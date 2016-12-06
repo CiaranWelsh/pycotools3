@@ -1,0 +1,2396 @@
+(dp0
+S'successful'
+p1
+(dp2
+S'Akman2008_Circadian_Clock_Model2.xml'
+p3
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000214\\Akman2008_Circadian_Clock_Model2.xml'
+p4
+sS"Ehrenstein1997 - The choline-leakage hypothesis in Alzheimer's disease.xml"
+p5
+S"D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000553\\Ehrenstein1997 - The choline-leakage hypothesis in Alzheimer's disease.xml"
+p6
+sS'DellOrco2009_phototransduction.xml'
+p7
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000326\\DellOrco2009_phototransduction.xml'
+p8
+sS'Ratushny2012_NF.xml'
+p9
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000417\\Ratushny2012_NF.xml'
+p10
+sS'Goldbeter1991 - Min Mit Oscil.xml'
+p11
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000003\\Goldbeter1991 - Min Mit Oscil.xml'
+p12
+sS'Balagadd\xe92008_E_coli_Predator_Prey.xml'
+p13
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000296\\Balagadd\xe92008_E_coli_Predator_Prey.xml'
+p14
+sS'Reyes-Palomares2012 -  a combined model hepatic polyamine and sulfur aminoacid metabolism - version2.xml'
+p15
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000450\\Reyes-Palomares2012 -  a combined model hepatic polyamine and sulfur aminoacid metabolism - version2.xml'
+p16
+sS'Nayak2015 - Blood Coagulation Network - Predicting the Effects of Various Therapies on Biomarkers.xml'
+p17
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000611\\Nayak2015 - Blood Coagulation Network - Predicting the Effects of Various Therapies on Biomarkers.xml'
+p18
+sS'Smith2009 - RGS mediated GTP hydrolysis.xml'
+p19
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000439\\Smith2009 - RGS mediated GTP hydrolysis.xml'
+p20
+sS'McClean2007_CrossTalk.xml'
+p21
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000116\\McClean2007_CrossTalk.xml'
+p22
+sS'Begitt2014 - STAT1 cooperative DNA binding - single GAS polymer model.xml'
+p23
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000500\\Begitt2014 - STAT1 cooperative DNA binding - single GAS polymer model.xml'
+p24
+sS'Sriram2007_CellCycle.xml'
+p25
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000181\\Sriram2007_CellCycle.xml'
+p26
+sS'Nyman2012_InsulinSignalling.xml'
+p27
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000423\\Nyman2012_InsulinSignalling.xml'
+p28
+sS'Akman2008_Circadian_Clock_Model1.xml'
+p29
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000295\\Akman2008_Circadian_Clock_Model1.xml'
+p30
+sS'Restif2007_Vaccination_Invasion.xml'
+p31
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000294\\Restif2007_Vaccination_Invasion.xml'
+p32
+sS'DallePezze2012 - TSC-independent mTORC2 regulation.xml'
+p33
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000581\\DallePezze2012 - TSC-independent mTORC2 regulation.xml'
+p34
+sS'Chan2004_TCell_receptor_activation.xml'
+p35
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000120\\Chan2004_TCell_receptor_activation.xml'
+p36
+sS'Galazzo1990_FermentationPathwayKinetics.xml'
+p37
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000063\\Galazzo1990_FermentationPathwayKinetics.xml'
+p38
+sS'Kolomeisky2003_MyosinV_Processivity.xml'
+p39
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000305\\Kolomeisky2003_MyosinV_Processivity.xml'
+p40
+sS'Schilling2009 - ERK distributive.xml'
+p41
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000270\\Schilling2009 - ERK distributive.xml'
+p42
+sS'Br\xe4nnmark2013 - Insulin signalling in human adipocytes (diabetic condition).xml'
+p43
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000449\\Br\xe4nnmark2013 - Insulin signalling in human adipocytes (diabetic condition).xml'
+p44
+sS'Huang1996 - Ultrasensitivity in MAPK cascade.xml'
+p45
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000009\\Huang1996 - Ultrasensitivity in MAPK cascade.xml'
+p46
+sS'deBack2012 - Lineage Specification in Pancreas Development.xml'
+p47
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000435\\deBack2012 - Lineage Specification in Pancreas Development.xml'
+p48
+sS'Markevich2004_MAPK_phosphoRandomMM.xml'
+p49
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000029\\Markevich2004_MAPK_phosphoRandomMM.xml'
+p50
+sS'Marwan2003 - Genetics, regulatory hierarchy between genes.xml'
+p51
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000037\\Marwan2003 - Genetics, regulatory hierarchy between genes.xml'
+p52
+sS'Ratushny2012_SPF_I.xml'
+p53
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000419\\Ratushny2012_SPF_I.xml'
+p54
+sS'Messiha2013 - Pentose phosphate pathway model.xml'
+p55
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000502\\Messiha2013 - Pentose phosphate pathway model.xml'
+p56
+sS'Ratushny2012_ASSURE_II.xml'
+p57
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000421\\Ratushny2012_ASSURE_II.xml'
+p58
+sS'Hofmeyer1986_SeqFb_Proc_AA_Synthesis.xml'
+p59
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000284\\Hofmeyer1986_SeqFb_Proc_AA_Synthesis.xml'
+p60
+sS'Raia2010_IL13_Signalling_MedB1.xml'
+p61
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000313\\Raia2010_IL13_Signalling_MedB1.xml'
+p62
+sS'Ayati2010_BoneRemodelingDynamics_WithTumour.xml'
+p63
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000402\\Ayati2010_BoneRemodelingDynamics_WithTumour.xml'
+p64
+sS'Monta\xf1ez2008_Arginine_catabolism.xml'
+p65
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000191\\Monta\xf1ez2008_Arginine_catabolism.xml'
+p66
+sS'Vasalou2010_Pacemaker_Neuron_SCN.xml'
+p67
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000246\\Vasalou2010_Pacemaker_Neuron_SCN.xml'
+p68
+sS'Zeilinger2006_PRR7-PRR9light-Yprime.xml'
+p69
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000097\\Zeilinger2006_PRR7-PRR9light-Yprime.xml'
+p70
+sS'Borghans1997 - Calcium Oscillation - Model 2.xml'
+p71
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000044\\Borghans1997 - Calcium Oscillation - Model 2.xml'
+p72
+sS'Becker2010_EpoR_CoreModel.xml'
+p73
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000271\\Becker2010_EpoR_CoreModel.xml'
+p74
+sS'Wolf2000_Glycolytic_Oscillations.xml'
+p75
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000206\\Wolf2000_Glycolytic_Oscillations.xml'
+p76
+sS'Wajima2009_BloodCoagulation_warfarin_heparin.xml'
+p77
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000340\\Wajima2009_BloodCoagulation_warfarin_heparin.xml'
+p78
+sS'Stortelder1997 - Thrombin Generation Amidolytic Activity.xml'
+p79
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000358\\Stortelder1997 - Thrombin Generation Amidolytic Activity.xml'
+p80
+sS'Zatorsky2006_p53_Model5.xml'
+p81
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000156\\Zatorsky2006_p53_Model5.xml'
+p82
+sS'Bianconi2012 - EGFR and IGF1R pathway in lung cancer.xml'
+p83
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000427\\Bianconi2012 - EGFR and IGF1R pathway in lung cancer.xml'
+p84
+sS'Bray1993_chemotaxis.xml'
+p85
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000404\\Bray1993_chemotaxis.xml'
+p86
+sS'Rattanakul2003_BoneFormationModel.xml'
+p87
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000274\\Rattanakul2003_BoneFormationModel.xml'
+p88
+sS'Lee2010_ThrombinActivation_OneForm_reduced.xml'
+p89
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000357\\Lee2010_ThrombinActivation_OneForm_reduced.xml'
+p90
+sS'Mueller2008_ThrombinGeneration_minimal.xml'
+p91
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000367\\Mueller2008_ThrombinGeneration_minimal.xml'
+p92
+sS'Dupont1992_Ca_dpt_protein_phospho.xml'
+p93
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000113\\Dupont1992_Ca_dpt_protein_phospho.xml'
+p94
+sS'Vizan2013 - TGF pathway long term signaling.xml'
+p95
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000499\\Vizan2013 - TGF pathway long term signaling.xml'
+p96
+sS'Rodriguez-Caso2006_Polyamine_Metabolism.xml'
+p97
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000190\\Rodriguez-Caso2006_Polyamine_Metabolism.xml'
+p98
+sS'Arnold2011_Poolman2000_CalvinCycle_Starch.xml'
+p99
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000391\\Arnold2011_Poolman2000_CalvinCycle_Starch.xml'
+p100
+sS'Smallbone2013 - Metabolic Control Analysis - Example 2.xml'
+p101
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000455\\Smallbone2013 - Metabolic Control Analysis - Example 2.xml'
+p102
+sS'Zeilinger2006_PRR7-PRR9light-Y.xml'
+p103
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000096\\Zeilinger2006_PRR7-PRR9light-Y.xml'
+p104
+sS'Marhl2000_CaOscillations.xml'
+p105
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000039\\Marhl2000_CaOscillations.xml'
+p106
+sS'Lee2010_ThrombinActivation_OneForm_minimal.xml'
+p107
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000363\\Lee2010_ThrombinActivation_OneForm_minimal.xml'
+p108
+sS'Yamada2003_JAK_STAT_SOCS1_knockout.xml'
+p109
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000094\\Yamada2003_JAK_STAT_SOCS1_knockout.xml'
+p110
+sS'Kaiser2014 - Salmonella persistence after ciprofloxacin treatment.xml'
+p111
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000527\\Kaiser2014 - Salmonella persistence after ciprofloxacin treatment.xml'
+p112
+sS'Teusink2000_Glycolysis.xml'
+p113
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000064\\Teusink2000_Glycolysis.xml'
+p114
+sS'Yugi2014 - Insulin induced signalling (PFKL phosphorylation) - model 1.xml'
+p115
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000540\\Yugi2014 - Insulin induced signalling (PFKL phosphorylation) - model 1.xml'
+p116
+sS'Lai2007_O2_Transport_Metabolism.xml'
+p117
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000248\\Lai2007_O2_Transport_Metabolism.xml'
+p118
+sS'Wang2007 - ATP induced intracellular Calcium Oscillation.xml'
+p119
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000145\\Wang2007 - ATP induced intracellular Calcium Oscillation.xml'
+p120
+sS'Leloup1999_CircadianRhythms_Neurospora.xml'
+p121
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000299\\Leloup1999_CircadianRhythms_Neurospora.xml'
+p122
+sS'Wajima2009_BloodCoagulation_PTtest.xml'
+p123
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000339\\Wajima2009_BloodCoagulation_PTtest.xml'
+p124
+sS'Chaouiya2013 - EGF and TNFalpha mediated signalling pathway.xml'
+p125
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000562\\Chaouiya2013 - EGF and TNFalpha mediated signalling pathway.xml'
+p126
+sS'Sarma2012 - Interaction topologies of MAPK cascade (M4_K2_QSS_PSEQ).xml'
+p127
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000433\\Sarma2012 - Interaction topologies of MAPK cascade (M4_K2_QSS_PSEQ).xml'
+p128
+sS'Qu2003_CellCycle.xml'
+p129
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000110\\Qu2003_CellCycle.xml'
+p130
+sS'Novak2001_FissionYeast_CellCycle.xml'
+p131
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000111\\Novak2001_FissionYeast_CellCycle.xml'
+p132
+sS'Markevich2004_MAPK_orderedElementary.xml'
+p133
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000026\\Markevich2004_MAPK_orderedElementary.xml'
+p134
+sS'Sarma2012 - Oscillations in MAPK cascade (S2).xml'
+p135
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000441\\Sarma2012 - Oscillations in MAPK cascade (S2).xml'
+p136
+sS'Chassagnole2001_Threonine Synthesis.xml'
+p137
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000066\\Chassagnole2001_Threonine Synthesis.xml'
+p138
+sS'Bartholome2007_MDCKII.xml'
+p139
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000197\\Bartholome2007_MDCKII.xml'
+p140
+sS'Bidkhori2012 - normal EGFR signalling.xml'
+p141
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000452\\Bidkhori2012 - normal EGFR signalling.xml'
+p142
+sS'Deineko2003_CellCycle.xml'
+p143
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000208\\Deineko2003_CellCycle.xml'
+p144
+sS'Dutta-Roy2015 - Opening of the multiple AMPA receptor conductance states.xml'
+p145
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000569\\Dutta-Roy2015 - Opening of the multiple AMPA receptor conductance states.xml'
+p146
+sS'Borghans1997 - Calcium Oscillation - Model 3.xml'
+p147
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000045\\Borghans1997 - Calcium Oscillation - Model 3.xml'
+p148
+sS'Komarova2005_TheoreticalFramework_BasicArchitecture.xml'
+p149
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000125\\Komarova2005_TheoreticalFramework_BasicArchitecture.xml'
+p150
+sS"Sneppen2009 - Modeling proteasome dynamics in Parkinson's disease.xml"
+p151
+S"D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000548\\Sneppen2009 - Modeling proteasome dynamics in Parkinson's disease.xml"
+p152
+sS'Sarma2012 - Interaction topologies of MAPK cascade (M4_K2_USEQ).xml'
+p153
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000430\\Sarma2012 - Interaction topologies of MAPK cascade (M4_K2_USEQ).xml'
+p154
+sS'Vilar2006_TGFbeta.xml'
+p155
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000101\\Vilar2006_TGFbeta.xml'
+p156
+sS'Clancy2001_Kchannel.xml'
+p157
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000121\\Clancy2001_Kchannel.xml'
+p158
+sS'Laub1998_SpontaneousOscillations.xml'
+p159
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000099\\Laub1998_SpontaneousOscillations.xml'
+p160
+sS'Kofahl2004_PheromonePathway.xml'
+p161
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000032\\Kofahl2004_PheromonePathway.xml'
+p162
+sS'Fran\xe7ois2005 - Mixed Feedback Loop (two-gene network).xml'
+p163
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000539\\Fran\xe7ois2005 - Mixed Feedback Loop (two-gene network).xml'
+p164
+sS'Yao2008_Rb_E2F_Switch.xml'
+p165
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000318\\Yao2008_Rb_E2F_Switch.xml'
+p166
+sS'Kerkhoven2013 - Glycolysis and Pentose Phosphate Pathway in T.brucei - MODEL C (with glucosomal ribokinase).xml'
+p167
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000510\\Kerkhoven2013 - Glycolysis and Pentose Phosphate Pathway in T.brucei - MODEL C (with glucosomal ribokinase).xml'
+p168
+sS'Tiago2010_FeMetabolism_FeLoaded.xml'
+p169
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000261\\Tiago2010_FeMetabolism_FeLoaded.xml'
+p170
+sS'Clancy2002_CardiacSodiumChannel_WT.xml'
+p171
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000126\\Clancy2002_CardiacSodiumChannel_WT.xml'
+p172
+sS'Shen-Orr2002_FeedForward_AND_gate.xml'
+p173
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000316\\Shen-Orr2002_FeedForward_AND_gate.xml'
+p174
+sS'Jones1994_BloodCoagulation.xml'
+p175
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000336\\Jones1994_BloodCoagulation.xml'
+p176
+sS'Cronwright2002_Glycerol_Synthesis.xml'
+p177
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000076\\Cronwright2002_Glycerol_Synthesis.xml'
+p178
+sS'Arnold2011_Hahn1986_CalvinCycle_Starch_Sucrose.xml'
+p179
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000389\\Arnold2011_Hahn1986_CalvinCycle_Starch_Sucrose.xml'
+p180
+sS'Kerkhoven2013 - Glycolysis and Pentose Phosphate Pathway in T.brucei - MODEL C in fructose medium (with glucosomal ribokinase).xml'
+p181
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000515\\Kerkhoven2013 - Glycolysis and Pentose Phosphate Pathway in T.brucei - MODEL C in fructose medium (with glucosomal ribokinase).xml'
+p182
+sS'Bertram2007_IsletCell_Oscillations.xml'
+p183
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000376\\Bertram2007_IsletCell_Oscillations.xml'
+p184
+sS'Pritchard2014 - plant-microbe interaction.xml'
+p185
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000563\\Pritchard2014 - plant-microbe interaction.xml'
+p186
+sS'Bungay2003_Thrombin_Generation.xml'
+p187
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000334\\Bungay2003_Thrombin_Generation.xml'
+p188
+sS'Kummer2000 - Oscillations in Calcium Signalling.xml'
+p189
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000329\\Kummer2000 - Oscillations in Calcium Signalling.xml'
+p190
+sS'Chickarmane2008 - Stem cell lineage determination.xml'
+p191
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000209\\Chickarmane2008 - Stem cell lineage determination.xml'
+p192
+sS'Cao2013 - Application of ABSIS method in the bistable Schl\xf6gl model.xml'
+p193
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000485\\Cao2013 - Application of ABSIS method in the bistable Schl\xf6gl model.xml'
+p194
+sS'Leloup2003_CircClock_DD.xml'
+p195
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000073\\Leloup2003_CircClock_DD.xml'
+p196
+sS'Markevich2004_MAPK_orderedMM2kinases.xml'
+p197
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000031\\Markevich2004_MAPK_orderedMM2kinases.xml'
+p198
+sS'Cooling2007_IP3transients_CardiacMyocyte.xml'
+p199
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000400\\Cooling2007_IP3transients_CardiacMyocyte.xml'
+p200
+sS'Birtwistle2007_ErbB_Signalling.xml'
+p201
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000175\\Birtwistle2007_ErbB_Signalling.xml'
+p202
+sS'Kerkhoven2013 - Glycolysis and Pentose Phosphate Pathway in T.brucei - MODEL B.xml'
+p203
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000514\\Kerkhoven2013 - Glycolysis and Pentose Phosphate Pathway in T.brucei - MODEL B.xml'
+p204
+sS'Messiha2013 - combined glycolysis and pentose phosphate pathway model.xml'
+p205
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000503\\Messiha2013 - combined glycolysis and pentose phosphate pathway model.xml'
+p206
+sS'Smallbone2013 - Yeast metabolic model with linlog rate law.xml'
+p207
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000471\\Smallbone2013 - Yeast metabolic model with linlog rate law.xml'
+p208
+sS'Tham2008 - PDmodel, Tumour shrinkage by gemcitabine and carboplatin .xml'
+p209
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000234\\Tham2008 - PDmodel, Tumour shrinkage by gemcitabine and carboplatin .xml'
+p210
+sS'Smith2013 - Regulation of Insulin Signalling by Oxidative Stress.xml'
+p211
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000474\\Smith2013 - Regulation of Insulin Signalling by Oxidative Stress.xml'
+p212
+sS'Weimann2004_CircadianOscillator.xml'
+p213
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000170\\Weimann2004_CircadianOscillator.xml'
+p214
+sS'Palsson2013 - Fully-integrated immune response model (FIRM).xml'
+p215
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000608\\Palsson2013 - Fully-integrated immune response model (FIRM).xml'
+p216
+sS'Novak1993 - Cell cycle M-phase control.xml'
+p217
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000107\\Novak1993 - Cell cycle M-phase control.xml'
+p218
+sS'Talemi2014 - Arsenic toxicity and detoxification mechanisms in yeast.xml'
+p219
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000547\\Talemi2014 - Arsenic toxicity and detoxification mechanisms in yeast.xml'
+p220
+sS'Arnold2011_Schultz2003_RuBisCO-CalvinCycle.xml'
+p221
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000385\\Arnold2011_Schultz2003_RuBisCO-CalvinCycle.xml'
+p222
+sS'Chickarmane2006 - Stem cell switch irreversible.xml'
+p223
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000204\\Chickarmane2006 - Stem cell switch irreversible.xml'
+p224
+sS'Smallbone2011_TrehaloseBiosynthesis.xml'
+p225
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000380\\Smallbone2011_TrehaloseBiosynthesis.xml'
+p226
+sS'Reiterer2013 - pseudophosphatase STYX role in ERK signalling.xml'
+p227
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000557\\Reiterer2013 - pseudophosphatase STYX role in ERK signalling.xml'
+p228
+sS'Zeilinger2006_PRR7-PRR9-Y.xml'
+p229
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000095\\Zeilinger2006_PRR7-PRR9-Y.xml'
+p230
+sS'Valero2006_Adenine_TernaryCycle.xml'
+p231
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000231\\Valero2006_Adenine_TernaryCycle.xml'
+p232
+sS'Scheper1999_CircClock.xml'
+p233
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000024\\Scheper1999_CircClock.xml'
+p234
+sS'Kolodkin2013 - Nuclear receptor-mediated cortisol signalling network.xml'
+p235
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000576\\Kolodkin2013 - Nuclear receptor-mediated cortisol signalling network.xml'
+p236
+sS'Brannmark2010_InsulinSignalling_Mifamodel.xml'
+p237
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000343\\Brannmark2010_InsulinSignalling_Mifamodel.xml'
+p238
+sS'Singh2006_TCA_Ecoli_glucose.xml'
+p239
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000222\\Singh2006_TCA_Ecoli_glucose.xml'
+p240
+sS'Zatorsky2006_p53_Model4.xml'
+p241
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000157\\Zatorsky2006_p53_Model4.xml'
+p242
+sS'Nishio2008 - Design of the phosphotransferase system for enhanced glucose uptake in E. coli..xml'
+p243
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000571\\Nishio2008 - Design of the phosphotransferase system for enhanced glucose uptake in E. coli..xml'
+p244
+sS'Petelenz-kurdzeil2013 - Osmo adaptation gpd1D.xml'
+p245
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000610\\Petelenz-kurdzeil2013 - Osmo adaptation gpd1D.xml'
+p246
+sS'Singh2006_TCA_Ecoli_acetate.xml'
+p247
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000221\\Singh2006_TCA_Ecoli_acetate.xml'
+p248
+sS'Chickarmane2008 - Stem cell lineage - NANOG GATA-6 switch.xml'
+p249
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000210\\Chickarmane2008 - Stem cell lineage - NANOG GATA-6 switch.xml'
+p250
+sS'Proctor2007 - Age related decline of proteolysis, ubiquitin-proteome system.xml'
+p251
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000105\\Proctor2007 - Age related decline of proteolysis, ubiquitin-proteome system.xml'
+p252
+sS'Smallbone2013 - Metabolic Control Analysis - Example 3.xml'
+p253
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000456\\Smallbone2013 - Metabolic Control Analysis - Example 3.xml'
+p254
+sS'Zhu2007_TF_modulated_by_Calcium.xml'
+p255
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000166\\Zhu2007_TF_modulated_by_Calcium.xml'
+p256
+sS'FitzHugh1961_NerveMembrane.xml'
+p257
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000346\\FitzHugh1961_NerveMembrane.xml'
+p258
+sS'Zatorsky2006_p53_Model3.xml'
+p259
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000154\\Zatorsky2006_p53_Model3.xml'
+p260
+sS'Mayya2005_STATmodule.xml'
+p261
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000167\\Mayya2005_STATmodule.xml'
+p262
+sS'Rosas2015 - Caffeine-induced luminal SR calcium changes.xml'
+p263
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000601\\Rosas2015 - Caffeine-induced luminal SR calcium changes.xml'
+p264
+sS'Smallbone2013 - Colon Crypt cycle - Version 2.xml'
+p265
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000518\\Smallbone2013 - Colon Crypt cycle - Version 2.xml'
+p266
+sS'Smallbone2013 - Colon Crypt cycle - Version 1.xml'
+p267
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000519\\Smallbone2013 - Colon Crypt cycle - Version 1.xml'
+p268
+sS'Bertram2000_PancreaticBetaCells_Oscillations.xml'
+p269
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000377\\Bertram2000_PancreaticBetaCells_Oscillations.xml'
+p270
+sS'Kim2007_CellularMemory_SymmetricModel.xml'
+p271
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000180\\Kim2007_CellularMemory_SymmetricModel.xml'
+p272
+sS'Panteleev2002_TFPImechanism_schmema1.xml'
+p273
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000361\\Panteleev2002_TFPImechanism_schmema1.xml'
+p274
+sS'Borghans1997 - Calcium Oscillation - Model 1.xml'
+p275
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000043\\Borghans1997 - Calcium Oscillation - Model 1.xml'
+p276
+sS'Noguchi2013 - Insulin dependent glucose metabolism.xml'
+p277
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000482\\Noguchi2013 - Insulin dependent glucose metabolism.xml'
+p278
+sS'Aguilera 2014 - HIV latency. Interaction between HIV proteins and immune response.xml'
+p279
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000573\\Aguilera 2014 - HIV latency. Interaction between HIV proteins and immune response.xml'
+p280
+sS'Amara2013 - PCNA ubiquitylation in the activation of PRR pathway.xml'
+p281
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000475\\Amara2013 - PCNA ubiquitylation in the activation of PRR pathway.xml'
+p282
+sS'Troein2011_ClockCircuit_OstreococcusTauri.xml'
+p283
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000350\\Troein2011_ClockCircuit_OstreococcusTauri.xml'
+p284
+sS'Ortega2006 - bistability from double phosphorylation in signal transduction.xml'
+p285
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000258\\Ortega2006 - bistability from double phosphorylation in signal transduction.xml'
+p286
+sS'Goldbeter2008_Somite_Segmentation_Clock_Notch_Wnt_FGF.xml'
+p287
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000201\\Goldbeter2008_Somite_Segmentation_Clock_Notch_Wnt_FGF.xml'
+p288
+sS'Suh2004_KCNQ_Regulation.xml'
+p289
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000081\\Suh2004_KCNQ_Regulation.xml'
+p290
+sS'Del_Conte_Zerial2008_Rab5_Rab7_cut_out_switch.xml'
+p291
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000174\\Del_Conte_Zerial2008_Rab5_Rab7_cut_out_switch.xml'
+p292
+sS'Ralser2007_Carbohydrate_Rerouting_ROS.xml'
+p293
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000247\\Ralser2007_Carbohydrate_Rerouting_ROS.xml'
+p294
+sS'Hermansen2015 - denovo biosynthesis of pyrimidines in yeast.xml'
+p295
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000590\\Hermansen2015 - denovo biosynthesis of pyrimidines in yeast.xml'
+p296
+sS'Liu2011_Complement_System.xml'
+p297
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000303\\Liu2011_Complement_System.xml'
+p298
+sS'Maeda2006_MyosinPhosphorylation.xml'
+p299
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000088\\Maeda2006_MyosinPhosphorylation.xml'
+p300
+sS'Somogyi1990_CaOscillations.xml'
+p301
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000114\\Somogyi1990_CaOscillations.xml'
+p302
+sS'Smallbone2013 - Metabolic Control Analysis - Example 1.xml'
+p303
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000454\\Smallbone2013 - Metabolic Control Analysis - Example 1.xml'
+p304
+sS'Nikolaev2005_AlbuminBilirubinAdsorption.xml'
+p305
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000291\\Nikolaev2005_AlbuminBilirubinAdsorption.xml'
+p306
+sS'Whitcomb2004_Bicarbonate_Pancreas.xml'
+p307
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000327\\Whitcomb2004_Bicarbonate_Pancreas.xml'
+p308
+sS'Meyer1991_CalciumSpike_ICC.xml'
+p309
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000224\\Meyer1991_CalciumSpike_ICC.xml'
+p310
+sS'Neumann2010_CD95Stimulation_NFkB_Apoptosis.xml'
+p311
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000243\\Neumann2010_CD95Stimulation_NFkB_Apoptosis.xml'
+p312
+sS'Bornheimer2004_GTPaseCycle.xml'
+p313
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000086\\Bornheimer2004_GTPaseCycle.xml'
+p314
+sS'Reed2008_Glutathione_Metabolism.xml'
+p315
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000268\\Reed2008_Glutathione_Metabolism.xml'
+p316
+sS'Izhikevich2004_SpikingNeurons_inhibitionInducedSpiking.xml'
+p317
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000129\\Izhikevich2004_SpikingNeurons_inhibitionInducedSpiking.xml'
+p318
+sS'Izhikevich2004_SpikingNeurons_subthresholdOscillations.xml'
+p319
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000135\\Izhikevich2004_SpikingNeurons_subthresholdOscillations.xml'
+p320
+sS'Kim2011_Oscillator_SimpleI.xml'
+p321
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000322\\Kim2011_Oscillator_SimpleI.xml'
+p322
+sS'Band2012_DII-Venus_ReducedModel.xml'
+p323
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000414\\Band2012_DII-Venus_ReducedModel.xml'
+p324
+sS'Goldbeter2006_weightCycling.xml'
+p325
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000079\\Goldbeter2006_weightCycling.xml'
+p326
+sS'Vilar2002_Oscillator.xml'
+p327
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000035\\Vilar2002_Oscillator.xml'
+p328
+sS'Abell2011_CalciumSignaling_WithAdaptation.xml'
+p329
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000355\\Abell2011_CalciumSignaling_WithAdaptation.xml'
+p330
+sS'Capuani2015 - Binding of Cbl and Gbr2 to EGFR (Multisite Phosphorylation Model - MPM).xml'
+p331
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000594\\Capuani2015 - Binding of Cbl and Gbr2 to EGFR (Multisite Phosphorylation Model - MPM).xml'
+p332
+sS'Cao2008 - Network of a toggle switch.xml'
+p333
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000483\\Cao2008 - Network of a toggle switch.xml'
+p334
+sS'Liebal2012 - B.subtilis post-transcriptional instability model.xml'
+p335
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000459\\Liebal2012 - B.subtilis post-transcriptional instability model.xml'
+p336
+sS'Tiago2010_FeMetabolism_FeDeficient.xml'
+p337
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000259\\Tiago2010_FeMetabolism_FeDeficient.xml'
+p338
+sS'Fridlyand2003_Calcium_flux.xml'
+p339
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000059\\Fridlyand2003_Calcium_flux.xml'
+p340
+sS'Pokhilko2012_CircClock_RepressilatorFeedbackloop.xml'
+p341
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000412\\Pokhilko2012_CircClock_RepressilatorFeedbackloop.xml'
+p342
+sS'Mitchell2013 - Liver Iron Metabolism.xml'
+p343
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000498\\Mitchell2013 - Liver Iron Metabolism.xml'
+p344
+sS'Fujita2010_Akt_Signalling_EGF.xml'
+p345
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000262\\Fujita2010_Akt_Signalling_EGF.xml'
+p346
+sS'Shrestha2010_HyperCalcemia_PTHresponse.xml'
+p347
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000277\\Shrestha2010_HyperCalcemia_PTHresponse.xml'
+p348
+sS'G\xf6rlich2003_RanGTP_gradient.xml'
+p349
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000192\\G\xf6rlich2003_RanGTP_gradient.xml'
+p350
+sS'Vinod2011_MitoticExit.xml'
+p351
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000370\\Vinod2011_MitoticExit.xml'
+p352
+sS'Liebal2012 - B.subtilis transcription inhibition model.xml'
+p353
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000461\\Liebal2012 - B.subtilis transcription inhibition model.xml'
+p354
+sS'Invergo2014 - Phototransduction cascade in mouse rod cells.xml'
+p355
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000578\\Invergo2014 - Phototransduction cascade in mouse rod cells.xml'
+p356
+sS'Reddyhoff2015 - Acetaminophen metabolism and toxicity.xml'
+p357
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000609\\Reddyhoff2015 - Acetaminophen metabolism and toxicity.xml'
+p358
+sS'Begitt2014 - STAT1 cooperative DNA binding - double GAS polymer model.xml'
+p359
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000501\\Begitt2014 - STAT1 cooperative DNA binding - double GAS polymer model.xml'
+p360
+sS'Ibrahim2008 - Mitotic Spindle Assembly Checkpoint - Convey variant.xml'
+p361
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000187\\Ibrahim2008 - Mitotic Spindle Assembly Checkpoint - Convey variant.xml'
+p362
+sS'Pritchard2002_glycolysis.xml'
+p363
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000172\\Pritchard2002_glycolysis.xml'
+p364
+sS'Flis2015 - Plant clock gene circuit (P2011.2.1 PLM_71 ver 2).xml'
+p365
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000598\\Flis2015 - Plant clock gene circuit (P2011.2.1 PLM_71 ver 2).xml'
+p366
+sS'Bakker2001_Glycolysis.xml'
+p367
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000071\\Bakker2001_Glycolysis.xml'
+p368
+sS'Philipson2015 - Innate immune response modulated by NLRX1.xml'
+p369
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000596\\Philipson2015 - Innate immune response modulated by NLRX1.xml'
+p370
+sS'Chassagnole2002_Carbon_Metabolism.xml'
+p371
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000051\\Chassagnole2002_Carbon_Metabolism.xml'
+p372
+sS'Erguler2013 - Unfolded protein stress response.xml'
+p373
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000446\\Erguler2013 - Unfolded protein stress response.xml'
+p374
+sS'Nag2011_ChloroplasticStarchDegradation.xml'
+p375
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000353\\Nag2011_ChloroplasticStarchDegradation.xml'
+p376
+sS'Rehm2006_Caspase.xml'
+p377
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000256\\Rehm2006_Caspase.xml'
+p378
+sS'Lebeda2008_BoNT_Paralysis_3stepModel.xml'
+p379
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000267\\Lebeda2008_BoNT_Paralysis_3stepModel.xml'
+p380
+sS'Cloutier2009 - Brain Energy Metabolism.xml'
+p381
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000554\\Cloutier2009 - Brain Energy Metabolism.xml'
+p382
+sS'Dwivedi2014 - Crohns IL6 Disease model - Anti-IL6R Antibody.xml'
+p383
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000537\\Dwivedi2014 - Crohns IL6 Disease model - Anti-IL6R Antibody.xml'
+p384
+sS'Singh2006_IL6_Signal_Transduction.xml'
+p385
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000151\\Singh2006_IL6_Signal_Transduction.xml'
+p386
+sS'Smallbone2013 - E.coli metabolic model with modular rate law.xml'
+p387
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000470\\Smallbone2013 - E.coli metabolic model with modular rate law.xml'
+p388
+sS'Koo2013 - Shear stress induced AKT and eNOS phosphorylation - Model 2.xml'
+p389
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000465\\Koo2013 - Shear stress induced AKT and eNOS phosphorylation - Model 2.xml'
+p390
+sS'Tyson2003_Substrate_Depletion_Osc.xml'
+p391
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000307\\Tyson2003_Substrate_Depletion_Osc.xml'
+p392
+sS'Carbo2013 - Mucosal Immune Response during H.pylori Infection.xml'
+p393
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000480\\Carbo2013 - Mucosal Immune Response during H.pylori Infection.xml'
+p394
+sS'Tseng2012 - Circadian clock of N.crassa.xml'
+p395
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000437\\Tseng2012 - Circadian clock of N.crassa.xml'
+p396
+sS'McAuley2012 - Whole-body Cholesterol Metabolism.xml'
+p397
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000434\\McAuley2012 - Whole-body Cholesterol Metabolism.xml'
+p398
+sS'Grange2001 - L Dopa PK model.xml'
+p399
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000321\\Grange2001 - L Dopa PK model.xml'
+p400
+sS'Liu2010_Hormonal_Crosstalk_Arabidopsis.xml'
+p401
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000269\\Liu2010_Hormonal_Crosstalk_Arabidopsis.xml'
+p402
+sS'Moriya2011_CellCycle_FissionYeast.xml'
+p403
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000406\\Moriya2011_CellCycle_FissionYeast.xml'
+p404
+sS'Nyman2011_M3Hierarachical_InsulinGlucosedynamics.xml'
+p405
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000356\\Nyman2011_M3Hierarachical_InsulinGlucosedynamics.xml'
+p406
+sS'Ueda2001_CircClock.xml'
+p407
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000022\\Ueda2001_CircClock.xml'
+p408
+sS'Schaber2012 - Hog pathway in yeast.xml'
+p409
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000429\\Schaber2012 - Hog pathway in yeast.xml'
+p410
+sS'Conant2007_WGD_glycolysis_2A3AB.xml'
+p411
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000176\\Conant2007_WGD_glycolysis_2A3AB.xml'
+p412
+sS'Fujita2010_Akt_Signalling_EGFRinhib.xml'
+p413
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000264\\Fujita2010_Akt_Signalling_EGFRinhib.xml'
+p414
+sS'Ma2002_cAMP_oscillations.xml'
+p415
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000229\\Ma2002_cAMP_oscillations.xml'
+p416
+sS'Levchenko2000_MAPK_noScaffold.xml'
+p417
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000011\\Levchenko2000_MAPK_noScaffold.xml'
+p418
+sS'Schittler2010 - Cell fate of progenitor cells, osteoblasts or chondrocytes.xml'
+p419
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000493\\Schittler2010 - Cell fate of progenitor cells, osteoblasts or chondrocytes.xml'
+p420
+sS'Vernoux2011_AuxinSignaling_AuxinSingleStepInput.xml'
+p421
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000351\\Vernoux2011_AuxinSignaling_AuxinSingleStepInput.xml'
+p422
+sS'Koo2013 - Shear stress induced calcium influx and eNOS activation - Model 1.xml'
+p423
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000464\\Koo2013 - Shear stress induced calcium influx and eNOS activation - Model 1.xml'
+p424
+sS'Morris2008 - Fitting protein aggregation data via F-W 2-step mechanism.xml'
+p425
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000567\\Morris2008 - Fitting protein aggregation data via F-W 2-step mechanism.xml'
+p426
+sS'Achcar2012 - Glycolysis in bloodstream form T. brucei.xml'
+p427
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000428\\Achcar2012 - Glycolysis in bloodstream form T. brucei.xml'
+p428
+sS'Eungdamrong2007_Ras_Activation.xml'
+p429
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000161\\Eungdamrong2007_Ras_Activation.xml'
+p430
+sS'Bray1995_chemotaxis_receptorlinkedcomplex.xml'
+p431
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000200\\Bray1995_chemotaxis_receptorlinkedcomplex.xml'
+p432
+sS'Albert2005_Glycolysis.xml'
+p433
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000211\\Albert2005_Glycolysis.xml'
+p434
+sS'Proctor2011_ProteinHomeostasis_NormalCondition.xml'
+p435
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000344\\Proctor2011_ProteinHomeostasis_NormalCondition.xml'
+p436
+sS'Karapetyan2016 - Genetic oscillatory network - Repressor Titration Circuit (RTC).xml'
+p437
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000587\\Karapetyan2016 - Genetic oscillatory network - Repressor Titration Circuit (RTC).xml'
+p438
+sS'Bungay2006_FollicularFluid.xml'
+p439
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000333\\Bungay2006_FollicularFluid.xml'
+p440
+sS'Cao2013 - Application of ABSIS method in the reversible isomerization model.xml'
+p441
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000486\\Cao2013 - Application of ABSIS method in the reversible isomerization model.xml'
+p442
+sS'Arnold2011_Zhu2009_CalvinCycle.xml'
+p443
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000388\\Arnold2011_Zhu2009_CalvinCycle.xml'
+p444
+sS'Wang1996_Synaptic_Inhibition_Two_Neuron.xml'
+p445
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000302\\Wang1996_Synaptic_Inhibition_Two_Neuron.xml'
+p446
+sS'Edelstein1996 - EPSP ACh species.xml'
+p447
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000002\\Edelstein1996 - EPSP ACh species.xml'
+p448
+sS'Bucher2011_Atorvastatin_Metabolism.xml'
+p449
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000328\\Bucher2011_Atorvastatin_Metabolism.xml'
+p450
+sS'Firczuk2013 - Eukaryotic mRNA translation machinery.xml'
+p451
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000457\\Firczuk2013 - Eukaryotic mRNA translation machinery.xml'
+p452
+sS'Boehm2014 - isoform-specific dimerization of pSTAT5A and pSTAT5B.xml'
+p453
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000591\\Boehm2014 - isoform-specific dimerization of pSTAT5A and pSTAT5B.xml'
+p454
+sS'Hoffmann2002_KnockOut_IkBNFkB_Signaling.xml'
+p455
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000139\\Hoffmann2002_KnockOut_IkBNFkB_Signaling.xml'
+p456
+sS'Martinez-Sanchez2015 - T CD4+ lymphocyte transcriptional-signaling regulatory network.xml'
+p457
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000593\\Martinez-Sanchez2015 - T CD4+ lymphocyte transcriptional-signaling regulatory network.xml'
+p458
+sS'Legewie2006_apoptosis_NC.xml'
+p459
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000103\\Legewie2006_apoptosis_NC.xml'
+p460
+sS'Swat2004_Mammalian_G1_S_Transition.xml'
+p461
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000228\\Swat2004_Mammalian_G1_S_Transition.xml'
+p462
+sS"Proctor2010 - a link between GSK3 and p53 in Alzheimer's Disease.xml"
+p463
+S"D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000286\\Proctor2010 - a link between GSK3 and p53 in Alzheimer's Disease.xml"
+p464
+sS'Dwivedi2014 - Healthy Volunteer IL6 Model.xml'
+p465
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000534\\Dwivedi2014 - Healthy Volunteer IL6 Model.xml'
+p466
+sS'Obeyesekere1999_CellCycle.xml'
+p467
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000168\\Obeyesekere1999_CellCycle.xml'
+p468
+sS'Larsen2004_CalciumSpiking_EnzymeBinding.xml'
+p469
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000331\\Larsen2004_CalciumSpiking_EnzymeBinding.xml'
+p470
+sS'Tyson2003_Perfect_Adaption.xml'
+p471
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000312\\Tyson2003_Perfect_Adaption.xml'
+p472
+sS'Sarma2012 - Oscillations in MAPK cascade (S2), inclusion of external signalling module.xml'
+p473
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000442\\Sarma2012 - Oscillations in MAPK cascade (S2), inclusion of external signalling module.xml'
+p474
+sS'Locke2008_Circadian_Clock.xml'
+p475
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000185\\Locke2008_Circadian_Clock.xml'
+p476
+sS'Romond1999_CellCycle.xml'
+p477
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000207\\Romond1999_CellCycle.xml'
+p478
+sS'Zatorsky2006_p53_Model6.xml'
+p479
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000155\\Zatorsky2006_p53_Model6.xml'
+p480
+sS'Roblitz2013 - Menstrual Cycle following GnRH analogue administration.xml'
+p481
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000494\\Roblitz2013 - Menstrual Cycle following GnRH analogue administration.xml'
+p482
+sS'Chance1960_Glycolysis_Respiration.xml'
+p483
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000281\\Chance1960_Glycolysis_Respiration.xml'
+p484
+sS'Mandlik2015 - Tristable genetic circuit of Leishmania.xml'
+p485
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000584\\Mandlik2015 - Tristable genetic circuit of Leishmania.xml'
+p486
+sS'Benson2014 - FAAH inhibitors for the treatment of osteoarthritic pain.xml'
+p487
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000512\\Benson2014 - FAAH inhibitors for the treatment of osteoarthritic pain.xml'
+p488
+sS'Koo2013 - Shear stress induced eNOS expression - Model 3.xml'
+p489
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000466\\Koo2013 - Shear stress induced eNOS expression - Model 3.xml'
+p490
+sS'Sen2013 - Phospholipid Synthesis in P.knowlesi.xml'
+p491
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000495\\Sen2013 - Phospholipid Synthesis in P.knowlesi.xml'
+p492
+sS'Middleton2012_GibberellinSignalling.xml'
+p493
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000422\\Middleton2012_GibberellinSignalling.xml'
+p494
+sS'Machado2014 - Curcumin production pathway in Escherichia coli.xml'
+p495
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000565\\Machado2014 - Curcumin production pathway in Escherichia coli.xml'
+p496
+sS'Sivakumar2011 - EGF Receptor Signaling Pathway.xml'
+p497
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000394\\Sivakumar2011 - EGF Receptor Signaling Pathway.xml'
+p498
+sS'Chance1952_Catalase_Mechanism.xml'
+p499
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000282\\Chance1952_Catalase_Mechanism.xml'
+p500
+sS'Sarma2012 - Oscillations in MAPK cascade (S1n).xml'
+p501
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000443\\Sarma2012 - Oscillations in MAPK cascade (S1n).xml'
+p502
+sS'Petelenz-Kurdziel2013 - Osmo adaptation fps1D1.xml'
+p503
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000607\\Petelenz-Kurdziel2013 - Osmo adaptation fps1D1.xml'
+p504
+sS'Lebeda2008_BoTN_Paralysis_4stepModel.xml'
+p505
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000178\\Lebeda2008_BoTN_Paralysis_4stepModel.xml'
+p506
+sS'Lei2001_Yeast_Aerobic_Metabolism.xml'
+p507
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000245\\Lei2001_Yeast_Aerobic_Metabolism.xml'
+p508
+sS'Hodgkin-Huxley1952 squid-axon.xml'
+p509
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000020\\Hodgkin-Huxley1952 squid-axon.xml'
+p510
+sS'Golomb2006_SomaticBursting.xml'
+p511
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000118\\Golomb2006_SomaticBursting.xml'
+p512
+sS'Ibrahim2008 - Mitotic Spindle Assembly Checkpoint - Dissociation variant.xml'
+p513
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000186\\Ibrahim2008 - Mitotic Spindle Assembly Checkpoint - Dissociation variant.xml'
+p514
+sS'Goldbeter1991 - Min Mit Oscil, Expl Inact.xml'
+p515
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000004\\Goldbeter1991 - Min Mit Oscil, Expl Inact.xml'
+p516
+sS'Wegner2012_TGFbetaSignalling_FeedbackLoops.xml'
+p517
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000410\\Wegner2012_TGFbetaSignalling_FeedbackLoops.xml'
+p518
+sS'Sarma2012 - Oscillations in MAPK cascade (S1).xml'
+p519
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000440\\Sarma2012 - Oscillations in MAPK cascade (S1).xml'
+p520
+sS'Leloup1998_CircClock_LD.xml'
+p521
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000171\\Leloup1998_CircClock_LD.xml'
+p522
+sS'Leloup1999_CircadianRhythms_Drosophila.xml'
+p523
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000298\\Leloup1999_CircadianRhythms_Drosophila.xml'
+p524
+sS'Field1974_Oregonator.xml'
+p525
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000040\\Field1974_Oregonator.xml'
+p526
+sS'Lee2010_ThrombinActivation_OneForm.xml'
+p527
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000364\\Lee2010_ThrombinActivation_OneForm.xml'
+p528
+sS'Queralt2006_MitoticExit_Cdc55DownregulationBySeparase.xml'
+p529
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000409\\Queralt2006_MitoticExit_Cdc55DownregulationBySeparase.xml'
+p530
+sS'Hong2009_CircadianClock.xml'
+p531
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000216\\Hong2009_CircadianClock.xml'
+p532
+sS'Proctor2010 - UCHL1 Protein Aggregation.xml'
+p533
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000293\\Proctor2010 - UCHL1 Protein Aggregation.xml'
+p534
+sS'Butenas2004_BloodCoagulation.xml'
+p535
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000362\\Butenas2004_BloodCoagulation.xml'
+p536
+sS'ChenXF2008_CICR.xml'
+p537
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000202\\ChenXF2008_CICR.xml'
+p538
+sS'Band2012_DII-Venus_FullModel.xml'
+p539
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000413\\Band2012_DII-Venus_FullModel.xml'
+p540
+sS'Vazquez2014 - Chemical inhibition from amyloid protein aggregation kinetics.xml'
+p541
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000532\\Vazquez2014 - Chemical inhibition from amyloid protein aggregation kinetics.xml'
+p542
+sS'Holzhutter2004_Erythrocyte_Metabolism.xml'
+p543
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000070\\Holzhutter2004_Erythrocyte_Metabolism.xml'
+p544
+sS'Alexander2010_Tcell_Regulation_Sys2.xml'
+p545
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000290\\Alexander2010_Tcell_Regulation_Sys2.xml'
+p546
+sS'Benson2013 - Identification of key drug targets in nerve growth factor pathway.xml'
+p547
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000588\\Benson2013 - Identification of key drug targets in nerve growth factor pathway.xml'
+p548
+sS'Fridlyand2010_GlucoseSensitivity_B.xml'
+p549
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000349\\Fridlyand2010_GlucoseSensitivity_B.xml'
+p550
+sS'Tolic2000_InsulinGlucoseFeedback.xml'
+p551
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000372\\Tolic2000_InsulinGlucoseFeedback.xml'
+p552
+sS'Levchenko2000_MAPK_Scaffold.xml'
+p553
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000014\\Levchenko2000_MAPK_Scaffold.xml'
+p554
+sS'Sivakumar2011 - Hedgehog Signaling Pathway.xml'
+p555
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000395\\Sivakumar2011 - Hedgehog Signaling Pathway.xml'
+p556
+sS'Bachmann2011_JAK2-STAT5_FeedbackControl.xml'
+p557
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000347\\Bachmann2011_JAK2-STAT5_FeedbackControl.xml'
+p558
+sS'Schmierer2010_FIH_Ankyrins.xml'
+p559
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000300\\Schmierer2010_FIH_Ankyrins.xml'
+p560
+sS'Zatorsky2006_p53_Model2.xml'
+p561
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000158\\Zatorsky2006_p53_Model2.xml'
+p562
+sS'Costa2014 - Computational Model of L. lactis Metabolism.xml'
+p563
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000572\\Costa2014 - Computational Model of L. lactis Metabolism.xml'
+p564
+sS'Sedaghat2002_InsulinSignalling_noFeedback.xml'
+p565
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000137\\Sedaghat2002_InsulinSignalling_noFeedback.xml'
+p566
+sS'Smallbone2013 - Yeast metabolic model with modular rate law.xml'
+p567
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000472\\Smallbone2013 - Yeast metabolic model with modular rate law.xml'
+p568
+sS'Hoefnagel2002_PyruvateBranches.xml'
+p569
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000017\\Hoefnagel2002_PyruvateBranches.xml'
+p570
+sS'Nijhout2004_Folate_Cycle.xml'
+p571
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000213\\Nijhout2004_Folate_Cycle.xml'
+p572
+sS'Goldbeter1990_CalciumSpike_CICR.xml'
+p573
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000098\\Goldbeter1990_CalciumSpike_CICR.xml'
+p574
+sS'Izhikevich2003_SpikingNeuron.xml'
+p575
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000127\\Izhikevich2003_SpikingNeuron.xml'
+p576
+sS'Brown2004 - NGF and EGF signaling.xml'
+p577
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000033\\Brown2004 - NGF and EGF signaling.xml'
+p578
+sS'Smallbone2013 - Colon Crypt cycle - Version 0.xml'
+p579
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000520\\Smallbone2013 - Colon Crypt cycle - Version 0.xml'
+p580
+sS'Ribba2012 - Low-grade gliomas, tumour growth inhibition model.xml'
+p581
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000521\\Ribba2012 - Low-grade gliomas, tumour growth inhibition model.xml'
+p582
+sS'Saucerman2006_PKA.xml'
+p583
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000165\\Saucerman2006_PKA.xml'
+p584
+sS'Novak1997 - Cell Cycle.xml'
+p585
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000007\\Novak1997 - Cell Cycle.xml'
+p586
+sS'Conradie2010_RPControl_CellCycle.xml'
+p587
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000265\\Conradie2010_RPControl_CellCycle.xml'
+p588
+sS'Stavrum2013 - Tryptophan Metabolism in Liver.xml'
+p589
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000602\\Stavrum2013 - Tryptophan Metabolism in Liver.xml'
+p590
+sS'Izhikevich2004_SpikingNeurons_Class2Excitable.xml'
+p591
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000142\\Izhikevich2004_SpikingNeurons_Class2Excitable.xml'
+p592
+sS'Stanford2013 - Kinetic model of yeast metabolic network (regulation).xml'
+p593
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000497\\Stanford2013 - Kinetic model of yeast metabolic network (regulation).xml'
+p594
+sS'Bindschadler2001_coupled_Ca_oscillators.xml'
+p595
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000058\\Bindschadler2001_coupled_Ca_oscillators.xml'
+p596
+sS'Maree2006_DuCa_Type1DiabetesModel.xml'
+p597
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000381\\Maree2006_DuCa_Type1DiabetesModel.xml'
+p598
+sS'Fung2005_Metabolic_Oscillator.xml'
+p599
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000067\\Fung2005_Metabolic_Oscillator.xml'
+p600
+sS'Fridlyand2010_GlucoseSensitivity_A.xml'
+p601
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000348\\Fridlyand2010_GlucoseSensitivity_A.xml'
+p602
+sS'Pathak2013 - MAPK activation in response to various biotic stresses.xml'
+p603
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000492\\Pathak2013 - MAPK activation in response to various biotic stresses.xml'
+p604
+sS'Clarke2006_Smad_signalling.xml'
+p605
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000112\\Clarke2006_Smad_signalling.xml'
+p606
+sS'Schmierer_2008_Smad_Tgfb.xml'
+p607
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000173\\Schmierer_2008_Smad_Tgfb.xml'
+p608
+sS'Proctor2016 - Circadian rhythm of PTH and the dynamics of signaling molecules on bone remodeling.xml'
+p609
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000612\\Proctor2016 - Circadian rhythm of PTH and the dynamics of signaling molecules on bone remodeling.xml'
+p610
+sS'Tabak2007_dopamine.xml'
+p611
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000138\\Tabak2007_dopamine.xml'
+p612
+sS'Lavrentovich2008_Ca_Oscillations.xml'
+p613
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000184\\Lavrentovich2008_Ca_Oscillations.xml'
+p614
+sS'Hockin2002_BloodCoagulation.xml'
+p615
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000335\\Hockin2002_BloodCoagulation.xml'
+p616
+sS'Ferreira2003_CML_generation2.xml'
+p617
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000053\\Ferreira2003_CML_generation2.xml'
+p618
+sS'Borisov2009_EGF_Insulin_Crosstalk.xml'
+p619
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000223\\Borisov2009_EGF_Insulin_Crosstalk.xml'
+p620
+sS'Fisher2006_Ca_Oscillation_dpdnt_NFAT_dynamics.xml'
+p621
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000122\\Fisher2006_Ca_Oscillation_dpdnt_NFAT_dynamics.xml'
+p622
+sS'Teusink1998_Glycolysis_TurboDesign.xml'
+p623
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000253\\Teusink1998_Glycolysis_TurboDesign.xml'
+p624
+sS'ODea2007_IkappaB.xml'
+p625
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000147\\ODea2007_IkappaB.xml'
+p626
+sS'Chen2009 - ErbB Signaling.xml'
+p627
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000255\\Chen2009 - ErbB Signaling.xml'
+p628
+sS'Tyson1991 - Cell Cycle 2 var.xml'
+p629
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000006\\Tyson1991 - Cell Cycle 2 var.xml'
+p630
+sS'DallePezze2014 -  Cellular senescene-induced mitochondrial dysfunction.xml'
+p631
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000582\\DallePezze2014 -  Cellular senescene-induced mitochondrial dysfunction.xml'
+p632
+sS'Ibrahim2008_Cdc20_Sequestring_Template_Model.xml'
+p633
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000194\\Ibrahim2008_Cdc20_Sequestring_Template_Model.xml'
+p634
+sS'Chay1997_CalciumConcentration.xml'
+p635
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000378\\Chay1997_CalciumConcentration.xml'
+p636
+sS'Leloup2003_CircClock_LD_REV-ERBalpha.xml'
+p637
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000083\\Leloup2003_CircClock_LD_REV-ERBalpha.xml'
+p638
+sS'Muraro2011_Cytokinin-Auxin_CrossRegulation.xml'
+p639
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000416\\Muraro2011_Cytokinin-Auxin_CrossRegulation.xml'
+p640
+sS'Schliemann2011_TNF_ProAntiApoptosis.xml'
+p641
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000407\\Schliemann2011_TNF_ProAntiApoptosis.xml'
+p642
+sS'Plant1981_BurstingNerveCells.xml'
+p643
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000304\\Plant1981_BurstingNerveCells.xml'
+p644
+sS'Arnold2011_Giersch1990_CalvinCycle.xml'
+p645
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000390\\Arnold2011_Giersch1990_CalvinCycle.xml'
+p646
+sS'Das2010 - Effect of a gamma-secretase inhibitor on Amyloid-beta dynamics.xml'
+p647
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000551\\Das2010 - Effect of a gamma-secretase inhibitor on Amyloid-beta dynamics.xml'
+p648
+sS'Pfeiffer2001_ATP-ProducingPathways_CooperationCompetition.xml'
+p649
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000337\\Pfeiffer2001_ATP-ProducingPathways_CooperationCompetition.xml'
+p650
+sS'Arnold2011_Sharkey2007_RuBisCO-CalvinCycle.xml'
+p651
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000386\\Arnold2011_Sharkey2007_RuBisCO-CalvinCycle.xml'
+p652
+sS'Fisher2006_NFAT_Activation.xml'
+p653
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000123\\Fisher2006_NFAT_Activation.xml'
+p654
+sS'Gould2013 - Temperature Sensitive Circadian Clock.xml'
+p655
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000564\\Gould2013 - Temperature Sensitive Circadian Clock.xml'
+p656
+sS'Br\xe4nnmark2013 - Insulin signalling in human adipocytes (normal condition).xml'
+p657
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000448\\Br\xe4nnmark2013 - Insulin signalling in human adipocytes (normal condition).xml'
+p658
+sS'Kholodenko1999 - EGFR signaling.xml'
+p659
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000048\\Kholodenko1999 - EGFR signaling.xml'
+p660
+sS'Izhikevich2004_SpikingNeurons_Class1Excitable.xml'
+p661
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000141\\Izhikevich2004_SpikingNeurons_Class1Excitable.xml'
+p662
+sS'Tyson1991 - Cell Cycle 6 var.xml'
+p663
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000005\\Tyson1991 - Cell Cycle 6 var.xml'
+p664
+sS'Smallbone2013 - Serine biosynthesis.xml'
+p665
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000458\\Smallbone2013 - Serine biosynthesis.xml'
+p666
+sS'Zi2007_TGFbeta_signaling.xml'
+p667
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000163\\Zi2007_TGFbeta_signaling.xml'
+p668
+sS'Tyson2003_NegFB_Homeostasis.xml'
+p669
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000309\\Tyson2003_NegFB_Homeostasis.xml'
+p670
+sS'Edelstein1996 - EPSP ACh event.xml'
+p671
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000001\\Edelstein1996 - EPSP ACh event.xml'
+p672
+sS'Jenkinson2011_EGF_MAPK.xml'
+p673
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000399\\Jenkinson2011_EGF_MAPK.xml'
+p674
+sS'Orfao2008_ThrombinGeneration_AmidolyticActivity.xml'
+p675
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000366\\Orfao2008_ThrombinGeneration_AmidolyticActivity.xml'
+p676
+sS'Rohwer2001_Sucrose.xml'
+p677
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000023\\Rohwer2001_Sucrose.xml'
+p678
+sS'Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade.xml'
+p679
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000010\\Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade.xml'
+p680
+sS'Steckmann2012 - Amyloid beta-protein fibrillogenesis (kinetics of secondary structure conversion).xml'
+p681
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000533\\Steckmann2012 - Amyloid beta-protein fibrillogenesis (kinetics of secondary structure conversion).xml'
+p682
+sS'Overgaard2007_PDmodel_IL21.xml'
+p683
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000238\\Overgaard2007_PDmodel_IL21.xml'
+p684
+sS'Ciliberto2003_Morphogenesis_Checkpoint.xml'
+p685
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000297\\Ciliberto2003_Morphogenesis_Checkpoint.xml'
+p686
+sS'Ayati2010_BoneRemodelingDynamics_WithTumour+DrugTreatment.xml'
+p687
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000403\\Ayati2010_BoneRemodelingDynamics_WithTumour+DrugTreatment.xml'
+p688
+sS'Veening2008_DegU_Regulation.xml'
+p689
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000240\\Veening2008_DegU_Regulation.xml'
+p690
+sS'Poolman2004_CalvinCycle.xml'
+p691
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000013\\Poolman2004_CalvinCycle.xml'
+p692
+sS'Morrison1989_FolateCycle.xml'
+p693
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000018\\Morrison1989_FolateCycle.xml'
+p694
+sS'Gardner1998 - Cell Cycle Goldbeter.xml'
+p695
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000008\\Gardner1998 - Cell Cycle Goldbeter.xml'
+p696
+sS'Flis2015 - Plant clock gene circuit (P2011.1.2 PLM_71 ver 1).xml'
+p697
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000597\\Flis2015 - Plant clock gene circuit (P2011.1.2 PLM_71 ver 1).xml'
+p698
+sS'Auer2010 - Correlation between lag time and aggregation rate in protein aggregation.xml'
+p699
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000555\\Auer2010 - Correlation between lag time and aggregation rate in protein aggregation.xml'
+p700
+sS'Yi2003_GproteinCycle.xml'
+p701
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000072\\Yi2003_GproteinCycle.xml'
+p702
+sS'Ratushny2012_SPF.xml'
+p703
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000418\\Ratushny2012_SPF.xml'
+p704
+sS'Leber2015 - Mucosal immunity and gut microbiome interaction during C. difficile infection.xml'
+p705
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000583\\Leber2015 - Mucosal immunity and gut microbiome interaction during C. difficile infection.xml'
+p706
+sS'Smolen2004_CircClock.xml'
+p707
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000034\\Smolen2004_CircClock.xml'
+p708
+sS'Arnold2011_Zhu2007_CalvinCycle_Starch_Sucrose_Photorespiration.xml'
+p709
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000393\\Arnold2011_Zhu2007_CalvinCycle_Starch_Sucrose_Photorespiration.xml'
+p710
+sS'Faratian2009 - Role of PTEN in Trastuzumab resistance.xml'
+p711
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000424\\Faratian2009 - Role of PTEN in Trastuzumab resistance.xml'
+p712
+sS'Cao2013 - Application of ABSIS in the the enzymatic futile cycle.xml'
+p713
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000487\\Cao2013 - Application of ABSIS in the the enzymatic futile cycle.xml'
+p714
+sS'Heiland2012_CircadianClock_C.reinhardtii.xml'
+p715
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000411\\Heiland2012_CircadianClock_C.reinhardtii.xml'
+p716
+sS'Izhikevich2004_SpikingNeurons_reboundBurst.xml'
+p717
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000131\\Izhikevich2004_SpikingNeurons_reboundBurst.xml'
+p718
+sS'Zhou2015 - Circadian clock with immune regulator NPR1.xml'
+p719
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000577\\Zhou2015 - Circadian clock with immune regulator NPR1.xml'
+p720
+sS'Friedland2009_Ara_RTC3_counter.xml'
+p721
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000301\\Friedland2009_Ara_RTC3_counter.xml'
+p722
+sS'Chen2004 - Cell Cycle Regulation.xml'
+p723
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000056\\Chen2004 - Cell Cycle Regulation.xml'
+p724
+sS'Jiang2007 - GSIS system, Pancreatic Beta Cells.xml'
+p725
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000239\\Jiang2007 - GSIS system, Pancreatic Beta Cells.xml'
+p726
+sS'Arnold2011_Damour2007_RuBisCO-CalvinCycle.xml'
+p727
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000387\\Arnold2011_Damour2007_RuBisCO-CalvinCycle.xml'
+p728
+sS'Peterson2010 - Integrated calcium homeostasis and bone remodelling.xml'
+p729
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000613\\Peterson2010 - Integrated calcium homeostasis and bone remodelling.xml'
+p730
+sS'Morris2002_CellCycle_CDK2Cyclin.xml'
+p731
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000150\\Morris2002_CellCycle_CDK2Cyclin.xml'
+p732
+sS'Srividhya2006_CellCycle.xml'
+p733
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000196\\Srividhya2006_CellCycle.xml'
+p734
+sS'Tyson2003_Mutual_Activation.xml'
+p735
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000311\\Tyson2003_Mutual_Activation.xml'
+p736
+sS'Hunziker2010_p53_StressSpecificResponse.xml'
+p737
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000252\\Hunziker2010_p53_StressSpecificResponse.xml'
+p738
+sS'Sturis1991_InsulinGlucoseModel_UltradianOscillation.xml'
+p739
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000382\\Sturis1991_InsulinGlucoseModel_UltradianOscillation.xml'
+p740
+sS'Fernandez2006_ModelA.xml'
+p741
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000152\\Fernandez2006_ModelA.xml'
+p742
+sS'Radulescu2008_NFkB_hierarchy_M_39_65_90.xml'
+p743
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000227\\Radulescu2008_NFkB_hierarchy_M_39_65_90.xml'
+p744
+sS'Heldt2012 - Influenza Virus Replication.xml'
+p745
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000463\\Heldt2012 - Influenza Virus Replication.xml'
+p746
+sS'Bertram2004_PancreaticBetaCell_modelB.xml'
+p747
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000373\\Bertram2004_PancreaticBetaCell_modelB.xml'
+p748
+sS'Walsh2014 - Inhibition kinetics of DAPT on APP Cleavage.xml'
+p749
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000617\\Walsh2014 - Inhibition kinetics of DAPT on APP Cleavage.xml'
+p750
+sS'Hoffmann2002_WT_IkBNFkB_Signaling.xml'
+p751
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000140\\Hoffmann2002_WT_IkBNFkB_Signaling.xml'
+p752
+sS'Chickarmane2006 - Stem cell switch reversible.xml'
+p753
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000203\\Chickarmane2006 - Stem cell switch reversible.xml'
+p754
+sS'Ouyang2014 - photomorphogenic UV-B signalling network.xml'
+p755
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000545\\Ouyang2014 - photomorphogenic UV-B signalling network.xml'
+p756
+sS'Martins2013 - True and apparent inhibition of amyloid fribril formation.xml'
+p757
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000561\\Martins2013 - True and apparent inhibition of amyloid fribril formation.xml'
+p758
+sS'Westermark2003_Pancreatic_GlycOsc_extended.xml'
+p759
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000236\\Westermark2003_Pancreatic_GlycOsc_extended.xml'
+p760
+sS'Koo2013 - Integrated shear stress induced NO production model.xml'
+p761
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000468\\Koo2013 - Integrated shear stress induced NO production model.xml'
+p762
+sS'Locke2006_CircClock_LL.xml'
+p763
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000089\\Locke2006_CircClock_LL.xml'
+p764
+sS'Singh2006_TCA_mtu_model2.xml'
+p765
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000218\\Singh2006_TCA_mtu_model2.xml'
+p766
+sS'Smallbone2013 - Yeast metabolic model with modular rate law, merged with Pritchard 2002.xml'
+p767
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000473\\Smallbone2013 - Yeast metabolic model with modular rate law, merged with Pritchard 2002.xml'
+p768
+sS'Hernjak2005_Calcium_Signaling.xml'
+p769
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000162\\Hernjak2005_Calcium_Signaling.xml'
+p770
+sS'Kowald2006_SOD.xml'
+p771
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000108\\Kowald2006_SOD.xml'
+p772
+sS'Smallbone2013 - E.coli metabolic model with linlog rate law.xml'
+p773
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000469\\Smallbone2013 - E.coli metabolic model with linlog rate law.xml'
+p774
+sS'Stanford2013 - Kinetic model of yeast metabolic network (standard).xml'
+p775
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000496\\Stanford2013 - Kinetic model of yeast metabolic network (standard).xml'
+p776
+sS'Baker2013 - Cytokine Mediated Inflammation in Rheumatoid Arthritis - Age Dependant.xml'
+p777
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000549\\Baker2013 - Cytokine Mediated Inflammation in Rheumatoid Arthritis - Age Dependant.xml'
+p778
+sS'Ibrahim2008_MCC_assembly_model_KDM.xml'
+p779
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000193\\Ibrahim2008_MCC_assembly_model_KDM.xml'
+p780
+sS'Hettling2011_CreatineKinase.xml'
+p781
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000408\\Hettling2011_CreatineKinase.xml'
+p782
+sS'SmithAE2002_RanTransport.xml'
+p783
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000164\\SmithAE2002_RanTransport.xml'
+p784
+sS'Shrestha2010_HypoCalcemia_PTHresponse.xml'
+p785
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000276\\Shrestha2010_HypoCalcemia_PTHresponse.xml'
+p786
+sS'Curien2003_MetThr_synthesis.xml'
+p787
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000068\\Curien2003_MetThr_synthesis.xml'
+p788
+sS'Montagne2011_Oligator_optimised.xml'
+p789
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000315\\Montagne2011_Oligator_optimised.xml'
+p790
+sS'Wilhelm2009_BistableReaction.xml'
+p791
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000233\\Wilhelm2009_BistableReaction.xml'
+p792
+sS'Abell2011_CalciumSignaling_WithoutAdaptation.xml'
+p793
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000354\\Abell2011_CalciumSignaling_WithoutAdaptation.xml'
+p794
+sS'Tyson2003_Mutual_Inhibition.xml'
+p795
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000310\\Tyson2003_Mutual_Inhibition.xml'
+p796
+sS'Topp2000_BetaCellMass_Diabetes.xml'
+p797
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000341\\Topp2000_BetaCellMass_Diabetes.xml'
+p798
+sS'Sengupta2015 - Knowledge base model of human energy pool network (HEPNet).xml'
+p799
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000579\\Sengupta2015 - Knowledge base model of human energy pool network (HEPNet).xml'
+p800
+sS'Muraro2014 - Vascular patterning in Arabidopsis roots.xml'
+p801
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000522\\Muraro2014 - Vascular patterning in Arabidopsis roots.xml'
+p802
+sS'Shen-Orr2002_Single_Input_Module.xml'
+p803
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000317\\Shen-Orr2002_Single_Input_Module.xml'
+p804
+sS'Koschorreck2008_InsulinClearance.xml'
+p805
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000345\\Koschorreck2008_InsulinClearance.xml'
+p806
+sS'Ouzounoglou2014 - Modeling of alpha-synuclein effects on neuronal homeostasis.xml'
+p807
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000559\\Ouzounoglou2014 - Modeling of alpha-synuclein effects on neuronal homeostasis.xml'
+p808
+sS'Radulescu2008_NFkB_hierarchy_M_14_25_28_Lipniacky.xml'
+p809
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000226\\Radulescu2008_NFkB_hierarchy_M_14_25_28_Lipniacky.xml'
+p810
+sS'Yildirim2003_Lac_Operon.xml'
+p811
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000065\\Yildirim2003_Lac_Operon.xml'
+p812
+sS'Blum2000_LHsecretion_1.xml'
+p813
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000077\\Blum2000_LHsecretion_1.xml'
+p814
+sS'Restif2006_Whooping_Cough.xml'
+p815
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000249\\Restif2006_Whooping_Cough.xml'
+p816
+sS'Morris1981_MuscleFibre_Voltage_full.xml'
+p817
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000324\\Morris1981_MuscleFibre_Voltage_full.xml'
+p818
+sS'Sarma2012 - Interaction topologies of MAPK cascade (M4_K2_QSS_USEQ).xml'
+p819
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000432\\Sarma2012 - Interaction topologies of MAPK cascade (M4_K2_QSS_USEQ).xml'
+p820
+sS'Mosca2012 - Central Carbon Metabolism Regulated by AKT.xml'
+p821
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000426\\Mosca2012 - Central Carbon Metabolism Regulated by AKT.xml'
+p822
+sS'Kotte2010_Ecoli_Metabolic_Adaption.xml'
+p823
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000244\\Kotte2010_Ecoli_Metabolic_Adaption.xml'
+p824
+sS'Dwivedi2014 - Crohns IL6 Disease model - Anti-IL6 Antibody.xml'
+p825
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000535\\Dwivedi2014 - Crohns IL6 Disease model - Anti-IL6 Antibody.xml'
+p826
+sS'Ortega2013 - Interplay between secretases determines biphasic amyloid-beta level.xml'
+p827
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000556\\Ortega2013 - Interplay between secretases determines biphasic amyloid-beta level.xml'
+p828
+sS'Olsen2003_peroxidase.xml'
+p829
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000046\\Olsen2003_peroxidase.xml'
+p830
+sS'Schaber2006_Pheromone_Starvation_Crosstalk.xml'
+p831
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000237\\Schaber2006_Pheromone_Starvation_Crosstalk.xml'
+p832
+sS'Raia2011_IL13_L1236.xml'
+p833
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000314\\Raia2011_IL13_L1236.xml'
+p834
+sS'Yugi2014 - Insulin induced signalling (PFKL phosphorylation) - model 2.xml'
+p835
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000541\\Yugi2014 - Insulin induced signalling (PFKL phosphorylation) - model 2.xml'
+p836
+sS'Karapetyan2016 - Genetic oscillatory network - Activator Titration Circuit (ATC).xml'
+p837
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000586\\Karapetyan2016 - Genetic oscillatory network - Activator Titration Circuit (ATC).xml'
+p838
+sS'Crespo2012 - Kinetics of Amyloid Fibril Formation.xml'
+p839
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000531\\Crespo2012 - Kinetics of Amyloid Fibril Formation.xml'
+p840
+sS'Curien2009_Aspartate_Metabolism.xml'
+p841
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000212\\Curien2009_Aspartate_Metabolism.xml'
+p842
+sS'Piedrafita2010_MR_System.xml'
+p843
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000257\\Piedrafita2010_MR_System.xml'
+p844
+sS'Decroly1982_Enzymatic_Oscillator.xml'
+p845
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000319\\Decroly1982_Enzymatic_Oscillator.xml'
+p846
+sS'Kim2011_Oscillator_SimpleIII.xml'
+p847
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000323\\Kim2011_Oscillator_SimpleIII.xml'
+p848
+sS'Santolini2001_nNOS_Mechanism_Regulation.xml'
+p849
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000199\\Santolini2001_nNOS_Mechanism_Regulation.xml'
+p850
+sS'Nakakuki2010_CellFateDecision_Mechanistic.xml'
+p851
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000250\\Nakakuki2010_CellFateDecision_Mechanistic.xml'
+p852
+sS'DeVries2000_PancreaticBetaCells_InsulinSecretion.xml'
+p853
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000371\\DeVries2000_PancreaticBetaCells_InsulinSecretion.xml'
+p854
+sS'Tiago2010_FeMetabolism_FeAdequate.xml'
+p855
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000260\\Tiago2010_FeMetabolism_FeAdequate.xml'
+p856
+sS'Fuentes2005_ZymogenActivation.xml'
+p857
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000092\\Fuentes2005_ZymogenActivation.xml'
+p858
+sS'Markevich2004 - MAPK double phosphorylation,  ordered Michaelis-Menton.xml'
+p859
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000027\\Markevich2004 - MAPK double phosphorylation,  ordered Michaelis-Menton.xml'
+p860
+sS'Ihekwaba2004_NFkB_Sensitivity.xml'
+p861
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000230\\Ihekwaba2004_NFkB_Sensitivity.xml'
+p862
+sS'Ung2008_EGFR_Endocytosis.xml'
+p863
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000205\\Ung2008_EGFR_Endocytosis.xml'
+p864
+sS'Markevich2004_MAPK_AllRandomElementary.xml'
+p865
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000030\\Markevich2004_MAPK_AllRandomElementary.xml'
+p866
+sS'Larsen2004_CalciumSpiking.xml'
+p867
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000330\\Larsen2004_CalciumSpiking.xml'
+p868
+sS'Aubert2002 - Coupling between Brain electrical activity, Metabolism and Hemodynamics.xml'
+p869
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000570\\Aubert2002 - Coupling between Brain electrical activity, Metabolism and Hemodynamics.xml'
+p870
+sS'Yamada2003_JAK_STAT_pathway.xml'
+p871
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000093\\Yamada2003_JAK_STAT_pathway.xml'
+p872
+sS'Wang2009 - PI3K Ras Crosstalk.xml'
+p873
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000288\\Wang2009 - PI3K Ras Crosstalk.xml'
+p874
+sS'Sarma2012 - Interaction topologies of MAPK cascade (M4_K2_PSEQ).xml'
+p875
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000431\\Sarma2012 - Interaction topologies of MAPK cascade (M4_K2_PSEQ).xml'
+p876
+sS'Westermark2003_Pancreatic_GlycOsc_basic.xml'
+p877
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000225\\Westermark2003_Pancreatic_GlycOsc_basic.xml'
+p878
+sS'Zi2011_TGF-beta_Pathway.xml'
+p879
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000342\\Zi2011_TGF-beta_Pathway.xml'
+p880
+sS'Proctor2005 - Actions of chaperones and their role in ageing.xml'
+p881
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000091\\Proctor2005 - Actions of chaperones and their role in ageing.xml'
+p882
+sS'Izhikevich2004_SpikingNeurons_integrator.xml'
+p883
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000130\\Izhikevich2004_SpikingNeurons_integrator.xml'
+p884
+sS'Fuss2006_MitoticActivation.xml'
+p885
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000069\\Fuss2006_MitoticActivation.xml'
+p886
+sS'Fernandez2006_ModelB.xml'
+p887
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000153\\Fernandez2006_ModelB.xml'
+p888
+sS'Pokhilko2010_CircClock.xml'
+p889
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000273\\Pokhilko2010_CircClock.xml'
+p890
+sS'Izhikevich2004_SpikingNeurons_SpikeLatency.xml'
+p891
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000134\\Izhikevich2004_SpikingNeurons_SpikeLatency.xml'
+p892
+sS'Calzone2007_CellCycle.xml'
+p893
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000144\\Calzone2007_CellCycle.xml'
+p894
+sS'Gardner2000 - genetic toggle switch in E.coli.xml'
+p895
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000507\\Gardner2000 - genetic toggle switch in E.coli.xml'
+p896
+sS'Kuhn2009_EndoMesodermNetwork.xml'
+p897
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000235\\Kuhn2009_EndoMesodermNetwork.xml'
+p898
+sS'Nakakuki2010_CellFateDecision_Core.xml'
+p899
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000251\\Nakakuki2010_CellFateDecision_Core.xml'
+p900
+sS'Dwivedi2014 - Crohns IL6 Disease model - sgp130 activity.xml'
+p901
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000536\\Dwivedi2014 - Crohns IL6 Disease model - sgp130 activity.xml'
+p902
+sS'Kongas2007 - Creatine Kinase in energy metabolic signaling in muscle.xml'
+p903
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000041\\Kongas2007 - Creatine Kinase in energy metabolic signaling in muscle.xml'
+p904
+sS'Xu2003 - Phosphoinositide turnover.xml'
+p905
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000075\\Xu2003 - Phosphoinositide turnover.xml'
+p906
+sS'Smolen2002_CircClock.xml'
+p907
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000025\\Smolen2002_CircClock.xml'
+p908
+sS'Albeck2008_extrinsic_apoptosis.xml'
+p909
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000220\\Albeck2008_extrinsic_apoptosis.xml'
+p910
+sS'Izhikevich2004_SpikingNeurons_thresholdVariability.xml'
+p911
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000136\\Izhikevich2004_SpikingNeurons_thresholdVariability.xml'
+p912
+sS'Hui2014 - Age-related changes in articular cartilage.xml'
+p913
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000560\\Hui2014 - Age-related changes in articular cartilage.xml'
+p914
+sS'Yang2007_ArachidonicAcid.xml'
+p915
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000106\\Yang2007_ArachidonicAcid.xml'
+p916
+sS'Sneyd2002_IP3_Receptor.xml'
+p917
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000057\\Sneyd2002_IP3_Receptor.xml'
+p918
+sS'Wolf2001_Respiratory_Oscillations.xml'
+p919
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000090\\Wolf2001_Respiratory_Oscillations.xml'
+p920
+sS'Palini2011_Minimal_2_Feedback_Model.xml'
+p921
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000325\\Palini2011_Minimal_2_Feedback_Model.xml'
+p922
+sS'Adams2012 - Locke2006 Circadian Rhythm model refined with Input Signal Light Function.xml'
+p923
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000476\\Adams2012 - Locke2006 Circadian Rhythm model refined with Input Signal Light Function.xml'
+p924
+sS'Arnold2011_Laisk2006_CalvinCycle_Starch_Sucrose.xml'
+p925
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000392\\Arnold2011_Laisk2006_CalvinCycle_Starch_Sucrose.xml'
+p926
+sS'Rohwer2000_Phosphotransferase_System.xml'
+p927
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000038\\Rohwer2000_Phosphotransferase_System.xml'
+p928
+sS'Sonntag2012 - mTOR model - IRS dependent regulation of AMPK by insulin.xml'
+p929
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000580\\Sonntag2012 - mTOR model - IRS dependent regulation of AMPK by insulin.xml'
+p930
+sS'Hatakeyama2003_MAPK.xml'
+p931
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000146\\Hatakeyama2003_MAPK.xml'
+p932
+sS"Ehrenstein2000 - Positive-Feedback model for the loss of acetylcholine in Alzheimer's disease.xml"
+p933
+S"D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000552\\Ehrenstein2000 - Positive-Feedback model for the loss of acetylcholine in Alzheimer's disease.xml"
+p934
+sS'Sasagawa2005_MAPK.xml'
+p935
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000049\\Sasagawa2005_MAPK.xml'
+p936
+sS'Tyson2003_NegFB_Oscillator.xml'
+p937
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000308\\Tyson2003_NegFB_Oscillator.xml'
+p938
+sS'Singh2006_TCA_mtu_model1.xml'
+p939
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000219\\Singh2006_TCA_mtu_model1.xml'
+p940
+sS'Leloup2003_CircClock_DD_REV-ERBalpha.xml'
+p941
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000074\\Leloup2003_CircClock_DD_REV-ERBalpha.xml'
+p942
+sS'Dunster2014 - WBC Interactions (Model1).xml'
+p943
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000616\\Dunster2014 - WBC Interactions (Model1).xml'
+p944
+sS'DallaMan2007_MealModel_GlucoseInsulinSystem.xml'
+p945
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000379\\DallaMan2007_MealModel_GlucoseInsulinSystem.xml'
+p946
+sS'Saeidi2012 - Quorum sensing device that produces GFP.xml'
+p947
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000438\\Saeidi2012 - Quorum sensing device that produces GFP.xml'
+p948
+sS'Kerkhoven2013 - Glycolysis in T.brucei - MODEL A.xml'
+p949
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000513\\Kerkhoven2013 - Glycolysis in T.brucei - MODEL A.xml'
+p950
+sS'Bai2003_G1phaseRegulation.xml'
+p951
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000242\\Bai2003_G1phaseRegulation.xml'
+p952
+sS'Bruggeman2005_AmmoniumAssimilation.xml'
+p953
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000217\\Bruggeman2005_AmmoniumAssimilation.xml'
+p954
+sS'Koo2013 - Shear stress induced NO production - Model 4.xml'
+p955
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000467\\Koo2013 - Shear stress induced NO production - Model 4.xml'
+p956
+sS'Miao2010 - Innate and adaptive immune responses to primary Influenza A Virus infection.xml'
+p957
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000546\\Miao2010 - Innate and adaptive immune responses to primary Influenza A Virus infection.xml'
+p958
+sS'Martinez-Sanchez2015 - T CD4+ lymphocyte transcriptional regulatory network.xml'
+p959
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000592\\Martinez-Sanchez2015 - T CD4+ lymphocyte transcriptional regulatory network.xml'
+p960
+sS'Izhikevich2004_SpikingNeurons_resonator.xml'
+p961
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000133\\Izhikevich2004_SpikingNeurons_resonator.xml'
+p962
+sS'Stefan2008 - calmodulin allostery.xml'
+p963
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000183\\Stefan2008 - calmodulin allostery.xml'
+p964
+sS'Wu2006_K+Channel.xml'
+p965
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000124\\Wu2006_K+Channel.xml'
+p966
+sS'Neves2008 - Role of cell shape and size in controlling intracellular signalling.xml'
+p967
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000182\\Neves2008 - Role of cell shape and size in controlling intracellular signalling.xml'
+p968
+sS'Conant2007_glycolysis_2C.xml'
+p969
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000177\\Conant2007_glycolysis_2C.xml'
+p970
+sS'Voit2003_Trehalose_Cycle.xml'
+p971
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000266\\Voit2003_Trehalose_Cycle.xml'
+p972
+sS'Leloup1999_CircClock.xml'
+p973
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000021\\Leloup1999_CircClock.xml'
+p974
+sS'Locke2005 - Circadian Clock.xml'
+p975
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000055\\Locke2005 - Circadian Clock.xml'
+p976
+sS'Olsen2003_neutrophil_oscillatory_metabolism.xml'
+p977
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000143\\Olsen2003_neutrophil_oscillatory_metabolism.xml'
+p978
+sS'Petelenz-kurdziel2013 - Osmo adaptation WT.xml'
+p979
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000603\\Petelenz-kurdziel2013 - Osmo adaptation WT.xml'
+p980
+sS'Qi2013 - IL-6 and IFN crosstalk model.xml'
+p981
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000544\\Qi2013 - IL-6 and IFN crosstalk model.xml'
+p982
+sS'Ratushny2012_ASSURE_I.xml'
+p983
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000420\\Ratushny2012_ASSURE_I.xml'
+p984
+sS'Ayati2010_BoneRemodelingDynamics_NormalCondition.xml'
+p985
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000401\\Ayati2010_BoneRemodelingDynamics_NormalCondition.xml'
+p986
+sS'Sharp2013 - Lipopolysaccharide induced NFkB activation.xml'
+p987
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000489\\Sharp2013 - Lipopolysaccharide induced NFkB activation.xml'
+p988
+sS'Martins2003_AmadoriDegradation.xml'
+p989
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000050\\Martins2003_AmadoriDegradation.xml'
+p990
+sS'Panteleev2002_TFPImechanism_schmema2.xml'
+p991
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000360\\Panteleev2002_TFPImechanism_schmema2.xml'
+p992
+sS'Schmitz2014 - RNA triplex formation.xml'
+p993
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000530\\Schmitz2014 - RNA triplex formation.xml'
+p994
+sS'Markevich2004_MAPK_phosphoRandomElementary.xml'
+p995
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000028\\Markevich2004_MAPK_phosphoRandomElementary.xml'
+p996
+sS'Brands2002 - Monosaccharide-casein systems.xml'
+p997
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000052\\Brands2002 - Monosaccharide-casein systems.xml'
+p998
+sS'Kim2007 - Crosstalk between Wnt and ERK pathways.xml'
+p999
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000149\\Kim2007 - Crosstalk between Wnt and ERK pathways.xml'
+p1000
+sS'Keizer1996_Ryanodine_receptor_adaptation.xml'
+p1001
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000060\\Keizer1996_Ryanodine_receptor_adaptation.xml'
+p1002
+sS'Curto1998 - purine metabolism.xml'
+p1003
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000015\\Curto1998 - purine metabolism.xml'
+p1004
+sS'Hynne2001_Glycolysis.xml'
+p1005
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000061\\Hynne2001_Glycolysis.xml'
+p1006
+sS'Petelenz-kurdziel2013 - Osmo adaptation HOG1att.xml'
+p1007
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000605\\Petelenz-kurdziel2013 - Osmo adaptation HOG1att.xml'
+p1008
+sS'Schulz2009_Th1_differentiation.xml'
+p1009
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000215\\Schulz2009_Th1_differentiation.xml'
+p1010
+sS'Leloup2003_CircClock_LD.xml'
+p1011
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000078\\Leloup2003_CircClock_LD.xml'
+p1012
+sS'Sivakumar2011 - Notch Signaling Pathway.xml'
+p1013
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000396\\Sivakumar2011 - Notch Signaling Pathway.xml'
+p1014
+sS'Proctor2012 - Role of Amyloid-beta dimers in aggregation formation.xml'
+p1015
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000462\\Proctor2012 - Role of Amyloid-beta dimers in aggregation formation.xml'
+p1016
+sS'Tan2012 - Antibiotic Treatment, Inoculum Effect.xml'
+p1017
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000425\\Tan2012 - Antibiotic Treatment, Inoculum Effect.xml'
+p1018
+sS'Goldbeter1995_CircClock.xml'
+p1019
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000016\\Goldbeter1995_CircClock.xml'
+p1020
+sS'Komarova2005_PTHaction_OsteoclastOsteoblastCoupling.xml'
+p1021
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000279\\Komarova2005_PTHaction_OsteoclastOsteoblastCoupling.xml'
+p1022
+sS'Bidkhori2012 - EGFR signalling in NSCLC.xml'
+p1023
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000453\\Bidkhori2012 - EGFR signalling in NSCLC.xml'
+p1024
+sS'Demin2013 - PKPD behaviour - 5-Lipoxygenase inhibitors.xml'
+p1025
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000490\\Demin2013 - PKPD behaviour - 5-Lipoxygenase inhibitors.xml'
+p1026
+sS'Bungay2006_Plasma.xml'
+p1027
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000332\\Bungay2006_Plasma.xml'
+p1028
+sS'Thomsen1989_AdenylateCyclase.xml'
+p1029
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000080\\Thomsen1989_AdenylateCyclase.xml'
+p1030
+sS'Grange2001 - PK interaction of L-dopa and benserazide.xml'
+p1031
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000320\\Grange2001 - PK interaction of L-dopa and benserazide.xml'
+p1032
+sS'Fujita2010_Akt_Signalling_NGF.xml'
+p1033
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000263\\Fujita2010_Akt_Signalling_NGF.xml'
+p1034
+sS'Nazaret2009_TCA_RC_ATP.xml'
+p1035
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000232\\Nazaret2009_TCA_RC_ATP.xml'
+p1036
+sS'Chance1943_Peroxidase_ES_Kinetics.xml'
+p1037
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000283\\Chance1943_Peroxidase_ES_Kinetics.xml'
+p1038
+sS'Becker2010_EpoR_AuxiliaryModel.xml'
+p1039
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000272\\Becker2010_EpoR_AuxiliaryModel.xml'
+p1040
+sS'Arnold2011_Farquhar1980_RuBisCO-CalvinCycle.xml'
+p1041
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000383\\Arnold2011_Farquhar1980_RuBisCO-CalvinCycle.xml'
+p1042
+sS'Bier2000_GlycolyticOscillation.xml'
+p1043
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000254\\Bier2000_GlycolyticOscillation.xml'
+p1044
+sS'Petelenz-kurdziel2013 - Osmo adaptation pfk2627D.xml'
+p1045
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000604\\Petelenz-kurdziel2013 - Osmo adaptation pfk2627D.xml'
+p1046
+sS'Thomsen1988_AdenylateCyclase_Inhibition.xml'
+p1047
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000082\\Thomsen1988_AdenylateCyclase_Inhibition.xml'
+p1048
+sS'Capuani2015 - Binding of Cbl and Grb2 to EGFR (Early Activation Model - EAM).xml'
+p1049
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000595\\Capuani2015 - Binding of Cbl and Grb2 to EGFR (Early Activation Model - EAM).xml'
+p1050
+sS'Pathak2013 - MAPK activation in response to various abiotic stresses.xml'
+p1051
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000491\\Pathak2013 - MAPK activation in response to various abiotic stresses.xml'
+p1052
+sS'Maurya2005_GTPaseCycle_reducedOrder.xml'
+p1053
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000085\\Maurya2005_GTPaseCycle_reducedOrder.xml'
+p1054
+sS'Legewie2006_apoptosis_WT.xml'
+p1055
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000102\\Legewie2006_apoptosis_WT.xml'
+p1056
+sS'Izhikevich2004_SpikingNeurons_reboundSpike.xml'
+p1057
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000132\\Izhikevich2004_SpikingNeurons_reboundSpike.xml'
+p1058
+sS'Tyson1999_CircClock.xml'
+p1059
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000036\\Tyson1999_CircClock.xml'
+p1060
+sS'Bhartiya2003_Tryptophan_operon.xml'
+p1061
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000062\\Bhartiya2003_Tryptophan_operon.xml'
+p1062
+sS'Pokhilko2013 - TOC1 signalling in Arabidopsis circadian clock.xml'
+p1063
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000445\\Pokhilko2013 - TOC1 signalling in Arabidopsis circadian clock.xml'
+p1064
+sS'Wajima2009_BloodCoagulation_aPTTtest.xml'
+p1065
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000338\\Wajima2009_BloodCoagulation_aPTTtest.xml'
+p1066
+sS'Sivakumar2011_WntSignalingPathway.xml'
+p1067
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000397\\Sivakumar2011_WntSignalingPathway.xml'
+p1068
+sS'Bertram2006_Endothelin.xml'
+p1069
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000128\\Bertram2006_Endothelin.xml'
+p1070
+sS'Elowitz2000 - Repressilator.xml'
+p1071
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000012\\Elowitz2000 - Repressilator.xml'
+p1072
+sS'Petelenz-kurdziel2013 - Osmo adaptation hog1D.xml'
+p1073
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000606\\Petelenz-kurdziel2013 - Osmo adaptation hog1D.xml'
+p1074
+sS'Lai2014 - Hemiconcerted MWC model of intact calmodulin with two targets.xml'
+p1075
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000574\\Lai2014 - Hemiconcerted MWC model of intact calmodulin with two targets.xml'
+p1076
+sS'Sivakumar2011_NeuralStemCellDifferentiation_Crosstalk.xml'
+p1077
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000398\\Sivakumar2011_NeuralStemCellDifferentiation_Crosstalk.xml'
+p1078
+sS'Proctor2006_telomere.xml'
+p1079
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000087\\Proctor2006_telomere.xml'
+p1080
+sS'Tyson2003_Activator_Inhibitor.xml'
+p1081
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000306\\Tyson2003_Activator_Inhibitor.xml'
+p1082
+sS'Bertram1995_PancreaticBetaCell_CRAC.xml'
+p1083
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000374\\Bertram1995_PancreaticBetaCell_CRAC.xml'
+p1084
+sS"Cloutier2012 - Feedback motif for Parkinson's disease.xml"
+p1085
+S"D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000558\\Cloutier2012 - Feedback motif for Parkinson's disease.xml"
+p1086
+sS'Ataullahkhanov1996_Adenylate.xml'
+p1087
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000054\\Ataullahkhanov1996_Adenylate.xml'
+p1088
+sS'Rozi2003_GlycogenPhosphorylase_Activation.xml'
+p1089
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000100\\Rozi2003_GlycogenPhosphorylase_Activation.xml'
+p1090
+sS'Vernoux2011_AuxinSignaling_AuxinFluctuating.xml'
+p1091
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000352\\Vernoux2011_AuxinSignaling_AuxinFluctuating.xml'
+p1092
+sS'Nielsen1998_Glycolysis.xml'
+p1093
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000042\\Nielsen1998_Glycolysis.xml'
+p1094
+sS'Hockin1999_BloodCoagulation_VaInactivation.xml'
+p1095
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000365\\Hockin1999_BloodCoagulation_VaInactivation.xml'
+p1096
+sS'Morris1981_MuscleFibre_Voltage_reduced.xml'
+p1097
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000280\\Morris1981_MuscleFibre_Voltage_reduced.xml'
+p1098
+sS'Cao2013 - Application of ABSIS method in birth-death process.xml'
+p1099
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000484\\Cao2013 - Application of ABSIS method in birth-death process.xml'
+p1100
+sS'Gupta2009 - Eicosanoid Metabolism.xml'
+p1101
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000436\\Gupta2009 - Eicosanoid Metabolism.xml'
+p1102
+sS'Mellor2012_LipooxygenasePathway.xml'
+p1103
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000415\\Mellor2012_LipooxygenasePathway.xml'
+p1104
+sS'Clarke2000 - One-hit model of cell death in neuronal degenerations.xml'
+p1105
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000538\\Clarke2000 - One-hit model of cell death in neuronal degenerations.xml'
+p1106
+sS'Sarma2012 - Oscillations in MAPK cascade (S2n).xml'
+p1107
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000444\\Sarma2012 - Oscillations in MAPK cascade (S2n).xml'
+p1108
+sS'Somogyi1990_CaOscillations_SingleCaSpike.xml'
+p1109
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000115\\Somogyi1990_CaOscillations_SingleCaSpike.xml'
+p1110
+sS'Haberichter2007_cellcycle.xml'
+p1111
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000109\\Haberichter2007_cellcycle.xml'
+p1112
+sS'Arnold2011_Medlyn2002_RuBisCO-CalvinCycle.xml'
+p1113
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000384\\Arnold2011_Medlyn2002_RuBisCO-CalvinCycle.xml'
+p1114
+sS'Mears1997_CRAC_PancreaticBetaCells.xml'
+p1115
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000375\\Mears1997_CRAC_PancreaticBetaCells.xml'
+p1116
+sS'Hornberg2005_ERKcascade.xml'
+p1117
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000084\\Hornberg2005_ERKcascade.xml'
+p1118
+sS'Goldbeter2007_Somitogenesis_Switch.xml'
+p1119
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000275\\Goldbeter2007_Somitogenesis_Switch.xml'
+p1120
+sS'Beltrami1995_ThrombinGeneration_C.xml'
+p1121
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000368\\Beltrami1995_ThrombinGeneration_C.xml'
+p1122
+sS'Mueller2015 - Hepatocyte proliferation, T160 phosphorylation of CDK2.xml'
+p1123
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000568\\Mueller2015 - Hepatocyte proliferation, T160 phosphorylation of CDK2.xml'
+p1124
+sS'Aguda1999_CellCycle.xml'
+p1125
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000169\\Aguda1999_CellCycle.xml'
+p1126
+sS'Mol2013 - Immune Signal Transduction in Leishmaniasis.xml'
+p1127
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000477\\Mol2013 - Immune Signal Transduction in Leishmaniasis.xml'
+p1128
+sS'Stone1996_NOsGC.xml'
+p1129
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000198\\Stone1996_NOsGC.xml'
+p1130
+sS'Beltrami1995_ThrombinGeneration_D.xml'
+p1131
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000369\\Beltrami1995_ThrombinGeneration_D.xml'
+p1132
+sS'Liebal2012 - B.subtilis sigB proteolysis model.xml'
+p1133
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000460\\Liebal2012 - B.subtilis sigB proteolysis model.xml'
+p1134
+sS'Oxhamre2005_Ca_oscillation.xml'
+p1135
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000047\\Oxhamre2005_Ca_oscillation.xml'
+p1136
+sS'Golomb2006_SomaticBursting_nonzero[Ca].xml'
+p1137
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000119\\Golomb2006_SomaticBursting_nonzero[Ca].xml'
+p1138
+sS'Croft2013 - GPCR-RGS interaction that compartmentalizes RGS activity.xml'
+p1139
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000479\\Croft2013 - GPCR-RGS interaction that compartmentalizes RGS activity.xml'
+p1140
+sS'Xie2007_CircClock.xml'
+p1141
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000160\\Xie2007_CircClock.xml'
+p1142
+sS'Schoeberl2002 - EGF MAPK.xml'
+p1143
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000019\\Schoeberl2002 - EGF MAPK.xml'
+p1144
+sS'Zatorsky2006_p53_Model1.xml'
+p1145
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000159\\Zatorsky2006_p53_Model1.xml'
+p1146
+sS'Panteleev2002_TFPImechanism_schmema3.xml'
+p1147
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000359\\Panteleev2002_TFPImechanism_schmema3.xml'
+p1148
+sS'Klipp2002_MetabolicOptimization_linearPathway(n=2).xml'
+p1149
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000104\\Klipp2002_MetabolicOptimization_linearPathway(n=2).xml'
+p1150
+sS'Coggins2014 - CXCL12 dependent recruitment of beta arrestin.xml'
+p1151
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000599\\Coggins2014 - CXCL12 dependent recruitment of beta arrestin.xml'
+p1152
+sS'Kamihira2000 - calcitonin fibrillation kinetics.xml'
+p1153
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000614\\Kamihira2000 - calcitonin fibrillation kinetics.xml'
+p1154
+sS'Cookson2011_EnzymaticQueueingCoupling.xml'
+p1155
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000405\\Cookson2011_EnzymaticQueueingCoupling.xml'
+p1156
+sS'Passos2010_DNAdamage_CellularSenescence.xml'
+p1157
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000287\\Passos2010_DNAdamage_CellularSenescence.xml'
+p1158
+sS'Carbo2013 - Cytokine driven CD4+ T Cell differentiation and phenotype plasticity.xml'
+p1159
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000451\\Carbo2013 - Cytokine driven CD4+ T Cell differentiation and phenotype plasticity.xml'
+p1160
+sS'Kim2007_CellularMemory_AsymmetricModel.xml'
+p1161
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000179\\Kim2007_CellularMemory_AsymmetricModel.xml'
+p1162
+sS'Yuraszeck2010 - Vulnerabilities in the Tau Network in Tau Pathophysiology.xml'
+p1163
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000542\\Yuraszeck2010 - Vulnerabilities in the Tau Network in Tau Pathophysiology.xml'
+p1164
+sS'Proctor2013 - Cartilage breakdown, interventions to reduce collagen release.xml'
+p1165
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000504\\Proctor2013 - Cartilage breakdown, interventions to reduce collagen release.xml'
+p1166
+sS'Rovers1995_Photsynthetic_Oscillations.xml'
+p1167
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000292\\Rovers1995_Photsynthetic_Oscillations.xml'
+p1168
+sS'Dupont1991_CaOscillation.xml'
+p1169
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000117\\Dupont1991_CaOscillation.xml'
+p1170
+sS'Alexander2010_Tcell_Regulation_Sys1.xml'
+p1171
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000289\\Alexander2010_Tcell_Regulation_Sys1.xml'
+p1172
+sS'Baker2013 - Cytokine Mediated Inflammation in Rheumatoid Arthritis.xml'
+p1173
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000550\\Baker2013 - Cytokine Mediated Inflammation in Rheumatoid Arthritis.xml'
+p1174
+sS'Smallbone2013 - Colon Crypt cycle - Version 3.xml'
+p1175
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000517\\Smallbone2013 - Colon Crypt cycle - Version 3.xml'
+p1176
+sS'Qi2013 - IL-6 and IFN crosstalk model (non-competitive).xml'
+p1177
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000543\\Qi2013 - IL-6 and IFN crosstalk model (non-competitive).xml'
+p1178
+sS'Tyson2001_Cell_Cycle_Regulation.xml'
+p1179
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000195\\Tyson2001_Cell_Cycle_Regulation.xml'
+p1180
+sS'Tang2010_PolyGlutamate.xml'
+p1181
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000285\\Tang2010_PolyGlutamate.xml'
+p1182
+ssS'Error'
+p1183
+(dp1184
+S'Venkatraman2012 - Interplay between PLS and TSP1 in TGF-\xdf1 activation.xml'
+p1185
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000447\\Venkatraman2012 - Interplay between PLS and TSP1 in TGF-\xdf1 activation.xml'
+p1186
+sS'Celli\xe8re2011 - Plasticity of TGF-\xdf Signalling.xml'
+p1187
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000600\\Celli\xe8re2011 - Plasticity of TGF-\xdf Signalling.xml'
+p1188
+sS'Morris2009 - a-Synuclein aggregation variable temperature and pH.xml'
+p1189
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000566\\Morris2009 - a-Synuclein aggregation variable temperature and pH.xml'
+p1190
+sS'St\xf6tzel2012 - Bovine estrous cycle, synchronization with prostaglandin F2a.xml'
+p1191
+S'D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000481\\St\xf6tzel2012 - Bovine estrous cycle, synchronization with prostaglandin F2a.xml'
+p1192
+sS"Kuznetsov2016 - a-syn aggregation kinetics in Parkinson's Disease.xml"
+p1193
+S"D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000615\\Kuznetsov2016 - a-syn aggregation kinetics in Parkinson's Disease.xml"
+p1194
+sS"Sass2009 - Approach to an a-synuclein-based BST model of Parkinson's disease.xml"
+p1195
+S"D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000575\\Sass2009 - Approach to an a-synuclein-based BST model of Parkinson's disease.xml"
+p1196
+sS"Proctor2013 - Effect of A\xdf immunisation in Alzheimer's disease.xml"
+p1197
+S"D:\\MPhil\\Python\\My_Python_Modules\\Modelling_Tools\\PyCoTools\\Documentation\\Examples\\PydentifyingBiomodels\\BIOMD0000000488\\Proctor2013 - Effect of A\xdf immunisation in Alzheimer's disease.xml"
+p1198
+ss.
