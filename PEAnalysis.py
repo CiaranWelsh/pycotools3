@@ -1472,35 +1472,179 @@ class PlotPEData():
             self.plot1file(f)
             
             
+            
+class PlotHistogram3D():
+    '''
+    Plot parameter estimation results as histogram
+    Args:
+        results_path:
+            Path to file or folder of files containing parameter estimation data
+            to plot
+    **kwargs:
+         TruncateMode:
+             'below_x', #either 'below_x' or 'percent' for method of truncation. 
+         Log10:
+             'false',
+         X:
+             100,           #if below_x: this is the X boundary. If percent: this is the percent of data to keep
+    **kwargs which correspond to matplotlib.pyplot.hist keyword arguments. 
+    More information about these can be found in the matplotlib documentation 
+         Bins:
+             Number of bins to use. Default=100,
+         AxisSize:
+             Font size for the axis. Default=15
+         FontSize:
+             Font size for the graph labels. Default=22
+         Normed:
+             'true' or 'false. Whether to make the plot integrate to 1. 
+             Default='false'
+         Color:
+             Plot colour. Default='red',     
+         XRotation:
+             25,   #rotation for X tick axis
+         TitleWrapSize:
+             Number of characters to use before word wrapping the title. Default=35  
+         Orientation:
+             'horizontal' or 'vertical', default='vertical'
+         SaveFig:
+             'true' or 'false'. Save to a folder called histograms in results directory. 
+             Default='false'
+         DPI:
+             Resolution to use when SaveFig='true'. The larger this value the 
+             higher the resolution. Default=125. 
+         ExtraTitle:
+             When SaveFig='true', save with ExtraTitle appended to the filepath. 
+             Default=None
+         Show:
+             'true' or 'false'. When not using iPython and graphs are not automatically 
+             displayed in shell, this determines whether the plots are opened in a
+             window or not. Default='false'
+                     
+                 
+    '''
+    def __init__(self,results_path,**kwargs):
+        #arguments
+#        self.copasi_file=copasi_file
+        self.results_path=results_path
+        #keywrod arguments
+        options={'FromPickle':'false',
+                 'TruncateMode':'percent', #either 'below_x' or 'percent' for method of truncation. 
+                 'Log10':'false',
+                 'X':100,           #if below_x: this is the X boundary. If percent: this is the percent of data to keep
+                 'Bins':100,
+                 'AxisSize':15,
+                 'FontSize':22,
+                 'Normed':'false',
+                 'Color':'red',
+                 'XRotation':25,
+                 'TitleWrapSize':35,
+                 'Orientation':'vertical',
+                 'SaveFig':'false',
+                 'DPI':125,
+                 'ExtraTitle':None,
+                 'Log10':'false',
+                 'Show':'false',
+                 'Variable':None,
+                 
+                     }
+        for i in kwargs.keys():
+            assert i in options.keys(),'{} is not a keyword argument for TruncateData'.format(i)
+        options.update( kwargs)  
+        self.kwargs=options
+        assert self.kwargs.get('TruncateMode') in ['below_x','percent']
+        
+        #Other classes
+        self.PED=ParsePEData(self.results_path)
 
+        #create a directory and change to it
+        self.results_dir=os.path.join(os.path.dirname(self.results_path),'Histograms')
+        if self.kwargs.get('SaveFig')=='true':
+            if os.path.isdir(self.results_dir)!=True:
+                os.mkdir(self.results_dir)
+            os.chdir(self.results_dir)
+        
+        #attributes
+        self.data=self.PED.data.dropna()
+        self.log_data=self.PED.log_data.dropna()
+        self.truncated_data=self.truncate_data()
+        #main method
+        print self.list_parameters()
+        self.plot1()
+#        self.testing_variable=self.plot_all() #only assigned to variable for testing purposes
+#        os.chdir(os.path.dirname(self.results_dir))
+            
+    def list_parameters(self):
+        return self.data.keys()
+    
+    def truncate_data(self):
+        if self.kwargs.get('Log10')=='false':
+#            print '1'
+            TC=TruncateData(self.data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'))
+            return TC.data
+        elif self.kwargs.get('Log10')=='true':
+#            print '2'
+            TC=TruncateData(self.log_data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'))
+            return TC.data
+        
+    def plot1(self,variable='RSS'):
+        '''
+        variable: variable to plot. Default= 'RSS'
+        '''
+        matplotlib.rcParams.update({'font.size': 22})
+        assert variable in self.truncated_data.keys(),'{} is not in your PE results: {}'.format(variable,self.truncated_data.keys())
+        data= self.truncated_data[variable]
+        fig=plt.figure()
+        Axes3D.plot_surface()
+        
+#        plt.hist(data,
+#                 bins=self.kwargs.get('Bins'),
+#                 color=self.kwargs.get('Color'),
+#                 normed=self.kwargs.get('Normed'),
+#                 orientation=self.kwargs.get('Orientation'))
+#        
+#        #pretty stuff
+#        ax=plt.subplot(1,1,1)
+#        ax.spines['right'].set_color('none')
+#        ax.spines['top'].set_color('none')
+#        ax.xaxis.set_ticks_position('bottom')
+#        ax.yaxis.set_ticks_position('left')
+#        ax.spines['left'].set_smart_bounds(True)
+#        ax.spines['bottom'].set_smart_bounds(True)
+#        
+#        #labels
+##        plt.title('\n'.join(wrap('{},n={}'.format(variable,self.data.shape[1])) ),35  )
+#        plt.title('\n'.join(wrap('{},n={}'.format(variable,data.shape[0]),
+#                                 self.kwargs.get('TitleWrapSize'))),
+#                                 fontsize=self.kwargs.get('FontSize'))
+#        plt.ylabel('Frequency in bin')
+#        plt.xticks(rotation=self.kwargs.get('XRotation'))
+#        if self.kwargs.get('Log10')=='true':
+#            plt.xlabel('Parameter Value(Log10)',fontsize=self.kwargs.get('FontSize'))
+#        else:
+#            plt.xlabel('Parameter Value',fontsize=self.kwargs.get('FontSize'))
+#        
+#        #SaveFig options
+#        if self.kwargs.get('SaveFig')=='true':
+#            if self.kwargs.get('ExtraTitle')!=None:
+#                assert isinstance(self.kwargs.get('ExtraTitle'),str),'extra title should be a string'
+#                plt.savefig(variable+'_'+self.kwargs.get('ExtraTitle')+'.jpeg',bbox_inches='tight',format='jpeg',dpi=self.kwargs.get('DPI'))
+#            else:
+#                plt.savefig(variable+'.jpeg',format='jpeg',bbox_inches='tight',dpi=self.kwargs.get('DPI'))
+#        if self.kwargs.get('Show')=='true':
+#            plt.show()
+#    
+#    def plot_all(self):
+#        for i in self.truncated_data:
+#            self.plot1(i)
+#        return True
 
 
 if __name__=='__main__':
-    f=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\Documentation\Examples\PydentifyingBiomodels\BIOMD0000000062\Bhartiya2003_Tryptophan_operon.cps'
-    d=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\Documentation\Examples\PydentifyingBiomodels\BIOMD0000000062\data_with_noise.txt'
-    t=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\Documentation\Examples\PydentifyingBiomodels\BIOMD0000000062\Bhartiya2003_Tryptophan_operon_PE_results.txt'
-#    
-#    P=PlotPEData(f,d,t)
-#
-#    f=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\Documentation\Examples\PydentifyingBiomodels\BIOMD0000000062\Bhartiya2003_Tryptophan_operon.cps'
-#    d=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\Documentation\Examples\PydentifyingBiomodels\BIOMD0000000062\data_with_noise.txt'
-#    
-#    t=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\Documentation\Examples\PydentifyingBiomodels\BIOMD0000000062\Bhartiya2003_Tryptophan_operon_temp_TimeCourse.txt'
-#    
-
-#    PE=ParameterEstimation(f,d,Plot='false',Save='overwrite')
-#    PE.write_item_template()
-#    PE.set_up()
-#    PE.run()
-#    
-#    p=PlotPEData(f,d,t)
-#    print p.parameters
-#
-#    
+    d=r'D:\MPhil\Model_Building\Models\2016\11_Nov\TGFbModel\Modules\Fit5\Results'    
+    
 
 
-
-
+    PlotHistogram3D(d)
 
 
 
