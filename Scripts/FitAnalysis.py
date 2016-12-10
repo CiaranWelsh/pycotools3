@@ -16,6 +16,8 @@ parser.add_argument('-n','--NumPerPlot',help='Number of bars per plot',type=int)
 args=parser.parse_args()
 #===============================================================================
 
+PD=P.PEAnalysis.ParsePEData(args.path)
+print 'Number of PE Runs: {}'.format(PD.data.shape[0])
 
 if args.TruncateMode==None:
     args.TruncateMode='percent'
