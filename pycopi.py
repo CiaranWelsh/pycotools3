@@ -1185,7 +1185,8 @@ class ExperimentMapper():
             assert i in options.keys(),'{} is not a keyword argument for TimeCourse'.format(i)
         options.update( kwargs) 
         self.kwargs=options
-        
+        for i in self.kwargs:
+            print i,self.kwargs[i]
 
         #assign numberic values to WeightMethod   
         for i in range(len(self.kwargs.get('WeightMethod'))):
@@ -1309,7 +1310,7 @@ class ExperimentMapper():
             if re.findall('\[(.*)\]',obs[j])!=[]:
                 obs[j]=re.findall('\[(.*)\]',obs[j])[0]
         num_rows= str(data.shape[0])
-        num_columns=str(data.shape[1])
+        num_columns=str(data.shape[1]) #plus 1 to account for 0 indexed
         
         
         #if exp_file is in the same directory as copasi_file only use relative path
@@ -1329,7 +1330,7 @@ class ExperimentMapper():
         ExpFile={'type': 'file', 'name': 'File Name', 'value': exp}
         FirstRow={'type': 'unsignedInteger', 'name': 'First Row', 'value': self.kwargs.get('FirstRow')[index]}
         Key={'type': 'key', 'name': 'Key', 'value': self.key}
-        LastRow={'type': 'unsignedInteger', 'name': 'Last Row', 'value': num_rows}
+        LastRow={'type': 'unsignedInteger', 'name': 'Last Row', 'value': str(int(num_rows)+1)} #add 1 to account for 0 indexed python 
         NormalizeWeightsPerExperiment={'type': 'bool', 'name': 'Normalize Weights per Experiment', 'value': self.kwargs.get('NormalizeWeightsPerExperiment')[index]}
         NumberOfColumns={'type': 'unsignedInteger', 'name': 'Number of Columns', 'value': num_columns}
         ObjectMap={'name': 'Object Map'}
@@ -1362,8 +1363,9 @@ class ExperimentMapper():
 
         for i in range(int(num_columns)):
             map_group=etree.SubElement(Map,'ParameterGroup',attrib={'name':(str(i))})
-            if i==0:
-                etree.SubElement(map_group,'Parameter',attrib=TimeRole)
+            if self.kwargs.get('ExperimentType')[index]==str(1): #when Experiment type is set to time course it should be 1
+                if i==0:
+                    etree.SubElement(map_group,'Parameter',attrib=TimeRole)
             else:
                 if obs[i][-6:]=='_indep':
                     if obs[i][:-6] in ICs.keys():
