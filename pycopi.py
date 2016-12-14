@@ -1211,8 +1211,8 @@ class ExperimentMapper():
 
         assert isinstance(self.kwargs.get('ExperimentType'),list)
         for i in range(len(self.kwargs.get('ExperimentType'))):
-            assert self.kwargs.get('ExperimentType')[i] in ['steadtstate','timecourse']
-            if self.kwargs.get('ExperimentType')[i]=='steady_state':
+            assert self.kwargs.get('ExperimentType')[i] in ['steadystate','timecourse']
+            if self.kwargs.get('ExperimentType')[i]=='steadystate':
                 self.kwargs.get('ExperimentType')[i]=str(0)
             else:
                 self.kwargs.get('ExperimentType')[i]=str(1)

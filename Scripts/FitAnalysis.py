@@ -15,7 +15,7 @@ parser.add_argument('-n','--NumPerPlot',help='Number of bars per plot',type=int)
 
 args=parser.parse_args()
 #===============================================================================
-
+print args
 PD=P.PEAnalysis.ParsePEData(args.path)
 print 'Number of PE Runs: {}'.format(PD.data.shape[0])
 
@@ -35,33 +35,33 @@ elif args.Log10==False:
     
     
 
-def EOP():
-    P.PEAnalysis.EvaluateOptimizationPerformance(args.path,SaveFig='true',Log10=args.Log10)
-def PH():
-    P.PEAnalysis.PlotHistogram(args.path,SaveFig='true',TruncateMode=args.TruncateMode,X=args.x,Bins=args.Bins,Log10=args.Log10)
-def PS():
-    P.PEAnalysis.PlotScatters(args.path,SaveFig='true',Log10=args.Log10)
-def PB():
-    P.PEAnalysis.PlotBoxplot(args.path,SaveFig='true',TruncateMode=args.TruncateMode,X=args.x,NumPerPlot=args.NumPerPlot)
+#def EOP():
+P.PEAnalysis.EvaluateOptimizationPerformance(args.path,SaveFig='true',Log10=args.Log10)
+#def PH():
+P.PEAnalysis.PlotHistogram(args.path,SaveFig='true',TruncateMode=args.TruncateMode,X=args.x,Bins=args.Bins,Log10=args.Log10)
+#def PS():
+P.PEAnalysis.PlotScatters(args.path,SaveFig='true',Log10=args.Log10)
+#def PB():
+P.PEAnalysis.PlotBoxplot(args.path,SaveFig='true',TruncateMode=args.TruncateMode,X=args.x,NumPerPlot=args.NumPerPlot)
 
-if __name__=='__main__':
-    multiprocessing.freeze_support()
-    p1=multiprocessing.Process(target=EOP)
-    p2=multiprocessing.Process(target=PH)
-    p3=multiprocessing.Process(target=PS)
-    p4=multiprocessing.Process(target=PB)
-    
-    p1.start()
-    p1.join()
-
-    p2.start()
-    p2.join()
-    
-    p3.start()
-    p3.join()
-    
-    p4.start()
-    p4.join()
+#if __name__=='__main__':
+#    multiprocessing.freeze_support()
+#    p1=multiprocessing.Process(target=EOP)
+#    p2=multiprocessing.Process(target=PH)
+#    p3=multiprocessing.Process(target=PS)
+#    p4=multiprocessing.Process(target=PB)
+#    
+#    p1.start()
+#    p1.join()
+#
+#    p2.start()
+#    p2.join()
+#    
+#    p3.start()
+#    p3.join()
+#    
+#    p4.start()
+#    p4.join()
 #t1=threading.Thread(target=EOP)
 #t2=threading.Thread(target=PH)
 #t3=threading.Thread(target=PS)
