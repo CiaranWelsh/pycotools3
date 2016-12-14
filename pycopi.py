@@ -1185,8 +1185,6 @@ class ExperimentMapper():
             assert i in options.keys(),'{} is not a keyword argument for TimeCourse'.format(i)
         options.update( kwargs) 
         self.kwargs=options
-        for i in self.kwargs:
-            print i,self.kwargs[i]
 
         #assign numberic values to WeightMethod   
         for i in range(len(self.kwargs.get('WeightMethod'))):
@@ -1360,53 +1358,54 @@ class ExperimentMapper():
         TimeRole={'type': 'unsignedInteger', 'name': 'Role', 'value': '3'}
         DepentantVariableRole={'type': 'unsignedInteger', 'name': 'Role', 'value': '2'}
         IndepentantVariableRole={'type': 'unsignedInteger', 'name': 'Role', 'value': '1'}
-
+        
+        print self.kwargs.get('ExperimentType')
         for i in range(int(num_columns)):
             map_group=etree.SubElement(Map,'ParameterGroup',attrib={'name':(str(i))})
             if self.kwargs.get('ExperimentType')[index]==str(1): #when Experiment type is set to time course it should be 1
                 if i==0:
                     etree.SubElement(map_group,'Parameter',attrib=TimeRole)
-            else:
-                if obs[i][-6:]=='_indep':
-                    if obs[i][:-6] in ICs.keys():
-                        cn=ICs[obs[i][:-6]]['cn']+',Reference=InitialConcentration'
-                        independent_ICs={'type': 'cn', 'name': 'Object CN', 'value':cn} 
-                        etree.SubElement(map_group,'Parameter',attrib=independent_ICs)
-                        
-                    elif obs[i][:-6] in glob.keys():
-                        cn=glob[obs[i][:-6]]['cn']+',Reference=InitialValue'
-                        independent_globs={'type': 'cn', 'name': 'Object CN', 'value':cn} 
-                        etree.SubElement(map_group,'Parameter',attrib=independent_globs)
-
-                    elif obs[i][:-6] in loc.keys():
-                        cn=loc[obs[i][:-6]]['cn']+',Reference=Value'
-                        independent_locs={'type': 'cn', 'name': 'Object CN', 'value':cn}
-                        etree.SubElement(map_group,'Parameter',attrib=independent_locs)
-                    else:
-                        raise Errors.ExperimentMappingError('{} not in ICs, global vars or local variables'.format(obs[i]))
-                    etree.SubElement(map_group,'Parameter',attrib=IndepentantVariableRole)
-                    
                 else:
-                    if obs[i] in ICs.keys():
-                        cn=ICs[obs[i]]['cn']+',Reference=Concentration'
-                        dependent_ICs={'type': 'cn', 'name': 'Object CN', 'value':cn}
-                        etree.SubElement(map_group,'Parameter',attrib=dependent_ICs)
+                    if obs[i][-6:]=='_indep':
+                        if obs[i][:-6] in ICs.keys():
+                            cn=ICs[obs[i][:-6]]['cn']+',Reference=InitialConcentration'
+                            independent_ICs={'type': 'cn', 'name': 'Object CN', 'value':cn} 
+                            etree.SubElement(map_group,'Parameter',attrib=independent_ICs)
+                            
+                        elif obs[i][:-6] in glob.keys():
+                            cn=glob[obs[i][:-6]]['cn']+',Reference=InitialValue'
+                            independent_globs={'type': 'cn', 'name': 'Object CN', 'value':cn} 
+                            etree.SubElement(map_group,'Parameter',attrib=independent_globs)
+    
+                        elif obs[i][:-6] in loc.keys():
+                            cn=loc[obs[i][:-6]]['cn']+',Reference=Value'
+                            independent_locs={'type': 'cn', 'name': 'Object CN', 'value':cn}
+                            etree.SubElement(map_group,'Parameter',attrib=independent_locs)
+                        else:
+                            raise Errors.ExperimentMappingError('{} not in ICs, global vars or local variables'.format(obs[i]))
+                        etree.SubElement(map_group,'Parameter',attrib=IndepentantVariableRole)
                         
-                    elif obs[i] in glob.keys():
-                        cn=glob[obs[i]]['cn']+',Reference=Value'
-                        dependent_globs={'type': 'cn', 'name': 'Object CN', 'value':cn} 
-                        etree.SubElement(map_group,'Parameter',attrib=dependent_globs)
-                        '''
-                        Note that you don't ever map data to reaction parameters therefore the commented
-                        out block below is not needed. Don't delete until you are sure of it though...
-                        '''
-                    elif obs[i] in loc.keys():
-                        cn=loc[obs[i]['cn']]+',Reference=Value'
-                        dependent_locs={'type': 'cn', 'name': 'Object CN', 'value':cn}
-                        etree.SubElement(map_group,'Parameter',attrib=dependent_locs)
                     else:
-                        raise Errors.ExperimentMappingError('''\'{}\' mapping error. In the copasi GUI its possible to have same name for two species provided they are in different compartments. In this API, having non-unique species identifiers leads to errors in mapping experimental to model variables'''.format(obs[i]))
-                    etree.SubElement(map_group,'Parameter',attrib=DepentantVariableRole)
+                        if obs[i] in ICs.keys():
+                            cn=ICs[obs[i]]['cn']+',Reference=Concentration'
+                            dependent_ICs={'type': 'cn', 'name': 'Object CN', 'value':cn}
+                            etree.SubElement(map_group,'Parameter',attrib=dependent_ICs)
+                            
+                        elif obs[i] in glob.keys():
+                            cn=glob[obs[i]]['cn']+',Reference=Value'
+                            dependent_globs={'type': 'cn', 'name': 'Object CN', 'value':cn} 
+                            etree.SubElement(map_group,'Parameter',attrib=dependent_globs)
+                            '''
+                            Note that you don't ever map data to reaction parameters therefore the commented
+                            out block below is not needed. Don't delete until you are sure of it though...
+                            '''
+                        elif obs[i] in loc.keys():
+                            cn=loc[obs[i]['cn']]+',Reference=Value'
+                            dependent_locs={'type': 'cn', 'name': 'Object CN', 'value':cn}
+                            etree.SubElement(map_group,'Parameter',attrib=dependent_locs)
+                        else:
+                            raise Errors.ExperimentMappingError('''\'{}\' mapping error. In the copasi GUI its possible to have same name for two species provided they are in different compartments. In this API, having non-unique species identifiers leads to errors in mapping experimental to model variables'''.format(obs[i]))
+                        etree.SubElement(map_group,'Parameter',attrib=DepentantVariableRole)
 
         return Exp
 
