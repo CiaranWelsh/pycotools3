@@ -2973,8 +2973,9 @@ class ParameterEstimation():
             i.attrib.update(scheluled_attrib)
             for j in list(i):
                 if self.kwargs.get('SetReport')=='true':
-                    if 'append' in j.attrib.keys():
-                        j.attrib.update(report_attrib)
+                    if self.kwargs.get('ReportName')!=None:
+                        if 'append' in j.attrib.keys():
+                            j.attrib.update(report_attrib)
                 if list(j)!=[]:
                     for k in list(j):
                         if k.attrib['name']=='Randomize Start Values':

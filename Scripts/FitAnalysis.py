@@ -10,7 +10,6 @@ parser.add_argument('-x',help='value to use for data truncation',type=float)
 
 parser.add_argument('-b','--Bins',help='Number of bins for histogram',type=int)
 parser.add_argument('-n','--NumPerPlot',help='Number of bars per plot',type=int)
-
 #parser.add_argument()
 
 args=parser.parse_args()
@@ -32,7 +31,6 @@ if args.Log10==True:
     args.Log10='true'
 elif args.Log10==False:
     args.Log10='false'
-    
     
 
 #def EOP():
