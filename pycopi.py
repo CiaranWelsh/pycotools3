@@ -600,7 +600,7 @@ class Reports():
                  'OutputML':default_outputML,
                  'Separator':'\t',
                  #
-                 'Save':'false',
+                 'Save':'overwrite',
                  'UpdateModel':'false',
                  'ReportType':'parameter_estimation',
                  'Variable':self.GMQ.get_metabolites().keys()[0], #only for profile_likelihood
