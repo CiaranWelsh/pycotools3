@@ -3148,7 +3148,7 @@ class Scan():
             Defaults to the first key in the GMQ.get_metabolites() method
 
         Scheduled: 
-            Corresponds to the Scheduled box in Copasi GUI. Default=0.01.
+            Corresponds to the Scheduled box in Copasi GUI. Default='true'.
             
         Save:
             Can be one of ['duplicate','false','overwrite']. Duplicate
@@ -3197,7 +3197,7 @@ class Scan():
                  'ScanType':'scan',
                  #scan object specific (for scan and random_sampling ScanTypes)
                  'Variable':self.GMQ.get_metabolites().keys()[0],
-                 'Scheduled':'false',
+                 'Scheduled':'true',
                  'Save':'overwrite',
                  'ClearScans':'true',#if true, will remove all scans present then add new scan
                  'Run':'false'}
