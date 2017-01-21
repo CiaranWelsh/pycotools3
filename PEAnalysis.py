@@ -23,11 +23,7 @@
  and analysing parameter estimation data. The module can be used with 
  any PE data regardless of origin but has been developed with copasi in 
  mind. 
-
- Further,the PEAnalysis module is out-dated compared to the other PyCoTools 
- modules. Whilst the code is operational, the naming conventions are 
- still inconsistent with the other PyCoTools modules. This will be remedied
- in future releases.     
+  
 
 
  $Author: Ciaran Welsh
