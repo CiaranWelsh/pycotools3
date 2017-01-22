@@ -1,6 +1,10 @@
 Package was developed by ciaran welsh (c.welsh2@newcastle.ac.uk) from Newcastle University, UK. 
 
-The pycopi module is a set of python classes for interfacing with copasi via python. This can be used when a user wantes to setup an anaysis not native to COPASI, as exemplified by the Pydentify2 module
+The pycopi module is a set of python classes for interfacing with copasi via python. 
+This can be used when a user wantes to setup an anaysis not native to COPASI, as exemplified by the Pydentify2 module.
+
+This package was developed on Python 2.7 and Copasi version 16. 
+
     Features include:
         - GetModelQuantites()   - Class to retrieving information about model and model entities
         - Reports               - Automate the setting up of specific and commonly used reports
