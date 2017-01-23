@@ -71,17 +71,14 @@ class CopasiMLParser():
         copasiML=the copasi model parsed into etree
     '''
     def __init__(self,copasi_file):
-        #positional arguments
         self.copasi_file=copasi_file
         if os.path.isfile(self.copasi_file)!=True:
             raise Errors.FileDoesNotExistError('{} is not a copasi file'.format(self.copasi_file))
 
         
-        #container methods i.e. methods that build a copasiMLModifier shaped container
         self.copasiML=self._parse_copasiML()
         
         
-        #system methods i.e. code to logistically organize output from this class
         self.dir=os.path.dirname(self.copasi_file)
         self.output_file=os.path.join(self.dir,os.path.split(self.copasi_file)[1][:-4]+'_Duplicate.cps')
 
@@ -3922,22 +3919,4 @@ class PruneCopasiHeaders():
         
             
 if __name__=='__main__':
-    pass
-#    f=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\Tests\VilarModel2006pycopitestModel.cps'
-#    GMQ=GetModelQuantities(f)
-##    print GMQ.get_IC_cns()
-#    print GMQ.get_all_model_variables()
-
-#    f=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\Documentation\Examples\PydentifyingBiomodels\BIOMD0000000062\Bhartiya2003_Tryptophan_operon.cps'
-#    d=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\Documentation\Examples\PydentifyingBiomodels\BIOMD0000000062\data_with_noise.txt'
-#    
-#    t=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\Documentation\Examples\PydentifyingBiomodels\BIOMD0000000062\Bhartiya2003_Tryptophan_operon_temp_TimeCourse.txt'
-#    
-#
-#    PE=ParameterEstimation(f,d,Plot='true',Save='overwrite',SaveFig='true')
-#    PE.write_item_template()
-#    PE.set_up()
-#    PE.run()
-#    
-#    
-#    
+        
