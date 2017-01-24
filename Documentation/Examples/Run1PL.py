@@ -9,29 +9,34 @@ import PyCoTools
 import os
 
 
-
-f=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\Documentation\Examples\PydentifyingBiomodels\BIOMD0000000021\Leloup1999_CircClock.cps'
+'''
+Change variable 'f' to the full path to your own model
+'''
+f=r'.\Leloup1999_CircClock.cps'
 
 wd=os.path.dirname(f)
 os.chdir(wd)
 time_course_report=os.path.join(wd,'timecourse.txt')
 
-#TC=PyCoTools.pycopi.TimeCourse(f,End=100,StepSize=1,Intervals=100,Plot='true',
-#                               ReportName=time_course_report,SaveFig='true')
+#first create a time course to get some fake data for parameter estimation
+TC=PyCoTools.pycopi.TimeCourse(f,End=100,StepSize=1,Intervals=100,Plot='true',
+                               ReportName=time_course_report,SaveFig='true')
 
 
-
+#get some parameter estimation data 
 PE=PyCoTools.pycopi.ParameterEstimation(f,time_course_report)
 
-#PE.write_item_template()
-#PE.set_up()
-#PE.run()
+PE.write_item_template() #write the default template (estimation of all parameters)
+PE.set_up()              # Automatic Parameter estimation setup   
+PE.run()                #Run the Parameter estimation 
 #
 
-#import pandas
-#df= pandas.DataFrame(pandas.DataFrame.from_csv(PE.kwargs.get('ReportName'),sep='\t').iloc[-1]).transpose()
-
-PyCoTools.pydentify2.ProfileLikelihood(f,ParameterPath=PE.kwargs.get('ReportName'),
+'''
+Output from parameter estimation is stored in default variable in the kwargs dict. 
+You can change the default by giving a 'ReportName' argument to the ParameterEstimation
+class
+'''
+PyCoTools.pydentify2.ProfileLikelihood(f,ParameterPath=PE.kwargs['ReportName'],
                                        Index=0,Run='slow')
 
 
