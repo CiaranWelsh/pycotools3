@@ -361,9 +361,6 @@ class GetModelQuantities():
         '''
         Get the xml segment for global kinetic parameters. 
         
-        If names_only set to True:
-            return only the parameter names 
-            
         '''
         query='//*[@cn="String=Initial Global Quantities"]'
         d={}
