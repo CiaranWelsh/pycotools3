@@ -3544,6 +3544,7 @@ class Run():
     def run(self):
         '''
         Process the copasi file using CopasiSE
+        Must be Copasi version 16
         
         '''
         if self.kwargs.get('MaxTime')==None:
@@ -3916,4 +3917,5 @@ class PruneCopasiHeaders():
         
             
 if __name__=='__main__':
+    pass
         
