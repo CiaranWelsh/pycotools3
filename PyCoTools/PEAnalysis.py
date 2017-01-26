@@ -60,11 +60,12 @@ class ParsePEData():
     kwargs:
         UsePickle:
             Allow one to overwrite the pickle file automatically
-            produced for speed. CDefault='false'
+            produced for speed. Default='false'
     '''
-    def __init__(self,results_path,UsePickle='false',OverwritePickle='true',RemoveInfiniteRSS='true'):
+    def __init__(self,results_path,UsePickle='false',OverwritePickle='true',RemoveInfiniteRSS='false'):
         #input argument variables
         self.results_path=results_path #either file or folder
+        self.RemoveInfiniteRSS=RemoveInfiniteRSS
         #assertions
 #        assert os.path.isfile(self.copasi_file),'{} is not a real file'.format(self.copasi_file)
         #change directory
@@ -112,17 +113,9 @@ class ParsePEData():
                 logging.log(logging.INFO,'Your PE data contains infinite RSS values. These data will be removed''')
                 self.RemoveInfiniteRSS='true'
         if self.RemoveInfiniteRSS=='true':
-            if i=='1.#INF':
-                return self.data[self.data['RSS']!='1.#INF'].reset_index(drop=True)
+            return self.data[self.data['RSS']!='1.#INF'].reset_index(drop=True)
         else:
             return self.data
-#                raise Errors.InputError('Your PE data contains infinite RSS values. Please set RemoveInfiniteRSS to \'true\'')
-
-#        print self.data
-#        if self.RemoveInfiniteRSS=='true':
-#            return self.data[self.data['RSS']!='1.#INF']
-#        else:
-#            return self.data
         
         
     def filter_constants(self,df):
@@ -1485,6 +1478,11 @@ class PlotPEData():
             
 class PlotHistogram3D():
     '''
+    Not functional 
+    
+    
+    
+    
     Plot parameter estimation results as histogram
     Args:
         results_path:
@@ -1650,12 +1648,17 @@ class PlotHistogram3D():
 
 
 if __name__=='__main__':
-    d=r'D:\MPhil\Model_Building\Models\2016\11_Nov\TGFbModel\Modules\Fit5\Results'    
-    
-
-
-    PlotHistogram3D(d)
-
+    pass
+#    current_directory='D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\Examples\GoldbetterExample'
+#    copasi_file=r'Goldbeter1995_CircClock.cps'
+#    goldbetter_model=os.path.join(current_directory,copasi_file)
+#    report=os.path.join(current_directory,'TimeCourseOutput.txt')
+#    noisy_report=os.path.join(current_directory,'NoisyTimeCourseOutput.txt')
+#    
+#    PEData_report=os.path.join(current_directory,'PEData.txt')
+#    
+#    
+#    print ParsePEData(PEData_report).data
 
 
 

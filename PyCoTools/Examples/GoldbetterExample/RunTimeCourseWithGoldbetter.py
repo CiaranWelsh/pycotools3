@@ -54,4 +54,3 @@ TC=PyCoTools.pycopi.TimeCourse(goldbetter_model,ReportName=report,End=1000,
 
 
 
-
