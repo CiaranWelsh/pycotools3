@@ -62,7 +62,7 @@ class ParsePEData():
             Allow one to overwrite the pickle file automatically
             produced for speed. CDefault='false'
     '''
-    def __init__(self,results_path,UsePickle='false',OverwritePickle='true'):
+    def __init__(self,results_path,UsePickle='false',OverwritePickle='true',RemoveInfiniteRSS='true'):
         #input argument variables
         self.results_path=results_path #either file or folder
         #assertions
@@ -75,7 +75,6 @@ class ParsePEData():
 #        self.FromPickle=True
         self.UsePickle=UsePickle
         self.OverwritePickle=OverwritePickle
-        self.RemoveInfiniteRSS='false'
         
         assert os.path.exists(self.results_path),'{} does not exist'.format(self.results_path)
         if os.path.isdir(self.results_path):
