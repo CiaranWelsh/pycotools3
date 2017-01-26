@@ -97,7 +97,7 @@ class ParsePEData():
             raise Errors.InputError('DataFrame is empty. Your PE data has not been read.')
         self.data=self.rename_RSS(self.data)
         self.data=self.sort_data(self.data)
-        self.data=self.prune_headers()
+#        self.data=self.prune_headers()
         self.data=self.filter_constants(self.data)
         self.data=self.remove_infinite_RSS()
         try:
@@ -258,17 +258,17 @@ class ParsePEData():
 #            else:
 #                data=self.read_pickle()
 #            return data
-    
-    def prune_headers(self):
-        new_keys=[]
-        for i in self.data.keys():
-            match= re.findall('.*\[(.*)\]',i)
-            if match!=[]:
-                new_keys.append( match[0])
-            else:
-                new_keys.append(i)
-        self.data.columns=new_keys
-        return self.data
+#    
+#    def prune_headers(self):
+#        new_keys=[]
+#        for i in self.data.keys():
+#            match= re.findall('.*\[(.*)\]',i)
+#            if match!=[]:
+#                new_keys.append( match[0])
+#            else:
+#                new_keys.append(i)
+#        self.data.columns=new_keys
+#        return self.data
         
     def log10_conversion(self):
         return numpy.log10(self.data)
@@ -1655,9 +1655,10 @@ if __name__=='__main__':
 #    report=os.path.join(current_directory,'TimeCourseOutput.txt')
 #    noisy_report=os.path.join(current_directory,'NoisyTimeCourseOutput.txt')
 #    
+#    EvaluateOptimizationPerformance(noisy_report)
 #    PEData_report=os.path.join(current_directory,'PEData.txt')
-#    
-#    
+    
+    
 #    print ParsePEData(PEData_report).data
 
 
