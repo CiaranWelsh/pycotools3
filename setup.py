@@ -28,6 +28,7 @@ Setup tools for PyCoTools
  $Date: 22-01-2017
  Time:  12:29
 
+
 """
 
 from distutils.core import setup
@@ -37,7 +38,8 @@ import  setuptools
 #version
 MAJOR = 3
 MINOR = 0
-MICRO = 15
+MICRO = 16
+
 #=======
 __version__ = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
