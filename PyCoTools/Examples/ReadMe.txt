@@ -1,5 +1,5 @@
 Examples were written by Ciaran Welsh.  
-Email c.welh2@newcastle.ac.uk
+Email c.welsh2@newcastle.ac.uk
 
 Firstly download models from biomodels using DownloadCuratedModelsFromBioModels.py. This relies on bioservices module
 ConvertToCps.py uses coapsiSE to convert xml to cps
