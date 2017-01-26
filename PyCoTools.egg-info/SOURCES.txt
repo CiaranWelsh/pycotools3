@@ -34,8 +34,10 @@ PyCoTools/Examples/RunTimeCourseForEachModel.py
 PyCoTools/Examples/RunWorkflow.py
 PyCoTools/Examples/RunningGoldbetter1995MultiplePEs.py
 PyCoTools/Scripts/FitAnalysis.py
+PyCoTools/Scripts/RunTimecoursey.py
 PyCoTools/Scripts/delete_SGE_jobs.py
 PyCoTools/Scripts/insertPE.py
+PyCoTools/Scripts/module1.py
 PyCoTools/Scripts/submit_copasi_multjob.py
 PyCoTools/Tests/EvaluateOptimizationPerformanceTests.py
 PyCoTools/Tests/InsertParameterTests.py

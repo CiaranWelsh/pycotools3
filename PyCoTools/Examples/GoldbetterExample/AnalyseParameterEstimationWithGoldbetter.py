@@ -18,12 +18,12 @@ noisy_report=os.path.join(current_directory,'NoisyTimeCourseOutput.txt')
 
 PEData_report=os.path.join(current_directory,'PEData.txt')
 
-PyCoTools.PEAnalysis.EvaluateOptimizationPerformance(PEData_report)
+#PyCoTools.PEAnalysis.EvaluateOptimizationPerformance(PEData_report)
 
 
+P= PyCoTools.PEAnalysis.ParsePEData(PEData_report)
 
-
-
+print P.data
 
 
 
