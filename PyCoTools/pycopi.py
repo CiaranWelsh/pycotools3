@@ -74,26 +74,33 @@ class CopasiMLParser():
         self.copasi_file=copasi_file
         if os.path.isfile(self.copasi_file)!=True:
             raise Errors.FileDoesNotExistError('{} is not a copasi file'.format(self.copasi_file))
-
-        
         self.copasiML=self._parse_copasiML()
         
+        '''
+        Recently changed this class to use lxml built in functions
+        rather that pythons standard write and read methods. Hopefully this
+        should help some of the performance issues. The below two comments are required for
+        the old class. Keep them commented out until you remove the deprecations fully 
+        '''
+        #self.dir=os.path.dirname(self.copasi_file)
+        os.chdir(os.path.dirname(self.copasi_file))
         
-        self.dir=os.path.dirname(self.copasi_file)
-        self.output_file=os.path.join(self.dir,os.path.split(self.copasi_file)[1][:-4]+'_Duplicate.cps')
-
-
-        os.chdir(self.dir)
         
-        
-    def _parse_copasiML(self):
+    def _parse_copasiML_deprecated(self):
+        '''
+        deprecated in favor of using etree.parse
+        '''
         with open(self.copasi_file) as f:
             copasiML_str=f.read()
         return etree.fromstring(copasiML_str)
         
+    def _parse_copasiML(self):
+        '''
+        Parse xml doc with lxml 
+        '''
+        return etree.parse(self.copasi_file)
 
-
-    def write_copasi_file(self,copasi_filename,copasiML):
+    def write_copasi_file_deprecated(self,copasi_filename,copasiML):
         '''
         Often you need to delete a copasi file and rewrite it
         directly from the string. This function does this.
@@ -105,7 +112,14 @@ class CopasiMLParser():
         if os.path.isfile(copasi_filename):
             os.remove(copasi_filename)
         with open(copasi_filename,'w') as f:
-            f.write(etree.tostring(copasiML,pretty_print=True))       
+            f.write(etree.tostring(copasiML,pretty_print=True))    
+            
+    def write_copasi_file(self,copasi_filename,copasiML):
+        '''
+        write to file with lxml write function
+
+        '''
+        copasiML.write(copasi_filename)
             
 #==============================================================================
 
@@ -975,8 +989,12 @@ class Reports():
         
 
 #==============================================================================
-class ParsePEData():
+class ParsePEDataDeprecated():
     '''
+    Deprecated on 28-01-2017. Keep until you know it 
+    wont mess up the rest of your code. 
+    
+    
     parse parameter estimation data from file
     
     Positional args:
@@ -1160,7 +1178,6 @@ class ExperimentMapper():
             assert os.path.isfile(i),'{} is not a real file'.format(i)
         self.CParser=CopasiMLParser(self.copasi_file)
         self.copasiML=self.CParser.copasiML 
-        self.output_file=self.CParser.output_file
         self.GMQ=GetModelQuantities(self.copasi_file)
         default_outputML=os.path.split(self.copasi_file)[1][:-4]+'_Duplicate.cps'
 
@@ -1274,7 +1291,6 @@ class ExperimentMapper():
                 if j.attrib['name']==experiment_name:
                     j.getparent().remove(j)
         return self.copasiML
-#        self.CParser.write_copasi_file(self.output_file,self.copasiML)
         
     def remove_all_experiments(self):
         for i in self.get_existing_experiments():
@@ -1849,7 +1865,6 @@ class TimeCourse(object):
 
                     elif  k.attrib['name']=='MaxInternalSteps':
                         k.attrib['value']=self.kwargs.get('MaxInternalSteps')
-#        self.CParser.write_copasi_file(self.CParser.output_file,self.copasiML)
         return self.copasiML
 
 
