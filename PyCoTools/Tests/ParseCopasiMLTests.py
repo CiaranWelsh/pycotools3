@@ -1894,7 +1894,7 @@ class ParseCopasiML(unittest.TestCase):
         
         
     def tearDown(self):
-        os.remove(self.m2odel_file)
+        os.remove(self.model_file)
         
         
         
