@@ -94,11 +94,7 @@ class CopasiMLParser():
             copasiML_str=f.read()
         return etree.fromstring(copasiML_str)
         
-    def _parse_copasiML(self):
-        '''
-        Parse xml doc with lxml 
-        '''
-        return etree.parse(self.copasi_file)
+
 
     def write_copasi_file_deprecated(self,copasi_filename,copasiML):
         '''
@@ -113,6 +109,12 @@ class CopasiMLParser():
             os.remove(copasi_filename)
         with open(copasi_filename,'w') as f:
             f.write(etree.tostring(copasiML,pretty_print=True))    
+            
+    def _parse_copasiML(self):
+        '''
+        Parse xml doc with lxml 
+        '''
+        return etree.parse(self.copasi_file)
             
     def write_copasi_file(self,copasi_filename,copasiML):
         '''
