@@ -1650,12 +1650,11 @@ class PlotHistogram3D():
 
 
 if __name__=='__main__':
-    pass
-#    d=r'D:\MPhil\Model_Building\Models\2016\11_Nov\TGFbModel\Modules\Fit5\Results'    
+    d=r'D:\MPhil\Model_Building\Models\2016\11_Nov\TGFbModel\Modules\Fit5\Results'    
     
 
 
-#    PlotHistogram3D(d)
+    PlotHistogram3D(d)
 
 
 
