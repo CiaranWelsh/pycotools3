@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "c:\anaconda2\lib\site-packages\spyder\app\mainwindow.py", line 3001, in main
+    mainwindow = run_spyder(app, options, args)
+  File "c:\anaconda2\lib\site-packages\spyder\app\mainwindow.py", line 2905, in run_spyder
+    main.setup()
+  File "c:\anaconda2\lib\site-packages\spyder\app\mainwindow.py", line 876, in setup
+    self.extconsole = ExternalConsole(self)
+  File "c:\anaconda2\lib\site-packages\spyder\plugins\externalconsole.py", line 294, in __init__
+    not self.get_option('pythonstartup/default'))
+  File "c:\anaconda2\lib\site-packages\spyder\plugins\__init__.py", line 437, in set_option
+    CONF.set(self.CONF_SECTION, str(option), value)
+  File "c:\anaconda2\lib\site-packages\spyder\config\user.py", line 437, in set
+    self._save()
+  File "c:\anaconda2\lib\site-packages\spyder\config\user.py", line 121, in _save
+    raise(e)
+WindowsError: [Error 32] The process cannot access the file because it is being used by another process: u'D:\\.spyder\\spyder.ini'
