@@ -1,7 +1,0 @@
-[distutils]
-index-servers=pypi
-
-[pypi]
-repository = https://testpypi.python.org/pypi
-username = c.welsh2
-password = Nabduj12
