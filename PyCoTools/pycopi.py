@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 '''
  This file is part of PyCoTools.
 
@@ -74,7 +75,8 @@ class CopasiMLParser():
         self.copasi_file=copasi_file
         if os.path.isfile(self.copasi_file)!=True:
             raise Errors.FileDoesNotExistError('{} is not a copasi file'.format(self.copasi_file))
-        self.copasiML=self._parse_copasiML()
+        self.copasiMLTree=self._parse_copasiML()
+        self.copasiML=self.copasiMLTree.getroot()
         
         '''
         Recently changed this class to use lxml built in functions
@@ -121,7 +123,9 @@ class CopasiMLParser():
         write to file with lxml write function
 
         '''
-        copasiML.write(copasi_filename)
+        ##first convert the copasiML to a root element tree
+        root=etree.ElementTree(copasiML)
+        root.write(copasi_filename)
             
 #==============================================================================
 
@@ -2008,6 +2012,12 @@ class TimeCourse(object):
                     save_plot()
                     
 class PhaseSpacePlots(TimeCourse):
+    '''
+    Inherits from TimeCourse
+    
+    Use TimeCourse to get data and replot all n choose 2 combinations
+    of phase space plot
+    '''
     def __init__(self,copasi_file,**kwargs):
         super(PhaseSpacePlots,self).__init__(copasi_file,**kwargs)
                 
