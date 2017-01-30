@@ -1878,7 +1878,7 @@ class ParseCopasiML(unittest.TestCase):
     def setUp(self):
         self.model_file=os.path.join(os.getcwd(),'test_model.cps')
         with open(self.model_file,'w') as f:
-            f.write(MODEL_STR)
+            f.write(MODEL_STR.encode('utf-8'))
         
     def test_read_copasi_file(self):
         '''

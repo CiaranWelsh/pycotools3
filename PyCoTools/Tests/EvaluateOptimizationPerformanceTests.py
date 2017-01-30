@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import PyCoTools
 import unittest
 import glob
@@ -8,6 +10,7 @@ import time
 import re
 import shutil 
 import scipy
+import shutil 
 
 model_string=u'''<?xml version="1.0" encoding="UTF-8"?>
 <!-- generated with COPASI 4.16 (Build 104) (http://www.copasi.org) at 2016-10-26 08:49:08 UTC -->
@@ -1868,24 +1871,17 @@ class EvaluateOptimizationPerformanceTests(unittest.TestCase):
     def setUp(self):
         self.copasi_file=os.path.join(os.getcwd(),'VilarModel2006pycopitestModel.cps')
         with open(self.copasi_file,'w') as f:
-            f.write(model_string)
+            f.write(model_string.encode('utf-8'))
 
-#        self.PE_dir=os.path.join(os.path.dirname(self.copasi_file),'PE_dir')
-#        if os.path.isdir(self.PE_dir)==False:
-#            os.mkdir(self.PE_dir)
-#
-#        os.chdir(self.PE_dir)       
-#        
-        #make time course report name and make sure its available
+        ## make time course report name and make sure its available
         self.timecourse_report_name=os.path.join(os.getcwd(),'timecourse.txt')
         if os.path.isfile(self.timecourse_report_name):
             os.remove(self.timecourse_report_name)
-        #do time course
+        ## do time course
         self.TC=PyCoTools.pycopi.TimeCourse(self.copasi_file,StepSize=100,Plot='false',
                                                Intervals=50,End=5000,
                                                ReportName=self.timecourse_report_name)
-#                                               
-        #make PE report name available
+        ## make PE report name available
         self.PE_report_name=os.path.join(os.path.dirname(self.copasi_file),'PEdata.txt')
 
         PyCoTools.pycopi.PruneCopasiHeaders(self.timecourse_report_name,replace='true')
@@ -1904,10 +1900,26 @@ class EvaluateOptimizationPerformanceTests(unittest.TestCase):
                                  ReportType='parameter_estimation',ReportName=self.PE_report_name)   
         
     def test_figure_is_produced(self):
-        EOP= PyCoTools.PEAnalysis.EvaluateOptimizationPerformance(self.PE_report_name,
+        self.EOP= PyCoTools.PEAnalysis.EvaluateOptimizationPerformance(self.PE_report_name,
                                                                   Log10='true',
                                                                   SaveFig='true')
-        self.assertEqual(len(os.listdir(EOP.results_dir)),1)
+        self.assertEqual(len(os.listdir(self.EOP.results_dir)),1)
+        
+        
+    def tearDown(self):
+        os.remove(self.PE_report_name)
+        for i in glob.glob('*.xlsx'):
+            os.remove(i)
+            
+        for i in glob.glob('*.txt'):
+            os.remove(i)
+            
+        for i in glob.glob('*.cps'):
+            os.remove(i)    
+            
+        shutil.rmtree(self.EOP.results_dir)
+        
+        
     
     
     
