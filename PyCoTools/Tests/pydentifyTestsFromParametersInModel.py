@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import PyCoTools
 import os
 import unittest

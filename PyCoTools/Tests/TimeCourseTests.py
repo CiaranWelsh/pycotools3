@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import PyCoTools
 import unittest
 import glob
@@ -1820,7 +1821,7 @@ class TimeCourseTests(unittest.TestCase):
         if os.path.isfile(copasi_file):
             os.remove(copasi_file)
         with open(copasi_file,'w') as f:
-            f.write(model_string)
+            f.write(model_string.encode('utf-8'))
             
         self.copasi_file=copasi_file
         self.timecourse_report_name=os.path.join(os.getcwd(),'cheese.txt')
