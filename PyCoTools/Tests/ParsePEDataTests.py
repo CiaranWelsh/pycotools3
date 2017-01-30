@@ -14,7 +14,7 @@ import shutil
 
 
 
-model_string='''<?xml version="1.0" encoding="UTF-8"?>
+model_string=u'''<?xml version="1.0" encoding="UTF-8"?>
 <!-- generated with COPASI 4.16 (Build 104) (http://www.copasi.org) at 2016-10-27 14:41:02 UTC -->
 <?oxygen RNGSchema="http://www.copasi.org/static/schema/CopasiML.rng" type="xml"?>
 <COPASI xmlns="http://www.copasi.org/static/schema" versionMajor="4" versionMinor="16" versionDevel="104" copasiSourcesModified="0">
@@ -1880,7 +1880,7 @@ class ParsePETests(unittest.TestCase):
         if os.path.isfile(copasi_file):
             os.remove(copasi_file)
         with open(copasi_file,'w') as f:
-            f.write(model_string)
+            f.write(model_string.encode('utf-8'))
             
         self.copasi_file=copasi_file
         self.timecourse_report_name=os.path.join(os.getcwd(),'timecourse.txt')
@@ -1897,8 +1897,7 @@ class ParsePETests(unittest.TestCase):
                                                         NumberOfGenerations=5,
                                                         RandomizeStartValues='true',
                                                         ReportName=self.PE_report_name,
-                                                        Save='overwrite',Plot='false',
-                                                        Run='false')
+                                                        Save='overwrite',Plot='false')
         self.PE.write_item_template()
         self.PE.set_up()
                                                         
@@ -1955,7 +1954,7 @@ class ParsePETests(unittest.TestCase):
         self.assertTrue(p2.for_testing=='pickle_true_overwrite_false')
 
 
-    def test_pickle3(self):
+    def test_pickle4(self):
         '''
         The pickle feature should be used this way. First use the parse class
         once then when you use it again you don't have to wait to read all the 
@@ -1964,7 +1963,13 @@ class ParsePETests(unittest.TestCase):
         PyCoTools.PEAnalysis.ParsePEData(self.PE_dir,UsePickle='false',OverwritePickle='false')
         p2=PyCoTools.PEAnalysis.ParsePEData(self.PE_dir,UsePickle='true',OverwritePickle='true')
         self.assertTrue(p2.for_testing=='pickle_true_overwrite_true')
-
+        
+    def test_log10_conversion(self):
+        PEData=PyCoTools.PEAnalysis.ParsePEData(self.PE_dir,UsePickle='false',OverwritePickle='false')
+        print PEData.log_data
+        
+        
+        
     def tearDown(self):
         os.remove(self.copasi_file)
         os.remove(self.PE_report_name)

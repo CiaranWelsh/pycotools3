@@ -18,23 +18,7 @@ noisy_report=os.path.join(current_directory,'NoisyTimeCourseOutput.txt')
 
 PEData_report=os.path.join(current_directory,'PEData.txt')
 
-#PyCoTools.PEAnalysis.EvaluateOptimizationPerformance(PEData_report)
-
-
-P= PyCoTools.PEAnalysis.ParsePEData(PEData_report)
-data=P.read_data()
-data=P.rename_RSS(data)
-data=P.sort_data(data)
-data=P.filter_constants(data)
-#print data
-#k=[]
-#for i in data.keys():
-#    print i
-#    k.append(PyCoTools.Misc.RemoveNonAscii(i).filter)
-#print k
-#print P.prune_headers()
-#print data
-
+PyCoTools.PEAnalysis.EvaluateOptimizationPerformance(PEData_report)
 
 
 
