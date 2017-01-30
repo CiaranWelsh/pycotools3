@@ -1885,12 +1885,11 @@ class ParseCopasiML(unittest.TestCase):
         
         '''
         copasiModel=  PyCoTools.pycopi.CopasiMLParser(self.model_file)
-        self.assertTrue( isinstance(copasiModel.copasiML,lxml.etree._ElementTree))
+        self.assertTrue( isinstance(copasiModel.copasiMLTree,lxml.etree._ElementTree))
         
     def test_write_copasi_file(self):
         parser=PyCoTools.pycopi.CopasiMLParser(self.model_file)
         parser.write_copasi_file(self.model_file,parser.copasiML)
-        
         
         
     def tearDown(self):

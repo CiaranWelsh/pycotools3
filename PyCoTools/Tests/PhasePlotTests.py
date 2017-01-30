@@ -1911,6 +1911,9 @@ class PhaseSpacePlotTests(unittest.TestCase):
         if os.path.isdir(f):
             shutil.rmtree(f)
         os.remove(self.copasi_file)
+        for i in os.listdir(os.path.dirname(self.copasi_file)):
+            if i.endswith('.jpeg'):
+                os.remove(i)
         
         
 if __name__=='__main__':
