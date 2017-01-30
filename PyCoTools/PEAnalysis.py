@@ -103,7 +103,8 @@ class ParsePEData():
         try:
             self.log_data=self.log10_conversion()
         except AttributeError:
-            self.log_data='Could not convert to log10 scale'
+            raise TypeError('Could not convert to log10 scale. Chances are this is because you have infinite RSS values in your parameter estimation data. Try changing the optimization settings')
+            
 
 
 
@@ -207,69 +208,6 @@ class ParsePEData():
                 data.to_pickle(self.pickle_path)
                 return data 
 
-
-
-
-#                
-#            if self.mode=='file':
-#                data= self.read_file()
-#            elif self.mode=='folder':
-#                data= self.read_folder()
-#            if self.OverwritePickle=='false':
-#                
-                
-                
-                
-#                
-#                if os.path.isfile(self.pickle_path)==True:
-#                    os.remove(self.pickle_path)
-#                if os.path.isfile(self.pickle_path_log)==True:
-#                    os.remove(self.pickle_path_log)
-#                data.to_pickle(self.pickle_path)
-            
-            
-            
-#            return data
-#        elif self.UsePickle=='true':
-#            if os.path.isfile(self.pickle_path)==False:
-#                self.UsePickle='false'
-#                data=self.read_data()
-#            else:
-#                data=self.read_pickle()
-#            return data           
-    
-#    def read_data(self):
-#        if self.UsePickle=='false':
-#            if self.mode=='file':
-#                data=self.read_file()
-#            elif self.mode=='folder':
-#                data=self.read_folder()
-#            if self.OverwritePickle=='true':
-#                if os.path.isfile(self.pickle_path)==True:
-#                    os.remove(self.pickle_path)
-#                if os.path.isfile(self.pickle_path_log)==True:
-#                    os.remove(self.pickle_path_log)
-#            data.to_pickle(self.pickle_path)
-#            return data
-#        elif self.UsePickle=='true':
-#            if os.path.isfile(self.pickle_path)==False:
-#                self.UsePickle='false'
-#                data=self.read_data()
-#            else:
-#                data=self.read_pickle()
-#            return data
-#    
-#    def prune_headers(self):
-#        new_keys=[]
-#        for i in self.data.keys():
-#            match= re.findall('.*\[(.*)\]',i)
-#            if match!=[]:
-#                new_keys.append( match[0])
-#            else:
-#                new_keys.append(i)
-#        self.data.columns=new_keys
-#        return self.data
-        
     def log10_conversion(self):
         return numpy.log10(self.data)
 

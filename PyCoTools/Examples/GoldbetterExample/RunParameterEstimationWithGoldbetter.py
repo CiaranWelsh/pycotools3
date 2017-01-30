@@ -25,8 +25,9 @@ First define the method variables within the PE class using the key word argumen
 
 PE= PyCoTools.pycopi.ParameterEstimation(goldbetter_model, #model
                                            noisy_report, #experimental data
-                                           Method='HookeJeeves',#use a quick local algorithm 
-                                           IterationLimit=10, #turn down iterations for speed
+                                           Method='GeneticAlgorithm',#use a quick global algorithm 
+                                           NumberOfGenerations=10, #set low number of generations for speed
+                                           PopulationSize=10, #set low population size parameter for speed
                                            Separator=[',']) #we wrote data to csv so need to tell copasi
 '''
 Then write a template file. This contains all your model variables. 
@@ -55,7 +56,7 @@ scan task so we'll not use the run method.
 PEData_report=os.path.join(current_directory,'PEData.txt')
 
 '''
-Run the parameter estimation via the scan task to run 4000 of them
+Run the parameter estimation via the scan task to run 500 of them
 
 Other options include copying the goldbetter model to four other file paths. 
 Then you could run the same code in a loop and have n copasi's running parameter
@@ -66,7 +67,7 @@ computer power
 PyCoTools.pycopi.Scan(goldbetter_model,ScanType='repeat',
                       ReportName=PEData_report,
                       ReportType='parameter_estimation',
-                      NumberOfSteps=4000,Run='true')
+                      NumberOfSteps=500,Run='true')
 
 
 
