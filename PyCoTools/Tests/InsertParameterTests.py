@@ -3601,7 +3601,6 @@ class InsertParametersTest(unittest.TestCase):
         self.copasi_file=copasi_file
         self.copasiML=PyCoTools.pycopi.CopasiMLParser(self.copasi_file).copasiML
         self.GMQ=PyCoTools.pycopi.GetModelQuantities(self.copasi_file)
-        self.insert_paraemter_options={}
         
         '''
         simulate a time course for testing 
@@ -3678,7 +3677,7 @@ class InsertParametersTest(unittest.TestCase):
 
 #    def test_global_from_file(self):
 #        '''
-#        insert parameters from a PE result file
+#        insert global parameters from a PE result file
 #        '''
 #        IP=PyCoTools.pycopi.InsertParameters(self.copasi_file,
 #                                               ParameterPath=self.PE_report_name,
@@ -3688,9 +3687,12 @@ class InsertParametersTest(unittest.TestCase):
 #        
 #        for i in GMQ.get_global_quantities():
 #            for j in input_parameters:
+#                print i,j
 #                if i==j:
+#                    
 #                    in_PE_file= float(input_parameters[i])
 #                    in_est_data=float(GMQ.get_global_quantities()[i])
+#                    print in_PE_file,in_est_data
 #                    self.assertAlmostEqual(in_PE_file,in_est_data)
 ##                    
 #                    
@@ -3711,18 +3713,16 @@ class InsertParametersTest(unittest.TestCase):
 #                    in_est_data=float(GMQ.get_local_parameters()[i])
 #                    self.assertAlmostEqual(in_PE_file,in_est_data)
 #                    
-    def test_IC_from_file(self):
-        '''
-        insert parameters from a PE result file
-        '''
+#    def test_IC_from_file(self):
+#        '''
+#        insert parameters from a PE result file
+#        '''
 #        IP=PyCoTools.pycopi.InsertParameters(self.copasi_file,
 #                                               ParameterPath=self.PE_file,
 #                                               Index=0)
 #        GMQ=PyCoTools.pycopi.GetModelQuantities(self.copasi_file)
-        m= pandas.DataFrame.from_csv(self.PE_report_name,sep='\t',index_col=None)#.iloc[0]['unphosphorylated PER']
-        
-        print m
-##        
+#        m= pandas.DataFrame.from_csv(self.PE_report_name,sep='\t',index_col=None)#.iloc[0]['unphosphorylated PER']
+
 #        for i in GMQ.get_metabolites():
 #            for j in input_parameters:
 #                if i==j:
@@ -3732,7 +3732,7 @@ class InsertParametersTest(unittest.TestCase):
 #                    else:
 #                        in_est_data=float(GMQ.get_metabolites()[i]['particle_numbers'])
 #                    self.assertAlmostEqual(in_PE_file,in_est_data)                                        
-                    
+#                    
                     
 #                    self.assertAlmostEqual( GMQ.get_global_quantities()[i],float(input_parameters[i]))
 #            print i,GMQ.get_global_quantities()[i]

@@ -9,8 +9,12 @@ import os
 import pandas
 import numpy
 
-current_directory='D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\Examples\GoldbetterExample'
-copasi_file=r'Goldbeter1995_CircClock.cps'
+import sys
+if sys.platform=='win32':
+    current_directory='D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\Examples\KholodenkoExample'
+else:
+    current_directory=r'/sharedlustre/users/b3053674/2017/Jan'
+copasi_file=r'Kholodenko.cps'
 goldbetter_model=os.path.join(current_directory,copasi_file)
 report=os.path.join(current_directory,'TimeCourseOutput.txt')
 noisy_report=os.path.join(current_directory,'NoisyTimeCourseOutput.txt')
@@ -49,7 +53,7 @@ def add_noise(f,noise_factor=0.05):
     return noise
     
     
-print add_noise(report).to_csv(noisy_report)
+print add_noise(report).to_csv(noisy_report,sep='\t')
 
 
 
