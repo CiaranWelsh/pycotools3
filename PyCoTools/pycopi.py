@@ -483,6 +483,8 @@ class GetModelQuantities():
         '''
         returns dict[parameter_name]=parameter_value for all local, 
         global and IC parameters in copasi_file
+        
+        Use get_all_model_variables
         '''
         var_dct={}
         d=self.get_all_model_variables()
@@ -510,6 +512,10 @@ class GetModelQuantities():
         '''
         returns dict[parameter_name]=parameter_value for all local, 
         global and IC parameters in copasi_file
+        
+        get_all_model_variables
+        
+        
         '''
         var_dct={}
         d=self.get_all_model_variables()
@@ -2472,6 +2478,9 @@ class ParameterEstimation():
             self.kwargs['ConfirmOverwrite']=str(0)        
             
         self.kwargs['Method']=self.kwargs.get('Method').lower()
+        if self.kwargs['Method']=='currentsolutionstatistics':
+            if self.kwargs['RandomizeStartValues']=='true':
+                raise Errors.InputError('Cannot run current solution statistics with \'RandomizeStartValues\' set to \'true\'.' )
         write_to_file_list=['duplicate','overwrite','false']
         assert self.kwargs.get('Save') in write_to_file_list  
         
@@ -2644,9 +2653,6 @@ class ParameterEstimation():
         self.PlotPEDataKwargs['LegendLoc']=self.kwargs.get('LegendLoc')
         self.PlotPEDataKwargs['PruneHeaders']=self.kwargs.get('PruneHeaders')
         
-#        if self.kwargs.get('Run')=='true':
-#            self.copasiML=self.run()
-            
 
     def clear_pe(self):
         pass
@@ -3841,11 +3847,11 @@ Please check the headers of your PE data are consistent with your model paramete
         
     def insert_all(self):
         self.copasiML=self.insert_locals()
-        self.save() 
+#        self.save() 
         self.copasiML=self.insert_global()
-        self.save()
+#        self.save()
         self.copasiML=self.insert_ICs()
-        self.save()
+#        self.save()
         self.copasiML=self.insert_fit_items()
         self.save()
 #        os.chdir(os.path.dirname(self.copasi_file))

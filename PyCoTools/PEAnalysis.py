@@ -610,7 +610,7 @@ class PlotBoxplot():
             estimation results files. 
             
     **kwargs:
-        NumPerPlot:
+         NumPerPlot:
             How many parameters to include in a box plot before producing 
             multiple figure. Default=None -  means all will be in one figure. 
     
