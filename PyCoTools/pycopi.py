@@ -3535,7 +3535,7 @@ class Run():
         self.CParser=CopasiMLParser(self.copasi_file)
         self.copasiML=self.CParser.copasiML 
         self.GMQ=GetModelQuantities(self.copasi_file)
-        self.SGE_job_file=os.path.join(os.path.splitext(self.copasi_file)[0],'.sh')
+        self.SGE_job_file=os.path.splitext(self.copasi_file)[0]+'.sh'
         
         options={'Task':'time_course',
                  'Save':'overwrite',
