@@ -42,8 +42,8 @@ def runHJ(copasi_file,parameters,report_name):
     
     PE=PyCoTools.pycopi.ParameterEstimation(copasi_file,K.noisy_timecourse_report,
                                          Method='HookeJeeves',
-                                         IterationLimit=1000,
-                                         Tolerance=1e-6,
+                                         IterationLimit=2000,
+                                         Tolerance=1e-12,
                                          RandomizeStartValues='false',
                                          Plot='true',
                                          SaveFig='true',
