@@ -30,7 +30,9 @@ data= PyCoTools.PEAnalysis.ParsePEData(PEData_path).data
 def runHJ(copasi_file,parameters,report_name):
     '''
     Take parameters from global parameter estimation and perform local parameter
-    estimation around these parameters
+    estimation around these parameters.
+    
+    Need to instantiate ParameterEstimation class before inserting parameters
     '''
     PE=PyCoTools.pycopi.ParameterEstimation(copasi_file,K.noisy_timecourse_report,
                                          ReportName=report_name,
@@ -38,6 +40,8 @@ def runHJ(copasi_file,parameters,report_name):
                                          IterationLimit=1000,
                                          Tolerance=1e-10,
                                          RandomizeStartValues='false',
+                                         Plot='true',
+                                         SaveFig='true',
                                          )
     if 'RSS' in parameters.keys():
         del parameters['RSS']

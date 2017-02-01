@@ -2289,6 +2289,11 @@ class ParameterEstimation():
             task when using CopasiSE. This should be 'true' of you are running a parameter
             estimation from the parameter estimation task via the pycopi but 'false' when you 
             want to set up a repeat item in the scan task with the parameter estimation subtask
+            
+        UseTemplateStartValues:
+            Default set to 'false'. Determines whether the starting parameters 
+            from within the fitItemTemplate.xlsx are use for starting values
+            in the parameter estimation or not
                  
         LowerBound:
             Value of the default lower bound for the FitItemTemplate. Default 0.000001
@@ -2380,6 +2385,7 @@ class ParameterEstimation():
                  'RandomizeStartValues':'true',
                  'CreateParameterSets':'false',
                  'CalculateStatistics':'false',
+                 'UseTemplateStartValues':'false',
                  #method options
                  'Method':'GeneticAlgorithm',
                  #'DifferentialEvolution',
@@ -2497,7 +2503,8 @@ class ParameterEstimation():
         for i in self.kwargs.get('Metabolites'):
             assert i in self.GMQ.get_IC_cns().keys()
 
-
+        if self.kwargs['UseTemplateStartValues'] not in ['true','false']:
+            raise Errors.InputError(''' Argument to the UseTemplateStartValues must be \'true\' or \'false\' not {}'''.format(self.kwargs['UseTemplateStartValues']))
 
 
             
@@ -2780,13 +2787,16 @@ class ParameterEstimation():
         subA1={'name': 'Affected Cross Validation Experiments'}
         subA2={'name': 'Affected Experiments'}
         subA3={'type': 'cn', 'name': 'LowerBound', 'value': str(item['LowerBound'])}
-        subA5={'type': 'float', 'name': 'StartValue', 'value': str(item['StartValue'])}
+        if self.kwargs.get('UseTemplateStartValues')=='true':
+            subA5={'type': 'float', 'name': 'StartValue', 'value': str(item['StartValue'])}
+        
         subA6={'type': 'cn', 'name': 'UpperBound', 'value': str(item['UpperBound'])}
         
         etree.SubElement(new_element,'ParameterGroup',attrib=subA1)
         etree.SubElement(new_element,'ParameterGroup',attrib=subA2)
         etree.SubElement(new_element,'Parameter',attrib=subA3)
-        etree.SubElement(new_element,'Parameter',attrib=subA5)
+        if self.kwargs.get('UseTemplateStartValues')=='true':
+            etree.SubElement(new_element,'Parameter',attrib=subA5)
         etree.SubElement(new_element,'Parameter',attrib=subA6)
         
         #for IC parameters
