@@ -37,4 +37,5 @@ class KholodenkoExample():
         ## Full path to a folder containing all data from initial multiple global parameter estimations
         self.PEData_dir=os.path.join(self.current_directory,'PEResults')
         ## Full path to file containing secondary local parameter estimation (starting with best values from self.PEData_dir)
-        self.local_PEData=os.path.join(self.current_directory,'LocalPEData.txt')
+#        self.local_PEData_file=os.path.join(self.current_directory,'LocalPEData.txt')
+        self.local_PEData_dir=os.path.join(self.current_directory,'LocalPEDataResults')

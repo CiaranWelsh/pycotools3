@@ -102,6 +102,7 @@ class Submit_Copasi_Job(object):
         else:
             with open('{}.sh'.format(self.report_name),'w') as f:
                 f.write('#!/bin/bash\n#$ -V -cwd\nmodule add apps/COPASI/4.16.104-Linux-64bit\nCopasiSE {}'.format(self.copasi_file))
+        ## -N is the current job name option
         os.system('qsub {} -N {} '.format('{}.sh'.format(self.report_name),self.report_name))
         os.remove('{}.sh'.format(self.report_name))
         
