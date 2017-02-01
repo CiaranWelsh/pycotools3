@@ -54,7 +54,7 @@ def runHJ(copasi_file,parameters,report_name):
     PE.set_up()
     ## Run via scan task because this gives only best values in function
     ## evaluations, rather than the periodic function evaluations as well
-    PyCoTools.pycopi.Scan(copasi_file,ScanType='repeat',Run='true',
+    PyCoTools.pycopi.Scan(copasi_file,ScanType='repeat',Run='SGE',
                           NumberOfSteps=1,
                           ReportName=report,
                           ReportType='parameter_estimation')
