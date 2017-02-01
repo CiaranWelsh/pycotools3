@@ -34,28 +34,38 @@ def runHJ(copasi_file,parameters,report_name):
     
     Need to instantiate ParameterEstimation class before inserting parameters
     '''
+    if 'RSS' in parameters.keys():
+        del parameters['RSS']
+    for i in parameters:
+        print i,':\t',parameters[i]
+    PyCoTools.pycopi.InsertParameters(copasi_file,ParameterDict=parameters)
+    
     PE=PyCoTools.pycopi.ParameterEstimation(copasi_file,K.noisy_timecourse_report,
-                                         ReportName=report_name,
                                          Method='HookeJeeves',
                                          IterationLimit=1000,
-                                         Tolerance=1e-10,
+                                         Tolerance=1e-6,
                                          RandomizeStartValues='false',
                                          Plot='true',
                                          SaveFig='true',
+                                         UseTemplateStartValues='false',
                                          )
-    if 'RSS' in parameters.keys():
-        del parameters['RSS']
-    PyCoTools.pycopi.InsertParameters(copasi_file,ParameterDict=parameters)
-    for i in parameters:
-        print i,':\t',parameters[i]
+
         
     PE.set_up()
-#    PE.run()
-    
-report=K.local_PEData[:-4]+'0.txt'
-    
-print runHJ(K.kholodenko_model,data.iloc[0].to_dict(),report)
+    ## Run via scan task because this gives only best values in function
+    ## evaluations, rather than the periodic function evaluations as well
+    PyCoTools.pycopi.Scan(copasi_file,ScanType='repeat',Run='true',
+                          NumberOfSteps=1,
+                          ReportName=report,
+                          ReportType='parameter_estimation')
 
+
+for i in range(int(data.shape[0]*0.1)):
+    print 'running index {} with starting RSS of {}'.format(i,data.iloc[i]['RSS'])
+    if os.path.isdir(K.local_PEData_dir)!=True:
+        os.mkdir(K.local_PEData_dir)
+    report=os.path.join(K.local_PEData_dir,'{}.txt'.format(i))
+    print runHJ(K.kholodenko_model,data.iloc[i].to_dict(),report)
 
 
 

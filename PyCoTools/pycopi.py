@@ -3517,7 +3517,7 @@ class Run():
             on 'overwrite', the default. 
             
         Run:
-            'true' or 'false'. Default is 'true' but can be turned off if you 
+            'true', 'false' or 'SGE'. Default is 'true' but can be turned off if you 
             want to uncheck all executable boxes then check the Task executable
             
         MaxTime:
@@ -3528,6 +3528,7 @@ class Run():
         self.CParser=CopasiMLParser(self.copasi_file)
         self.copasiML=self.CParser.copasiML 
         self.GMQ=GetModelQuantities(self.copasi_file)
+        self.SGE_job_file=os.path.join(os.path.splitext(self.copasi_file),'.sh')
         
         options={'Task':'time_course',
                  'Save':'overwrite',
@@ -3569,6 +3570,8 @@ class Run():
         self.save()
         if self.kwargs.get('Run')=='true':
             self.output=self.run()
+        elif self.kwargs.get('Run')=='SGE':
+            self.output=self.submit_copasi_job_SGE()
             
 
         
@@ -3603,7 +3606,16 @@ class Run():
             raise Errors.CopasiError(d['error'])
         return d['output']
         
-        
+    def submit_copasi_job_SGE(self):
+        '''
+        Submit copasi file as job to SGE based job scheduler. 
+        '''
+        with open('{}.sh'.format(self.SGE_job_file),'w') as f:
+            f.write('#!/bin/bash\n#$ -V -cwd\nmodule add apps/COPASI/4.16.104-Linux-64bit\nCopasiSE {}'.format(self.copasi_file))
+        ## -N option for job name 
+        os.system('qsub {} -N {} '.format(self.SGE_job_file,self.SGE_job_file))
+        ## remove .sh file after used. 
+        os.remove('{}.sh'.format(self.report_name))
     
         
     def save(self):
