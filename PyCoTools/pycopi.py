@@ -3687,9 +3687,11 @@ class InsertParameters():
 #        assert os.path.exists(self.parameter_path),'{} doesn\'t exist'.format(self.parameter_path)
         assert self.kwargs.get('QuantityType') in ['concentration','particle_numbers']
         if self.kwargs.get('ParameterDict') != None:
-            assert isinstance(self.kwargs.get('ParameterDict'),dict)
+            if isinstance(self.kwargs.get('ParameterDict'),dict)!=True:
+                raise Errors.InputError('Argument to \'ParameterDict\' keyword needs to be of type dict')
             for i in self.kwargs.get('ParameterDict').keys():
-                assert i in self.GMQ.get_all_model_variables().keys()
+                if i not in self.GMQ.get_all_model_variables().keys():
+                    raise Errors.InputError('Parameter \'{}\' is not in your model. \n\nThese are in your model:\n{}'.format(i,sorted(self.GMQ.get_all_model_variables().keys())))
                 
         if self.kwargs.get('ParameterDict')==None and self.kwargs.get('ParameterPath')==None and self.kwargs.get('DF') is None:
             raise Errors.InputError('You need to give at least one of ParameterDict,ParameterPath or DF keyword arguments')
