@@ -3622,7 +3622,7 @@ class Run():
         ## -N option for job name 
         os.system('qsub {} -N {} '.format(self.SGE_job_file,self.SGE_job_file))
         ## remove .sh file after used. 
-        os.remove('{}.sh'.format(self.SGE_job_file))
+        os.remove(self.SGE_job_file)
     
         
     def save(self):
