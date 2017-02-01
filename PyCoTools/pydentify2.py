@@ -1064,7 +1064,6 @@ class Plot():
             plt.figure()
         ax = plt.subplot(111)
         data= self.data[index][parameter]
-        print data
         parameter_val,RSS_val=(data[data.keys()[0]],data[data.keys()[1]])
         #plot parameter vs RSS once as green circles the other as lines
         try:

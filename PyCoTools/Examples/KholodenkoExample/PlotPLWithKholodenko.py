@@ -21,11 +21,8 @@ PEData_report=os.path.join(current_directory,'LocalPEData.txt')
 
 PyCoTools.pydentify2.Plot(Kholodenko_model, #full path to the model
                            ParameterPath=PEData_report, #full path to the PEData
-                           Index=-1,
-                           RSS=108.083)
-#                           Mode='one',
-#                           PlotIndex=0,
-#                           PlotParameter='(transcription of PER).KI')#, #index of PE set for plotting. (best is 0)
+                           Index=0)
+#                           RSS=618.648)
                            
 
 

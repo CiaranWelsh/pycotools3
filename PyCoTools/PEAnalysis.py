@@ -360,6 +360,10 @@ class PlotHistogram():
              'true' or 'false'. When not using iPython and graphs are not automatically 
              displayed in shell, this determines whether the plots are opened in a
              window or not. Default='false'
+        
+         ResultsDirectory:
+             Name of the directory to store parameter estimation results. 
+             Default= 'Histograms'
                      
                  
     '''
@@ -386,6 +390,7 @@ class PlotHistogram():
                  'Log10':'false',
                  'Show':'false',
                  'Variable':None,
+                 'ResultsDirectory':None,
                  
                      }
         for i in kwargs.keys():
@@ -394,11 +399,14 @@ class PlotHistogram():
         self.kwargs=options
         assert self.kwargs.get('TruncateMode') in ['below_x','percent']
         
-        #Other classes
+        #Other 
         self.PED=ParsePEData(self.results_path)
 
         #create a directory and change to it
-        self.results_dir=os.path.join(os.path.dirname(self.results_path),'Histograms')
+        if self.kwargs.get('ResultsDirectory')==None:
+            self.results_dir=os.path.join(os.path.dirname(self.results_path),'Histograms')
+        else:
+            self.results_dir=self.kwargs.get('ResultsDirectory')
         if self.kwargs.get('SaveFig')=='true':
             if os.path.isdir(self.results_dir)!=True:
                 os.mkdir(self.results_dir)
