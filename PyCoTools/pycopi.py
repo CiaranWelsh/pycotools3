@@ -3617,7 +3617,7 @@ class Run():
         '''
         Submit copasi file as job to SGE based job scheduler. 
         '''
-        with open('{}.sh'.format(self.SGE_job_file),'w') as f:
+        with open(self.SGE_job_file,'w') as f:
             f.write('#!/bin/bash\n#$ -V -cwd\nmodule add apps/COPASI/4.16.104-Linux-64bit\nCopasiSE {}'.format(self.copasi_file))
         ## -N option for job name 
         os.system('qsub {} -N {} '.format(self.SGE_job_file,self.SGE_job_file))
