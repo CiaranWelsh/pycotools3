@@ -3201,7 +3201,7 @@ class Scan():
             parameter of interest. Must be a model entity. Default=None
             
         Run:
-            Run Scan task or not. 'true' or 'false'. Default='false'
+            Run Scan task or not. 'true' or 'false' or 'SGE'. Default='false'
             
     '''
     def __init__(self,copasi_file,**kwargs):
@@ -3288,7 +3288,7 @@ class Scan():
         assert self.kwargs.get('QuantityType') in quantity_type_list
         assert self.kwargs.get('Scheduled') in ['true','false']
         assert self.kwargs.get('ClearScans') in ['true','false']
-        assert self.kwargs.get('Run') in ['true','false']
+        assert self.kwargs.get('Run') in ['true','false','SGE']
 
 
         #numericify the some keyword arguments
@@ -3343,8 +3343,9 @@ class Scan():
         self.copasiML=self.create_scan()
         self.copasiML=self.set_scan_options()
         self.copasiML=self.save()
-        if self.kwargs.get('Run')=='true':
-            self.run()
+        self.run()
+        
+            
 #            PruneCopasiHeaders(self.kwargs['ReportName'],replace='true')
             
             
@@ -3490,8 +3491,14 @@ class Scan():
         return self.copasiML
         
     def run(self):
-        R=Run(self.copasi_file,Task='scan')
-        return R.output
+        R=Run(self.copasi_file,Task='scan',Mode=self.kwargs.get('Run'))
+        
+        if self.kwargs.get('Run')=='false':
+            return None
+        elif self.kwargs.get('Run')=='true':
+            return R.output
+        elif self.kwargs.get('Run')=='SGE':
+            return R.output
 #==============================================================================            
             
 class Run():
@@ -3516,7 +3523,7 @@ class Run():
             Either 'false','duplicate' or 'overwrite'. Should probably remain 
             on 'overwrite', the default. 
             
-        Run:
+        Mode:
             'true', 'false' or 'SGE'. Default is 'true' but can be turned off if you 
             want to uncheck all executable boxes then check the Task executable
             
@@ -3528,11 +3535,11 @@ class Run():
         self.CParser=CopasiMLParser(self.copasi_file)
         self.copasiML=self.CParser.copasiML 
         self.GMQ=GetModelQuantities(self.copasi_file)
-        self.SGE_job_file=os.path.join(os.path.splitext(self.copasi_file),'.sh')
+        self.SGE_job_file=os.path.join(os.path.splitext(self.copasi_file)[0],'.sh')
         
         options={'Task':'time_course',
                  'Save':'overwrite',
-                 'Run':'true',
+                 'Mode':'true',
                  'MaxTime':None}
                                   
                  
@@ -3568,10 +3575,10 @@ class Run():
             self.kwargs['Task']='steadystate'           
         self.copasiML=self.set_task()
         self.save()
-        if self.kwargs.get('Run')=='true':
-            self.output=self.run()
-        elif self.kwargs.get('Run')=='SGE':
-            self.output=self.submit_copasi_job_SGE()
+        if self.kwargs.get('Mode')=='true':
+            self.run()
+        elif self.kwargs.get('Mode')=='SGE':
+            self.submit_copasi_job_SGE()
             
 
         
