@@ -3496,9 +3496,9 @@ class Scan():
         if self.kwargs.get('Run')=='false':
             return None
         elif self.kwargs.get('Run')=='true':
-            return R.output
+            return R
         elif self.kwargs.get('Run')=='SGE':
-            return R.output
+            return R
 #==============================================================================            
             
 class Run():
