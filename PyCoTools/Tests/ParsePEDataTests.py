@@ -1,20 +1,20 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Sat Jan 28 14:03:25 2017
 
-@author: Ciaran
-"""
-
-import PyCoTools
-import os
 import unittest
+import os
+import re
+import pandas
+import numpy
+import scipy
+import PyCoTools
+import glob
+import shutil
 
-import lxml
 
 
 
 
-MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
+model_string=u'''<?xml version="1.0" encoding="UTF-8"?>
 <!-- generated with COPASI 4.16 (Build 104) (http://www.copasi.org) at 2016-10-27 14:41:02 UTC -->
 <?oxygen RNGSchema="http://www.copasi.org/static/schema/CopasiML.rng" type="xml"?>
 <COPASI xmlns="http://www.copasi.org/static/schema" versionMajor="4" versionMinor="16" versionDevel="104" copasiSourcesModified="0">
@@ -1872,38 +1872,123 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
 '''
 
 
-
-class ParseCopasiML(unittest.TestCase):
+class ParsePETests(unittest.TestCase):
+    
     
     def setUp(self):
-        self.model_file=os.path.join(os.getcwd(),'test_model.cps')
-        with open(self.model_file,'w') as f:
-            f.write(MODEL_STR.encode('utf-8'))
+        copasi_file=os.path.join(os.getcwd(),'VilarModel2006pycopitestModel.cps')
+        if os.path.isfile(copasi_file):
+            os.remove(copasi_file)
+        with open(copasi_file,'w') as f:
+            f.write(model_string.encode('utf-8'))
+            
+        self.copasi_file=copasi_file
+        self.timecourse_report_name=os.path.join(os.getcwd(),'timecourse.txt')
+        if os.path.isfile(self.timecourse_report_name):
+            os.remove(self.timecourse_report_name)
+            
+        self.PE_report_name=os.path.join(os.path.dirname(self.copasi_file),'PEdata.txt')
+        self.TC=PyCoTools.pycopi.TimeCourse(self.copasi_file,StepSize=100,Plot='false',Intervals=50,End=5000,ReportName=self.timecourse_report_name)
+        PyCoTools.pycopi.PruneCopasiHeaders(self.timecourse_report_name,replace='true')
         
-    def test_read_copasi_file(self):
+        self.PE=PyCoTools.pycopi.ParameterEstimation(self.copasi_file,
+                                                        self.timecourse_report_name,
+                                                        PopulationSize=6,
+                                                        NumberOfGenerations=5,
+                                                        RandomizeStartValues='true',
+                                                        ReportName=self.PE_report_name,
+                                                        Save='overwrite',Plot='false')
+        self.PE.write_item_template()
+        self.PE.set_up()
+                                                        
+        self.S=PyCoTools.pycopi.Scan(self.copasi_file,ScanType='repeat',
+                                        ReportType='parameter_estimation',
+                                        Run='true',NumberOfSteps=3,
+                                        ReportName=self.PE_report_name,Scheduled='true')
+
+#        self.PE.run()
+        self.PE_dir=os.path.join(os.path.dirname(self.copasi_file),'PE_dir')
+        if os.path.isdir(self.PE_dir)==False:
+            os.mkdir(self.PE_dir)
+        new_fle= os.path.join(self.PE_dir,os.path.split(self.PE_report_name)[1])
+        shutil.copy(self.PE_report_name,new_fle)
+        
+        
+        self.GEP=PyCoTools.pycopi.GetModelQuantities(self.copasi_file)
+    
+    
+    def test_read_from_file(self):
+        P=PyCoTools.PEAnalysis.ParsePEData(self.PE_report_name)
+        self.assertEqual(P.data.shape[0],int(self.S.kwargs.get('NumberOfSteps')))
+        
+    def test_read_from_folder(self):
+        P=PyCoTools.PEAnalysis.ParsePEData(self.PE_dir)
+        self.assertEqual(P.data.shape[0],int(self.S.kwargs.get('NumberOfSteps')))
+        
+    def test_pickle1(self):
         '''
+        When UsePickle set to false, the pickle path should be made and not used
+        '''        
+        P=PyCoTools.PEAnalysis.ParsePEData(self.PE_dir,UsePickle='false')
+        self.assertTrue(os.path.isfile(P.pickle_path))
         
+
+        
+        
+    def test_pickle2(self):
         '''
-        copasiModel=  PyCoTools.pycopi.CopasiMLParser(self.model_file)
-        self.assertTrue( isinstance(copasiModel.copasiMLTree,lxml.etree._ElementTree))
+        When use pickle is set to true but there is no pickle path, 
+        turn UsePickle back to false and write a pickle file
+        '''        
+        P=PyCoTools.PEAnalysis.ParsePEData(self.PE_dir,UsePickle='true')
+        self.assertTrue(os.path.isfile(P.pickle_path))
+
+    def test_pickle3(self):
+        '''
+        The pickle feature should be used this way. First use the parse class
+        once then when you use it again you don't have to wait to read all the 
+        data again
+        '''        
+        PyCoTools.PEAnalysis.ParsePEData(self.PE_dir,UsePickle='false',OverwritePickle='false')
+        p2=PyCoTools.PEAnalysis.ParsePEData(self.PE_dir,UsePickle='true',OverwritePickle='false')
+        self.assertTrue(p2.for_testing=='pickle_true_overwrite_false')
+
+
+    def test_pickle4(self):
+        '''
+        The pickle feature should be used this way. First use the parse class
+        once then when you use it again you don't have to wait to read all the 
+        data again
+        '''        
+        PyCoTools.PEAnalysis.ParsePEData(self.PE_dir,UsePickle='false',OverwritePickle='false')
+        p2=PyCoTools.PEAnalysis.ParsePEData(self.PE_dir,UsePickle='true',OverwritePickle='true')
+        self.assertTrue(p2.for_testing=='pickle_true_overwrite_true')
         
-    def test_write_copasi_file(self):
-        parser=PyCoTools.pycopi.CopasiMLParser(self.model_file)
-        parser.write_copasi_file(self.model_file,parser.copasiML)
+    def test_log10_conversion(self):
+        PEData=PyCoTools.PEAnalysis.ParsePEData(self.PE_dir,UsePickle='false',OverwritePickle='false')
+        print PEData.log_data
+        
         
         
     def tearDown(self):
-        os.remove(self.model_file)
-        
-        
-        
-      
+        os.remove(self.copasi_file)
+        os.remove(self.PE_report_name)
+        shutil.rmtree(self.PE_dir)
+        for i in glob.glob('*.pickle'):
+            os.remove(i)
+        os.remove(self.PE.kwargs.get('ItemTemplateFilename'))
+        os.remove(self.timecourse_report_name)
+
+#==============================================================================
+
+
 if __name__=='__main__':
+#    current_dir= os.getcwd()    
+#    new_dir= os.path.join(os.getcwd(),r'Tests\Pydentify2Tests')
+#    os.chdir(new_dir)
+
     unittest.main()
     
-    
-
-
 
 
 
