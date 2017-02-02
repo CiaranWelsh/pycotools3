@@ -993,7 +993,7 @@ class EvaluateOptimizationPerformance():
                  #truncate data options
                  'X':100,           #if below_x: this is the X boundary. If percent: this is the percent of data to keep
                  #graph options
-                 'AxisSize':8,
+                 'AxisSize':15,
                  'Show':'false',
                  'FontSize':22,
                  'Color':'red',
@@ -1011,6 +1011,7 @@ class EvaluateOptimizationPerformance():
         self.kwargs=options
         assert self.kwargs.get('TruncateMode') in ['below_x','percent']
         
+        
         #Other classes
         self.PED=ParsePEData(self.results_path)
         #create a directory and change to it
@@ -1019,16 +1020,21 @@ class EvaluateOptimizationPerformance():
             os.mkdir(self.results_dir)
         os.chdir(self.results_dir)
         
+        ## Set size of axes font
+        matplotlib.rcParams.update({'font.size':self.kwargs.get('AxisSize')})
+        
+        
         self.plot_rss()
         os.chdir(os.path.dirname(self.results_path))
                              
     def plot_rss(self):
         if self.kwargs.get('Log10')=='true':
             rss=self.PED.log_data['RSS']
+            iterations=numpy.log10(range(len(rss)))
         else:
             rss= self.PED.data['RSS']
+            iterations=range(len(rss))
             
-        iterations=range(len(rss))
         plt.figure()
         plt.plot(iterations,rss)
         
@@ -1051,13 +1057,15 @@ class EvaluateOptimizationPerformance():
 
         if self.kwargs.get('Log10')=='true':
             plt.ylabel('RSS Values (Log10)',fontsize=self.kwargs.get('FontSize'))
+            plt.xlabel('Rank of Best Fit (Log10)',fontsize=self.kwargs.get('FontSize'))
         else:
             plt.ylabel('Optimization Iteration',fontsize=self.kwargs.get('FontSize'))
+            plt.xlabel('Rank of Best Fit',fontsize=self.kwargs.get('FontSize'))
             
-        plt.xlabel('Rank of Best Fit')
-
         plt.xticks(rotation=self.kwargs.get('XRotation'))
         
+        if self.kwargs['Log10']=='true':
+            self.kwargs['ExtraTitle']='(Log10)'
         
 #        SaveFig options
         if self.kwargs.get('SaveFig')=='true':
