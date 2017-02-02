@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 '''
  This file is part of PyCoTools.
 
@@ -74,7 +75,8 @@ class CopasiMLParser():
         self.copasi_file=copasi_file
         if os.path.isfile(self.copasi_file)!=True:
             raise Errors.FileDoesNotExistError('{} is not a copasi file'.format(self.copasi_file))
-        self.copasiML=self._parse_copasiML()
+        self.copasiMLTree=self._parse_copasiML()
+        self.copasiML=self.copasiMLTree.getroot()
         
         '''
         Recently changed this class to use lxml built in functions
@@ -94,11 +96,7 @@ class CopasiMLParser():
             copasiML_str=f.read()
         return etree.fromstring(copasiML_str)
         
-    def _parse_copasiML(self):
-        '''
-        Parse xml doc with lxml 
-        '''
-        return etree.parse(self.copasi_file)
+
 
     def write_copasi_file_deprecated(self,copasi_filename,copasiML):
         '''
@@ -114,12 +112,20 @@ class CopasiMLParser():
         with open(copasi_filename,'w') as f:
             f.write(etree.tostring(copasiML,pretty_print=True))    
             
+    def _parse_copasiML(self):
+        '''
+        Parse xml doc with lxml 
+        '''
+        return etree.parse(self.copasi_file)
+            
     def write_copasi_file(self,copasi_filename,copasiML):
         '''
         write to file with lxml write function
 
         '''
-        copasiML.write(copasi_filename)
+        ##first convert the copasiML to a root element tree
+        root=etree.ElementTree(copasiML)
+        root.write(copasi_filename)
             
 #==============================================================================
 
@@ -477,6 +483,8 @@ class GetModelQuantities():
         '''
         returns dict[parameter_name]=parameter_value for all local, 
         global and IC parameters in copasi_file
+        
+        Use get_all_model_variables
         '''
         var_dct={}
         d=self.get_all_model_variables()
@@ -504,6 +512,10 @@ class GetModelQuantities():
         '''
         returns dict[parameter_name]=parameter_value for all local, 
         global and IC parameters in copasi_file
+        
+        get_all_model_variables
+        
+        
         '''
         var_dct={}
         d=self.get_all_model_variables()
@@ -1653,6 +1665,7 @@ class TimeCourse(object):
                  'ExtraTitle':None,
                  'DPI':125,
                  'MarkerSize':5,
+                 'GraphDirectory':None,
                  
 
                      }
@@ -1929,7 +1942,7 @@ class TimeCourse(object):
             args=['CopasiSE',self.kwargs.get('OutputML')]
             
         R=Run(self.copasi_file,Task='time_course')
-        return R.output
+        return R
 
         
     def read_sim_data(self):
@@ -1940,6 +1953,16 @@ class TimeCourse(object):
         return pandas.read_csv(data_output,sep='\t') 
         
     def plot(self):
+        '''
+        
+        '''
+        ## Create directory for graphs
+        if self.kwargs['GraphDirectory']==None:
+            dire=os.path.join(os.path.dirname(self.copasi_file),'TimeCourseGraphs')
+            if os.path.isdir(dire)!=True:
+                os.mkdir(dire)
+            os.chdir(dire)
+            
         for i in self.data:
             if i.lower()!='time':
                 plt.figure()
@@ -1989,7 +2012,7 @@ class TimeCourse(object):
                         
                     filename={}
                     name=replace_non_ascii(i)
-                    filename[i]=os.path.join(os.getcwd(),name+'.jpeg')
+                    filename[i]=os.path.join(dire,name+'.jpeg')
 
                     if self.kwargs.get('ExtraTitle') !=None:
                         plt.savefig(name+'_'+self.kwargs.get('ExtraTitle')+'.jpeg',bbox_inches='tight',format='jpeg',dpi=self.kwargs.get('DPI'))
@@ -2006,6 +2029,12 @@ class TimeCourse(object):
                     save_plot()
                     
 class PhaseSpacePlots(TimeCourse):
+    '''
+    Inherits from TimeCourse
+    
+    Use TimeCourse to get data and replot all n choose 2 combinations
+    of phase space plot
+    '''
     def __init__(self,copasi_file,**kwargs):
         super(PhaseSpacePlots,self).__init__(copasi_file,**kwargs)
                 
@@ -2271,6 +2300,11 @@ class ParameterEstimation():
             task when using CopasiSE. This should be 'true' of you are running a parameter
             estimation from the parameter estimation task via the pycopi but 'false' when you 
             want to set up a repeat item in the scan task with the parameter estimation subtask
+            
+        UseTemplateStartValues:
+            Default set to 'false'. Determines whether the starting parameters 
+            from within the fitItemTemplate.xlsx are use for starting values
+            in the parameter estimation or not
                  
         LowerBound:
             Value of the default lower bound for the FitItemTemplate. Default 0.000001
@@ -2362,6 +2396,7 @@ class ParameterEstimation():
                  'RandomizeStartValues':'true',
                  'CreateParameterSets':'false',
                  'CalculateStatistics':'false',
+                 'UseTemplateStartValues':'false',
                  #method options
                  'Method':'GeneticAlgorithm',
                  #'DifferentialEvolution',
@@ -2460,6 +2495,9 @@ class ParameterEstimation():
             self.kwargs['ConfirmOverwrite']=str(0)        
             
         self.kwargs['Method']=self.kwargs.get('Method').lower()
+        if self.kwargs['Method']=='currentsolutionstatistics':
+            if self.kwargs['RandomizeStartValues']=='true':
+                raise Errors.InputError('Cannot run current solution statistics with \'RandomizeStartValues\' set to \'true\'.' )
         write_to_file_list=['duplicate','overwrite','false']
         assert self.kwargs.get('Save') in write_to_file_list  
         
@@ -2476,7 +2514,8 @@ class ParameterEstimation():
         for i in self.kwargs.get('Metabolites'):
             assert i in self.GMQ.get_IC_cns().keys()
 
-
+        if self.kwargs['UseTemplateStartValues'] not in ['true','false']:
+            raise Errors.InputError(''' Argument to the UseTemplateStartValues must be \'true\' or \'false\' not {}'''.format(self.kwargs['UseTemplateStartValues']))
 
 
             
@@ -2632,9 +2671,6 @@ class ParameterEstimation():
         self.PlotPEDataKwargs['LegendLoc']=self.kwargs.get('LegendLoc')
         self.PlotPEDataKwargs['PruneHeaders']=self.kwargs.get('PruneHeaders')
         
-#        if self.kwargs.get('Run')=='true':
-#            self.copasiML=self.run()
-            
 
     def clear_pe(self):
         pass
@@ -2644,7 +2680,7 @@ class ParameterEstimation():
             self.copasiML=Run(self.copasi_file,Task='parameter_estimation')
             return self.copasiML
         else:
-            self.copasiML=Run(self.copasi_file,Task='parameter_estimation',Run='false')
+            self.copasiML=Run(self.copasi_file,Task='parameter_estimation',Mode='false')
             subprocess.check_call('CopasiSE "{}"'.format(self.copasi_file),shell=True)
             self.plot()
         return self.copasiML
@@ -2762,13 +2798,16 @@ class ParameterEstimation():
         subA1={'name': 'Affected Cross Validation Experiments'}
         subA2={'name': 'Affected Experiments'}
         subA3={'type': 'cn', 'name': 'LowerBound', 'value': str(item['LowerBound'])}
-        subA5={'type': 'float', 'name': 'StartValue', 'value': str(item['StartValue'])}
+        if self.kwargs.get('UseTemplateStartValues')=='true':
+            subA5={'type': 'float', 'name': 'StartValue', 'value': str(item['StartValue'])}
+        
         subA6={'type': 'cn', 'name': 'UpperBound', 'value': str(item['UpperBound'])}
         
         etree.SubElement(new_element,'ParameterGroup',attrib=subA1)
         etree.SubElement(new_element,'ParameterGroup',attrib=subA2)
         etree.SubElement(new_element,'Parameter',attrib=subA3)
-        etree.SubElement(new_element,'Parameter',attrib=subA5)
+        if self.kwargs.get('UseTemplateStartValues')=='true':
+            etree.SubElement(new_element,'Parameter',attrib=subA5)
         etree.SubElement(new_element,'Parameter',attrib=subA6)
         
         #for IC parameters
@@ -3173,7 +3212,7 @@ class Scan():
             parameter of interest. Must be a model entity. Default=None
             
         Run:
-            Run Scan task or not. 'true' or 'false'. Default='false'
+            Run Scan task or not. 'true' or 'false' or 'SGE'. Default='false'
             
     '''
     def __init__(self,copasi_file,**kwargs):
@@ -3260,7 +3299,7 @@ class Scan():
         assert self.kwargs.get('QuantityType') in quantity_type_list
         assert self.kwargs.get('Scheduled') in ['true','false']
         assert self.kwargs.get('ClearScans') in ['true','false']
-        assert self.kwargs.get('Run') in ['true','false']
+        assert self.kwargs.get('Run') in ['true','false','SGE']
 
 
         #numericify the some keyword arguments
@@ -3315,8 +3354,9 @@ class Scan():
         self.copasiML=self.create_scan()
         self.copasiML=self.set_scan_options()
         self.copasiML=self.save()
-        if self.kwargs.get('Run')=='true':
-            self.run()
+        self.run()
+        
+            
 #            PruneCopasiHeaders(self.kwargs['ReportName'],replace='true')
             
             
@@ -3462,8 +3502,14 @@ class Scan():
         return self.copasiML
         
     def run(self):
-        R=Run(self.copasi_file,Task='scan')
-        return R.output
+        R=Run(self.copasi_file,Task='scan',Mode=self.kwargs.get('Run'))
+        
+        if self.kwargs.get('Run')=='false':
+            return None
+        elif self.kwargs.get('Run')=='true':
+            return R
+        elif self.kwargs.get('Run')=='SGE':
+            return R
 #==============================================================================            
             
 class Run():
@@ -3488,8 +3534,8 @@ class Run():
             Either 'false','duplicate' or 'overwrite'. Should probably remain 
             on 'overwrite', the default. 
             
-        Run:
-            'true' or 'false'. Default is 'true' but can be turned off if you 
+        Mode:
+            'true', 'false' or 'SGE'. Default is 'true' but can be turned off if you 
             want to uncheck all executable boxes then check the Task executable
             
         MaxTime:
@@ -3500,10 +3546,11 @@ class Run():
         self.CParser=CopasiMLParser(self.copasi_file)
         self.copasiML=self.CParser.copasiML 
         self.GMQ=GetModelQuantities(self.copasi_file)
+        self.SGE_job_file=os.path.splitext(self.copasi_file)[0]+'.sh'
         
         options={'Task':'time_course',
                  'Save':'overwrite',
-                 'Run':'true',
+                 'Mode':'true',
                  'MaxTime':None}
                                   
                  
@@ -3539,8 +3586,10 @@ class Run():
             self.kwargs['Task']='steadystate'           
         self.copasiML=self.set_task()
         self.save()
-        if self.kwargs.get('Run')=='true':
-            self.output=self.run()
+        if self.kwargs.get('Mode')=='true':
+            self.run()
+        elif self.kwargs.get('Mode')=='SGE':
+            self.submit_copasi_job_SGE()
             
 
         
@@ -3572,10 +3621,19 @@ class Run():
         d['output']=output
         d['error']=err
         if err!='':
-            raise Errors.CopasiError(d['error'])
+            raise Errors.CopasiError('Failed with Copasi error: \n\n'+d['error'])
         return d['output']
         
-        
+    def submit_copasi_job_SGE(self):
+        '''
+        Submit copasi file as job to SGE based job scheduler. 
+        '''
+        with open(self.SGE_job_file,'w') as f:
+            f.write('#!/bin/bash\n#$ -V -cwd\nmodule add apps/COPASI/4.16.104-Linux-64bit\nCopasiSE {}'.format(self.copasi_file))
+        ## -N option for job name 
+        os.system('qsub {} -N {} '.format(self.SGE_job_file,self.SGE_job_file))
+        ## remove .sh file after used. 
+        os.remove(self.SGE_job_file)
     
         
     def save(self):
@@ -3669,9 +3727,11 @@ class InsertParameters():
 #        assert os.path.exists(self.parameter_path),'{} doesn\'t exist'.format(self.parameter_path)
         assert self.kwargs.get('QuantityType') in ['concentration','particle_numbers']
         if self.kwargs.get('ParameterDict') != None:
-            assert isinstance(self.kwargs.get('ParameterDict'),dict)
+            if isinstance(self.kwargs.get('ParameterDict'),dict)!=True:
+                raise Errors.InputError('Argument to \'ParameterDict\' keyword needs to be of type dict')
             for i in self.kwargs.get('ParameterDict').keys():
-                assert i in self.GMQ.get_all_model_variables().keys()
+                if i not in self.GMQ.get_all_model_variables().keys():
+                    raise Errors.InputError('Parameter \'{}\' is not in your model. \n\nThese are in your model:\n{}'.format(i,sorted(self.GMQ.get_all_model_variables().keys())))
                 
         if self.kwargs.get('ParameterDict')==None and self.kwargs.get('ParameterPath')==None and self.kwargs.get('DF') is None:
             raise Errors.InputError('You need to give at least one of ParameterDict,ParameterPath or DF keyword arguments')
@@ -3829,11 +3889,11 @@ Please check the headers of your PE data are consistent with your model paramete
         
     def insert_all(self):
         self.copasiML=self.insert_locals()
-        self.save() 
+#        self.save() 
         self.copasiML=self.insert_global()
-        self.save()
+#        self.save()
         self.copasiML=self.insert_ICs()
-        self.save()
+#        self.save()
         self.copasiML=self.insert_fit_items()
         self.save()
 #        os.chdir(os.path.dirname(self.copasi_file))

@@ -1,23 +1,16 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Sat Jan 28 14:03:25 2017
-
-@author: Ciaran
-"""
-
 import PyCoTools
-import os
 import unittest
+import glob
+import os
+import numpy
+import pandas
+import time
+import re
+import shutil 
+import scipy
 
-import lxml
-
-
-
-
-MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
-<!-- generated with COPASI 4.16 (Build 104) (http://www.copasi.org) at 2016-10-27 14:41:02 UTC -->
-<?oxygen RNGSchema="http://www.copasi.org/static/schema/CopasiML.rng" type="xml"?>
-<COPASI xmlns="http://www.copasi.org/static/schema" versionMajor="4" versionMinor="16" versionDevel="104" copasiSourcesModified="0">
+model_string='''<COPASI xmlns="http://www.copasi.org/static/schema" versionMajor="4" versionMinor="16" versionDevel="104" copasiSourcesModified="0">
   <ListOfFunctions>
     <Function key="Function_40" name="Function for Ligand receptor complex formation" type="UserDefined" reversible="false">
       <Expression>
@@ -150,13 +143,9 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
       </ListOfParameterDescriptions>
     </Function>
   </ListOfFunctions>
-  <Model key="Model_3" name="Vilar2006_TGFbeta" simulationType="time" timeUnit="h" volumeUnit="l" areaUnit="m²" lengthUnit="m" quantityUnit="#" type="stochastic" avogadroConstant="6.02214179e+023">
+  <Model key="Model_3" name="Vilar2006_TGFbeta" simulationType="time" timeUnit="h" volumeUnit="l" areaUnit="m&#178;" lengthUnit="m" quantityUnit="#" type="stochastic" avogadroConstant="6.02214179e+023">
     <MiriamAnnotation>
-<rdf:RDF
-   xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#"
-   xmlns:dcterms="http://purl.org/dc/terms/"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
+<rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
   <rdf:Description rdf:about="#Model_3">
     <dcterms:bibliographicCitation>
       <rdf:Bag>
@@ -234,12 +223,12 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
     <Comment>
       <body xmlns="http://www.w3.org/1999/xhtml">
     <p>The model reproduces Fig 5A of the paper. The ligand concentration is increased from 3E-5 to 0.01 at time t=2500 to ensure that the system  reaches steady state. Hence, the time t=0 of the paper corresponds to t=2500 in the model. The peak value of the active ligand receptor complex is off by a value of 1.25, the authors have stated that this discrepancy is due to the fact that the figure in the paper corresponds to a slightly different parameter set. The model was successfully tested on MathSBML.</p>
-    <br />
+    <br/>
     <p>To the extent possible under law, all copyright and related or neighbouring rights to this encoded model have been dedicated to the public domain worldwide. Please refer to      <a href="http://creativecommons.org/publicdomain/zero/1.0/" title="Creative Commons CC0">CC0 Public Domain Dedication</a>
           for more information.      </p>
   <p>In summary, you are entitled to use this encoded model in absolutely any manner you deem suitable, verbatim, or with modification, alone or embedded it in a larger context, redistribute it, commercially or not, in a restricted way or not.</p>
-  <br />
-  <p>To cite BioModels Database, please use:      <a href="http://www.ncbi.nlm.nih.gov/pubmed/20587024" target="_blank">Li C, Donizelli M, Rodriguez N, Dharuri H, Endler L, Chelliah V, Li L, He E, Henry A, Stefan MI, Snoep JL, Hucka M, Le Novère N, Laibe C (2010) BioModels Database: An enhanced, curated and annotated resource for published quantitative kinetic models. BMC Syst Biol., 4:92.</a>
+  <br/>
+  <p>To cite BioModels Database, please use:      <a href="http://www.ncbi.nlm.nih.gov/pubmed/20587024" target="_blank">Li C, Donizelli M, Rodriguez N, Dharuri H, Endler L, Chelliah V, Li L, He E, Henry A, Stefan MI, Snoep JL, Hucka M, Le Nov&#232;re N, Laibe C (2010) BioModels Database: An enhanced, curated and annotated resource for published quantitative kinetic models. BMC Syst Biol., 4:92.</a>
 </p>
 </body>
     </Comment>
@@ -250,7 +239,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
   <rdf:Description rdf:about="#Compartment_1">
     <CopasiMT:is>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0005886" />
+        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0005886"/>
       </rdf:Bag>
     </CopasiMT:is>
   </rdf:Description>
@@ -263,7 +252,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
   <rdf:Description rdf:about="#Compartment_3">
     <CopasiMT:is>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0005768" />
+        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0005768"/>
       </rdf:Bag>
     </CopasiMT:is>
   </rdf:Description>
@@ -278,7 +267,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
   <rdf:Description rdf:about="#Metabolite_1">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/P36897" />
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/P36897"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -291,7 +280,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
   <rdf:Description rdf:about="#Metabolite_3">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/P37173" />
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/P37173"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -304,9 +293,9 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
   <rdf:Description rdf:about="#Metabolite_5">
     <CopasiMT:hasPart>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/P01137" />
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/P36897" />
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/P37173" />
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/P01137"/>
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/P36897"/>
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/P37173"/>
       </rdf:Bag>
     </CopasiMT:hasPart>
   </rdf:Description>
@@ -319,9 +308,9 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
   <rdf:Description rdf:about="#Metabolite_7">
     <CopasiMT:hasPart>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/P01137" />
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/P36897" />
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/P37173" />
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/P01137"/>
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/P36897"/>
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/P37173"/>
       </rdf:Bag>
     </CopasiMT:hasPart>
   </rdf:Description>
@@ -334,7 +323,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
   <rdf:Description rdf:about="#Metabolite_9">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/P36897" />
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/P36897"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -347,7 +336,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
   <rdf:Description rdf:about="#Metabolite_11">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/P37173" />
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/P37173"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -382,8 +371,8 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
   <rdf:Description rdf:about="#Reaction_0">
     <CopasiMT:is>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0007181" />
-        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0050431" />
+        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0007181"/>
+        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0050431"/>
       </rdf:Bag>
     </CopasiMT:is>
   </rdf:Description>
@@ -397,8 +386,8 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
           <Product metabolite="Metabolite_5" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4396" name="ka" value="0.779862"/>
-          <Constant key="Parameter_4395" name="ligand" value="0.0001"/>
+          <Constant key="Parameter_4387" name="ka" value="99.9998"/>
+          <Constant key="Parameter_4386" name="ligand" value="0.000661902"/>
         </ListOfConstants>
         <KineticLaw function="Function_40">
           <ListOfCallParameters>
@@ -426,7 +415,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
   <rdf:Description rdf:about="#Reaction_1">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0030512" />
+        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0030512"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -436,7 +425,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
           <Substrate metabolite="Metabolite_5" stoichiometry="1"/>
         </ListOfSubstrates>
         <ListOfConstants>
-          <Constant key="Parameter_4394" name="kcd" value="0.0251133"/>
+          <Constant key="Parameter_4385" name="kcd" value="0.204821"/>
         </ListOfConstants>
         <KineticLaw function="Function_41">
           <ListOfCallParameters>
@@ -458,7 +447,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
   <rdf:Description rdf:about="#Reaction_2">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0030512" />
+        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0030512"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -468,7 +457,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
           <Substrate metabolite="Metabolite_5" stoichiometry="1"/>
         </ListOfSubstrates>
         <ListOfConstants>
-          <Constant key="Parameter_4393" name="klid" value="0.268159"/>
+          <Constant key="Parameter_4384" name="klid" value="0.272681"/>
         </ListOfConstants>
         <KineticLaw function="Function_42">
           <ListOfCallParameters>
@@ -490,7 +479,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
   <rdf:Description rdf:about="#Reaction_3">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0030511" />
+        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0030511"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -503,7 +492,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
           <Product metabolite="Metabolite_7" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4392" name="ki" value="0.390589"/>
+          <Constant key="Parameter_4383" name="ki" value="8.92617"/>
         </ListOfConstants>
         <KineticLaw function="Function_43">
           <ListOfCallParameters>
@@ -525,7 +514,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
   <rdf:Description rdf:about="#Reaction_4">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0006412" />
+        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0006412"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -535,7 +524,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
           <Product metabolite="Metabolite_1" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4391" name="pRI" value="6.44406"/>
+          <Constant key="Parameter_4382" name="pRI" value="2.38351"/>
         </ListOfConstants>
         <KineticLaw function="Function_44">
           <ListOfCallParameters>
@@ -554,7 +543,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
   <rdf:Description rdf:about="#Reaction_5">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0032801" />
+        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0032801"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -564,7 +553,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
           <Substrate metabolite="Metabolite_1" stoichiometry="1"/>
         </ListOfSubstrates>
         <ListOfConstants>
-          <Constant key="Parameter_4390" name="kcd" value="0.0251133"/>
+          <Constant key="Parameter_4381" name="kcd" value="0.204821"/>
         </ListOfConstants>
         <KineticLaw function="Function_45">
           <ListOfCallParameters>
@@ -586,7 +575,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
   <rdf:Description rdf:about="#Reaction_6">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0031623" />
+        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0031623"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -599,7 +588,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
           <Product metabolite="Metabolite_9" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4389" name="ki" value="0.390589"/>
+          <Constant key="Parameter_4380" name="ki" value="8.92617"/>
         </ListOfConstants>
         <KineticLaw function="Function_46">
           <ListOfCallParameters>
@@ -621,7 +610,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
   <rdf:Description rdf:about="#Reaction_7">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0001881" />
+        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0001881"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -634,7 +623,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
           <Product metabolite="Metabolite_1" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4388" name="kr" value="0.0308656"/>
+          <Constant key="Parameter_4379" name="kr" value="0.042881"/>
         </ListOfConstants>
         <KineticLaw function="Function_47">
           <ListOfCallParameters>
@@ -656,7 +645,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
   <rdf:Description rdf:about="#Reaction_8">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0001881" />
+        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0001881"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -670,7 +659,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
           <Product metabolite="Metabolite_3" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4387" name="kr" value="0.0308656"/>
+          <Constant key="Parameter_4378" name="kr" value="0.042881"/>
         </ListOfConstants>
         <KineticLaw function="Function_48">
           <ListOfCallParameters>
@@ -692,7 +681,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
   <rdf:Description rdf:about="#Reaction_9">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0006412" />
+        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0006412"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -702,7 +691,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
           <Product metabolite="Metabolite_3" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4386" name="pRII" value="4.20542"/>
+          <Constant key="Parameter_4377" name="pRII" value="0.430213"/>
         </ListOfConstants>
         <KineticLaw function="Function_49">
           <ListOfCallParameters>
@@ -721,7 +710,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
   <rdf:Description rdf:about="#Reaction_10">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0032801" />
+        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0032801"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -731,7 +720,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
           <Substrate metabolite="Metabolite_3" stoichiometry="1"/>
         </ListOfSubstrates>
         <ListOfConstants>
-          <Constant key="Parameter_4385" name="kcd" value="0.0251133"/>
+          <Constant key="Parameter_4376" name="kcd" value="0.204821"/>
         </ListOfConstants>
         <KineticLaw function="Function_50">
           <ListOfCallParameters>
@@ -753,7 +742,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
   <rdf:Description rdf:about="#Reaction_11">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0031623" />
+        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0031623"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -766,7 +755,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
           <Product metabolite="Metabolite_11" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4384" name="ki" value="0.390589"/>
+          <Constant key="Parameter_4375" name="ki" value="8.92617"/>
         </ListOfConstants>
         <KineticLaw function="Function_51">
           <ListOfCallParameters>
@@ -788,7 +777,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
   <rdf:Description rdf:about="#Reaction_12">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0001881" />
+        <rdf:li rdf:resource="http://identifiers.org/obo.go/GO:0001881"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -801,7 +790,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
           <Product metabolite="Metabolite_3" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4383" name="kr" value="0.0308656"/>
+          <Constant key="Parameter_4374" name="kr" value="0.042881"/>
         </ListOfConstants>
         <KineticLaw function="Function_52">
           <ListOfCallParameters>
@@ -850,7 +839,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
           <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[Receptor 2 endosome]" value="0.385859" type="Species" simulationType="reactions"/>
         </ModelParameterGroup>
         <ModelParameterGroup cn="String=Initial Global Quantities" type="Group">
-          <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ka]" value="0.7798620000000001" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ka]" value="0.779862" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ligand]" value="0.0001" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kcd]" value="0.0251133" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[klid]" value="0.268159" type="ModelValue" simulationType="fixed"/>
@@ -862,96 +851,96 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
         </ModelParameterGroup>
         <ModelParameterGroup cn="String=Kinetic Parameters" type="Group">
           <ModelParameterGroup cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[Ligand receptor complex formation]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[Ligand receptor complex formation],ParameterGroup=Parameters,Parameter=ka" value="0.7798620000000001" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[Ligand receptor complex formation],ParameterGroup=Parameters,Parameter=ka" value="99.99979082998443" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ka],Reference=InitialValue&gt;
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[Ligand receptor complex formation],ParameterGroup=Parameters,Parameter=ligand" value="0.0001" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[Ligand receptor complex formation],ParameterGroup=Parameters,Parameter=ligand" value="0.0006619016703488301" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ligand],Reference=InitialValue&gt;
               </InitialExpression>
             </ModelParameter>
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[Ligand receptor complex constitutive degradation]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[Ligand receptor complex constitutive degradation],ParameterGroup=Parameters,Parameter=kcd" value="0.0251133" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[Ligand receptor complex constitutive degradation],ParameterGroup=Parameters,Parameter=kcd" value="0.2048205249892138" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kcd],Reference=InitialValue&gt;
               </InitialExpression>
             </ModelParameter>
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[Ligand independent complex degradation]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[Ligand independent complex degradation],ParameterGroup=Parameters,Parameter=klid" value="0.268159" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[Ligand independent complex degradation],ParameterGroup=Parameters,Parameter=klid" value="0.2726806766859603" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[klid],Reference=InitialValue&gt;
               </InitialExpression>
             </ModelParameter>
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[Ligand receptor complex internalization]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[Ligand receptor complex internalization],ParameterGroup=Parameters,Parameter=ki" value="0.390589" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[Ligand receptor complex internalization],ParameterGroup=Parameters,Parameter=ki" value="8.926166068114043" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ki],Reference=InitialValue&gt;
               </InitialExpression>
             </ModelParameter>
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RI synthesis]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RI synthesis],ParameterGroup=Parameters,Parameter=pRI" value="6.44406" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RI synthesis],ParameterGroup=Parameters,Parameter=pRI" value="2.383514525738733" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[pRI],Reference=InitialValue&gt;
               </InitialExpression>
             </ModelParameter>
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RI constitutive degradation]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RI constitutive degradation],ParameterGroup=Parameters,Parameter=kcd" value="0.0251133" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RI constitutive degradation],ParameterGroup=Parameters,Parameter=kcd" value="0.2048205249892138" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kcd],Reference=InitialValue&gt;
               </InitialExpression>
             </ModelParameter>
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RI internalization]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RI internalization],ParameterGroup=Parameters,Parameter=ki" value="0.390589" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RI internalization],ParameterGroup=Parameters,Parameter=ki" value="8.926166068114043" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ki],Reference=InitialValue&gt;
               </InitialExpression>
             </ModelParameter>
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RI recycling]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RI recycling],ParameterGroup=Parameters,Parameter=kr" value="0.0308656" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RI recycling],ParameterGroup=Parameters,Parameter=kr" value="0.042880961849497" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kr],Reference=InitialValue&gt;
               </InitialExpression>
             </ModelParameter>
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[Ligand Receptor complex recycling]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[Ligand Receptor complex recycling],ParameterGroup=Parameters,Parameter=kr" value="0.0308656" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[Ligand Receptor complex recycling],ParameterGroup=Parameters,Parameter=kr" value="0.042880961849497" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kr],Reference=InitialValue&gt;
               </InitialExpression>
             </ModelParameter>
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RII synthesis]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RII synthesis],ParameterGroup=Parameters,Parameter=pRII" value="4.20542" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RII synthesis],ParameterGroup=Parameters,Parameter=pRII" value="0.430213" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[pRII],Reference=InitialValue&gt;
               </InitialExpression>
             </ModelParameter>
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RII constitutive degradation]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RII constitutive degradation],ParameterGroup=Parameters,Parameter=kcd" value="0.0251133" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RII constitutive degradation],ParameterGroup=Parameters,Parameter=kcd" value="0.2048205249892138" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kcd],Reference=InitialValue&gt;
               </InitialExpression>
             </ModelParameter>
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RII internalization]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RII internalization],ParameterGroup=Parameters,Parameter=ki" value="0.390589" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RII internalization],ParameterGroup=Parameters,Parameter=ki" value="8.926166068114043" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ki],Reference=InitialValue&gt;
               </InitialExpression>
             </ModelParameter>
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RII recycling]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RII recycling],ParameterGroup=Parameters,Parameter=kr" value="0.0308656" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RII recycling],ParameterGroup=Parameters,Parameter=kr" value="0.042880961849497" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kr],Reference=InitialValue&gt;
               </InitialExpression>
@@ -981,7 +970,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
       <StateTemplateVariable objectReference="ModelValue_8"/>
     </StateTemplate>
     <InitialState type="initialState">
-      0 22.9544 0.00155182 0.0001 38.8192950146758 7.62219 0.385859 1 1 0.7798620000000001 0.0001 0.0251133 0.268159 0.390589 6.44406 0.0308656 1.04518 4.20542 
+      0 0.0001 18.33170201336451 45.89012478791828 38.8192950146758 0.0001234329897578243 9.117063525097914 1 1 99.99979082998443 0.0006619016703488301 0.2048205249892138 0.2726806766859603 8.926166068114043 2.383514525738733 0.042880961849497 63.9748778908782 0.430213 
     </InitialState>
   </Model>
   <ListOfTasks>
@@ -1004,30 +993,30 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
       </Method>
     </Task>
     <Task key="Task_15" name="Time-Course" type="timeCourse" scheduled="false" updateModel="false">
-      <Report reference="Report_18" target="" append="0" confirmOverwrite="0"/>
-      <Problem>
+      <Report reference="Report_48" target="" append="false" confirmOverwrite="false" type="Deterministic(LSODA)" name="Deterministic (LSODA)"/>
+      <Problem type="Deterministic(LSODA)" name="Deterministic (LSODA)">
         <Parameter name="StepNumber" type="unsignedInteger" value="50"/>
         <Parameter name="StepSize" type="float" value="100"/>
         <Parameter name="Duration" type="float" value="5000"/>
         <Parameter name="TimeSeriesRequested" type="bool" value="1"/>
-        <Parameter name="OutputStartTime" type="float" value="0"/>
-        <Parameter name="Output Event" type="bool" value="0"/>
+        <Parameter name="OutputStartTime" type="float" value="0.0"/>
+        <Parameter name="Output Event" type="bool" value="false"/>
         <Parameter name="Continue on Simultaneous Events" type="bool" value="0"/>
       </Problem>
       <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
         <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
-        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-006"/>
-        <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-012"/>
+        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-6"/>
+        <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
         <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
       </Method>
     </Task>
-    <Task key="Task_16" name="Scan" type="scan" scheduled="true" updateModel="false">
-      <Report reference="Report_19" target="PEdata.txt" append="0" confirmOverwrite="0"/>
+    <Task key="Task_16" name="Scan" type="scan" scheduled="false" updateModel="false">
+      <Report reference="Report_19" target="" append="0" confirmOverwrite="0"/>
       <Problem>
         <Parameter name="Subtask" type="unsignedInteger" value="5"/>
         <ParameterGroup name="ScanItems">
           <ParameterGroup name="ScanItem">
-            <Parameter name="Number of steps" type="unsignedInteger" value="3"/>
+            <Parameter name="Number of steps" type="unsignedInteger" value="10"/>
             <Parameter name="Object" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[ligand receptor complex-endosome],Reference=InitialConcentration"/>
             <Parameter name="Type" type="unsignedInteger" value="0"/>
           </ParameterGroup>
@@ -1066,33 +1055,27 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
         <Parameter name="Seed" type="unsignedInteger" value="0"/>
       </Method>
     </Task>
-    <Task key="Task_19" name="Parameter Estimation" type="parameterFitting" scheduled="false" updateModel="false">
-      <Report reference="Report_12" target="" append="0" confirmOverwrite="0"/>
+    <Task key="Task_19" name="Parameter Estimation" type="parameterFitting" scheduled="true" updateModel="false">
+      <Report reference="Report_32" target="D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\VilarPEData.txt" append="0" confirmOverwrite="0"/>
       <Problem>
         <Parameter name="Maximize" type="bool" value="0"/>
-        <Parameter name="Randomize Start Values" type="bool" value="1"/>
+        <Parameter name="Randomize Start Values" type="bool" value="true"/>
         <Parameter name="Calculate Statistics" type="bool" value="0"/>
         <ParameterGroup name="OptimizationItemList">
-        </ParameterGroup>
+          <ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="StartValue" type="float" value="4.20542"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[pRII],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="StartValue" type="float" value="0.0251133"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kcd],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="StartValue" type="float" value="0.779862"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ka],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="StartValue" type="float" value="0.0001"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ligand],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="StartValue" type="float" value="0.390589"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ki],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="StartValue" type="float" value="6.44406"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[pRI],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="StartValue" type="float" value="0.0308656"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kr],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="StartValue" type="float" value="1.04518"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[alpha],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="StartValue" type="float" value="0.268159"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[klid],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="StartValue" type="float" value="38.8192950147"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[ligand receptor complex-endosome],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="StartValue" type="float" value="7.62219"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[Receptor 1-endosome],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="StartValue" type="float" value="0.00155182"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[Receptor 2],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="StartValue" type="float" value="0.385859"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[Receptor 2 endosome],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="StartValue" type="float" value="22.9544"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[Receptor 1],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="StartValue" type="float" value="0.0001"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[ligand receptor complex-plasma membrane],Reference=InitialConcentration"/></ParameterGroup></ParameterGroup>
         <ParameterGroup name="OptimizationConstraintList">
         </ParameterGroup>
         <Parameter name="Steady-State" type="cn" value="CN=Root,Vector=TaskList[Steady-State]"/>
         <Parameter name="Time-Course" type="cn" value="CN=Root,Vector=TaskList[Time-Course]"/>
         <Parameter name="Create Parameter Sets" type="bool" value="0"/>
         <ParameterGroup name="Experiment Set">
-        </ParameterGroup>
+          <ParameterGroup name="Experiment_0"><Parameter name="Data is Row Oriented" type="bool" value="1"/><Parameter name="Experiment Type" type="unsignedInteger" value="1"/><Parameter name="File Name" type="file" value="vilarTimeCourse.txt"/><Parameter name="First Row" type="unsignedInteger" value="1"/><Parameter name="Key" type="key" value="Experiment_0"/><Parameter name="Last Row" type="unsignedInteger" value="51"/><Parameter name="Normalize Weights per Experiment" type="bool" value="1"/><Parameter name="Number of Columns" type="unsignedInteger" value="16"/><ParameterGroup name="Object Map"><ParameterGroup name="0"><Parameter name="Role" type="unsignedInteger" value="3"/></ParameterGroup><ParameterGroup name="1"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[ligand receptor complex-endosome],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="2"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[Receptor 2],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="3"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[Receptor 1-endosome],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="4"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[Receptor 2 endosome],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="5"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[Receptor 1],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="6"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[ligand receptor complex-plasma membrane],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="7"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[pRII],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="8"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kcd],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="9"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ka],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="10"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ligand],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="11"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ki],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="12"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[pRI],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="13"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kr],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="14"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[alpha],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="15"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[klid],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup></ParameterGroup><Parameter name="Row containing Names" type="unsignedInteger" value="1"/><Parameter name="Separator" type="string" value="&#9;"/><Parameter name="Weight Method" type="unsignedInteger" value="1"/></ParameterGroup></ParameterGroup>
         <ParameterGroup name="Validation Set">
           <Parameter name="Threshold" type="unsignedInteger" value="5"/>
           <Parameter name="Weight" type="unsignedFloat" value="1"/>
         </ParameterGroup>
       </Problem>
-      <Method name="Genetic Algorithm" type="GeneticAlgorithm">
-        <Parameter name="Number of Generations" type="unsignedInteger" value="10"/>
-        <Parameter name="Population Size" type="unsignedInteger" value="10"/>
-        <Parameter name="Random Number Generator" type="unsignedInteger" value="1"/>
-        <Parameter name="Seed" type="unsignedInteger" value="0"/>
-      </Method>
-    </Task>
+      <Method name="Genetic Algorithm" type="GeneticAlgorithm"><Parameter name="Number of Generations" type="unsignedInteger" value="10"/><Parameter name="Population Size" type="unsignedInteger" value="10"/><Parameter name="Random Number Generator" type="unsignedInteger" value="1"/><Parameter name="Seed" type="unsignedInteger" value="0"/></Method></Task>
     <Task key="Task_20" name="Metabolic Control Analysis" type="metabolicControlAnalysis" scheduled="false" updateModel="false">
       <Report reference="Report_13" target="" append="1" confirmOverwrite="1"/>
       <Problem>
@@ -1200,7 +1183,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
     </Task>
   </ListOfTasks>
   <ListOfReports>
-    <Report key="Report_9" name="Steady-State" taskType="steadyState" separator="&#x09;" precision="6">
+    <Report key="Report_9" name="Steady-State" taskType="steadyState" separator="&#9;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -1208,7 +1191,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
         <Object cn="CN=Root,Vector=TaskList[Steady-State]"/>
       </Footer>
     </Report>
-    <Report key="Report_10" name="Elementary Flux Modes" taskType="fluxMode" separator="&#x09;" precision="6">
+    <Report key="Report_10" name="Elementary Flux Modes" taskType="fluxMode" separator="&#9;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -1216,55 +1199,55 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
         <Object cn="CN=Root,Vector=TaskList[Elementary Flux Modes],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_11" name="Optimization" taskType="optimization" separator="&#x09;" precision="6">
+    <Report key="Report_11" name="Optimization" taskType="optimization" separator="&#9;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
       <Header>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Object=Description"/>
         <Object cn="String=\[Function Evaluations\]"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="Separator=&#9;"/>
         <Object cn="String=\[Best Value\]"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="Separator=&#9;"/>
         <Object cn="String=\[Best Parameters\]"/>
       </Header>
       <Body>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Problem=Optimization,Reference=Function Evaluations"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="Separator=&#9;"/>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Problem=Optimization,Reference=Best Value"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="Separator=&#9;"/>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Problem=Optimization,Reference=Best Parameters"/>
       </Body>
       <Footer>
-        <Object cn="String=&#x0a;"/>
+        <Object cn="String=&#10;"/>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_12" name="Parameter Estimation" taskType="parameterFitting" separator="&#x09;" precision="6">
+    <Report key="Report_12" name="Parameter Estimation" taskType="parameterFitting" separator="&#9;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
       <Header>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Object=Description"/>
         <Object cn="String=\[Function Evaluations\]"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="Separator=&#9;"/>
         <Object cn="String=\[Best Value\]"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="Separator=&#9;"/>
         <Object cn="String=\[Best Parameters\]"/>
       </Header>
       <Body>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Function Evaluations"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="Separator=&#9;"/>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="Separator=&#9;"/>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"/>
       </Body>
       <Footer>
-        <Object cn="String=&#x0a;"/>
+        <Object cn="String=&#10;"/>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_13" name="Metabolic Control Analysis" taskType="metabolicControlAnalysis" separator="&#x09;" precision="6">
+    <Report key="Report_13" name="Metabolic Control Analysis" taskType="metabolicControlAnalysis" separator="&#9;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -1272,11 +1255,11 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
         <Object cn="CN=Root,Vector=TaskList[Metabolic Control Analysis],Object=Description"/>
       </Header>
       <Footer>
-        <Object cn="String=&#x0a;"/>
+        <Object cn="String=&#10;"/>
         <Object cn="CN=Root,Vector=TaskList[Metabolic Control Analysis],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_14" name="Lyapunov Exponents" taskType="lyapunovExponents" separator="&#x09;" precision="6">
+    <Report key="Report_14" name="Lyapunov Exponents" taskType="lyapunovExponents" separator="&#9;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -1284,11 +1267,11 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
         <Object cn="CN=Root,Vector=TaskList[Lyapunov Exponents],Object=Description"/>
       </Header>
       <Footer>
-        <Object cn="String=&#x0a;"/>
+        <Object cn="String=&#10;"/>
         <Object cn="CN=Root,Vector=TaskList[Lyapunov Exponents],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_15" name="Time Scale Separation Analysis" taskType="timeScaleSeparationAnalysis" separator="&#x09;" precision="6">
+    <Report key="Report_15" name="Time Scale Separation Analysis" taskType="timeScaleSeparationAnalysis" separator="&#9;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -1296,11 +1279,11 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
         <Object cn="CN=Root,Vector=TaskList[Time Scale Separation Analysis],Object=Description"/>
       </Header>
       <Footer>
-        <Object cn="String=&#x0a;"/>
+        <Object cn="String=&#10;"/>
         <Object cn="CN=Root,Vector=TaskList[Time Scale Separation Analysis],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_16" name="Sensitivities" taskType="sensitivities" separator="&#x09;" precision="6">
+    <Report key="Report_16" name="Sensitivities" taskType="sensitivities" separator="&#9;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -1308,11 +1291,11 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
         <Object cn="CN=Root,Vector=TaskList[Sensitivities],Object=Description"/>
       </Header>
       <Footer>
-        <Object cn="String=&#x0a;"/>
+        <Object cn="String=&#10;"/>
         <Object cn="CN=Root,Vector=TaskList[Sensitivities],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_17" name="Linear Noise Approximation" taskType="linearNoiseApproximation" separator="&#x09;" precision="6">
+    <Report key="Report_17" name="Linear Noise Approximation" taskType="linearNoiseApproximation" separator="&#9;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -1320,55 +1303,11 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
         <Object cn="CN=Root,Vector=TaskList[Linear Noise Approximation],Object=Description"/>
       </Header>
       <Footer>
-        <Object cn="String=&#x0a;"/>
+        <Object cn="String=&#10;"/>
         <Object cn="CN=Root,Vector=TaskList[Linear Noise Approximation],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_18" name="Time-Course" taskType="unset" separator="&#x09;" precision="6">
-      <Comment>
-      </Comment>
-      <Table printTitle="1">
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Reference=Time"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[ligand receptor complex-endosome],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[Receptor 2],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[Receptor 1-endosome],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[Receptor 2 endosome],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[Receptor 1],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[ligand receptor complex-plasma membrane],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[pRII],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kcd],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ka],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ligand],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ki],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[pRI],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kr],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[alpha],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[klid],Reference=InitialValue"/>
-      </Table>
-    </Report>
-    <Report key="Report_19" name="parameter_estimation" taskType="parameterFitting" separator="&#x09;" precision="6">
-      <Comment>
-      </Comment>
-      <Table printTitle="1">
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[ligand receptor complex-endosome],Reference=InitialConcentration"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[Receptor 2],Reference=InitialConcentration"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[Receptor 1-endosome],Reference=InitialConcentration"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[Receptor 2 endosome],Reference=InitialConcentration"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[Receptor 1],Reference=InitialConcentration"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[ligand receptor complex-plasma membrane],Reference=InitialConcentration"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[pRII],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kcd],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ka],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ligand],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ki],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[pRI],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kr],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[alpha],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[klid],Reference=InitialValue"/>
-        <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/>
-      </Table>
-    </Report>
-  </ListOfReports>
+    <Report taskType="Time-Course" separator="&#9;" precision="6" key="Report_48" name="Time-Course"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=Vilar2006_TGFbeta,Reference=Time"/><Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[ligand receptor complex-endosome],Reference=Concentration"/><Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[Receptor 2],Reference=Concentration"/><Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[Receptor 1-endosome],Reference=Concentration"/><Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[Receptor 2 endosome],Reference=Concentration"/><Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[Receptor 1],Reference=Concentration"/><Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[ligand receptor complex-plasma membrane],Reference=Concentration"/><Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[pRII],Reference=InitialValue"/><Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kcd],Reference=InitialValue"/><Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ka],Reference=InitialValue"/><Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ligand],Reference=InitialValue"/><Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ki],Reference=InitialValue"/><Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[pRI],Reference=InitialValue"/><Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kr],Reference=InitialValue"/><Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[alpha],Reference=InitialValue"/><Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[klid],Reference=InitialValue"/></Table></Report><Report taskType="parameterFitting" separator="&#9;" precision="6" key="Report_32" name="parameter_estimation"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[ligand receptor complex-endosome],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[Receptor 2],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[Receptor 1-endosome],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[Receptor 2 endosome],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[Receptor 1],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[ligand receptor complex-plasma membrane],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[pRII],Reference=InitialValue"/><Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kcd],Reference=InitialValue"/><Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ka],Reference=InitialValue"/><Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ligand],Reference=InitialValue"/><Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ki],Reference=InitialValue"/><Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[pRI],Reference=InitialValue"/><Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kr],Reference=InitialValue"/><Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[alpha],Reference=InitialValue"/><Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[klid],Reference=InitialValue"/><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/></Table></Report></ListOfReports>
   <ListOfPlots>
     <PlotSpecification name="Parameter Estimation Result" type="Plot2D" active="1">
       <Parameter name="log X" type="bool" value="0"/>
@@ -1873,58 +1812,71 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
 
 
 
-class ParseCopasiML(unittest.TestCase):
+
+class ReportsTests(unittest.TestCase):
+
+
     
     def setUp(self):
-        self.model_file=os.path.join(os.getcwd(),'test_model.cps')
-        with open(self.model_file,'w') as f:
-            f.write(MODEL_STR.encode('utf-8'))
-        
-    def test_read_copasi_file(self):
-        '''
-        
-        '''
-        copasiModel=  PyCoTools.pycopi.CopasiMLParser(self.model_file)
-        self.assertTrue( isinstance(copasiModel.copasiMLTree,lxml.etree._ElementTree))
-        
-    def test_write_copasi_file(self):
-        parser=PyCoTools.pycopi.CopasiMLParser(self.model_file)
-        parser.write_copasi_file(self.model_file,parser.copasiML)
+        copasi_file=os.path.join(os.getcwd(),'VilarModel2006pycopitestModel.cps')
+        if os.path.isfile(copasi_file):
+            os.remove(copasi_file)
+        with open(copasi_file,'w') as f:
+            f.write(model_string)
+            
+        self.copasi_file=copasi_file
+        self.timecourse_report_name=os.path.join(os.getcwd(),'cheese.txt')
+        if os.path.isfile(self.timecourse_report_name):
+            os.remove(self.timecourse_report_name)
+            
+        self.GMQ=PyCoTools.pycopi.GetModelQuantities(self.copasi_file)
+        self.report_options={#report variables
+                 'Metabolites':self.GMQ.get_metabolites().keys(),
+                 'GlobalQuantities':self.GMQ.get_global_quantities().keys(),
+                 'QuantityType':'concentration',
+                 'ReportName':'cheese.txt',
+                 'Append': '1', 
+                 'ConfirmOverwrite': '0',
+                 'Save':'overwrite',
+                 'ReportType':'profilelikelihood'}
+
         
         
     def tearDown(self):
-        os.remove(self.model_file)
+        if os.path.isfile(self.copasi_file):
+            os.remove(self.copasi_file)
+
+        if os.path.isfile(self.timecourse_report_name):
+            os.remove(self.timecourse_report_name)
+            
+        for i in glob.glob('*.jpeg'):
+            os.remove(i)
+        
+        for i in glob.glob('*.txt'):
+            os.remove(i)
+            
+        for i in glob.glob('*.xlsx'):
+            os.remove(i)
+
+
+    def test_timecourse_report(self):
+        new_report_options={'ReportType':'time_course'}
+        self.report_options.update(new_report_options)
+        R=PyCoTools.pycopi.Reports(self.copasi_file,**self.report_options)
+        l=[]
+        for i in R.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports'):
+            l.append(i.attrib['name'])
+        self.assertTrue(self.report_options['ReportType'],l)
+    
+    def test_profile_likelihood_report(self):
+        new_report_options={'ReportType':'profilelikelihood'}
+        self.report_options.update(new_report_options)
+        R=PyCoTools.pycopi.Reports(self.copasi_file,**self.report_options)
+        l=[]
+        for i in R.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports'):
+            l.append(i.attrib['name'])
+        self.assertTrue(self.report_options['ReportType'],l)
         
         
-        
-      
 if __name__=='__main__':
     unittest.main()
-    
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -103,7 +103,8 @@ class ParsePEData():
         try:
             self.log_data=self.log10_conversion()
         except AttributeError:
-            self.log_data='Could not convert to log10 scale'
+            raise TypeError('Could not convert to log10 scale. Chances are this is because you have infinite RSS values in your parameter estimation data. Try changing the optimization settings')
+            
 
 
 
@@ -207,69 +208,6 @@ class ParsePEData():
                 data.to_pickle(self.pickle_path)
                 return data 
 
-
-
-
-#                
-#            if self.mode=='file':
-#                data= self.read_file()
-#            elif self.mode=='folder':
-#                data= self.read_folder()
-#            if self.OverwritePickle=='false':
-#                
-                
-                
-                
-#                
-#                if os.path.isfile(self.pickle_path)==True:
-#                    os.remove(self.pickle_path)
-#                if os.path.isfile(self.pickle_path_log)==True:
-#                    os.remove(self.pickle_path_log)
-#                data.to_pickle(self.pickle_path)
-            
-            
-            
-#            return data
-#        elif self.UsePickle=='true':
-#            if os.path.isfile(self.pickle_path)==False:
-#                self.UsePickle='false'
-#                data=self.read_data()
-#            else:
-#                data=self.read_pickle()
-#            return data           
-    
-#    def read_data(self):
-#        if self.UsePickle=='false':
-#            if self.mode=='file':
-#                data=self.read_file()
-#            elif self.mode=='folder':
-#                data=self.read_folder()
-#            if self.OverwritePickle=='true':
-#                if os.path.isfile(self.pickle_path)==True:
-#                    os.remove(self.pickle_path)
-#                if os.path.isfile(self.pickle_path_log)==True:
-#                    os.remove(self.pickle_path_log)
-#            data.to_pickle(self.pickle_path)
-#            return data
-#        elif self.UsePickle=='true':
-#            if os.path.isfile(self.pickle_path)==False:
-#                self.UsePickle='false'
-#                data=self.read_data()
-#            else:
-#                data=self.read_pickle()
-#            return data
-#    
-#    def prune_headers(self):
-#        new_keys=[]
-#        for i in self.data.keys():
-#            match= re.findall('.*\[(.*)\]',i)
-#            if match!=[]:
-#                new_keys.append( match[0])
-#            else:
-#                new_keys.append(i)
-#        self.data.columns=new_keys
-#        return self.data
-        
     def log10_conversion(self):
         return numpy.log10(self.data)
 
@@ -422,6 +360,10 @@ class PlotHistogram():
              'true' or 'false'. When not using iPython and graphs are not automatically 
              displayed in shell, this determines whether the plots are opened in a
              window or not. Default='false'
+        
+         ResultsDirectory:
+             Name of the directory to store parameter estimation results. 
+             Default= 'Histograms'
                      
                  
     '''
@@ -448,6 +390,7 @@ class PlotHistogram():
                  'Log10':'false',
                  'Show':'false',
                  'Variable':None,
+                 'ResultsDirectory':None,
                  
                      }
         for i in kwargs.keys():
@@ -456,11 +399,14 @@ class PlotHistogram():
         self.kwargs=options
         assert self.kwargs.get('TruncateMode') in ['below_x','percent']
         
-        #Other classes
+        #Other 
         self.PED=ParsePEData(self.results_path)
 
         #create a directory and change to it
-        self.results_dir=os.path.join(os.path.dirname(self.results_path),'Histograms')
+        if self.kwargs.get('ResultsDirectory')==None:
+            self.results_dir=os.path.join(os.path.dirname(self.results_path),'Histograms')
+        else:
+            self.results_dir=self.kwargs.get('ResultsDirectory')
         if self.kwargs.get('SaveFig')=='true':
             if os.path.isdir(self.results_dir)!=True:
                 os.mkdir(self.results_dir)
@@ -672,7 +618,7 @@ class PlotBoxplot():
             estimation results files. 
             
     **kwargs:
-        NumPerPlot:
+         NumPerPlot:
             How many parameters to include in a box plot before producing 
             multiple figure. Default=None -  means all will be in one figure. 
     
@@ -1047,7 +993,7 @@ class EvaluateOptimizationPerformance():
                  #truncate data options
                  'X':100,           #if below_x: this is the X boundary. If percent: this is the percent of data to keep
                  #graph options
-                 'AxisSize':8,
+                 'AxisSize':15,
                  'Show':'false',
                  'FontSize':22,
                  'Color':'red',
@@ -1065,6 +1011,7 @@ class EvaluateOptimizationPerformance():
         self.kwargs=options
         assert self.kwargs.get('TruncateMode') in ['below_x','percent']
         
+        
         #Other classes
         self.PED=ParsePEData(self.results_path)
         #create a directory and change to it
@@ -1073,16 +1020,21 @@ class EvaluateOptimizationPerformance():
             os.mkdir(self.results_dir)
         os.chdir(self.results_dir)
         
+        ## Set size of axes font
+        matplotlib.rcParams.update({'font.size':self.kwargs.get('AxisSize')})
+        
+        
         self.plot_rss()
         os.chdir(os.path.dirname(self.results_path))
                              
     def plot_rss(self):
         if self.kwargs.get('Log10')=='true':
             rss=self.PED.log_data['RSS']
+            iterations=numpy.log10(range(len(rss)))
         else:
             rss= self.PED.data['RSS']
+            iterations=range(len(rss))
             
-        iterations=range(len(rss))
         plt.figure()
         plt.plot(iterations,rss)
         
@@ -1105,13 +1057,15 @@ class EvaluateOptimizationPerformance():
 
         if self.kwargs.get('Log10')=='true':
             plt.ylabel('RSS Values (Log10)',fontsize=self.kwargs.get('FontSize'))
+            plt.xlabel('Rank of Best Fit (Log10)',fontsize=self.kwargs.get('FontSize'))
         else:
             plt.ylabel('Optimization Iteration',fontsize=self.kwargs.get('FontSize'))
+            plt.xlabel('Rank of Best Fit',fontsize=self.kwargs.get('FontSize'))
             
-        plt.xlabel('Rank of Best Fit')
-
         plt.xticks(rotation=self.kwargs.get('XRotation'))
         
+        if self.kwargs['Log10']=='true':
+            self.kwargs['ExtraTitle']='(Log10)'
         
 #        SaveFig options
         if self.kwargs.get('SaveFig')=='true':

@@ -213,7 +213,6 @@ class ProfileLikelihood():
         if self.kwargs.get('NumProcesses')>multiprocessing.cpu_count():
             raise Errors.Errors.InputError('You have selected {} processes but your computer only has {} available'.format(self.kwargs.get('NumProcesses'),multiprocessing.cpu_count()))
         
-        assert self.kwargs.get('Verbose') in ['false','true']
         assert self.kwargs.get('Log') in ['false','true']
 #        if self.kwargs.get('Log')=='false':
 #            self.kwargs['Log']=str(0)
@@ -424,11 +423,7 @@ class ProfileLikelihood():
     def setup_scan(self):
         for i in self.cps_dct:
             for j in self.cps_dct[i]:
-#                C=pycopi.CopasiMLParser(self.cps_dct[i][j])
-#                childML=C.copasiML
                 GMQ_child=pycopi.GetModelQuantities(self.cps_dct[i][j])
-                #get specific scan quantities:
-                #1) current variable value
                 if self.kwargs.get('QuantityType')=='concentration':
                     try:
                         variable_value= GMQ_child.get_all_model_variables()[j]['concentration'] 
@@ -469,16 +464,6 @@ class ProfileLikelihood():
                 res[self.cps_dct[i][j]]= pycopi.Run(self.cps_dct[i][j],Task='scan',MaxTime=self.kwargs.get('MaxTime')).output
         return res
 
-#                p=subprocess.Popen(args,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-#                output,err= p.communicate()
-#                d={}
-#                d['output']=output
-#                d['error']=err
-#                if err!='':
-#                    raise pycopi.CopasiError(d['error'])
-            
-#        return d
-
 #    def run_fast(self):
 #        '''
 #        self.cps_dct is a nested dictionary dct[index1][index2]=filename
@@ -507,20 +492,11 @@ class ProfileLikelihood():
             return True
                 
     def run_SGE(self):
-#        print self.cps_dct
         for i in self.cps_dct.keys():
-#            print 's'
             for j in self.cps_dct[i]:
-#                print self.cps_dct[i][j]
                 with open('run_script.sh','w') as f:
                     f.write('#!/bin/bash\n#$ -V -cwd\nmodule addapps/COPASI/4.16.104-Linux-64bit\nCopasiSE "{}"'.format(self.cps_dct[i][j]))
                 os.system('qsub {}'.format('run_script.sh'))
-#                try:
-#                    subprocess.Popen('qsub {}'.format('run_script.sh'))
-#                except OSError:
-#                        subprocess.check_call('qsub {}'.format('run_script.sh'))
-#                except OSError:
-#                        os.system('qsub {}'.format('run_script.sh'))
                 os.remove('run_script.sh')         
         return True
                 
@@ -635,11 +611,13 @@ class Plot():
         InterpolationResolution;
             Number of points to split line into for interpolation. Defualt=1000
             
-        Ylimit: default==None, restrict amount of data shown on y axis. 
-        Useful for honing in on small confidence intervals
+        Ylimit: 
+            default==None, restrict amount of data shown on y axis. 
+            Useful for honing in on small confidence intervals
 
-        Xlimit: default==None, restrict amount of data shown on x axis. 
-        Useful for honing in on small confidence intervals
+        Xlimit: 
+            default==None, restrict amount of data shown on x axis. 
+            Useful for honing in on small confidence intervals
         
         DPI:
             How big saved figure should be. Default=125
@@ -661,6 +639,13 @@ class Plot():
             If Mode set to 'one' which parameter to plot. Must
             be an item in your results. 
             
+        Separator:
+            Separator used in csv file for experimental data. 
+            Default='\t'
+            
+        Log10:
+            'true' or 'false'. Default='true'. Plot on log10-log10 scale
+            
         
     '''
 
@@ -671,7 +656,6 @@ class Plot():
         self.GMQ=pycopi.GetModelQuantities(self.copasi_file)
         os.chdir(os.path.dirname(self.copasi_file))
 
-#        default_outputML=os.path.split(self.copasi_file)[1][:-4]+'_Duplicate.cps'
         options={#report variables
                  'ParameterPath':None,                 
                  'Index':-1,
@@ -702,6 +686,8 @@ class Plot():
                  'PlotIndex':-1,
                  'PlotParameter':None,
                  'DotSize':4,
+                 'Separator':'\t',
+                 'Log10':'true',
                  }
                  
         for i in kwargs.keys():
@@ -712,9 +698,14 @@ class Plot():
         assert isinstance(self.kwargs.get('NumProcesses'),int)
         if self.kwargs.get('NumProcesses')!=0:
             self.kwargs['NumProcesses']=self.kwargs.get('NumProcesses')-1
-        
+
+        if self.kwargs.get('Log10') not in ['true','false']:
+            raise Errors.InputError('Log10 argument should be \'true\' or \'false\' not {}'.format(self.kwargs.get('Log10')))
+
+            
+            
         if self.kwargs.get('NumProcesses')>multiprocessing.cpu_count():
-            raise Errors.Errors.InputError('You have selected {} processes but your computer only has {} available'.format(self.kwargs.get('NumProcesses'),multiprocessing.cpu_count()))
+            raise Errors.InputError('You have selected {} processes but your computer only has {} available'.format(self.kwargs.get('NumProcesses'),multiprocessing.cpu_count()))
         
         #if Index is -1 i.e. current parameters, user needs to give RSS
         if self.kwargs.get('Index')==-1:
@@ -738,18 +729,39 @@ class Plot():
             assert isinstance(self.kwargs.get('Xlimit'),list),'Xlimit is a list of coordinates for X axis,i.e. [0,10]'
             assert len(self.kwargs.get('Xlimit'))==2,'length of the Xlimit list must be 2'
         
-        assert isinstance(self.kwargs.get('XTickRotation'),int),'XTickRotation parameter should be a Python integer'
+        if isinstance(self.kwargs.get('XTickRotation'),int)!=True:
+            raise TypeError('XTickRotation parameter should be a Python integer')
 
         
         if self.kwargs.get('ExtraTitle')!=None:
-            assert isinstance(self.kwargs.get('ExtraTitle'),str)
-        assert isinstance(self.kwargs.get('FontSize'),int)
-        assert isinstance(self.kwargs.get('AxisSize'),int)
-        assert isinstance(self.kwargs.get('LineWidth'),int)
+            if isinstance(self.kwargs.get('ExtraTitle'),str)!=True:
+                raise TypeError('ExtraTitle should be of type str')
+                
+        if isinstance(self.kwargs.get('FontSize'),int)!=True:
+            raise TypeError('FontSize argument should be of type int')
+            
+        if isinstance(self.kwargs.get('AxisSize'),int)!=True:
+            raise TypeError('AxisSize argument should be of type int')
+            
+        if isinstance(self.kwargs.get('LineWidth'),int)!=True:
+            raise TypeError('LineWidth argument should be of type int')
+            
+        if isinstance(self.kwargs.get('InterpolationKind'),str)!=True:
+            raise TypeError('InterpolationKind argument should be of type str')
+            
+        if isinstance(self.kwargs.get('InterpolationResolution'),int)!=True:
+            raise TypeError('InterpolationResolution argument should be of type int')
 
-        assert isinstance(self.kwargs.get('InterpolationKind'),str)
-        assert isinstance(self.kwargs.get('InterpolationResolution'),int)
-        assert isinstance(self.kwargs.get('TitleWrapSize'),int)
+        if isinstance(self.kwargs.get('TitleWrapSize'),int)!=True:
+            raise TypeError('TitleWrapSize argument should be of type int')
+
+
+        if isinstance(self.kwargs.get('InterpolationResolution'),int)!=True:
+            raise TypeError('InterpolationResolution argument should be of type int')
+
+            
+            
+
 
         if self.kwargs.get('Ylimit')!=None:
             assert isinstance(self.kwargs.get('Ylimit'),str)
@@ -772,7 +784,7 @@ class Plot():
         
         
         '''
-        The below arguments rely on the above code. Do notchange
+        The below arguments rely on the above code. Do not change
         the ordering!
         
         '''
@@ -814,6 +826,11 @@ class Plot():
             self.plot1(self.kwargs.get('PlotIndex'),self.kwargs.get('PlotParameter'))
             
         
+        self.plot_chi2_CI()
+        CI=self.calc_chi2_CI()
+        for i in CI:
+            print 'Confidence level for Index {} is {} or {} on a Log10 scale'.format(i,CI[i],numpy.log10(CI[i]))
+            
     def get_PL_dir(self):
         '''
         Find the ProfleLikelihood directory within the same directory as copasi_file
@@ -877,28 +894,14 @@ class Plot():
             df_dict[i]={}
             for j in self.result_paths[i]:
                 if j not in experiment_keys:
-                    data= pandas.read_csv(self.result_paths[i][j],sep='\t')
+                    data= pandas.read_csv(self.result_paths[i][j],sep=self.kwargs['Separator'])
                     best_value_str='TaskList[Parameter Estimation].(Problem)Parameter Estimation.Best Value'
                     data=data.rename(columns={best_value_str:'RSS'})
                     df_dict[i][j]=data
-#                    print df_dict
-#                '''
-#                note to self:
-#                    I'm not sure why I included the commented out code below
-#                    but there must have been a reason so keep it commented out
-#                    until you find out why. lol
-#                '''
-#                pattern='.*\[(.*)\]'
-#                match= re.findall(pattern,list(data.columns)[0])
-#                if match!=[]:
-#                    replacement= data.columns.str.findall(pattern)[0][0]
-#                    old= list(data.columns)[0]
-#                    data.columns=[replacement,'RSS']
-#                    df_dict[i][replacement]=data
         return df_dict
 #        
     def list_parameters(self):
-        return sorted(self.GMQ.get_all_params_dict().keys())
+        return sorted(self.GMQ.get_all_model_variables().keys())
 
 
     def num_estimated_params(self):
@@ -923,39 +926,14 @@ class Plot():
         '''
         returns number of data points in your data files
         '''
-        experimental_data= [pandas.read_csv(i,sep='\t') for i in self.get_experiment_files_in_use()]
+        experimental_data= [pandas.read_csv(i,sep=self.kwargs['Separator']) for i in self.get_experiment_files_in_use()]
         l=[]        
         for i in experimental_data:
             l.append( i.shape[0]*(i.shape[1]-1))
-        return sum(l)
-
-#    def f_ratio_lookup(self):
-#        '''
-#        Find the f-ratio statistic required(Schaber2012)
-#        First DOF is m: the number of parameters 
-#        second DOF is n: the number of data points
-#        
-#        '''
-#        nums= numpy.arange(0,100,0.1)
-#        num_params=self.num_estimated_params()
-#        num_data_points=self.num_data_points()
-##        print scipy.stats.f.cdf(10,14,15)
-#        f=scipy.stats.f.cdf(nums,num_params,num_data_points)
-#        table=zip(nums, f)
-#        return 'Not yet a finished feature of pydentify'
-#
-#
-#    def get_f_ratio_alpha(self):
-#        '''
-#        return the chi2 threshold for cut off point alpha and DOF degrees of freedom
-#        '''
-#        dct={}
-#        alphas=numpy.arange(0,1,0.01)
-#        for i in alphas:
-#            dct[round(i,3)]=self.chi2_lookup_table(i)
-##        return dct[self.kwargs.get('Alpha')]
-#        return 'not yet a finished feature of pydentify'
-        
+        s= sum(l)
+        if s==0:
+            raise Errors.InputError('Number of data points cannot be 0. This is wrong')
+        return s
 
     def get_RSS(self):
         RSS={}
@@ -999,6 +977,7 @@ class Plot():
         return dct[self.kwargs.get('Alpha')]
 
     def plot_chi2_CI(self):
+        
         '''
         Visualize where the alpha cut off is on the chi2 distribution
         '''
@@ -1093,7 +1072,10 @@ class Plot():
         else:
             plt.figure()
         ax = plt.subplot(111)
-        data= self.data[index][parameter]
+        if self.kwargs['Log10']=='true':
+            data= numpy.log10(self.data[index][parameter])
+        else:
+            data= self.data[index][parameter]
         parameter_val,RSS_val=(data[data.keys()[0]],data[data.keys()[1]])
         #plot parameter vs RSS once as green circles the other as lines
         try:
@@ -1112,7 +1094,11 @@ class Plot():
         plt.setp(handle,'color','black',linewidth=self.kwargs.get('LineWidth'))
         
         #plot the confidence interval 
-        CI= self.calc_chi2_CI()[index]
+        if self.kwargs.get('Log10')=='true':
+            CI= numpy.log10(self.calc_chi2_CI()[index])
+        else:
+            CI= self.calc_chi2_CI()[index]
+        
         
         plt.plot(parameter_val,[CI]*len(parameter_val),'g--',linewidth=self.kwargs.get('LineWidth'))
 #        print self.GMQ.get_all_model_variables()
@@ -1135,11 +1121,14 @@ class Plot():
         
         #plot labels
         plt.title('\n'.join(wrap('{}'.format(parameter),self.kwargs.get('TitleWrapSize'))),fontsize=self.kwargs.get('FontSize'))
-        plt.ylabel('RSS',fontsize=self.kwargs.get('FontSize'))
-        if self.kwargs.get('Log')=='true':
-            plt.xlabel('Parameter Value (Log10)',fontsize=self.kwargs.get('FontSize'))         
+        
+        
+        if self.kwargs['Log10']=='true':
+            plt.xlabel('Parameter Value (Log10)',fontsize=self.kwargs.get('FontSize'))  
+            plt.ylabel('RSS (Log10)',fontsize=self.kwargs.get('FontSize'))
         else:
             plt.xlabel('Parameter Value',fontsize=self.kwargs.get('FontSize'))         
+            plt.ylabel('RSS',fontsize=self.kwargs.get('FontSize'))
        #pretty stuff
 
         ax.spines['right'].set_color('none')
@@ -1192,7 +1181,6 @@ class Plot():
 #                
         if isinstance(self.kwargs.get('Index'),int) and self.kwargs.get('Index')!=-1:
             for i in self.data[self.kwargs.get('Index')]:
-#                print i
                 self.plot1(self.kwargs.get('Index'),i)
 #            except KeyError:
 #                raise Errors.InputError('Index out of bounds, i.e. Index>number PE runs')

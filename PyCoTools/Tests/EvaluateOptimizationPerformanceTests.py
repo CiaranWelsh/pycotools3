@@ -1,21 +1,19 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Sat Jan 28 14:03:25 2017
-
-@author: Ciaran
-"""
 
 import PyCoTools
-import os
 import unittest
+import glob
+import os
+import numpy
+import pandas
+import time
+import re
+import shutil 
+import scipy
+import shutil 
 
-import lxml
-
-
-
-
-MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
-<!-- generated with COPASI 4.16 (Build 104) (http://www.copasi.org) at 2016-10-27 14:41:02 UTC -->
+model_string=u'''<?xml version="1.0" encoding="UTF-8"?>
+<!-- generated with COPASI 4.16 (Build 104) (http://www.copasi.org) at 2016-10-26 08:49:08 UTC -->
 <?oxygen RNGSchema="http://www.copasi.org/static/schema/CopasiML.rng" type="xml"?>
 <COPASI xmlns="http://www.copasi.org/static/schema" versionMajor="4" versionMinor="16" versionDevel="104" copasiSourcesModified="0">
   <ListOfFunctions>
@@ -199,12 +197,12 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
     </dcterms:modified>
     <CopasiMT:hasPart>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_6844.3"/>
+        <rdf:li rdf:resource="http://identifiers.org/kegg.pathway/hsa04350"/>
       </rdf:Bag>
     </CopasiMT:hasPart>
     <CopasiMT:hasPart>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/kegg.pathway/hsa04350"/>
+        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_6844.3"/>
       </rdf:Bag>
     </CopasiMT:hasPart>
     <CopasiMT:is>
@@ -1003,8 +1001,8 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
         <Parameter name="Maximum duration for backward integration" type="unsignedFloat" value="1000000"/>
       </Method>
     </Task>
-    <Task key="Task_15" name="Time-Course" type="timeCourse" scheduled="false" updateModel="false">
-      <Report reference="Report_18" target="" append="0" confirmOverwrite="0"/>
+    <Task key="Task_15" name="Time-Course" type="timeCourse" scheduled="true" updateModel="false">
+      <Report reference="Report_19" target="timecourse.txt" append="0" confirmOverwrite="0"/>
       <Problem>
         <Parameter name="StepNumber" type="unsignedInteger" value="50"/>
         <Parameter name="StepSize" type="float" value="100"/>
@@ -1021,13 +1019,12 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
         <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
       </Method>
     </Task>
-    <Task key="Task_16" name="Scan" type="scan" scheduled="true" updateModel="false">
-      <Report reference="Report_19" target="PEdata.txt" append="0" confirmOverwrite="0"/>
+    <Task key="Task_16" name="Scan" type="scan" scheduled="false" updateModel="false">
       <Problem>
         <Parameter name="Subtask" type="unsignedInteger" value="5"/>
         <ParameterGroup name="ScanItems">
           <ParameterGroup name="ScanItem">
-            <Parameter name="Number of steps" type="unsignedInteger" value="3"/>
+            <Parameter name="Number of steps" type="unsignedInteger" value="10"/>
             <Parameter name="Object" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[ligand receptor complex-endosome],Reference=InitialConcentration"/>
             <Parameter name="Type" type="unsignedInteger" value="0"/>
           </ParameterGroup>
@@ -1067,7 +1064,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
       </Method>
     </Task>
     <Task key="Task_19" name="Parameter Estimation" type="parameterFitting" scheduled="false" updateModel="false">
-      <Report reference="Report_12" target="" append="0" confirmOverwrite="0"/>
+      <Report reference="Report_18" target="" append="0" confirmOverwrite="0"/>
       <Problem>
         <Parameter name="Maximize" type="bool" value="0"/>
         <Parameter name="Randomize Start Values" type="bool" value="1"/>
@@ -1324,29 +1321,7 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
         <Object cn="CN=Root,Vector=TaskList[Linear Noise Approximation],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_18" name="Time-Course" taskType="unset" separator="&#x09;" precision="6">
-      <Comment>
-      </Comment>
-      <Table printTitle="1">
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Reference=Time"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[ligand receptor complex-endosome],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[Receptor 2],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[Receptor 1-endosome],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[Receptor 2 endosome],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[Receptor 1],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[ligand receptor complex-plasma membrane],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[pRII],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kcd],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ka],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ligand],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ki],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[pRI],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kr],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[alpha],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[klid],Reference=InitialValue"/>
-      </Table>
-    </Report>
-    <Report key="Report_19" name="parameter_estimation" taskType="parameterFitting" separator="&#x09;" precision="6">
+    <Report key="Report_18" name="parameter_estimation" taskType="parameterFitting" separator="&#x09;" precision="6">
       <Comment>
       </Comment>
       <Table printTitle="1">
@@ -1366,6 +1341,28 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
         <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[alpha],Reference=InitialValue"/>
         <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[klid],Reference=InitialValue"/>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/>
+      </Table>
+    </Report>
+    <Report key="Report_19" name="Time-Course" taskType="unset" separator="&#x09;" precision="6">
+      <Comment>
+      </Comment>
+      <Table printTitle="1">
+        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Reference=Time"/>
+        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[ligand receptor complex-endosome],Reference=Concentration"/>
+        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[Receptor 2],Reference=Concentration"/>
+        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[Receptor 1-endosome],Reference=Concentration"/>
+        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[Receptor 2 endosome],Reference=Concentration"/>
+        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[Receptor 1],Reference=Concentration"/>
+        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[ligand receptor complex-plasma membrane],Reference=Concentration"/>
+        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[pRII],Reference=InitialValue"/>
+        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kcd],Reference=InitialValue"/>
+        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ka],Reference=InitialValue"/>
+        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ligand],Reference=InitialValue"/>
+        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ki],Reference=InitialValue"/>
+        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[pRI],Reference=InitialValue"/>
+        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kr],Reference=InitialValue"/>
+        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[alpha],Reference=InitialValue"/>
+        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[klid],Reference=InitialValue"/>
       </Table>
     </Report>
   </ListOfReports>
@@ -1870,61 +1867,62 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
 </COPASI>
 
 '''
-
-
-
-class ParseCopasiML(unittest.TestCase):
-    
+class EvaluateOptimizationPerformanceTests(unittest.TestCase):
     def setUp(self):
-        self.model_file=os.path.join(os.getcwd(),'test_model.cps')
-        with open(self.model_file,'w') as f:
-            f.write(MODEL_STR.encode('utf-8'))
+        self.copasi_file=os.path.join(os.getcwd(),'VilarModel2006pycopitestModel.cps')
+        with open(self.copasi_file,'w') as f:
+            f.write(model_string.encode('utf-8'))
+
+        ## make time course report name and make sure its available
+        self.timecourse_report_name=os.path.join(os.getcwd(),'timecourse.txt')
+        if os.path.isfile(self.timecourse_report_name):
+            os.remove(self.timecourse_report_name)
+        ## do time course
+        self.TC=PyCoTools.pycopi.TimeCourse(self.copasi_file,StepSize=100,Plot='false',
+                                               Intervals=50,End=5000,
+                                               ReportName=self.timecourse_report_name)
+        ## make PE report name available
+        self.PE_report_name=os.path.join(os.path.dirname(self.copasi_file),'PEdata.txt')
+
+        PyCoTools.pycopi.PruneCopasiHeaders(self.timecourse_report_name,replace='true')
         
-    def test_read_copasi_file(self):
-        '''
+        self.PE=PyCoTools.pycopi.ParameterEstimation(self.copasi_file,
+                                                        self.timecourse_report_name,
+                                                        PopulationSize=2,
+                                                        NumberOfGenerations=2,
+                                                        RandomizeStartValues='true',
+                                                        ReportName=self.PE_report_name,
+                                                        Plot='false')
+        self.PE.write_item_template()
+        self.PE.set_up()
         
-        '''
-        copasiModel=  PyCoTools.pycopi.CopasiMLParser(self.model_file)
-        self.assertTrue( isinstance(copasiModel.copasiMLTree,lxml.etree._ElementTree))
+        PyCoTools.pycopi.Scan(self.copasi_file,ScanType='repeat',NumberOfSteps=10,Run='true',
+                                 ReportType='parameter_estimation',ReportName=self.PE_report_name)   
         
-    def test_write_copasi_file(self):
-        parser=PyCoTools.pycopi.CopasiMLParser(self.model_file)
-        parser.write_copasi_file(self.model_file,parser.copasiML)
+    def test_figure_is_produced(self):
+        self.EOP= PyCoTools.PEAnalysis.EvaluateOptimizationPerformance(self.PE_report_name,
+                                                                  Log10='true',
+                                                                  SaveFig='true')
+        self.assertEqual(len(os.listdir(self.EOP.results_dir)),1)
         
         
     def tearDown(self):
-        os.remove(self.model_file)
+        os.remove(self.PE_report_name)
+        for i in glob.glob('*.xlsx'):
+            os.remove(i)
+            
+        for i in glob.glob('*.txt'):
+            os.remove(i)
+            
+        for i in glob.glob('*.cps'):
+            os.remove(i)    
+            
+        shutil.rmtree(self.EOP.results_dir)
         
         
-        
-      
+    
+    
+    
 if __name__=='__main__':
     unittest.main()
     
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
