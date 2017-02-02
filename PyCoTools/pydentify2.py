@@ -643,6 +643,9 @@ class Plot():
             Separator used in csv file for experimental data. 
             Default='\t'
             
+        Log10:
+            'true' or 'false'. Default='true'. Plot on log10-log10 scale
+            
         
     '''
 
@@ -683,8 +686,8 @@ class Plot():
                  'PlotIndex':-1,
                  'PlotParameter':None,
                  'DotSize':4,
-                 'PlotLog10':'false',
                  'Separator':'\t',
+                 'Log10':'true',
                  }
                  
         for i in kwargs.keys():
@@ -696,8 +699,8 @@ class Plot():
         if self.kwargs.get('NumProcesses')!=0:
             self.kwargs['NumProcesses']=self.kwargs.get('NumProcesses')-1
 
-        if self.kwargs.get('PlotLog10') not in ['true','false']:
-            raise Errors.InputError('PlotLog10 kwarg must be either \'true\' or \'false\'. You have {} '.format(self.kwargs.get('PlotLog10')) )
+        if self.kwargs.get('Log10') not in ['true','false']:
+            raise Errors.InputError('Log10 argument should be \'true\' or \'false\' not {}'.format(self.kwargs.get('Log10')))
 
             
             
@@ -726,18 +729,39 @@ class Plot():
             assert isinstance(self.kwargs.get('Xlimit'),list),'Xlimit is a list of coordinates for X axis,i.e. [0,10]'
             assert len(self.kwargs.get('Xlimit'))==2,'length of the Xlimit list must be 2'
         
-        assert isinstance(self.kwargs.get('XTickRotation'),int),'XTickRotation parameter should be a Python integer'
+        if isinstance(self.kwargs.get('XTickRotation'),int)!=True:
+            raise TypeError('XTickRotation parameter should be a Python integer')
 
         
         if self.kwargs.get('ExtraTitle')!=None:
-            assert isinstance(self.kwargs.get('ExtraTitle'),str)
-        assert isinstance(self.kwargs.get('FontSize'),int)
-        assert isinstance(self.kwargs.get('AxisSize'),int)
-        assert isinstance(self.kwargs.get('LineWidth'),int)
+            if isinstance(self.kwargs.get('ExtraTitle'),str)!=True:
+                raise TypeError('ExtraTitle should be of type str')
+                
+        if isinstance(self.kwargs.get('FontSize'),int)!=True:
+            raise TypeError('FontSize argument should be of type int')
+            
+        if isinstance(self.kwargs.get('AxisSize'),int)!=True:
+            raise TypeError('AxisSize argument should be of type int')
+            
+        if isinstance(self.kwargs.get('LineWidth'),int)!=True:
+            raise TypeError('LineWidth argument should be of type int')
+            
+        if isinstance(self.kwargs.get('InterpolationKind'),str)!=True:
+            raise TypeError('InterpolationKind argument should be of type str')
+            
+        if isinstance(self.kwargs.get('InterpolationResolution'),int)!=True:
+            raise TypeError('InterpolationResolution argument should be of type int')
 
-        assert isinstance(self.kwargs.get('InterpolationKind'),str)
-        assert isinstance(self.kwargs.get('InterpolationResolution'),int)
-        assert isinstance(self.kwargs.get('TitleWrapSize'),int)
+        if isinstance(self.kwargs.get('TitleWrapSize'),int)!=True:
+            raise TypeError('TitleWrapSize argument should be of type int')
+
+
+        if isinstance(self.kwargs.get('InterpolationResolution'),int)!=True:
+            raise TypeError('InterpolationResolution argument should be of type int')
+
+            
+            
+
 
         if self.kwargs.get('Ylimit')!=None:
             assert isinstance(self.kwargs.get('Ylimit'),str)
@@ -801,27 +825,12 @@ class Plot():
         elif self.kwargs.get('Mode')=='one':
             self.plot1(self.kwargs.get('PlotIndex'),self.kwargs.get('PlotParameter'))
             
+        
         self.plot_chi2_CI()
+        CI=self.calc_chi2_CI()
+        for i in CI:
+            print 'Confidence level for Index {} is {} or {} on a Log10 scale'.format(i,CI[i],numpy.log10(CI[i]))
             
-    def print_PL_info(self):
-        '''
-        Output:
-            RSS, 
-            alpha 
-            degrees_of_freedom
-            num_data_points
-            get_chi2_alpha
-    def plot_chi2_CI(self):
-        calc_chi2_CI
-        
-        '''
-        print r'chi2 based cut off dict(Index,confidence level): {} '.format(self.calc_chi2_CI())
-        print 'Degrees of freedom: {}'.format(self.degrees_of_freedom())
-        print 'chi2 alpha: {}'.format(self.get_chi2_alpha())
-        print 'experimental files in use: {}'.format(self.get_experiment_files_in_use())
-        print 'RSS: {} '.format(self.get_RSS())
-        print 'Number of estimated parameters: {}'.format(self.num_estimated_params())
-        
     def get_PL_dir(self):
         '''
         Find the ProfleLikelihood directory within the same directory as copasi_file
@@ -1063,7 +1072,10 @@ class Plot():
         else:
             plt.figure()
         ax = plt.subplot(111)
-        data= self.data[index][parameter]
+        if self.kwargs['Log10']=='true':
+            data= numpy.log10(self.data[index][parameter])
+        else:
+            data= self.data[index][parameter]
         parameter_val,RSS_val=(data[data.keys()[0]],data[data.keys()[1]])
         #plot parameter vs RSS once as green circles the other as lines
         try:
@@ -1082,7 +1094,11 @@ class Plot():
         plt.setp(handle,'color','black',linewidth=self.kwargs.get('LineWidth'))
         
         #plot the confidence interval 
-        CI= self.calc_chi2_CI()[index]
+        if self.kwargs.get('Log10')=='true':
+            CI= numpy.log10(self.calc_chi2_CI()[index])
+        else:
+            CI= self.calc_chi2_CI()[index]
+        
         
         plt.plot(parameter_val,[CI]*len(parameter_val),'g--',linewidth=self.kwargs.get('LineWidth'))
 #        print self.GMQ.get_all_model_variables()
@@ -1105,11 +1121,14 @@ class Plot():
         
         #plot labels
         plt.title('\n'.join(wrap('{}'.format(parameter),self.kwargs.get('TitleWrapSize'))),fontsize=self.kwargs.get('FontSize'))
-        plt.ylabel('RSS',fontsize=self.kwargs.get('FontSize'))
-        if self.kwargs.get('Log')=='true':
-            plt.xlabel('Parameter Value (Log10)',fontsize=self.kwargs.get('FontSize'))         
+        
+        
+        if self.kwargs['Log10']=='true':
+            plt.xlabel('Parameter Value (Log10)',fontsize=self.kwargs.get('FontSize'))  
+            plt.ylabel('RSS (Log10)',fontsize=self.kwargs.get('FontSize'))
         else:
             plt.xlabel('Parameter Value',fontsize=self.kwargs.get('FontSize'))         
+            plt.ylabel('RSS',fontsize=self.kwargs.get('FontSize'))
        #pretty stuff
 
         ax.spines['right'].set_color('none')
@@ -1162,7 +1181,6 @@ class Plot():
 #                
         if isinstance(self.kwargs.get('Index'),int) and self.kwargs.get('Index')!=-1:
             for i in self.data[self.kwargs.get('Index')]:
-                print self.kwargs['Index']
                 self.plot1(self.kwargs.get('Index'),i)
 #            except KeyError:
 #                raise Errors.InputError('Index out of bounds, i.e. Index>number PE runs')

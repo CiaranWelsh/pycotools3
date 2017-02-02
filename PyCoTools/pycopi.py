@@ -1665,6 +1665,7 @@ class TimeCourse(object):
                  'ExtraTitle':None,
                  'DPI':125,
                  'MarkerSize':5,
+                 'GraphDirectory':None,
                  
 
                      }
@@ -1941,7 +1942,7 @@ class TimeCourse(object):
             args=['CopasiSE',self.kwargs.get('OutputML')]
             
         R=Run(self.copasi_file,Task='time_course')
-        return R.output
+        return R
 
         
     def read_sim_data(self):
@@ -1952,6 +1953,16 @@ class TimeCourse(object):
         return pandas.read_csv(data_output,sep='\t') 
         
     def plot(self):
+        '''
+        
+        '''
+        ## Create directory for graphs
+        if self.kwargs['GraphDirectory']==None:
+            dire=os.path.join(os.path.dirname(self.copasi_file),'TimeCourseGraphs')
+            if os.path.isdir(dire)!=True:
+                os.mkdir(dire)
+            os.chdir(dire)
+            
         for i in self.data:
             if i.lower()!='time':
                 plt.figure()
@@ -2001,7 +2012,7 @@ class TimeCourse(object):
                         
                     filename={}
                     name=replace_non_ascii(i)
-                    filename[i]=os.path.join(os.getcwd(),name+'.jpeg')
+                    filename[i]=os.path.join(dire,name+'.jpeg')
 
                     if self.kwargs.get('ExtraTitle') !=None:
                         plt.savefig(name+'_'+self.kwargs.get('ExtraTitle')+'.jpeg',bbox_inches='tight',format='jpeg',dpi=self.kwargs.get('DPI'))
@@ -2669,7 +2680,7 @@ class ParameterEstimation():
             self.copasiML=Run(self.copasi_file,Task='parameter_estimation')
             return self.copasiML
         else:
-            self.copasiML=Run(self.copasi_file,Task='parameter_estimation',Run='false')
+            self.copasiML=Run(self.copasi_file,Task='parameter_estimation',Mode='false')
             subprocess.check_call('CopasiSE "{}"'.format(self.copasi_file),shell=True)
             self.plot()
         return self.copasiML
@@ -3610,7 +3621,7 @@ class Run():
         d['output']=output
         d['error']=err
         if err!='':
-            raise Errors.CopasiError(d['error'])
+            raise Errors.CopasiError('Failed with Copasi error: \n\n'+d['error'])
         return d['output']
         
     def submit_copasi_job_SGE(self):
