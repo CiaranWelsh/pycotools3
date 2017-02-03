@@ -1,4 +1,7 @@
-<!-- generated with COPASI 4.16 (Build 104) (http://www.copasi.org) at 2017-02-01 16:45:36 UTC --><?oxygen RNGSchema="http://www.copasi.org/static/schema/CopasiML.rng" type="xml"?><COPASI xmlns="http://www.copasi.org/static/schema" versionMajor="4" versionMinor="16" versionDevel="104" copasiSourcesModified="0">
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generated with COPASI 4.16 (Build 104) (http://www.copasi.org) at 2017-02-03 11:44:09 UTC -->
+<?oxygen RNGSchema="http://www.copasi.org/static/schema/CopasiML.rng" type="xml"?>
+<COPASI xmlns="http://www.copasi.org/static/schema" versionMajor="4" versionMinor="16" versionDevel="104" copasiSourcesModified="0">
   <ListOfFunctions>
     <Function key="Function_40" name="Function for MAPKKK activation" type="UserDefined" reversible="false">
       <Expression>
@@ -108,9 +111,14 @@
       </ListOfParameterDescriptions>
     </Function>
   </ListOfFunctions>
-  <Model key="Model_3" name="Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade" simulationType="time" timeUnit="s" volumeUnit="l" areaUnit="m&#178;" lengthUnit="m" quantityUnit="nmol" type="deterministic" avogadroConstant="6.02214179e+023">
+  <Model key="Model_3" name="Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade" simulationType="time" timeUnit="s" volumeUnit="l" areaUnit="m²" lengthUnit="m" quantityUnit="nmol" type="deterministic" avogadroConstant="6.02214179e+023">
     <MiriamAnnotation>
-<rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
+<rdf:RDF
+   xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#"
+   xmlns:bqbiol="http://biomodels.net/biology-qualifiers/"
+   xmlns:dcterms="http://purl.org/dc/terms/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
   <rdf:Description rdf:about="#Model_3">
     <bqbiol:hasTaxon>
       <rdf:Bag>
@@ -221,7 +229,7 @@
   <rdf:Description rdf:about="#Metabolite_1">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/P09560"/>
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/P09560" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -234,7 +242,7 @@
   <rdf:Description rdf:about="#Metabolite_3">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/P09560"/>
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/P09560" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -247,7 +255,7 @@
   <rdf:Description rdf:about="#Metabolite_5">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/Q05116"/>
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/Q05116" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -260,7 +268,7 @@
   <rdf:Description rdf:about="#Metabolite_7">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/Q05116"/>
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/Q05116" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -273,7 +281,7 @@
   <rdf:Description rdf:about="#Metabolite_9">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/Q05116"/>
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/Q05116" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -286,7 +294,7 @@
   <rdf:Description rdf:about="#Metabolite_11">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/P26696"/>
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/P26696" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -299,7 +307,7 @@
   <rdf:Description rdf:about="#Metabolite_13">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/P26696"/>
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/P26696" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -312,7 +320,7 @@
   <rdf:Description rdf:about="#Metabolite_15">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/P26696"/>
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/P26696" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -327,14 +335,14 @@
   <rdf:Description rdf:about="#Reaction_0">
     <CopasiMT:isHomologTo>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_525"/>
+        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_525" />
       </rdf:Bag>
     </CopasiMT:isHomologTo>
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/ec-code/2.7.11.1"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0000185"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0008349"/>
+        <rdf:li rdf:resource="http://identifiers.org/ec-code/2.7.11.1" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0000185" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0008349" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -350,10 +358,10 @@
           <Modifier metabolite="Metabolite_15" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4420" name="V1" value="3380.59"/>
-          <Constant key="Parameter_4419" name="Ki" value="0.00323106"/>
+          <Constant key="Parameter_4420" name="V1" value="9.37691"/>
+          <Constant key="Parameter_4419" name="Ki" value="1.42825"/>
           <Constant key="Parameter_4418" name="n" value="1"/>
-          <Constant key="Parameter_4417" name="K1" value="0.132435"/>
+          <Constant key="Parameter_4417" name="K1" value="0.127421"/>
         </ListOfConstants>
         <KineticLaw function="Function_40">
           <ListOfCallParameters>
@@ -384,9 +392,9 @@
   <rdf:Description rdf:about="#Reaction_1">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/ec-code/3.1.3.16"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006470"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0051390"/>
+        <rdf:li rdf:resource="http://identifiers.org/ec-code/3.1.3.16" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006470" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0051390" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -399,8 +407,8 @@
           <Product metabolite="Metabolite_1" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4416" name="V2" value="0.596805"/>
-          <Constant key="Parameter_4415" name="KK2" value="87.1659"/>
+          <Constant key="Parameter_4416" name="V2" value="2.72164"/>
+          <Constant key="Parameter_4415" name="KK2" value="557.643"/>
         </ListOfConstants>
         <KineticLaw function="Function_41">
           <ListOfCallParameters>
@@ -422,14 +430,14 @@
   <rdf:Description rdf:about="#Reaction_2">
     <CopasiMT:isHomologTo>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_614"/>
+        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_614" />
       </rdf:Bag>
     </CopasiMT:isHomologTo>
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/ec-code/2.7.11.25"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0004709"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006468"/>
+        <rdf:li rdf:resource="http://identifiers.org/ec-code/2.7.11.25" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0004709" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006468" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -445,8 +453,8 @@
           <Modifier metabolite="Metabolite_3" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4414" name="k3" value="0.0242397"/>
-          <Constant key="Parameter_4413" name="KK3" value="6.93739"/>
+          <Constant key="Parameter_4414" name="k3" value="0.0237853"/>
+          <Constant key="Parameter_4413" name="KK3" value="10.9952"/>
         </ListOfConstants>
         <KineticLaw function="Function_42">
           <ListOfCallParameters>
@@ -471,15 +479,15 @@
   <rdf:Description rdf:about="#Reaction_3">
     <CopasiMT:isHomologTo>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_614"/>
+        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_614" />
       </rdf:Bag>
     </CopasiMT:isHomologTo>
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/ec-code/2.7.11.25"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0000186"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0004709"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006468"/>
+        <rdf:li rdf:resource="http://identifiers.org/ec-code/2.7.11.25" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0000186" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0004709" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006468" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -495,8 +503,8 @@
           <Modifier metabolite="Metabolite_3" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4412" name="k4" value="0.0484467"/>
-          <Constant key="Parameter_4411" name="KK4" value="62.3489"/>
+          <Constant key="Parameter_4412" name="k4" value="0.0585721"/>
+          <Constant key="Parameter_4411" name="KK4" value="80.4557"/>
         </ListOfConstants>
         <KineticLaw function="Function_43">
           <ListOfCallParameters>
@@ -521,9 +529,9 @@
   <rdf:Description rdf:about="#Reaction_4">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/ec-code/3.1.3.16"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006470"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0051389"/>
+        <rdf:li rdf:resource="http://identifiers.org/ec-code/3.1.3.16" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006470" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0051389" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -536,8 +544,8 @@
           <Product metabolite="Metabolite_7" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4410" name="V5" value="0.733996"/>
-          <Constant key="Parameter_4409" name="KK5" value="0.00266192"/>
+          <Constant key="Parameter_4410" name="V5" value="0.746185"/>
+          <Constant key="Parameter_4409" name="KK5" value="2.13481e-006"/>
         </ListOfConstants>
         <KineticLaw function="Function_44">
           <ListOfCallParameters>
@@ -559,8 +567,8 @@
   <rdf:Description rdf:about="#Reaction_5">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/ec-code/3.1.3.16"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006470"/>
+        <rdf:li rdf:resource="http://identifiers.org/ec-code/3.1.3.16" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006470" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -573,8 +581,8 @@
           <Product metabolite="Metabolite_5" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4408" name="V6" value="0.703836"/>
-          <Constant key="Parameter_4407" name="KK6" value="2.23467"/>
+          <Constant key="Parameter_4408" name="V6" value="617.596"/>
+          <Constant key="Parameter_4407" name="KK6" value="51528.9"/>
         </ListOfConstants>
         <KineticLaw function="Function_45">
           <ListOfCallParameters>
@@ -596,15 +604,15 @@
   <rdf:Description rdf:about="#Reaction_6">
     <CopasiMT:hasVersion>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_136"/>
-        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_2247"/>
+        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_136" />
+        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_2247" />
       </rdf:Bag>
     </CopasiMT:hasVersion>
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/ec-code/2.7.12.2"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0004708"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006468"/>
+        <rdf:li rdf:resource="http://identifiers.org/ec-code/2.7.12.2" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0004708" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006468" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -620,8 +628,8 @@
           <Modifier metabolite="Metabolite_9" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4406" name="k7" value="0.0216479"/>
-          <Constant key="Parameter_4405" name="KK7" value="0.0420945"/>
+          <Constant key="Parameter_4406" name="k7" value="0.0191301"/>
+          <Constant key="Parameter_4405" name="KK7" value="0.0578695"/>
         </ListOfConstants>
         <KineticLaw function="Function_46">
           <ListOfCallParameters>
@@ -646,16 +654,16 @@
   <rdf:Description rdf:about="#Reaction_7">
     <CopasiMT:hasVersion>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_136"/>
-        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_2247"/>
+        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_136" />
+        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_2247" />
       </rdf:Bag>
     </CopasiMT:hasVersion>
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/ec-code/2.7.12.2"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0000187"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0004708"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006468"/>
+        <rdf:li rdf:resource="http://identifiers.org/ec-code/2.7.12.2" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0000187" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0004708" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006468" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -671,8 +679,8 @@
           <Modifier metabolite="Metabolite_9" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4404" name="k8" value="3.46169"/>
-          <Constant key="Parameter_4403" name="KK8" value="10893.7"/>
+          <Constant key="Parameter_4404" name="k8" value="0.58306"/>
+          <Constant key="Parameter_4403" name="KK8" value="2156.69"/>
         </ListOfConstants>
         <KineticLaw function="Function_47">
           <ListOfCallParameters>
@@ -697,9 +705,9 @@
   <rdf:Description rdf:about="#Reaction_8">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/ec-code/3.1.3.16"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0000188"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006470"/>
+        <rdf:li rdf:resource="http://identifiers.org/ec-code/3.1.3.16" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0000188" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006470" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -712,8 +720,8 @@
           <Product metabolite="Metabolite_13" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4402" name="V9" value="2.6332"/>
-          <Constant key="Parameter_4401" name="KK9" value="4407.05"/>
+          <Constant key="Parameter_4402" name="V9" value="1.29598e-005"/>
+          <Constant key="Parameter_4401" name="KK9" value="754701"/>
         </ListOfConstants>
         <KineticLaw function="Function_48">
           <ListOfCallParameters>
@@ -735,8 +743,8 @@
   <rdf:Description rdf:about="#Reaction_9">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/ec-code/3.1.3.16"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006470"/>
+        <rdf:li rdf:resource="http://identifiers.org/ec-code/3.1.3.16" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006470" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -749,8 +757,8 @@
           <Product metabolite="Metabolite_11" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4400" name="V10" value="1.33473e-006"/>
-          <Constant key="Parameter_4399" name="KK10" value="540.959"/>
+          <Constant key="Parameter_4400" name="V10" value="0.00545105"/>
+          <Constant key="Parameter_4399" name="KK10" value="0.00177443"/>
         </ListOfConstants>
         <KineticLaw function="Function_49">
           <ListOfCallParameters>
@@ -789,7 +797,7 @@
         </ModelParameterGroup>
         <ModelParameterGroup cn="String=Kinetic Parameters" type="Group">
           <ModelParameterGroup cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=V1" value="9.37691" type="ReactionParameter" simulationType="fixed"/>
+            <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=V1" value="9.376910000000001" type="ReactionParameter" simulationType="fixed"/>
             <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=Ki" value="1.42825" type="ReactionParameter" simulationType="fixed"/>
             <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=n" value="1" type="ReactionParameter" simulationType="fixed"/>
             <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=K1" value="0.127421" type="ReactionParameter" simulationType="fixed"/>
@@ -804,11 +812,11 @@
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK-P]" type="Reaction">
             <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=k4" value="0.0585721" type="ReactionParameter" simulationType="fixed"/>
-            <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=KK4" value="80.4557" type="ReactionParameter" simulationType="fixed"/>
+            <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=KK4" value="80.45569999999999" type="ReactionParameter" simulationType="fixed"/>
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-PP]" type="Reaction">
             <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-PP],ParameterGroup=Parameters,Parameter=V5" value="0.746185" type="ReactionParameter" simulationType="fixed"/>
-            <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-PP],ParameterGroup=Parameters,Parameter=KK5" value="2.13481e-06" type="ReactionParameter" simulationType="fixed"/>
+            <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-PP],ParameterGroup=Parameters,Parameter=KK5" value="2.13481e-006" type="ReactionParameter" simulationType="fixed"/>
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-P]" type="Reaction">
             <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=V6" value="617.596" type="ReactionParameter" simulationType="fixed"/>
@@ -823,11 +831,11 @@
             <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=KK8" value="2156.69" type="ReactionParameter" simulationType="fixed"/>
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-PP]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-PP],ParameterGroup=Parameters,Parameter=V9" value="1.29598e-05" type="ReactionParameter" simulationType="fixed"/>
-            <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-PP],ParameterGroup=Parameters,Parameter=KK9" value="754701.0" type="ReactionParameter" simulationType="fixed"/>
+            <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-PP],ParameterGroup=Parameters,Parameter=V9" value="1.29598e-005" type="ReactionParameter" simulationType="fixed"/>
+            <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-PP],ParameterGroup=Parameters,Parameter=KK9" value="754701" type="ReactionParameter" simulationType="fixed"/>
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-P]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=V10" value="0.00545105" type="ReactionParameter" simulationType="fixed"/>
+            <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=V10" value="0.005451050000000001" type="ReactionParameter" simulationType="fixed"/>
             <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=KK10" value="0.00177443" type="ReactionParameter" simulationType="fixed"/>
           </ModelParameterGroup>
         </ModelParameterGroup>
@@ -886,12 +894,17 @@
         <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
       </Method>
     </Task>
-    <Task key="Task_16" name="Scan" type="scan" scheduled="false" updateModel="false">
-      <Report reference="Report_32" target="" append="false" confirmOverwrite="false"/>
+    <Task key="Task_16" name="Scan" type="scan" scheduled="true" updateModel="false">
+      <Report reference="Report_20" target="PEResultsFile.txt" append="0" confirmOverwrite="0"/>
       <Problem>
         <Parameter name="Subtask" type="unsignedInteger" value="5"/>
         <ParameterGroup name="ScanItems">
-          <ParameterGroup name="ScanItem"><Parameter name="Number of steps" type="unsignedInteger" value="1"/><Parameter name="Type" type="unsignedInteger" value="0"/><Parameter name="Object" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP],Reference=InitialConcentration"/></ParameterGroup></ParameterGroup>
+          <ParameterGroup name="ScanItem">
+            <Parameter name="Number of steps" type="unsignedInteger" value="4"/>
+            <Parameter name="Object" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP],Reference=InitialConcentration"/>
+            <Parameter name="Type" type="unsignedInteger" value="0"/>
+          </ParameterGroup>
+        </ParameterGroup>
         <Parameter name="Output in subtask" type="bool" value="0"/>
         <Parameter name="Adjust initial conditions" type="bool" value="0"/>
       </Problem>
@@ -926,27 +939,263 @@
         <Parameter name="Seed" type="unsignedInteger" value="0"/>
       </Method>
     </Task>
-    <Task key="Task_19" name="Parameter Estimation" type="parameterFitting" scheduled="true" updateModel="false">
-      <Report reference="Report_32" target="D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\Examples\KholodenkoExample\Kholodenko_PE_results.txt" append="0" confirmOverwrite="0"/>
+    <Task key="Task_19" name="Parameter Estimation" type="parameterFitting" scheduled="false" updateModel="false">
+      <Report reference="Report_12" target="" append="0" confirmOverwrite="0"/>
       <Problem>
         <Parameter name="Maximize" type="bool" value="0"/>
-        <Parameter name="Randomize Start Values" type="bool" value="false"/>
+        <Parameter name="Randomize Start Values" type="bool" value="1"/>
         <Parameter name="Calculate Statistics" type="bool" value="0"/>
         <ParameterGroup name="OptimizationItemList">
-          <ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK],ParameterGroup=Parameters,Parameter=KK3,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=K1,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-PP],ParameterGroup=Parameters,Parameter=V9,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK],ParameterGroup=Parameters,Parameter=k7,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=k8,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK inactivation],ParameterGroup=Parameters,Parameter=KK2,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK inactivation],ParameterGroup=Parameters,Parameter=V2,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK],ParameterGroup=Parameters,Parameter=k3,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=k4,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-PP],ParameterGroup=Parameters,Parameter=KK5,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-PP],ParameterGroup=Parameters,Parameter=KK9,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=KK6,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=KK4,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=V1,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=Ki,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK],ParameterGroup=Parameters,Parameter=KK7,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=KK10,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=KK8,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-PP],ParameterGroup=Parameters,Parameter=V5,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=V10,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=V6,Reference=Value"/></ParameterGroup></ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1.0"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=KK6,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="51528.9"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1000.0"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=V6,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="617.596"/>
+            <Parameter name="UpperBound" type="cn" value="10000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-PP],ParameterGroup=Parameters,Parameter=KK5,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="2.13481e-006"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=KK10,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="0.00177443"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="0.1"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=V10,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="0.005451050000000001"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-PP],ParameterGroup=Parameters,Parameter=KK9,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="754701"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-PP],ParameterGroup=Parameters,Parameter=V9,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="1.29598e-005"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=K1,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="0.127421"/>
+            <Parameter name="UpperBound" type="cn" value="100"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="0.1"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=Ki,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="1.42825"/>
+            <Parameter name="UpperBound" type="cn" value="100"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1.0"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=V1,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="9.376910000000001"/>
+            <Parameter name="UpperBound" type="cn" value="10000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="10.0"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK inactivation],ParameterGroup=Parameters,Parameter=KK2,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="557.643"/>
+            <Parameter name="UpperBound" type="cn" value="10000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="0.1"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK inactivation],ParameterGroup=Parameters,Parameter=V2,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="2.72164"/>
+            <Parameter name="UpperBound" type="cn" value="100"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK],ParameterGroup=Parameters,Parameter=KK7,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="0.0578695"/>
+            <Parameter name="UpperBound" type="cn" value="100"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1.0"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK],ParameterGroup=Parameters,Parameter=KK3,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="10.9952"/>
+            <Parameter name="UpperBound" type="cn" value="100"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="0.01"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=k4,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="0.0585721"/>
+            <Parameter name="UpperBound" type="cn" value="1"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="10.0"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=KK4,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="80.45569999999999"/>
+            <Parameter name="UpperBound" type="cn" value="1000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="0.01"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=k8,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="0.58306"/>
+            <Parameter name="UpperBound" type="cn" value="10"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1.0"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=KK8,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="2156.69"/>
+            <Parameter name="UpperBound" type="cn" value="100000"/>
+          </ParameterGroup>
+        </ParameterGroup>
         <ParameterGroup name="OptimizationConstraintList">
         </ParameterGroup>
         <Parameter name="Steady-State" type="cn" value="CN=Root,Vector=TaskList[Steady-State]"/>
         <Parameter name="Time-Course" type="cn" value="CN=Root,Vector=TaskList[Time-Course]"/>
         <Parameter name="Create Parameter Sets" type="bool" value="0"/>
         <ParameterGroup name="Experiment Set">
-          <ParameterGroup name="Experiment_0"><Parameter name="Data is Row Oriented" type="bool" value="1"/><Parameter name="Experiment Type" type="unsignedInteger" value="1"/><Parameter name="File Name" type="file" value="NoisyKholodenkoTimeCourseOutput.txt"/><Parameter name="First Row" type="unsignedInteger" value="1"/><Parameter name="Key" type="key" value="Experiment_0"/><Parameter name="Last Row" type="unsignedInteger" value="52"/><Parameter name="Normalize Weights per Experiment" type="bool" value="1"/><Parameter name="Number of Columns" type="unsignedInteger" value="9"/><ParameterGroup name="Object Map"><ParameterGroup name="0"><Parameter name="Role" type="unsignedInteger" value="3"/></ParameterGroup><ParameterGroup name="1"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="2"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="3"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="4"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-P],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="5"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-PP],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="6"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos-P],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="7"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="8"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-P],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup></ParameterGroup><Parameter name="Row containing Names" type="unsignedInteger" value="1"/><Parameter name="Separator" type="string" value="&#9;"/><Parameter name="Weight Method" type="unsignedInteger" value="1"/></ParameterGroup></ParameterGroup>
+          <ParameterGroup name="Experiment_0">
+            <Parameter name="Data is Row Oriented" type="bool" value="1"/>
+            <Parameter name="Experiment Type" type="unsignedInteger" value="1"/>
+            <Parameter name="File Name" type="file" value="NoisyKholodenkoTimeCourseOutput.txt"/>
+            <Parameter name="First Row" type="unsignedInteger" value="1"/>
+            <Parameter name="Key" type="key" value="Experiment_0"/>
+            <Parameter name="Last Row" type="unsignedInteger" value="52"/>
+            <Parameter name="Normalize Weights per Experiment" type="bool" value="1"/>
+            <Parameter name="Number of Columns" type="unsignedInteger" value="9"/>
+            <ParameterGroup name="Object Map">
+              <ParameterGroup name="0">
+                <Parameter name="Role" type="unsignedInteger" value="3"/>
+              </ParameterGroup>
+              <ParameterGroup name="1">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="2">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="3">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="4">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-P],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="5">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-PP],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="6">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos-P],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="7">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="8">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-P],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+            </ParameterGroup>
+            <Parameter name="Row containing Names" type="unsignedInteger" value="1"/>
+            <Parameter name="Separator" type="string" value="&#x09;"/>
+            <Parameter name="Weight Method" type="unsignedInteger" value="1"/>
+          </ParameterGroup>
+        </ParameterGroup>
         <ParameterGroup name="Validation Set">
           <Parameter name="Threshold" type="unsignedInteger" value="5"/>
           <Parameter name="Weight" type="unsignedFloat" value="1"/>
         </ParameterGroup>
       </Problem>
-      <Method name="Current Solution Statistics" type="CurrentSolutionStatistics"/></Task>
+      <Method name="Genetic Algorithm" type="GeneticAlgorithm">
+        <Parameter name="Number of Generations" type="unsignedInteger" value="300"/>
+        <Parameter name="Population Size" type="unsignedInteger" value="150"/>
+        <Parameter name="Random Number Generator" type="unsignedInteger" value="1"/>
+        <Parameter name="Seed" type="unsignedInteger" value="0"/>
+      </Method>
+    </Task>
     <Task key="Task_20" name="Metabolic Control Analysis" type="metabolicControlAnalysis" scheduled="false" updateModel="false">
       <Report reference="Report_13" target="" append="1" confirmOverwrite="1"/>
       <Problem>
@@ -1054,7 +1303,7 @@
     </Task>
   </ListOfTasks>
   <ListOfReports>
-    <Report key="Report_9" name="Steady-State" taskType="steadyState" separator="&#9;" precision="6">
+    <Report key="Report_9" name="Steady-State" taskType="steadyState" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -1062,7 +1311,7 @@
         <Object cn="CN=Root,Vector=TaskList[Steady-State]"/>
       </Footer>
     </Report>
-    <Report key="Report_10" name="Elementary Flux Modes" taskType="fluxMode" separator="&#9;" precision="6">
+    <Report key="Report_10" name="Elementary Flux Modes" taskType="fluxMode" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -1070,55 +1319,55 @@
         <Object cn="CN=Root,Vector=TaskList[Elementary Flux Modes],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_11" name="Optimization" taskType="optimization" separator="&#9;" precision="6">
+    <Report key="Report_11" name="Optimization" taskType="optimization" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
       <Header>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Object=Description"/>
         <Object cn="String=\[Function Evaluations\]"/>
-        <Object cn="Separator=&#9;"/>
+        <Object cn="Separator=&#x09;"/>
         <Object cn="String=\[Best Value\]"/>
-        <Object cn="Separator=&#9;"/>
+        <Object cn="Separator=&#x09;"/>
         <Object cn="String=\[Best Parameters\]"/>
       </Header>
       <Body>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Problem=Optimization,Reference=Function Evaluations"/>
-        <Object cn="Separator=&#9;"/>
+        <Object cn="Separator=&#x09;"/>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Problem=Optimization,Reference=Best Value"/>
-        <Object cn="Separator=&#9;"/>
+        <Object cn="Separator=&#x09;"/>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Problem=Optimization,Reference=Best Parameters"/>
       </Body>
       <Footer>
-        <Object cn="String=&#10;"/>
+        <Object cn="String=&#x0a;"/>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_12" name="Parameter Estimation" taskType="parameterFitting" separator="&#9;" precision="6">
+    <Report key="Report_12" name="Parameter Estimation" taskType="parameterFitting" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
       <Header>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Object=Description"/>
         <Object cn="String=\[Function Evaluations\]"/>
-        <Object cn="Separator=&#9;"/>
+        <Object cn="Separator=&#x09;"/>
         <Object cn="String=\[Best Value\]"/>
-        <Object cn="Separator=&#9;"/>
+        <Object cn="Separator=&#x09;"/>
         <Object cn="String=\[Best Parameters\]"/>
       </Header>
       <Body>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Function Evaluations"/>
-        <Object cn="Separator=&#9;"/>
+        <Object cn="Separator=&#x09;"/>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/>
-        <Object cn="Separator=&#9;"/>
+        <Object cn="Separator=&#x09;"/>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"/>
       </Body>
       <Footer>
-        <Object cn="String=&#10;"/>
+        <Object cn="String=&#x0a;"/>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_13" name="Metabolic Control Analysis" taskType="metabolicControlAnalysis" separator="&#9;" precision="6">
+    <Report key="Report_13" name="Metabolic Control Analysis" taskType="metabolicControlAnalysis" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -1126,11 +1375,11 @@
         <Object cn="CN=Root,Vector=TaskList[Metabolic Control Analysis],Object=Description"/>
       </Header>
       <Footer>
-        <Object cn="String=&#10;"/>
+        <Object cn="String=&#x0a;"/>
         <Object cn="CN=Root,Vector=TaskList[Metabolic Control Analysis],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_14" name="Lyapunov Exponents" taskType="lyapunovExponents" separator="&#9;" precision="6">
+    <Report key="Report_14" name="Lyapunov Exponents" taskType="lyapunovExponents" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -1138,11 +1387,11 @@
         <Object cn="CN=Root,Vector=TaskList[Lyapunov Exponents],Object=Description"/>
       </Header>
       <Footer>
-        <Object cn="String=&#10;"/>
+        <Object cn="String=&#x0a;"/>
         <Object cn="CN=Root,Vector=TaskList[Lyapunov Exponents],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_15" name="Time Scale Separation Analysis" taskType="timeScaleSeparationAnalysis" separator="&#9;" precision="6">
+    <Report key="Report_15" name="Time Scale Separation Analysis" taskType="timeScaleSeparationAnalysis" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -1150,11 +1399,11 @@
         <Object cn="CN=Root,Vector=TaskList[Time Scale Separation Analysis],Object=Description"/>
       </Header>
       <Footer>
-        <Object cn="String=&#10;"/>
+        <Object cn="String=&#x0a;"/>
         <Object cn="CN=Root,Vector=TaskList[Time Scale Separation Analysis],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_16" name="Sensitivities" taskType="sensitivities" separator="&#9;" precision="6">
+    <Report key="Report_16" name="Sensitivities" taskType="sensitivities" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -1162,11 +1411,11 @@
         <Object cn="CN=Root,Vector=TaskList[Sensitivities],Object=Description"/>
       </Header>
       <Footer>
-        <Object cn="String=&#10;"/>
+        <Object cn="String=&#x0a;"/>
         <Object cn="CN=Root,Vector=TaskList[Sensitivities],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_17" name="Linear Noise Approximation" taskType="linearNoiseApproximation" separator="&#9;" precision="6">
+    <Report key="Report_17" name="Linear Noise Approximation" taskType="linearNoiseApproximation" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -1174,11 +1423,11 @@
         <Object cn="CN=Root,Vector=TaskList[Linear Noise Approximation],Object=Description"/>
       </Header>
       <Footer>
-        <Object cn="String=&#10;"/>
+        <Object cn="String=&#x0a;"/>
         <Object cn="CN=Root,Vector=TaskList[Linear Noise Approximation],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_18" name="Time-Course" taskType="unset" separator="&#9;" precision="6">
+    <Report key="Report_18" name="Time-Course" taskType="unset" separator="&#x09;" precision="6">
       <Comment>
       </Comment>
       <Table printTitle="1">
@@ -1193,7 +1442,52 @@
         <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-P],Reference=Concentration"/>
       </Table>
     </Report>
-    <Report taskType="Scan" separator="&#9;" precision="6" key="Report_31" name="profilelikelihood"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP],Reference=InitialConcentration"/><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/></Table></Report><Report taskType="parameterFitting" separator="&#9;" precision="6" key="Report_32" name="parameter_estimation"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-P],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-PP],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos-P],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-P],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK],ParameterGroup=Parameters,Parameter=KK3,Reference=Value"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=K1,Reference=Value"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-PP],ParameterGroup=Parameters,Parameter=V9,Reference=Value"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK],ParameterGroup=Parameters,Parameter=k7,Reference=Value"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=k8,Reference=Value"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK inactivation],ParameterGroup=Parameters,Parameter=KK2,Reference=Value"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK inactivation],ParameterGroup=Parameters,Parameter=V2,Reference=Value"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK],ParameterGroup=Parameters,Parameter=k3,Reference=Value"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=k4,Reference=Value"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-PP],ParameterGroup=Parameters,Parameter=KK5,Reference=Value"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-PP],ParameterGroup=Parameters,Parameter=KK9,Reference=Value"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=KK6,Reference=Value"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=KK4,Reference=Value"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=V1,Reference=Value"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=Ki,Reference=Value"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK],ParameterGroup=Parameters,Parameter=KK7,Reference=Value"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=KK10,Reference=Value"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=KK8,Reference=Value"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-PP],ParameterGroup=Parameters,Parameter=V5,Reference=Value"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=V10,Reference=Value"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=V6,Reference=Value"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=n,Reference=Value"/><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/></Table></Report></ListOfReports>
+    <Report key="Report_19" name="profilelikelihood" taskType="unset" separator="&#x09;" precision="6">
+      <Comment>
+      </Comment>
+      <Table printTitle="1">
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP],Reference=InitialConcentration"/>
+        <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/>
+      </Table>
+    </Report>
+    <Report key="Report_20" name="parameter_estimation" taskType="parameterFitting" separator="&#x09;" precision="6">
+      <Comment>
+      </Comment>
+      <Table printTitle="1">
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP],Reference=InitialConcentration"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2],Reference=InitialConcentration"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos],Reference=InitialConcentration"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-P],Reference=InitialConcentration"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-PP],Reference=InitialConcentration"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos-P],Reference=InitialConcentration"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1],Reference=InitialConcentration"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-P],Reference=InitialConcentration"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK],ParameterGroup=Parameters,Parameter=KK3,Reference=Value"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=K1,Reference=Value"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-PP],ParameterGroup=Parameters,Parameter=V9,Reference=Value"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK],ParameterGroup=Parameters,Parameter=k7,Reference=Value"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=k8,Reference=Value"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK inactivation],ParameterGroup=Parameters,Parameter=KK2,Reference=Value"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK inactivation],ParameterGroup=Parameters,Parameter=V2,Reference=Value"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK],ParameterGroup=Parameters,Parameter=k3,Reference=Value"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=k4,Reference=Value"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-PP],ParameterGroup=Parameters,Parameter=KK5,Reference=Value"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-PP],ParameterGroup=Parameters,Parameter=KK9,Reference=Value"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=KK6,Reference=Value"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=KK4,Reference=Value"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=V1,Reference=Value"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=Ki,Reference=Value"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK],ParameterGroup=Parameters,Parameter=KK7,Reference=Value"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=KK10,Reference=Value"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=KK8,Reference=Value"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-PP],ParameterGroup=Parameters,Parameter=V5,Reference=Value"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=V10,Reference=Value"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=V6,Reference=Value"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=n,Reference=Value"/>
+        <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/>
+      </Table>
+    </Report>
+  </ListOfReports>
   <GUI>
   </GUI>
   <SBMLReference file="Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade.xml">

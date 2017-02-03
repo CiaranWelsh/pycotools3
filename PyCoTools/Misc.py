@@ -17,9 +17,6 @@ class RemoveNonAscii():
                 self.non_ascii_str=self.non_ascii_str.replace(i,'_')
         return self.non_ascii_str
                 
-        
-
-
 
 
 
