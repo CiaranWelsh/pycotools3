@@ -45,7 +45,7 @@ import logging
 import os
 import subprocess
 import re
-import PEAnalysis,Errors
+import PEAnalysis,Errors,Misc
 import matplotlib
 import matplotlib.pyplot as plt
 from textwrap import wrap
@@ -3750,7 +3750,7 @@ class InsertParameters():
         if num!=1:
             raise Errors.InputError('You need to supply exactly one of ParameterDict,ParameterPath or df keyord argument. You cannot give two or three.')
         
-        self.check_parameter_consistancy()
+#        self.check_parameter_consistancy()
         self.parameters=self.get_parameters()   
         self.parameters= self.replace_gl_and_lt()
         self.insert_all()
@@ -3762,11 +3762,45 @@ class InsertParameters():
         elif self.kwargs.get('Save')=='overwrite':
             self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
         return self.copasiML
+
+
+    def check_parameter_consistancy_deprecated(self):
+        '''
+        raise an error if no parameters in the PE header match 
+        parameters in model
+        '''
+        model_parameter_names= set(self.GMQ.get_all_model_variables().keys())
+        input_parameter_names= set(list(self.get_parameters().keys()))
+        intersection=list( model_parameter_names.intersection(input_parameter_names))
+        if intersection==[]:
+            raise Errors.InputError('''The parameters in your parameter estimation data are not in your model.\
+Please check the headers of your PE data are consistent with your model parameter names.''' )
+            
+    def check_parameter_consistancy(self,df):
+        '''
+        raise an error if no parameters in the PE header match 
+        parameters in model
         
-        
+        args:
+            df:
+                containing parameters to compare with parameters
+                in the model
+        '''
+        model_parameter_names= set(self.GMQ.get_all_model_variables().keys())
+        input_parameter_names= set(list(df.keys()))
+        intersection=list( model_parameter_names.intersection(input_parameter_names))
+        if intersection==[]:
+            raise Errors.InputError('''The parameters in your parameter estimation data are not in your model.\
+Please check the headers of your PE data are consistent with your model parameter names.''' )            
+            
     def get_parameters(self):
         '''
-        Get parameters depending on the type of input. Converge on a pandas dataframe. Columns = parameters, rows = parameter sets
+        Get parameters depending on the type of input. 
+        Converge on a pandas dataframe. 
+        Columns = parameters, rows = parameter sets
+        
+        Use check parameter consistency to see
+        whether headers have been pruned or not. If not try pruning them
         '''
         if self.kwargs.get('ParameterDict')!=None:
             assert isinstance(self.kwargs.get('ParameterDict'),dict),'The ParameterDict argument takes a Python dictionary'
@@ -3781,7 +3815,13 @@ class InsertParameters():
             else: 
                 return PED.data.iloc[self.kwargs.get('Index')]
         if self.kwargs.get('DF') is not None:
-            return pandas.DataFrame(self.kwargs.get('DF').iloc[self.kwargs.get('Index')]).transpose()
+            df= pandas.DataFrame(self.kwargs.get('DF').iloc[self.kwargs.get('Index')]).transpose()
+        try:
+            self.check_parameter_consistancy(df)
+        except Errors.InputError:
+            df=PruneCopasiHeaders(df).prune()
+            self.check_parameter_consistancy(df)
+        return df
 
     def insert_locals(self):
         '''
@@ -3859,20 +3899,13 @@ class InsertParameters():
                                 continue
         return self.copasiML
         
-    def get_current_parameters(self):
+    def get_current_parameters_deprecated(self):
+        '''
+        Deprecated. Just use self.GMQ.get_all_model_variables()
+        '''
         return self.GMQ.get_all_model_variables()
         
-    def check_parameter_consistancy(self):
-        '''
-        raise an error if no parameters in the PE header match 
-        parameters in model
-        '''
-        model_parameter_names= set(self.get_current_parameters().keys())
-        input_parameter_names= set(list(self.get_parameters().keys()))
-        intersection=list( model_parameter_names.intersection(input_parameter_names))
-        if intersection==[]:
-            raise Errors.InputError('''The parameters in your parameter estimation data are not in your model.\
-Please check the headers of your PE data are consistent with your model parameter names.''' )
+
 
     def replace_gl_and_lt(self):
         '''
@@ -3907,16 +3940,18 @@ class PruneCopasiHeaders():
     model component as it is in the model. 
     
     Args:
-        for_pruning: the full path to the file for which you want to prune headers
-        or equally the dataframe 
+        for_pruning: either a full path to the file you want to prune or 
+        a pandas dataframe
     
     kwargs:
         replace:
             'true' or 'false', if 'true' will overwrite the filename. If 'false'
-            write new file to new_path
+            write new file to new_path. If for_pruning a dataframe this argument is
+            ignored. 
             
         new_path: 
-            When replace='false 'new_path' is the output filename
+            When replace='false 'new_path' is the output filename. Ignored when 
+            for_pruning is a pandas dataframe.
         
 
     '''
@@ -3926,12 +3961,13 @@ class PruneCopasiHeaders():
         
 #        assert self.mode in ['singlePE','multiPE,'time_course']
         
-        assert replace in ['true','false']
+        if replace not in ['true','false']:
+            raise Errors.InputError('\'replace\' keyword should be either \'true\' or \'false\' ')
 
             
         self.from_file=False
         self.from_df=False
-        if isinstance(self.for_pruning,str):
+        if isinstance(self.for_pruning,str) and os.path.isfile(self.for_pruning):
             self.from_file=True
         elif isinstance(for_pruning,pandas.core.frame.DataFrame):
             self.from_df=True

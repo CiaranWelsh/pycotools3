@@ -100,6 +100,7 @@ class ParsePEData():
 #        self.data=self.prune_headers()
         self.data=self.filter_constants(self.data)
         self.data=self.remove_infinite_RSS()
+        self.data=pycopi.PruneCopasiHeaders(self.data).prune()
         try:
             self.log_data=self.log10_conversion()
         except AttributeError:
