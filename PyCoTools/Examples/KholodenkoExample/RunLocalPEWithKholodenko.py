@@ -82,7 +82,7 @@ if __name__=='__main__':
         Run on windows machine
         '''
         mode='true'
-        for i in range(int(data.shape[0]*0.1)):
+        for i in range(int(data.shape[0]*0.025)):
             print 'running index {} with starting RSS of {}'.format(i,data.iloc[i]['RSS'])
             if os.path.isdir(K.local_PEData_dir)!=True:
                 os.mkdir(K.local_PEData_dir)

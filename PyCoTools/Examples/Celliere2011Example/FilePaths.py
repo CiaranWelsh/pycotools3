@@ -22,7 +22,7 @@ class Celliere2011Example():
         if sys.platform=='win32':
             self.current_directory='D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\Examples\Celliere2011Example'
         else:
-            self.current_directory=r'/sharedlustre/users/b3053674/2017/Jan/Celliere2011Example'
+            self.current_directory=r'//sharedlustre/users/b3053674/2017/Jan/Celliere2011Example'
         
         ## Kholodenko filename
         self.copasi_filename=r'Celliere2011.cps'
@@ -39,3 +39,8 @@ class Celliere2011Example():
         ## Full path to file containing secondary local parameter estimation (starting with best values from self.PEData_dir)
 #        self.local_PEData_file=os.path.join(self.current_directory,'LocalPEData.txt')
         self.local_PEData_dir=os.path.join(self.current_directory,'LocalPEDataResults')
+
+
+
+
+

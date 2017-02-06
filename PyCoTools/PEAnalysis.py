@@ -1015,6 +1015,7 @@ class EvaluateOptimizationPerformance():
         
         #Other classes
         self.PED=ParsePEData(self.results_path)
+        
         #create a directory and change to it
         self.results_dir=os.path.join(os.path.dirname(self.results_path),'OptimizationPerformanceGraph')
         if os.path.isdir(self.results_dir)!=True:
@@ -1029,12 +1030,16 @@ class EvaluateOptimizationPerformance():
         os.chdir(os.path.dirname(self.results_path))
                              
     def plot_rss(self):
+
         if self.kwargs.get('Log10')=='true':
-            rss=self.PED.log_data['RSS']
+            data=TruncateData(self.PED.log_data,TruncateMode=self.kwargs['TruncateMode'],X=self.kwargs['X']).data
+            rss=data['RSS']
             iterations=numpy.log10(range(len(rss)))
         else:
-            rss= self.PED.data['RSS']
+            data=TruncateData(self.PED.data,TruncateMode=self.kwargs['TruncateMode'],X=self.kwargs['X']).data
+            rss= data['RSS']
             iterations=range(len(rss))
+
             
         plt.figure()
         plt.plot(iterations,rss)
@@ -1303,6 +1308,7 @@ class PlotPEData():
         df= pandas.read_csv( self.PE_result_file,sep='\t')
         df=ParsePEData(self.PE_result_file)
         df= df.data
+        print self.PE_result_file
         return pandas.DataFrame(df.iloc[-1]).transpose()
     
     def insert_parameters(self):
