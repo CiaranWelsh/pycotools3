@@ -38,7 +38,7 @@ print 'best estimated parameters:\n',PEData.data.iloc[0].sort_index()
 Visualize plot of likelihood Vs iteration
 '''
 PyCoTools.PEAnalysis.EvaluateOptimizationPerformance(PEData_path,SaveFig='true')
-
+#
 '''
 Insert the parameters and simulate a parameter estimation 
 with current solution statistics as 'Method' keyword, plotting the results

@@ -6,6 +6,7 @@ import pandas
 import numpy
 import sys
 import FilePaths
+import subprocess
 
 K=FilePaths.KholodenkoExample()
 
@@ -15,7 +16,7 @@ print param.data.iloc[0].sort_index()
 
 PyCoTools.pydentify2.ProfileLikelihood(K.kholodenko_model, #full path to the model
                                        ParameterPath=K.local_PEData_dir, #full path to the PEData
-                                       Index=[0,1], #index of PE set for profiling. (best is 0)
+                                       Index=range(10), #index of PE set for profiling. (best is 0)
                                        NumberOfSteps=100, #resolution of profile likelihood 
                                        Run='SGE',#Run method, 
                                        
@@ -28,11 +29,8 @@ PyCoTools.pydentify2.ProfileLikelihood(K.kholodenko_model, #full path to the mod
 
 
 
-
-
-
-
-
+copasiML=PyCoTools.pycopi.CopasiMLParser( K.kholodenko_model)
+print copasiML.copasiML
 
 
 

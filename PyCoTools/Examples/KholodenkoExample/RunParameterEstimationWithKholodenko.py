@@ -71,7 +71,7 @@ allows for extension code to support other systems.
 PyCoTools.pycopi.Scan(K.kholodenko_model,ScanType='repeat',
                       ReportName=K.PEData_file, 
                       ReportType='parameter_estimation',
-                      NumberOfSteps=10,Run='false')
+                      NumberOfSteps=4,Run='false')
 
 
 

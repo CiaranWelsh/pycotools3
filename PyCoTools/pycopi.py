@@ -2028,7 +2028,7 @@ class TimeCourse(object):
                     os.chdir(os.path.dirname(self.copasi_file))
                     save_plot()
                     
-class PhaseSpacePlots(TimeCourse):
+class PhaseSpace(TimeCourse):
     '''
     Inherits from TimeCourse
     
@@ -3107,6 +3107,9 @@ class ParameterEstimation():
             copasi_file=self.copasi_file[:-4]+'_temp.cps'
             shutil.copy(self.copasi_file,copasi_file)
 #        cps_copy=shutil.copy
+        print copasi_file
+        print self.experiment_files
+        print self.kwargs.get('ReportName')
         self.PL=PEAnalysis.PlotPEData(copasi_file,self.experiment_files,self.kwargs.get('ReportName'),
                         **self.PlotPEDataKwargs)
         if self.kwargs.get('UpdateModel')=='false':

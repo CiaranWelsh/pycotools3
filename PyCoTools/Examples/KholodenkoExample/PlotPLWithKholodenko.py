@@ -10,19 +10,21 @@ import FilePaths
 
 K=FilePaths.KholodenkoExample()
 
+data= PyCoTools.PEAnalysis.ParsePEData(K.local_PEData_dir,
+                                 UsePickle='true',
+                                 OverwritePickle='true').data
+
+print data.iloc[0]
+
 PyCoTools.pydentify2.Plot(K.kholodenko_model, #full path to the model
                            ParameterPath=K.local_PEData_dir, #full path to the PEData
-                           Index=[0,1],
+                           Index=range(10),
                            Log10='true',
-                           SaveFig='true')
-#                           RSS=618.648)
-                           
-
-
-
-
-
-
+                           SaveFig='true',
+                           MultiPlot='true',
+                           UsePickle='true',
+                           OverwritePickle='false')
+#                           
 
 
 
