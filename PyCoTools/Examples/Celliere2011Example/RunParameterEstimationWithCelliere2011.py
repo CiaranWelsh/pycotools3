@@ -11,7 +11,7 @@ import numpy
 
 import FilePaths
 
-## Instantiate class contianing file paths for Kholodenko example
+## Instantiate class contianing file paths for Celliere2011` example
 C=FilePaths.Celliere2011Example()
 
 ## Set up a parameter estimation 
@@ -21,7 +21,7 @@ with chosen keyword arguments. define the method variables within the PE class u
 '''
 
 PE= PyCoTools.pycopi.ParameterEstimation(C.celliere2011_model, #model
-                                           C.timecourse_report, #experimental data
+                                           C.noisy_timecourse_report, #experimental data
                                            Method='GeneticAlgorithm',#use a quick global algorithm 
                                            NumberOfGenerations=300, #set Generation Number and population size
                                            PopulationSize=150)
