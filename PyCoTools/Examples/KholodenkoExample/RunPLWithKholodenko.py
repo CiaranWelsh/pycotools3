@@ -16,7 +16,7 @@ print param.data.iloc[0].sort_index()
 
 PyCoTools.pydentify2.ProfileLikelihood(K.kholodenko_model, #full path to the model
                                        ParameterPath=K.local_PEData_dir, #full path to the PEData
-                                       Index=range(10), #index of PE set for profiling. (best is 0)
+                                       Index=range(5), #index of PE set for profiling. (best is 0)
                                        NumberOfSteps=100, #resolution of profile likelihood 
                                        Run='SGE',#Run method, 
                                        

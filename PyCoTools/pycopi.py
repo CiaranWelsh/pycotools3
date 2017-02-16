@@ -1600,7 +1600,7 @@ class TimeCourse(object):
         LineColor:
             Passed to Matplotlib.pyplot.plot. Color of the line
 
-        DotColor:
+        MarkerColor:
             Passed to Matplotlib.pyplot.plot. color of the dots
 
         LineStyle:
@@ -1654,7 +1654,7 @@ class TimeCourse(object):
                  'Plot':'false'      ,              
                  'LineWidth':2,
                  'LineColor':'k',
-                 'DotColor':'r',
+                 'MarkerColor':'r',
                  'LineStyle':'-',
                  'MarkerStyle':'o',
                  'AxisSize':15,
@@ -1797,7 +1797,7 @@ class TimeCourse(object):
                    'k': 'black',
                    'w': 'white'}
         assert self.kwargs.get('LineColor') in color_dct.keys()+color_dct.values()
-        assert self.kwargs.get('DotColor') in color_dct.keys()+color_dct.values()
+        assert self.kwargs.get('MarkerColor') in color_dct.keys()+color_dct.values()
                  
                  
         self.report_options={}#report variables
@@ -1969,8 +1969,8 @@ class TimeCourse(object):
                 ax = plt.subplot(111)
                 plt.plot(self.data['Time'],self.data[i],
                          linewidth=self.kwargs.get('LineWidth'),color=self.kwargs.get('LineColor'),
-                         linestyle=self.kwargs.get('LineStyle'),marker='o',markerfacecolor=self.kwargs.get('DotColor'),markersize=self.kwargs.get('MarkerSize'))
-#                plt.plot(self.data['Time'],self.data[i],color=self.kwargs.get('DotColor'),marker=self.kwargs.get('MarkerStyle'))
+                         linestyle=self.kwargs.get('LineStyle'),marker='o',markerfacecolor=self.kwargs.get('MarkerColor'),markersize=self.kwargs.get('MarkerSize'))
+#                plt.plot(self.data['Time'],self.data[i],color=self.kwargs.get('MarkerColor'),marker=self.kwargs.get('MarkerStyle'))
 
                 
                 #plot labels
@@ -2086,7 +2086,7 @@ class PhaseSpace(TimeCourse):
         plt.plot(x_data,y_data,linewidth=self.kwargs.get('LineWidth'),
                     color=self.kwargs.get('LineColor'),
                     linestyle=self.kwargs.get('LineStyle'),
-                    marker='o',markerfacecolor=self.kwargs.get('DotColor'),
+                    marker='o',markerfacecolor=self.kwargs.get('MarkerColor'),
                     markersize=self.kwargs.get('MarkerSize'))
                     
         plt.title('\n'.join(wrap('{} Vs {} Phase Plot'.format(x,y),self.kwargs.get('TitleWrapSize'))),fontsize=self.kwargs.get('FontSize'))
