@@ -3574,7 +3574,8 @@ class Run():
                    
         
                   
-        assert self.kwargs.get('Task') in tasks
+        if  self.kwargs.get('Task') not in tasks:
+            raise Errors.InputError('{} is not a valid task. Choose from {}'.format(self.kwargs.get('Task'),tasks))
         if self.kwargs.get('MaxTime')!=None:
             if isinstance(self.kwargs.get('MaxTime'),(float,int))!=True:
                 raise TypeError('MaxTime argument must be float or int')
@@ -3587,29 +3588,28 @@ class Run():
             
         elif self.kwargs.get('Task')=='steady_state':
             self.kwargs['Task']='steadystate'        
-                       
+        
+        
         self.copasiML=self.set_task()
         self.save()
         if self.kwargs.get('Mode')=='true':
             self.run()
         elif self.kwargs.get('Mode')=='SGE':
             self.submit_copasi_job_SGE()
+        elif self.kwargs.get('Mode')=='multiprocess':
+            self.multi_run()
             
             
 
     def multi_run(self):
         def run(x):
             subprocess.Popen('CopasiSE "{}"'.format(x))
+        if isinstance(self.copasi_file,list):
+            for i in self.copasi_file:
+                Process(run(i))
         else:
-            pool=multiprocessing.Pool(self.kwargs.get('NumProcesses'))
-            for i in self.cps_dct.keys():
-                for j in self.cps_dct[i]:
-                    p=[k.name() for k in psutil.process_iter()]
-                    count= Counter(p)['CopasiSE.exe']
-                    if count>self.kwargs.get('NumProcesses'):
-                        sleep(self.kwargs.get('SleepTime'))
-                    pool.Process(run(self.cps_dct[i][j]))
-            return True
+            Process(run(self.copasi_file))
+        return 0
 
 
         
@@ -3621,10 +3621,6 @@ class Run():
                 
         return self.copasiML
         
-#    def run(self):
-#        subprocess.check_call('CopasiSE {}'.format(self.copasi_file))
-        
-           
     def run(self):
         '''
         Process the copasi file using CopasiSE
