@@ -62,7 +62,8 @@ class ParsePEData():
             Allow one to overwrite the pickle file automatically
             produced for speed. Default='false'
     '''
-    def __init__(self,results_path,UsePickle='false',OverwritePickle='true',RemoveInfiniteRSS='false'):
+    def __init__(self,results_path,UsePickle='false',OverwritePickle='true',
+                 RemoveInfiniteRSS='false',PicklePath=None):
         #input argument variables
         self.results_path=results_path #either file or folder
         self.RemoveInfiniteRSS=RemoveInfiniteRSS
@@ -71,8 +72,12 @@ class ParsePEData():
         #change directory
         self.cwd=os.path.dirname(self.results_path)
         os.chdir(self.cwd)
-        self.pickle_path=os.path.join(self.cwd,'PEData.pickle')
-        self.pickle_path_log=os.path.join(self.cwd,'PEData_log.pickle')
+        self.pickle_path=PicklePath
+        if self.pickle_path==None:
+            self.pickle_path=os.path.join(self.cwd,'PEData.pickle')
+            self.pickle_path_log=os.path.join(self.cwd,'PEData_log.pickle')
+        else:
+            self.pickle_path_log=os.path.join(os.path.dirname(self.pickle_path),os.path.splitext(self.pickle_path)[0][:6]+'_log.pickle')
 #        self.FromPickle=True
         self.UsePickle=UsePickle
         self.OverwritePickle=OverwritePickle
@@ -91,7 +96,7 @@ class ParsePEData():
 
         if self.RemoveInfiniteRSS not in ['true','false']:
             raise Errors.InputError('The argument OverwritePickle only accepts \'true\' or \'false\'')            
-        #main method of class
+        
         self.data=self.read_data()
         if self.data.empty==True:
             raise Errors.InputError('DataFrame is empty. Your PE data has not been read.')
@@ -161,14 +166,15 @@ class ParsePEData():
     def read_file(self):
         assert self.mode=='file','mode not file'
         _,ext=os.path.splitext(self.results_path)
-        assert ext in ['.txt','.xlsx','.xls','.csv'],'parameter file is not .txt, .xlsx, .xls, .csv'
+        assert ext in ['.txt','.xlsx','.xls','.csv','.pickle'],'parameter file is not .pickle, .txt, .xlsx, .xls, .csv'
         if ext=='.txt':
             return pandas.read_csv(self.results_path,sep='\t')
-        elif ext=='xlsx' or 'xls':
+        elif ext=='xlsx' or ext=='xls':
             return pandas.read_excel(self.results_path)
         elif ext=='.csv':
             return pandas.read_csv(self.results_path)
-
+        elif ext=='.pickle':
+            return pandas.read_pickle(self.results_path)
             
     def read_pickle(self):
         if os.path.isfile(self.pickle_path)!=True:
@@ -550,9 +556,8 @@ class PlotScatters():
         x_data=self.truncated_data[x_specie]
         y_data=self.truncated_data[y_specie]
         plt.figure()
-        plt.scatter(x_data,y_data)
-
-
+        plt.scatter(x_data,y_data,c=self.truncated_data['RSS'],cmap='hsv')
+        plt.colorbar()
 
         #pretty stuff
         ax=plt.subplot(1,1,1)
@@ -587,6 +592,8 @@ class PlotScatters():
                 plt.savefig('{}_vs_{}'.format(x_specie,y_specie)+'.jpeg',format='jpeg',bbox_inches='tight',dpi=self.kwargs.get('DPI'))
         if self.kwargs.get('Show')=='true':
             plt.show()
+        else:
+            plt.close()
 #            
             
     def binomial_coefficient(self,n,k):
@@ -598,10 +605,13 @@ class PlotScatters():
         
     def get_combinations(self):
         comb=itertools.combinations(self.truncated_data.keys(),2)
-        comb=[i for i in comb]
+#        comb=[i for i in comb]
         return comb
         
     def plot_scatters(self):
+        '''
+        
+        '''
         comb=self.get_combinations()
         for X,y in comb:
             self.plot1_scatter(X,y,self.truncated_data)
@@ -989,7 +999,7 @@ class EvaluateOptimizationPerformance():
         self.results_path=results_path
         #keywrod arguments
         options={#parse data options
-                 'TruncateMode':'below_x', #either 'below_x' or 'percent' for method of truncation. 
+                 'TruncateMode':'percent', #either 'below_x' or 'percent' for method of truncation. 
                  'Log10':'true',
                  #truncate data options
                  'X':100,           #if below_x: this is the X boundary. If percent: this is the percent of data to keep

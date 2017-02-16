@@ -121,10 +121,11 @@ if __name__=='__main__':
 
 
 
+f=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\temp\kholodenkoTemp\attempt1\SecondIteration\LocalPEDataResults'
+d=PyCoTools.PEAnalysis.ParsePEData(f)
 
-
-
-
+f=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\Examples\KholodenkoExample\KholodenkoExamplePEDataLocal.pickle'
+PyCoTools.PEAnalysis.EvaluateOptimizationPerformance(K.PEData_pickle_local,Log10='false')
 
 
 
