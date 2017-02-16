@@ -28,10 +28,10 @@ PEData=PyCoTools.PEAnalysis.ParsePEData(local_PEData_dir)
 ## Print the best parameters from your parameter estimations to console
 print 'best estimated parameters:\n',PEData.data.iloc[0].sort_index()
 
-PyCoTools.PEAnalysis.EvaluateOptimizationPerformance(local_PEData_dir,SaveFig='true',Log10='true')
+#PyCoTools.PEAnalysis.EvaluateOptimizationPerformance(local_PEData_dir,SaveFig='true',Log10='true')
 
-#PyCoTools.pycopi.InsertParameters(K.kholodenko_model,ParameterPath=local_PEData_dir,Index=0)
-#
+PyCoTools.pycopi.InsertParameters(K.kholodenko_model,ParameterPath=local_PEData_dir,Index=0)
+
 #PE=PyCoTools.pycopi.ParameterEstimation(K.kholodenko_model,K.noisy_timecourse_report,
 #                                        Method='CurrentSolutionStatistics',
 #                                        Plot='true',
