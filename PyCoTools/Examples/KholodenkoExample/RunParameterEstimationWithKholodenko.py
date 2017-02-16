@@ -22,7 +22,7 @@ with chosen keyword arguments. define the method variables within the PE class u
 
 PE= PyCoTools.pycopi.ParameterEstimation(K.kholodenko_model, #model
                                            K.noisy_timecourse_report, #experimental data
-                                           Method='ParticleSwarm',#use a quick global algorithm 
+                                           Method='GeneticAlgorithm',#use a quick global algorithm 
                                            NumberOfGenerations=300, #set Generation Number and population size
                                            PopulationSize=150,
                                            SwarmSize=200,
@@ -79,6 +79,7 @@ PyCoTools.pycopi.Scan(K.kholodenko_model,ScanType='repeat',
 
 
 
+from shutil import copy
 def copy_copasi(copasi_file,n):
     '''
     run a copasi file n times on the same computer 
@@ -90,32 +91,39 @@ def copy_copasi(copasi_file,n):
         copy(copasi_file,new_cps)
         sub_copasi_files_dct[i]= new_cps
     return sub_copasi_files_dct
-            
-        
-            
+
 def enumerate_PE_output(output_filename,n):
     '''
-    
+    make some more filenames for our analysis
     '''
     dct={}
     dire,fle=os.path.split(output_filename)
+    output_dir=os.path.join(dire,'Results')
+    if os.path.isdir(output_dir)!=True:
+        os.mkdir(output_dir)
+    
     for i in range(n):
-        new_file=os.path.join(dire,fle[:-4]+'{}.txt'.format(str(i)))
+        new_file=os.path.join(output_dir,fle[:-4]+'{}.txt'.format(str(i)))
         dct[i]=new_file
     return dct
 
+n=3
+copasi_files=copy_copasi(K.kholodenko_model,n)
+result_files=enumerate_PE_output(K.PEData_file,n)
+
         
 
-
-
-
-print enumerate_PE_output(K.PEData_file,3)
-
+#
 
 
 
 
-
+for i in range(n):
+    PyCoTools.pycopi.Scan(copasi_files[i],ScanType='repeat',
+                          ReportName=result_files[i], 
+                          ReportType='parameter_estimation',
+                          NumberOfSteps=3,Run='false')
+    PyCoTools.pycopi.Run(copasi_files[i],Mode='multiprocess',Task='scan')
 
 
 
