@@ -37,7 +37,7 @@ import  setuptools
 #version
 MAJOR = 3
 MINOR = 1
-MICRO = 2
+MICRO = 3
 #=======
 __version__ = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
