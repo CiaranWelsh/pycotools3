@@ -115,24 +115,31 @@ result_files=enumerate_PE_output(K.PEData_file,n)
 
 #
 
+#import matplotlib.pyplot as plt
+#import numpy as np
+#
+## Generate data...
+#x = np.random.random(10)
+#y = np.random.random(10)
+#print x,y
+#plt.scatter(x, y, c=y, s=50, cmap='hsv')
+#plt.show()
 
 
+#for i in range(n):
+#    PyCoTools.pycopi.Scan(copasi_files[i],ScanType='repeat',
+#                          ReportName=result_files[i], 
+#                          ReportType='parameter_estimation',
+#                          NumberOfSteps=3,Run='false')
+#    PyCoTools.pycopi.Run(copasi_files[i],Mode='multiprocess',Task='scan')
+#
+#
 
-for i in range(n):
-    PyCoTools.pycopi.Scan(copasi_files[i],ScanType='repeat',
-                          ReportName=result_files[i], 
-                          ReportType='parameter_estimation',
-                          NumberOfSteps=3,Run='false')
-    PyCoTools.pycopi.Run(copasi_files[i],Mode='multiprocess',Task='scan')
-
-
-
-
-
-
-
-
-
+#
+f=r"D:\MPhil\Python\My_Python_Modules\Modelling_Tools\temp\kholodenkoTemp\attempt1\SecondIteration\PEResults"
+#PyCoTools.PEAnalysis.ParsePEData(f)
+#print pandas.read_pickle(K.PEData_pickle)
+PyCoTools.PEAnalysis.PlotScatters(f,Log10='true')
 
 
 
