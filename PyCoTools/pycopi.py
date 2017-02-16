@@ -51,7 +51,7 @@ import matplotlib.pyplot as plt
 from textwrap import wrap
 import string
 import itertools
-
+from  multiprocessing import Process
 
 
 
@@ -3538,7 +3538,7 @@ class Run():
             on 'overwrite', the default. 
             
         Mode:
-            'true', 'false' or 'SGE'. Default is 'true' but can be turned off if you 
+            'true', 'false','multiprocess', or 'SGE'. Default is 'true' but can be turned off if you 
             want to uncheck all executable boxes then check the Task executable
             
         MaxTime:
@@ -3586,7 +3586,8 @@ class Run():
             self.kwargs['Task']='parameterfitting'        
             
         elif self.kwargs.get('Task')=='steady_state':
-            self.kwargs['Task']='steadystate'           
+            self.kwargs['Task']='steadystate'        
+                       
         self.copasiML=self.set_task()
         self.save()
         if self.kwargs.get('Mode')=='true':
@@ -3594,6 +3595,22 @@ class Run():
         elif self.kwargs.get('Mode')=='SGE':
             self.submit_copasi_job_SGE()
             
+            
+
+    def multi_run(self):
+        def run(x):
+            subprocess.Popen('CopasiSE "{}"'.format(x))
+        else:
+            pool=multiprocessing.Pool(self.kwargs.get('NumProcesses'))
+            for i in self.cps_dct.keys():
+                for j in self.cps_dct[i]:
+                    p=[k.name() for k in psutil.process_iter()]
+                    count= Counter(p)['CopasiSE.exe']
+                    if count>self.kwargs.get('NumProcesses'):
+                        sleep(self.kwargs.get('SleepTime'))
+                    pool.Process(run(self.cps_dct[i][j]))
+            return True
+
 
         
     def set_task(self):

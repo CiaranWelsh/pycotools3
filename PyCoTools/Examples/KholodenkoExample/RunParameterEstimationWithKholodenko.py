@@ -8,7 +8,7 @@ import PyCoTools
 import os
 import pandas
 import numpy
-
+from shutil import copy
 import FilePaths
 
 ## Instantiate class contianing file paths for Kholodenko example
@@ -79,14 +79,37 @@ PyCoTools.pycopi.Scan(K.kholodenko_model,ScanType='repeat',
 
 
 
+def copy_copasi(copasi_file,n):
+    '''
+    run a copasi file n times on the same computer 
+    '''
+    sub_copasi_files_dct={}
+    copasi_path,copasi_filename=os.path.split(copasi_file)
+    for i in range(n):
+        new_cps=os.path.join(copasi_path,copasi_filename[:-4]+'{}.cps'.format(str(i)))
+        copy(copasi_file,new_cps)
+        sub_copasi_files_dct[i]= new_cps
+    return sub_copasi_files_dct
+            
+        
+            
+def enumerate_PE_output(output_filename,n):
+    '''
+    
+    '''
+    dct={}
+    dire,fle=os.path.split(output_filename)
+    for i in range(n):
+        new_file=os.path.join(dire,fle[:-4]+'{}.txt'.format(str(i)))
+        dct[i]=new_file
+    return dct
+
+        
 
 
 
 
-
-
-
-
+print enumerate_PE_output(K.PEData_file,3)
 
 
 
