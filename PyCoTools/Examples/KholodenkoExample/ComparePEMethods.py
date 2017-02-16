@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 """
+Created on Mon Feb 06 17:23:12 2017
+
+@author: b3053674
+"""
+
+# -*- coding: utf-8 -*-
+"""
 Created on Wed Feb 01 15:19:52 2017
 
 @author: b3053674

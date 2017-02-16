@@ -22,9 +22,12 @@ with chosen keyword arguments. define the method variables within the PE class u
 
 PE= PyCoTools.pycopi.ParameterEstimation(K.kholodenko_model, #model
                                            K.noisy_timecourse_report, #experimental data
-                                           Method='GeneticAlgorithm',#use a quick global algorithm 
+                                           Method='ParticleSwarm',#use a quick global algorithm 
                                            NumberOfGenerations=300, #set Generation Number and population size
-                                           PopulationSize=150)
+                                           PopulationSize=150,
+                                           SwarmSize=200,
+                                           IterationLimit=3000,
+                                           )
 #                                           Plot='true',SaveFig='true') ## Optionally use to get experimental Vs simualted graphs
 '''
 Then write a template file. This contains all your model variables. 
@@ -36,7 +39,7 @@ In this example I've removed the initial concentration varibles from the estimat
 
 Comment and uncomment the below lines of code as you need
 '''
-## PE.write_item_template()
+#PE.write_item_template()
 
 
 '''
@@ -71,7 +74,7 @@ allows for extension code to support other systems.
 PyCoTools.pycopi.Scan(K.kholodenko_model,ScanType='repeat',
                       ReportName=K.PEData_file, 
                       ReportType='parameter_estimation',
-                      NumberOfSteps=4,Run='false')
+                      NumberOfSteps=2,Run='false')
 
 
 

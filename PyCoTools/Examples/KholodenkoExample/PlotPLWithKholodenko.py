@@ -18,7 +18,7 @@ print data.iloc[0]
 
 PyCoTools.pydentify2.Plot(K.kholodenko_model, #full path to the model
                            ParameterPath=K.local_PEData_dir, #full path to the PEData
-                           Index=range(10),
+                           Index=range(3),
                            Log10='true',
                            SaveFig='true',
                            MultiPlot='true',
