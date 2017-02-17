@@ -107,9 +107,9 @@ def enumerate_PE_output(output_filename,n):
         dct[i]=new_file
     return dct
 
-n=3
-copasi_files=copy_copasi(K.kholodenko_model,n)
-result_files=enumerate_PE_output(K.PEData_file,n)
+#n=3
+#copasi_files=copy_copasi(K.kholodenko_model,n)
+#result_files=enumerate_PE_output(K.PEData_file,n)
 
         
 
@@ -136,10 +136,12 @@ result_files=enumerate_PE_output(K.PEData_file,n)
 #
 
 #
-f=r"D:\MPhil\Python\My_Python_Modules\Modelling_Tools\temp\kholodenkoTemp\attempt1\SecondIteration\PEResults"
+#f=r"D:\MPhil\Python\My_Python_Modules\Modelling_Tools\temp\kholodenkoTemp\attempt1\SecondIteration\PEResults"
 #PyCoTools.PEAnalysis.ParsePEData(f)
 #print pandas.read_pickle(K.PEData_pickle)
-PyCoTools.PEAnalysis.PlotScatters(f,Log10='true')
+f=r"D:\MPhil\Python\My_Python_Modules\Modelling_Tools\temp\kholodenkoTemp\attempt1\ThirdIteration\2GlobalPEData.pickle"
+PyCoTools.PEAnalysis.PlotHistogram(f,Log10='true')
+#PyCoTools.PEAnalysis.PlotScatters(f,Log10='true')
 
 
 
