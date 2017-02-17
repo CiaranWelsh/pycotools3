@@ -136,12 +136,23 @@ def enumerate_PE_output(output_filename,n):
 #
 
 #
-#f=r"D:\MPhil\Python\My_Python_Modules\Modelling_Tools\temp\kholodenkoTemp\attempt1\SecondIteration\PEResults"
-#PyCoTools.PEAnalysis.ParsePEData(f)
+f=r"D:\MPhil\Python\My_Python_Modules\Modelling_Tools\temp\kholodenkoTemp\attempt1\SecondIteration\PEResults"
+data=PyCoTools.PEAnalysis.ParsePEData(f).data
 #print pandas.read_pickle(K.PEData_pickle)
-f=r"D:\MPhil\Python\My_Python_Modules\Modelling_Tools\temp\kholodenkoTemp\attempt1\ThirdIteration\2GlobalPEData.pickle"
-PyCoTools.PEAnalysis.PlotHistogram(f,Log10='true')
+#f=r"D:\MPhil\Python\My_Python_Modules\Modelling_Tools\temp\kholodenkoTemp\attempt1\ThirdIteration\2GlobalPEData.pickle"
+#PyCoTools.PEAnalysis.PlotHistogram(f,Log10='true')
 #PyCoTools.PEAnalysis.PlotScatters(f,Log10='true')
+
+
+
+PyCoTools.PEAnalysis.PlotHexMap(f,Show='false',Log10='true',
+                                TruncateMode='percent',X=100,SaveFig='true',
+                                GridSize=50,
+                                Mode='RSS',Bins=100)
+
+
+
+
 
 
 
