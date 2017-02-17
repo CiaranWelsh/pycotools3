@@ -489,6 +489,8 @@ class PlotHistogram():
         for i in self.truncated_data:
             self.plot1(i)
         return True
+
+
         
 #==============================================================================            
 class PlotScatters():
@@ -570,7 +572,7 @@ class PlotScatters():
         
         #labels
 #        plt.title('\n'.join(wrap('{},n={}'.format(variable,self.data.shape[1])) ),35  )
-        plt.title('\n'.join(wrap('{} Vs {},n={},Log10={}'.format(x_specie,y_specie,x_data.shape[0],self.kwargs.get('Log10')),
+        plt.title('\n'.join(wrap('n={},Log10={}'.format(x_data.shape[0],self.kwargs.get('Log10')),
                                  self.kwargs.get('TitleWrapSize'))),fontsize=self.kwargs.get('FontSize'))
         plt.ylabel('\n'.join(wrap(y_specie,self.kwargs.get('TitleWrapSize'))),fontsize=self.kwargs.get('FontSize'))
         plt.xticks(rotation=self.kwargs.get('XRotation'))
@@ -617,7 +619,156 @@ class PlotScatters():
             self.plot1_scatter(X,y,self.truncated_data)
         return True
 
+class PlotHexMap():
+    '''
+    Plot all possible combinations of scatter graph
+    '''
+    def __init__(self,results_path,**kwargs):
+        self.results_path=results_path
+        #keywrod arguments
+        options={'FromPickle':'false',
+                 'TruncateMode':'percent', #either 'below_x' or 'percent' for method of truncation. 
+                 'Log10':'false',
+                 'GridSize':25,
+                 'X':100,           #if below_x: this is the X boundary. If percent: this is the percent of data to keep
+                 'AxisSize':15,
+                 'FontSize':22,
+                 'Bins':50,
+                 'ColorMap':'inferno',
+                 'XRotation':25,
+                 'TitleWrapSize':25,
+                 'SaveFig':'false',
+                 'DPI':125,
+                 'ExtraTitle':None,
+                 'Log10':'false',
+                 'Show':'false',
+                 'Mode':'counts',
+                 'Marginals':'false',
+                 
+                     }
+        for i in kwargs.keys():
+            assert i in options.keys(),'{} is not a keyword argument for TruncateData'.format(i)
+        options.update( kwargs)  
+        self.kwargs=options
+        assert self.kwargs.get('TruncateMode') in ['below_x','percent']
+        if self.kwargs['Mode'] not in ['counts','RSS']:
+            raise Errors.InputError('{} not in {}'.format(self.kwargs['Mode'],['counts','RSS']))        
+        
+        if self.kwargs['Marginals'] not in ['true','false']:
+            raise Errors.InputError('{} not argument for Marginals'.format(self.kwargs['Marginals']))
+            
+        if self.kwargs['Marginals']=='true':
+            self.kwargs['Marginals']=True
+        else:
+            self.kwargs['Marginals']=False
+        self.PED=ParsePEData(self.results_path)
+        
+        #create a directory and change to it
+        if self.kwargs['Mode']=='RSS':
+            self.results_dir=os.path.join(os.path.dirname(self.results_path),'HexPlotsByRSS')
+        else:
+            self.results_dir=os.path.join(os.path.dirname(self.results_path),'HexPlotsByCounts')
+        if self.kwargs.get('SaveFig')=='true':
+            if os.path.isdir(self.results_dir)!=True:
+                os.mkdir(self.results_dir)
+            os.chdir(self.results_dir)
+            
 
+        
+        
+        #attributes
+        self.data=self.PED.data
+        self.log_data=self.PED.log_data.dropna()
+        self.truncated_data=self.truncate_data()
+        self.testing_variable=self.plot_hex_maps()
+
+    def list_parameters(self):
+        return self.data.keys()
+    
+        
+    def truncate_data(self):
+        if self.kwargs.get('Log10')=='false':
+            TC=TruncateData(self.data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'))
+            return TC.data
+        else:
+            TC=TruncateData(self.log_data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'))
+            return TC.data
+            
+    def plot1_hex(self,x_specie,y_specie,data):
+        assert x_specie in self.truncated_data.keys(),'x_specie is not in your PE data set'
+        assert y_specie in self.truncated_data.keys(),'y_specie is not in your PE data set'
+        matplotlib.rcParams.update({'font.size':self.kwargs.get('AxisSize')})   
+        
+        
+        x_data=self.truncated_data[x_specie]
+        y_data=self.truncated_data[y_specie]
+        plt.figure()
+        if self.kwargs['Mode']=='RSS':
+            plt.hexbin(x_data,y_data,cmap='inferno',C=self.truncated_data['RSS'],bins=self.kwargs['Bins'],gridsize=self.kwargs['GridSize'])
+            cb=plt.colorbar()
+            cb.set_label('RSS')
+        else:
+            plt.hexbin(x_data,y_data,cmap='inferno',gridsize=self.kwargs['GridSize'],bins=self.kwargs['Bins'])
+            cb=plt.colorbar()
+            cb.set_label('Counts')        
+
+        #pretty stuff
+        ax=plt.subplot(1,1,1)
+        ax.spines['right'].set_color('none')
+        ax.spines['top'].set_color('none')
+        ax.xaxis.set_ticks_position('bottom')
+        ax.yaxis.set_ticks_position('left')
+        ax.spines['left'].set_smart_bounds(True)
+        ax.spines['bottom'].set_smart_bounds(True)
+#        
+        #labels
+        plt.title('\n'.join(wrap('n={},Log10={},Bins={},GridSize={}'.format(x_data.shape[0],self.kwargs.get('Log10'),self.kwargs['Bins'],self.kwargs['GridSize']),
+                                 self.kwargs.get('TitleWrapSize'))),fontsize=self.kwargs.get('FontSize'))
+        plt.ylabel('\n'.join(wrap(y_specie,self.kwargs.get('TitleWrapSize'))),fontsize=self.kwargs.get('FontSize'))
+        plt.xticks(rotation=self.kwargs.get('XRotation'))
+        if self.kwargs.get('Log10')=='true':
+            plt.xlabel(x_specie,fontsize=self.kwargs.get('FontSize'))
+        else:
+            plt.xlabel(x_specie,fontsize=self.kwargs.get('FontSize'))
+        
+        
+        x_specie=x_specie.replace('(','')
+        x_specie=x_specie.replace(')','')
+        y_specie=y_specie.replace('(','')
+        y_specie=y_specie.replace(')','')
+#        SaveFig options
+        if self.kwargs.get('SaveFig')=='true':
+            if self.kwargs.get('ExtraTitle')!=None:
+                assert isinstance(self.kwargs.get('ExtraTitle'),str),'extra title should be a string'
+                plt.savefig('{}_vs_{}'.format(x_specie,y_specie)+'_'+self.kwargs.get('ExtraTitle')+'.jpeg',bbox_inches='tight',format='jpeg',dpi=self.kwargs.get('DPI'))
+            else:
+                plt.savefig('{}_vs_{}'.format(x_specie,y_specie)+'.jpeg',format='jpeg',bbox_inches='tight',dpi=self.kwargs.get('DPI'))
+        if self.kwargs.get('Show')=='true':
+            plt.show()
+        else:
+            plt.close()
+#            
+            
+    def binomial_coefficient(self,n,k):
+        assert isinstance(n,int)
+        assert isinstance(k,int)
+        from scipy.misc import factorial
+        return factorial(n)/(factorial(k)*factorial(n-k))
+        
+        
+    def get_combinations(self):
+        comb=itertools.combinations(self.truncated_data.keys(),2)
+#        comb=[i for i in comb]
+        return comb
+        
+    def plot_hex_maps(self):
+        '''
+        
+        '''
+        comb=self.get_combinations()
+        for x,y in comb:
+            self.plot1_hex(x,y,self.truncated_data)
+        return True
 #==============================================================================
 class PlotBoxplot():
     '''
