@@ -398,8 +398,8 @@ class PlotHistogram():
                  'Show':'false',
                  'Variable':None,
                  'ResultsDirectory':None,
-                 
-                     }
+                 'ColourMap':'plasma',
+                 }
         for i in kwargs.keys():
             assert i in options.keys(),'{} is not a keyword argument for TruncateData'.format(i)
         options.update( kwargs)  
@@ -1439,10 +1439,6 @@ class PlotPEData():
         for f in self.experiment_files:
             dire,p= os.path.split(f)
             fle=os.path.splitext(p)[0]
-#            d=os.path.join(dire,fle)
-#            if os.path.isdir(d)==False:
-#                os.mkdir(d)
-#            os.chdir(d)
             self.plot1file(f)
             
             
