@@ -62,7 +62,8 @@ class ParsePEData():
             Allow one to overwrite the pickle file automatically
             produced for speed. Default='false'
     '''
-    def __init__(self,results_path,UsePickle='false',OverwritePickle='true',RemoveInfiniteRSS='false'):
+    def __init__(self,results_path,UsePickle='false',OverwritePickle='true',
+                 RemoveInfiniteRSS='false',PicklePath=None):
         #input argument variables
         self.results_path=results_path #either file or folder
         self.RemoveInfiniteRSS=RemoveInfiniteRSS
@@ -71,8 +72,12 @@ class ParsePEData():
         #change directory
         self.cwd=os.path.dirname(self.results_path)
         os.chdir(self.cwd)
-        self.pickle_path=os.path.join(self.cwd,'PEData.pickle')
-        self.pickle_path_log=os.path.join(self.cwd,'PEData_log.pickle')
+        self.pickle_path=PicklePath
+        if self.pickle_path==None:
+            self.pickle_path=os.path.join(self.cwd,'PEData.pickle')
+            self.pickle_path_log=os.path.join(self.cwd,'PEData_log.pickle')
+        else:
+            self.pickle_path_log=os.path.join(os.path.dirname(self.pickle_path),os.path.splitext(self.pickle_path)[0][:6]+'_log.pickle')
 #        self.FromPickle=True
         self.UsePickle=UsePickle
         self.OverwritePickle=OverwritePickle
@@ -91,7 +96,7 @@ class ParsePEData():
 
         if self.RemoveInfiniteRSS not in ['true','false']:
             raise Errors.InputError('The argument OverwritePickle only accepts \'true\' or \'false\'')            
-        #main method of class
+        
         self.data=self.read_data()
         if self.data.empty==True:
             raise Errors.InputError('DataFrame is empty. Your PE data has not been read.')
@@ -161,14 +166,15 @@ class ParsePEData():
     def read_file(self):
         assert self.mode=='file','mode not file'
         _,ext=os.path.splitext(self.results_path)
-        assert ext in ['.txt','.xlsx','.xls','.csv'],'parameter file is not .txt, .xlsx, .xls, .csv'
+        assert ext in ['.txt','.xlsx','.xls','.csv','.pickle'],'parameter file is not .pickle, .txt, .xlsx, .xls, .csv'
         if ext=='.txt':
             return pandas.read_csv(self.results_path,sep='\t')
-        elif ext=='xlsx' or 'xls':
+        elif ext=='xlsx' or ext=='xls':
             return pandas.read_excel(self.results_path)
         elif ext=='.csv':
             return pandas.read_csv(self.results_path)
-
+        elif ext=='.pickle':
+            return pandas.read_pickle(self.results_path)
             
     def read_pickle(self):
         if os.path.isfile(self.pickle_path)!=True:
@@ -392,8 +398,8 @@ class PlotHistogram():
                  'Show':'false',
                  'Variable':None,
                  'ResultsDirectory':None,
-                 
-                     }
+                 'ColourMap':'plasma',
+                 }
         for i in kwargs.keys():
             assert i in options.keys(),'{} is not a keyword argument for TruncateData'.format(i)
         options.update( kwargs)  
@@ -483,6 +489,8 @@ class PlotHistogram():
         for i in self.truncated_data:
             self.plot1(i)
         return True
+
+
         
 #==============================================================================            
 class PlotScatters():
@@ -550,9 +558,8 @@ class PlotScatters():
         x_data=self.truncated_data[x_specie]
         y_data=self.truncated_data[y_specie]
         plt.figure()
-        plt.scatter(x_data,y_data)
-
-
+        plt.scatter(x_data,y_data,c=self.truncated_data['RSS'],cmap='hsv')
+        plt.colorbar()
 
         #pretty stuff
         ax=plt.subplot(1,1,1)
@@ -565,7 +572,7 @@ class PlotScatters():
         
         #labels
 #        plt.title('\n'.join(wrap('{},n={}'.format(variable,self.data.shape[1])) ),35  )
-        plt.title('\n'.join(wrap('{} Vs {},n={},Log10={}'.format(x_specie,y_specie,x_data.shape[0],self.kwargs.get('Log10')),
+        plt.title('\n'.join(wrap('n={},Log10={}'.format(x_data.shape[0],self.kwargs.get('Log10')),
                                  self.kwargs.get('TitleWrapSize'))),fontsize=self.kwargs.get('FontSize'))
         plt.ylabel('\n'.join(wrap(y_specie,self.kwargs.get('TitleWrapSize'))),fontsize=self.kwargs.get('FontSize'))
         plt.xticks(rotation=self.kwargs.get('XRotation'))
@@ -587,6 +594,8 @@ class PlotScatters():
                 plt.savefig('{}_vs_{}'.format(x_specie,y_specie)+'.jpeg',format='jpeg',bbox_inches='tight',dpi=self.kwargs.get('DPI'))
         if self.kwargs.get('Show')=='true':
             plt.show()
+        else:
+            plt.close()
 #            
             
     def binomial_coefficient(self,n,k):
@@ -598,16 +607,168 @@ class PlotScatters():
         
     def get_combinations(self):
         comb=itertools.combinations(self.truncated_data.keys(),2)
-        comb=[i for i in comb]
+#        comb=[i for i in comb]
         return comb
         
     def plot_scatters(self):
+        '''
+        
+        '''
         comb=self.get_combinations()
         for X,y in comb:
             self.plot1_scatter(X,y,self.truncated_data)
         return True
 
+class PlotHexMap():
+    '''
+    Plot all possible combinations of scatter graph
+    '''
+    def __init__(self,results_path,**kwargs):
+        self.results_path=results_path
+        #keywrod arguments
+        options={'FromPickle':'false',
+                 'TruncateMode':'percent', #either 'below_x' or 'percent' for method of truncation. 
+                 'Log10':'false',
+                 'GridSize':25,
+                 'X':100,           #if below_x: this is the X boundary. If percent: this is the percent of data to keep
+                 'AxisSize':15,
+                 'FontSize':22,
+                 'Bins':50,
+                 'ColorMap':'inferno',
+                 'XRotation':25,
+                 'TitleWrapSize':25,
+                 'SaveFig':'false',
+                 'DPI':125,
+                 'ExtraTitle':None,
+                 'Log10':'false',
+                 'Show':'false',
+                 'Mode':'counts',
+                 'Marginals':'false',
+                 
+                     }
+        for i in kwargs.keys():
+            assert i in options.keys(),'{} is not a keyword argument for TruncateData'.format(i)
+        options.update( kwargs)  
+        self.kwargs=options
+        assert self.kwargs.get('TruncateMode') in ['below_x','percent']
+        if self.kwargs['Mode'] not in ['counts','RSS']:
+            raise Errors.InputError('{} not in {}'.format(self.kwargs['Mode'],['counts','RSS']))        
+        
+        if self.kwargs['Marginals'] not in ['true','false']:
+            raise Errors.InputError('{} not argument for Marginals'.format(self.kwargs['Marginals']))
+            
+        if self.kwargs['Marginals']=='true':
+            self.kwargs['Marginals']=True
+        else:
+            self.kwargs['Marginals']=False
+        self.PED=ParsePEData(self.results_path)
+        
+        #create a directory and change to it
+        if self.kwargs['Mode']=='RSS':
+            self.results_dir=os.path.join(os.path.dirname(self.results_path),'HexPlotsByRSS')
+        else:
+            self.results_dir=os.path.join(os.path.dirname(self.results_path),'HexPlotsByCounts')
+        if self.kwargs.get('SaveFig')=='true':
+            if os.path.isdir(self.results_dir)!=True:
+                os.mkdir(self.results_dir)
+            os.chdir(self.results_dir)
+            
 
+        
+        
+        #attributes
+        self.data=self.PED.data
+        self.log_data=self.PED.log_data.dropna()
+        self.truncated_data=self.truncate_data()
+        self.testing_variable=self.plot_hex_maps()
+
+    def list_parameters(self):
+        return self.data.keys()
+    
+        
+    def truncate_data(self):
+        if self.kwargs.get('Log10')=='false':
+            TC=TruncateData(self.data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'))
+            return TC.data
+        else:
+            TC=TruncateData(self.log_data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'))
+            return TC.data
+            
+    def plot1_hex(self,x_specie,y_specie,data):
+        assert x_specie in self.truncated_data.keys(),'x_specie is not in your PE data set'
+        assert y_specie in self.truncated_data.keys(),'y_specie is not in your PE data set'
+        matplotlib.rcParams.update({'font.size':self.kwargs.get('AxisSize')})   
+        
+        
+        x_data=self.truncated_data[x_specie]
+        y_data=self.truncated_data[y_specie]
+        plt.figure()
+        if self.kwargs['Mode']=='RSS':
+            plt.hexbin(x_data,y_data,cmap='inferno',C=self.truncated_data['RSS'],bins=self.kwargs['Bins'],gridsize=self.kwargs['GridSize'])
+            cb=plt.colorbar()
+            cb.set_label('RSS')
+        else:
+            plt.hexbin(x_data,y_data,cmap='inferno',gridsize=self.kwargs['GridSize'],bins=self.kwargs['Bins'])
+            cb=plt.colorbar()
+            cb.set_label('Counts')        
+
+        #pretty stuff
+        ax=plt.subplot(1,1,1)
+        ax.spines['right'].set_color('none')
+        ax.spines['top'].set_color('none')
+        ax.xaxis.set_ticks_position('bottom')
+        ax.yaxis.set_ticks_position('left')
+        ax.spines['left'].set_smart_bounds(True)
+        ax.spines['bottom'].set_smart_bounds(True)
+#        
+        #labels
+        plt.title('\n'.join(wrap('n={},Log10={},Bins={},GridSize={}'.format(x_data.shape[0],self.kwargs.get('Log10'),self.kwargs['Bins'],self.kwargs['GridSize']),
+                                 self.kwargs.get('TitleWrapSize'))),fontsize=self.kwargs.get('FontSize'))
+        plt.ylabel('\n'.join(wrap(y_specie,self.kwargs.get('TitleWrapSize'))),fontsize=self.kwargs.get('FontSize'))
+        plt.xticks(rotation=self.kwargs.get('XRotation'))
+        if self.kwargs.get('Log10')=='true':
+            plt.xlabel(x_specie,fontsize=self.kwargs.get('FontSize'))
+        else:
+            plt.xlabel(x_specie,fontsize=self.kwargs.get('FontSize'))
+        
+        
+        x_specie=x_specie.replace('(','')
+        x_specie=x_specie.replace(')','')
+        y_specie=y_specie.replace('(','')
+        y_specie=y_specie.replace(')','')
+#        SaveFig options
+        if self.kwargs.get('SaveFig')=='true':
+            if self.kwargs.get('ExtraTitle')!=None:
+                assert isinstance(self.kwargs.get('ExtraTitle'),str),'extra title should be a string'
+                plt.savefig('{}_vs_{}'.format(x_specie,y_specie)+'_'+self.kwargs.get('ExtraTitle')+'.jpeg',bbox_inches='tight',format='jpeg',dpi=self.kwargs.get('DPI'))
+            else:
+                plt.savefig('{}_vs_{}'.format(x_specie,y_specie)+'.jpeg',format='jpeg',bbox_inches='tight',dpi=self.kwargs.get('DPI'))
+        if self.kwargs.get('Show')=='true':
+            plt.show()
+        else:
+            plt.close()
+#            
+            
+    def binomial_coefficient(self,n,k):
+        assert isinstance(n,int)
+        assert isinstance(k,int)
+        from scipy.misc import factorial
+        return factorial(n)/(factorial(k)*factorial(n-k))
+        
+        
+    def get_combinations(self):
+        comb=itertools.combinations(self.truncated_data.keys(),2)
+#        comb=[i for i in comb]
+        return comb
+        
+    def plot_hex_maps(self):
+        '''
+        
+        '''
+        comb=self.get_combinations()
+        for x,y in comb:
+            self.plot1_hex(x,y,self.truncated_data)
+        return True
 #==============================================================================
 class PlotBoxplot():
     '''
@@ -832,12 +993,16 @@ class PlotHeatMap():
             os.mkdir(self.results_dir)
         os.chdir(self.results_dir)
         
+
+
+
         #attributes
         self.data=self.PED.data
         self.log_data=self.PED.log_data
         self.truncated_data=self.truncate_data()
-        self.plot_r_value_heatmap()
-
+        if self.kwargs.get('NumPerPlot')==None:
+            self.kwargs['NumPerPlot']=self.truncated_data.shape[1]
+        self.boxplot()
 
     def list_parameters(self):
         return self.data.keys()
@@ -845,101 +1010,35 @@ class PlotHeatMap():
         
     def truncate_data(self):
         if self.kwargs.get('Log10')=='false':
-            TC=TruncateData(self.data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'))
-            return TC.truncate()
-        else:
+            TC=TruncateData(self.data,mode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'))
+            return TC.data
+        elif self.kwargs.get('Log10')=='true':
             TC=TruncateData(self.log_data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'))
-            return TC.truncate() 
+            return TC.data
             
-            
-    def get_r_value(self,x_specie,y_specie):
-        '''
-        takes pandas df, x_specie, y_specie
-        returns  [slope, intercept, r_value, p_value, std_err]
-        '''
-        assert isinstance(self.truncated_data,pandas.core.frame.DataFrame),'data must be a pandas dataframe'
-        assert x_specie and y_specie in self.truncated_data.keys()
-        r=numpy.corrcoef(self.truncated_data[x_specie],self.truncated_data[y_specie])[0,1]
-        return r
-    
-
-    def get_all_r_values_non_sym(self):
-        '''
-        takes a pandas data frame with parameter estimation data. 
-        uses combinations to provide an exaustive list of 2 way combinations. 
-        saves computation power but is less clear that all combinations are accounted for
-        
-        returns pandas df with:
-            x_specie','y_specie','slope', 'intercept', 'r_value', 'p_value', 'std_err']
-        as column headings
-        '''
-        assert isinstance(self.truncated_data,pandas.core.frame.DataFrame),'data must be a pandas dataframe'
-        comb=itertools.combinations( self.truncated_data.keys(),2)
-        comb=[i for i in comb]
-        df_list=[]
-#        dct={}
-        for i,j in comb:
-            d=[i]+[j]+[self.get_r_value(i,j)]
-            df=pandas.DataFrame(d,index=['x_species','y_species', 'r_value']).transpose()
-            df_list.append(df)
-        df=pandas.concat(df_list).reset_index()
-        del df['index']
-        return df.fillna(0)
+    def divide_data(self):
+        n_vars=len(self.truncated_data.keys())
+        n_per_plot= self.kwargs.get('NumPerPlot')
+#        assert n_per_plot<n_vars,'number of variables per plot must be smaller than the number of variables'
+        int_division= n_vars//n_per_plot
+        remainder=n_vars-(n_per_plot*int_division)
+        l=[]
+        for i in range(int_division):
+            l.append(self.truncated_data.keys()[i*n_per_plot:(i+1)*n_per_plot])
+        l.append(self.truncated_data.keys()[-remainder:])
+        return [list(i) for i in l]
 
 
-    def get_all_r_values_sym(self):
-        '''
-        takes a pandas data frame with parameter estimation data
-        Needs to compute more than get_linear_correlations2 but end result is a symetical set of data for the heat map. Easier to look at...
-        returns pandas df with:
-            x_specie','y_specie','slope', 'intercept', 'r_value', 'p_value', 'std_err']
-        as column headings
-        '''
-        assert isinstance(self.truncated_data,pandas.core.frame.DataFrame),'data must be a pandas dataframe'
-        comb=itertools.combinations( self.truncated_data.keys(),2)
-        comb=[i for i in comb]
-        X= self.log_data.keys()
-        y= self.log_data.keys()
-        df_list=[]
-        for i in X:
-            for j in y:
-                d=[i]+[j]+[self.get_r_value(i,j)]
-                df=pandas.DataFrame(d,index=['x_species','y_species', 'r_value']).transpose()
-                df_list.append(df)
-        df=pandas.concat(df_list).reset_index()
-        del df['index']
-        return df.fillna(0)
-        
-    def plot_r_value_heatmap(self):
-        if self.kwargs.get('sym')=='true':
-            data=self.get_all_r_values_sym()
-        else:
-            data=self.get_all_r_values_non_sym()
-        pivoted_table= data.pivot(index='x_species',columns='y_species',values='r_value')        
-        pivoted_table.fillna(0, inplace=True)
-        fig, ax = plt.subplots()
-        if self.kwargs.get('grid')=='true':
-            plt.pcolor(pivoted_table.values, cmap=plt.cm.Reds,edgecolors='k')
-        else:
-            plt.pcolor(pivoted_table.values, cmap=plt.cm.Reds,edgecolors='k')
-        plt.colorbar()
-        ax.set_xticks(numpy.arange(pivoted_table.shape[0])+0.5, minor=False)
-        ax.set_yticks(numpy.arange(pivoted_table.shape[1])+0.5, minor=False)
-        ax.invert_yaxis()
-        ax.set_xticklabels(list(pivoted_table.columns.values), minor=False,rotation='vertical',FontSize=self.kwargs.get('FontSize'))
-        ax.set_yticklabels(list(pivoted_table.index.values), minor=False,FontSize=self.kwargs.get('FontSize'))
 
-        plt.title('Heatmap of r values for linear correlation of parameter estimation data',FontSize=self.kwargs.get('FontSize'))
-    
-#        SaveFig options
-        if self.kwargs.get('SaveFig')=='true':
-            if self.kwargs.get('ExtraTitle')!=None:
-                assert isinstance(self.kwargs.get('ExtraTitle'),str),'extra title should be a string'
-                plt.savefig('heatmap'+'_'+self.kwargs.get('ExtraTitle'+'.jpeg',bbox_inches='tight',format='jpeg',dpi=self.kwargs.get('DPI')))
-            else:
-                plt.savefig('heatmap'+'.jpeg',format='jpeg',bbox_inches='tight',dpi=self.kwargs.get('DPI'))
-        if self.kwargs.get('Show')=='true':
-            plt.show()
+    def get_variance(self):
+        print 
+
+
+
+
+
+
+
             
 class GetCovarianceMatrix():
     '''
@@ -989,7 +1088,7 @@ class EvaluateOptimizationPerformance():
         self.results_path=results_path
         #keywrod arguments
         options={#parse data options
-                 'TruncateMode':'below_x', #either 'below_x' or 'percent' for method of truncation. 
+                 'TruncateMode':'percent', #either 'below_x' or 'percent' for method of truncation. 
                  'Log10':'true',
                  #truncate data options
                  'X':100,           #if below_x: this is the X boundary. If percent: this is the percent of data to keep
@@ -1015,6 +1114,7 @@ class EvaluateOptimizationPerformance():
         
         #Other classes
         self.PED=ParsePEData(self.results_path)
+        
         #create a directory and change to it
         self.results_dir=os.path.join(os.path.dirname(self.results_path),'OptimizationPerformanceGraph')
         if os.path.isdir(self.results_dir)!=True:
@@ -1029,12 +1129,16 @@ class EvaluateOptimizationPerformance():
         os.chdir(os.path.dirname(self.results_path))
                              
     def plot_rss(self):
+
         if self.kwargs.get('Log10')=='true':
-            rss=self.PED.log_data['RSS']
+            data=TruncateData(self.PED.log_data,TruncateMode=self.kwargs['TruncateMode'],X=self.kwargs['X']).data
+            rss=data['RSS']
             iterations=numpy.log10(range(len(rss)))
         else:
-            rss= self.PED.data['RSS']
+            data=TruncateData(self.PED.data,TruncateMode=self.kwargs['TruncateMode'],X=self.kwargs['X']).data
+            rss= data['RSS']
             iterations=range(len(rss))
+
             
         plt.figure()
         plt.plot(iterations,rss)
@@ -1303,6 +1407,7 @@ class PlotPEData():
         df= pandas.read_csv( self.PE_result_file,sep='\t')
         df=ParsePEData(self.PE_result_file)
         df= df.data
+        print self.PE_result_file
         return pandas.DataFrame(df.iloc[-1]).transpose()
     
     def insert_parameters(self):
@@ -1423,10 +1528,6 @@ class PlotPEData():
         for f in self.experiment_files:
             dire,p= os.path.split(f)
             fle=os.path.splitext(p)[0]
-#            d=os.path.join(dire,fle)
-#            if os.path.isdir(d)==False:
-#                os.mkdir(d)
-#            os.chdir(d)
             self.plot1file(f)
             
             

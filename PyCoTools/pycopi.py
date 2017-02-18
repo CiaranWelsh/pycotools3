@@ -51,7 +51,7 @@ import matplotlib.pyplot as plt
 from textwrap import wrap
 import string
 import itertools
-
+from  multiprocessing import Process
 
 
 
@@ -1600,7 +1600,7 @@ class TimeCourse(object):
         LineColor:
             Passed to Matplotlib.pyplot.plot. Color of the line
 
-        DotColor:
+        MarkerColor:
             Passed to Matplotlib.pyplot.plot. color of the dots
 
         LineStyle:
@@ -1654,7 +1654,7 @@ class TimeCourse(object):
                  'Plot':'false'      ,              
                  'LineWidth':2,
                  'LineColor':'k',
-                 'DotColor':'r',
+                 'MarkerColor':'r',
                  'LineStyle':'-',
                  'MarkerStyle':'o',
                  'AxisSize':15,
@@ -1797,7 +1797,7 @@ class TimeCourse(object):
                    'k': 'black',
                    'w': 'white'}
         assert self.kwargs.get('LineColor') in color_dct.keys()+color_dct.values()
-        assert self.kwargs.get('DotColor') in color_dct.keys()+color_dct.values()
+        assert self.kwargs.get('MarkerColor') in color_dct.keys()+color_dct.values()
                  
                  
         self.report_options={}#report variables
@@ -1969,8 +1969,8 @@ class TimeCourse(object):
                 ax = plt.subplot(111)
                 plt.plot(self.data['Time'],self.data[i],
                          linewidth=self.kwargs.get('LineWidth'),color=self.kwargs.get('LineColor'),
-                         linestyle=self.kwargs.get('LineStyle'),marker='o',markerfacecolor=self.kwargs.get('DotColor'),markersize=self.kwargs.get('MarkerSize'))
-#                plt.plot(self.data['Time'],self.data[i],color=self.kwargs.get('DotColor'),marker=self.kwargs.get('MarkerStyle'))
+                         linestyle=self.kwargs.get('LineStyle'),marker='o',markerfacecolor=self.kwargs.get('MarkerColor'),markersize=self.kwargs.get('MarkerSize'))
+#                plt.plot(self.data['Time'],self.data[i],color=self.kwargs.get('MarkerColor'),marker=self.kwargs.get('MarkerStyle'))
 
                 
                 #plot labels
@@ -2028,7 +2028,7 @@ class TimeCourse(object):
                     os.chdir(os.path.dirname(self.copasi_file))
                     save_plot()
                     
-class PhaseSpacePlots(TimeCourse):
+class PhaseSpace(TimeCourse):
     '''
     Inherits from TimeCourse
     
@@ -2086,7 +2086,7 @@ class PhaseSpacePlots(TimeCourse):
         plt.plot(x_data,y_data,linewidth=self.kwargs.get('LineWidth'),
                     color=self.kwargs.get('LineColor'),
                     linestyle=self.kwargs.get('LineStyle'),
-                    marker='o',markerfacecolor=self.kwargs.get('DotColor'),
+                    marker='o',markerfacecolor=self.kwargs.get('MarkerColor'),
                     markersize=self.kwargs.get('MarkerSize'))
                     
         plt.title('\n'.join(wrap('{} Vs {} Phase Plot'.format(x,y),self.kwargs.get('TitleWrapSize'))),fontsize=self.kwargs.get('FontSize'))
@@ -3107,6 +3107,9 @@ class ParameterEstimation():
             copasi_file=self.copasi_file[:-4]+'_temp.cps'
             shutil.copy(self.copasi_file,copasi_file)
 #        cps_copy=shutil.copy
+        print copasi_file
+        print self.experiment_files
+        print self.kwargs.get('ReportName')
         self.PL=PEAnalysis.PlotPEData(copasi_file,self.experiment_files,self.kwargs.get('ReportName'),
                         **self.PlotPEDataKwargs)
         if self.kwargs.get('UpdateModel')=='false':
@@ -3535,7 +3538,7 @@ class Run():
             on 'overwrite', the default. 
             
         Mode:
-            'true', 'false' or 'SGE'. Default is 'true' but can be turned off if you 
+            'true', 'false','multiprocess', or 'SGE'. Default is 'true' but can be turned off if you 
             want to uncheck all executable boxes then check the Task executable
             
         MaxTime:
@@ -3571,7 +3574,8 @@ class Run():
                    
         
                   
-        assert self.kwargs.get('Task') in tasks
+        if  self.kwargs.get('Task') not in tasks:
+            raise Errors.InputError('{} is not a valid task. Choose from {}'.format(self.kwargs.get('Task'),tasks))
         if self.kwargs.get('MaxTime')!=None:
             if isinstance(self.kwargs.get('MaxTime'),(float,int))!=True:
                 raise TypeError('MaxTime argument must be float or int')
@@ -3583,14 +3587,30 @@ class Run():
             self.kwargs['Task']='parameterfitting'        
             
         elif self.kwargs.get('Task')=='steady_state':
-            self.kwargs['Task']='steadystate'           
+            self.kwargs['Task']='steadystate'        
+        
+        
         self.copasiML=self.set_task()
         self.save()
         if self.kwargs.get('Mode')=='true':
             self.run()
         elif self.kwargs.get('Mode')=='SGE':
             self.submit_copasi_job_SGE()
+        elif self.kwargs.get('Mode')=='multiprocess':
+            self.multi_run()
             
+            
+
+    def multi_run(self):
+        def run(x):
+            subprocess.Popen('CopasiSE "{}"'.format(x))
+        if isinstance(self.copasi_file,list):
+            for i in self.copasi_file:
+                Process(run(i))
+        else:
+            Process(run(self.copasi_file))
+        return 0
+
 
         
     def set_task(self):
@@ -3601,10 +3621,6 @@ class Run():
                 
         return self.copasiML
         
-#    def run(self):
-#        subprocess.check_call('CopasiSE {}'.format(self.copasi_file))
-        
-           
     def run(self):
         '''
         Process the copasi file using CopasiSE

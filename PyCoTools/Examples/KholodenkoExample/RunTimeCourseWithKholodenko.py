@@ -15,7 +15,9 @@ K=KholodenkoExample()
 
 #run deterministic time course with kholodenko model
 PyCoTools.pycopi.TimeCourse(K.kholodenko_model,ReportName=K.timecourse_report,End=1000,
-                               Intervals=50,StepSize=20,Plot='true',SaveFig='true')
+                               Intervals=50,StepSize=20,Metabolites=['Mek1-P','Mek1'],
+                                                                    MarkerColor='b',Plot='true')
+#                               )#,Plot='true',SaveFig='true')
 
 
 

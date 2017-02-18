@@ -22,7 +22,7 @@ class KholodenkoExample():
         if sys.platform=='win32':
             self.current_directory='D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\Examples\KholodenkoExample'
         else:
-            self.current_directory=r'/sharedlustre/users/b3053674/2017/Jan/4/KholodenkoExample'
+            self.current_directory=r'/sharedlustre/users/b3053674/2017/Jan/Kholod/KholodenkoExample'
         
         ## Kholodenko filename
         self.copasi_filename=r'Kholodenko.cps'
@@ -39,3 +39,23 @@ class KholodenkoExample():
         ## Full path to file containing secondary local parameter estimation (starting with best values from self.PEData_dir)
 #        self.local_PEData_file=os.path.join(self.current_directory,'LocalPEData.txt')
         self.local_PEData_dir=os.path.join(self.current_directory,'LocalPEDataResults')
+        ## path to PEData Pickle
+        
+        self.PEData_pickle=os.path.join(self.current_directory,'KholodenkoExamplePEData.pickle')
+        self.PEData_pickle_local=os.path.join(self.current_directory,'KholodenkoExamplePEDataLocal.pickle')
+
+        self.PEDataGlobal2=os.path.join(self.current_directory,'2GlobalPEData.pickle')
+        self.PEDataLocal2=os.path.join(self.current_directory,'2LocalPEData.pickle')
+        
+
+
+
+
+
+
+
+
+
+
+
+
