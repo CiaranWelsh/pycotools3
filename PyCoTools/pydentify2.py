@@ -88,17 +88,17 @@ class ProfileLikelihood():
             
         UpperBoundMultiplier:
             Number of times above the current value of the parameter of interest
-            to extend profile likleihood to. Default=4
+            to extend profile likleihood to. Default=1000
         
         LowerBoundMultiplier:
             Number of times below the current value of the parameter of interest
-            to extend profile likleihood to. Default=4     
+            to extend profile likleihood to. Default=1000  
             
         NumberOfSteps:
             How many times to sample between lower and upper boundaries. Default=10
             
         Log:
-            Sample in Log space. Default=False
+            Sample in Log space. Default='false'
             
         IterationLimit:
             Hook and Jeeves algorithm iteration limit parameter. Default=50
@@ -118,10 +118,12 @@ class ProfileLikelihood():
             on a SunGridEngine managed cluster. Deault='false'
             
         NumProcesses:
+            Deprecated: do not use
             How many processors to use at the same time. NumProcesses=0 will
             prevent running the estimations. Default 1
 
         SleepTime: 
+            Deprecated: Do not use. 
             How many seconds to wait before running each copasi file. If running
             too many parameter estimations at the same time will slow your computer
             considerably. In this situation use a longer SleepTime.
@@ -143,7 +145,7 @@ class ProfileLikelihood():
                  'UpperBoundMultiplier':1000,
                  'LowerBoundMultiplier':1000,
                  'NumberOfSteps':10,
-                 'Log':'true',
+                 'Log':'false',
                  'IterationLimit':50,
                  'Tolerance':1e-5,
                  'Rho':0.2,
