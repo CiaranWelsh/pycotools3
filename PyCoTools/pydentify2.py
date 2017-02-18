@@ -646,6 +646,13 @@ class Plot():
         Log10:
             'true' or 'false'. Default='true'. Plot on log10-log10 scale
             
+        UsePickle:
+            Data read by PEAnalysis.ParsePEData are automatically pickled
+            for speed. 'true' or 'false' to use pickle. Default='false'
+        
+        OverwritePickle:
+            If data has changed set 'OverwritePickle' to 'true' to rewrite 
+            pickle before 'UsePickle' can be useful again. Default='false'
         
     '''
 
@@ -688,6 +695,9 @@ class Plot():
                  'DotSize':4,
                  'Separator':'\t',
                  'Log10':'true',
+                 
+                 'UsePickle':'false',
+                 'OverwritePickle':'false',
                  }
                  
         for i in kwargs.keys():
@@ -701,6 +711,13 @@ class Plot():
 
         if self.kwargs.get('Log10') not in ['true','false']:
             raise Errors.InputError('Log10 argument should be \'true\' or \'false\' not {}'.format(self.kwargs.get('Log10')))
+
+        if self.kwargs.get('UsePickle') not in ['true','false']:
+            raise Errors.InputError('UsePickle argument should be \'true\' or \'false\' not {}'.format(self.kwargs.get('Log10')))
+
+
+        if self.kwargs.get('OverwritePickle') not in ['true','false']:
+            raise Errors.InputError('OverwritePickle argument should be \'true\' or \'false\' not {}'.format(self.kwargs.get('Log10')))
 
             
             
@@ -943,7 +960,9 @@ class Plot():
             RSS[-1]= self.kwargs.get('RSS')
             return RSS
         else:
-            PED= PEAnalysis.ParsePEData(self.kwargs.get('ParameterPath'))
+            PED= PEAnalysis.ParsePEData(self.kwargs.get('ParameterPath'),
+                                        UsePickle=self.kwargs['UsePickle'],
+                                        OverwritePickle=self.kwargs['OverwritePickle'])
             if isinstance(self.kwargs.get('Index'),int):
                 RSS[self.kwargs.get('Index')]=PED.data.iloc[self.kwargs.get('Index')]['RSS']
             elif isinstance(self.kwargs.get('Index'),list):
@@ -1186,7 +1205,7 @@ class Plot():
 #                raise Errors.InputError('Index out of bounds, i.e. Index>number PE runs')
                 
         elif isinstance(self.kwargs.get('Index'),list):
-            for i in self.kwargs.get('Index'):
+            for i in reversed(self.kwargs.get('Index')):
                 for j in self.data[i]:
                     self.plot1(i,j)
 

@@ -11,21 +11,6 @@ import FilePaths
 import shutil
 import sys
 
-K=FilePaths.KholodenkoExample()
-
-if os.path.isdir(K.PEData_dir):
-    PEData_path=K.PEData_dir
-elif os.path.isdir(K.PEData_dir) !=True:
-    if os.path.isfile(K.PEData_file):
-        PEData_path=K.PEData_file
-        
-        
-data= PyCoTools.PEAnalysis.ParsePEData(PEData_path).data
-
-
-
-
-
 
 
 
@@ -51,7 +36,7 @@ def runHJ(copasi_file,parameters,report_name,mode):
         print i,':\t',parameters[i]
     PyCoTools.pycopi.InsertParameters(copasi_file,ParameterDict=parameters)
     
-    PE=PyCoTools.pycopi.ParameterEstimation(copasi_file,K.noisy_timecourse_report,
+    PE=PyCoTools.pycopi.ParameterEstimation(copasi_file,C.noisy_timecourse_report,
                                          Method='HookeJeeves',
                                          IterationLimit=20000,
                                          Tolerance=1e-30,
@@ -75,39 +60,55 @@ def runHJ(copasi_file,parameters,report_name,mode):
 
 #data.shape[0]*0.01)
 if __name__=='__main__':
-    if sys.platform=='win32':
-        '''
-        Run hook and jeeves from the top 1 percent
-        best estimated parameter from the genetic algorithm
-        Run on windows machine
-        '''
-        mode='true'
-        for i in range(int(data.shape[0]*0.1)):
-            print 'running index {} with starting RSS of {}'.format(i,data.iloc[i]['RSS'])
-            if os.path.isdir(K.local_PEData_dir)!=True:
-                os.mkdir(K.local_PEData_dir)
-            report=os.path.join(K.local_PEData_dir,'{}.txt'.format(i))
-            print runHJ(K.kholodenko_model,data.iloc[i].to_dict(),report,mode)
-
-    elif sys.platform=='linux2':
-        '''
-        A few differences required when running on a clutser. 
-        Generally there is a time delay between submitting job and 
-        running the job. This time delay is longer than the time between an iteration
-        of the below loop meaning that by the time the job gets submitted, all
-        jobs get the same report name. Solution - copy and enumerate copasi file. 
-        
-        '''
-        mode='SGE'
-        for i in range(int(data.shape[0]*1)):
-            print 'running index {} with starting RSS of {}'.format(i,data.iloc[i]['RSS'])
-            if os.path.isdir(K.local_PEData_dir)!=True:
-                os.mkdir(K.local_PEData_dir)
-            report=os.path.join(K.local_PEData_dir,'{}.txt'.format(i))
-            enum_cps=os.path.splitext(K.kholodenko_model)[0]+'temp{}.cps'.format(str(i))
-            shutil.copyfile(K.kholodenko_model,enum_cps)
-            print runHJ(enum_cps,data.iloc[i].to_dict(),report,mode)        
-        
+    C=FilePaths.Celliere2011Example()
+    
+    if os.path.isdir(C.PEData_dir):
+        PEData_path=C.PEData_dir
+    elif os.path.isdir(C.PEData_dir) !=True:
+        if os.path.isfile(C.PEData_file):
+            PEData_path=C.PEData_file
+            
+    if os.path.isdir(PEData_path)!=True:
+        raise TypeError
+            
+            
+    data= PyCoTools.PEAnalysis.ParsePEData(PEData_path).data
+    print data
+                                      
+#    if sys.platform=='win32':
+#        '''
+#        Run hook and jeeves from the top 1 percent
+#        best estimated parameter from the genetic algorithm
+#        Run on windows machine
+#        '''
+#        mode='true'
+#        for i in range(int(data.shape[0]*0.1)):
+#            print 'running secondary PE on index {} with starting RSS of {}'.format(i,data.iloc[i]['RSS'])
+#            if os.path.isdir(C.local_PEData_dir)!=True:
+#                os.mkdir(C.local_PEData_dir)
+#            report=os.path.join(C.local_PEData_dir,'{}.txt'.format(i))
+#            print runHJ(C.celliere2011_model,data.iloc[i].to_dict(),report,mode)
+#
+#    elif sys.platform=='linux2':
+#        '''
+#        A few differences required when running on a clutser. 
+#        Generally there is a time delay between submitting job and 
+#        running the job. This time delay is longer than the time between an iteration
+#        of the below loop meaning that by the time the job gets submitted, all
+#        jobs get the same report name. Solution - copy and enumerate copasi file. 
+#        
+#        '''
+#        mode='SGE'
+#        print mode
+##        for i in range(int(data.shape[0]*0.01)):
+##            print 'running secondary PE on index {} with starting RSS of {}'.format(i,data.iloc[i]['RSS'])
+##            if os.path.isdir(C.local_PEData_dir)!=True:
+##                os.mkdir(C.local_PEData_dir)
+##            report=os.path.join(C.local_PEData_dir,'{}.txt'.format(i))
+##            enum_cps=os.path.splitext(C.celliere2011_model)[0]+'temp{}.cps'.format(str(i))
+##            shutil.copyfile(C.celliere2011_model,enum_cps)
+##            print runHJ(enum_cps,data.iloc[i].to_dict(),report,mode)        
+#        
 
 
 

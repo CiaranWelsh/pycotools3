@@ -8,7 +8,7 @@ import PyCoTools
 import os
 import pandas
 import numpy
-
+from shutil import copy
 import FilePaths
 
 ## Instantiate class contianing file paths for Kholodenko example
@@ -24,7 +24,10 @@ PE= PyCoTools.pycopi.ParameterEstimation(K.kholodenko_model, #model
                                            K.noisy_timecourse_report, #experimental data
                                            Method='GeneticAlgorithm',#use a quick global algorithm 
                                            NumberOfGenerations=300, #set Generation Number and population size
-                                           PopulationSize=150)
+                                           PopulationSize=150,
+                                           SwarmSize=200,
+                                           IterationLimit=3000,
+                                           )
 #                                           Plot='true',SaveFig='true') ## Optionally use to get experimental Vs simualted graphs
 '''
 Then write a template file. This contains all your model variables. 
@@ -36,7 +39,7 @@ In this example I've removed the initial concentration varibles from the estimat
 
 Comment and uncomment the below lines of code as you need
 '''
-## PE.write_item_template()
+#PE.write_item_template()
 
 
 '''
@@ -71,30 +74,81 @@ allows for extension code to support other systems.
 PyCoTools.pycopi.Scan(K.kholodenko_model,ScanType='repeat',
                       ReportName=K.PEData_file, 
                       ReportType='parameter_estimation',
-                      NumberOfSteps=10,Run='false')
+                      NumberOfSteps=2,Run='false')
 
 
 
 
+from shutil import copy
+def copy_copasi(copasi_file,n):
+    '''
+    run a copasi file n times on the same computer 
+    '''
+    sub_copasi_files_dct={}
+    copasi_path,copasi_filename=os.path.split(copasi_file)
+    for i in range(n):
+        new_cps=os.path.join(copasi_path,copasi_filename[:-4]+'{}.cps'.format(str(i)))
+        copy(copasi_file,new_cps)
+        sub_copasi_files_dct[i]= new_cps
+    return sub_copasi_files_dct
+
+def enumerate_PE_output(output_filename,n):
+    '''
+    make some more filenames for our analysis
+    '''
+    dct={}
+    dire,fle=os.path.split(output_filename)
+    output_dir=os.path.join(dire,'Results')
+    if os.path.isdir(output_dir)!=True:
+        os.mkdir(output_dir)
+    
+    for i in range(n):
+        new_file=os.path.join(output_dir,fle[:-4]+'{}.txt'.format(str(i)))
+        dct[i]=new_file
+    return dct
+
+#n=3
+#copasi_files=copy_copasi(K.kholodenko_model,n)
+#result_files=enumerate_PE_output(K.PEData_file,n)
+
+        
+
+#
+
+#import matplotlib.pyplot as plt
+#import numpy as np
+#
+## Generate data...
+#x = np.random.random(10)
+#y = np.random.random(10)
+#print x,y
+#plt.scatter(x, y, c=y, s=50, cmap='hsv')
+#plt.show()
+
+
+#for i in range(n):
+#    PyCoTools.pycopi.Scan(copasi_files[i],ScanType='repeat',
+#                          ReportName=result_files[i], 
+#                          ReportType='parameter_estimation',
+#                          NumberOfSteps=3,Run='false')
+#    PyCoTools.pycopi.Run(copasi_files[i],Mode='multiprocess',Task='scan')
+#
+#
+
+#
+f=r"D:\MPhil\Python\My_Python_Modules\Modelling_Tools\temp\kholodenkoTemp\attempt1\SecondIteration\PEResults"
+data=PyCoTools.PEAnalysis.ParsePEData(f).data
+#print pandas.read_pickle(K.PEData_pickle)
+#f=r"D:\MPhil\Python\My_Python_Modules\Modelling_Tools\temp\kholodenkoTemp\attempt1\ThirdIteration\2GlobalPEData.pickle"
+#PyCoTools.PEAnalysis.PlotHistogram(f,Log10='true')
+#PyCoTools.PEAnalysis.PlotScatters(f,Log10='true')
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+PyCoTools.PEAnalysis.PlotHexMap(f,Show='false',Log10='true',
+                                TruncateMode='percent',X=100,SaveFig='true',
+                                GridSize=50,
+                                Mode='RSS',Bins=100)
 
 
 
