@@ -41,11 +41,11 @@ class KholodenkoExample():
         self.local_PEData_dir=os.path.join(self.current_directory,'LocalPEDataResults')
         ## path to PEData Pickle
         
-        self.PEData_pickle=os.path.join(self.current_directory,'KholodenkoExamplePEData.pickle')
-        self.PEData_pickle_local=os.path.join(self.current_directory,'KholodenkoExamplePEDataLocal.pickle')
+        self.PE_data_global1=os.path.join(self.current_directory,'1GlobalPEData.pickle')
+        self.PE_data_local1=os.path.join(self.current_directory,'1LocalPEData.pickle')
 
-        self.PEDataGlobal2=os.path.join(self.current_directory,'2GlobalPEData.pickle')
-        self.PEDataLocal2=os.path.join(self.current_directory,'2LocalPEData.pickle')
+        self.PE_data_global2=os.path.join(self.current_directory,'2GlobalPEData.pickle')
+        self.PE_data_local2=os.path.join(self.current_directory,'2LocalPEData.pickle')
         
 
 
