@@ -993,12 +993,16 @@ class PlotHeatMap():
             os.mkdir(self.results_dir)
         os.chdir(self.results_dir)
         
+
+
+
         #attributes
         self.data=self.PED.data
         self.log_data=self.PED.log_data
         self.truncated_data=self.truncate_data()
-        self.plot_r_value_heatmap()
-
+        if self.kwargs.get('NumPerPlot')==None:
+            self.kwargs['NumPerPlot']=self.truncated_data.shape[1]
+        self.boxplot()
 
     def list_parameters(self):
         return self.data.keys()
@@ -1006,101 +1010,35 @@ class PlotHeatMap():
         
     def truncate_data(self):
         if self.kwargs.get('Log10')=='false':
-            TC=TruncateData(self.data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'))
-            return TC.truncate()
-        else:
+            TC=TruncateData(self.data,mode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'))
+            return TC.data
+        elif self.kwargs.get('Log10')=='true':
             TC=TruncateData(self.log_data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'))
-            return TC.truncate() 
+            return TC.data
             
-            
-    def get_r_value(self,x_specie,y_specie):
-        '''
-        takes pandas df, x_specie, y_specie
-        returns  [slope, intercept, r_value, p_value, std_err]
-        '''
-        assert isinstance(self.truncated_data,pandas.core.frame.DataFrame),'data must be a pandas dataframe'
-        assert x_specie and y_specie in self.truncated_data.keys()
-        r=numpy.corrcoef(self.truncated_data[x_specie],self.truncated_data[y_specie])[0,1]
-        return r
-    
-
-    def get_all_r_values_non_sym(self):
-        '''
-        takes a pandas data frame with parameter estimation data. 
-        uses combinations to provide an exaustive list of 2 way combinations. 
-        saves computation power but is less clear that all combinations are accounted for
-        
-        returns pandas df with:
-            x_specie','y_specie','slope', 'intercept', 'r_value', 'p_value', 'std_err']
-        as column headings
-        '''
-        assert isinstance(self.truncated_data,pandas.core.frame.DataFrame),'data must be a pandas dataframe'
-        comb=itertools.combinations( self.truncated_data.keys(),2)
-        comb=[i for i in comb]
-        df_list=[]
-#        dct={}
-        for i,j in comb:
-            d=[i]+[j]+[self.get_r_value(i,j)]
-            df=pandas.DataFrame(d,index=['x_species','y_species', 'r_value']).transpose()
-            df_list.append(df)
-        df=pandas.concat(df_list).reset_index()
-        del df['index']
-        return df.fillna(0)
+    def divide_data(self):
+        n_vars=len(self.truncated_data.keys())
+        n_per_plot= self.kwargs.get('NumPerPlot')
+#        assert n_per_plot<n_vars,'number of variables per plot must be smaller than the number of variables'
+        int_division= n_vars//n_per_plot
+        remainder=n_vars-(n_per_plot*int_division)
+        l=[]
+        for i in range(int_division):
+            l.append(self.truncated_data.keys()[i*n_per_plot:(i+1)*n_per_plot])
+        l.append(self.truncated_data.keys()[-remainder:])
+        return [list(i) for i in l]
 
 
-    def get_all_r_values_sym(self):
-        '''
-        takes a pandas data frame with parameter estimation data
-        Needs to compute more than get_linear_correlations2 but end result is a symetical set of data for the heat map. Easier to look at...
-        returns pandas df with:
-            x_specie','y_specie','slope', 'intercept', 'r_value', 'p_value', 'std_err']
-        as column headings
-        '''
-        assert isinstance(self.truncated_data,pandas.core.frame.DataFrame),'data must be a pandas dataframe'
-        comb=itertools.combinations( self.truncated_data.keys(),2)
-        comb=[i for i in comb]
-        X= self.log_data.keys()
-        y= self.log_data.keys()
-        df_list=[]
-        for i in X:
-            for j in y:
-                d=[i]+[j]+[self.get_r_value(i,j)]
-                df=pandas.DataFrame(d,index=['x_species','y_species', 'r_value']).transpose()
-                df_list.append(df)
-        df=pandas.concat(df_list).reset_index()
-        del df['index']
-        return df.fillna(0)
-        
-    def plot_r_value_heatmap(self):
-        if self.kwargs.get('sym')=='true':
-            data=self.get_all_r_values_sym()
-        else:
-            data=self.get_all_r_values_non_sym()
-        pivoted_table= data.pivot(index='x_species',columns='y_species',values='r_value')        
-        pivoted_table.fillna(0, inplace=True)
-        fig, ax = plt.subplots()
-        if self.kwargs.get('grid')=='true':
-            plt.pcolor(pivoted_table.values, cmap=plt.cm.Reds,edgecolors='k')
-        else:
-            plt.pcolor(pivoted_table.values, cmap=plt.cm.Reds,edgecolors='k')
-        plt.colorbar()
-        ax.set_xticks(numpy.arange(pivoted_table.shape[0])+0.5, minor=False)
-        ax.set_yticks(numpy.arange(pivoted_table.shape[1])+0.5, minor=False)
-        ax.invert_yaxis()
-        ax.set_xticklabels(list(pivoted_table.columns.values), minor=False,rotation='vertical',FontSize=self.kwargs.get('FontSize'))
-        ax.set_yticklabels(list(pivoted_table.index.values), minor=False,FontSize=self.kwargs.get('FontSize'))
 
-        plt.title('Heatmap of r values for linear correlation of parameter estimation data',FontSize=self.kwargs.get('FontSize'))
-    
-#        SaveFig options
-        if self.kwargs.get('SaveFig')=='true':
-            if self.kwargs.get('ExtraTitle')!=None:
-                assert isinstance(self.kwargs.get('ExtraTitle'),str),'extra title should be a string'
-                plt.savefig('heatmap'+'_'+self.kwargs.get('ExtraTitle'+'.jpeg',bbox_inches='tight',format='jpeg',dpi=self.kwargs.get('DPI')))
-            else:
-                plt.savefig('heatmap'+'.jpeg',format='jpeg',bbox_inches='tight',dpi=self.kwargs.get('DPI'))
-        if self.kwargs.get('Show')=='true':
-            plt.show()
+    def get_variance(self):
+        print 
+
+
+
+
+
+
+
             
 class GetCovarianceMatrix():
     '''
