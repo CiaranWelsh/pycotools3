@@ -1,6 +1,6 @@
 # PyCoTools
 
-Package was developed by ciaran welsh (c.welsh2@newcastle.ac.uk) from Newcastle University, UK. 
+Package was developed by Ciaran Welsh (c.welsh2@newcastle.ac.uk) at Newcastle University, UK. 
 
 ## Installation 
 Use:
@@ -13,6 +13,10 @@ quick sucession and some featuers about how copasi reads the CopasiML have appar
 of PyCoTools works on Copasi Version 16 and previous releases. Efforts will be made to develop a PyCoTools for the newest version of Copasi 
 (version 19 at the date of writing this)
 
+## jupyter notebook tutorial
+For a detailed description of the major features in PyCoTools see the [tutorial](https://github.com/CiaranWelsh/PyCoTools/tree/master/PyCoTools/PyCoToolsTutorial)
+
+
 
 ## pycopi
 The `pycopi` module is a set of python classes for interfacing with copasi via python. 
@@ -21,31 +25,31 @@ This can be used when a user wantes to setup an anaysis not native to COPASI, as
 
 
     Features include:
-        - GetModelQuantites     - Class to retrieving information about model 
+        - `GetModelQuantites`     - Class to retrieving information about model 
                                   and model entities
         
-        - Reports               - Automate the setting up of specific and commonly used reports
+        - `Reports`               - Automate the setting up of specific and commonly used reports
         
-        - ParameterEstimation   - Automate the setting up of a parameter estimation in copasi. 
+        - `ParameterEstimation`   - Automate the setting up of a parameter estimation in copasi. 
                                 
                                 - Run a parameter estiamtion through copasi Via python and visualize 
                                   the results
         
-        - ExperimentMapper      - Automate the process of mapping model species to experimental data. 
+        - `ExperimentMapper`      - Automate the process of mapping model species to experimental data. 
                                   Used by ParameterEstimation class
         
-        - TimeCourse            - Simulate a time course using Copasi. Parse this data into python 
+        - `TimeCourse`            - Simulate a time course using Copasi. Parse this data into python 
                                   and plot it optionally. 
         
-        - PhaseSpace            - Produce plots in phase space.
+        - `PhaseSpace`            - Produce plots in phase space.
         
-        - Scan                  - Automate the process of setting up a parameter scan. All three 
+        - `Scan`                  - Automate the process of setting up a parameter scan. All three 
                                   scan, repeat and random number generation) are supported. 
         
-        - Run                   - Submit copasi file to CopasiSE. Unticks all 'executable boxes' then ticks 
+        - `Run`                   - Submit copasi file to CopasiSE. Unticks all 'executable boxes' then ticks 
                                   the executable box of interest. 
        
-        - InsertParameters      - Take parameters from pandas.DataFrame, python dict or from csv/txt files (output from copasi) 
+        - `InsertParameters`      - Take parameters from pandas.DataFrame, python dict or from csv/txt files (output from copasi) 
                                   put them into the model. Note: A known bug exists where if you have parameter 
                                   sets in your copasi file then these get changed instead of the active parameters. 
                                   
@@ -55,32 +59,34 @@ The `PEAnalysis` module provides a number of convenient classes for visualizing 
     
     Features Include:
         
-        - ParsePEData           - Read data from a single parameter estimation file (Copasi output) 
+        - `ParsePEData`           - Read data from a single parameter estimation file (Copasi output) 
                                   or a folder of parameter estimation files
         
-        - WritePEData           - Output Parameter estiation data back to file in more convenient format
+        - `WritePEData`           - Output Parameter estiation data back to file in more convenient format
         
-        - TruncateData          - Parameter estimations often find local minima. These can be truncated 
+        - `TruncateData`          - Parameter estimations often find local minima. These can be truncated 
                                   from further analysis by either specifying how many percent (i.e. top 1%)
                                   or what value you would like to use as cut-off, i.e <1e2). 
                                   This class is used implicitely within the plotting classes and an 
                                   interface is provided as an option.
         
-        - PlotHistogram         - Plot histogram for each parameter in your estiation file
+        - `PlotHistogram`         - Plot histogram for each parameter in your estiation file
         
-        - PlotScatters          - Plot all combinations of scatter graph
+        - `PlotScatters`          - Plot all combinations of scatter graph
         
-        - PlotBoxPlots          - visualize variance with box plots
+        - `PlotBoxPlots`          - visualize variance with box plots
         
-        - PlotOptimizationPerformance - evaluate optimization performance with plot of (ordered) 
+        - `PlotOptimizationPerformance` - evaluate optimization performance with plot of (ordered) 
                                         likelihood Vs iteration. The flatter the graph the better. 
+        - `Hex graphs`                  - Like scatters or histograms depending on whether the 'RSS' kwarg 
+                                        is passes to the `Mode` argument or not 
 ## Pydentify2      
 
 The `pydentify2` module uses the `pycopi` module to fully automate the process outlined by Schaber 2012: Easy Identifiability Analysis in Copasi. 
    
     Features Include:
         
-        - ProfileLikelihood     - Setup and run profile likleihood for a model around current parameters
+        - `ProfileLikelihood`     - Setup and run profile likleihood for a model around current parameters
                                 
                                 - Optionally take parameters from a file (copasi output file for example) 
                                 and perform profile likelihood around these parameters
@@ -91,7 +97,7 @@ The `pydentify2` module uses the `pycopi` module to fully automate the process o
                                 - Optionally run on a cluster (sun grid engine is implemented but modular 
                                 nature of the code means this bit can be replaced by code for any job scheduler)
 
-        - Plot                  - Plotting facilities for profile likleihood output. 
+        - `Plot`                  - Plotting facilities for profile likleihood output. 
         
                                 - Chi2 based confidence interval is automatically calculated and 
                                 plotted as red dotted line for determining identifiability status. 
