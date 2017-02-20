@@ -19,7 +19,6 @@ PyCoTools/Scripts/RunTimecoursey.py
 PyCoTools/Scripts/__init__.py
 PyCoTools/Scripts/delete_SGE_jobs.py
 PyCoTools/Scripts/insertPE.py
-PyCoTools/Scripts/module1.py
 PyCoTools/Scripts/submit_copasi_multijob.py
 PyCoTools/Tests/EvaluateOptimizationPerformanceTests.py
 PyCoTools/Tests/InsertParameterFromDictTests.py
