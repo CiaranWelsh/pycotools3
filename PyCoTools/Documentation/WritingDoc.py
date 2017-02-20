@@ -1,6 +1,7 @@
 import pdoc
 import os
-os.chdir('D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools')
+# os.chdir('D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools')
+os.chdir(r'..\Documentation')
 pyd= pdoc.html('pydentify2')
 cp= pdoc.html('pycopi')
 pea= pdoc.html('PEAnalysis')
