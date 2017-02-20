@@ -50,13 +50,4 @@ Temporary Items
 
 
 #my gitignore files 
-..\PyCoTools\Examples\GoldbetterExample\Histograms\*
-
-..\PyCoTools\Examples\GoldbetterExample\Boxplots\*
-
-..\PyCoTools\Examples\GoldbetterExample\OptimizationPerformanceGraph\*
-
-..\PyCoTools\Examples\GoldbetterExample\ProfileLikelihood\*
-
-..\PyCoTools\Examples\GoldbetterExample\Scatters\*
 
