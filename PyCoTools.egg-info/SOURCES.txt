@@ -12,7 +12,7 @@ PyCoTools.egg-info/dependency_links.txt
 PyCoTools.egg-info/requires.txt
 PyCoTools.egg-info/top_level.txt
 PyCoTools/Documentation/PEAnalysis.html
-PyCoTools/Documentation/copasiAPI.html
+PyCoTools/Documentation/pycpoi.html
 PyCoTools/Documentation/pydentify2.html
 PyCoTools/Scripts/FitAnalysis.py
 PyCoTools/Scripts/RunTimecoursey.py

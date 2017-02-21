@@ -14,6 +14,9 @@ of PyCoTools works on Copasi Version 16 and previous releases. Efforts will be m
 (version 19 at the date of writing this)
 
 
+## Tutorial
+A full tutorial on how to use PyCoTools can be found [here](https://github.com/CiaranWelsh/PyCoTools/blob/master/PyCoTools/PyCoToolsTutorial/PyCoToolsTutorial.ipynb)
+
 ## pycopi
 The `pycopi` module is a set of python classes for interfacing with copasi via python. 
 
