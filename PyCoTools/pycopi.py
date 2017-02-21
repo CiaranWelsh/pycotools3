@@ -2036,7 +2036,7 @@ class PhaseSpace(TimeCourse):
     of phase space plot
     '''
     def __init__(self,copasi_file,**kwargs):
-        super(PhaseSpacePlots,self).__init__(copasi_file,**kwargs)
+        super(PhaseSpace,self).__init__(copasi_file,**kwargs)
                 
         self.new_options={'Plot':'false'}
         self.kwargs.update(self.new_options)
