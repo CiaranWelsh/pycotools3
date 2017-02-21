@@ -809,7 +809,7 @@ class PlotBoxplot():
          Orientation:
              'horizontal' or 'vertical', default='vertical'
          SaveFig:
-             'true' or 'false'. Save to a folder called histograms in results directory. 
+             'true' or 'false'. Save to a folder called boxplots in results directory. 
              Default='false'
          DPI:
              Resolution to use when SaveFig='true'. The larger this value the 
