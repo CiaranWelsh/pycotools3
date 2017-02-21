@@ -514,6 +514,7 @@ class PlotScatters():
                  'ExtraTitle':None,
                  'Log10':'false',
                  'Show':'false',
+                 'ColourMap':'inferno'
                  
                      }
         for i in kwargs.keys():
@@ -558,7 +559,7 @@ class PlotScatters():
         x_data=self.truncated_data[x_specie]
         y_data=self.truncated_data[y_specie]
         plt.figure()
-        plt.scatter(x_data,y_data,c=self.truncated_data['RSS'],cmap='hsv')
+        plt.scatter(x_data,y_data,c=self.truncated_data['RSS'],cmap=self.kwargs['ColourMap'])
         cb=plt.colorbar()
         cb.set_label('RSS')
         #pretty stuff
