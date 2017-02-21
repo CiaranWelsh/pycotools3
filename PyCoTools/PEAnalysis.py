@@ -559,8 +559,8 @@ class PlotScatters():
         y_data=self.truncated_data[y_specie]
         plt.figure()
         plt.scatter(x_data,y_data,c=self.truncated_data['RSS'],cmap='hsv')
-        plt.colorbar()
-
+        cb=plt.colorbar()
+        cb.set_label('RSS')
         #pretty stuff
         ax=plt.subplot(1,1,1)
         ax.spines['right'].set_color('none')
