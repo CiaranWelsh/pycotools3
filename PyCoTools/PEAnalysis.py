@@ -425,7 +425,7 @@ class PlotHistogram():
         self.truncated_data=self.truncate_data()
         #main method
         self.testing_variable=self.plot_all() #only assigned to variable for testing purposes
-        os.chdir(os.path.dirname(self.results_dir))
+        os.chdir('..'))
         
     def list_parameters(self):
         return self.data.keys()
@@ -634,7 +634,7 @@ class PlotHexMap():
                  'X':100,           #if below_x: this is the X boundary. If percent: this is the percent of data to keep
                  'AxisSize':15,
                  'FontSize':22,
-                 'Bins':50,
+                 'Bins':'log',
                  'ColorMap':'inferno',
                  'XRotation':25,
                  'TitleWrapSize':25,
@@ -645,10 +645,12 @@ class PlotHexMap():
                  'Show':'false',
                  'Mode':'counts',
                  'Marginals':'false',
+                 'ColourMap':'inferno',
+                 'ResultsDirectory':None,
                  
                      }
         for i in kwargs.keys():
-            assert i in options.keys(),'{} is not a keyword argument for TruncateData'.format(i)
+            assert i in options.keys(),'{} is not a keyword argument for PlotHexMap'.format(i)
         options.update( kwargs)  
         self.kwargs=options
         assert self.kwargs.get('TruncateMode') in ['below_x','percent']
@@ -665,10 +667,11 @@ class PlotHexMap():
         self.PED=ParsePEData(self.results_path)
         
         #create a directory and change to it
-        if self.kwargs['Mode']=='RSS':
-            self.results_dir=os.path.join(os.path.dirname(self.results_path),'HexPlotsByRSS')
-        else:
-            self.results_dir=os.path.join(os.path.dirname(self.results_path),'HexPlotsByCounts')
+        if self.kwargs['ResultsDirectory']==None:
+            if self.kwargs['Mode']=='RSS':
+                self.results_dir=os.path.join(os.path.dirname(self.results_path),'HexPlotsByRSS')
+            else:
+                self.results_dir=os.path.join(os.path.dirname(self.results_path),'HexPlotsByCounts')
         if self.kwargs.get('SaveFig')=='true':
             if os.path.isdir(self.results_dir)!=True:
                 os.mkdir(self.results_dir)
@@ -705,13 +708,19 @@ class PlotHexMap():
         y_data=self.truncated_data[y_specie]
         plt.figure()
         if self.kwargs['Mode']=='RSS':
-            plt.hexbin(x_data,y_data,cmap='inferno',C=self.truncated_data['RSS'],bins=self.kwargs['Bins'],gridsize=self.kwargs['GridSize'])
+            plt.hexbin(x_data,y_data,cmap=self.kwargs['ColourMap'],C=self.truncated_data['RSS'],bins=self.kwargs['Bins'],gridsize=self.kwargs['GridSize'])
             cb=plt.colorbar()
-            cb.set_label('RSS')
+            if self.kwargs['Bins']=='log':
+                cb.set_label('RSS(log)')   
+            else:
+                cb.set_label('RSS')
         else:
-            plt.hexbin(x_data,y_data,cmap='inferno',gridsize=self.kwargs['GridSize'],bins=self.kwargs['Bins'])
+            plt.hexbin(x_data,y_data,cmap=self.kwargs['ColourMap'],gridsize=self.kwargs['GridSize'],bins=self.kwargs['Bins'])
             cb=plt.colorbar()
-            cb.set_label('Counts')        
+            if self.kwargs['Bins']=='log':
+                cb.set_label('Counts (log)')        
+            else:
+                cb.set_label('Counts')
 
         #pretty stuff
         ax=plt.subplot(1,1,1)
