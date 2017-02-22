@@ -677,6 +677,8 @@ class PlotHexMap():
                 self.results_dir=os.path.join(os.path.dirname(self.results_path),'HexPlotsByRSS')
             else:
                 self.results_dir=os.path.join(os.path.dirname(self.results_path),'HexPlotsByCounts')
+        else:
+            self.results_dir=self.kwargs['ResultsDirectory']
         if self.kwargs.get('SaveFig')=='true':
             if os.path.isdir(self.results_dir)!=True:
                 os.mkdir(self.results_dir)

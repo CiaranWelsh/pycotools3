@@ -39,12 +39,16 @@ if os.path.isdir(args.o)!=True:
     os.mkdir(args.o)
 os.chdir(args.o)
 
-P.PEAnalysis.EvaluateOptimizationPerformance(args.path,SaveFig='true',Log10=args.Log10)
-P.PEAnalysis.PlotHistogram(args.path,SaveFig='true',TruncateMode=args.TruncateMode,X=args.x,Bins=args.Bins,Log10=args.Log10)
-P.PEAnalysis.PlotScatters(args.path,SaveFig='true',Log10=args.Log10,TruncateMode=args.TruncateMode,X=args.x)
-P.PEAnalysis.PlotBoxplot(args.path,SaveFig='true',TruncateMode=args.TruncateMode,X=args.x,NumPerPlot=args.NumPerPlot)
-P.PEAnalysis.PlotHexMap(args.path,SaveFig='true',TruncateMode=args.TruncateMode,X=args.x,Mode='RSS')
-P.PEAnalysis.PlotHexMap(args.path,SaveFig='true',TruncateMode=args.TruncateMode,X=args.x,Mode='count')
+l=[]
+for i in['OptimizationPerformance','Histograms','Scatters','BoxPlots','HexMapRSS','HexMapCounts']:
+    l.append(os.path.join(args.o,i))
+
+P.PEAnalysis.EvaluateOptimizationPerformance(args.path,SaveFig='true',Log10=args.Log10,ResultsDirectory=l[0])
+P.PEAnalysis.PlotHistogram(args.path,SaveFig='true',TruncateMode=args.TruncateMode,X=args.x,Bins=args.Bins,Log10=args.Log10,ResultsDirectory=l[1])
+P.PEAnalysis.PlotScatters(args.path,SaveFig='true',Log10=args.Log10,TruncateMode=args.TruncateMode,X=args.x,ResultsDirectory=l[2])
+P.PEAnalysis.PlotBoxplot(args.path,SaveFig='true',TruncateMode=args.TruncateMode,X=args.x,NumPerPlot=args.NumPerPlot,ResultsDirectory=l[3])
+P.PEAnalysis.PlotHexMap(args.path,SaveFig='true',TruncateMode=args.TruncateMode,X=args.x,Mode='RSS',ResultsDirectory=l[4])
+P.PEAnalysis.PlotHexMap(args.path,SaveFig='true',TruncateMode=args.TruncateMode,X=args.x,Mode='counts',ResultsDirectory=l[5])
 
 
 
