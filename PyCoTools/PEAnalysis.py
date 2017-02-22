@@ -425,7 +425,7 @@ class PlotHistogram():
         self.truncated_data=self.truncate_data()
         #main method
         self.testing_variable=self.plot_all() #only assigned to variable for testing purposes
-        os.chdir('..'))
+        os.chdir('..')
         
     def list_parameters(self):
         return self.data.keys()
