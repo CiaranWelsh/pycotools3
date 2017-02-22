@@ -37,7 +37,7 @@ import  setuptools
 #version
 MAJOR = 3
 MINOR = 2
-MICRO = 1
+MICRO = 2
 #=======
 __version__ = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
@@ -55,7 +55,12 @@ setup(
                              'Examples/*.cps',
                              'Scripts/*.py',
                              'Tests/*.py',
-                             'Tests/*.cps']},
+                             'Tests/*.cps',
+                             'PyCoToolsTutorial/*.pickle',
+                             'PyCoToolsTutorial/*.py',
+                             'PyCoToolsTutorial/*.ipynb',
+                             'PyCoToolsTutorial/*.html',
+                             'PyCoToolsTutorial/*.cps']},
   author_email = 'c.welsh2@newcastle.ac.uk',
   url = 'https://github.com/CiarnWelsh/PyCoTools', # use the URL to the github repo
 #  download_url = 'https://github.com/b3053674/pydentify/tarball/0.1',
@@ -65,7 +70,7 @@ setup(
 #  platform=['windows','linux'],
   install_requires=['pandas','numpy','scipy','matplotlib',
                     'lxml'],
-  long_description='''Tools for using Copasi via Python and conduction profile likelihoods. See Github page for more details''')
+  long_description='''Tools for using Copasi via Python and calculating profile likelihoods. See Github page for more details''')
 
 
 
