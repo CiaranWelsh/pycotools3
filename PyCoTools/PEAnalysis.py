@@ -514,7 +514,8 @@ class PlotScatters():
                  'ExtraTitle':None,
                  'Log10':'false',
                  'Show':'false',
-                 'ColourMap':'inferno'
+                 'ColourMap':'inferno',
+                 'ResultsDirectory':None,
                  
                      }
         for i in kwargs.keys():
@@ -527,7 +528,11 @@ class PlotScatters():
         self.PED=ParsePEData(self.results_path)
         
         #create a directory and change to it
-        self.results_dir=os.path.join(os.path.dirname(self.results_path),'Scatters')
+        if self.kwargs['ResultsDirectory']==None:
+            self.results_dir=os.path.join(os.path.dirname(self.results_path),'Scatters')
+        else:
+            self.results_dir=self.kwargs['ResultsDirectory']
+            
         if self.kwargs.get('SaveFig')=='true':
             if os.path.isdir(self.results_dir)!=True:
                 os.mkdir(self.results_dir)
@@ -856,6 +861,7 @@ class PlotBoxplot():
                  'CustomTitle':None,
                  #boxplot specific options
                  'NumPerPlot':None,
+                 'ResultsDirectory':None,
                  
                      }
         for i in kwargs.keys():
@@ -869,7 +875,10 @@ class PlotBoxplot():
         #Other classes
         self.PED=ParsePEData(self.results_path)
         #create a directory and change to it
-        self.results_dir=os.path.join(os.path.dirname(self.results_path),'Boxplots')
+        if self.kwargs['ResultsDirectory']==None:
+            self.results_dir=os.path.join(os.path.dirname(self.results_path),'Boxplots')
+        else:
+            self.results_dir=self.kwargs['ResultsDirectory']
         if os.path.isdir(self.results_dir)!=True:
             os.mkdir(self.results_dir)
         os.chdir(self.results_dir)
@@ -1113,6 +1122,7 @@ class EvaluateOptimizationPerformance():
                  'DPI':300,
                  'ExtraTitle':None,
                  'CustomTitle':None,
+                 'ResultsDirectory':None,
                  
                      }
         for i in kwargs.keys():
@@ -1126,7 +1136,10 @@ class EvaluateOptimizationPerformance():
         self.PED=ParsePEData(self.results_path)
         
         #create a directory and change to it
-        self.results_dir=os.path.join(os.path.dirname(self.results_path),'OptimizationPerformanceGraph')
+        if self.kwargs['ResultsDirectory']==None:
+            self.results_dir=os.path.join(os.path.dirname(self.results_path),'OptimizationPerformanceGraph')
+        else:
+            self.results_dir=self.kwargs['ResultsDirectory']
         if os.path.isdir(self.results_dir)!=True:
             os.mkdir(self.results_dir)
         os.chdir(self.results_dir)
