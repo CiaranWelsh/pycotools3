@@ -85,7 +85,8 @@ if __name__=='__main__':
                                                NumberOfGenerations = 200,
                                                Plot='false', #don't want to plot this time
                                                SaveFig='false',
-                                               RandomizeStartValues='true') #Default'true' anyway
+                                               RandomizeStartValues='true',
+                                               ) #Default'true' anyway
     PE.set_up()
     
     PyCoTools.pycopi.Scan(K.kholodenko_model,
