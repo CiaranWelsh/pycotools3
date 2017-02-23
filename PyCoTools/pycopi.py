@@ -3604,13 +3604,9 @@ class Run():
     def multi_run(self):
         def run(x):
             subprocess.Popen('CopasiSE "{}"'.format(x))
-        if isinstance(self.copasi_file,list):
-            for i in self.copasi_file:
-                Process(run(i))
-        else:
-            Process(run(self.copasi_file))
-        return 0
-
+        Process(run(self.copasi_file))
+        
+        
 
         
     def set_task(self):
