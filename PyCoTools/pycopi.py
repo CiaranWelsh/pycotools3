@@ -2183,8 +2183,8 @@ class ParameterEstimation():
         ConfigFilename:
             Filename for the parameter estimation config file
             
-        OverwriteItemTemplate:,
-            'true' or 'false', overwrite the template each time program is run
+        OverwriteConfigFile:,
+            'true' or 'false', overwrite the config file each time program is run
             
         UpdateModel:
             Update model parameters after parameter estimation
@@ -2389,7 +2389,7 @@ class ParameterEstimation():
                  'SetReport':'true',
                  'ConfirmOverwrite': 'false',
                  'ConfigFilename':config_file,
-                 'OverwriteItemTemplate':'false',
+                 'OverwriteConfigFile':'false',
                  'OutputML':default_outputML,
                  'PruneHeaders':'true',
                  'UpdateModel':'false',
@@ -2766,9 +2766,9 @@ class ParameterEstimation():
 
         
     def write_item_template(self):
-        if os.path.isfile(self.kwargs.get('ConfigFilename'))==False or self.kwargs.get('OverwriteItemTemplate')=='true':
+        if os.path.isfile(self.kwargs.get('ConfigFilename'))==False or self.kwargs.get('OverwriteConfigFile')=='true':
             self.get_item_template().to_excel(self.kwargs.get('ConfigFilename'))
-        return  'writing template. {} set to {} and {} is {}'.format('OverwriteItemTemplate',self.kwargs.get('OverwriteItemTemplate'),'ConfigFilename',self.kwargs.get('ConfigFilename'))
+        return  'writing template. {} set to {} and {} is {}'.format('OverwriteConfigFile',self.kwargs.get('OverwriteConfigFile'),'ConfigFilename',self.kwargs.get('ConfigFilename'))
 
         
     def read_item_template(self):
