@@ -166,7 +166,8 @@ class ParsePEData():
     def read_file(self):
         assert self.mode=='file','mode not file'
         _,ext=os.path.splitext(self.results_path)
-        assert ext in ['.txt','.xlsx','.xls','.csv','.pickle'],'parameter file is not .pickle, .txt, .xlsx, .xls, .csv'
+        if ext not in ['.txt','.xlsx','.xls','.csv','.pickle']:
+            raise Errors.InputError('parameter file {} is not a is not .pickle, .txt, .xlsx, .xls or .csv'.format(self.results_path))
         if ext=='.txt':
             return pandas.read_csv(self.results_path,sep='\t')
         elif ext=='xlsx' or ext=='xls':
