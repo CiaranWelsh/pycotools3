@@ -2180,8 +2180,8 @@ class ParameterEstimation():
         ConfirmOverwrite:
             'true' or 'false', overwrite report or not
             
-        ItemTemplateFilename:
-            Filename for the fitItem template
+        ConfigFilename:
+            Filename for the parameter estimation config file
             
         OverwriteItemTemplate:,
             'true' or 'false', overwrite the template each time program is run
@@ -2377,7 +2377,7 @@ class ParameterEstimation():
         
         default_report_name=os.path.join(os.path.dirname(self.copasi_file),
                                          os.path.split(self.copasi_file)[1][:-4]+'_PE_results.txt')
-        item_template_filename= os.path.join(os.path.dirname(self.copasi_file),'fitItemTemplate.xlsx')
+        config_file= os.path.join(os.path.dirname(self.copasi_file),'parameter_estimation_config.xlsx')
         default_outputML=os.path.join(os.path.dirname(self.copasi_file),'_Duplicate.cps')
         options={#report variables
                  'Metabolites':self.GMQ.get_metabolites().keys(),
@@ -2388,7 +2388,7 @@ class ParameterEstimation():
                  'Append': 'false', 
                  'SetReport':'true',
                  'ConfirmOverwrite': 'false',
-                 'ItemTemplateFilename':item_template_filename,
+                 'ConfigFilename':config_file,
                  'OverwriteItemTemplate':'false',
                  'OutputML':default_outputML,
                  'PruneHeaders':'true',
@@ -2766,16 +2766,16 @@ class ParameterEstimation():
 
         
     def write_item_template(self):
-        if os.path.isfile(self.kwargs.get('ItemTemplateFilename'))==False or self.kwargs.get('OverwriteItemTemplate')=='true':
-            self.get_item_template().to_excel(self.kwargs.get('ItemTemplateFilename'))
-        return  'writing template. {} set to {} and {} is {}'.format('OverwriteItemTemplate',self.kwargs.get('OverwriteItemTemplate'),'ItemTemplateFilename',self.kwargs.get('ItemTemplateFilename'))
+        if os.path.isfile(self.kwargs.get('ConfigFilename'))==False or self.kwargs.get('OverwriteItemTemplate')=='true':
+            self.get_item_template().to_excel(self.kwargs.get('ConfigFilename'))
+        return  'writing template. {} set to {} and {} is {}'.format('OverwriteItemTemplate',self.kwargs.get('OverwriteItemTemplate'),'ConfigFilename',self.kwargs.get('ConfigFilename'))
 
         
     def read_item_template(self):
-        if os.path.isfile(self.kwargs.get('ItemTemplateFilename'))==False:
+        if os.path.isfile(self.kwargs.get('ConfigFilename'))==False:
             self.write_item_template()
-        assert os.path.isfile(self.kwargs.get('ItemTemplateFilename'))==True,'ItemTemplate file does not exist. Run \'write_item_template\' method and modify it how you like then rerun this method'
-        return pandas.read_excel(self.kwargs.get('ItemTemplateFilename'))
+        assert os.path.isfile(self.kwargs.get('ConfigFilename'))==True,'ItemTemplate file does not exist. Run \'write_item_template\' method and modify it how you like then rerun this method'
+        return pandas.read_excel(self.kwargs.get('ConfigFilename'))
     
     def add_fit_item(self,item):
         '''
