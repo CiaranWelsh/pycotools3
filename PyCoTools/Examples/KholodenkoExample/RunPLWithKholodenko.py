@@ -11,13 +11,13 @@ import subprocess
 K=FilePaths.KholodenkoExample()
 
 
-param=PyCoTools.PEAnalysis.ParsePEData(K.local_PEData_dir)
+param=PyCoTools.PEAnalysis.ParsePEData(K.PE_data2_2)
 print param.data.iloc[0].sort_index()
 
 PyCoTools.pydentify2.ProfileLikelihood(K.kholodenko_model, #full path to the model
-                                       ParameterPath=K.local_PEData_dir, #full path to the PEData
+                                       ParameterPath=K.PE_data2_2, #full path to the PEData
                                        Index=range(5), #index of PE set for profiling. (best is 0)
-                                       NumberOfSteps=100, #resolution of profile likelihood 
+                                       NumberOfSteps=25, #resolution of profile likelihood 
                                        Run='SGE',#Run method, 
                                        
                                        ##specify multipliers for scan boundaries\
@@ -29,8 +29,6 @@ PyCoTools.pydentify2.ProfileLikelihood(K.kholodenko_model, #full path to the mod
 
 
 
-copasiML=PyCoTools.pycopi.CopasiMLParser( K.kholodenko_model)
-print copasiML.copasiML
 
 
 

@@ -2180,11 +2180,11 @@ class ParameterEstimation():
         ConfirmOverwrite:
             'true' or 'false', overwrite report or not
             
-        ItemTemplateFilename:
-            Filename for the fitItem template
+        ConfigFilename:
+            Filename for the parameter estimation config file
             
-        OverwriteItemTemplate:,
-            'true' or 'false', overwrite the template each time program is run
+        OverwriteConfigFile:,
+            'true' or 'false', overwrite the config file each time program is run
             
         UpdateModel:
             Update model parameters after parameter estimation
@@ -2377,7 +2377,7 @@ class ParameterEstimation():
         
         default_report_name=os.path.join(os.path.dirname(self.copasi_file),
                                          os.path.split(self.copasi_file)[1][:-4]+'_PE_results.txt')
-        item_template_filename= os.path.join(os.path.dirname(self.copasi_file),'fitItemTemplate.xlsx')
+        config_file= os.path.join(os.path.dirname(self.copasi_file),'parameter_estimation_config.xlsx')
         default_outputML=os.path.join(os.path.dirname(self.copasi_file),'_Duplicate.cps')
         options={#report variables
                  'Metabolites':self.GMQ.get_metabolites().keys(),
@@ -2388,8 +2388,8 @@ class ParameterEstimation():
                  'Append': 'false', 
                  'SetReport':'true',
                  'ConfirmOverwrite': 'false',
-                 'ItemTemplateFilename':item_template_filename,
-                 'OverwriteItemTemplate':'false',
+                 'ConfigFilename':config_file,
+                 'OverwriteConfigFile':'false',
                  'OutputML':default_outputML,
                  'PruneHeaders':'true',
                  'UpdateModel':'false',
@@ -2766,16 +2766,16 @@ class ParameterEstimation():
 
         
     def write_item_template(self):
-        if os.path.isfile(self.kwargs.get('ItemTemplateFilename'))==False or self.kwargs.get('OverwriteItemTemplate')=='true':
-            self.get_item_template().to_excel(self.kwargs.get('ItemTemplateFilename'))
-        return  'writing template. {} set to {} and {} is {}'.format('OverwriteItemTemplate',self.kwargs.get('OverwriteItemTemplate'),'ItemTemplateFilename',self.kwargs.get('ItemTemplateFilename'))
+        if os.path.isfile(self.kwargs.get('ConfigFilename'))==False or self.kwargs.get('OverwriteConfigFile')=='true':
+            self.get_item_template().to_excel(self.kwargs.get('ConfigFilename'))
+        return  'writing template. {} set to {} and {} is {}'.format('OverwriteConfigFile',self.kwargs.get('OverwriteConfigFile'),'ConfigFilename',self.kwargs.get('ConfigFilename'))
 
         
     def read_item_template(self):
-        if os.path.isfile(self.kwargs.get('ItemTemplateFilename'))==False:
+        if os.path.isfile(self.kwargs.get('ConfigFilename'))==False:
             self.write_item_template()
-        assert os.path.isfile(self.kwargs.get('ItemTemplateFilename'))==True,'ItemTemplate file does not exist. Run \'write_item_template\' method and modify it how you like then rerun this method'
-        return pandas.read_excel(self.kwargs.get('ItemTemplateFilename'))
+        assert os.path.isfile(self.kwargs.get('ConfigFilename'))==True,'ItemTemplate file does not exist. Run \'write_item_template\' method and modify it how you like then rerun this method'
+        return pandas.read_excel(self.kwargs.get('ConfigFilename'))
     
     def add_fit_item(self,item):
         '''
@@ -3604,13 +3604,9 @@ class Run():
     def multi_run(self):
         def run(x):
             subprocess.Popen('CopasiSE "{}"'.format(x))
-        if isinstance(self.copasi_file,list):
-            for i in self.copasi_file:
-                Process(run(i))
-        else:
-            Process(run(self.copasi_file))
-        return 0
-
+        Process(run(self.copasi_file))
+        
+        
 
         
     def set_task(self):
