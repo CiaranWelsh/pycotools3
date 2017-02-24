@@ -20,11 +20,16 @@ PyCoTools/PyCoToolsTutorial/Kholodenko.cps
 PyCoTools/PyCoToolsTutorial/PyCoToolsTutorial.html
 PyCoTools/PyCoToolsTutorial/PyCoToolsTutorial.ipynb
 PyCoTools/PyCoToolsTutorial/__init__.py
-PyCoTools/Scripts/FitAnalysis.py
+PyCoTools/Scripts/PlotPL.py
 PyCoTools/Scripts/__init__.py
+PyCoTools/Scripts/compare_sim_vs_exp.py
 PyCoTools/Scripts/delete_SGE_jobs.py
+PyCoTools/Scripts/fit_analysis.py
 PyCoTools/Scripts/insertPE.py
+PyCoTools/Scripts/plot_PL.py
+PyCoTools/Scripts/run_PL.py
 PyCoTools/Scripts/run_local_chaser_PEs.py
+PyCoTools/Scripts/run_multiple_PEs.py
 PyCoTools/Scripts/submit_copasi_multijob.py
 PyCoTools/Tests/EvaluateOptimizationPerformanceTests.py
 PyCoTools/Tests/InsertParameterFromDictTests.py
