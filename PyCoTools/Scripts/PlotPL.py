@@ -67,7 +67,7 @@ else:
                            SaveFig=args.SaveFig,
                            MultiPlot=args.MultiPlot,
                            UsePickle=args.UsePickle,
-                           OverwritePickle=args.OverwritePickle
+                           OverwritePickle=args.OverwritePickle)
 
 
 
