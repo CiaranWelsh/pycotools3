@@ -37,7 +37,7 @@ import  setuptools
 #version
 MAJOR = 3
 MINOR = 2
-MICRO = 6
+MICRO = 7
 #=======
 __version__ = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
@@ -62,7 +62,7 @@ setup(
                              'PyCoToolsTutorial/*.html',
                              'PyCoToolsTutorial/*.cps']},
   author_email = 'c.welsh2@newcastle.ac.uk',
-  url = 'https://github.com/CiarnWelsh/PyCoTools', # use the URL to the github repo
+  url = 'https://github.com/CiaranWelsh/PyCoTools', # use the URL to the github repo
 #  download_url = 'https://github.com/b3053674/pydentify/tarball/0.1',
   keywords = ['systems biology','modelling','biological','networks','copasi','identifiability analysis','profile likelihood'],
 #  include_package_data=False,
