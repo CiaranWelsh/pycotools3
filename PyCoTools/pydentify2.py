@@ -463,7 +463,7 @@ class ProfileLikelihood():
 #                args=['CopasiSE',self.cps_dct[i][j]]
                 if self.kwargs.get('Verbose')=='true':
                     print 'running {}'.format(j)
-                res[self.cps_dct[i][j]]= pycopi.Run(self.cps_dct[i][j],Task='scan',MaxTime=self.kwargs.get('MaxTime')).output
+                res[self.cps_dct[i][j]]= pycopi.Run(self.cps_dct[i][j],Task='scan',MaxTime=self.kwargs.get('MaxTime'),Mode='slow').run()
         return res
 
 #    def run_fast(self):
@@ -1227,98 +1227,6 @@ if __name__=='__main__':
     p=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\Tests\output.txt'
     
     t=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\Tests\cheese.txt'
-    
-#    PE=pycopi.ParameterEstimation(f,t,Method='ParticleSwarm',ReportName='output.txt',Plot='true',Save='overwrite')
-#    PE.write_item_template()
-#    PE.set_up()
-    
-#    S=pycopi.Scan(f,ReportType='time_course',ScanType='scan')
-    
-    
-#    PE.run()
-#    data=pandas.read_csv(p,sep='\t')
-#    data=pandas.DataFrame(data.iloc[-1]).transpose()
-#    os.remove(p)
-#    data.to_csv(p,sep='\t')
-#
-#
-#    ProfileLikelihood(f,ParameterPath=p,Run='slow',Index=0)
-
-#    print data
-#    IP=pycopi.InsertParameters(f,DF=data)
-
-
-
-#    P=Plot(f,ParameterPath=p,Index=0,savefig='true')
-
-
-#    f=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\BioModelsPydentify\Models\Abell2011_CalciumSignaling_WithAdaptation\Abell2011_CalciumSignaling_WithAdaptation.cps'
-#    d=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\BioModelsPydentify\Models\Abell2011_CalciumSignaling_WithAdaptation\PE_results_pruned_titles.txt'
-#    
-#    
-    
-#    Plot(f,ParameterPath=d,Index=0)
-
-
-
-
-
-
-
-
-#
-#
-#
-#
-#
-#    f=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\BioModelsPydentify\Models\Abell2011_CalciumSignaling_WithAdaptation\Abell2011_CalciumSignaling_WithAdaptation.cps'
-#    d=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\BioModelsPydentify\Models\Abell2011_CalciumSignaling_WithAdaptation\PE_results_pruned_titles.txt'
-#    
-#    
-#    
-#    p=Plot(f,ParameterPath=d,Index=0)
-##    print p.data
-#
-#
-
-
-#self.get_PL_dir()
-##        self.indices=self.get_index_dirs()
-##        self.result_paths=self.get_results()
-##        self.data=self.parse_results()
-
-
-'''
-
-
-
-Another way to visualize the profile likleihood:
-
-Each point in a profile likelihood  is either lower or higher than the chi2 confidence interval. 
-This gives me a new way to represent identifiability status. 
-
-
-
-Over Over Under Under Undre over over (would represent identifiable paraemter)
-Under under under over oeer (practical)
-ove over over under under under under (pracical) 
-
-All under but parameter valeus not constant (practicla)
-
-All under but parameter valeus constant - structural 
-
-
-What about 3D profile likleihoods! all possible combinations of pairs of parameters 
-
-
-
-Another thing:
-    when you do a profil likelihood you are reoptimizing. all paraemters. not just theta. 
-    So you could look at how the values of the other parameters change with respect to the reoptimization 
-    like they do in the new raue paper
-
-
-'''
  
 
 
