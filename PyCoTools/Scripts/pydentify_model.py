@@ -9,13 +9,11 @@ import PyCoTools as P
 import os
 import argparse
 
+#==============================================================================
 parser=argparse.ArgumentParser()
 parser.add_argument('model',help='copasi file for running through the pydentify workflow' )
-
-
-
-
-
+args=parser.parse_args()
+#==============================================================================
 
 '''
 Download models from BioModels in another Script. 
@@ -35,9 +33,13 @@ Workflow:
     
 Collect counts to search for errors. 
 '''
+
+
+
+
+
 plot='true'
 savefig='true'
-
 model=r"D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels\BIOMD0000000001\Edelstein1996 - EPSP ACh event.cps"
 directory,fle=os.path.split(model)
 TCReportName=os.path.join(directory,'timecourse_report.txt')
