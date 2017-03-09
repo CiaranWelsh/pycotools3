@@ -407,6 +407,8 @@ class PlotHistogram():
         self.kwargs=options
         assert self.kwargs.get('TruncateMode') in ['below_x','percent']
         
+        if self.kwargs['Log10'] not in ['true','false']:
+            raise Errors.InputError('Log10 should be string. Either \'true\' or \'false\' ')
         #Other 
         self.PED=ParsePEData(self.results_path)
 
@@ -1447,6 +1449,9 @@ class PlotPEData():
             '''
             need to subtract 1 from the intervals
             '''
+            print self.exp_times[i]['End']
+            print self.exp_times[i]['Intervals']
+            print self.exp_times[i]['StepSize']
             TC=pycopi.TimeCourse(self.copasi_file,Start=self.exp_times[i]['Start'],
                           End=self.exp_times[i]['End'],
                           Intervals=self.exp_times[i]['Intervals'],
