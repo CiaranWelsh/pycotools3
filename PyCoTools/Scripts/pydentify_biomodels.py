@@ -68,7 +68,10 @@ def xml2cps(model_pickle,cps_pickle):
     cps_files=[]
     for i in paths.index:
         path= paths.iloc[i][0]
-        cps_path=os.path.splitext(path)[0]+'.cps'
+        print path
+        cps_path=PyCoTools.Misc.RemoveNonAscii(os.path.splitext(path)[0]).filter+'.cps'
+        print cps_path
+#        print 'cps file:{}'.format(cps_path).decode('utf8')
         cps_files.append(cps_path)        
         if os.path.isfile(cps_path):
             continue
@@ -78,6 +81,7 @@ def xml2cps(model_pickle,cps_pickle):
         p.join()
 #        subprocess.check_call('CopasiSE -i "{}"'.format(paths['successful'][i]))
     print 'SBML to cps conversion took {}s'.format(time.time()-start)
+    
     df=pandas.DataFrame( cps_files)
     df.to_pickle(cps_pickle)
     
@@ -98,14 +102,18 @@ def pydentify_biomodels_cluster(cps_pickle):
         if os.path.isfile(cps_file)==False:
             raise PyCoTools.Errors.InputError('{} doesn\' exist.'.format(cps_file))
         dire,fle=os.path.split(cps_file)
-        sh_file=os.path.join(dire,fle[:-4]+'_sh_file.sh')
-        with open(sh_file,'w') as f:
-            f.write('module load apps/python27/2.7.8\nmodule load apps/COPASI/4.16.104-Linux-64bit\npython -m PyCoTools.Scripts.pydentify_model {}'.format(cps_file))
-        os.system('qsub {}'.format(sh_file))
+        if CLUSTER:
+            sh_file=os.path.join(dire,fle[:-4]+'_sh_file.sh')
+            with open(sh_file,'w') as f:
+                f.write('module load apps/python27/2.7.8\nmodule load apps/COPASI/4.16.104-Linux-64bit\npython -m PyCoTools.Scripts.pydentify_model "{}"'.format(cps_file))
+            os.system('qsub {}'.format(sh_file))
+        else:
+            subprocess.check_call('python -m PyCoTools.Scripts.pydentify_model "{}"'.format(cps_file),shell=True)
 
 if __name__=='__main__':
     
     F=FilePaths()
+    PyCoTools.Misc.download_models(F.wd)
     cps_files=xml2cps(F.model_downloads_pickle,F.cps_files_pickle)
     print pydentify_biomodels_cluster(F.cps_files_pickle)
     
