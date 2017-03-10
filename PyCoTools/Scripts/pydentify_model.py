@@ -8,7 +8,8 @@ Created on Wed Mar 08 20:23:21 2017
 import PyCoTools as P
 import os
 import argparse
-
+import time
+import pickle
 '''
 Download models from BioModels in another Script. 
 
@@ -60,6 +61,8 @@ print model
 ## get working directory and file
 directory,fle=os.path.split(model)
 
+profile_likelihood_computation_time_pickle=os.path.join(directory,'profile_likelihood_computation_time_pickle.pickle')
+
 #%% Name time course reort and run time course, saving data to file and plotting 
 ## with matplotlib
 TCReportName=os.path.join(directory,'timecourse_report.txt')
@@ -100,12 +103,16 @@ PE.set_up()
 PE.run()
 
 #%% Run profile likelihoods
+
+start=time.time()
 print 'running profile likelihoods for {}'.format(model)
 P.pydentify2.ProfileLikelihood(model,ParameterPath=PEResults_file,
                                NumberOfSteps=10,UpperBoundMultiplier=1000,
                                LowerBoundMultiplier=100,Run='slow',Index=0)
 
-
+computation_time=time.time()-start
+with open(profile_likelihood_computation_time_pickle,'w') as f:
+    pickle.dump(computation_time,f)
 #%% Visualize profile likelihoods
 P.pydentify2.Plot(model,ParameterPath=PEResults_file,Index=0,SaveFig=savefig)
 
