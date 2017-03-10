@@ -13,6 +13,8 @@ import threading
 import pickle
 import pandas
 import time
+import argparse
+
 '''
 First download models using:
     >>>import PyCoTools
@@ -23,12 +25,13 @@ Run this script to pass the models in curated biomodels to the pydentify_model
 script.
 
 '''
+#==============================================================================
 
+parser=argparse.ArgumentParser()
+parser.add_argument('--percent',help='Percent of curated models to download',type=int,default=100)
+args=parser.parse_args()
 
-
-
-
-
+#==============================================================================
 
 if sys.platform=='win32':
     DOWNLOAD_DIRECTORY=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4'
@@ -126,7 +129,7 @@ def pydentify_biomodels_cluster(cps_pickle):
 if __name__=='__main__':
     
     F=FilePaths()
-    PyCoTools.Misc.download_models(F.wd,percent=1)
+    PyCoTools.Misc.download_models(F.wd,percent=args.percent)
     cps_files=xml2cps(F.model_downloads_pickle,F.cps_files_pickle)
     print pydentify_biomodels_cluster(F.cps_files_pickle)
     
