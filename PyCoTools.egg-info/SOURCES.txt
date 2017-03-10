@@ -87,7 +87,7 @@ PyCoTools/Scripts/delete_SGE_jobs.py
 PyCoTools/Scripts/fit_analysis.py
 PyCoTools/Scripts/insertPE.py
 PyCoTools/Scripts/plot_PL.py
-PyCoTools/Scripts/pydenitfy_biomodels.py
+PyCoTools/Scripts/pydentify_biomodels.py
 PyCoTools/Scripts/pydentify_model.py
 PyCoTools/Scripts/run_PL.py
 PyCoTools/Scripts/run_local_chaser_PEs.py

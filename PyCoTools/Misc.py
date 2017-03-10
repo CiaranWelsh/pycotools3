@@ -15,7 +15,7 @@ class RemoveNonAscii():
         
     def remove_non_ascii(self):
         for i in self.non_ascii_str:
-            if i not in string.ascii_letters+string.digits+'[]-_().':
+            if i not in string.ascii_letters+string.digits+'[]-_().\\:':
                 self.non_ascii_str=self.non_ascii_str.replace(i,'_')
         return self.non_ascii_str
                 
@@ -107,7 +107,7 @@ def download_models(directory):
     model_dct={}
     model_files=[]
     skipped=0
-    for i in model:
+    for i in model[:50]:
         os.chdir(directory)
         dire=os.path.join(directory,i)
         if os.path.isdir(dire)==False:
@@ -123,16 +123,19 @@ def download_models(directory):
             continue
         try:
             name=bio.getModelNameById(i)
-            strings='\[\]_\{\}'
-            name=re.sub(strings,'_',name)
+            name=RemoveNonAscii(name).filter
+#            strings='\[\]_\{\}'
+#            name=re.sub(strings,'_',name)
             model_dct[name]=bio.getModelSBMLById(i)
             print 'downloading {}:\t{}'.format(i,name.encode('utf8'))
+            
             fle=os.path.join(dire,name+'.xml')
             if os.path.isfile(fle)!=True:
                 with open(fle,'w') as f:
                     f.write(model_dct[name].encode('utf8'))
             time.sleep(0.25)
             model_files.append(fle)
+            print 'saved to : {}'.format(fle)
         except:
             continue
     print 'You have downloaded {} out of {} models'.format(len(model_dct.keys()),len(model))
