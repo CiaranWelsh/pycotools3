@@ -3624,7 +3624,7 @@ class Run():
         
         '''
         if self.kwargs.get('MaxTime')==None:
-            args=['CopasiSE',self.copasi_file]
+            args=['CopasiSE','{}'.format(self.copasi_file)]
         else:
             args=['CopasiSE','--maxTime',str(self.kwargs.get('MaxTime')),self.copasi_file]
         p=subprocess.Popen(args,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=True)
