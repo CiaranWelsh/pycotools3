@@ -56,7 +56,7 @@ else:
     ## Set model variable to a path to COPASI file if not using COMMAND_LINE option
     model=r"D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels\BIOMD0000000016\Goldbeter1995_CircClock.cps"
 
-
+print model
 ## get working directory and file
 directory,fle=os.path.split(model)
 

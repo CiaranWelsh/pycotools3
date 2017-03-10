@@ -67,7 +67,7 @@ def add_noise(f, noise_factor=0.05):
 
 
 
-def download_models(directory):
+def download_models(directory,percent=100):
     '''
     download curated models from biomodels curated section
     
@@ -83,6 +83,8 @@ def download_models(directory):
             save to file and contains models
         
     '''
+    if percent>100 or percent <0 :
+        raise TypeError('percent should be between 0 and 100')
     try:
         import bioservices
     except ImportError:
@@ -104,10 +106,12 @@ def download_models(directory):
     print 'The number of models in biomodels right now is {}'.format(len(bio))
     model=bio.getAllCuratedModelsId()
     print 'The number of curated models in biomodels is: {}'.format(len(model))
+    per=len(model)//100*percent
+    print per
     model_dct={}
     model_files=[]
     skipped=0
-    for i in model[:50]:
+    for i in model[:per]:
         os.chdir(directory)
         dire=os.path.join(directory,i)
         if os.path.isdir(dire)==False:
