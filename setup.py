@@ -37,7 +37,7 @@ import  setuptools
 #version
 MAJOR = 3
 MINOR = 2
-MICRO = 8
+MICRO = 11
 #=======
 __version__ = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
@@ -51,8 +51,8 @@ setup(
   package_data={'PyCoTools':['*.py','Documentation/*.pdf',
                              'Documentation/*.html','Licence.txt',
                              'ReadMe.md',
-                             'Examples/*.py',
-                             'Examples/*.cps',
+                             'Examples/KholodenkoExample/*',
+                             'Examples/BioModelsWorkflowVersion1/*'
                              'Scripts/*.py',
                              'Tests/*.py',
                              'Tests/*.cps',
