@@ -65,16 +65,21 @@ directory,fle=os.path.split(model)
 TCReportName=os.path.join(directory,'timecourse_report.txt')
 TC=P.pycopi.TimeCourse(model,End=1000,StepSize=20,Intervals=50,Plot=plot,SaveFig=savefig,
                        ReportName=TCReportName)
+                       
+print 'running time course {}'.format(TCReportName)
 #%% Add Noise to timecourse for more interesting fits. 
 noisy_data= P.Misc.add_noise(TCReportName)
 noisy_datafile=os.path.join(directory,'noisy_data.txt')
 noisy_data.to_csv(noisy_datafile,sep='\t')
+print 'adding noise {}'.format(noisy_datafile)
 #%% Run Parameter estimation. Do not randomize initial values as we
 ##  want to start the parameter estimation in a good place.
 ##  Run parameter estimation through the scan task to get only the best parameter
 ##  values rather than progression of optimization problem as function evalutions
 ##  Only run one parameter estimation save to file
+
 PEResults_file=os.path.join(directory,'PEResults.txt')
+print 'running parameter estimation for  {}'.format(PEResults_file)
 PE=P.pycopi.ParameterEstimation(model,noisy_datafile,Method='GeneticAlgorithm',
                                 RandomizeStartValues='false')
 PE.write_item_template() #estimate all paraemter variables, therefore doesn't need editing 
@@ -95,6 +100,7 @@ PE.set_up()
 PE.run()
 
 #%% Run profile likelihoods
+print 'running profile likelihoods for {}'.format(model)
 P.pydentify2.ProfileLikelihood(model,ParameterPath=PEResults_file,
                                NumberOfSteps=10,UpperBoundMultiplier=1000,
                                LowerBoundMultiplier=100,Run='slow',Index=0)
