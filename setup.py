@@ -37,7 +37,7 @@ import  setuptools
 #version
 MAJOR = 3
 MINOR = 2
-MICRO = 13
+MICRO = 14
 #=======
 __version__ = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
@@ -52,7 +52,8 @@ setup(
                              'Documentation/*.html','Licence.txt',
                              'ReadMe.md',
                              'Examples/KholodenkoExample/*',
-                             'Examples/BioModelsWorkflowVersion1/*'
+                             'Examples/BioModelsWorkflowVersion1/*',
+                             'Scripts/*.py',
                              'Scripts/*.py',
                              'Tests/*.py',
                              'Tests/*.cps',
