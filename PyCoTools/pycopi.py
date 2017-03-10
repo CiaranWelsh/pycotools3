@@ -2012,12 +2012,12 @@ class TimeCourse(object):
                         
                     filename={}
                     name=replace_non_ascii(i)
-                    filename[i]=os.path.join(dire,name+'.jpeg')
+                    filename[i]=os.path.join(dire,name+'.png')
 
                     if self.kwargs.get('ExtraTitle') !=None:
-                        plt.savefig(name+'_'+self.kwargs.get('ExtraTitle')+'.jpeg',bbox_inches='tight',format='jpeg',dpi=self.kwargs.get('DPI'))
+                        plt.savefig(name+'_'+self.kwargs.get('ExtraTitle')+'.png',bbox_inches='tight',format='png',dpi=self.kwargs.get('DPI'))
                     else:
-                        plt.savefig(filename[i],format='jpeg',bbox_inches='tight',dpi=self.kwargs.get('DPI'))     
+                        plt.savefig(filename[i],format='png',bbox_inches='tight',dpi=self.kwargs.get('DPI'))     
                     return filename
         
                 if self.kwargs.get('Show')=='true':
@@ -2129,9 +2129,9 @@ class PhaseSpace(TimeCourse):
         
         if self.kwargs.get('SaveFig')=='true':
             if self.kwargs.get('ExtraTitle') !=None:
-                plt.savefig(name+'_'+self.kwargs.get('ExtraTitle')+'.jpeg',bbox_inches='tight',format='jpeg',dpi=self.kwargs.get('DPI'))
+                plt.savefig(name+'_'+self.kwargs.get('ExtraTitle')+'.png',bbox_inches='tight',format='png',dpi=self.kwargs.get('DPI'))
             else:
-                plt.savefig(name+'_'+'.jpeg',format='jpeg',bbox_inches='tight',dpi=self.kwargs.get('DPI'))     
+                plt.savefig(name+'_'+'.png',format='png',bbox_inches='tight',dpi=self.kwargs.get('DPI'))     
     def plot_all_phase(self):
         for i in self.combinations:
             self.plot1phase(i[0],i[1])
@@ -3593,7 +3593,10 @@ class Run():
         self.copasiML=self.set_task()
         self.save()
         if self.kwargs.get('Mode')=='true':
-            self.run()
+            try:
+                self.run()
+            except Errors.CopasiError:
+                self.run_linux()
         elif self.kwargs.get('Mode')=='SGE':
             self.submit_copasi_job_SGE()
         elif self.kwargs.get('Mode')=='multiprocess':
@@ -3635,6 +3638,10 @@ class Run():
         if err!='':
             raise Errors.CopasiError('Failed with Copasi error: \n\n'+d['error'])
         return d['output']
+        
+    def run_linux(self):
+        os.system('CopasiSE "{}"'.format(self.copasi_file) )
+            
         
     def submit_copasi_job_SGE(self):
         '''
