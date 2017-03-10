@@ -482,9 +482,9 @@ class PlotHistogram():
         if self.kwargs.get('SaveFig')=='true':
             if self.kwargs.get('ExtraTitle')!=None:
                 assert isinstance(self.kwargs.get('ExtraTitle'),str),'extra title should be a string'
-                plt.savefig(variable+'_'+self.kwargs.get('ExtraTitle')+'.jpeg',bbox_inches='tight',format='jpeg',dpi=self.kwargs.get('DPI'))
+                plt.savefig(variable+'_'+self.kwargs.get('ExtraTitle')+'.png',bbox_inches='tight',format='png',dpi=self.kwargs.get('DPI'))
             else:
-                plt.savefig(variable+'.jpeg',format='jpeg',bbox_inches='tight',dpi=self.kwargs.get('DPI'))
+                plt.savefig(variable+'.png',format='png',bbox_inches='tight',dpi=self.kwargs.get('DPI'))
         if self.kwargs.get('Show')=='true':
             plt.show()
     
@@ -598,9 +598,9 @@ class PlotScatters():
         if self.kwargs.get('SaveFig')=='true':
             if self.kwargs.get('ExtraTitle')!=None:
                 assert isinstance(self.kwargs.get('ExtraTitle'),str),'extra title should be a string'
-                plt.savefig('{}_vs_{}'.format(x_specie,y_specie)+'_'+self.kwargs.get('ExtraTitle')+'.jpeg',bbox_inches='tight',format='jpeg',dpi=self.kwargs.get('DPI'))
+                plt.savefig('{}_vs_{}'.format(x_specie,y_specie)+'_'+self.kwargs.get('ExtraTitle')+'.png',bbox_inches='tight',format='png',dpi=self.kwargs.get('DPI'))
             else:
-                plt.savefig('{}_vs_{}'.format(x_specie,y_specie)+'.jpeg',format='jpeg',bbox_inches='tight',dpi=self.kwargs.get('DPI'))
+                plt.savefig('{}_vs_{}'.format(x_specie,y_specie)+'.png',format='png',bbox_inches='tight',dpi=self.kwargs.get('DPI'))
         if self.kwargs.get('Show')=='true':
             plt.show()
         else:
@@ -760,9 +760,9 @@ class PlotHexMap():
         if self.kwargs.get('SaveFig')=='true':
             if self.kwargs.get('ExtraTitle')!=None:
                 assert isinstance(self.kwargs.get('ExtraTitle'),str),'extra title should be a string'
-                plt.savefig('{}_vs_{}'.format(x_specie,y_specie)+'_'+self.kwargs.get('ExtraTitle')+'.jpeg',bbox_inches='tight',format='jpeg',dpi=self.kwargs.get('DPI'))
+                plt.savefig('{}_vs_{}'.format(x_specie,y_specie)+'_'+self.kwargs.get('ExtraTitle')+'.png',bbox_inches='tight',format='png',dpi=self.kwargs.get('DPI'))
             else:
-                plt.savefig('{}_vs_{}'.format(x_specie,y_specie)+'.jpeg',format='jpeg',bbox_inches='tight',dpi=self.kwargs.get('DPI'))
+                plt.savefig('{}_vs_{}'.format(x_specie,y_specie)+'.png',format='png',bbox_inches='tight',dpi=self.kwargs.get('DPI'))
         if self.kwargs.get('Show')=='true':
             plt.show()
         else:
@@ -959,9 +959,9 @@ class PlotBoxplot():
             if self.kwargs.get('SaveFig')=='true':
                 if self.kwargs.get('ExtraTitle')!=None:
                     assert isinstance(self.kwargs.get('ExtraTitle'),str),'extra title should be a string'
-                    plt.savefig('boxplot_{}'.format(i)+'_'+self.kwargs.get('ExtraTitle')+'.jpeg',bbox_inches='tight',format='jpeg',dpi=self.kwargs.get('DPI'))
+                    plt.savefig('boxplot_{}'.format(i)+'_'+self.kwargs.get('ExtraTitle')+'.png',bbox_inches='tight',format='png',dpi=self.kwargs.get('DPI'))
                 else:
-                    plt.savefig('boxplot_{}'.format(i)+'.jpeg',format='jpeg',bbox_inches='tight',dpi=self.kwargs.get('DPI'))
+                    plt.savefig('boxplot_{}'.format(i)+'.png',format='png',bbox_inches='tight',dpi=self.kwargs.get('DPI'))
             if self.kwargs.get('Show')=='true':
                 plt.show()
                 
@@ -1205,9 +1205,9 @@ class EvaluateOptimizationPerformance():
             if self.kwargs.get('ExtraTitle')!=None:
                 if isinstance(self.kwargs.get('ExtraTitle'),str)==False:
                     raise Errors.InputError('extra title should be a string')
-                plt.savefig('RSSVsITerations'+'_'+self.kwargs.get('ExtraTitle')+'.jpeg',bbox_inches='tight',format='jpeg',dpi=self.kwargs.get('DPI'))
+                plt.savefig('RSSVsITerations'+'_'+self.kwargs.get('ExtraTitle')+'.png',bbox_inches='tight',format='png',dpi=self.kwargs.get('DPI'))
             else:
-                plt.savefig('RSSVsITerations'+'.jpeg',format='jpeg',bbox_inches='tight',dpi=self.kwargs.get('DPI'))
+                plt.savefig('RSSVsITerations'+'.png',format='png',bbox_inches='tight',dpi=self.kwargs.get('DPI'))
         if self.kwargs.get('Show')=='true':
             plt.show()
 
@@ -1533,9 +1533,9 @@ class PlotPEData():
         if self.kwargs.get('SaveFig')=='true':
             if self.kwargs.get('ExtraTitle')!=None:
                 assert isinstance(self.kwargs.get('ExtraTitle'),str),'extra title should be a string'
-                fle=os.path.join(self.kwargs.get('OutputDirectory'),'{}_{}.jpeg'.format(parameter,self.kwargs.get('ExtraTitle')))                
+                fle=os.path.join(self.kwargs.get('OutputDirectory'),'{}_{}.png'.format(parameter,self.kwargs.get('ExtraTitle')))                
             else:
-                fle=os.path.join(self.kwargs.get('OutputDirectory'),'{}.jpeg'.format(parameter))
+                fle=os.path.join(self.kwargs.get('OutputDirectory'),'{}.png'.format(parameter))
             plt.savefig(fle,dpi=self.kwargs.get('DPI'),bbox_inches='tight')
 
         if self.kwargs.get('Show')=='true':
@@ -1722,9 +1722,9 @@ class PlotHistogram3D():
 #        if self.kwargs.get('SaveFig')=='true':
 #            if self.kwargs.get('ExtraTitle')!=None:
 #                assert isinstance(self.kwargs.get('ExtraTitle'),str),'extra title should be a string'
-#                plt.savefig(variable+'_'+self.kwargs.get('ExtraTitle')+'.jpeg',bbox_inches='tight',format='jpeg',dpi=self.kwargs.get('DPI'))
+#                plt.savefig(variable+'_'+self.kwargs.get('ExtraTitle')+'.png',bbox_inches='tight',format='png',dpi=self.kwargs.get('DPI'))
 #            else:
-#                plt.savefig(variable+'.jpeg',format='jpeg',bbox_inches='tight',dpi=self.kwargs.get('DPI'))
+#                plt.savefig(variable+'.png',format='png',bbox_inches='tight',dpi=self.kwargs.get('DPI'))
 #        if self.kwargs.get('Show')=='true':
 #            plt.show()
 #    
