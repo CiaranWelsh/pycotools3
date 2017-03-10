@@ -3,8 +3,9 @@ import string
 import pandas,numpy
 import re
 import time
-import sys
-
+import subprocess
+import threading
+import pickle
 
 class RemoveNonAscii():
     def __init__(self,non_ascii_str):
@@ -104,6 +105,7 @@ def download_models(directory):
     model=bio.getAllCuratedModelsId()
     print 'The number of curated models in biomodels is: {}'.format(len(model))
     model_dct={}
+    model_files=[]
     skipped=0
     for i in model:
         os.chdir(directory)
@@ -130,13 +132,15 @@ def download_models(directory):
                 with open(fle,'w') as f:
                     f.write(model_dct[name].encode('utf8'))
             time.sleep(0.25)
+            model_files.append(fle)
         except:
             continue
     print 'You have downloaded {} out of {} models'.format(len(model_dct.keys()),len(model))
     print 'you have skipped {} models because you already have a folder for them'.format(skipped)
-    df=pandas.DataFrame.from_dict(model_dct.keys())
-    xlsx=os.path.join(directory,'ModelsMap.xlsx')
-    df.to_excel(xlsx,index=True,header=True)
+    df=pandas.DataFrame(model_files)
+#    df=pandas.DataFrame.from_dict(model_dct.keys())
+#    xlsx=os.path.join(directory,'ModelsMap.xlsx')
+#    df.to_excel(xlsx,index=True,header=True)
     pickle_file=os.path.join(directory,'BioModelsFilesPickle.pickle')
     df.to_pickle(pickle_file)    
     return df
@@ -144,6 +148,30 @@ def download_models(directory):
 
 
 
+
+    
+        
+def xml2cps(paths):
+    '''
+    use CopasiSE to convert the xml into copasi files
+    
+    paths:
+        dictionary dict[sbml filename]=copasi filename
+    '''
+    
+    def worker(path):
+        return subprocess.check_call('CopasiSE -i "{}"'.format(path),shell=True)
+        
+    start=time.time()
+    jobs=[]
+    for i in paths:
+        print i
+        p=threading.Thread(target=worker,args=(paths['successful'][i],))
+        jobs.append(p)
+        p.start()
+        p.join()
+#        subprocess.check_call('CopasiSE -i "{}"'.format(paths['successful'][i]))
+    return 'program took {}s'.format(time.time()-start)
 
 
 
