@@ -53,10 +53,6 @@ setup(
                              'ReadMe.md',
                              'Examples/KholodenkoExample/*',
                              'Examples/BioModelsWorkflowVersion1/*',
-<<<<<<< HEAD
-=======
-                             'Scripts/*.py',
->>>>>>> develop
                              'Scripts/*.py',
                              'Tests/*.py',
                              'Tests/*.cps',
