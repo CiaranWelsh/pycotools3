@@ -70,6 +70,8 @@ def xml2cps(model_pickle,cps_pickle):
         path= paths.iloc[i][0]
         cps_path=os.path.splitext(path)[0]+'.cps'
         cps_files.append(cps_path)        
+        if os.path.isfile(cps_path):
+            continue
         p=threading.Thread(target=worker,args=(path,))
         jobs.append(p)
         p.start()
