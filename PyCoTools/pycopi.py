@@ -3636,7 +3636,10 @@ class Run():
         d['output']=output
         d['error']=err
         if err!='':
-            raise Errors.CopasiError('Failed with Copasi error: \n\n'+d['error'])
+            try:
+                self.run_linux()
+            except:
+                raise Errors.CopasiError('Failed with Copasi error: \n\n'+d['error'])
         return d['output']
         
     def run_linux(self):
