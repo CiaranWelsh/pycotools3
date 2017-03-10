@@ -37,7 +37,7 @@ import  setuptools
 #version
 MAJOR = 3
 MINOR = 2
-MICRO = 11
+MICRO = 14
 #=======
 __version__ = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
@@ -53,6 +53,10 @@ setup(
                              'ReadMe.md',
                              'Examples/KholodenkoExample/*',
                              'Examples/BioModelsWorkflowVersion1/*',
+<<<<<<< HEAD
+=======
+                             'Scripts/*.py',
+>>>>>>> develop
                              'Scripts/*.py',
                              'Tests/*.py',
                              'Tests/*.cps',
