@@ -52,7 +52,7 @@ setup(
                              'Documentation/*.html','Licence.txt',
                              'ReadMe.md',
                              'Examples/KholodenkoExample/*',
-                             'Examples/BioModelsWorkflowVersion1/*'
+                             'Examples/BioModelsWorkflowVersion1/*',
                              'Scripts/*.py',
                              'Tests/*.py',
                              'Tests/*.cps',
