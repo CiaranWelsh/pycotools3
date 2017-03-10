@@ -24,15 +24,19 @@ script.
 
 '''
 
-CLUSTER=False
+
+
 
 
 
 
 if sys.platform=='win32':
     DOWNLOAD_DIRECTORY=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4'
+    CLUSTER=False
 else:
     DOWNLOAD_DIRECTORY=r'/sharedlustre/users/b3053674/12_Dec/PydentifyingBiomodelsAgain'
+    CLUSTER=True
+    
 class FilePaths():
     def __init__(self):
         self.wd=DOWNLOAD_DIRECTORY
