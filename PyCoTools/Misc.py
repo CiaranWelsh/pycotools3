@@ -6,7 +6,25 @@ import time
 import subprocess
 import threading
 import pickle
+import logging
 
+
+def setup_logger(logger_name, log_file, level=logging.INFO):
+    l = logging.getLogger(logger_name)
+    formatter = logging.Formatter('%(asctime)s : %(message)s')
+    fileHandler = logging.FileHandler(log_file, mode='w')
+    fileHandler.setFormatter(formatter)
+    streamHandler = logging.StreamHandler()
+    streamHandler.setFormatter(formatter)
+
+    l.setLevel(level)
+    l.addHandler(fileHandler)
+    l.addHandler(streamHandler)
+    
+    
+    
+    
+    
 class RemoveNonAscii():
     def __init__(self,non_ascii_str):
         self.non_ascii_str=non_ascii_str
@@ -107,13 +125,15 @@ def download_models(directory,percent=100,SKIP_ALREADY_DOWNLOADED=True):
     model=bio.getAllCuratedModelsId()
     print 'The number of curated models in biomodels is: {}'.format(len(model))
     per=len(model)//100*percent
-    print 'You are downloading  {} models'.format(per)
+    print 'You are about to download {} models'.format(per)
     model_dct={}
     model_files=[]
     skipped=0
-    for i in model[:per]:
+    for i in enumerate(model[:per]):
         os.chdir(directory)
-        dire=os.path.join(directory,i)
+        author=bio.getAuthorsByModelId(i[1])
+        author=RemoveNonAscii(author[0]).filter
+        dire=os.path.join(directory,i[1]+author)
 #        if SKIP_ALREADY_DOWNLOADED:
         if os.path.isdir(dire)==False:
             os.mkdir(dire)   
@@ -122,17 +142,15 @@ def download_models(directory,percent=100,SKIP_ALREADY_DOWNLOADED=True):
                 skipped+=1
                 continue
         models_to_skip=['BIOMD0000000241','BIOMD0000000148'] #these cause python to crash
-        if i in models_to_skip:
+        if i[1] in models_to_skip:
             '''
             These file is broken and doesn't simulate with CopasiSE
             '''
             continue
         try:
-            name=bio.getModelNameById(i)
-            author=bio.getAuthorsByModelId(i)
-            author=RemoveNonAscii(author[0]).filter
-            model_dct[author]=bio.getModelSBMLById(i)
-            print 'downloading {}:\t{}'.format(author,name.encode('utf8'))
+
+            model_dct[author]=bio.getModelSBMLById(i[1])
+            print 'downloading model {} of {}: {}:\t{}'.format(i[0],per,i[1],author.encode('utf8'))
             fle=os.path.join(dire,author+'.xml')
             print fle
             if os.path.isfile(fle)!=True:
@@ -147,9 +165,6 @@ def download_models(directory,percent=100,SKIP_ALREADY_DOWNLOADED=True):
     print 'You have downloaded {} out of {} models'.format(len(model_dct.keys()),len(model))
     print 'you have skipped {} models because you already have a folder for them'.format(skipped)
     df=pandas.DataFrame(model_files)
-##    df=pandas.DataFrame.from_dict(model_dct.keys())
-##    xlsx=os.path.join(directory,'ModelsMap.xlsx')
-##    df.to_excel(xlsx,index=True,header=True)
     pickle_file=os.path.join(directory,'BioModelsFilesPickle.pickle')
     df.to_pickle(pickle_file)    
     return df

@@ -164,7 +164,7 @@ def pydentify_biomodels_cluster(cps_pickle):
 
 
 if __name__=='__main__':
-    
+    LOG.info('Logger has been saved to {}'.format(log_file))
     F=FilePaths()
     if args.d:
         PyCoTools.Misc.download_models(F.wd,percent=args.p,SKIP_ALREADY_DOWNLOADED=False)
