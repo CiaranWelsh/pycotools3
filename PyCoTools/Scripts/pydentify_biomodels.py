@@ -42,26 +42,8 @@ else:
     CLUSTER=True
     
 log_file=os.path.join(DOWNLOAD_DIRECTORY,'log.log')
-if os.path.isfile(log_file)!=True:
-    LOG = logging.getLogger(log_file)
-    LOG.setLevel(logging.DEBUG)
-    # create file handler which logs even debug messages
-    fh = logging.FileHandler(log_file)
-    fh.setLevel(logging.DEBUG)
-    # create console handler with a higher log level
-    ch = logging.StreamHandler()
-    ch.setLevel(logging.DEBUG)
-    # create formatter and add it to the handlers
-    formatter = logging.Formatter('-->%(asctime)s - %(levelname)s - %(message)s')
-    fh.setFormatter(formatter)
-    ch.setFormatter(formatter)
-    # add the handlers to the logger
-    LOG.addHandler(fh)
-    LOG.addHandler(ch)
-else:
-    LOG=logging.getLogger(log_file)
-    
-    
+PyCoTools.Misc.setup_logger(__name__,log_file)
+LOG=logging.getLogger(__name__)
 
 class FilePaths():
     def __init__(self):
@@ -75,14 +57,6 @@ class FilePaths():
         self.models_downloads_xlsx=os.path.join(self.wd,'ModelsMap.xlsx')
         
     
-
-    
-    
-
-
-    
-
-        
 def xml2cps(model_pickle,cps_pickle):
     '''
     use CopasiSE to convert the xml into copasi files
