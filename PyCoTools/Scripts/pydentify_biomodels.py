@@ -25,14 +25,14 @@ Run this script to pass the models in curated biomodels to the pydentify_model
 script.
 
 '''
-#==============================================================================
+##==============================================================================
 
 parser=argparse.ArgumentParser()
 parser.add_argument('-d', help='whether to download models or not',action='store_true')
 parser.add_argument('-p',help='Percent of curated models to download',type=int,default=100)
 args=parser.parse_args()
 
-#==============================================================================
+##==============================================================================
 
 if sys.platform=='win32':
     DOWNLOAD_DIRECTORY=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4'
@@ -41,7 +41,7 @@ else:
     DOWNLOAD_DIRECTORY=r'/sharedlustre/users/b3053674/12_Dec/PydentifyingBiomodelsAgain'
     CLUSTER=True
     
-log_file=os.path.join(os.getcwd(),'log.log')
+log_file=os.path.join(DOWNLOAD_DIRECTORY,'log.log')
 if os.path.isfile(log_file)!=True:
     LOG = logging.getLogger(log_file)
     LOG.setLevel(logging.DEBUG)
@@ -167,7 +167,7 @@ if __name__=='__main__':
     
     F=FilePaths()
     if args.d:
-        PyCoTools.Misc.download_models(F.wd,percent=args.p)
+        PyCoTools.Misc.download_models(F.wd,percent=args.p,SKIP_ALREADY_DOWNLOADED=False)
     cps_files=xml2cps(F.model_downloads_pickle,F.cps_files_pickle)
     print pydentify_biomodels_cluster(F.cps_files_pickle)
     

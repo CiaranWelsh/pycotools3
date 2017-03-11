@@ -67,7 +67,7 @@ def add_noise(f, noise_factor=0.05):
 
 
 
-def download_models(directory,percent=100):
+def download_models(directory,percent=100,SKIP_ALREADY_DOWNLOADED=True):
     '''
     download curated models from biomodels curated section
     
@@ -107,18 +107,20 @@ def download_models(directory,percent=100):
     model=bio.getAllCuratedModelsId()
     print 'The number of curated models in biomodels is: {}'.format(len(model))
     per=len(model)//100*percent
-    print per
+    print 'You are downloading  {} models'.format(per)
     model_dct={}
     model_files=[]
     skipped=0
     for i in model[:per]:
         os.chdir(directory)
         dire=os.path.join(directory,i)
+#        if SKIP_ALREADY_DOWNLOADED:
         if os.path.isdir(dire)==False:
             os.mkdir(dire)   
         else:
-            skipped+=1
-            continue
+            if SKIP_ALREADY_DOWNLOADED:
+                skipped+=1
+                continue
         models_to_skip=['BIOMD0000000241','BIOMD0000000148'] #these cause python to crash
         if i in models_to_skip:
             '''
@@ -127,27 +129,27 @@ def download_models(directory,percent=100):
             continue
         try:
             name=bio.getModelNameById(i)
-            name=RemoveNonAscii(name).filter
-#            strings='\[\]_\{\}'
-#            name=re.sub(strings,'_',name)
-            model_dct[name]=bio.getModelSBMLById(i)
-            print 'downloading {}:\t{}'.format(i,name.encode('utf8'))
-            
-            fle=os.path.join(dire,name+'.xml')
+            author=bio.getAuthorsByModelId(i)
+            author=RemoveNonAscii(author[0]).filter
+            model_dct[author]=bio.getModelSBMLById(i)
+            print 'downloading {}:\t{}'.format(author,name.encode('utf8'))
+            fle=os.path.join(dire,author+'.xml')
+            print fle
             if os.path.isfile(fle)!=True:
                 with open(fle,'w') as f:
-                    f.write(model_dct[name].encode('utf8'))
+                    f.write(model_dct[author].encode('utf8'))
             time.sleep(0.25)
             model_files.append(fle)
             print 'saved to : {}'.format(fle)
-        except:
+        except UnicodeEncodeError:
+            print 'model with author {} skipped as the name contains non-ascii characters'.format(author)
             continue
     print 'You have downloaded {} out of {} models'.format(len(model_dct.keys()),len(model))
     print 'you have skipped {} models because you already have a folder for them'.format(skipped)
     df=pandas.DataFrame(model_files)
-#    df=pandas.DataFrame.from_dict(model_dct.keys())
-#    xlsx=os.path.join(directory,'ModelsMap.xlsx')
-#    df.to_excel(xlsx,index=True,header=True)
+##    df=pandas.DataFrame.from_dict(model_dct.keys())
+##    xlsx=os.path.join(directory,'ModelsMap.xlsx')
+##    df.to_excel(xlsx,index=True,header=True)
     pickle_file=os.path.join(directory,'BioModelsFilesPickle.pickle')
     df.to_pickle(pickle_file)    
     return df
