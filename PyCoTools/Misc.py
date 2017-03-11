@@ -11,7 +11,7 @@ import logging
 
 def setup_logger(logger_name, log_file, level=logging.INFO):
     l = logging.getLogger(logger_name)
-    formatter = logging.Formatter('%(asctime)s : %(message)s')
+    formatter = logging.Formatter('%(asctime)s : %(levelname)s : %(message)s')
     fileHandler = logging.FileHandler(log_file, mode='w')
     fileHandler.setFormatter(formatter)
     streamHandler = logging.StreamHandler()
@@ -20,7 +20,22 @@ def setup_logger(logger_name, log_file, level=logging.INFO):
     l.setLevel(level)
     l.addHandler(fileHandler)
     l.addHandler(streamHandler)
-    
+#    LOG = logging.getLogger(log_file)
+#    LOG.setLevel(logging.DEBUG)
+#    # create file handler which logs even debug messages
+#    fh = logging.FileHandler(log_file)
+#    fh.setLevel(logging.DEBUG)
+#    # create console handler with a higher log level
+#    ch = logging.StreamHandler()
+#    ch.setLevel(logging.DEBUG)
+#    # create formatter and add it to the handlers
+#    formatter = logging.Formatter('-->%(asctime)s - %(levelname)s - %(message)s')
+#    fh.setFormatter(formatter)
+#    ch.setFormatter(formatter)
+#    # add the handlers to the logger
+#    LOG.addHandler(fh)
+#    LOG.addHandler(ch)  
+#    return LOG
     
     
     
