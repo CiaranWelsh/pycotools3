@@ -1171,11 +1171,11 @@ class Plot():
         def save_plot():
             filename={}
             if self.kwargs.get('ExtraTitle') !=None:
-                filename[parameter]=os.path.join(os.getcwd(),parameter+'_'+self.kwargs.get('ExtraTitle')+'.jpeg')
-                plt.savefig(parameter+'_'+self.kwargs.get('ExtraTitle')+'.jpeg',bbox_inches='tight',format='jpeg',dpi=self.kwargs.get('DPI'))
+                filename[parameter]=os.path.join(os.getcwd(),parameter+'_'+self.kwargs.get('ExtraTitle')+'.png')
+                plt.savefig(parameter+'_'+self.kwargs.get('ExtraTitle')+'.png',bbox_inches='tight',format='png',dpi=self.kwargs.get('DPI'))
             else:
-                filename[parameter]=os.path.join(os.getcwd(),parameter+'.jpeg')
-                plt.savefig(parameter+'.jpeg',format='jpeg',bbox_inches='tight',dpi=self.kwargs.get('DPI'))     
+                filename[parameter]=os.path.join(os.getcwd(),parameter+'.png')
+                plt.savefig(parameter+'.png',format='png',bbox_inches='tight',dpi=self.kwargs.get('DPI'))     
             return filename
 
         if self.kwargs.get('Show')=='true':
