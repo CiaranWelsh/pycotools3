@@ -28,8 +28,8 @@ script.
 #==============================================================================
 
 parser=argparse.ArgumentParser()
-parser.add_argument('--download_models', help='whether to download models or not',action='store_true')
-parser.add_argument('--percent',help='Percent of curated models to download',type=int,default=100)
+parser.add_argument('-d', help='whether to download models or not',action='store_true')
+parser.add_argument('-p',help='Percent of curated models to download',type=int,default=100)
 args=parser.parse_args()
 
 #==============================================================================
@@ -41,12 +41,12 @@ else:
     DOWNLOAD_DIRECTORY=r'/sharedlustre/users/b3053674/12_Dec/PydentifyingBiomodelsAgain'
     CLUSTER=True
     
-LOG=os.path.join(os.getcwd(),'log.log')
-if os.path.isfile(LOG)!=True:
-    LOG = logging.getLogger(LOG)
+log_file=os.path.join(os.getcwd(),'log.log')
+if os.path.isfile(log_file)!=True:
+    LOG = logging.getLogger(log_file)
     LOG.setLevel(logging.DEBUG)
     # create file handler which logs even debug messages
-    fh = logging.FileHandler(LOG)
+    fh = logging.FileHandler(log_file)
     fh.setLevel(logging.DEBUG)
     # create console handler with a higher log level
     ch = logging.StreamHandler()
@@ -59,7 +59,7 @@ if os.path.isfile(LOG)!=True:
     LOG.addHandler(fh)
     LOG.addHandler(ch)
 else:
-    LOG=logging.getLogger(LOG)
+    LOG=logging.getLogger(log_file)
     
     
 
@@ -96,7 +96,7 @@ def xml2cps(model_pickle,cps_pickle):
     returns:
         list of copasi files
     '''
-    
+    LOG.debug('Converting XML to COPASI')
     paths= pandas.read_pickle(model_pickle)
 #    print pandas.read_excel(models,header=0,index_col=0)
     def worker(path,output_path):
@@ -107,8 +107,10 @@ def xml2cps(model_pickle,cps_pickle):
     cps_files=[]
     for i in paths.index:
         path= paths.iloc[i][0]
+        LOG.debug('sbml file: {}'.format(path))
 #        print path
         cps_path=PyCoTools.Misc.RemoveNonAscii(os.path.splitext(path)[0]).filter+'.cps'
+        LOG.debug('cps file: {}'.format(cps_path))
 #        print cps_path
         print 'cps file:{}'.format(cps_path).decode('utf8')
         cps_files.append(cps_path)        
@@ -119,7 +121,7 @@ def xml2cps(model_pickle,cps_pickle):
         p.start()
         p.join()
 #        subprocess.check_call('CopasiSE -i "{}"'.format(paths['successful'][i]))
-    print 'SBML to cps conversion took {}s'.format(time.time()-start)
+    LOG.info( 'full SBML to cps conversion took {}s'.format(time.time()-start))
     
     df=pandas.DataFrame( cps_files)
     df.to_pickle(cps_pickle)
@@ -138,8 +140,10 @@ def pydentify_biomodels_cluster(cps_pickle):
     skipped=[]
     copasi_files=pandas.read_pickle(cps_pickle)
     for i in copasi_files.index:
+        LOG.debug('pydentifying: {}'.format(copasi_files.iloc[i][0]))
         cps_file= copasi_files.iloc[i][0]
         if os.path.isfile(cps_file)==False:
+            LOG.critical('{} does not exist'.format(cps_file))
             raise PyCoTools.Errors.InputError('{} doesn\' exist.'.format(cps_file))
         dire,fle=os.path.split(cps_file)
         try:
@@ -153,6 +157,7 @@ def pydentify_biomodels_cluster(cps_pickle):
 
         except:
             skipped.append(cps_file)
+            LOG.warning('skipped: {}'.format(cps_file))
     return skipped
             
 
@@ -161,8 +166,8 @@ def pydentify_biomodels_cluster(cps_pickle):
 if __name__=='__main__':
     
     F=FilePaths()
-    if args.download_models:
-        PyCoTools.Misc.download_models(F.wd,percent=args.percent)
+    if args.d:
+        PyCoTools.Misc.download_models(F.wd,percent=args.p)
     cps_files=xml2cps(F.model_downloads_pickle,F.cps_files_pickle)
     print pydentify_biomodels_cluster(F.cps_files_pickle)
     
