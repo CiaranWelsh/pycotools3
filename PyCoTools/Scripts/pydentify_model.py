@@ -10,6 +10,7 @@ import os
 import argparse
 import time
 import pickle
+import logging
 '''
 Download models from BioModels in another Script. 
 
@@ -30,7 +31,6 @@ Collect counts to search for errors.
 '''
 
 
-
 ## Set to true if you want to pass model fie path from the command line
 COMMAND_LINE=True
 
@@ -42,6 +42,9 @@ if COMMAND_LINE:
     parser.add_argument('model',help='copasi file for running through the pydentify workflow' )
     args=parser.parse_args()
     #==============================================================================
+
+
+
 
 
 
@@ -60,61 +63,76 @@ else:
 print model
 ## get working directory and file
 directory,fle=os.path.split(model)
+log_filename=os.path.join(directory,fle[:-4]+'log.log')
+P.Misc.setup_logger(__name__,log_filename,level=logging.DEBUG)
+LOG=logging.getLogger(__name__)
 
 profile_likelihood_computation_time_pickle=os.path.join(directory,'profile_likelihood_computation_time_pickle.pickle')
 
 #%% Name time course reort and run time course, saving data to file and plotting 
 ## with matplotlib
+
 TCReportName=os.path.join(directory,'timecourse_report.txt')
+LOG.debug('Starting to run TimeCourse')
 TC=P.pycopi.TimeCourse(model,End=1000,StepSize=20,Intervals=50,Plot=plot,SaveFig=savefig,
                        ReportName=TCReportName)
-                       
-print 'running time course {}'.format(TCReportName)
+LOG.debug('TimeCourse finished')
 #%% Add Noise to timecourse for more interesting fits. 
+LOG.debug('adding noise to {}'.format(model))
 noisy_data= P.Misc.add_noise(TCReportName)
 noisy_datafile=os.path.join(directory,'noisy_data.txt')
 noisy_data.to_csv(noisy_datafile,sep='\t')
-print 'adding noise {}'.format(noisy_datafile)
+LOG.debug('noise added to {}'.format(model))
 #%% Run Parameter estimation. Do not randomize initial values as we
 ##  want to start the parameter estimation in a good place.
 ##  Run parameter estimation through the scan task to get only the best parameter
 ##  values rather than progression of optimization problem as function evalutions
 ##  Only run one parameter estimation save to file
 
+LOG.debug('running parameter estimation')
 PEResults_file=os.path.join(directory,'PEResults.txt')
 print 'running parameter estimation for  {}'.format(PEResults_file)
 PE=P.pycopi.ParameterEstimation(model,noisy_datafile,Method='GeneticAlgorithm',
                                 RandomizeStartValues='false')
 PE.write_item_template() #estimate all paraemter variables, therefore doesn't need editing 
 PE.set_up()
-
+LOG.debug('setting up scan task to run parameter estimation from')
 S=P.pycopi.Scan(model,ScanType='repeat',NumberOfSteps=1,
                 ReportName=PEResults_file,ReportType='parameter_estimation',Run='true')
-                
+LOG.debug('parameter estimation finished')
                 
 #%% Insert estimated parameters into model
+LOG.debug('inserting parameters into model to plot experimental versus simulated')
 P.pycopi.InsertParameters(model,ParameterPath=PEResults_file)
+LOG.debug('parameters inserted')
 
 #%% Run a 'current solution statistics' parameter estimation
 ##  to get a plot of simulated vs experimental data 
+LOG.debug('running current solution parameter esitmation')
 PE=P.pycopi.ParameterEstimation(model,noisy_datafile,Method='CurrentSolutionStatistics',
                                 RandomizeStartValues='false',SaveFig=savefig,Plot=plot)
 PE.set_up()
 PE.run()
+LOG.debug('current solution parameter estimation finished')
 
 #%% Run profile likelihoods
 
 start=time.time()
+LOG.debug('setting up and running profile likelihoods. Start time: {}'.format(start))
 print 'running profile likelihoods for {}'.format(model)
 P.pydentify2.ProfileLikelihood(model,ParameterPath=PEResults_file,
                                NumberOfSteps=10,UpperBoundMultiplier=1000,
                                LowerBoundMultiplier=100,Run='slow',Index=0)
 
 computation_time=time.time()-start
+LOG.debug('profile likelihoods calculated for model {}. Computation time was {}'.format(model,computation_time))
+
 with open(profile_likelihood_computation_time_pickle,'w') as f:
     pickle.dump(computation_time,f)
-#%% Visualize profile likelihoods
-P.pydentify2.Plot(model,ParameterPath=PEResults_file,Index=0,SaveFig=savefig)
 
+#%% Visualize profile likelihoods
+LOG.debug('plotting profile likelihoods')
+P.pydentify2.Plot(model,ParameterPath=PEResults_file,Index=0,SaveFig=savefig)
+LOG.debug('profiles plotted')
 
 

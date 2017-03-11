@@ -25,14 +25,14 @@ Run this script to pass the models in curated biomodels to the pydentify_model
 script.
 
 '''
-#==============================================================================
+##==============================================================================
 
 parser=argparse.ArgumentParser()
 parser.add_argument('-d', help='whether to download models or not',action='store_true')
 parser.add_argument('-p',help='Percent of curated models to download',type=int,default=100)
 args=parser.parse_args()
 
-#==============================================================================
+##==============================================================================
 
 if sys.platform=='win32':
     DOWNLOAD_DIRECTORY=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4'
@@ -41,27 +41,9 @@ else:
     DOWNLOAD_DIRECTORY=r'/sharedlustre/users/b3053674/12_Dec/PydentifyingBiomodelsAgain'
     CLUSTER=True
     
-log_file=os.path.join(os.getcwd(),'log.log')
-if os.path.isfile(log_file)!=True:
-    LOG = logging.getLogger(log_file)
-    LOG.setLevel(logging.DEBUG)
-    # create file handler which logs even debug messages
-    fh = logging.FileHandler(log_file)
-    fh.setLevel(logging.DEBUG)
-    # create console handler with a higher log level
-    ch = logging.StreamHandler()
-    ch.setLevel(logging.DEBUG)
-    # create formatter and add it to the handlers
-    formatter = logging.Formatter('-->%(asctime)s - %(levelname)s - %(message)s')
-    fh.setFormatter(formatter)
-    ch.setFormatter(formatter)
-    # add the handlers to the logger
-    LOG.addHandler(fh)
-    LOG.addHandler(ch)
-else:
-    LOG=logging.getLogger(log_file)
-    
-    
+log_file=os.path.join(DOWNLOAD_DIRECTORY,'log.log')
+PyCoTools.Misc.setup_logger(__name__,log_file)
+LOG=logging.getLogger(__name__)
 
 class FilePaths():
     def __init__(self):
@@ -75,14 +57,6 @@ class FilePaths():
         self.models_downloads_xlsx=os.path.join(self.wd,'ModelsMap.xlsx')
         
     
-
-    
-    
-
-
-    
-
-        
 def xml2cps(model_pickle,cps_pickle):
     '''
     use CopasiSE to convert the xml into copasi files
@@ -164,10 +138,10 @@ def pydentify_biomodels_cluster(cps_pickle):
 
 
 if __name__=='__main__':
-    
+    LOG.info('Logger has been saved to {}'.format(log_file))
     F=FilePaths()
     if args.d:
-        PyCoTools.Misc.download_models(F.wd,percent=args.p)
+        PyCoTools.Misc.download_models(F.wd,percent=args.p,SKIP_ALREADY_DOWNLOADED=False)
     cps_files=xml2cps(F.model_downloads_pickle,F.cps_files_pickle)
     print pydentify_biomodels_cluster(F.cps_files_pickle)
     

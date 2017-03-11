@@ -1,0 +1,73 @@
+-->2017-03-11 21:24:12,377 - INFO - Logger has been saved to D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\log.log
+-->2017-03-11 21:24:12,378 - DEBUG - Converting XML to COPASI
+-->2017-03-11 21:24:12,387 - DEBUG - sbml file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000308\Tyson_JJ.xml
+-->2017-03-11 21:24:12,388 - DEBUG - cps file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000308\Tyson_JJ.cps
+-->2017-03-11 21:24:12,395 - DEBUG - sbml file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000429\Schaber_J.xml
+-->2017-03-11 21:24:12,395 - DEBUG - cps file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000429\Schaber_J.cps
+-->2017-03-11 21:24:12,395 - DEBUG - sbml file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000309\Tyson_JJ.xml
+-->2017-03-11 21:24:12,397 - DEBUG - cps file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000309\Tyson_JJ.cps
+-->2017-03-11 21:24:12,398 - DEBUG - sbml file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000306\Tyson_JJ.xml
+-->2017-03-11 21:24:12,400 - DEBUG - cps file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000306\Tyson_JJ.cps
+-->2017-03-11 21:24:12,401 - DEBUG - sbml file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000427\Bianconi_F.xml
+-->2017-03-11 21:24:12,401 - DEBUG - cps file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000427\Bianconi_F.cps
+-->2017-03-11 21:24:12,404 - DEBUG - sbml file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000548\Sneppen_K.xml
+-->2017-03-11 21:24:12,404 - DEBUG - cps file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000548\Sneppen_K.cps
+-->2017-03-11 21:24:12,405 - DEBUG - sbml file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000307\Tyson_JJ.xml
+-->2017-03-11 21:24:12,407 - DEBUG - cps file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000307\Tyson_JJ.cps
+-->2017-03-11 21:24:12,407 - DEBUG - sbml file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000428\Achcar_F.xml
+-->2017-03-11 21:24:12,408 - DEBUG - cps file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000428\Achcar_F.cps
+-->2017-03-11 21:24:12,411 - DEBUG - sbml file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000549\Baker_M.xml
+-->2017-03-11 21:24:12,411 - DEBUG - cps file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000549\Baker_M.cps
+-->2017-03-11 21:24:12,413 - DEBUG - sbml file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000304\Plant_RE.xml
+-->2017-03-11 21:24:12,414 - DEBUG - cps file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000304\Plant_RE.cps
+-->2017-03-11 21:24:12,415 - DEBUG - sbml file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000425\Tan_C.xml
+-->2017-03-11 21:24:12,417 - DEBUG - cps file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000425\Tan_C.cps
+-->2017-03-11 21:24:12,418 - DEBUG - sbml file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000546\Miao_H.xml
+-->2017-03-11 21:24:12,420 - DEBUG - cps file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000546\Miao_H.cps
+-->2017-03-11 21:24:12,421 - DEBUG - sbml file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000305\Kolomeisky_AB.xml
+-->2017-03-11 21:24:12,421 - DEBUG - cps file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000305\Kolomeisky_AB.cps
+-->2017-03-11 21:24:12,423 - DEBUG - sbml file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000426\Mosca_E.xml
+-->2017-03-11 21:24:12,424 - DEBUG - cps file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000426\Mosca_E.cps
+-->2017-03-11 21:24:12,426 - DEBUG - sbml file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000547\Talemi_SR.xml
+-->2017-03-11 21:24:12,427 - DEBUG - cps file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000547\Talemi_SR.cps
+-->2017-03-11 21:24:12,428 - DEBUG - sbml file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000302\Wang_XJ.xml
+-->2017-03-11 21:24:12,430 - DEBUG - cps file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000302\Wang_XJ.cps
+-->2017-03-11 21:24:12,431 - DEBUG - sbml file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000423\Nyman_E.xml
+-->2017-03-11 21:24:12,433 - DEBUG - cps file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000423\Nyman_E.cps
+-->2017-03-11 21:24:12,434 - DEBUG - sbml file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000544\Qi_YF.xml
+-->2017-03-11 21:24:12,436 - DEBUG - cps file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000544\Qi_YF.cps
+-->2017-03-11 21:24:12,437 - INFO - full SBML to cps conversion took 0.0510001182556s
+-->2017-03-11 21:24:12,443 - DEBUG - pydentifying: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000308\Tyson_JJ.cps
+-->2017-03-11 21:24:30,101 - INFO - Logger has been saved to D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\log.log
+-->2017-03-11 21:24:52,410 - DEBUG - Converting XML to COPASI
+-->2017-03-11 21:24:52,411 - DEBUG - sbml file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000308Tyson_JJ\Tyson_JJ.xml
+-->2017-03-11 21:24:52,411 - DEBUG - cps file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000308Tyson_JJ\Tyson_JJ.cps
+-->2017-03-11 21:24:52,555 - DEBUG - sbml file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000429Schaber_J\Schaber_J.xml
+-->2017-03-11 21:24:52,556 - DEBUG - cps file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000429Schaber_J\Schaber_J.cps
+-->2017-03-11 21:24:53,160 - DEBUG - sbml file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000309Tyson_JJ\Tyson_JJ.xml
+-->2017-03-11 21:24:53,161 - DEBUG - cps file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000309Tyson_JJ\Tyson_JJ.cps
+-->2017-03-11 21:24:53,305 - DEBUG - sbml file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000306Tyson_JJ\Tyson_JJ.xml
+-->2017-03-11 21:24:53,305 - DEBUG - cps file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000306Tyson_JJ\Tyson_JJ.cps
+-->2017-03-11 21:24:53,444 - DEBUG - sbml file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000427Bianconi_F\Bianconi_F.xml
+-->2017-03-11 21:24:53,444 - DEBUG - cps file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000427Bianconi_F\Bianconi_F.cps
+-->2017-03-11 21:24:53,630 - DEBUG - sbml file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000548Sneppen_K\Sneppen_K.xml
+-->2017-03-11 21:24:53,630 - DEBUG - cps file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000548Sneppen_K\Sneppen_K.cps
+-->2017-03-11 21:24:53,736 - INFO - full SBML to cps conversion took 1.3259999752s
+-->2017-03-11 21:24:53,743 - DEBUG - pydentifying: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000308Tyson_JJ\Tyson_JJ.cps
+-->2017-03-11 21:27:44,431 - DEBUG - pydentifying: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000429\Schaber_J.cps
+-->2017-03-11 21:28:30,927 - DEBUG - pydentifying: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000309\Tyson_JJ.cps
+-->2017-03-11 21:29:21,309 - DEBUG - pydentifying: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000306\Tyson_JJ.cps
+-->2017-03-11 21:31:36,193 - DEBUG - pydentifying: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000427\Bianconi_F.cps
+-->2017-03-11 21:31:38,289 - DEBUG - pydentifying: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000548\Sneppen_K.cps
+-->2017-03-11 21:31:40,382 - DEBUG - pydentifying: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000307\Tyson_JJ.cps
+-->2017-03-11 21:31:42,377 - DEBUG - pydentifying: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000428\Achcar_F.cps
+-->2017-03-11 21:31:44,359 - DEBUG - pydentifying: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000549\Baker_M.cps
+-->2017-03-11 21:31:46,242 - DEBUG - pydentifying: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000304\Plant_RE.cps
+-->2017-03-11 21:31:48,255 - DEBUG - pydentifying: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000425\Tan_C.cps
+-->2017-03-11 21:31:50,198 - DEBUG - pydentifying: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000546\Miao_H.cps
+-->2017-03-11 21:31:52,108 - DEBUG - pydentifying: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000305\Kolomeisky_AB.cps
+-->2017-03-11 21:31:54,030 - DEBUG - pydentifying: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000426\Mosca_E.cps
+-->2017-03-11 21:31:56,000 - DEBUG - pydentifying: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000547\Talemi_SR.cps
+-->2017-03-11 21:31:57,911 - DEBUG - pydentifying: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000302\Wang_XJ.cps
+-->2017-03-11 21:31:59,818 - DEBUG - pydentifying: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000423\Nyman_E.cps
+-->2017-03-11 21:32:01,734 - DEBUG - pydentifying: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4\BIOMD0000000544\Qi_YF.cps
