@@ -1,10 +1,34 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Fri Mar 10 09:17:04 2017
+'''
 
-@author: b3053674
-"""
+ This file is part of PyCoTools.
 
+ PyCoTools is free software: you can redistribute it and/or modify
+ it under the terms of the GNU Lesser General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ PyCoTools is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Lesser General Public License for more details.
+
+ You should have received a copy of the GNU Lesser General Public License
+ along with PyCoTools.  If not, see <http://www.gnu.org/licenses/>.
+
+
+Author: 
+    Ciaran Welsh
+Date:
+    12/03/2017
+
+ Object:
+ 
+Optionally download a percentage of models from BioModels using the -d flag. 
+Specify the percentage of models to download via the -p flag. 
+Process these models through a workflow demonstrating PyCoTools capability. 
+See 'pydentify_model.py' for more details on the workflow.
+'''
 import PyCoTools
 import os
 import sys
@@ -15,20 +39,16 @@ import pandas
 import time
 import argparse
 import logging
-'''
-First download models using:
-    >>>import PyCoTools
-    >>>directory=<'/path/to/your/chosen/directory>
-    >>PyCoTools.Misc.download_models(directory)
-Then give this script the download directory as the 'DOWNLOAD_DIRECTORY' variable
-Run this script to pass the models in curated biomodels to the pydentify_model
-script.
 
-'''
+ 
+  
+
+
 ##==============================================================================
 
 parser=argparse.ArgumentParser()
-parser.add_argument('-d', help='whether to download models or not',action='store_true')
+
+parser.add_argument('-d', help='Stores True. Use -d to download models before pydentifying',action='store_true')
 parser.add_argument('-p',help='Percent of curated models to download',type=int,default=100)
 args=parser.parse_args()
 
@@ -136,7 +156,7 @@ def pydentify_biomodels(cps_pickle):
                 with open(sh_file,'w') as f:
                     f.write('module load apps/python27/2.7.8\nmodule load apps/COPASI/4.16.104-Linux-64bit\npython -m PyCoTools.Scripts.pydentify_model "{}"'.format(cps_file))
                 
-                os.system('qsub {} -e {} -o {}'.format(sh_file,err_file,out_file))
+                os.system('qsub {} '.format(sh_file,err_file,out_file))
             else:   
                 subprocess.call('python -m PyCoTools.Scripts.pydentify_model "{}"'.format(cps_file),shell=True)
 
@@ -155,7 +175,7 @@ if __name__=='__main__':
     F=FilePaths()
     if args.d:
         PyCoTools.Misc.download_models(F.wd,percent=args.p,SKIP_ALREADY_DOWNLOADED=False)
-        
+    
     cps_files=xml2cps(F.model_downloads_pickle,F.cps_files_pickle)
         
     print pydentify_biomodels(F.cps_files_pickle)
