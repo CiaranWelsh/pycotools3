@@ -9,9 +9,9 @@ import pickle
 import logging
 
 
-def setup_logger(logger_name, log_file, level=logging.INFO):
+def setup_logger(logger_name, log_file, level=logging.DEBUG):
     l = logging.getLogger(logger_name)
-    formatter = logging.Formatter('%(asctime)s : %(levelname)s : %(message)s')
+    formatter = logging.Formatter('%(asctime)s : %(levelname)s : %(funcName)s : %(message)s')
     fileHandler = logging.FileHandler(log_file, mode='w')
     fileHandler.setFormatter(formatter)
     streamHandler = logging.StreamHandler()
@@ -139,12 +139,16 @@ def download_models(directory,percent=100,SKIP_ALREADY_DOWNLOADED=True):
     print 'The number of models in biomodels right now is {}'.format(len(bio))
     model=bio.getAllCuratedModelsId()
     print 'The number of curated models in biomodels is: {}'.format(len(model))
-    per=len(model)//100*percent
+    per=len(model)//100.0*percent
     print 'You are about to download {} models'.format(per)
     model_dct={}
     model_files=[]
     skipped=0
-    for i in enumerate(model[:per]):
+    if percent==100:
+        models=model
+    else:
+        models=model[:int(per)]
+    for i in enumerate(models):
         os.chdir(directory)
         author=bio.getAuthorsByModelId(i[1])
         author=RemoveNonAscii(author[0]).filter

@@ -70,8 +70,10 @@ def xml2cps(model_pickle,cps_pickle):
     returns:
         list of copasi files
     '''
-    LOG.debug('Converting XML to COPASI')
+    LOG.info('Converting XML to COPASI')
     paths= pandas.read_pickle(model_pickle)
+    LOG.debug('sbml pickle file has following dimenions: {} '.format(paths.shape))
+
 #    print pandas.read_excel(models,header=0,index_col=0)
     def worker(path,output_path):
         return subprocess.check_call('CopasiSE -i "{}" -s {}'.format(path,output_path),shell=True)
@@ -84,24 +86,25 @@ def xml2cps(model_pickle,cps_pickle):
         LOG.debug('sbml file: {}'.format(path))
 #        print path
         cps_path=PyCoTools.Misc.RemoveNonAscii(os.path.splitext(path)[0]).filter+'.cps'
-        LOG.debug('cps file: {}'.format(cps_path))
-#        print cps_path
-        print 'cps file:{}'.format(cps_path).decode('utf8')
-        cps_files.append(cps_path)        
+        LOG.debug('cps file: {}'.format(cps_path.decode('utf8')))
+               
         if os.path.isfile(cps_path):
             continue
+        LOG.debug('Performing conversion')
         p=threading.Thread(target=worker,args=(path,cps_path))
         jobs.append(p)
         p.start()
         p.join()
-#        subprocess.check_call('CopasiSE -i "{}"'.format(paths['successful'][i]))
-    LOG.info( 'full SBML to cps conversion took {}s'.format(time.time()-start))
-    
+        cps_files.append(cps_path) 
     df=pandas.DataFrame( cps_files)
     df.to_pickle(cps_pickle)
+    LOG.debug('cps pickle file has following shape: {}'.format(df.shape))
+    LOG.info( '...Finished. Full SBML to cps conversion took {}s'.format(time.time()-start))
+
+    return df
 #    
     
-def pydentify_biomodels_cluster(cps_pickle):
+def pydentify_biomodels(cps_pickle):
     '''
     cps_pickle:
         Input to function. This is the pickle file containing copasi file paths
@@ -111,28 +114,38 @@ def pydentify_biomodels_cluster(cps_pickle):
         Full path to script called pydentify_model.py distributed with 
         PyCoTools under the scripts folder. 
     '''
-    skipped=[]
+    
+    failures_path=os.path.join(os.path.dirname(cps_pickle),'ErrorCopasiImport.pickle')
+    failures=[]
     copasi_files=pandas.read_pickle(cps_pickle)
+    LOG.debug('Starting the Pydentification process')
+    LOG.debug('cps_pickle passed to pydentify_biomodels has the following shape: {}'.format(copasi_files.shape))
     for i in copasi_files.index:
         LOG.debug('pydentifying: {}'.format(copasi_files.iloc[i][0]))
         cps_file= copasi_files.iloc[i][0]
         if os.path.isfile(cps_file)==False:
-            LOG.critical('{} does not exist'.format(cps_file))
-            raise PyCoTools.Errors.InputError('{} doesn\' exist.'.format(cps_file))
+            LOG.warning('{} does not exist'.format(cps_file))
+            failures.append((cps_file,'SBML conversion Error'))
+
         dire,fle=os.path.split(cps_file)
         try:
             if CLUSTER:
                 sh_file=os.path.join(dire,fle[:-4]+'_sh_file.sh')
+                err_file=os.path.join(dire,fle[:-4]+'_errorStream.txt')
+                out_file=os.path.join(dire,fle[:-4]+'outputStream.txt')
                 with open(sh_file,'w') as f:
                     f.write('module load apps/python27/2.7.8\nmodule load apps/COPASI/4.16.104-Linux-64bit\npython -m PyCoTools.Scripts.pydentify_model "{}"'.format(cps_file))
-                os.system('qsub {}'.format(sh_file))
-            else:
+                
+                os.system('qsub {} -e {} -o {}'.format(sh_file,err_file,out_file))
+            else:   
                 subprocess.call('python -m PyCoTools.Scripts.pydentify_model "{}"'.format(cps_file),shell=True)
 
         except:
-            skipped.append(cps_file)
             LOG.warning('skipped: {}'.format(cps_file))
-    return skipped
+            failures.append((cps_file,'skipped, already exists'))
+    failures=pandas.DataFrame(failures)
+    failures.to_pickle(failures_path)
+    return failures
             
 
 
@@ -142,8 +155,10 @@ if __name__=='__main__':
     F=FilePaths()
     if args.d:
         PyCoTools.Misc.download_models(F.wd,percent=args.p,SKIP_ALREADY_DOWNLOADED=False)
+        
     cps_files=xml2cps(F.model_downloads_pickle,F.cps_files_pickle)
-    print pydentify_biomodels_cluster(F.cps_files_pickle)
+        
+    print pydentify_biomodels(F.cps_files_pickle)
     
     
 
