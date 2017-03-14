@@ -25,7 +25,7 @@ Date:
 Visualize parameter estimation data 
  
 '''
- import PyCoTools as P
+import PyCoTools as P
 import argparse
 import os
 
