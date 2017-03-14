@@ -75,6 +75,8 @@ class FilePaths():
         self.cps_files_pickle=os.path.join(self.wd,'cpsFilesPickle.pickle')
 
         self.models_downloads_xlsx=os.path.join(self.wd,'ModelsMap.xlsx')
+        self.computation_time_pickle=os.path.join(self.wd,'computation_time_results.pickle')
+        self.figure_path=os.path.join(self.wd,'computation_time_plot.png')
         
     
 def xml2cps(model_pickle,cps_pickle):
