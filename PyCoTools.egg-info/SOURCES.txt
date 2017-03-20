@@ -82,6 +82,7 @@ PyCoTools/PyCoToolsTutorial/PyCoToolsTutorial.html
 PyCoTools/PyCoToolsTutorial/PyCoToolsTutorial.ipynb
 PyCoTools/PyCoToolsTutorial/__init__.py
 PyCoTools/Scripts/__init__.py
+PyCoTools/Scripts/calculate_biomodels_computation_time.py
 PyCoTools/Scripts/compare_sim_vs_exp.py
 PyCoTools/Scripts/delete_SGE_jobs.py
 PyCoTools/Scripts/fit_analysis.py

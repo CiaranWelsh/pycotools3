@@ -126,7 +126,6 @@ def plot_computation_times(df,figure_path,fontsize=22):
     
     '''
     df=df.reset_index()
-    
     seaborn.set(font_scale=2)
     plt.figure()
     plt.scatter(df['Num params'],df[r'computation_time/num_params(min per parameter)'])

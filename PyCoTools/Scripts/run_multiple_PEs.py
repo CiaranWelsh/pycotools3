@@ -40,6 +40,7 @@ parser.add_argument('--Method',help='Method of parameter estimation',default='Ge
 parser.add_argument('--RandomizeStartValues',help='Start parameter estimation from random initial values',default='true')
 parser.add_argument('-n',help='Number of parameter estimations for model copy to perform',default=3,type=int)
 parser.add_argument('-m',help='Number of times to copy the model. >6 will probably cause problems.',default=4,type=int)
+parser.add_argument('--ReportName',help='Name of parameter estimation report file to store results',default=None)
 
 ## arguments to control optimization specific parameterswith defaults
 parser.add_argument('--NumberOfGenerations',help='Method specific parameter',default=200,type=int)
@@ -93,6 +94,8 @@ if __name__=='__main__':
     copasi_files=copy_copasi(args.Model,args.m)
     result_files=enumerate_PE_output(args.Model,args.m)
 
+    if args.ReportName==None:
+        args.ReportName=os.path.join(os.path.dirname(args.Model),'ParameterEstimationResults.txt')
     # general call to ParameterEstimation
     PE= PyCoTools.pycopi.ParameterEstimation(args.Model,
                                                args.Data, 
@@ -100,6 +103,7 @@ if __name__=='__main__':
                                                Plot='false', #don't want to plot this time
                                                SaveFig='false',
                                                RandomizeStartValues=args.RandomizeStartValues,
+                                               ReportName=args.ReportName,
                                                
                                                ConfigFilename=args.ConfigFile,
                                                NumberOfGenerations=args.NumberOfGenerations,
