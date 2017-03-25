@@ -1,3 +1,32 @@
+
+'''
+
+ This file is part of PyCoTools.
+
+ PyCoTools is free software: you can redistribute it and/or modify
+ it under the terms of the GNU Lesser General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ PyCoTools is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Lesser General Public License for more details.
+
+ You should have received a copy of the GNU Lesser General Public License
+ along with PyCoTools.  If not, see <http://www.gnu.org/licenses/>.
+
+
+Author: 
+    Ciaran Welsh
+Date:
+    12/03/2017
+
+ Object:
+ 
+Miscellaneous bunch of useful classes and functions
+'''
+
 import os
 import string
 import pandas,numpy
@@ -38,7 +67,15 @@ def setup_logger(logger_name, log_file, level=logging.DEBUG):
 #    return LOG
     
     
-    
+def run_parallel(commands):
+    length = len(commands)
+    x = 0
+    import threading
+    while x < length:
+        exec("threading.Thread(target = "+commands[x]+").start()")
+        x = x+1
+    return True
+
     
 class RemoveNonAscii():
     def __init__(self,non_ascii_str):
