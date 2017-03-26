@@ -45,7 +45,7 @@ import logging
 import os
 import subprocess
 import re
-import PEAnalysis,Errors,Misc
+import PEAnalysis,Errors
 import matplotlib
 import matplotlib.pyplot as plt
 from textwrap import wrap
@@ -56,6 +56,7 @@ from  multiprocessing import Process
 
 
 
+LOG=logging.getLogger(__name__)
 
 
 #==========================================================================
@@ -63,13 +64,13 @@ from  multiprocessing import Process
 class CopasiMLParser():
     '''
     Parse a copasi file into xml.etree. 
+    The copasiML is availbale as the copasiML attribute.
     
-    Positional arguments:
+    args:
         copasi_file:
             A full path to a copasi file
         
-    Attributes:
-        copasiML=the copasi model parsed into etree
+
     '''
     def __init__(self,copasi_file):
         self.copasi_file=copasi_file
@@ -77,6 +78,7 @@ class CopasiMLParser():
             raise Errors.FileDoesNotExistError('{} is not a copasi file'.format(self.copasi_file))
         self.copasiMLTree=self._parse_copasiML()
         self.copasiML=self.copasiMLTree.getroot()
+        
         
         '''
         Recently changed this class to use lxml built in functions
@@ -116,16 +118,19 @@ class CopasiMLParser():
         '''
         Parse xml doc with lxml 
         '''
-        return etree.parse(self.copasi_file)
+        tree= etree.parse(self.copasi_file)
+        LOG.debug('copasi file {} has been parsed into Python'.format(os.path.split(self.copasi_file)[1]))
+        return tree
             
     def write_copasi_file(self,copasi_filename,copasiML):
         '''
         write to file with lxml write function
 
         '''
-        ##first convert the copasiML to a root element tree
+        #first convert the copasiML to a root element tree
         root=etree.ElementTree(copasiML)
         root.write(copasi_filename)
+        LOG.debug('File {} written to \n{}'.format(os.path.split(self.copasi_file)[1],copasi_filename))
             
 #==============================================================================
 
