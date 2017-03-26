@@ -47,6 +47,7 @@ import re
 import logging
 #import math
 
+LOG=logging.getLogger(__name__)
 
 class ParsePEData():
     '''
@@ -117,7 +118,7 @@ class ParsePEData():
     def remove_infinite_RSS(self):
         for i in self.data['RSS']:
             if i=='1.#INF' :
-                logging.log(logging.INFO,'Your PE data contains infinite RSS values. These data will be removed''')
+                LOG.INFO('Your PE data contains infinite RSS values. These data will be removed''')
                 self.RemoveInfiniteRSS='true'
         if self.RemoveInfiniteRSS=='true':
             return self.data[self.data['RSS']!='1.#INF'].reset_index(drop=True)

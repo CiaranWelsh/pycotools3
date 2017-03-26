@@ -1,9 +1,3 @@
-import PyCoTools
-
-
-
-
-
 class InputError(Exception):
     pass
 

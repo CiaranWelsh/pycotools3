@@ -45,7 +45,7 @@ import logging
 import os
 import subprocess
 import re
-import PEAnalysis,Errors,Misc
+import PEAnalysis,Errors
 import matplotlib
 import matplotlib.pyplot as plt
 from textwrap import wrap
@@ -56,6 +56,7 @@ from  multiprocessing import Process
 
 
 
+LOG=logging.getLogger(__name__)
 
 
 #==========================================================================
@@ -63,13 +64,13 @@ from  multiprocessing import Process
 class CopasiMLParser():
     '''
     Parse a copasi file into xml.etree. 
+    The copasiML is availbale as the copasiML attribute.
     
-    Positional arguments:
+    args:
         copasi_file:
             A full path to a copasi file
         
-    Attributes:
-        copasiML=the copasi model parsed into etree
+
     '''
     def __init__(self,copasi_file):
         self.copasi_file=copasi_file
@@ -77,6 +78,7 @@ class CopasiMLParser():
             raise Errors.FileDoesNotExistError('{} is not a copasi file'.format(self.copasi_file))
         self.copasiMLTree=self._parse_copasiML()
         self.copasiML=self.copasiMLTree.getroot()
+        
         
         '''
         Recently changed this class to use lxml built in functions
@@ -116,16 +118,19 @@ class CopasiMLParser():
         '''
         Parse xml doc with lxml 
         '''
-        return etree.parse(self.copasi_file)
+        tree= etree.parse(self.copasi_file)
+        LOG.debug('copasi file {} has been parsed into Python'.format(os.path.split(self.copasi_file)[1]))
+        return tree
             
     def write_copasi_file(self,copasi_filename,copasiML):
         '''
         write to file with lxml write function
 
         '''
-        ##first convert the copasiML to a root element tree
+        #first convert the copasiML to a root element tree
         root=etree.ElementTree(copasiML)
         root.write(copasi_filename)
+        LOG.debug('File {} written to \n{}'.format(os.path.split(self.copasi_file)[1],copasi_filename))
             
 #==============================================================================
 
@@ -134,6 +139,7 @@ class GetModelQuantities():
     Positional arguments:
         copasi_file:
             Full path to copasi file
+            
             
     keywords:
         Quantitytype:
@@ -677,7 +683,15 @@ class Reports():
 
         self.copasiML=self.clear_all_reports()
         self.copasiML=self.run()
+        
+
+        LOG.debug('setting up a report with the following settings:')
+        for i in self.kwargs:
+            LOG.debug('\t'+str([i, self.kwargs[i]]))
+            
         self.copasiML=self.save()
+        
+        
         
     def save(self):
         if self.kwargs.get('Save')=='duplicate':
@@ -965,13 +979,17 @@ class Reports():
         Execute code that builds the report defined by the kwargs
         '''
         if self.kwargs.get('ReportType')=='parameter_estimation':
+            LOG.debug('created a \'parameter_estimation\' report')
             self.copasiML=self.parameter_estimation_with_function_evaluations()
         elif self.kwargs.get('ReportType')=='profilelikelihood':
             self.copasiML=self.profile_likelihood()
+            LOG.debug('created a \'profile_likelihod\' type report')
         elif self.kwargs.get('ReportType')=='time_course':
             self.copasiML=self.timecourse()
+            LOG.debug('created a \'time_course\' type report')
         elif self.kwargs.get('ReportType')=='none':
             self.copasiML=self.copasiML
+            LOG.debug('created a \'none\' type report')
         return self.copasiML
         
     def remove_report(self,report_name):
@@ -1497,8 +1515,10 @@ class ExperimentMapper():
         
     def map_experiments(self):
         self.remove_all_experiments()
+        LOG.debug('Removing all pre-existing experiments from copasi mapping interface')
         for i in range(len(self.experiment_files)):
             Experiment=self.create_experiment(i)
+            LOG.debug('Mapping experiment {}'.format(self.experiment_files[i]))
             self.copasiML=self.add_experiment_set(Experiment)
             self.save()
         return self.copasiML
@@ -1932,6 +1952,7 @@ class TimeCourse(object):
             self.copasiML=self.report_definition()
             self.copasiML=self.set_report()
             self.copasiML=self.set_deterministic()
+            LOG.debug('setting up deterministic time course')
         elif self.kwargs.get('SimulationType')=='stochastic':
             return 'There is space in this class to write code to run a stochastic simulation but it is not yet written'
         #save to duplicate copasi file
@@ -1942,13 +1963,16 @@ class TimeCourse(object):
             args=['CopasiSE',self.kwargs.get('OutputML')]
             
         R=Run(self.copasi_file,Task='time_course')
+        LOG.debug('Time course ran')
         return R
 
         
     def read_sim_data(self):
         data_output=os.path.join(os.path.dirname(self.copasi_file), self.kwargs['ReportName'])
         #trim copasi style headers
+        LOG.debug('Reading timecourse')
         if self.kwargs.get('PruneHeaders')=='true':
+            LOG.debug('pruning headers of copasi files of COPASI references')    
             PruneCopasiHeaders(data_output,replace='true')
         return pandas.read_csv(data_output,sep='\t') 
         
@@ -1956,6 +1980,7 @@ class TimeCourse(object):
         '''
         
         '''
+        LOG.debug('plotting time course')
         ## Create directory for graphs
         if self.kwargs['GraphDirectory']==None:
             dire=os.path.join(os.path.dirname(self.copasi_file),'TimeCourseGraphs')
@@ -2037,7 +2062,7 @@ class PhaseSpace(TimeCourse):
     '''
     def __init__(self,copasi_file,**kwargs):
         super(PhaseSpace,self).__init__(copasi_file,**kwargs)
-                
+        LOG.debug('Plotting all combinations of phase space plot')
         self.new_options={'Plot':'false'}
         self.kwargs.update(self.new_options)
         self.species_data=self.isolate_species()
@@ -2671,16 +2696,24 @@ class ParameterEstimation():
         self.PlotPEDataKwargs['LegendLoc']=self.kwargs.get('LegendLoc')
         self.PlotPEDataKwargs['PruneHeaders']=self.kwargs.get('PruneHeaders')
         
+        LOG.debug('ParameterEstimation kwarg dict looks like this:')
+        for i in self.kwargs:
+            LOG.debug('\t'+str([i,self.kwargs[i]]))
+            
+        
 
     def clear_pe(self):
         pass
 
     def run(self):
         if self.kwargs.get('Plot')=='false':
+            LOG.debug('Running ParameterEstimation. Data reported to file: {}'.format(self.kwargs['ReportName']))
             self.copasiML=Run(self.copasi_file,Task='parameter_estimation')
             return self.copasiML
         else:
+            ##Run with 'Mode' set to false just unchecks the executable boxes.
             self.copasiML=Run(self.copasi_file,Task='parameter_estimation',Mode='false')
+            ## Now run with check_call
             subprocess.check_call('CopasiSE "{}"'.format(self.copasi_file),shell=True)
             self.plot()
         return self.copasiML
