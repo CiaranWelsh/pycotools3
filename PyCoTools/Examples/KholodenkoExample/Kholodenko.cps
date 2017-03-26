@@ -889,7 +889,7 @@
       </Method>
     </Task>
     <Task key="Task_11" name="Time-Course" type="timeCourse" scheduled="true" updateModel="false">
-      <Report append="false" confirmOverwrite="false" reference="Report_36" target="D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\Examples\KholodenkoExample\KholodenkoTimeCourseOutput.txt" type="Deterministic(LSODA)" name="Deterministic (LSODA)"/><Problem type="Deterministic(LSODA)" name="Deterministic (LSODA)">
+      <Report append="false" confirmOverwrite="false" reference="Report_43" target="D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\Examples\KholodenkoExample\KholodenkoTimeCourseOutput.txt" type="Deterministic(LSODA)" name="Deterministic (LSODA)"/><Problem type="Deterministic(LSODA)" name="Deterministic (LSODA)">
         <Parameter name="StepNumber" type="unsignedInteger" value="50"/>
         <Parameter name="StepSize" type="float" value="20"/>
         <Parameter name="Duration" type="float" value="1000"/>
@@ -1202,7 +1202,7 @@
         <Object cn="CN=Root,Vector=TaskList[Linear Noise Approximation],Object=Result"/>
       </Footer>
     </Report>
-  <Report taskType="Time-Course" separator="&#9;" precision="6" key="Report_36" name="Time-Course"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Reference=Time"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-P],Reference=Concentration"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1],Reference=Concentration"/></Table></Report></ListOfReports>
+  <Report taskType="Time-Course" separator="&#9;" precision="6" key="Report_43" name="Time-Course"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Reference=Time"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-P],Reference=Concentration"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1],Reference=Concentration"/></Table></Report></ListOfReports>
   <GUI>
   </GUI>
   <SBMLReference file="BIOMD0000000010 (2).xml">
