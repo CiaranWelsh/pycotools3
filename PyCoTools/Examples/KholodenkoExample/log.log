@@ -1,0 +1,76 @@
+2017-03-26 14:19:28,306:INFO:__init__.py:<module>:Initializing PyCoTools
+2017-03-26 14:19:28,309:INFO:__init__.py:<module>:Initializing Logging System
+2017-03-26 14:19:28,315:INFO:__init__.py:<module>:logging to file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\logging_config.conf
+2017-03-26 14:19:28,321:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:19:28,326:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:19:28,361:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:19:28,368:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:19:28,464:DEBUG:pycopi.py:write_copasi_file:File Kholodenko.cps written to 
+D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\Examples\KholodenkoExample\Kholodenko.cps
+2017-03-26 14:19:28,471:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:19:28,479:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:19:28,579:DEBUG:pycopi.py:write_copasi_file:File Kholodenko.cps written to 
+D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\Examples\KholodenkoExample\Kholodenko.cps
+2017-03-26 14:19:28,609:DEBUG:pycopi.py:write_copasi_file:File Kholodenko.cps written to 
+D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\Examples\KholodenkoExample\Kholodenko.cps
+2017-03-26 14:19:28,615:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:19:28,667:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:19:28,690:DEBUG:pycopi.py:write_copasi_file:File Kholodenko.cps written to 
+D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\Examples\KholodenkoExample\Kholodenko.cps
+2017-03-26 14:20:23,088:INFO:__init__.py:<module>:Initializing PyCoTools
+2017-03-26 14:20:23,089:INFO:__init__.py:<module>:Initializing Logging System
+2017-03-26 14:20:23,096:INFO:__init__.py:<module>:logging to file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\logging_config.conf
+2017-03-26 14:20:23,105:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:20:23,115:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:20:23,207:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:20:23,219:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:20:23,328:DEBUG:pycopi.py:write_copasi_file:File Kholodenko.cps written to 
+D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\Examples\KholodenkoExample\Kholodenko.cps
+2017-03-26 14:20:23,335:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:20:23,344:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:20:23,536:DEBUG:pycopi.py:write_copasi_file:File Kholodenko.cps written to 
+D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\Examples\KholodenkoExample\Kholodenko.cps
+2017-03-26 14:20:23,569:DEBUG:pycopi.py:write_copasi_file:File Kholodenko.cps written to 
+D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\Examples\KholodenkoExample\Kholodenko.cps
+2017-03-26 14:20:23,576:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:20:23,586:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:20:23,608:DEBUG:pycopi.py:write_copasi_file:File Kholodenko.cps written to 
+D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\Examples\KholodenkoExample\Kholodenko.cps
+2017-03-26 14:22:52,983:INFO:__init__.py:<module>:Initializing PyCoTools
+2017-03-26 14:22:52,984:INFO:__init__.py:<module>:Initializing Logging System
+2017-03-26 14:22:52,990:INFO:__init__.py:<module>:logging to file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\logging_config.conf
+2017-03-26 14:22:52,997:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:22:53,003:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:22:53,052:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:22:53,059:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:22:53,164:DEBUG:pycopi.py:write_copasi_file:File Kholodenko.cps written to 
+D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\Examples\KholodenkoExample\Kholodenko.cps
+2017-03-26 14:22:53,170:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:22:53,176:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:22:53,286:DEBUG:pycopi.py:write_copasi_file:File Kholodenko.cps written to 
+D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\Examples\KholodenkoExample\Kholodenko.cps
+2017-03-26 14:22:53,311:DEBUG:pycopi.py:write_copasi_file:File Kholodenko.cps written to 
+D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\Examples\KholodenkoExample\Kholodenko.cps
+2017-03-26 14:22:53,319:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:22:53,325:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:22:53,345:DEBUG:pycopi.py:write_copasi_file:File Kholodenko.cps written to 
+D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\Examples\KholodenkoExample\Kholodenko.cps
+2017-03-26 14:24:51,760:INFO:__init__.py:<module>:Initializing PyCoTools
+2017-03-26 14:24:51,762:INFO:__init__.py:<module>:Initializing Logging System
+2017-03-26 14:24:51,766:INFO:__init__.py:<module>:logging to file: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\logging_config.conf
+2017-03-26 14:24:51,773:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:24:51,780:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:24:51,826:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:24:51,832:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:24:51,936:DEBUG:pycopi.py:write_copasi_file:File Kholodenko.cps written to 
+D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\Examples\KholodenkoExample\Kholodenko.cps
+2017-03-26 14:24:51,944:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:24:51,950:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:24:52,039:DEBUG:pycopi.py:write_copasi_file:File Kholodenko.cps written to 
+D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\Examples\KholodenkoExample\Kholodenko.cps
+2017-03-26 14:24:52,059:DEBUG:pycopi.py:write_copasi_file:File Kholodenko.cps written to 
+D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\Examples\KholodenkoExample\Kholodenko.cps
+2017-03-26 14:24:52,065:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:24:52,069:DEBUG:pycopi.py:_parse_copasiML:copasi file Kholodenko.cps has been parsed into Python
+2017-03-26 14:24:52,088:DEBUG:pycopi.py:write_copasi_file:File Kholodenko.cps written to 
+D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\Examples\KholodenkoExample\Kholodenko.cps

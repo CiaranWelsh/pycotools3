@@ -49,8 +49,9 @@ import matplotlib
 import matplotlib.pyplot as plt
 from scipy.interpolate import interp1d
 from textwrap import wrap
+import logging
 
-
+LOG=logging.getLogger(__name__)
 
 
 class ProfileLikelihood():
