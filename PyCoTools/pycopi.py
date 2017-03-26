@@ -140,6 +140,7 @@ class GetModelQuantities():
         copasi_file:
             Full path to copasi file
             
+            
     keywords:
         Quantitytype:
             either 'concentration' (default) or 'particle_numbers'. 
@@ -682,7 +683,15 @@ class Reports():
 
         self.copasiML=self.clear_all_reports()
         self.copasiML=self.run()
+        
+
+        LOG.debug('setting up a report with the following settings:')
+        for i in self.kwargs:
+            LOG.debug('\t'+str([i, self.kwargs[i]]))
+            
         self.copasiML=self.save()
+        
+        
         
     def save(self):
         if self.kwargs.get('Save')=='duplicate':
