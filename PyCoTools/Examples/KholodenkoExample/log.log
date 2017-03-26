@@ -253,3 +253,4 @@ D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\Examples\K
 DEBUG:PyCoTools.pycopi:pycopi:1966:Time course ran
 DEBUG:PyCoTools.pycopi:pycopi:1973:Reading timecourse
 DEBUG:PyCoTools.pycopi:pycopi:1975:pruning headers of copasi files of COPASI references
+DEBUG:PyCoTools.pycopi:pycopi:1983:plotting time course
