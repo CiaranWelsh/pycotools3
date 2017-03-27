@@ -75,6 +75,7 @@ PyCoTools/Examples/KholodenkoExample/TimeCourseOutput.txt
 PyCoTools/Examples/KholodenkoExample/__init__.py
 PyCoTools/Examples/KholodenkoExample/fitItemTemplate.JPG
 PyCoTools/Examples/KholodenkoExample/fitItemTemplate.xlsx
+PyCoTools/Examples/KholodenkoExample/log.log
 PyCoTools/PyCoToolsTutorial/1GlobalPEData.pickle
 PyCoTools/PyCoToolsTutorial/FilePaths.py
 PyCoTools/PyCoToolsTutorial/Kholodenko.cps
@@ -82,6 +83,7 @@ PyCoTools/PyCoToolsTutorial/PyCoToolsTutorial.html
 PyCoTools/PyCoToolsTutorial/PyCoToolsTutorial.ipynb
 PyCoTools/PyCoToolsTutorial/__init__.py
 PyCoTools/Scripts/__init__.py
+PyCoTools/Scripts/calculate_biomodels_computation_time.py
 PyCoTools/Scripts/compare_sim_vs_exp.py
 PyCoTools/Scripts/delete_SGE_jobs.py
 PyCoTools/Scripts/fit_analysis.py
