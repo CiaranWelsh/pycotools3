@@ -254,3 +254,104 @@ DEBUG:PyCoTools.pycopi:pycopi:1966:Time course ran
 DEBUG:PyCoTools.pycopi:pycopi:1973:Reading timecourse
 DEBUG:PyCoTools.pycopi:pycopi:1975:pruning headers of copasi files of COPASI references
 DEBUG:PyCoTools.pycopi:pycopi:1983:plotting time course
+DEBUG:PyCoTools.pycopi:pycopi:122:copasi file zi2012.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:122:copasi file zi2012.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:122:copasi file zi2012.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:122:copasi file zi2012.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:989:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:688:setting up a report with the following settings:
+DEBUG:PyCoTools.pycopi:pycopi:690:	['LocalParameters', {}]
+DEBUG:PyCoTools.pycopi:pycopi:690:	['Metabolites', ['PSmad2_PSmad2_c', 'AA', 'Smad4c', 'PSmad2_Smad4_n', 'Smad2c', 'empty_degraded', 'TGF_beta_ex', 'Smad2n', 'T2R_surf', 'T1R_surf', 'T2R_endo', 'PSmad2_Smad4_c', 'PSmad2n', 'T1R_endo', 'PSmad2_PSmad2_n', 'PSmad2c', 'LRC_surf', 'Smad4n', 'TGF_beta_endo', 'TGF_beta_ns', 'LRC_endo']]
+DEBUG:PyCoTools.pycopi:pycopi:690:	['Separator', '\t']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['UpdateModel', 'false']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['GlobalQuantities', ['k_T1R', 'KD_ns', 'kimp_Smad4', 'kon_ns', 'kpho_Smad2', 'kdepho_Smad2', 'stimulation_type', 'totalNumT1R', 'kdeg_T2R', 'totalNuclearPSmad2', 'TGF_beta_dose_mol_per_cell', 'klid', 'totalNumPSmad2', 'koff_Smads', 'totalSmad2c', 'totalSmad2n', 'totalNumLRC', 'medium_TGF_beta_amount', 'single_pulse_duration', 'ka_LRC', 'kexp_Smad4', 'kexp_Smad2', 'kon_Smads', 'k_T2R', 'kdeg_T1R', 'kdeg_TGF_beta', 'totalNumT2R', 'ki', 'kimp_Smad2', 'kdeg_LRC', 'kr', 'kdiss_LRC', 'koff_ns', 'kimp_Smads']]
+DEBUG:PyCoTools.pycopi:pycopi:690:	['Save', 'overwrite']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['ReportName', 'zi2012_TimeCourse.txt']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['QuantityType', 'concentration']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['ConfirmOverwrite', '0']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['OutputML', 'D:\\MPhil\\Model_Building\\Models\\For_Other_People\\Alice\\_Duplicate.cps']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['Variable', 'PSmad2_PSmad2_c']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['ReportType', 'time_course']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['Append', '0']
+DEBUG:PyCoTools.pycopi:pycopi:133:File zi2012.cps written to 
+D:\MPhil\Model_Building\Models\For_Other_People\Alice\zi2012.cps
+DEBUG:PyCoTools.pycopi:pycopi:122:copasi file zi2012.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:122:copasi file zi2012.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:989:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:688:setting up a report with the following settings:
+DEBUG:PyCoTools.pycopi:pycopi:690:	['LocalParameters', {}]
+DEBUG:PyCoTools.pycopi:pycopi:690:	['Metabolites', ['PSmad2_PSmad2_c', 'AA', 'Smad4c', 'PSmad2_Smad4_n', 'Smad2c', 'empty_degraded', 'TGF_beta_ex', 'Smad2n', 'T2R_surf', 'T1R_surf', 'T2R_endo', 'PSmad2_Smad4_c', 'PSmad2n', 'T1R_endo', 'PSmad2_PSmad2_n', 'PSmad2c', 'LRC_surf', 'Smad4n', 'TGF_beta_endo', 'TGF_beta_ns', 'LRC_endo']]
+DEBUG:PyCoTools.pycopi:pycopi:690:	['Separator', '\t']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['UpdateModel', 'false']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['GlobalQuantities', ['k_T1R', 'KD_ns', 'kimp_Smad4', 'kon_ns', 'kpho_Smad2', 'kdepho_Smad2', 'stimulation_type', 'totalNumT1R', 'kdeg_T2R', 'totalNuclearPSmad2', 'TGF_beta_dose_mol_per_cell', 'klid', 'totalNumPSmad2', 'koff_Smads', 'totalSmad2c', 'totalSmad2n', 'totalNumLRC', 'medium_TGF_beta_amount', 'single_pulse_duration', 'ka_LRC', 'kexp_Smad4', 'kexp_Smad2', 'kon_Smads', 'k_T2R', 'kdeg_T1R', 'kdeg_TGF_beta', 'totalNumT2R', 'ki', 'kimp_Smad2', 'kdeg_LRC', 'kr', 'kdiss_LRC', 'koff_ns', 'kimp_Smads']]
+DEBUG:PyCoTools.pycopi:pycopi:690:	['Save', 'overwrite']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['ReportName', 'zi2012_TimeCourse.txt']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['QuantityType', 'concentration']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['ConfirmOverwrite', '0']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['OutputML', 'D:\\MPhil\\Model_Building\\Models\\For_Other_People\\Alice\\_Duplicate.cps']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['Variable', 'PSmad2_PSmad2_c']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['ReportType', 'time_course']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['Append', '0']
+DEBUG:PyCoTools.pycopi:pycopi:133:File zi2012.cps written to 
+D:\MPhil\Model_Building\Models\For_Other_People\Alice\zi2012.cps
+DEBUG:PyCoTools.pycopi:pycopi:1955:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:133:File zi2012.cps written to 
+D:\MPhil\Model_Building\Models\For_Other_People\Alice\zi2012.cps
+DEBUG:PyCoTools.pycopi:pycopi:122:copasi file zi2012.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:122:copasi file zi2012.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:133:File zi2012.cps written to 
+D:\MPhil\Model_Building\Models\For_Other_People\Alice\zi2012.cps
+DEBUG:PyCoTools.pycopi:pycopi:1966:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:1973:Reading timecourse
+DEBUG:PyCoTools.pycopi:pycopi:1975:pruning headers of copasi files of COPASI references
+DEBUG:PyCoTools.pycopi:pycopi:1983:plotting time course
+DEBUG:PyCoTools.pycopi:pycopi:122:copasi file zi2012.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:122:copasi file zi2012.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:122:copasi file zi2012.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:122:copasi file zi2012.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:989:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:688:setting up a report with the following settings:
+DEBUG:PyCoTools.pycopi:pycopi:690:	['LocalParameters', {}]
+DEBUG:PyCoTools.pycopi:pycopi:690:	['Metabolites', ['PSmad2_PSmad2_c', 'AA', 'Smad4c', 'PSmad2_Smad4_n', 'Smad2c', 'empty_degraded', 'TGF_beta_ex', 'Smad2n', 'T2R_surf', 'T1R_surf', 'T2R_endo', 'PSmad2_Smad4_c', 'PSmad2n', 'T1R_endo', 'PSmad2_PSmad2_n', 'PSmad2c', 'LRC_surf', 'Smad4n', 'TGF_beta_endo', 'TGF_beta_ns', 'LRC_endo']]
+DEBUG:PyCoTools.pycopi:pycopi:690:	['Separator', '\t']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['UpdateModel', 'false']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['GlobalQuantities', ['k_T1R', 'KD_ns', 'kimp_Smad4', 'kon_ns', 'kpho_Smad2', 'kdepho_Smad2', 'stimulation_type', 'totalNumT1R', 'kdeg_T2R', 'totalNuclearPSmad2', 'TGF_beta_dose_mol_per_cell', 'klid', 'totalNumPSmad2', 'koff_Smads', 'totalSmad2c', 'totalSmad2n', 'totalNumLRC', 'medium_TGF_beta_amount', 'single_pulse_duration', 'ka_LRC', 'kexp_Smad4', 'kexp_Smad2', 'kon_Smads', 'k_T2R', 'kdeg_T1R', 'kdeg_TGF_beta', 'totalNumT2R', 'ki', 'kimp_Smad2', 'kdeg_LRC', 'kr', 'kdiss_LRC', 'koff_ns', 'kimp_Smads']]
+DEBUG:PyCoTools.pycopi:pycopi:690:	['Save', 'overwrite']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['ReportName', 'zi2012_TimeCourse.txt']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['QuantityType', 'concentration']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['ConfirmOverwrite', '0']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['OutputML', 'D:\\MPhil\\Model_Building\\Models\\For_Other_People\\Alice\\_Duplicate.cps']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['Variable', 'PSmad2_PSmad2_c']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['ReportType', 'time_course']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['Append', '0']
+DEBUG:PyCoTools.pycopi:pycopi:133:File zi2012.cps written to 
+D:\MPhil\Model_Building\Models\For_Other_People\Alice\zi2012.cps
+DEBUG:PyCoTools.pycopi:pycopi:122:copasi file zi2012.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:122:copasi file zi2012.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:989:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:688:setting up a report with the following settings:
+DEBUG:PyCoTools.pycopi:pycopi:690:	['LocalParameters', {}]
+DEBUG:PyCoTools.pycopi:pycopi:690:	['Metabolites', ['PSmad2_PSmad2_c', 'AA', 'Smad4c', 'PSmad2_Smad4_n', 'Smad2c', 'empty_degraded', 'TGF_beta_ex', 'Smad2n', 'T2R_surf', 'T1R_surf', 'T2R_endo', 'PSmad2_Smad4_c', 'PSmad2n', 'T1R_endo', 'PSmad2_PSmad2_n', 'PSmad2c', 'LRC_surf', 'Smad4n', 'TGF_beta_endo', 'TGF_beta_ns', 'LRC_endo']]
+DEBUG:PyCoTools.pycopi:pycopi:690:	['Separator', '\t']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['UpdateModel', 'false']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['GlobalQuantities', ['k_T1R', 'KD_ns', 'kimp_Smad4', 'kon_ns', 'kpho_Smad2', 'kdepho_Smad2', 'stimulation_type', 'totalNumT1R', 'kdeg_T2R', 'totalNuclearPSmad2', 'TGF_beta_dose_mol_per_cell', 'klid', 'totalNumPSmad2', 'koff_Smads', 'totalSmad2c', 'totalSmad2n', 'totalNumLRC', 'medium_TGF_beta_amount', 'single_pulse_duration', 'ka_LRC', 'kexp_Smad4', 'kexp_Smad2', 'kon_Smads', 'k_T2R', 'kdeg_T1R', 'kdeg_TGF_beta', 'totalNumT2R', 'ki', 'kimp_Smad2', 'kdeg_LRC', 'kr', 'kdiss_LRC', 'koff_ns', 'kimp_Smads']]
+DEBUG:PyCoTools.pycopi:pycopi:690:	['Save', 'overwrite']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['ReportName', 'zi2012_TimeCourse.txt']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['QuantityType', 'concentration']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['ConfirmOverwrite', '0']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['OutputML', 'D:\\MPhil\\Model_Building\\Models\\For_Other_People\\Alice\\_Duplicate.cps']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['Variable', 'PSmad2_PSmad2_c']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['ReportType', 'time_course']
+DEBUG:PyCoTools.pycopi:pycopi:690:	['Append', '0']
+DEBUG:PyCoTools.pycopi:pycopi:133:File zi2012.cps written to 
+D:\MPhil\Model_Building\Models\For_Other_People\Alice\zi2012.cps
+DEBUG:PyCoTools.pycopi:pycopi:1955:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:133:File zi2012.cps written to 
+D:\MPhil\Model_Building\Models\For_Other_People\Alice\zi2012.cps
+DEBUG:PyCoTools.pycopi:pycopi:122:copasi file zi2012.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:122:copasi file zi2012.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:133:File zi2012.cps written to 
+D:\MPhil\Model_Building\Models\For_Other_People\Alice\zi2012.cps
+DEBUG:PyCoTools.pycopi:pycopi:1966:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:1973:Reading timecourse
+DEBUG:PyCoTools.pycopi:pycopi:1975:pruning headers of copasi files of COPASI references
