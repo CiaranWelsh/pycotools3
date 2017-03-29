@@ -518,7 +518,7 @@ class PlotScatters():
                  'ExtraTitle':None,
                  'Log10':'false',
                  'Show':'false',
-                 'ColourMap':'inferno',
+                 'ColourMap':'jet_r',
                  'ResultsDirectory':None,
                  
                      }
@@ -644,7 +644,7 @@ class PlotHexMap():
                  'AxisSize':15,
                  'FontSize':22,
                  'Bins':'log',
-                 'ColorMap':'inferno',
+                 'ColorMap':'jet_r',
                  'XRotation':25,
                  'TitleWrapSize':25,
                  'SaveFig':'false',
@@ -654,7 +654,7 @@ class PlotHexMap():
                  'Show':'false',
                  'Mode':'counts',
                  'Marginals':'false',
-                 'ColourMap':'inferno',
+                 'ColourMap':'jet_r',
                  'ResultsDirectory':None,
                  
                      }
