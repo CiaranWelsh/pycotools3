@@ -1,6 +1,10 @@
 Metadata-Version: 1.1
 Name: PyCoTools
+<<<<<<< HEAD
 Version: 3.2.31
+=======
+Version: 3.2.32
+>>>>>>> refs/remotes/origin/master
 Summary: A python copasi toolbox
 Home-page: https://github.com/CiaranWelsh/PyCoTools
 Author: Ciaran Welsh

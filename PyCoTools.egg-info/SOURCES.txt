@@ -75,6 +75,7 @@ PyCoTools/Examples/KholodenkoExample/TimeCourseOutput.txt
 PyCoTools/Examples/KholodenkoExample/__init__.py
 PyCoTools/Examples/KholodenkoExample/fitItemTemplate.JPG
 PyCoTools/Examples/KholodenkoExample/fitItemTemplate.xlsx
+PyCoTools/Examples/KholodenkoExample/log.log
 PyCoTools/PyCoToolsTutorial/1GlobalPEData.pickle
 PyCoTools/PyCoToolsTutorial/FilePaths.py
 PyCoTools/PyCoToolsTutorial/Kholodenko.cps
