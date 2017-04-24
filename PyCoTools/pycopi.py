@@ -3134,15 +3134,13 @@ class ParameterEstimation():
         '''
         Use the PlotPEData class to plot results 
         '''
-        if self.kwargs.get('UpdateModel')=='true':
-            copasi_file=self.copasi_file
-        else:
-            copasi_file=self.copasi_file[:-4]+'_temp.cps'
-            shutil.copy(self.copasi_file,copasi_file)
-        self.PL=PEAnalysis.PlotPEData(copasi_file,self.experiment_files,self.kwargs.get('ReportName'),
+#        if self.kwargs.get('UpdateModel')=='true':
+#            copasi_file=self.copasi_file
+#        else:
+#            #copasi_file=self.copasi_file[:-4]+'_temp.cps'
+#            shutil.copy(self.copasi_file,copasi_file)
+        self.PL=PEAnalysis.PlotPEData(self.copasi_file,self.experiment_files,self.kwargs.get('ReportName'),
                         **self.PlotPEDataKwargs)
-        if self.kwargs.get('UpdateModel')=='false':
-            os.remove(copasi_file)
 
 #==============================================================================
 
