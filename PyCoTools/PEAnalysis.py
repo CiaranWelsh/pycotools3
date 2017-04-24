@@ -1384,6 +1384,7 @@ class PlotPEData():
         self.parameters=self.parse_parameters()
         self.insert_parameters()
         self.sim_data=self.simulate_time_course()
+        
 ##        '''
 ##        Only change directory before doing the actual plotting. 
 ##        You want to be in the model directory for all the while your collecting
@@ -1436,7 +1437,6 @@ class PlotPEData():
         df= pandas.read_csv( self.PE_result_file,sep='\t')
         df=ParsePEData(self.PE_result_file)
         df= df.data
-        print self.PE_result_file
         return pandas.DataFrame(df.iloc[-1]).transpose()
     
     def insert_parameters(self):
@@ -1445,18 +1445,19 @@ class PlotPEData():
         
         
     def simulate_time_course(self):
+        '''
+        This function does not work with irregular time courses
+        '''
         data_dct={}
         for i in self.exp_times:
             '''
             need to subtract 1 from the intervals
             '''
-            print self.exp_times[i]['End']
-            print self.exp_times[i]['Intervals']
-            print self.exp_times[i]['StepSize']
-            TC=pycopi.TimeCourse(self.copasi_file,Start=self.exp_times[i]['Start'],
+            TC=pycopi.TimeCourse(self.copasi_file,Start=0,
                           End=self.exp_times[i]['End'],
-                          Intervals=self.exp_times[i]['Intervals'],
-                          StepSize=self.exp_times[i]['StepSize'],Plot='false')
+                          Intervals=self.exp_times[i]['End'],
+                          StepSize=1,
+                          Plot='false')
             P=pycopi.PruneCopasiHeaders(TC.data,replace='true')
             data_dct[i]=P.df
         return data_dct
@@ -1489,11 +1490,12 @@ class PlotPEData():
             raise Errors.InputError('{} not in {} or {}'.format(parameter,self.sim_data[fle.keys()],self.experiment_data[fle].keys()))
         sim= self.sim_data[fle][parameter]
         exp= self.experiment_data[fle][parameter]
-        time=self.sim_data[fle]['Time']
+        time_exp= self.experiment_data[fle]['Time']
+        time_sim=self.sim_data[fle]['Time']
         plt.figure()
         ax = plt.subplot(111)
-        plt.plot(time,sim,'k-',label='simulated',linewidth=self.kwargs.get('LineWidth'))
-        plt.plot(time,exp,'ro',label='experimental',markersize=self.kwargs.get('DotSize'))
+        plt.plot(time_sim,sim,'k-',label='simulated',linewidth=self.kwargs.get('LineWidth'))
+        plt.plot(time_exp,exp,'ro',label='experimental',markersize=self.kwargs.get('DotSize'))
         plt.legend(loc=self.kwargs.get('LegendLoc'))
 
 
@@ -1551,7 +1553,10 @@ class PlotPEData():
         '''
         for parameter in  self.experiment_data[fle]:
             if parameter !='Time':
-                self.plot1(fle,parameter)
+                if parameter[-6:]=='_indep':
+                    pass
+                else:
+                    self.plot1(fle,parameter)
         
     def plot(self):
         '''
@@ -1737,18 +1742,33 @@ class PlotHistogram3D():
 
 if __name__=='__main__':
     pass
-#    current_directory='D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\Examples\GoldbetterExample'
-#    copasi_file=r'Goldbeter1995_CircClock.cps'
-#    goldbetter_model=os.path.join(current_directory,copasi_file)
-#    report=os.path.join(current_directory,'TimeCourseOutput.txt')
-#    noisy_report=os.path.join(current_directory,'NoisyTimeCourseOutput.txt')
+#    import glob
+#    dire=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSC project"
+#    full_dire = os.path.join(dire,'Full model')
+#    simple_dire = os.path.join(dire,'Simplified model')
+#    akt_dire = os.path.join(dire,'AKT model')
+#    erk_dire = os.path.join(dire,'ERK model')
 #    
-#    EvaluateOptimizationPerformance(noisy_report)
-#    PEData_report=os.path.join(current_directory,'PEData.txt')
-    
-    
-#    print ParsePEData(PEData_report).data
-
+#    os.chdir(full_dire)
+#    full_cps= glob.glob('*.cps')
+#    full_cps= [os.path.abspath(i) for i in full_cps]
+#    full_data=glob.glob('*.csv')
+#    full_data=[os.path.abspath(i) for i in full_data]
+#    
+#    report_name=os.path.join(full_dire,'Fit1.txt')
+#    ## check 
+#    if os.path.isfile(full_cps[0])!=True:
+#        raise TypeError
+#        
+#    for i in full_data:
+#        if os.path.isfile(i)!=True:
+#            raise TypeError
+#            
+##    PE_full=pycopi.ParameterEstimation(full_cps[0],full_data[0],
+##                                                ReportName=report_name)
+#    #PE_full.write_item_template()
+##    PE_full.set_up()
+#    PlotPEData(full_cps[0],full_data[0],report_name)
 
 
 
