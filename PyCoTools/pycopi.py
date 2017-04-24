@@ -2454,7 +2454,7 @@ class ParameterEstimation():
                  'LowerBound':0.000001,
                  'UpperBound':1000000,
 #                 'Run':'false',
-                 'Plot':'true',
+                 'Plot':'false',
                  '''
                  The below arguments get passed to the parameter
                  estimation plotting class
