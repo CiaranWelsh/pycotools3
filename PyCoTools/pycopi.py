@@ -52,7 +52,7 @@ from textwrap import wrap
 import string
 import itertools
 from  multiprocessing import Process
-
+import glob
 
 
 
@@ -4070,12 +4070,193 @@ class PruneCopasiHeaders():
             return self.new_path
         elif self.from_df:
             return df
+        
+        
+class MultiExperimentFit():
+    '''
+    
+    '''
+    def __init__(self,ProjectConfig,Outdir,**kwargs):
+        self.outdir=Outdir
+        self.project_dir=ProjectConfig
+        options={}
+                     
+        for key in kwargs.keys():
+            if key not in options.keys():
+                raise Errors.InputError('{} is not a keyword argument for MultiExperimentFit'.format(key))
+        options.update( kwargs) 
+        self.kwargs=options    
+        
+        
+        self.do_checks()
+        self.cps_files,self.exp_files=self.read_fit_config()
+        self.create_workspace()
 
+    def do_checks(self):
+        '''
+        Function to check the integrity of the input given by user
+        '''
+        pass
+        ## situation where neither workspace or copasi_files/experiment files are provided
+#        if project==None and self.kwargs['CopasiFiles']==None:
+#            raise Errors.InputError('Need input either to the Project or CopasiFiles and ExperimentFiles kwargs')
+#            
+#        ## For when list of copasi files and experiment files are provided
+#        if self.kwargs['CopasiFiles']:
+#            for copasi_file in self.copasi_files:
+#                if copasi_file[-4:]!='.cps':
+#                    raise Errors.InputError('{} is not a copasi file'.format(copasi_file))
+#                
+#        if self.kwargs['ExperimentFiles']!=None:
+#            for experiment_file in self.experiment_files:
+#                if experiment_file[-4:]!='.txt' or experiment_file[-4:]!='.csv':
+#                    raise Errors.InputError('{} is not a txt or csv file'.format(experiment_file))
+#        ## Make sure CopasiFiles and ExperimnetFiles are called together
+#        if self.kwargs['CopasiFiles']!=None:
+#            if self.kwargs['ExperimentFiles']==None:
+#                raise Errors.InputError('If argument given to CopasiFiles and argument needs to be given to ExperimentFiles')
+#
+#        if self.kwargs['ExperimentFiles']!=None:
+#            if self.kwargs['Copasi_Files']==None:
+#                raise Errors.InputError('If argument given to ExperimentFiles and argument needs to be given to CopasiFiles')
+                
+        ## 
+    
+        
+    def create_workspace(self):
+        '''
+        Creates a workspace from cps and experiment files in self.project_dir
+        
+        i.e. 
+            --project_dir
+            ----model1_dir
+            ------model1.cps
+            ------exp_data.txt
+            ----model2_dir
+            ------model2.cps
+            ------exp_data.txt
+        
+        '''
+        LOG.info('Creating workspace from project_dir')
+        LOG.debug('Creating Workspace from files in: \n{}'.format(self.project_dir))
+        ## Create entire working directory for analysis
+        self.wd=os.path.join(self.project_dir,self.outdir)
+        LOG.debug('New Working directory is:\n{}'.format(self.wd))
+        if os.path.isdir(self.wd)!=True:
+            LOG.debug('{} doesn\' already exist. Creating {}'.format(self.wd,self.wd))
+            os.mkdir(self.wd)
+        os.chdir(self.project_dir)
+        LOG.debug('changing directory to project_dir: \n({}) to read relevent .cps and exp files'.format(self.wd))
+        LOG.debug('Creating a directory in working directory for each of the model files')
+        
+        cps_dirs={}
+        
+        for cps in self.cps_files:
+            cps_abs=os.path.abspath(cps)
+            cps=os.path.splitext(cps)[0]
+            new_cps_dir=os.path.join(self.wd,cps)
+            if os.path.isdir(new_cps_dir)!=True:
+                os.mkdir(new_cps_dir)
+                LOG.debug('Creating directory :\n{}'.format(new_cps_dir))
+            LOG.debug('copying cps file:\n{} \n into \n{}'.format(cps_abs,new_cps_dir))
+            shutil.copy(cps_abs,new_cps_dir)
+            for exp_file in self.exp_files:
+                exp_file_abs=os.path.abspath(exp_file)
+                LOG.debug('moving experiment file at:\n{}'.format(exp_file_abs))
+                LOG.debug('to')
+                new_exp_file=os.path.join(new_cps_dir,exp_file)
+                LOG.debug(new_exp_file)
+                shutil.copy(exp_file_abs,new_exp_file)
+            cps_dirs[cps]=new_cps_dir
+        LOG.info('Workspace created')
+        return cps_dirs
+                
+
+    def read_fit_config(self):
+        '''
+        The recommed way to use this class: 
+            Put all .cps files you want to fit in a folder with meaningful names (pref with no spaces)
+            Put all data files for fitting in the same folder. 
+                Make sure all data files have left most column as Time (with consistent units)
+                and all other columns corresponding exactly (no trailing white spaces) to model variables. 
+                Any independent variables should have the '_indep' suffix
+        This function will read this multifit config and produce a directory tree for subsequent analysis
+        '''
+        LOG.debug('Reading fit configuration')
+        if self.project_dir==None:
+            raise Errors.InputError('Cannot read multifit confuration as no Project kwarg is provided')
+        ##make sure we're in the right directory
+        os.chdir(self.project_dir)
+        cps_list=[]
+        LOG.debug('These are the cps files in your fit config:')
+        for cps_file in glob.glob('*.cps'):
+            LOG.debug('''{}'''.format(cps_file))
+            cps_list.append(cps_file)
+            
+        LOG.debug('These are the experiment files in your fit config:')
+        exp_list=[]
+        exp_file_types=('*.csv','*.txt')
+        for typ in exp_file_types:
+            for exp_file in glob.glob(typ):
+                LOG.debug('''{}'''.format(exp_file))
+                exp_list.append(exp_file)
+                
+        if cps_list==[]:
+            raise Errors.InputError('No cps files in your project')
+        if exp_list==[]:
+            raise Errors.InputError('No experiment files in your project')
+        return cps_list,exp_list
+        
+        
+        
 #==============================================================================
 
             
         
             
 if __name__=='__main__':
-    pass
-        
+    dire=r'D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV'
+    MEF=MultiExperimentFit(ProjectConfig=dire,Outdir='MultiExperimentFit')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

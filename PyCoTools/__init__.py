@@ -9,6 +9,8 @@ import os
 import logging.config
 global LOG_FILENAME
 LOG_CONFIG_FILE=os.path.join(os.path.dirname(os.path.abspath(__file__)),'logging_config.conf')
+if os.path.isfile(LOG_CONFIG_FILE)!=True:
+    raise Exception
 logging.config.fileConfig(LOG_CONFIG_FILE,disable_existing_loggers=False)
 
 
