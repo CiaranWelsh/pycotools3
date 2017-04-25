@@ -1,7 +1,0 @@
-INFO:root:__init__:18:Initializing PyCoTools
-INFO:root:__init__:19:Initializing Logging System
-INFO:root:__init__:20:logging config file at: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\logging_config.conf
-DEBUG:PyCoTools.pycopi:pycopi:4155:These are the cps files in your fit config:
-DEBUG:PyCoTools.pycopi:pycopi:4160:These are the experiment files in your fit config:
-DEBUG:PyCoTools.pycopi:pycopi:4131:Creating Workspace from D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV
-DEBUG:PyCoTools.pycopi:pycopi:4138:changing directory to D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV\MultiExperimentFit

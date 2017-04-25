@@ -45,6 +45,7 @@ import logging
 import os
 import subprocess
 import re
+import pickle
 import PEAnalysis,Errors
 import matplotlib
 import matplotlib.pyplot as plt
@@ -4071,16 +4072,231 @@ class PruneCopasiHeaders():
         elif self.from_df:
             return df
         
-        
-class MultiExperimentFit():
+class RunMultiplePEs():
     '''
     
     '''
-    def __init__(self,ProjectConfig,Outdir,**kwargs):
-        self.outdir=Outdir
-        self.project_dir=ProjectConfig
-        options={}
-                     
+    def __init__(self,copasi_file,experiment_files,**kwargs):
+        self.copasi_file=copasi_file
+        self.experiment_files=experiment_files
+        
+        if os.path.isfile(self.copasi_file)!=True:
+            raise Errors.InputError('{} doesn\'t exist'.format(self.copasi_file))
+        LOG.debug('Performing multi parameter fit for model at:\n{}'.format(self.copasi_file))
+        
+        self.copasi_file_pickle=os.path.join(os.path.dirname(self.copasi_file),'sub_copasi_file.pickle')
+        
+        self.config_filename=os.path.join(os.path.dirname(self.copasi_file),'PEConfigFile.xlsx')
+        options={'Run':'multiprocess',
+                 'CopyNumber':1,
+                 'NumberOfPEs':3,
+                 'ReportName':None,
+                 ##default parameters for ParameterEstimation
+                 'Plot':'false',
+                 'RandomizeStartValues':'true',
+                 'ConfigFilename':self.config_filename,
+                 'NumberOfGenerations':200,
+                 'RandomNumberGenerator':1,
+                 'Seed':0,
+                 'Pf':0.475,
+                 'IterationLimit':50,
+                 'Tolerance':0.000001,
+                 'Rho':0.2,
+                 'Scale':10,
+                 'SwarmSize':50,
+                 'StdDeviation':0.000001,
+                 'NumberOfIterations':100000,
+                 'StartTemperature':1,
+                 'CoolingFactor':0.85,
+                 'PopulationSize':50,
+                 }
+        
+        for key in kwargs.keys():
+            if key not in options.keys():
+                raise Errors.InputError('{} is not a keyword argument for RunMutliplePEs'.format(key))
+        options.update( kwargs) 
+        self.kwargs=options           
+        self._do_checks()
+        self._create_defaults()
+        self.PE_dct={'ReportName':self.kwargs['ReportName'],
+                     'Plot':self.kwargs['Plot'],
+                     'RandomizeStartValues':self.kwargs['RandomizeStartValues'],
+                     'ConfigFilename':self.kwargs['ConfigFilename'],
+                     'NumberOfGenerations':self.kwargs['NumberOfGenerations'],
+                     'RandomNumberGenerator':self.kwargs['RandomNumberGenerator'],
+                     'Seed':self.kwargs['Seed'],
+                     'Pf':self.kwargs['Pf'],
+                     'IterationLimit':self.kwargs['IterationLimit'],
+                     'Tolerance':self.kwargs['Tolerance'],
+                     'Rho':self.kwargs['Rho'],
+                     'Scale':self.kwargs['Scale'],
+                     'SwarmSize':self.kwargs['SwarmSize'],
+                     'StdDeviation':self.kwargs['StdDeviation'],
+                     'NumberOfIterations':self.kwargs['NumberOfIterations'],
+                     'StartTemperature':self.kwargs['StartTemperature'],
+                     'CoolingFactor':self.kwargs['CoolingFactor'],
+                     'PopulationSize':self.kwargs['PopulationSize'],
+                                                }
+        
+        
+        self.report_files=self.enumerate_PE_output()
+        LOG.debug('Create an instance of ParameterEstimation')
+        self.PE=ParameterEstimation(self.copasi_file,self.experiment_files,**self.PE_dct)
+        
+        
+    def set_up(self):
+        '''
+        Analogous to the set_up method of the ParameterEstimation class but this time
+        setup both the PE and Scan tasks       
+        '''
+
+        self.PE.set_up()
+        self.sub_copasi_files=self.copy_copasi()
+        self.setup_scan()
+    
+#        if os.path.isfile(self.config_filename)!=True:
+#            self.PE.write_item_template()
+#        LOG.debug('calling the set_up method of the ParameterEstimation class')
+ 
+    def run(self):
+        '''
+        If Run=mutliprocess:
+        '''
+        ##load cps from pickle in case run not being use straignt after set_up
+        if os.path.isfile(self.copasi_file_pickle):
+            with open(self.copasi_file_pickle) as f:
+                self.sub_copasi_files=pickle.load(f)
+        for i in self.sub_copasi_files:
+            LOG.info('Running model: {}'.format(i))
+            Run(self.sub_copasi_files[i],Mode='multiprocess',Task='scan')
+            
+    def write_config_template(self):
+        self.PE.write_item_template()
+        
+        
+    
+        
+    ##void    
+    def setup_scan(self):
+        '''
+        Set up n repeat items with NumberOfSteps repeats of parameter estimation
+        Set run to false as we want to use the multiprocess mode of the Run class
+        to process all m files at once in CopasiSE
+        
+        Remember scan needs iterating over because each file needs an unique report
+        name
+        '''
+        for num in range(self.kwargs['CopyNumber']):
+            LOG.debug('setting up scan for model number {}'.format(num))
+            Scan(self.sub_copasi_files[num],
+                 ScanType='repeat', #set up repeat item under scan. 
+                 NumberOfSteps=self.kwargs['NumberOfPEs'], #Run the parameter estimation task 3 times
+                 SubTask='parameter_estimation', #this is the default, but included here for demonstration anyway
+                 ReportType='parameter_estimation', ## report automatically set up within copasi. 
+                 ReportName=self.report_files[num],
+                 Run='false') #run the scan task automatically in the background
+            
+    ##void
+    def _create_defaults(self):
+        '''
+        
+        '''
+        default_report_name=os.path.join(os.path.dirname(self.copasi_file),'ParameterFit.txt')
+        if self.kwargs['ReportName']==None:
+            LOG.debug('Using default report name:\n{}'.format(default_report_name))
+            self.kwargs['ReportName']=default_report_name
+                       
+                       
+
+    
+    ##void             
+    def _do_checks(self):
+        '''
+        
+        '''
+        run_arg_list=['multiprocess','sge']
+        if self.kwargs['Run'] not in run_arg_list:
+            raise Errors.InputError('Run needs to be one of {}'.format(run_arg_list))
+        if isinstance(self.kwargs['CopyNumber'],int)!=True:
+            raise Errors.InputError('CopyNumber argument is of type int')
+            
+        if isinstance(self.kwargs['NumberOfPEs'],int)!=True:
+            raise Errors.InputError('NumberOfPEs argument is of type int')        
+            
+    
+    def copy_copasi(self):
+        '''
+        Copy copasi files m times to run separetly on a single 
+        computer
+        
+        returns:
+            dict[model_number]=cps_file
+        '''
+        LOG.debug('Copying copasi file {} times'.format(self.kwargs['CopyNumber']))
+        sub_copasi_files_dct={}
+        copasi_path,copasi_filename=os.path.split(self.copasi_file)
+        for i in range(self.kwargs['CopyNumber']):
+            new_cps=os.path.join(copasi_path,copasi_filename[:-4]+'{}.cps'.format(str(i)))
+            shutil.copy(self.copasi_file,new_cps)
+            sub_copasi_files_dct[i]= new_cps
+            
+        
+        
+        with open(self.copasi_file_pickle,'w')as f:
+            pickle.dump(sub_copasi_files_dct,f)
+            
+        return sub_copasi_files_dct
+    
+    def enumerate_PE_output(self):
+        '''
+        Create a filename for each file to collect PE results
+        
+        Returns:
+            dct['model_copy_number]=enumerated_report_name
+        '''
+        LOG.debug('Enumerating the PE report files')
+        dct={}
+        dire,fle=os.path.split(self.kwargs['ReportName'])
+        output_dir=os.path.join(dire,'MultiplePEResults')
+        if os.path.isdir(output_dir)!=True:
+            os.mkdir(output_dir)
+        for i in range(self.kwargs['CopyNumber']):
+            new_file=os.path.join(output_dir,fle[:-4]+'{}.txt'.format(str(i)))
+            dct[i]=new_file
+        return dct
+    
+
+
+class MultiModelFit():
+    '''
+    
+    '''
+    def __init__(self,project_config,outdir,**kwargs):
+        self.outdir=outdir
+        self.project_dir=project_config
+#        self.config_filename=os.path.join(os.path.dirname(self.copasi_file),'PEConfigFile.xlsx')
+        options={'Run':'multiprocess',
+                 'CopyNumber':1,
+                 'NumberOfPEs':3,
+                 'ReportName':None,
+                 ##default parameters for ParameterEstimation
+                 'Plot':'false',
+                 'RandomizeStartValues':'true',
+                 'NumberOfGenerations':200,
+                 'RandomNumberGenerator':1,
+                 'Seed':0,
+                 'Pf':0.475,
+                 'IterationLimit':50,
+                 'Tolerance':0.000001,
+                 'Rho':0.2,
+                 'Scale':10,
+                 'SwarmSize':50,
+                 'StdDeviation':0.000001,
+                 'NumberOfIterations':100000,
+                 'StartTemperature':1,
+                 'CoolingFactor':0.85,
+                 'PopulationSize':50,
+                 }
         for key in kwargs.keys():
             if key not in options.keys():
                 raise Errors.InputError('{} is not a keyword argument for MultiExperimentFit'.format(key))
@@ -4090,37 +4306,50 @@ class MultiExperimentFit():
         
         self.do_checks()
         self.cps_files,self.exp_files=self.read_fit_config()
-        self.create_workspace()
+        self.sub_cps_dirs=self.create_workspace()
+        self.RMPE_dct=self.instantiate_run_multi_PEs_class()
+        
+    def instantiate_run_multi_PEs_class(self):
+        '''
+        
+        '''
+        dct={}
+        for cps_dir in self.sub_cps_dirs:
+            os.chdir(cps_dir)
+            dct[self.sub_cps_dirs[cps_dir]]=RunMultiplePEs(self.sub_cps_dirs[cps_dir],
+                                                           self.exp_files,**self.kwargs)
+        return dct
+   
+    
+    def write_config_template(self):
+        '''
+        
+        '''
+        for RMPE in self.RMPE_dct:
+            self.RMPE_dct[RMPE].write_config_template()
+            
+        
+    def set_up(self):
+        '''
+        
+        '''
+        for RMPE in self.RMPE_dct:
+            self.RMPE_dct[RMPE].set_up()
+
+
+    def run(self):
+        '''
+
+        '''
+        for RMPE in self.RMPE_dct:
+            self.RMPE_dct[RMPE].run()
+        
 
     def do_checks(self):
         '''
         Function to check the integrity of the input given by user
         '''
         pass
-        ## situation where neither workspace or copasi_files/experiment files are provided
-#        if project==None and self.kwargs['CopasiFiles']==None:
-#            raise Errors.InputError('Need input either to the Project or CopasiFiles and ExperimentFiles kwargs')
-#            
-#        ## For when list of copasi files and experiment files are provided
-#        if self.kwargs['CopasiFiles']:
-#            for copasi_file in self.copasi_files:
-#                if copasi_file[-4:]!='.cps':
-#                    raise Errors.InputError('{} is not a copasi file'.format(copasi_file))
-#                
-#        if self.kwargs['ExperimentFiles']!=None:
-#            for experiment_file in self.experiment_files:
-#                if experiment_file[-4:]!='.txt' or experiment_file[-4:]!='.csv':
-#                    raise Errors.InputError('{} is not a txt or csv file'.format(experiment_file))
-#        ## Make sure CopasiFiles and ExperimnetFiles are called together
-#        if self.kwargs['CopasiFiles']!=None:
-#            if self.kwargs['ExperimentFiles']==None:
-#                raise Errors.InputError('If argument given to CopasiFiles and argument needs to be given to ExperimentFiles')
-#
-#        if self.kwargs['ExperimentFiles']!=None:
-#            if self.kwargs['Copasi_Files']==None:
-#                raise Errors.InputError('If argument given to ExperimentFiles and argument needs to be given to CopasiFiles')
-                
-        ## 
     
         
     def create_workspace(self):
@@ -4141,6 +4370,7 @@ class MultiExperimentFit():
         LOG.debug('Creating Workspace from files in: \n{}'.format(self.project_dir))
         ## Create entire working directory for analysis
         self.wd=os.path.join(self.project_dir,self.outdir)
+        
         LOG.debug('New Working directory is:\n{}'.format(self.wd))
         if os.path.isdir(self.wd)!=True:
             LOG.debug('{} doesn\' already exist. Creating {}'.format(self.wd,self.wd))
@@ -4153,24 +4383,18 @@ class MultiExperimentFit():
         
         for cps in self.cps_files:
             cps_abs=os.path.abspath(cps)
-            cps=os.path.splitext(cps)[0]
-            new_cps_dir=os.path.join(self.wd,cps)
-            if os.path.isdir(new_cps_dir)!=True:
-                os.mkdir(new_cps_dir)
-                LOG.debug('Creating directory :\n{}'.format(new_cps_dir))
-            LOG.debug('copying cps file:\n{} \n into \n{}'.format(cps_abs,new_cps_dir))
-            shutil.copy(cps_abs,new_cps_dir)
-            for exp_file in self.exp_files:
-                exp_file_abs=os.path.abspath(exp_file)
-                LOG.debug('moving experiment file at:\n{}'.format(exp_file_abs))
-                LOG.debug('to')
-                new_exp_file=os.path.join(new_cps_dir,exp_file)
-                LOG.debug(new_exp_file)
-                shutil.copy(exp_file_abs,new_exp_file)
-            cps_dirs[cps]=new_cps_dir
+            cps_filename=os.path.split(cps_abs)[1]
+            sub_cps_dir=os.path.join(self.wd,cps_filename[:-4])
+            if os.path.isdir(sub_cps_dir)!=True:
+                os.mkdir(sub_cps_dir)
+            sub_cps_abs=os.path.join(sub_cps_dir,cps_filename)
+            shutil.copy(cps_abs,sub_cps_abs)
+            if os.path.isfile(sub_cps_abs)!=True:
+                raise Exception ('Error in copying copasi file to sub directories')
+            cps_dirs[sub_cps_dir]=sub_cps_abs
         LOG.info('Workspace created')
         return cps_dirs
-                
+#                
 
     def read_fit_config(self):
         '''
@@ -4199,7 +4423,7 @@ class MultiExperimentFit():
         for typ in exp_file_types:
             for exp_file in glob.glob(typ):
                 LOG.debug('''{}'''.format(exp_file))
-                exp_list.append(exp_file)
+                exp_list.append(os.path.abspath(exp_file))
                 
         if cps_list==[]:
             raise Errors.InputError('No cps files in your project')
@@ -4216,13 +4440,22 @@ class MultiExperimentFit():
             
 if __name__=='__main__':
     dire=r'D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV'
-    MEF=MultiExperimentFit(ProjectConfig=dire,Outdir='MultiExperimentFit')
+    MEF=MultiModelFit(project_config=dire,outdir='MultiExperimentFit')
+    f=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV\MultiExperimentFit\AktModelTGFb_TGFQFT_EV\AktModelTGFb_TGFQFT_EV0.cps"
+    d=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV\Quantitations_TGFb_with_Everolimus_FGFQFT.txt"
+    
+#    MEF.write_config_template()
+#    RMPE=RunMultiplePEs(f,d)
+#    RMPE.set_up()
+#    MEF.set_up()
+    MMF.run()
 
-
-
-
-
-
+#    f=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV\MultiExperimentFit\SimpleModelTGFb_TGFQFT_EV\SimpleModelTGFb_TGFQFT_EV0.cps"
+#    d=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV\Quantitations_TGFb_with_Everolimus_FGFQFT.txt"
+#    
+#    PE=ParameterEstimation(f,d)
+#    PE.set_up()
+#    
 
 
 
