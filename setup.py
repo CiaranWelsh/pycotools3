@@ -37,11 +37,8 @@ import  setuptools
 #version
 MAJOR = 3
 MINOR = 2
-<<<<<<< HEAD
-MICRO = 31
-=======
-MICRO = 32
->>>>>>> refs/remotes/origin/master
+MICRO = 33
+
 #=======
 __version__ = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
