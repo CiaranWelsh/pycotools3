@@ -1234,11 +1234,11 @@ class ExperimentMapper():
             if self.kwargs.get('WeightMethod')[i]=='mean':
                 self.kwargs.get('WeightMethod')[int(i)]=str(1)
             if self.kwargs.get('WeightMethod')[i]=='mean_squared':
-                self.kwargs.get('WeightMethod')[int(i)]=str(1)
+                self.kwargs.get('WeightMethod')[int(i)]=str(2)
             if self.kwargs.get('WeightMethod')[i]=='stardard_deviation':
-                self.kwargs.get('WeightMethod')[int(i)]=str(1)
+                self.kwargs.get('WeightMethod')[int(i)]=str(3)
             if self.kwargs.get('WeightMethod')[i]=='value_scaling':
-                self.kwargs.get('WeightMethod')[int(i)]=str(1) 
+                self.kwargs.get('WeightMethod')[int(i)]=str(4) 
         
         l=[]
         assert isinstance(self.kwargs.get('RowOrientation'),list)
@@ -4440,14 +4440,19 @@ class MultiModelFit():
             
 if __name__=='__main__':
     dire=r'D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV'
-    MEF=MultiModelFit(project_config=dire,outdir='MultiExperimentFit')
+    MMF=MultiModelFit(project_config=dire,outdir='MultiExperimentFit',
+                      NumberOfPEs=10,
+                      CopyNumber=1,
+                      PopulationSize=125,
+                      ReportName='Fit1.1.txt')
     f=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV\MultiExperimentFit\AktModelTGFb_TGFQFT_EV\AktModelTGFb_TGFQFT_EV0.cps"
     d=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV\Quantitations_TGFb_with_Everolimus_FGFQFT.txt"
     
-#    MEF.write_config_template()
+#    MMF.write_config_template()
 #    RMPE=RunMultiplePEs(f,d)
 #    RMPE.set_up()
-#    MEF.set_up()
+    
+    MMF.set_up()
     MMF.run()
 
 #    f=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV\MultiExperimentFit\SimpleModelTGFb_TGFQFT_EV\SimpleModelTGFb_TGFQFT_EV0.cps"
