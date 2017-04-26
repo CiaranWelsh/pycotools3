@@ -31,6 +31,13 @@
  Time:  20:33
 
 
+Features to include:
+    PCA for dimensionality reduction of the PE data. Identify component with most variance 
+    
+    Create class for computing model selection criteria
+        AIC/BIC
+
+
 '''
 import string
 import pandas 
@@ -1566,182 +1573,75 @@ class PlotPEData():
             dire,p= os.path.split(f)
             fle=os.path.splitext(p)[0]
             self.plot1file(f)
-            
-            
-            
-class PlotHistogram3D():
+
+    
+    
+class ModelSelection():
     '''
-    Not functional 
     
-    
-    
-    
-    Plot parameter estimation results as histogram
-    Args:
-        results_path:
-            Path to file or folder of files containing parameter estimation data
-            to plot
-    **kwargs:
-         TruncateMode:
-             'below_x', #either 'below_x' or 'percent' for method of truncation. 
-         Log10:
-             'false',
-         X:
-             100,           #if below_x: this is the X boundary. If percent: this is the percent of data to keep
-    **kwargs which correspond to matplotlib.pyplot.hist keyword arguments. 
-    More information about these can be found in the matplotlib documentation 
-         Bins:
-             Number of bins to use. Default=100,
-         AxisSize:
-             Font size for the axis. Default=15
-         FontSize:
-             Font size for the graph labels. Default=22
-         Normed:
-             'true' or 'false. Whether to make the plot integrate to 1. 
-             Default='false'
-         Color:
-             Plot colour. Default='red',     
-         XRotation:
-             25,   #rotation for X tick axis
-         TitleWrapSize:
-             Number of characters to use before word wrapping the title. Default=35  
-         Orientation:
-             'horizontal' or 'vertical', default='vertical'
-         SaveFig:
-             'true' or 'false'. Save to a folder called histograms in results directory. 
-             Default='false'
-         DPI:
-             Resolution to use when SaveFig='true'. The larger this value the 
-             higher the resolution. Default=125. 
-         ExtraTitle:
-             When SaveFig='true', save with ExtraTitle appended to the filepath. 
-             Default=None
-         Show:
-             'true' or 'false'. When not using iPython and graphs are not automatically 
-             displayed in shell, this determines whether the plots are opened in a
-             window or not. Default='false'
-                     
-                 
     '''
-    def __init__(self,results_path,**kwargs):
-        #arguments
-#        self.copasi_file=copasi_file
-        self.results_path=results_path
-        #keywrod arguments
-        options={'FromPickle':'false',
-                 'TruncateMode':'percent', #either 'below_x' or 'percent' for method of truncation. 
-                 'Log10':'false',
-                 'X':100,           #if below_x: this is the X boundary. If percent: this is the percent of data to keep
-                 'Bins':100,
-                 'AxisSize':15,
-                 'FontSize':22,
-                 'Normed':'false',
-                 'Color':'red',
-                 'XRotation':25,
-                 'TitleWrapSize':35,
-                 'Orientation':'vertical',
-                 'SaveFig':'false',
-                 'DPI':125,
-                 'ExtraTitle':None,
-                 'Log10':'false',
-                 'Show':'false',
-                 'Variable':None,
-                 
-                     }
-        for i in kwargs.keys():
-            assert i in options.keys(),'{} is not a keyword argument for TruncateData'.format(i)
-        options.update( kwargs)  
-        self.kwargs=options
-        assert self.kwargs.get('TruncateMode') in ['below_x','percent']
+    def __init__(self,multi_model_fit):
+        LOG.debug('Instantiate ModelSelection class')
+        self.multi_model_fit=multi_model_fit
+        self.results_folder_dct=self._get_results_directories()
+#        self._PED_dct=self._parse_data()
         
-        #Other classes
-        self.PED=ParsePEData(self.results_path)
-
-        #create a directory and change to it
-        self.results_dir=os.path.join(os.path.dirname(self.results_path),'Histograms')
-        if self.kwargs.get('SaveFig')=='true':
-            if os.path.isdir(self.results_dir)!=True:
-                os.mkdir(self.results_dir)
-            os.chdir(self.results_dir)
-        
-        #attributes
-        self.data=self.PED.data.dropna()
-        self.log_data=self.PED.log_data.dropna()
-        self.truncated_data=self.truncate_data()
-        #main method
-        print self.list_parameters()
-        self.plot1()
-#        self.testing_variable=self.plot_all() #only assigned to variable for testing purposes
-#        os.chdir(os.path.dirname(self.results_dir))
-            
-    def list_parameters(self):
-        return self.data.keys()
+    def _get_results_directories(self):
+        '''
+        Find the results directories embedded within MultiModelFit
+        and RunMultiplePEs. 
+        '''
+        LOG.debug('Finding location of parameter estimation results:')
+        dct=self.multi_model_fit.results_folder_dct
+        for key in dct:
+            LOG.debug('Key to results folder dict is the cps file: \n{}'.format(key))
+            LOG.debug('Value to results folder dict is the output results folder: \n{}'.format(dct[key]))
+            LOG.debug('Checking that the results folder exists: ... {}'.format(os.path.isdir(dct[key])))
+        return dct
+#        dct={}
+#        ## RMPE_dct=[cps_file]=results_file
+#        for i in self.multi_model_fit.results_folder_dct:
+#            LOG.debug('key={}'.format(i))
+#            LOG.debug('d[key]={}'.format(self.multi_model_fit.results_dct[i]))
+#            LOG.debug('the output directory is :\n{}'.format('\t'+os.path.abspath(self.multi_model_fit.results_dct[i])))
+#            dct[i]=getattr(self.multi_model_fit.RMPE_dct[i],'output_dir')
+#        LOG.debug('_results_dct is of type {}'.format(type(dct)))
+#        return dct[i]
     
-    def truncate_data(self):
-        if self.kwargs.get('Log10')=='false':
-#            print '1'
-            TC=TruncateData(self.data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'))
-            return TC.data
-        elif self.kwargs.get('Log10')=='true':
-#            print '2'
-            TC=TruncateData(self.log_data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'))
-            return TC.data
-        
-    def plot1(self,variable='RSS'):
+    def _parse_data(self):
         '''
-        variable: variable to plot. Default= 'RSS'
-        '''
-        matplotlib.rcParams.update({'font.size': 22})
-        assert variable in self.truncated_data.keys(),'{} is not in your PE results: {}'.format(variable,self.truncated_data.keys())
-        data= self.truncated_data[variable]
-        fig=plt.figure()
-        Axes3D.plot_surface()
         
-#        plt.hist(data,
-#                 bins=self.kwargs.get('Bins'),
-#                 color=self.kwargs.get('Color'),
-#                 normed=self.kwargs.get('Normed'),
-#                 orientation=self.kwargs.get('Orientation'))
-#        
-#        #pretty stuff
-#        ax=plt.subplot(1,1,1)
-#        ax.spines['right'].set_color('none')
-#        ax.spines['top'].set_color('none')
-#        ax.xaxis.set_ticks_position('bottom')
-#        ax.yaxis.set_ticks_position('left')
-#        ax.spines['left'].set_smart_bounds(True)
-#        ax.spines['bottom'].set_smart_bounds(True)
-#        
-#        #labels
-##        plt.title('\n'.join(wrap('{},n={}'.format(variable,self.data.shape[1])) ),35  )
-#        plt.title('\n'.join(wrap('{},n={}'.format(variable,data.shape[0]),
-#                                 self.kwargs.get('TitleWrapSize'))),
-#                                 fontsize=self.kwargs.get('FontSize'))
-#        plt.ylabel('Frequency in bin')
-#        plt.xticks(rotation=self.kwargs.get('XRotation'))
-#        if self.kwargs.get('Log10')=='true':
-#            plt.xlabel('Parameter Value(Log10)',fontsize=self.kwargs.get('FontSize'))
-#        else:
-#            plt.xlabel('Parameter Value',fontsize=self.kwargs.get('FontSize'))
-#        
-#        #SaveFig options
-#        if self.kwargs.get('SaveFig')=='true':
-#            if self.kwargs.get('ExtraTitle')!=None:
-#                assert isinstance(self.kwargs.get('ExtraTitle'),str),'extra title should be a string'
-#                plt.savefig(variable+'_'+self.kwargs.get('ExtraTitle')+'.png',bbox_inches='tight',format='png',dpi=self.kwargs.get('DPI'))
-#            else:
-#                plt.savefig(variable+'.png',format='png',bbox_inches='tight',dpi=self.kwargs.get('DPI'))
-#        if self.kwargs.get('Show')=='true':
-#            plt.show()
-#    
-#    def plot_all(self):
-#        for i in self.truncated_data:
-#            self.plot1(i)
-#        return True
-
-
+        '''
+        
+        PED_dct={}
+        LOG.debug('Here is the results folder:\n{}'.format(self._results_folders))
+        LOG.debug('The results folder vairable is of type {}'.format(type(self._results_folders)))
+#        for i in self._results_folders:
+#            print i,self._results_folder[i]
+#        print type(self._results_folders)
+#        print len(self._results_folders.items())
+#        for folder in self._results_folders:
+#            LOG.debug('parsing data from folder')
+#            LOG.debug('checking results folder () exists: {}'.format(os.path.isdir(self._results_folders[folder],self._results_folders[folder])))
+#            PED_dct[folder]=ParsePEData(self._results_folders[folder])
+#        return PED_dct
+            
+            
+        
+            
+               
+        
 if __name__=='__main__':
-    pass
+    dire=r'D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV'
+    MMF=pycopi.MultiModelFit(project_config=dire,outdir='MultiExperimentFit',
+                      NumberOfPEs=10,
+                      CopyNumber=1,
+                      PopulationSize=125,
+                      ReportName='Fit1.1.txt')
+    MS=ModelSelection(MMF)
+    print MS.results_folder_dct
+    
+    
 #    import glob
 #    dire=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSC project"
 #    full_dire = os.path.join(dire,'Full model')
