@@ -686,9 +686,9 @@ class Reports():
         self.copasiML=self.run()
         
 
-        LOG.debug('setting up a report with the following settings:')
-        for i in self.kwargs:
-            LOG.debug('\t'+str([i, self.kwargs[i]]))
+#        LOG.debug('setting up a report with the following settings:')
+#        for i in self.kwargs:
+#            LOG.debug('\t'+str([i, self.kwargs[i]]))
             
         self.copasiML=self.save()
         
@@ -2697,9 +2697,6 @@ class ParameterEstimation():
         self.PlotPEDataKwargs['LegendLoc']=self.kwargs.get('LegendLoc')
         self.PlotPEDataKwargs['PruneHeaders']=self.kwargs.get('PruneHeaders')
         
-        LOG.debug('ParameterEstimation kwarg dict looks like this:')
-        for i in self.kwargs:
-            LOG.debug('\t'+str([i,self.kwargs[i]]))
             
         
 
@@ -4084,10 +4081,11 @@ class RunMultiplePEs():
             raise Errors.InputError('{} doesn\'t exist'.format(self.copasi_file))
         LOG.debug('Performing multi parameter fit for model at:\n{}'.format(self.copasi_file))
         
+        ## Pickle file to store directories of sub copasi files
         self.copasi_file_pickle=os.path.join(os.path.dirname(self.copasi_file),'sub_copasi_file.pickle')
-        
         self.config_filename=os.path.join(os.path.dirname(self.copasi_file),'PEConfigFile.xlsx')
         options={'Run':'multiprocess',
+                 'OutputDir':None,
                  'CopyNumber':1,
                  'NumberOfPEs':3,
                  'ReportName':None,
@@ -4118,6 +4116,11 @@ class RunMultiplePEs():
         self.kwargs=options           
         self._do_checks()
         self._create_defaults()
+        self._create_output_directory()
+        
+#        dire,fle=os.path.split(self.kwargs['ReportName']) ## for making sub-result directories
+#        self.output_dir=os.path.join(dire,'MultiplePEResults')
+
         self.PE_dct={'ReportName':self.kwargs['ReportName'],
                      'Plot':self.kwargs['Plot'],
                      'RandomizeStartValues':self.kwargs['RandomizeStartValues'],
@@ -4152,7 +4155,7 @@ class RunMultiplePEs():
 
         self.PE.set_up()
         self.sub_copasi_files=self.copy_copasi()
-        self.setup_scan()
+        self._setup_scan()
     
 #        if os.path.isfile(self.config_filename)!=True:
 #            self.PE.write_item_template()
@@ -4171,13 +4174,17 @@ class RunMultiplePEs():
             Run(self.sub_copasi_files[i],Mode='multiprocess',Task='scan')
             
     def write_config_template(self):
+        '''
+        
+        '''
+        LOG.debug('writing PE config template')
         self.PE.write_item_template()
         
         
     
         
     ##void    
-    def setup_scan(self):
+    def _setup_scan(self):
         '''
         Set up n repeat items with NumberOfSteps repeats of parameter estimation
         Set run to false as we want to use the multiprocess mode of the Run class
@@ -4187,7 +4194,7 @@ class RunMultiplePEs():
         name
         '''
         for num in range(self.kwargs['CopyNumber']):
-            LOG.debug('setting up scan for model number {}'.format(num))
+            LOG.info('setting up scan for model number {}'.format(num))
             Scan(self.sub_copasi_files[num],
                  ScanType='repeat', #set up repeat item under scan. 
                  NumberOfSteps=self.kwargs['NumberOfPEs'], #Run the parameter estimation task 3 times
@@ -4206,6 +4213,10 @@ class RunMultiplePEs():
             LOG.debug('Using default report name:\n{}'.format(default_report_name))
             self.kwargs['ReportName']=default_report_name
                        
+        output_dir_default=os.path.join(os.path.dirname(self.copasi_file),'MultiplePEResults')
+        if self.kwargs['OutputDir']==None:
+            LOG.debug('Using default OutputDir:\n{}'.format(output_dir_default))
+            self.kwargs['OutputDir']=output_dir_default                       
                        
 
     
@@ -4239,13 +4250,24 @@ class RunMultiplePEs():
             new_cps=os.path.join(copasi_path,copasi_filename[:-4]+'{}.cps'.format(str(i)))
             shutil.copy(self.copasi_file,new_cps)
             sub_copasi_files_dct[i]= new_cps
-            
-        
         
         with open(self.copasi_file_pickle,'w')as f:
             pickle.dump(sub_copasi_files_dct,f)
             
         return sub_copasi_files_dct
+    
+    def _create_output_directory(self):
+        '''
+        
+        '''
+#        self.report_dir,self.report_file_root=os.path.split(self.kwargs['ReportName'])
+        
+#        self.output_dir=os.path.join(os.path.dirname(self.copasi_file),'MultiplePEResults')
+        LOG.debug('creating a directory for analysis: \n\n{}'.format(self.kwargs['OutputDir']))
+        if os.path.isdir(self.kwargs['OutputDir'])!=True:
+            os.mkdir(self.kwargs['OutputDir'])
+            
+            
     
     def enumerate_PE_output(self):
         '''
@@ -4257,11 +4279,12 @@ class RunMultiplePEs():
         LOG.debug('Enumerating the PE report files')
         dct={}
         dire,fle=os.path.split(self.kwargs['ReportName'])
-        output_dir=os.path.join(dire,'MultiplePEResults')
-        if os.path.isdir(output_dir)!=True:
-            os.mkdir(output_dir)
+#        self.output_dir=os.path.join(dire,'MultiplePEResults')
+#        if os.path.isdir(self.output_dir)!=True:
+#            os.mkdir(self.output_dir)
         for i in range(self.kwargs['CopyNumber']):
-            new_file=os.path.join(output_dir,fle[:-4]+'{}.txt'.format(str(i)))
+            new_file=os.path.join(self.kwargs['OutputDir'],
+                                  fle[:-4]+'{}.txt'.format(str(i)))
             dct[i]=new_file
         return dct
     
@@ -4308,22 +4331,45 @@ class MultiModelFit():
         self.cps_files,self.exp_files=self.read_fit_config()
         self.sub_cps_dirs=self.create_workspace()
         self.RMPE_dct=self.instantiate_run_multi_PEs_class()
+        self.results_folder_dct=self.get_output_directories()
         
     def instantiate_run_multi_PEs_class(self):
         '''
+        pass correct arguments to the RunMultiplePEs class in order
+        to instantiate a RunMultiplePEs instance for each model. 
         
+        Reutrns:
+            dict[model_filename]=RunMultiplePEs_instance
         '''
+        LOG.debug('instantiating an instance of RunMultiplePEs for each model')
         dct={}
+#        self.results_dct={}
         for cps_dir in self.sub_cps_dirs:
             os.chdir(cps_dir)
             dct[self.sub_cps_dirs[cps_dir]]=RunMultiplePEs(self.sub_cps_dirs[cps_dir],
                                                            self.exp_files,**self.kwargs)
+        LOG.debug('Each instance of RunMultiplePEs is being held in a dct:\n{}'.format(dct))
         return dct
-   
+
+    def get_output_directories(self):
+        '''
+        Returns the location of the parameter estimation output files
+        produced from the analysis. 
+        '''
+        LOG.debug('getting output directories')
+        output_dct={}
+        for RMPE in self.RMPE_dct:
+            LOG.debug('output directory for model \n{}:'.format(RMPE))
+            LOG.debug('\t\t'+self.RMPE_dct[RMPE].kwargs['OutputDir'])
+            output_dct[RMPE]=self.RMPE_dct[RMPE].kwargs['OutputDir']
+        return output_dct
     
+    #void
     def write_config_template(self):
         '''
-        
+        A class to write a config file template for each 
+        model in the analysis. Calls the corresponding
+        write_config_template from the RunMultiplePEs class
         '''
         for RMPE in self.RMPE_dct:
             self.RMPE_dct[RMPE].write_config_template()
@@ -4331,6 +4377,9 @@ class MultiModelFit():
         
     def set_up(self):
         '''
+        A user interface class which calls the corresponding
+        method (set_up) from the RunMultiplePEs class per model. 
+        Perform the ParameterEstimation.set_up() method on each model. 
         
         '''
         for RMPE in self.RMPE_dct:
@@ -4339,7 +4388,9 @@ class MultiModelFit():
 
     def run(self):
         '''
-
+        A user interface class which calls the corresponding
+        method (run) from the RunMultiplePEs class per model. 
+        Perform the ParameterEstimation.run() method on each model. 
         '''
         for RMPE in self.RMPE_dct:
             self.RMPE_dct[RMPE].run()
@@ -4365,6 +4416,8 @@ class MultiModelFit():
             ------model2.cps
             ------exp_data.txt
         
+        returns:
+            Dictionary[cps_filename]=DirectoryForCpsAnalysis
         '''
         LOG.info('Creating workspace from project_dir')
         LOG.debug('Creating Workspace from files in: \n{}'.format(self.project_dir))
@@ -4441,10 +4494,10 @@ class MultiModelFit():
 if __name__=='__main__':
     dire=r'D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV'
     MMF=MultiModelFit(project_config=dire,outdir='MultiExperimentFit',
-                      NumberOfPEs=10,
+                      NumberOfPEs=20,
                       CopyNumber=1,
                       PopulationSize=125,
-                      ReportName='Fit1.1.txt')
+                      ReportName='Fit1.4.txt')
     f=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV\MultiExperimentFit\AktModelTGFb_TGFQFT_EV\AktModelTGFb_TGFQFT_EV0.cps"
     d=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV\Quantitations_TGFb_with_Everolimus_FGFQFT.txt"
     
