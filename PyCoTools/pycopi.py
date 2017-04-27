@@ -4292,7 +4292,8 @@ class RunMultiplePEs():
 
 class MultiModelFit():
     '''
-    
+    Feature to add - convert this to iterator. 
+    Iterate over models
     '''
     def __init__(self,project_config,outdir,**kwargs):
         self.outdir=outdir
@@ -4494,10 +4495,10 @@ class MultiModelFit():
 if __name__=='__main__':
     dire=r'D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV'
     MMF=MultiModelFit(project_config=dire,outdir='MultiExperimentFit',
-                      NumberOfPEs=20,
+                      NumberOfPEs=50,
                       CopyNumber=1,
                       PopulationSize=125,
-                      ReportName='Fit1.4.txt')
+                      ReportName='Fit1.6.txt')
     f=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV\MultiExperimentFit\AktModelTGFb_TGFQFT_EV\AktModelTGFb_TGFQFT_EV0.cps"
     d=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV\Quantitations_TGFb_with_Everolimus_FGFQFT.txt"
     

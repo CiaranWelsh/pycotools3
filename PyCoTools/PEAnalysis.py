@@ -36,6 +36,10 @@ Features to include:
     
     Create class for computing model selection criteria
         AIC/BIC
+        
+        
+    I could begin giving my python classes things like iteration capabilities or
+    getters...
 
 
 '''
@@ -51,6 +55,7 @@ import itertools
 import unittest
 import pycopi,Errors
 import re
+import seaborn as sns
 import logging
 #import math
 
@@ -1578,13 +1583,28 @@ class PlotPEData():
     
 class ModelSelection():
     '''
-    
+    ## could give
     '''
-    def __init__(self,multi_model_fit):
+    def __init__(self,multi_model_fit,model_selection_filename=None):
         LOG.debug('Instantiate ModelSelection class')
         self.multi_model_fit=multi_model_fit
+        self.model_selection_filename=model_selection_filename
+        if self.model_selection_filename==None:
+            self.model_selection_filename=os.path.join(self.multi_model_fit.wd,'ModelSelectionData.xlsx')
         self.results_folder_dct=self._get_results_directories()
-#        self._PED_dct=self._parse_data()
+        self._PED_dct=self._parse_data()
+        self.GMQ_dct=self._get_GMQ_dct()
+        self.number_model_parameters=self._get_number_estimated_model_parameters()
+        self.number_observations=self._get_n()
+        
+        self.model_selection_data=self.calculate_model_selection_criteria()
+        self.plot_boxplot()
+        
+    
+        
+    ## void
+    def to_excel(self):
+        self.model_selection_data.to_excel(self.model_selection_filename)
         
     def _get_results_directories(self):
         '''
@@ -1598,15 +1618,6 @@ class ModelSelection():
             LOG.debug('Value to results folder dict is the output results folder: \n{}'.format(dct[key]))
             LOG.debug('Checking that the results folder exists: ... {}'.format(os.path.isdir(dct[key])))
         return dct
-#        dct={}
-#        ## RMPE_dct=[cps_file]=results_file
-#        for i in self.multi_model_fit.results_folder_dct:
-#            LOG.debug('key={}'.format(i))
-#            LOG.debug('d[key]={}'.format(self.multi_model_fit.results_dct[i]))
-#            LOG.debug('the output directory is :\n{}'.format('\t'+os.path.abspath(self.multi_model_fit.results_dct[i])))
-#            dct[i]=getattr(self.multi_model_fit.RMPE_dct[i],'output_dir')
-#        LOG.debug('_results_dct is of type {}'.format(type(dct)))
-#        return dct[i]
     
     def _parse_data(self):
         '''
@@ -1614,22 +1625,207 @@ class ModelSelection():
         '''
         
         PED_dct={}
-        LOG.debug('Here is the results folder:\n{}'.format(self._results_folders))
-        LOG.debug('The results folder vairable is of type {}'.format(type(self._results_folders)))
+        LOG.debug('Here is the results folder:\n{}'.format(self.results_folder_dct))
+        LOG.debug('The results folder vairable is of type {}'.format(type(self.results_folder_dct)))
 #        for i in self._results_folders:
 #            print i,self._results_folder[i]
 #        print type(self._results_folders)
 #        print len(self._results_folders.items())
-#        for folder in self._results_folders:
-#            LOG.debug('parsing data from folder')
-#            LOG.debug('checking results folder () exists: {}'.format(os.path.isdir(self._results_folders[folder],self._results_folders[folder])))
-#            PED_dct[folder]=ParsePEData(self._results_folders[folder])
-#        return PED_dct
+        for folder in self.results_folder_dct:
+            LOG.debug('parsing data from folder')
+            LOG.debug('checking results folder exists: {}'.format(os.path.isdir(self.results_folder_dct[folder]),self.results_folder_dct[folder]))
+            PED_dct[folder]=ParsePEData(self.results_folder_dct[folder])
             
+        LOG.info('data successfully parsed from {} models into Python'.format(len(self.results_folder_dct.items())))
+        return PED_dct
+            
+    def _get_GMQ_dct(self):
+        '''
+        iterate over each model and get the corresponding
+        GetModelQuantities class for each. 
+        '''
+        LOG.debug('Instantiating GetModelQuantities per model')
+        GMQ_dct={}
+        for model in self.multi_model_fit.sub_cps_dirs:
+            LOG.debug('Key:\t{}'.format(model))
+            LOG.debug('Value \t{}'.format(self.multi_model_fit.sub_cps_dirs[model]))
+            GMQ_dct[self.multi_model_fit.sub_cps_dirs[model]]=pycopi.GetModelQuantities(self.multi_model_fit.sub_cps_dirs[model])
+        LOG.debug('GetModelQuantities Instantiated')
+        return GMQ_dct
+    
+    def _get_number_estimated_model_parameters(self):
+        '''
+        
+        '''
+        k_dct={}
+        for GMQ in self.GMQ_dct:
+            LOG.debug( 'model at {} has {} estimated parameters'.format(GMQ,len(self.GMQ_dct[GMQ].get_fit_items().items())))
+            k_dct[GMQ]=len(self.GMQ_dct[GMQ].get_fit_items().items())
+        return k_dct
+            
+    def _get_n(self):
+        '''
+        get number of observed data points for AIC calculation
+        '''
+        LOG.info('Counting number of observed data points:...')
+        LOG.debug('Number of Experiment Files: \t{}'.format(len(self.multi_model_fit.exp_files)))
+        n={}
+        for exp in self.multi_model_fit.exp_files:
+            data=pandas.read_csv(exp,sep='\t')
+            l=[]
+            for key in data.keys() :
+                if key.lower()!='time':
+                    if key[-6:]!='_indep':
+                        LOG.debug('Dimensions of data at file \n{} is \n{}'.format(exp,data[key].shape))
+                        l.append(int(data[key].shape[0]))
+            n[exp]=sum(l)
+        n=sum(n.values())
+        LOG.debug('Final sum of all data files is {}'.format(n))
+        return n
+        
+        
+    
+    def calculate1AIC(self,RSS,K,n):
+        '''
+        Calculate the corrected AIC:
+            
+            AICc = -2*ln(RSS/n) + 2*K + (2*K*(K+1))/(n-K-1) 
+                
+            or if likelihood function used instead of RSS
+                                
+            AICc = -2*ln(likelihood) + 2*K + (2*K*(K+1))/(n-K-1)
+            
+        Where:
+            RSS:
+                Residual sum of squares for model fit
+            n:
+                Number of observations collectively in all data files
+                
+            K:
+                Number of model parameters
+        '''
+        return n*numpy.log((RSS/n))  + 2*K + (2*K*(K+1))/(n-K-1) 
+        
+    
+    def calculate1BIC(self,RSS,K,n):
+        '''
+        Calculate the bayesian information criteria
+            BIC = -2*ln(likelihood) + k*ln(n)
+            
+                Does this then go to:
+                    
+            BIC = -2*ln(RSS/n) + k*ln(n)
+        '''
+        return  (n*numpy.log(RSS/n) ) + K*numpy.log(n)
+    
+    def calculate_model_selection_criteria(self):
+        '''
+        
+        '''
+        LOG.debug('calculating model selection criteria AIC and BIC')
+        LOG.debug('self.multi_model_fit.sub_cps_dirs is of type {}'.format(type(self.multi_model_fit.sub_cps_dirs)))
+        df_dct={}
+        for model_num in range(len(self.multi_model_fit.sub_cps_dirs)):
+            keys=self.multi_model_fit.sub_cps_dirs.keys()
+            LOG.debug( 'Calculating MSC for model \t{}'.format(keys[model_num]))
+            cps_key=self.multi_model_fit.sub_cps_dirs[keys[model_num]]
+            k=self.number_model_parameters[cps_key]
+            LOG.debug('k is {}'.format(k))
+            n=self.number_observations #constant throughout analysis 
+            LOG.debug('n is {}'.format(n))
+            RSS=self._PED_dct[cps_key].data['RSS']
+            LOG.debug(RSS.shape)
+            aic_dct={}
+            bic_dct={}
+            LOG.debug('Full RSS Series')
+            LOG.debug(RSS)
+            for i in range(len(RSS)):
+                LOG.debug('In RSS vector: {},{}'.format(i,RSS.iloc[i]))
+                aic=self.calculate1AIC(RSS.iloc[i],k,n)
+                bic=self.calculate1BIC(RSS.iloc[i],k,n)
+                aic_dct[i]=aic
+                bic_dct[i]=bic
+                LOG.debug('In idx,RSS,AIC,BIC: {},{},{},{}'.format(i,RSS.iloc[i],aic,bic))
+            LOG.debug('RSS for model:\n{}'.format(RSS.to_dict()))
+            LOG.debug('AICc calculation produced:\n{}'.format(aic_dct))
+            LOG.debug('BIC calculation produced:\n{}'.format(bic_dct))
+            LOG.debug('{},{}'.format(i,RSS[i]))
+            aic= pandas.DataFrame.from_dict(aic_dct,orient='index')
+            RSS= pandas.DataFrame(RSS)
+            bic= pandas.DataFrame.from_dict(bic_dct,orient='index')
+            LOG.debug(aic)
+            LOG.debug(RSS)
+            LOG.debug(bic)
+            df=pandas.concat([RSS,aic,bic],axis=1)
+            df.columns=['RSS','AICc','BIC']
+            df.index.name='RSS Rank'
+            df_dct[os.path.split(cps_key)[1]]=df
+            LOG.debug('\n{}'.format(df))
+        df=pandas.concat(df_dct,axis=1)
+        LOG.debug(df)
+        return df
+    
+    
+    def plot_boxplot(self):
+        '''
+        
+        '''
+        sns.set_context(context='poster',font_scale=3)
+        for i in range(len(self.model_selection_data.keys())):
+            keys=self.model_selection_data.keys()
+            LOG.debug(keys[i])
+            LOG.debug('plotting {}'.format(keys[i]))
+            plt.figure(1)
+#            plt.subplot(311)
+            LOG.debug(self.model_selection_data[keys[i][0]])
+            sns.boxplot(data=self.model_selection_data[keys[i][0]],
+#                        x=self.model_selection_data.index,
+                        y='RSS',
+                        )
             
         
-            
-               
+        
+        
+    def chi2_lookup_table(self,alpha):
+        '''
+        Looks at the cdf of a chi2 distribution at incriments of 
+        0.1 between 0 and 100. 
+        
+        Returns the x axis value at which the alpha interval has been crossed, 
+        i.e. gets the cut off point for chi2 dist with DOF and alpha . 
+        '''
+        nums= numpy.arange(0,100,0.1)
+        table=zip(nums,scipy.stats.chi2.cdf(nums,self.kwargs.get('DOF')) )
+        for i in table:
+            if i[1]<=alpha:
+                chi2_df_alpha=i[0]
+        return chi2_df_alpha  
+        
+    def get_chi2_alpha(self):
+        '''
+        return the chi2 threshold for cut off point alpha and DOF degrees of freedom
+        '''
+        dct={}
+        alphas=numpy.arange(0,1,0.01)
+        for i in alphas:
+            dct[round(i,3)]=self.chi2_lookup_table(i)
+        return dct[0.05]
+
+class PlotMultiHistogram(object):
+    '''
+    
+    '''
+    def __init__(self,results_path):
+        super(self,PlotMultiHistogram,self).__init__()
+        PlotHistogram()
+        
+        
+        
+        
+        
+        
+        
+        
         
 if __name__=='__main__':
     dire=r'D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV'
@@ -1639,7 +1835,8 @@ if __name__=='__main__':
                       PopulationSize=125,
                       ReportName='Fit1.1.txt')
     MS=ModelSelection(MMF)
-    print MS.results_folder_dct
+#    MS.plot_boxplot()
+    
     
     
 #    import glob
