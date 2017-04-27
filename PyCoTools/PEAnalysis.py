@@ -335,7 +335,7 @@ class TruncateData():
         
 
 #==============================================================================
-class PlotHistogram():
+class PlotHistogram(object):
     '''
     Plot parameter estimation results as histogram
     Args:
@@ -509,7 +509,7 @@ class PlotHistogram():
 
         
 #==============================================================================            
-class PlotScatters():
+class PlotScatters(object):
     '''
     Plot all possible combinations of scatter graph
     '''
@@ -641,7 +641,7 @@ class PlotScatters():
             self.plot1_scatter(X,y,self.truncated_data)
         return True
 
-class PlotHexMap():
+class PlotHexMap(object):
     '''
     Plot all possible combinations of scatter graph
     '''
@@ -803,7 +803,7 @@ class PlotHexMap():
             self.plot1_hex(x,y,self.truncated_data)
         return True
 #==============================================================================
-class PlotBoxplot():
+class PlotBoxplot(object):
     '''
     Visualize your PE data as boxplots. 
     
@@ -1108,7 +1108,7 @@ class GetCovarianceMatrix():
     def get_covariance(self):
         print self.PED
 
-class EvaluateOptimizationPerformance():
+class EvaluateOptimizationPerformance(object):
     '''
     Plot your data RSS Vs Rank of best fit as evaluated by RSS value. This should
     highlight whether your optimization is finding a minimum and also help map 
@@ -1227,7 +1227,7 @@ class EvaluateOptimizationPerformance():
 #==============================================================================
 
 
-class PlotPEData():
+class PlotPEData(object):
     '''
     Plot a parameter estimation run against experimental data. 
     Suport currently only exists for time course experiments. In future versions
@@ -1598,7 +1598,6 @@ class ModelSelection():
         self.number_observations=self._get_n()
         
         self.model_selection_data=self.calculate_model_selection_criteria()
-        self.plot_boxplot()
         
     
         
@@ -1810,20 +1809,31 @@ class ModelSelection():
         for i in alphas:
             dct[round(i,3)]=self.chi2_lookup_table(i)
         return dct[0.05]
-
-class PlotMultiHistogram(object):
-    '''
     
-    '''
-    def __init__(self,results_path):
-        super(self,PlotMultiHistogram,self).__init__()
-        PlotHistogram()
+    def compare_sim_vs_exp(self):
+        '''
         
-        
-        
-        
-        
-        
+        '''
+        LOG.info('Comparing simulated versus experimental data')
+        LOG.debug('Results Folder Dict:')
+        for i in self.multi_model_fit.results_folder_dct:
+            LOG.debug('\tKey :\n{}\nValue:\n{}'.format(i,self.multi_model_fit.results_folder_dct[i]))
+        LOG.debug('Cps files used for comparison:')
+        exp=self.multi_model_fit.exp_files
+        for cps,results_folder in self.multi_model_fit.results_folder_dct.items():
+            PlotPEData(cps,exp,ParameterPath=results_folder)
+
+#        results_path_dct_keys=self.multi_model_fit.results_folder_dct.keys()
+#        for i in range(len(self.multi_model_fit.cps_files)):
+#            LOG.debug('cps files:\t{}'.format(self.multi_model_fit.cps_files[i]))
+#            cps=os.path.abspath(self.multi_model_fit.cps_files[i])
+#            exp=self.multi_model_fit.exp_files
+#            LOG.debug('Results folder:\t{}'.format(self.multi_model_fit.results_folder_dct[results_path_dct_keys[i]]))
+#            dire=self.multi_model_fit.results_folder_dct[results_path_dct_keys[i]]
+#            PlotPEData(cps,exp,)
+            
+#
+#        
         
         
         
@@ -1835,37 +1845,24 @@ if __name__=='__main__':
                       PopulationSize=125,
                       ReportName='Fit1.1.txt')
     MS=ModelSelection(MMF)
-#    MS.plot_boxplot()
-    
-    
-    
-#    import glob
-#    dire=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSC project"
-#    full_dire = os.path.join(dire,'Full model')
-#    simple_dire = os.path.join(dire,'Simplified model')
-#    akt_dire = os.path.join(dire,'AKT model')
-#    erk_dire = os.path.join(dire,'ERK model')
-#    
-#    os.chdir(full_dire)
-#    full_cps= glob.glob('*.cps')
-#    full_cps= [os.path.abspath(i) for i in full_cps]
-#    full_data=glob.glob('*.csv')
-#    full_data=[os.path.abspath(i) for i in full_data]
-#    
-#    report_name=os.path.join(full_dire,'Fit1.txt')
-#    ## check 
-#    if os.path.isfile(full_cps[0])!=True:
-#        raise TypeError
-#        
-#    for i in full_data:
-#        if os.path.isfile(i)!=True:
-#            raise TypeError
-#            
-##    PE_full=pycopi.ParameterEstimation(full_cps[0],full_data[0],
-##                                                ReportName=report_name)
-#    #PE_full.write_item_template()
-##    PE_full.set_up()
-#    PlotPEData(full_cps[0],full_data[0],report_name)
+
+
+    MS.compare_sim_vs_exp()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
