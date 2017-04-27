@@ -1281,11 +1281,11 @@ class PlotPEData(object):
             Name of an output directory. 
         
     '''
-    def __init__(self,copasi_file,experiment_files,PE_result_file,**kwargs):
+    def __init__(self,copasi_file,experiment_files,**kwargs):
 
         self.copasi_file=copasi_file
         self.experiment_files=experiment_files
-        self.PE_result_file=PE_result_file
+#        self.PE_result_path=PE_result_path
         
         
         
@@ -1319,7 +1319,8 @@ class PlotPEData(object):
                  'DotSize':4,
                  'LegendLoc':'best',
                  'OutputDirectory':os.path.join(os.path.dirname(self.copasi_file),'ParameterEstimationPlots'),
-                 'Plot':'true',                 
+                 'Plot':'true',    
+                 'ParameterPath':None,
                  
                  }
                  
@@ -1385,8 +1386,14 @@ class PlotPEData(object):
                 if os.path.isfile(i)==False:
                     raise Errors.InputError('{} doesn\'t exist'.format(i))
         
-        if os.path.isfile(self.PE_result_file)==False:
-            raise Errors.InputError('Your PE data file {} doesn\'t exist'.format(self.PE_result_file))
+        if self.kwargs['ParameterPath']==None:
+            raise Errors.InputError('Please specify a ParameterPathArgument')
+        
+        if self.kwargs['ParameterPath']!=None:
+            if os.path.isfile(self.kwargs['ParameterPath']):
+                
+            
+            Your PE data file {} doesn\'t exist'.format(self.PE_result_file))
         
         matplotlib.rcParams.update({'font.size':self.kwargs.get('AxisSize')})
         
