@@ -4498,7 +4498,7 @@ if __name__=='__main__':
                       NumberOfPEs=50,
                       CopyNumber=1,
                       PopulationSize=125,
-                      ReportName='Fit1.7.txt')
+                      ReportName='Fit1.6.txt')
     f=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV\MultiExperimentFit\AktModelTGFb_TGFQFT_EV\AktModelTGFb_TGFQFT_EV0.cps"
     d=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV\Quantitations_TGFb_with_Everolimus_FGFQFT.txt"
     
