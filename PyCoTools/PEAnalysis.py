@@ -57,6 +57,8 @@ import pycopi,Errors
 import re
 import seaborn as sns
 import logging
+from subprocess import check_call
+import ipyparallel
 #import math
 
 LOG=logging.getLogger(__name__)
@@ -1281,11 +1283,11 @@ class PlotPEData(object):
             Name of an output directory. 
         
     '''
-    def __init__(self,copasi_file,experiment_files,**kwargs):
+    def __init__(self,copasi_file,experiment_files,PE_result_file,**kwargs):
 
         self.copasi_file=copasi_file
         self.experiment_files=experiment_files
-#        self.PE_result_path=PE_result_path
+        self.PE_result_file=PE_result_file
         
         
         
@@ -1319,8 +1321,7 @@ class PlotPEData(object):
                  'DotSize':4,
                  'LegendLoc':'best',
                  'OutputDirectory':os.path.join(os.path.dirname(self.copasi_file),'ParameterEstimationPlots'),
-                 'Plot':'true',    
-                 'ParameterPath':None,
+                 'Plot':'true',                 
                  
                  }
                  
@@ -1386,14 +1387,8 @@ class PlotPEData(object):
                 if os.path.isfile(i)==False:
                     raise Errors.InputError('{} doesn\'t exist'.format(i))
         
-        if self.kwargs['ParameterPath']==None:
-            raise Errors.InputError('Please specify a ParameterPathArgument')
-        
-        if self.kwargs['ParameterPath']!=None:
-            if os.path.isfile(self.kwargs['ParameterPath']):
-                
-            
-            Your PE data file {} doesn\'t exist'.format(self.PE_result_file))
+        if os.path.isfile(self.PE_result_file)==False:
+            raise Errors.InputError('Your PE data file {} doesn\'t exist'.format(self.PE_result_file))
         
         matplotlib.rcParams.update({'font.size':self.kwargs.get('AxisSize')})
         
@@ -1595,6 +1590,7 @@ class ModelSelection():
     def __init__(self,multi_model_fit,model_selection_filename=None):
         LOG.debug('Instantiate ModelSelection class')
         self.multi_model_fit=multi_model_fit
+        self.number_models=self.get_num_models()
         self.model_selection_filename=model_selection_filename
         if self.model_selection_filename==None:
             self.model_selection_filename=os.path.join(self.multi_model_fit.wd,'ModelSelectionData.xlsx')
@@ -1607,7 +1603,8 @@ class ModelSelection():
         self.model_selection_data=self.calculate_model_selection_criteria()
         
     
-        
+    def get_num_models(self):
+        return len(self.multi_model_fit.cps_files)
     ## void
     def to_excel(self):
         self.model_selection_data.to_excel(self.model_selection_filename)
@@ -1817,18 +1814,81 @@ class ModelSelection():
             dct[round(i,3)]=self.chi2_lookup_table(i)
         return dct[0.05]
     
-    def compare_sim_vs_exp(self):
+    def call_fit_analysis_script(self):
         '''
         
         '''
         LOG.info('Comparing simulated versus experimental data')
         LOG.debug('Results Folder Dict:')
+        LOG.debug('Checking that fit_analysis_script_name exists:\t\t{}'.format(os.path.isfile(fit_analysis_script_name)))
+        LOG.debug('Setting up ipyparallel cluster with n={}'.format(self.number_models))
+        check_call('ipcluster start -n {}'.format(self.number_models))
+        rc=ipyparallel.Client()
+        LOG.debug('checking that we have {} ipython engines'.format(self.number_models))
+        if len(rc.ids)!=self.number_models:
+            LOG.warning('you have started {} ipycluster engines, one per model'.format(self.number_models))
         for i in self.multi_model_fit.results_folder_dct:
             LOG.debug('\tKey :\n{}\nValue:\n{}'.format(i,self.multi_model_fit.results_folder_dct[i]))
-        LOG.debug('Cps files used for comparison:')
-        exp=self.multi_model_fit.exp_files
-        for cps,results_folder in self.multi_model_fit.results_folder_dct.items():
-            PlotPEData(cps,exp,ParameterPath=results_folder)
+            self.run_fit_analysis(self.multi_model_fit.results_folder_dct[i])
+            
+                    #fit_analysis_script_name,
+                    #self.multi_model_fit.results_folder_dct[i]
+
+#    @ipyparallel.dview.remote(block=True)
+    def run_fit_analysis(self,results_path):
+        '''
+        
+        '''
+        scripts_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)),'Scripts')
+        fit_analysis_script_name=os.path.join(scripts_folder,'fit_analysis.py')
+        LOG.debug('fit analysis script on your computer is at \t\t{}'.format(fit_analysis_script_name))
+
+        return check_call('python {} {}'.format(fit_analysis_script_name,results_path))
+#        
+    def call_compare_sim_vs_exp(self):
+        '''
+        
+        '''
+        LOG.info('Visually comparing simulated Versus Experiemntal data.')
+        
+        for cps, res in self.multi_model_fit.results_folder_dct.items():
+            LOG.debug('running current solution statistics PE with:\t {}'.format(cps))
+            pycopi.InsertParameters(cps,ParameterPath=res)
+            PE=pycopi.ParameterEstimation(cps,self.multi_model_fit.exp_files,
+                                       RandomizeStartValues='false',
+                                       Method='CurrentSolutionStatistics',
+                                       Plot='true',SaveFig='true',
+                                       )
+            PE.set_up()
+            PE.run()
+#            PlotPEData(i,self.multi_model_fit.exp_files,
+#                       ParameterPath=self.multi_model_fit.results_folder_dct[i])
+            
+            
+            
+#        
+#    def run_compare_sim_vs_exp(self,model,parameter_path,index):
+#        '''
+#        
+#        '''
+#        scripts_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)),'Scripts')
+#        com_script_name=os.path.join(scripts_folder,'compare_sim_vs_exp.py')
+#        if os.path.isfile(com_script_name)!=True:
+#            raise Errors.FileDoesNotExistError('{} doesn\'t exist'.format(com_script_name))
+#        return check_call('python {} {} {} {}'.format(com_script_name,model,parameter_path,index))
+        
+#    def compare_sim_vs_exp(self):
+#        '''
+#        
+#        '''
+#        LOG.info('Comparing simulated versus experimental data')
+#        LOG.debug('Results Folder Dict:')
+#        for i in self.multi_model_fit.results_folder_dct:
+#            LOG.debug('\tKey :\n{}\nValue:\n{}'.format(i,self.multi_model_fit.results_folder_dct[i]))
+#        LOG.debug('Cps files used for comparison:')
+#        exp=self.multi_model_fit.exp_files
+#        for cps,results_folder in self.multi_model_fit.results_folder_dct.items():
+#            PlotPEData(cps,exp,ParameterPath=results_folder)
 
 #        results_path_dct_keys=self.multi_model_fit.results_folder_dct.keys()
 #        for i in range(len(self.multi_model_fit.cps_files)):
@@ -1854,7 +1914,10 @@ if __name__=='__main__':
     MS=ModelSelection(MMF)
 
 
-    MS.compare_sim_vs_exp()
+    f=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV\MultiExperimentFit\AktModelTGFb_TGFQFT_EV\AktModelTGFb_TGFQFT_EV.cps"
+    d=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV\MultiExperimentFit\AktModelTGFb_TGFQFT_EV\MultiplePEResults"
+    
+    MS.call_compare_sim_vs_exp()
 
 
 
