@@ -54,11 +54,14 @@ import string
 import itertools
 from  multiprocessing import Process
 import glob
+import seaborn as sns
+
 
 
 
 LOG=logging.getLogger(__name__)
-
+sns.set_context(context='poster',
+                font_scale=3)
 
 #==========================================================================
 
@@ -4090,6 +4093,7 @@ class RunMultiplePEs():
                  'NumberOfPEs':3,
                  'ReportName':None,
                  ##default parameters for ParameterEstimation
+                 'Method':'GeneticAlgorithm'
                  'Plot':'false',
                  'RandomizeStartValues':'true',
                  'ConfigFilename':self.config_filename,
@@ -4139,7 +4143,7 @@ class RunMultiplePEs():
                      'StartTemperature':self.kwargs['StartTemperature'],
                      'CoolingFactor':self.kwargs['CoolingFactor'],
                      'PopulationSize':self.kwargs['PopulationSize'],
-                                                }
+                     'Method':self.kwargs['Method'] }
         
         
         self.report_files=self.enumerate_PE_output()
@@ -4292,8 +4296,10 @@ class RunMultiplePEs():
 
 class MultiModelFit():
     '''
-    Feature to add - convert this to iterator. 
-    Iterate over models
+    Take a project directory containing all copasi files
+    and data files that you want to fit simultaneously and 
+    
+
     '''
     def __init__(self,project_config,outdir,**kwargs):
         self.outdir=outdir
@@ -4304,6 +4310,7 @@ class MultiModelFit():
                  'NumberOfPEs':3,
                  'ReportName':None,
                  ##default parameters for ParameterEstimation
+                 'Method':'GeneticAlgorithm',
                  'Plot':'false',
                  'RandomizeStartValues':'true',
                  'NumberOfGenerations':200,
