@@ -55,6 +55,7 @@ import itertools
 from  multiprocessing import Process
 import glob
 import seaborn as sns
+from copy import deepcopy
 
 
 
@@ -4093,39 +4094,15 @@ class RunMultiplePEs():
                  'CopyNumber':1,
                  'NumberOfPEs':3,
                  'ReportName':None,
-                 ##default parameters for ParameterEstimation
-                 'Method':'GeneticAlgorithm',
-                 'Plot':'false',
-                 'RandomizeStartValues':'true',
-                 'ConfigFilename':self.config_filename,
-                 'NumberOfGenerations':200,
-                 'RandomNumberGenerator':1,
-                 'Seed':0,
-                 'Pf':0.475,
-                 'IterationLimit':50,
-                 'Tolerance':0.000001,
-                 'Rho':0.2,
-                 'Scale':10,
-                 'SwarmSize':50,
-                 'StdDeviation':0.000001,
-                 'NumberOfIterations':100000,
-                 'StartTemperature':1,
-                 'CoolingFactor':0.85,
-                 'PopulationSize':50,
-                 }
-        
-        
                  'Metabolites':self.GMQ.get_metabolites().keys(),
                  'GlobalQuantities':self.GMQ.get_global_quantities().keys(),
                  'LocalParameters': self.GMQ.get_local_kinetic_parameters_cns().keys(),
                  'QuantityType':'concentration',
-                 'ReportName':default_report_name,
                  'Append': 'false', 
                  'SetReport':'true',
                  'ConfirmOverwrite': 'false',
-                 'ConfigFilename':config_file,
+                 'ConfigFilename':self.config_filename,
                  'OverwriteConfigFile':'false',
-                 'OutputML':default_outputML,
                  'PruneHeaders':'true',
                  'UpdateModel':'false',
                  'RandomizeStartValues':'true',
@@ -4184,7 +4161,7 @@ class RunMultiplePEs():
                  'DPI':125,
                  'XTickRotation':35,
                  'DotSize':4,
-                 'LegendLoc':'best',
+                 'LegendLoc':'best'}
                  
                  
                  
@@ -4201,25 +4178,30 @@ class RunMultiplePEs():
 #        dire,fle=os.path.split(self.kwargs['ReportName']) ## for making sub-result directories
 #        self.output_dir=os.path.join(dire,'MultiplePEResults')
 
-        self.PE_dct={'ReportName':self.kwargs['ReportName'],
-                     'Plot':self.kwargs['Plot'],
-                     'RandomizeStartValues':self.kwargs['RandomizeStartValues'],
-                     'ConfigFilename':self.kwargs['ConfigFilename'],
-                     'NumberOfGenerations':self.kwargs['NumberOfGenerations'],
-                     'RandomNumberGenerator':self.kwargs['RandomNumberGenerator'],
-                     'Seed':self.kwargs['Seed'],
-                     'Pf':self.kwargs['Pf'],
-                     'IterationLimit':self.kwargs['IterationLimit'],
-                     'Tolerance':self.kwargs['Tolerance'],
-                     'Rho':self.kwargs['Rho'],
-                     'Scale':self.kwargs['Scale'],
-                     'SwarmSize':self.kwargs['SwarmSize'],
-                     'StdDeviation':self.kwargs['StdDeviation'],
-                     'NumberOfIterations':self.kwargs['NumberOfIterations'],
-                     'StartTemperature':self.kwargs['StartTemperature'],
-                     'CoolingFactor':self.kwargs['CoolingFactor'],
-                     'PopulationSize':self.kwargs['PopulationSize'],
-                     'Method':self.kwargs['Method'] }
+#        self.PE_dct={'ReportName':self.kwargs['ReportName'],
+#                     'Plot':self.kwargs['Plot'],
+#                     'RandomizeStartValues':self.kwargs['RandomizeStartValues'],
+#                     'ConfigFilename':self.kwargs['ConfigFilename'],
+#                     'NumberOfGenerations':self.kwargs['NumberOfGenerations'],
+#                     'RandomNumberGenerator':self.kwargs['RandomNumberGenerator'],
+#                     'Seed':self.kwargs['Seed'],
+#                     'Pf':self.kwargs['Pf'],
+#                     'IterationLimit':self.kwargs['IterationLimit'],
+#                     'Tolerance':self.kwargs['Tolerance'],
+#                     'Rho':self.kwargs['Rho'],
+#                     'Scale':self.kwargs['Scale'],
+#                     'SwarmSize':self.kwargs['SwarmSize'],
+#                     'StdDeviation':self.kwargs['StdDeviation'],
+#                     'NumberOfIterations':self.kwargs['NumberOfIterations'],
+#                     'StartTemperature':self.kwargs['StartTemperature'],
+#                     'CoolingFactor':self.kwargs['CoolingFactor'],
+#                     'PopulationSize':self.kwargs['PopulationSize'],
+#                     'Method':self.kwargs['Method'] }
+        self.PE_dct=deepcopy(self.kwargs)
+        del self.PE_dct['OutputDir']
+        del self.PE_dct['CopyNumber']
+        del self.PE_dct['NumberOfPEs']
+        del self.PE_dct['Run']
         
         
         self.report_files=self.enumerate_PE_output()
@@ -4308,7 +4290,7 @@ class RunMultiplePEs():
         '''
         
         '''
-        run_arg_list=['multiprocess','sge']
+        run_arg_list=['multiprocess','SGE']
         if self.kwargs['Run'] not in run_arg_list:
             raise Errors.InputError('Run needs to be one of {}'.format(run_arg_list))
         if isinstance(self.kwargs['CopyNumber'],int)!=True:
@@ -4380,10 +4362,15 @@ class MultiModelFit():
     
 
     '''
-    def __init__(self,project_config,outdir,**kwargs):
+    def __init__(self,project_config,outdir,config_filename=None,**kwargs):
         self.outdir=outdir
         self.project_dir=project_config
-#        self.config_filename=os.path.join(os.path.dirname(self.copasi_file),'PEConfigFile.xlsx')
+        self.config_filename=config_filename
+        self.do_checks()
+        self.cps_files,self.exp_files=self.read_fit_config()
+        if self.config_filename==None:
+            self.config_filename=os.path.join(self.project_dir,'PEConfigFile.xlsx')
+        
         options={'Run':'multiprocess',
                  'CopyNumber':1,
                  'NumberOfPEs':3,
@@ -4391,13 +4378,28 @@ class MultiModelFit():
                  ##default parameters for ParameterEstimation
                  'Method':'GeneticAlgorithm',
                  'Plot':'false',
+                 'QuantityType':'concentration',
+                 'Append': 'false', 
+                 'SetReport':'true',
+                 'ConfirmOverwrite': 'false',
+                 'ConfigFilename':self.config_filename,
+                 'OverwriteConfigFile':'false',
+                 'PruneHeaders':'true',
+                 'UpdateModel':'false',
                  'RandomizeStartValues':'true',
+                 'CreateParameterSets':'false',
+                 'CalculateStatistics':'false',
+                 'UseTemplateStartValues':'false',
+                 #method options
+                 'Method':'GeneticAlgorithm',
+                 #'DifferentialEvolution',
                  'NumberOfGenerations':200,
+                 'PopulationSize':50,
                  'RandomNumberGenerator':1,
                  'Seed':0,
                  'Pf':0.475,
                  'IterationLimit':50,
-                 'Tolerance':0.000001,
+                 'Tolerance':0.00001,
                  'Rho':0.2,
                  'Scale':10,
                  'SwarmSize':50,
@@ -4405,17 +4407,31 @@ class MultiModelFit():
                  'NumberOfIterations':100000,
                  'StartTemperature':1,
                  'CoolingFactor':0.85,
-                 'PopulationSize':50,
-                 }
+                 #experiment definition options
+                 #need to include options for defining multiple experimental files at once
+                 'RowOrientation':['true']*len(self.exp_files),
+                 'ExperimentType':['timecourse']*len(self.exp_files),
+                 'FirstRow':[str(1)]*len(self.exp_files),
+                 'NormalizeWeightsPerExperiment':['true']*len(self.exp_files),
+                 'RowContainingNames':[str(1)]*len(self.exp_files),
+                 'Separator':['\t']*len(self.exp_files),
+                 'WeightMethod':['mean_squared']*len(self.exp_files),
+                 'Save':'overwrite',  
+                 'Scheduled':'false',
+                 'Verbose':'false',
+                 'LowerBound':0.000001,
+                 'UpperBound':1000000,
+#                 'Run':'false',
+                 'Plot':'false'}
+        
         for key in kwargs.keys():
             if key not in options.keys():
-                raise Errors.InputError('{} is not a keyword argument for MultiExperimentFit'.format(key))
+                raise Errors.InputError('{} is not a keyword argument for MultiModelFit'.format(key))
         options.update( kwargs) 
         self.kwargs=options    
         
         
-        self.do_checks()
-        self.cps_files,self.exp_files=self.read_fit_config()
+        
         self.sub_cps_dirs=self.create_workspace()
         self.RMPE_dct=self.instantiate_run_multi_PEs_class()
         self.results_folder_dct=self.get_output_directories()
@@ -4584,9 +4600,12 @@ if __name__=='__main__':
     MMF=MultiModelFit(project_config=dire,outdir='MultiExperimentFit',
                       NumberOfPEs=2,
                       CopyNumber=1,
-                      PopulationSize=50,
-                      ReportName='Fit1.7.txt',
-                      Method='GeneticAlgorithm',
+                      SwarmSize=100,
+                      NumberOfIterations=3000,
+                      ReportName='Fit1PS.8.txt',
+                      Append='true',
+                      Method='ParticleSwarm',
+                      Run='SGE'
                       )
         
 #    MMP.write_config_template()
