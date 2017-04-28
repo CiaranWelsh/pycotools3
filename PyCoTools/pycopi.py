@@ -4596,25 +4596,26 @@ class MultiModelFit():
         
             
 if __name__=='__main__':
-    dire=r'D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV'
-    MMF=MultiModelFit(project_config=dire,outdir='MultiExperimentFit',
-                      NumberOfPEs=2,
-                      CopyNumber=1,
-                      SwarmSize=100,
-                      NumberOfIterations=3000,
-                      ReportName='Fit1PS.8.txt',
-                      Append='true',
-                      Method='ParticleSwarm',
-                      Run='SGE'
-                      )
-        
-#    MMP.write_config_template()
-    
-    
-    MMF.set_up()
-    
-    
-    MMF.run()
+    pass
+#    dire=r'D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV'
+#    MMF=MultiModelFit(project_config=dire,outdir='MultiExperimentFit',
+#                      NumberOfPEs=2,
+#                      CopyNumber=1,
+#                      SwarmSize=100,
+#                      NumberOfIterations=3000,
+#                      ReportName='Fit1PS.8.txt',
+#                      Append='true',
+#                      Method='ParticleSwarm',
+#                      Run='SGE'
+#                      )
+#        
+##    MMP.write_config_template()
+#    
+#    
+#    MMF.set_up()
+#    
+#    
+#    MMF.run()
 
 #    f=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV\MultiExperimentFit\SimpleModelTGFb_TGFQFT_EV\SimpleModelTGFb_TGFQFT_EV0.cps"
 #    d=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV\Quantitations_TGFb_with_Everolimus_FGFQFT.txt"

@@ -1905,19 +1905,20 @@ class ModelSelection():
         
         
 if __name__=='__main__':
-    dire=r'D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV'
-    MMF=pycopi.MultiModelFit(project_config=dire,outdir='MultiExperimentFit',
-                      NumberOfPEs=10,
-                      CopyNumber=1,
-                      PopulationSize=125,
-                      ReportName='Fit1.1.txt')
-    MS=ModelSelection(MMF)
-
-
-    f=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV\MultiExperimentFit\AktModelTGFb_TGFQFT_EV\AktModelTGFb_TGFQFT_EV.cps"
-    d=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV\MultiExperimentFit\AktModelTGFb_TGFQFT_EV\MultiplePEResults"
-    
-    MS.call_compare_sim_vs_exp()
+    pass
+#    dire=r'D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV'
+#    MMF=pycopi.MultiModelFit(project_config=dire,outdir='MultiExperimentFit',
+#                      NumberOfPEs=10,
+#                      CopyNumber=1,
+#                      PopulationSize=125,
+#                      ReportName='Fit1.1.txt')
+#    MS=ModelSelection(MMF)
+#
+#
+#    f=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV\MultiExperimentFit\AktModelTGFb_TGFQFT_EV\AktModelTGFb_TGFQFT_EV.cps"
+#    d=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV\MultiExperimentFit\AktModelTGFb_TGFQFT_EV\MultiplePEResults"
+#    
+#    MS.call_compare_sim_vs_exp()
 
 
 
