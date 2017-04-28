@@ -4079,6 +4079,7 @@ class RunMultiplePEs():
     def __init__(self,copasi_file,experiment_files,**kwargs):
         self.copasi_file=copasi_file
         self.experiment_files=experiment_files
+        self.GMQ=GetModelQuantities(self.copasi_file)
         
         if os.path.isfile(self.copasi_file)!=True:
             raise Errors.InputError('{} doesn\'t exist'.format(self.copasi_file))
@@ -4093,7 +4094,7 @@ class RunMultiplePEs():
                  'NumberOfPEs':3,
                  'ReportName':None,
                  ##default parameters for ParameterEstimation
-                 'Method':'GeneticAlgorithm'
+                 'Method':'GeneticAlgorithm',
                  'Plot':'false',
                  'RandomizeStartValues':'true',
                  'ConfigFilename':self.config_filename,
@@ -4112,6 +4113,81 @@ class RunMultiplePEs():
                  'CoolingFactor':0.85,
                  'PopulationSize':50,
                  }
+        
+        
+                 'Metabolites':self.GMQ.get_metabolites().keys(),
+                 'GlobalQuantities':self.GMQ.get_global_quantities().keys(),
+                 'LocalParameters': self.GMQ.get_local_kinetic_parameters_cns().keys(),
+                 'QuantityType':'concentration',
+                 'ReportName':default_report_name,
+                 'Append': 'false', 
+                 'SetReport':'true',
+                 'ConfirmOverwrite': 'false',
+                 'ConfigFilename':config_file,
+                 'OverwriteConfigFile':'false',
+                 'OutputML':default_outputML,
+                 'PruneHeaders':'true',
+                 'UpdateModel':'false',
+                 'RandomizeStartValues':'true',
+                 'CreateParameterSets':'false',
+                 'CalculateStatistics':'false',
+                 'UseTemplateStartValues':'false',
+                 #method options
+                 'Method':'GeneticAlgorithm',
+                 #'DifferentialEvolution',
+                 'NumberOfGenerations':200,
+                 'PopulationSize':50,
+                 'RandomNumberGenerator':1,
+                 'Seed':0,
+                 'Pf':0.475,
+                 'IterationLimit':50,
+                 'Tolerance':0.00001,
+                 'Rho':0.2,
+                 'Scale':10,
+                 'SwarmSize':50,
+                 'StdDeviation':0.000001,
+                 'NumberOfIterations':100000,
+                 'StartTemperature':1,
+                 'CoolingFactor':0.85,
+                 #experiment definition options
+                 #need to include options for defining multiple experimental files at once
+                 'RowOrientation':['true']*len(self.experiment_files),
+                 'ExperimentType':['timecourse']*len(self.experiment_files),
+                 'FirstRow':[str(1)]*len(self.experiment_files),
+                 'NormalizeWeightsPerExperiment':['true']*len(self.experiment_files),
+                 'RowContainingNames':[str(1)]*len(self.experiment_files),
+                 'Separator':['\t']*len(self.experiment_files),
+                 'WeightMethod':['mean_squared']*len(self.experiment_files),
+                 'Save':'overwrite',  
+                 'Scheduled':'false',
+                 'Verbose':'false',
+                 'LowerBound':0.000001,
+                 'UpperBound':1000000,
+#                 'Run':'false',
+                 'Plot':'false',
+                 '''
+                 The below arguments get passed to the parameter
+                 estimation plotting class
+                 '''
+                 
+                 'LineWidth':4,
+                 #graph features
+                 'FontSize':22,
+                 'AxisSize':15,
+                 'ExtraTitle':None,
+                 'LineWidth':3,
+                 'Show':'false',
+                 'SaveFig':'false',
+                 'TitleWrapSize':30,
+                 'Ylimit':None,
+                 'Xlimit':None,
+                 'DPI':125,
+                 'XTickRotation':35,
+                 'DotSize':4,
+                 'LegendLoc':'best',
+                 
+                 
+                 
         
         for key in kwargs.keys():
             if key not in options.keys():
@@ -4175,7 +4251,10 @@ class RunMultiplePEs():
                 self.sub_copasi_files=pickle.load(f)
         for i in self.sub_copasi_files:
             LOG.info('Running model: {}'.format(i))
-            Run(self.sub_copasi_files[i],Mode='multiprocess',Task='scan')
+            if self.kwargs['Run']=='multiprocess':
+                Run(self.sub_copasi_files[i],Mode='multiprocess',Task='scan')
+            elif self.kwargs['Run']=='SGE':
+                Run(self.sub_copasi_files[i],Mode='SGE',Task='scan')
             
     def write_config_template(self):
         '''
@@ -4351,7 +4430,8 @@ class MultiModelFit():
         '''
         LOG.debug('instantiating an instance of RunMultiplePEs for each model')
         dct={}
-#        self.results_dct={}
+#        run_multiple_pes_kwargs=self.kwargs
+#        del run_multiple_pes_kwargs['Method']
         for cps_dir in self.sub_cps_dirs:
             os.chdir(cps_dir)
             dct[self.sub_cps_dirs[cps_dir]]=RunMultiplePEs(self.sub_cps_dirs[cps_dir],
@@ -4502,18 +4582,19 @@ class MultiModelFit():
 if __name__=='__main__':
     dire=r'D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV'
     MMF=MultiModelFit(project_config=dire,outdir='MultiExperimentFit',
-                      NumberOfPEs=50,
+                      NumberOfPEs=2,
                       CopyNumber=1,
-                      PopulationSize=125,
-                      ReportName='Fit1.6.txt')
-    f=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV\MultiExperimentFit\AktModelTGFb_TGFQFT_EV\AktModelTGFb_TGFQFT_EV0.cps"
-    d=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV\Quantitations_TGFb_with_Everolimus_FGFQFT.txt"
+                      PopulationSize=50,
+                      ReportName='Fit1.7.txt',
+                      Method='GeneticAlgorithm',
+                      )
+        
+#    MMP.write_config_template()
     
-#    MMF.write_config_template()
-#    RMPE=RunMultiplePEs(f,d)
-#    RMPE.set_up()
     
     MMF.set_up()
+    
+    
     MMF.run()
 
 #    f=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV\MultiExperimentFit\SimpleModelTGFb_TGFQFT_EV\SimpleModelTGFb_TGFQFT_EV0.cps"
