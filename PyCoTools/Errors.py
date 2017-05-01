@@ -30,7 +30,8 @@ class FileDoesNotExistError(Exception):
     pass
 
 
-
+class NotImplementedError(Exception):
+    pass
 
 
 

@@ -90,7 +90,7 @@ PyCoTools/Scripts/compare_sim_vs_exp.py
 PyCoTools/Scripts/delete_SGE_jobs.py
 PyCoTools/Scripts/fit_analysis.py
 PyCoTools/Scripts/insertPE.py
-PyCoTools/Scripts/list.py
+PyCoTools/Scripts/ls.py
 PyCoTools/Scripts/plot_PL.py
 PyCoTools/Scripts/pydentify_biomodels.py
 PyCoTools/Scripts/pydentify_model.py
