@@ -4316,7 +4316,7 @@ class RunMultiplePEs():
         returns:
             dict[model_number]=cps_file
         '''
-        LOG.debug('Copying copasi file {} times'.format(self.kwargs['CopyNumber']))
+        LOG.info('Copying copasi file {} times'.format(self.kwargs['CopyNumber']))
         sub_copasi_files_dct={}
         copasi_path,copasi_filename=os.path.split(self.copasi_file)
         for i in range(self.kwargs['CopyNumber']):
@@ -4336,7 +4336,7 @@ class RunMultiplePEs():
 #        self.report_dir,self.report_file_root=os.path.split(self.kwargs['ReportName'])
         
 #        self.output_dir=os.path.join(os.path.dirname(self.copasi_file),'MultiplePEResults')
-        LOG.debug('creating a directory for analysis: \n\n{}'.format(self.kwargs['OutputDir']))
+        LOG.info('creating a directory for analysis: \n\n{}'.format(self.kwargs['OutputDir']))
         if os.path.isdir(self.kwargs['OutputDir'])!=True:
             os.mkdir(self.kwargs['OutputDir'])
             
@@ -4349,7 +4349,7 @@ class RunMultiplePEs():
         Returns:
             dct['model_copy_number]=enumerated_report_name
         '''
-        LOG.debug('Enumerating the PE report files')
+        LOG.info('Enumerating the PE report files')
         dct={}
         dire,fle=os.path.split(self.kwargs['ReportName'])
 #        self.output_dir=os.path.join(dire,'MultiplePEResults')
@@ -4383,6 +4383,7 @@ class MultiModelFit():
                  'CopyNumber':1,
                  'NumberOfPEs':3,
                  'ReportName':None,
+                 'OutputDir':None,
                  ##default parameters for ParameterEstimation
                  'Method':'GeneticAlgorithm',
                  'Plot':'false',
@@ -4605,25 +4606,25 @@ class MultiModelFit():
             
 if __name__=='__main__':
     pass
-    dire=r'D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV'
-    MMF=MultiModelFit(project_config=dire,outdir='MultiExperimentFit',
-                      NumberOfPEs=2,
-                      CopyNumber=1,
-                      SwarmSize=100,
-                      NumberOfIterations=3000,
-                      ReportName='Fit1PS.8.txt',
-                      Append='true',
-                      Method='ParticleSwarm',
-                      Run='SGE'
-                      )
-#        
-##    MMP.write_config_template()
-#    
-#    
-    MMF.set_up()
-#    
-#    
-    MMF.run()
+#    dire=r'D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV'
+#    MMF=MultiModelFit(project_config=dire,outdir='MultiExperimentFit',
+#                      NumberOfPEs=2,
+#                      CopyNumber=1,
+#                      SwarmSize=100,
+#                      NumberOfIterations=3000,
+#                      ReportName='Fit1PS.8.txt',
+#                      Append='true',
+#                      Method='ParticleSwarm',
+#                      Run='SGE'
+#                      )
+##        
+###    MMP.write_config_template()
+##    
+##    
+#    MMF.set_up()
+##    
+##    
+#    MMF.run()
 
 #    
 
