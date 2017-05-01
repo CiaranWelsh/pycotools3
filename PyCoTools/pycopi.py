@@ -4229,7 +4229,7 @@ class RunMultiplePEs():
         If Run=mutliprocess:
         '''
         ##load cps from pickle in case run not being use straignt after set_up
-        if self.kwargs['Run']='SGE':
+        if self.kwargs['Run']=='SGE':
             try:
                 check_call('qhost')
             except Errors.NotImplementedError:
