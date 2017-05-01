@@ -58,7 +58,7 @@ import re
 import seaborn as sns
 import logging
 from subprocess import check_call
-import ipyparallel
+#import ipyparallel
 #import math
 
 LOG=logging.getLogger(__name__)
