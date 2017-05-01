@@ -1073,10 +1073,6 @@ class Plot():
             return best_parameter_value
             
 
-            
-            
-            
-#
     def plot1(self,index,parameter):
         '''
         Plot one parameter. 

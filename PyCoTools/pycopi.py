@@ -56,6 +56,7 @@ from  multiprocessing import Process
 import glob
 import seaborn as sns
 from copy import deepcopy
+from subprocess import check_call
 
 
 
@@ -4236,7 +4237,14 @@ class RunMultiplePEs():
             if self.kwargs['Run']=='multiprocess':
                 Run(self.sub_copasi_files[i],Mode='multiprocess',Task='scan')
             elif self.kwargs['Run']=='SGE':
-                Run(self.sub_copasi_files[i],Mode='SGE',Task='scan')
+                try:
+                    check_call('qhost')
+                    Run(self.sub_copasi_files[i],Mode='SGE',Task='scan')
+                except Errors.NotImplementedError:
+                    LOG.warning('Attempting to run in SGE mode but SGE specific commands are unavailable. Switching to \'multiprocess\' mode')
+                    Run(self.sub_copasi_files[i],Mode='multiprocess',Task='scan')
+                    
+                
             
     def write_config_template(self):
         '''
@@ -4597,31 +4605,26 @@ class MultiModelFit():
             
 if __name__=='__main__':
     pass
-#    dire=r'D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV'
-#    MMF=MultiModelFit(project_config=dire,outdir='MultiExperimentFit',
-#                      NumberOfPEs=2,
-#                      CopyNumber=1,
-#                      SwarmSize=100,
-#                      NumberOfIterations=3000,
-#                      ReportName='Fit1PS.8.txt',
-#                      Append='true',
-#                      Method='ParticleSwarm',
-#                      Run='SGE'
-#                      )
+    dire=r'D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV'
+    MMF=MultiModelFit(project_config=dire,outdir='MultiExperimentFit',
+                      NumberOfPEs=2,
+                      CopyNumber=1,
+                      SwarmSize=100,
+                      NumberOfIterations=3000,
+                      ReportName='Fit1PS.8.txt',
+                      Append='true',
+                      Method='ParticleSwarm',
+                      Run='SGE'
+                      )
 #        
 ##    MMP.write_config_template()
 #    
 #    
-#    MMF.set_up()
+    MMF.set_up()
 #    
 #    
-#    MMF.run()
+    MMF.run()
 
-#    f=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV\MultiExperimentFit\SimpleModelTGFb_TGFQFT_EV\SimpleModelTGFb_TGFQFT_EV0.cps"
-#    d=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV\Quantitations_TGFb_with_Everolimus_FGFQFT.txt"
-#    
-#    PE=ParameterEstimation(f,d)
-#    PE.set_up()
 #    
 
 
