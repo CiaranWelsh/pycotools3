@@ -85,6 +85,7 @@ class ParsePEData():
         #assertions
 #        assert os.path.isfile(self.copasi_file),'{} is not a real file'.format(self.copasi_file)
         #change directory
+        assert os.path.exists(self.results_path),'{} does not exist'.format(self.results_path)
         self.cwd=os.path.dirname(self.results_path)
         os.chdir(self.cwd)
         self.pickle_path=PicklePath
@@ -97,7 +98,7 @@ class ParsePEData():
         self.UsePickle=UsePickle
         self.OverwritePickle=OverwritePickle
         
-        assert os.path.exists(self.results_path),'{} does not exist'.format(self.results_path)
+        
         if os.path.isdir(self.results_path):
             self.mode='folder'
         elif os.path.isfile(self.results_path):
