@@ -4229,6 +4229,12 @@ class RunMultiplePEs():
         If Run=mutliprocess:
         '''
         ##load cps from pickle in case run not being use straignt after set_up
+        if self.kwargs['Run']='SGE':
+            try:
+                check_call('qhost')
+            except Errors.NotImplementedError:
+                LOG.warning('Attempting to run in SGE mode but SGE specific commands are unavailable. Switching to \'multiprocess\' mode')
+                self.kwargs['Run']='multiprocess'
         if os.path.isfile(self.copasi_file_pickle):
             with open(self.copasi_file_pickle) as f:
                 self.sub_copasi_files=pickle.load(f)
@@ -4237,12 +4243,7 @@ class RunMultiplePEs():
             if self.kwargs['Run']=='multiprocess':
                 Run(self.sub_copasi_files[i],Mode='multiprocess',Task='scan')
             elif self.kwargs['Run']=='SGE':
-                try:
-                    check_call('qhost')
-                    Run(self.sub_copasi_files[i],Mode='SGE',Task='scan')
-                except Errors.NotImplementedError:
-                    LOG.warning('Attempting to run in SGE mode but SGE specific commands are unavailable. Switching to \'multiprocess\' mode')
-                    Run(self.sub_copasi_files[i],Mode='multiprocess',Task='scan')
+                Run(self.sub_copasi_files[i],Mode='SGE',Task='scan')
                     
                 
             
