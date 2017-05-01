@@ -37,7 +37,7 @@ import  setuptools
 #version
 MAJOR = 3
 MINOR = 3
-MICRO = 39
+MICRO = 41
 
 #=======
 __version__ = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
@@ -50,7 +50,7 @@ setup(
   author = 'Ciaran Welsh',
   requires=['lxml','argparse','pandas','numpy','scipy','matplotlib.pyplot'],
   package_data={'PyCoTools':['*.py','Documentation/*.pdf',
-                             'logging_config.conf'
+                             'logging_config.conf',
                              'Documentation/*.html','Licence.txt',
                              'ReadMe.md',
                              'Examples/KholodenkoExample/*',
