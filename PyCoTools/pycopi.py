@@ -4089,7 +4089,6 @@ class RunMultiplePEs():
         
         ## Pickle file to store directories of sub copasi files
         self.copasi_file_pickle=os.path.join(os.path.dirname(self.copasi_file),'sub_copasi_file.pickle')
-        self.config_filename=os.path.join(os.path.dirname(self.copasi_file),'PEConfigFile.xlsx')
         options={'Run':'multiprocess',
                  'OutputDir':None,
                  'CopyNumber':1,
@@ -4102,7 +4101,7 @@ class RunMultiplePEs():
                  'Append': 'false', 
                  'SetReport':'true',
                  'ConfirmOverwrite': 'false',
-                 'ConfigFilename':self.config_filename,
+                 'ConfigFilename':None,
                  'OverwriteConfigFile':'false',
                  'PruneHeaders':'true',
                  'UpdateModel':'false',
@@ -4220,8 +4219,8 @@ class RunMultiplePEs():
         self.sub_copasi_files=self.copy_copasi()
         self._setup_scan()
     
-#        if os.path.isfile(self.config_filename)!=True:
-#            self.PE.write_item_template()
+        if os.path.isfile(self.config_filename)!=True:
+            self.PE.write_item_template()
 #        LOG.debug('calling the set_up method of the ParameterEstimation class')
  
     def run(self):
@@ -4251,7 +4250,8 @@ class RunMultiplePEs():
         '''
         
         '''
-        LOG.debug('writing PE config template')
+        LOG.info('writing PE config template for model: {}'.format(self.copasi_file))
+        LOG.debug('ConfigFilename is {}'.format(self.PE.kwargs['ConfigFilename']))
         self.PE.write_item_template()
         
         
@@ -4290,7 +4290,16 @@ class RunMultiplePEs():
         output_dir_default=os.path.join(os.path.dirname(self.copasi_file),'MultiplePEResults')
         if self.kwargs['OutputDir']==None:
             LOG.debug('Using default OutputDir:\n{}'.format(output_dir_default))
-            self.kwargs['OutputDir']=output_dir_default                       
+            self.kwargs['OutputDir']=output_dir_default        
+                       
+        if self.kwargs['ConfigFilename']==None:
+            LOG.debug('ConfigFilename is None. Reassigning ConfigFilename')
+            self.kwargs['ConfigFilename']=os.path.join(os.path.dirname(self.copasi_file),'PEConfigFile.xlsx')
+        
+        if self.kwargs['ConfigFilename']!=None:
+            if os.path.isabs(self.kwargs['ConfigFilename'])==False:
+                self.kwargs['ConfigFilename']=os.path.join(os.path.dirname(self.copasi_file),self.kwargs['ConfigFilename'])
+                
                        
 
     
@@ -4306,7 +4315,9 @@ class RunMultiplePEs():
             raise Errors.InputError('CopyNumber argument is of type int')
             
         if isinstance(self.kwargs['NumberOfPEs'],int)!=True:
-            raise Errors.InputError('NumberOfPEs argument is of type int')        
+            raise Errors.InputError('NumberOfPEs argument is of type int')    
+            
+        self.kwargs['OutputDir']=os.path.abspath(self.kwargs['OutputDir'])
             
     
     def copy_copasi(self):
@@ -4337,10 +4348,11 @@ class RunMultiplePEs():
 #        self.report_dir,self.report_file_root=os.path.split(self.kwargs['ReportName'])
         
 #        self.output_dir=os.path.join(os.path.dirname(self.copasi_file),'MultiplePEResults')
+        
         LOG.info('creating a directory for analysis: \n\n{}'.format(self.kwargs['OutputDir']))
         if os.path.isdir(self.kwargs['OutputDir'])!=True:
             os.mkdir(self.kwargs['OutputDir'])
-            
+                
             
     
     def enumerate_PE_output(self):
@@ -4371,14 +4383,15 @@ class MultiModelFit():
     
 
     '''
-    def __init__(self,project_config,outdir,config_filename=None,**kwargs):
+    def __init__(self,project_config,outdir,**kwargs):
         self.outdir=outdir
         self.project_dir=project_config
-        self.config_filename=config_filename
+#        self.config_filename=config_filename
         self.do_checks()
         self.cps_files,self.exp_files=self.read_fit_config()
-        if self.config_filename==None:
-            self.config_filename=os.path.join(self.project_dir,'PEConfigFile.xlsx')
+        
+#        if self.config_filename==None:
+#            self.config_filename=os.path.join(self.project_dir,'PEConfigFile.xlsx')
         
         options={'Run':'multiprocess',
                  'CopyNumber':1,
@@ -4392,7 +4405,7 @@ class MultiModelFit():
                  'Append': 'false', 
                  'SetReport':'true',
                  'ConfirmOverwrite': 'false',
-                 'ConfigFilename':self.config_filename,
+                 'ConfigFilename':'PEConfigFile.xlsx',
                  'OverwriteConfigFile':'false',
                  'PruneHeaders':'true',
                  'UpdateModel':'false',
@@ -4458,10 +4471,19 @@ class MultiModelFit():
         dct={}
 #        run_multiple_pes_kwargs=self.kwargs
 #        del run_multiple_pes_kwargs['Method']
+#        if self.kwargs['ConfigFilename']==None:
+#            self.kwargs['ConfigFilename']='PEConfigFile.xlsx'
+            
         for cps_dir in self.sub_cps_dirs:
             os.chdir(cps_dir)
+            if os.path.isabs(self.kwargs['ConfigFilename']):
+                self.kwargs['ConfigFilename']=os.path.split(self.kwargs['ConfigFilename'])[1]
+#            LOG.debug('ConfigFilename is {}'.format(self.kwargs['ConfigFilename']))
+#            self.kwargs['ConfigFilename']=os.path.join(cps_dir,self.kwargs['ConfigFilename'])
+#            LOG.debug('config filename after modification is: {}'.format(self.kwargs['ConfigFilename']))
             dct[self.sub_cps_dirs[cps_dir]]=RunMultiplePEs(self.sub_cps_dirs[cps_dir],
                                                            self.exp_files,**self.kwargs)
+            
         LOG.debug('Each instance of RunMultiplePEs is being held in a dct:\n{}'.format(dct))
         return dct
 
