@@ -306,12 +306,13 @@ class TruncateData():
         X:
             Either Xth percentive or value to truncate data below. 
     '''
-    def __init__(self,data,TruncateMode='percent',X=100):
+    def __init__(self,data,TruncateMode='tolerance',X=100,Tolerance=0.001):
         self.data=data
         self.TruncateMode=TruncateMode        
         self.X=X
+        self.Tolerance=Tolerance
         assert isinstance(self.data,pandas.core.frame.DataFrame)
-        assert self.TruncateMode in ['below_x','percent']
+        assert self.TruncateMode in ['below_x','percent','tolerance']
         
         self.data=self.truncate()
         
@@ -335,6 +336,18 @@ class TruncateData():
             return self.below_x()#self.data
         elif self.TruncateMode=='percent':
             return self.top_x_percent()
+        elif self.TruncateMode=='tolerance':
+            return self.by_tolerance()
+        
+    def by_tolerance(self):
+        '''
+        Get data indices where RSS[i+1] - RSS[i] < Tolerance
+        '''
+        LOG.debug('calculating tolerance')
+        RSS_diff= self.data['RSS'].diff()
+        idx=RSS_diff[RSS_diff<self.Tolerance]
+        idx= list(idx.index)
+        return self.data.iloc[idx]
         
 
 #==============================================================================
@@ -397,7 +410,7 @@ class PlotHistogram(object):
         self.results_path=results_path
         #keywrod arguments
         options={'FromPickle':'false',
-                 'TruncateMode':'percent', #either 'below_x' or 'percent' for method of truncation. 
+                 'TruncateMode':'tolerance', #either 'below_x' or 'percent' for method of truncation. 
                  'Log10':'false',
                  'X':100,           #if below_x: this is the X boundary. If percent: this is the percent of data to keep
                  'Bins':100,
@@ -416,12 +429,13 @@ class PlotHistogram(object):
                  'Variable':None,
                  'ResultsDirectory':None,
                  'ColourMap':'plasma',
+                 'Tolerance':0.001,
                  }
         for i in kwargs.keys():
             assert i in options.keys(),'{} is not a keyword argument for TruncateData'.format(i)
         options.update( kwargs)  
         self.kwargs=options
-        assert self.kwargs.get('TruncateMode') in ['below_x','percent']
+        assert self.kwargs.get('TruncateMode') in ['below_x','percent','tolerance']
         
         if self.kwargs['Log10'] not in ['true','false']:
             raise Errors.InputError('Log10 should be string. Either \'true\' or \'false\' ')
@@ -451,12 +465,10 @@ class PlotHistogram(object):
     
     def truncate_data(self):
         if self.kwargs.get('Log10')=='false':
-#            print '1'
-            TC=TruncateData(self.data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'))
+            TC=TruncateData(self.data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'),Tolerance=self.kwargs['Tolerance'])
             return TC.data
         elif self.kwargs.get('Log10')=='true':
-#            print '2'
-            TC=TruncateData(self.log_data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'))
+            TC=TruncateData(self.log_data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'),Tolerance=self.kwargs['Tolerance'])
             return TC.data
         
     def plot1(self,variable='RSS'):
@@ -520,7 +532,7 @@ class PlotScatters(object):
         self.results_path=results_path
         #keywrod arguments
         options={'FromPickle':'false',
-                 'TruncateMode':'percent', #either 'below_x' or 'percent' for method of truncation. 
+                 'TruncateMode':'tolerance', #either 'below_x' or 'percent' for method of truncation. 
                  'Log10':'false',
                  'X':100,           #if below_x: this is the X boundary. If percent: this is the percent of data to keep
                  'AxisSize':15,
@@ -535,13 +547,14 @@ class PlotScatters(object):
                  'Show':'false',
                  'ColourMap':'jet_r',
                  'ResultsDirectory':None,
+                 'Tolerance':0.001,
                  
                      }
         for i in kwargs.keys():
             assert i in options.keys(),'{} is not a keyword argument for TruncateData'.format(i)
         options.update( kwargs)  
         self.kwargs=options
-        assert self.kwargs.get('TruncateMode') in ['below_x','percent']
+        assert self.kwargs.get('TruncateMode') in ['below_x','percent','tolerance']
         
         #Other classes
         self.PED=ParsePEData(self.results_path)
@@ -570,10 +583,10 @@ class PlotScatters(object):
         
     def truncate_data(self):
         if self.kwargs.get('Log10')=='false':
-            TC=TruncateData(self.data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'))
+            TC=TruncateData(self.data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'),Tolerance=self.kwargs['Tolerance'])
             return TC.data
-        else:
-            TC=TruncateData(self.log_data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'))
+        elif self.kwargs.get('Log10')=='true':
+            TC=TruncateData(self.log_data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'),Tolerance=self.kwargs['Tolerance'])
             return TC.data
             
     def plot1_scatter(self,x_specie,y_specie,data):
@@ -652,7 +665,7 @@ class PlotHexMap(object):
         self.results_path=results_path
         #keywrod arguments
         options={'FromPickle':'false',
-                 'TruncateMode':'percent', #either 'below_x' or 'percent' for method of truncation. 
+                 'TruncateMode':'tolerance', #either 'below_x' or 'percent' for method of truncation. 
                  'Log10':'false',
                  'GridSize':25,
                  'X':100,           #if below_x: this is the X boundary. If percent: this is the percent of data to keep
@@ -671,13 +684,14 @@ class PlotHexMap(object):
                  'Marginals':'false',
                  'ColourMap':'jet_r',
                  'ResultsDirectory':None,
+                 'Tolerance':0.001
                  
                      }
         for i in kwargs.keys():
             assert i in options.keys(),'{} is not a keyword argument for PlotHexMap'.format(i)
         options.update( kwargs)  
         self.kwargs=options
-        assert self.kwargs.get('TruncateMode') in ['below_x','percent']
+        assert self.kwargs.get('TruncateMode') in ['below_x','percent','tolerance']
         if self.kwargs['Mode'] not in ['counts','RSS']:
             raise Errors.InputError('{} not in {}'.format(self.kwargs['Mode'],['counts','RSS']))        
         
@@ -718,10 +732,10 @@ class PlotHexMap(object):
         
     def truncate_data(self):
         if self.kwargs.get('Log10')=='false':
-            TC=TruncateData(self.data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'))
+            TC=TruncateData(self.data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'),Tolerance=self.kwargs['Tolerance'])
             return TC.data
-        else:
-            TC=TruncateData(self.log_data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'))
+        elif self.kwargs.get('Log10')=='true':
+            TC=TruncateData(self.log_data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'),Tolerance=self.kwargs['Tolerance'])
             return TC.data
             
     def plot1_hex(self,x_specie,y_specie,data):
@@ -863,7 +877,7 @@ class PlotBoxplot(object):
         self.results_path=results_path
         #keywrod arguments
         options={#parse data options
-                 'TruncateMode':'percent', #either 'below_x' or 'percent' for method of truncation. 
+                 'TruncateMode':'tolerance', #either 'below_x' or 'percent' for method of truncation. 
                  'Log10':'true',
                  'parse_mode':'folder',
                  'FromPickle':'true',
@@ -883,13 +897,13 @@ class PlotBoxplot(object):
                  #boxplot specific options
                  'NumPerPlot':None,
                  'ResultsDirectory':None,
-                 
+                 'Tolerance':None,
                      }
         for i in kwargs.keys():
             assert i in options.keys(),'{} is not a keyword argument for TruncateData'.format(i)
         options.update( kwargs)  
         self.kwargs=options
-        assert self.kwargs.get('TruncateMode') in ['below_x','percent']
+        assert self.kwargs.get('TruncateMode') in ['below_x','percent','tolerance']
         
         if self.kwargs.get('CustomTitle')!=None:
             assert isinstance(self.kwargs.get('CustomTitle'),str)
@@ -918,10 +932,10 @@ class PlotBoxplot(object):
         
     def truncate_data(self):
         if self.kwargs.get('Log10')=='false':
-            TC=TruncateData(self.data,mode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'))
+            TC=TruncateData(self.data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'),Tolerance=self.kwargs['Tolerance'])
             return TC.data
         elif self.kwargs.get('Log10')=='true':
-            TC=TruncateData(self.log_data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'))
+            TC=TruncateData(self.log_data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'),Tolerance=self.kwargs['Tolerance'])
             return TC.data
             
     def divide_data(self):
@@ -995,7 +1009,7 @@ class PlotHeatMap():
         #keywrod arguments
         options={#parse data options
                  'FromPickle':'false',
-                 'TruncateMode':'below_x', #either 'below_x' or 'percent' for method of truncation. 
+                 'TruncateMode':'tolerance', #either 'below_x' or 'percent' for method of truncation. 
                  'Log10':'true',
                  'parse_mode':'folder',
                  #truncate data options
@@ -1013,13 +1027,14 @@ class PlotHeatMap():
                  #boxplot specific options
                  'sym':'true',
                  'grid':'true',
+                 'Tolerance':0.001,
                  
                      }
         for i in kwargs.keys():
             assert i in options.keys(),'{} is not a keyword argument for TruncateData'.format(i)
         options.update( kwargs)  
         self.kwargs=options
-        assert self.kwargs.get('TruncateMode') in ['below_x','percent']
+        assert self.kwargs.get('TruncateMode') in ['below_x','percent','tolerance']
         
         #Other classes
         self.PED=ParsePEData(self.copasi_file,self.results_path,
@@ -1050,10 +1065,10 @@ class PlotHeatMap():
         
     def truncate_data(self):
         if self.kwargs.get('Log10')=='false':
-            TC=TruncateData(self.data,mode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'))
+            TC=TruncateData(self.data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'),Tolerance=self.kwargs['Tolerance'])
             return TC.data
         elif self.kwargs.get('Log10')=='true':
-            TC=TruncateData(self.log_data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'))
+            TC=TruncateData(self.log_data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'),Tolerance=self.kwargs['Tolerance'])
             return TC.data
             
     def divide_data(self):
@@ -1128,7 +1143,7 @@ class EvaluateOptimizationPerformance(object):
         self.results_path=results_path
         #keywrod arguments
         options={#parse data options
-                 'TruncateMode':'percent', #either 'below_x' or 'percent' for method of truncation. 
+                 'TruncateMode':'tolerance', #either 'below_x' or 'percent' for method of truncation. 
                  'Log10':'true',
                  #truncate data options
                  'X':100,           #if below_x: this is the X boundary. If percent: this is the percent of data to keep
@@ -1144,16 +1159,18 @@ class EvaluateOptimizationPerformance(object):
                  'ExtraTitle':None,
                  'CustomTitle':None,
                  'ResultsDirectory':None,
-                 'Tolerance':0.0001}
+                 'Tolerance':0.001}
         for i in kwargs.keys():
             assert i in options.keys(),'{} is not a keyword argument for TruncateData'.format(i)
         options.update( kwargs)  
         self.kwargs=options
-        assert self.kwargs.get('TruncateMode') in ['below_x','percent']
+        assert self.kwargs.get('TruncateMode') in ['below_x','percent','tolerance']
         
         
         #Other classes
         self.PED=ParsePEData(self.results_path)
+#        self.tolerance_index
+        self.data=self.truncate_data()
         
         #create a directory and change to it
         if self.kwargs['ResultsDirectory']==None:
@@ -1170,21 +1187,24 @@ class EvaluateOptimizationPerformance(object):
         
         self.plot_rss()
         os.chdir(os.path.dirname(self.results_path))
+        
+    def truncate_data(self):
+        if self.kwargs.get('Log10')=='false':
+            TC=TruncateData(self.PED.data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'),Tolerance=self.kwargs['Tolerance'])
+            return TC.data
+        elif self.kwargs.get('Log10')=='true':
+            TC=TruncateData(self.PED.log_data,TruncateMode=self.kwargs.get('TruncateMode'),X=self.kwargs.get('X'),Tolerance=self.kwargs['Tolerance'])
+            return TC.data
                              
     def plot_rss(self):
-
-        if self.kwargs.get('Log10')=='true':
-            data=TruncateData(self.PED.log_data,TruncateMode=self.kwargs['TruncateMode'],X=self.kwargs['X']).data
-            rss=data['RSS']
-            iterations=numpy.log10(range(len(rss)))
-        else:
-            data=TruncateData(self.PED.data,TruncateMode=self.kwargs['TruncateMode'],X=self.kwargs['X']).data
-            rss= data['RSS']
-            iterations=range(len(rss))
-
+        '''
+        
+        '''
+        iterations=numpy.log10(range(self.data.shape[0]))
+        rss=self.data['RSS']
             
         plt.figure()
-        plt.plot(iterations,rss)
+        plt.plot(iterations,rss,'ro')
         
         #pretty stuff
         ax=plt.subplot(1,1,1)
@@ -1226,17 +1246,18 @@ class EvaluateOptimizationPerformance(object):
         if self.kwargs.get('Show')=='true':
             plt.show()
             
-    def calculate_tolerance(self):
-        '''
-        
-        '''
-        LOG.debug('calculating tolerance')
-        data=self.PED.data
-        RSS_diff= data['RSS'].diff()
-        idx=RSS_diff[RSS_diff<self.kwargs['Tolerance']]
-        idx= list(idx.index)
-        plt.figure()
-        plt.plot(data.iloc[idx]['RSS'],'ro')
+#    def calculate_tolerance(self):
+#        '''
+#        Get data indices where RSS[i+1] - RSS[i] < Tolerance
+#        '''
+#        LOG.debug('calculating tolerance')
+#        data=self.PED.data
+#        RSS_diff= data['RSS'].diff()
+#        idx=RSS_diff[RSS_diff<self.kwargs['Tolerance']]
+#        idx= list(idx.index)
+#        return idx
+#        plt.figure()
+#        plt.plot(data.iloc[idx]['RSS'],'ro')
 
 #==============================================================================
 
@@ -1908,8 +1929,11 @@ class ModelSelection():
 if __name__=='__main__':
 
     f=r'D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\05_May\ModelSelectionProject\WithEV_v2\Fit2\MultiFit\SimpleModelTGFb_TGFQFT_EV\Fit2Results'
-    EV=EvaluateOptimizationPerformance(f,Log10='false')
-    EV.calculate_tolerance()
+    EV=EvaluateOptimizationPerformance(f,Log10='true',Tolerance=0.0001)
+#    PlotHistogram(f,Log10='true',Tolerance=0.1)
+#    PED=ParsePEData(f)
+#    T=TruncateData(PED.data,TruncateMode='tolerance')
+#    print T.data
 #    dire=r'D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV'
 #    MMF=pycopi.MultiModelFit(project_config=dire,outdir='MultiExperimentFit',
 #                      NumberOfPEs=10,
