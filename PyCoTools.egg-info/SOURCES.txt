@@ -4,6 +4,7 @@ PyCoTools/Misc.py
 PyCoTools/PEAnalysis.py
 PyCoTools/ReadMe.md
 PyCoTools/__init__.py
+PyCoTools/logging_config.conf
 PyCoTools/pycopi.py
 PyCoTools/pydentify2.py
 PyCoTools.egg-info/PKG-INFO

@@ -80,11 +80,11 @@ class ParsePEData():
     def __init__(self,results_path,UsePickle='false',OverwritePickle='true',
                  RemoveInfiniteRSS='false',PicklePath=None):
         #input argument variables
+        
         self.results_path=results_path #either file or folder
         self.RemoveInfiniteRSS=RemoveInfiniteRSS
-        #assertions
-#        assert os.path.isfile(self.copasi_file),'{} is not a real file'.format(self.copasi_file)
         #change directory
+        LOG.info('Parsing data from {} into python'.format(self.results_path))
         assert os.path.exists(self.results_path),'{} does not exist'.format(self.results_path)
         self.cwd=os.path.dirname(self.results_path)
         os.chdir(self.cwd)
@@ -1144,8 +1144,7 @@ class EvaluateOptimizationPerformance(object):
                  'ExtraTitle':None,
                  'CustomTitle':None,
                  'ResultsDirectory':None,
-                 
-                     }
+                 'Tolerance':0.0001}
         for i in kwargs.keys():
             assert i in options.keys(),'{} is not a keyword argument for TruncateData'.format(i)
         options.update( kwargs)  
@@ -1226,6 +1225,18 @@ class EvaluateOptimizationPerformance(object):
                 plt.savefig('RSSVsITerations'+'.png',format='png',bbox_inches='tight',dpi=self.kwargs.get('DPI'))
         if self.kwargs.get('Show')=='true':
             plt.show()
+            
+    def calculate_tolerance(self):
+        '''
+        
+        '''
+        LOG.debug('calculating tolerance')
+        data=self.PED.data
+        RSS_diff= data['RSS'].diff()
+        idx=RSS_diff[RSS_diff<self.kwargs['Tolerance']]
+        idx= list(idx.index)
+        plt.figure()
+        plt.plot(data.iloc[idx]['RSS'],'ro')
 
 #==============================================================================
 
@@ -1819,21 +1830,10 @@ class ModelSelection():
         '''
         
         '''
-        LOG.info('Comparing simulated versus experimental data')
-        LOG.debug('Results Folder Dict:')
-        LOG.debug('Checking that fit_analysis_script_name exists:\t\t{}'.format(os.path.isfile(fit_analysis_script_name)))
-        LOG.debug('Setting up ipyparallel cluster with n={}'.format(self.number_models))
-        check_call('ipcluster start -n {}'.format(self.number_models))
-        rc=ipyparallel.Client()
-        LOG.debug('checking that we have {} ipython engines'.format(self.number_models))
-        if len(rc.ids)!=self.number_models:
-            LOG.warning('you have started {} ipycluster engines, one per model'.format(self.number_models))
+        LOG.debug('calling fit analysis script')
         for i in self.multi_model_fit.results_folder_dct:
             LOG.debug('\tKey :\n{}\nValue:\n{}'.format(i,self.multi_model_fit.results_folder_dct[i]))
             self.run_fit_analysis(self.multi_model_fit.results_folder_dct[i])
-            
-                    #fit_analysis_script_name,
-                    #self.multi_model_fit.results_folder_dct[i]
 
 #    @ipyparallel.dview.remote(block=True)
     def run_fit_analysis(self,results_path):
@@ -1846,7 +1846,7 @@ class ModelSelection():
 
         return check_call('python {} {}'.format(fit_analysis_script_name,results_path))
 #        
-    def call_compare_sim_vs_exp(self):
+    def compare_sim_vs_exp(self):
         '''
         
         '''
@@ -1906,7 +1906,10 @@ class ModelSelection():
         
         
 if __name__=='__main__':
-    pass
+
+    f=r'D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\05_May\ModelSelectionProject\WithEV_v2\Fit2\MultiFit\SimpleModelTGFb_TGFQFT_EV\Fit2Results'
+    EV=EvaluateOptimizationPerformance(f,Log10='false')
+    EV.calculate_tolerance()
 #    dire=r'D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV'
 #    MMF=pycopi.MultiModelFit(project_config=dire,outdir='MultiExperimentFit',
 #                      NumberOfPEs=10,
