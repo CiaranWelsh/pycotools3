@@ -35,6 +35,9 @@
  Time:  13:33
 
 '''
+import time
+import threading
+import Queue
 import shutil
 import numpy 
 import pandas
@@ -4287,15 +4290,15 @@ class RunMultiplePEs():
         Remember scan needs iterating over because each file needs an unique report
         name
         '''
-        import threading
-        import Queue
+
         q=Queue.Queue()
         for num in range(self.kwargs['CopyNumber']):
-            LOG.info('setting up scan for model number {}'.format(num))
+            LOG.info('setting up scan for model : {}'.format(self.sub_copasi_files[num]))
             t=threading.Thread(target=self._setup1scan,
                                args =  (q,self.sub_copasi_files[num] , self.report_files[num])  )
             t.daemon=True
             t.start()
+            time.sleep(0.1)
             
         s=q.get()
         LOG.info(str(s))
@@ -4307,7 +4310,6 @@ class RunMultiplePEs():
         
         '''
 #        LOG.info('setting up scan for model number {}'.format(num))
-        import time
         start=time.time()
         q.put(Scan(cps,
              ScanType='repeat', #set up repeat item under scan. 
