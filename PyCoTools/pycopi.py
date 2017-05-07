@@ -4267,8 +4267,10 @@ class RunMultiplePEs():
         Remember scan needs iterating over because each file needs an unique report
         name
         '''
+        import time
         for num in range(self.kwargs['CopyNumber']):
             LOG.info('setting up scan for model number {}'.format(num))
+            start=time.time()
             Scan(self.sub_copasi_files[num],
                  ScanType='repeat', #set up repeat item under scan. 
                  NumberOfSteps=self.kwargs['NumberOfPEs'], #Run the parameter estimation task 3 times
@@ -4276,6 +4278,7 @@ class RunMultiplePEs():
                  ReportType='parameter_estimation', ## report automatically set up within copasi. 
                  ReportName=self.report_files[num],
                  Run='false') #run the scan task automatically in the background
+            LOG.info('Setup Took {} seconds'.format(time.time() - start))
             
     ##void
     def _create_defaults(self):
