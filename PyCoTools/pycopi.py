@@ -4219,8 +4219,8 @@ class RunMultiplePEs():
         self.sub_copasi_files=self.copy_copasi()
         self._setup_scan()
     
-        if os.path.isfile(self.config_filename)!=True:
-            self.PE.write_item_template()
+#        if os.path.isfile(self.config_filename)!=True:
+#            self.PE.write_item_template()
 #        LOG.debug('calling the set_up method of the ParameterEstimation class')
  
     def run(self):
@@ -4255,10 +4255,7 @@ class RunMultiplePEs():
         self.PE.write_item_template()
         
         
-    
-        
-    ##void    
-    def _setup_scan(self):
+    def _setup_scan2(self):
         '''
         Set up n repeat items with NumberOfSteps repeats of parameter estimation
         Set run to false as we want to use the multiprocess mode of the Run class
@@ -4278,8 +4275,50 @@ class RunMultiplePEs():
                  ReportType='parameter_estimation', ## report automatically set up within copasi. 
                  ReportName=self.report_files[num],
                  Run='false') #run the scan task automatically in the background
-            LOG.info('Setup Took {} seconds'.format(time.time() - start))
+            LOG.info('Setup Took {} seconds'.format(time.time() - start))    
+        
+    ##void    
+    def _setup_scan(self):
+        '''
+        Set up n repeat items with NumberOfSteps repeats of parameter estimation
+        Set run to false as we want to use the multiprocess mode of the Run class
+        to process all m files at once in CopasiSE
+        
+        Remember scan needs iterating over because each file needs an unique report
+        name
+        '''
+        import threading
+        import Queue
+        q=Queue.Queue()
+        for num in range(self.kwargs['CopyNumber']):
+            LOG.info('setting up scan for model number {}'.format(num))
+            t=threading.Thread(target=self._setup1scan,
+                               args =  (q,self.sub_copasi_files[num] , self.report_files[num])  )
+            t.daemon=True
+            t.start()
             
+        s=q.get()
+        LOG.info(str(s))
+
+            
+    ## void
+    def _setup1scan(self,q,cps,report):
+        '''
+        
+        '''
+#        LOG.info('setting up scan for model number {}'.format(num))
+        import time
+        start=time.time()
+        q.put(Scan(cps,
+             ScanType='repeat', #set up repeat item under scan. 
+             NumberOfSteps=self.kwargs['NumberOfPEs'], #Run the parameter estimation task 3 times
+             SubTask='parameter_estimation', #this is the default, but included here for demonstration anyway
+             ReportType='parameter_estimation', ## report automatically set up within copasi. 
+             ReportName=report,
+             Run='false') )#run the scan task automatically in the background
+        LOG.info('Setup Took {} seconds'.format(time.time() - start))      
+        
+        
     ##void
     def _create_defaults(self):
         '''
