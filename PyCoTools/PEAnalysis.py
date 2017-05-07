@@ -57,7 +57,7 @@ import pycopi,Errors
 import re
 import seaborn as sns
 import logging
-from subprocess import check_call
+from subprocess import check_call,Popen
 #import ipyparallel
 #import math
 
@@ -1865,7 +1865,7 @@ class ModelSelection():
         fit_analysis_script_name=os.path.join(scripts_folder,'fit_analysis.py')
         LOG.debug('fit analysis script on your computer is at \t\t{}'.format(fit_analysis_script_name))
 
-        return check_call('python {} {}'.format(fit_analysis_script_name,results_path))
+        return Popen('python {} {}'.format(fit_analysis_script_name,results_path))
 #        
     def compare_sim_vs_exp(self):
         '''
@@ -1928,10 +1928,14 @@ class ModelSelection():
         
 if __name__=='__main__':
 
-    f=r'D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\05_May\ModelSelectionProject\WithEV_v2\Fit2\MultiFit\SimpleModelTGFb_TGFQFT_EV\Fit2Results'
-    EV=EvaluateOptimizationPerformance(f,Log10='true',Tolerance=0.0001)
+    f=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\05_May\ModelSelectionProject\WithEV_v2\Fit2\MultiFit\AktModelTGFb_TGFQFT_EV\AktModelTGFb_TGFQFT_EV.cps"
+    d=r'D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\05_May\ModelSelectionProject\WithEV_v2\Fit2\MultiFit\AktModelTGFb_TGFQFT_EV\Fit2Results'
+    w=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\05_May\ModelSelectionProject\WithEV_v2\Fit2\MultiFit\AktModelTGFb_TGFQFT_EV\AktModelTGFb_TGFQFT_EV_TimeCourse.txt"
+#    EV=EvaluateOptimizationPerformance(f,Log10='true',Tolerance=0.0001)
+    
 #    PlotHistogram(f,Log10='true',Tolerance=0.1)
-#    PED=ParsePEData(f)
+    PED=ParsePEData(d)
+    print PED.data.iloc[0]
 #    T=TruncateData(PED.data,TruncateMode='tolerance')
 #    print T.data
 #    dire=r'D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV'
