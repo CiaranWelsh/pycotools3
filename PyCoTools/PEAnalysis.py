@@ -48,16 +48,19 @@ import pandas
 import matplotlib.pyplot as plt
 import scipy 
 import numpy 
+import Queue
 import os
 import matplotlib
 from textwrap import wrap
 import itertools
 import unittest
+import seaborn as sns
 import pycopi,Errors
 import re
 import seaborn as sns
 import logging
 from subprocess import check_call,Popen
+import threading
 #import ipyparallel
 #import math
 
@@ -429,7 +432,7 @@ class PlotHistogram(object):
                  'Variable':None,
                  'ResultsDirectory':None,
                  'ColourMap':'plasma',
-                 'Tolerance':0.001,
+                 'Tolerance':0.0001,
                  }
         for i in kwargs.keys():
             assert i in options.keys(),'{} is not a keyword argument for TruncateData'.format(i)
@@ -547,7 +550,7 @@ class PlotScatters(object):
                  'Show':'false',
                  'ColourMap':'jet_r',
                  'ResultsDirectory':None,
-                 'Tolerance':0.001,
+                 'Tolerance':0.0001,
                  
                      }
         for i in kwargs.keys():
@@ -654,7 +657,8 @@ class PlotScatters(object):
         '''
         comb=self.get_combinations()
         for X,y in comb:
-            self.plot1_scatter(X,y,self.truncated_data)
+            self.plot1_scatter(X,y,self.truncated_data) 
+        
         return True
 
 class PlotHexMap(object):
@@ -897,7 +901,7 @@ class PlotBoxplot(object):
                  #boxplot specific options
                  'NumPerPlot':None,
                  'ResultsDirectory':None,
-                 'Tolerance':None,
+                 'Tolerance':0.001,
                      }
         for i in kwargs.keys():
             assert i in options.keys(),'{} is not a keyword argument for TruncateData'.format(i)
@@ -1351,10 +1355,11 @@ class PlotPEData(object):
                  'Xlimit':None,
                  'DPI':125,
                  'XTickRotation':35,
-                 'DotSize':4,
-                 'LegendLoc':'best',
+                 'DotSize':10,
+                 'LegendLoc':(1,0),
                  'OutputDirectory':os.path.join(os.path.dirname(self.copasi_file),'ParameterEstimationPlots'),
                  'Plot':'true',                 
+                 'Separator':'\t',
                  
                  }
                  
@@ -1423,10 +1428,12 @@ class PlotPEData(object):
         if os.path.isfile(self.PE_result_file)==False:
             raise Errors.InputError('Your PE data file {} doesn\'t exist'.format(self.PE_result_file))
         
+        if isinstance(self.kwargs['Separator'],str):
+            self.kwargs['Separator']=[self.kwargs['Separator']]
+        
         matplotlib.rcParams.update({'font.size':self.kwargs.get('AxisSize')})
         
         self.experiment_data=self.parse_experimental_files()
-#        print self.experiment_data
         self.exp_times=self.get_experiment_times()
         self.parameters=self.parse_parameters()
         self.insert_parameters()
@@ -1453,9 +1460,9 @@ class PlotPEData(object):
         
     def parse_experimental_files(self):
         df_dct={}
-        for i in self.experiment_files:
-            df=pandas.read_csv(i,sep='\t')
-            df_dct[i]=df
+        for i in range(len(self.experiment_files)):
+            df=pandas.read_csv(self.experiment_files[i],sep=self.kwargs['Separator'][i])
+            df_dct[self.experiment_files[i]]=df
         return df_dct
         
     
@@ -1466,6 +1473,7 @@ class PlotPEData(object):
             for j in self.experiment_data[i].keys():
                 if j.lower()=='time':
                     d[i]= self.experiment_data[i][j]
+                    
         times={}
         for i in d:
             times[i]={}
@@ -1531,6 +1539,7 @@ class PlotPEData(object):
         Plot one parameter of one experiment. for iterating over in 
         other functions
         '''
+        sns.set_context(context='poster',font_scale=2)
         if fle not in self.experiment_files:
             raise Errors.InputError('{} not in {}'.format(fle,self.exp_times))
         if parameter not in self.sim_data[fle].keys() and parameter not in self.experiment_data[fle].keys():
@@ -1847,7 +1856,7 @@ class ModelSelection():
             dct[round(i,3)]=self.chi2_lookup_table(i)
         return dct[0.05]
     
-    def call_fit_analysis_script(self):
+    def call_fit_analysis_script(self,Tolerance=0.001):
         '''
         
         '''
@@ -1857,7 +1866,7 @@ class ModelSelection():
             self.run_fit_analysis(self.multi_model_fit.results_folder_dct[i])
 
 #    @ipyparallel.dview.remote(block=True)
-    def run_fit_analysis(self,results_path):
+    def run_fit_analysis(self,results_path,Tolerance=0.001):
         '''
         
         '''
@@ -1865,7 +1874,7 @@ class ModelSelection():
         fit_analysis_script_name=os.path.join(scripts_folder,'fit_analysis.py')
         LOG.debug('fit analysis script on your computer is at \t\t{}'.format(fit_analysis_script_name))
 
-        return Popen('python {} {}'.format(fit_analysis_script_name,results_path))
+        return Popen('python {} {} -tol {}'.format(fit_analysis_script_name,results_path,Tolerance))
 #        
     def compare_sim_vs_exp(self):
         '''
@@ -1883,6 +1892,40 @@ class ModelSelection():
                                        )
             PE.set_up()
             PE.run()
+            
+            
+    def get_best_parameters(self,filename=None):
+        '''
+        
+        '''
+        df=pandas.DataFrame()
+        for cps, res in self.multi_model_fit.results_folder_dct.items():
+            df[os.path.split(cps)[1]]= ParsePEData(res).data.iloc[0]
+            
+        if filename==None:
+            return df
+        else:
+            df.to_excel(filename)
+            return df
+        
+        
+        
+    def compare_model_parameters(self,parameter_list,filename=None):
+        '''
+        Compare all the parameters accross multiple models 
+        in a bar chart averaging and STD for a parameter accross
+        all models. 
+        '''
+        best_parameters=self.get_best_parameters()
+        data= best_parameters.loc[parameter_list].transpose()
+        f=sns.barplot(data=numpy.log10(data))
+        f.set_xticklabels(parameter_list,rotation=90)
+        plt.legend(loc=(1,1))
+        plt.title('Barplot Comparing Parameter Estimation Results for specific\nParameters accross all models')
+        plt.ylabel('log10(parameter_value),Err=SEM')
+        if filename!=None:
+            plt.savefig(filename,dpi=200,bbox_inches='tight')
+#        plt.title
 #            PlotPEData(i,self.multi_model_fit.exp_files,
 #                       ParameterPath=self.multi_model_fit.results_folder_dct[i])
             
@@ -1927,30 +1970,59 @@ class ModelSelection():
         
         
 if __name__=='__main__':
-
-    f=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\05_May\ModelSelectionProject\WithEV_v2\Fit2\MultiFit\AktModelTGFb_TGFQFT_EV\AktModelTGFb_TGFQFT_EV.cps"
-    d=r'D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\05_May\ModelSelectionProject\WithEV_v2\Fit2\MultiFit\AktModelTGFb_TGFQFT_EV\Fit2Results'
-    w=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\05_May\ModelSelectionProject\WithEV_v2\Fit2\MultiFit\AktModelTGFb_TGFQFT_EV\AktModelTGFb_TGFQFT_EV_TimeCourse.txt"
-#    EV=EvaluateOptimizationPerformance(f,Log10='true',Tolerance=0.0001)
+    pass
+#    f=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\05_May\ModelSelectionProject\WithEV_v3\MultiFit\ERKModelTGFb_TGFQFT_EV\ERKModelTGFb_TGFQFT_EV.cps"
+#    r=r'D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\05_May\ModelSelectionProject\WithEV_v3\MultiFit\ERKModelTGFb_TGFQFT_EV\Fit1Results'
+#    class FilePaths():
+#        def __init__(self):
+#            self.dire=r'/home/b3053674/Documents/Models/MinimalTGFbetaModel'
+#            self.copasi_file=os.path.join(self.dire,'M2.1.cps')
+#            self.data_file=os.path.join(self.dire,'FittingData.csv')
+#            self.PE_results_file=os.path.join(self.dire,'M2.1_PE_results.txt')
+#        
+#    F=FilePaths()
+#    PlotPEData(F.copasi_file,F.data_file,F.PE_results_file,
+#               Separator=',')
     
-#    PlotHistogram(f,Log10='true',Tolerance=0.1)
-    PED=ParsePEData(d)
-    print PED.data.iloc[0]
-#    T=TruncateData(PED.data,TruncateMode='tolerance')
-#    print T.data
-#    dire=r'D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV'
-#    MMF=pycopi.MultiModelFit(project_config=dire,outdir='MultiExperimentFit',
-#                      NumberOfPEs=10,
-#                      CopyNumber=1,
-#                      PopulationSize=125,
-#                      ReportName='Fit1.1.txt')
-#    MS=ModelSelection(MMF)
-##
-#
-#    f=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV\MultiExperimentFit\AktModelTGFb_TGFQFT_EV\AktModelTGFb_TGFQFT_EV.cps"
-#    d=r"D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV\MultiExperimentFit\AktModelTGFb_TGFQFT_EV\MultiplePEResults"
-#    
-#    MS.call_compare_sim_vs_exp()
+#    PlotScatters(r)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
 
 
 

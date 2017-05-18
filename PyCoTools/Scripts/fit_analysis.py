@@ -42,7 +42,7 @@ parser.add_argument('-n','--NumPerPlot',help='Number of bars per plot',type=int)
 parser.add_argument('-g','--GridSize',help='size of hex grids',type=int,default=25)
 parser.add_argument('-fs','--FontSize',help='size of font',type=int,default=22)
 parser.add_argument('-as','--AxisSize',help='size of axes labels',type=int,default=18)
-
+parser.add_argument('-tol','-tolerance',help='Tolerance parameter',type=float,default=0.01)
 
 args=parser.parse_args()
 #===============================================================================
@@ -50,7 +50,7 @@ PD=P.PEAnalysis.ParsePEData(args.path)
 print 'Number of PE Runs: {}'.format(PD.data.shape[0])
 
 if args.TruncateMode==None:
-    args.TruncateMode='percent'
+    args.TruncateMode='tolerance'
     
 if args.x==None:
     args.x=100
@@ -81,22 +81,68 @@ for i in['OptimizationPerformance','Histograms','Scatters','BoxPlots','HexMapRSS
 
 
 print args
-P.PEAnalysis.EvaluateOptimizationPerformance(args.path,SaveFig='true',Log10=args.Log10,ResultsDirectory=l[0],FontSize=args.FontSize,AxisSize=args.AxisSize)
-P.PEAnalysis.PlotHistogram(args.path,SaveFig='true',TruncateMode=args.TruncateMode,X=args.x,Bins=args.Bins,Log10=args.Log10,ResultsDirectory=l[1],
-                            FontSize=args.FontSize,AxisSize=args.AxisSize)
-P.PEAnalysis.PlotScatters(args.path,SaveFig='true',Log10=args.Log10,TruncateMode=args.TruncateMode,X=args.x,ResultsDirectory=l[2],
-                            FontSize=args.FontSize,AxisSize=args.AxisSize)
-P.PEAnalysis.PlotBoxplot(args.path,SaveFig='true',TruncateMode=args.TruncateMode,X=args.x,NumPerPlot=args.NumPerPlot,ResultsDirectory=l[3],Log10='true',
-                               FontSize=args.FontSize,AxisSize=args.AxisSize)
-P.PEAnalysis.PlotHexMap(args.path,SaveFig='true',
-                        TruncateMode=args.TruncateMode,X=args.x,Mode='RSS',
-                        ResultsDirectory=l[4],Log10='true',
+P.PEAnalysis.EvaluateOptimizationPerformance(args.path,
+                                             SaveFig='true',
+                                             Log10=args.Log10,
+                                             ResultsDirectory=l[0],
+                                             FontSize=args.FontSize,
+                                             AxisSize=args.AxisSize,
+                                             Tolerance=args.tol)
+
+P.PEAnalysis.PlotHistogram(args.path,SaveFig='true',
+                           Tolerance=args.tol,
+                           TruncateMode=args.TruncateMode,
+                           X=args.x,
+                           Bins=args.Bins,
+                           Log10=args.Log10,
+                           ResultsDirectory=l[1],
+                           FontSize=args.FontSize,
+                           AxisSize=args.AxisSize)
+
+P.PEAnalysis.PlotScatters(args.path,
+                          SaveFig='true',
+                          Log10=args.Log10,
+                          TruncateMode=args.TruncateMode,
+                          X=args.x,ResultsDirectory=l[2],
+                          FontSize=args.FontSize,
+                          AxisSize=args.AxisSize,
+                          Tolerance=args.tol)
+
+P.PEAnalysis.PlotBoxplot(args.path,
+                         SaveFig='true',
+                         TruncateMode=args.TruncateMode,
+                         X=args.x,
+                         NumPerPlot=args.NumPerPlot,
+                         ResultsDirectory=l[3],
+                         Log10='true',
+                         FontSize=args.FontSize,
+                         AxisSize=args.AxisSize,
+                         Tolernce=args.tol)
+
+P.PEAnalysis.PlotHexMap(args.path,
+                        SaveFig='true',
+                        TruncateMode=args.TruncateMode,
+                        X=args.x,
+                        Mode='RSS',
+                        ResultsDirectory=l[4],
+                        Log10='true',
                         GridSize=args.GridSize,
-                        FontSize=args.FontSize,AxisSize=args.AxisSize)
-P.PEAnalysis.PlotHexMap(args.path,SaveFig='true',
-                        TruncateMode=args.TruncateMode,X=args.x,Mode='counts',
-                        ResultsDirectory=l[5],Log10='true',GridSize=args.GridSize,
-                        FontSize=args.FontSize,AxisSize=args.AxisSize)
+                        FontSize=args.FontSize,
+                        AxisSize=args.AxisSize,
+                        Tolerance=args.tol)
+
+
+P.PEAnalysis.PlotHexMap(args.path,
+                        SaveFig='true',
+                        TruncateMode=args.TruncateMode,
+                        X=args.x,
+                        Mode='counts',
+                        ResultsDirectory=l[5],
+                        Log10='true',
+                        GridSize=args.GridSize,
+                        FontSize=args.FontSize,
+                        AxisSize=args.AxisSize,
+                        Tolerance=args.tol)
 
 
 for i in l:

@@ -12138,3 +12138,16 @@ D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\05_May\ModelSel
 Value:
 D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\05_May\ModelSelectionProject\WithEVFit2.cluster\Fit2MultiFit\FullModelTGFb_TGFQFT_EV\Fit2Results
 DEBUG:PyCoTools.PEAnalysis:PEAnalysis:1845:fit analysis script on your computer is at 		D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\Scripts\fit_analysis.py
+INFO:root:__init__:18:Initializing PyCoTools
+INFO:root:__init__:19:Initializing Logging System
+INFO:root:__init__:20:logging config file at: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\logging_config.conf
+INFO:__main__:PEAnalysis:89:Parsing data from D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\05_May\ModelSelectionProject\WithEV_v3\MultiFit\ERKModelTGFb_TGFQFT_EV\Fit1Results into python
+DEBUG:__main__:PEAnalysis:348:calculating tolerance
+INFO:root:__init__:18:Initializing PyCoTools
+INFO:root:__init__:19:Initializing Logging System
+INFO:root:__init__:20:logging config file at: D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\logging_config.conf
+INFO:__main__:PEAnalysis:89:Parsing data from D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\05_May\ModelSelectionProject\WithEV_v3\MultiFit\ERKModelTGFb_TGFQFT_EV\Fit1Results into python
+DEBUG:__main__:PEAnalysis:348:calculating tolerance
+INFO:root:__init__:18:Initializing PyCoTools
+INFO:root:__init__:19:Initializing Logging System
+INFO:root:__init__:20:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
