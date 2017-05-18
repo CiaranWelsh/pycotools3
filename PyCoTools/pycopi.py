@@ -2486,8 +2486,8 @@ class ParameterEstimation():
                  'Xlimit':None,
                  'DPI':125,
                  'XTickRotation':35,
-                 'DotSize':4,
-                 'LegendLoc':'best',
+                 'DotSize':10,
+                 'LegendLoc':(1,0),
                  }
                      
         #values need to be lower case for copasiML
