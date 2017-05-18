@@ -4366,6 +4366,8 @@ class RunMultiplePEs():
         if isinstance(self.kwargs['NumberOfPEs'],int)!=True:
             raise Errors.InputError('NumberOfPEs argument is of type int')    
             
+        if self.kwargs['OutputDir']==None:
+            self.kwargs['OutputDir']='MultipleParameterEsimationAnalysis'
         self.kwargs['OutputDir']=os.path.abspath(self.kwargs['OutputDir'])
             
     
@@ -4670,28 +4672,24 @@ class MultiModelFit():
         
             
 if __name__=='__main__':
-    pass
-#    class FilePaths():
-#        def __init__(self):
-#            self.dire=r'/home/b3053674/Documents/Models/MinimalTGFbetaModel'
-#            self.copasi_file=os.path.join(self.dire,'M2.1.cps')
-#            self.data_file=os.path.join(self.dire,'FittingData.csv')
-#        
-#    F=FilePaths()
-#    
-#    PE=ParameterEstimation(F.copasi_file,F.data_file,
-#                                         Method='CurrentSolutionStatistics',
-#                                         RandomizeStartValues='false',
-#                                         Plot='true',
-#                                         SaveFig='true',
-#                                         Separator=[','])
-#    
-#    PE.set_up()
-#    PE.run() 
-#
-
-
-
+    class FilePaths():
+        def __init__(self):
+            self.dire=r'/home/b3053674/Documents/Models/MinimalTGFbetaModel'
+            self.copasi_file=os.path.join(self.dire,'M2.1.cps')
+            self.data_file=os.path.join(self.dire,'FittingData.csv')
+            self.pSmad3_data_file=os.path.join(self.dire,'pSmad3data.csv')
+        
+    F=FilePaths()
+    #
+    config=r'M2.1.ConfigFile.xlsx'
+    
+    RMPE=RunMultiplePEs(F.copasi_file,F.data_file,#,F.pSmad3_data_file],
+    #                                     Method='ParticleSwarm',
+    #                                     IterationLimit=3000,
+    #                                     SwarmSize=150,
+    #                                     CopyNumber=4,
+    #                                     NumberOfPEs=10,
+                                         )
 
 
 
