@@ -1455,6 +1455,10 @@ class ExperimentMapper():
                             cn=loc[obs[i]['cn']]+',Reference=Value'
                             dependent_locs={'type': 'cn', 'name': 'Object CN', 'value':cn}
                             etree.SubElement(map_group,'Parameter',attrib=dependent_locs)
+                            
+                        elif obs[i] not in loc.keys() + glob.keys() + ICs.keys():
+                            LOG.info('{}not in model and has not been mapped. Please check spelling and try again'.format(obs[i]))
+
                         else:
                             raise Errors.ExperimentMappingError('''\'{}\' mapping error. In the copasi GUI its possible to have same name for two species provided they are in different compartments. In this API, having non-unique species identifiers leads to errors in mapping experimental to model variables'''.format(obs[i]))
                         etree.SubElement(map_group,'Parameter',attrib=DepentantVariableRole)
@@ -2411,7 +2415,7 @@ class ParameterEstimation():
         
         default_report_name=os.path.join(os.path.dirname(self.copasi_file),
                                          os.path.split(self.copasi_file)[1][:-4]+'_PE_results.txt')
-        config_file= os.path.join(os.path.dirname(self.copasi_file),'parameter_estimation_config.xlsx')
+        config_file= os.path.join(os.path.dirname(self.copasi_file),'PEConfigFile.xlsx')
         default_outputML=os.path.join(os.path.dirname(self.copasi_file),'_Duplicate.cps')
         options={#report variables
                  'Metabolites':self.GMQ.get_metabolites().keys(),
@@ -2704,6 +2708,7 @@ class ParameterEstimation():
         self.PlotPEDataKwargs['DotSize']=self.kwargs.get('DotSize')
         self.PlotPEDataKwargs['LegendLoc']=self.kwargs.get('LegendLoc')
         self.PlotPEDataKwargs['PruneHeaders']=self.kwargs.get('PruneHeaders')
+        self.PlotPEDataKwargs['Separator']=self.kwargs.get('Separator')
         
             
         
@@ -4389,11 +4394,7 @@ class RunMultiplePEs():
         '''
         
         '''
-#        self.report_dir,self.report_file_root=os.path.split(self.kwargs['ReportName'])
-        
-#        self.output_dir=os.path.join(os.path.dirname(self.copasi_file),'MultiplePEResults')
-        
-        LOG.info('creating a directory for analysis: \n\n{}'.format(self.kwargs['OutputDir']))
+        LOG.info('creating a directory for analysis in : \n\n{}'.format(self.kwargs['OutputDir']))
         if os.path.isdir(self.kwargs['OutputDir'])!=True:
             os.mkdir(self.kwargs['OutputDir'])
                 
@@ -4406,12 +4407,9 @@ class RunMultiplePEs():
         Returns:
             dct['model_copy_number]=enumerated_report_name
         '''
-        LOG.info('Enumerating the PE report files')
+        LOG.debug('Enumerating PE report files')
         dct={}
         dire,fle=os.path.split(self.kwargs['ReportName'])
-#        self.output_dir=os.path.join(dire,'MultiplePEResults')
-#        if os.path.isdir(self.output_dir)!=True:
-#            os.mkdir(self.output_dir)
         for i in range(self.kwargs['CopyNumber']):
             new_file=os.path.join(self.kwargs['OutputDir'],
                                   fle[:-4]+'{}.txt'.format(str(i)))
@@ -4466,7 +4464,7 @@ class MultiModelFit():
                  'Seed':0,
                  'Pf':0.475,
                  'IterationLimit':50,
-                 'Tolerance':0.00001,
+                 'Tolerance':0.0001,
                  'Rho':0.2,
                  'Scale':10,
                  'SwarmSize':50,
@@ -4673,29 +4671,24 @@ class MultiModelFit():
             
 if __name__=='__main__':
     pass
-#    dire=r'D:\MPhil\Model_Building\Models\For_Other_People\Phils_model\2017\04_April\TSCproject_CW\PhilMultiFit\WithEV'
-#    MMF=MultiModelFit(project_config=dire,outdir='MultiExperimentFit',
-#                      NumberOfPEs=2,
-#                      CopyNumber=1,
-#                      SwarmSize=100,
-#                      NumberOfIterations=3000,
-#                      ReportName='Fit1PS.8.txt',
-#                      Append='true',
-#                      Method='ParticleSwarm',
-#                      Run='SGE'
-#                      )
-##        
-###    MMP.write_config_template()
-##    
-##    
-#    MMF.set_up()
-##    
-##    
-#    MMF.run()
-
+#    class FilePaths():
+#        def __init__(self):
+#            self.dire=r'/home/b3053674/Documents/Models/MinimalTGFbetaModel'
+#            self.copasi_file=os.path.join(self.dire,'M2.1.cps')
+#            self.data_file=os.path.join(self.dire,'FittingData.csv')
+#        
+#    F=FilePaths()
 #    
-
-
+#    PE=ParameterEstimation(F.copasi_file,F.data_file,
+#                                         Method='CurrentSolutionStatistics',
+#                                         RandomizeStartValues='false',
+#                                         Plot='true',
+#                                         SaveFig='true',
+#                                         Separator=[','])
+#    
+#    PE.set_up()
+#    PE.run() 
+#
 
 
 
