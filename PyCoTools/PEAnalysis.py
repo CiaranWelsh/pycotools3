@@ -121,7 +121,7 @@ class ParsePEData():
             raise Errors.InputError('DataFrame is empty. Your PE data has not been read.')
         self.data=self.rename_RSS(self.data)
         self.data=self.sort_data(self.data)
-#        self.data=self.prune_headers()
+        self.data=self.data.dropna()
         self.data=self.filter_constants(self.data)
         self.data=self.remove_infinite_RSS()
         self.data=pycopi.PruneCopasiHeaders(self.data).prune()
