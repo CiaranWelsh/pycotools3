@@ -4715,8 +4715,8 @@ if __name__=='__main__':
 #        plt.plot(TC.data['Time'],TC.data[i])
 #        
         
-#    PlotPEData(F.copasi_file,[F.data_file,F.pSmad3_data_file],
-#               F.parameter_file,Plot='true')
+    PEAnalysis.PlotPEData(F.copasi_file,[F.data_file,F.pSmad3_data_file],
+               F.parameter_file,Plot='true')
     
 
 
