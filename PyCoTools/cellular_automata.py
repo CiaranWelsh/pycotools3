@@ -19,50 +19,7 @@ LOG=logging.getLogger(__name__)
 
 
 
-class State(object):
-    '''
-    A cell can be in a state which is defined using this class
-    
-    args:
-        label:
-            symbolic representation of a state
-    '''
-    def __init__(self,label,rule=None):
-        self.label=self.set_label(label)
-        self.rule=rule
-    
-    def __repr__(self):
-        return str(self.label)
-    
-    def set_label(self,label):
-        self.label=label
-        return self.label
-    
-    def get_label(self):
-        return self.label
-    
-    def set_rule(self,rule):
-        if isinstance(rule,Rule)!=True:
-            raise TypeError('{} is not of type Rule'.format(rule))
-        self.rule=rule
-        return rule
-    
-    def get_rule(self):
-        return self.rule
-    
-class ZerothOrderReaction(object):
-    def __init__(self,A):
-        self.A=A
-    
-    
-class FirstOrderReaction(object):
-    def __init__(self):
-        pass
-    
-    
-class SecondOrderReaction(object):
-    def __init__(self):
-        pass
+
     
     
     
@@ -177,7 +134,7 @@ class Cell(object):
     def get_num_dimensions(self):
         boolean= [isinstance(i,int) for i in [self.x,self.y,self.z]]
         if boolean ==[False,False,False]:
-            raise Errors.InputError('Need to specific at least an x dimension')            
+            raise Errors.InputError('Need to specifiy at least an x dimension')            
         elif boolean == [True,False,False]:
             return 1
         elif boolean == [True,True,False]:
@@ -246,8 +203,11 @@ class Cell(object):
     def get_state(self):
         return self.state
     
-    def __repr__(self):
+    def __str__(self):
         return str('Cell({},{})'.format(self.coordinates,self.state))
+    
+    def __repr__(self):
+        return __str__
 
     def __getitem__(self,idx):
         return self.coordinates[idx]
@@ -307,6 +267,9 @@ class Lattice(object):
         self.cells=self.create()
         self.filter_cell_neighbours()
         
+#    def items(self):
+#        return zip()
+        
         
     def filter_cell_neighbours(self):
         '''
@@ -354,8 +317,6 @@ class Lattice(object):
             raise Exception('Something is wrong (I like to be helpful)')
         
             
-        
-        
     def __iter__(self):
         for i in self.cells:
             yield i
@@ -369,8 +330,9 @@ class Lattice(object):
     def __repr__(self):
         return str(self.cells)
     
-    def update_cell(self,cell,value):
-        self.cells[cell]=value
+    def update_cell(self,index,new_state):
+        self.cells[index]=new_state
+                  
         
     
     def create(self):
@@ -403,23 +365,99 @@ class Lattice(object):
                         cell=Cell('Empty',x=i,y=j,z=k)
                         cells[cell.coordinates]=cell
             return cells
+
+class State(object):
+    '''
+    A cell can be in a state which is defined using this class
+    
+    args:
+        label:
+            symbolic representation of a state
+    '''
+    def __init__(self,label,rule=None):
+        self.label=self.set_label(label)
+        self.rule=rule
+    
+    def __repr__(self):
+        return str('State(\'{}\')'.format(self.label))
+    
+    def set_label(self,label):
+        self.label=label
+        return self.label
+    
+    def get_label(self):
+        return self.label
+    
+#    def set_rule(self,rule):
+#        if isinstance(rule,Rule)!=True:
+#            raise TypeError('{} is not of type Rule'.format(rule))
+#        self.rule=rule
+#        return rule
+#    
+#    def get_rule(self):
+#        return self.rule
+
+class ZerothOrderReaction(object):
+    '''
+    This basically sets a cell to a constant state
+    '''
+    def __init__(self,state,index):
+        self.state=state
+        self.index=index
+        self.do_checks()
+#        self.create_state()
+        
+        
+    def do_checks(self):
+        if isinstance(self.state,str)!=True:
+            raise TypeError('{} should be a str object'.format(self.state))
+        
+    def __repr__(self):
+        return self.__str__()
+    
+    def __str__(self):
+        return str('ZerothOrderReaction(\'-> {}<{}>\')'.format(self.state,self.index))
+    
+    def create_state(self):
+        return State(self.state,rule=self)
+    
+    
+class FirstOrderReaction(object):
+    def __init__(self):
+        pass
+    
+    
+class SecondOrderReaction(object):
+    def __init__(self):
+        pass
+
     
 class Automaton(object):
     '''
     Need syntax for determining the default background state
+    What is my strategy for the automaton?
+    
+    1) read th rules and interpret them. 
+    2) for each rule
     '''
     def __init__(self,rules,lattice,initial,generations=10):
         self.rules = rules
         self.initial = initial
         self.lattice = lattice
         self.preamble,self.rules = self.read_rules()
+        self.states=[]
         
         self.num_rules= len(self.rules)
 #        print self.rules
-        self.environment='Empty'
         self.enviornment,self.seeds = self.interpret_preamble()
         self.set_environment()
         self.set_seeds()
+        self.reaction_types=self.interpret_rules()
+#        print self.reaction_types
+#        print self.states
+        self.turn()
+
+#        self.states=self.get_states()
 #        self.environment=self.interpret_environment()
         
 #        print self.environment
@@ -433,18 +471,19 @@ class Automaton(object):
     def get_states(self):
         states=[]
         for rule in self.rules:
-            if '->' in rule:
-                a,b= re.findall('(.*) -> (.*)',rule)[0]
-                c= re.search('\[',a)
-                if not c:
-                    states.append(a) 
-#                states.append(a)
-                states.append(b)
-        for state in states:
-            match=re.findall('.*\[(.*)\(.*\)\]', state)
-            if match != []:
-                states=states+match
-        return list(set(states))
+            print re.findall('(\D*)',rule)
+#            if '->' in rule:
+#                a,b= re.findall('(.*) -> (.*)',rule)[0]
+#                c= re.search('\[',a)
+#                if not c:
+#                    states.append(a) 
+##                states.append(a)
+#                states.append(b)
+#        for state in states:
+#            match=re.findall('.*\[(.*)\(.*\)\]', state)
+#            if match != []:
+#                states=states+match
+#        return list(set(states))
                 
     
     def read_rules(self):
@@ -471,11 +510,21 @@ class Automaton(object):
         
         '''
         rules=[]
+        states=[]
+        zero_order_pattern='-> (\D+)<(\d)>|-> (\D+)<(\d,\d)>|-> (\D+)<(\d,\d,\d)>'
         for rule in self.rules:
-            if '->' in rule:
-                a,b= re.findall('(.*) -> (.*)', rule)[0]
-                rules.append(Rule(a,b))
+            zeroth= re.match(zero_order_pattern,rule)
+            if zeroth:
+                zeroth= re.findall(zero_order_pattern,rule)[0]
+                state,index= [i for i in zeroth if i!='']
+                self.states.append(state)
+                rules.append(ZerothOrderReaction(state,index))
         return rules
+                
+#            if '->' in rule:
+#                a,b= re.findall('(.*) -> (.*)', rule)[0]
+#                rules.append(Rule(a,b))
+#        return rules
     
     def interpret_preamble(self):
         '''
@@ -493,6 +542,7 @@ class Automaton(object):
             
                 if preamble_id=='Environment':
                     environment_id=re.findall('(\w+)$',rule)[0]
+                    self.states.append(environment_id)
                 elif preamble_id=='Seed':
                     seeds=re.findall('= (.*)',rule)[0]
                     
@@ -512,7 +562,8 @@ class Automaton(object):
         
     def set_environment(self):
         for cell in self.lattice:
-            self.lattice[cell]=self.environment            
+            self.lattice[cell]=Cell(self.enviornment,cell)
+        return self.lattice
             
     def set_seeds(self):
         d={}
@@ -524,13 +575,34 @@ class Automaton(object):
             
         LOG.debug('Seeding {}:\n\nSeed Dict=\n\t{}'.format(self.seeds,d))
         for seed in d:
-            self.lattice[ d[seed].values()[0][0]] = d[seed].keys()[0]
+            self.lattice[ d[seed].values()[0][0]] = Cell(d[seed].keys()[0],x=d[seed].values()[0][0])
         return d
     
     def turn(self):
         '''
         '''
-        print self.interpret_rules()
+        lattice2=self.lattice
+#        for reaction in self.reaction_types:
+#            print reaction.state
+        for cell in self.lattice:
+            if self.lattice[cell].state.label =='White':
+                continue
+            elif self.lattice[cell].state.label=='Black':
+                for direction in  self.lattice[cell].neighbours.keys():
+                    index=self.lattice[cell].neighbours[direction]
+                    lattice2[index].state=State('White')
+                    
+#                    lattice2[index]='Black'
+                
+        return lattice2
+    
+    
+    
+#            print type(self.lattice[cell])
+#        lattice_tplus1=self.lattice
+#        for i in self.interpreted_rules:
+#            if isinstance(i,ZerothOrderReaction):
+#                print 
 
 
 
@@ -545,17 +617,32 @@ if __name__=='__main__':
     '''
     rules='''
     %%Environment = White
-    %%Seed = Black<5>, Black<9>
-    Black -> White
+    %%Seed = Black<5>
+     -> Black<9> ; zeroth
     '''    
+    '''
+    try just putting the piees together outside classes
     
+    1) add state to cell
+    2) add cells and lattice to automata
+    3) interpret rules
+    '''
     
+#    s=State('black',ZerothOrderReaction())
+#    print s.rule
+#    cell=Cell('black',ZerothOrderReaction,x=2)
+#    print cell.state
     L=Lattice(x=11)#,y=11,z=11)
-#    print L.cells[0,0,0].neighbours
+#    for i in L:
+#        print type(L[i])
 #    black=State('Black')
 ##    white=State('White')
-#    initial={5:'Black'}
+    initial={5:'Black'}
     A=Automaton(rules,L,initial)
+#    print A.lattice
+#    print A.interpret_rules()
+#    print A.interpret_rules()
+#    print ZerothOrderReaction('black',5)
 #    print A.lattice
     
 #    print A
