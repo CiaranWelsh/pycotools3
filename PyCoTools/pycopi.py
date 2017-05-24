@@ -4674,25 +4674,50 @@ class MultiModelFit():
 if __name__=='__main__':
     class FilePaths():
         def __init__(self):
-            self.dire=r'/home/b3053674/Documents/Models/MinimalTGFbetaModel'
-            self.copasi_file=os.path.join(self.dire,'M2.1.cps')
+            self.dire=r'/home/b3053674/Documents/Models/MinimalTGFbetaModel/Fit3'
+    #        self.dire='/sharedlustre/users/a8021862/Ciaran/MinimalTGFbetaModel/Fit2'
+            self.copasi_file=os.path.join(self.dire,'M3.cps')
             self.data_file=os.path.join(self.dire,'FittingData.csv')
             self.pSmad3_data_file=os.path.join(self.dire,'pSmad3data.csv')
+            self.PEData=os.path.join(self.dire,'MultipleParameterEsimationAnalysis')
+            self.parameter_file=os.path.join(self.dire,'MultipleParameterEsimationAnalysis/Fit30.txt')
         
     F=FilePaths()
     #
-    config=r'M2.1.ConfigFile.xlsx'
+    config=r'M3.ConfigFile.xlsx'
     
-    RMPE=RunMultiplePEs(F.copasi_file,F.data_file,#,F.pSmad3_data_file],
-    #                                     Method='ParticleSwarm',
-    #                                     IterationLimit=3000,
-    #                                     SwarmSize=150,
-    #                                     CopyNumber=4,
-    #                                     NumberOfPEs=10,
-                                         )
+#    PE=pycopi.ParameterEstimation(F.copasi_file,[F.data_file,F.pSmad3_data_file],
+#                                         Method='CurrentSolutionStatistics',
+#                                         RandomizeStartValues='false',
+#                                         Plot='true',
+#                                         )
+#    PE.set_up()
+#    PE.run()
 
 
+#    G=pycopi.GetModelQuantities(F.copasi_file)
+#    for i in G.get_all_model_variables():
+#        print i,G.get_all_model_variables()[i]['value']
+#    I=pycopi.InsertParameters(F.copasi_file,ParameterPath=F.parameter_file,Index=0)
+#    print I.parameters
+    
 
+#    TC=TimeCourse(F.copasi_file,End=50,StepSize=1,Intervals=50,
+#                         ReportName=os.path.join(F.dire,'TimeCourseReport.txt'),
+#                         Plot='true')
+#    for i in dir(TC):
+#        print i
+#        
+#        
+#        
+#    for i in TC.data:
+#        plt.figure()
+#        plt.plot(TC.data['Time'],TC.data[i])
+#        
+        
+#    PlotPEData(F.copasi_file,[F.data_file,F.pSmad3_data_file],
+#               F.parameter_file,Plot='true')
+    
 
 
 
