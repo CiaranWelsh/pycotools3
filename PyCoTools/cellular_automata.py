@@ -11,6 +11,7 @@ import pandas
 import numpy
 from contextlib import contextmanager
 import re
+from collections import OrderedDict
 from random import randint
 import os
 
@@ -19,67 +20,107 @@ LOG=logging.getLogger(__name__)
 
 
 
+class State(object):
+    '''
+    A cell can be in a state which is defined using this class
+    
+    args:
+        label:
+            symbolic representation of a state
+    '''
+    def __init__(self,label,behaviour=None):
+        self.label=self.set_label(label)
+        self.behaviour=behaviour
+    
+    def __repr__(self):
+        return str(self.label)
+    
+    def set_label(self,label):
+        self.label=label
+        return self.label
+    
+    def get_label(self):
+        return self.label
+    
+    def set_behaviour(self,type):
+        return Behaviour.factory(type)
+    
+    def get_behaviour(self):
+        pass
+            
+    
+class Behaviour(object):
+    '''
+    Base class of behaviour. Read and interpret rules from a string.
+    Firstly Behaviour differentiates between the preamble and the actual rules 
+    which determine behaviour. 
+    
+    Collect subclasses using the BehaviourFactory.__subclasses__() function
+    
+    '''
+        
+    @staticmethod
+    def factory(args,rule):
+
+        if rule=='constant_production':
+            return ConstantProduction(args)
+        elif rule=='transition':
+            return Transition(args)
+        else:
+            raise TypeError('{} not a valid type'.format(rule))
+        
+        
+        
+class Transition(Behaviour):
+    
+    def __init__(self,args1):
+        self.args1=args1
+        
+    def update(self,cell):
+        pattern= '(.*) -> (.*)'
+        A,B=re.findall(pattern,self.args1)[0]
+        if cell.state.label==A:
+            return State(B.strip())
+        else:
+            return cell.state.label.strip()
+        
+    def __str__(self):
+        return '<class Transition>'
+        
+#            elif i=='Black -> White : transition':
+#                if self.state.label == 'Black':
+#                    self.state=State('White')            
+            
 
     
     
-    
-class Rule(object):
+class ConstantProduction(Behaviour):
     '''
-    Use compas NESW... for navigation. 
-    Does it extend to 3D? 
-    
-    0, first second ,third order reations
-    Diffusion
-    
-    
-    Need:
-        Static reaction
-            A Cell converts to another cell type (i.e. different state)
-            but stays at current location. Is this just a first order 
-            reaction
-            
-        second order reaction:
-            A cell 'reacts' with another cell if they are next to eachother
-            in the appropiate stoiciometry
-            
-        Movement:
-            Diffusion? A cell moves but remains unchanged
-            
-        Proliferation == 1st order reaction with two products .
+    Describes production of the type:
         
-        
+        -> A<index>
+    
+    Where A is constantly produced at a location given in index. This
+    is essentially a zeroth order reaction.
     '''
-    def __init__(self,a,b):
-        self.a=a
-        self.b=b
-        self.type=''
-        
-        self.interpret_rule()
-        
-        if self.type=='':
-            raise Errors.InputError('type attribute has not been set')
+    def __init__(self,args):
+        self.args=args
         
         
-    def interpret_rule(self):
-        square_brackets= re.findall('\[(.*\])',self.a)
-        if square_brackets==[]:
-            self.type='C'
-            
-        elif square_brackets!=[]:
-            self.type= re.findall('\((.*)\)',square_brackets[0])[0]
-            self.type=list(self.type)
-            self.qualifier=re.findall('(.*)\(',square_brackets[0])[0]
-            
-            
-            
+    def update(self,cell):
+        pattern='-> (\D+)<(\d)>|-> (\D+)<(\d,\d)>|-> (\D+)<(\d,\d,\d)>'
+        match=re.findall(pattern,self.args)[0]
+        A,index= [i for i in match if i!='']
+        if cell.coordinates==int(index):
+            return State(A.strip())
+        else:
+            return cell.state
+        
+    def __str__(self):
+        return '<class ConstantProduction>'
+        
+        
     
-            
-            
-    def set_type(self):
-        '''
-        
-        '''
-        pass
     
     
 
@@ -107,13 +148,15 @@ class Cell(object):
             tuple containing (x,y,z), the position of the cell
         
     '''
-    def __init__(self,state,x=None,y=None,z=None):
+    def __init__(self,state,x=None,y=None,z=None,behaviours=[]):
         self.state=state
         self.state=self.set_state(state)
         self.x=x
         self.y=y
         self.z=z
+        self.behaviours=behaviours
         self.coordinates=[]
+        
         
         if self.x==None:
             raise TypeError('x cannot be None')
@@ -131,10 +174,12 @@ class Cell(object):
                              
         self.neighbours=self.define_neighbours()
         
+        
+        
     def get_num_dimensions(self):
         boolean= [isinstance(i,int) for i in [self.x,self.y,self.z]]
         if boolean ==[False,False,False]:
-            raise Errors.InputError('Need to specifiy at least an x dimension')            
+            raise Errors.InputError('Need to specific at least an x dimension')            
         elif boolean == [True,False,False]:
             return 1
         elif boolean == [True,True,False]:
@@ -203,36 +248,38 @@ class Cell(object):
     def get_state(self):
         return self.state
     
-    def __str__(self):
-        return str('Cell({},{})'.format(self.coordinates,self.state))
-    
     def __repr__(self):
-        return __str__
+        return str('Cell({})'.format(self.state))
 
     def __getitem__(self,idx):
         return self.coordinates[idx]
     
     def __setitem__(self,idx,item):
         self.coordinates[idx]=item
-                        
-#    def keys(self):
-#        return self.coordinates.keys()[0]
-#                     
-#    def values(self):
-#       return self.coordinates.values()[0]
+        
+        
+    def update2(self):
+        for i in self.behaviours:
+            if i=='-> White<5> : constant_production':
+                if self.coordinates == 5:
+                    self.state=State('White')
                     
+            elif i=='Black -> White : transition':
+                if self.state.label == 'Black':
+                    self.state=State('White')
+                    
+    def update(self):
+        for i in self.behaviours:
+            LOG.debug('Current State = {}'.format(self.state))
+            LOG.debug('Updating behaviour "{}"'.format(i))
+            args,rule=i.split(':')
+            behaviour= Behaviour.factory(args,rule.strip())
+            LOG.debug('Behaviour determined to be {}'.format(behaviour))
+            self.state=behaviour.update(self)
+            LOG.debug('New state is: {}'.format(self.state))
+
     
-    
-    '''
-    get item and set item are used in dicts for mattping keys to values
-    which is why I cannot yse the list like lattice in the model object. 
-    modify!
-    
-    Create a dictionary type lattice with coordinates corresponding
-    to grid locations and value containing the Cell(State) object
-    '''   
-    
-class Lattice(object):
+class Lattice(OrderedDict):
     '''
     A structure for containing cells that are associated with 
     a state. 
@@ -250,59 +297,70 @@ class Lattice(object):
             Only used when dimensions=3
     ==================
     Other Attributes:
-        index:
-            Used for iterating over the lattice
-            
-        geometry:
-            name used for accessing cells in the lattice
-            
+        pass            
         
     '''
-    def __init__(self, x=64,y=None,z=None):
+    def __init__(self,cell, x=64,y=None,z=None,):
+        super(Lattice,self).__init__(x=64,y=None,z=None)
+        self.cell=cell
         self.x=x
         self.y=y
         self.z=z
-        self.index=0
-        self.dimensions=self.get_num_dimensions()
-        self.cells=self.create()
-        self.filter_cell_neighbours()
         
-#    def items(self):
-#        return zip()
-        
-        
-    def filter_cell_neighbours(self):
+        self.dimensions=self._get_num_dimensions()
+        self._create()
+        self._remove_coordinates()
+        self._filter_cell_neighbours()
+#        self.update()
+    
+    ##private, void
+    def _remove_coordinates(self):
+        '''
+        OrderedDict automatically puts the x,y and z values into the dict. 
+        This method removes these from the dict
+        '''
+#        for i in range(3):
+        self.popitem(last=False)
+        self.popitem(last=False)
+        self.popitem(last=False)
+            
+    ##private, void
+    def _filter_cell_neighbours(self):
         '''
         Remove neighbours from each cell which 
         violate boundaries of the automata dimensions
         '''
         if self.dimensions==1:
-            for cell in self.cells:
-                for direction,x in self.cells[cell].neighbours.items():
+            for cell in self:
+                for direction,x in self[cell].neighbours.items():
                     if x not in range(self.x):
-                        del self.cells[cell].neighbours[direction]
+                        del self[cell].neighbours[direction]
         if self.dimensions==2:
-            for cell in self.cells:
-                for direction,(x,y) in self.cells[cell].neighbours.items():
+            for cell in self:
+                for direction,(x,y) in self[cell].neighbours.items():
                     if x not in range(self.x):# direction,x,y
-                        del self.cells[cell].neighbours[direction]
-                for direction,(x,y) in self.cells[cell].neighbours.items():
+                        del self[cell].neighbours[direction]
+                for direction,(x,y) in self[cell].neighbours.items():
                     if y not in range(self.y):
-                        del self.cells[cell].neighbours[direction]
+                        del self[cell].neighbours[direction]
                         
         if self.dimensions==3:
-            for cell in self.cells:
-                for direction,(x,y,z) in self.cells[cell].neighbours.items():
+            for cell in self:
+                for direction,(x,y,z) in self[cell].neighbours.items():
                     if x not in range(self.x):# direction,x,y
-                        del self.cells[cell].neighbours[direction]
-                for direction,(x,y,z) in self.cells[cell].neighbours.items():
+                        del self[cell].neighbours[direction]
+                for direction,(x,y,z) in self[cell].neighbours.items():
                     if y not in range(self.y):
-                        del self.cells[cell].neighbours[direction]
-                for direction,(x,y,z) in self.cells[cell].neighbours.items():
+                        del self[cell].neighbours[direction]
+                for direction,(x,y,z) in self[cell].neighbours.items():
                     if z not in range(self.y):
-                        del self.cells[cell].neighbours[direction]
-        
-    def get_num_dimensions(self):
+                        del self[cell].neighbours[direction]
+    
+    ##private
+    def _get_num_dimensions(self):
+        '''
+        returns 1, 2 or 3 dependinging on arguments to x,y and z kwargs
+        '''
         boolean= [isinstance(i,int) for i in [self.x,self.y,self.z]]
         if boolean ==[False,False,False]:
             raise Errors.InputError('Need to specific at least an x dimension')            
@@ -316,122 +374,44 @@ class Lattice(object):
             LOG.critical('Something has gone badly wrong')
             raise Exception('Something is wrong (I like to be helpful)')
         
-            
-    def __iter__(self):
-        for i in self.cells:
-            yield i
-    
-    def __getitem__(self, index):
-        return self.cells[index]
-#    
-    def __setitem__(self,key,item):
-        self.cells[key]=item
-
-    def __repr__(self):
-        return str(self.cells)
-    
-    def update_cell(self,index,new_state):
-        self.cells[index]=new_state
-                  
-        
-    
-    def create(self):
+    ##private,void
+    def _create(self):
         '''
         
         '''
         if self.dimensions==1:
             LOG.debug('creating lattice in 1D')
-            cells={}
             for i in range(self.x):
                 cell=Cell('Empty',x=i)
-                cells[cell.coordinates]=cell
-            return cells
+                cell.state=self.cell.state
+                self[cell.coordinates]=cell
+            return self#cells
                 
         elif self.dimensions==2:
             LOG.debug('creating lattice in 2D')
-            cells={}
             for i in range(self.x):
                 for j in range(self.y):
                     cell=Cell('Empty',x=i,y=j)
-                    cells[cell.coordinates]=cell
-            return cells
+                    cell.state=self.cell.state
+
+                    self[cell.coordinates]=cell
+            return self
         
         elif self.dimensions==3:
             LOG.debug('creating lattice in 3D')
-            cells={}
             for i in range(self.x):
                 for j in range(self.y):
                     for k in range(self.z):
                         cell=Cell('Empty',x=i,y=j,z=k)
-                        cells[cell.coordinates]=cell
-            return cells
-
-class State(object):
-    '''
-    A cell can be in a state which is defined using this class
-    
-    args:
-        label:
-            symbolic representation of a state
-    '''
-    def __init__(self,label,rule=None):
-        self.label=self.set_label(label)
-        self.rule=rule
-    
-    def __repr__(self):
-        return str('State(\'{}\')'.format(self.label))
-    
-    def set_label(self,label):
-        self.label=label
-        return self.label
-    
-    def get_label(self):
-        return self.label
-    
-#    def set_rule(self,rule):
-#        if isinstance(rule,Rule)!=True:
-#            raise TypeError('{} is not of type Rule'.format(rule))
-#        self.rule=rule
-#        return rule
-#    
-#    def get_rule(self):
-#        return self.rule
-
-class ZerothOrderReaction(object):
-    '''
-    This basically sets a cell to a constant state
-    '''
-    def __init__(self,state,index):
-        self.state=state
-        self.index=index
-        self.do_checks()
-#        self.create_state()
+                        cell.state=self.cell.state
+                        self[cell.coordinates]=cell
+            return self
         
-        
-    def do_checks(self):
-        if isinstance(self.state,str)!=True:
-            raise TypeError('{} should be a str object'.format(self.state))
-        
-    def __repr__(self):
-        return self.__str__()
-    
-    def __str__(self):
-        return str('ZerothOrderReaction(\'-> {}<{}>\')'.format(self.state,self.index))
-    
-    def create_state(self):
-        return State(self.state,rule=self)
-    
-    
-class FirstOrderReaction(object):
-    def __init__(self):
-        pass
-    
-    
-class SecondOrderReaction(object):
-    def __init__(self):
-        pass
+#    def update(self):
+#        for cell in self:
+#            print self[cell].update()
 
-    
+
 class Automaton(object):
     '''
     Need syntax for determining the default background state
@@ -449,43 +429,29 @@ class Automaton(object):
         
         self.num_rules= len(self.rules)
 #        print self.rules
-        self.enviornment,self.seeds = self.interpret_preamble()
+        self.environment,self.seeds = self.interpret_preamble()
         self.set_environment()
         self.set_seeds()
-        self.reaction_types=self.interpret_rules()
-#        print self.reaction_types
-#        print self.states
-        self.turn()
-
-#        self.states=self.get_states()
-#        self.environment=self.interpret_environment()
+        self.behaviours=self.get_behaviours()
+        print self.turn()
         
-#        print self.environment
-#        self.states=self.get_states()
-#        self.seed()
-#        self.turn()
-        
-#        print self.lattice[0]
-        
-        
-    def get_states(self):
-        states=[]
-        for rule in self.rules:
-            print re.findall('(\D*)',rule)
-#            if '->' in rule:
-#                a,b= re.findall('(.*) -> (.*)',rule)[0]
-#                c= re.search('\[',a)
-#                if not c:
-#                    states.append(a) 
-##                states.append(a)
-#                states.append(b)
-#        for state in states:
-#            match=re.findall('.*\[(.*)\(.*\)\]', state)
-#            if match != []:
-#                states=states+match
-#        return list(set(states))
+    def turn(self):
+        lattice2=self.lattice
+        for i in self.lattice:
+            print lattice2[i]
                 
-    
+    def get_behaviours(self):
+        '''
+        
+        '''
+        b={}
+        for line in self.rules:
+            args, rule = line.split(':')
+            behaviour = Behaviour.factory(args,rule.strip())
+            b[line]=behaviour
+        return b
+            
+            
     def read_rules(self):
         '''
         Convert rule string into list of rules/reactions
@@ -505,26 +471,8 @@ class Automaton(object):
         LOG.debug('\n\nThis is your preamble:\n\t\t{}\n\n\nThese are your rules\n\t\t{}'.format(preamble,new_rules))
         return preamble,new_rules
     
-    def interpret_rules(self):
-        '''
-        
-        '''
-        rules=[]
-        states=[]
-        zero_order_pattern='-> (\D+)<(\d)>|-> (\D+)<(\d,\d)>|-> (\D+)<(\d,\d,\d)>'
-        for rule in self.rules:
-            zeroth= re.match(zero_order_pattern,rule)
-            if zeroth:
-                zeroth= re.findall(zero_order_pattern,rule)[0]
-                state,index= [i for i in zeroth if i!='']
-                self.states.append(state)
-                rules.append(ZerothOrderReaction(state,index))
-        return rules
-                
-#            if '->' in rule:
-#                a,b= re.findall('(.*) -> (.*)', rule)[0]
-#                rules.append(Rule(a,b))
-#        return rules
+
+            
     
     def interpret_preamble(self):
         '''
@@ -562,7 +510,10 @@ class Automaton(object):
         
     def set_environment(self):
         for cell in self.lattice:
-            self.lattice[cell]=Cell(self.enviornment,cell)
+            if isinstance(cell,int):
+                self.lattice[cell]=Cell(self.environment,cell)
+            elif isinstance(cell,tuple):
+                self.lattice[cell]=Cell(self.environment,*cell)
         return self.lattice
             
     def set_seeds(self):
@@ -577,34 +528,9 @@ class Automaton(object):
         for seed in d:
             self.lattice[ d[seed].values()[0][0]] = Cell(d[seed].keys()[0],x=d[seed].values()[0][0])
         return d
-    
-    def turn(self):
-        '''
-        '''
-        lattice2=self.lattice
-#        for reaction in self.reaction_types:
-#            print reaction.state
-        for cell in self.lattice:
-            if self.lattice[cell].state.label =='White':
-                continue
-            elif self.lattice[cell].state.label=='Black':
-                for direction in  self.lattice[cell].neighbours.keys():
-                    index=self.lattice[cell].neighbours[direction]
-                    lattice2[index].state=State('White')
-                    
-#                    lattice2[index]='Black'
-                
-        return lattice2
-    
-    
-    
-#            print type(self.lattice[cell])
-#        lattice_tplus1=self.lattice
-#        for i in self.interpreted_rules:
-#            if isinstance(i,ZerothOrderReaction):
-#                print 
 
-
+        
+    
 
 if __name__=='__main__':
     
@@ -614,72 +540,31 @@ if __name__=='__main__':
     Black -> White
     White + Black -> Black  ##comments are possible. 
     Black + White -> Black
+    Black -> White : transition
+
     '''
     rules='''
     %%Environment = White
-    %%Seed = Black<5>
-     -> Black<9> ; zeroth
+    %%Seed = Black<5>, Black<9>
+    -> Black<5> : constant_production
     '''    
+    
+    
     '''
-    try just putting the piees together outside classes
+    To make a system with two states
+    the background and black state, 
+    associate the states with cells
     
-    1) add state to cell
-    2) add cells and lattice to automata
-    3) interpret rules
     '''
     
-#    s=State('black',ZerothOrderReaction())
-#    print s.rule
-#    cell=Cell('black',ZerothOrderReaction,x=2)
-#    print cell.state
-    L=Lattice(x=11)#,y=11,z=11)
-#    for i in L:
-#        print type(L[i])
-#    black=State('Black')
-##    white=State('White')
-    initial={5:'Black'}
-    A=Automaton(rules,L,initial)
-#    print A.lattice
-#    print A.interpret_rules()
-#    print A.interpret_rules()
-#    print ZerothOrderReaction('black',5)
-#    print A.lattice
     
-#    print A
-#    print M.lattice
-#    for cell in L:
-#        print type(cell)
-
-
-#    cell=Cell('black',x=6,y=6,z=None)
-##    print cell
-#    print cell.neighbours
-    
-#    print cell.values()
-#    cell[(1,None,None)]='white'
-    
-    #[(1,None,None)]
-
-#    L=Lattice(dimensions=1,x=4,y=4)
-#    L.update_cell(0,'new')
+    c=Cell('Black',x=4,behaviours=['-> White<4> : constant_production',
+                                   'Black-> White : transition'])
+    print c
+    c.update()
+    print c
+#    L=Lattice(c,x=20)
 #    print L
-##    print L[0]['Empty']
-
-#    print L[0].coordinate
-#    for i in M.lattice:
-#        print M.lattice[i].coordinate
-        
-#    for i in L:
-#        print i
-#    print L
-#    print [Cell(1),Cell(2)]
-
-    
-#    Cell objects shold have a key which is the state ad
-#    the coordinates
-
-
-
 
 
 
