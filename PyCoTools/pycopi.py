@@ -763,7 +763,7 @@ class Reports():
         #for global quantities 
         if self.kwargs.get('GlobalQuantities')!=None:
             for i in self.kwargs.get('GlobalQuantities'):
-                cn= self.GMQ.get_global_quantities_cns()[i]['cn']+',Reference=InitialValue'
+                cn= self.GMQ.get_global_quantities_cns()[i]['cn']+',Reference=Concentration'
                 Object=etree.SubElement(table,'Object')
                 Object.attrib['cn']=cn
         return self.copasiML
