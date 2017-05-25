@@ -1359,7 +1359,7 @@ class PlotPEData(object):
                  'LegendLoc':(1,0),
                  'OutputDirectory':os.path.join(os.path.dirname(self.copasi_file),'ParameterEstimationPlots'),
                  'Plot':'true',                 
-                 'Separator':'\t',
+                 'Separator':['\t']*len(self.experiment_files),
                  
                  }
                  

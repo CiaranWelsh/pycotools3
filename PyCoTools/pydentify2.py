@@ -461,22 +461,9 @@ class ProfileLikelihood():
         res={}
         for i in self.cps_dct.keys():
             for j in self.cps_dct[i]:
-#                args=['CopasiSE',self.cps_dct[i][j]]
-                if self.kwargs.get('Verbose')=='true':
-                    print 'running {}'.format(j)
+                LOG.debug( 'running {}'.format(j))
                 res[self.cps_dct[i][j]]= pycopi.Run(self.cps_dct[i][j],Task='scan',MaxTime=self.kwargs.get('MaxTime'),Mode='slow').run()
         return res
-
-#    def run_fast(self):
-#        '''
-#        self.cps_dct is a nested dictionary dct[index1][index2]=filename
-#        CopasiSE is a program for simulating mathematical models using the terminal/cmd
-#        
-#        '''
-#        for i in self.cps_dct.keys():
-#            for j in self.cps_dct[i]:
-#                subprocess.Popen('CopasiSE {}'.format(self.cps_dct[i][j]))
-#        return self.cps_dct
         
     def multi_run(self):
         def run(x):

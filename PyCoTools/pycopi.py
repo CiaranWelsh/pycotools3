@@ -763,7 +763,7 @@ class Reports():
         #for global quantities 
         if self.kwargs.get('GlobalQuantities')!=None:
             for i in self.kwargs.get('GlobalQuantities'):
-                cn= self.GMQ.get_global_quantities_cns()[i]['cn']+',Reference=InitialValue'
+                cn= self.GMQ.get_global_quantities_cns()[i]['cn']+',Reference=Value'
                 Object=etree.SubElement(table,'Object')
                 Object.attrib['cn']=cn
         return self.copasiML
@@ -2816,9 +2816,7 @@ class ParameterEstimation():
 
         
     def read_item_template(self):
-        if os.path.isfile(self.kwargs.get('ConfigFilename'))==False:
-            self.write_item_template()
-        assert os.path.isfile(self.kwargs.get('ConfigFilename'))==True,'ItemTemplate file does not exist. Run \'write_item_template\' method and modify it how you like then rerun this method'
+        assert os.path.isfile(self.kwargs.get('ConfigFilename'))==True,'ConfigFile does not exist. Run \'write_item_template\' method and modify it how you like then rerun this method'
         return pandas.read_excel(self.kwargs.get('ConfigFilename'))
     
     def add_fit_item(self,item):
@@ -4672,24 +4670,25 @@ class MultiModelFit():
         
             
 if __name__=='__main__':
-    class FilePaths():
-        def __init__(self):
-            self.dire=r'/home/b3053674/Documents/Models/MinimalTGFbetaModel/Fit3'
-    #        self.dire='/sharedlustre/users/a8021862/Ciaran/MinimalTGFbetaModel/Fit2'
-            self.copasi_file=os.path.join(self.dire,'M3.cps')
-            self.data_file=os.path.join(self.dire,'FittingData.csv')
-            self.pSmad3_data_file=os.path.join(self.dire,'pSmad3data.csv')
-            self.PEData=os.path.join(self.dire,'MultipleParameterEsimationAnalysis')
-            self.parameter_file=os.path.join(self.dire,'MultipleParameterEsimationAnalysis/Fit30.txt')
-        
-    F=FilePaths()
-    #
-    config=r'M3.ConfigFile.xlsx'
-    
-#    PE=pycopi.ParameterEstimation(F.copasi_file,[F.data_file,F.pSmad3_data_file],
+    pass
+#    class FilePaths():
+#        def __init__(self):
+#            self.dire=r'/home/b3053674/Documents/Models/MinimalTGFbetaModel/Fit3'
+#    #        self.dire='/sharedlustre/users/a8021862/Ciaran/MinimalTGFbetaModel/Fit2'
+#            self.copasi_file=os.path.join(self.dire,'M3.cps')
+#            self.data_file=os.path.join(self.dire,'FittingData.csv')
+#            self.pSmad3_data_file=os.path.join(self.dire,'pSmad3data.csv')
+#            self.PEData=os.path.join(self.dire,'MultipleParameterEsimationAnalysis')
+#            self.parameter_file=os.path.join(self.dire,'MultipleParameterEsimationAnalysis/Fit30.txt')
+#        
+#    F=FilePaths()
+#    #
+#    config=r'M3.ConfigFile.xlsx'
+#    
+#    PE=ParameterEstimation(F.copasi_file,[F.data_file,F.pSmad3_data_file],
 #                                         Method='CurrentSolutionStatistics',
 #                                         RandomizeStartValues='false',
-#                                         Plot='true',
+#                                         Plot='true',SaveFig='true',
 #                                         )
 #    PE.set_up()
 #    PE.run()
@@ -4715,7 +4714,7 @@ if __name__=='__main__':
 #        plt.plot(TC.data['Time'],TC.data[i])
 #        
         
-#    PlotPEData(F.copasi_file,[F.data_file,F.pSmad3_data_file],
+#    PEAnalysis.PlotPEData(F.copasi_file,[F.data_file,F.pSmad3_data_file],
 #               F.parameter_file,Plot='true')
     
 
