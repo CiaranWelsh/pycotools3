@@ -654,6 +654,7 @@ class Plot():
         os.chdir(os.path.dirname(self.copasi_file))
 
         options={#report variables
+                 'ExperimentFiles':None,
                  'ParameterPath':None,                 
                  'Index':-1,
                  'NumProcesses':1, 
@@ -685,7 +686,6 @@ class Plot():
                  'DotSize':4,
                  'Separator':'\t',
                  'Log10':'false',
-                 
                  'UsePickle':'false',
                  'OverwritePickle':'false',
                  }
@@ -694,6 +694,9 @@ class Plot():
             assert i in options.keys(),'{} is not a keyword argument for Plot'.format(i)
         options.update( kwargs) 
         self.kwargs=options       
+        
+        if self.kwargs['ExperimentFiles']==None:
+            self.kwargs['ExperimentFiles']=self.get_experiment_files_in_use()
     
         assert isinstance(self.kwargs.get('NumProcesses'),int)
         if self.kwargs.get('NumProcesses')!=0:
@@ -784,6 +787,12 @@ class Plot():
         assert self.kwargs.get('SaveFig') in ['false','true']
         assert self.kwargs.get('MultiPlot') in ['false','true']
         assert self.kwargs.get('QuantityType') in ['concentration','partical_numbers']
+        
+        if self.kwargs['ExperimentFiles']==None:
+            LOG.critical('Experimental Files not None')
+            self.kwargs['ExperimentFiles']=self.get_experiment_files_in_use()
+            
+            
         self.PL_dir=self.get_PL_dir()
         self.indices=self.get_index_dirs()
         self.result_paths=self.get_results()
@@ -879,6 +888,9 @@ class Plot():
         query='//*[@name="File Name"]'
         l=[]
         for i in self.copasiML.xpath(query):
+            f=os.path.abspath(i.attrib['value'])
+            if os.path.isfile(f)==True:
+                raise Errors.InputError('Experimental files in use cannot be automatically determined. Please give a list of experiment file paths to the ExperimentFiles keyword'.format())
             l.append(os.path.abspath(i.attrib['value']))
         
         return l
@@ -897,7 +909,8 @@ class Plot():
         
     def parse_results(self):
         df_dict={}
-        experiment_keys= [os.path.splitext(i)[0] for i in self.get_experiment_files_in_use()]
+
+        experiment_keys= [os.path.splitext(i)[0] for i in self.kwargs['ExperimentFiles']]
         for i in self.result_paths:
             df_dict[i]={}
             for j in self.result_paths[i]:
@@ -934,7 +947,7 @@ class Plot():
         '''
         returns number of data points in your data files
         '''
-        experimental_data= [pandas.read_csv(i,sep=self.kwargs['Separator']) for i in self.get_experiment_files_in_use()]
+        experimental_data= [pandas.read_csv(i,sep=self.kwargs['Separator']) for i in self.kwargs['ExperimentFiles']]
         l=[]        
         for i in experimental_data:
             l.append( i.shape[0]*(i.shape[1]-1))
@@ -1037,23 +1050,6 @@ class Plot():
                 best_parameter_value= self.GMQ.get_IC_cns()[parameter]['value']
 
 
-
-
-
-        
-#            else:
-#                best_parameter_value=self.GMQ.get_IC_cns()[parameter]['value']
-            
-#        if st in [Misc.RemoveNonAscii(i).filter for i in self.GMQ.get_IC_cns().keys()] or self.GMQ.get_IC_cns().keys():
-#            if self.kwargs.get('QuantityType')=='concentration':
-#                best_parameter_value=self.GMQ.get_IC_cns()[parameter]['concentration']
-#            else:
-#                best_parameter_value=self.GMQ.get_IC_cns()[parameter]['value']
-#        if st in [Misc.RemoveNonAscii(i).filter for i in self.GMQ.get_local_kinetic_parameters_cns()] or self.GMQ.get_local_kinetic_parameters_cns().keys():
-#            best_parameter_value=self.GMQ.get_local_kinetic_parameters_cns()[parameter]['value']
-#
-#        if st in [Misc.RemoveNonAscii(i).filter for i in self.GMQ.get_global_quantities()] or self.GMQ.get_global_quantities().keys():
-#            best_parameter_value= self.GMQ.get_global_quantities()[parameter]
         try:
             return best_parameter_value
         except UnboundLocalError:
@@ -1204,19 +1200,25 @@ class Plot():
 
         
 if __name__=='__main__':
-    f=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\Tests\VilarModel2006pycopitestModel.cps'
-    
-    r=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\Tests\vilarTimeCourse.txt'
-    r2=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\Tests\vilarTimeCourse2.txt'
+
+    class FilePaths():
+        def __init__(self):
+            self.dire=r'/home/b3053674/Documents/Models/MinimalTGFbetaModel/Fit3'
+    #        self.dire='/sharedlustre/users/a8021862/Ciaran/MinimalTGFbetaModel/Fit3'
+            self.copasi_file=os.path.join(self.dire,'M3.cps')
+            self.data_file=os.path.join(self.dire,'FittingData.csv')
+            self.pSmad3_data_file=os.path.join(self.dire,'pSmad3data.csv')
+            self.PEData=os.path.join(self.dire,'MultipleParameterEsimationAnalysis')
+            self.parameter_file=os.path.join(self.dire,'MultipleParameterEsimationAnalysis/Fit30.txt')
+            self.parameter_file2=os.path.join(self.dire,'MultipleParameterEsimationAnalysis/Fit30.2.txt')
         
-    p=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\Tests\output.txt'
-    
-    t=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\Tests\cheese.txt'
- 
+    F=FilePaths()
+    #
+    config=r'M3.ConfigFile.xlsx'
 
 
-
-
-
-
+    P=Plot(F.copasi_file,ParameterPath=F.parameter_file2,Index=0,
+           ExperimentFiles=[F.data_file,F.pSmad3_data_file]
+                          )
+    P
 
