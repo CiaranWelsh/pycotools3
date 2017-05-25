@@ -879,7 +879,8 @@ class Plot():
         query='//*[@name="File Name"]'
         l=[]
         for i in self.copasiML.xpath(query):
-            l.append(i.attrib['value'])
+            l.append(os.path.abspath(i.attrib['value']))
+        
         return l
         
         
