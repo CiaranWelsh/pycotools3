@@ -684,7 +684,7 @@ class Plot():
                  'PlotParameter':None,
                  'DotSize':4,
                  'Separator':'\t',
-                 'Log10':'true',
+                 'Log10':'false',
                  
                  'UsePickle':'false',
                  'OverwritePickle':'false',
