@@ -217,10 +217,6 @@ class ProfileLikelihood():
             raise Errors.Errors.InputError('You have selected {} processes but your computer only has {} available'.format(self.kwargs.get('NumProcesses'),multiprocessing.cpu_count()))
         
         assert self.kwargs.get('Log') in ['false','true']
-#        if self.kwargs.get('Log')=='false':
-#            self.kwargs['Log']=str(0)
-#        else:
-#            self.kwargs['Log']=str(1)
 
         
         self.cps_dct=self.copy_copasi_files_and_insert_parameters()
@@ -845,7 +841,7 @@ class Plot():
         self.plot_chi2_CI()
         CI=self.calc_chi2_CI()
         for i in CI:
-            print 'Confidence level for Index {} is {} or {} on a Log10 scale'.format(i,CI[i],numpy.log10(CI[i]))
+            LOG.info( 'Confidence level for Index {} is {} or {} on a Log10 scale'.format(i,CI[i],numpy.log10(CI[i])))
             
     def get_PL_dir(self):
         '''

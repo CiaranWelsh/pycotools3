@@ -1407,6 +1407,7 @@ class ExperimentMapper():
         TimeRole={'type': 'unsignedInteger', 'name': 'Role', 'value': '3'}
         DepentantVariableRole={'type': 'unsignedInteger', 'name': 'Role', 'value': '2'}
         IndepentantVariableRole={'type': 'unsignedInteger', 'name': 'Role', 'value': '1'}
+        IgnoredVariableRole={'type': 'unsignedInteger', 'name': 'Role', 'value': '0'}
         
         for i in range(int(num_columns)):
             map_group=etree.SubElement(Map,'ParameterGroup',attrib={'name':(str(i))})
@@ -1437,6 +1438,33 @@ class ExperimentMapper():
                             raise Errors.ExperimentMappingError('{} not in ICs, global vars or local variables'.format(obs[i]))
                         etree.SubElement(map_group,'Parameter',attrib=IndepentantVariableRole)
                         
+                    elif obs[i][:-6]!='indep':
+                        if obs[i] in ICs.keys():
+                            cn=ICs[obs[i]]['cn']+',Reference=Concentration'
+                            dependent_ICs={'type': 'cn', 'name': 'Object CN', 'value':cn}
+                            etree.SubElement(map_group,'Parameter',attrib=dependent_ICs)
+                            
+                        elif obs[i] in glob.keys():
+                            cn=glob[obs[i]]['cn']+',Reference=Value'
+                            dependent_globs={'type': 'cn', 'name': 'Object CN', 'value':cn} 
+                            etree.SubElement(map_group,'Parameter',attrib=dependent_globs)
+                            '''
+                            Note that you don't ever map data to reaction parameters therefore the commented
+                            out block below is not needed. Don't delete until you are sure of it though...
+                            '''
+                        elif obs[i] in loc.keys():
+                            cn=loc[obs[i]['cn']]+',Reference=Value'
+                            dependent_locs={'type': 'cn', 'name': 'Object CN', 'value':cn}
+                            etree.SubElement(map_group,'Parameter',attrib=dependent_locs)
+                            
+                        elif obs[i] not in loc.keys() + glob.keys() + ICs.keys():
+                            LOG.warning('{}not in model and has not been mapped. Please check spelling and try again'.format(obs[i]))
+
+                        else:
+                            raise Errors.ExperimentMappingError('''\'{}\' mapping error. In the copasi GUI its possible to have same name for two species provided they are in different compartments. In this API, having non-unique species identifiers leads to errors in mapping experimental to model variables'''.format(obs[i]))
+                        etree.SubElement(map_group,'Parameter',attrib=DepentantVariableRole)
+                        
+                        
                     else:
                         if obs[i] in ICs.keys():
                             cn=ICs[obs[i]]['cn']+',Reference=Concentration'
@@ -1457,11 +1485,12 @@ class ExperimentMapper():
                             etree.SubElement(map_group,'Parameter',attrib=dependent_locs)
                             
                         elif obs[i] not in loc.keys() + glob.keys() + ICs.keys():
-                            LOG.info('{}not in model and has not been mapped. Please check spelling and try again'.format(obs[i]))
+                            LOG.warning('{}not in model and has not been mapped. Please check spelling and try again'.format(obs[i]))
 
                         else:
                             raise Errors.ExperimentMappingError('''\'{}\' mapping error. In the copasi GUI its possible to have same name for two species provided they are in different compartments. In this API, having non-unique species identifiers leads to errors in mapping experimental to model variables'''.format(obs[i]))
-                        etree.SubElement(map_group,'Parameter',attrib=DepentantVariableRole)
+                        etree.SubElement(map_group,'Parameter',attrib=IgnoredVariableRole)
+
 
             else:
                 '''
@@ -1486,6 +1515,27 @@ class ExperimentMapper():
                         raise Errors.ExperimentMappingError('{} not in ICs, global vars or local variables'.format(obs[i]))
                     etree.SubElement(map_group,'Parameter',attrib=IndepentantVariableRole)
                     
+                elif obs[i][-6:]!='_indep'::
+                    if obs[i] in ICs.keys():
+                        cn=ICs[obs[i]]['cn']+',Reference=Concentration'
+                        dependent_ICs={'type': 'cn', 'name': 'Object CN', 'value':cn}
+                        etree.SubElement(map_group,'Parameter',attrib=dependent_ICs)
+                        
+                    elif obs[i] in glob.keys():
+                        cn=glob[obs[i]]['cn']+',Reference=Value'
+                        dependent_globs={'type': 'cn', 'name': 'Object CN', 'value':cn} 
+                        etree.SubElement(map_group,'Parameter',attrib=dependent_globs)
+                        '''
+                        Note that you don't ever map data to reaction parameters therefore the commented
+                        out block below is not needed. Don't delete until you are sure of it though...
+                        '''
+                    elif obs[i] in loc.keys():
+                        cn=loc[obs[i]['cn']]+',Reference=Value'
+                        dependent_locs={'type': 'cn', 'name': 'Object CN', 'value':cn}
+                        etree.SubElement(map_group,'Parameter',attrib=dependent_locs)
+                    else:
+                        raise Errors.ExperimentMappingError('''\'{}\' mapping error. In the copasi GUI its possible to have same name for two species provided they are in different compartments. In this API, having non-unique species identifiers leads to errors in mapping experimental to model variables'''.format(obs[i]))
+                    etree.SubElement(map_group,'Parameter',attrib=IgnoredVariableRole)
                 else:
                     if obs[i] in ICs.keys():
                         cn=ICs[obs[i]]['cn']+',Reference=Concentration'
