@@ -911,7 +911,7 @@ class Plot():
             df_dict[i]={}
             for j in self.result_paths[i]:
                 if j not in experiment_keys:
-                    data= pandas.read_csv(self.result_paths[i][j],sep=self.kwargs['Separator'])
+                    data= pandas.read_csv(self.result_paths[i][j],sep='\t')#self.kwargs['Separator'])
                     best_value_str='TaskList[Parameter Estimation].(Problem)Parameter Estimation.Best Value'
                     data=data.rename(columns={best_value_str:'RSS'})
                     df_dict[i][j]=data
@@ -1196,25 +1196,4 @@ class Plot():
 
         
 if __name__=='__main__':
-
-    class FilePaths():
-        def __init__(self):
-            self.dire=r'/home/b3053674/Documents/Models/MinimalTGFbetaModel/Fit3'
-    #        self.dire='/sharedlustre/users/a8021862/Ciaran/MinimalTGFbetaModel/Fit3'
-            self.copasi_file=os.path.join(self.dire,'M3.cps')
-            self.data_file=os.path.join(self.dire,'FittingData.csv')
-            self.pSmad3_data_file=os.path.join(self.dire,'pSmad3data.csv')
-            self.PEData=os.path.join(self.dire,'MultipleParameterEsimationAnalysis')
-            self.parameter_file=os.path.join(self.dire,'MultipleParameterEsimationAnalysis/Fit30.txt')
-            self.parameter_file2=os.path.join(self.dire,'MultipleParameterEsimationAnalysis/Fit30.2.txt')
-        
-    F=FilePaths()
-    #
-    config=r'M3.ConfigFile.xlsx'
-
-
-    P=Plot(F.copasi_file,ParameterPath=F.parameter_file2,Index=0,
-           ExperimentFiles=[F.data_file,F.pSmad3_data_file]
-                          )
-    P
-
+    pass
