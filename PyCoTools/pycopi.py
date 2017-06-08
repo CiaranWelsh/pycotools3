@@ -1515,7 +1515,7 @@ class ExperimentMapper():
                         raise Errors.ExperimentMappingError('{} not in ICs, global vars or local variables'.format(obs[i]))
                     etree.SubElement(map_group,'Parameter',attrib=IndepentantVariableRole)
                     
-                elif obs[i][-6:]!='_indep'::
+                elif obs[i][-6:]!='_indep':
                     if obs[i] in ICs.keys():
                         cn=ICs[obs[i]]['cn']+',Reference=Concentration'
                         dependent_ICs={'type': 'cn', 'name': 'Object CN', 'value':cn}
