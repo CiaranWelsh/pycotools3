@@ -885,7 +885,7 @@ class Plot():
         l=[]
         for i in self.copasiML.xpath(query):
             f=os.path.abspath(i.attrib['value'])
-            if os.path.isfile(f)==True:
+            if os.path.isfile(f)!=True:
                 raise Errors.InputError('Experimental files in use cannot be automatically determined. Please give a list of experiment file paths to the ExperimentFiles keyword'.format())
             l.append(os.path.abspath(i.attrib['value']))
         
