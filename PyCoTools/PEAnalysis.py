@@ -309,7 +309,7 @@ class TruncateData():
         X:
             Either Xth percentive or value to truncate data below. 
     '''
-    def __init__(self,data,TruncateMode='tolerance',X=100,Tolerance=0.001):
+    def __init__(self,data,TruncateMode='percent',X=100,Tolerance=0.001):
         self.data=data
         self.TruncateMode=TruncateMode        
         self.X=X
@@ -1629,11 +1629,10 @@ class ModelSelection():
     '''
     ## could give
     '''
-    def __init__(self,multi_model_fit,model_selection_filename=None):
+    def __init__(self,multi_model_fit):
         LOG.debug('Instantiate ModelSelection class')
         self.multi_model_fit=multi_model_fit
         self.number_models=self.get_num_models()
-        self.model_selection_filename=model_selection_filename
         if self.model_selection_filename==None:
             self.model_selection_filename=os.path.join(self.multi_model_fit.wd,'ModelSelectionData.xlsx')
         self.results_folder_dct=self._get_results_directories()
@@ -1648,8 +1647,8 @@ class ModelSelection():
     def get_num_models(self):
         return len(self.multi_model_fit.cps_files)
     ## void
-    def to_excel(self):
-        self.model_selection_data.to_excel(self.model_selection_filename)
+    def to_excel(self,filename):
+        self.model_selection_data.to_excel(filename)
         
     def _get_results_directories(self):
         '''
