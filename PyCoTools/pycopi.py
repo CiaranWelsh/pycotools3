@@ -4470,10 +4470,59 @@ class RunMultiplePEs():
 
 class MultiModelFit():
     '''
-    Take a project directory containing all copasi files
-    and data files that you want to fit simultaneously and 
+    Coordinate a systematic multi model fitting parameter estimation and 
+    compare results using AIC/BIC. 
     
+    Usage: 
+        1):
+            Setup a new folder containing all models that you would like to fit
+            and all data you would like to fit to the model. Do not have any 
+            other text or csv files in this folder as python will try and setup
+            fits for them. Data files must have 'Time' in the left column
+            and each subsequent column must be titled with a variable name mapping 
+            to a model entity exactly (watch out for trailing spaces). It is 
+            reccommended to supply a plain text file detailing the common 
+            component between the models and what is different between each model. 
+            This however should not be saved as a .txt file or python will 
+            try and map it to the models. Just save the 'ReadMe' without an extention
+            to avoid this problem.
+            
+                i.e.:
+                    ./project_dir
+                        --Exp data 1
+                        --Exp data n
+                        --Model1.cps
+                        --Model2.cps
 
+        2):
+            Instantiate instance of the MultiModelFit class with all relevant 
+            keywords. Relevant keywords are described in the ParameterEstimation
+            or RunMultiplePEs classes. As non-optional arguments this takes the absolute path 
+            to the project directory that you created in step 1. 
+            Python automatically creates subdirectories  for each model in your 
+            model selection problem and maps all data files in the main directory 
+            to each of the models. 
+        3):
+            Use the write_item_template() method to create a spreadsheet containing
+            your a config file with it instructions. By default, all ICs and all kinetic (global or local)
+            parameters are included. Delete entries that you would like to keep fixed. Do not 
+            modify the last columns which contain xml code for that variable. 
+        4): 
+            Once each model folder has a config file specific for that model
+            use the set_up() method. Then open one of the child copasi files
+            in order to check that things are configured how you'd like them before 
+            using the run() method. 
+            
+            
+        **kwargs:
+            CopyNumber:
+                Default = 1. This is how many times to copy a copasi file before
+                running the parameter estimation on each model. 
+            NumberOfPEs:
+                Default = 3. How many parameter estimations to perform in one model. 
+                i.e. a repeat scan task is automatically configured. 
+                
+            All other kwargs are described in RunMultiplePEs or ParameterEstimation
     '''
     def __init__(self,project_config,outdir,**kwargs):
         self.outdir=outdir

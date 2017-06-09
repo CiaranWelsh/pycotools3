@@ -914,6 +914,9 @@ class Plot():
                     data= pandas.read_csv(self.result_paths[i][j],sep='\t')#self.kwargs['Separator'])
                     best_value_str='TaskList[Parameter Estimation].(Problem)Parameter Estimation.Best Value'
                     data=data.rename(columns={best_value_str:'RSS'})
+#                    if self.kwargs['Log10']=='true':
+#                        df_dict[i][j]=numpy.log10(data)
+#                    else:
                     df_dict[i][j]=data
         return df_dict
 #        
@@ -962,7 +965,7 @@ class Plot():
         else:
             PED= PEAnalysis.ParsePEData(self.kwargs.get('ParameterPath'),
                                         UsePickle=self.kwargs['UsePickle'],
-                                        OverwritePickle=self.kwargs['OverwritePickle'])
+                                        OverwritePickle='false')#self.kwargs['OverwritePickle'])
             if isinstance(self.kwargs.get('Index'),int):
                 RSS[self.kwargs.get('Index')]=PED.data.iloc[self.kwargs.get('Index')]['RSS']
             elif isinstance(self.kwargs.get('Index'),list):
