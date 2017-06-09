@@ -3203,7 +3203,7 @@ class ParameterEstimation():
 
 #==============================================================================
 
-class Scan():
+    class Scan():
     '''
     Positional Args:
         copasi_file:
@@ -3718,10 +3718,10 @@ class Run():
             args=['CopasiSE','--maxTime',str(self.kwargs.get('MaxTime')),"{}".format(self.copasi_file)]
         p=subprocess.Popen(args,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=True)
         output,err= p.communicate()
-        d={}
+        d={}print data1
         d['output']=output
         d['error']=err
-        if err!='':
+        if err!='':print data1
             try:
                 self.run_linux()
             except:
