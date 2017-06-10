@@ -4430,7 +4430,7 @@ class RunMultiplePEs():
         LOG.info('Copying copasi file {} times'.format(self.kwargs['CopyNumber']))
         sub_copasi_files_dct={}
         copasi_path,copasi_filename=os.path.split(self.copasi_file)
-        for i in range(1,self.kwargs['CopyNumber']-1):
+        for i in range(1,self.kwargs['CopyNumber']):
             new_cps=os.path.join(copasi_path,copasi_filename[:-4]+'{}.cps'.format(str(i)))
             shutil.copy(self.copasi_file,new_cps)
             sub_copasi_files_dct[i]= new_cps
