@@ -88,6 +88,7 @@ PyCoTools/PyCoToolsTutorial/InstallationAndConfiguration.ipynb
 PyCoTools/PyCoToolsTutorial/Kholodenko.cps
 PyCoTools/PyCoToolsTutorial/ModelSelection.ipynb
 PyCoTools/PyCoToolsTutorial/MultipleParameterEstimations.ipynb
+PyCoTools/PyCoToolsTutorial/PEData.pickle
 PyCoTools/PyCoToolsTutorial/PyCoToolsTutorial.html
 PyCoTools/PyCoToolsTutorial/PyCoToolsTutorial.ipynb
 PyCoTools/PyCoToolsTutorial/Scan.ipynb
@@ -96,6 +97,7 @@ PyCoTools/PyCoToolsTutorial/Single Parameter Estimations.ipynb
 PyCoTools/PyCoToolsTutorial/Timecourse.ipynb
 PyCoTools/PyCoToolsTutorial/Tutorial1QuickStart.ipynb
 PyCoTools/PyCoToolsTutorial/__init__.py
+PyCoTools/PyCoToolsTutorial/sub_copasi_file.pickle
 PyCoTools/Scripts/__init__.py
 PyCoTools/Scripts/calculate_biomodels_computation_time.py
 PyCoTools/Scripts/compare_sim_vs_exp.py

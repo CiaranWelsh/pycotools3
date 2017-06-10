@@ -2186,3 +2186,206 @@ DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to
 /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
 INFO:PyCoTools.pycopi:pycopi:4374:Setup Took 0.323647022247 seconds
 INFO:PyCoTools.pycopi:pycopi:4357:<PyCoTools.pycopi.Scan instance at 0x7f1d636f0bd8>
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:4144:Performing multi parameter fit for model at:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:4384:Using default report name:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ParameterFit.txt
+DEBUG:PyCoTools.pycopi:pycopi:4393:ConfigFilename is None. Reassigning ConfigFilename
+INFO:PyCoTools.pycopi:pycopi:4450:creating a directory for analysis in : 
+
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEsimationAnalysis
+DEBUG:PyCoTools.pycopi:pycopi:4463:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:4264:Create an instance of ParameterEstimation
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+INFO:PyCoTools.pycopi:pycopi:4309:writing PE config template for model: /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:4310:ConfigFilename is /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1581:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:1584:Mapping experiment InsertParametersEstimationData.txt
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:991:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+INFO:PyCoTools.pycopi:pycopi:4430:Copying copasi file 1 times
+INFO:PyCoTools.pycopi:pycopi:4349:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+INFO:root:pycopi:3466:defining report
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:991:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+INFO:PyCoTools.pycopi:pycopi:4374:Setup Took 0.318156003952 seconds
+INFO:PyCoTools.pycopi:pycopi:4357:<PyCoTools.pycopi.Scan instance at 0x7f1d6380b248>
+INFO:PyCoTools.pycopi:pycopi:4297:Running model: 0
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+INFO:root:__init__:18:Initializing PyCoTools
+INFO:root:__init__:19:Initializing Logging System
+INFO:root:__init__:20:logging config file at: /home/b3053674/anaconda2/lib/python2.7/site-packages/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:998:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:998:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:2018:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:2029:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:2036:Reading timecourse
+DEBUG:PyCoTools.pycopi:pycopi:2038:pruning headers of copasi files of COPASI references
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1581:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:1584:Mapping experiment InsertParametersEstimationData.txt
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:991:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:2771:Running ParameterEstimation. Data reported to file: InsertParametersEstimationResults.txt
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:998:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:998:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:2018:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:2029:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:2036:Reading timecourse
+DEBUG:PyCoTools.pycopi:pycopi:2038:pruning headers of copasi files of COPASI references
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1581:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:1584:Mapping experiment InsertParametersEstimationData.txt
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:991:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:2771:Running ParameterEstimation. Data reported to file: InsertParametersEstimationResults.txt
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:4144:Performing multi parameter fit for model at:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:4384:Using default report name:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ParameterFit.txt
+DEBUG:PyCoTools.pycopi:pycopi:4393:ConfigFilename is None. Reassigning ConfigFilename
+INFO:PyCoTools.pycopi:pycopi:4450:creating a directory for analysis in : 
+
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEsimationAnalysis
+DEBUG:PyCoTools.pycopi:pycopi:4463:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:4264:Create an instance of ParameterEstimation
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+INFO:PyCoTools.pycopi:pycopi:4309:writing PE config template for model: /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:4310:ConfigFilename is /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1581:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:1584:Mapping experiment InsertParametersEstimationData.txt
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:991:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+INFO:PyCoTools.pycopi:pycopi:4430:Copying copasi file 1 times
+INFO:PyCoTools.pycopi:pycopi:4349:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+INFO:root:pycopi:3466:defining report
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:991:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+INFO:PyCoTools.pycopi:pycopi:4374:Setup Took 0.338140010834 seconds
+INFO:PyCoTools.pycopi:pycopi:4357:<PyCoTools.pycopi.Scan instance at 0x7f080b74edd0>
+INFO:PyCoTools.pycopi:pycopi:4297:Running model: 0
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:131:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:142:File Kholodenko.cps written to 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
