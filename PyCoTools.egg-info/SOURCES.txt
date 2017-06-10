@@ -83,6 +83,7 @@ PyCoTools/PyCoToolsTutorial/Analysis of Parameter Estimation Data.ipynb
 PyCoTools/PyCoToolsTutorial/FilePaths.py
 PyCoTools/PyCoToolsTutorial/Getting Model Quantities.ipynb
 PyCoTools/PyCoToolsTutorial/Identifiability Analysis.ipynb
+PyCoTools/PyCoToolsTutorial/InsertParameters.ipynb
 PyCoTools/PyCoToolsTutorial/InstallationAndConfiguration.ipynb
 PyCoTools/PyCoToolsTutorial/Kholodenko.cps
 PyCoTools/PyCoToolsTutorial/ModelSelection.ipynb

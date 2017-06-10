@@ -3203,7 +3203,7 @@ class ParameterEstimation():
 
 #==============================================================================
 
-class Scan():
+    class Scan():
     '''
     Positional Args:
         copasi_file:
@@ -3718,10 +3718,10 @@ class Run():
             args=['CopasiSE','--maxTime',str(self.kwargs.get('MaxTime')),"{}".format(self.copasi_file)]
         p=subprocess.Popen(args,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=True)
         output,err= p.communicate()
-        d={}
+        d={}print data1
         d['output']=output
         d['error']=err
-        if err!='':
+        if err!='':print data1
             try:
                 self.run_linux()
             except:
@@ -4430,10 +4430,13 @@ class RunMultiplePEs():
         LOG.info('Copying copasi file {} times'.format(self.kwargs['CopyNumber']))
         sub_copasi_files_dct={}
         copasi_path,copasi_filename=os.path.split(self.copasi_file)
-        for i in range(self.kwargs['CopyNumber']):
+        for i in range(1,self.kwargs['CopyNumber']-1):
             new_cps=os.path.join(copasi_path,copasi_filename[:-4]+'{}.cps'.format(str(i)))
             shutil.copy(self.copasi_file,new_cps)
             sub_copasi_files_dct[i]= new_cps
+        
+        sub_copasi_files_dct[0] = self.copasi_file
+        
         
         with open(self.copasi_file_pickle,'w')as f:
             pickle.dump(sub_copasi_files_dct,f)
