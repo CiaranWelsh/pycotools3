@@ -89,7 +89,7 @@ class ParsePEData():
         #change directory
         LOG.info('Parsing data from {} into python'.format(self.results_path))
         assert os.path.exists(self.results_path),'{} does not exist'.format(self.results_path)
-        self.cwd=os.path.dirname(self.results_path)
+        self.cwd=os.path.dirname(os.path.abspath(self.results_path))
         os.chdir(self.cwd)
         self.pickle_path=PicklePath
         if self.pickle_path==None:
