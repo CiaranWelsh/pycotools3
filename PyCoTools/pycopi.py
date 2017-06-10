@@ -3718,10 +3718,10 @@ class Run():
             args=['CopasiSE','--maxTime',str(self.kwargs.get('MaxTime')),"{}".format(self.copasi_file)]
         p=subprocess.Popen(args,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=True)
         output,err= p.communicate()
-        d={}print data1
+        d={}
         d['output']=output
         d['error']=err
-        if err!='':print data1
+        if err!='':
             try:
                 self.run_linux()
             except:
