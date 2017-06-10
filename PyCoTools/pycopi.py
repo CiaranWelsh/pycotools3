@@ -3203,7 +3203,7 @@ class ParameterEstimation():
 
 #==============================================================================
 
-    class Scan():
+class Scan():
     '''
     Positional Args:
         copasi_file:
