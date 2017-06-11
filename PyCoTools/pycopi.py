@@ -3675,6 +3675,9 @@ class Run():
         elif self.kwargs.get('Task')=='steady_state':
             self.kwargs['Task']='steadystate'        
         
+        if os.path.isfile(self.copasi_file)!=True:
+            raise Errors.FileDoesNotExistError('{} is not a file'.format(self.copasi_file))
+            
         
         self.copasiML=self.set_task()
         self.save()
@@ -3692,7 +3695,9 @@ class Run():
 
     def multi_run(self):
         def run(x):
-            subprocess.Popen('CopasiSE "{}"'.format(x))
+            if os.path.isfile(x)!=True:
+                raise Errors.FileDoesNotExistError('{} is not a file'.format(self.copasi_file))
+            subprocess.Popen(['CopasiSE',self.copasi_file)
         Process(run(self.copasi_file))
         
         
@@ -4431,7 +4436,7 @@ class RunMultiplePEs():
         sub_copasi_files_dct={}
         copasi_path,copasi_filename=os.path.split(self.copasi_file)
         for i in range(self.kwargs['CopyNumber']):
-            new_cps=os.path.join(copasi_path,copasi_filename[:-4]+'{}.cps'.format(str(i)))
+            new_cps=os.path.join(copasi_path,copasi_filename[:-4]+'_{}.cps'.format(str(i)))
             shutil.copy(self.copasi_file,new_cps)
             sub_copasi_files_dct[i]= new_cps
         
@@ -4772,7 +4777,19 @@ class MultiModelFit():
         
             
 if __name__=='__main__':
-    pass
+    f=r'/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps'
+    d='/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/InsertParametersEstimationData.txt'
+    
+#    print os.path.isfile(f)
+    
+#    print os.path.isfile(d)
+    
+#    R=RunMultiplePEs(f,d,CopyNumber=1)
+#    R.write_config_template()
+#    R.set_up()
+#    R.run()
+#    R.run()
+    
 #    class FilePaths():
 #        def __init__(self):
 #            self.dire=r'/home/b3053674/Documents/Models/MinimalTGFbetaModel/Fit3'
