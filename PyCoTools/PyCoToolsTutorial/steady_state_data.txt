@@ -1,2 +1,0 @@
-Erk2	Erk2-P	Erk2-PP	Mek1	Mek1-P	Mek1-PP	Mos	Mos-P
-280.0	10.0	10.0	280.0	10.0	20.0	90.0	10.0

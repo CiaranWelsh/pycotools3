@@ -887,7 +887,7 @@
       </Method>
     </Task>
     <Task key="Task_16" name="Scan" type="scan" scheduled="true" updateModel="false">
-      <Report reference="Report_32" target="/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEsimationAnalysis/ParameterFit0.txt" append="false" confirmOverwrite="false"/>
+      <Report reference="Report_32" target="" append="false" confirmOverwrite="false"/>
       <Problem>
         <Parameter name="Subtask" type="unsignedInteger" value="5"/>
         <ParameterGroup name="ScanItems">
@@ -927,7 +927,7 @@
       </Method>
     </Task>
     <Task key="Task_19" name="Parameter Estimation" type="parameterFitting" scheduled="false" updateModel="false">
-      <Report reference="Report_60" target="" append="0" confirmOverwrite="0"/>
+      <Report reference="Report_32" target="/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ParameterFit.txt" append="0" confirmOverwrite="0"/>
       <Problem>
         <Parameter name="Maximize" type="bool" value="0"/>
         <Parameter name="Randomize Start Values" type="bool" value="true"/>
