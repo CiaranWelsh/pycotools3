@@ -3697,7 +3697,7 @@ class Run():
         def run(x):
             if os.path.isfile(x)!=True:
                 raise Errors.FileDoesNotExistError('{} is not a file'.format(self.copasi_file))
-            subprocess.Popen(['CopasiSE',self.copasi_file)
+            subprocess.Popen(['CopasiSE',self.copasi_file])
         Process(run(self.copasi_file))
         
         
