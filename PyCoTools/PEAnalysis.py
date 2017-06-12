@@ -1873,7 +1873,7 @@ class ModelSelection():
         fit_analysis_script_name=os.path.join(scripts_folder,'fit_analysis.py')
         LOG.debug('fit analysis script on your computer is at \t\t{}'.format(fit_analysis_script_name))
 
-        return Popen('python {} {} -tol {}'.format(fit_analysis_script_name,results_path,Tolerance))
+        return Popen(['python',fit_analysis_script_name,results_path,'-tol', Tolerance])
 #        
     def compare_sim_vs_exp(self):
         '''
