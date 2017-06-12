@@ -78,25 +78,24 @@ PyCoTools/Examples/KholodenkoExample/__init__.py
 PyCoTools/Examples/KholodenkoExample/fitItemTemplate.JPG
 PyCoTools/Examples/KholodenkoExample/fitItemTemplate.xlsx
 PyCoTools/Examples/KholodenkoExample/log.log
-PyCoTools/PyCoToolsTutorial/Analysis of Parameter Estimation Data.ipynb
 PyCoTools/PyCoToolsTutorial/FilePaths.py
 PyCoTools/PyCoToolsTutorial/Getting Model Quantities.ipynb
 PyCoTools/PyCoToolsTutorial/Identifiability Analysis.ipynb
 PyCoTools/PyCoToolsTutorial/InsertParameters.ipynb
 PyCoTools/PyCoToolsTutorial/InstallationAndConfiguration.ipynb
 PyCoTools/PyCoToolsTutorial/Kholodenko.cps
-PyCoTools/PyCoToolsTutorial/Kholodenko_0.cps
 PyCoTools/PyCoToolsTutorial/ModelSelection.ipynb
 PyCoTools/PyCoToolsTutorial/MultipleParameterEstimations.ipynb
+PyCoTools/PyCoToolsTutorial/ParameterEstimationAnalysis.ipynb
+PyCoTools/PyCoToolsTutorial/Profile Likelihoods.ipynb
 PyCoTools/PyCoToolsTutorial/PyCoToolsTutorial.html
 PyCoTools/PyCoToolsTutorial/PyCoToolsTutorial.ipynb
+PyCoTools/PyCoToolsTutorial/References.ipynb
 PyCoTools/PyCoToolsTutorial/Scan.ipynb
 PyCoTools/PyCoToolsTutorial/Scripts.ipynb
 PyCoTools/PyCoToolsTutorial/Single Parameter Estimations.ipynb
 PyCoTools/PyCoToolsTutorial/Timecourse.ipynb
-PyCoTools/PyCoToolsTutorial/Tutorial1QuickStart.ipynb
 PyCoTools/PyCoToolsTutorial/__init__.py
-PyCoTools/PyCoToolsTutorial/sub_copasi_file.pickle
 PyCoTools/Scripts/__init__.py
 PyCoTools/Scripts/calculate_biomodels_computation_time.py
 PyCoTools/Scripts/compare_sim_vs_exp.py
@@ -110,7 +109,6 @@ PyCoTools/Scripts/pydentify_model.py
 PyCoTools/Scripts/run_PL.py
 PyCoTools/Scripts/run_local_chaser_PEs.py
 PyCoTools/Scripts/run_multiple_PEs.py
-PyCoTools/Scripts/scripts.py
 PyCoTools/Scripts/submit_copasi_multijob.py
 PyCoTools/Tests/EvaluateOptimizationPerformanceTests.py
 PyCoTools/Tests/InsertParameterFromDictTests.py
