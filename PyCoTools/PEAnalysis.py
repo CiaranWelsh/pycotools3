@@ -1620,7 +1620,7 @@ class PlotPEData(object):
         '''
         for f in self.experiment_files:
             dire,p= os.path.split(f)
-            fle=os.path.splitext(p)[0]
+            fle=os.path.splitext(p)[0]  
             self.plot1file(f)
 
     
@@ -1633,8 +1633,8 @@ class ModelSelection():
         LOG.debug('Instantiate ModelSelection class')
         self.multi_model_fit=multi_model_fit
         self.number_models=self.get_num_models()
-        if self.model_selection_filename==None:
-            self.model_selection_filename=os.path.join(self.multi_model_fit.wd,'ModelSelectionData.xlsx')
+#        if self.model_selection_filename==None:
+#            self.model_selection_filename=os.path.join(self.multi_model_fit.wd,'ModelSelectionData.xlsx')
         self.results_folder_dct=self._get_results_directories()
         self._PED_dct=self._parse_data()
         self.GMQ_dct=self._get_GMQ_dct()
