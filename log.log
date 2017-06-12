@@ -12151,3 +12151,6 @@ DEBUG:__main__:PEAnalysis:348:calculating tolerance
 INFO:root:__init__:18:Initializing PyCoTools
 INFO:root:__init__:19:Initializing Logging System
 INFO:root:__init__:20:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+INFO:root:__init__:18:Initializing PyCoTools
+INFO:root:__init__:19:Initializing Logging System
+INFO:root:__init__:20:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
