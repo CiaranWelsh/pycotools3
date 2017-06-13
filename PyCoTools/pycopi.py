@@ -71,16 +71,17 @@ sns.set_context(context='poster',
 #==========================================================================
 
 class CopasiMLParser():
-    '''
-    Parse a copasi file into xml.etree. 
+
+    """
+    Parse a copasi file into xml.etree.
     The copasiML is availbale as the copasiML attribute.
-    
+
     args:
         copasi_file:
             A full path to a copasi file
-        
 
-    '''
+
+    """
     def __init__(self,copasi_file):
         self.copasi_file=copasi_file
         if os.path.isfile(self.copasi_file)!=True:
@@ -120,7 +121,7 @@ class CopasiMLParser():
         '''
         if os.path.isfile(copasi_filename):
             os.remove(copasi_filename)
-        with open(copasi_filename,'w') as f:
+        with open(copasi_filename, 'w') as f:
             f.write(etree.tostring(copasiML,pretty_print=True))    
             
     def _parse_copasiML(self):
