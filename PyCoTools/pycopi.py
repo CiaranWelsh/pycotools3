@@ -189,8 +189,76 @@ class GetModelQuantities():
             molarity=float(particles)
         return round(molarity,33)
         
+    def get_model_units(self):
+        '''
+        get model reference
+        '''
+        query =  '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
+        return self.copasiML.xpath(query)[0].attrib
+    
+    def get_model_object_reference(self):
+        """
+        Get the model reference - the 'key' from self.get_model_units
+        """
+        return self.get_model_units()['key']
+    
+    def get_metabolites_object_reference(self):
+        """
+        Get the model reference - the 'key' from self.get_model_units
+        """
+        collection= {}
+        for i in self.copasiML.iter():
+            if  i.tag == '{http://www.copasi.org/static/schema}ListOfMetabolites':
+                for j in i:
+                    collection[j.attrib['key']] = j.attrib['name']
+        return collection
+
+    def get_global_object_reference(self):
+        """
+        Get the model reference - the 'key' from self.get_model_units
+        """
+        collection= {}
+        for i in self.copasiML.iter():
+            if  i.tag == '{http://www.copasi.org/static/schema}ListOfModelValues':
+                for j in i:
+                    collection[j.attrib['key']] = j.attrib['name']
+        return collection
+    
+    def get_compartment_object_reference(self):
+        """
+        Get the model reference - the 'key' from self.get_model_units
+        """
+        collection= {}
+        for i in self.copasiML.iter():
+            if  i.tag == '{http://www.copasi.org/static/schema}ListOfCompartments':
+                for j in i:
+                    collection[j.attrib['key']] = j.attrib['name']
+        return collection
+
+    def get_list_of_constants(self):
+        """
+        Get the model reference - the 'key' from self.get_model_units
+        """
+        collection= {}
+        for i in self.copasiML.iter():
+            if  i.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
+                for j in i:
+                    collection[j.attrib['name']] = {}
+                for j in i:
+                    collection[j.attrib['name']][j.attrib['key']] = j.attrib['value']
+        return collection    
+    
+    def get_reactions_object_reference(self):
+        """
         
-        
+        """
+        collection={}
+        for i in self.copasiML.iter():
+            if i.tag=='{http://www.copasi.org/static/schema}ListOfReactions':
+                for j in i:
+                    collection[j.attrib['name']] = j.attrib['key']
+        return collection
+            
     def convert_molar_to_particles(self,moles,mol_unit,compartment_volume):
         '''
         Converts particle numbers to Molarity. 
@@ -308,6 +376,16 @@ class GetModelQuantities():
             raise Errors.NoMetabolitesError('There are no metabolites in {}'.format(self.get_model_name()))
         return metab_dct
         
+    def get_state_template(self):
+        """
+
+        """
+        collection= []
+        for i in self.copasiML.iter():
+            if  i.tag == '{http://www.copasi.org/static/schema}StateTemplate':
+                for j in i:
+                    collection.append(j.attrib['objectReference'])
+        return collection        
 
     def get_global_quantities(self):
         '''
@@ -481,6 +559,7 @@ class GetModelQuantities():
         l=self.get_local_kinetic_parameters_cns()
         p= dict(l,**g)
         p=dict(p,**self.get_IC_cns())
+        p=dict(p,**self.get_compartments())
         return p
         
     def get_experiment_files(self):
@@ -4876,7 +4955,7 @@ class InsertParameters():
 #        self.check_parameter_consistancy()
         self.parameters=self.get_parameters()   
         self.parameters= self.replace_gl_and_lt()
-#        self.insert_all()
+        self.insert_all()
         #change
 
     def check_parameter_consistancy(self,df):
@@ -4930,24 +5009,116 @@ Please check the headers of your PE data are consistent with your model paramete
         '''
         
         '''
-        #first isolate the local parameters 
+        ## get local parameters
         local=self.GMQ.get_local_kinetic_parameters_cns().keys()
-        print local
-#        for i in local:
-#            query='//*[@cn="{}"]'.format( self.GMQ.get_local_kinetic_parameters_cns()[i]['cn'])
-#            for j in self.copasiML.xpath( query):
-#                if i in self.parameters.keys():
-#                    j.attrib['value']=str(float(self.parameters[i]))
-#        return self.copasiML
-                    
-    def insert_global(self):
-        glob= self.GMQ.get_global_quantities_cns().keys()
-        for i in glob:
-            query='//*[@cn="{}"]'.format( self.GMQ.get_global_quantities_cns()[i]['cn'])
-            for j in self.copasiML.xpath(query):
-                if i in self.parameters.keys() and j.attrib['simulationType']!='assignment':
-                    j.attrib['value']=str(float(self.parameters[i]))
+        ## remove local parameters from complete list depending on whether 
+        ## user wants to insert anything for that parameter or not
+        local= [i for i in self.parameters if i in local]
+        
+        ## create a dict[reaction]=parameter type dict to help
+        ## navidate the xml
+        local_dct={}
+        for i in local:
+            k,v = re.findall(  '\((.*)\)\.(.*)',i  ) [0]
+            local_dct[k]=v
+        
+        ## Iterate over all local parameters that we want to insert
+        ## Identify the list of reactions ,match for the current reaction
+        ## bore into that reaction to locate the locally defined rate constant
+        ## match with the parameter then insert the str(float(*.)) representation
+        ## of the parameter value into the value attribute for the constant
+        ## element
+        for reaction,parameter in local_dct.items():
+            for i in self.copasiML.iter():
+                if  i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
+                    for j in i:
+                        if j.attrib['name'] == reaction:
+                            for k in j:
+                                if k.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
+                                    for l in k:
+                                        if l.attrib['name']==parameter:
+                                            l.attrib['value'] = str(float(self.parameters['({}).{}'.format(reaction,parameter)]))
         return self.copasiML
+    
+    def assemble_state_values(self):
+        """
+        
+        """
+        LOG.debug('States:\t {}'.format( self.GMQ.get_state_template()))
+        state_values = []
+        count = 0
+        for state in self.GMQ.get_state_template():
+            LOG.debug('assembling parameter {} out of {}'.format(count,len(self.GMQ.get_state_template())))
+            count+=1
+            model = re.findall('(Model)_',state)
+            metab = re.findall('Metabolite',state)
+            mod_value = re.findall('ModelValue',state)
+            compartment = re.findall('Compartment',state)
+            if model !=[]:
+                LOG.debug('State {} is model'.format(state))
+                assert metab == []
+                assert mod_value == []
+                assert compartment ==[]
+                state_values.append(str(0))
+                LOG.debug('Added 0 for first parameter in sequence')
+            elif metab !=[]:
+                LOG.debug('State {} is metab'.format(state))
+                assert model == []
+                assert mod_value == []
+                assert compartment == []
+                metab_name= self.GMQ.get_metabolites_object_reference()[state]
+                if self.kwargs['QuantityType']=='concentration':
+                    print self.parameters[metab_name]
+#                    particles=self.GMQ.convert_molar_to_particles(float(self.parameters[metab_name]),
+#                                                                  self.GMQ.get_quantity_units(),
+#                                                                  float(self.insert_ICs[metab_name]['compartment_volume']))
+#                else:
+#                    particles = 
+
+                    metab_value = self.GMQ.get_IC_cns()[metab_name]['concentration']
+                    
+                comp = self.GMQ.get_metabolites()[metab_name]['compartment']
+                compartment_value= self.GMQ.get_compartments()[comp]['value']
+                
+                if metab_name in self.parameters.keys():
+                    LOG.debug('Quantity unit = {}'.format(self.GMQ.get_quantity_units()))
+                    LOG.debug('Compartment quantity = {}'.format(compartment_value))
+                    metab_value = self.GMQ.convert_molar_to_particles(self.parameters[metab_name],
+                                                          self.GMQ.get_quantity_units(),
+                                                          float(compartment_value))
+                state_values.append(str(float(metab_value)))
+            elif mod_value !=[]:
+                LOG.debug('State {} is Global Variable'.format(state))
+
+                assert model == []
+                assert metab == []
+                assert compartment == []
+                mod_value_name = self.GMQ.get_global_object_reference()[state]
+                mod_value_value = self.GMQ.get_global_quantities()[mod_value_name]
+                if mod_value_name in self.parameters.keys():
+                    mod_value_value=str(float(self.parameters[mod_value_name]))
+                state_values.append(mod_value_value)
+                
+            elif compartment != []:
+                '''
+                Warning: A potential bug may exist where if some metabolites are
+                calculated before the compartment is changed then other after, 
+                we'll get metabolites with inconsident volumes. This will be 
+                rare as I don't generally estimate the compartment volumes 
+                but if you are then this could be a problem. 
+                '''
+                assert model ==[]
+                assert metab == []
+                assert mod_value == []
+                compartment_name = self.GMQ.get_compartment_object_reference()[state]
+                compartment_value = self.GMQ.get_compartments()[compartment_name]['value']
+                if compartment_name in self.parameters.keys():
+                    compartment_value = str(float(self.parameters[compartment_name]))
+                state_values.append(compartment_value)
+                    
+        if len(state_values)!=len(self.GMQ.get_state_template()):
+            raise Exception('For some reason the number of state values does not equal the number of global + IC parameters in yoru model')
+        return state_values
 
     def insert_ICs(self):
         IC=self.GMQ.get_IC_cns()
@@ -4962,6 +5133,28 @@ Please check the headers of your PE data are consistent with your model paramete
                         particles=self.parameters[i]
                     j.attrib['value']=str(float(particles))
         return self.copasiML
+    
+    def insert_global_and_ICs(self):
+        """
+        
+        """
+        def reduce_str(y,z):
+            return '{} {}'.format(y,z)
+        values=reduce(reduce_str,self.assemble_state_values())
+        query = '//*[@type="initialState"]'
+        for i in self.copasiML.xpath(query):
+            i.text = values
+        return self.copasiML
+                    
+    def insert_global(self):
+        glob= self.GMQ.get_global_quantities_cns().keys()
+        for i in glob:
+            query='//*[@cn="{}"]'.format( self.GMQ.get_global_quantities_cns()[i]['cn'])
+            for j in self.copasiML.xpath(query):
+                if i in self.parameters.keys() and j.attrib['simulationType']!='assignment':
+                    j.attrib['value']=str(float(self.parameters[i]))
+        return self.copasiML
+
 
 
 
@@ -5002,12 +5195,7 @@ Please check the headers of your PE data are consistent with your model paramete
                             else:
                                 continue
         return self.copasiML
-        
-    def get_current_parameters_deprecated(self):
-        '''
-        Deprecated. Just use self.GMQ.get_all_model_variables()
-        '''
-        return self.GMQ.get_all_model_variables()
+
         
 
 
@@ -5026,14 +5214,9 @@ Please check the headers of your PE data are consistent with your model paramete
         
     def insert_all(self):
         self.copasiML=self.insert_locals()
-#        self.save() 
-        self.copasiML=self.insert_global()
-#        self.save()
-        self.copasiML=self.insert_ICs()
-#        self.save()
-        self.copasiML=self.insert_fit_items()
-        self.save()
-#        os.chdir(os.path.dirname(self.copasi_file))
+        self.copasiML = self.insert_global_and_ICs()
+#        self.copasiML=self.insert_fit_items()
+        self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
         
         
 #==============================================================================
@@ -5043,19 +5226,22 @@ Please check the headers of your PE data are consistent with your model paramete
             
 if __name__=='__main__':
 
-    f=r'C:\Users\Ciaran\Documents\CopasiVer19KholodenkoTests\M1.cps'
+    f=r'C:\Users\Ciaran\Documents\CopasiVer19KholodenkoTests\M2.cps'
 
     dire = os.path.dirname(f)
 
     report = os.path.join(dire, 'timecourse_report.txt')
     
-    PE=ParameterEstimation(f,report)
-#    PE.write_item_template()
-#    PE.set_up()
-#    PE.run()
+    d={'A':5,'B':10,'one':15,'(second).k1':20,'another':25,'new_com':1000}
+    I=InsertParameters(f,ParameterDict=d)
+    print I.parameters.transpose()    
 
-    I=InsertParameters(f,ParameterPath = PE.kwargs['ReportName'])    
-    print I.insert_locals()
+    print '\n\n\n'
+
+    
+
+#    os.system('CopasiUI {}'.format(f))
+#    print I.insert_initial_state()
 #    print os.system('CopasiUI {}'.format(f))
 
     '''
@@ -5066,6 +5252,12 @@ if __name__=='__main__':
     
     Hopefully this would work. 
     '''
+#    GMQ=GetModelQuantities(f)
+    
+#    print GMQ.get_all_model_variables().keys()
+
+    
+
 
 
 
