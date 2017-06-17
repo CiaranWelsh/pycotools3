@@ -5033,7 +5033,7 @@ Please check the headers of your PE data are consistent with your model paramete
                 if  i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
                     for j in i:
                         if j.attrib['name'] == reaction:
-                            for k in j:
+                            for k in j: 
                                 if k.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
                                     for l in k:
                                         if l.attrib['name']==parameter:
@@ -5067,26 +5067,19 @@ Please check the headers of your PE data are consistent with your model paramete
                 assert mod_value == []
                 assert compartment == []
                 metab_name= self.GMQ.get_metabolites_object_reference()[state]
-                if self.kwargs['QuantityType']=='concentration':
-                    print self.parameters[metab_name]
-#                    particles=self.GMQ.convert_molar_to_particles(float(self.parameters[metab_name]),
-#                                                                  self.GMQ.get_quantity_units(),
-#                                                                  float(self.insert_ICs[metab_name]['compartment_volume']))
-#                else:
-#                    particles = 
-
-                    metab_value = self.GMQ.get_IC_cns()[metab_name]['concentration']
-                    
-                comp = self.GMQ.get_metabolites()[metab_name]['compartment']
-                compartment_value= self.GMQ.get_compartments()[comp]['value']
+#                    print self.parameters[metab_name]
+                metab =  self.GMQ.get_metabolites()[metab_name]
+                comp_vol = self.GMQ.get_IC_cns()[metab_name]['compartment_volume']
                 
-                if metab_name in self.parameters.keys():
-                    LOG.debug('Quantity unit = {}'.format(self.GMQ.get_quantity_units()))
-                    LOG.debug('Compartment quantity = {}'.format(compartment_value))
-                    metab_value = self.GMQ.convert_molar_to_particles(self.parameters[metab_name],
+                metab_val = self.GMQ.get_IC_cns()[metab_name]['value']
+                LOG.debug('Metab dict for {}, \n\n{}'.format(state,self.GMQ.get_IC_cns()[metab_name]))
+                
+                if metab_name in self.parameters:
+                    metab_val =  self.GMQ.convert_molar_to_particles(float(self.parameters[metab_name]),
                                                           self.GMQ.get_quantity_units(),
-                                                          float(compartment_value))
-                state_values.append(str(float(metab_value)))
+                                                          float(comp_vol))
+                state_values.append(str(float(metab_val)))
+
             elif mod_value !=[]:
                 LOG.debug('State {} is Global Variable'.format(state))
 
@@ -5116,8 +5109,8 @@ Please check the headers of your PE data are consistent with your model paramete
                     compartment_value = str(float(self.parameters[compartment_name]))
                 state_values.append(compartment_value)
                     
-        if len(state_values)!=len(self.GMQ.get_state_template()):
-            raise Exception('For some reason the number of state values does not equal the number of global + IC parameters in yoru model')
+#        if len(state_values)!=len(self.GMQ.get_state_template()):
+#            raise Exception('For some reason the number of state values does not equal the number of global + IC parameters in yoru model')
         return state_values
 
     def insert_ICs(self):
