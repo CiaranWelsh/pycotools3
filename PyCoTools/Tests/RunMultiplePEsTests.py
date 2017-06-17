@@ -70,7 +70,7 @@ class RunMultiplePESetUp(unittest.TestCase):
 
         self.options = {'Run': 'multiprocess',
                        'OutputDir': None,
-                       'CopyNumber': 1,
+                       'CopyNumber': 2,
                        'NumberOfPEs': 3,
                        'ReportName': None,
                        'Metabolites': self.GMQ.get_metabolites().keys(),
@@ -145,5 +145,16 @@ class Test1(RunMultiplePESetUp):
     def test_output_directory(self):
         self.assertTrue(os.path.isdir(self.RMPE.kwargs['OutputDir']))
 
-    def test_results_produced(self):
-        print dir(self.RMPE.kwargs['OutputDir'])
+    def test_results_copy_number(self):
+        num1 = len(glob.glob(self.RMPE.kwargs['OutputDir']))
+        self.assertEqual(self.RMPE.kwargs['CopyNumber'],num1)
+
+    def test_results_number_of_PEs(self):
+        df_list = []
+        for i in glob.glob(self.RMPE.kwargs['OutputDir']):
+            print pandas.read_csv(i,sep='\t')
+        #     df_list.append(pandas.read_csv(i,sep='\t'))
+        # df = pandas.concat(df_list)
+        # num = self.RMPE.kwargs['CopyNumber'] * self.RMPE.kwargs['NumberOfPEs']
+        # print df
+        # self.assertEqual(df.shape[0],num)
