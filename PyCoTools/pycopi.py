@@ -1817,6 +1817,8 @@ class ExperimentMapper():
     def __init__(self,copasi_file,experiment_files,**kwargs):
         self.copasi_file=copasi_file
         self.experiment_files=experiment_files
+        if isinstance(self.experiment_files,str)==True:
+            self.experiment_files = [self.experiment_files]
         assert isinstance(self.experiment_files,list)
         for i in self.experiment_files:
             assert os.path.isfile(i),'{} is not a real file'.format(i)
@@ -2942,6 +2944,11 @@ class ParameterEstimation():
             self.get_item_template().to_excel(self.kwargs.get('ConfigFilename'))
         return  'writing template. {} set to {} and {} is {}'.format('OverwriteConfigFile',self.kwargs.get('OverwriteConfigFile'),'ConfigFilename',self.kwargs.get('ConfigFilename'))
 
+    def write_config_template(self):
+        if os.path.isfile(self.kwargs.get('ConfigFilename'))==False or self.kwargs.get('OverwriteConfigFile')=='true':
+            self.get_item_template().to_excel(self.kwargs.get('ConfigFilename'))
+        return  'writing template. {} set to {} and {} is {}'.format('OverwriteConfigFile',self.kwargs.get('OverwriteConfigFile'),'ConfigFilename',self.kwargs.get('ConfigFilename'))
+
         
     def read_item_template(self):
         assert os.path.isfile(self.kwargs.get('ConfigFilename'))==True,'ConfigFile does not exist. Run \'write_item_template\' method and modify it how you like then rerun this method'
@@ -3207,6 +3214,7 @@ class ParameterEstimation():
       
     def get_item_template(self):
         local_params= self.GMQ.get_local_kinetic_parameters_cns()
+        LOG.debug(local_params)
         global_params= self.GMQ.get_global_quantities_cns()
         IC_params= self.GMQ.get_IC_cns()
         df_list_local=[]
@@ -3218,15 +3226,15 @@ class ParameterEstimation():
             df.columns=[i]
             df=df.transpose()
             df_list_local.append(df)
-        
-            
+
+
         for i in global_params.keys():
             df= pandas.DataFrame.from_dict(global_params[i].values())
             df.index=global_params[i].keys()
             df.columns=[i]
             df=df.transpose()
             df_list_global.append(df)
-            
+
         for i in IC_params.keys():
             df= pandas.DataFrame.from_dict(IC_params[i].values())
             df.index=IC_params[i].keys()
@@ -5219,14 +5227,24 @@ Please check the headers of your PE data are consistent with your model paramete
         
             
 if __name__=='__main__':
-    pass
 
-#     f=r'C:\Users\Ciaran\Documents\CopasiVer19KholodenkoTests\M2.cps'
-#
-#     dire = os.path.dirname(f)
-#
-#     report = os.path.join(dire, 'timecourse_report.txt')
-#
+    f=r'C:\Users\Ciaran\Documents\CopasiVer19KholodenkoTests\M2.cps'
+
+    dire = os.path.dirname(f)
+
+    report = os.path.join(dire, 'timecourse_report.txt')
+
+    TimeCourse(f, Intervals=10, StepSize=100,
+               End=1000, ReportName=report)
+
+
+#    EM=ExperimentMapper(f,report)
+#    PE = ParameterEstimation(f,report)
+#    PE.write_config_template()
+#    PE.write_item_template()
+#    PE.set_up()
+#    PE.run()
+
 #     d={'A':5,'B':10,'one':15,'(second).k1':20,'another':25,'new_com':1000}
 #
 #     d={'A':100,'B':1000,'C':10000,'D':100000,'new_com':100}
@@ -5235,9 +5253,9 @@ if __name__=='__main__':
 #     print I.parameters.transpose()
 #
 # #    print '\n\n\n'
-#
-#
-#
+
+
+
 # #    os.system('CopasiUI {}'.format(f))
 # #    print I.insert_initial_state()
 # #    print os.system('CopasiUI {}'.format(f))
