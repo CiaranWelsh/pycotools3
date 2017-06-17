@@ -130,8 +130,9 @@ class CopasiMLParser():
         tree= etree.parse(self.copasi_file)
         LOG.debug('copasi file {} has been parsed into Python'.format(os.path.split(self.copasi_file)[1]))
         return tree
-            
-    def write_copasi_file(self,copasi_filename,copasiML):
+
+    @staticmethod
+    def write_copasi_file(copasi_filename, copasiML):
         '''
         write to file with lxml write function
 
@@ -139,8 +140,8 @@ class CopasiMLParser():
         #first convert the copasiML to a root element tree
         root=etree.ElementTree(copasiML)
         root.write(copasi_filename)
-        LOG.debug('File {} written to \n{}'.format(os.path.split(self.copasi_file)[1],copasi_filename))
-            
+        LOG.debug('Model written to {}'.format(copasi_filename))
+
 #==============================================================================
 
 class GetModelQuantities():
@@ -5218,55 +5219,56 @@ Please check the headers of your PE data are consistent with your model paramete
         
             
 if __name__=='__main__':
+    pass
 
-    f=r'C:\Users\Ciaran\Documents\CopasiVer19KholodenkoTests\M2.cps'
-
-    dire = os.path.dirname(f)
-
-    report = os.path.join(dire, 'timecourse_report.txt')
-    
-    d={'A':5,'B':10,'one':15,'(second).k1':20,'another':25,'new_com':1000}
-
-    d={'A':100,'B':1000,'C':10000,'D':100000,'new_com':100}
-
-    I=InsertParameters(f,ParameterDict=d)
-    print I.parameters.transpose()
-
-#    print '\n\n\n'
-
-    
-
-#    os.system('CopasiUI {}'.format(f))
-#    print I.insert_initial_state()
-#    print os.system('CopasiUI {}'.format(f))
-
-    '''
-    First get look up type structure for model, metabolites compartments 
-    and model values (the objectReferences)
-    
-    Then extract order and replace the existing string under the initial state tag
-    
-    Hopefully this would work. 
-    '''
-    GMQ=GetModelQuantities(f)
-    
-    # print GMQ.convert_molar_to_particles(1,'mmol',0.5)
-
-    
-#    print GMQ.get_all_model_variables().keys()
-
-    '''
-    copasi answer
-    mmol per liter: 1 -> 6.022140857e+20
-    
-    '''
-
-
-
-
-
-
-
+#     f=r'C:\Users\Ciaran\Documents\CopasiVer19KholodenkoTests\M2.cps'
+#
+#     dire = os.path.dirname(f)
+#
+#     report = os.path.join(dire, 'timecourse_report.txt')
+#
+#     d={'A':5,'B':10,'one':15,'(second).k1':20,'another':25,'new_com':1000}
+#
+#     d={'A':100,'B':1000,'C':10000,'D':100000,'new_com':100}
+#
+#     I=InsertParameters(f,ParameterDict=d)
+#     print I.parameters.transpose()
+#
+# #    print '\n\n\n'
+#
+#
+#
+# #    os.system('CopasiUI {}'.format(f))
+# #    print I.insert_initial_state()
+# #    print os.system('CopasiUI {}'.format(f))
+#
+#     '''
+#     First get look up type structure for model, metabolites compartments
+#     and model values (the objectReferences)
+#
+#     Then extract order and replace the existing string under the initial state tag
+#
+#     Hopefully this would work.
+#     '''
+#     GMQ=GetModelQuantities(f)
+#
+#     # print GMQ.convert_molar_to_particles(1,'mmol',0.5)
+#
+#
+# #    print GMQ.get_all_model_variables().keys()
+#
+#     '''
+#     copasi answer
+#     mmol per liter: 1 -> 6.022140857e+20
+#
+#     '''
+#
+#
+#
+#
+#
+#
+#
 
 
 
