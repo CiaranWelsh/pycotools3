@@ -122,10 +122,9 @@ PyCoTools/Tests/PlotBoxplotTests.py
 PyCoTools/Tests/PruneCopasiParameterTests.py
 PyCoTools/Tests/ReportTests.py
 PyCoTools/Tests/ScanTests.py
-PyCoTools/Tests/TestModels.py
 PyCoTools/Tests/TimeCourseTests.py
-PyCoTools/Tests/VilarModel2006pycopitestModel.cps
 PyCoTools/Tests/__init__.py
 PyCoTools/Tests/pydentify2_setup_tests.py
 PyCoTools/Tests/pydentifyTestsFromParametersInModel.py
 PyCoTools/Tests/pydentify_tests.py
+PyCoTools/Tests/test_model.cps
