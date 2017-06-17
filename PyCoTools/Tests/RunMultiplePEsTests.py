@@ -38,11 +38,11 @@ import shutil
 import scipy
 import TestModels
 import lxml.etree as etree
-
+import shutil
 MODEL_STRING = TestModels.TestModels.get_model1()
 
 
-class RunMultiplePETests(unittest.TestCase):
+class RunMultiplePESetUp(unittest.TestCase):
     def setUp(self):
         self.copasi_file = os.path.join(os.getcwd(), 'test_model.cps')
         self.copasiML = etree.fromstring(MODEL_STRING)
@@ -129,18 +129,21 @@ class RunMultiplePETests(unittest.TestCase):
                        'XTickRotation': 35,
                        'DotSize': 4,
                        'LegendLoc': 'best'}
+        self.RMPE = PyCoTools.pycopi.RunMultiplePEs(self.copasi_file,self.experiment_files,
+                                                    **self.options)
 
 
-    def test_timecourse_prodution(self):
-        """
+    def tearDown(self):
+        shutil.rmtree(self.RMPE.kwargs['OutputDir'])
+        os.remove(self.copasi_file)
 
-        :return:
-        """
-        self.assertTrue(os.path.isfile(self.timecourse_report1))
 
-    def test_default_parameters(self):
-        RMPE = PyCoTools.pycopi.RunMultiplePEs(self.copasi_file,self.experiment_files,
-                                               **self.options)
-        RMPE.write_config_template()
-        RMPE.set_up()
-        RMPE.run()
+class Test1(RunMultiplePESetUp):
+    def setUp(self):
+        super(Test1,self).setUp()
+
+    def test_output_directory(self):
+        self.assertTrue(os.path.isdir(self.RMPE.kwargs['OutputDir']))
+
+    def test_results_produced(self):
+        print dir(self.RMPE.kwargs['OutputDir'])
