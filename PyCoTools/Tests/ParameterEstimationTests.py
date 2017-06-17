@@ -1864,8 +1864,8 @@ class ParameterEstimationTests(unittest.TestCase):
                  'ReportName':os.path.join(os.path.dirname(self.copasi_file),'PE_testing.txt'),
                  'Append': 'true', 
                  'ConfirmOverwrite': 'true',
-                 'ItemTemplateFilename':os.path.join(os.path.dirname(self.copasi_file),'ItemTemplate.xlsx'),
-                 'OverwriteItemTemplate':'true',
+                 'ConfigFilename':os.path.join(os.path.dirname(self.copasi_file),'ItemTemplate.xlsx'),
+                 'OverwriteConfigFile':'true',
                  #
                  'UpdateModel':'true',
                  'RandomizeStartValues':'true',
@@ -1913,7 +1913,7 @@ class ParameterEstimationTests(unittest.TestCase):
                                                         ReportName=self.PE_report_name,
                                                         Save='overwrite')
         PE.write_item_template()
-        self.assertTrue(os.path.isfile(PE.kwargs.get('ItemTemplateFilename')))
+        self.assertTrue(os.path.isfile(PE.kwargs.get('ConfigFilename')))
 #        
     def test_insert_fit_items(self):
         '''

@@ -5226,10 +5226,13 @@ if __name__=='__main__':
     report = os.path.join(dire, 'timecourse_report.txt')
     
     d={'A':5,'B':10,'one':15,'(second).k1':20,'another':25,'new_com':1000}
-    I=InsertParameters(f,ParameterDict=d)
-    print I.parameters.transpose()    
 
-    print '\n\n\n'
+    d={'A':100,'B':1000,'C':10000,'D':100000,'new_com':100}
+
+    I=InsertParameters(f,ParameterDict=d)
+    print I.parameters.transpose()
+
+#    print '\n\n\n'
 
     
 
@@ -5245,11 +5248,18 @@ if __name__=='__main__':
     
     Hopefully this would work. 
     '''
-#    GMQ=GetModelQuantities(f)
+    GMQ=GetModelQuantities(f)
+    
+    # print GMQ.convert_molar_to_particles(1,'mmol',0.5)
+
     
 #    print GMQ.get_all_model_variables().keys()
 
+    '''
+    copasi answer
+    mmol per liter: 1 -> 6.022140857e+20
     
+    '''
 
 
 

@@ -31,10 +31,7 @@ import unittest
 
 import lxml
 
-
-
-
-MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
+MODEL_STR = '''<?xml version="1.0" encoding="UTF-8"?>
 <!-- generated with COPASI 4.16 (Build 104) (http://www.copasi.org) at 2016-10-27 14:41:02 UTC -->
 <?oxygen RNGSchema="http://www.copasi.org/static/schema/CopasiML.rng" type="xml"?>
 <COPASI xmlns="http://www.copasi.org/static/schema" versionMajor="4" versionMinor="16" versionDevel="104" copasiSourcesModified="0">
@@ -1892,59 +1889,26 @@ MODEL_STR='''<?xml version="1.0" encoding="UTF-8"?>
 '''
 
 
-
 class ParseCopasiML(unittest.TestCase):
-    
     def setUp(self):
-        self.model_file=os.path.join(os.getcwd(),'test_model.cps')
-        with open(self.model_file,'w') as f:
+        self.model_file = os.path.join(os.getcwd(), 'test_model.cps')
+        with open(self.model_file, 'w') as f:
             f.write(MODEL_STR.encode('utf-8'))
-        
+
     def test_read_copasi_file(self):
         '''
         
         '''
-        copasiModel=  PyCoTools.pycopi.CopasiMLParser(self.model_file)
-        self.assertTrue( isinstance(copasiModel.copasiMLTree,lxml.etree._ElementTree))
-        
+        copasiModel = PyCoTools.pycopi.CopasiMLParser(self.model_file)
+        self.assertTrue(isinstance(copasiModel.copasiMLTree, lxml.etree._ElementTree))
+
     def test_write_copasi_file(self):
-        parser=PyCoTools.pycopi.CopasiMLParser(self.model_file)
-        parser.write_copasi_file(self.model_file,parser.copasiML)
-        
-        
+        parser = PyCoTools.pycopi.CopasiMLParser(self.model_file)
+        parser.write_copasi_file(self.model_file, parser.copasiML)
+
     def tearDown(self):
         os.remove(self.model_file)
-        
-        
-        
-      
-if __name__=='__main__':
+
+
+if __name__ == '__main__':
     unittest.main()
-    
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
