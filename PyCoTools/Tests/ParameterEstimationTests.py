@@ -133,12 +133,10 @@ class ParameterEstimationTests(unittest.TestCase):
                                                         RandomizeStartValues='false',
                                                         ReportName=self.PE_report_name,
                                                         Save='overwrite')
-        PE.write_item_template()
+        PE.write_config_template()
         PE.copasiML=PE.remove_all_fit_items()
         PE.copasiML= PE.insert_all_fit_items()
         num_fit_items= PE.read_item_template().shape[0]
-        print PE.get_fit_items()
-        print '\n',num_fit_items
         self.assertEqual(num_fit_items, len(PE.get_fit_items()))
 
     def test_set_PE_method(self):
@@ -170,8 +168,8 @@ class ParameterEstimationTests(unittest.TestCase):
 
 
     def tearDown(self):
-        if os.path.isfile(self.copasi_file):
-            os.remove(self.copasi_file)
+        # if os.path.isfile(self.copasi_file):
+        #     os.remove(self.copasi_file)
 
         if os.path.isfile(self.timecourse_report_name):
             os.remove(self.timecourse_report_name)

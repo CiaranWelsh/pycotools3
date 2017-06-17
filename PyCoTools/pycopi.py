@@ -1670,14 +1670,10 @@ class TimeCourse(object):
                 self.copasiML = self.set_deterministic()
                 LOG.debug('setting up deterministic time course')
             elif self.kwargs.get('SimulationType') == 'stochastic':
-                return 'There is space in this class to write code to run a stochastic simulation but it is not yet written'
-            # save to duplicate copasi file
+                raise Errors.NotImplementedError('There is space in this class to write code to run a stochastic simulation but it is not yet written')
+#                
+#            # save to duplicate copasi file
             self.save()
-            if self.kwargs.get('Save') == 'overwrite':
-                args = ['CopasiSE', self.copasi_file]
-            elif self.kwargs.get('Save') == 'duplicate':
-                args = ['CopasiSE', self.kwargs.get('OutputML')]
-
             R = Run(self.copasi_file, Task='time_course')
             LOG.debug('Time course ran')
             return R
@@ -5228,20 +5224,19 @@ Please check the headers of your PE data are consistent with your model paramete
             
 if __name__=='__main__':
 
-    f=r'C:\Users\Ciaran\Documents\CopasiVer19KholodenkoTests\M2.cps'
+    f=r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps'
 
     dire = os.path.dirname(f)
-
     report = os.path.join(dire, 'timecourse_report.txt')
-
     TimeCourse(f, Intervals=10, StepSize=100,
-               End=1000, ReportName=report)
+               End=1000, ReportName=report,
+               Plot='true',SaveFig='true')
+    
+#    os.system('CopasiSE {}'.format(f))
 
-
-#    EM=ExperimentMapper(f,report)
+##    EM=ExperimentMapper(f,report)
 #    PE = ParameterEstimation(f,report)
 #    PE.write_config_template()
-#    PE.write_item_template()
 #    PE.set_up()
 #    PE.run()
 
