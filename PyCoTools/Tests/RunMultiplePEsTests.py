@@ -134,8 +134,9 @@ class RunMultiplePESetUp(unittest.TestCase):
 
 
     def tearDown(self):
-        shutil.rmtree(self.RMPE.kwargs['OutputDir'])
-        os.remove(self.copasi_file)
+        pass
+#        shutil.rmtree(self.RMPE.kwargs['OutputDir'])
+#        os.remove(self.copasi_file)
 
 
 class Test1(RunMultiplePESetUp):
@@ -158,3 +159,7 @@ class Test1(RunMultiplePESetUp):
         # num = self.RMPE.kwargs['CopyNumber'] * self.RMPE.kwargs['NumberOfPEs']
         # print df
         # self.assertEqual(df.shape[0],num)
+        
+        
+        
+        

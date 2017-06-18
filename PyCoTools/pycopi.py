@@ -5189,20 +5189,23 @@ Please check the headers of your PE data are consistent with your model paramete
         
             
 if __name__=='__main__':
-
-    f=r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps'
-
-    dire = os.path.dirname(f)
-    report = os.path.join(dire, 'timecourse_report.txt')
-    # TimeCourse(f, Intervals=10, StepSize=100,
-    #            End=1000, ReportName=report,
-    #            # Plot='true',SaveFig='true')
-    PE=RunMultiplePEs(f,report,
-                      CopyNumber=3,
-                      NumberOfPEs=3)
-    PE.write_config_template()
-    PE.set_up()
-    PE.run()
+    pass
+#    f=r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps'
+#
+#    dire = os.path.dirname(f)
+#    report = os.path.join(dire, 'timecourse_report.txt')
+#    # TimeCourse(f, Intervals=10, StepSize=100,
+#    #            End=1000, ReportName=report,
+#    #            # Plot='true',SaveFig='true')
+#    PE=RunMultiplePEs(f,report,
+#                      CopyNumber=3,
+#                      NumberOfPEs=3)
+#    PE.write_config_template()
+#    PE.set_up()
+#    PE.run()
+#    
+#    
+#    
 
 
     # S=Scan(f,ScanType='repeat',NumberOfSteps=10,
