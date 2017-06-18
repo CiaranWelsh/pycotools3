@@ -3393,7 +3393,7 @@ class Scan():
         self.GMQ=GetModelQuantities(self.copasi_file)
         
         default_report_name=os.path.split(self.copasi_file)[1][:-4]+'_PE_results.txt'
-        default_outputML=os.path.split(self.copasi_file)[1][:-4]+'_Duplicate.cps'
+        #default_outputML=os.path.split(self.copasi_file)[1][:-4]+'_Duplicate.cps'
         options={#report variables
                  'Metabolites':self.GMQ.get_metabolites().keys(),
                  'GlobalQuantities':self.GMQ.get_global_quantities().keys(),
@@ -3401,7 +3401,7 @@ class Scan():
                  'ReportName':default_report_name,
                  'Append': 'false', 
                  'ConfirmOverwrite': 'false',
-                 'OutputML':default_outputML,
+                 #'OutputML':default_outputML,
                  #
                  'UpdateModel':'false',
                  'SubTask':'parameter_estimation',
@@ -3528,17 +3528,8 @@ class Scan():
         self.run()
         
             
-#            PruneCopasiHeaders(self.kwargs['ReportName'],replace='true')
-            
-            
-            
-        
     def save(self):
-        if self.kwargs.get('Save')=='duplicate':
-            self.CParser.write_copasi_file(self.kwargs.get('OutputML'),self.copasiML)
-        elif self.kwargs.get('Save')=='overwrite':
-            self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
-        return self.copasiML
+        self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
                 
         
     def define_report(self):
@@ -5228,10 +5219,21 @@ if __name__=='__main__':
 
     dire = os.path.dirname(f)
     report = os.path.join(dire, 'timecourse_report.txt')
-    TimeCourse(f, Intervals=10, StepSize=100,
-               End=1000, ReportName=report,
-               Plot='true',SaveFig='true')
-    
+    # TimeCourse(f, Intervals=10, StepSize=100,
+    #            End=1000, ReportName=report,
+    #            # Plot='true',SaveFig='true')
+    # PE=ParameterEstimation(f,report)
+    #                   # CopyNumber=3,
+    #                   # NumberOfPEs=3)
+    # PE.write_config_template()
+    # PE.set_up()
+    # PE.run()
+
+
+    S=Scan(f,ScanType='repeat',NumberOfSteps=10,
+           ReportType='parameter_estimation',
+           SubTask='parameter_estimation',Run = 'true')
+    os.system('CopasiUI {}'.format(f))
 #    os.system('CopasiSE {}'.format(f))
 
 ##    EM=ExperimentMapper(f,report)

@@ -1,4 +1,4 @@
-<!-- generated with COPASI 4.19 (Build 140) (http://www.copasi.org) at 2017-06-18 09:57:02 UTC --><?oxygen RNGSchema="http://www.copasi.org/static/schema/CopasiML.rng" type="xml"?><COPASI xmlns="http://www.copasi.org/static/schema" versionMajor="4" versionMinor="19" versionDevel="140" copasiSourcesModified="0">
+<!-- generated with COPASI 4.19 (Build 140) (http://www.copasi.org) at 2017-06-17 21:47:15 UTC --><?oxygen RNGSchema="http://www.copasi.org/static/schema/CopasiML.rng" type="xml"?><COPASI xmlns="http://www.copasi.org/static/schema" versionMajor="4" versionMinor="19" versionDevel="140" copasiSourcesModified="0">
   <ListOfFunctions>
     <Function key="Function_13" name="Mass action (irreversible)" type="MassAction" reversible="false">
       <MiriamAnnotation>
@@ -225,8 +225,8 @@
           <ModelParameter cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A]" value="6.022140856999986e+020" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B]" value="6.022140857000001e+021" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C]" value="6.022140857000001e+022" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[D]" value="6.022140856999987e+023" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[E]" value="6.02214085699998e+024" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[D]" value="6.022140856999988e+023" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[E]" value="6.022140856999982e+024" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[F]" value="6.022140857000001e+025" type="Species" simulationType="reactions"/>
         </ModelParameterGroup>
         <ModelParameterGroup cn="String=Initial Global Quantities" type="Group">
@@ -268,7 +268,7 @@
       <StateTemplateVariable objectReference="ModelValue_2"/>
     </StateTemplate>
     <InitialState type="initialState">
-      0 6.022140857000001e+021 6.022140856999987e+023 6.02214085699998e+024 6.022140857000001e+022 6.022140856999986e+020 6.022140857000001e+025 1.999999999999998 1 5 50 1 
+      0 6.022140857000001e+021 6.022140856999988e+023 6.022140856999982e+024 6.022140857000001e+022 6.022140856999986e+020 6.022140857000001e+025 1.999999999999998 1 5 50 1 
     </InitialState>
   </Model>
   <ListOfTasks>
@@ -291,31 +291,29 @@
       </Method>
     </Task>
     <Task key="Task_15" name="Time-Course" type="timeCourse" scheduled="false" updateModel="false">
-      <Report reference="Report_18" target="" append="0" confirmOverwrite="0"/>
-      <Problem>
+      <Report append="false" confirmOverwrite="false" reference="Report_30" target="" type="Deterministic(LSODA)" name="Deterministic (LSODA)"/><Problem type="Deterministic(LSODA)" name="Deterministic (LSODA)">
         <Parameter name="AutomaticStepSize" type="bool" value="0"/>
         <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
         <Parameter name="StepSize" type="float" value="100"/>
         <Parameter name="Duration" type="float" value="1000"/>
         <Parameter name="TimeSeriesRequested" type="bool" value="1"/>
-        <Parameter name="OutputStartTime" type="float" value="0"/>
-        <Parameter name="Output Event" type="bool" value="0"/>
+        <Parameter name="OutputStartTime" type="float" value="0.0"/>
+        <Parameter name="Output Event" type="bool" value="false"/>
         <Parameter name="Start in Steady State" type="bool" value="0"/>
       </Problem>
       <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
         <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
-        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-006"/>
-        <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-012"/>
+        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-6"/>
+        <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
         <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
         <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
       </Method>
     </Task>
     <Task key="Task_16" name="Scan" type="scan" scheduled="true" updateModel="false">
-      <Report reference="Report_67" target="test_model_PE_results.txt" append="false" confirmOverwrite="false"/>
-      <Problem>
+      <Report append="false" confirmOverwrite="false" reference="Report_32" target="C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEsimationAnalysis\ParameterFit1.txt"/><Problem>
         <Parameter name="Subtask" type="unsignedInteger" value="5"/>
         <ParameterGroup name="ScanItems">
-        <ParameterGroup name="ScanItem"><Parameter name="Number of steps" type="unsignedInteger" value="10"/><Parameter name="Type" type="unsignedInteger" value="0"/><Parameter name="Object" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=InitialConcentration"/></ParameterGroup></ParameterGroup>
+        <ParameterGroup name="ScanItem"><Parameter name="Number of steps" type="unsignedInteger" value="3"/><Parameter name="Type" type="unsignedInteger" value="0"/><Parameter name="Object" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=InitialConcentration"/></ParameterGroup></ParameterGroup>
         <Parameter name="Output in subtask" type="bool" value="0"/>
         <Parameter name="Adjust initial conditions" type="bool" value="0"/>
       </Problem>
@@ -351,216 +349,26 @@
       </Method>
     </Task>
     <Task key="Task_19" name="Parameter Estimation" type="parameterFitting" scheduled="false" updateModel="false">
-      <Report reference="Report_19" target="" append="0" confirmOverwrite="0"/>
+      <Report reference="Report_62" target="" append="0" confirmOverwrite="0"/>
       <Problem>
         <Parameter name="Maximize" type="bool" value="0"/>
-        <Parameter name="Randomize Start Values" type="bool" value="1"/>
+        <Parameter name="Randomize Start Values" type="bool" value="true"/>
         <Parameter name="Calculate Statistics" type="bool" value="0"/>
         <ParameterGroup name="OptimizationItemList">
-          <ParameterGroup name="FitItem">
-            <ParameterGroup name="Affected Cross Validation Experiments">
-            </ParameterGroup>
-            <ParameterGroup name="Affected Experiments">
-            </ParameterGroup>
-            <Parameter name="LowerBound" type="cn" value="1e-06"/>
-            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Reactions[reaction_3],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/>
-            <Parameter name="StartValue" type="float" value="0.1"/>
-            <Parameter name="UpperBound" type="cn" value="1000000"/>
-          </ParameterGroup>
-          <ParameterGroup name="FitItem">
-            <ParameterGroup name="Affected Cross Validation Experiments">
-            </ParameterGroup>
-            <ParameterGroup name="Affected Experiments">
-            </ParameterGroup>
-            <Parameter name="LowerBound" type="cn" value="1e-06"/>
-            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Reactions[reaction_4],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/>
-            <Parameter name="StartValue" type="float" value="0.1"/>
-            <Parameter name="UpperBound" type="cn" value="1000000"/>
-          </ParameterGroup>
-          <ParameterGroup name="FitItem">
-            <ParameterGroup name="Affected Cross Validation Experiments">
-            </ParameterGroup>
-            <ParameterGroup name="Affected Experiments">
-            </ParameterGroup>
-            <Parameter name="LowerBound" type="cn" value="1e-06"/>
-            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Reactions[reaction_1],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/>
-            <Parameter name="StartValue" type="float" value="0.1"/>
-            <Parameter name="UpperBound" type="cn" value="1000000"/>
-          </ParameterGroup>
-          <ParameterGroup name="FitItem">
-            <ParameterGroup name="Affected Cross Validation Experiments">
-            </ParameterGroup>
-            <ParameterGroup name="Affected Experiments">
-            </ParameterGroup>
-            <Parameter name="LowerBound" type="cn" value="1e-06"/>
-            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Reactions[reaction_2],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/>
-            <Parameter name="StartValue" type="float" value="0.1"/>
-            <Parameter name="UpperBound" type="cn" value="1000000"/>
-          </ParameterGroup>
-          <ParameterGroup name="FitItem">
-            <ParameterGroup name="Affected Cross Validation Experiments">
-            </ParameterGroup>
-            <ParameterGroup name="Affected Experiments">
-            </ParameterGroup>
-            <Parameter name="LowerBound" type="cn" value="1e-06"/>
-            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Reactions[reaction],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/>
-            <Parameter name="StartValue" type="float" value="0.1"/>
-            <Parameter name="UpperBound" type="cn" value="1000000"/>
-          </ParameterGroup>
-          <ParameterGroup name="FitItem">
-            <ParameterGroup name="Affected Cross Validation Experiments">
-            </ParameterGroup>
-            <ParameterGroup name="Affected Experiments">
-            </ParameterGroup>
-            <Parameter name="LowerBound" type="cn" value="1e-06"/>
-            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Values[two],Reference=InitialValue"/>
-            <Parameter name="StartValue" type="float" value="50"/>
-            <Parameter name="UpperBound" type="cn" value="1000000"/>
-          </ParameterGroup>
-          <ParameterGroup name="FitItem">
-            <ParameterGroup name="Affected Cross Validation Experiments">
-            </ParameterGroup>
-            <ParameterGroup name="Affected Experiments">
-            </ParameterGroup>
-            <Parameter name="LowerBound" type="cn" value="1e-06"/>
-            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Values[three],Reference=InitialValue"/>
-            <Parameter name="StartValue" type="float" value="1"/>
-            <Parameter name="UpperBound" type="cn" value="1000000"/>
-          </ParameterGroup>
-          <ParameterGroup name="FitItem">
-            <ParameterGroup name="Affected Cross Validation Experiments">
-            </ParameterGroup>
-            <ParameterGroup name="Affected Experiments">
-            </ParameterGroup>
-            <Parameter name="LowerBound" type="cn" value="1e-06"/>
-            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=InitialConcentration"/>
-            <Parameter name="StartValue" type="float" value="0.9999999999999976"/>
-            <Parameter name="UpperBound" type="cn" value="1000000"/>
-          </ParameterGroup>
-          <ParameterGroup name="FitItem">
-            <ParameterGroup name="Affected Cross Validation Experiments">
-            </ParameterGroup>
-            <ParameterGroup name="Affected Experiments">
-            </ParameterGroup>
-            <Parameter name="LowerBound" type="cn" value="1e-06"/>
-            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=InitialConcentration"/>
-            <Parameter name="StartValue" type="float" value="100"/>
-            <Parameter name="UpperBound" type="cn" value="1000000"/>
-          </ParameterGroup>
-          <ParameterGroup name="FitItem">
-            <ParameterGroup name="Affected Cross Validation Experiments">
-            </ParameterGroup>
-            <ParameterGroup name="Affected Experiments">
-            </ParameterGroup>
-            <Parameter name="LowerBound" type="cn" value="1e-06"/>
-            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=InitialConcentration"/>
-            <Parameter name="StartValue" type="float" value="10"/>
-            <Parameter name="UpperBound" type="cn" value="1000000"/>
-          </ParameterGroup>
-          <ParameterGroup name="FitItem">
-            <ParameterGroup name="Affected Cross Validation Experiments">
-            </ParameterGroup>
-            <ParameterGroup name="Affected Experiments">
-            </ParameterGroup>
-            <Parameter name="LowerBound" type="cn" value="1e-06"/>
-            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[E],Reference=InitialConcentration"/>
-            <Parameter name="StartValue" type="float" value="9999.999999999967"/>
-            <Parameter name="UpperBound" type="cn" value="1000000"/>
-          </ParameterGroup>
-          <ParameterGroup name="FitItem">
-            <ParameterGroup name="Affected Cross Validation Experiments">
-            </ParameterGroup>
-            <ParameterGroup name="Affected Experiments">
-            </ParameterGroup>
-            <Parameter name="LowerBound" type="cn" value="1e-06"/>
-            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[D],Reference=InitialConcentration"/>
-            <Parameter name="StartValue" type="float" value="999.9999999999978"/>
-            <Parameter name="UpperBound" type="cn" value="1000000"/>
-          </ParameterGroup>
-          <ParameterGroup name="FitItem">
-            <ParameterGroup name="Affected Cross Validation Experiments">
-            </ParameterGroup>
-            <ParameterGroup name="Affected Experiments">
-            </ParameterGroup>
-            <Parameter name="LowerBound" type="cn" value="1e-06"/>
-            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[F],Reference=InitialConcentration"/>
-            <Parameter name="StartValue" type="float" value="100000"/>
-            <Parameter name="UpperBound" type="cn" value="1000000"/>
-          </ParameterGroup>
-        </ParameterGroup>
+        <ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Reactions[reaction_3],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Reactions[reaction_4],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Reactions[reaction_1],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Reactions[reaction_2],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Reactions[reaction],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Values[two],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Values[three],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[E],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[D],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[F],Reference=InitialConcentration"/></ParameterGroup></ParameterGroup>
         <ParameterGroup name="OptimizationConstraintList">
         </ParameterGroup>
         <Parameter name="Steady-State" type="cn" value="CN=Root,Vector=TaskList[Steady-State]"/>
         <Parameter name="Time-Course" type="cn" value="CN=Root,Vector=TaskList[Time-Course]"/>
         <Parameter name="Create Parameter Sets" type="bool" value="0"/>
         <ParameterGroup name="Experiment Set">
-          <ParameterGroup name="Experiment_0">
-            <Parameter name="Data is Row Oriented" type="bool" value="1"/>
-            <Parameter name="Experiment Type" type="unsignedInteger" value="1"/>
-            <Parameter name="File Name" type="file" value="timecourse_report.txt"/>
-            <Parameter name="First Row" type="unsignedInteger" value="1"/>
-            <Parameter name="Key" type="key" value="Experiment_0"/>
-            <Parameter name="Last Row" type="unsignedInteger" value="12"/>
-            <Parameter name="Normalize Weights per Experiment" type="bool" value="1"/>
-            <Parameter name="Number of Columns" type="unsignedInteger" value="10"/>
-            <ParameterGroup name="Object Map">
-              <ParameterGroup name="0">
-                <Parameter name="Role" type="unsignedInteger" value="3"/>
-              </ParameterGroup>
-              <ParameterGroup name="1">
-                <Parameter name="Object CN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration"/>
-                <Parameter name="Role" type="unsignedInteger" value="2"/>
-              </ParameterGroup>
-              <ParameterGroup name="2">
-                <Parameter name="Object CN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=Concentration"/>
-                <Parameter name="Role" type="unsignedInteger" value="2"/>
-              </ParameterGroup>
-              <ParameterGroup name="3">
-                <Parameter name="Object CN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=Concentration"/>
-                <Parameter name="Role" type="unsignedInteger" value="2"/>
-              </ParameterGroup>
-              <ParameterGroup name="4">
-                <Parameter name="Object CN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[E],Reference=Concentration"/>
-                <Parameter name="Role" type="unsignedInteger" value="2"/>
-              </ParameterGroup>
-              <ParameterGroup name="5">
-                <Parameter name="Object CN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[D],Reference=Concentration"/>
-                <Parameter name="Role" type="unsignedInteger" value="2"/>
-              </ParameterGroup>
-              <ParameterGroup name="6">
-                <Parameter name="Object CN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[F],Reference=Concentration"/>
-                <Parameter name="Role" type="unsignedInteger" value="2"/>
-              </ParameterGroup>
-              <ParameterGroup name="7">
-                <Parameter name="Object CN" type="cn" value="CN=Root,Model=New Model,Vector=Values[assignment_global_var],Reference=Value"/>
-                <Parameter name="Role" type="unsignedInteger" value="2"/>
-              </ParameterGroup>
-              <ParameterGroup name="8">
-                <Parameter name="Object CN" type="cn" value="CN=Root,Model=New Model,Vector=Values[two],Reference=Value"/>
-                <Parameter name="Role" type="unsignedInteger" value="2"/>
-              </ParameterGroup>
-              <ParameterGroup name="9">
-                <Parameter name="Object CN" type="cn" value="CN=Root,Model=New Model,Vector=Values[three],Reference=Value"/>
-                <Parameter name="Role" type="unsignedInteger" value="2"/>
-              </ParameterGroup>
-            </ParameterGroup>
-            <Parameter name="Row containing Names" type="unsignedInteger" value="1"/>
-            <Parameter name="Separator" type="string" value="&#9;"/>
-            <Parameter name="Weight Method" type="unsignedInteger" value="2"/>
-          </ParameterGroup>
-        </ParameterGroup>
+        <ParameterGroup name="Experiment_0"><Parameter name="Data is Row Oriented" type="bool" value="1"/><Parameter name="Experiment Type" type="unsignedInteger" value="1"/><Parameter name="File Name" type="file" value="timecourse_report.txt"/><Parameter name="First Row" type="unsignedInteger" value="1"/><Parameter name="Key" type="key" value="Experiment_0"/><Parameter name="Last Row" type="unsignedInteger" value="12"/><Parameter name="Normalize Weights per Experiment" type="bool" value="1"/><Parameter name="Number of Columns" type="unsignedInteger" value="10"/><ParameterGroup name="Object Map"><ParameterGroup name="0"><Parameter name="Role" type="unsignedInteger" value="3"/></ParameterGroup><ParameterGroup name="1"><Parameter name="Object CN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="2"><Parameter name="Object CN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="3"><Parameter name="Object CN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="4"><Parameter name="Object CN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[E],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="5"><Parameter name="Object CN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[D],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="6"><Parameter name="Object CN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[F],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="7"><Parameter name="Object CN" type="cn" value="CN=Root,Model=New Model,Vector=Values[assignment_global_var],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="8"><Parameter name="Object CN" type="cn" value="CN=Root,Model=New Model,Vector=Values[two],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="9"><Parameter name="Object CN" type="cn" value="CN=Root,Model=New Model,Vector=Values[three],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup></ParameterGroup><Parameter name="Row containing Names" type="unsignedInteger" value="1"/><Parameter name="Separator" type="string" value="&#9;"/><Parameter name="Weight Method" type="unsignedInteger" value="2"/></ParameterGroup></ParameterGroup>
         <ParameterGroup name="Validation Set">
           <Parameter name="Threshold" type="unsignedInteger" value="5"/>
           <Parameter name="Weight" type="unsignedFloat" value="1"/>
         </ParameterGroup>
       </Problem>
-      <Method name="Genetic Algorithm" type="GeneticAlgorithm">
-        <Parameter name="Number of Generations" type="unsignedInteger" value="200"/>
-        <Parameter name="Population Size" type="unsignedInteger" value="50"/>
-        <Parameter name="Random Number Generator" type="unsignedInteger" value="1"/>
-        <Parameter name="Seed" type="unsignedInteger" value="0"/>
-      </Method>
-    </Task>
+      <Method name="Genetic Algorithm" type="GeneticAlgorithm"><Parameter name="Number of Generations" type="unsignedInteger" value="200"/><Parameter name="Population Size" type="unsignedInteger" value="50"/><Parameter name="Random Number Generator" type="unsignedInteger" value="1"/><Parameter name="Seed" type="unsignedInteger" value="0"/></Method></Task>
     <Task key="Task_20" name="Metabolic Control Analysis" type="metabolicControlAnalysis" scheduled="false" updateModel="false">
       <Report reference="Report_13" target="" append="1" confirmOverwrite="1"/>
       <Problem>
@@ -798,23 +606,7 @@
         <Object cn="CN=Root,Vector=TaskList[Linear Noise Approximation],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_18" name="Time-Course" taskType="unset" separator="&#9;" precision="6">
-      <Comment>
-      </Comment>
-      <Table printTitle="1">
-        <Object cn="CN=Root,Model=New Model,Reference=Time"/>
-        <Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[E],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[D],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[F],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=New Model,Vector=Values[assignment_global_var],Reference=Value"/>
-        <Object cn="CN=Root,Model=New Model,Vector=Values[two],Reference=Value"/>
-        <Object cn="CN=Root,Model=New Model,Vector=Values[three],Reference=Value"/>
-      </Table>
-    </Report>
-    <Report taskType="Scan" separator="&#9;" precision="6" key="Report_40" name="profilelikelihood"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=InitialConcentration"/><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/></Table></Report><Report taskType="parameterFitting" separator="&#9;" precision="6" key="Report_67" name="parameter_estimation"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=InitialConcentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=InitialConcentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=InitialConcentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[E],Reference=InitialConcentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[D],Reference=InitialConcentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[F],Reference=InitialConcentration"/><Object cn="CN=Root,Model=New Model,Vector=Values[assignment_global_var],Reference=InitialValue"/><Object cn="CN=Root,Model=New Model,Vector=Values[two],Reference=InitialValue"/><Object cn="CN=Root,Model=New Model,Vector=Values[three],Reference=InitialValue"/><Object cn="CN=Root,Model=New Model,Vector=Reactions[reaction_3],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Reactions[reaction_4],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Reactions[reaction_1],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Reactions[reaction_2],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Reactions[reaction],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/></Table></Report></ListOfReports>
+  <Report taskType="Time-Course" separator="&#9;" precision="6" key="Report_30" name="Time-Course"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=New Model,Reference=Time"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[E],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[D],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[F],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Values[assignment_global_var],Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Values[two],Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Values[three],Reference=Value"/></Table></Report><Report taskType="parameterFitting" separator="&#9;" precision="6" key="Report_32" name="parameter_estimation"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=InitialConcentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=InitialConcentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=InitialConcentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[E],Reference=InitialConcentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[D],Reference=InitialConcentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[F],Reference=InitialConcentration"/><Object cn="CN=Root,Model=New Model,Vector=Values[assignment_global_var],Reference=InitialValue"/><Object cn="CN=Root,Model=New Model,Vector=Values[two],Reference=InitialValue"/><Object cn="CN=Root,Model=New Model,Vector=Values[three],Reference=InitialValue"/><Object cn="CN=Root,Model=New Model,Vector=Reactions[reaction_3],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Reactions[reaction_4],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Reactions[reaction_1],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Reactions[reaction_2],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Reactions[reaction],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/></Table></Report></ListOfReports>
   <ListOfPlots>
     <PlotSpecification name="Concentrations, Volumes, and Global Quantity Values" type="Plot2D" active="1">
       <Parameter name="log X" type="bool" value="0"/>
