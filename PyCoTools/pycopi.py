@@ -99,29 +99,6 @@ class CopasiMLParser():
         '''
         #self.dir=os.path.dirname(self.copasi_file)
         os.chdir(os.path.dirname(self.copasi_file))
-        
-        
-    def _parse_copasiML_deprecated(self):
-        '''
-        deprecated in favor of using etree.parse
-        '''
-        with open(self.copasi_file) as f:
-            copasiML_str=f.read()
-        return etree.fromstring(copasiML_str)
-
-    def write_copasi_file_deprecated(self,copasi_filename,copasiML):
-        '''
-        Often you need to delete a copasi file and rewrite it
-        directly from the string. This function does this.
-        
-        copasi_filename = a valid .cps file
-        copasiML = an xml string. Convert to xml string
-        before using this function using etree.fromstring(xml_string)
-        '''
-        if os.path.isfile(copasi_filename):
-            os.remove(copasi_filename)
-        with open(copasi_filename, 'w') as f:
-            f.write(etree.tostring(copasiML,pretty_print=True))    
             
     def _parse_copasiML(self):
         '''
@@ -3706,22 +3683,22 @@ class Run():
     def __init__(self,copasi_file,**kwargs):
         self.copasi_file=copasi_file
         self.CParser=CopasiMLParser(self.copasi_file)
-        self.copasiML=self.CParser.copasiML 
+        self.copasiML=self.CParser.copasiML
         self.GMQ=GetModelQuantities(self.copasi_file)
         self.SGE_job_file=os.path.splitext(self.copasi_file)[0]+'.sh'
-        
+
         options={'Task':'time_course',
                  'Save':'overwrite',
                  'Mode':'true',
                  'MaxTime':None}
-                                  
-                 
-                     
+
+
+
         #values need to be lower case for copasiML
         for i in kwargs.keys():
             assert i in options.keys(),'{} is not a keyword argument for Run'.format(i)
-        options.update( kwargs) 
-        self.kwargs=options    
+        options.update( kwargs)
+        self.kwargs=options
 
 
         tasks=['steady_state','time_course',
@@ -3730,28 +3707,28 @@ class Run():
                'lyapunovexponents','timescaleseparationanalysis',
                'sensitivities','moieties','crosssection',
                'linearnoiseapproximation']
-                   
-        
-                  
+
+
+
         if  self.kwargs.get('Task') not in tasks:
             raise Errors.InputError('{} is not a valid task. Choose from {}'.format(self.kwargs.get('Task'),tasks))
         if self.kwargs.get('MaxTime')!=None:
             if isinstance(self.kwargs.get('MaxTime'),(float,int))!=True:
                 raise TypeError('MaxTime argument must be float or int')
-        
+
         if self.kwargs.get('Task')=='time_course':
             self.kwargs['Task']='timecourse'
-            
+
         elif self.kwargs.get('Task')=='parameter_estimation':
-            self.kwargs['Task']='parameterfitting'        
-            
+            self.kwargs['Task']='parameterfitting'
+
         elif self.kwargs.get('Task')=='steady_state':
-            self.kwargs['Task']='steadystate'        
-        
+            self.kwargs['Task']='steadystate'
+
         if os.path.isfile(self.copasi_file)!=True:
             raise Errors.FileDoesNotExistError('{} is not a file'.format(self.copasi_file))
-            
-        
+
+
         self.copasiML=self.set_task()
         self.save()
         if self.kwargs.get('Mode')=='true':
@@ -3763,8 +3740,8 @@ class Run():
             self.submit_copasi_job_SGE()
         elif self.kwargs.get('Mode')=='multiprocess':
             self.multi_run()
-            
-            
+
+
 
     def multi_run(self):
         def run(x):
@@ -3772,18 +3749,18 @@ class Run():
                 raise Errors.FileDoesNotExistError('{} is not a file'.format(self.copasi_file))
             subprocess.Popen(['CopasiSE',self.copasi_file])
         Process(run(self.copasi_file))
-        
-        
 
-        
+
+
+
     def set_task(self):
         for i in self.copasiML.find('{http://www.copasi.org/static/schema}ListOfTasks'):
             i.attrib['scheduled']='false' #set all to false
             if self.kwargs.get('Task')== i.attrib['type'].lower():
                 i.attrib['scheduled']='true'
-                
+
         return self.copasiML
-        
+
     def run(self):
         '''
         Process the copasi file using CopasiSE
@@ -3805,11 +3782,11 @@ class Run():
             except:
                 raise Errors.CopasiError('Failed with Copasi error: \n\n'+d['error'])
         return d['output']
-        
+
     def run_linux(self):
         os.system('CopasiSE "{}"'.format(self.copasi_file) )
-            
-        
+
+
     def submit_copasi_job_SGE(self):
         '''
         Submit copasi file as job to SGE based job scheduler. 
@@ -3820,14 +3797,14 @@ class Run():
         os.system('qsub {} -N {} '.format(self.SGE_job_file,self.SGE_job_file))
         ## remove .sh file after used. 
         os.remove(self.SGE_job_file)
-    
-        
+
+
     def save(self):
         if self.kwargs.get('Save')=='duplicate':
             self.CParser.write_copasi_file(self.kwargs.get('OutputML'),self.copasiML)
         elif self.kwargs.get('Save')=='overwrite':
             self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
-        return self.copasiML        
+        return self.copasiML
 
 
 #==============================================================================
@@ -4386,7 +4363,7 @@ class RunMultiplePEs():
         '''
         LOG.info('writing PE config template for model: {}'.format(self.copasi_file))
         LOG.debug('ConfigFilename is {}'.format(self.PE.kwargs['ConfigFilename']))
-        self.PE.write_item_template()
+        self.PE.write_config_template()
         
         
     def _setup_scan2(self):
@@ -4508,13 +4485,11 @@ class RunMultiplePEs():
         LOG.info('Copying copasi file {} times'.format(self.kwargs['CopyNumber']))
         sub_copasi_files_dct={}
         copasi_path,copasi_filename=os.path.split(self.copasi_file)
-        for i in range(self.kwargs['CopyNumber']):
+        for i in range(1,self.kwargs['CopyNumber']):
             new_cps=os.path.join(copasi_path,copasi_filename[:-4]+'_{}.cps'.format(str(i)))
             shutil.copy(self.copasi_file,new_cps)
             sub_copasi_files_dct[i]= new_cps
-        
-        #sub_copasi_files_dct[0] = self.copasi_file
-        
+        sub_copasi_files_dct[0]=self.copasi_file
         
         with open(self.copasi_file_pickle,'w')as f:
             pickle.dump(sub_copasi_files_dct,f)
@@ -5222,18 +5197,18 @@ if __name__=='__main__':
     # TimeCourse(f, Intervals=10, StepSize=100,
     #            End=1000, ReportName=report,
     #            # Plot='true',SaveFig='true')
-    # PE=ParameterEstimation(f,report)
-    #                   # CopyNumber=3,
-    #                   # NumberOfPEs=3)
-    # PE.write_config_template()
-    # PE.set_up()
-    # PE.run()
+    PE=RunMultiplePEs(f,report,
+                      CopyNumber=3,
+                      NumberOfPEs=3)
+    PE.write_config_template()
+    PE.set_up()
+    PE.run()
 
 
-    S=Scan(f,ScanType='repeat',NumberOfSteps=10,
-           ReportType='parameter_estimation',
-           SubTask='parameter_estimation',Run = 'true')
-    os.system('CopasiUI {}'.format(f))
+    # S=Scan(f,ScanType='repeat',NumberOfSteps=10,
+    #        ReportType='parameter_estimation',
+    #        SubTask='parameter_estimation',Run = 'true')
+    # os.system('CopasiUI {}'.format(f))
 #    os.system('CopasiSE {}'.format(f))
 
 ##    EM=ExperimentMapper(f,report)
