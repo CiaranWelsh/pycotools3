@@ -5198,7 +5198,7 @@ if __name__=='__main__':
     #            End=1000, ReportName=report,
     #            # Plot='true',SaveFig='true')
     PE=RunMultiplePEs(f,report,
-                      CopyNumber=3,
+                      CopyNumber=5,
                       NumberOfPEs=3)
     PE.write_config_template()
     PE.set_up()
