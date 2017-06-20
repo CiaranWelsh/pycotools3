@@ -33,12 +33,18 @@ import os
 import numpy
 import pandas
 import time
+import pickle
 import re
 import shutil
 import scipy
 import TestModels
 import lxml.etree as etree
 import shutil
+import logging
+
+LOG = logging.getLogger()
+
+
 MODEL_STRING = TestModels.TestModels.get_model1()
 
 
@@ -70,7 +76,7 @@ class RunMultiplePESetUp(unittest.TestCase):
 
         self.options = {'Run': 'multiprocess',
                        'OutputDir': None,
-                       'CopyNumber': 2,
+                       'CopyNumber': 0,
                        'NumberOfPEs': 3,
                        'ReportName': None,
                        'Metabolites': self.GMQ.get_metabolites().keys(),
@@ -133,9 +139,9 @@ class RunMultiplePESetUp(unittest.TestCase):
                                                     **self.options)
 
 
-    def tearDown(self):
-        shutil.rmtree(self.RMPE.kwargs['OutputDir'])
-        os.remove(self.copasi_file)
+    # def tearDown(self):
+    #     shutil.rmtree(self.RMPE.kwargs['OutputDir'])
+    #     os.remove(self.copasi_file)
 
 
 class Test1(RunMultiplePESetUp):
@@ -145,14 +151,17 @@ class Test1(RunMultiplePESetUp):
     def test_output_directory(self):
         self.assertTrue(os.path.isdir(self.RMPE.kwargs['OutputDir']))
 
-    def test_results_copy_number(self):
-        num1 = len(glob.glob(self.RMPE.kwargs['OutputDir']))
-        self.assertEqual(self.RMPE.kwargs['CopyNumber'],num1)
+    def test_results_copy_copasi_pickle(self):
+        with open(self.RMPE.copasi_file_pickle) as f:
+            c = pickle.load(f)
+        LOG.debug('pickle copasi file is: {}'.format(c))
 
-    def test_results_number_of_PEs(self):
-        df_list = []
-        for i in glob.glob(self.RMPE.kwargs['OutputDir']):
-            print pandas.read_csv(i,sep='\t')
+        self.assertEqual(len(c.items()),self.RMPE.kwargs['CopyNumber'])
+
+    # def test_results_number_of_PEs(self):
+    #     df_list = []
+    #     for i in glob.glob(self.RMPE.kwargs['OutputDir']):
+    #         print pandas.read_csv(i,sep='\t')
         #     df_list.append(pandas.read_csv(i,sep='\t'))
         # df = pandas.concat(df_list)
         # num = self.RMPE.kwargs['CopyNumber'] * self.RMPE.kwargs['NumberOfPEs']

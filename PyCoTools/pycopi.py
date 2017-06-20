@@ -4345,6 +4345,7 @@ class RunMultiplePEs():
             except Errors.NotImplementedError:
                 LOG.warning('Attempting to run in SGE mode but SGE specific commands are unavailable. Switching to \'multiprocess\' mode')
                 self.kwargs['Run']='multiprocess'
+                self.run()
         if os.path.isfile(self.copasi_file_pickle):
             with open(self.copasi_file_pickle) as f:
                 self.sub_copasi_files=pickle.load(f)
@@ -4490,7 +4491,9 @@ class RunMultiplePEs():
             shutil.copy(self.copasi_file,new_cps)
             sub_copasi_files_dct[i]= new_cps
         sub_copasi_files_dct[0]=self.copasi_file
-        
+
+        # if os.path.isfile(self.copasi_file_pickle):
+        #     os.remove(self.copasi_file_pickle)
         with open(self.copasi_file_pickle,'w')as f:
             pickle.dump(sub_copasi_files_dct,f)
             
@@ -5189,20 +5192,20 @@ Please check the headers of your PE data are consistent with your model paramete
         
             
 if __name__=='__main__':
-
-    f=r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps'
-
-    dire = os.path.dirname(f)
-    report = os.path.join(dire, 'timecourse_report.txt')
-    # TimeCourse(f, Intervals=10, StepSize=100,
-    #            End=1000, ReportName=report,
-    #            # Plot='true',SaveFig='true')
-    PE=RunMultiplePEs(f,report,
-                      CopyNumber=5,
-                      NumberOfPEs=3)
-    PE.write_config_template()
-    PE.set_up()
-    PE.run()
+    pass
+    # f=r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps'
+    #
+    # dire = os.path.dirname(f)
+    # report = os.path.join(dire, 'timecourse_report.txt')
+    # # TimeCourse(f, Intervals=10, StepSize=100,
+    # #            End=1000, ReportName=report,
+    # #            # Plot='true',SaveFig='true')
+    # PE=RunMultiplePEs(f,report,
+    #                   CopyNumber=5,
+    #                   NumberOfPEs=3)
+    # PE.write_config_template()
+    # PE.set_up()
+    # PE.run()
 
 
     # S=Scan(f,ScanType='repeat',NumberOfSteps=10,
