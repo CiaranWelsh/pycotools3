@@ -4958,16 +4958,18 @@ Please check the headers of your PE data are consistent with your model paramete
         '''
         ## get local parameters
         local=self.GMQ.get_local_kinetic_parameters_cns().keys()
-        ## remove local parameters from complete list depending on whether 
+        ## remove local parameters from complete list depending on whether
         ## user wants to insert anything for that parameter or not
         local= [i for i in self.parameters if i in local]
-        
+        LOG.debug('Local parameters being inserted into mode: {}'.format(local))
         ## create a dict[reaction]=parameter type dict to help
         ## navidate the xml
         local_dct={}
         for i in local:
             k,v = re.findall(  '\((.*)\)\.(.*)',i  ) [0]
             local_dct[k]=v
+
+        LOG.debug('Constructing a dict of reaction:parameter for local parameters: {}'.format(local_dct))
         
         ## Iterate over all local parameters that we want to insert
         ## Identify the list of reactions ,match for the current reaction
@@ -5155,7 +5157,7 @@ Please check the headers of your PE data are consistent with your model paramete
     def insert_all(self):
         self.copasiML=self.insert_locals()
         self.copasiML = self.insert_global_and_ICs()
-#        self.copasiML=self.insert_fit_items()
+        self.copasiML=self.insert_fit_items()
         self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
         
         

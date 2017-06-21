@@ -351,7 +351,7 @@
               </Method>
             </Task>
             <Task key="Task_19" name="Parameter Estimation" type="parameterFitting" scheduled="false" updateModel="false">
-              <Report reference="Report_48" target="" append="0" confirmOverwrite="0"/>
+              <Report reference="Report_52" target="" append="0" confirmOverwrite="0"/>
               <Problem>
                 <Parameter name="Maximize" type="bool" value="0"/>
                 <Parameter name="Randomize Start Values" type="bool" value="false"/>
