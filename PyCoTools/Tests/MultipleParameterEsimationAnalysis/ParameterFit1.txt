@@ -1,1 +1,5 @@
 [A]_0	[C]_0	[B]_0	[E]_0	[D]_0	[F]_0	Values[assignment_global_var].InitialValue	Values[two].InitialValue	Values[three].InitialValue	(reaction_3).k1	(reaction_4).k1	(reaction_1).k1	(reaction_2).k1	(reaction).k1	TaskList[Parameter Estimation].(Problem)Parameter Estimation.Best Value
+1	100	10	10000	1000	100000	2	50	1	0.1	0.1	0.1	0.1	0.1	1.54362e-18
+1	100	10	10000	1000	100000	2	50	1	0.1	0.1	0.1	0.1	0.1	1.54362e-18
+1	100	10	10000	1000	100000	2	50	1	0.1	0.1	0.1	0.1	0.1	1.54362e-18
+1	100	10	10000	1000	100000	2	50	1	0.1	0.1	0.1	0.1	0.1	1.54362e-18

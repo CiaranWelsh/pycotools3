@@ -312,7 +312,7 @@
               </Method>
             </Task>
             <Task key="Task_16" name="Scan" type="scan" scheduled="true" updateModel="false">
-              <Report append="false" confirmOverwrite="false" reference="Report_32" target="/home/b3053674/Documents/PyCoTools/PyCoTools/Tests/MultipleParameterEsimationAnalysis/ParameterFit1.txt"/><Problem>
+              <Report append="false" confirmOverwrite="false" reference="Report_32" target="/home/b3053674/Documents/PyCoTools/PyCoTools/Tests/MultipleParameterEsimationAnalysis/ParameterFit0.txt"/><Problem>
                 <Parameter name="Subtask" type="unsignedInteger" value="5"/>
                 <ParameterGroup name="ScanItems">
                 <ParameterGroup name="ScanItem"><Parameter name="Number of steps" type="unsignedInteger" value="4"/><Parameter name="Type" type="unsignedInteger" value="0"/><Parameter name="Object" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=InitialConcentration"/></ParameterGroup></ParameterGroup>
