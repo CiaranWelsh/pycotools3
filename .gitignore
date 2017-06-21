@@ -50,4 +50,5 @@ Temporary Items
 
 
 #my gitignore files 
-
+.idea/*
+.tox/*
