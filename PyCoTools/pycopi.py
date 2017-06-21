@@ -5042,29 +5042,31 @@ Please check the headers of your PE data are consistent with your model paramete
         
             
 if __name__=='__main__':
-
-    f=r'C:\Users\Ciaran\Documents\CopasiVer19KholodenkoTests\M1.cps'
-
-    dire = os.path.dirname(f)
-
-    report = os.path.join(dire, 'timecourse_report.txt')
+    pass
     
-    PE=ParameterEstimation(f,report)
-#    PE.write_item_template()
-#    PE.set_up()
-#    PE.run()
 
-    I=InsertParameters(f,ParameterPath = PE.kwargs['ReportName'])    
-    print I.insert_locals()
-#    print os.system('CopasiUI {}'.format(f))
-
-    '''
-    First get look up type structure for model, metabolites compartments 
-    and model values (the objectReferences)
-    
-    Then extract order and replace the existing string under the initial state tag
-    
-    Hopefully this would work. 
+#    f=r'C:\Users\Ciaran\Documents\CopasiVer19KholodenkoTests\M1.cps'
+#
+#    dire = os.path.dirname(f)
+#
+#    report = os.path.join(dire, 'timecourse_report.txt')
+#    
+#    PE=ParameterEstimation(f,report)
+##    PE.write_item_template()
+##    PE.set_up()
+##    PE.run()
+#
+#    I=InsertParameters(f,ParameterPath = PE.kwargs['ReportName'])    
+#    print I.insert_locals()
+##    print os.system('CopasiUI {}'.format(f))
+#
+#    '''
+#    First get look up type structure for model, metabolites compartments 
+#    and model values (the objectReferences)
+#    
+#    Then extract order and replace the existing string under the initial state tag
+#    
+#    Hopefully this would work. 
     '''
 
 
