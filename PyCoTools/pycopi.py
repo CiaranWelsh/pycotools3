@@ -4285,40 +4285,17 @@ class RunMultiplePEs():
         self._do_checks()
         self._create_defaults()
         self._create_output_directory()
-        
-#        dire,fle=os.path.split(self.kwargs['ReportName']) ## for making sub-result directories
-#        self.output_dir=os.path.join(dire,'MultiplePEResults')
-
-#        self.PE_dct={'ReportName':self.kwargs['ReportName'],
-#                     'Plot':self.kwargs['Plot'],
-#                     'RandomizeStartValues':self.kwargs['RandomizeStartValues'],
-#                     'ConfigFilename':self.kwargs['ConfigFilename'],
-#                     'NumberOfGenerations':self.kwargs['NumberOfGenerations'],
-#                     'RandomNumberGenerator':self.kwargs['RandomNumberGenerator'],
-#                     'Seed':self.kwargs['Seed'],
-#                     'Pf':self.kwargs['Pf'],
-#                     'IterationLimit':self.kwargs['IterationLimit'],
-#                     'Tolerance':self.kwargs['Tolerance'],
-#                     'Rho':self.kwargs['Rho'],
-#                     'Scale':self.kwargs['Scale'],
-#                     'SwarmSize':self.kwargs['SwarmSize'],
-#                     'StdDeviation':self.kwargs['StdDeviation'],
-#                     'NumberOfIterations':self.kwargs['NumberOfIterations'],
-#                     'StartTemperature':self.kwargs['StartTemperature'],
-#                     'CoolingFactor':self.kwargs['CoolingFactor'],
-#                     'PopulationSize':self.kwargs['PopulationSize'],
-#                     'Method':self.kwargs['Method'] }
         self.PE_dct=deepcopy(self.kwargs)
         del self.PE_dct['OutputDir']
         del self.PE_dct['CopyNumber']
         del self.PE_dct['NumberOfPEs']
         del self.PE_dct['Run']
-        
-        
+
+
         self.report_files=self.enumerate_PE_output()
         LOG.debug('Create an instance of ParameterEstimation')
         self.PE=ParameterEstimation(self.copasi_file,self.experiment_files,**self.PE_dct)
-        
+#
         
     def set_up(self):
         '''
@@ -4426,9 +4403,8 @@ class RunMultiplePEs():
              ReportType='parameter_estimation', ## report automatically set up within copasi. 
              ReportName=report,
              Run='false') )#run the scan task automatically in the background
-        LOG.info('Setup Took {} seconds'.format(time.time() - start))      
-        
-        
+        LOG.info('Setup Took {} seconds'.format(time.time() - start))
+
     ##void
     def _create_defaults(self):
         '''
@@ -5189,7 +5165,6 @@ Please check the headers of your PE data are consistent with your model paramete
         
             
 if __name__=='__main__':
-<<<<<<< HEAD
     pass
     
 
@@ -5256,8 +5231,6 @@ if __name__=='__main__':
 #     print I.parameters.transpose()
 #
 # #    print '\n\n\n'
->>>>>>> af6b6a8ab02637b1c3f554b48fd9c4c2eb19b68d
-
 
 
 # #    os.system('CopasiUI {}'.format(f))

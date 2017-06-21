@@ -39,8 +39,11 @@ import scipy
 import TestModels
 import lxml.etree as etree
 import shutil
+import logging
+import pickle
+import time
 MODEL_STRING = TestModels.TestModels.get_model1()
-
+LOG = logging.getLogger(__name__)
 
 class RunMultiplePESetUp(unittest.TestCase):
     def setUp(self):
@@ -129,32 +132,216 @@ class RunMultiplePESetUp(unittest.TestCase):
                        'XTickRotation': 35,
                        'DotSize': 4,
                        'LegendLoc': 'best'}
+
         self.RMPE = PyCoTools.pycopi.RunMultiplePEs(self.copasi_file,self.experiment_files,
                                                     **self.options)
 
-
+#
     def tearDown(self):
+        pass
+        ##  not yet
+        # os.remove(self.copasi_file)
+        # for i in glob.glob('*.txt'):
+        #     os.remove(i)
+        #
+        # for i in glob.glob('*.xlsx'):
+        #     os.remove(i)
+
+        # for i in glob.glob('*.cps'):
+        #     os.remove(i)
+        #
+        # for i in glob.glob('*.pickle'):
+        #     os.remove(i)
+
         shutil.rmtree(self.RMPE.kwargs['OutputDir'])
-        os.remove(self.copasi_file)
-
-
-class Test1(RunMultiplePESetUp):
-    def setUp(self):
-        super(Test1,self).setUp()
 
     def test_output_directory(self):
+
         self.assertTrue(os.path.isdir(self.RMPE.kwargs['OutputDir']))
 
-    def test_results_copy_number(self):
-        num1 = len(glob.glob(self.RMPE.kwargs['OutputDir']))
-        self.assertEqual(self.RMPE.kwargs['CopyNumber'],num1)
+    def test_report_files(self):
+        LOG.debug('Here are the generated report files: {}'.format(self.RMPE.report_files))
+        self.assertEqual(len(self.RMPE.report_files.items()),self.RMPE.kwargs['CopyNumber'])
 
-    def test_results_number_of_PEs(self):
-        df_list = []
-        for i in glob.glob(self.RMPE.kwargs['OutputDir']):
-            print pandas.read_csv(i,sep='\t')
-        #     df_list.append(pandas.read_csv(i,sep='\t'))
-        # df = pandas.concat(df_list)
-        # num = self.RMPE.kwargs['CopyNumber'] * self.RMPE.kwargs['NumberOfPEs']
-        # print df
-        # self.assertEqual(df.shape[0],num)
+    def test_write_config_file(self):
+        """
+        Test that RMPE produces a config file
+        :return:
+        """
+        LOG.info('Testing the write_config_file() method')
+        self.RMPE.write_config_template()
+        self.assertTrue(os.path.isfile(self.RMPE.kwargs['ConfigFilename']))
+
+    def test_write_config_file2(self):
+        """
+        test that you can change the name of the config file
+        :return:
+        """
+        new_filename=os.path.join(os.getcwd(),'NewConfigFilename.xlsx')
+        self.options.update({'ConfigFilename':new_filename})
+        self.RMPE = PyCoTools.pycopi.RunMultiplePEs(self.copasi_file,self.experiment_files,**self.options)
+        if self.RMPE.kwargs['ConfigFilename'] != new_filename:
+            LOG.critical('ConfigFilname argument was not changed. {}'.format(self.RMPE.kwargs['ConfigFilename']))
+            raise PyCoTools.Errors.InputError('ConfigFilename argument was not changed')
+        LOG.info('Testing the write_config_file() method again')
+        self.RMPE.write_config_template()
+        self.assertTrue(os.path.isfile(self.RMPE.kwargs['ConfigFilename']))
+
+    def test_set_up(self):
+        """
+        RMPE requries config file generation before setting
+        :return:
+        """
+        pass
+
+    def test_number_of_copasi_files(self):
+        """
+        make sure we have the correct number of files
+        :return:
+        """
+        LOG.debug('This i')
+
+    def test_number_of_copasi_files2(self):
+        """
+        Check that desired behaviour occurs when you
+        the code twice but change the CopyNumber parameter
+        :return:
+        """
+        pass
+
+    def test_scan(self):
+        """
+        ensure scan item is correctly set up on each of the sub copasi files
+        :return:
+        """
+        pass
+
+    def test_pickle_path(self):
+        """
+        Test that the pickle path is created
+        :return:
+        """
+        LOG.info('Testing that pickle path was created')
+        self.RMPE.write_config_template()
+        self.RMPE.set_up()
+        self.assertTrue(os.path.isfile(self.RMPE.copasi_file_pickle))
+
+    def test_pickle_contents(self):
+        """
+        Test that the pickle file has the correct number of
+        copasi files as contents
+        :return:
+        """
+
+        LOG.info('Testing the contents of the copasi pickle file are correct')
+        self.RMPE.write_config_template()
+        self.RMPE.set_up()
+        with open(self.RMPE.copasi_file_pickle) as f:
+            copasi_dict = pickle.load(f)
+        LOG.debug('Copasi file pickle variable: {}'.format(copasi_dict))
+        self.assertEqual(self.RMPE.kwargs['CopyNumber'], len(copasi_dict.items()))
+
+    def test_pickle_changable(self):
+        """
+        Test that pickle is written every time in order to direct
+        the correct number of copasi copies to run
+        :return:
+        """
+        LOG.info('Testing that a new pickle file is written each time the code is run')
+        self.RMPE.write_config_template()
+        self.RMPE.set_up()
+        with open(self.RMPE.copasi_file_pickle) as f1:
+            copasi_dct1 = pickle.load(f1)
+
+        frst_len = len(copasi_dct1.items())
+
+        cp2 = 10
+        self.options.update({'CopyNumber':cp2})
+        RMPE2 = PyCoTools.pycopi.RunMultiplePEs(self.copasi_file,self.experiment_files,**self.options)
+        RMPE2.write_config_template()
+        RMPE2.set_up()
+        with open(RMPE2.copasi_file_pickle) as f2:
+            copasi_dct2 = pickle.load(f2)
+
+        self.assertEqual(cp2,len(copasi_dct2))
+
+
+    def test_run(self):
+        """
+        Run as current solution statistics so that they run quickly
+        Then use the wait for a little while
+        :return:
+        """
+        self.options.update({'Method':'CurrentSolutionStatistics',
+                             'CopyNumber':6,
+                             'RandomizeStartValues':'false'})
+        self.RMPE = PyCoTools.pycopi.RunMultiplePEs(self.copasi_file,self.experiment_files,**self.options)
+        self.RMPE.write_config_template()
+        self.RMPE.set_up()
+        self.RMPE.run()
+        dire = self.RMPE.kwargs['OutputDir']
+        files = glob.glob(dire+'/*.txt')
+        time.sleep(5)
+        LOG.debug('txt files in OutputDir: {}'.format(files))
+        LOG.debug('Copy Number argument: {}'.format(self.RMPE.kwargs['CopyNumber']))
+        self.assertEqual(len(files), self.RMPE.kwargs['CopyNumber'])
+
+
+
+    def test_total_number_of_PE(self):
+        """
+        test that the total number of PEs = CopyNumber*NumberOfPEs
+        :return:
+        """
+        self.options.update({'Method':'CurrentSolutionStatistics',
+                             'CopyNumber':4,
+                             'NumberOfPEs':6,
+                             'RandomizeStartValues':'false'})
+        self.RMPE = PyCoTools.pycopi.RunMultiplePEs(self.copasi_file,self.experiment_files,**self.options)
+        self.RMPE.write_config_template()
+        self.RMPE.set_up()
+        self.RMPE.run()
+        dire = self.RMPE.kwargs['OutputDir']
+        files = glob.glob(dire+'/*.txt')
+        time.sleep(30)
+        LOG.debug('txt files in OutputDir: {}'.format(files))
+        LOG.debug('Copy Number argument: {}'.format(self.RMPE.kwargs['CopyNumber']))
+        pandas_lst =[]
+        for i in files:
+            LOG.debug(i)
+            df=pandas.read_csv(i,sep='\t')
+            pandas_lst.append(df)
+            LOG.debug(df)
+        df = pandas.concat(pandas_lst)
+        LOG.debug('Dataframe shape after concatonation: {}'.format(df.shape))
+        self.assertEqual(self.RMPE.kwargs['CopyNumber'] * self.RMPE.kwargs['NumberOfPEs'],
+                         df.shape[0])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
