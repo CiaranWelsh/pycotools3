@@ -153,7 +153,7 @@
                   <Product metabolite="Metabolite_9" stoichiometry="1"/>
                 </ListOfProducts>
                 <ListOfConstants>
-                  <Constant key="Parameter_4438" name="k1" value="0.1"/>
+                  <Constant key="Parameter_4438" name="k1" value="10.0"/>
                 </ListOfConstants>
                 <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=New Model,Vector=Compartments[nuc]">
                   <ListOfCallParameters>
@@ -225,7 +225,7 @@
                 </ModelParameterGroup>
                 <ModelParameterGroup cn="String=Initial Species Values" type="Group">
                   <ModelParameter cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A]" value="6.022140856999986e+020" type="Species" simulationType="reactions"/>
-                  <ModelParameter cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B]" value="6.022140857000001e+021" type="Species" simulationType="reactions"/>
+                  <ModelParameter cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B]" value="3.011070895e+21" type="Species" simulationType="reactions"/>
                   <ModelParameter cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C]" value="6.022140857000001e+022" type="Species" simulationType="reactions"/>
                   <ModelParameter cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[D]" value="6.022140856999989e+023" type="Species" simulationType="reactions"/>
                   <ModelParameter cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[E]" value="6.022140856999983e+024" type="Species" simulationType="reactions"/>
@@ -233,7 +233,7 @@
                 </ModelParameterGroup>
                 <ModelParameterGroup cn="String=Initial Global Quantities" type="Group">
                   <ModelParameter cn="CN=Root,Model=New Model,Vector=Values[assignment_global_var]" value="1.999999999999998" type="ModelValue" simulationType="assignment"/>
-                  <ModelParameter cn="CN=Root,Model=New Model,Vector=Values[two]" value="50" type="ModelValue" simulationType="fixed"/>
+                  <ModelParameter cn="CN=Root,Model=New Model,Vector=Values[two]" value="15.0" type="ModelValue" simulationType="fixed"/>
                   <ModelParameter cn="CN=Root,Model=New Model,Vector=Values[three]" value="1" type="ModelValue" simulationType="fixed"/>
                 </ModelParameterGroup>
                 <ModelParameterGroup cn="String=Kinetic Parameters" type="Group">
@@ -247,7 +247,7 @@
                     <ModelParameter cn="CN=Root,Model=New Model,Vector=Reactions[reaction_2],ParameterGroup=Parameters,Parameter=k1" value="0.1" type="ReactionParameter" simulationType="fixed"/>
                   </ModelParameterGroup>
                   <ModelParameterGroup cn="CN=Root,Model=New Model,Vector=Reactions[reaction_3]" type="Reaction">
-                    <ModelParameter cn="CN=Root,Model=New Model,Vector=Reactions[reaction_3],ParameterGroup=Parameters,Parameter=k1" value="0.1" type="ReactionParameter" simulationType="fixed"/>
+                    <ModelParameter cn="CN=Root,Model=New Model,Vector=Reactions[reaction_3],ParameterGroup=Parameters,Parameter=k1" value="10.0" type="ReactionParameter" simulationType="fixed"/>
                   </ModelParameterGroup>
                   <ModelParameterGroup cn="CN=Root,Model=New Model,Vector=Reactions[reaction_4]" type="Reaction">
                     <ModelParameter cn="CN=Root,Model=New Model,Vector=Reactions[reaction_4],ParameterGroup=Parameters,Parameter=k1" value="0.1" type="ReactionParameter" simulationType="fixed"/>
@@ -269,9 +269,7 @@
               <StateTemplateVariable objectReference="ModelValue_1"/>
               <StateTemplateVariable objectReference="ModelValue_2"/>
             </StateTemplate>
-            <InitialState type="initialState">
-              0 6.022140857000001e+021 6.022140856999989e+023 6.022140856999983e+024 6.022140857000001e+022 6.022140856999986e+020 6.022140857000001e+025 1.999999999999998 1 5 50 1 
-            </InitialState>
+            <InitialState type="initialState">0 3.011070895e+21 6.022140857e+23 6.022140857e+24 6.022140857e+22 6.022140857e+20 6.022140857e+25 1.999999999999998 1 5 15.0 1</InitialState>
           </Model>
           <ListOfTasks>
             <Task key="Task_14" name="Steady-State" type="steadyState" scheduled="false" updateModel="false">
@@ -292,7 +290,7 @@
                 <Parameter name="Maximum duration for backward integration" type="unsignedFloat" value="1000000"/>
               </Method>
             </Task>
-            <Task key="Task_15" name="Time-Course" type="timeCourse" scheduled="true" updateModel="false">
+            <Task key="Task_15" name="Time-Course" type="timeCourse" scheduled="false" updateModel="false">
               <Report append="false" confirmOverwrite="false" reference="Report_62" target="" type="Deterministic(LSODA)" name="Deterministic (LSODA)"/><Problem type="Deterministic(LSODA)" name="Deterministic (LSODA)">
                 <Parameter name="AutomaticStepSize" type="bool" value="0"/>
                 <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
@@ -311,12 +309,12 @@
                 <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
               </Method>
             </Task>
-            <Task key="Task_16" name="Scan" type="scan" scheduled="false" updateModel="false">
-              <Problem>
-                <Parameter name="Subtask" type="unsignedInteger" value="1"/>
+            <Task key="Task_16" name="Scan" type="scan" scheduled="true" updateModel="false">
+              <Report append="false" confirmOverwrite="false" reference="Report_44" target="/home/b3053674/Documents/PyCoTools/PyCoTools/Tests/MultipleParameterEsimationAnalysis/ParameterFit0.txt"/><Problem>
+                <Parameter name="Subtask" type="unsignedInteger" value="5"/>
                 <ParameterGroup name="ScanItems">
-                </ParameterGroup>
-                <Parameter name="Output in subtask" type="bool" value="1"/>
+                <ParameterGroup name="ScanItem"><Parameter name="Number of steps" type="unsignedInteger" value="4"/><Parameter name="Type" type="unsignedInteger" value="0"/><Parameter name="Object" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=InitialConcentration"/></ParameterGroup></ParameterGroup>
+                <Parameter name="Output in subtask" type="bool" value="0"/>
                 <Parameter name="Adjust initial conditions" type="bool" value="0"/>
               </Problem>
               <Method name="Scan Framework" type="ScanFramework">
@@ -351,7 +349,7 @@
               </Method>
             </Task>
             <Task key="Task_19" name="Parameter Estimation" type="parameterFitting" scheduled="false" updateModel="false">
-              <Report reference="Report_48" target="/home/b3053674/Documents/PyCoTools/PyCoTools/Tests/ParameterFit.txt" append="0" confirmOverwrite="0"/>
+              <Report reference="Report_32" target="" append="0" confirmOverwrite="0"/>
               <Problem>
                 <Parameter name="Maximize" type="bool" value="0"/>
                 <Parameter name="Randomize Start Values" type="bool" value="false"/>
@@ -608,7 +606,7 @@
                 <Object cn="CN=Root,Vector=TaskList[Linear Noise Approximation],Object=Result"/>
               </Footer>
             </Report>
-          <Report taskType="Time-Course" separator="&#9;" precision="6" key="Report_62" name="Time-Course"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=New Model,Reference=Time"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[E],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[D],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[F],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Values[assignment_global_var],Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Values[two],Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Values[three],Reference=Value"/></Table></Report><Report taskType="parameterFitting" separator="&#9;" precision="6" key="Report_48" name="parameter_estimation"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=InitialConcentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=InitialConcentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=InitialConcentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[E],Reference=InitialConcentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[D],Reference=InitialConcentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[F],Reference=InitialConcentration"/><Object cn="CN=Root,Model=New Model,Vector=Values[assignment_global_var],Reference=InitialValue"/><Object cn="CN=Root,Model=New Model,Vector=Values[two],Reference=InitialValue"/><Object cn="CN=Root,Model=New Model,Vector=Values[three],Reference=InitialValue"/><Object cn="CN=Root,Model=New Model,Vector=Reactions[reaction_3],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Reactions[reaction_4],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Reactions[reaction_1],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Reactions[reaction_2],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Reactions[reaction],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/></Table></Report></ListOfReports>
+          <Report taskType="Time-Course" separator="&#9;" precision="6" key="Report_62" name="Time-Course"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=New Model,Reference=Time"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[E],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[D],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[F],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Values[assignment_global_var],Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Values[two],Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Values[three],Reference=Value"/></Table></Report><Report taskType="parameterFitting" separator="&#9;" precision="6" key="Report_44" name="parameter_estimation"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=InitialConcentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=InitialConcentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=InitialConcentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[E],Reference=InitialConcentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[D],Reference=InitialConcentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[F],Reference=InitialConcentration"/><Object cn="CN=Root,Model=New Model,Vector=Values[assignment_global_var],Reference=InitialValue"/><Object cn="CN=Root,Model=New Model,Vector=Values[two],Reference=InitialValue"/><Object cn="CN=Root,Model=New Model,Vector=Values[three],Reference=InitialValue"/><Object cn="CN=Root,Model=New Model,Vector=Reactions[reaction_3],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Reactions[reaction_4],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Reactions[reaction_1],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Reactions[reaction_2],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Reactions[reaction],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/></Table></Report></ListOfReports>
           <ListOfPlots>
             <PlotSpecification name="Concentrations, Volumes, and Global Quantity Values" type="Plot2D" active="1">
               <Parameter name="log X" type="bool" value="0"/>
