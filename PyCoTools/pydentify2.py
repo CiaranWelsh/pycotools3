@@ -55,80 +55,80 @@ LOG=logging.getLogger(__name__)
 
 
 class ProfileLikelihood():
-    '''
+    """
     This class uses the profile likelihood method of identifiability analysis
-    to assess whether parameters can be uniquely determined with the defined 
-    optimization problem. 
-    
+    to assess whether parameters can be uniquely determined with the defined
+    optimization problem.
+
     copasi_file:
         The copasi file you wish to conduct a profile likelihood on
-        
+
     **kwargs:
         ParameterPath:
-            The absolute path to either a parameter estimation results file 
-            ('.txt','.xlsx','.xls' or '.csv') or a folder of parameter 
+            The absolute path to either a parameter estimation results file
+            ('.txt','.xlsx','.xls' or '.csv') or a folder of parameter
             estimation results files. Default=None
-            
+
         Index:
-            The index of the parameter estimation run you want to calculate 
+            The index of the parameter estimation run you want to calculate
             a profile likelihood around. Parameter estimations are ranked in
             order of best fit, with 0 being the best fit value from your set of
-            estimations. Can be either an integer or list of integers to give 
-            the option of conducting multiple profile likelihoods using the same 
-            line of code. Use Index=-1 if you want to calculate profile likelihood 
+            estimations. Can be either an integer or list of integers to give
+            the option of conducting multiple profile likelihoods using the same
+            line of code. Use Index=-1 if you want to calculate profile likelihood
             around parameters already in copasi. If Index is not equal
-            to -1 you must specificy a valid argument to the ParameterPath 
-            keyword argument. Default is -1. 
-    
+            to -1 you must specificy a valid argument to the ParameterPath
+            keyword argument. Default is -1.
+
         OutputML:
             When Save set to 'duplicate' this is the file name
             of the output cps file. Default='overwrite'
 
         Save:
             One of, 'false','overwrite' or 'duplicate'
-            
+
         UpperBoundMultiplier:
             Number of times above the current value of the parameter of interest
             to extend profile likleihood to. Default=1000
-        
+
         LowerBoundMultiplier:
             Number of times below the current value of the parameter of interest
-            to extend profile likleihood to. Default=1000  
-            
+            to extend profile likleihood to. Default=1000
+
         NumberOfSteps:
             How many times to sample between lower and upper boundaries. Default=10
-            
+
         Log:
             Sample in Log space. Default='false'
-            
+
         IterationLimit:
             Hook and Jeeves algorithm iteration limit parameter. Default=50
-            
+
         Tolerance:
             Hook and Jeeves algorithm tolerance parameter. Default=1e-5
-            
+
         Rho:
             Hook and Jeeves algorithm Rho parameter. Default=0.2
-            
+
         Run:
-            Either ['false','slow','multiprocess','SGE']. 'multiprocess' 
-            will use the number of processes specified in the NumProcesses 
+            Either ['false','slow','multiprocess','SGE']. 'multiprocess'
+            will use the number of processes specified in the NumProcesses
             keyword argument to work. This features doesn't work well yet and
-            user is reccommended to use slow mode which runs each 
+            user is reccommended to use slow mode which runs each
             copasi file in serial. 'SGE' mode can be used specifically
             on a SunGridEngine managed cluster. Deault='false'
-            
+
         NumProcesses:
             Deprecated: do not use
             How many processors to use at the same time. NumProcesses=0 will
             prevent running the estimations. Default 1
 
-        SleepTime: 
-            Deprecated: Do not use. 
+        SleepTime:
+            Deprecated: Do not use.
             How many seconds to wait before running each copasi file. If running
             too many parameter estimations at the same time will slow your computer
             considerably. In this situation use a longer SleepTime.
-    '''
+    """
     def __init__(self,copasi_file,**kwargs):
         self.copasi_file=copasi_file
         self.CParser=pycopi.CopasiMLParser(self.copasi_file)
@@ -146,7 +146,7 @@ class ProfileLikelihood():
                  'UpperBoundMultiplier':1000,
                  'LowerBoundMultiplier':1000,
                  'NumberOfSteps':10,
-                 'Log':'false',
+                 'Log':'true',
                  'IterationLimit':50,
                  'Tolerance':1e-5,
                  'Rho':0.2,

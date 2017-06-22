@@ -4295,7 +4295,7 @@ class RunMultiplePEs():
         self.report_files=self.enumerate_PE_output()
         LOG.debug('Create an instance of ParameterEstimation')
         self.PE=ParameterEstimation(self.copasi_file,self.experiment_files,**self.PE_dct)
-#
+#   
         
     def set_up(self):
         '''
@@ -4387,6 +4387,11 @@ class RunMultiplePEs():
             
         s=q.get()
         LOG.info(str(s))
+        ## Since this is being executed in parallel sometimes
+        ## we get process clashes. Not sure exactly whats going on
+        ## but introducing a small delay seems to fix
+        time.sleep(0.1)
+
 
             
     ## void
