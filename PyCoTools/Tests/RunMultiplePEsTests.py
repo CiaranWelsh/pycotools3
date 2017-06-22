@@ -138,22 +138,21 @@ class RunMultiplePESetUp(unittest.TestCase):
 
 #
     def tearDown(self):
-        pass
-        ##  not yet
-        # os.remove(self.copasi_file)
-        # for i in glob.glob('*.txt'):
-        #     os.remove(i)
-        #
-        # for i in glob.glob('*.xlsx'):
-        #     os.remove(i)
+        #  not yet
+        os.remove(self.copasi_file)
+        for i in glob.glob('*.txt'):
+            os.remove(i)
 
-        # for i in glob.glob('*.cps'):
-        #     os.remove(i)
-        #
-        # for i in glob.glob('*.pickle'):
-        #     os.remove(i)
+        for i in glob.glob('*.xlsx'):
+            os.remove(i)
 
-        shutil.rmtree(self.RMPE.kwargs['OutputDir'])
+        for i in glob.glob('*.cps'):
+            os.remove(i)
+
+        for i in glob.glob('*.pickle'):
+            os.remove(i)
+        # time.sleep(0.1)
+        # shutil.rmtree(self.RMPE.kwargs['OutputDir'])
 
     def test_output_directory(self):
 
@@ -275,22 +274,28 @@ class RunMultiplePESetUp(unittest.TestCase):
         self.options.update({'Method':'CurrentSolutionStatistics',
                              'CopyNumber':6,
                              'RandomizeStartValues':'false'})
-        self.RMPE = PyCoTools.pycopi.RunMultiplePEs(self.copasi_file,self.experiment_files,**self.options)
-        self.RMPE.write_config_template()
-        self.RMPE.set_up()
-        self.RMPE.run()
-        dire = self.RMPE.kwargs['OutputDir']
+        RMPE = PyCoTools.pycopi.RunMultiplePEs(self.copasi_file,self.experiment_files,**self.options)
+        RMPE.write_config_template()
+        RMPE.set_up()
+        RMPE.run()
+        dire = RMPE.kwargs['OutputDir']
         files = glob.glob(dire+'/*.txt')
         time.sleep(5)
         LOG.debug('txt files in OutputDir: {}'.format(files))
-        LOG.debug('Copy Number argument: {}'.format(self.RMPE.kwargs['CopyNumber']))
-        self.assertEqual(len(files), self.RMPE.kwargs['CopyNumber'])
+        LOG.debug('Copy Number argument: {}'.format(RMPE.kwargs['CopyNumber']))
+        self.assertEqual(len(files), RMPE.kwargs['CopyNumber'])
 
 
 
     def test_total_number_of_PE(self):
         """
         test that the total number of PEs = CopyNumber*NumberOfPEs
+
+        This test doesn't work but the behaviour is working as expected.
+        Not sure why the test wont work but I thnk its something to do with
+        write speed and sequentially deleting files and trying to count them.
+
+        Not important enough to spend lots of time on.
         :return:
         """
         self.options.update({'Method':'CurrentSolutionStatistics',
@@ -303,16 +308,18 @@ class RunMultiplePESetUp(unittest.TestCase):
         self.RMPE.run()
         dire = self.RMPE.kwargs['OutputDir']
         files = glob.glob(dire+'/*.txt')
-        time.sleep(30)
+
+        time.sleep(2)
         LOG.debug('txt files in OutputDir: {}'.format(files))
         LOG.debug('Copy Number argument: {}'.format(self.RMPE.kwargs['CopyNumber']))
         pandas_lst =[]
         for i in files:
-            LOG.debug(i)
+            LOG.debug('Reading file {}'.format(i))
             df=pandas.read_csv(i,sep='\t')
             pandas_lst.append(df)
             LOG.debug(df)
         df = pandas.concat(pandas_lst)
+        LOG.debug('DataFrame after concat = {}'.format(df))
         LOG.debug('Dataframe shape after concatonation: {}'.format(df.shape))
         self.assertEqual(self.RMPE.kwargs['CopyNumber'] * self.RMPE.kwargs['NumberOfPEs'],
                          df.shape[0])
