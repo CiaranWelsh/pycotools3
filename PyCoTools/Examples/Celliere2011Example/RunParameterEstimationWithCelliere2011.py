@@ -22,10 +22,10 @@ with chosen keyword arguments. define the method variables within the PE class u
 
 PE= PyCoTools.pycopi.ParameterEstimation(C.celliere2011_model, #model
                                            C.noisy_timecourse_report, #experimental data
-                                           Method='GeneticAlgorithm',#use a quick global algorithm 
+                                           method='GeneticAlgorithm',#use a quick global algorithm 
                                            NumberOfGenerations=300, #set Generation Number and population size
-                                           PopulationSize=150)
-#                                           Plot='true',SaveFig='true') ## Optionally use to get experimental Vs simualted graphs
+                                           population_size=150)
+#                                           plot='true',savefig='true') ## Optionally use to get experimental Vs simualted graphs
 '''
 Then write a template file. This contains all your model variables. 
 Delete the rows containing variables that you do not want to estimate, modify
@@ -41,14 +41,14 @@ Comment and uncomment the below lines of code as you need
 
 '''
 Perform the setting up of the parameter estimation
-Variable names in the experimental data header need to exactly match the 
+variable names in the experimental data header need to exactly match the 
 corresponding variables in the model to be mapped correctly. 
 '''
 PE.set_up()
 
 '''
 The run method enables you to run the parameter estimation from Python. 
-If the Plot keyword was set to 'true' in the instantiation of the ParameterEstimation
+If the plot keyword was set to 'true' in the instantiation of the ParameterEstimation
 class, plots are generated of the experimental vs simulated data. 
 In this tutorial however we want to run the parameter estimation via the repeat
 scan task so we'll not use the run method.
@@ -57,7 +57,7 @@ scan task so we'll not use the run method.
 #
 
 '''
-Run the parameter estimation via the scan task to run 'NumberOfSteps' of them
+run the parameter estimation via the scan task to run 'number_of_steps' of them
 
 Other options include copying the model to 'n' other file locations. 
 Then you could run the same code in a loop and have n copasi's running parameter
@@ -68,15 +68,15 @@ other job schedulers is not currently supported but modular nature of PyCoTools
 allows for extension code to support other systems. 
 
 #'''
-PyCoTools.pycopi.Scan(C.celliere2011_model,ScanType='repeat',
-                      ReportName=C.PEData_file, 
-                      ReportType='parameter_estimation',
-                      NumberOfSteps=1,
-                      Run='false') ## Change run to true to run on this computer
+PyCoTools.pycopi.Scan(C.celliere2011_model,scan_type='repeat',
+                      report_name=C.PEData_file, 
+                      report_type='parameter_estimation',
+                      number_of_steps=1,
+                      run='false') ## Change run to true to run on this computer
 
 
 '''
-Run is currently set to false because the copasi file was run on a cluster
+run is currently set to false because the copasi file was run on a cluster
 '''
 
 

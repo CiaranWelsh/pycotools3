@@ -20,7 +20,7 @@ class Celliere2011Example():
     def __init__(self):
         ## path to folder containing kholodenko example
         if sys.platform=='win32':
-            self.current_directory='D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\Examples\Celliere2011Example'
+            self.current_directory='D:\MPhil\Python\My_Python_Modules\modelling_Tools\PyCoTools\PyCoTools\Examples\Celliere2011Example'
         else:
             self.current_directory=r'//sharedlustre/users/b3053674/2017/Jan/Celliere2011Example'
         

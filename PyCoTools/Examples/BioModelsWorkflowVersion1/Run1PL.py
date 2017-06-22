@@ -25,7 +25,7 @@ Date:
  Object:
  
 
-Run a profile likelihood
+run a profile likelihood
 """
 
 import PyCoTools
@@ -42,8 +42,8 @@ os.chdir(wd)
 time_course_report=os.path.join(wd,'timecourse.txt')
 
 #first create a time course to get some fake data for parameter estimation
-TC=PyCoTools.pycopi.TimeCourse(f,End=100,StepSize=1,Intervals=100,Plot='true',
-                               ReportName=time_course_report,SaveFig='true')
+TC=PyCoTools.pycopi.TimeCourse(f,End=100,StepSize=1,Intervals=100,plot='true',
+                               report_name=time_course_report,savefig='true')
 
 
 #get some parameter estimation data 
@@ -51,16 +51,16 @@ PE=PyCoTools.pycopi.ParameterEstimation(f,time_course_report)
 
 PE.write_item_template() #write the default template (estimation of all parameters)
 PE.set_up()              # Automatic Parameter estimation setup   
-PE.run()                #Run the Parameter estimation 
+PE.run()                #run the Parameter estimation 
 #
 
 '''
 Output from parameter estimation is stored in default variable in the kwargs dict. 
-You can change the default by giving a 'ReportName' argument to the ParameterEstimation
+You can change the default by giving a 'report_name' argument to the ParameterEstimation
 class
 '''
-PyCoTools.pydentify2.ProfileLikelihood(f,ParameterPath=PE.kwargs['ReportName'],
-                                       Index=0,Run='slow')
+PyCoTools.pydentify2.ProfileLikelihood(f,parameter_path=PE.kwargs['report_name'],
+                                       index=0,run='slow')
 
 
 

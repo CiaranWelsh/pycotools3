@@ -27,7 +27,7 @@ def pair_cps_with_data(data):
             
 def run_parameter_estimation(input_args,skip_already_done=False):
     '''
-    Run a parameter estimation on the list of models that we have simulated noisy
+    run a parameter estimation on the list of models that we have simulated noisy
     time courses for. This estimation is generic in the sense that the same algorithm and 
     algorithm parameters are used for each model. Since this is proof of principle and we already 
     know the data fits the model, we can use estimation settings that will not take a long time
@@ -59,16 +59,16 @@ def run_parameter_estimation(input_args,skip_already_done=False):
         try:
             
             PE= PyCoTools.pycopi.ParameterEstimation(i[0],[i[1]],
-                                                      Save='overwrite',
+                                                      save='overwrite',
                                                       Verbose='true',
                                                       OverwriteItemTemplate='true',
-                                                      Append='false',
-                                                      Method='GeneticAlgorithm',
-                                                      PopulationSize=20,
+                                                      append='false',
+                                                      method='GeneticAlgorithm',
+                                                      population_size=20,
                                                       NumberOfGenerations=50,
-                                                      ReportName=report_name,
-                                                      RandomizeStartValues='false',
-                                                      SaveFig='true')
+                                                      report_name=report_name,
+                                                      randomize_start_values='false',
+                                                      savefig='true')
             PE.write_item_template()
             PE.set_up() 
             PE.run()  
@@ -101,7 +101,7 @@ if __name__=='__main__':
     
     '''
     Get a handle to the noisy data that was simulated from the running 
-    RunTimeCourseForEachModel.py script
+    runTimeCourseForEachmodel.py script
     '''
     noisy_simulated_data_paths=os.path.join(os.getcwd(),'NoisySimulatedDataPickle.pickle')
     with open(noisy_simulated_data_paths) as f:
@@ -144,35 +144,35 @@ if __name__=='__main__':
 
 
 #
-#    f=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\Documentation\Examples\PydentifyingBiomodels\BIOMD0000000104\Klipp2002_MetabolicOptimization_linearPathway(n=2).cps'
+#    f=r'D:\MPhil\Python\My_Python_Modules\modelling_Tools\PyCoTools\Documentation\Examples\PydentifyingBiomodels\BIOMD0000000104\Klipp2002_MetabolicOptimization_linearPathway(n=2).cps'
 #    
-#    r=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\Documentation\Examples\PydentifyingBiomodels\BIOMD0000000104\data_with_noise.txt'
+#    r=r'D:\MPhil\Python\My_Python_Modules\modelling_Tools\PyCoTools\Documentation\Examples\PydentifyingBiomodels\BIOMD0000000104\data_with_noise.txt'
 #    
-#    t=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\Documentation\Examples\PydentifyingBiomodels\BIOMD0000000104\PE_results.txt'
+#    t=r'D:\MPhil\Python\My_Python_Modules\modelling_Tools\PyCoTools\Documentation\Examples\PydentifyingBiomodels\BIOMD0000000104\PE_results.txt'
 #    
 #    PE= PyCoTools.pycopi.ParameterEstimation(f,r,
-#                                              Save='overwrite',
+#                                              save='overwrite',
 #                                              Verbose='true',
 #                                              OverwriteItemTemplate='true',
-#                                              Append='false',
-#                                              Method='GeneticAlgorithm',
-#                                              PopulationSize=10,
+#                                              append='false',
+#                                              method='GeneticAlgorithm',
+#                                              population_size=10,
 #                                              NumberOfGenerations=50,
-#                                              ReportName='report.txt',
-#                                              RandomizeStartValues='true')
+#                                              report_name='report.txt',
+#                                              randomize_start_values='true')
 #    PE.write_item_template()
 #    PE.set_up()
 #    PE.run()
 
 #    PE=PyCoTools.pycopi.PlotPEData(f,r,t)
 #
-#    R=PyCoTools.pycopi.Run(f,Task='parameter_estimation')
+#    R=PyCoTools.pycopi.run(f,Task='parameter_estimation')
 
-#    p=PyCoTools.pycopi.GetModelQuantities(f)
+#    p=PyCoTools.pycopi.GetmodelQuantities(f)
 #    for i in  p.get_all_params_dict().keys():
 #        print i.decode('utf8')
 #
-#    ICP=PyCoTools.pycopi.InsertParameters(f,ParameterPath=)
+#    ICP=PyCoTools.pycopi.InsertParameters(f,parameter_path=)
 
 
 
