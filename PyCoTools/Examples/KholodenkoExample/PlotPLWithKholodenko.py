@@ -22,7 +22,7 @@ Date:
     12/03/2017
 
  Object:
-Plot profile likelihoods
+plot profile likelihoods
 '''
 import PyCoTools
 import os
@@ -36,18 +36,18 @@ K=FilePaths.KholodenkoExample()
 
 data= PyCoTools.PEAnalysis.ParsePEData(K.local_PEData_dir,
                                  UsePickle='true',
-                                 OverwritePickle='true').data
+                                 overwrite_pickle='true').data
 
 print data.iloc[0]
 
-PyCoTools.pydentify2.Plot(K.kholodenko_model, #full path to the model
-                           ParameterPath=K.local_PEData_dir, #full path to the PEData
-                           Index=range(3),
-                           Log10='true',
-                           SaveFig='true',
-                           MultiPlot='true',
+PyCoTools.pydentify2.plot(K.kholodenko_model, #full path to the model
+                           parameter_path=K.local_PEData_dir, #full path to the PEData
+                           index=range(3),
+                           log10='true',
+                           savefig='true',
+                           Multiplot='true',
                            UsePickle='true',
-                           OverwritePickle='false')
+                           overwrite_pickle='false')
 #                           
 
 

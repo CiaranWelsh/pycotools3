@@ -34,11 +34,11 @@ import string
 import time
 import pandas
 
-#d=r'/sharedlustre/users/b3053674/2016/08August/Models'
+#d=r'/sharedlustre/users/b3053674/2016/08August/models'
 
 
 '''
-This script will download all curated models from the BioModels DataBase. 
+This script will download all curated models from the Biomodels DataBase. 
 This script relys on bioservices which can be installed using 
 'pip install bioservices' from the command line if you have pip available
 '''
@@ -52,9 +52,9 @@ def replace_non_ascii(st):
     
     
 def download_models():
-    bio=bioservices.BioModels()
+    bio=bioservices.Biomodels()
     print 'The number of models in biomodels right now is {}'.format(len(bio))
-    m=bio.getAllCuratedModelsId()
+    m=bio.getAllCuratedmodelsId()
     print 'The number of curated models in biomodels is: {}'.format(len(m))
     model_dct={}
     skipped=0
@@ -73,10 +73,10 @@ def download_models():
             '''
             continue
         try:
-            name=bio.getModelNameById(i)
+            name=bio.getmodelNameById(i)
             strings='\[\]_\{\}'
             name=re.sub(strings,'_',name)
-            model_dct[name]=bio.getModelSBMLById(i)
+            model_dct[name]=bio.getmodelSBMLById(i)
             print 'downloading {}:\t{}'.format(i,name.encode('utf8'))
             fle=os.path.join(dire,name+'.xml')
             if os.path.isfile(fle)!=True:
@@ -88,7 +88,7 @@ def download_models():
     print 'You have downloaded {} out of {} models'.format(len(model_dct.keys()),len(m))
     print 'you have skipped {} models because you already have a folder for them'.format(skipped)
     df=pandas.DataFrame.from_dict(model_dct.keys())
-    xlsx=os.path.join(d,'ModelsMap.xlsx')
+    xlsx=os.path.join(d,'modelsMap.xlsx')
     df.to_excel(xlsx,index=True,header=True)
     return df
 

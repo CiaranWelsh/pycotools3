@@ -26,7 +26,7 @@ def run1PL(cps,data,skip_completed=False):
     '''
     if skip_completed==True:
         
-        GMQ=PyCoTools.pycopi.GetModelQuantities(cps)
+        GMQ=PyCoTools.pycopi.GetmodelQuantities(cps)
         fit_item_length= len(GMQ.get_fit_items().keys())
         PL_dir= os.path.join(os.path.dirname(cps),'ProfileLikelihood')
         PL_dir= os.path.join(PL_dir,'0')
@@ -38,12 +38,12 @@ def run1PL(cps,data,skip_completed=False):
             if fit_item_length==len_text_files-1:#minus 1 to account for data_with_noise data file
                 return cps
     PL= PyCoTools.pydentify2.ProfileLikelihood(cps,
-                                                   ParameterPath=data,
-                                                   Index=0,
-                                                   IterationLimit=50,
-                                                   Tolerance=1e-3,
-                                                   Run=mode,
-                                                   MaxTime=300,
+                                                   parameter_path=data,
+                                                   index=0,
+                                                   iteration_limit=50,
+                                                   tolerance=1e-3,
+                                                   run=mode,
+                                                   max_time=300,
                                                    )
 
                         
@@ -51,7 +51,7 @@ def run1PL(cps,data,skip_completed=False):
 def run_all_PLs(model_data_dict,skip_completed=False):
     d={}
     d['successful']={}
-    d['IndexError']={}
+    d['indexError']={}
     d['IOError']={}
     d['KeyError']={}
     d['CopasiError']={}
@@ -62,11 +62,11 @@ def run_all_PLs(model_data_dict,skip_completed=False):
         try:
             run1PL(model_data_dict.keys()[i],model_data_dict[model_data_dict.keys()[i]],skip_completed)
             d['successful'][model_data_dict.keys()[i]]=model_data_dict[model_data_dict.keys()[i]]
-        except IndexError:
+        except indexError:
             '''
             some models give an index error because they have no metabolites. 
             '''
-            d['IndexError'][model_data_dict.keys()[i]]=model_data_dict[model_data_dict.keys()[i]]
+            d['indexError'][model_data_dict.keys()[i]]=model_data_dict[model_data_dict.keys()[i]]
             continue
         except IOError:
             d['IOError'][model_data_dict.keys()[i]]=model_data_dict[model_data_dict.keys()[i]]

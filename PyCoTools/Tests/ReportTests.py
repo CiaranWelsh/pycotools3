@@ -34,10 +34,10 @@ import time
 import re
 import shutil 
 import scipy
-import TestModels
+import Testmodels
 import lxml.etree as etree
 
-MODEL_STRING = TestModels.TestModels.get_model1()
+MODEL_STRING = Testmodels.Testmodels.get_model1()
 
 class ReportsTests(unittest.TestCase):
 
@@ -53,14 +53,14 @@ class ReportsTests(unittest.TestCase):
             
         self.GMQ=PyCoTools.pycopi.GetModelQuantities(self.copasi_file)
         self.report_options={#report variables
-                 'Metabolites':self.GMQ.get_metabolites().keys(),
-                 'GlobalQuantities':self.GMQ.get_global_quantities().keys(),
-                 'QuantityType':'concentration',
-                 'ReportName':'cheese.txt',
-                 'Append': '1', 
-                 'ConfirmOverwrite': '0',
-                 'Save':'overwrite',
-                 'ReportType':'profilelikelihood'}
+                 'metabolites':self.GMQ.get_metabolites().keys(),
+                 'global_quantities':self.GMQ.get_global_quantities().keys(),
+                 'quantity_type':'concentration',
+                 'report_name':'cheese.txt',
+                 'append': '1', 
+                 'confirm_overwrite': '0',
+                 'save':'overwrite',
+                 'report_type':'profilelikelihood'}
 
         
         
@@ -82,32 +82,32 @@ class ReportsTests(unittest.TestCase):
 
 
     def test_timecourse_report(self):
-        new_report_options={'ReportType':'time_course'}
+        new_report_options={'report_type':'time_course'}
         self.report_options.update(new_report_options)
         R=PyCoTools.pycopi.Reports(self.copasi_file,**self.report_options)
         l=[]
         for i in R.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports'):
             l.append(i.attrib['name'])
-        self.assertTrue(self.report_options['ReportType'],l)
+        self.assertTrue(self.report_options['report_type'],l)
     
     def test_profile_likelihood_report(self):
-        new_report_options={'ReportType':'profilelikelihood'}
+        new_report_options={'report_type':'profilelikelihood'}
         self.report_options.update(new_report_options)
         R=PyCoTools.pycopi.Reports(self.copasi_file,**self.report_options)
         l=[]
         for i in R.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports'):
             l.append(i.attrib['name'])
-        self.assertTrue(self.report_options['ReportType'],l)
+        self.assertTrue(self.report_options['report_type'],l)
 
 
     def test_parameter_estimation_report(self):
-        new_report_options = {'ReportType': 'parameter_estimation'}
+        new_report_options = {'report_type': 'parameter_estimation'}
         self.report_options.update(new_report_options)
         R = PyCoTools.pycopi.Reports(self.copasi_file, **self.report_options)
         l = []
         for i in R.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports'):
             l.append(i.attrib['name'])
-        self.assertTrue(self.report_options['ReportType'], l)
+        self.assertTrue(self.report_options['report_type'], l)
         
 if __name__=='__main__':
     unittest.main()

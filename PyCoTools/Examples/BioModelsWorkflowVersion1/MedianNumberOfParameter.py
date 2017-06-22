@@ -64,7 +64,7 @@ def investivate_parameters(cps,p,from_pickle=False):
         print 'reading {}: sucessful'.format(i)
         time_course_name=os.path.join(os.path.dirname(cps[i]),'{}_TimeCourse.txt'.format(i))
         try:
-            GMQ=PyCoTools.pycopi.GetModelQuantities(cps[i])
+            GMQ=PyCoTools.pycopi.GetmodelQuantities(cps[i])
             glob.append( len(GMQ.get_global_kinetic_parameters_cns().keys()))
             IC.append( len(GMQ.get_IC_cns().keys()))
             local.append( len(GMQ.get_local_kinetic_parameters_cns().keys()))
@@ -96,7 +96,7 @@ if __name__=='__main__':
     log10=False
     if log10==True:
         ax=numpy.log10(df).boxplot(fontsize=22,return_type='axes')
-        ax.set_ylabel('Number of Parameters(Log10)')
+        ax.set_ylabel('Number of Parameters(log10)')
 
     else:
         ax=df.boxplot(fontsize=26,return_type='axes',sym='',vert=True,widths=0.7,

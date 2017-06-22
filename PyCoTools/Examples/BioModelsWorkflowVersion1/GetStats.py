@@ -79,7 +79,7 @@ for i in cps:
 #print len(TC[0]['successful'].keys())    
 #print len(TC[0]['KeyboardInterrupt'].keys())    
 #print len(TC[0]['CopasiError'].keys())    
-#print len(TC[0]['NoMetabolitesError'].keys())    
+#print len(TC[0]['NometabolitesError'].keys())    
 #print len(TC[0]['IncompatibleStringError'].keys())    
 #print len(TC[0]['OverNSpecies'].keys())    
 #

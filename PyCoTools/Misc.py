@@ -157,10 +157,10 @@ def download_models(directory,percent=100,SKIP_ALREADY_DOWNLOADED=True):
         os.makedirs(directory)
     ## change to directory
     os.chdir(directory)
-    ## get BioModels service 
-    bio=bioservices.BioModels()
+    ## get Biomodels service 
+    bio=bioservices.Biomodels()
     print 'The number of models in biomodels right now is {}'.format(len(bio))
-    model=bio.getAllCuratedModelsId()
+    model=bio.getAllCuratedmodelsId()
     print 'The number of curated models in biomodels is: {}'.format(len(model))
     per=len(model)//100.0*percent
     print 'You are about to download {} models'.format(per)
@@ -173,7 +173,7 @@ def download_models(directory,percent=100,SKIP_ALREADY_DOWNLOADED=True):
         models=model[:int(per)]
     for i in enumerate(models):
         os.chdir(directory)
-        author=bio.getAuthorsByModelId(i[1])
+        author=bio.getAuthorsBymodelId(i[1])
         author=RemoveNonAscii(author[0]).filter
         dire=os.path.join(directory,i[1]+author)
 #        if SKIP_ALREADY_DOWNLOADED:
@@ -191,7 +191,7 @@ def download_models(directory,percent=100,SKIP_ALREADY_DOWNLOADED=True):
             continue
         try:
 
-            model_dct[author]=bio.getModelSBMLById(i[1])
+            model_dct[author]=bio.getmodelSBMLById(i[1])
             print 'downloading model {} of {}: {}:\t{}'.format(i[0],per,i[1],author.encode('utf8'))
             fle=os.path.join(dire,author+'.xml')
             print fle
@@ -207,7 +207,7 @@ def download_models(directory,percent=100,SKIP_ALREADY_DOWNLOADED=True):
     print 'You have downloaded {} out of {} models'.format(len(model_dct.keys()),len(model))
     print 'you have skipped {} models because you already have a folder for them'.format(skipped)
     df=pandas.DataFrame(model_files)
-    pickle_file=os.path.join(directory,'BioModelsFilesPickle.pickle')
+    pickle_file=os.path.join(directory,'BiomodelsFilesPickle.pickle')
     df.to_pickle(pickle_file)    
     return df
 
