@@ -2,27 +2,38 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f3f575b3-d917-4076-9844-5f92a0f760b7" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/PyCoTools/PyCoToolsTutorial/.ipynb_checkpoints/Identifiability Analysis-checkpoint.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/PyCoTools/PyCoToolsTutorial/Identifiability Analysis.ipynb" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/PyCoTools.iml" afterPath="$PROJECT_DIR$/.idea/PyCoTools.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/PyCoTools/Tests/MultipleParameterEsimationAnalysis/ParameterFit0.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/PyCoTools/Tests/MultipleParameterEsimationAnalysis/ParameterFit1.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/PyCoTools/Tests/NewConfigFilename.xlsx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/PyCoTools/Tests/PEConfigFile.xlsx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/PyCoTools/Tests/TimeCourse1.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/PyCoTools/Tests/TimeCourse2.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/PyCoTools/Tests/log.log" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/PyCoTools/Tests/sub_copasi_file.pickle" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/PyCoTools/Tests/test_model.cps" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/PyCoTools/Tests/test_model_0.cps" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/PyCoTools/Tests/test_model_1.cps" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/PyCoTools/Tests/test_model_2.cps" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/PyCoTools/test_model.cps" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/activate" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/activate.bat" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/activate.ps1" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/activate_this.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/deactivate.bat" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/easy_install-2.7.exe" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/easy_install.exe" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/pip.exe" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/pip2.7.exe" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/pip2.exe" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/python.exe" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/python27.dll" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/pythonw.exe" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/wheel.exe" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyCoTools/Examples/KholodenkoExample/log.log" afterPath="$PROJECT_DIR$/PyCoTools/Examples/KholodenkoExample/log.log" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyCoTools/PyCoToolsTutorial/.ipynb_checkpoints/ParameterEstimationAnalysis-checkpoint.ipynb" afterPath="$PROJECT_DIR$/PyCoTools/PyCoToolsTutorial/.ipynb_checkpoints/ParameterEstimationAnalysis-checkpoint.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyCoTools/PyCoToolsTutorial/InsertParameters.ipynb" afterPath="$PROJECT_DIR$/PyCoTools/PyCoToolsTutorial/InsertParameters.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyCoTools/PyCoToolsTutorial/Kholodenko.cps" afterPath="$PROJECT_DIR$/PyCoTools/PyCoToolsTutorial/Kholodenko.cps" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyCoTools/PyCoToolsTutorial/ParameterEstimationAnalysis.ipynb" afterPath="$PROJECT_DIR$/PyCoTools/PyCoToolsTutorial/ParameterEstimationAnalysis.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyCoTools/PyCoToolsTutorial/Scan.ipynb" afterPath="$PROJECT_DIR$/PyCoTools/PyCoToolsTutorial/Scan.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyCoTools/PyCoToolsTutorial/Single Parameter Estimations.ipynb" afterPath="$PROJECT_DIR$/PyCoTools/PyCoToolsTutorial/Single Parameter Estimations.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyCoTools/PyCoToolsTutorial/log.log" afterPath="$PROJECT_DIR$/PyCoTools/PyCoToolsTutorial/log.log" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyCoTools/Tests/log.log" afterPath="$PROJECT_DIR$/PyCoTools/Tests/log.log" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyCoTools/Tests/test.py" afterPath="$PROJECT_DIR$/PyCoTools/Tests/test.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyCoTools/Tests/test_model.cps" afterPath="$PROJECT_DIR$/PyCoTools/Tests/test_model.cps" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyCoTools/Tests/test_model_0.cps" afterPath="$PROJECT_DIR$/PyCoTools/Tests/test_model_0.cps" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyCoTools/Tests/test_model_1.cps" afterPath="$PROJECT_DIR$/PyCoTools/Tests/test_model_1.cps" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyCoTools/Tests/test_model_2.cps" afterPath="$PROJECT_DIR$/PyCoTools/Tests/test_model_2.cps" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyCoTools/PyCoToolsTutorial/.ipynb_checkpoints/Profile Likelihoods-checkpoint.ipynb" afterPath="$PROJECT_DIR$/PyCoTools/PyCoToolsTutorial/.ipynb_checkpoints/Profile Likelihoods-checkpoint.ipynb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyCoTools/PyCoToolsTutorial/Profile Likelihoods.ipynb" afterPath="$PROJECT_DIR$/PyCoTools/PyCoToolsTutorial/Profile Likelihoods.ipynb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyCoTools/pycopi.py" afterPath="$PROJECT_DIR$/PyCoTools/pycopi.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/log.log" afterPath="$PROJECT_DIR$/log.log" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyCoTools/pydentify2.py" afterPath="$PROJECT_DIR$/PyCoTools/pydentify2.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -48,69 +59,31 @@
     <favorites_list name="PyCoTools" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.45833334">
-      <split-first>
-        <leaf>
-          <file leaf-file-name="pycopi.py" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/PyCoTools/pycopi.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="442">
-                  <caret line="4972" column="6" lean-forward="false" selection-start-line="4972" selection-start-column="6" selection-end-line="4972" selection-end-column="6" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-first>
-      <split-second>
-        <leaf>
-          <file leaf-file-name="pycopi.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/PyCoTools/pycopi.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-8">
-                  <caret line="4273" column="29" lean-forward="false" selection-start-line="4273" selection-start-column="29" selection-end-line="4273" selection-end-column="29" />
-                  <folding>
-                    <marker date="1498075692586" expanded="true" signature="1910:2899" ph="..." />
-                    <marker date="1498075692586" expanded="true" signature="195349:196061" ph="..." />
-                    <marker date="1498075692586" expanded="true" signature="212663:229376" ph="..." />
-                    <marker date="1498075692586" expanded="true" signature="229163:229376" ph="..." />
-                    <marker date="1498075692586" expanded="true" signature="229551:230230" ph="..." />
-                    <marker date="1498075692586" expanded="true" signature="230235:231491" ph="'''...'''" />
-                    <marker date="1498075692586" expanded="true" signature="231492:231992" ph="..." />
-                    <marker date="1498075692586" expanded="true" signature="231992:231996" ph="..." />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="test.py" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/PyCoTools/Tests/test.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="315">
-                  <caret line="21" column="0" lean-forward="true" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-                  <folding>
-                    <element signature="e#0#9#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="RunMultiplePEsTests.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/PyCoTools/Tests/RunMultiplePEsTests.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="420">
-                  <caret line="80" column="2" lean-forward="false" selection-start-line="80" selection-start-column="2" selection-end-line="80" selection-end-column="2" />
-                  <folding>
-                    <element signature="e#784#800#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-second>
-    </splitter>
+    <leaf>
+      <file leaf-file-name="pycopi.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/PyCoTools/pycopi.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="352">
+              <caret line="4297" column="4" lean-forward="false" selection-start-line="4297" selection-start-column="4" selection-end-line="4297" selection-end-column="4" />
+              <folding>
+                <marker date="1498119228774" expanded="true" signature="1910:2899" ph="..." />
+                <marker date="1498119228774" expanded="true" signature="232203:232207" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pydentify2.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PyCoTools/pydentify2.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="660">
+              <caret line="145" column="45" lean-forward="true" selection-start-line="145" selection-start-column="45" selection-end-line="145" selection-end-column="45" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -123,10 +96,11 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/PyCoTools/Tests/RunMultiplePEsTests.py" />
         <option value="$PROJECT_DIR$/PyCoTools/test.py" />
-        <option value="$PROJECT_DIR$/PyCoTools/pycopi.py" />
         <option value="$PROJECT_DIR$/PyCoTools/Tests/test.py" />
+        <option value="$PROJECT_DIR$/PyCoTools/Tests/RunMultiplePEsTests.py" />
+        <option value="$PROJECT_DIR$/PyCoTools/pydentify2.py" />
+        <option value="$PROJECT_DIR$/PyCoTools/pycopi.py" />
       </list>
     </option>
   </component>
@@ -142,7 +116,7 @@
     <option name="width" value="1855" />
     <option name="height" value="1204" />
   </component>
-  <component name="ProjectLevelVcsManager">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="1" id="Add" />
   </component>
   <component name="ProjectView">
@@ -170,38 +144,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="PyCoTools" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="PyCoTools" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="PyCoTools" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="PyCoTools" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="PyCoTools" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="PyCoTools" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="PyCoTools" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tests" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -423,9 +365,9 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21019109" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21019109" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13315363" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.13315363" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -439,6 +381,27 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
+    <layout-to-restore>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21019109" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13315363" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="combo" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="processedProjectFiles" value="true" />
@@ -463,37 +426,55 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/PyCoTools/Tests/RunMultiplePEsTests.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="80" column="2" lean-forward="false" selection-start-line="80" selection-start-column="2" selection-end-line="80" selection-end-column="2" />
+        <state relative-caret-position="345">
+          <caret line="297" column="54" lean-forward="false" selection-start-line="297" selection-start-column="54" selection-end-line="297" selection-end-column="54" />
           <folding>
             <element signature="e#784#800#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PyCoTools/pycopi.py">
+    <entry file="file://$PROJECT_DIR$/PyCoTools/Tests/test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-8">
-          <caret line="4273" column="29" lean-forward="false" selection-start-line="4273" selection-start-column="29" selection-end-line="4273" selection-end-column="29" />
+        <state relative-caret-position="255">
+          <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
           <folding>
-            <marker date="1498075692586" expanded="true" signature="1910:2899" ph="..." />
-            <marker date="1498075692586" expanded="true" signature="195349:196061" ph="..." />
-            <marker date="1498075692586" expanded="true" signature="212663:229376" ph="..." />
-            <marker date="1498075692586" expanded="true" signature="229163:229376" ph="..." />
-            <marker date="1498075692586" expanded="true" signature="229551:230230" ph="..." />
-            <marker date="1498075692586" expanded="true" signature="230235:231491" ph="'''...'''" />
-            <marker date="1498075692586" expanded="true" signature="231492:231992" ph="..." />
-            <marker date="1498075692586" expanded="true" signature="231992:231996" ph="..." />
+            <element signature="e#0#9#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PyCoTools/Tests/test.py">
+    <entry file="file://$PROJECT_DIR$/PyCoTools/Tests/TestModels.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="21" column="0" lean-forward="true" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyCoTools/Scripts/calculate_biomodels_computation_time.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyCoTools/pydentify2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="660">
+          <caret line="145" column="45" lean-forward="true" selection-start-line="145" selection-start-column="45" selection-end-line="145" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyCoTools/pycopi.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="352">
+          <caret line="4297" column="4" lean-forward="false" selection-start-line="4297" selection-start-column="4" selection-end-line="4297" selection-end-column="4" />
           <folding>
-            <element signature="e#0#9#0" expanded="true" />
+            <marker date="1498119228774" expanded="true" signature="1910:2899" ph="..." />
+            <marker date="1498119228774" expanded="true" signature="232203:232207" ph="..." />
           </folding>
         </state>
       </provider>
