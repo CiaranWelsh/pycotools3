@@ -1,4 +1,5 @@
-'''
+# -*- coding: utf-8 -*-
+"""
  This file is part of PyCoTools.
 
  PyCoTools is free software: you can redistribute it and/or modify
@@ -16,18 +17,18 @@
 
 
  $Author: Ciaran Welsh
- $Date: 12-09-2016 
+ $Date: 12-09-2016
  Time:  14:50
- 
- 
+
+
   This file uses the pycopi module to set up and run a profile likleihool
  method of identifiability analysis (Raue2009) by automating the COAPSI method
  (shaber2012). Use the ProfileLikelihood class to setup and run an identifiability
- analysis and the Plot class to calculate confidence intervals and visualize the 
- results. 
-     
+ analysis and the Plot class to calculate confidence intervals and visualize the
+ results.
 
-'''
+
+"""
 
 import unittest
 import os
