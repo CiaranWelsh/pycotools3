@@ -4295,7 +4295,7 @@ class RunMultiplePEs():
         self.report_files=self.enumerate_PE_output()
         LOG.debug('Create an instance of ParameterEstimation')
         self.PE=ParameterEstimation(self.copasi_file,self.experiment_files,**self.PE_dct)
-#   
+#
         
     def set_up(self):
         '''
