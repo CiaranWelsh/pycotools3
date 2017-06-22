@@ -34,6 +34,9 @@ class NotImplementedError(Exception):
     pass
 
 
+class ParameterInputError(Exception):
+    pass
+
 
 
 
