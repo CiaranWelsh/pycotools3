@@ -1618,10 +1618,11 @@ class PlotPEData(object):
         '''
         Plot all parameters
         '''
-        for f in self.experiment_files:
-            dire,p= os.path.split(f)
-            fle=os.path.splitext(p)[0]  
-            self.plot1file(f)
+        LOG.warning('the plotting function is temporarily disabled')
+#        for f in self.experiment_files:
+#            dire,p= os.path.split(f)
+#            fle=os.path.splitext(p)[0]  
+#            self.plot1file(f)
 
     
     

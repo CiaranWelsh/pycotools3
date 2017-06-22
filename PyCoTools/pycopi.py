@@ -4922,10 +4922,15 @@ class InsertParameters():
         '''
         model_parameter_names= set(self.GMQ.get_all_model_variables().keys())
         input_parameter_names= set(list(df.keys()))
-        intersection=list( model_parameter_names.intersection(input_parameter_names))
-        if intersection==[]:
-            raise Errors.InputError('''The parameters in your parameter estimation data are not in your model.\
-Please check the headers of your PE data are consistent with your model parameter names.''' )            
+        LOG.info('Model parameter names: {}'.format(model_parameter_names))
+        LOG.info('\n\n')
+        LOG.info('Input parameter names: {}'.format(input_parameter_names))
+#        intersection=list( model_parameter_names.intersection(input_parameter_names))
+#        LOG.debug('intersection of model and input parameters: {}'.format(intersection))
+#        if intersection==[]:
+#            LOG.debug('InputError raised. No intersection between model parameter names and input parameter names: \n\nmodel parameters:\n{}\n input parameters:\n\n{}'.format(model_parameter_names,input_parameter_names))
+#            raise Errors.InputError('''The parameters in your parameter estimation data are not in your model.\
+#Please check the headers of your PE data are consistent with your model parameter names.''' )            
             
     def get_parameters(self):
         '''
