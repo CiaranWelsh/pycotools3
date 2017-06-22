@@ -1,0 +1,105 @@
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+INFO:root:__init__:18:Initializing PyCoTools
+INFO:root:__init__:19:Initializing Logging System
+INFO:root:__init__:20:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1055:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1055:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:1648:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:1655:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:1661:Reading timecourse
+DEBUG:PyCoTools.pycopi:pycopi:1663:pruning headers of copasi files of COPASI references
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:4199:Performing multi parameter fit for model at:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:4420:Using default report name:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ParameterFit.txt
+DEBUG:PyCoTools.pycopi:pycopi:4429:ConfigFilename is None. Reassigning ConfigFilename
+INFO:PyCoTools.pycopi:pycopi:4484:creating a directory for analysis in : 
+
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEsimationAnalysis
+DEBUG:PyCoTools.pycopi:pycopi:4497:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:4296:Create an instance of ParameterEstimation
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+INFO:PyCoTools.pycopi:pycopi:4341:writing PE config template for model: /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:4342:ConfigFilename is /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:3190:{'(phosphorylation of MAPKK).KK3': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK],ParameterGroup=Parameters,Parameter=KK3', 'value': '29224.0'}, '(MAPKKK activation).K1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=K1', 'value': '10.0'}, '(dephosphorylation of MAPK-PP).V9': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-PP],ParameterGroup=Parameters,Parameter=V9', 'value': '5.22054e-06'}, '(phosphorylation of MAPK).k7': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK],ParameterGroup=Parameters,Parameter=k7', 'value': '118926.0'}, '(phosphorylation of MAPK-P).k8': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=k8', 'value': '46722.9'}, '(MAPKKK inactivation).KK2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK inactivation],ParameterGroup=Parameters,Parameter=KK2', 'value': '770669.0'}, '(MAPKKK inactivation).V2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK inactivation],ParameterGroup=Parameters,Parameter=V2', 'value': '1.8982e-05'}, '(phosphorylation of MAPKK).k3': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK],ParameterGroup=Parameters,Parameter=k3', 'value': '0.0171707'}, '(phosphorylation of MAPKK-P).k4': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=k4', 'value': '0.00738712'}, '(dephosphorylation of MAPKK-PP).KK5': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-PP],ParameterGroup=Parameters,Parameter=KK5', 'value': '2083.18'}, '(dephosphorylation of MAPK-PP).KK9': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-PP],ParameterGroup=Parameters,Parameter=KK9', 'value': '688.833'}, '(dephosphorylation of MAPKK-P).KK6': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=KK6', 'value': '0.199851'}, '(phosphorylation of MAPKK-P).KK4': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=KK4', 'value': '1693.46'}, '(MAPKKK activation).V1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=V1', 'value': '19.8726'}, '(MAPKKK activation).Ki': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=Ki', 'value': '0.00127978'}, '(phosphorylation of MAPK).KK7': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK],ParameterGroup=Parameters,Parameter=KK7', 'value': '0.00080569'}, '(dephosphorylation of MAPK-P).KK10': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=KK10', 'value': '6535.37'}, '(phosphorylation of MAPK-P).KK8': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=KK8', 'value': '1.96775e-05'}, '(dephosphorylation of MAPKK-PP).V5': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-PP],ParameterGroup=Parameters,Parameter=V5', 'value': '0.000648891'}, '(dephosphorylation of MAPK-P).V10': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=V10', 'value': '0.018027'}, '(dephosphorylation of MAPKK-P).V6': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=V6', 'value': '306.398'}, '(MAPKKK activation).n': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=n', 'value': '4.25568'}}
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:2161:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:2164:Mapping experiment Kholodenko_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1048:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+INFO:PyCoTools.pycopi:pycopi:4466:Copying copasi file 3 times
+INFO:PyCoTools.pycopi:pycopi:4381:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+INFO:root:pycopi:3516:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+INFO:PyCoTools.pycopi:pycopi:4381:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:1048:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_1.cps
+INFO:root:pycopi:3516:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+INFO:PyCoTools.pycopi:pycopi:4381:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1048:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_2.cps
+INFO:root:pycopi:3516:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:1048:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+INFO:PyCoTools.pycopi:pycopi:4411:Setup Took 0.411815881729 seconds
+INFO:PyCoTools.pycopi:pycopi:4389:<PyCoTools.pycopi.Scan instance at 0x7fda7d384290>
+INFO:PyCoTools.pycopi:pycopi:4329:Running model: 0
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+INFO:PyCoTools.pycopi:pycopi:4329:Running model: 1
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_1.cps
+INFO:PyCoTools.pycopi:pycopi:4329:Running model: 2
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_1.cps
+INFO:PyCoTools.pycopi:pycopi:4411:Setup Took 0.506976127625 seconds
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_2.cps
+INFO:PyCoTools.pycopi:pycopi:4411:Setup Took 0.503196954727 seconds
