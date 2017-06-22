@@ -3897,7 +3897,7 @@ class InsertParameters16():
         if num!=1:
             raise Errors.InputError('You need to supply exactly one of parameter_dict,parameter_path or df keyord argument. You cannot give two or three.')
         
-#        self.check_parameter_consistancy()
+        self.check_parameter_consistancy()
         self.parameters=self.get_parameters()   
         self.parameters= self.replace_gl_and_lt()
         self.insert_all()
@@ -4883,10 +4883,17 @@ class InsertParameters():
         if self.kwargs.get('parameter_path')!=None:
             num+=1
         if num!=1:
+<<<<<<< HEAD
             raise Errors.InputError('You need to supply exactly one of parameter_dict,parameter_path or df keyord argument. You cannot give two or three.')
         
 #        self.check_parameter_consistancy()
         self.parameters=self.get_parameters()   
+=======
+            raise Errors.InputError('You need to supply exactly one of ParameterDict,ParameterPath or df keyord argument. You cannot give two or three.')
+
+
+        self.parameters=self.get_parameters()
+>>>>>>> 429c10cf87dc359d74434f80ea107ba8d837c4c9
         self.parameters= self.replace_gl_and_lt()
         self.insert_all()
         #change
@@ -4905,7 +4912,7 @@ class InsertParameters():
         input_parameter_names= set(list(df.keys()))
         intersection=list( model_parameter_names.intersection(input_parameter_names))
         if intersection==[]:
-            raise Errors.InputError('''The parameters in your parameter estimation data are not in your model.\
+            raise Errors.ParameterInputError('''The parameters in your parameter estimation data are not in your model.\
 Please check the headers of your PE data are consistent with your model parameter names.''' )            
             
     def get_parameters(self):
@@ -4933,9 +4940,13 @@ Please check the headers of your PE data are consistent with your model paramete
             df= pandas.DataFrame(self.kwargs.get('df').iloc[self.kwargs.get('index')]).transpose()
         try:
             self.check_parameter_consistancy(df)
-        except Errors.InputError:
-            df=PruneCopasiHeaders(df).prune()
-            self.check_parameter_consistancy(df)
+        except Errors.ParameterInputError:
+            try:
+                df=PruneCopasiHeaders(df).prune()
+                self.check_parameter_consistancy(df)
+            except Errors.ParameterInputError:
+                LOG.warning('No intersection between input and model parameters. Switching to InsertParameters16 class to see if it works')
+                InsertParameters16(self.copasi_file, **self.kwargs)
         return df
 
     def insert_locals(self):
