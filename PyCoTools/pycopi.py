@@ -737,7 +737,7 @@ class Reports():
         #Objects for the report to report
         time=etree.SubElement(table,'Object')
         #first element always time. 
-        time.attrib['cn']='CN=Root,model={},Reference=Time'.format(self.GMQ.get_model_name_cn())
+        time.attrib['cn']='CN=Root,Model={},Reference=Time'.format(self.GMQ.get_model_name_cn())
 
         '''
         generate more SubElements dynamically
@@ -1216,7 +1216,7 @@ class TimeCourse(object):
             self.copasiML = self.CParser.copasiML
             LOG.debug('CopasiML: {}'.format(self.copasiML))
             self.GMQ = GetModelQuantities(self.copasi_file)
-            default_report_name = os.path.split(self.copasi_file)[1][:-4] + '_TimeCourse.txt'
+            default_report_name = os.path.join(os.path.dirname(self.copasi_file),'{}_TimeCourse.txt'.format(os.path.split(self.copasi_file)[1][:-4]))
             options = {'intervals': '100',
                        'step_size': '0.01',
                        'end': '1',
