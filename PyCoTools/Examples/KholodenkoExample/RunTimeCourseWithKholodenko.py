@@ -22,7 +22,7 @@ Date:
     12/03/2017
 
  Object:
-Run a time course
+run a time course
  '''
 import PyCoTools
 import os
@@ -34,10 +34,10 @@ from FilePaths import KholodenkoExample
 K=KholodenkoExample()
 
 #run deterministic time course with kholodenko model
-PyCoTools.pycopi.TimeCourse(K.kholodenko_model,ReportName=K.timecourse_report,End=1000,
-                               Intervals=50,StepSize=20,Metabolites=['Mek1-P','Mek1'],
-                                                                    MarkerColor='b',Plot='true')
-#                               )#,Plot='true',SaveFig='true')
+PyCoTools.pycopi.TimeCourse(K.kholodenko_model,report_name=K.timecourse_report,End=1000,
+                               Intervals=50,StepSize=20,metabolites=['Mek1-P','Mek1'],
+                                                                    Markercolor='b',plot='true')
+#                               )#,plot='true',savefig='true')
 
 
 

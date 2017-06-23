@@ -30,38 +30,38 @@ import argparse
 import os
 
 
-parser=argparse.ArgumentParser(description='Plot Parameter Estimation Data')
+parser=argparse.ArgumentParser(description='plot Parameter Estimation Data')
 parser.add_argument('path',help='Path to parameter estimation data file or folder of parameter estimation data files')
 parser.add_argument('-o',help='output directory',default=None)
-parser.add_argument('-l','--Log10',action='store_false',help='do not plot in log10 space')
-parser.add_argument('-t','--TruncateMode',help='either percent or below_x')
+parser.add_argument('-l','--log10',action='store_false',help='do not plot in log10 space')
+parser.add_argument('-t','--truncate_model',help='either percent or below_x')
 parser.add_argument('-x',help='value to use for data truncation',type=float)
 
-parser.add_argument('-b','--Bins',help='Number of bins for histogram',type=int)
-parser.add_argument('-n','--NumPerPlot',help='Number of bars per plot',type=int)
-parser.add_argument('-g','--GridSize',help='size of hex grids',type=int,default=25)
-parser.add_argument('-fs','--FontSize',help='size of font',type=int,default=22)
-parser.add_argument('-as','--AxisSize',help='size of axes labels',type=int,default=18)
-parser.add_argument('-tol','-tolerance',help='Tolerance parameter',type=float,default=0.01)
+parser.add_argument('-b','--bins',help='Number of bins for histogram',type=int)
+parser.add_argument('-n','--NumPerplot',help='Number of bars per plot',type=int)
+parser.add_argument('-g','--grid_size',help='size of hex grids',type=int,default=25)
+parser.add_argument('-fs','--font_size',help='size of font',type=int,default=22)
+parser.add_argument('-as','--axis_size',help='size of axes labels',type=int,default=18)
+parser.add_argument('-tol','-tolerance',help='tolerance parameter',type=float,default=0.01)
 
 args=parser.parse_args()
 #===============================================================================
 PD=P.PEAnalysis.ParsePEData(args.path)
-print 'Number of PE Runs: {}'.format(PD.data.shape[0])
+print 'Number of PE runs: {}'.format(PD.data.shape[0])
 
-if args.TruncateMode==None:
-    args.TruncateMode='tolerance'
+if args.truncate_model==None:
+    args.truncate_model='tolerance'
     
 if args.x==None:
     args.x=100
     
-if args.Bins==None:
-    args.Bins=100
+if args.bins==None:
+    args.bins=100
     
-if args.Log10==True:
-    args.Log10='true'
-elif args.Log10==False:
-    args.Log10='false'
+if args.log10==True:
+    args.log10='true'
+elif args.log10==False:
+    args.log10='false'
     
     
 if args.o==None:
@@ -76,73 +76,73 @@ if os.path.isdir(args.o)!=True:
 os.chdir(args.o)
 
 l=[]
-for i in['OptimizationPerformance','Histograms','Scatters','BoxPlots','HexMapRSS','HexMapCounts']:
+for i in['OptimizationPerformance','Histograms','Scatters','Boxplots','HexMapRSS','HexMapCounts']:
     l.append(os.path.join(args.o,i))
 
 
 print args
 P.PEAnalysis.EvaluateOptimizationPerformance(args.path,
-                                             SaveFig='true',
-                                             Log10=args.Log10,
-                                             ResultsDirectory=l[0],
-                                             FontSize=args.FontSize,
-                                             AxisSize=args.AxisSize,
-                                             Tolerance=args.tol)
+                                             savefig='true',
+                                             log10=args.log10,
+                                             results_directory=l[0],
+                                             font_size=args.font_size,
+                                             axis_size=args.axis_size,
+                                             tolerance=args.tol)
 
-P.PEAnalysis.PlotHistogram(args.path,SaveFig='true',
-                           Tolerance=args.tol,
-                           TruncateMode=args.TruncateMode,
-                           X=args.x,
-                           Bins=args.Bins,
-                           Log10=args.Log10,
-                           ResultsDirectory=l[1],
-                           FontSize=args.FontSize,
-                           AxisSize=args.AxisSize)
+P.PEAnalysis.plotHistogram(args.path,savefig='true',
+                           tolerance=args.tol,
+                           truncate_model=args.truncate_model,
+                           x=args.x,
+                           bins=args.bins,
+                           log10=args.log10,
+                           results_directory=l[1],
+                           font_size=args.font_size,
+                           axis_size=args.axis_size)
 
-P.PEAnalysis.PlotScatters(args.path,
-                          SaveFig='true',
-                          Log10=args.Log10,
-                          TruncateMode=args.TruncateMode,
-                          X=args.x,ResultsDirectory=l[2],
-                          FontSize=args.FontSize,
-                          AxisSize=args.AxisSize,
-                          Tolerance=args.tol)
+P.PEAnalysis.plotScatters(args.path,
+                          savefig='true',
+                          log10=args.log10,
+                          truncate_model=args.truncate_model,
+                          x=args.x,results_directory=l[2],
+                          font_size=args.font_size,
+                          axis_size=args.axis_size,
+                          tolerance=args.tol)
 
-P.PEAnalysis.PlotBoxplot(args.path,
-                         SaveFig='true',
-                         TruncateMode=args.TruncateMode,
-                         X=args.x,
-                         NumPerPlot=args.NumPerPlot,
-                         ResultsDirectory=l[3],
-                         Log10='true',
-                         FontSize=args.FontSize,
-                         AxisSize=args.AxisSize,
+P.PEAnalysis.plotBoxplot(args.path,
+                         savefig='true',
+                         truncate_model=args.truncate_model,
+                         x=args.x,
+                         NumPerplot=args.NumPerplot,
+                         results_directory=l[3],
+                         log10='true',
+                         font_size=args.font_size,
+                         axis_size=args.axis_size,
                          Tolernce=args.tol)
 
-P.PEAnalysis.PlotHexMap(args.path,
-                        SaveFig='true',
-                        TruncateMode=args.TruncateMode,
-                        X=args.x,
-                        Mode='RSS',
-                        ResultsDirectory=l[4],
-                        Log10='true',
-                        GridSize=args.GridSize,
-                        FontSize=args.FontSize,
-                        AxisSize=args.AxisSize,
-                        Tolerance=args.tol)
+P.PEAnalysis.plotHexMap(args.path,
+                        savefig='true',
+                        truncate_model=args.truncate_model,
+                        x=args.x,
+                        mode='RSS',
+                        results_directory=l[4],
+                        log10='true',
+                        grid_size=args.grid_size,
+                        font_size=args.font_size,
+                        axis_size=args.axis_size,
+                        tolerance=args.tol)
 
 
-P.PEAnalysis.PlotHexMap(args.path,
-                        SaveFig='true',
-                        TruncateMode=args.TruncateMode,
-                        X=args.x,
-                        Mode='counts',
-                        ResultsDirectory=l[5],
-                        Log10='true',
-                        GridSize=args.GridSize,
-                        FontSize=args.FontSize,
-                        AxisSize=args.AxisSize,
-                        Tolerance=args.tol)
+P.PEAnalysis.plotHexMap(args.path,
+                        savefig='true',
+                        truncate_model=args.truncate_model,
+                        x=args.x,
+                        mode='counts',
+                        results_directory=l[5],
+                        log10='true',
+                        grid_size=args.grid_size,
+                        font_size=args.font_size,
+                        axis_size=args.axis_size,
+                        tolerance=args.tol)
 
 
 for i in l:

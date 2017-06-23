@@ -34,29 +34,29 @@ def runHJ(copasi_file,parameters,report_name,mode):
         del parameters['RSS']
     for i in parameters:
         print i,':\t',parameters[i]
-    PyCoTools.pycopi.InsertParameters(copasi_file,ParameterDict=parameters)
+    PyCoTools.pycopi.InsertParameters(copasi_file,parameter_dict=parameters)
     
     PE=PyCoTools.pycopi.ParameterEstimation(copasi_file,C.noisy_timecourse_report,
-                                         Method='HookeJeeves',
-                                         IterationLimit=20000,
-                                         Tolerance=1e-30,
-                                         RandomizeStartValues='false',
-                                         Plot='true',
-                                         SaveFig='true',
-                                         UseTemplateStartValues='false',
+                                         method='HookeJeeves',
+                                         iteration_limit=20000,
+                                         tolerance=1e-30,
+                                         randomize_start_values='false',
+                                         plot='true',
+                                         savefig='true',
+                                         use_config_start_values='false',
                                          )
 
         
     PE.set_up()
-    ## Run via scan task because this gives only best values in function
+    ## run via scan task because this gives only best values in function
     ## evaluations, rather than the periodic function evaluations as well
     print '\n\n'
     print report_name
     print '\n'
-    PyCoTools.pycopi.Scan(copasi_file,ScanType='repeat',Run=mode,
-                          NumberOfSteps=1,
-                          ReportName=report,
-                          ReportType='parameter_estimation')
+    PyCoTools.pycopi.Scan(copasi_file,scan_type='repeat',run=mode,
+                          number_of_steps=1,
+                          report_name=report,
+                          report_type='parameter_estimation')
 
 #data.shape[0]*0.01)
 if __name__=='__main__':
@@ -77,9 +77,9 @@ if __name__=='__main__':
                                       
 #    if sys.platform=='win32':
 #        '''
-#        Run hook and jeeves from the top 1 percent
+#        run hook and jeeves from the top 1 percent
 #        best estimated parameter from the genetic algorithm
-#        Run on windows machine
+#        run on windows machine
 #        '''
 #        mode='true'
 #        for i in range(int(data.shape[0]*0.1)):

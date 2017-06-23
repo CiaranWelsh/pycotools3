@@ -22,7 +22,7 @@ Date:
     12/03/2017
 
  Object:
-Run Profile likelihoods
+run Profile likelihoods
 """
 
 import PyCoTools
@@ -34,35 +34,35 @@ import argparse
 des=''' run profile likelihoods using copasi''' 
 parser=argparse.ArgumentParser(description=des)
 
-parser.add_argument('Model',help='Model to run profile likelihood analysis on')
+parser.add_argument('model',help='model to run profile likelihood analysis on')
 
-parser.add_argument('Index',nargs='+',
+parser.add_argument('index',nargs='+',
                     help='''-1 for parameters already in model, integer value for
                     index of best fit (0 is best) or list of integers for multiple''',
                     type=int,
                     default=None)
 
-parser.add_argument('--ParameterPath',
+parser.add_argument('--parameter_path',
                     help='Full path to parameter results file or folder of results files from the same problem',
                     type=str,
                     default=None)
 
-parser.add_argument('--UpperBoundMultiplier',
+parser.add_argument('--upper_boundMultiplier',
                     help='number to multiple parameter of interest by',
                     default=1000,
                     type=int)
 
-parser.add_argument('--LowerBoundMultiplier',
+parser.add_argument('--lower_boundMultiplier',
                     help='number to multiple parameter of interest by',
                     default=1000,
                     type=int)
 
-parser.add_argument('--NumberOfSteps',
+parser.add_argument('--number_of_steps',
                     help='How densily to sample the profile likelihoods',
                     default=10,
                     type=int)
 
-parser.add_argument('--Run',
+parser.add_argument('--run',
                     help='''One of 'false','slow','multiprocess','SGE' ''',
                     default='slow')
 
@@ -70,25 +70,25 @@ args=parser.parse_args()
 
 ##==============================================================================
 
-if args.Index==None:
-    args.Index=-1
+if args.index==None:
+    args.index=-1
     
-if args.ParameterPath!=None:
-    parameters=PyCoTools.PEAnalysis.ParsePEData(args.ParameterPath)
-    print parameters.data.iloc[args.Index].sort_index().transpose()
+if args.parameter_path!=None:
+    parameters=PyCoTools.PEAnalysis.ParsePEData(args.parameter_path)
+    print parameters.data.iloc[args.index].sort_index().transpose()
 
-PyCoTools.pydentify2.ProfileLikelihood(args.Model, #full path to the model
-                                       ParameterPath=args.ParameterPath, #full path to the PEData
-                                       Index=args.Index, #index of PE set for profiling. (best is 0)
-                                       NumberOfSteps=args.NumberOfSteps, #resolution of profile likelihood 
-                                       Run=args.Run,#Run method, 
+PyCoTools.pydentify2.ProfileLikelihood(args.model, #full path to the model
+                                       parameter_path=args.parameter_path, #full path to the PEData
+                                       index=args.index, #index of PE set for profiling. (best is 0)
+                                       number_of_steps=args.number_of_steps, #resolution of profile likelihood 
+                                       run=args.run,#run method, 
                                        
                                        ##specify multipliers for scan boundaries\
                                        ##i.e. if estimated parameter was 0.1, \
                                        ##Boundaries with the present settings would be \
                                        ##between 0.1/1000 and 0.1*1000 = 0.0001 and 100\
-                                       UpperBoundMultiplier=args.UpperBoundMultiplier, 
-                                       LowerBoundMultiplier=args.LowerBoundMultiplier)  
+                                       upper_boundMultiplier=args.upper_boundMultiplier, 
+                                       lower_boundMultiplier=args.lower_boundMultiplier)  
 
 
 

@@ -170,14 +170,14 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </ListOfParameterDescriptions>
     </Function>
   </ListOfFunctions>
-  <Model key="Model_3" name="Vilar2006_TGFbeta" simulationType="time" timeUnit="h" volumeUnit="l" areaUnit="m²" lengthUnit="m" quantityUnit="#" type="stochastic" avogadroConstant="6.02214179e+023">
+  <model key="model_3" name="Vilar2006_TGFbeta" simulationType="time" timeUnit="h" volumeUnit="l" areaUnit="m²" lengthUnit="m" quantityUnit="#" type="stochastic" avogadroConstant="6.02214179e+023">
     <MiriamAnnotation>
-<rdf:RDF
-   xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#"
+<rdf:Rdf
+   xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#"
    xmlns:dcterms="http://purl.org/dc/terms/"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
-  <rdf:Description rdf:about="#Model_3">
+  <rdf:Description rdf:about="#model_3">
     <dcterms:bibliographicCitation>
       <rdf:Bag>
         <rdf:li>
@@ -248,7 +248,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:occursIn>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
 
     </MiriamAnnotation>
     <Comment>
@@ -259,14 +259,14 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
           for more information.      </p>
   <p>In summary, you are entitled to use this encoded model in absolutely any manner you deem suitable, verbatim, or with modification, alone or embedded it in a larger context, redistribute it, commercially or not, in a restricted way or not.</p>
   <br />
-  <p>To cite BioModels Database, please use:      <a href="http://www.ncbi.nlm.nih.gov/pubmed/20587024" target="_blank">Li C, Donizelli M, Rodriguez N, Dharuri H, Endler L, Chelliah V, Li L, He E, Henry A, Stefan MI, Snoep JL, Hucka M, Le Novère N, Laibe C (2010) BioModels Database: An enhanced, curated and annotated resource for published quantitative kinetic models. BMC Syst Biol., 4:92.</a>
+  <p>To cite Biomodels Database, please use:      <a href="http://www.ncbi.nlm.nih.gov/pubmed/20587024" target="_blank">Li C, Donizelli M, Rodriguez N, Dharuri H, Endler L, Chelliah V, Li L, He E, Henry A, Stefan MI, Snoep JL, Hucka M, Le Novère N, Laibe C (2010) Biomodels Database: An enhanced, curated and annotated resource for published quantitative kinetic models. BMC Syst Biol., 4:92.</a>
 </p>
 </body>
     </Comment>
     <ListOfCompartments>
       <Compartment key="Compartment_1" name="Plasma membrane" simulationType="fixed" dimensionality="3">
         <MiriamAnnotation>
-<rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:Rdf xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Compartment_1">
     <CopasiMT:is>
       <rdf:Bag>
@@ -274,12 +274,12 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:is>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
         </MiriamAnnotation>
       </Compartment>
       <Compartment key="Compartment_3" name="Endosome" simulationType="fixed" dimensionality="3">
         <MiriamAnnotation>
-<rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:Rdf xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Compartment_3">
     <CopasiMT:is>
       <rdf:Bag>
@@ -287,14 +287,14 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:is>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
         </MiriamAnnotation>
       </Compartment>
     </ListOfCompartments>
-    <ListOfMetabolites>
+    <ListOfmetabolites>
       <Metabolite key="Metabolite_1" name="Receptor 1" simulationType="reactions" compartment="Compartment_1">
         <MiriamAnnotation>
-<rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:Rdf xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Metabolite_1">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
@@ -302,12 +302,12 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
         </MiriamAnnotation>
       </Metabolite>
       <Metabolite key="Metabolite_3" name="Receptor 2" simulationType="reactions" compartment="Compartment_1">
         <MiriamAnnotation>
-<rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:Rdf xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Metabolite_3">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
@@ -315,12 +315,12 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
         </MiriamAnnotation>
       </Metabolite>
       <Metabolite key="Metabolite_5" name="ligand receptor complex-plasma membrane" simulationType="reactions" compartment="Compartment_1">
         <MiriamAnnotation>
-<rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:Rdf xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Metabolite_5">
     <CopasiMT:hasPart>
       <rdf:Bag>
@@ -330,12 +330,12 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:hasPart>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
         </MiriamAnnotation>
       </Metabolite>
       <Metabolite key="Metabolite_7" name="ligand receptor complex-endosome" simulationType="reactions" compartment="Compartment_3">
         <MiriamAnnotation>
-<rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:Rdf xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Metabolite_7">
     <CopasiMT:hasPart>
       <rdf:Bag>
@@ -345,12 +345,12 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:hasPart>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
         </MiriamAnnotation>
       </Metabolite>
       <Metabolite key="Metabolite_9" name="Receptor 1-endosome" simulationType="reactions" compartment="Compartment_3">
         <MiriamAnnotation>
-<rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:Rdf xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Metabolite_9">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
@@ -358,12 +358,12 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
         </MiriamAnnotation>
       </Metabolite>
       <Metabolite key="Metabolite_11" name="Receptor 2 endosome" simulationType="reactions" compartment="Compartment_3">
         <MiriamAnnotation>
-<rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:Rdf xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Metabolite_11">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
@@ -371,34 +371,34 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
         </MiriamAnnotation>
       </Metabolite>
-    </ListOfMetabolites>
-    <ListOfModelValues>
-      <ModelValue key="ModelValue_0" name="ka" simulationType="fixed">
-      </ModelValue>
-      <ModelValue key="ModelValue_1" name="ligand" simulationType="fixed">
-      </ModelValue>
-      <ModelValue key="ModelValue_2" name="kcd" simulationType="fixed">
-      </ModelValue>
-      <ModelValue key="ModelValue_3" name="klid" simulationType="fixed">
-      </ModelValue>
-      <ModelValue key="ModelValue_4" name="ki" simulationType="fixed">
-      </ModelValue>
-      <ModelValue key="ModelValue_5" name="pRI" simulationType="fixed">
-      </ModelValue>
-      <ModelValue key="ModelValue_6" name="kr" simulationType="fixed">
-      </ModelValue>
-      <ModelValue key="ModelValue_7" name="alpha" simulationType="fixed">
-      </ModelValue>
-      <ModelValue key="ModelValue_8" name="pRII" simulationType="fixed">
-      </ModelValue>
-    </ListOfModelValues>
+    </ListOfmetabolites>
+    <ListOfmodelValues>
+      <modelValue key="modelValue_0" name="ka" simulationType="fixed">
+      </modelValue>
+      <modelValue key="modelValue_1" name="ligand" simulationType="fixed">
+      </modelValue>
+      <modelValue key="modelValue_2" name="kcd" simulationType="fixed">
+      </modelValue>
+      <modelValue key="modelValue_3" name="klid" simulationType="fixed">
+      </modelValue>
+      <modelValue key="modelValue_4" name="ki" simulationType="fixed">
+      </modelValue>
+      <modelValue key="modelValue_5" name="pRI" simulationType="fixed">
+      </modelValue>
+      <modelValue key="modelValue_6" name="kr" simulationType="fixed">
+      </modelValue>
+      <modelValue key="modelValue_7" name="alpha" simulationType="fixed">
+      </modelValue>
+      <modelValue key="modelValue_8" name="pRII" simulationType="fixed">
+      </modelValue>
+    </ListOfmodelValues>
     <ListOfReactions>
       <Reaction key="Reaction_0" name="Ligand receptor complex formation" reversible="false" fast="false">
         <MiriamAnnotation>
-<rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:Rdf xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Reaction_0">
     <CopasiMT:is>
       <rdf:Bag>
@@ -407,7 +407,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:is>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
         </MiriamAnnotation>
         <ListOfSubstrates>
           <Substrate metabolite="Metabolite_3" stoichiometry="1"/>
@@ -432,17 +432,17 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
               <SourceParameter reference="Metabolite_3"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_264">
-              <SourceParameter reference="ModelValue_0"/>
+              <SourceParameter reference="modelValue_0"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_254">
-              <SourceParameter reference="ModelValue_1"/>
+              <SourceParameter reference="modelValue_1"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
       </Reaction>
       <Reaction key="Reaction_1" name="Ligand receptor complex constitutive degradation" reversible="false" fast="false">
         <MiriamAnnotation>
-<rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:Rdf xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Reaction_1">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
@@ -450,7 +450,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
         </MiriamAnnotation>
         <ListOfSubstrates>
           <Substrate metabolite="Metabolite_5" stoichiometry="1"/>
@@ -464,7 +464,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
               <SourceParameter reference="Compartment_1"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_269">
-              <SourceParameter reference="ModelValue_2"/>
+              <SourceParameter reference="modelValue_2"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_265">
               <SourceParameter reference="Metabolite_5"/>
@@ -474,7 +474,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </Reaction>
       <Reaction key="Reaction_2" name="Ligand independent complex degradation" reversible="false" fast="false">
         <MiriamAnnotation>
-<rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:Rdf xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Reaction_2">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
@@ -482,7 +482,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
         </MiriamAnnotation>
         <ListOfSubstrates>
           <Substrate metabolite="Metabolite_5" stoichiometry="1"/>
@@ -496,7 +496,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
               <SourceParameter reference="Compartment_1"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_270">
-              <SourceParameter reference="ModelValue_3"/>
+              <SourceParameter reference="modelValue_3"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_267">
               <SourceParameter reference="Metabolite_5"/>
@@ -506,7 +506,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </Reaction>
       <Reaction key="Reaction_3" name="Ligand receptor complex internalization" reversible="false" fast="false">
         <MiriamAnnotation>
-<rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:Rdf xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Reaction_3">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
@@ -514,7 +514,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
         </MiriamAnnotation>
         <ListOfSubstrates>
           <Substrate metabolite="Metabolite_5" stoichiometry="1"/>
@@ -531,7 +531,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
               <SourceParameter reference="Compartment_1"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_273">
-              <SourceParameter reference="ModelValue_4"/>
+              <SourceParameter reference="modelValue_4"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_246">
               <SourceParameter reference="Metabolite_5"/>
@@ -541,7 +541,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </Reaction>
       <Reaction key="Reaction_4" name="RI synthesis" reversible="false" fast="false">
         <MiriamAnnotation>
-<rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:Rdf xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Reaction_4">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
@@ -549,7 +549,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
         </MiriamAnnotation>
         <ListOfProducts>
           <Product metabolite="Metabolite_1" stoichiometry="1"/>
@@ -563,14 +563,14 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
               <SourceParameter reference="Compartment_1"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_276">
-              <SourceParameter reference="ModelValue_5"/>
+              <SourceParameter reference="modelValue_5"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
       </Reaction>
       <Reaction key="Reaction_5" name="RI constitutive degradation" reversible="false" fast="false">
         <MiriamAnnotation>
-<rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:Rdf xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Reaction_5">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
@@ -578,7 +578,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
         </MiriamAnnotation>
         <ListOfSubstrates>
           <Substrate metabolite="Metabolite_1" stoichiometry="1"/>
@@ -595,14 +595,14 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
               <SourceParameter reference="Metabolite_1"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_277">
-              <SourceParameter reference="ModelValue_2"/>
+              <SourceParameter reference="modelValue_2"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
       </Reaction>
       <Reaction key="Reaction_6" name="RI internalization" reversible="false" fast="false">
         <MiriamAnnotation>
-<rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:Rdf xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Reaction_6">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
@@ -610,7 +610,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
         </MiriamAnnotation>
         <ListOfSubstrates>
           <Substrate metabolite="Metabolite_1" stoichiometry="1"/>
@@ -630,14 +630,14 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
               <SourceParameter reference="Metabolite_1"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_281">
-              <SourceParameter reference="ModelValue_4"/>
+              <SourceParameter reference="modelValue_4"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
       </Reaction>
       <Reaction key="Reaction_7" name="RI recycling" reversible="false" fast="false">
         <MiriamAnnotation>
-<rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:Rdf xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Reaction_7">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
@@ -645,7 +645,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
         </MiriamAnnotation>
         <ListOfSubstrates>
           <Substrate metabolite="Metabolite_9" stoichiometry="1"/>
@@ -665,14 +665,14 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
               <SourceParameter reference="Metabolite_9"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_284">
-              <SourceParameter reference="ModelValue_6"/>
+              <SourceParameter reference="modelValue_6"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
       </Reaction>
       <Reaction key="Reaction_8" name="Ligand Receptor complex recycling" reversible="false" fast="false">
         <MiriamAnnotation>
-<rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:Rdf xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Reaction_8">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
@@ -680,7 +680,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
         </MiriamAnnotation>
         <ListOfSubstrates>
           <Substrate metabolite="Metabolite_7" stoichiometry="1"/>
@@ -698,7 +698,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
               <SourceParameter reference="Compartment_3"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_287">
-              <SourceParameter reference="ModelValue_6"/>
+              <SourceParameter reference="modelValue_6"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_282">
               <SourceParameter reference="Metabolite_7"/>
@@ -708,7 +708,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </Reaction>
       <Reaction key="Reaction_9" name="RII synthesis" reversible="false" fast="false">
         <MiriamAnnotation>
-<rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:Rdf xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Reaction_9">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
@@ -716,7 +716,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
         </MiriamAnnotation>
         <ListOfProducts>
           <Product metabolite="Metabolite_3" stoichiometry="1"/>
@@ -730,14 +730,14 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
               <SourceParameter reference="Compartment_1"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_290">
-              <SourceParameter reference="ModelValue_8"/>
+              <SourceParameter reference="modelValue_8"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
       </Reaction>
       <Reaction key="Reaction_10" name="RII constitutive degradation" reversible="false" fast="false">
         <MiriamAnnotation>
-<rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:Rdf xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Reaction_10">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
@@ -745,7 +745,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
         </MiriamAnnotation>
         <ListOfSubstrates>
           <Substrate metabolite="Metabolite_3" stoichiometry="1"/>
@@ -762,14 +762,14 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
               <SourceParameter reference="Metabolite_3"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_291">
-              <SourceParameter reference="ModelValue_2"/>
+              <SourceParameter reference="modelValue_2"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
       </Reaction>
       <Reaction key="Reaction_11" name="RII internalization" reversible="false" fast="false">
         <MiriamAnnotation>
-<rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:Rdf xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Reaction_11">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
@@ -777,7 +777,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
         </MiriamAnnotation>
         <ListOfSubstrates>
           <Substrate metabolite="Metabolite_3" stoichiometry="1"/>
@@ -797,14 +797,14 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
               <SourceParameter reference="Metabolite_3"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_295">
-              <SourceParameter reference="ModelValue_4"/>
+              <SourceParameter reference="modelValue_4"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
       </Reaction>
       <Reaction key="Reaction_12" name="RII recycling" reversible="false" fast="false">
         <MiriamAnnotation>
-<rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:Rdf xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Reaction_12">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
@@ -812,7 +812,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
         </MiriamAnnotation>
         <ListOfSubstrates>
           <Substrate metabolite="Metabolite_11" stoichiometry="1"/>
@@ -832,7 +832,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
               <SourceParameter reference="Metabolite_11"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_298">
-              <SourceParameter reference="ModelValue_6"/>
+              <SourceParameter reference="modelValue_6"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -841,10 +841,10 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
     <ListOfEvents>
       <Event key="Event_0" name="event_0000001" fireAtInitialTime="0" persistentTrigger="0">
         <TriggerExpression>
-          &lt;CN=Root,Model=Vilar2006_TGFbeta,Reference=Time&gt; ge 2500
+          &lt;CN=Root,model=Vilar2006_TGFbeta,Reference=Time&gt; ge 2500
         </TriggerExpression>
         <ListOfAssignments>
-          <Assignment targetKey="ModelValue_1">
+          <Assignment targetKey="modelValue_1">
             <Expression>
               0.01
             </Expression>
@@ -852,166 +852,166 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
         </ListOfAssignments>
       </Event>
     </ListOfEvents>
-    <ListOfModelParameterSets activeSet="ModelParameterSet_1">
-      <ModelParameterSet key="ModelParameterSet_1" name="Initial State">
-        <ModelParameterGroup cn="String=Initial Time" type="Group">
-          <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta" value="0" type="Model" simulationType="time"/>
-        </ModelParameterGroup>
-        <ModelParameterGroup cn="String=Initial Compartment Sizes" type="Group">
-          <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane]" value="1" type="Compartment" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome]" value="1" type="Compartment" simulationType="fixed"/>
-        </ModelParameterGroup>
-        <ModelParameterGroup cn="String=Initial Species Values" type="Group">
-          <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[Receptor 1]" value="22.9544" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[Receptor 2]" value="0.00155182" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[ligand receptor complex-plasma membrane]" value="0.0001" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[ligand receptor complex-endosome]" value="38.8192950146758" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[Receptor 1-endosome]" value="7.62219" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[Receptor 2 endosome]" value="0.385859" type="Species" simulationType="reactions"/>
-        </ModelParameterGroup>
-        <ModelParameterGroup cn="String=Initial Global Quantities" type="Group">
-          <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ka]" value="0.7798620000000001" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ligand]" value="0.0001" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kcd]" value="0.0251133" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[klid]" value="0.268159" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ki]" value="0.390589" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[pRI]" value="6.44406" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kr]" value="0.0308656" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[alpha]" value="1.04518" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[pRII]" value="4.20542" type="ModelValue" simulationType="fixed"/>
-        </ModelParameterGroup>
-        <ModelParameterGroup cn="String=Kinetic Parameters" type="Group">
-          <ModelParameterGroup cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[Ligand receptor complex formation]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[Ligand receptor complex formation],ParameterGroup=Parameters,Parameter=ka" value="0.7798620000000001" type="ReactionParameter" simulationType="assignment">
+    <ListOfmodelParameterSets activeSet="modelParameterSet_1">
+      <modelParameterSet key="modelParameterSet_1" name="Initial State">
+        <modelParameterGroup cn="String=Initial Time" type="Group">
+          <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta" value="0" type="model" simulationType="time"/>
+        </modelParameterGroup>
+        <modelParameterGroup cn="String=Initial Compartment Sizes" type="Group">
+          <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane]" value="1" type="Compartment" simulationType="fixed"/>
+          <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Compartments[Endosome]" value="1" type="Compartment" simulationType="fixed"/>
+        </modelParameterGroup>
+        <modelParameterGroup cn="String=Initial Species Values" type="Group">
+          <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=metabolites[Receptor 1]" value="22.9544" type="Species" simulationType="reactions"/>
+          <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=metabolites[Receptor 2]" value="0.00155182" type="Species" simulationType="reactions"/>
+          <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=metabolites[ligand receptor complex-plasma membrane]" value="0.0001" type="Species" simulationType="reactions"/>
+          <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=metabolites[ligand receptor complex-endosome]" value="38.8192950146758" type="Species" simulationType="reactions"/>
+          <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=metabolites[Receptor 1-endosome]" value="7.62219" type="Species" simulationType="reactions"/>
+          <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=metabolites[Receptor 2 endosome]" value="0.385859" type="Species" simulationType="reactions"/>
+        </modelParameterGroup>
+        <modelParameterGroup cn="String=Initial Global Quantities" type="Group">
+          <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Values[ka]" value="0.7798620000000001" type="modelValue" simulationType="fixed"/>
+          <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Values[ligand]" value="0.0001" type="modelValue" simulationType="fixed"/>
+          <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Values[kcd]" value="0.0251133" type="modelValue" simulationType="fixed"/>
+          <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Values[klid]" value="0.268159" type="modelValue" simulationType="fixed"/>
+          <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Values[ki]" value="0.390589" type="modelValue" simulationType="fixed"/>
+          <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Values[pRI]" value="6.44406" type="modelValue" simulationType="fixed"/>
+          <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Values[kr]" value="0.0308656" type="modelValue" simulationType="fixed"/>
+          <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Values[alpha]" value="1.04518" type="modelValue" simulationType="fixed"/>
+          <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Values[pRII]" value="4.20542" type="modelValue" simulationType="fixed"/>
+        </modelParameterGroup>
+        <modelParameterGroup cn="String=Kinetic Parameters" type="Group">
+          <modelParameterGroup cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Reactions[Ligand receptor complex formation]" type="Reaction">
+            <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Reactions[Ligand receptor complex formation],ParameterGroup=Parameters,Parameter=ka" value="0.7798620000000001" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
-                &lt;CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ka],Reference=InitialValue&gt;
+                &lt;CN=Root,model=Vilar2006_TGFbeta,Vector=Values[ka],Reference=InitialValue&gt;
               </InitialExpression>
-            </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[Ligand receptor complex formation],ParameterGroup=Parameters,Parameter=ligand" value="0.0001" type="ReactionParameter" simulationType="assignment">
+            </modelParameter>
+            <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Reactions[Ligand receptor complex formation],ParameterGroup=Parameters,Parameter=ligand" value="0.0001" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
-                &lt;CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ligand],Reference=InitialValue&gt;
+                &lt;CN=Root,model=Vilar2006_TGFbeta,Vector=Values[ligand],Reference=InitialValue&gt;
               </InitialExpression>
-            </ModelParameter>
-          </ModelParameterGroup>
-          <ModelParameterGroup cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[Ligand receptor complex constitutive degradation]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[Ligand receptor complex constitutive degradation],ParameterGroup=Parameters,Parameter=kcd" value="0.0251133" type="ReactionParameter" simulationType="assignment">
+            </modelParameter>
+          </modelParameterGroup>
+          <modelParameterGroup cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Reactions[Ligand receptor complex constitutive degradation]" type="Reaction">
+            <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Reactions[Ligand receptor complex constitutive degradation],ParameterGroup=Parameters,Parameter=kcd" value="0.0251133" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
-                &lt;CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kcd],Reference=InitialValue&gt;
+                &lt;CN=Root,model=Vilar2006_TGFbeta,Vector=Values[kcd],Reference=InitialValue&gt;
               </InitialExpression>
-            </ModelParameter>
-          </ModelParameterGroup>
-          <ModelParameterGroup cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[Ligand independent complex degradation]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[Ligand independent complex degradation],ParameterGroup=Parameters,Parameter=klid" value="0.268159" type="ReactionParameter" simulationType="assignment">
+            </modelParameter>
+          </modelParameterGroup>
+          <modelParameterGroup cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Reactions[Ligand independent complex degradation]" type="Reaction">
+            <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Reactions[Ligand independent complex degradation],ParameterGroup=Parameters,Parameter=klid" value="0.268159" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
-                &lt;CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[klid],Reference=InitialValue&gt;
+                &lt;CN=Root,model=Vilar2006_TGFbeta,Vector=Values[klid],Reference=InitialValue&gt;
               </InitialExpression>
-            </ModelParameter>
-          </ModelParameterGroup>
-          <ModelParameterGroup cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[Ligand receptor complex internalization]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[Ligand receptor complex internalization],ParameterGroup=Parameters,Parameter=ki" value="0.390589" type="ReactionParameter" simulationType="assignment">
+            </modelParameter>
+          </modelParameterGroup>
+          <modelParameterGroup cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Reactions[Ligand receptor complex internalization]" type="Reaction">
+            <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Reactions[Ligand receptor complex internalization],ParameterGroup=Parameters,Parameter=ki" value="0.390589" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
-                &lt;CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ki],Reference=InitialValue&gt;
+                &lt;CN=Root,model=Vilar2006_TGFbeta,Vector=Values[ki],Reference=InitialValue&gt;
               </InitialExpression>
-            </ModelParameter>
-          </ModelParameterGroup>
-          <ModelParameterGroup cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RI synthesis]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RI synthesis],ParameterGroup=Parameters,Parameter=pRI" value="6.44406" type="ReactionParameter" simulationType="assignment">
+            </modelParameter>
+          </modelParameterGroup>
+          <modelParameterGroup cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Reactions[RI synthesis]" type="Reaction">
+            <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Reactions[RI synthesis],ParameterGroup=Parameters,Parameter=pRI" value="6.44406" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
-                &lt;CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[pRI],Reference=InitialValue&gt;
+                &lt;CN=Root,model=Vilar2006_TGFbeta,Vector=Values[pRI],Reference=InitialValue&gt;
               </InitialExpression>
-            </ModelParameter>
-          </ModelParameterGroup>
-          <ModelParameterGroup cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RI constitutive degradation]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RI constitutive degradation],ParameterGroup=Parameters,Parameter=kcd" value="0.0251133" type="ReactionParameter" simulationType="assignment">
+            </modelParameter>
+          </modelParameterGroup>
+          <modelParameterGroup cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Reactions[RI constitutive degradation]" type="Reaction">
+            <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Reactions[RI constitutive degradation],ParameterGroup=Parameters,Parameter=kcd" value="0.0251133" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
-                &lt;CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kcd],Reference=InitialValue&gt;
+                &lt;CN=Root,model=Vilar2006_TGFbeta,Vector=Values[kcd],Reference=InitialValue&gt;
               </InitialExpression>
-            </ModelParameter>
-          </ModelParameterGroup>
-          <ModelParameterGroup cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RI internalization]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RI internalization],ParameterGroup=Parameters,Parameter=ki" value="0.390589" type="ReactionParameter" simulationType="assignment">
+            </modelParameter>
+          </modelParameterGroup>
+          <modelParameterGroup cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Reactions[RI internalization]" type="Reaction">
+            <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Reactions[RI internalization],ParameterGroup=Parameters,Parameter=ki" value="0.390589" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
-                &lt;CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ki],Reference=InitialValue&gt;
+                &lt;CN=Root,model=Vilar2006_TGFbeta,Vector=Values[ki],Reference=InitialValue&gt;
               </InitialExpression>
-            </ModelParameter>
-          </ModelParameterGroup>
-          <ModelParameterGroup cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RI recycling]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RI recycling],ParameterGroup=Parameters,Parameter=kr" value="0.0308656" type="ReactionParameter" simulationType="assignment">
+            </modelParameter>
+          </modelParameterGroup>
+          <modelParameterGroup cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Reactions[RI recycling]" type="Reaction">
+            <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Reactions[RI recycling],ParameterGroup=Parameters,Parameter=kr" value="0.0308656" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
-                &lt;CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kr],Reference=InitialValue&gt;
+                &lt;CN=Root,model=Vilar2006_TGFbeta,Vector=Values[kr],Reference=InitialValue&gt;
               </InitialExpression>
-            </ModelParameter>
-          </ModelParameterGroup>
-          <ModelParameterGroup cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[Ligand Receptor complex recycling]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[Ligand Receptor complex recycling],ParameterGroup=Parameters,Parameter=kr" value="0.0308656" type="ReactionParameter" simulationType="assignment">
+            </modelParameter>
+          </modelParameterGroup>
+          <modelParameterGroup cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Reactions[Ligand Receptor complex recycling]" type="Reaction">
+            <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Reactions[Ligand Receptor complex recycling],ParameterGroup=Parameters,Parameter=kr" value="0.0308656" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
-                &lt;CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kr],Reference=InitialValue&gt;
+                &lt;CN=Root,model=Vilar2006_TGFbeta,Vector=Values[kr],Reference=InitialValue&gt;
               </InitialExpression>
-            </ModelParameter>
-          </ModelParameterGroup>
-          <ModelParameterGroup cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RII synthesis]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RII synthesis],ParameterGroup=Parameters,Parameter=pRII" value="4.20542" type="ReactionParameter" simulationType="assignment">
+            </modelParameter>
+          </modelParameterGroup>
+          <modelParameterGroup cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Reactions[RII synthesis]" type="Reaction">
+            <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Reactions[RII synthesis],ParameterGroup=Parameters,Parameter=pRII" value="4.20542" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
-                &lt;CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[pRII],Reference=InitialValue&gt;
+                &lt;CN=Root,model=Vilar2006_TGFbeta,Vector=Values[pRII],Reference=InitialValue&gt;
               </InitialExpression>
-            </ModelParameter>
-          </ModelParameterGroup>
-          <ModelParameterGroup cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RII constitutive degradation]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RII constitutive degradation],ParameterGroup=Parameters,Parameter=kcd" value="0.0251133" type="ReactionParameter" simulationType="assignment">
+            </modelParameter>
+          </modelParameterGroup>
+          <modelParameterGroup cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Reactions[RII constitutive degradation]" type="Reaction">
+            <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Reactions[RII constitutive degradation],ParameterGroup=Parameters,Parameter=kcd" value="0.0251133" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
-                &lt;CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kcd],Reference=InitialValue&gt;
+                &lt;CN=Root,model=Vilar2006_TGFbeta,Vector=Values[kcd],Reference=InitialValue&gt;
               </InitialExpression>
-            </ModelParameter>
-          </ModelParameterGroup>
-          <ModelParameterGroup cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RII internalization]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RII internalization],ParameterGroup=Parameters,Parameter=ki" value="0.390589" type="ReactionParameter" simulationType="assignment">
+            </modelParameter>
+          </modelParameterGroup>
+          <modelParameterGroup cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Reactions[RII internalization]" type="Reaction">
+            <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Reactions[RII internalization],ParameterGroup=Parameters,Parameter=ki" value="0.390589" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
-                &lt;CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ki],Reference=InitialValue&gt;
+                &lt;CN=Root,model=Vilar2006_TGFbeta,Vector=Values[ki],Reference=InitialValue&gt;
               </InitialExpression>
-            </ModelParameter>
-          </ModelParameterGroup>
-          <ModelParameterGroup cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RII recycling]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Reactions[RII recycling],ParameterGroup=Parameters,Parameter=kr" value="0.0308656" type="ReactionParameter" simulationType="assignment">
+            </modelParameter>
+          </modelParameterGroup>
+          <modelParameterGroup cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Reactions[RII recycling]" type="Reaction">
+            <modelParameter cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Reactions[RII recycling],ParameterGroup=Parameters,Parameter=kr" value="0.0308656" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
-                &lt;CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kr],Reference=InitialValue&gt;
+                &lt;CN=Root,model=Vilar2006_TGFbeta,Vector=Values[kr],Reference=InitialValue&gt;
               </InitialExpression>
-            </ModelParameter>
-          </ModelParameterGroup>
-        </ModelParameterGroup>
-      </ModelParameterSet>
-    </ListOfModelParameterSets>
+            </modelParameter>
+          </modelParameterGroup>
+        </modelParameterGroup>
+      </modelParameterSet>
+    </ListOfmodelParameterSets>
     <StateTemplate>
-      <StateTemplateVariable objectReference="Model_3"/>
-      <StateTemplateVariable objectReference="Metabolite_1"/>
-      <StateTemplateVariable objectReference="Metabolite_3"/>
-      <StateTemplateVariable objectReference="Metabolite_5"/>
-      <StateTemplateVariable objectReference="Metabolite_7"/>
-      <StateTemplateVariable objectReference="Metabolite_9"/>
-      <StateTemplateVariable objectReference="Metabolite_11"/>
-      <StateTemplateVariable objectReference="Compartment_1"/>
-      <StateTemplateVariable objectReference="Compartment_3"/>
-      <StateTemplateVariable objectReference="ModelValue_0"/>
-      <StateTemplateVariable objectReference="ModelValue_1"/>
-      <StateTemplateVariable objectReference="ModelValue_2"/>
-      <StateTemplateVariable objectReference="ModelValue_3"/>
-      <StateTemplateVariable objectReference="ModelValue_4"/>
-      <StateTemplateVariable objectReference="ModelValue_5"/>
-      <StateTemplateVariable objectReference="ModelValue_6"/>
-      <StateTemplateVariable objectReference="ModelValue_7"/>
-      <StateTemplateVariable objectReference="ModelValue_8"/>
+      <StateTemplatevariable objectReference="model_3"/>
+      <StateTemplatevariable objectReference="Metabolite_1"/>
+      <StateTemplatevariable objectReference="Metabolite_3"/>
+      <StateTemplatevariable objectReference="Metabolite_5"/>
+      <StateTemplatevariable objectReference="Metabolite_7"/>
+      <StateTemplatevariable objectReference="Metabolite_9"/>
+      <StateTemplatevariable objectReference="Metabolite_11"/>
+      <StateTemplatevariable objectReference="Compartment_1"/>
+      <StateTemplatevariable objectReference="Compartment_3"/>
+      <StateTemplatevariable objectReference="modelValue_0"/>
+      <StateTemplatevariable objectReference="modelValue_1"/>
+      <StateTemplatevariable objectReference="modelValue_2"/>
+      <StateTemplatevariable objectReference="modelValue_3"/>
+      <StateTemplatevariable objectReference="modelValue_4"/>
+      <StateTemplatevariable objectReference="modelValue_5"/>
+      <StateTemplatevariable objectReference="modelValue_6"/>
+      <StateTemplatevariable objectReference="modelValue_7"/>
+      <StateTemplatevariable objectReference="modelValue_8"/>
     </StateTemplate>
     <InitialState type="initialState">
       0 22.9544 0.00155182 0.0001 38.8192950146758 7.62219 0.385859 1 1 0.7798620000000001 0.0001 0.0251133 0.268159 0.390589 6.44406 0.0308656 1.04518 4.20542 
     </InitialState>
-  </Model>
+  </model>
   <ListOfTasks>
-    <Task key="Task_14" name="Steady-State" type="steadyState" scheduled="false" updateModel="false">
+    <Task key="Task_14" name="Steady-State" type="steadyState" scheduled="false" updatemodel="false">
       <Report reference="Report_9" target="" append="1" confirmOverwrite="1"/>
       <Problem>
         <Parameter name="JacobianRequested" type="bool" value="1"/>
         <Parameter name="StabilityAnalysisRequested" type="bool" value="1"/>
       </Problem>
-      <Method name="Enhanced Newton" type="EnhancedNewton">
+      <method name="Enhanced Newton" type="EnhancedNewton">
         <Parameter name="Resolution" type="unsignedFloat" value="1e-009"/>
         <Parameter name="Derivation Factor" type="unsignedFloat" value="0.001"/>
         <Parameter name="Use Newton" type="bool" value="1"/>
@@ -1019,11 +1019,11 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
         <Parameter name="Use Back Integration" type="bool" value="1"/>
         <Parameter name="Accept Negative Concentrations" type="bool" value="0"/>
         <Parameter name="Iteration Limit" type="unsignedInteger" value="50"/>
-        <Parameter name="Maximum duration for forward integration" type="unsignedFloat" value="1000000000"/>
-        <Parameter name="Maximum duration for backward integration" type="unsignedFloat" value="1000000"/>
-      </Method>
+        <Parameter name="maximum duration for forward integration" type="unsignedFloat" value="1000000000"/>
+        <Parameter name="maximum duration for backward integration" type="unsignedFloat" value="1000000"/>
+      </method>
     </Task>
-    <Task key="Task_15" name="Time-Course" type="timeCourse" scheduled="true" updateModel="false">
+    <Task key="Task_15" name="Time-Course" type="timeCourse" scheduled="true" updatemodel="false">
       <Report reference="Report_19" target="timecourse.txt" append="0" confirmOverwrite="0"/>
       <Problem>
         <Parameter name="StepNumber" type="unsignedInteger" value="50"/>
@@ -1034,37 +1034,37 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
         <Parameter name="Output Event" type="bool" value="0"/>
         <Parameter name="Continue on Simultaneous Events" type="bool" value="0"/>
       </Problem>
-      <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
-        <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
-        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-006"/>
-        <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-012"/>
+      <method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+        <Parameter name="Integrate Reduced model" type="bool" value="0"/>
+        <Parameter name="Relative tolerance" type="unsignedFloat" value="1e-006"/>
+        <Parameter name="Absolute tolerance" type="unsignedFloat" value="1e-012"/>
         <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
-      </Method>
+      </method>
     </Task>
-    <Task key="Task_16" name="Scan" type="scan" scheduled="false" updateModel="false">
+    <Task key="Task_16" name="Scan" type="scan" scheduled="false" updatemodel="false">
       <Problem>
         <Parameter name="Subtask" type="unsignedInteger" value="5"/>
         <ParameterGroup name="ScanItems">
           <ParameterGroup name="ScanItem">
             <Parameter name="Number of steps" type="unsignedInteger" value="10"/>
-            <Parameter name="Object" type="cn" value="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[ligand receptor complex-endosome],Reference=InitialConcentration"/>
+            <Parameter name="Object" type="cn" value="CN=Root,model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=metabolites[ligand receptor complex-endosome],Reference=InitialConcentration"/>
             <Parameter name="Type" type="unsignedInteger" value="0"/>
           </ParameterGroup>
         </ParameterGroup>
         <Parameter name="Output in subtask" type="bool" value="0"/>
         <Parameter name="Adjust initial conditions" type="bool" value="0"/>
       </Problem>
-      <Method name="Scan Framework" type="ScanFramework">
-      </Method>
+      <method name="Scan Framework" type="ScanFramework">
+      </method>
     </Task>
-    <Task key="Task_17" name="Elementary Flux Modes" type="fluxMode" scheduled="false" updateModel="false">
+    <Task key="Task_17" name="Elementary Flux modes" type="fluxmode" scheduled="false" updatemodel="false">
       <Report reference="Report_10" target="" append="1" confirmOverwrite="1"/>
       <Problem>
       </Problem>
-      <Method name="EFM Algorithm" type="EFMAlgorithm">
-      </Method>
+      <method name="EFM Algorithm" type="EFMAlgorithm">
+      </method>
     </Task>
-    <Task key="Task_18" name="Optimization" type="optimization" scheduled="false" updateModel="false">
+    <Task key="Task_18" name="Optimization" type="optimization" scheduled="false" updatemodel="false">
       <Report reference="Report_11" target="" append="1" confirmOverwrite="1"/>
       <Problem>
         <Parameter name="Subtask" type="cn" value="CN=Root,Vector=TaskList[Steady-State]"/>
@@ -1079,13 +1079,13 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
         <ParameterGroup name="OptimizationConstraintList">
         </ParameterGroup>
       </Problem>
-      <Method name="Random Search" type="RandomSearch">
+      <method name="Random Search" type="RandomSearch">
         <Parameter name="Number of Iterations" type="unsignedInteger" value="100000"/>
         <Parameter name="Random Number Generator" type="unsignedInteger" value="1"/>
-        <Parameter name="Seed" type="unsignedInteger" value="0"/>
-      </Method>
+        <Parameter name="seed" type="unsignedInteger" value="0"/>
+      </method>
     </Task>
-    <Task key="Task_19" name="Parameter Estimation" type="parameterFitting" scheduled="false" updateModel="false">
+    <Task key="Task_19" name="Parameter Estimation" type="parameterFitting" scheduled="false" updatemodel="false">
       <Report reference="Report_18" target="" append="0" confirmOverwrite="0"/>
       <Problem>
         <Parameter name="Maximize" type="bool" value="0"/>
@@ -1105,40 +1105,40 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
           <Parameter name="Weight" type="unsignedFloat" value="1"/>
         </ParameterGroup>
       </Problem>
-      <Method name="Genetic Algorithm" type="GeneticAlgorithm">
+      <method name="Genetic Algorithm" type="GeneticAlgorithm">
         <Parameter name="Number of Generations" type="unsignedInteger" value="10"/>
         <Parameter name="Population Size" type="unsignedInteger" value="10"/>
         <Parameter name="Random Number Generator" type="unsignedInteger" value="1"/>
-        <Parameter name="Seed" type="unsignedInteger" value="0"/>
-      </Method>
+        <Parameter name="seed" type="unsignedInteger" value="0"/>
+      </method>
     </Task>
-    <Task key="Task_20" name="Metabolic Control Analysis" type="metabolicControlAnalysis" scheduled="false" updateModel="false">
+    <Task key="Task_20" name="Metabolic Control Analysis" type="metabolicControlAnalysis" scheduled="false" updatemodel="false">
       <Report reference="Report_13" target="" append="1" confirmOverwrite="1"/>
       <Problem>
         <Parameter name="Steady-State" type="key" value="Task_14"/>
       </Problem>
-      <Method name="MCA Method (Reder)" type="MCAMethod(Reder)">
+      <method name="MCA method (Reder)" type="MCAmethod(Reder)">
         <Parameter name="Modulation Factor" type="unsignedFloat" value="1e-009"/>
         <Parameter name="Use Reeder" type="bool" value="1"/>
         <Parameter name="Use Smallbone" type="bool" value="1"/>
-      </Method>
+      </method>
     </Task>
-    <Task key="Task_21" name="Lyapunov Exponents" type="lyapunovExponents" scheduled="false" updateModel="false">
+    <Task key="Task_21" name="Lyapunov Exponents" type="lyapunovExponents" scheduled="false" updatemodel="false">
       <Report reference="Report_14" target="" append="1" confirmOverwrite="1"/>
       <Problem>
         <Parameter name="ExponentNumber" type="unsignedInteger" value="3"/>
         <Parameter name="DivergenceRequested" type="bool" value="1"/>
         <Parameter name="TransientTime" type="float" value="0"/>
       </Problem>
-      <Method name="Wolf Method" type="WolfMethod">
+      <method name="Wolf method" type="Wolfmethod">
         <Parameter name="Orthonormalization Interval" type="unsignedFloat" value="1"/>
         <Parameter name="Overall time" type="unsignedFloat" value="1000"/>
-        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-006"/>
-        <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-012"/>
+        <Parameter name="Relative tolerance" type="unsignedFloat" value="1e-006"/>
+        <Parameter name="Absolute tolerance" type="unsignedFloat" value="1e-012"/>
         <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
-      </Method>
+      </method>
     </Task>
-    <Task key="Task_22" name="Time Scale Separation Analysis" type="timeScaleSeparationAnalysis" scheduled="false" updateModel="false">
+    <Task key="Task_22" name="Time scale Separation Analysis" type="timescaleSeparationAnalysis" scheduled="false" updatemodel="false">
       <Report reference="Report_15" target="" append="1" confirmOverwrite="1"/>
       <Problem>
         <Parameter name="StepNumber" type="unsignedInteger" value="100"/>
@@ -1147,11 +1147,11 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
         <Parameter name="TimeSeriesRequested" type="bool" value="1"/>
         <Parameter name="OutputStartTime" type="float" value="0"/>
       </Problem>
-      <Method name="ILDM (LSODA,Deuflhard)" type="TimeScaleSeparation(ILDM,Deuflhard)">
-        <Parameter name="Deuflhard Tolerance" type="unsignedFloat" value="1e-006"/>
-      </Method>
+      <method name="ILDM (LSODA,Deuflhard)" type="TimescaleSeparation(ILDM,Deuflhard)">
+        <Parameter name="Deuflhard tolerance" type="unsignedFloat" value="1e-006"/>
+      </method>
     </Task>
-    <Task key="Task_23" name="Sensitivities" type="sensitivities" scheduled="false" updateModel="false">
+    <Task key="Task_23" name="Sensitivities" type="sensitivities" scheduled="false" updatemodel="false">
       <Report reference="Report_16" target="" append="1" confirmOverwrite="1"/>
       <Problem>
         <Parameter name="SubtaskType" type="unsignedInteger" value="1"/>
@@ -1159,25 +1159,25 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
           <Parameter name="SingleObject" type="cn" value=""/>
           <Parameter name="ObjectListType" type="unsignedInteger" value="7"/>
         </ParameterGroup>
-        <ParameterGroup name="ListOfVariables">
-          <ParameterGroup name="Variables">
+        <ParameterGroup name="ListOfvariables">
+          <ParameterGroup name="variables">
             <Parameter name="SingleObject" type="cn" value=""/>
             <Parameter name="ObjectListType" type="unsignedInteger" value="41"/>
           </ParameterGroup>
         </ParameterGroup>
       </Problem>
-      <Method name="Sensitivities Method" type="SensitivitiesMethod">
+      <method name="Sensitivities method" type="Sensitivitiesmethod">
         <Parameter name="Delta factor" type="unsignedFloat" value="0.001"/>
         <Parameter name="Delta minimum" type="unsignedFloat" value="1e-012"/>
-      </Method>
+      </method>
     </Task>
-    <Task key="Task_24" name="Moieties" type="moieties" scheduled="false" updateModel="false">
+    <Task key="Task_24" name="Moieties" type="moieties" scheduled="false" updatemodel="false">
       <Problem>
       </Problem>
-      <Method name="Householder Reduction" type="Householder">
-      </Method>
+      <method name="Householder Reduction" type="Householder">
+      </method>
     </Task>
-    <Task key="Task_25" name="Cross Section" type="crosssection" scheduled="false" updateModel="false">
+    <Task key="Task_25" name="Cross Section" type="crosssection" scheduled="false" updatemodel="false">
       <Problem>
         <Parameter name="StepNumber" type="unsignedInteger" value="100"/>
         <Parameter name="StepSize" type="float" value="0.01"/>
@@ -1193,29 +1193,29 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
         <Parameter name="PositiveDirection" type="bool" value="1"/>
         <Parameter name="NumOutCrossingsLimit" type="unsignedInteger" value="0"/>
         <Parameter name="LimitUntilConvergence" type="bool" value="0"/>
-        <Parameter name="ConvergenceTolerance" type="float" value="1e-006"/>
+        <Parameter name="Convergencetolerance" type="float" value="1e-006"/>
         <Parameter name="Threshold" type="float" value="0"/>
         <Parameter name="DelayOutputUntilConvergence" type="bool" value="0"/>
-        <Parameter name="OutputConvergenceTolerance" type="float" value="1e-006"/>
+        <Parameter name="OutputConvergencetolerance" type="float" value="1e-006"/>
         <ParameterText name="TriggerExpression" type="expression">
           
         </ParameterText>
-        <Parameter name="SingleVariable" type="cn" value=""/>
+        <Parameter name="Singlevariable" type="cn" value=""/>
       </Problem>
-      <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
-        <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
-        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-006"/>
-        <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-012"/>
+      <method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+        <Parameter name="Integrate Reduced model" type="bool" value="0"/>
+        <Parameter name="Relative tolerance" type="unsignedFloat" value="1e-006"/>
+        <Parameter name="Absolute tolerance" type="unsignedFloat" value="1e-012"/>
         <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
-      </Method>
+      </method>
     </Task>
-    <Task key="Task_26" name="Linear Noise Approximation" type="linearNoiseApproximation" scheduled="false" updateModel="false">
+    <Task key="Task_26" name="Linear Noise Approximation" type="linearNoiseApproximation" scheduled="false" updatemodel="false">
       <Report reference="Report_17" target="" append="1" confirmOverwrite="1"/>
       <Problem>
         <Parameter name="Steady-State" type="key" value="Task_14"/>
       </Problem>
-      <Method name="Linear Noise Approximation" type="LinearNoiseApproximation">
-      </Method>
+      <method name="Linear Noise Approximation" type="LinearNoiseApproximation">
+      </method>
     </Task>
   </ListOfTasks>
   <ListOfReports>
@@ -1227,12 +1227,12 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
         <Object cn="CN=Root,Vector=TaskList[Steady-State]"/>
       </Footer>
     </Report>
-    <Report key="Report_10" name="Elementary Flux Modes" taskType="fluxMode" separator="&#x09;" precision="6">
+    <Report key="Report_10" name="Elementary Flux modes" taskType="fluxmode" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
       <Footer>
-        <Object cn="CN=Root,Vector=TaskList[Elementary Flux Modes],Object=Result"/>
+        <Object cn="CN=Root,Vector=TaskList[Elementary Flux modes],Object=Result"/>
       </Footer>
     </Report>
     <Report key="Report_11" name="Optimization" taskType="optimization" separator="&#x09;" precision="6">
@@ -1242,16 +1242,16 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       <Header>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Object=Description"/>
         <Object cn="String=\[Function Evaluations\]"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="separator=&#x09;"/>
         <Object cn="String=\[Best Value\]"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="separator=&#x09;"/>
         <Object cn="String=\[Best Parameters\]"/>
       </Header>
       <Body>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Problem=Optimization,Reference=Function Evaluations"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="separator=&#x09;"/>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Problem=Optimization,Reference=Best Value"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="separator=&#x09;"/>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Problem=Optimization,Reference=Best Parameters"/>
       </Body>
       <Footer>
@@ -1266,16 +1266,16 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       <Header>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Object=Description"/>
         <Object cn="String=\[Function Evaluations\]"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="separator=&#x09;"/>
         <Object cn="String=\[Best Value\]"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="separator=&#x09;"/>
         <Object cn="String=\[Best Parameters\]"/>
       </Header>
       <Body>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Function Evaluations"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="separator=&#x09;"/>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="separator=&#x09;"/>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"/>
       </Body>
       <Footer>
@@ -1307,16 +1307,16 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
         <Object cn="CN=Root,Vector=TaskList[Lyapunov Exponents],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_15" name="Time Scale Separation Analysis" taskType="timeScaleSeparationAnalysis" separator="&#x09;" precision="6">
+    <Report key="Report_15" name="Time scale Separation Analysis" taskType="timescaleSeparationAnalysis" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
       <Header>
-        <Object cn="CN=Root,Vector=TaskList[Time Scale Separation Analysis],Object=Description"/>
+        <Object cn="CN=Root,Vector=TaskList[Time scale Separation Analysis],Object=Description"/>
       </Header>
       <Footer>
         <Object cn="String=&#x0a;"/>
-        <Object cn="CN=Root,Vector=TaskList[Time Scale Separation Analysis],Object=Result"/>
+        <Object cn="CN=Root,Vector=TaskList[Time scale Separation Analysis],Object=Result"/>
       </Footer>
     </Report>
     <Report key="Report_16" name="Sensitivities" taskType="sensitivities" separator="&#x09;" precision="6">
@@ -1347,21 +1347,21 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       <Comment>
       </Comment>
       <Table printTitle="1">
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[ligand receptor complex-endosome],Reference=InitialConcentration"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[Receptor 2],Reference=InitialConcentration"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[Receptor 1-endosome],Reference=InitialConcentration"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[Receptor 2 endosome],Reference=InitialConcentration"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[Receptor 1],Reference=InitialConcentration"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[ligand receptor complex-plasma membrane],Reference=InitialConcentration"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[pRII],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kcd],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ka],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ligand],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ki],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[pRI],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kr],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[alpha],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[klid],Reference=InitialValue"/>
+        <Object cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=metabolites[ligand receptor complex-endosome],Reference=InitialConcentration"/>
+        <Object cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=metabolites[Receptor 2],Reference=InitialConcentration"/>
+        <Object cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=metabolites[Receptor 1-endosome],Reference=InitialConcentration"/>
+        <Object cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=metabolites[Receptor 2 endosome],Reference=InitialConcentration"/>
+        <Object cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=metabolites[Receptor 1],Reference=InitialConcentration"/>
+        <Object cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=metabolites[ligand receptor complex-plasma membrane],Reference=InitialConcentration"/>
+        <Object cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Values[pRII],Reference=InitialValue"/>
+        <Object cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Values[kcd],Reference=InitialValue"/>
+        <Object cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Values[ka],Reference=InitialValue"/>
+        <Object cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Values[ligand],Reference=InitialValue"/>
+        <Object cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Values[ki],Reference=InitialValue"/>
+        <Object cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Values[pRI],Reference=InitialValue"/>
+        <Object cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Values[kr],Reference=InitialValue"/>
+        <Object cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Values[alpha],Reference=InitialValue"/>
+        <Object cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Values[klid],Reference=InitialValue"/>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/>
       </Table>
     </Report>
@@ -1369,32 +1369,32 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       <Comment>
       </Comment>
       <Table printTitle="1">
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Reference=Time"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[ligand receptor complex-endosome],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[Receptor 2],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[Receptor 1-endosome],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=Metabolites[Receptor 2 endosome],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[Receptor 1],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=Metabolites[ligand receptor complex-plasma membrane],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[pRII],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kcd],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ka],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ligand],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[ki],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[pRI],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[kr],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[alpha],Reference=InitialValue"/>
-        <Object cn="CN=Root,Model=Vilar2006_TGFbeta,Vector=Values[klid],Reference=InitialValue"/>
+        <Object cn="CN=Root,model=Vilar2006_TGFbeta,Reference=Time"/>
+        <Object cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=metabolites[ligand receptor complex-endosome],Reference=Concentration"/>
+        <Object cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=metabolites[Receptor 2],Reference=Concentration"/>
+        <Object cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=metabolites[Receptor 1-endosome],Reference=Concentration"/>
+        <Object cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Compartments[Endosome],Vector=metabolites[Receptor 2 endosome],Reference=Concentration"/>
+        <Object cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=metabolites[Receptor 1],Reference=Concentration"/>
+        <Object cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Compartments[Plasma membrane],Vector=metabolites[ligand receptor complex-plasma membrane],Reference=Concentration"/>
+        <Object cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Values[pRII],Reference=InitialValue"/>
+        <Object cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Values[kcd],Reference=InitialValue"/>
+        <Object cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Values[ka],Reference=InitialValue"/>
+        <Object cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Values[ligand],Reference=InitialValue"/>
+        <Object cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Values[ki],Reference=InitialValue"/>
+        <Object cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Values[pRI],Reference=InitialValue"/>
+        <Object cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Values[kr],Reference=InitialValue"/>
+        <Object cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Values[alpha],Reference=InitialValue"/>
+        <Object cn="CN=Root,model=Vilar2006_TGFbeta,Vector=Values[klid],Reference=InitialValue"/>
       </Table>
     </Report>
   </ListOfReports>
-  <ListOfPlots>
-    <PlotSpecification name="Parameter Estimation Result" type="Plot2D" active="1">
-      <Parameter name="log X" type="bool" value="0"/>
+  <ListOfplots>
+    <plotSpecification name="Parameter Estimation Result" type="plot2D" active="1">
+      <Parameter name="log x" type="bool" value="0"/>
       <Parameter name="log Y" type="bool" value="0"/>
-      <ListOfPlotItems>
-        <PlotItem name="Experiment_0,[ligand receptor complex-endosome](Measured Value)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#FF0000"/>
+      <ListOfplotItems>
+        <plotItem name="Experiment_0,[ligand receptor complex-endosome](Measured Value)" type="Curve2D">
+          <Parameter name="color" type="string" value="#FF0000"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
           <Parameter name="Line type" type="unsignedInteger" value="3"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1404,9 +1404,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Measured Value"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[ligand receptor complex-endosome](Fitted Value)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#FF0000"/>
+        </plotItem>
+        <plotItem name="Experiment_0,[ligand receptor complex-endosome](Fitted Value)" type="Curve2D">
+          <Parameter name="color" type="string" value="#FF0000"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
           <Parameter name="Line type" type="unsignedInteger" value="0"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1416,9 +1416,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Fitted Value"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[ligand receptor complex-endosome](Weighted Error)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#FF0000"/>
+        </plotItem>
+        <plotItem name="Experiment_0,[ligand receptor complex-endosome](Weighted Error)" type="Curve2D">
+          <Parameter name="color" type="string" value="#FF0000"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
           <Parameter name="Line type" type="unsignedInteger" value="2"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1428,9 +1428,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Weighted Error"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Receptor 2](Measured Value)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#0000FF"/>
+        </plotItem>
+        <plotItem name="Experiment_0,[Receptor 2](Measured Value)" type="Curve2D">
+          <Parameter name="color" type="string" value="#0000FF"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
           <Parameter name="Line type" type="unsignedInteger" value="3"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1440,9 +1440,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[1],Reference=Measured Value"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Receptor 2](Fitted Value)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#0000FF"/>
+        </plotItem>
+        <plotItem name="Experiment_0,[Receptor 2](Fitted Value)" type="Curve2D">
+          <Parameter name="color" type="string" value="#0000FF"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
           <Parameter name="Line type" type="unsignedInteger" value="0"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1452,9 +1452,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[1],Reference=Fitted Value"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Receptor 2](Weighted Error)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#0000FF"/>
+        </plotItem>
+        <plotItem name="Experiment_0,[Receptor 2](Weighted Error)" type="Curve2D">
+          <Parameter name="color" type="string" value="#0000FF"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
           <Parameter name="Line type" type="unsignedInteger" value="2"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1464,9 +1464,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[1],Reference=Weighted Error"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Receptor 1-endosome](Measured Value)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#00E600"/>
+        </plotItem>
+        <plotItem name="Experiment_0,[Receptor 1-endosome](Measured Value)" type="Curve2D">
+          <Parameter name="color" type="string" value="#00E600"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
           <Parameter name="Line type" type="unsignedInteger" value="3"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1476,9 +1476,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[2],Reference=Measured Value"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Receptor 1-endosome](Fitted Value)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#00E600"/>
+        </plotItem>
+        <plotItem name="Experiment_0,[Receptor 1-endosome](Fitted Value)" type="Curve2D">
+          <Parameter name="color" type="string" value="#00E600"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
           <Parameter name="Line type" type="unsignedInteger" value="0"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1488,9 +1488,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[2],Reference=Fitted Value"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Receptor 1-endosome](Weighted Error)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#00E600"/>
+        </plotItem>
+        <plotItem name="Experiment_0,[Receptor 1-endosome](Weighted Error)" type="Curve2D">
+          <Parameter name="color" type="string" value="#00E600"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
           <Parameter name="Line type" type="unsignedInteger" value="2"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1500,9 +1500,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[2],Reference=Weighted Error"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Receptor 2 endosome](Measured Value)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#00BEF0"/>
+        </plotItem>
+        <plotItem name="Experiment_0,[Receptor 2 endosome](Measured Value)" type="Curve2D">
+          <Parameter name="color" type="string" value="#00BEF0"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
           <Parameter name="Line type" type="unsignedInteger" value="3"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1512,9 +1512,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[3],Reference=Measured Value"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Receptor 2 endosome](Fitted Value)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#00BEF0"/>
+        </plotItem>
+        <plotItem name="Experiment_0,[Receptor 2 endosome](Fitted Value)" type="Curve2D">
+          <Parameter name="color" type="string" value="#00BEF0"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
           <Parameter name="Line type" type="unsignedInteger" value="0"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1524,9 +1524,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[3],Reference=Fitted Value"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Receptor 2 endosome](Weighted Error)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#00BEF0"/>
+        </plotItem>
+        <plotItem name="Experiment_0,[Receptor 2 endosome](Weighted Error)" type="Curve2D">
+          <Parameter name="color" type="string" value="#00BEF0"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
           <Parameter name="Line type" type="unsignedInteger" value="2"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1536,9 +1536,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[3],Reference=Weighted Error"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Receptor 1](Measured Value)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#F000FF"/>
+        </plotItem>
+        <plotItem name="Experiment_0,[Receptor 1](Measured Value)" type="Curve2D">
+          <Parameter name="color" type="string" value="#F000FF"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
           <Parameter name="Line type" type="unsignedInteger" value="3"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1548,9 +1548,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[4],Reference=Measured Value"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Receptor 1](Fitted Value)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#F000FF"/>
+        </plotItem>
+        <plotItem name="Experiment_0,[Receptor 1](Fitted Value)" type="Curve2D">
+          <Parameter name="color" type="string" value="#F000FF"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
           <Parameter name="Line type" type="unsignedInteger" value="0"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1560,9 +1560,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[4],Reference=Fitted Value"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Receptor 1](Weighted Error)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#F000FF"/>
+        </plotItem>
+        <plotItem name="Experiment_0,[Receptor 1](Weighted Error)" type="Curve2D">
+          <Parameter name="color" type="string" value="#F000FF"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
           <Parameter name="Line type" type="unsignedInteger" value="2"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1572,9 +1572,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[4],Reference=Weighted Error"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[ligand receptor complex-plasma membrane](Measured Value)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#F0C800"/>
+        </plotItem>
+        <plotItem name="Experiment_0,[ligand receptor complex-plasma membrane](Measured Value)" type="Curve2D">
+          <Parameter name="color" type="string" value="#F0C800"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
           <Parameter name="Line type" type="unsignedInteger" value="3"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1584,9 +1584,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[5],Reference=Measured Value"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[ligand receptor complex-plasma membrane](Fitted Value)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#F0C800"/>
+        </plotItem>
+        <plotItem name="Experiment_0,[ligand receptor complex-plasma membrane](Fitted Value)" type="Curve2D">
+          <Parameter name="color" type="string" value="#F0C800"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
           <Parameter name="Line type" type="unsignedInteger" value="0"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1596,9 +1596,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[5],Reference=Fitted Value"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[ligand receptor complex-plasma membrane](Weighted Error)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#F0C800"/>
+        </plotItem>
+        <plotItem name="Experiment_0,[ligand receptor complex-plasma membrane](Weighted Error)" type="Curve2D">
+          <Parameter name="color" type="string" value="#F0C800"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
           <Parameter name="Line type" type="unsignedInteger" value="2"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1608,15 +1608,15 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[5],Reference=Weighted Error"/>
           </ListOfChannels>
-        </PlotItem>
-      </ListOfPlotItems>
-    </PlotSpecification>
-    <PlotSpecification name="Parameter Estimation Result_1" type="Plot2D" active="1">
-      <Parameter name="log X" type="bool" value="0"/>
+        </plotItem>
+      </ListOfplotItems>
+    </plotSpecification>
+    <plotSpecification name="Parameter Estimation Result_1" type="plot2D" active="1">
+      <Parameter name="log x" type="bool" value="0"/>
       <Parameter name="log Y" type="bool" value="0"/>
-      <ListOfPlotItems>
-        <PlotItem name="Experiment,[ligand receptor complex-endosome](Measured Value)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#FF0000"/>
+      <ListOfplotItems>
+        <plotItem name="Experiment,[ligand receptor complex-endosome](Measured Value)" type="Curve2D">
+          <Parameter name="color" type="string" value="#FF0000"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
           <Parameter name="Line type" type="unsignedInteger" value="3"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1626,9 +1626,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Measured Value"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment,[ligand receptor complex-endosome](Fitted Value)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#FF0000"/>
+        </plotItem>
+        <plotItem name="Experiment,[ligand receptor complex-endosome](Fitted Value)" type="Curve2D">
+          <Parameter name="color" type="string" value="#FF0000"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
           <Parameter name="Line type" type="unsignedInteger" value="0"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1638,9 +1638,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Fitted Value"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment,[ligand receptor complex-endosome](Weighted Error)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#FF0000"/>
+        </plotItem>
+        <plotItem name="Experiment,[ligand receptor complex-endosome](Weighted Error)" type="Curve2D">
+          <Parameter name="color" type="string" value="#FF0000"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
           <Parameter name="Line type" type="unsignedInteger" value="2"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1650,9 +1650,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Weighted Error"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment,[Receptor 2](Measured Value)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#0000FF"/>
+        </plotItem>
+        <plotItem name="Experiment,[Receptor 2](Measured Value)" type="Curve2D">
+          <Parameter name="color" type="string" value="#0000FF"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
           <Parameter name="Line type" type="unsignedInteger" value="3"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1662,9 +1662,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[1],Reference=Measured Value"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment,[Receptor 2](Fitted Value)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#0000FF"/>
+        </plotItem>
+        <plotItem name="Experiment,[Receptor 2](Fitted Value)" type="Curve2D">
+          <Parameter name="color" type="string" value="#0000FF"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
           <Parameter name="Line type" type="unsignedInteger" value="0"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1674,9 +1674,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[1],Reference=Fitted Value"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment,[Receptor 2](Weighted Error)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#0000FF"/>
+        </plotItem>
+        <plotItem name="Experiment,[Receptor 2](Weighted Error)" type="Curve2D">
+          <Parameter name="color" type="string" value="#0000FF"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
           <Parameter name="Line type" type="unsignedInteger" value="2"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1686,9 +1686,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[1],Reference=Weighted Error"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment,Receptor 1-endosome.ParticleNumber(Measured Value)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#00E600"/>
+        </plotItem>
+        <plotItem name="Experiment,Receptor 1-endosome.ParticleNumber(Measured Value)" type="Curve2D">
+          <Parameter name="color" type="string" value="#00E600"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
           <Parameter name="Line type" type="unsignedInteger" value="3"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1698,9 +1698,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[2],Reference=Measured Value"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment,Receptor 1-endosome.ParticleNumber(Fitted Value)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#00E600"/>
+        </plotItem>
+        <plotItem name="Experiment,Receptor 1-endosome.ParticleNumber(Fitted Value)" type="Curve2D">
+          <Parameter name="color" type="string" value="#00E600"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
           <Parameter name="Line type" type="unsignedInteger" value="0"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1710,9 +1710,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[2],Reference=Fitted Value"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment,Receptor 1-endosome.ParticleNumber(Weighted Error)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#00E600"/>
+        </plotItem>
+        <plotItem name="Experiment,Receptor 1-endosome.ParticleNumber(Weighted Error)" type="Curve2D">
+          <Parameter name="color" type="string" value="#00E600"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
           <Parameter name="Line type" type="unsignedInteger" value="2"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1722,9 +1722,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[2],Reference=Weighted Error"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment,[Receptor 2 endosome](Measured Value)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#00BEF0"/>
+        </plotItem>
+        <plotItem name="Experiment,[Receptor 2 endosome](Measured Value)" type="Curve2D">
+          <Parameter name="color" type="string" value="#00BEF0"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
           <Parameter name="Line type" type="unsignedInteger" value="3"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1734,9 +1734,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[3],Reference=Measured Value"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment,[Receptor 2 endosome](Fitted Value)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#00BEF0"/>
+        </plotItem>
+        <plotItem name="Experiment,[Receptor 2 endosome](Fitted Value)" type="Curve2D">
+          <Parameter name="color" type="string" value="#00BEF0"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
           <Parameter name="Line type" type="unsignedInteger" value="0"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1746,9 +1746,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[3],Reference=Fitted Value"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment,[Receptor 2 endosome](Weighted Error)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#00BEF0"/>
+        </plotItem>
+        <plotItem name="Experiment,[Receptor 2 endosome](Weighted Error)" type="Curve2D">
+          <Parameter name="color" type="string" value="#00BEF0"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
           <Parameter name="Line type" type="unsignedInteger" value="2"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1758,9 +1758,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[3],Reference=Weighted Error"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment,[Receptor 2 endosome](Measured Value)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#F000FF"/>
+        </plotItem>
+        <plotItem name="Experiment,[Receptor 2 endosome](Measured Value)" type="Curve2D">
+          <Parameter name="color" type="string" value="#F000FF"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
           <Parameter name="Line type" type="unsignedInteger" value="3"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1770,9 +1770,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[4],Reference=Measured Value"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment,[Receptor 2 endosome](Fitted Value)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#F000FF"/>
+        </plotItem>
+        <plotItem name="Experiment,[Receptor 2 endosome](Fitted Value)" type="Curve2D">
+          <Parameter name="color" type="string" value="#F000FF"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
           <Parameter name="Line type" type="unsignedInteger" value="0"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1782,9 +1782,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[4],Reference=Fitted Value"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment,[Receptor 2 endosome](Weighted Error)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#F000FF"/>
+        </plotItem>
+        <plotItem name="Experiment,[Receptor 2 endosome](Weighted Error)" type="Curve2D">
+          <Parameter name="color" type="string" value="#F000FF"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
           <Parameter name="Line type" type="unsignedInteger" value="2"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1794,9 +1794,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[4],Reference=Weighted Error"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment,[Receptor 1](Measured Value)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#F0C800"/>
+        </plotItem>
+        <plotItem name="Experiment,[Receptor 1](Measured Value)" type="Curve2D">
+          <Parameter name="color" type="string" value="#F0C800"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
           <Parameter name="Line type" type="unsignedInteger" value="3"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1806,9 +1806,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[5],Reference=Measured Value"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment,[Receptor 1](Fitted Value)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#F0C800"/>
+        </plotItem>
+        <plotItem name="Experiment,[Receptor 1](Fitted Value)" type="Curve2D">
+          <Parameter name="color" type="string" value="#F0C800"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
           <Parameter name="Line type" type="unsignedInteger" value="0"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1818,9 +1818,9 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[5],Reference=Fitted Value"/>
           </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment,[Receptor 1](Weighted Error)" type="Curve2D">
-          <Parameter name="Color" type="string" value="#F0C800"/>
+        </plotItem>
+        <plotItem name="Experiment,[Receptor 1](Weighted Error)" type="Curve2D">
+          <Parameter name="color" type="string" value="#F0C800"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
           <Parameter name="Line type" type="unsignedInteger" value="2"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1830,15 +1830,15 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[5],Reference=Weighted Error"/>
           </ListOfChannels>
-        </PlotItem>
-      </ListOfPlotItems>
-    </PlotSpecification>
-    <PlotSpecification name="Progress of Fit" type="Plot2D" active="1">
-      <Parameter name="log X" type="bool" value="0"/>
+        </plotItem>
+      </ListOfplotItems>
+    </plotSpecification>
+    <plotSpecification name="Progress of Fit" type="plot2D" active="1">
+      <Parameter name="log x" type="bool" value="0"/>
       <Parameter name="log Y" type="bool" value="1"/>
-      <ListOfPlotItems>
-        <PlotItem name="sum of squares" type="Curve2D">
-          <Parameter name="Color" type="string" value="auto"/>
+      <ListOfplotItems>
+        <plotItem name="sum of squares" type="Curve2D">
+          <Parameter name="color" type="string" value="auto"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
           <Parameter name="Line type" type="unsignedInteger" value="0"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -1848,10 +1848,10 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Function Evaluations"/>
             <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/>
           </ListOfChannels>
-        </PlotItem>
-      </ListOfPlotItems>
-    </PlotSpecification>
-  </ListOfPlots>
+        </plotItem>
+      </ListOfplotItems>
+    </plotSpecification>
+  </ListOfplots>
   <GUI>
   </GUI>
   <SBMLReference file="Vilar2006_TGFbeta.xml">
@@ -1861,17 +1861,17 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
     <SBMLMap SBMLid="RII" COPASIkey="Metabolite_3"/>
     <SBMLMap SBMLid="RII_endo" COPASIkey="Metabolite_11"/>
     <SBMLMap SBMLid="RI_endo" COPASIkey="Metabolite_9"/>
-    <SBMLMap SBMLid="alpha" COPASIkey="ModelValue_7"/>
-    <SBMLMap SBMLid="ka" COPASIkey="ModelValue_0"/>
-    <SBMLMap SBMLid="kcd" COPASIkey="ModelValue_2"/>
-    <SBMLMap SBMLid="ki" COPASIkey="ModelValue_4"/>
-    <SBMLMap SBMLid="klid" COPASIkey="ModelValue_3"/>
-    <SBMLMap SBMLid="kr" COPASIkey="ModelValue_6"/>
+    <SBMLMap SBMLid="alpha" COPASIkey="modelValue_7"/>
+    <SBMLMap SBMLid="ka" COPASIkey="modelValue_0"/>
+    <SBMLMap SBMLid="kcd" COPASIkey="modelValue_2"/>
+    <SBMLMap SBMLid="ki" COPASIkey="modelValue_4"/>
+    <SBMLMap SBMLid="klid" COPASIkey="modelValue_3"/>
+    <SBMLMap SBMLid="kr" COPASIkey="modelValue_6"/>
     <SBMLMap SBMLid="lRIRII" COPASIkey="Metabolite_5"/>
     <SBMLMap SBMLid="lRIRII_endo" COPASIkey="Metabolite_7"/>
-    <SBMLMap SBMLid="ligand" COPASIkey="ModelValue_1"/>
-    <SBMLMap SBMLid="pRI" COPASIkey="ModelValue_5"/>
-    <SBMLMap SBMLid="pRII" COPASIkey="ModelValue_8"/>
+    <SBMLMap SBMLid="ligand" COPASIkey="modelValue_1"/>
+    <SBMLMap SBMLid="pRI" COPASIkey="modelValue_5"/>
+    <SBMLMap SBMLid="pRII" COPASIkey="modelValue_8"/>
     <SBMLMap SBMLid="v1" COPASIkey="Reaction_0"/>
     <SBMLMap SBMLid="v10" COPASIkey="Reaction_9"/>
     <SBMLMap SBMLid="v11" COPASIkey="Reaction_10"/>
@@ -1891,7 +1891,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
 '''
 class BoxplotTests(unittest.TestCase):
     def setUp(self):
-        self.copasi_file=os.path.join(os.getcwd(),'VilarModel2006pycopitestModel.cps')
+        self.copasi_file=os.path.join(os.getcwd(),'Vilarmodel2006pycopitestmodel.cps')
         with open(self.copasi_file,'w') as f:
             f.write(model_string)
 
@@ -1906,9 +1906,9 @@ class BoxplotTests(unittest.TestCase):
         if os.path.isfile(self.timecourse_report_name):
             os.remove(self.timecourse_report_name)
         #do time course
-        self.TC=PyCoTools.pycopi.TimeCourse(self.copasi_file,StepSize=100,Plot='false',
+        self.TC=PyCoTools.pycopi.TimeCourse(self.copasi_file,StepSize=100,plot='false',
                                                Intervals=50,End=5000,
-                                               ReportName=self.timecourse_report_name)
+                                               report_name=self.timecourse_report_name)
 #                                               
         #make PE report name available
         self.PE_report_name=os.path.join(os.path.dirname(self.copasi_file),'PEdata.txt')
@@ -1917,19 +1917,19 @@ class BoxplotTests(unittest.TestCase):
         
         self.PE=PyCoTools.pycopi.ParameterEstimation(self.copasi_file,
                                                         self.timecourse_report_name,
-                                                        PopulationSize=2,
-                                                        NumberOfGenerations=2,
-                                                        RandomizeStartValues='true',
-                                                        ReportName=self.PE_report_name,
-                                                        Plot='false')
+                                                        population_size=2,
+                                                        number_of_generations=2,
+                                                        randomize_start_values='true',
+                                                        report_name=self.PE_report_name,
+                                                        plot='false')
         self.PE.write_item_template()
         self.PE.set_up()
         
-        PyCoTools.pycopi.Scan(self.copasi_file,ScanType='repeat',NumberOfSteps=10,Run='true',
-                                 ReportType='parameter_estimation',ReportName=self.PE_report_name)   
+        PyCoTools.pycopi.Scan(self.copasi_file,scan_type='repeat',number_of_steps=10,run='true',
+                                 report_type='parameter_estimation',report_name=self.PE_report_name)   
         
     def test_boxplot(self):
-        B=PyCoTools.PEAnalysis.PlotBoxplot(self.PE_report_name)
+        B=PyCoTools.PEAnalysis.plotBoxplot(self.PE_report_name)
         print B.kwargs
 
 

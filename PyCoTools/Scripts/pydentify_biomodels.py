@@ -24,7 +24,7 @@ Date:
 
  Object:
  
-Optionally download a percentage of models from BioModels using the -d flag. 
+Optionally download a percentage of models from Biomodels using the -d flag. 
 Specify the percentage of models to download via the -p flag. 
 Process these models through a workflow demonstrating PyCoTools capability. 
 See 'pydentify_model.py' for more details on the workflow.
@@ -55,7 +55,7 @@ args=parser.parse_args()
 ##==============================================================================
 
 if sys.platform=='win32':
-    DOWNLOAD_DIRECTORY=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4'
+    DOWNLOAD_DIRECTORY=r'D:\MPhil\Python\My_Python_Modules\modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels4'
     CLUSTER=False
 else:
     DOWNLOAD_DIRECTORY=r'/sharedlustre/users/b3053674/12_Dec/PydentifyingBiomodelsAgain'
@@ -63,7 +63,7 @@ else:
     
 log_file=os.path.join(DOWNLOAD_DIRECTORY,'log.log')
 PyCoTools.Misc.setup_logger(__name__,log_file)
-LOG=logging.getLogger(__name__)
+LOG=logging.getlog10ger(__name__)
 
 class FilePaths():
     def __init__(self):
@@ -71,10 +71,10 @@ class FilePaths():
         if os.path.isdir(self.wd)!=True:
             raise PyCoTools.Errors.InputError('{} doesn\'t exist'.format(self.wd))
         
-        self.model_downloads_pickle=os.path.join(self.wd,'BioModelsFilesPickle.pickle')
+        self.model_downloads_pickle=os.path.join(self.wd,'BiomodelsFilesPickle.pickle')
         self.cps_files_pickle=os.path.join(self.wd,'cpsFilesPickle.pickle')
 
-        self.models_downloads_xlsx=os.path.join(self.wd,'ModelsMap.xlsx')
+        self.models_downloads_xlsx=os.path.join(self.wd,'modelsMap.xlsx')
         self.computation_time_pickle=os.path.join(self.wd,'computation_time_results.pickle')
         self.figure_path=os.path.join(self.wd,'computation_time_plot.png')
         
@@ -92,7 +92,7 @@ def xml2cps(model_pickle,cps_pickle):
     returns:
         list of copasi files
     '''
-    LOG.info('Converting XML to COPASI')
+    LOG.info('Converting xML to COPASI')
     paths= pandas.read_pickle(model_pickle)
     LOG.debug('sbml pickle file has following dimenions: {} '.format(paths.shape))
 
@@ -173,7 +173,7 @@ def pydentify_biomodels(cps_pickle):
 
 
 if __name__=='__main__':
-    LOG.info('Logger has been saved to {}'.format(log_file))
+    LOG.info('log10ger has been saved to {}'.format(log_file))
     F=FilePaths()
     if args.d:
         PyCoTools.Misc.download_models(F.wd,percent=args.p,SKIP_ALREADY_DOWNLOADED=False)
