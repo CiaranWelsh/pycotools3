@@ -37,7 +37,7 @@ An appropiately configured copasi file conforms to the following:
     3) now use the report you've just defined in the parameter scan window. Set 'append' and 'confirm overwrite' to off (optional but this is how I like it)
     4) ensure parameter estimation is set as subtask and the 'executable' box is checked in the top right hand corner of the parameter scan task
     5) go to the parameter estimation task and configure your estimation however you like
-    6) Save and close
+    6) save and close
     
     
 This script works as 1) command line program or 2) as a stand-alone python module

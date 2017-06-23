@@ -22,7 +22,7 @@ Date:
     12/03/2017
 
  Object:
- Run profile likelihood with the kholodenko model
+ run profile likelihood with the kholodenko model
  '''
 import PyCoTools
 import os
@@ -39,17 +39,17 @@ param=PyCoTools.PEAnalysis.ParsePEData(K.PE_data2_2)
 print param.data.iloc[0].sort_index()
 
 PyCoTools.pydentify2.ProfileLikelihood(K.kholodenko_model, #full path to the model
-                                       ParameterPath=K.PE_data2_2, #full path to the PEData
-                                       Index=range(5), #index of PE set for profiling. (best is 0)
-                                       NumberOfSteps=25, #resolution of profile likelihood 
-                                       Run='SGE',#Run method, 
+                                       parameter_path=K.PE_data2_2, #full path to the PEData
+                                       index=range(5), #index of PE set for profiling. (best is 0)
+                                       number_of_steps=25, #resolution of profile likelihood 
+                                       run='SGE',#run method, 
                                        
                                        ##specify multipliers for scan boundaries\
                                        ##i.e. if estimated parameter was 0.1, \
                                        ##Boundaries with the present settings would be \
                                        ##between 0.1/1000 and 0.1*1000 = 0.0001 and 100\
-                                       UpperBoundMultiplier=1000, 
-                                       LowerBoundMultiplier=1000)  
+                                       upper_boundMultiplier=1000, 
+                                       lower_boundMultiplier=1000)  
 
 
 

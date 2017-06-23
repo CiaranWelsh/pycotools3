@@ -35,13 +35,13 @@ import time
 import re
 import shutil 
 import scipy
-import TestModels
+import Testmodels
 import lxml.etree as etree
 
-MODEL_STRING = TestModels.TestModels.get_model1()
+MODEL_STRING = Testmodels.Testmodels.get_model1()
 
 
-class ParameterEstimationPlotsTests(unittest.TestCase):
+class ParameterEstimationplotsTests(unittest.TestCase):
     
     def setUp(self):
         self.copasi_file = os.path.join(os.getcwd(), 'test_model.cps')
@@ -58,18 +58,18 @@ class ParameterEstimationPlotsTests(unittest.TestCase):
             
         self.GMQ=PyCoTools.pycopi.GetModelQuantities(self.copasi_file)
             
-        self.TC=PyCoTools.pycopi.TimeCourse(self.copasi_file,StepSize=100,Plot='false',Intervals=50,End=5000,ReportName=self.timecourse_report_name)
-        self.TC2=PyCoTools.pycopi.TimeCourse(self.copasi_file,StepSize=100,Plot='false',Intervals=60,End=6000,ReportName=self.timecourse_report_name2)
+        self.TC=PyCoTools.pycopi.TimeCourse(self.copasi_file,StepSize=100,plot='false',Intervals=50,End=5000,report_name=self.timecourse_report_name)
+        self.TC2=PyCoTools.pycopi.TimeCourse(self.copasi_file,StepSize=100,plot='false',Intervals=60,End=6000,report_name=self.timecourse_report_name2)
         
         self.time_course_reports=[self.timecourse_report_name,self.timecourse_report_name2]
         for i in self.time_course_reports:
             PyCoTools.pycopi.PruneCopasiHeaders(i,replace='true')
         
         self.PE=PyCoTools.pycopi.ParameterEstimation(self.copasi_file,self.time_course_reports,
-                                                   NumberOfGenerations=1,
-                                                   PopulationSize=1,
-                                                   ReportName=self.PE_report_name,
-                                                   Plot='false')
+                                                   number_of_generations=1,
+                                                   population_size=1,
+                                                   report_name=self.PE_report_name,
+                                                   plot='false')
         self.PE.write_item_template()
         self.PE.set_up()
         self.PE.run()
@@ -80,11 +80,11 @@ class ParameterEstimationPlotsTests(unittest.TestCase):
         
     def test_len_exp_files(self):
         '''
-        make sure PEdataPlot is recognizing all necessary experimetnal files
+        make sure PEdataplot is recognizing all necessary experimetnal files
         '''
         PL= PyCoTools.PEAnalysis.PlotPEData(self.copasi_file,self.time_course_reports,
                                            self.PE_report_name,
-                                           Plot='false')
+                                           plot='false')
         self.assertEqual(len( PL.experiment_files),len(self.time_course_reports))
 
 
@@ -94,7 +94,7 @@ class ParameterEstimationPlotsTests(unittest.TestCase):
         '''
         PL= PyCoTools.PEAnalysis.PlotPEData(self.copasi_file,self.time_course_reports,
                                            self.PE_report_name,
-                                           Plot='false')
+                                           plot='false')
         df1=pandas.read_csv(self.time_course_reports[0],sep='\t')
         key1= PL.experiment_data.keys()[0]
         self.assertEqual(df1.all().all(),PL.experiment_data[key1].all().all())
@@ -104,7 +104,7 @@ class ParameterEstimationPlotsTests(unittest.TestCase):
         '''
         PL= PyCoTools.PEAnalysis.PlotPEData(self.copasi_file,self.time_course_reports,
                                            self.PE_report_name,
-                                           Plot='false')
+                                           plot='false')
         df1=pandas.read_csv(self.time_course_reports[1],sep='\t')
         key1= PL.experiment_data.keys()[1]
         self.assertEqual(df1.all().all(),PL.experiment_data[key1].all().all())
@@ -113,7 +113,7 @@ class ParameterEstimationPlotsTests(unittest.TestCase):
     def test_prune_parameters(self):
         PL= PyCoTools.PEAnalysis.PlotPEData(self.copasi_file,self.time_course_reports,
                                            self.PE_report_name,
-                                           Plot='false')
+                                           plot='false')
         PyCoTools.pycopi.PruneCopasiHeaders(self.PE_report_name,replace='true')
         est_parameters=pandas.DataFrame.from_csv(self.PE_report_name,sep='\t')
         self.assertEqual(est_parameters.all().all(),PL.parameters.all().all())
@@ -121,7 +121,7 @@ class ParameterEstimationPlotsTests(unittest.TestCase):
     def test_insert_parameters(self):
         PL= PyCoTools.PEAnalysis.PlotPEData(self.copasi_file,self.time_course_reports,
                                            self.PE_report_name,
-                                           Plot='false')
+                                           plot='false')
         ICP=PyCoTools.pycopi.GetModelQuantities(self.copasi_file)
         for i in PL.parameters.keys():
             for j in ICP.get_all_model_variables().keys():
@@ -136,14 +136,14 @@ class ParameterEstimationPlotsTests(unittest.TestCase):
     def test_plot(self):
         PL= PyCoTools.PEAnalysis.PlotPEData(self.copasi_file,self.time_course_reports,
                                            self.PE_report_name,
-                                           Plot='true',SaveFig='true')
-        os.chdir(PL.kwargs['OutputDirectory'])
+                                           plot='true',savefig='true')
+        os.chdir(PL.kwargs['output_directory'])
         len_files=0
         for i in glob.glob('*'):
             len_files+=1
         os.chdir('..')
-        if os.path.isdir(PL.kwargs['OutputDirectory']):
-            shutil.rmtree(PL.kwargs['OutputDirectory'])
+        if os.path.isdir(PL.kwargs['output_directory']):
+            shutil.rmtree(PL.kwargs['output_directory'])
         self.assertEqual(len_files,PL.parameters.shape[1]-1)#, minus 1 for RSS
         
         

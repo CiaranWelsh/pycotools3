@@ -30,16 +30,16 @@ import argparse
 #
 ##==============================================================================
 parser=argparse.ArgumentParser()
-parser.add_argument('Model',help='Model that was used in parameter estimation')
-parser.add_argument('ParameterPath',help='File or folder of files containing parameter estimation data')
-parser.add_argument('Index',help='index of parameter set to visualize (best=0)',type=int)
-parser.add_argument('-s',help='Save figures to file',choices=['true','false'],default='true')
+parser.add_argument('model',help='model that was used in parameter estimation')
+parser.add_argument('parameter_path',help='File or folder of files containing parameter estimation data')
+parser.add_argument('index',help='index of parameter set to visualize (best=0)',type=int)
+parser.add_argument('-s',help='save figures to file',choices=['true','false'],default='true')
 
 
 args=parser.parse_args()
 ##==============================================================================
 
-GMQ=PyCoTools.pycopi.GetModelQuantities(args.Model)
+GMQ=PyCoTools.pycopi.GetModelQuantities(args.model)
 ##get experiment files defined in model
 experiment_files= GMQ.get_experiment_files()
 ##insert data
@@ -48,15 +48,15 @@ experiment_files= GMQ.get_experiment_files()
 
 #run a 
 
-PEData=PyCoTools.PEAnalysis.ParsePEData(args.ParameterPath)
+PEData=PyCoTools.PEAnalysis.ParsePEData(args.parameter_path)
 
-print 'best estimated parameters:\n',PEData.data.iloc[args.Index].sort_index()
-PyCoTools.pycopi.InsertParameters(args.Model,ParameterPath=args.ParameterPath,Index=args.Index)
-PE=PyCoTools.pycopi.ParameterEstimation(args.Model,experiment_files,
-                                        Method='CurrentSolutionStatistics',
-                                        Plot='true',
-                                        SaveFig=args.s,
-                                        RandomizeStartValues='false') #important to turn this off
+print 'best estimated parameters:\n',PEData.data.iloc[args.index].sort_index()
+PyCoTools.pycopi.InsertParameters(args.model,parameter_path=args.parameter_path,index=args.index)
+PE=PyCoTools.pycopi.ParameterEstimation(args.model,experiment_files,
+                                        method='CurrentSolutionStatistics',
+                                        plot='true',
+                                        savefig=args.s,
+                                        randomize_start_values='false') #important to turn this off
 PE.set_up() ## setup
 PE.run()    ## and run the current solution statistics parameter estimation
 

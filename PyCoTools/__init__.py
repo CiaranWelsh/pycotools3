@@ -24,7 +24,7 @@ logging.config.fileConfig(LOG_CONFIG_FILE,disable_existing_loggers=False)
 
 LOG=logging.getLogger('root')
 LOG.info('Initializing PyCoTools')
-LOG.info('Initializing Logging System')
+LOG.info('Initializing log10ging System')
 LOG.info('logging config file at: {}'.format(LOG_CONFIG_FILE))
 
 

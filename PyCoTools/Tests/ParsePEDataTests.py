@@ -33,10 +33,10 @@ import scipy
 import PyCoTools
 import glob
 import shutil
-import TestModels
+import Testmodels
 import lxml.etree as etree
 
-MODEL_STRING = TestModels.TestModels.get_model1()
+MODEL_STRING = Testmodels.Testmodels.get_model1()
 
 class ParsePETests(unittest.TestCase):
     
@@ -51,23 +51,23 @@ class ParsePETests(unittest.TestCase):
             os.remove(self.timecourse_report_name)
             
         self.PE_report_name=os.path.join(os.path.dirname(self.copasi_file),'PEdata.txt')
-        self.TC=PyCoTools.pycopi.TimeCourse(self.copasi_file,StepSize=100,Plot='false',Intervals=50,End=5000,ReportName=self.timecourse_report_name)
+        self.TC=PyCoTools.pycopi.TimeCourse(self.copasi_file,StepSize=100,plot='false',Intervals=50,End=5000,report_name=self.timecourse_report_name)
         PyCoTools.pycopi.PruneCopasiHeaders(self.timecourse_report_name,replace='true')
         
         self.PE=PyCoTools.pycopi.ParameterEstimation(self.copasi_file,
                                                         self.timecourse_report_name,
-                                                        PopulationSize=6,
-                                                        NumberOfGenerations=5,
-                                                        RandomizeStartValues='true',
-                                                        ReportName=self.PE_report_name,
-                                                        Save='overwrite',Plot='false')
+                                                        population_size=6,
+                                                        number_of_generations=5,
+                                                        randomize_start_values='true',
+                                                        report_name=self.PE_report_name,
+                                                        save='overwrite',plot='false')
         self.PE.write_item_template()
         self.PE.set_up()
                                                         
-        self.S=PyCoTools.pycopi.Scan(self.copasi_file,ScanType='repeat',
-                                        ReportType='parameter_estimation',
-                                        Run='true',NumberOfSteps=3,
-                                        ReportName=self.PE_report_name,Scheduled='true')
+        self.S=PyCoTools.pycopi.Scan(self.copasi_file,scan_type='repeat',
+                                        report_type='parameter_estimation',
+                                        run='true',number_of_steps=3,
+                                        report_name=self.PE_report_name,scheduled='true')
 
 #        self.PE.run()
         self.PE_dir=os.path.join(os.path.dirname(self.copasi_file),'PE_dir')
@@ -82,11 +82,11 @@ class ParsePETests(unittest.TestCase):
     
     def test_read_from_file(self):
         P=PyCoTools.PEAnalysis.ParsePEData(self.PE_report_name)
-        self.assertEqual(P.data.shape[0],int(self.S.kwargs.get('NumberOfSteps')))
+        self.assertEqual(P.data.shape[0],int(self.S.kwargs.get('number_of_steps')))
         
     def test_read_from_folder(self):
         P=PyCoTools.PEAnalysis.ParsePEData(self.PE_dir)
-        self.assertEqual(P.data.shape[0],int(self.S.kwargs.get('NumberOfSteps')))
+        self.assertEqual(P.data.shape[0],int(self.S.kwargs.get('number_of_steps')))
         
     def test_pickle1(self):
         '''
@@ -112,8 +112,8 @@ class ParsePETests(unittest.TestCase):
         once then when you use it again you don't have to wait to read all the 
         data again
         '''        
-        PyCoTools.PEAnalysis.ParsePEData(self.PE_dir,UsePickle='false',OverwritePickle='false')
-        p2=PyCoTools.PEAnalysis.ParsePEData(self.PE_dir,UsePickle='true',OverwritePickle='false')
+        PyCoTools.PEAnalysis.ParsePEData(self.PE_dir,UsePickle='false',overwrite_pickle='false')
+        p2=PyCoTools.PEAnalysis.ParsePEData(self.PE_dir,UsePickle='true',overwrite_pickle='false')
         self.assertTrue(p2.for_testing=='pickle_true_overwrite_false')
 
 
@@ -123,12 +123,12 @@ class ParsePETests(unittest.TestCase):
         once then when you use it again you don't have to wait to read all the 
         data again
         '''        
-        PyCoTools.PEAnalysis.ParsePEData(self.PE_dir,UsePickle='false',OverwritePickle='false')
-        p2=PyCoTools.PEAnalysis.ParsePEData(self.PE_dir,UsePickle='true',OverwritePickle='true')
+        PyCoTools.PEAnalysis.ParsePEData(self.PE_dir,UsePickle='false',overwrite_pickle='false')
+        p2=PyCoTools.PEAnalysis.ParsePEData(self.PE_dir,UsePickle='true',overwrite_pickle='true')
         self.assertTrue(p2.for_testing=='pickle_true_overwrite_true')
         
     def test_log10_conversion(self):
-        PEData=PyCoTools.PEAnalysis.ParsePEData(self.PE_dir,UsePickle='false',OverwritePickle='false')
+        PEData=PyCoTools.PEAnalysis.ParsePEData(self.PE_dir,UsePickle='false',overwrite_pickle='false')
         print PEData.log_data
         
         
@@ -139,7 +139,7 @@ class ParsePETests(unittest.TestCase):
         shutil.rmtree(self.PE_dir)
         for i in glob.glob('*.pickle'):
             os.remove(i)
-        os.remove(self.PE.kwargs['ConfigFilename'])
+        os.remove(self.PE.kwargs['config_filename'])
         os.remove(self.timecourse_report_name)
 
 #==============================================================================

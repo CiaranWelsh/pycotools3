@@ -2,9 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f3f575b3-d917-4076-9844-5f92a0f760b7" name="Default" comment="">
+<<<<<<< HEAD
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/PyCoTools.iml" afterPath="$PROJECT_DIR$/.idea/PyCoTools.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyCoTools/pycopi.py" afterPath="$PROJECT_DIR$/PyCoTools/pycopi.py" />
+=======
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyCoTools/Errors.py" afterPath="$PROJECT_DIR$/PyCoTools/Errors.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyCoTools/Tests/test.py" afterPath="$PROJECT_DIR$/PyCoTools/Tests/test.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyCoTools/pycopi.py" afterPath="$PROJECT_DIR$/PyCoTools/pycopi.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/log.log" afterPath="$PROJECT_DIR$/log.log" />
+>>>>>>> b5251ac39e0e966dfceb851ff97bd2f79e887bd0
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -14,7 +22,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/PyCoTools$Unnamed.coverage" NAME="Unnamed Coverage Results" MODIFIED="1498125538963" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/PyCoTools$Unnamed.coverage" NAME="Unnamed Coverage Results" MODIFIED="1498128168204" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
   <component name="DatabaseView">
     <option name="SHOW_INTERMEDIATE" value="true" />
@@ -34,6 +42,7 @@
       <file leaf-file-name="pycopi.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/PyCoTools/pycopi.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="15">
               <caret line="29" column="5" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
               <folding>
@@ -482,12 +491,59 @@
                 <marker date="1498156506960" expanded="true" signature="230171:230850" ph="..." />
                 <marker date="1498156506960" expanded="true" signature="230855:232111" ph="'''...'''" />
                 <marker date="1498156506960" expanded="true" signature="232112:232612" ph="..." />
+=======
+            <state relative-caret-position="531">
+              <caret line="4964" column="11" lean-forward="true" selection-start-line="4964" selection-start-column="11" selection-end-line="4964" selection-end-column="11" />
+              <folding>
+                <marker date="1498128433036" expanded="true" signature="1910:2899" ph="..." />
+                <marker date="1498128433036" expanded="true" signature="232443:232447" ph="..." />
+>>>>>>> b5251ac39e0e966dfceb851ff97bd2f79e887bd0
               </folding>
             </state>
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file leaf-file-name="pydentify2.py" pinned="false" current-in-tab="true">
+=======
+      <file leaf-file-name="test.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/PyCoTools/Tests/test.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="540">
+              <caret line="51" column="47" lean-forward="false" selection-start-line="51" selection-start-column="47" selection-end-line="51" selection-end-column="47" />
+              <folding>
+                <element signature="e#0#9#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PyCoTools/__init__.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="345">
+              <caret line="31" column="0" lean-forward="true" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#17#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CleanUp.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PyCoTools/PyCoToolsTutorial/CleanUp.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="637">
+              <caret line="50" column="0" lean-forward="false" selection-start-line="50" selection-start-column="0" selection-end-line="50" selection-end-column="0" />
+              <folding>
+                <element signature="e#892#901#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pydentify2.py" pinned="false" current-in-tab="false">
+>>>>>>> b5251ac39e0e966dfceb851ff97bd2f79e887bd0
         <entry file="file://$PROJECT_DIR$/PyCoTools/pydentify2.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="915">
@@ -502,6 +558,8 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>set_up</find>
+      <find>InsertP</find>
+      <find>check_parameter_consistancy</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -511,12 +569,13 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/PyCoTools/test.py" />
-        <option value="$PROJECT_DIR$/PyCoTools/Tests/test.py" />
         <option value="$PROJECT_DIR$/PyCoTools/Tests/RunMultiplePEsTests.py" />
-        <option value="$PROJECT_DIR$/PyCoTools/pycopi.py" />
         <option value="$PROJECT_DIR$/PyCoTools/pydentify2.py" />
         <option value="$PROJECT_DIR$/PyCoTools/PyCoToolsTutorial/CleanUp.py" />
         <option value="$PROJECT_DIR$/PyCoTools/__init__.py" />
+        <option value="$PROJECT_DIR$/PyCoTools/Errors.py" />
+        <option value="$PROJECT_DIR$/PyCoTools/pycopi.py" />
+        <option value="$PROJECT_DIR$/PyCoTools/Tests/test.py" />
       </list>
     </option>
   </component>
@@ -1345,6 +1404,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/PyCoTools/Tests/test.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
@@ -1352,6 +1412,8 @@
         </state>
       </provider>
     </entry>
+=======
+>>>>>>> b5251ac39e0e966dfceb851ff97bd2f79e887bd0
     <entry file="file://$PROJECT_DIR$/PyCoTools/Tests/TestModels.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1367,6 +1429,27 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/PyCoTools/__init__.py">
+<<<<<<< HEAD
+=======
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="31" column="0" lean-forward="true" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#17#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyCoTools/Errors.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="555">
+          <caret line="37" column="8" lean-forward="false" selection-start-line="37" selection-start-column="8" selection-end-line="37" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyCoTools/pydentify2.py">
+>>>>>>> b5251ac39e0e966dfceb851ff97bd2f79e887bd0
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="465">
           <caret line="31" column="0" lean-forward="false" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
@@ -1388,6 +1471,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/PyCoTools/pycopi.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="15">
           <caret line="29" column="5" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
           <folding>
@@ -1836,15 +1920,32 @@
             <marker date="1498156506960" expanded="true" signature="230171:230850" ph="..." />
             <marker date="1498156506960" expanded="true" signature="230855:232111" ph="'''...'''" />
             <marker date="1498156506960" expanded="true" signature="232112:232612" ph="..." />
+=======
+        <state relative-caret-position="531">
+          <caret line="4964" column="11" lean-forward="true" selection-start-line="4964" selection-start-column="11" selection-end-line="4964" selection-end-column="11" />
+          <folding>
+            <marker date="1498128433036" expanded="true" signature="1910:2899" ph="..." />
+            <marker date="1498128433036" expanded="true" signature="232443:232447" ph="..." />
+>>>>>>> b5251ac39e0e966dfceb851ff97bd2f79e887bd0
           </folding>
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/PyCoTools/pydentify2.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="915">
           <caret line="1202" column="8" lean-forward="false" selection-start-line="1202" selection-start-column="4" selection-end-line="1202" selection-end-column="8" />
           <folding />
+=======
+    <entry file="file://$PROJECT_DIR$/PyCoTools/Tests/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="540">
+          <caret line="51" column="47" lean-forward="false" selection-start-line="51" selection-start-column="47" selection-end-line="51" selection-end-column="47" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+>>>>>>> b5251ac39e0e966dfceb851ff97bd2f79e887bd0
         </state>
       </provider>
     </entry>

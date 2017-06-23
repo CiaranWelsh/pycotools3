@@ -48,28 +48,28 @@ PEData=PyCoTools.PEAnalysis.ParsePEData(local_PEData_dir)
 print 'best estimated parameters:\n',PEData.data.iloc[0].sort_index()
 
 PyCoTools.PEAnalysis.EvaluateOptimizationPerformance(local_PEData_dir,
-                                                     SaveFig='true',
-                                                     Log10='true')
-#                                                     TruncateMode='below_x',X=2.062)
+                                                     savefig='true',
+                                                     log10='true')
+#                                                     truncate_model='below_x',x=2.062)
 
-PyCoTools.pycopi.InsertParameters(K.kholodenko_model,ParameterPath=local_PEData_dir,Index=0)
+PyCoTools.pycopi.InsertParameters(K.kholodenko_model,parameter_path=local_PEData_dir,index=0)
 
 PE=PyCoTools.pycopi.ParameterEstimation(K.kholodenko_model,K.noisy_timecourse_report,
-                                        Method='CurrentSolutionStatistics',
-                                        Plot='true',
-                                        SaveFig='true',
-                                        RandomizeStartValues='false')
+                                        method='CurrentSolutionStatistics',
+                                        plot='true',
+                                        savefig='true',
+                                        randomize_start_values='false')
 PE.set_up() ## setup
 PE.run()    ## and run the current solution statistics parameter estimation
 
-PyCoTools.PEAnalysis.EvaluateOptimizationPerformance(local_PEData_dir,SaveFig='true')
+PyCoTools.PEAnalysis.EvaluateOptimizationPerformance(local_PEData_dir,savefig='true')
 
-PyCoTools.PEAnalysis.PlotBoxplot(local_PEData_dir,SaveFig='true')
+PyCoTools.PEAnalysis.plotBoxplot(local_PEData_dir,savefig='true')
 
-PyCoTools.PEAnalysis.PlotHistogram(local_PEData_dir,Log10='true',
-                                   Bins=10,SaveFig='true')
-PyCoTools.PEAnalysis.PlotScatters(K.local_PEData_dir,Log10='true',
-                                  SaveFig='true')
+PyCoTools.PEAnalysis.plotHistogram(local_PEData_dir,log10='true',
+                                   bins=10,savefig='true')
+PyCoTools.PEAnalysis.plotScatters(K.local_PEData_dir,log10='true',
+                                  savefig='true')
 
 
 
