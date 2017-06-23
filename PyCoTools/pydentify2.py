@@ -680,9 +680,9 @@ class Plot():
                  'Mode':'all',
                  'PlotIndex':-1,
                  'PlotParameter':None,
-                 'DotSize':4,
+                 'DotSize':10,
                  'Separator':'\t',
-                 'Log10':'false',
+                 'Log10':'true',
                  'UsePickle':'false',
                  'OverwritePickle':'false',
                  }
@@ -1067,8 +1067,14 @@ class Plot():
             that the red dot is in the correct place
         '''
         matplotlib.pyplot.rcParams.update({'font.size':self.kwargs.get('AxisSize')})
-#        if parameter not in self.GMQ.get_all_model_variables().keys():
-#            raise Errors.InputError('{} is not in your model. These are parameters in your model: {}'.format(parameter,self.GMQ.get_all_model_variables().keys()))
+        best_parameter_value=self.get_original_value(index,parameter)  
+        LOG.debug('best parameter value is {}'.format(best_parameter_value))
+        
+        if best_parameter_value != None:
+            if self.kwargs['Log10']=='true':
+                best_parameter_value = round(numpy.log10(float(best_parameter_value)),6)
+                
+                
         if self.kwargs.get('MultiPlot')=='true':
             plt.figure(parameter)
         else:
@@ -1081,7 +1087,7 @@ class Plot():
         parameter_val,RSS_val=(data[data.keys()[0]],data[data.keys()[1]])
         #plot parameter vs RSS once as green circles the other as lines
         try:
-            plt.plot(parameter_val,RSS_val,'bo',markersize=self.kwargs.get('DotSize'))
+            plt.plot(parameter_val,RSS_val,'bo',markersize=self.kwargs.get('DotSize'),label = best_parameter_value)
         except ValueError as e:
             if e.message=='invalid literal for float(): 1.#INF':
                 return True
@@ -1107,7 +1113,9 @@ class Plot():
 #        print parameter
         st=Misc.RemoveNonAscii(parameter).filter
 #        print st
-        best_parameter_value=self.get_original_value(index,parameter)   
+        
+        
+
         if best_parameter_value!=None:         
             #best parameter value contains the model value for pparameter
             #we now need to look this value up on the interpolation and read off the corresponding RSS value
@@ -1122,7 +1130,7 @@ class Plot():
             plt.plot(best_parameter_value,best_RSS_value,'ro',markersize=self.kwargs.get('DotSize'))
         
         #plot labels
-        plt.title('\n'.join(wrap('{}'.format(parameter),self.kwargs.get('TitleWrapSize'))),fontsize=self.kwargs.get('FontSize'))
+        plt.title('\n'.join(wrap('{},OriginalParameterValue={}'.format(parameter,best_parameter_value),self.kwargs.get('TitleWrapSize'))),fontsize=self.kwargs.get('FontSize'))
         
         
         if self.kwargs['Log10']=='true':
@@ -1143,6 +1151,8 @@ class Plot():
         #xtick rotation
         plt.xticks(rotation=self.kwargs.get('XTickRotation'))
         
+        ##legend
+        plt.legend(loc='best')
         #options for changing the plot axis
         if self.kwargs.get('Ylimit')!=None:
             ax.set_ylim(self.kwargs.get('Ylimit'))
