@@ -360,7 +360,7 @@ class ProfileLikelihood():
                     for l in list(k):
                         if l.attrib['name']=='ObjectCN':
                             #metabolites first
-                            match= re.findall('metabolites\[{}\]'.format(j),l.attrib['value'])
+                            match= re.findall('Metabolites\[{}\]'.format(j),l.attrib['value'])
                             if match !=[]:
                                 parent=l.getparent()
                                 parent.getparent().remove(parent) 
@@ -416,22 +416,6 @@ class ProfileLikelihood():
                 ub=float(variable_value)*float(self.kwargs.get('upper_bound_multiplier'))
                 
                 pycopi.Scan(self.cps_dct[i][j],
-<<<<<<< HEAD
-                                     Variable=j,
-                                     ReportName=Misc.RemoveNonAscii(j).filter+'.txt',
-                                     ReportType='profilelikelihood',
-                                     SubTask='parameter_estimation',
-                                     ScanType='scan',
-                                     OutputInSubtask=False,
-                                     AdjustInitialConditions=False,
-                                     NumberOfSteps=self.kwargs.get('NumberOfSteps'),
-                                     Maximum=ub,
-                                     Minimum=lb,
-                                     Log=self.kwargs.get('Log10'),
-                                     Scheduled=True,
-                                     Save='overwrite',
-                                     ClearScans=True)
-=======
                                      variable=j,
                                      report_name=Misc.RemoveNonAscii(j).filter+'.txt',
                                      report_type='profilelikelihood',
@@ -446,7 +430,6 @@ class ProfileLikelihood():
                                      scheduled=True,
                                      save='overwrite',
                                      clear_scans=True)
->>>>>>> b5251ac39e0e966dfceb851ff97bd2f79e887bd0
         return self.cps_dct
         
     def run_slow(self):
@@ -457,7 +440,7 @@ class ProfileLikelihood():
         for i in self.cps_dct.keys():
             for j in self.cps_dct[i]:
                 LOG.debug( 'running {}'.format(j))
-                res[self.cps_dct[i][j]]= pycopi.run(self.cps_dct[i][j],Task='scan',max_time=self.kwargs.get('max_time'),mode='slow').run()
+                res[self.cps_dct[i][j]]= pycopi.Run(self.cps_dct[i][j],task='scan',max_time=self.kwargs.get('max_time'),mode='slow').run()
         return res
         
     def multi_run(self):
@@ -469,10 +452,6 @@ class ProfileLikelihood():
             pool=multiprocessing.Pool(self.kwargs.get('NumProcesses'))
             for i in self.cps_dct.keys():
                 for j in self.cps_dct[i]:
-                    p=[k.name() for k in psutil.process_iter()]
-                    count= Counter(p)['CopasiSE.exe']
-                    if count>self.kwargs.get('NumProcesses'):
-                        sleep(self.kwargs.get('SleepTime'))
                     pool.Process(run(self.cps_dct[i][j]))
             return True
                 
@@ -501,7 +480,7 @@ class ProfileLikelihood():
 
 #==============================================================================
             
-class plot():
+class Plot():
     '''    
     After ProfileLikelihood class has been run, the plot class will plot the
     profile likelihoods for you. 
@@ -519,37 +498,33 @@ class plot():
             Which index to plot. Either an integer or list of integers. Default=-1, 
             means profile likelihoods were calculated around the parameters present 
             in the model. When index=-1 you must speficy an argument to the 
-            RSS argument. An integer index other than -1 specifies that a profile
+            rss argument. An integer index other than -1 specifies that a profile
             likleihood was calculated around the integer best set of parameters and 
             to plot them. A list of integers specifies the plotting of an 
             arbtrary number of profile likelihoods. When index is an Int or list of Int
-            the RSS argument is taken directly from the PE data specified by parameter_path
+            the rss argument is taken directly from the PE data specified by parameter_path
             
-        NumProcesses:
-            How many processes to use for plotting, which can be fairly intensive 
-            computationally. Default=1
-            
-        Alpha:
+        alpha:
             The alpha cut off for the chi squared based confidence interval. 
             Default=0.95
             
-        N:
+        n:
             Number of data points in use. The data files that were used for 
             parameter estimation in the original copasi file (the argument to copasi_file)
             were extracted, parsed and data points were counted. This value is the default
             but can be over-ridden if value given to this argument.
             
-        DOF:
+        dof:
             Degrees of freedom. The number of parameters that you want to calculate
             profile likelihoods for minus 1 is calcualted automatically. This is 
             default but can be overridden by specifying an argument to this keyword
             
-        RSS:
+        rss:
             Residual Sum of Squared. The objective function used as a measure of distance
-            of the experimental to simulated data. The RSS is minimized by copasi's 
+            of the experimental to simulated data. The rss is minimized by copasi's 
             parameter estimation algorithms. The smaller the better. This value is 
             automatically taken from parameter estimation data if the index kwarg 
-            is anything other than minus 1. when index=-1, the RSS value must be 
+            is anything other than minus 1. when index=-1, the rss value must be 
             given to this argument for the calculation of the chi squared based 
             confidence interval
 
@@ -581,7 +556,7 @@ class plot():
         savefig:
             save graphs to file labelled after the index
 
-        InterpolationKind:
+        interpolation_kind:
             Which method to use for interpolation. Can be any of ['linear', 
             'nearest', 'zero', 'slinear', 'quadratic', 'cubic'] but be careful
             with these. Default=slinear
@@ -616,11 +591,11 @@ class plot():
             either 'all', 'one' or 'none to either plot all results 
             or just a certain parameter. Defulat='all'
             
-        plotindex:
+        plot_index:
             if mode set to 'one', this specifies the index of the 
             profile likelihood run you want to plot (i.e -1,0,[0,3,5])
             
-        plotParameter:
+        plot_parameter:
             If mode set to 'one' which parameter to plot. Must
             be an item in your results. 
             
@@ -631,13 +606,13 @@ class plot():
         log10:
             True or False. Default=True. plot on log10-log10 scale
             
-        UsePickle:
+        use_pickle:
             Data read by PEAnalysis.ParsePEData are automatically pickled
             for speed. True or False to use pickle. Default=False
         
         overwrite_pickle:
             If data has changed set 'overwrite_pickle' to True to rewrite 
-            pickle before 'UsePickle' can be useful again. Default=False
+            pickle before 'use_pickle' can be useful again. Default=False
         
     '''
 
@@ -649,14 +624,13 @@ class plot():
         os.chdir(os.path.dirname(self.copasi_file))
 
         options={#report variables
-                 'ExperimentFiles':None,
+                 'experiment_files':None,
                  'parameter_path':None,                 
                  'index':-1,
-                 'NumProcesses':1, 
-                 'Alpha':0.95,
-                 'DOF':None,
-                 'N':None,
-                 'RSS':None,
+                 'alpha':0.95,
+                 'dof':None,
+                 'n':None,
+                 'rss':None,
                  'quantity_type':'concentration',
                  
                  #graph features
@@ -668,34 +642,20 @@ class plot():
                  'show':False,
                  'multiplot':False,
                  'savefig':False,
-                 'InterpolationKind':'slinear',
+                 'interpolation_kind':'slinear',
                  'InterpolationResolution':1000,
-<<<<<<< HEAD
-                 'TitleWrapSize':30,
-                 'Ylimit':None,
-                 'Xlimit':None,
-                 'DPI':125,
-                 'XTickRotation':35,
-                 'Mode':'all',
-                 'PlotIndex':-1,
-                 'PlotParameter':None,
-                 'DotSize':10,
-                 'Separator':'\t',
-                 'Log10':True,
-=======
                  'title_wrap_size':30,
                  'ylimit':None,
                  'xlimit':None,
                  'dpi':125,
                  'xtick_rotation':35,
                  'mode':'all',
-                 'plotindex':-1,
-                 'plotParameter':None,
+                 'plot_index':-1,
+                 'plot_parameter':None,
                  'marker_size':4,
                  'separator':'\t',
                  'log10':False,
->>>>>>> b5251ac39e0e966dfceb851ff97bd2f79e887bd0
-                 'UsePickle':False,
+                 'use_pickle':False,
                  'overwrite_pickle':False,
                  }
                  
@@ -704,40 +664,32 @@ class plot():
         options.update( kwargs) 
         self.kwargs=options       
         
-        if self.kwargs['ExperimentFiles']==None:
-            self.kwargs['ExperimentFiles']=self.get_experiment_files_in_use()
+        if self.kwargs['experiment_files']==None:
+            self.kwargs['experiment_files']=self.get_experiment_files_in_use()
     
-        assert isinstance(self.kwargs.get('NumProcesses'),int)
-        if self.kwargs.get('NumProcesses')!=0:
-            self.kwargs['NumProcesses']=self.kwargs.get('NumProcesses')-1
-
         if self.kwargs.get('log10') not in [True,False]:
             raise Errors.InputError('log10 argument should be \'true\' or \'false\' not {}'.format(self.kwargs.get('log10')))
 
-        if self.kwargs.get('UsePickle') not in [True,False]:
-            raise Errors.InputError('UsePickle argument should be \'true\' or \'false\' not {}'.format(self.kwargs.get('log10')))
+        if self.kwargs.get('use_pickle') not in [True,False]:
+            raise Errors.InputError('use_pickle argument should be \'true\' or \'false\' not {}'.format(self.kwargs.get('log10')))
 
 
         if self.kwargs.get('overwrite_pickle') not in [True,False]:
             raise Errors.InputError('overwrite_pickle argument should be \'true\' or \'false\' not {}'.format(self.kwargs.get('log10')))
 
             
-            
-        if self.kwargs.get('NumProcesses')>multiprocessing.cpu_count():
-            raise Errors.InputError('You have selected {} processes but your computer only has {} available'.format(self.kwargs.get('NumProcesses'),multiprocessing.cpu_count()))
-        
-        #if index is -1 i.e. current parameters, user needs to give RSS
+        #if index is -1 i.e. current parameters, user needs to give rss
         if self.kwargs.get('index')==-1:
-            if self.kwargs.get('RSS')==None:
-                raise Errors.InputError('when calculating PL around current parameter sets must specify the current RSS as keyword argument to plot')
+            if self.kwargs.get('rss')==None:
+                raise Errors.InputError('when calculating PL around current parameter sets must specify the current rss as keyword argument to plot')
         
-        #otherwise the RSS is ascertained automatically from the parameter_path
+        #otherwise the rss is ascertained automatically from the parameter_path
         if self.kwargs.get('index')!=-1:
             assert self.kwargs.get('parameter_path')!=None,'If index!=-1 then you need to suply argument to parameter_path'
         
 
         #line interpolation options
-        assert self.kwargs.get('InterpolationKind') in ['linear', 'nearest', 'zero', 'slinear', 'quadratic', 'cubic'],"interpolation kind must be one of ['linear', 'nearest', 'zero', 'slinear', 'quadratic', 'cubic']"
+        assert self.kwargs.get('interpolation_kind') in ['linear', 'nearest', 'zero', 'slinear', 'quadratic', 'cubic'],"interpolation kind must be one of ['linear', 'nearest', 'zero', 'slinear', 'quadratic', 'cubic']"
 
         #limit parameters
         if self.kwargs.get('ylimit')!=None:
@@ -765,8 +717,8 @@ class plot():
         if isinstance(self.kwargs.get('line_width'),int)!=True:
             raise TypeError('line_width argument should be of type int')
             
-        if isinstance(self.kwargs.get('InterpolationKind'),str)!=True:
-            raise TypeError('InterpolationKind argument should be of type str')
+        if isinstance(self.kwargs.get('interpolation_kind'),str)!=True:
+            raise TypeError('interpolation_kind argument should be of type str')
             
         if isinstance(self.kwargs.get('InterpolationResolution'),int)!=True:
             raise TypeError('InterpolationResolution argument should be of type int')
@@ -797,9 +749,9 @@ class plot():
         assert self.kwargs.get('multiplot') in [False,True]
         assert self.kwargs.get('quantity_type') in ['concentration','partical_numbers']
         
-        if self.kwargs['ExperimentFiles']==None:
+        if self.kwargs['experiment_files']==None:
             LOG.critical('Experimental Files not None')
-            self.kwargs['ExperimentFiles']=self.get_experiment_files_in_use()
+            self.kwargs['experiment_files']=self.get_experiment_files_in_use()
             
             
         self.PL_dir=self.get_PL_dir()
@@ -813,18 +765,18 @@ class plot():
         the ordering!
         
         '''
-        #default DOF is num estimated parameters minus 1 but can be manually overrider by specifying DOF keyword
-        if self.kwargs.get('DOF')==None:
-            self.kwargs['DOF']=self.degrees_of_freedom()
-        if self.kwargs.get('DOF')==None:
-            raise Errors.InputError('Please specify argument to DOF keyword')
+        #default dof is num estimated parameters minus 1 but can be manually overrider by specifying dof keyword
+        if self.kwargs.get('dof')==None:
+            self.kwargs['dof']=self.degrees_of_freedom()
+        if self.kwargs.get('dof')==None:
+            raise Errors.InputError('Please specify argument to dof keyword')
         
-        #defult N is number of data points in your data set. 
-        #This can be overridden by manually specifying N
+        #defult n is number of data points in your data set. 
+        #This can be overridden by manually specifying n
         
-        if self.kwargs.get('N')==None :
-            self.kwargs['N']=self.num_data_points()
-        assert self.kwargs.get('N')!=None        
+        if self.kwargs.get('n')==None :
+            self.kwargs['n']=self.num_data_points()
+        assert self.kwargs.get('n')!=None        
         
         if self.kwargs.get('mode') not in ['all','one','none']:
             raise Errors.InputError('{} is not a valid mode. mode should be either all or one'.format(self.kwargs.get('mode')))
@@ -833,22 +785,22 @@ class plot():
   
 
         if self.kwargs.get('mode')!='all':
-            if self.kwargs.get('plotParameter') not in self.list_parameters():
-                raise Errors.InputError('{} is not a valid Parameter. Your parameters are: {}'.format(self.kwargs.get('plotParameter'),self.list_parameters()))
+            if self.kwargs.get('plot_parameter') not in self.list_parameters():
+                raise Errors.InputError('{} is not a valid Parameter. Your parameters are: {}'.format(self.kwargs.get('plot_parameter'),self.list_parameters()))
 
             if isinstance(self.kwargs.get('index'),int):
-                if self.kwargs.get('plotindex') != self.kwargs.get('index'):
-                    raise Errors.InputError('{} is not an index in your Indices: {}'.format(self.kwargs.get('plotindex'),self.kwargs.get('index')))
+                if self.kwargs.get('plot_index') != self.kwargs.get('index'):
+                    raise Errors.InputError('{} is not an index in your Indices: {}'.format(self.kwargs.get('plot_index'),self.kwargs.get('index')))
             
             elif isinstance(self.kwargs.get('index'),list):
-                if self.kwargs.get('plotindex') not in self.kwargs.get('index'):
-                    raise Errors.InputError('{} is not an index in your Indices: {}'.format(self.kwargs.get('plotindex'),self.kwargs.get('index')))
+                if self.kwargs.get('plot_index') not in self.kwargs.get('index'):
+                    raise Errors.InputError('{} is not an index in your Indices: {}'.format(self.kwargs.get('plot_index'),self.kwargs.get('index')))
 
 
         if self.kwargs.get('mode')=='all':
             self.plot_all()
         elif self.kwargs.get('mode')=='one':
-            self.plot1(self.kwargs.get('plotindex'),self.kwargs.get('plotParameter'))
+            self.plot1(self.kwargs.get('plot_index'),self.kwargs.get('plot_parameter'))
             
         
         self.plot_chi2_CI()
@@ -861,8 +813,14 @@ class plot():
         Find the ProfleLikelihood directory within the same directory as copasi_file
         '''
         d=os.path.dirname(self.copasi_file)
-        path= os.path.join(d,'ProfileLikelihood')
-        assert os.path.isdir(path),'The current directory: {} \t does not contain a directory called ProfileLikelihood, have you used the ProfileLikelihood class with the run option enabled?'.format(d)
+        if self.kwargs['results_directory']==None:
+            path= os.path.join(d,'ProfileLikelihood')
+        if self.kwargs['results_directory']!=None:
+            if os.path.abspath(self.kwargs['results_directory'])==False:
+                path = os.path.join(os.path.dirname(self.copasi_file),self.kwargs['results_directory'])
+            else:
+                path = self.kwargs['results_directory']
+            assert os.path.isdir(path),'The current directory: {} \t does not contain a directory called ProfileLikelihood, have you used the ProfileLikelihood class with the run option enabled?'.format(d)
         return path
         
     def get_index_dirs(self):
@@ -899,7 +857,7 @@ class plot():
         for i in self.copasiML.xpath(query):
             f=os.path.abspath(i.attrib['value'])
             if os.path.isfile(f)!=True:
-                raise Errors.InputError('Experimental files in use cannot be automatically determined. Please give a list of experiment file paths to the ExperimentFiles keyword'.format())
+                raise Errors.InputError('Experimental files in use cannot be automatically determined. Please give a list of experiment file paths to the experiment_files keyword'.format())
             l.append(os.path.abspath(i.attrib['value']))
         
         return l
@@ -919,14 +877,14 @@ class plot():
     def parse_results(self):
         df_dict={}
 
-        experiment_keys= [os.path.splitext(i)[0] for i in self.kwargs['ExperimentFiles']]
+        experiment_keys= [os.path.splitext(i)[0] for i in self.kwargs['experiment_files']]
         for i in self.result_paths:
             df_dict[i]={}
             for j in self.result_paths[i]:
                 if j not in experiment_keys:
                     data= pandas.read_csv(self.result_paths[i][j],sep='\t')#self.kwargs['separator'])
                     best_value_str='TaskList[Parameter Estimation].(Problem)Parameter Estimation.Best Value'
-                    data=data.rename(columns={best_value_str:'RSS'})
+                    data=data.rename(columns={best_value_str:'rss'})
 #                    if self.kwargs['log10']==True:
 #                        df_dict[i][j]=numpy.log10(data)
 #                    else:
@@ -943,7 +901,7 @@ class plot():
         count= len( self.data[first_key].keys())
         return count
 #        except AttributeError:
-#            raise Errors.InputError('index set to -1 and therefore a parameter_path is not present to count data points. Specify an argument to N kwarg')
+#            raise Errors.InputError('index set to -1 and therefore a parameter_path is not present to count data points. Specify an argument to n kwarg')
         
         
     def degrees_of_freedom(self):
@@ -953,13 +911,13 @@ class plot():
 #        try:
         return self.num_estimated_params()-1
 #        except AttributeError:
-#            raise Errors.InputError('index set to -1 and therefore a parameter_path is not present to count number of parameter. Specify an argument to DOF kwarg')
+#            raise Errors.InputError('index set to -1 and therefore a parameter_path is not present to count number of parameter. Specify an argument to dof kwarg')
         
     def num_data_points(self):
         '''
         returns number of data points in your data files
         '''
-        experimental_data= [pandas.read_csv(i,sep=self.kwargs['separator']) for i in self.kwargs['ExperimentFiles']]
+        experimental_data= [pandas.read_csv(i,sep=self.kwargs['separator']) for i in self.kwargs['experiment_files']]
         l=[]        
         for i in experimental_data:
             l.append( i.shape[0]*(i.shape[1]-1))
@@ -969,22 +927,22 @@ class plot():
         return s
 
     def get_RSS(self):
-        RSS={}
+        rss={}
 
         if self.kwargs.get('index')==-1:
-            assert self.kwargs.get('RSS')!=None
-            RSS[-1]= self.kwargs.get('RSS')
-            return RSS
+            assert self.kwargs.get('rss')!=None
+            rss[-1]= self.kwargs.get('rss')
+            return rss
         else:
             PED= PEAnalysis.ParsePEData(self.kwargs.get('parameter_path'),
-                                        UsePickle=self.kwargs['UsePickle'],
+                                        use_pickle=self.kwargs['use_pickle'],
                                         overwrite_pickle=False)#self.kwargs['overwrite_pickle'])
             if isinstance(self.kwargs.get('index'),int):
-                RSS[self.kwargs.get('index')]=PED.data.iloc[self.kwargs.get('index')]['RSS']
+                rss[self.kwargs.get('index')]=PED.data.iloc[self.kwargs.get('index')]['rss']
             elif isinstance(self.kwargs.get('index'),list):
                 for i in self.kwargs.get('index'):
-                    RSS[i]=PED.data.iloc[i]['RSS']
-            return RSS
+                    rss[i]=PED.data.iloc[i]['rss']
+            return rss
         
     def chi2_lookup_table(self,alpha):
         '''
@@ -992,10 +950,10 @@ class plot():
         0.1 between 0 and 100. 
         
         Returns the x axis value at which the alpha interval has been crossed, 
-        i.e. gets the cut off point for chi2 dist with DOF and alpha . 
+        i.e. gets the cut off point for chi2 dist with dof and alpha . 
         '''
         nums= numpy.arange(0,100,0.1)
-        table=zip(nums,scipy.stats.chi2.cdf(nums,self.kwargs.get('DOF')) )
+        table=zip(nums,scipy.stats.chi2.cdf(nums,self.kwargs.get('dof')) )
         for i in table:
             if i[1]<=alpha:
                 chi2_df_alpha=i[0]
@@ -1003,23 +961,23 @@ class plot():
         
     def get_chi2_alpha(self):
         '''
-        return the chi2 threshold for cut off point alpha and DOF degrees of freedom
+        return the chi2 threshold for cut off point alpha and dof degrees of freedom
         '''
         dct={}
         alphas=numpy.arange(0,1,0.01)
         for i in alphas:
             dct[round(i,3)]=self.chi2_lookup_table(i)
-        return dct[self.kwargs.get('Alpha')]
+        return dct[self.kwargs.get('alpha')]
 
     def plot_chi2_CI(self):
         
         '''
         Visualize where the alpha cut off is on the chi2 distribution
         '''
-        x = numpy.linspace(scipy.stats.chi2.ppf(0.01, self.kwargs.get('DOF')),scipy.stats.chi2.ppf(0.99, self.kwargs.get('DOF')), 100)
+        x = numpy.linspace(scipy.stats.chi2.ppf(0.01, self.kwargs.get('dof')),scipy.stats.chi2.ppf(0.99, self.kwargs.get('dof')), 100)
         
         plt.figure()        
-        plt.plot(x, scipy.stats.chi2.pdf(x, self.kwargs.get('DOF')),'k-', lw=self.kwargs.get('line_width'), label='chi2 pdf')
+        plt.plot(x, scipy.stats.chi2.pdf(x, self.kwargs.get('dof')),'k-', lw=self.kwargs.get('line_width'), label='chi2 pdf')
         
         y_alpha=numpy.linspace(plt.ylim()[0],plt.ylim()[1])
         x_alpha=[self.get_chi2_alpha()]*len(y_alpha)
@@ -1027,7 +985,7 @@ class plot():
         plt.plot(x_alpha,y_alpha,'--',linewidth=self.kwargs.get('line_width'))
         plt.xlabel('x',fontsize=self.kwargs.get('Fontsize'))
         plt.ylabel('Probability',fontsize=self.kwargs.get('Fontsize'))
-        plt.title('Chi2 distribution with {} DOF'.format(self.kwargs.get('DOF')),fontsize=self.kwargs.get('Fontsize'))
+        plt.title('Chi2 distribution with {} dof'.format(self.kwargs.get('dof')),fontsize=self.kwargs.get('Fontsize'))
         
         
     def calc_chi2_CI(self):
@@ -1078,7 +1036,6 @@ class plot():
             that the CI line is calculated correctly
             that the red dot is in the correct place
         '''
-<<<<<<< HEAD
         matplotlib.pyplot.rcParams.update({'font.size':self.kwargs.get('AxisSize')})
         best_parameter_value=self.get_original_value(index,parameter)  
         LOG.debug('best parameter value is {}'.format(best_parameter_value))
@@ -1089,12 +1046,6 @@ class plot():
                 
                 
         if self.kwargs.get('MultiPlot')==True:
-=======
-        matplotlib.pyplot.rcParams.update({'font.size':self.kwargs.get('axis_size')})
-#        if parameter not in self.GMQ.get_all_model_variables().keys():
-#            raise Errors.InputError('{} is not in your model. These are parameters in your model: {}'.format(parameter,self.GMQ.get_all_model_variables().keys()))
-        if self.kwargs.get('multiplot')==True:
->>>>>>> b5251ac39e0e966dfceb851ff97bd2f79e887bd0
             plt.figure(parameter)
         else:
             plt.figure()
@@ -1104,19 +1055,15 @@ class plot():
         else:
             data= self.data[index][parameter]
         parameter_val,RSS_val=(data[data.keys()[0]],data[data.keys()[1]])
-        #plot parameter vs RSS once as green circles the other as lines
+        #plot parameter vs rss once as green circles the other as lines
         try:
-<<<<<<< HEAD
-            plt.plot(parameter_val,RSS_val,'bo',markersize=self.kwargs.get('DotSize'),label = best_parameter_value)
-=======
             plt.plot(parameter_val,RSS_val,'bo',markersize=self.kwargs.get('marker_size'))
->>>>>>> b5251ac39e0e966dfceb851ff97bd2f79e887bd0
         except ValueError as e:
             if e.message=='invalid literal for float(): 1.#INF':
                 return True
-            
+
         #now get your interpolation on...
-        f=interp1d(parameter_val,RSS_val,kind=self.kwargs.get('InterpolationKind'))
+        f=interp1d(parameter_val,RSS_val,kind=self.kwargs.get('interpolation_kind'))
         interp_parameter_value=numpy.linspace(min(parameter_val),
                                               max(parameter_val), 
                                               num=self.kwargs.get('InterpolationResolution')*len(parameter_val), endpoint=True)
@@ -1141,31 +1088,27 @@ class plot():
 
         if best_parameter_value!=None:         
             #best parameter value contains the model value for pparameter
-            #we now need to look this value up on the interpolation and read off the corresponding RSS value
+            #we now need to look this value up on the interpolation and read off the corresponding rss value
             #first find the parameter value in the interolation that is closest to the best param val
             pandas.set_option('precision',15)
-            interp_df= pandas.DataFrame([interp_parameter_value,interp_RSS_value],index=[parameter,'RSS']).transpose()
+            interp_df= pandas.DataFrame([interp_parameter_value,interp_RSS_value],index=[parameter,'rss']).transpose()
             best_parameter_value=numpy.round(float(best_parameter_value),15)
             abs_diff_df= abs(interp_df-best_parameter_value)
             minimum_index= abs_diff_df.idxmin()[parameter]
             best_parameter_value= interp_df.iloc[minimum_index][parameter]
-            best_RSS_value=interp_df.iloc[minimum_index]['RSS']
+            best_RSS_value=interp_df.iloc[minimum_index]['rss']
             plt.plot(best_parameter_value,best_RSS_value,'ro',markersize=self.kwargs.get('marker_size'))
         
         #plot labels
-<<<<<<< HEAD
         plt.title('\n'.join(wrap('{},OriginalParameterValue={}'.format(parameter,best_parameter_value),self.kwargs.get('TitleWrapSize'))),fontsize=self.kwargs.get('FontSize'))
-=======
-        plt.title('\n'.join(wrap('{}'.format(parameter),self.kwargs.get('title_wrap_size'))),fontsize=self.kwargs.get('font_size'))
->>>>>>> b5251ac39e0e966dfceb851ff97bd2f79e887bd0
-        
+
         
         if self.kwargs['log10']==True:
             plt.xlabel('Parameter Value (log10)',fontsize=self.kwargs.get('font_size'))  
-            plt.ylabel('RSS (log10)',fontsize=self.kwargs.get('font_size'))
+            plt.ylabel('rss (log10)',fontsize=self.kwargs.get('font_size'))
         else:
             plt.xlabel('Parameter Value',fontsize=self.kwargs.get('font_size'))         
-            plt.ylabel('RSS',fontsize=self.kwargs.get('font_size'))
+            plt.ylabel('rss',fontsize=self.kwargs.get('font_size'))
        #pretty stuff
 
         ax.spines['right'].set_color('none')
