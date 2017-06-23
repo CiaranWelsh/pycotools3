@@ -5009,7 +5009,7 @@ class InsertParameters():
         state_values = []
         count = 0
         for state in self.GMQ.get_state_template():
-            LOG.debug('assembling parameter {} out of {}'.format(count,len(self.GMQ.get_state_template())))
+            #LOG.debug('assembling parameter {} out of {}'.format(count,len(self.GMQ.get_state_template())))
             count+=1
             model = re.findall('(Model)_',state)
             metab = re.findall('Metabolite',state)
@@ -5033,7 +5033,7 @@ class InsertParameters():
                 comp_vol = self.GMQ.get_IC_cns()[metab_name]['compartment_volume']
                 
                 metab_val = self.GMQ.get_IC_cns()[metab_name]['value']
-                LOG.debug('Metab dict for {}, \n\n{}'.format(state,self.GMQ.get_IC_cns()[metab_name]))
+                #LOG.debug('Metab dict for {}, \n\n{}'.format(state,self.GMQ.get_IC_cns()[metab_name]))
                 
                 if metab_name in self.parameters:
                     metab_val =  self.GMQ.convert_molar_to_particles(float(self.parameters[metab_name]),
