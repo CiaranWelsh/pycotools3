@@ -81,18 +81,15 @@ class ProfileLikelihood():
             to -1 you must specificy a valid argument to the parameter_path
             keyword argument. Default is -1.
 
-        OutputML:
-            When save set to 'duplicate' this is the file name
-            of the output cps file. Default='overwrite'
 
         save:
-            One of, 'false','overwrite' or 'duplicate'
+            One of, False,'overwrite' or 'duplicate'
 
-        upper_boundMultiplier:
+        upper_bound_multiplier:
             Number of times above the current value of the parameter of interest
             to extend profile likleihood to. Default=1000
 
-        lower_boundMultiplier:
+        lower_bound_multiplier:
             Number of times below the current value of the parameter of interest
             to extend profile likleihood to. Default=1000
 
@@ -100,7 +97,7 @@ class ProfileLikelihood():
             How many times to sample between lower and upper boundaries. Default=10
 
         log10:
-            Sample in log10 space. Default='false'
+            Sample in log10 space. Default=False
 
         iteration_limit:
             Hook and Jeeves algorithm iteration limit parameter. Default=50
@@ -112,23 +109,13 @@ class ProfileLikelihood():
             Hook and Jeeves algorithm rho parameter. Default=0.2
 
         run:
-            Either ['false','slow','multiprocess','SGE']. 'multiprocess'
+            Either [False,'slow','multiprocess','SGE']. 'multiprocess'
             will use the number of processes specified in the NumProcesses
             keyword argument to work. This features doesn't work well yet and
             user is reccommended to use slow mode which runs each
             copasi file in serial. 'SGE' mode can be used specifically
-            on a SunGridEngine managed cluster. Deault='false'
+            on a SunGridEngine managed cluster. Deault=False
 
-        NumProcesses:
-            Deprecated: do not use
-            How many processors to use at the same time. NumProcesses=0 will
-            prevent running the estimations. Default 1
-
-        SleepTime:
-            Deprecated: Do not use.
-            How many seconds to wait before running each copasi file. If running
-            too many parameter estimations at the same time will slow your computer
-            considerably. In this situation use a longer SleepTime.
     """
     def __init__(self,copasi_file,**kwargs):
         self.copasi_file=copasi_file
@@ -139,38 +126,21 @@ class ProfileLikelihood():
 
         default_outputML=os.path.split(self.copasi_file)[1][:-4]+'_Duplicate.cps'
         options={#report variables
-                 'OutputML':default_outputML,
-<<<<<<< HEAD
-                 'Save':'overwrite',
-                 'Index':-1,
-                 'ParameterPath':None,
-                 'QuantityType':'concentration',
-                 'UpperBoundMultiplier':1000,
-                 'LowerBoundMultiplier':1000,
-                 'NumberOfSteps':10,
-                 'Log10':'true',
-                 'IterationLimit':50,
-                 'Tolerance':1e-5,
-                 'Rho':0.2,
-                 'Run':'false',
-=======
                  'save':'overwrite',
                  'index':-1,
                  'parameter_path':None,
                  'quantity_type':'concentration',
-                 'upper_boundMultiplier':1000,
-                 'lower_boundMultiplier':1000,
+                 'upper_bound_multiplier':1000,
+                 'lower_bound_multiplier':1000,
                  'number_of_steps':10,
-                 'log10':'true',
+                 'log10':True,
                  'iteration_limit':50,
                  'tolerance':1e-5,
                  'rho':0.2,
-                 'run':'false',
->>>>>>> b5251ac39e0e966dfceb851ff97bd2f79e887bd0
-                 'NumProcesses':1, #when runset to 'true' determines, how many NumProcesses to use at the same time
-                 'SleepTime':0, #How long to wait between running each copasi file
-                 'Verbose':'true',
-                 'max_time':None}
+                 'run':False,
+                 'Verbose':True,
+                 'max_time':None,
+                 'results_directory':None}
                  
 
         for i in kwargs.keys():
@@ -211,34 +181,21 @@ class ProfileLikelihood():
         if self.GMQ.get_fit_items()=={}:
             raise Errors.InputError('Your copasi file doesnt have a parameter estimation defined')
         #convert some numeric input variables to string
-        self.kwargs['upper_boundMultiplier']=str(self.kwargs['upper_boundMultiplier'])
-        self.kwargs['lower_boundMultiplier']=str(self.kwargs['lower_boundMultiplier'])
+        self.kwargs['upper_bound_multiplier']=str(self.kwargs['upper_bound_multiplier'])
+        self.kwargs['lower_bound_multiplier']=str(self.kwargs['lower_bound_multiplier'])
         self.kwargs['number_of_steps']=str(self.kwargs['number_of_steps'])
         self.kwargs['iteration_limit']=str(self.kwargs['iteration_limit'])
         self.kwargs['tolerance']=str(self.kwargs['tolerance'])
         self.kwargs['rho']=str(self.kwargs['rho'])
         
-        if self.kwargs.get('run') not in ['false','slow','multiprocess','SGE']:
+        if self.kwargs.get('run') not in [False,'slow','multiprocess','SGE']:
             raise Errors.InputError('\'run\' keyword must be one of \'slow\', \'false\',\'multiprocess\', or \'SGE\'')
-        assert isinstance(self.kwargs.get('NumProcesses'),int)
-        if self.kwargs.get('NumProcesses')!=0:
-            self.kwargs['NumProcesses']=self.kwargs.get('NumProcesses')-1
-        assert isinstance(self.kwargs.get('SleepTime'),int)
-        
-        
+
         assert self.kwargs.get('quantity_type') in ['concentration','particle_number']
 
         
-        if self.kwargs.get('NumProcesses')>multiprocessing.cpu_count():
-            raise Errors.Errors.InputError('You have selected {} processes but your computer only has {} available'.format(self.kwargs.get('NumProcesses'),multiprocessing.cpu_count()))
-        
-<<<<<<< HEAD
-        assert self.kwargs.get('Log10') in ['false','true']
-=======
-        assert self.kwargs.get('log10') in ['false','true']
->>>>>>> b5251ac39e0e966dfceb851ff97bd2f79e887bd0
+        assert self.kwargs.get('log10') in [False,True]
 
-        
         self.cps_dct=self.copy_copasi_files_and_insert_parameters()
         self.copy_data_files()
         self.cps_dct= self.setup_report()
@@ -248,8 +205,10 @@ class ProfileLikelihood():
         os.chdir(os.path.dirname(self.copasi_file))
         self.run()
 
-        
     def save(self):
+        self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
+        
+    def save_dep(self):
         if self.kwargs.get('save')=='duplicate':
             self.CParser.write_copasi_file(self.kwargs.get('OutputML'),self.copasiML)
         elif self.kwargs.get('save')=='overwrite':
@@ -293,8 +252,6 @@ class ProfileLikelihood():
                     os.remove(filename)
                 copyfile(self.copasi_file,filename)
             os.chdir(os.path.dirname(self.copasi_file))
-#            os.chdir('..')
-#            os.chdir('..')
             return cps_dct
             
         elif isinstance(self.kwargs.get('index'),int):
@@ -349,7 +306,12 @@ class ProfileLikelihood():
         Note that you must have your data files int the same directory as the 
         cps file you want to perform profile likeliood on. 
         '''
-        self.IA_dir=os.path.join(os.path.dirname(self.copasi_file),'ProfileLikelihood')
+        if self.kwargs['result_directory'] == None:
+            self.IA_dir=os.path.join(os.path.dirname(self.copasi_file),'ProfileLikelihoods')
+        if os.path.abspath(self.kwargs['results_directory'])!=True:
+            self.IA_dir = os.path.join(os.path.dirname(self.copasi_file),self.kwargs['results_directory'])
+        else:
+            self.IA_dir = self.kwargs['results_directory']
         q='//*[@name="File Name"]'
         data_file_dct={}
 #        print self.copasi_file
@@ -450,8 +412,8 @@ class ProfileLikelihood():
                         variable_value= GMQ_child.get_all_model_variables()[j]['value'] 
                 elif self.kwargs.get('quantity_type')=='particle_number':
                     variable_value= GMQ_child.get_all_model_variables()[j]['value']  
-                lb=float(variable_value)/float(self.kwargs.get('lower_boundMultiplier'))
-                ub=float(variable_value)*float(self.kwargs.get('upper_boundMultiplier'))
+                lb=float(variable_value)/float(self.kwargs.get('lower_bound_multiplier'))
+                ub=float(variable_value)*float(self.kwargs.get('upper_bound_multiplier'))
                 
                 pycopi.Scan(self.cps_dct[i][j],
 <<<<<<< HEAD
@@ -460,30 +422,30 @@ class ProfileLikelihood():
                                      ReportType='profilelikelihood',
                                      SubTask='parameter_estimation',
                                      ScanType='scan',
-                                     OutputInSubtask='false',
-                                     AdjustInitialConditions='false',
+                                     OutputInSubtask=False,
+                                     AdjustInitialConditions=False,
                                      NumberOfSteps=self.kwargs.get('NumberOfSteps'),
                                      Maximum=ub,
                                      Minimum=lb,
                                      Log=self.kwargs.get('Log10'),
-                                     Scheduled='true',
+                                     Scheduled=True,
                                      Save='overwrite',
-                                     ClearScans='true')
+                                     ClearScans=True)
 =======
                                      variable=j,
                                      report_name=Misc.RemoveNonAscii(j).filter+'.txt',
                                      report_type='profilelikelihood',
                                      subtask='parameter_estimation',
                                      scan_type='scan',
-                                     output_in_subtask='false',
-                                     adjust_initial_conditions='false',
+                                     output_in_subtask=False,
+                                     adjust_initial_conditions=False,
                                      number_of_steps=self.kwargs.get('number_of_steps'),
                                      maximum=ub,
                                      minimum=lb,
                                      log10=self.kwargs.get('log10'),
-                                     scheduled='true',
+                                     scheduled=True,
                                      save='overwrite',
-                                     clear_scans='true')
+                                     clear_scans=True)
 >>>>>>> b5251ac39e0e966dfceb851ff97bd2f79e887bd0
         return self.cps_dct
         
@@ -524,7 +486,7 @@ class ProfileLikelihood():
         return True
                 
     def run(self):
-        if self.kwargs.get('run')=='false':
+        if self.kwargs.get('run')==False:
             return False
         elif self.kwargs.get('run')=='multiprocess':
             self.multi_run()
@@ -598,7 +560,7 @@ class plot():
             Control graph axis font size
 
         extra_title:
-            When savefig='true', given the saved
+            When savefig=True, given the saved
             file an extra label in the file path
 
         line_width:
@@ -610,7 +572,7 @@ class plot():
         bins:
             Control number of bins in any histograms. Used???
 
-        Multiplot:
+        multiplot:
             plot results of sequential profile likelihoods for the same 
             parameter but with different index on the same graph. Results
             accumulate with index value, so desired graphs are in the
@@ -629,7 +591,7 @@ class plot():
             line before word wrap. Default=30. 
             
         show:
-            When not using iPython, use show='true' to display graphs
+            When not using iPython, use show=True to display graphs
             
         InterpolationResolution;
             Number of points to split line into for interpolation. Defualt=1000
@@ -667,15 +629,15 @@ class plot():
             Default='\t'
             
         log10:
-            'true' or 'false'. Default='true'. plot on log10-log10 scale
+            True or False. Default=True. plot on log10-log10 scale
             
         UsePickle:
             Data read by PEAnalysis.ParsePEData are automatically pickled
-            for speed. 'true' or 'false' to use pickle. Default='false'
+            for speed. True or False to use pickle. Default=False
         
         overwrite_pickle:
-            If data has changed set 'overwrite_pickle' to 'true' to rewrite 
-            pickle before 'UsePickle' can be useful again. Default='false'
+            If data has changed set 'overwrite_pickle' to True to rewrite 
+            pickle before 'UsePickle' can be useful again. Default=False
         
     '''
 
@@ -703,9 +665,9 @@ class plot():
                  'extra_title':None,
                  'line_width':3,
                  'bins':100,
-                 'show':'false',
-                 'Multiplot':'false',
-                 'savefig':'false',
+                 'show':False,
+                 'multiplot':False,
+                 'savefig':False,
                  'InterpolationKind':'slinear',
                  'InterpolationResolution':1000,
 <<<<<<< HEAD
@@ -719,7 +681,7 @@ class plot():
                  'PlotParameter':None,
                  'DotSize':10,
                  'Separator':'\t',
-                 'Log10':'true',
+                 'Log10':True,
 =======
                  'title_wrap_size':30,
                  'ylimit':None,
@@ -731,10 +693,10 @@ class plot():
                  'plotParameter':None,
                  'marker_size':4,
                  'separator':'\t',
-                 'log10':'false',
+                 'log10':False,
 >>>>>>> b5251ac39e0e966dfceb851ff97bd2f79e887bd0
-                 'UsePickle':'false',
-                 'overwrite_pickle':'false',
+                 'UsePickle':False,
+                 'overwrite_pickle':False,
                  }
                  
         for i in kwargs.keys():
@@ -749,14 +711,14 @@ class plot():
         if self.kwargs.get('NumProcesses')!=0:
             self.kwargs['NumProcesses']=self.kwargs.get('NumProcesses')-1
 
-        if self.kwargs.get('log10') not in ['true','false']:
+        if self.kwargs.get('log10') not in [True,False]:
             raise Errors.InputError('log10 argument should be \'true\' or \'false\' not {}'.format(self.kwargs.get('log10')))
 
-        if self.kwargs.get('UsePickle') not in ['true','false']:
+        if self.kwargs.get('UsePickle') not in [True,False]:
             raise Errors.InputError('UsePickle argument should be \'true\' or \'false\' not {}'.format(self.kwargs.get('log10')))
 
 
-        if self.kwargs.get('overwrite_pickle') not in ['true','false']:
+        if self.kwargs.get('overwrite_pickle') not in [True,False]:
             raise Errors.InputError('overwrite_pickle argument should be \'true\' or \'false\' not {}'.format(self.kwargs.get('log10')))
 
             
@@ -830,9 +792,9 @@ class plot():
         assert isinstance(self.kwargs.get('dpi'),int)
         assert isinstance(self.kwargs.get('xtick_rotation'),int)
     
-        assert self.kwargs.get('show') in ['false','true']
-        assert self.kwargs.get('savefig') in ['false','true']
-        assert self.kwargs.get('Multiplot') in ['false','true']
+        assert self.kwargs.get('show') in [False,True]
+        assert self.kwargs.get('savefig') in [False,True]
+        assert self.kwargs.get('multiplot') in [False,True]
         assert self.kwargs.get('quantity_type') in ['concentration','partical_numbers']
         
         if self.kwargs['ExperimentFiles']==None:
@@ -965,7 +927,7 @@ class plot():
                     data= pandas.read_csv(self.result_paths[i][j],sep='\t')#self.kwargs['separator'])
                     best_value_str='TaskList[Parameter Estimation].(Problem)Parameter Estimation.Best Value'
                     data=data.rename(columns={best_value_str:'RSS'})
-#                    if self.kwargs['log10']=='true':
+#                    if self.kwargs['log10']==True:
 #                        df_dict[i][j]=numpy.log10(data)
 #                    else:
                     df_dict[i][j]=data
@@ -1016,7 +978,7 @@ class plot():
         else:
             PED= PEAnalysis.ParsePEData(self.kwargs.get('parameter_path'),
                                         UsePickle=self.kwargs['UsePickle'],
-                                        overwrite_pickle='false')#self.kwargs['overwrite_pickle'])
+                                        overwrite_pickle=False)#self.kwargs['overwrite_pickle'])
             if isinstance(self.kwargs.get('index'),int):
                 RSS[self.kwargs.get('index')]=PED.data.iloc[self.kwargs.get('index')]['RSS']
             elif isinstance(self.kwargs.get('index'),list):
@@ -1122,22 +1084,22 @@ class plot():
         LOG.debug('best parameter value is {}'.format(best_parameter_value))
         
         if best_parameter_value != None:
-            if self.kwargs['Log10']=='true':
+            if self.kwargs['Log10']==True:
                 best_parameter_value = round(numpy.log10(float(best_parameter_value)),6)
                 
                 
-        if self.kwargs.get('MultiPlot')=='true':
+        if self.kwargs.get('MultiPlot')==True:
 =======
         matplotlib.pyplot.rcParams.update({'font.size':self.kwargs.get('axis_size')})
 #        if parameter not in self.GMQ.get_all_model_variables().keys():
 #            raise Errors.InputError('{} is not in your model. These are parameters in your model: {}'.format(parameter,self.GMQ.get_all_model_variables().keys()))
-        if self.kwargs.get('Multiplot')=='true':
+        if self.kwargs.get('multiplot')==True:
 >>>>>>> b5251ac39e0e966dfceb851ff97bd2f79e887bd0
             plt.figure(parameter)
         else:
             plt.figure()
         ax = plt.subplot(111)
-        if self.kwargs['log10']=='true':
+        if self.kwargs['log10']==True:
             data= numpy.log10(self.data[index][parameter])
         else:
             data= self.data[index][parameter]
@@ -1163,7 +1125,7 @@ class plot():
         plt.setp(handle,'color','black',linewidth=self.kwargs.get('line_width'))
         
         #plot the confidence interval 
-        if self.kwargs.get('log10')=='true':
+        if self.kwargs.get('log10')==True:
             CI= numpy.log10(self.calc_chi2_CI()[index])
         else:
             CI= self.calc_chi2_CI()[index]
@@ -1198,7 +1160,7 @@ class plot():
 >>>>>>> b5251ac39e0e966dfceb851ff97bd2f79e887bd0
         
         
-        if self.kwargs['log10']=='true':
+        if self.kwargs['log10']==True:
             plt.xlabel('Parameter Value (log10)',fontsize=self.kwargs.get('font_size'))  
             plt.ylabel('RSS (log10)',fontsize=self.kwargs.get('font_size'))
         else:
@@ -1234,11 +1196,11 @@ class plot():
                 plt.savefig(parameter+'.png',format='png',bbox_inches='tight',dpi=self.kwargs.get('dpi'))     
             return filename
 
-        if self.kwargs.get('show')=='true':
+        if self.kwargs.get('show')==True:
             plt.show()
             
         #save figure options
-        if self.kwargs.get('savefig')=='true':
+        if self.kwargs.get('savefig')==True:
             os.chdir(self.get_index_dirs_as_dict()[index])
             graph_dirs=save_plot()
             #change back to parent directory
