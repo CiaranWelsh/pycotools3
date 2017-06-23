@@ -1540,11 +1540,11 @@ class TimeCourse(object):
                 self.copasiML = self.set_deterministic()
                 LOG.debug('setting up deterministic time course')
             elif self.kwargs.get('simulation_type') == 'stochastic':
-                raise Errors.NotImplementedError('There is space in this class to write code to run a stochastic simulation but it is not yet written')
+                raise Errors.NotImplementedError('There is space in this class to write code to Run a stochastic simulation but it is not yet written')
 ##                
 #            # save to duplicate copasi file
             self.save()
-            R = run(self.copasi_file, Task='time_course')
+            R = Run(self.copasi_file, Task='time_course')
             LOG.debug('Time course ran')
             return R
 
@@ -2703,11 +2703,11 @@ class ParameterEstimation():
     def run(self):
         if self.kwargs.get('plot')==False:
             LOG.debug('running ParameterEstimation. Data reported to file: {}'.format(self.kwargs['report_name']))
-            self.copasiML=run(self.copasi_file,Task='parameter_estimation')
+            self.copasiML=Run(self.copasi_file,Task='parameter_estimation')
             return self.copasiML
         else:
-            ##run with 'mode' set to false just unchecks the executable boxes.
-            self.copasiML=run(self.copasi_file,Task='parameter_estimation',mode=False)
+            ##Run with 'mode' set to false just unchecks the executable boxes.
+            self.copasiML=Run(self.copasi_file,Task='parameter_estimation',mode=False)
             ## Now run with check_call
             subprocess.check_call('CopasiSE "{}"'.format(self.copasi_file),shell=True)
             self.plot()
@@ -3507,17 +3507,17 @@ class Scan():
         return self.copasiML
         
     def run(self):
-        R=run(self.copasi_file,Task='scan',mode=self.kwargs.get('run'))
-        
-        if self.kwargs.get('run')==False:
-            return None
-        elif self.kwargs.get('run')==True:
-            return R
-        elif self.kwargs.get('run')=='SGE':
-            return R
+        R=Run(self.copasi_file,Task='scan',mode=self.kwargs.get('run'))
+        #
+        # if self.kwargs.get('run')==False:
+        #     return None
+        # elif self.kwargs.get('run')==True:
+        #     return R
+        # elif self.kwargs.get('run')=='SGE':
+        #     return R
 #==============================================================================            
             
-class run():
+class Run():
     '''
     run a copasi file using CopasiSE. run will deactivate all tasks from 
     being executable via CopasiSE then activate the task you want to run, 
@@ -3528,7 +3528,7 @@ class run():
     
     **kwargs:
     
-        Task:
+        task:
             Any valid copasi task. Default=time_course. Options are 
             ['steady_state','time_course','scan','fluxmode','optimization',
             'parameter_estimation','metaboliccontrolanalysis','lyapunovexponents',
@@ -3553,7 +3553,7 @@ class run():
         self.GMQ=GetModelQuantities(self.copasi_file)
         self.SGE_job_file=os.path.splitext(self.copasi_file)[0]+'.sh'
 
-        options={'Task':'time_course',
+        options={'task':'time_course',
                  'save':'overwrite',
                  'mode':True,
                  'max_time':None}
@@ -3576,20 +3576,20 @@ class run():
 
 
 
-        if  self.kwargs.get('Task') not in tasks:
-            raise Errors.InputError('{} is not a valid task. Choose from {}'.format(self.kwargs.get('Task'),tasks))
+        if  self.kwargs.get('task') not in tasks:
+            raise Errors.InputError('{} is not a valid task. Choose from {}'.format(self.kwargs.get('task'),tasks))
         if self.kwargs.get('max_time')!=None:
             if isinstance(self.kwargs.get('max_time'),(float,int))!=True:
                 raise TypeError('max_time argument must be float or int')
 
-        if self.kwargs.get('Task')=='time_course':
-            self.kwargs['Task']='timecourse'
+        if self.kwargs.get('task')=='time_course':
+            self.kwargs['task']='timecourse'
 
-        elif self.kwargs.get('Task')=='parameter_estimation':
-            self.kwargs['Task']='parameterfitting'
+        elif self.kwargs.get('task')=='parameter_estimation':
+            self.kwargs['task']='parameterfitting'
 
-        elif self.kwargs.get('Task')=='steady_state':
-            self.kwargs['Task']='steadystate'
+        elif self.kwargs.get('task')=='steady_state':
+            self.kwargs['task']='steadystate'
 
         if os.path.isfile(self.copasi_file)!=True:
             raise Errors.FileDoesNotExistError('{} is not a file'.format(self.copasi_file))
@@ -3622,7 +3622,7 @@ class run():
     def set_task(self):
         for i in self.copasiML.find('{http://www.copasi.org/static/schema}ListOfTasks'):
             i.attrib['scheduled']=False #set all to false
-            if self.kwargs.get('Task')== i.attrib['type'].lower():
+            if self.kwargs.get('task')== i.attrib['type'].lower():
                 i.attrib['scheduled']=True
 
         return self.copasiML
@@ -3739,7 +3739,6 @@ class InsertParameters16():
                  'global_quantities':self.GMQ.get_global_quantities().keys(),
                  'quantity_type':'concentration',
                  'report_name':default_report_name,
-                 'OutputML':default_outputML,
                  'save':'overwrite',
                  'index':0,
                  'parameter_dict':None,
@@ -4051,7 +4050,7 @@ class PruneCopasiHeaders():
         elif self.from_df:
             return df
         
-class runMultiplePEs():
+class RunMultiplePEs():
     '''
     
     '''
@@ -4194,9 +4193,9 @@ class runMultiplePEs():
         for i in self.sub_copasi_files:
             LOG.info('running model: {}'.format(i))
             if self.kwargs['run']=='multiprocess':
-                run(self.sub_copasi_files[i],mode='multiprocess',Task='scan')
+                Run(self.sub_copasi_files[i],mode='multiprocess',task='scan')
             elif self.kwargs['run']=='SGE':
-                run(self.sub_copasi_files[i],mode='SGE',Task='scan')
+                Run(self.sub_copasi_files[i],mode='SGE',task='scan')
                     
                 
             
@@ -4458,7 +4457,6 @@ class MultimodelFit():
                  'calculate_statistics':False,
                  'use_config_start_values':False,
                  #method options
-                 'method':'GeneticAlgorithm',
                  #'DifferentialEvolution',
                  'number_of_generations':200,
                  'population_size':50,
@@ -4522,10 +4520,10 @@ class MultimodelFit():
 #            LOG.debug('config_filename is {}'.format(self.kwargs['config_filename']))
 #            self.kwargs['config_filename']=os.path.join(cps_dir,self.kwargs['config_filename'])
 #            LOG.debug('config filename after modification is: {}'.format(self.kwargs['config_filename']))
-            dct[self.sub_cps_dirs[cps_dir]]=runMultiplePEs(self.sub_cps_dirs[cps_dir],
+            dct[self.sub_cps_dirs[cps_dir]]=RunMultiplePEs(self.sub_cps_dirs[cps_dir],
                                                            self.exp_files,**self.kwargs)
             
-        LOG.debug('Each instance of runMultiplePEs is being held in a dct:\n{}'.format(dct))
+        LOG.debug('Each instance of RunMultiplePEs is being held in a dct:\n{}'.format(dct))
         return dct
 
     def get_output_directories(self):
@@ -4685,9 +4683,6 @@ class InsertParameters():
         report_name;
             Unused. Delete?
             
-        OutputML:
-            If save set to 'duplicate', this is the duplicate filename
-            
         save:
             either False,'overwrite' or 'duplicate',default=overwrite
                 
@@ -4721,13 +4716,11 @@ class InsertParameters():
         self.GMQ=GetModelQuantities(self.copasi_file)
 
         default_report_name=os.path.split(self.copasi_file)[1][:-4]+'_PE_results.txt'
-        default_outputML=os.path.split(self.copasi_file)[1][:-4]+'_Duplicate.cps'
         options={#report variables
                  'metabolites':self.GMQ.get_metabolites().keys(),
                  'global_quantities':self.GMQ.get_global_quantities().keys(),
                  'quantity_type':'concentration',
                  'report_name':default_report_name,
-                 'OutputML':default_outputML,
                  'save':'overwrite',
                  'index':0,
                  'parameter_dict':None,
@@ -4765,17 +4758,9 @@ class InsertParameters():
         if self.kwargs.get('parameter_path')!=None:
             num+=1
         if num!=1:
-<<<<<<< HEAD
             raise Errors.InputError('You need to supply exactly one of parameter_dict,parameter_path or df keyord argument. You cannot give two or three.')
         
-#        self.check_parameter_consistancy()
-        self.parameters=self.get_parameters()   
-=======
-            raise Errors.InputError('You need to supply exactly one of ParameterDict,ParameterPath or df keyord argument. You cannot give two or three.')
-
-
         self.parameters=self.get_parameters()
->>>>>>> 429c10cf87dc359d74434f80ea107ba8d837c4c9
         self.parameters= self.replace_gl_and_lt()
         self.insert_all()
         #change
@@ -4792,23 +4777,14 @@ class InsertParameters():
         '''
         model_parameter_names= set(self.GMQ.get_all_model_variables().keys())
         input_parameter_names= set(list(df.keys()))
-<<<<<<< HEAD
         LOG.info('Model parameter names: {}'.format(model_parameter_names))
         LOG.info('\n\n')
         LOG.info('Input parameter names: {}'.format(input_parameter_names))
-#        intersection=list( model_parameter_names.intersection(input_parameter_names))
-#        LOG.debug('intersection of model and input parameters: {}'.format(intersection))
-#        if intersection==[]:
-#            LOG.debug('InputError raised. No intersection between model parameter names and input parameter names: \n\nmodel parameters:\n{}\n input parameters:\n\n{}'.format(model_parameter_names,input_parameter_names))
-#            raise Errors.InputError('''The parameters in your parameter estimation data are not in your model.\
-#Please check the headers of your PE data are consistent with your model parameter names.''' )            
-=======
         intersection=list( model_parameter_names.intersection(input_parameter_names))
         if intersection==[]:
             raise Errors.ParameterInputError('''The parameters in your parameter estimation data are not in your model.\
 Please check the headers of your PE data are consistent with your model parameter names.''' )            
->>>>>>> b5251ac39e0e966dfceb851ff97bd2f79e887bd0
-            
+
     def get_parameters(self):
         '''
         Get parameters depending on the type of input. 
@@ -4832,15 +4808,10 @@ Please check the headers of your PE data are consistent with your model paramete
                 return PED.data.iloc[self.kwargs.get('index')]
         if self.kwargs.get('df') is not None:
             df= pandas.DataFrame(self.kwargs.get('df').iloc[self.kwargs.get('index')]).transpose()
-        try:
             self.check_parameter_consistancy(df)
-        except Errors.ParameterInputError:
-            try:
-                df=PruneCopasiHeaders(df).prune()
-                self.check_parameter_consistancy(df)
-            except Errors.ParameterInputError:
-                LOG.warning('No intersection between input and model parameters. Switching to InsertParameters16 class to see if it works')
-                InsertParameters16(self.copasi_file, **self.kwargs)
+        # except Errors.ParameterInputError:
+        #     df=PruneCopasiHeaders(df).prune()
+        #     self.check_parameter_consistancy(df)
         return df
 
     def insert_locals(self):
@@ -4890,9 +4861,9 @@ Please check the headers of your PE data are consistent with your model paramete
         for state in self.GMQ.get_state_template():
             #LOG.debug('assembling parameter {} out of {}'.format(count,len(self.GMQ.get_state_template())))
             count+=1
-            model = re.findall('(model)_',state)
+            model = re.findall('(Model)_',state)
             metab = re.findall('Metabolite',state)
-            mod_value = re.findall('modelValue',state)
+            mod_value = re.findall('ModelValue',state)
             compartment = re.findall('Compartment',state)
             if model !=[]:
                 LOG.debug('State {} is model'.format(state))
@@ -5061,102 +5032,6 @@ if __name__=='__main__':
     pass
     
 
-#    f=r'C:\Users\Ciaran\Documents\CopasiVer19KholodenkoTests\M1.cps'
-#
-#    dire = os.path.dirname(f)
-#
-#    report = os.path.join(dire, 'timecourse_report.txt')
-#    
-#    PE=ParameterEstimation(f,report)
-##    PE.write_item_template()
-##    PE.set_up()
-##    PE.run()
-#
-#    I=InsertParameters(f,parameter_path = PE.kwargs['report_name'])    
-#    print I.insert_locals()
-##    print os.system('CopasiUI {}'.format(f))
-#
-#    '''
-#    First get look up type structure for model, metabolites compartments 
-#    and model values (the objectReferences)
-#    
-#    Then extract order and replace the existing string under the initial state tag
-#    
-#    Hopefully this would work. 
-    '''
-
-
-
-=======
-
-    f=r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps'
-
-    dire = os.path.dirname(f)
-    report = os.path.join(dire, 'timecourse_report.txt')
-    # TimeCourse(f, intervals=10, step_size=100,
-    #            end=1000, report_name=report,
-    #            # plot=True,savefig=True)
-    PE=runMultiplePEs(f,report,
-                      copy_number=5,
-                      pe_number=3)
-    PE.write_config_template()
-    PE.set_up()
-    PE.run()
-
-
-    # S=Scan(f,scan_type='repeat',number_of_steps=10,
-    #        report_type='parameter_estimation',
-    #        subtask='parameter_estimation',run = True)
-    # os.system('CopasiUI {}'.format(f))
-#    os.system('CopasiSE {}'.format(f))
-
-##    EM=ExperimentMapper(f,report)
-#    PE = ParameterEstimation(f,report)
-#    PE.write_config_template()
-#    PE.set_up()
-#    PE.run()
-
-#     d={'A':5,'B':10,'one':15,'(second).k1':20,'another':25,'new_com':1000}
-#
-#     d={'A':100,'B':1000,'C':10000,'D':100000,'new_com':100}
-#
-#     I=InsertParameters(f,parameter_dict=d)
-#     print I.parameters.transpose()
-#
-# #    print '\n\n\n'
-
-
-# #    os.system('CopasiUI {}'.format(f))
-# #    print I.insert_initial_state()
-# #    print os.system('CopasiUI {}'.format(f))
-#
-#     '''
-#     First get look up type structure for model, metabolites compartments
-#     and model values (the objectReferences)
-#
-#     Then extract order and replace the existing string under the initial state tag
-#
-#     Hopefully this would work.
-#     '''
-#     GMQ=GetModelQuantities(f)
-#
-#     # print GMQ.convert_molar_to_particles(1,'mmol',0.5)
-#
-#
-# #    print GMQ.get_all_model_variables().keys()
-#
-#     '''
-#     copasi answer
-#     mmol per liter: 1 -> 6.022140857e+20
-#
-#     '''
-#
-#
-#
-#
-#
-#
-#
 
 
 
