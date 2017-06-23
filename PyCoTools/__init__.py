@@ -1,6 +1,6 @@
 import PEAnalysis
 import pycopi
-import pydentify2
+import pydentify
 import Errors
 import os
 

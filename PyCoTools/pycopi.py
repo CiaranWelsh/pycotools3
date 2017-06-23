@@ -390,7 +390,7 @@ class GetModelQuantities():
         for i in self.copasiML.xpath(query):
             for j in  list(i):
                 for k in list(j):
-                    if k.attrib['simulation_type']=='fixed':
+                    if k.attrib['simulationType']=='fixed':
                         match= re.findall('.*\[(.*)\].*Parameter=(.*)',k.attrib['cn'])
                         if match==[]:
                             return False
@@ -431,7 +431,7 @@ class GetModelQuantities():
         d={}
         for i in self.copasiML.xpath(query):
             for j in list(i):
-                match= re.findall('metabolites\[(.*)\]', j.attrib['cn'])[0]
+                match= re.findall('Metabolites\[(.*)\]', j.attrib['cn'])[0]
                 assert isinstance(match.encode('utf8'),str),'{} is not a string but a {}'.format(match,type(match))
                 assert match !=None
                 assert match !=[]  
@@ -474,7 +474,7 @@ class GetModelQuantities():
         for i in self.copasiML.xpath(query):
             for j in list(i):
                 for k in list(j):
-                    if k.attrib['simulation_type']=='fixed':
+                    if k.attrib['simulationType']=='fixed':
                         match=re.findall('Reactions\[(.*)\].*Parameter=(.*)',k.attrib['cn'])[0]
                         assert isinstance(match,tuple),'get species regex hasn\'t been found. Do you have species in your model?'
                         assert match !=None
@@ -494,7 +494,7 @@ class GetModelQuantities():
         for i in self.copasiML.xpath(query):
             for j in list(i):
                 for k in list(j):
-                    if k.attrib['simulation_type']=='assignment':
+                    if k.attrib['simulationType']=='assignment':
                         match=re.findall('Reactions\[(.*)\].*Parameter=(.*)',k.attrib['cn'])[0]
                         assert isinstance(match,tuple),'get species regex hasn\'t been found. Do you have species in your model?'
                         assert match !=None
@@ -523,7 +523,7 @@ class GetModelQuantities():
                     elif match=='InitialValue':
                         match2=re.findall('Values\[(.*)\]', j.attrib['value'])[0]
                     elif match=='InitialConcentration':
-                        match2=re.findall('metabolites\[(.*)\]',j.attrib['value'])[0]
+                        match2=re.findall('Metabolites\[(.*)\]',j.attrib['value'])[0]
                     d[match2]=j.attrib    
         return d
         
@@ -551,67 +551,7 @@ class GetModelQuantities():
             files.append(os.path.abspath(i.attrib['value']))
         return files
         
-    def get_all_params_dict_deprecated(self):
-        '''
-        returns dict[parameter_name]=parameter_value for all local, 
-        global and IC parameters in copasi_file
-        
-        Use get_all_model_variables
-        '''
-        var_dct={}
-        d=self.get_all_model_variables()
-        pattern='.*Values\[(.*)\]|.*Reactions\[(.*)\].*Parameter=(.*)|.*metabolites\[(.*)\]'
-        for i in d:
-            match= re.findall(pattern,d[i]['cn'])
-            l=[]
-            for j in match[0]:
-                if j!='':
-                    l.append(j)
-#            now format the local parameters
-            local=False
-            if len(l)==2:
-                local=True
-                local_param='({}).{}'.format(l[0],l[1])
-                
-            if local==True:
-                var_dct[local_param]=d[i]['value']
-            else:
-                var_dct[l[0]]=d[i]['value']
-        return var_dct
-        
-        
-    def get_all_params_dict_deprecated2(self):
-        '''
-        returns dict[parameter_name]=parameter_value for all local, 
-        global and IC parameters in copasi_file
-        
-        get_all_model_variables
-        
-        
-        '''
-        var_dct={}
-        d=self.get_all_model_variables()
-        pattern='.*Values\[(.*)\]|.*Reactions\[(.*)\].*Parameter=(.*)|.*metabolites\[(.*)\]'
-        for i in d:
-            match= re.findall(pattern,d[i]['cn'])
-            l=[]
-            for j in match[0]:
-                if j!='':
-                    l.append(j)
-#            now format the local parameters
-            local=False
-            if len(l)==2:
-                local=True
-                local_param='({}).{}'.format(l[0],l[1])
-                
-            if local==True:
-                var_dct[local_param]=d[i]['value']
-            else:
-                if self.quantity_type=='concentration':
-                    var_dct[l[0]]=d[i]['concentration']
-                else:
-                    var_dct[l[0]]=d[i]['value']
-        return var_dct
+
 
 #==============================================================================
 
@@ -2843,40 +2783,40 @@ class ParameterEstimation():
         etree.SubElement(new_element,'Parameter',attrib=subA6)
         
         #for IC parameters
-        if item['simulation_type']=='reactions' and item['type']=='Species':
+        if item['simulationType']=='reactions' and item['type']=='Species':
             #fill in the attributes
             if self.kwargs.get('quantity_type')=='concentration':
                 subA4={'type': 'cn', 'name': 'ObjectCN', 'value': str(item['cn'])+',Reference=InitialConcentration'}
             else:
                 subA4={'type': 'cn', 'name': 'ObjectCN', 'value': str(item['cn'])+',Reference=InitialParticleNumber'}
 
-        elif item['simulation_type']=='ode' and item['type']=='Species':
+        elif item['simulationType']=='ode' and item['type']=='Species':
             if self.kwargs.get('quantity_type')=='concentration':
                 subA4={'type': 'cn', 'name': 'ObjectCN', 'value': str(item['cn'])+',Reference=InitialConcentration'}
             else:
                 subA4={'type': 'cn', 'name': 'ObjectCN', 'value': str(item['cn'])+',Reference=InitialParticleNumber'}
 
-        elif item['simulation_type']=='ode' and item['type']=='modelValue':
+        elif item['simulationType']=='ode' and item['type']=='modelValue':
             if self.kwargs.get('quantity_type')=='concentration':
                 subA4={'type': 'cn', 'name': 'ObjectCN', 'value': str(item['cn'])+',Reference=InitialConcentration'}
             else:
                 subA4={'type': 'cn', 'name': 'ObjectCN', 'value': str(item['cn'])+',Reference=InitialParticleNumber'}
 
 
-        elif item['simulation_type']=='fixed' and item['type']=='ReactionParameter':
+        elif item['simulationType']=='fixed' and item['type']=='ReactionParameter':
             subA4={'type': 'cn', 'name': 'ObjectCN', 'value': str(item['cn'])+',Reference=Value'}
 
-        elif item['simulation_type']=='assignment' and item['type']=='ModelValue':
+        elif item['simulationType']=='assignment' and item['type']=='ModelValue':
 #            logger.info('{} is an assignment and can therefore not be estimated!'.format(list(item.index)))
             return self.copasiML
-        elif item['simulation_type']=='fixed' and item['type']=='ModelValue':
+        elif item['simulationType']=='fixed' and item['type']=='ModelValue':
             subA4={'type': 'cn', 'name': 'ObjectCN', 'value': str(item['cn'])+',Reference=InitialValue'}
 
 
-        elif item['simulation_type']=='assignment' and item['type']=='Species':
+        elif item['simulationType']=='assignment' and item['type']=='Species':
             return self.copasiML
  
-        elif item['simulation_type']=='fixed' and item['type']=='Species':
+        elif item['simulationType']=='fixed' and item['type']=='Species':
             return self.copasiML           
         else:
             raise Errors.InputError('{} is not a valid parameter for estimation'.format(list(item)))
@@ -3869,7 +3809,7 @@ Please check the headers of your PE data are consistent with your model paramete
         for i in glob:
             query='//*[@cn="{}"]'.format( self.GMQ.get_global_quantities_cns()[i]['cn'])
             for j in self.copasiML.xpath(query):
-                if i in self.parameters.keys() and j.attrib['simulation_type']!='assignment':
+                if i in self.parameters.keys() and j.attrib['simulationType']!='assignment':
                     j.attrib['value']=str(float(self.parameters[i]))
         return self.copasiML
 
@@ -3878,7 +3818,7 @@ Please check the headers of your PE data are consistent with your model paramete
         for i in IC:
             query='//*[@cn="{}"]'.format( self.GMQ.get_IC_cns()[i]['cn'])
             for j in self.copasiML.xpath(query):
-                if i in self.parameters.keys() and j.attrib['simulation_type']=='reactions':
+                if i in self.parameters.keys() and j.attrib['simulationType']=='reactions':
                     if self.kwargs.get('quantity_type')=='concentration':
                         particles=self.GMQ.convert_molar_to_particles(float(self.parameters[i]),self.GMQ.get_quantity_units(),float(IC[i]['compartment_volume']))#,self.GMQ.get_volume_unit())
 ##                        particles=self.parameters[i]
@@ -4929,7 +4869,7 @@ Please check the headers of your PE data are consistent with your model paramete
         for i in IC:
             query='//*[@cn="{}"]'.format( self.GMQ.get_IC_cns()[i]['cn'])
             for j in self.copasiML.xpath(query):
-                if i in self.parameters.keys() and j.attrib['simulation_type']=='reactions':
+                if i in self.parameters.keys() and j.attrib['simulationType']=='reactions':
                     if self.kwargs.get('quantity_type')=='concentration':
                         particles=self.GMQ.convert_molar_to_particles(float(self.parameters[i]),self.GMQ.get_quantity_units(),float(IC[i]['compartment_volume']))#,self.GMQ.get_volume_unit())
 ##                        particles=self.parameters[i]
@@ -4955,7 +4895,7 @@ Please check the headers of your PE data are consistent with your model paramete
         for i in glob:
             query='//*[@cn="{}"]'.format( self.GMQ.get_global_quantities_cns()[i]['cn'])
             for j in self.copasiML.xpath(query):
-                if i in self.parameters.keys() and j.attrib['simulation_type']!='assignment':
+                if i in self.parameters.keys() and j.attrib['Simulationtype']!='assignment':
                     j.attrib['value']=str(float(self.parameters[i]))
         return self.copasiML
 
