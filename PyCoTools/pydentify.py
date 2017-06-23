@@ -481,7 +481,7 @@ class ProfileLikelihood():
 #==============================================================================
             
 class Plot():
-    '''    
+    """
     After ProfileLikelihood class has been run, the plot class will plot the
     profile likelihoods for you. 
     
@@ -614,7 +614,7 @@ class Plot():
             If data has changed set 'overwrite_pickle' to True to rewrite 
             pickle before 'use_pickle' can be useful again. Default=False
         
-    '''
+    """
 
     def __init__(self,copasi_file,**kwargs):
         self.copasi_file=copasi_file
@@ -1036,7 +1036,7 @@ class Plot():
             that the CI line is calculated correctly
             that the red dot is in the correct place
         '''
-        matplotlib.pyplot.rcParams.update({'font.size':self.kwargs.get('AxisSize')})
+        matplotlib.pyplot.rcParams.update({'font.size':self.kwargs.get('axis_size')})
         best_parameter_value=self.get_original_value(index,parameter)  
         LOG.debug('best parameter value is {}'.format(best_parameter_value))
         
@@ -1045,7 +1045,7 @@ class Plot():
                 best_parameter_value = round(numpy.log10(float(best_parameter_value)),6)
                 
                 
-        if self.kwargs.get('MultiPlot')==True:
+        if self.kwargs.get('multiplot')==True:
             plt.figure(parameter)
         else:
             plt.figure()
