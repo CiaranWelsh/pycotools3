@@ -14,7 +14,7 @@
 
  You should have received a copy of the GNU Lesser General Public License
  along with PyCoTools.  If not, see <http://www.gnu.org/licenses/>.
-
+TimeC
 
  This file is intended to provide a COPASI user an alternative to 
  using the official python-copasi API. At present support is 
@@ -1643,12 +1643,12 @@ class TimeCourse(object):
             '''
             if self.kwargs.get('SimulationType') == 'deterministic':
                 self.copasiML = self.report_definition()
-                self.copasiML = self.set_report()
+#                self.copasiML = self.set_report()
                 self.copasiML = self.set_deterministic()
                 LOG.debug('setting up deterministic time course')
             elif self.kwargs.get('SimulationType') == 'stochastic':
                 raise Errors.NotImplementedError('There is space in this class to write code to run a stochastic simulation but it is not yet written')
-#                
+##                
 #            # save to duplicate copasi file
             self.save()
             R = Run(self.copasi_file, Task='time_course')
@@ -3159,6 +3159,8 @@ class ParameterEstimation():
                        'reference': self.get_report_key(),
                        'target': self.kwargs.get('ReportName'),
                        'confirmOverwrite': self.kwargs.get('ConfirmOverwrite')}
+        
+        LOG.debug('Report_dict : {}'.format(report_attrib))
 
         randomize_start_values={'type': 'bool', 
                                 'name': 'Randomize Start Values', 
@@ -3232,10 +3234,10 @@ class ParameterEstimation():
         return df
 
     def save(self):
-        if self.kwargs.get('Save')=='duplicate':
-            self.CParser.write_copasi_file(self.kwargs.get('OutputML'),self.copasiML)
-        elif self.kwargs.get('Save')=='overwrite':
-            self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
+        """
+        
+        """
+        self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
         return self.copasiML
             
     def set_up(self):
