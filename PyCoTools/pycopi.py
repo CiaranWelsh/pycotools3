@@ -108,8 +108,7 @@ class CopasiMLParser():
         LOG.debug('copasi file {} has been parsed into Python'.format(os.path.split(self.copasi_file)[1]))
         return tree
 
-    @staticmethod
-    def write_copasi_file(copasi_filename, copasiML):
+    def write_copasi_file(self,copasi_filename, copasiML):
         '''
         write to file with lxml write function
 
@@ -322,9 +321,9 @@ class GetModelQuantities():
         first= self.get_IC_cns().keys()[0]
         string= self.get_IC_cns()[first]['cn']
         string=self.check_ascii(string)
-        return re.findall('model=(.*),Vector=C',string)[0]
+        return re.findall('Model=(.*),Vector=C',string)[0]
         
-    def get_metabolites(self):
+    def get_metabolites_dep(self):
         '''
         Deprecated. Use get_ICs_cns() inst
         returns dict of metabolites in the 'species' menu
@@ -333,7 +332,7 @@ class GetModelQuantities():
         query='//*[@cn="String=Initial Species Values"]'
         for i in self.copasiML.xpath(query):
             for j in list(i):
-                match=re.findall('.*Vector=metabolites\[(.*)\]',j.attrib['cn'])
+                match=re.findall('.*Vector=Metabolites\[(.*)\]',j.attrib['cn'])
                                 
                 if match==[]:
                     return self.copasiML
@@ -412,7 +411,7 @@ class GetModelQuantities():
         
     def compartment_lookup(self,metab):
         '''
-        metab=a single metabolite dict from the get_metabolites method
+        metab=a single metabolite dict from the get_IC_cns method
         look metab up in the compartment definitions 
         and get the name corresponding to it's key
         '''
@@ -618,7 +617,7 @@ class Reports():
         
 #        default_report_name=os.path.split(self.copasi_file)[1][:-4]+'_PE_results.txt'
         options={#report variables
-                 'metabolites':self.GMQ.get_metabolites().keys(),
+                 'metabolites':self.GMQ.get_IC_cns().keys(),
                  'global_quantities':self.GMQ.get_global_quantities().keys(),
                  'local_parameters':self.GMQ.get_local_kinetic_parameters_cns(),
                  'quantity_type':'concentration',
@@ -630,7 +629,7 @@ class Reports():
                  'save':'overwrite',
                  'update_model':False,
                  'report_type':'parameter_estimation',
-                 'variable':self.GMQ.get_metabolites().keys()[0], #only for profile_likelihood
+                 'variable':self.GMQ.get_IC_cns().keys()[0], #only for profile_likelihood
         
                  }
                      
@@ -639,6 +638,7 @@ class Reports():
             assert i in options.keys(),'{} is not a keyword argument for Reports'.format(i)
         options.update( kwargs) 
         self.kwargs=options
+        self.kwargs = Bool2Str(self.kwargs).convert_dct()
         
         if isinstance(self.kwargs.get('metabolites'),str):
             self.kwargs['metabolites']=[self.kwargs.get('metabolites')]
@@ -943,6 +943,7 @@ class ParsePEDataDeprecated():
                  'overwrite_pickle':False}   
         options.update(kwargs)
         self.kwargs= options
+        self.kwargs = Bool2Str(self.kwargs).convert_dct()
         
         assert os.path.exists(self.results_path),'{} does not exist'.format(self.results_path)
         if os.path.isdir(self.results_path):
@@ -1054,6 +1055,46 @@ class ParsePEDataDeprecated():
             else:
                 data=self.read_pickle()
         return data
+    
+class Bool2Str():
+    """
+    copasiML expects strings and we pythoners want to use python booleans not strings
+    This class quickly converts between them
+    """
+    def __init__(self,dct):
+        self.dct = dct
+        if isinstance(self.dct,dict)!=True:
+            raise Errors.InputError('Input must be dict')
+        
+        self.acceptable_kwargs = ['append','confirm_overwrite','update_model',
+                                  'output_in_subtask','adjust_initial_conditions',
+                                  'log10','randomize_start_values','create_parameter_sets',
+                                  'calculate_statistics','scheduled','output_event']
+    
+    def convert(self,boolean):
+        if boolean == True:
+            return "true"
+        elif boolean == False:
+            return "false"
+        else:
+            raise Errors.InputError('Input should be boolean not {}'.format(isinstance(boolean)))
+            
+    def convert_dct(self):
+        """
+        
+        ----
+        return 
+        """
+        for kwarg in self.dct.keys():
+            if kwarg in self.acceptable_kwargs:
+                if self.dct[kwarg]==True:
+                    self.dct.update({kwarg:"true"})
+                else:
+                    self.dct.update({kwarg:"false"})
+#                
+        return self.dct
+            
+    
 
 class TimeCourse(object):
         '''
@@ -1173,10 +1214,9 @@ class TimeCourse(object):
             self.copasi_file = copasi_file
             self.CParser = CopasiMLParser(self.copasi_file)
             self.copasiML = self.CParser.copasiML
+            LOG.debug('CopasiML: {}'.format(self.copasiML))
             self.GMQ = GetModelQuantities(self.copasi_file)
             default_report_name = os.path.split(self.copasi_file)[1][:-4] + '_TimeCourse.txt'
-            default_outputML = os.path.join(os.path.dirname(self.copasi_file), '_Duplicate.cps')
-
             options = {'intervals': '100',
                        'step_size': '0.01',
                        'end': '1',
@@ -1186,7 +1226,7 @@ class TimeCourse(object):
                        'start': '0.0',
                        'update_model': False,
                        # report variables
-                       'metabolites': self.GMQ.get_metabolites().keys(),
+                       'metabolites': self.GMQ.get_IC_cns().keys(),
                        'global_quantities': self.GMQ.get_global_quantities().keys(),
                        'quantity_type': 'concentration',
                        'report_name': default_report_name,
@@ -1223,7 +1263,9 @@ class TimeCourse(object):
                 #            kwargs[i]=str(kwargs[i]).lower()
                 #            assert isinstance(kwargs[i],str),'all optional arguments passed shold be lower case strings'
             options.update(kwargs)
+            
             self.kwargs = options
+            self.kwargs = Bool2Str(self.kwargs).convert_dct()
 
             '''
             if the below three kwargs are a single entry they can be a string. 
@@ -1248,7 +1290,7 @@ class TimeCourse(object):
                 assert isinstance(self.kwargs.get('metabolites'),
                                   list), 'Keyword argument metabolites should be a Python list'
                 for i in self.kwargs.get('metabolites'):
-                    assert i in self.GMQ.get_metabolites().keys(), '{} is not a Metabolite in this model. These are metabolites in this model: {}'.format(
+                    assert i in self.GMQ.get_IC_cns().keys(), '{} is not a Metabolite in this model. These are metabolites in this model: {}'.format(
                         i, self.GMQ.get_IC_cns().keys())
 
             if self.kwargs.get('global_quantities') != None:
@@ -1268,22 +1310,22 @@ class TimeCourse(object):
 
             # report arguments
 
-            if self.kwargs.get('prune_headers') not in [True, False]:
+            if self.kwargs.get('prune_headers') not in [True, False,'true','false']:
                 raise Errors.InputError('prune_headers kwarg must be either \'true\' or \'false\'')
 
-            if self.kwargs.get('append') not in [True, False]:
+            if self.kwargs.get('append') not in [True, False,'true','false']:
                 raise Errors.InputError('append kwarg must be either \'true\' or \'false\'')
 
-            if self.kwargs.get('confirm_overwrite') not in [True, False]:
+            if self.kwargs.get('confirm_overwrite') not in [True, False,'true','false']:
                 raise Errors.InputError('confirm_overwrite kwarg must be either \'true\' or \'false\'')
 
-            if self.kwargs.get('output_event') not in [True, False]:
+            if self.kwargs.get('output_event') not in [True, False,'true','false']:
                 raise Errors.InputError('OutputEvent kwarg must be either \'true\' or \'false\'')
 
-            if self.kwargs.get('scheduled') not in [True, False]:
+            if self.kwargs.get('scheduled') not in [True, False,'true','false']:
                 raise Errors.InputError('scheduled kwarg must be either \'true\' or \'false\'')
 
-            if self.kwargs.get('plot') not in [True, False]:
+            if self.kwargs.get('plot') not in [True, False,'true','false']:
                 raise Errors.InputError('plot kwarg must be either \'true\' or \'false\'')
 
             self.kwargs['line_width'] = int(self.kwargs.get('line_width'))
@@ -1365,13 +1407,23 @@ class TimeCourse(object):
             All methods required for time course are 
             called with run
             '''
+            
+            self.save()
             self.run()
-            self.data = self.read_sim_data()
+            
             if self.kwargs.get('plot') == True:
+                self.data = self.read_sim_data()
                 self.plot()
+
+        def _do_checks(self):
+            """
+            
+            """
+            
 
         def save(self):
             self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
+            return self.copasiML
 
         def save_dep(self):
             if self.kwargs.get('save') == 'duplicate':
@@ -1428,7 +1480,7 @@ class TimeCourse(object):
             return self.copasiML
 
         def report_definition(self):
-            self.copasiML = Reports(self.copasi_file, **self.report_options).copasiML
+            Reports(self.copasi_file, **self.report_options).copasiML
             return self.copasiML
 
         def get_report_key(self):
@@ -1476,7 +1528,7 @@ class TimeCourse(object):
             '''
             if self.kwargs.get('simulation_type') == 'deterministic':
                 self.copasiML = self.report_definition()
-#                self.copasiML = self.set_report()
+                self.copasiML = self.set_report()
                 self.copasiML = self.set_deterministic()
                 LOG.debug('setting up deterministic time course')
             elif self.kwargs.get('simulation_type') == 'stochastic':
@@ -1484,7 +1536,7 @@ class TimeCourse(object):
 ##                
 #            # save to duplicate copasi file
             self.save()
-            R = Run(self.copasi_file, Task='time_course')
+            R = Run(self.copasi_file, task='time_course')
             LOG.debug('Time course ran')
             return R
 
@@ -1646,6 +1698,7 @@ class ExperimentMapper():
             assert i in options.keys(),'{} is not a keyword argument for TimeCourse'.format(i)
         options.update( kwargs) 
         self.kwargs=options
+        self.kwargs = Bool2Str(self.kwargs).convert_dct()
 
         #assign numberic values to weight_method   
         for i in range(len(self.kwargs.get('weight_method'))):
@@ -1980,6 +2033,7 @@ class ExperimentMapper():
 
     def save(self):
         self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
+        return self.copasiML
 
     def save_deg(self):
         if self.kwargs.get('save')=='duplicate':
@@ -2030,7 +2084,7 @@ class PhaseSpace(TimeCourse):
         '''
         Isolate the species from the time course data 
         '''
-        metabs= self.GMQ.get_metabolites().keys()
+        metabs= self.GMQ.get_IC_cns().keys()
         for i in metabs:
             if i not in self.data.keys():
                 raise Errors.IncompatibleStringError(' {} is an incompatible string that is not supported by PyCoTools. Please modify the string and rerun')
@@ -2350,13 +2404,12 @@ class ParameterEstimation():
         config_file= os.path.join(os.path.dirname(self.copasi_file),'PEConfigFile.xlsx')
         default_outputML=os.path.join(os.path.dirname(self.copasi_file),'_Duplicate.cps')
         options={#report variables
-                 'metabolites':self.GMQ.get_metabolites().keys(),
+                 'metabolites':self.GMQ.get_IC_cns().keys(),
                  'global_quantities':self.GMQ.get_global_quantities().keys(),
                  'local_parameters': self.GMQ.get_local_kinetic_parameters_cns().keys(),
                  'quantity_type':'concentration',
                  'report_name':default_report_name,
                  'append': False, 
-                 'set_report':True,
                  'confirm_overwrite': False,
                  'config_filename':config_file,
                  'overwrite_config_file':False,
@@ -2425,6 +2478,7 @@ class ParameterEstimation():
             assert i in options.keys(),'{} is not a keyword argument for ParameterEstimation'.format(i)
         options.update( kwargs) 
         self.kwargs=options
+        self.kwargs = Bool2Str(self.kwargs).convert_dct()
         #second dict to separate arguments for the experiment mapper
         self.kwargs_experiment={}
         
@@ -2616,8 +2670,6 @@ class ParameterEstimation():
         self.report_dict['variable']=self.kwargs.get('variable')
         self.report_dict['report_type']='parameter_estimation'
         
-        assert self.kwargs.get('set_report') in [False,True]
-#        assert self.kwargs.get('run') in [True,False]
         
         
         '''
@@ -2643,11 +2695,11 @@ class ParameterEstimation():
     def run(self):
         if self.kwargs.get('plot')==False:
             LOG.debug('running ParameterEstimation. Data reported to file: {}'.format(self.kwargs['report_name']))
-            self.copasiML=Run(self.copasi_file,Task='parameter_estimation')
+            self.copasiML=Run(self.copasi_file,task='parameter_estimation')
             return self.copasiML
         else:
             ##Run with 'mode' set to false just unchecks the executable boxes.
-            self.copasiML=Run(self.copasi_file,Task='parameter_estimation',mode=False)
+            self.copasiML=Run(self.copasi_file,task='parameter_estimation',mode=False)
             ## Now run with check_call
             subprocess.check_call('CopasiSE "{}"'.format(self.copasi_file),shell=True)
             self.plot()
@@ -2994,10 +3046,9 @@ class ParameterEstimation():
         for i in self.copasiML.xpath(query):
             i.attrib.update(scheluled_attrib)
             for j in list(i):
-                if self.kwargs.get('set_report')==True:
-                    if self.kwargs.get('report_name')!=None:
-                        if 'append' in j.attrib.keys():
-                            j.attrib.update(report_attrib)
+                if self.kwargs.get('report_name')!=None:
+                    if 'append' in j.attrib.keys():
+                        j.attrib.update(report_attrib)
                 if list(j)!=[]:
                     for k in list(j):
                         if k.attrib['name']=='Randomize start Values':
@@ -3060,6 +3111,7 @@ class ParameterEstimation():
         
         """
         self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
+        return self.copasiML
 
             
     def set_up(self):
@@ -3134,7 +3186,7 @@ class Scan():
             
         number_of_steps:
             Corresponds to the intervals box in Copasi GUI or number
-            of repeats in case your using the Task='repeat' option. Default=10. 
+            of repeats in case your using the task='repeat' option. Default=10.
             
         maximum: 
             Corresponds to the maximum box in Copasi GUI. Default=100. 
@@ -3152,7 +3204,7 @@ class Scan():
             
         variable:
             The target of the Scan. Must be a valid model entity. 
-            Defaults to the first key in the GMQ.get_metabolites() method
+            Defaults to the first key in the GMQ.get_IC_cns() method
 
         scheduled: 
             Corresponds to the scheduled box in Copasi GUI. Default=True.
@@ -3179,7 +3231,7 @@ class Scan():
         default_report_name=os.path.split(self.copasi_file)[1][:-4]+'_PE_results.txt'
         #default_outputML=os.path.split(self.copasi_file)[1][:-4]+'_Duplicate.cps'
         options={#report variables
-                 'metabolites':self.GMQ.get_metabolites().keys(),
+                 'metabolites':self.GMQ.get_IC_cns().keys(),
                  'global_quantities':self.GMQ.get_global_quantities().keys(),
                  'quantity_type':'concentration',
                  'report_name':default_report_name,
@@ -3199,7 +3251,7 @@ class Scan():
                  'distribution_type':'normal',
                  'scan_type':'scan',
                  #scan object specific (for scan and random_sampling scan_types)
-                 'variable':self.GMQ.get_metabolites().keys()[0],
+                 'variable':self.GMQ.get_IC_cns().keys()[0],
                  'scheduled':True,
                  'save':'overwrite',
                  'clear_scans':True,#if true, will remove all scans present then add new scan
@@ -3212,6 +3264,7 @@ class Scan():
             assert i in options.keys(),'{} is not a keyword argument for Scan'.format(i)
         options.update( kwargs) 
         self.kwargs=options
+        self.kwargs = Bool2Str(self.kwargs).convert_dct()
         
         #correct output_in_subtask and AsjestInitialConditions
         assert self.kwargs.get('output_in_subtask') in [False,True]
@@ -3314,6 +3367,7 @@ class Scan():
             
     def save(self):
         self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
+        return self.copasiML
                 
         
     def define_report(self):
@@ -3447,7 +3501,7 @@ class Scan():
         return self.copasiML
         
     def run(self):
-        R=Run(self.copasi_file,Task='scan',mode=self.kwargs.get('run'))
+        R=Run(self.copasi_file,task='scan',mode=self.kwargs.get('run'))
         #
         # if self.kwargs.get('run')==False:
         #     return None
@@ -3481,7 +3535,7 @@ class Run():
             
         mode:
             True, False,'multiprocess', or 'SGE'. Default is True but can be turned off if you 
-            want to uncheck all executable boxes then check the Task executable
+            want to uncheck all executable boxes then check the task executable
             
         max_time:
             Default None. Max time in seconds for copasi to be allowed to run
@@ -3505,6 +3559,7 @@ class Run():
             assert i in options.keys(),'{} is not a keyword argument for run'.format(i)
         options.update( kwargs)
         self.kwargs=options
+        self.kwargs = Bool2Str(self.kwargs).convert_dct()
 
 
         tasks=['steady_state','time_course',
@@ -3561,9 +3616,9 @@ class Run():
 
     def set_task(self):
         for i in self.copasiML.find('{http://www.copasi.org/static/schema}ListOfTasks'):
-            i.attrib['scheduled']=False #set all to false
+            i.attrib['scheduled']="false" #set all to false
             if self.kwargs.get('task')== i.attrib['type'].lower():
-                i.attrib['scheduled']=True
+                i.attrib['scheduled']="true"
 
         return self.copasiML
 
@@ -3603,9 +3658,13 @@ class Run():
         os.system('qsub {} -N {} '.format(self.SGE_job_file,self.SGE_job_file))
         ## remove .sh file after used. 
         os.remove(self.SGE_job_file)
-
-
+        
     def save(self):
+        self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
+        return self.copasiML
+
+
+    def save_dep(self):
         if self.kwargs.get('save')=='duplicate':
             self.CParser.write_copasi_file(self.kwargs.get('OutputML'),self.copasiML)
         elif self.kwargs.get('save')=='overwrite':
@@ -3675,7 +3734,7 @@ class InsertParameters16():
         default_report_name=os.path.split(self.copasi_file)[1][:-4]+'_PE_results.txt'
         default_outputML=os.path.split(self.copasi_file)[1][:-4]+'_Duplicate.cps'
         options={#report variables
-                 'metabolites':self.GMQ.get_metabolites().keys(),
+                 'metabolites':self.GMQ.get_IC_cns().keys(),
                  'global_quantities':self.GMQ.get_global_quantities().keys(),
                  'quantity_type':'concentration',
                  'report_name':default_report_name,
@@ -3691,6 +3750,7 @@ class InsertParameters16():
             assert i in options.keys(),'{} is not a keyword argument for InsertParameters'.format(i)
         options.update( kwargs) 
         self.kwargs=options
+        self.kwargs = Bool2Str(self.kwargs).convert_dct()
         
 #        assert os.path.exists(self.parameter_path),'{} doesn\'t exist'.format(self.parameter_path)
         assert self.kwargs.get('quantity_type') in ['concentration','particle_numbers']
@@ -3723,7 +3783,10 @@ class InsertParameters16():
         self.parameters= self.replace_gl_and_lt()
         self.insert_all()
         #change
-
+    def save(self):
+        self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
+        return self.copasiML
+    
     def save(self):
         if self.kwargs.get('save')=='duplicate':
             self.CParser.write_copasi_file(self.kwargs.get('OutputML'),self.copasiML)
@@ -4010,12 +4073,11 @@ class RunMultiplePEs():
                  'copy_number':1,
                  'pe_number':3,
                  'report_name':None,
-                 'metabolites':self.GMQ.get_metabolites().keys(),
+                 'metabolites':self.GMQ.get_IC_cns().keys(),
                  'global_quantities':self.GMQ.get_global_quantities().keys(),
                  'local_parameters': self.GMQ.get_local_kinetic_parameters_cns().keys(),
                  'quantity_type':'concentration',
                  'append': False, 
-                 'set_report':True,
                  'confirm_overwrite': False,
                  'config_filename':None,
                  'overwrite_config_file':False,
@@ -4053,7 +4115,6 @@ class RunMultiplePEs():
                  'weight_method':['mean_squared']*len(self.experiment_files),
                  'save':'overwrite',  
                  'scheduled':False,
-                 'Verbose':False,
                  'lower_bound':0.000001,
                  'upper_bound':1000000,
 #                 'run':False,
@@ -4086,7 +4147,8 @@ class RunMultiplePEs():
             if key not in options.keys():
                 raise Errors.InputError('{} is not a keyword argument for runMutliplePEs'.format(key))
         options.update( kwargs) 
-        self.kwargs=options           
+        self.kwargs=options       
+        self.kwargs = Bool2Str(self.kwargs).convert_dct()
         self._do_checks()
         self._create_defaults()
         self._create_output_directory()
@@ -4386,7 +4448,6 @@ class MultimodelFit():
                  'plot':False,
                  'quantity_type':'concentration',
                  'append': False, 
-                 'set_report':True,
                  'confirm_overwrite': False,
                  'config_filename':'PEConfigFile.xlsx',
                  'overwrite_config_file':False,
@@ -4431,7 +4492,7 @@ class MultimodelFit():
                 raise Errors.InputError('{} is not a keyword argument for MultimodelFit'.format(key))
         options.update( kwargs) 
         self.kwargs=options    
-        
+        self.kwargs = Bool2Str(self.kwargs).convert_dct()
         
         
         self.sub_cps_dirs=self.create_workspace()
@@ -4657,7 +4718,7 @@ class InsertParameters():
 
         default_report_name=os.path.split(self.copasi_file)[1][:-4]+'_PE_results.txt'
         options={#report variables
-                 'metabolites':self.GMQ.get_metabolites().keys(),
+                 'metabolites':self.GMQ.get_IC_cns().keys(),
                  'global_quantities':self.GMQ.get_global_quantities().keys(),
                  'quantity_type':'concentration',
                  'report_name':default_report_name,
@@ -4673,6 +4734,7 @@ class InsertParameters():
             assert i in options.keys(),'{} is not a keyword argument for InsertParameters'.format(i)
         options.update( kwargs) 
         self.kwargs=options
+        self.kwargs = Bool2Str(self.kwargs).convert_dct()
         
 #        assert os.path.exists(self.parameter_path),'{} doesn\'t exist'.format(self.parameter_path)
         assert self.kwargs.get('quantity_type') in ['concentration','particle_numbers']
@@ -4819,7 +4881,7 @@ Please check the headers of your PE data are consistent with your model paramete
                 assert compartment == []
                 metab_name= self.GMQ.get_metabolites_object_reference()[state]
 #                    print self.parameters[metab_name]
-                metab =  self.GMQ.get_metabolites()[metab_name]
+                metab =  self.GMQ.get_IC_cns()[metab_name]
                 comp_vol = self.GMQ.get_IC_cns()[metab_name]['compartment_volume']
                 
                 metab_val = self.GMQ.get_IC_cns()[metab_name]['value']
@@ -4960,7 +5022,7 @@ Please check the headers of your PE data are consistent with your model paramete
         self.copasiML=self.insert_locals()
         self.copasiML = self.insert_global_and_ICs()
         self.copasiML=self.insert_fit_items()
-        self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
+        self.save()
         
         
 #==============================================================================
