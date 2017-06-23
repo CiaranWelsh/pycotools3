@@ -1,9 +1,12 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
 INFO:root:__init__:18:Initializing PyCoTools
 INFO:root:__init__:19:Initializing Logging System
 INFO:root:__init__:20:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
 =======
+=======
+>>>>>>> CopasiVersion19Develop
 INFO:root:__init__:26:Initializing PyCoTools
 <<<<<<< HEAD
 INFO:root:__init__:27:Initializing Logging System
@@ -167,6 +170,9 @@ DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed int
 INFO:root:__init__:26:Initializing PyCoTools
 INFO:root:__init__:27:Initializing Logging System
 INFO:root:__init__:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+<<<<<<< HEAD
+>>>>>>> CopasiVersion19Develop
+=======
 >>>>>>> CopasiVersion19Develop
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
@@ -222,8 +228,13 @@ INFO:root:pycopi:3516:defining report
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
 <<<<<<< HEAD
+<<<<<<< HEAD
 INFO:PyCoTools.pycopi:pycopi:4381:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_1.cps
 DEBUG:PyCoTools.pycopi:pycopi:1048:created a 'parameter_estimation' report
+=======
+DEBUG:PyCoTools.pycopi:pycopi:1048:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:4381:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_1.cps
+>>>>>>> CopasiVersion19Develop
 =======
 DEBUG:PyCoTools.pycopi:pycopi:1048:created a 'parameter_estimation' report
 INFO:PyCoTools.pycopi:pycopi:4381:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_1.cps
@@ -235,15 +246,21 @@ INFO:root:pycopi:3516:defining report
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
 <<<<<<< HEAD
+<<<<<<< HEAD
 INFO:PyCoTools.pycopi:pycopi:4381:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_2.cps
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
 DEBUG:PyCoTools.pycopi:pycopi:1048:created a 'parameter_estimation' report
 =======
+=======
+>>>>>>> CopasiVersion19Develop
 DEBUG:PyCoTools.pycopi:pycopi:1048:created a 'parameter_estimation' report
 INFO:PyCoTools.pycopi:pycopi:4381:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_2.cps
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+<<<<<<< HEAD
+>>>>>>> CopasiVersion19Develop
+=======
 >>>>>>> CopasiVersion19Develop
 DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_2.cps
 INFO:root:pycopi:3516:defining report
@@ -255,6 +272,7 @@ DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCo
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
 DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+<<<<<<< HEAD
 <<<<<<< HEAD
 INFO:PyCoTools.pycopi:pycopi:4411:Setup Took 0.411815881729 seconds
 INFO:PyCoTools.pycopi:pycopi:4389:<PyCoTools.pycopi.Scan instance at 0x7fda7d384290>
@@ -277,6 +295,8 @@ DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed i
 DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_1.cps
 INFO:PyCoTools.pycopi:pycopi:4411:Setup Took 0.506976127625 seconds
 =======
+=======
+>>>>>>> CopasiVersion19Develop
 INFO:PyCoTools.pycopi:pycopi:4411:Setup Took 0.338761091232 seconds
 INFO:PyCoTools.pycopi:pycopi:4389:<PyCoTools.pycopi.Scan instance at 0x7f8ca92635f0>
 DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_1.cps
@@ -291,6 +311,9 @@ DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed i
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
 DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_1.cps
 INFO:PyCoTools.pycopi:pycopi:4411:Setup Took 0.370431184769 seconds
+<<<<<<< HEAD
+>>>>>>> CopasiVersion19Develop
+=======
 >>>>>>> CopasiVersion19Develop
 DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_2.cps
 DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_2.cps
@@ -298,8 +321,11 @@ DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed i
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
 DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_2.cps
 <<<<<<< HEAD
+<<<<<<< HEAD
 INFO:PyCoTools.pycopi:pycopi:4411:Setup Took 0.503196954727 seconds
 =======
+=======
+>>>>>>> CopasiVersion19Develop
 INFO:PyCoTools.pycopi:pycopi:4411:Setup Took 0.356174945831 seconds
 INFO:root:__init__:26:Initializing PyCoTools
 INFO:root:__init__:27:Initializing Logging System
@@ -893,4 +919,7 @@ DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed int
 >>>>>>> b5251ac39e0e966dfceb851ff97bd2f79e887bd0
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+<<<<<<< HEAD
+>>>>>>> CopasiVersion19Develop
+=======
 >>>>>>> CopasiVersion19Develop
