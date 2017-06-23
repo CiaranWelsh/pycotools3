@@ -31,29 +31,29 @@ are analyzed in the same way as the global data.
 
 
 
-#PyCoTools.PEAnalysis.EvaluateOptimizationPerformance(local_PEData_dir,SaveFig='true',Log10='true')
+#PyCoTools.PEAnalysis.EvaluateOptimizationPerformance(local_PEData_dir,savefig='true',log10='true')
 
-#PyCoTools.pycopi.InsertParameters(C.celliere2011_model,ParameterPath=local_PEData_dir,Index=0)
+#PyCoTools.pycopi.InsertParameters(C.celliere2011_model,parameter_path=local_PEData_dir,index=0)
 #
 #PE=PyCoTools.pycopi.ParameterEstimation(C.celliere2011_model,C.noisy_timecourse_report,
-#                                        Method='CurrentSolutionStatistics',
-#                                        Plot='true',
-#                                        SaveFig='true',
-#                                        RandomizeStartValues='false')
+#                                        method='CurrentSolutionStatistics',
+#                                        plot='true',
+#                                        savefig='true',
+#                                        randomize_start_values='false')
 #PE.set_up() ## setup
 #PE.run()    ## and run the current solution statistics parameter estimation
 #
-#PyCoTools.PEAnalysis.EvaluateOptimizationPerformance(local_PEData_dir,SaveFig='true')
+#PyCoTools.PEAnalysis.EvaluateOptimizationPerformance(local_PEData_dir,savefig='true')
 #
-#PyCoTools.PEAnalysis.PlotBoxplot(local_PEData_dir,SaveFig='true')
+#PyCoTools.PEAnalysis.plotBoxplot(local_PEData_dir,savefig='true')
 #
-#PyCoTools.PEAnalysis.PlotHistogram(local_PEData_dir,Log10='true',
-#                                   Bins=10,SaveFig='true')
-#PyCoTools.PEAnalysis.PlotScatters(C.local_PEData_dir,Log10='true',
-#                                  SaveFig='true')
+#PyCoTools.PEAnalysis.plotHistogram(local_PEData_dir,log10='true',
+#                                   bins=10,savefig='true')
+#PyCoTools.PEAnalysis.plotScatters(C.local_PEData_dir,log10='true',
+#                                  savefig='true')
 
 
-f=r"D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\Examples\Celliere2011Example\Celliere2011_temp_TimeCourse.txt"
+f=r"D:\MPhil\Python\My_Python_Modules\modelling_Tools\PyCoTools\PyCoTools\Examples\Celliere2011Example\Celliere2011_temp_TimeCourse.txt"
 print PyCoTools.PEAnalysis.PlotPEData(C.celliere2011_model,C.noisy_timecourse_report,f)
 
 

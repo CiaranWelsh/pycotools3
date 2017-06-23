@@ -40,13 +40,13 @@ with chosen keyword arguments. define the method variables within the PE class u
 
 PE= PyCoTools.pycopi.ParameterEstimation(K.kholodenko_model, #model
                                            K.noisy_timecourse_report, #experimental data
-                                           Method='GeneticAlgorithm',#use a quick global algorithm 
+                                           method='GeneticAlgorithm',#use a quick global algorithm 
                                            NumberOfGenerations=300, #set Generation Number and population size
-                                           PopulationSize=150,
-                                           SwarmSize=200,
-                                           IterationLimit=3000,
+                                           population_size=150,
+                                           swarm_size=200,
+                                           iteration_limit=3000,
                                            )
-#                                           Plot='true',SaveFig='true') ## Optionally use to get experimental Vs simualted graphs
+#                                           plot='true',savefig='true') ## Optionally use to get experimental Vs simualted graphs
 '''
 Then write a template file. This contains all your model variables. 
 Delete the rows containing variables that you do not want to estimate, modify
@@ -62,14 +62,14 @@ Comment and uncomment the below lines of code as you need
 
 '''
 Perform the setting up of the parameter estimation
-Variable names in the experimental data header need to exactly match the 
+variable names in the experimental data header need to exactly match the 
 corresponding variables in the model to be mapped correctly. 
 '''
 PE.set_up()
 
 '''
 The run method enables you to run the parameter estimation from Python. 
-If the Plot keyword was set to 'true' in the instantiation of the ParameterEstimation
+If the plot keyword was set to 'true' in the instantiation of the ParameterEstimation
 class, plots are generated of the experimental vs simulated data. 
 In this tutorial however we want to run the parameter estimation via the repeat
 scan task so we'll not use the run method.
@@ -78,7 +78,7 @@ scan task so we'll not use the run method.
 #
 
 '''
-Run the parameter estimation via the scan task to run 'NumberOfSteps' of them
+run the parameter estimation via the scan task to run 'number_of_steps' of them
 
 Other options include copying the model to 'n' other file locations. 
 Then you could run the same code in a loop and have n copasi's running parameter
@@ -89,10 +89,10 @@ other job schedulers is not currently supported but modular nature of PyCoTools
 allows for extension code to support other systems. 
 
 #'''
-PyCoTools.pycopi.Scan(K.kholodenko_model,ScanType='repeat',
-                      ReportName=K.PEData_file, 
-                      ReportType='parameter_estimation',
-                      NumberOfSteps=2,Run='false')
+PyCoTools.pycopi.Scan(K.kholodenko_model,scan_type='repeat',
+                      report_name=K.PEData_file, 
+                      report_type='parameter_estimation',
+                      number_of_steps=2,run='false')
 
 
 
@@ -145,28 +145,28 @@ def enumerate_PE_output(output_filename,n):
 
 
 #for i in range(n):
-#    PyCoTools.pycopi.Scan(copasi_files[i],ScanType='repeat',
-#                          ReportName=result_files[i], 
-#                          ReportType='parameter_estimation',
-#                          NumberOfSteps=3,Run='false')
-#    PyCoTools.pycopi.Run(copasi_files[i],Mode='multiprocess',Task='scan')
+#    PyCoTools.pycopi.Scan(copasi_files[i],scan_type='repeat',
+#                          report_name=result_files[i], 
+#                          report_type='parameter_estimation',
+#                          number_of_steps=3,run='false')
+#    PyCoTools.pycopi.run(copasi_files[i],mode='multiprocess',Task='scan')
 #
 #
 
 #
-f=r"D:\MPhil\Python\My_Python_Modules\Modelling_Tools\temp\kholodenkoTemp\attempt1\SecondIteration\PEResults"
+f=r"D:\MPhil\Python\My_Python_Modules\modelling_Tools\temp\kholodenkoTemp\attempt1\SecondIteration\PEResults"
 data=PyCoTools.PEAnalysis.ParsePEData(f).data
 #print pandas.read_pickle(K.PEData_pickle)
-#f=r"D:\MPhil\Python\My_Python_Modules\Modelling_Tools\temp\kholodenkoTemp\attempt1\ThirdIteration\2GlobalPEData.pickle"
-#PyCoTools.PEAnalysis.PlotHistogram(f,Log10='true')
-#PyCoTools.PEAnalysis.PlotScatters(f,Log10='true')
+#f=r"D:\MPhil\Python\My_Python_Modules\modelling_Tools\temp\kholodenkoTemp\attempt1\ThirdIteration\2GlobalPEData.pickle"
+#PyCoTools.PEAnalysis.plotHistogram(f,log10='true')
+#PyCoTools.PEAnalysis.plotScatters(f,log10='true')
 
 
 
-PyCoTools.PEAnalysis.PlotHexMap(f,Show='false',Log10='true',
-                                TruncateMode='percent',X=100,SaveFig='true',
-                                GridSize=50,
-                                Mode='RSS',Bins=100)
+PyCoTools.PEAnalysis.plotHexMap(f,show='false',log10='true',
+                                truncate_model='percent',x=100,savefig='true',
+                                grid_size=50,
+                                mode='RSS',bins=100)
 
 
 

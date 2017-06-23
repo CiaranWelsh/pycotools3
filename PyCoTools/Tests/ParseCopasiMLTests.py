@@ -27,12 +27,12 @@ Date:
 
 import os
 import subprocess
-from TestModels import TestModels
+from Testmodels import Testmodels
 import unittest
 import lxml.etree as etree
 import PyCoTools
 
-MODEL_STRING=TestModels().get_model1()
+MODEL_STRING=Testmodels().get_model1()
 
 class ParseCopasiML(unittest.TestCase):
     def setUp(self):

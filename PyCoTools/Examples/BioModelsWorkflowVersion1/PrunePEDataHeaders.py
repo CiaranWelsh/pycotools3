@@ -38,7 +38,7 @@ def prune1(f,delete_old=False):
         assert os.path.isfile(new_path),'{} is not a file, set delete_old to False'.format(new_path)
         os.remove(new_path)            
     if os.path.isfile(new_path)==False:
-        df.to_csv(new_path,sep='\t',Index=False)
+        df.to_csv(new_path,sep='\t',index=False)
     return new_path
     
     
@@ -47,7 +47,7 @@ def prune1(f,delete_old=False):
 def prune_PE_titles(PE_files,delete_old=False):
     '''
     Take the output of copasi PE and remove additional
-    elements of the titles (i.e. Metabolites, Values etc...)
+    elements of the titles (i.e. metabolites, Values etc...)
     
     delete_old:
         if True, files are pruned again and overwriten

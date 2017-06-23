@@ -14,9 +14,9 @@ import FilePaths
 C=FilePaths.Celliere2011Example()
 
 #run deterministic time course with kholodenko model
-PyCoTools.pycopi.TimeCourse(C.celliere2011_model,ReportName=C.timecourse_report,End=4000,
-                               Intervals=50,StepSize=80,Plot='true',SaveFig='true',
-                               GlobalQuantities=None) #don't want global quantities right now
+PyCoTools.pycopi.TimeCourse(C.celliere2011_model,report_name=C.timecourse_report,End=4000,
+                               Intervals=50,StepSize=80,plot='true',savefig='true',
+                               global_quantities=None) #don't want global quantities right now
 
 
 

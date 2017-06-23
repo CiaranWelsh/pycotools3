@@ -36,7 +36,7 @@ def get_cps(directory):
 
 def run_phase_space(cps,n,pickle_path,ignore_previously_completed=False):
     '''
-    Run a time course for each copasi file in the cps dict and plot as phase
+    run a time course for each copasi file in the cps dict and plot as phase
     space diagrams
     
     cps:
@@ -52,15 +52,15 @@ def run_phase_space(cps,n,pickle_path,ignore_previously_completed=False):
         dict[sucess|fail]=[result|error] (where '|' mean 'or')
         
         Any time course which already exists is skipped
-        Models that produce a copasi error are ignored
-        Models that are too big to run in just a few seconds can be skipped
+        models that produce a copasi error are ignored
+        models that are too big to run in just a few seconds can be skipped
         by using KeyboardInterrutp. Many big models were manually deleted
         from the analysis.
         all data is pickled for later use
         
         Any model without any metabolites was ignored
         
-        Models with non-ascii characters in the name were ignored
+        models with non-ascii characters in the name were ignored
         
         
     '''
@@ -71,7 +71,7 @@ def run_phase_space(cps,n,pickle_path,ignore_previously_completed=False):
     result['successful']={}
     result['CopasiError']={}
     result['KeyboardInterrupt']={}
-    result['NoMetabolitesError']={}
+    result['NometabolitesError']={}
     result['IncompatibleStringError']={}
     result['OverNSpecies']={}
 
@@ -80,24 +80,24 @@ def run_phase_space(cps,n,pickle_path,ignore_previously_completed=False):
         print 'running {}: '.format(i)
         start=time.time()
         time_course_name=os.path.join(os.path.dirname(cps[i]),'{}_TimeCourse.txt'.format(i))
-        GMQ=PyCoTools.pycopi.GetModelQuantities(cps[i])
+        GMQ=PyCoTools.pycopi.GetmodelQuantities(cps[i])
         if len(GMQ.get_IC_cns())>n:
             result['OverNSpecies'][i]='More than {} parameters'.format(n)
             continue
         if ignore_previously_completed==True:
-            if os.path.isdir(os.path.join(os.getcwd(),'PhasePlots')):
+            if os.path.isdir(os.path.join(os.getcwd(),'Phaseplots')):
                 continue
         try:
-            TC=PyCoTools.pycopi.PhaseSpacePlots(cps[i],
-                                 GlobalQuantities=None,
+            TC=PyCoTools.pycopi.PhaseSpaceplots(cps[i],
+                                 global_quantities=None,
                                  Intervals=10,
                                  StepSize=100,
                                  Start=0,
                                  End=1000,
-                                 LineColor='black',
-                                 SaveFig='true',
-                                 Save='overwrite',
-                                 Plot='false')
+                                 Linecolor='black',
+                                 savefig='true',
+                                 save='overwrite',
+                                 plot='false')
             print '...successful'
             result['successful'][i]=TC.data
             end=time.time()
@@ -126,12 +126,12 @@ def run_phase_space(cps,n,pickle_path,ignore_previously_completed=False):
             result['KeyboardInterrupt'][i]='KeyboardInterrupt'
             print 'running {}: unsucessful. User quit'.format(i)
             continue
-        except PyCoTools.Errors.NoMetabolitesError as E:
+        except PyCoTools.Errors.NometabolitesError as E:
             '''
             Some models downloaded from biomodels don't have any metabolites
             and therefore we cannot run a time course with them
             '''
-            result['NoMetabolitesError'][i]=E
+            result['NometabolitesError'][i]=E
         except PyCoTools.Errors.IncompatibleStringError as E:
             '''
             Some models use non-ascii characters. Non-ascii characters are not 
@@ -165,35 +165,35 @@ if __name__=='__main__':
     
     
     print res[0].keys()
-    print 'total number of copasi models: {}'.format(len(res[0]['successful'].keys()) + len(res[0]['CopasiError'].keys()) + len(res[0]['IncompatibleStringError'].keys()) + len(res[0]['IncompatibleStringError'].keys()) + len(res[0]['NoMetabolitesError'].keys()) + len(res[0]['KeyboardInterrupt'].keys()) + len(res[0]['OverNSpecies'].keys()))
+    print 'total number of copasi models: {}'.format(len(res[0]['successful'].keys()) + len(res[0]['CopasiError'].keys()) + len(res[0]['IncompatibleStringError'].keys()) + len(res[0]['IncompatibleStringError'].keys()) + len(res[0]['NometabolitesError'].keys()) + len(res[0]['KeyboardInterrupt'].keys()) + len(res[0]['OverNSpecies'].keys()))
     print 'number of successful time courses: {}'.format(len(res[0]['successful'].keys()))
 
     print 'number failed because model contains more than N species: {}'.format(len(res[0]['OverNSpecies'].keys()))
     print 'number failed with copasi error: {}'.format(len(res[0]['CopasiError'].keys()))
     print 'number failed because the model contains non-ascii characters: {}'.format(len(res[0]['IncompatibleStringError'].keys()))
-    print 'number failed because model has no metabolites: {}'.format(len(res[0]['NoMetabolitesError'].keys()))
+    print 'number failed because model has no metabolites: {}'.format(len(res[0]['NometabolitesError'].keys()))
     print 'number failed because of keyboardInterrupt: {}'.format(len(res[0]['KeyboardInterrupt'].keys()))
 #
     os.chdir(model_dir)
 
 
-#    f=r'D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\Documentation\Examples\PydentifyingBiomodels\BIOMD0000000063\Galazzo1990_FermentationPathwayKinetics.cps'
+#    f=r'D:\MPhil\Python\My_Python_Modules\modelling_Tools\PyCoTools\Documentation\Examples\PydentifyingBiomodels\BIOMD0000000063\Galazzo1990_FermentationPathwayKinetics.cps'
     
     
     
-#    TC=PyCoTools.pycopi.PhaseSpacePlots(f,
-#                     GlobalQuantities=None,
+#    TC=PyCoTools.pycopi.PhaseSpaceplots(f,
+#                     global_quantities=None,
 #                     Intervals=100,
 #                     StepSize=10,
 #                     Start=0,
 #                     End=1000,
-#                     LineColor='black',
-#                     SaveFig='true',
-#                     Save='overwrite',
-#                     Plot='false')
+#                     Linecolor='black',
+#                     savefig='true',
+#                     save='overwrite',
+#                     plot='false')
 #
 
-#    g=PyCoTools.pycopi.GetModelQuantities(f)
+#    g=PyCoTools.pycopi.GetmodelQuantities(f)
 #    print g.get_metabolites().keys()
 #    print g.get_metabolites()['Fructose 1\\,6-phosphate']
 

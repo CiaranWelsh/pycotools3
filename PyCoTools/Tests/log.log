@@ -1,0 +1,127 @@
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing Logging System
+INFO:root:__init__:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing Logging System
+INFO:root:__init__:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing Logging System
+INFO:root:__init__:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing Logging System
+INFO:root:__init__:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing Logging System
+INFO:root:__init__:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+INFO:root:test:46:Original parameters
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing Logging System
+INFO:root:__init__:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+INFO:root:test:46:Original parameters
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:4973:Local parameters being inserted into mode: ['(reaction_3).k1']
+DEBUG:PyCoTools.pycopi:pycopi:4981:Constructing a dict of reaction:parameter for local parameters: {'reaction_3': 'k1'}
+DEBUG:PyCoTools.pycopi:pycopi:5005:States:	 ['Model_3', 'Metabolite_3', 'Metabolite_7', 'Metabolite_9', 'Metabolite_5', 'Metabolite_1', 'Metabolite_11', 'ModelValue_0', 'Compartment_1', 'Compartment_3', 'ModelValue_1', 'ModelValue_2']
+DEBUG:PyCoTools.pycopi:pycopi:5009:assembling parameter 0 out of 12
+DEBUG:PyCoTools.pycopi:pycopi:5016:State Model_3 is model
+DEBUG:PyCoTools.pycopi:pycopi:5021:Added 0 for first parameter in sequence
+DEBUG:PyCoTools.pycopi:pycopi:5009:assembling parameter 1 out of 12
+DEBUG:PyCoTools.pycopi:pycopi:5023:State Metabolite_3 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5033:Metab dict for Metabolite_3, 
+
+{'cn': 'CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B]', 'value': '6.022140857000001e+021', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '9.99999845072', 'compartment': 'nuc', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5009:assembling parameter 2 out of 12
+DEBUG:PyCoTools.pycopi:pycopi:5023:State Metabolite_7 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5033:Metab dict for Metabolite_7, 
+
+{'cn': 'CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[D]', 'value': '6.022140856999989e+023', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '999.999845072', 'compartment': 'nuc', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5009:assembling parameter 3 out of 12
+DEBUG:PyCoTools.pycopi:pycopi:5023:State Metabolite_9 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5033:Metab dict for Metabolite_9, 
+
+{'cn': 'CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[E]', 'value': '6.022140856999983e+024', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '9999.99845072', 'compartment': 'nuc', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5009:assembling parameter 4 out of 12
+DEBUG:PyCoTools.pycopi:pycopi:5023:State Metabolite_5 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5033:Metab dict for Metabolite_5, 
+
+{'cn': 'CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C]', 'value': '6.022140857000001e+022', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '99.9999845072', 'compartment': 'nuc', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5009:assembling parameter 5 out of 12
+DEBUG:PyCoTools.pycopi:pycopi:5023:State Metabolite_1 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5033:Metab dict for Metabolite_1, 
+
+{'cn': 'CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A]', 'value': '6.022140856999986e+020', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '0.999999845072', 'compartment': 'nuc', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5009:assembling parameter 6 out of 12
+DEBUG:PyCoTools.pycopi:pycopi:5023:State Metabolite_11 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5033:Metab dict for Metabolite_11, 
+
+{'cn': 'CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[F]', 'value': '6.022140857000001e+025', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '99999.9845072', 'compartment': 'nuc', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5009:assembling parameter 7 out of 12
+DEBUG:PyCoTools.pycopi:pycopi:5042:State ModelValue_0 is Global Variable
+DEBUG:PyCoTools.pycopi:pycopi:5009:assembling parameter 8 out of 12
+DEBUG:PyCoTools.pycopi:pycopi:5009:assembling parameter 9 out of 12
+DEBUG:PyCoTools.pycopi:pycopi:5009:assembling parameter 10 out of 12
+DEBUG:PyCoTools.pycopi:pycopi:5042:State ModelValue_1 is Global Variable
+DEBUG:PyCoTools.pycopi:pycopi:5009:assembling parameter 11 out of 12
+DEBUG:PyCoTools.pycopi:pycopi:5042:State ModelValue_2 is Global Variable
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing Logging System
+INFO:root:__init__:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+INFO:root:test:46:Original parameters
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:4973:Local parameters being inserted into mode: ['(reaction_3).k1']
+DEBUG:PyCoTools.pycopi:pycopi:4981:Constructing a dict of reaction:parameter for local parameters: {'reaction_3': 'k1'}
+DEBUG:PyCoTools.pycopi:pycopi:5005:States:	 ['Model_3', 'Metabolite_3', 'Metabolite_7', 'Metabolite_9', 'Metabolite_5', 'Metabolite_1', 'Metabolite_11', 'ModelValue_0', 'Compartment_1', 'Compartment_3', 'ModelValue_1', 'ModelValue_2']
+DEBUG:PyCoTools.pycopi:pycopi:5009:assembling parameter 0 out of 12
+DEBUG:PyCoTools.pycopi:pycopi:5016:State Model_3 is model
+DEBUG:PyCoTools.pycopi:pycopi:5021:Added 0 for first parameter in sequence
+DEBUG:PyCoTools.pycopi:pycopi:5009:assembling parameter 1 out of 12
+DEBUG:PyCoTools.pycopi:pycopi:5023:State Metabolite_3 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5033:Metab dict for Metabolite_3, 
+
+{'cn': 'CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B]', 'value': '6.022140857000001e+021', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '9.99999845072', 'compartment': 'nuc', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5009:assembling parameter 2 out of 12
+DEBUG:PyCoTools.pycopi:pycopi:5023:State Metabolite_7 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5033:Metab dict for Metabolite_7, 
+
+{'cn': 'CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[D]', 'value': '6.022140856999989e+023', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '999.999845072', 'compartment': 'nuc', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5009:assembling parameter 3 out of 12
+DEBUG:PyCoTools.pycopi:pycopi:5023:State Metabolite_9 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5033:Metab dict for Metabolite_9, 
+
+{'cn': 'CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[E]', 'value': '6.022140856999983e+024', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '9999.99845072', 'compartment': 'nuc', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5009:assembling parameter 4 out of 12
+DEBUG:PyCoTools.pycopi:pycopi:5023:State Metabolite_5 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5033:Metab dict for Metabolite_5, 
+
+{'cn': 'CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C]', 'value': '6.022140857000001e+022', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '99.9999845072', 'compartment': 'nuc', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5009:assembling parameter 5 out of 12
+DEBUG:PyCoTools.pycopi:pycopi:5023:State Metabolite_1 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5033:Metab dict for Metabolite_1, 
+
+{'cn': 'CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A]', 'value': '6.022140856999986e+020', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '0.999999845072', 'compartment': 'nuc', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5009:assembling parameter 6 out of 12
+DEBUG:PyCoTools.pycopi:pycopi:5023:State Metabolite_11 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5033:Metab dict for Metabolite_11, 
+
+{'cn': 'CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[F]', 'value': '6.022140857000001e+025', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '99999.9845072', 'compartment': 'nuc', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5009:assembling parameter 7 out of 12
+DEBUG:PyCoTools.pycopi:pycopi:5042:State ModelValue_0 is Global Variable
+DEBUG:PyCoTools.pycopi:pycopi:5009:assembling parameter 8 out of 12
+DEBUG:PyCoTools.pycopi:pycopi:5009:assembling parameter 9 out of 12
+DEBUG:PyCoTools.pycopi:pycopi:5009:assembling parameter 10 out of 12
+DEBUG:PyCoTools.pycopi:pycopi:5042:State ModelValue_1 is Global Variable
+DEBUG:PyCoTools.pycopi:pycopi:5009:assembling parameter 11 out of 12
+DEBUG:PyCoTools.pycopi:pycopi:5042:State ModelValue_2 is Global Variable
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+INFO:root:test:53:Parameters after insertion: <bound method DataFrame.transpose of    (reaction_3).k1  B  two
+0               10  5   15>

@@ -10,11 +10,11 @@ import FilePaths
 
 K=FilePaths.KholodenkoExample()
 
-PyCoTools.pydentify2.Plot(K.kholodenko_model, #full path to the model
-                           ParameterPath=K.local_PEData_dir, #full path to the PEData
-                           Index=[0,1],
-                           Log10='true',
-                           SaveFig='true')
+PyCoTools.pydentify2.plot(K.kholodenko_model, #full path to the model
+                           parameter_path=K.local_PEData_dir, #full path to the PEData
+                           index=[0,1],
+                           log10='true',
+                           savefig='true')
 #                           RSS=618.648)
                            
 
