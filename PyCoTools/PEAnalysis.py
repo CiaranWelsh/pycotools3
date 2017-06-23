@@ -413,7 +413,7 @@ class PlotHistogram(object):
         self.results_path=results_path
         #keywrod arguments
         options={'FromPickle':'false',
-                 'TruncateMode':'tolerance', #either 'below_x' or 'percent' for method of truncation. 
+                 'TruncateMode':'percent', #either 'below_x' or 'percent' for method of truncation. 
                  'Log10':'false',
                  'X':100,           #if below_x: this is the X boundary. If percent: this is the percent of data to keep
                  'Bins':100,
@@ -535,7 +535,7 @@ class PlotScatters(object):
         self.results_path=results_path
         #keywrod arguments
         options={'FromPickle':'false',
-                 'TruncateMode':'tolerance', #either 'below_x' or 'percent' for method of truncation. 
+                 'TruncateMode':'percent', #either 'below_x' or 'percent' for method of truncation. 
                  'Log10':'false',
                  'X':100,           #if below_x: this is the X boundary. If percent: this is the percent of data to keep
                  'AxisSize':15,
@@ -669,7 +669,7 @@ class PlotHexMap(object):
         self.results_path=results_path
         #keywrod arguments
         options={'FromPickle':'false',
-                 'TruncateMode':'tolerance', #either 'below_x' or 'percent' for method of truncation. 
+                 'TruncateMode':'percent', #either 'below_x' or 'percent' for method of truncation. 
                  'Log10':'false',
                  'GridSize':25,
                  'X':100,           #if below_x: this is the X boundary. If percent: this is the percent of data to keep
@@ -881,7 +881,7 @@ class PlotBoxplot(object):
         self.results_path=results_path
         #keywrod arguments
         options={#parse data options
-                 'TruncateMode':'tolerance', #either 'below_x' or 'percent' for method of truncation. 
+                 'TruncateMode':'percent', #either 'below_x' or 'percent' for method of truncation. 
                  'Log10':'true',
                  'parse_mode':'folder',
                  'FromPickle':'true',
@@ -1013,7 +1013,7 @@ class PlotHeatMap():
         #keywrod arguments
         options={#parse data options
                  'FromPickle':'false',
-                 'TruncateMode':'tolerance', #either 'below_x' or 'percent' for method of truncation. 
+                 'TruncateMode':'percent', #either 'below_x' or 'percent' for method of truncation. 
                  'Log10':'true',
                  'parse_mode':'folder',
                  #truncate data options
@@ -1147,7 +1147,7 @@ class EvaluateOptimizationPerformance(object):
         self.results_path=results_path
         #keywrod arguments
         options={#parse data options
-                 'TruncateMode':'tolerance', #either 'below_x' or 'percent' for method of truncation. 
+                 'TruncateMode':'percent', #either 'below_x' or 'percent' for method of truncation. 
                  'Log10':'true',
                  #truncate data options
                  'X':100,           #if below_x: this is the X boundary. If percent: this is the percent of data to keep
