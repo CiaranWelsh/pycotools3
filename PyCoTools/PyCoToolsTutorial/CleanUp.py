@@ -59,3 +59,11 @@ import shutil
 p = os.path.join(os.getcwd(),'MultipleParameterEsimationAnalysis')
 if os.path.isdir(p):
     shutil.rmtree(p)
+
+
+
+p = os.path.join(os.getcwd(),'ProfileLikelihood')
+if os.path.isdir(p):
+    shutil.rmtree(p)
+
+
