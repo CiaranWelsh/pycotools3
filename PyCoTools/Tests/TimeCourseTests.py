@@ -35,10 +35,10 @@ import time
 import re
 import shutil
 import scipy
-import TestModels
+import Testmodels
 import lxml.etree as etree
 
-MODEL_STRING = TestModels.TestModels.get_model1()
+MODEL_STRING = Testmodels.Testmodels.get_model1()
 
 class TimeCourseTests(unittest.TestCase):
 
@@ -56,39 +56,39 @@ class TimeCourseTests(unittest.TestCase):
         self.options={'Intervals':'10',
                  'StepSize':'100',
                  'End':'1000',
-                 'RelativeTolerance':'1e-7',
-                 'AbsoluteTolerance':'1e-11',
+                 'Relativetolerance':'1e-7',
+                 'Absolutetolerance':'1e-11',
                  'MaxInternalSteps':'10100',
                  'Start':'0.0',
-                 'UpdateModel':'false',
+                 'update_model':'false',
                  #report variables
-                 'Metabolites':self.GMQ.get_metabolites().keys(),
-                 'GlobalQuantities':self.GMQ.get_global_quantities().keys(),
-                 'QuantityType':'concentration',
-                 'ReportName':self.timecourse_report_name,
-                 'Append': 'false',
-                 'ConfirmOverwrite': 'false',
+                 'metabolites':self.GMQ.get_metabolites().keys(),
+                 'global_quantities':self.GMQ.get_global_quantities().keys(),
+                 'quantity_type':'concentration',
+                 'report_name':self.timecourse_report_name,
+                 'append': 'false',
+                 'confirm_overwrite': 'false',
                  'SimulationType':'deterministic',
                  'OutputEvent':'false',
-                 'Scheduled':'true',
-                 'Save':'overwrite',
+                 'scheduled':'true',
+                 'save':'overwrite',
                  'OutputML':None,
 
 
                  #graph options
-                 'Plot':'false'      ,
-                 'LineWidth':2,
-                 'LineColor':'k',
-                 'MarkerColor':'r',
+                 'plot':'false'      ,
+                 'line_width':2,
+                 'Linecolor':'k',
+                 'Markercolor':'r',
                  'LineStyle':'-',
                  'MarkerStyle':'o',
-                 'AxisSize':15,
-                 'FontSize':22,
-                 'XTickRotation':0,
-                 'TitleWrapSize':35,
-                 'SaveFig':'false',
-                 'ExtraTitle':None,
-                 'DPI':125,
+                 'axis_size':15,
+                 'font_size':22,
+                 'xtick_rotation':0,
+                 'title_wrap_size':35,
+                 'savefig':'false',
+                 'extra_title':None,
+                 'dpi':125,
                  'MarkerSize':2,
                  }
 
@@ -120,14 +120,14 @@ class TimeCourseTests(unittest.TestCase):
         TC=PyCoTools.pycopi.TimeCourse(self.copasi_file,**self.options)
         query="//*[@name='Time-Course']" and "//*[@type='timeCourse']"
         for i in TC.copasiML.xpath(query):
-             self.assertEqual(i.attrib['scheduled'],TC.kwargs.get('Scheduled'))
+             self.assertEqual(i.attrib['scheduled'],TC.kwargs.get('scheduled'))
 
     def test_update_model(self):
         TC=PyCoTools.pycopi.TimeCourse(self.copasi_file,**self.options)
         query="//*[@name='Time-Course']" and "//*[@type='timeCourse']"
         for i in TC.copasiML.xpath(query):
-#            print i.attrib,TC.kwargs['UpdateModel']
-            self.assertEqual(i.attrib['updateModel'],TC.kwargs.get('UpdateModel'))
+#            print i.attrib,TC.kwargs['update_model']
+            self.assertEqual(i.attrib['updatemodel'],TC.kwargs.get('update_model'))
 
 
 
@@ -136,7 +136,7 @@ class TimeCourseTests(unittest.TestCase):
         TC=PyCoTools.pycopi.TimeCourse(self.copasi_file,**self.options)
         query="//*[@name='Time-Course']" and "//*[@type='timeCourse']"
         for i in TC.copasiML.xpath(query):
-            self.assertEqual(i[0].attrib['append'],TC.kwargs.get('Append'))
+            self.assertEqual(i[0].attrib['append'],TC.kwargs.get('append'))
 
 #
     def test_report_name(self):
@@ -144,37 +144,37 @@ class TimeCourseTests(unittest.TestCase):
         TC.copasiML=TC.set_report()
         query="//*[@name='Time-Course']" and "//*[@type='timeCourse']"
         for i in TC.copasiML.xpath(query):
-            self.assertEqual(i[0].attrib['target'],TC.kwargs.get('ReportName'))
+            self.assertEqual(i[0].attrib['target'],TC.kwargs.get('report_name'))
 #
     def test_confirm_overwrite(self):
         TC=PyCoTools.pycopi.TimeCourse(self.copasi_file,**self.options)
         TC.copasiML=TC.set_report()
         query="//*[@name='Time-Course']" and "//*[@type='timeCourse']"
         for i in TC.copasiML.xpath(query):
-            self.assertEqual(i[0].attrib['confirmOverwrite'],TC.kwargs.get('ConfirmOverwrite'))
+            self.assertEqual(i[0].attrib['confirmOverwrite'],TC.kwargs.get('confirm_overwrite'))
 
 
     def test_relative_tolerance(self):
         TC=PyCoTools.pycopi.TimeCourse(self.copasi_file,**self.options)
         test_element= TC.copasiML[2][1]
         for i in list(test_element):
-            if i.attrib['name']=='Relative Tolerance':
-                self.assertEqual(i.attrib['value'],self.options['RelativeTolerance'])#,
+            if i.attrib['name']=='Relative tolerance':
+                self.assertEqual(i.attrib['value'],self.options['Relativetolerance'])#,
 
 
     def test_integrate_reduced_model(self):
         TC=PyCoTools.pycopi.TimeCourse(self.copasi_file,**self.options)
         test_element= TC.copasiML[2][1]
         for i in list(test_element):
-            if i.attrib['name']=='Integrate Reduced Model':
+            if i.attrib['name']=='Integrate Reduced model':
                 self.assertEqual(i.attrib['value'],str(0))
 
     def test_absolute_tolerance(self):
         TC=PyCoTools.pycopi.TimeCourse(self.copasi_file,**self.options)
         test_element= TC.copasiML[2][1]
         for i in list(test_element):
-            if i.attrib['name']=='Absolute Tolerance':
-                self.assertEqual(i.attrib['value'],self.options['AbsoluteTolerance'])
+            if i.attrib['name']=='Absolute tolerance':
+                self.assertEqual(i.attrib['value'],self.options['Absolutetolerance'])
 
     def test_max_internal_steps(self):
         TC=PyCoTools.pycopi.TimeCourse(self.copasi_file,**self.options)
@@ -234,12 +234,12 @@ class TimeCourseTests(unittest.TestCase):
 
     def test_data_production(self):
         TC=PyCoTools.pycopi.TimeCourse(self.copasi_file,**self.options)
-        data_file=os.path.join(os.getcwd(),TC.kwargs.get('ReportName'))
+        data_file=os.path.join(os.getcwd(),TC.kwargs.get('report_name'))
         self.assertTrue(os.path.isfile(data_file))
 
     def test_data_not_empty(self):
         TC=PyCoTools.pycopi.TimeCourse(self.copasi_file,**self.options)
-        data_file=os.path.join(os.getcwd(),TC.kwargs.get('ReportName'))
+        data_file=os.path.join(os.getcwd(),TC.kwargs.get('report_name'))
         data= pandas.read_csv(data_file,sep='\t')
         self.assertIsNot(data.shape,(0,0))
 #        

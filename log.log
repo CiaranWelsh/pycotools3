@@ -84,3 +84,6 @@ DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model_2.cps has been parsed i
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model_2.cps has been parsed into Python
 DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model_2.cps
 DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model_2.cps
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing Logging System
+INFO:root:__init__:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf

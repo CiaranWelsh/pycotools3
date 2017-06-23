@@ -143,15 +143,15 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </ListOfParameterDescriptions>
     </Function>
   </ListOfFunctions>
-  <Model key="Model_4" name="Goldbeter1995_CircClock" simulationType="time" timeUnit="h" volumeUnit="l" areaUnit="m²" lengthUnit="m" quantityUnit="µmol" type="deterministic" avogadroConstant="6.02214179e+023">
+  <model key="model_4" name="Goldbeter1995_CircClock" simulationType="time" timeUnit="h" volumeUnit="l" areaUnit="m²" lengthUnit="m" quantityUnit="µmol" type="deterministic" avogadroConstant="6.02214179e+023">
     <MiriamAnnotation>
-<rdf:RDF
-   xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#"
+<rdf:Rdf
+   xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#"
    xmlns:bqbiol="http://biomodels.net/biology-qualifiers/"
    xmlns:dcterms="http://purl.org/dc/terms/"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
-  <rdf:Description rdf:about="#Model_4">
+  <rdf:Description rdf:about="#model_4">
     <bqbiol:hasTaxon>
       <rdf:Bag>
         <rdf:li rdf:resource="http://identifiers.org/taxonomy/7227"/>
@@ -233,7 +233,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
 
     </MiriamAnnotation>
     <Comment>
@@ -243,7 +243,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
           for more information.      </p>
   <p>In summary, you are entitled to use this encoded model in absolutely any manner you deem suitable, verbatim, or with modification, alone or embedded it in a larger context, redistribute it, commercially or not, in a restricted way or not.</p>
   <br/>
-  <p>To cite BioModels Database, please use:      <a href="http://www.ncbi.nlm.nih.gov/pubmed/20587024" target="_blank">Li C, Donizelli M, Rodriguez N, Dharuri H, Endler L, Chelliah V, Li L, He E, Henry A, Stefan MI, Snoep JL, Hucka M, Le Novère N, Laibe C (2010) BioModels Database: An enhanced, curated and annotated resource for published quantitative kinetic models. BMC Syst Biol., 4:92.</a>
+  <p>To cite Biomodels Database, please use:      <a href="http://www.ncbi.nlm.nih.gov/pubmed/20587024" target="_blank">Li C, Donizelli M, Rodriguez N, Dharuri H, Endler L, Chelliah V, Li L, He E, Henry A, Stefan MI, Snoep JL, Hucka M, Le Novère N, Laibe C (2010) Biomodels Database: An enhanced, curated and annotated resource for published quantitative kinetic models. BMC Syst Biol., 4:92.</a>
 </p>
 </body>
 
@@ -253,8 +253,8 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </Compartment>
       <Compartment key="Compartment_3" name="CYTOPLASM" simulationType="fixed" dimensionality="3">
         <MiriamAnnotation>
-<rdf:RDF
-   xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#"
+<rdf:Rdf
+   xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Compartment_3">
     <CopasiMT:is>
@@ -263,14 +263,14 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:is>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
 
         </MiriamAnnotation>
       </Compartment>
       <Compartment key="Compartment_5" name="NUCLEUS" simulationType="fixed" dimensionality="3">
         <MiriamAnnotation>
-<rdf:RDF
-   xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#"
+<rdf:Rdf
+   xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Compartment_5">
     <CopasiMT:is>
@@ -279,12 +279,12 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:is>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
 
         </MiriamAnnotation>
       </Compartment>
     </ListOfCompartments>
-    <ListOfMetabolites>
+    <ListOfmetabolites>
       <Metabolite key="Metabolite_1" name="EmptySet" simulationType="fixed" compartment="Compartment_1">
         <Comment>
           
@@ -296,8 +296,8 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </Metabolite>
       <Metabolite key="Metabolite_3" name="PER mRNA" simulationType="reactions" compartment="Compartment_3">
         <MiriamAnnotation>
-<rdf:RDF
-   xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#"
+<rdf:Rdf
+   xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Metabolite_3">
     <CopasiMT:isVersionOf>
@@ -307,7 +307,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
 
         </MiriamAnnotation>
         <Comment>
@@ -320,8 +320,8 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </Metabolite>
       <Metabolite key="Metabolite_5" name="unphosphorylated PER" simulationType="reactions" compartment="Compartment_3">
         <MiriamAnnotation>
-<rdf:RDF
-   xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#"
+<rdf:Rdf
+   xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Metabolite_5">
     <CopasiMT:isVersionOf>
@@ -330,7 +330,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
 
         </MiriamAnnotation>
         <Comment>
@@ -343,8 +343,8 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </Metabolite>
       <Metabolite key="Metabolite_7" name="monophosphorylated PER" simulationType="reactions" compartment="Compartment_3">
         <MiriamAnnotation>
-<rdf:RDF
-   xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#"
+<rdf:Rdf
+   xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Metabolite_7">
     <CopasiMT:isVersionOf>
@@ -353,7 +353,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
 
         </MiriamAnnotation>
         <Comment>
@@ -366,8 +366,8 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </Metabolite>
       <Metabolite key="Metabolite_9" name="biphosphorylated PER" simulationType="reactions" compartment="Compartment_3">
         <MiriamAnnotation>
-<rdf:RDF
-   xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#"
+<rdf:Rdf
+   xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Metabolite_9">
     <CopasiMT:isVersionOf>
@@ -376,7 +376,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
 
         </MiriamAnnotation>
         <Comment>
@@ -389,8 +389,8 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </Metabolite>
       <Metabolite key="Metabolite_13" name="total PER" simulationType="assignment" compartment="Compartment_3">
         <MiriamAnnotation>
-<rdf:RDF
-   xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#"
+<rdf:Rdf
+   xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Metabolite_13">
     <CopasiMT:is>
@@ -399,7 +399,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:is>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
 
         </MiriamAnnotation>
         <Comment>
@@ -411,13 +411,13 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
 
         </Comment>
         <Expression>
-          &lt;CN=Root,Model=Goldbeter1995_CircClock,Vector=Compartments[CYTOPLASM],Vector=Metabolites[unphosphorylated PER],Reference=Concentration&gt;+&lt;CN=Root,Model=Goldbeter1995_CircClock,Vector=Compartments[CYTOPLASM],Vector=Metabolites[monophosphorylated PER],Reference=Concentration&gt;+&lt;CN=Root,Model=Goldbeter1995_CircClock,Vector=Compartments[CYTOPLASM],Vector=Metabolites[biphosphorylated PER],Reference=Concentration&gt;+&lt;CN=Root,Model=Goldbeter1995_CircClock,Vector=Compartments[NUCLEUS],Vector=Metabolites[nuclear PER],Reference=Concentration&gt;
+          &lt;CN=Root,model=Goldbeter1995_CircClock,Vector=Compartments[CYTOPLASM],Vector=metabolites[unphosphorylated PER],Reference=Concentration&gt;+&lt;CN=Root,model=Goldbeter1995_CircClock,Vector=Compartments[CYTOPLASM],Vector=metabolites[monophosphorylated PER],Reference=Concentration&gt;+&lt;CN=Root,model=Goldbeter1995_CircClock,Vector=Compartments[CYTOPLASM],Vector=metabolites[biphosphorylated PER],Reference=Concentration&gt;+&lt;CN=Root,model=Goldbeter1995_CircClock,Vector=Compartments[NUCLEUS],Vector=metabolites[nuclear PER],Reference=Concentration&gt;
         </Expression>
       </Metabolite>
       <Metabolite key="Metabolite_11" name="nuclear PER" simulationType="reactions" compartment="Compartment_5">
         <MiriamAnnotation>
-<rdf:RDF
-   xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#"
+<rdf:Rdf
+   xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Metabolite_11">
     <CopasiMT:is>
@@ -426,7 +426,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:is>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
 
         </MiriamAnnotation>
         <Comment>
@@ -437,12 +437,12 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
 
         </Comment>
       </Metabolite>
-    </ListOfMetabolites>
+    </ListOfmetabolites>
     <ListOfReactions>
       <Reaction key="Reaction_0" name="transcription of PER" reversible="false" fast="false">
         <MiriamAnnotation>
-<rdf:RDF
-   xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#"
+<rdf:Rdf
+   xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Reaction_0">
     <CopasiMT:isVersionOf>
@@ -452,7 +452,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
 
         </MiriamAnnotation>
         <ListOfSubstrates>
@@ -491,8 +491,8 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </Reaction>
       <Reaction key="Reaction_1" name="translation of PER" reversible="false" fast="false">
         <MiriamAnnotation>
-<rdf:RDF
-   xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#"
+<rdf:Rdf
+   xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Reaction_1">
     <CopasiMT:isVersionOf>
@@ -501,7 +501,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
 
         </MiriamAnnotation>
         <ListOfSubstrates>
@@ -532,8 +532,8 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </Reaction>
       <Reaction key="Reaction_2" name="first phosphorylation of PER" reversible="false" fast="false">
         <MiriamAnnotation>
-<rdf:RDF
-   xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#"
+<rdf:Rdf
+   xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Reaction_2">
     <CopasiMT:isVersionOf>
@@ -543,7 +543,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
 
         </MiriamAnnotation>
         <ListOfSubstrates>
@@ -572,8 +572,8 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </Reaction>
       <Reaction key="Reaction_3" name="removal of the first PER phosphate" reversible="false" fast="false">
         <MiriamAnnotation>
-<rdf:RDF
-   xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#"
+<rdf:Rdf
+   xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Reaction_3">
     <CopasiMT:isVersionOf>
@@ -583,7 +583,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
 
         </MiriamAnnotation>
         <ListOfSubstrates>
@@ -612,8 +612,8 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </Reaction>
       <Reaction key="Reaction_4" name="second phosphorylation of PER" reversible="false" fast="false">
         <MiriamAnnotation>
-<rdf:RDF
-   xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#"
+<rdf:Rdf
+   xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Reaction_4">
     <CopasiMT:isVersionOf>
@@ -623,7 +623,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
 
         </MiriamAnnotation>
         <ListOfSubstrates>
@@ -652,8 +652,8 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </Reaction>
       <Reaction key="Reaction_5" name="removal of the second PER phosphate" reversible="false" fast="false">
         <MiriamAnnotation>
-<rdf:RDF
-   xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#"
+<rdf:Rdf
+   xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Reaction_5">
     <CopasiMT:isVersionOf>
@@ -663,7 +663,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
 
         </MiriamAnnotation>
         <ListOfSubstrates>
@@ -692,8 +692,8 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </Reaction>
       <Reaction key="Reaction_6" name="translocation of PER to the nucleus" reversible="false" fast="false">
         <MiriamAnnotation>
-<rdf:RDF
-   xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#"
+<rdf:Rdf
+   xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Reaction_6">
     <CopasiMT:isVersionOf>
@@ -702,7 +702,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
 
         </MiriamAnnotation>
         <ListOfSubstrates>
@@ -730,8 +730,8 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </Reaction>
       <Reaction key="Reaction_7" name="translocation of PER to the cytoplasm" reversible="false" fast="false">
         <MiriamAnnotation>
-<rdf:RDF
-   xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#"
+<rdf:Rdf
+   xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Reaction_7">
     <CopasiMT:isVersionOf>
@@ -740,7 +740,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
 
         </MiriamAnnotation>
         <ListOfSubstrates>
@@ -768,8 +768,8 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </Reaction>
       <Reaction key="Reaction_8" name="degradation of PER mRNA" reversible="false" fast="false">
         <MiriamAnnotation>
-<rdf:RDF
-   xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#"
+<rdf:Rdf
+   xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Reaction_8">
     <CopasiMT:isVersionOf>
@@ -778,7 +778,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
 
         </MiriamAnnotation>
         <ListOfSubstrates>
@@ -810,8 +810,8 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </Reaction>
       <Reaction key="Reaction_9" name="degradation of PER" reversible="false" fast="false">
         <MiriamAnnotation>
-<rdf:RDF
-   xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#"
+<rdf:Rdf
+   xmlns:CopasiMT="http://www.copasi.org/Rdf/MiriamTerms#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Reaction_9">
     <CopasiMT:isVersionOf>
@@ -820,7 +820,7 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
-</rdf:RDF>
+</rdf:Rdf>
 
         </MiriamAnnotation>
         <ListOfSubstrates>
@@ -851,94 +851,94 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
         </KineticLaw>
       </Reaction>
     </ListOfReactions>
-    <ListOfModelParameterSets activeSet="ModelParameterSet_0">
-      <ModelParameterSet key="ModelParameterSet_0" name="Initial State">
-        <ModelParameterGroup cn="String=Initial Time" type="Group">
-          <ModelParameter cn="CN=Root,Model=Goldbeter1995_CircClock" value="0" type="Model" simulationType="time"/>
-        </ModelParameterGroup>
-        <ModelParameterGroup cn="String=Initial Compartment Sizes" type="Group">
-          <ModelParameter cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Compartments[default]" value="1e-015" type="Compartment" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Compartments[CYTOPLASM]" value="1e-015" type="Compartment" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Compartments[NUCLEUS]" value="1e-015" type="Compartment" simulationType="fixed"/>
-        </ModelParameterGroup>
-        <ModelParameterGroup cn="String=Initial Species Values" type="Group">
-          <ModelParameter cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Compartments[default],Vector=Metabolites[EmptySet]" value="0" type="Species" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Compartments[CYTOPLASM],Vector=Metabolites[PER mRNA]" value="60.22141790000001" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Compartments[CYTOPLASM],Vector=Metabolites[unphosphorylated PER]" value="150.55354475" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Compartments[CYTOPLASM],Vector=Metabolites[monophosphorylated PER]" value="150.55354475" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Compartments[CYTOPLASM],Vector=Metabolites[biphosphorylated PER]" value="150.55354475" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Compartments[CYTOPLASM],Vector=Metabolites[total PER]" value="602.2141790000001" type="Species" simulationType="assignment"/>
-          <ModelParameter cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Compartments[NUCLEUS],Vector=Metabolites[nuclear PER]" value="150.55354475" type="Species" simulationType="reactions"/>
-        </ModelParameterGroup>
-        <ModelParameterGroup cn="String=Initial Global Quantities" type="Group">
-        </ModelParameterGroup>
-        <ModelParameterGroup cn="String=Kinetic Parameters" type="Group">
-          <ModelParameterGroup cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Reactions[transcription of PER]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Reactions[transcription of PER],ParameterGroup=Parameters,Parameter=Vs" value="0.76" type="ReactionParameter" simulationType="fixed"/>
-            <ModelParameter cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Reactions[transcription of PER],ParameterGroup=Parameters,Parameter=KI" value="1" type="ReactionParameter" simulationType="fixed"/>
-            <ModelParameter cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Reactions[transcription of PER],ParameterGroup=Parameters,Parameter=n" value="4" type="ReactionParameter" simulationType="fixed"/>
-          </ModelParameterGroup>
-          <ModelParameterGroup cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Reactions[translation of PER]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Reactions[translation of PER],ParameterGroup=Parameters,Parameter=ks" value="0.38" type="ReactionParameter" simulationType="fixed"/>
-          </ModelParameterGroup>
-          <ModelParameterGroup cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Reactions[first phosphorylation of PER]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Reactions[first phosphorylation of PER],ParameterGroup=Parameters,Parameter=V1" value="3.2" type="ReactionParameter" simulationType="fixed"/>
-            <ModelParameter cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Reactions[first phosphorylation of PER],ParameterGroup=Parameters,Parameter=K1" value="2" type="ReactionParameter" simulationType="fixed"/>
-          </ModelParameterGroup>
-          <ModelParameterGroup cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Reactions[removal of the first PER phosphate]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Reactions[removal of the first PER phosphate],ParameterGroup=Parameters,Parameter=V2" value="1.58" type="ReactionParameter" simulationType="fixed"/>
-            <ModelParameter cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Reactions[removal of the first PER phosphate],ParameterGroup=Parameters,Parameter=K2" value="2" type="ReactionParameter" simulationType="fixed"/>
-          </ModelParameterGroup>
-          <ModelParameterGroup cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Reactions[second phosphorylation of PER]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Reactions[second phosphorylation of PER],ParameterGroup=Parameters,Parameter=V3" value="5" type="ReactionParameter" simulationType="fixed"/>
-            <ModelParameter cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Reactions[second phosphorylation of PER],ParameterGroup=Parameters,Parameter=K3" value="2" type="ReactionParameter" simulationType="fixed"/>
-          </ModelParameterGroup>
-          <ModelParameterGroup cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Reactions[removal of the second PER phosphate]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Reactions[removal of the second PER phosphate],ParameterGroup=Parameters,Parameter=V4" value="2.5" type="ReactionParameter" simulationType="fixed"/>
-            <ModelParameter cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Reactions[removal of the second PER phosphate],ParameterGroup=Parameters,Parameter=K4" value="2" type="ReactionParameter" simulationType="fixed"/>
-          </ModelParameterGroup>
-          <ModelParameterGroup cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Reactions[translocation of PER to the nucleus]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Reactions[translocation of PER to the nucleus],ParameterGroup=Parameters,Parameter=k1" value="1.9" type="ReactionParameter" simulationType="fixed"/>
-          </ModelParameterGroup>
-          <ModelParameterGroup cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Reactions[translocation of PER to the cytoplasm]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Reactions[translocation of PER to the cytoplasm],ParameterGroup=Parameters,Parameter=k2" value="1.3" type="ReactionParameter" simulationType="fixed"/>
-          </ModelParameterGroup>
-          <ModelParameterGroup cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Reactions[degradation of PER mRNA]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Reactions[degradation of PER mRNA],ParameterGroup=Parameters,Parameter=Km" value="0.5" type="ReactionParameter" simulationType="fixed"/>
-            <ModelParameter cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Reactions[degradation of PER mRNA],ParameterGroup=Parameters,Parameter=Vm" value="0.65" type="ReactionParameter" simulationType="fixed"/>
-          </ModelParameterGroup>
-          <ModelParameterGroup cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Reactions[degradation of PER]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Reactions[degradation of PER],ParameterGroup=Parameters,Parameter=Vd" value="0.95" type="ReactionParameter" simulationType="fixed"/>
-            <ModelParameter cn="CN=Root,Model=Goldbeter1995_CircClock,Vector=Reactions[degradation of PER],ParameterGroup=Parameters,Parameter=Kd" value="0.2" type="ReactionParameter" simulationType="fixed"/>
-          </ModelParameterGroup>
-        </ModelParameterGroup>
-      </ModelParameterSet>
-    </ListOfModelParameterSets>
+    <ListOfmodelParameterSets activeSet="modelParameterSet_0">
+      <modelParameterSet key="modelParameterSet_0" name="Initial State">
+        <modelParameterGroup cn="String=Initial Time" type="Group">
+          <modelParameter cn="CN=Root,model=Goldbeter1995_CircClock" value="0" type="model" simulationType="time"/>
+        </modelParameterGroup>
+        <modelParameterGroup cn="String=Initial Compartment Sizes" type="Group">
+          <modelParameter cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Compartments[default]" value="1e-015" type="Compartment" simulationType="fixed"/>
+          <modelParameter cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Compartments[CYTOPLASM]" value="1e-015" type="Compartment" simulationType="fixed"/>
+          <modelParameter cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Compartments[NUCLEUS]" value="1e-015" type="Compartment" simulationType="fixed"/>
+        </modelParameterGroup>
+        <modelParameterGroup cn="String=Initial Species Values" type="Group">
+          <modelParameter cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Compartments[default],Vector=metabolites[EmptySet]" value="0" type="Species" simulationType="fixed"/>
+          <modelParameter cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Compartments[CYTOPLASM],Vector=metabolites[PER mRNA]" value="60.22141790000001" type="Species" simulationType="reactions"/>
+          <modelParameter cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Compartments[CYTOPLASM],Vector=metabolites[unphosphorylated PER]" value="150.55354475" type="Species" simulationType="reactions"/>
+          <modelParameter cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Compartments[CYTOPLASM],Vector=metabolites[monophosphorylated PER]" value="150.55354475" type="Species" simulationType="reactions"/>
+          <modelParameter cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Compartments[CYTOPLASM],Vector=metabolites[biphosphorylated PER]" value="150.55354475" type="Species" simulationType="reactions"/>
+          <modelParameter cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Compartments[CYTOPLASM],Vector=metabolites[total PER]" value="602.2141790000001" type="Species" simulationType="assignment"/>
+          <modelParameter cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Compartments[NUCLEUS],Vector=metabolites[nuclear PER]" value="150.55354475" type="Species" simulationType="reactions"/>
+        </modelParameterGroup>
+        <modelParameterGroup cn="String=Initial Global Quantities" type="Group">
+        </modelParameterGroup>
+        <modelParameterGroup cn="String=Kinetic Parameters" type="Group">
+          <modelParameterGroup cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Reactions[transcription of PER]" type="Reaction">
+            <modelParameter cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Reactions[transcription of PER],ParameterGroup=Parameters,Parameter=Vs" value="0.76" type="ReactionParameter" simulationType="fixed"/>
+            <modelParameter cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Reactions[transcription of PER],ParameterGroup=Parameters,Parameter=KI" value="1" type="ReactionParameter" simulationType="fixed"/>
+            <modelParameter cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Reactions[transcription of PER],ParameterGroup=Parameters,Parameter=n" value="4" type="ReactionParameter" simulationType="fixed"/>
+          </modelParameterGroup>
+          <modelParameterGroup cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Reactions[translation of PER]" type="Reaction">
+            <modelParameter cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Reactions[translation of PER],ParameterGroup=Parameters,Parameter=ks" value="0.38" type="ReactionParameter" simulationType="fixed"/>
+          </modelParameterGroup>
+          <modelParameterGroup cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Reactions[first phosphorylation of PER]" type="Reaction">
+            <modelParameter cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Reactions[first phosphorylation of PER],ParameterGroup=Parameters,Parameter=V1" value="3.2" type="ReactionParameter" simulationType="fixed"/>
+            <modelParameter cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Reactions[first phosphorylation of PER],ParameterGroup=Parameters,Parameter=K1" value="2" type="ReactionParameter" simulationType="fixed"/>
+          </modelParameterGroup>
+          <modelParameterGroup cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Reactions[removal of the first PER phosphate]" type="Reaction">
+            <modelParameter cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Reactions[removal of the first PER phosphate],ParameterGroup=Parameters,Parameter=V2" value="1.58" type="ReactionParameter" simulationType="fixed"/>
+            <modelParameter cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Reactions[removal of the first PER phosphate],ParameterGroup=Parameters,Parameter=K2" value="2" type="ReactionParameter" simulationType="fixed"/>
+          </modelParameterGroup>
+          <modelParameterGroup cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Reactions[second phosphorylation of PER]" type="Reaction">
+            <modelParameter cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Reactions[second phosphorylation of PER],ParameterGroup=Parameters,Parameter=V3" value="5" type="ReactionParameter" simulationType="fixed"/>
+            <modelParameter cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Reactions[second phosphorylation of PER],ParameterGroup=Parameters,Parameter=K3" value="2" type="ReactionParameter" simulationType="fixed"/>
+          </modelParameterGroup>
+          <modelParameterGroup cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Reactions[removal of the second PER phosphate]" type="Reaction">
+            <modelParameter cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Reactions[removal of the second PER phosphate],ParameterGroup=Parameters,Parameter=V4" value="2.5" type="ReactionParameter" simulationType="fixed"/>
+            <modelParameter cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Reactions[removal of the second PER phosphate],ParameterGroup=Parameters,Parameter=K4" value="2" type="ReactionParameter" simulationType="fixed"/>
+          </modelParameterGroup>
+          <modelParameterGroup cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Reactions[translocation of PER to the nucleus]" type="Reaction">
+            <modelParameter cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Reactions[translocation of PER to the nucleus],ParameterGroup=Parameters,Parameter=k1" value="1.9" type="ReactionParameter" simulationType="fixed"/>
+          </modelParameterGroup>
+          <modelParameterGroup cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Reactions[translocation of PER to the cytoplasm]" type="Reaction">
+            <modelParameter cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Reactions[translocation of PER to the cytoplasm],ParameterGroup=Parameters,Parameter=k2" value="1.3" type="ReactionParameter" simulationType="fixed"/>
+          </modelParameterGroup>
+          <modelParameterGroup cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Reactions[degradation of PER mRNA]" type="Reaction">
+            <modelParameter cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Reactions[degradation of PER mRNA],ParameterGroup=Parameters,Parameter=Km" value="0.5" type="ReactionParameter" simulationType="fixed"/>
+            <modelParameter cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Reactions[degradation of PER mRNA],ParameterGroup=Parameters,Parameter=Vm" value="0.65" type="ReactionParameter" simulationType="fixed"/>
+          </modelParameterGroup>
+          <modelParameterGroup cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Reactions[degradation of PER]" type="Reaction">
+            <modelParameter cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Reactions[degradation of PER],ParameterGroup=Parameters,Parameter=Vd" value="0.95" type="ReactionParameter" simulationType="fixed"/>
+            <modelParameter cn="CN=Root,model=Goldbeter1995_CircClock,Vector=Reactions[degradation of PER],ParameterGroup=Parameters,Parameter=Kd" value="0.2" type="ReactionParameter" simulationType="fixed"/>
+          </modelParameterGroup>
+        </modelParameterGroup>
+      </modelParameterSet>
+    </ListOfmodelParameterSets>
     <StateTemplate>
-      <StateTemplateVariable objectReference="Model_4"/>
-      <StateTemplateVariable objectReference="Metabolite_9"/>
-      <StateTemplateVariable objectReference="Metabolite_7"/>
-      <StateTemplateVariable objectReference="Metabolite_3"/>
-      <StateTemplateVariable objectReference="Metabolite_5"/>
-      <StateTemplateVariable objectReference="Metabolite_11"/>
-      <StateTemplateVariable objectReference="Metabolite_13"/>
-      <StateTemplateVariable objectReference="Metabolite_1"/>
-      <StateTemplateVariable objectReference="Compartment_1"/>
-      <StateTemplateVariable objectReference="Compartment_3"/>
-      <StateTemplateVariable objectReference="Compartment_5"/>
+      <StateTemplatevariable objectReference="model_4"/>
+      <StateTemplatevariable objectReference="Metabolite_9"/>
+      <StateTemplatevariable objectReference="Metabolite_7"/>
+      <StateTemplatevariable objectReference="Metabolite_3"/>
+      <StateTemplatevariable objectReference="Metabolite_5"/>
+      <StateTemplatevariable objectReference="Metabolite_11"/>
+      <StateTemplatevariable objectReference="Metabolite_13"/>
+      <StateTemplatevariable objectReference="Metabolite_1"/>
+      <StateTemplatevariable objectReference="Compartment_1"/>
+      <StateTemplatevariable objectReference="Compartment_3"/>
+      <StateTemplatevariable objectReference="Compartment_5"/>
     </StateTemplate>
     <InitialState type="initialState">
       0 150.55354475 150.55354475 60.22141790000001 150.55354475 150.55354475 602.2141790000001 0 1e-015 1e-015 1e-015 
     </InitialState>
-  </Model>
+  </model>
   <ListOfTasks>
-    <Task key="Task_12" name="Steady-State" type="steadyState" scheduled="false" updateModel="false">
+    <Task key="Task_12" name="Steady-State" type="steadyState" scheduled="false" updatemodel="false">
       <Report reference="Report_8" target="" append="1" confirmOverwrite="1"/>
       <Problem>
         <Parameter name="JacobianRequested" type="bool" value="1"/>
         <Parameter name="StabilityAnalysisRequested" type="bool" value="1"/>
       </Problem>
-      <Method name="Enhanced Newton" type="EnhancedNewton">
+      <method name="Enhanced Newton" type="EnhancedNewton">
         <Parameter name="Resolution" type="unsignedFloat" value="1e-009"/>
         <Parameter name="Derivation Factor" type="unsignedFloat" value="0.001"/>
         <Parameter name="Use Newton" type="bool" value="1"/>
@@ -946,11 +946,11 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
         <Parameter name="Use Back Integration" type="bool" value="1"/>
         <Parameter name="Accept Negative Concentrations" type="bool" value="0"/>
         <Parameter name="Iteration Limit" type="unsignedInteger" value="50"/>
-        <Parameter name="Maximum duration for forward integration" type="unsignedFloat" value="1000000000"/>
-        <Parameter name="Maximum duration for backward integration" type="unsignedFloat" value="1000000"/>
-      </Method>
+        <Parameter name="maximum duration for forward integration" type="unsignedFloat" value="1000000000"/>
+        <Parameter name="maximum duration for backward integration" type="unsignedFloat" value="1000000"/>
+      </method>
     </Task>
-    <Task key="Task_11" name="Time-Course" type="timeCourse" scheduled="false" updateModel="false">
+    <Task key="Task_11" name="Time-Course" type="timeCourse" scheduled="false" updatemodel="false">
       <Problem>
         <Parameter name="StepNumber" type="unsignedInteger" value="100"/>
         <Parameter name="StepSize" type="float" value="0.01"/>
@@ -960,14 +960,14 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
         <Parameter name="Output Event" type="bool" value="0"/>
         <Parameter name="Continue on Simultaneous Events" type="bool" value="1"/>
       </Problem>
-      <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
-        <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
-        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-006"/>
-        <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-012"/>
+      <method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+        <Parameter name="Integrate Reduced model" type="bool" value="0"/>
+        <Parameter name="Relative tolerance" type="unsignedFloat" value="1e-006"/>
+        <Parameter name="Absolute tolerance" type="unsignedFloat" value="1e-012"/>
         <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
-      </Method>
+      </method>
     </Task>
-    <Task key="Task_10" name="Scan" type="scan" scheduled="false" updateModel="false">
+    <Task key="Task_10" name="Scan" type="scan" scheduled="false" updatemodel="false">
       <Problem>
         <Parameter name="Subtask" type="unsignedInteger" value="1"/>
         <ParameterGroup name="ScanItems">
@@ -975,17 +975,17 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
         <Parameter name="Output in subtask" type="bool" value="1"/>
         <Parameter name="Adjust initial conditions" type="bool" value="0"/>
       </Problem>
-      <Method name="Scan Framework" type="ScanFramework">
-      </Method>
+      <method name="Scan Framework" type="ScanFramework">
+      </method>
     </Task>
-    <Task key="Task_9" name="Elementary Flux Modes" type="fluxMode" scheduled="false" updateModel="false">
+    <Task key="Task_9" name="Elementary Flux modes" type="fluxmode" scheduled="false" updatemodel="false">
       <Report reference="Report_7" target="" append="1" confirmOverwrite="1"/>
       <Problem>
       </Problem>
-      <Method name="EFM Algorithm" type="EFMAlgorithm">
-      </Method>
+      <method name="EFM Algorithm" type="EFMAlgorithm">
+      </method>
     </Task>
-    <Task key="Task_8" name="Optimization" type="optimization" scheduled="false" updateModel="false">
+    <Task key="Task_8" name="Optimization" type="optimization" scheduled="false" updatemodel="false">
       <Report reference="Report_6" target="" append="1" confirmOverwrite="1"/>
       <Problem>
         <Parameter name="Subtask" type="cn" value="CN=Root,Vector=TaskList[Steady-State]"/>
@@ -1000,13 +1000,13 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
         <ParameterGroup name="OptimizationConstraintList">
         </ParameterGroup>
       </Problem>
-      <Method name="Random Search" type="RandomSearch">
+      <method name="Random Search" type="RandomSearch">
         <Parameter name="Number of Iterations" type="unsignedInteger" value="100000"/>
         <Parameter name="Random Number Generator" type="unsignedInteger" value="1"/>
-        <Parameter name="Seed" type="unsignedInteger" value="0"/>
-      </Method>
+        <Parameter name="seed" type="unsignedInteger" value="0"/>
+      </method>
     </Task>
-    <Task key="Task_7" name="Parameter Estimation" type="parameterFitting" scheduled="false" updateModel="false">
+    <Task key="Task_7" name="Parameter Estimation" type="parameterFitting" scheduled="false" updatemodel="false">
       <Report reference="Report_5" target="" append="1" confirmOverwrite="1"/>
       <Problem>
         <Parameter name="Maximize" type="bool" value="0"/>
@@ -1026,40 +1026,40 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
           <Parameter name="Threshold" type="unsignedInteger" value="5"/>
         </ParameterGroup>
       </Problem>
-      <Method name="Evolutionary Programming" type="EvolutionaryProgram">
+      <method name="Evolutionary Programming" type="EvolutionaryProgram">
         <Parameter name="Number of Generations" type="unsignedInteger" value="200"/>
         <Parameter name="Population Size" type="unsignedInteger" value="20"/>
         <Parameter name="Random Number Generator" type="unsignedInteger" value="1"/>
-        <Parameter name="Seed" type="unsignedInteger" value="0"/>
-      </Method>
+        <Parameter name="seed" type="unsignedInteger" value="0"/>
+      </method>
     </Task>
-    <Task key="Task_6" name="Metabolic Control Analysis" type="metabolicControlAnalysis" scheduled="false" updateModel="false">
+    <Task key="Task_6" name="Metabolic Control Analysis" type="metabolicControlAnalysis" scheduled="false" updatemodel="false">
       <Report reference="Report_4" target="" append="1" confirmOverwrite="1"/>
       <Problem>
         <Parameter name="Steady-State" type="key" value="Task_12"/>
       </Problem>
-      <Method name="MCA Method (Reder)" type="MCAMethod(Reder)">
+      <method name="MCA method (Reder)" type="MCAmethod(Reder)">
         <Parameter name="Modulation Factor" type="unsignedFloat" value="1e-009"/>
         <Parameter name="Use Reeder" type="bool" value="1"/>
         <Parameter name="Use Smallbone" type="bool" value="1"/>
-      </Method>
+      </method>
     </Task>
-    <Task key="Task_5" name="Lyapunov Exponents" type="lyapunovExponents" scheduled="false" updateModel="false">
+    <Task key="Task_5" name="Lyapunov Exponents" type="lyapunovExponents" scheduled="false" updatemodel="false">
       <Report reference="Report_3" target="" append="1" confirmOverwrite="1"/>
       <Problem>
         <Parameter name="ExponentNumber" type="unsignedInteger" value="3"/>
         <Parameter name="DivergenceRequested" type="bool" value="1"/>
         <Parameter name="TransientTime" type="float" value="0"/>
       </Problem>
-      <Method name="Wolf Method" type="WolfMethod">
+      <method name="Wolf method" type="Wolfmethod">
         <Parameter name="Orthonormalization Interval" type="unsignedFloat" value="1"/>
         <Parameter name="Overall time" type="unsignedFloat" value="1000"/>
-        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-006"/>
-        <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-012"/>
+        <Parameter name="Relative tolerance" type="unsignedFloat" value="1e-006"/>
+        <Parameter name="Absolute tolerance" type="unsignedFloat" value="1e-012"/>
         <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
-      </Method>
+      </method>
     </Task>
-    <Task key="Task_4" name="Time Scale Separation Analysis" type="timeScaleSeparationAnalysis" scheduled="false" updateModel="false">
+    <Task key="Task_4" name="Time scale Separation Analysis" type="timescaleSeparationAnalysis" scheduled="false" updatemodel="false">
       <Report reference="Report_2" target="" append="1" confirmOverwrite="1"/>
       <Problem>
         <Parameter name="StepNumber" type="unsignedInteger" value="100"/>
@@ -1068,11 +1068,11 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
         <Parameter name="TimeSeriesRequested" type="bool" value="1"/>
         <Parameter name="OutputStartTime" type="float" value="0"/>
       </Problem>
-      <Method name="ILDM (LSODA,Deuflhard)" type="TimeScaleSeparation(ILDM,Deuflhard)">
-        <Parameter name="Deuflhard Tolerance" type="unsignedFloat" value="1e-006"/>
-      </Method>
+      <method name="ILDM (LSODA,Deuflhard)" type="TimescaleSeparation(ILDM,Deuflhard)">
+        <Parameter name="Deuflhard tolerance" type="unsignedFloat" value="1e-006"/>
+      </method>
     </Task>
-    <Task key="Task_3" name="Sensitivities" type="sensitivities" scheduled="false" updateModel="false">
+    <Task key="Task_3" name="Sensitivities" type="sensitivities" scheduled="false" updatemodel="false">
       <Report reference="Report_1" target="" append="1" confirmOverwrite="1"/>
       <Problem>
         <Parameter name="SubtaskType" type="unsignedInteger" value="1"/>
@@ -1080,25 +1080,25 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
           <Parameter name="SingleObject" type="cn" value=""/>
           <Parameter name="ObjectListType" type="unsignedInteger" value="7"/>
         </ParameterGroup>
-        <ParameterGroup name="ListOfVariables">
-          <ParameterGroup name="Variables">
+        <ParameterGroup name="ListOfvariables">
+          <ParameterGroup name="variables">
             <Parameter name="SingleObject" type="cn" value=""/>
             <Parameter name="ObjectListType" type="unsignedInteger" value="41"/>
           </ParameterGroup>
         </ParameterGroup>
       </Problem>
-      <Method name="Sensitivities Method" type="SensitivitiesMethod">
+      <method name="Sensitivities method" type="Sensitivitiesmethod">
         <Parameter name="Delta factor" type="unsignedFloat" value="0.001"/>
         <Parameter name="Delta minimum" type="unsignedFloat" value="1e-012"/>
-      </Method>
+      </method>
     </Task>
-    <Task key="Task_2" name="Moieties" type="moieties" scheduled="false" updateModel="false">
+    <Task key="Task_2" name="Moieties" type="moieties" scheduled="false" updatemodel="false">
       <Problem>
       </Problem>
-      <Method name="Householder Reduction" type="Householder">
-      </Method>
+      <method name="Householder Reduction" type="Householder">
+      </method>
     </Task>
-    <Task key="Task_1" name="Cross Section" type="crosssection" scheduled="false" updateModel="false">
+    <Task key="Task_1" name="Cross Section" type="crosssection" scheduled="false" updatemodel="false">
       <Problem>
         <Parameter name="StepNumber" type="unsignedInteger" value="100"/>
         <Parameter name="StepSize" type="float" value="0.01"/>
@@ -1114,29 +1114,29 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
         <Parameter name="PositiveDirection" type="bool" value="1"/>
         <Parameter name="NumOutCrossingsLimit" type="unsignedInteger" value="0"/>
         <Parameter name="LimitUntilConvergence" type="bool" value="0"/>
-        <Parameter name="ConvergenceTolerance" type="float" value="1e-006"/>
+        <Parameter name="Convergencetolerance" type="float" value="1e-006"/>
         <Parameter name="Threshold" type="float" value="0"/>
         <Parameter name="DelayOutputUntilConvergence" type="bool" value="0"/>
-        <Parameter name="OutputConvergenceTolerance" type="float" value="1e-006"/>
+        <Parameter name="OutputConvergencetolerance" type="float" value="1e-006"/>
         <ParameterText name="TriggerExpression" type="expression">
           
         </ParameterText>
-        <Parameter name="SingleVariable" type="cn" value=""/>
+        <Parameter name="Singlevariable" type="cn" value=""/>
       </Problem>
-      <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
-        <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
-        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-006"/>
-        <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-012"/>
+      <method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+        <Parameter name="Integrate Reduced model" type="bool" value="0"/>
+        <Parameter name="Relative tolerance" type="unsignedFloat" value="1e-006"/>
+        <Parameter name="Absolute tolerance" type="unsignedFloat" value="1e-012"/>
         <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
-      </Method>
+      </method>
     </Task>
-    <Task key="Task_13" name="Linear Noise Approximation" type="linearNoiseApproximation" scheduled="false" updateModel="false">
+    <Task key="Task_13" name="Linear Noise Approximation" type="linearNoiseApproximation" scheduled="false" updatemodel="false">
       <Report reference="Report_0" target="" append="1" confirmOverwrite="1"/>
       <Problem>
         <Parameter name="Steady-State" type="key" value="Task_12"/>
       </Problem>
-      <Method name="Linear Noise Approximation" type="LinearNoiseApproximation">
-      </Method>
+      <method name="Linear Noise Approximation" type="LinearNoiseApproximation">
+      </method>
     </Task>
   </ListOfTasks>
   <ListOfReports>
@@ -1148,12 +1148,12 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
         <Object cn="CN=Root,Vector=TaskList[Steady-State]"/>
       </Footer>
     </Report>
-    <Report key="Report_7" name="Elementary Flux Modes" taskType="fluxMode" separator="&#x09;" precision="6">
+    <Report key="Report_7" name="Elementary Flux modes" taskType="fluxmode" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
       <Footer>
-        <Object cn="CN=Root,Vector=TaskList[Elementary Flux Modes],Object=Result"/>
+        <Object cn="CN=Root,Vector=TaskList[Elementary Flux modes],Object=Result"/>
       </Footer>
     </Report>
     <Report key="Report_6" name="Optimization" taskType="optimization" separator="&#x09;" precision="6">
@@ -1163,16 +1163,16 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       <Header>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Object=Description"/>
         <Object cn="String=\[Function Evaluations\]"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="separator=&#x09;"/>
         <Object cn="String=\[Best Value\]"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="separator=&#x09;"/>
         <Object cn="String=\[Best Parameters\]"/>
       </Header>
       <Body>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Problem=Optimization,Reference=Function Evaluations"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="separator=&#x09;"/>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Problem=Optimization,Reference=Best Value"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="separator=&#x09;"/>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Problem=Optimization,Reference=Best Parameters"/>
       </Body>
       <Footer>
@@ -1187,16 +1187,16 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
       <Header>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Object=Description"/>
         <Object cn="String=\[Function Evaluations\]"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="separator=&#x09;"/>
         <Object cn="String=\[Best Value\]"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="separator=&#x09;"/>
         <Object cn="String=\[Best Parameters\]"/>
       </Header>
       <Body>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Function Evaluations"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="separator=&#x09;"/>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="separator=&#x09;"/>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"/>
       </Body>
       <Footer>
@@ -1228,16 +1228,16 @@ model_string='''<?xml version="1.0" encoding="UTF-8"?>
         <Object cn="CN=Root,Vector=TaskList[Lyapunov Exponents],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_2" name="Time Scale Separation Analysis" taskType="timeScaleSeparationAnalysis" separator="&#x09;" precision="6">
+    <Report key="Report_2" name="Time scale Separation Analysis" taskType="timescaleSeparationAnalysis" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
       <Header>
-        <Object cn="CN=Root,Vector=TaskList[Time Scale Separation Analysis],Object=Description"/>
+        <Object cn="CN=Root,Vector=TaskList[Time scale Separation Analysis],Object=Description"/>
       </Header>
       <Footer>
         <Object cn="String=&#x0a;"/>
-        <Object cn="CN=Root,Vector=TaskList[Time Scale Separation Analysis],Object=Result"/>
+        <Object cn="CN=Root,Vector=TaskList[Time scale Separation Analysis],Object=Result"/>
       </Footer>
     </Report>
     <Report key="Report_1" name="Sensitivities" taskType="sensitivities" separator="&#x09;" precision="6">
@@ -1312,20 +1312,20 @@ class A_Test(unittest.TestCase):
         if os.path.isfile(self.timecourse_report_name):
             os.remove(self.timecourse_report_name)
             
-        self.TC=PyCoTools.pycopi.TimeCourse(self.copasi_file,StepSize=100,Plot='false',Intervals=50,End=5000,ReportName=self.timecourse_report_name)
+        self.TC=PyCoTools.pycopi.TimeCourse(self.copasi_file,StepSize=100,plot='false',Intervals=50,End=5000,report_name=self.timecourse_report_name)
         PyCoTools.pycopi.PruneCopasiHeaders(self.timecourse_report_name,replace='true')
         
         self.PE=PyCoTools.pycopi.ParameterEstimation(self.copasi_file,
                                                      self.timecourse_report_name,
-                                                     Plot='false',Method='HookeJeeves',
-                                                     IterationLimit=1)
+                                                     plot='false',method='HookeJeeves',
+                                                     iteration_limit=1)
         self.PE.write_item_template()
         self.PE.set_up()
 
-        self.S=PyCoTools.pycopi.Scan(self.copasi_file,SubTask='parameter_estimation',
-                                     ScanType='repeat',NumberOfSteps=1)
+        self.S=PyCoTools.pycopi.Scan(self.copasi_file,subtask='parameter_estimation',
+                                     scan_type='repeat',number_of_steps=1)
         self.PL=PyCoTools.pydentify2.ProfileLikelihood(self.copasi_file,
-                                                       Tolerance=1,IterationLimit=1)
+                                                       tolerance=1,iteration_limit=1)
         
     def test_cps_dct1(self):
         for i in self.PL.cps_dct.keys():
@@ -1389,7 +1389,7 @@ class A_Test(unittest.TestCase):
             for j in list(i):
                 for k in list(j):
                     if k.attrib['name']=='Number of steps':
-                        self.assertTrue(k.attrib['value']==self.PL.kwargs.get('NumberOfSteps'))
+                        self.assertTrue(k.attrib['value']==self.PL.kwargs.get('number_of_steps'))
         
       
         
@@ -1398,7 +1398,7 @@ class A_Test(unittest.TestCase):
 #    def tearDown(self):
 #        os.remove(self.copasi_file)
 #        os.remove(self.timecourse_report_name)
-#        os.remove(self.PE.kwargs.get('ReportName'))
+#        os.remove(self.PE.kwargs.get('report_name'))
 
             
 

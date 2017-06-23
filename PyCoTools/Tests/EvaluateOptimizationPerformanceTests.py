@@ -31,10 +31,10 @@ import glob
 import os
 import shutil 
 
-import TestModels
+import Testmodels
 import lxml.etree as etree
 
-MODEL_STRING = TestModels.TestModels.get_model1()
+MODEL_STRING = Testmodels.Testmodels.get_model1()
 
 
 
@@ -50,9 +50,9 @@ class EvaluateOptimizationPerformanceTests(unittest.TestCase):
         if os.path.isfile(self.timecourse_report_name):
             os.remove(self.timecourse_report_name)
         ## do time course
-        self.TC=PyCoTools.pycopi.TimeCourse(self.copasi_file,StepSize=100,Plot='false',
+        self.TC=PyCoTools.pycopi.TimeCourse(self.copasi_file,StepSize=100,plot='false',
                                                Intervals=50,End=5000,
-                                               ReportName=self.timecourse_report_name)
+                                               report_name=self.timecourse_report_name)
         ## make PE report name available
         self.PE_report_name=os.path.join(os.path.dirname(self.copasi_file),'PEdata.txt')
 
@@ -60,21 +60,21 @@ class EvaluateOptimizationPerformanceTests(unittest.TestCase):
         
         self.PE=PyCoTools.pycopi.ParameterEstimation(self.copasi_file,
                                                         self.timecourse_report_name,
-                                                        PopulationSize=2,
-                                                        NumberOfGenerations=2,
-                                                        RandomizeStartValues='true',
-                                                        ReportName=self.PE_report_name,
-                                                        Plot='false')
+                                                        population_size=2,
+                                                        number_of_generations=2,
+                                                        randomize_start_values='true',
+                                                        report_name=self.PE_report_name,
+                                                        plot='false')
         self.PE.write_item_template()
         self.PE.set_up()
         
-        PyCoTools.pycopi.Scan(self.copasi_file,ScanType='repeat',NumberOfSteps=10,Run='true',
-                                 ReportType='parameter_estimation',ReportName=self.PE_report_name)   
+        PyCoTools.pycopi.Scan(self.copasi_file,scan_type='repeat',number_of_steps=10,run='true',
+                                 report_type='parameter_estimation',report_name=self.PE_report_name)   
         
     def test_figure_is_produced(self):
         self.EOP= PyCoTools.PEAnalysis.EvaluateOptimizationPerformance(self.PE_report_name,
-                                                                  Log10='true',
-                                                                  SaveFig='true')
+                                                                  log10='true',
+                                                                  savefig='true')
         self.assertEqual(len(os.listdir(self.EOP.results_dir)),1)
         
         

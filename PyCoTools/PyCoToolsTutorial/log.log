@@ -1,7 +1,173 @@
+<<<<<<< HEAD
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
 INFO:root:__init__:18:Initializing PyCoTools
 INFO:root:__init__:19:Initializing Logging System
 INFO:root:__init__:20:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+=======
+INFO:root:__init__:26:Initializing PyCoTools
+<<<<<<< HEAD
+INFO:root:__init__:27:Initializing Logging System
+INFO:root:__init__:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:4969:Local parameters being inserted into mode: ['(MAPKKK activation).K1']
+DEBUG:PyCoTools.pycopi:pycopi:4977:Constructing a dict of reaction:parameter for local parameters: {'MAPKKK activation': 'K1'}
+DEBUG:PyCoTools.pycopi:pycopi:5001:States:	 ['Model_3', 'Metabolite_7', 'Metabolite_13', 'Metabolite_1', 'Metabolite_5', 'Metabolite_11', 'Metabolite_9', 'Metabolite_3', 'Metabolite_15', 'Compartment_1']
+DEBUG:PyCoTools.pycopi:pycopi:5005:assembling parameter 0 out of 10
+DEBUG:PyCoTools.pycopi:pycopi:5012:State Model_3 is model
+DEBUG:PyCoTools.pycopi:pycopi:5017:Added 0 for first parameter in sequence
+DEBUG:PyCoTools.pycopi:pycopi:5005:assembling parameter 1 out of 10
+DEBUG:PyCoTools.pycopi:pycopi:5019:State Metabolite_7 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5029:Metab dict for Metabolite_7, 
+
+{'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-P]', 'value': '2812394415.21', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '4.67009000001e-06', 'compartment': 'uVol', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5005:assembling parameter 2 out of 10
+DEBUG:PyCoTools.pycopi:pycopi:5019:State Metabolite_13 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5029:Metab dict for Metabolite_13, 
+
+{'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-P]', 'value': '7.9078550487e+15', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '13.1313', 'compartment': 'uVol', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5005:assembling parameter 3 out of 10
+DEBUG:PyCoTools.pycopi:pycopi:5019:State Metabolite_1 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5029:Metab dict for Metabolite_1, 
+
+{'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos]', 'value': '83649356105.6', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '0.000138903', 'compartment': 'uVol', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5005:assembling parameter 4 out of 10
+DEBUG:PyCoTools.pycopi:pycopi:5019:State Metabolite_5 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5029:Metab dict for Metabolite_5, 
+
+{'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1]', 'value': '3.00118253818e+12', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '0.00498358', 'compartment': 'uVol', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5005:assembling parameter 5 out of 10
+DEBUG:PyCoTools.pycopi:pycopi:5019:State Metabolite_11 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5029:Metab dict for Metabolite_11, 
+
+{'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2]', 'value': '4.79694306497e+11', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '0.000796551000001', 'compartment': 'uVol', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5005:assembling parameter 6 out of 10
+DEBUG:PyCoTools.pycopi:pycopi:5019:State Metabolite_9 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5029:Metab dict for Metabolite_9, 
+
+{'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP]', 'value': '1.52987694462e+11', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '0.000254042000001', 'compartment': 'uVol', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5005:assembling parameter 7 out of 10
+DEBUG:PyCoTools.pycopi:pycopi:5019:State Metabolite_3 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5029:Metab dict for Metabolite_3, 
+
+{'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos-P]', 'value': '6031596552.61', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '1.00157e-05', 'compartment': 'uVol', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5005:assembling parameter 8 out of 10
+DEBUG:PyCoTools.pycopi:pycopi:5019:State Metabolite_15 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5029:Metab dict for Metabolite_15, 
+
+{'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-PP]', 'value': '9.14263500132e+11', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '0.00151817', 'compartment': 'uVol', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5005:assembling parameter 9 out of 10
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:4969:Local parameters being inserted into mode: ['(MAPKKK activation).K1']
+DEBUG:PyCoTools.pycopi:pycopi:4977:Constructing a dict of reaction:parameter for local parameters: {'MAPKKK activation': 'K1'}
+DEBUG:PyCoTools.pycopi:pycopi:5001:States:	 ['Model_3', 'Metabolite_7', 'Metabolite_13', 'Metabolite_1', 'Metabolite_5', 'Metabolite_11', 'Metabolite_9', 'Metabolite_3', 'Metabolite_15', 'Compartment_1']
+DEBUG:PyCoTools.pycopi:pycopi:5005:assembling parameter 0 out of 10
+DEBUG:PyCoTools.pycopi:pycopi:5012:State Model_3 is model
+DEBUG:PyCoTools.pycopi:pycopi:5017:Added 0 for first parameter in sequence
+DEBUG:PyCoTools.pycopi:pycopi:5005:assembling parameter 1 out of 10
+DEBUG:PyCoTools.pycopi:pycopi:5019:State Metabolite_7 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5029:Metab dict for Metabolite_7, 
+
+{'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-P]', 'value': '2812394415.21', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '4.67009000001e-06', 'compartment': 'uVol', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5005:assembling parameter 2 out of 10
+DEBUG:PyCoTools.pycopi:pycopi:5019:State Metabolite_13 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5029:Metab dict for Metabolite_13, 
+
+{'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-P]', 'value': '7.9078550487e+15', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '13.1313', 'compartment': 'uVol', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5005:assembling parameter 3 out of 10
+DEBUG:PyCoTools.pycopi:pycopi:5019:State Metabolite_1 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5029:Metab dict for Metabolite_1, 
+
+{'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos]', 'value': '83649356105.6', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '0.000138903', 'compartment': 'uVol', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5005:assembling parameter 4 out of 10
+DEBUG:PyCoTools.pycopi:pycopi:5019:State Metabolite_5 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5029:Metab dict for Metabolite_5, 
+
+{'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1]', 'value': '3.00118253818e+12', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '0.00498358', 'compartment': 'uVol', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5005:assembling parameter 5 out of 10
+DEBUG:PyCoTools.pycopi:pycopi:5019:State Metabolite_11 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5029:Metab dict for Metabolite_11, 
+
+{'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2]', 'value': '4.79694306497e+11', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '0.000796551000001', 'compartment': 'uVol', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5005:assembling parameter 6 out of 10
+DEBUG:PyCoTools.pycopi:pycopi:5019:State Metabolite_9 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5029:Metab dict for Metabolite_9, 
+
+{'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP]', 'value': '1.52987694462e+11', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '0.000254042000001', 'compartment': 'uVol', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5005:assembling parameter 7 out of 10
+DEBUG:PyCoTools.pycopi:pycopi:5019:State Metabolite_3 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5029:Metab dict for Metabolite_3, 
+
+{'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos-P]', 'value': '6031596552.61', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '1.00157e-05', 'compartment': 'uVol', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5005:assembling parameter 8 out of 10
+DEBUG:PyCoTools.pycopi:pycopi:5019:State Metabolite_15 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5029:Metab dict for Metabolite_15, 
+
+{'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-PP]', 'value': '9.14263500132e+11', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '0.00151817', 'compartment': 'uVol', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5005:assembling parameter 9 out of 10
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:4969:Local parameters being inserted into mode: []
+DEBUG:PyCoTools.pycopi:pycopi:4977:Constructing a dict of reaction:parameter for local parameters: {}
+DEBUG:PyCoTools.pycopi:pycopi:5001:States:	 ['Model_3', 'Metabolite_7', 'Metabolite_13', 'Metabolite_1', 'Metabolite_5', 'Metabolite_11', 'Metabolite_9', 'Metabolite_3', 'Metabolite_15', 'Compartment_1']
+DEBUG:PyCoTools.pycopi:pycopi:5005:assembling parameter 0 out of 10
+DEBUG:PyCoTools.pycopi:pycopi:5012:State Model_3 is model
+DEBUG:PyCoTools.pycopi:pycopi:5017:Added 0 for first parameter in sequence
+DEBUG:PyCoTools.pycopi:pycopi:5005:assembling parameter 1 out of 10
+DEBUG:PyCoTools.pycopi:pycopi:5019:State Metabolite_7 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5029:Metab dict for Metabolite_7, 
+
+{'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-P]', 'value': '2812394415.21', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '4.67009000001e-06', 'compartment': 'uVol', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5005:assembling parameter 2 out of 10
+DEBUG:PyCoTools.pycopi:pycopi:5019:State Metabolite_13 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5029:Metab dict for Metabolite_13, 
+
+{'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-P]', 'value': '7.9078550487e+15', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '13.1313', 'compartment': 'uVol', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5005:assembling parameter 3 out of 10
+DEBUG:PyCoTools.pycopi:pycopi:5019:State Metabolite_1 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5029:Metab dict for Metabolite_1, 
+
+{'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos]', 'value': '83649356105.6', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '0.000138903', 'compartment': 'uVol', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5005:assembling parameter 4 out of 10
+DEBUG:PyCoTools.pycopi:pycopi:5019:State Metabolite_5 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5029:Metab dict for Metabolite_5, 
+
+{'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1]', 'value': '3.00118253818e+12', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '0.00498358', 'compartment': 'uVol', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5005:assembling parameter 5 out of 10
+DEBUG:PyCoTools.pycopi:pycopi:5019:State Metabolite_11 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5029:Metab dict for Metabolite_11, 
+
+{'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2]', 'value': '4.79694306497e+11', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '0.000796551000001', 'compartment': 'uVol', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5005:assembling parameter 6 out of 10
+DEBUG:PyCoTools.pycopi:pycopi:5019:State Metabolite_9 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5029:Metab dict for Metabolite_9, 
+
+{'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP]', 'value': '1.52987694462e+11', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '0.000254042000001', 'compartment': 'uVol', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5005:assembling parameter 7 out of 10
+DEBUG:PyCoTools.pycopi:pycopi:5019:State Metabolite_3 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5029:Metab dict for Metabolite_3, 
+
+{'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos-P]', 'value': '6031596552.61', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '1.00157e-05', 'compartment': 'uVol', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5005:assembling parameter 8 out of 10
+DEBUG:PyCoTools.pycopi:pycopi:5019:State Metabolite_15 is metab
+DEBUG:PyCoTools.pycopi:pycopi:5029:Metab dict for Metabolite_15, 
+
+{'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-PP]', 'value': '9.14263500132e+11', 'compartment_volume': '1.0', 'simulationType': 'reactions', 'concentration': '0.00151817', 'compartment': 'uVol', 'type': 'Species'}
+DEBUG:PyCoTools.pycopi:pycopi:5005:assembling parameter 9 out of 10
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing Logging System
+INFO:root:__init__:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+>>>>>>> CopasiVersion19Develop
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
@@ -55,18 +221,30 @@ DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCo
 INFO:root:pycopi:3516:defining report
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+<<<<<<< HEAD
 INFO:PyCoTools.pycopi:pycopi:4381:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_1.cps
 DEBUG:PyCoTools.pycopi:pycopi:1048:created a 'parameter_estimation' report
+=======
+DEBUG:PyCoTools.pycopi:pycopi:1048:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:4381:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_1.cps
+>>>>>>> CopasiVersion19Develop
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
 DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_1.cps
 INFO:root:pycopi:3516:defining report
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+<<<<<<< HEAD
 INFO:PyCoTools.pycopi:pycopi:4381:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_2.cps
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
 DEBUG:PyCoTools.pycopi:pycopi:1048:created a 'parameter_estimation' report
+=======
+DEBUG:PyCoTools.pycopi:pycopi:1048:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:4381:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+>>>>>>> CopasiVersion19Develop
 DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_2.cps
 INFO:root:pycopi:3516:defining report
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
@@ -77,6 +255,7 @@ DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCo
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
 DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+<<<<<<< HEAD
 INFO:PyCoTools.pycopi:pycopi:4411:Setup Took 0.411815881729 seconds
 INFO:PyCoTools.pycopi:pycopi:4389:<PyCoTools.pycopi.Scan instance at 0x7fda7d384290>
 INFO:PyCoTools.pycopi:pycopi:4329:Running model: 0
@@ -97,9 +276,621 @@ DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCo
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
 DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_1.cps
 INFO:PyCoTools.pycopi:pycopi:4411:Setup Took 0.506976127625 seconds
+=======
+INFO:PyCoTools.pycopi:pycopi:4411:Setup Took 0.338761091232 seconds
+INFO:PyCoTools.pycopi:pycopi:4389:<PyCoTools.pycopi.Scan instance at 0x7f8ca92635f0>
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_1.cps
+INFO:PyCoTools.pycopi:pycopi:4329:Running model: 0
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_1.cps
+INFO:PyCoTools.pycopi:pycopi:4329:Running model: 1
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_1.cps
+INFO:PyCoTools.pycopi:pycopi:4411:Setup Took 0.370431184769 seconds
+>>>>>>> CopasiVersion19Develop
 DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_2.cps
 DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_2.cps
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
 DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko_2.cps
+<<<<<<< HEAD
 INFO:PyCoTools.pycopi:pycopi:4411:Setup Took 0.503196954727 seconds
+=======
+INFO:PyCoTools.pycopi:pycopi:4411:Setup Took 0.356174945831 seconds
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing Logging System
+INFO:root:__init__:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK).KK3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK).KK3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPKK).KK3.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).K1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).K1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_activation).K1.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Erk2-P.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Erk2-P.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Erk2-P.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-PP).V9.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-PP).V9.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPK-PP).V9.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mos-P.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mos-P.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Mos-P.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK).k7.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK).k7.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPK).k7.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK-P).k8.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK-P).k8.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPK-P).k8.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_inactivation).KK2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_inactivation).KK2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_inactivation).KK2.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_inactivation).V2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_inactivation).V2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_inactivation).V2.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mos.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mos.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Mos.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Erk2-PP.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Erk2-PP.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Erk2-PP.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK).k3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK).k3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPKK).k3.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK-P).k4.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK-P).k4.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPKK-P).k4.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-PP).KK5.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-PP).KK5.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPKK-PP).KK5.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK-P).KK8.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK-P).KK8.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPK-P).KK8.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-PP).KK9.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-PP).KK9.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPK-PP).KK9.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-P).KK6.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-P).KK6.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPKK-P).KK6.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK-P).KK4.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK-P).KK4.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPKK-P).KK4.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Erk2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Erk2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Erk2.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).V1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).V1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_activation).V1.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).Ki.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).Ki.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_activation).Ki.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK).KK7.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK).KK7.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPK).KK7.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-P).KK10.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-P).KK10.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPK-P).KK10.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mek1-PP.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mek1-PP.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Mek1-PP.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-PP).V5.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-PP).V5.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPKK-PP).V5.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-P).V10.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-P).V10.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPK-P).V10.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mek1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mek1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Mek1.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mek1-P.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mek1-P.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Mek1-P.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-P).V6.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-P).V6.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPKK-P).V6.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).n.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).n.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_activation).n.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK).KK3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK).KK3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK).KK3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPKK).KK3.cps
+INFO:root:pycopi:3518:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK).KK3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK).KK3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPKK).KK3.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPKK).KK3.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK).KK3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK).KK3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPKK).KK3.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).K1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).K1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).K1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_activation).K1.cps
+INFO:root:pycopi:3518:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).K1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).K1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_activation).K1.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_activation).K1.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).K1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).K1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_activation).K1.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Erk2-P.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Erk2-P.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Erk2-P.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Erk2-P.cps
+INFO:root:pycopi:3518:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Erk2-P.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Erk2-P.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Erk2-P.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Erk2-P.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Erk2-P.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Erk2-P.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Erk2-P.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-PP).V9.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-PP).V9.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-PP).V9.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPK-PP).V9.cps
+INFO:root:pycopi:3518:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-PP).V9.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-PP).V9.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPK-PP).V9.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPK-PP).V9.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-PP).V9.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-PP).V9.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPK-PP).V9.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mos-P.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mos-P.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mos-P.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Mos-P.cps
+INFO:root:pycopi:3518:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mos-P.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mos-P.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Mos-P.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Mos-P.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mos-P.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mos-P.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Mos-P.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK).k7.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK).k7.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK).k7.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPK).k7.cps
+INFO:root:pycopi:3518:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK).k7.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK).k7.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPK).k7.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPK).k7.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK).k7.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK).k7.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPK).k7.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK-P).k8.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK-P).k8.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK-P).k8.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPK-P).k8.cps
+INFO:root:pycopi:3518:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK-P).k8.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK-P).k8.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPK-P).k8.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPK-P).k8.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK-P).k8.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK-P).k8.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPK-P).k8.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_inactivation).KK2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_inactivation).KK2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_inactivation).KK2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_inactivation).KK2.cps
+INFO:root:pycopi:3518:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_inactivation).KK2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_inactivation).KK2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_inactivation).KK2.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_inactivation).KK2.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_inactivation).KK2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_inactivation).KK2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_inactivation).KK2.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_inactivation).V2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_inactivation).V2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_inactivation).V2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_inactivation).V2.cps
+INFO:root:pycopi:3518:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_inactivation).V2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_inactivation).V2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_inactivation).V2.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_inactivation).V2.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_inactivation).V2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_inactivation).V2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_inactivation).V2.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mos.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mos.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mos.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Mos.cps
+INFO:root:pycopi:3518:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mos.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mos.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Mos.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Mos.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mos.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mos.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Mos.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Erk2-PP.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Erk2-PP.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Erk2-PP.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Erk2-PP.cps
+INFO:root:pycopi:3518:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Erk2-PP.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Erk2-PP.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Erk2-PP.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Erk2-PP.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Erk2-PP.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Erk2-PP.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Erk2-PP.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK).k3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK).k3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK).k3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPKK).k3.cps
+INFO:root:pycopi:3518:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK).k3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK).k3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPKK).k3.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPKK).k3.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK).k3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK).k3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPKK).k3.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK-P).k4.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK-P).k4.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK-P).k4.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPKK-P).k4.cps
+INFO:root:pycopi:3518:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK-P).k4.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK-P).k4.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPKK-P).k4.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPKK-P).k4.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK-P).k4.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK-P).k4.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPKK-P).k4.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-PP).KK5.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-PP).KK5.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-PP).KK5.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPKK-PP).KK5.cps
+INFO:root:pycopi:3518:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-PP).KK5.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-PP).KK5.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPKK-PP).KK5.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPKK-PP).KK5.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-PP).KK5.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-PP).KK5.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPKK-PP).KK5.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK-P).KK8.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK-P).KK8.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK-P).KK8.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPK-P).KK8.cps
+INFO:root:pycopi:3518:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK-P).KK8.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK-P).KK8.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPK-P).KK8.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPK-P).KK8.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK-P).KK8.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK-P).KK8.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPK-P).KK8.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-PP).KK9.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-PP).KK9.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-PP).KK9.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPK-PP).KK9.cps
+INFO:root:pycopi:3518:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-PP).KK9.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-PP).KK9.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPK-PP).KK9.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPK-PP).KK9.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-PP).KK9.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-PP).KK9.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPK-PP).KK9.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-P).KK6.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-P).KK6.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-P).KK6.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPKK-P).KK6.cps
+INFO:root:pycopi:3518:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-P).KK6.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-P).KK6.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPKK-P).KK6.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPKK-P).KK6.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-P).KK6.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-P).KK6.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPKK-P).KK6.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK-P).KK4.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK-P).KK4.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK-P).KK4.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPKK-P).KK4.cps
+INFO:root:pycopi:3518:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK-P).KK4.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK-P).KK4.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPKK-P).KK4.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPKK-P).KK4.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK-P).KK4.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK-P).KK4.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPKK-P).KK4.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Erk2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Erk2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Erk2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Erk2.cps
+INFO:root:pycopi:3518:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Erk2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Erk2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Erk2.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Erk2.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Erk2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Erk2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Erk2.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).V1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).V1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).V1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_activation).V1.cps
+INFO:root:pycopi:3518:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).V1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).V1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_activation).V1.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_activation).V1.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).V1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).V1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_activation).V1.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).Ki.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).Ki.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).Ki.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_activation).Ki.cps
+INFO:root:pycopi:3518:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).Ki.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).Ki.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_activation).Ki.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_activation).Ki.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).Ki.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).Ki.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_activation).Ki.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK).KK7.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK).KK7.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK).KK7.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPK).KK7.cps
+INFO:root:pycopi:3518:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK).KK7.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK).KK7.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPK).KK7.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPK).KK7.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK).KK7.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK).KK7.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPK).KK7.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-P).KK10.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-P).KK10.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-P).KK10.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPK-P).KK10.cps
+INFO:root:pycopi:3518:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-P).KK10.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-P).KK10.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPK-P).KK10.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPK-P).KK10.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-P).KK10.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-P).KK10.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPK-P).KK10.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mek1-PP.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mek1-PP.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mek1-PP.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Mek1-PP.cps
+INFO:root:pycopi:3518:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mek1-PP.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mek1-PP.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Mek1-PP.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Mek1-PP.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mek1-PP.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mek1-PP.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Mek1-PP.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-PP).V5.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-PP).V5.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-PP).V5.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPKK-PP).V5.cps
+INFO:root:pycopi:3518:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-PP).V5.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-PP).V5.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPKK-PP).V5.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPKK-PP).V5.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-PP).V5.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-PP).V5.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPKK-PP).V5.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-P).V10.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-P).V10.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-P).V10.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPK-P).V10.cps
+INFO:root:pycopi:3518:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-P).V10.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-P).V10.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPK-P).V10.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPK-P).V10.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-P).V10.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-P).V10.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPK-P).V10.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mek1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mek1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mek1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Mek1.cps
+INFO:root:pycopi:3518:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mek1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mek1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Mek1.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Mek1.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mek1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mek1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Mek1.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mek1-P.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mek1-P.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mek1-P.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Mek1-P.cps
+INFO:root:pycopi:3518:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mek1-P.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mek1-P.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Mek1-P.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Mek1-P.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mek1-P.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mek1-P.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Mek1-P.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-P).V6.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-P).V6.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-P).V6.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPKK-P).V6.cps
+INFO:root:pycopi:3518:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-P).V6.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-P).V6.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPKK-P).V6.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPKK-P).V6.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-P).V6.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-P).V6.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPKK-P).V6.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).n.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).n.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).n.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_activation).n.cps
+INFO:root:pycopi:3518:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).n.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).n.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1052:created a 'profile_likelihod' type report
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_activation).n.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_activation).n.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).n.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).n.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_activation).n.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK).KK3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPKK).KK3.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).K1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_activation).K1.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Erk2-P.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Erk2-P.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-PP).V9.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPK-PP).V9.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mos-P.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Mos-P.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK).k7.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPK).k7.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK-P).k8.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPK-P).k8.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_inactivation).KK2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_inactivation).KK2.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_inactivation).V2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_inactivation).V2.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mos.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Mos.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Erk2-PP.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Erk2-PP.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK).k3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPKK).k3.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK-P).k4.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPKK-P).k4.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-PP).KK5.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPKK-PP).KK5.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK-P).KK8.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPK-P).KK8.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-PP).KK9.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPK-PP).KK9.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-P).KK6.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPKK-P).KK6.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPKK-P).KK4.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPKK-P).KK4.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Erk2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Erk2.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).V1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_activation).V1.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).Ki.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_activation).Ki.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (phosphorylation_of_MAPK).KK7.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(phosphorylation_of_MAPK).KK7.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-P).KK10.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPK-P).KK10.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mek1-PP.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Mek1-PP.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-PP).V5.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPKK-PP).V5.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPK-P).V10.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPK-P).V10.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mek1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Mek1.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Mek1-P.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/Mek1-P.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (dephosphorylation_of_MAPKK-P).V6.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(dephosphorylation_of_MAPKK-P).V6.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file (MAPKKK_activation).n.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/-1/(MAPKKK_activation).n.cps
+DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+=======
+INFO:root:__init__:27:Initializing log10ging System
+INFO:root:__init__:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing log10ging System
+INFO:root:__init__:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing log10ging System
+INFO:root:__init__:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+>>>>>>> b5251ac39e0e966dfceb851ff97bd2f79e887bd0
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+>>>>>>> CopasiVersion19Develop

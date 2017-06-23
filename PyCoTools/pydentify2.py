@@ -24,7 +24,7 @@
   This file uses the pycopi module to set up and run a profile likleihool
  method of identifiability analysis (Raue2009) by automating the COAPSI method
  (shaber2012). Use the ProfileLikelihood class to setup and run an identifiability
- analysis and the Plot class to calculate confidence intervals and visualize the
+ analysis and the plot class to calculate confidence intervals and visualize the
  results.
 
 
@@ -65,53 +65,53 @@ class ProfileLikelihood():
         The copasi file you wish to conduct a profile likelihood on
 
     **kwargs:
-        ParameterPath:
+        parameter_path:
             The absolute path to either a parameter estimation results file
             ('.txt','.xlsx','.xls' or '.csv') or a folder of parameter
             estimation results files. Default=None
 
-        Index:
+        index:
             The index of the parameter estimation run you want to calculate
             a profile likelihood around. Parameter estimations are ranked in
             order of best fit, with 0 being the best fit value from your set of
             estimations. Can be either an integer or list of integers to give
             the option of conducting multiple profile likelihoods using the same
-            line of code. Use Index=-1 if you want to calculate profile likelihood
-            around parameters already in copasi. If Index is not equal
-            to -1 you must specificy a valid argument to the ParameterPath
+            line of code. Use index=-1 if you want to calculate profile likelihood
+            around parameters already in copasi. If index is not equal
+            to -1 you must specificy a valid argument to the parameter_path
             keyword argument. Default is -1.
 
         OutputML:
-            When Save set to 'duplicate' this is the file name
+            When save set to 'duplicate' this is the file name
             of the output cps file. Default='overwrite'
 
-        Save:
+        save:
             One of, 'false','overwrite' or 'duplicate'
 
-        UpperBoundMultiplier:
+        upper_boundMultiplier:
             Number of times above the current value of the parameter of interest
             to extend profile likleihood to. Default=1000
 
-        LowerBoundMultiplier:
+        lower_boundMultiplier:
             Number of times below the current value of the parameter of interest
             to extend profile likleihood to. Default=1000
 
-        NumberOfSteps:
+        number_of_steps:
             How many times to sample between lower and upper boundaries. Default=10
 
-        Log:
-            Sample in Log space. Default='false'
+        log10:
+            Sample in log10 space. Default='false'
 
-        IterationLimit:
+        iteration_limit:
             Hook and Jeeves algorithm iteration limit parameter. Default=50
 
-        Tolerance:
+        tolerance:
             Hook and Jeeves algorithm tolerance parameter. Default=1e-5
 
-        Rho:
-            Hook and Jeeves algorithm Rho parameter. Default=0.2
+        rho:
+            Hook and Jeeves algorithm rho parameter. Default=0.2
 
-        Run:
+        run:
             Either ['false','slow','multiprocess','SGE']. 'multiprocess'
             will use the number of processes specified in the NumProcesses
             keyword argument to work. This features doesn't work well yet and
@@ -140,6 +140,7 @@ class ProfileLikelihood():
         default_outputML=os.path.split(self.copasi_file)[1][:-4]+'_Duplicate.cps'
         options={#report variables
                  'OutputML':default_outputML,
+<<<<<<< HEAD
                  'Save':'overwrite',
                  'Index':-1,
                  'ParameterPath':None,
@@ -147,15 +148,29 @@ class ProfileLikelihood():
                  'UpperBoundMultiplier':1000,
                  'LowerBoundMultiplier':1000,
                  'NumberOfSteps':10,
-                 'Log':'true',
+                 'Log10':'true',
                  'IterationLimit':50,
                  'Tolerance':1e-5,
                  'Rho':0.2,
                  'Run':'false',
+=======
+                 'save':'overwrite',
+                 'index':-1,
+                 'parameter_path':None,
+                 'quantity_type':'concentration',
+                 'upper_boundMultiplier':1000,
+                 'lower_boundMultiplier':1000,
+                 'number_of_steps':10,
+                 'log10':'true',
+                 'iteration_limit':50,
+                 'tolerance':1e-5,
+                 'rho':0.2,
+                 'run':'false',
+>>>>>>> b5251ac39e0e966dfceb851ff97bd2f79e887bd0
                  'NumProcesses':1, #when runset to 'true' determines, how many NumProcesses to use at the same time
                  'SleepTime':0, #How long to wait between running each copasi file
                  'Verbose':'true',
-                 'MaxTime':None}
+                 'max_time':None}
                  
 
         for i in kwargs.keys():
@@ -163,61 +178,65 @@ class ProfileLikelihood():
         options.update( kwargs) 
         self.kwargs=options    
         
-        if self.kwargs.get('Index')!=-1:
-            assert self.kwargs.get('ParameterPath')!=None,'If you specify an index, you need to specify an argument to ParameterPath'
+        if self.kwargs.get('index')!=-1:
+            assert self.kwargs.get('parameter_path')!=None,'If you specify an index, you need to specify an argument to parameter_path'
         
-        #if no index or ParameterPath specified, use current parameteres in cps
+        #if no index or parameter_path specified, use current parameteres in cps
         self.mode='current'
-        if self.kwargs.get('ParameterPath')!=None:
+        if self.kwargs.get('parameter_path')!=None:
             #if parameter path is file or folder set the self.mode variablee accordingly
-            if os.path.exists(self.kwargs.get('ParameterPath')):
+            if os.path.exists(self.kwargs.get('parameter_path')):
                 self.mode='file'
         
-        #if ParameterPath specified without an index, set index to 0 (i.e. best parameter set)
-#        if self.kwargs.get('ParameterPath')!=None and self.kwargs.get('Index') !=-1 and self.kwargs.get('Index')!=None:
-#            self.kwargs['Index']=98
+        #if parameter_path specified without an index, set index to 0 (i.e. best parameter set)
+#        if self.kwargs.get('parameter_path')!=None and self.kwargs.get('index') !=-1 and self.kwargs.get('index')!=None:
+#            self.kwargs['index']=98
         self.PE_data=self.read_PE_data()
-        if self.kwargs.get('MaxTime')!=None:
-            if isinstance(self.kwargs.get('MaxTime'),(float,int))!=True:
-                raise Errors.InputError('MaxTime argument should be float or int')
+        if self.kwargs.get('max_time')!=None:
+            if isinstance(self.kwargs.get('max_time'),(float,int))!=True:
+                raise Errors.InputError('max_time argument should be float or int')
         
-        if self.kwargs.get('Index') !=None:
-            assert isinstance(self.kwargs.get('Index'),(list,int)),'index must be an integer or a list of integers'
-        if isinstance(self.kwargs.get('Index'),list):
-            for i in self.kwargs.get('Index'):
-                assert isinstance(i,int),'Index is int type'
+        if self.kwargs.get('index') !=None:
+            assert isinstance(self.kwargs.get('index'),(list,int)),'index must be an integer or a list of integers'
+        if isinstance(self.kwargs.get('index'),list):
+            for i in self.kwargs.get('index'):
+                assert isinstance(i,int),'index is int type'
                 try:
                     assert i<=self.PE_data.shape[0],'PE data contains {} parameter estimations. You have indicated that you want to use run {}'.format(self.PE_data.shape[0],i)
                 except AttributeError:
                     raise Errors.Errors.InputError('No data')
-        elif isinstance(self.kwargs.get('Index'),list):
-            assert self.kwargs.get('Index')<=self.PE_data.shape[0],'PE data contains {} parameter estimations. You have indicated that you want to use run {}'.format(self.PE_data.shape[0],self.kwargs.get('Index'))
+        elif isinstance(self.kwargs.get('index'),list):
+            assert self.kwargs.get('index')<=self.PE_data.shape[0],'PE data contains {} parameter estimations. You have indicated that you want to use run {}'.format(self.PE_data.shape[0],self.kwargs.get('index'))
 
         if self.GMQ.get_fit_items()=={}:
             raise Errors.InputError('Your copasi file doesnt have a parameter estimation defined')
         #convert some numeric input variables to string
-        self.kwargs['UpperBoundMultiplier']=str(self.kwargs['UpperBoundMultiplier'])
-        self.kwargs['LowerBoundMultiplier']=str(self.kwargs['LowerBoundMultiplier'])
-        self.kwargs['NumberOfSteps']=str(self.kwargs['NumberOfSteps'])
-        self.kwargs['IterationLimit']=str(self.kwargs['IterationLimit'])
-        self.kwargs['Tolerance']=str(self.kwargs['Tolerance'])
-        self.kwargs['Rho']=str(self.kwargs['Rho'])
+        self.kwargs['upper_boundMultiplier']=str(self.kwargs['upper_boundMultiplier'])
+        self.kwargs['lower_boundMultiplier']=str(self.kwargs['lower_boundMultiplier'])
+        self.kwargs['number_of_steps']=str(self.kwargs['number_of_steps'])
+        self.kwargs['iteration_limit']=str(self.kwargs['iteration_limit'])
+        self.kwargs['tolerance']=str(self.kwargs['tolerance'])
+        self.kwargs['rho']=str(self.kwargs['rho'])
         
-        if self.kwargs.get('Run') not in ['false','slow','multiprocess','SGE']:
-            raise Errors.InputError('\'Run\' keyword must be one of \'slow\', \'false\',\'multiprocess\', or \'SGE\'')
+        if self.kwargs.get('run') not in ['false','slow','multiprocess','SGE']:
+            raise Errors.InputError('\'run\' keyword must be one of \'slow\', \'false\',\'multiprocess\', or \'SGE\'')
         assert isinstance(self.kwargs.get('NumProcesses'),int)
         if self.kwargs.get('NumProcesses')!=0:
             self.kwargs['NumProcesses']=self.kwargs.get('NumProcesses')-1
         assert isinstance(self.kwargs.get('SleepTime'),int)
         
         
-        assert self.kwargs.get('QuantityType') in ['concentration','particle_number']
+        assert self.kwargs.get('quantity_type') in ['concentration','particle_number']
 
         
         if self.kwargs.get('NumProcesses')>multiprocessing.cpu_count():
             raise Errors.Errors.InputError('You have selected {} processes but your computer only has {} available'.format(self.kwargs.get('NumProcesses'),multiprocessing.cpu_count()))
         
-        assert self.kwargs.get('Log') in ['false','true']
+<<<<<<< HEAD
+        assert self.kwargs.get('Log10') in ['false','true']
+=======
+        assert self.kwargs.get('log10') in ['false','true']
+>>>>>>> b5251ac39e0e966dfceb851ff97bd2f79e887bd0
 
         
         self.cps_dct=self.copy_copasi_files_and_insert_parameters()
@@ -231,9 +250,9 @@ class ProfileLikelihood():
 
         
     def save(self):
-        if self.kwargs.get('Save')=='duplicate':
+        if self.kwargs.get('save')=='duplicate':
             self.CParser.write_copasi_file(self.kwargs.get('OutputML'),self.copasiML)
-        elif self.kwargs.get('Save')=='overwrite':
+        elif self.kwargs.get('save')=='overwrite':
             self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
         return self.copasiML
 
@@ -247,12 +266,12 @@ class ProfileLikelihood():
         if self.mode=='current':
             return None
         elif self.mode=='file':
-            return PEAnalysis.ParsePEData(self.kwargs.get('ParameterPath')).data
+            return PEAnalysis.ParsePEData(self.kwargs.get('parameter_path')).data
 
     def copy_copasi_files_and_insert_parameters(self):
         '''
         Its easier to do these two functions together
-        1) create relevant folders and copy copasi file into these based on the Index parameter
+        1) create relevant folders and copy copasi file into these based on the index parameter
         '''
         cps_dct={}
         estimated_parameters= self.GMQ.get_fit_items().keys()
@@ -260,7 +279,7 @@ class ProfileLikelihood():
         if os.path.isdir(IA_dir)==False:
             os.mkdir(IA_dir)
         os.chdir(IA_dir)
-        if self.kwargs.get('Index')==-1:
+        if self.kwargs.get('index')==-1:
             IA_dir=os.path.join(IA_dir,'-1')
             cps_dct[-1]={}
             if os.path.isdir(IA_dir)==False:
@@ -278,21 +297,21 @@ class ProfileLikelihood():
 #            os.chdir('..')
             return cps_dct
             
-        elif isinstance(self.kwargs.get('Index'),int):
-            assert self.kwargs.get('Index')!=-1
+        elif isinstance(self.kwargs.get('index'),int):
+            assert self.kwargs.get('index')!=-1
             IP=pycopi.InsertParameters(self.copasi_file,
-                                          Index=self.kwargs.get('Index'),
-                                          QuantityType=self.kwargs.get('QuantityType'),
-                                          DF=self.PE_data,Save='overwrite')
-            IA_dir=os.path.join(IA_dir,str(self.kwargs.get('Index')))
-            cps_dct[self.kwargs.get('Index')]={}
+                                          index=self.kwargs.get('index'),
+                                          quantity_type=self.kwargs.get('quantity_type'),
+                                          df=self.PE_data,save='overwrite')
+            IA_dir=os.path.join(IA_dir,str(self.kwargs.get('index')))
+            cps_dct[self.kwargs.get('index')]={}
             if os.path.isdir(IA_dir)==False:
                 os.mkdir(IA_dir)
             os.chdir(IA_dir)
             for i in estimated_parameters:
                 st=Misc.RemoveNonAscii(i).filter
                 filename=os.path.join(IA_dir,'{}.cps'.format(st))
-                cps_dct[self.kwargs.get('Index')][i]=filename
+                cps_dct[self.kwargs.get('index')][i]=filename
                 if os.path.isfile(filename)==True:
                     os.remove(filename)
                 copyfile(self.copasi_file,filename)
@@ -300,11 +319,11 @@ class ProfileLikelihood():
             os.chdir('..')
             return cps_dct
             
-        elif isinstance(self.kwargs.get('Index'),list):
-            for i in self.kwargs.get('Index'):
+        elif isinstance(self.kwargs.get('index'),list):
+            for i in self.kwargs.get('index'):
                 IP=pycopi.InsertParameters(self.copasi_file,
-                                          Index=i,
-                                          QuantityType=self.kwargs.get('QuantityType'),DF=self.PE_data,Save='overwrite')
+                                          index=i,
+                                          quantity_type=self.kwargs.get('quantity_type'),df=self.PE_data,save='overwrite')
 
                 IA_dir2=os.path.join(IA_dir,str(i))
                 cps_dct[i]={}
@@ -337,18 +356,18 @@ class ProfileLikelihood():
         for i in self.copasiML.xpath(q):
             data_path= os.path.join(os.path.dirname(self.copasi_file),i.attrib['value'])
             data_file_dct[i.attrib['value']]=data_path
-            if self.kwargs.get('Index')==-1:
+            if self.kwargs.get('index')==-1:
                 IA_dir1=os.path.join(self.IA_dir,'-1')
                 new_data_file1=os.path.join(IA_dir1,i.attrib['value'])
                 copyfile(data_path,new_data_file1)
                 
-            elif isinstance(self.kwargs.get('Index'),int):
-                IA_dir2=os.path.join(self.IA_dir,str(self.kwargs.get('Index')))
+            elif isinstance(self.kwargs.get('index'),int):
+                IA_dir2=os.path.join(self.IA_dir,str(self.kwargs.get('index')))
                 new_data_file2=os.path.join(IA_dir2,i.attrib['value'])
                 copyfile(data_path,new_data_file2)
                 
-            elif isinstance(self.kwargs.get('Index'),list):
-                for j in self.kwargs.get('Index'):
+            elif isinstance(self.kwargs.get('index'),list):
+                for j in self.kwargs.get('index'):
                     IA_dir3=os.path.join(self.IA_dir,str(j))
                     new_data_file3=os.path.join(IA_dir3,i.attrib['value'])
                     copyfile(data_path,new_data_file3)
@@ -360,14 +379,14 @@ class ProfileLikelihood():
         and change method parameters 
         '''
         method_params={'name':'Hooke &amp; Jeeves', 'type':'HookeJeeves'}
-        IterationLimit={'type': 'unsignedInteger', 'name': 'Iteration Limit', 'value': self.kwargs.get('IterationLimit')}
-        Tolerance={'type': 'float', 'name': 'Tolerance', 'value': self.kwargs.get('Tolerance')}
-        Rho={'type': 'float', 'name': 'Rho', 'value': self.kwargs.get('Rho')}
+        iteration_limit={'type': 'unsignedInteger', 'name': 'Iteration Limit', 'value': self.kwargs.get('iteration_limit')}
+        tolerance={'type': 'float', 'name': 'tolerance', 'value': self.kwargs.get('tolerance')}
+        rho={'type': 'float', 'name': 'rho', 'value': self.kwargs.get('rho')}
 
-        method_element=pycopi.etree.Element('Method',attrib=method_params)
-        pycopi.etree.SubElement(method_element,'Parameter',attrib=IterationLimit)
-        pycopi.etree.SubElement(method_element,'Parameter',attrib=Tolerance)
-        pycopi.etree.SubElement(method_element,'Parameter',attrib=Rho)
+        method_element=pycopi.etree.Element('method',attrib=method_params)
+        pycopi.etree.SubElement(method_element,'Parameter',attrib=iteration_limit)
+        pycopi.etree.SubElement(method_element,'Parameter',attrib=tolerance)
+        pycopi.etree.SubElement(method_element,'Parameter',attrib=rho)
             
             
         query="//*[@name='FitItem']" 
@@ -379,7 +398,7 @@ class ProfileLikelihood():
                     for l in list(k):
                         if l.attrib['name']=='ObjectCN':
                             #metabolites first
-                            match= re.findall('Metabolites\[{}\]'.format(j),l.attrib['value'])
+                            match= re.findall('metabolites\[{}\]'.format(j),l.attrib['value'])
                             if match !=[]:
                                 parent=l.getparent()
                                 parent.getparent().remove(parent) 
@@ -416,25 +435,26 @@ class ProfileLikelihood():
         for i in self.cps_dct:
             for j in self.cps_dct[i]:
                 st=Misc.RemoveNonAscii(j).filter
-                pycopi.Reports(self.cps_dct[i][j],ReportType='profilelikelihood',
-                               ReportName=st+'.txt',Save='overwrite',Variable=j)
+                pycopi.Reports(self.cps_dct[i][j],report_type='profilelikelihood',
+                               report_name=st+'.txt',save='overwrite',variable=j)
         return self.cps_dct
         
     def setup_scan(self):
         for i in self.cps_dct:
             for j in self.cps_dct[i]:
                 GMQ_child=pycopi.GetModelQuantities(self.cps_dct[i][j])
-                if self.kwargs.get('QuantityType')=='concentration':
+                if self.kwargs.get('quantity_type')=='concentration':
                     try:
                         variable_value= GMQ_child.get_all_model_variables()[j]['concentration'] 
                     except KeyError:
                         variable_value= GMQ_child.get_all_model_variables()[j]['value'] 
-                elif self.kwargs.get('QuantityType')=='particle_number':
+                elif self.kwargs.get('quantity_type')=='particle_number':
                     variable_value= GMQ_child.get_all_model_variables()[j]['value']  
-                lb=float(variable_value)/float(self.kwargs.get('LowerBoundMultiplier'))
-                ub=float(variable_value)*float(self.kwargs.get('UpperBoundMultiplier'))
+                lb=float(variable_value)/float(self.kwargs.get('lower_boundMultiplier'))
+                ub=float(variable_value)*float(self.kwargs.get('upper_boundMultiplier'))
                 
                 pycopi.Scan(self.cps_dct[i][j],
+<<<<<<< HEAD
                                      Variable=j,
                                      ReportName=Misc.RemoveNonAscii(j).filter+'.txt',
                                      ReportType='profilelikelihood',
@@ -445,21 +465,37 @@ class ProfileLikelihood():
                                      NumberOfSteps=self.kwargs.get('NumberOfSteps'),
                                      Maximum=ub,
                                      Minimum=lb,
-                                     Log=self.kwargs.get('Log'),
+                                     Log=self.kwargs.get('Log10'),
                                      Scheduled='true',
                                      Save='overwrite',
                                      ClearScans='true')
+=======
+                                     variable=j,
+                                     report_name=Misc.RemoveNonAscii(j).filter+'.txt',
+                                     report_type='profilelikelihood',
+                                     subtask='parameter_estimation',
+                                     scan_type='scan',
+                                     output_in_subtask='false',
+                                     adjust_initial_conditions='false',
+                                     number_of_steps=self.kwargs.get('number_of_steps'),
+                                     maximum=ub,
+                                     minimum=lb,
+                                     log10=self.kwargs.get('log10'),
+                                     scheduled='true',
+                                     save='overwrite',
+                                     clear_scans='true')
+>>>>>>> b5251ac39e0e966dfceb851ff97bd2f79e887bd0
         return self.cps_dct
         
     def run_slow(self):
         '''
-        Run using one process, separately, one after another
+        run using one process, separately, one after another
         '''
         res={}
         for i in self.cps_dct.keys():
             for j in self.cps_dct[i]:
                 LOG.debug( 'running {}'.format(j))
-                res[self.cps_dct[i][j]]= pycopi.Run(self.cps_dct[i][j],Task='scan',MaxTime=self.kwargs.get('MaxTime'),Mode='slow').run()
+                res[self.cps_dct[i][j]]= pycopi.run(self.cps_dct[i][j],Task='scan',max_time=self.kwargs.get('max_time'),mode='slow').run()
         return res
         
     def multi_run(self):
@@ -488,24 +524,24 @@ class ProfileLikelihood():
         return True
                 
     def run(self):
-        if self.kwargs.get('Run')=='false':
+        if self.kwargs.get('run')=='false':
             return False
-        elif self.kwargs.get('Run')=='multiprocess':
+        elif self.kwargs.get('run')=='multiprocess':
             self.multi_run()
             return True
-        elif self.kwargs.get('Run')=='slow':
+        elif self.kwargs.get('run')=='slow':
             self.run_slow()
             return True
-        elif self.kwargs.get('Run')=='SGE':
+        elif self.kwargs.get('run')=='SGE':
             self.run_SGE()
             return True
 
 
 #==============================================================================
             
-class Plot():
+class plot():
     '''    
-    After ProfileLikelihood class has been run, the Plot class will plot the
+    After ProfileLikelihood class has been run, the plot class will plot the
     profile likelihoods for you. 
     
     copasi_file:
@@ -513,19 +549,19 @@ class Plot():
         
     **kwargs:
     
-        ParameterPath:
-            When Index is anything other than -1 you need to specify the absolute
+        parameter_path:
+            When index is anything other than -1 you need to specify the absolute
             path to your parameters. 
             
-        Index:
-            Which Index to plot. Either an integer or list of integers. Default=-1, 
+        index:
+            Which index to plot. Either an integer or list of integers. Default=-1, 
             means profile likelihoods were calculated around the parameters present 
-            in the model. When Index=-1 you must speficy an argument to the 
-            RSS argument. An integer Index other than -1 specifies that a profile
+            in the model. When index=-1 you must speficy an argument to the 
+            RSS argument. An integer index other than -1 specifies that a profile
             likleihood was calculated around the integer best set of parameters and 
             to plot them. A list of integers specifies the plotting of an 
-            arbtrary number of profile likelihoods. When Index is an Int or list of Int
-            the RSS argument is taken directly from the PE data specified by ParameterPath
+            arbtrary number of profile likelihoods. When index is an Int or list of Int
+            the RSS argument is taken directly from the PE data specified by parameter_path
             
         NumProcesses:
             How many processes to use for plotting, which can be fairly intensive 
@@ -550,95 +586,95 @@ class Plot():
             Residual Sum of Squared. The objective function used as a measure of distance
             of the experimental to simulated data. The RSS is minimized by copasi's 
             parameter estimation algorithms. The smaller the better. This value is 
-            automatically taken from parameter estimation data if the Index kwarg 
-            is anything other than minus 1. when Index=-1, the RSS value must be 
+            automatically taken from parameter estimation data if the index kwarg 
+            is anything other than minus 1. when index=-1, the RSS value must be 
             given to this argument for the calculation of the chi squared based 
             confidence interval
 
-        FontSize:
+        font_size:
             Control graph label font size
 
-        AxisSize:
+        axis_size:
             Control graph axis font size
 
-        ExtraTitle:
+        extra_title:
             When savefig='true', given the saved
             file an extra label in the file path
 
-        LineWidth:
-            Control graph LineWidth
+        line_width:
+            Control graph line_width
             
-        DotSize:
+        marker_size:
             How big to plot the dots on the graph
 
-        Bins:
+        bins:
             Control number of bins in any histograms. Used???
 
-        MultiPlot:
-            Plot results of sequential profile likelihoods for the same 
-            parameter but with different Index on the same graph. Results
-            accumulate with Index value, so desired graphs are in the
+        Multiplot:
+            plot results of sequential profile likelihoods for the same 
+            parameter but with different index on the same graph. Results
+            accumulate with index value, so desired graphs are in the
             folder with the largest index. 
             
-        SaveFig:
-            Save graphs to file labelled after the index
+        savefig:
+            save graphs to file labelled after the index
 
         InterpolationKind:
             Which method to use for interpolation. Can be any of ['linear', 
             'nearest', 'zero', 'slinear', 'quadratic', 'cubic'] but be careful
             with these. Default=slinear
 
-        TitleWrapSize:
+        title_wrap_size:
             When graph titles are long, how many characters to have per 
             line before word wrap. Default=30. 
             
-        Show:
-            When not using iPython, use Show='true' to display graphs
+        show:
+            When not using iPython, use show='true' to display graphs
             
         InterpolationResolution;
             Number of points to split line into for interpolation. Defualt=1000
             
-        Ylimit: 
+        ylimit: 
             default==None, restrict amount of data shown on y axis. 
             Useful for honing in on small confidence intervals
 
-        Xlimit: 
+        xlimit: 
             default==None, restrict amount of data shown on x axis. 
             Useful for honing in on small confidence intervals
         
-        DPI:
+        dpi:
             How big saved figure should be. Default=125
         
-        XTickRotation:
-            How many degrees to rotate the X tick labels
+        xtick_rotation:
+            How many degrees to rotate the x tick labels
             of the output. Useful if you have very small or large
             numbers that overlay when plotting. 
             
-        Mode: 
+        mode: 
             either 'all', 'one' or 'none to either plot all results 
             or just a certain parameter. Defulat='all'
             
-        PlotIndex:
-            if Mode set to 'one', this specifies the index of the 
+        plotindex:
+            if mode set to 'one', this specifies the index of the 
             profile likelihood run you want to plot (i.e -1,0,[0,3,5])
             
-        PlotParameter:
-            If Mode set to 'one' which parameter to plot. Must
+        plotParameter:
+            If mode set to 'one' which parameter to plot. Must
             be an item in your results. 
             
-        Separator:
-            Separator used in csv file for experimental data. 
+        separator:
+            separator used in csv file for experimental data. 
             Default='\t'
             
-        Log10:
-            'true' or 'false'. Default='true'. Plot on log10-log10 scale
+        log10:
+            'true' or 'false'. Default='true'. plot on log10-log10 scale
             
         UsePickle:
             Data read by PEAnalysis.ParsePEData are automatically pickled
             for speed. 'true' or 'false' to use pickle. Default='false'
         
-        OverwritePickle:
-            If data has changed set 'OverwritePickle' to 'true' to rewrite 
+        overwrite_pickle:
+            If data has changed set 'overwrite_pickle' to 'true' to rewrite 
             pickle before 'UsePickle' can be useful again. Default='false'
         
     '''
@@ -652,26 +688,27 @@ class Plot():
 
         options={#report variables
                  'ExperimentFiles':None,
-                 'ParameterPath':None,                 
-                 'Index':-1,
+                 'parameter_path':None,                 
+                 'index':-1,
                  'NumProcesses':1, 
                  'Alpha':0.95,
                  'DOF':None,
                  'N':None,
                  'RSS':None,
-                 'QuantityType':'concentration',
+                 'quantity_type':'concentration',
                  
                  #graph features
-                 'FontSize':22,
-                 'AxisSize':15,
-                 'ExtraTitle':None,
-                 'LineWidth':3,
-                 'Bins':100,
-                 'Show':'false',
-                 'MultiPlot':'false',
-                 'SaveFig':'false',
+                 'font_size':22,
+                 'axis_size':15,
+                 'extra_title':None,
+                 'line_width':3,
+                 'bins':100,
+                 'show':'false',
+                 'Multiplot':'false',
+                 'savefig':'false',
                  'InterpolationKind':'slinear',
                  'InterpolationResolution':1000,
+<<<<<<< HEAD
                  'TitleWrapSize':30,
                  'Ylimit':None,
                  'Xlimit':None,
@@ -680,15 +717,28 @@ class Plot():
                  'Mode':'all',
                  'PlotIndex':-1,
                  'PlotParameter':None,
-                 'DotSize':4,
+                 'DotSize':10,
                  'Separator':'\t',
-                 'Log10':'false',
+                 'Log10':'true',
+=======
+                 'title_wrap_size':30,
+                 'ylimit':None,
+                 'xlimit':None,
+                 'dpi':125,
+                 'xtick_rotation':35,
+                 'mode':'all',
+                 'plotindex':-1,
+                 'plotParameter':None,
+                 'marker_size':4,
+                 'separator':'\t',
+                 'log10':'false',
+>>>>>>> b5251ac39e0e966dfceb851ff97bd2f79e887bd0
                  'UsePickle':'false',
-                 'OverwritePickle':'false',
+                 'overwrite_pickle':'false',
                  }
                  
         for i in kwargs.keys():
-            assert i in options.keys(),'{} is not a keyword argument for Plot'.format(i)
+            assert i in options.keys(),'{} is not a keyword argument for plot'.format(i)
         options.update( kwargs) 
         self.kwargs=options       
         
@@ -699,59 +749,59 @@ class Plot():
         if self.kwargs.get('NumProcesses')!=0:
             self.kwargs['NumProcesses']=self.kwargs.get('NumProcesses')-1
 
-        if self.kwargs.get('Log10') not in ['true','false']:
-            raise Errors.InputError('Log10 argument should be \'true\' or \'false\' not {}'.format(self.kwargs.get('Log10')))
+        if self.kwargs.get('log10') not in ['true','false']:
+            raise Errors.InputError('log10 argument should be \'true\' or \'false\' not {}'.format(self.kwargs.get('log10')))
 
         if self.kwargs.get('UsePickle') not in ['true','false']:
-            raise Errors.InputError('UsePickle argument should be \'true\' or \'false\' not {}'.format(self.kwargs.get('Log10')))
+            raise Errors.InputError('UsePickle argument should be \'true\' or \'false\' not {}'.format(self.kwargs.get('log10')))
 
 
-        if self.kwargs.get('OverwritePickle') not in ['true','false']:
-            raise Errors.InputError('OverwritePickle argument should be \'true\' or \'false\' not {}'.format(self.kwargs.get('Log10')))
+        if self.kwargs.get('overwrite_pickle') not in ['true','false']:
+            raise Errors.InputError('overwrite_pickle argument should be \'true\' or \'false\' not {}'.format(self.kwargs.get('log10')))
 
             
             
         if self.kwargs.get('NumProcesses')>multiprocessing.cpu_count():
             raise Errors.InputError('You have selected {} processes but your computer only has {} available'.format(self.kwargs.get('NumProcesses'),multiprocessing.cpu_count()))
         
-        #if Index is -1 i.e. current parameters, user needs to give RSS
-        if self.kwargs.get('Index')==-1:
+        #if index is -1 i.e. current parameters, user needs to give RSS
+        if self.kwargs.get('index')==-1:
             if self.kwargs.get('RSS')==None:
-                raise Errors.InputError('when calculating PL around current parameter sets must specify the current RSS as keyword argument to Plot')
+                raise Errors.InputError('when calculating PL around current parameter sets must specify the current RSS as keyword argument to plot')
         
-        #otherwise the RSS is ascertained automatically from the ParameterPath
-        if self.kwargs.get('Index')!=-1:
-            assert self.kwargs.get('ParameterPath')!=None,'If Index!=-1 then you need to suply argument to ParameterPath'
+        #otherwise the RSS is ascertained automatically from the parameter_path
+        if self.kwargs.get('index')!=-1:
+            assert self.kwargs.get('parameter_path')!=None,'If index!=-1 then you need to suply argument to parameter_path'
         
 
         #line interpolation options
         assert self.kwargs.get('InterpolationKind') in ['linear', 'nearest', 'zero', 'slinear', 'quadratic', 'cubic'],"interpolation kind must be one of ['linear', 'nearest', 'zero', 'slinear', 'quadratic', 'cubic']"
 
         #limit parameters
-        if self.kwargs.get('Ylimit')!=None:
-            assert isinstance(self.kwargs.get('Ylimit'),list),'Ylimit is a list of coordinates for y axis,i.e. [0,10]'
-            assert len(self.kwargs.get('Ylimit'))==2,'length of the Ylimit list must be 2'
+        if self.kwargs.get('ylimit')!=None:
+            assert isinstance(self.kwargs.get('ylimit'),list),'ylimit is a list of coordinates for y axis,i.e. [0,10]'
+            assert len(self.kwargs.get('ylimit'))==2,'length of the ylimit list must be 2'
         
-        if self.kwargs.get('Xlimit')!=None:
-            assert isinstance(self.kwargs.get('Xlimit'),list),'Xlimit is a list of coordinates for X axis,i.e. [0,10]'
-            assert len(self.kwargs.get('Xlimit'))==2,'length of the Xlimit list must be 2'
+        if self.kwargs.get('xlimit')!=None:
+            assert isinstance(self.kwargs.get('xlimit'),list),'xlimit is a list of coordinates for x axis,i.e. [0,10]'
+            assert len(self.kwargs.get('xlimit'))==2,'length of the xlimit list must be 2'
         
-        if isinstance(self.kwargs.get('XTickRotation'),int)!=True:
-            raise TypeError('XTickRotation parameter should be a Python integer')
+        if isinstance(self.kwargs.get('xtick_rotation'),int)!=True:
+            raise TypeError('xtick_rotation parameter should be a Python integer')
 
         
-        if self.kwargs.get('ExtraTitle')!=None:
-            if isinstance(self.kwargs.get('ExtraTitle'),str)!=True:
-                raise TypeError('ExtraTitle should be of type str')
+        if self.kwargs.get('extra_title')!=None:
+            if isinstance(self.kwargs.get('extra_title'),str)!=True:
+                raise TypeError('extra_title should be of type str')
                 
-        if isinstance(self.kwargs.get('FontSize'),int)!=True:
-            raise TypeError('FontSize argument should be of type int')
+        if isinstance(self.kwargs.get('font_size'),int)!=True:
+            raise TypeError('font_size argument should be of type int')
             
-        if isinstance(self.kwargs.get('AxisSize'),int)!=True:
-            raise TypeError('AxisSize argument should be of type int')
+        if isinstance(self.kwargs.get('axis_size'),int)!=True:
+            raise TypeError('axis_size argument should be of type int')
             
-        if isinstance(self.kwargs.get('LineWidth'),int)!=True:
-            raise TypeError('LineWidth argument should be of type int')
+        if isinstance(self.kwargs.get('line_width'),int)!=True:
+            raise TypeError('line_width argument should be of type int')
             
         if isinstance(self.kwargs.get('InterpolationKind'),str)!=True:
             raise TypeError('InterpolationKind argument should be of type str')
@@ -759,8 +809,8 @@ class Plot():
         if isinstance(self.kwargs.get('InterpolationResolution'),int)!=True:
             raise TypeError('InterpolationResolution argument should be of type int')
 
-        if isinstance(self.kwargs.get('TitleWrapSize'),int)!=True:
-            raise TypeError('TitleWrapSize argument should be of type int')
+        if isinstance(self.kwargs.get('title_wrap_size'),int)!=True:
+            raise TypeError('title_wrap_size argument should be of type int')
 
 
         if isinstance(self.kwargs.get('InterpolationResolution'),int)!=True:
@@ -770,20 +820,20 @@ class Plot():
             
 
 
-        if self.kwargs.get('Ylimit')!=None:
-            assert isinstance(self.kwargs.get('Ylimit'),str)
+        if self.kwargs.get('ylimit')!=None:
+            assert isinstance(self.kwargs.get('ylimit'),str)
             
-        if self.kwargs.get('Xlimit')!=None:
-            assert isinstance(self.kwargs.get('Xlimit'),str)
+        if self.kwargs.get('xlimit')!=None:
+            assert isinstance(self.kwargs.get('xlimit'),str)
             
             
-        assert isinstance(self.kwargs.get('DPI'),int)
-        assert isinstance(self.kwargs.get('XTickRotation'),int)
+        assert isinstance(self.kwargs.get('dpi'),int)
+        assert isinstance(self.kwargs.get('xtick_rotation'),int)
     
-        assert self.kwargs.get('Show') in ['false','true']
-        assert self.kwargs.get('SaveFig') in ['false','true']
-        assert self.kwargs.get('MultiPlot') in ['false','true']
-        assert self.kwargs.get('QuantityType') in ['concentration','partical_numbers']
+        assert self.kwargs.get('show') in ['false','true']
+        assert self.kwargs.get('savefig') in ['false','true']
+        assert self.kwargs.get('Multiplot') in ['false','true']
+        assert self.kwargs.get('quantity_type') in ['concentration','partical_numbers']
         
         if self.kwargs['ExperimentFiles']==None:
             LOG.critical('Experimental Files not None')
@@ -814,35 +864,35 @@ class Plot():
             self.kwargs['N']=self.num_data_points()
         assert self.kwargs.get('N')!=None        
         
-        if self.kwargs.get('Mode') not in ['all','one','none']:
-            raise Errors.InputError('{} is not a valid mode. Mode should be either all or one'.format(self.kwargs.get('Mode')))
+        if self.kwargs.get('mode') not in ['all','one','none']:
+            raise Errors.InputError('{} is not a valid mode. mode should be either all or one'.format(self.kwargs.get('mode')))
 #
 
   
 
-        if self.kwargs.get('Mode')!='all':
-            if self.kwargs.get('PlotParameter') not in self.list_parameters():
-                raise Errors.InputError('{} is not a valid Parameter. Your parameters are: {}'.format(self.kwargs.get('PlotParameter'),self.list_parameters()))
+        if self.kwargs.get('mode')!='all':
+            if self.kwargs.get('plotParameter') not in self.list_parameters():
+                raise Errors.InputError('{} is not a valid Parameter. Your parameters are: {}'.format(self.kwargs.get('plotParameter'),self.list_parameters()))
 
-            if isinstance(self.kwargs.get('Index'),int):
-                if self.kwargs.get('PlotIndex') != self.kwargs.get('Index'):
-                    raise Errors.InputError('{} is not an index in your Indices: {}'.format(self.kwargs.get('PlotIndex'),self.kwargs.get('Index')))
+            if isinstance(self.kwargs.get('index'),int):
+                if self.kwargs.get('plotindex') != self.kwargs.get('index'):
+                    raise Errors.InputError('{} is not an index in your Indices: {}'.format(self.kwargs.get('plotindex'),self.kwargs.get('index')))
             
-            elif isinstance(self.kwargs.get('Index'),list):
-                if self.kwargs.get('PlotIndex') not in self.kwargs.get('Index'):
-                    raise Errors.InputError('{} is not an index in your Indices: {}'.format(self.kwargs.get('PlotIndex'),self.kwargs.get('Index')))
+            elif isinstance(self.kwargs.get('index'),list):
+                if self.kwargs.get('plotindex') not in self.kwargs.get('index'):
+                    raise Errors.InputError('{} is not an index in your Indices: {}'.format(self.kwargs.get('plotindex'),self.kwargs.get('index')))
 
 
-        if self.kwargs.get('Mode')=='all':
+        if self.kwargs.get('mode')=='all':
             self.plot_all()
-        elif self.kwargs.get('Mode')=='one':
-            self.plot1(self.kwargs.get('PlotIndex'),self.kwargs.get('PlotParameter'))
+        elif self.kwargs.get('mode')=='one':
+            self.plot1(self.kwargs.get('plotindex'),self.kwargs.get('plotParameter'))
             
         
         self.plot_chi2_CI()
         CI=self.calc_chi2_CI()
         for i in CI:
-            LOG.info( 'Confidence level for Index {} is {} or {} on a Log10 scale'.format(i,CI[i],numpy.log10(CI[i])))
+            LOG.info( 'Confidence level for index {} is {} or {} on a log10 scale'.format(i,CI[i],numpy.log10(CI[i])))
             
     def get_PL_dir(self):
         '''
@@ -850,7 +900,7 @@ class Plot():
         '''
         d=os.path.dirname(self.copasi_file)
         path= os.path.join(d,'ProfileLikelihood')
-        assert os.path.isdir(path),'The current directory: {} \t does not contain a directory called ProfileLikelihood, have you used the ProfileLikelihood class with the Run option enabled?'.format(d)
+        assert os.path.isdir(path),'The current directory: {} \t does not contain a directory called ProfileLikelihood, have you used the ProfileLikelihood class with the run option enabled?'.format(d)
         return path
         
     def get_index_dirs(self):
@@ -912,10 +962,10 @@ class Plot():
             df_dict[i]={}
             for j in self.result_paths[i]:
                 if j not in experiment_keys:
-                    data= pandas.read_csv(self.result_paths[i][j],sep='\t')#self.kwargs['Separator'])
+                    data= pandas.read_csv(self.result_paths[i][j],sep='\t')#self.kwargs['separator'])
                     best_value_str='TaskList[Parameter Estimation].(Problem)Parameter Estimation.Best Value'
                     data=data.rename(columns={best_value_str:'RSS'})
-#                    if self.kwargs['Log10']=='true':
+#                    if self.kwargs['log10']=='true':
 #                        df_dict[i][j]=numpy.log10(data)
 #                    else:
                     df_dict[i][j]=data
@@ -931,7 +981,7 @@ class Plot():
         count= len( self.data[first_key].keys())
         return count
 #        except AttributeError:
-#            raise Errors.InputError('Index set to -1 and therefore a ParameterPath is not present to count data points. Specify an argument to N kwarg')
+#            raise Errors.InputError('index set to -1 and therefore a parameter_path is not present to count data points. Specify an argument to N kwarg')
         
         
     def degrees_of_freedom(self):
@@ -941,13 +991,13 @@ class Plot():
 #        try:
         return self.num_estimated_params()-1
 #        except AttributeError:
-#            raise Errors.InputError('Index set to -1 and therefore a ParameterPath is not present to count number of parameter. Specify an argument to DOF kwarg')
+#            raise Errors.InputError('index set to -1 and therefore a parameter_path is not present to count number of parameter. Specify an argument to DOF kwarg')
         
     def num_data_points(self):
         '''
         returns number of data points in your data files
         '''
-        experimental_data= [pandas.read_csv(i,sep=self.kwargs['Separator']) for i in self.kwargs['ExperimentFiles']]
+        experimental_data= [pandas.read_csv(i,sep=self.kwargs['separator']) for i in self.kwargs['ExperimentFiles']]
         l=[]        
         for i in experimental_data:
             l.append( i.shape[0]*(i.shape[1]-1))
@@ -959,18 +1009,18 @@ class Plot():
     def get_RSS(self):
         RSS={}
 
-        if self.kwargs.get('Index')==-1:
+        if self.kwargs.get('index')==-1:
             assert self.kwargs.get('RSS')!=None
             RSS[-1]= self.kwargs.get('RSS')
             return RSS
         else:
-            PED= PEAnalysis.ParsePEData(self.kwargs.get('ParameterPath'),
+            PED= PEAnalysis.ParsePEData(self.kwargs.get('parameter_path'),
                                         UsePickle=self.kwargs['UsePickle'],
-                                        OverwritePickle='false')#self.kwargs['OverwritePickle'])
-            if isinstance(self.kwargs.get('Index'),int):
-                RSS[self.kwargs.get('Index')]=PED.data.iloc[self.kwargs.get('Index')]['RSS']
-            elif isinstance(self.kwargs.get('Index'),list):
-                for i in self.kwargs.get('Index'):
+                                        overwrite_pickle='false')#self.kwargs['overwrite_pickle'])
+            if isinstance(self.kwargs.get('index'),int):
+                RSS[self.kwargs.get('index')]=PED.data.iloc[self.kwargs.get('index')]['RSS']
+            elif isinstance(self.kwargs.get('index'),list):
+                for i in self.kwargs.get('index'):
                     RSS[i]=PED.data.iloc[i]['RSS']
             return RSS
         
@@ -1007,12 +1057,12 @@ class Plot():
         x = numpy.linspace(scipy.stats.chi2.ppf(0.01, self.kwargs.get('DOF')),scipy.stats.chi2.ppf(0.99, self.kwargs.get('DOF')), 100)
         
         plt.figure()        
-        plt.plot(x, scipy.stats.chi2.pdf(x, self.kwargs.get('DOF')),'k-', lw=self.kwargs.get('LineWidth'), label='chi2 pdf')
+        plt.plot(x, scipy.stats.chi2.pdf(x, self.kwargs.get('DOF')),'k-', lw=self.kwargs.get('line_width'), label='chi2 pdf')
         
         y_alpha=numpy.linspace(plt.ylim()[0],plt.ylim()[1])
         x_alpha=[self.get_chi2_alpha()]*len(y_alpha)
         
-        plt.plot(x_alpha,y_alpha,'--',linewidth=self.kwargs.get('LineWidth'))
+        plt.plot(x_alpha,y_alpha,'--',linewidth=self.kwargs.get('line_width'))
         plt.xlabel('x',fontsize=self.kwargs.get('Fontsize'))
         plt.ylabel('Probability',fontsize=self.kwargs.get('Fontsize'))
         plt.title('Chi2 distribution with {} DOF'.format(self.kwargs.get('DOF')),fontsize=self.kwargs.get('Fontsize'))
@@ -1044,7 +1094,7 @@ class Plot():
             best_parameter_value= self.GMQ.get_local_kinetic_parameters_cns()[parameter]['value']
         
         if parameter in self.GMQ.get_IC_cns():
-            if self.kwargs.get('QuantityType')=='concentration':
+            if self.kwargs.get('quantity_type')=='concentration':
                 best_parameter_value= self.GMQ.get_IC_cns()[parameter]['concentration']
             else:
                 best_parameter_value= self.GMQ.get_IC_cns()[parameter]['value']
@@ -1059,29 +1109,46 @@ class Plot():
 
     def plot1(self,index,parameter):
         '''
-        Plot one parameter. 
+        plot one parameter. 
         
         things to check:
             that we are plotting the correct data
             that the CI line is calculated correctly
             that the red dot is in the correct place
         '''
+<<<<<<< HEAD
         matplotlib.pyplot.rcParams.update({'font.size':self.kwargs.get('AxisSize')})
+        best_parameter_value=self.get_original_value(index,parameter)  
+        LOG.debug('best parameter value is {}'.format(best_parameter_value))
+        
+        if best_parameter_value != None:
+            if self.kwargs['Log10']=='true':
+                best_parameter_value = round(numpy.log10(float(best_parameter_value)),6)
+                
+                
+        if self.kwargs.get('MultiPlot')=='true':
+=======
+        matplotlib.pyplot.rcParams.update({'font.size':self.kwargs.get('axis_size')})
 #        if parameter not in self.GMQ.get_all_model_variables().keys():
 #            raise Errors.InputError('{} is not in your model. These are parameters in your model: {}'.format(parameter,self.GMQ.get_all_model_variables().keys()))
-        if self.kwargs.get('MultiPlot')=='true':
+        if self.kwargs.get('Multiplot')=='true':
+>>>>>>> b5251ac39e0e966dfceb851ff97bd2f79e887bd0
             plt.figure(parameter)
         else:
             plt.figure()
         ax = plt.subplot(111)
-        if self.kwargs['Log10']=='true':
+        if self.kwargs['log10']=='true':
             data= numpy.log10(self.data[index][parameter])
         else:
             data= self.data[index][parameter]
         parameter_val,RSS_val=(data[data.keys()[0]],data[data.keys()[1]])
         #plot parameter vs RSS once as green circles the other as lines
         try:
-            plt.plot(parameter_val,RSS_val,'bo',markersize=self.kwargs.get('DotSize'))
+<<<<<<< HEAD
+            plt.plot(parameter_val,RSS_val,'bo',markersize=self.kwargs.get('DotSize'),label = best_parameter_value)
+=======
+            plt.plot(parameter_val,RSS_val,'bo',markersize=self.kwargs.get('marker_size'))
+>>>>>>> b5251ac39e0e966dfceb851ff97bd2f79e887bd0
         except ValueError as e:
             if e.message=='invalid literal for float(): 1.#INF':
                 return True
@@ -1093,21 +1160,23 @@ class Plot():
                                               num=self.kwargs.get('InterpolationResolution')*len(parameter_val), endpoint=True)
         interp_RSS_value=f(interp_parameter_value)        
         handle=plt.plot(interp_parameter_value,interp_RSS_value,'black')
-        plt.setp(handle,'color','black',linewidth=self.kwargs.get('LineWidth'))
+        plt.setp(handle,'color','black',linewidth=self.kwargs.get('line_width'))
         
         #plot the confidence interval 
-        if self.kwargs.get('Log10')=='true':
+        if self.kwargs.get('log10')=='true':
             CI= numpy.log10(self.calc_chi2_CI()[index])
         else:
             CI= self.calc_chi2_CI()[index]
         
         
-        plt.plot(parameter_val,[CI]*len(parameter_val),'g--',linewidth=self.kwargs.get('LineWidth'))
+        plt.plot(parameter_val,[CI]*len(parameter_val),'g--',linewidth=self.kwargs.get('line_width'))
 #        print self.GMQ.get_all_model_variables()
 #        print parameter
         st=Misc.RemoveNonAscii(parameter).filter
 #        print st
-        best_parameter_value=self.get_original_value(index,parameter)   
+        
+        
+
         if best_parameter_value!=None:         
             #best parameter value contains the model value for pparameter
             #we now need to look this value up on the interpolation and read off the corresponding RSS value
@@ -1119,18 +1188,22 @@ class Plot():
             minimum_index= abs_diff_df.idxmin()[parameter]
             best_parameter_value= interp_df.iloc[minimum_index][parameter]
             best_RSS_value=interp_df.iloc[minimum_index]['RSS']
-            plt.plot(best_parameter_value,best_RSS_value,'ro',markersize=self.kwargs.get('DotSize'))
+            plt.plot(best_parameter_value,best_RSS_value,'ro',markersize=self.kwargs.get('marker_size'))
         
         #plot labels
-        plt.title('\n'.join(wrap('{}'.format(parameter),self.kwargs.get('TitleWrapSize'))),fontsize=self.kwargs.get('FontSize'))
+<<<<<<< HEAD
+        plt.title('\n'.join(wrap('{},OriginalParameterValue={}'.format(parameter,best_parameter_value),self.kwargs.get('TitleWrapSize'))),fontsize=self.kwargs.get('FontSize'))
+=======
+        plt.title('\n'.join(wrap('{}'.format(parameter),self.kwargs.get('title_wrap_size'))),fontsize=self.kwargs.get('font_size'))
+>>>>>>> b5251ac39e0e966dfceb851ff97bd2f79e887bd0
         
         
-        if self.kwargs['Log10']=='true':
-            plt.xlabel('Parameter Value (Log10)',fontsize=self.kwargs.get('FontSize'))  
-            plt.ylabel('RSS (Log10)',fontsize=self.kwargs.get('FontSize'))
+        if self.kwargs['log10']=='true':
+            plt.xlabel('Parameter Value (log10)',fontsize=self.kwargs.get('font_size'))  
+            plt.ylabel('RSS (log10)',fontsize=self.kwargs.get('font_size'))
         else:
-            plt.xlabel('Parameter Value',fontsize=self.kwargs.get('FontSize'))         
-            plt.ylabel('RSS',fontsize=self.kwargs.get('FontSize'))
+            plt.xlabel('Parameter Value',fontsize=self.kwargs.get('font_size'))         
+            plt.ylabel('RSS',fontsize=self.kwargs.get('font_size'))
        #pretty stuff
 
         ax.spines['right'].set_color('none')
@@ -1141,29 +1214,31 @@ class Plot():
         ax.spines['bottom'].set_smart_bounds(True)
         
         #xtick rotation
-        plt.xticks(rotation=self.kwargs.get('XTickRotation'))
+        plt.xticks(rotation=self.kwargs.get('xtick_rotation'))
         
+        ##legend
+        plt.legend(loc='best')
         #options for changing the plot axis
-        if self.kwargs.get('Ylimit')!=None:
-            ax.set_ylim(self.kwargs.get('Ylimit'))
+        if self.kwargs.get('ylimit')!=None:
+            ax.set_ylim(self.kwargs.get('ylimit'))
         if self.kwargs.get('xlimit')!=None:
             ax.set_xlim(self.kwargs.get('xlimit'))
 
         def save_plot():
             filename={}
-            if self.kwargs.get('ExtraTitle') !=None:
-                filename[parameter]=os.path.join(os.getcwd(),parameter+'_'+self.kwargs.get('ExtraTitle')+'.png')
-                plt.savefig(parameter+'_'+self.kwargs.get('ExtraTitle')+'.png',bbox_inches='tight',format='png',dpi=self.kwargs.get('DPI'))
+            if self.kwargs.get('extra_title') !=None:
+                filename[parameter]=os.path.join(os.getcwd(),parameter+'_'+self.kwargs.get('extra_title')+'.png')
+                plt.savefig(parameter+'_'+self.kwargs.get('extra_title')+'.png',bbox_inches='tight',format='png',dpi=self.kwargs.get('dpi'))
             else:
                 filename[parameter]=os.path.join(os.getcwd(),parameter+'.png')
-                plt.savefig(parameter+'.png',format='png',bbox_inches='tight',dpi=self.kwargs.get('DPI'))     
+                plt.savefig(parameter+'.png',format='png',bbox_inches='tight',dpi=self.kwargs.get('dpi'))     
             return filename
 
-        if self.kwargs.get('Show')=='true':
+        if self.kwargs.get('show')=='true':
             plt.show()
             
         #save figure options
-        if self.kwargs.get('SaveFig')=='true':
+        if self.kwargs.get('savefig')=='true':
             os.chdir(self.get_index_dirs_as_dict()[index])
             graph_dirs=save_plot()
             #change back to parent directory
@@ -1173,22 +1248,22 @@ class Plot():
             return True
             
     def plot_all(self):
-        if isinstance(self.kwargs.get('Index'),int)and self.kwargs.get('Index')==-1:
+        if isinstance(self.kwargs.get('index'),int)and self.kwargs.get('index')==-1:
 #            print self.data
             try:
                 for i in self.data[-1]:
-                    self.plot1(self.kwargs.get('Index'),i)
+                    self.plot1(self.kwargs.get('index'),i)
             except KeyError:
-                raise Errors.InputError('Index out of bounds, i.e. Index>number PE runs')
+                raise Errors.InputError('index out of bounds, i.e. index>number PE runs')
 #                
-        if isinstance(self.kwargs.get('Index'),int) and self.kwargs.get('Index')!=-1:
-            for i in self.data[self.kwargs.get('Index')]:
-                self.plot1(self.kwargs.get('Index'),i)
+        if isinstance(self.kwargs.get('index'),int) and self.kwargs.get('index')!=-1:
+            for i in self.data[self.kwargs.get('index')]:
+                self.plot1(self.kwargs.get('index'),i)
 #            except KeyError:
-#                raise Errors.InputError('Index out of bounds, i.e. Index>number PE runs')
+#                raise Errors.InputError('index out of bounds, i.e. index>number PE runs')
                 
-        elif isinstance(self.kwargs.get('Index'),list):
-            for i in reversed(self.kwargs.get('Index')):
+        elif isinstance(self.kwargs.get('index'),list):
+            for i in reversed(self.kwargs.get('index')):
                 for j in self.data[i]:
                     self.plot1(i,j)
 
