@@ -654,13 +654,13 @@ class Reports():
             Name of the report. Default depends on kwarg report_type
         
         append: 
-            'true' or 'false'. append to report. Default 'false'
+            True or False. append to report. Default False
         
         confirm_overwrite: 
-            'true' or 'false'.  Default= 'false'
+            True or False.  Default= False
         
         save: 
-            either 'false','overwrite' or 'duplicate'. 
+            either False,'overwrite' or 'duplicate'. 
             false: don't write to file
             overwrite: overwrite copasi_file
             duplicate: write a new file named using the kwarg OutputML
@@ -683,12 +683,12 @@ class Reports():
                  'local_parameters':self.GMQ.get_local_kinetic_parameters_cns(),
                  'quantity_type':'concentration',
                  'report_name':None,
-                 'append': 'false', 
-                 'confirm_overwrite': 'false',
+                 'append': False, 
+                 'confirm_overwrite': False,
                  'separator':'\t',
                  #
                  'save':'overwrite',
-                 'update_model':'false',
+                 'update_model':False,
                  'report_type':'parameter_estimation',
                  'variable':self.GMQ.get_metabolites().keys()[0], #only for profile_likelihood
         
@@ -710,12 +710,12 @@ class Reports():
             self.kwargs['local_parameters']=[self.kwargs.get('local_parameters')]
 
 
-        if self.kwargs['append']=='true':
+        if self.kwargs['append']==True:
             self.kwargs['append']=str(1)
         else:
             self.kwargs['append']=str(0)
             
-        if self.kwargs['confirm_overwrite']=='true':
+        if self.kwargs['confirm_overwrite']==True:
             self.kwargs['confirm_overwrite']=str(1)
         else:
             self.kwargs['confirm_overwrite']=str(0)
@@ -724,7 +724,7 @@ class Reports():
         self.report_types=['none','profilelikelihood','time_course','parameter_estimation']
         assert self.kwargs.get('report_type') in self.report_types,'valid report types include {}'.format(self.report_types)
         
-        write_to_file_list=['duplicate','overwrite','false']
+        write_to_file_list=['duplicate','overwrite',False]
         assert self.kwargs.get('save') in write_to_file_list     
         
         quantity_types=['particle_numbers','concentration']
@@ -752,9 +752,10 @@ class Reports():
             
         self.copasiML=self.save()
         
-        
-        
     def save(self):
+        self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
+        
+    def save_dep(self):
         if self.kwargs.get('save')=='duplicate':
             self.CParser.write_copasi_file(self.kwargs.get('OutputML'),self.copasiML)
         elif self.kwargs.get('save')=='overwrite':
@@ -1134,7 +1135,7 @@ class ParsePEDataDeprecated():
                 match= re.findall('.*\[(.*)\].*',i)
                 l.append(match)
         if n==len(l):
-            data=PruneCopasiHeaders(self.data,replace='true').df
+            data=PruneCopasiHeaders(self.data,replace=True).df
             return data
         else:
             return self.data
@@ -1222,7 +1223,7 @@ class TimeCourse(object):
         '''
         run a time course using Copasi. Ensure, you specify the corrent amount
         of time you want simulating. Do this by ensuring that End=StepSize*Intervals.
-        Set plot='true' to automatically plot the results which can be found in a file
+        Set plot=True to automatically plot the results which can be found in a file
         in the same directory as your copasi file in a folder named after your report_name
         kwarg
 
@@ -1259,7 +1260,7 @@ class TimeCourse(object):
                 Default='10000',
 
             update_model:
-                Not really needed in time course. Do not change. Default='false'
+                Not really needed in time course. Do not change. Default=False
 
             metabolites:
                 A list of which metabolites to include in output. Default=all
@@ -1274,27 +1275,27 @@ class TimeCourse(object):
                 Name of the output report. Default is name of the copasi file with _TimeCourse appended'
 
             append:
-                append to the report, 'true' or 'false' , default='false'
+                append to the report, True or False , default=False
 
             confirm_overwrite:
-                Report confirm overwrite , 'true' or 'false' , default='false'
+                Report confirm overwrite , True or False , default=False
 
             SimulationType:
                 Either 'stochastic' or 'deterministic'. default='deterministic'. IMPORTANT: stochastic not yet implemented but there is room for it
 
             OutputEvent:
-                Output event or not, default ='false'
+                Output event or not, default =False
 
             scheduled:
-                'true' or 'false'. Enables running the simulation by CopasiSE. Default='true',
+                True or False. Enables running the simulation by CopasiSE. Default=True,
 
             save:
-                save the copasi file with the changes. Either 'false','overwrite' or 'duplicate'
+                save the copasi file with the changes. Either False,'overwrite' or 'duplicate'
 
             prune_headers:
                 Copasi automatically prints out copasi references to output files. Set
-                this to 'true' to  prune the references off leaving just the variable name,
-                'true' or 'false', default='true'
+                this to True to  prune the references off leaving just the variable name,
+                True or False, default=True
 
             #graph options
             plot:
@@ -1304,7 +1305,7 @@ class TimeCourse(object):
                 Whether to save the figures to file or not
 
             extra_title:
-                If savefig='true',give the filename an extra identifier
+                If savefig=True,give the filename an extra identifier
 
             line_width:
                 Passed to Matplotlib.pyplot.plot. Thickness of the line
@@ -1347,23 +1348,23 @@ class TimeCourse(object):
                        'absolute_tolerance': '1e-12',
                        'max_internal_steps': '10000',
                        'start': '0.0',
-                       'update_model': 'false',
+                       'update_model': False,
                        # report variables
                        'metabolites': self.GMQ.get_metabolites().keys(),
                        'global_quantities': self.GMQ.get_global_quantities().keys(),
                        'quantity_type': 'concentration',
                        'report_name': default_report_name,
-                       'append': 'false',
+                       'append': False,
                        #                 'target': 'cheese.txt',
-                       'confirm_overwrite': 'false',
+                       'confirm_overwrite': False,
                        'simulation_type': 'deterministic',
-                       'output_event': 'false',
-                       'scheduled': 'true',
+                       'output_event': False,
+                       'scheduled': True,
                        'save': 'overwrite',
-                       'prune_headers': 'true',
+                       'prune_headers': True,
 
                        # graph options
-                       'plot': 'false',
+                       'plot': False,
                        'line_width': 2,
                        'line_color': 'k',
                        'marker_color': 'r',
@@ -1373,7 +1374,7 @@ class TimeCourse(object):
                        'font_size': 22,
                        'xtick_rotation': 0,
                        'title_wrap_size': 35,
-                       'savefig': 'false',
+                       'savefig': False,
                        'extra_title': None,
                        'dpi': 125,
                        'marker_size': 5,
@@ -1431,22 +1432,22 @@ class TimeCourse(object):
 
             # report arguments
 
-            if self.kwargs.get('prune_headers') not in ['true', 'false']:
+            if self.kwargs.get('prune_headers') not in [True, False]:
                 raise Errors.InputError('prune_headers kwarg must be either \'true\' or \'false\'')
 
-            if self.kwargs.get('append') not in ['true', 'false']:
+            if self.kwargs.get('append') not in [True, False]:
                 raise Errors.InputError('append kwarg must be either \'true\' or \'false\'')
 
-            if self.kwargs.get('confirm_overwrite') not in ['true', 'false']:
+            if self.kwargs.get('confirm_overwrite') not in [True, False]:
                 raise Errors.InputError('confirm_overwrite kwarg must be either \'true\' or \'false\'')
 
-            if self.kwargs.get('output_event') not in ['true', 'false']:
+            if self.kwargs.get('output_event') not in [True, False]:
                 raise Errors.InputError('OutputEvent kwarg must be either \'true\' or \'false\'')
 
-            if self.kwargs.get('scheduled') not in ['true', 'false']:
+            if self.kwargs.get('scheduled') not in [True, False]:
                 raise Errors.InputError('scheduled kwarg must be either \'true\' or \'false\'')
 
-            if self.kwargs.get('plot') not in ['true', 'false']:
+            if self.kwargs.get('plot') not in [True, False]:
                 raise Errors.InputError('plot kwarg must be either \'true\' or \'false\'')
 
             self.kwargs['line_width'] = int(self.kwargs.get('line_width'))
@@ -1456,27 +1457,27 @@ class TimeCourse(object):
             self.kwargs['title_wrap_size'] = int(self.kwargs.get('title_wrap_size'))
             self.kwargs['dpi'] = int(self.kwargs.get('dpi'))
 
-            if self.kwargs.get('append') == 'true':
+            if self.kwargs.get('append') == True:
                 self.kwargs['append'] == str(1)
             else:
                 self.kwargs['append'] == str(0)
 
-            if self.kwargs.get('confirm_overwrite') == 'true':
+            if self.kwargs.get('confirm_overwrite') == True:
                 self.kwargs['confirm_overwrite'] == str(1)
             else:
                 self.kwargs['confirm_overwrite'] == str(0)
 
-            if self.kwargs.get('output_event') == 'true':
+            if self.kwargs.get('output_event') == True:
                 self.kwargs['output_event'] == str(1)
             else:
                 self.kwargs['output_event'] == str(0)
 
-            if self.kwargs.get('scheduled') == 'true':
+            if self.kwargs.get('scheduled') == True:
                 self.kwargs['scheduled'] == str(1)
             else:
                 self.kwargs['scheduled'] == str(0)
 
-            assert self.kwargs.get('savefig') in ['false', 'true']
+            assert self.kwargs.get('savefig') in [False, True]
 
             # convert some numeric kwargs to str
 
@@ -1531,7 +1532,7 @@ class TimeCourse(object):
             '''
             self.run()
             self.data = self.read_sim_data()
-            if self.kwargs.get('plot') == 'true':
+            if self.kwargs.get('plot') == True:
                 self.plot()
 
         def save(self):
@@ -1653,9 +1654,9 @@ class TimeCourse(object):
             data_output = os.path.join(os.path.dirname(self.copasi_file), self.kwargs['report_name'])
             # trim copasi style headers
             LOG.debug('Reading timecourse')
-            if self.kwargs.get('prune_headers') == 'true':
+            if self.kwargs.get('prune_headers') == True:
                 LOG.debug('pruning headers of copasi files of COPASI references')
-                PruneCopasiHeaders(data_output, replace='true')
+                PruneCopasiHeaders(data_output, replace=True)
             return pandas.read_csv(data_output, sep='\t')
 
         def plot(self):
@@ -1731,11 +1732,11 @@ class TimeCourse(object):
                             plt.savefig(filename[i], format='png', bbox_inches='tight', dpi=self.kwargs.get('dpi'))
                         return filename
 
-                    if self.kwargs.get('show') == 'true':
+                    if self.kwargs.get('show') == True:
                         plt.show()
 
                     # save figure options
-                    if self.kwargs.get('savefig') == 'true':
+                    if self.kwargs.get('savefig') == True:
                         os.chdir(os.path.dirname(self.copasi_file))
                         save_plot()
 
@@ -1795,10 +1796,10 @@ class ExperimentMapper():
         default_outputML=os.path.split(self.copasi_file)[1][:-4]+'_Duplicate.cps'
 
         options={    
-                 'row_orientation':['true']*len(self.experiment_files),
+                 'row_orientation':[True]*len(self.experiment_files),
                  'experiment_type':['timecourse']*len(self.experiment_files),
                  'first_row':[str(1)]*len(self.experiment_files),
-                 'normalize_weights_per_experiment':['true']*len(self.experiment_files),
+                 'normalize_weights_per_experiment':[True]*len(self.experiment_files),
                  'row_containing_names':[str(1)]*len(self.experiment_files),
                  'separator':['\t']*len(self.experiment_files),
                  'weight_method':['mean_squared']*len(self.experiment_files) ,
@@ -1824,8 +1825,8 @@ class ExperimentMapper():
         l=[]
         assert isinstance(self.kwargs.get('row_orientation'),list)
         for i in self.kwargs.get('row_orientation'):
-            assert i in ['true','false']
-            if i=='true':
+            assert i in [True,False]
+            if i==True:
                 l.append(str(1))
             else:
                 l.append(str(0))
@@ -1850,8 +1851,8 @@ class ExperimentMapper():
         l=[]
         assert isinstance(self.kwargs.get('normalize_weights_per_experiment'),list)
         for i in self.kwargs.get('normalize_weights_per_experiment'):
-            assert i in ['true','false'],'{} should be true or false'.format(i)
-            if i=='true':
+            assert i in [True,False],'{} should be true or false'.format(i)
+            if i==True:
                 l.append(str(1))
             else:
                 l.append(str(0))
@@ -1875,13 +1876,13 @@ class ExperimentMapper():
         for i in self.kwargs['separator']:
             assert isinstance(i,str),'separator should be given asa python list'
         
-        assert self.kwargs.get('save') in ['false','duplicate','overwrite']
+        assert self.kwargs.get('save') in [False,'duplicate','overwrite']
         
         #run the experiment mapper        
         self.map_experiments()
         
         #save the copasi file
-        if self.kwargs.get('save')!='false':
+        if self.kwargs.get('save')!=False:
             self.save()
         
         
@@ -2172,12 +2173,12 @@ class PhaseSpace(TimeCourse):
     def __init__(self,copasi_file,**kwargs):
         super(PhaseSpace,self).__init__(copasi_file,**kwargs)
         LOG.debug('plotting all combinations of phase space plot')
-        self.new_options={'plot':'false'}
+        self.new_options={'plot':False}
         self.kwargs.update(self.new_options)
         self.species_data=self.isolate_species()
         self.combinations=self.get_combinations()
         
-        if self.kwargs.get('savefig')=='true':
+        if self.kwargs.get('savefig')==True:
             self.phase_dir=self.make_phase_dir()
             os.chdir(self.phase_dir)
         
@@ -2248,7 +2249,7 @@ class PhaseSpace(TimeCourse):
             ax.set_ylim(self.kwargs.get('ylimit'))
         if self.kwargs.get('xlimit')!=None:
             ax.set_xlim(self.kwargs.get('xlimit'))
-        if self.kwargs.get('show')=='true':
+        if self.kwargs.get('show')==True:
             plt.show()
             
         def replace_non_ascii(st):
@@ -2261,7 +2262,7 @@ class PhaseSpace(TimeCourse):
         x_new=replace_non_ascii(x)
         name='{}_Vs_{}_Phaseplot'.format(x_new,y_new)
         
-        if self.kwargs.get('savefig')=='true':
+        if self.kwargs.get('savefig')==True:
             if self.kwargs.get('extra_title') !=None:
                 plt.savefig(name+'_'+self.kwargs.get('extra_title')+'.png',bbox_inches='tight',format='png',dpi=self.kwargs.get('dpi'))
             else:
@@ -2279,10 +2280,10 @@ class ParameterEstimation():
     class with all the relevant keyword arguments. Subsequently use the 
     write_item_template() method and modify the resulting xlsx in your copasi file
     directory. save the file then close and run the set_up() method to define your
-    optimization problem. When run is set to 'true', the parameter estimation will
-    automatically run in CopasiSE. If plot is also set to 'true', a plot comparing 
+    optimization problem. When run is set to True, the parameter estimation will
+    automatically run in CopasiSE. If plot is also set to True, a plot comparing 
     experimental and simulated profiles are produced. Profiles are saved
-    to file with savefig='true'
+    to file with savefig=True
     
     args:
         
@@ -2307,28 +2308,28 @@ class ParameterEstimation():
             name of the output report
             
         append:
-            append to report or not,'true' or 'false'
+            append to report or not,True or False
 
         confirm_overwrite:
-            'true' or 'false', overwrite report or not
+            True or False, overwrite report or not
             
         config_filename:
             Filename for the parameter estimation config file
             
         overwrite_config_file:,
-            'true' or 'false', overwrite the config file each time program is run
+            True or False, overwrite the config file each time program is run
             
         update_model:
             Update model parameters after parameter estimation
 
         randomize_start_values:
-            'true' or 'false'. Check the randomize start values box or not. Default 'true'
+            True or False. Check the randomize start values box or not. Default True
 
         create_parameter_sets:
-            'true' or 'false'. Check the create parameter sets box or not. Default 'false'
+            True or False. Check the create parameter sets box or not. Default False
         
         calculate_statistics':str(1),
-            'true' or 'false'. Check the calcualte statistics box or not. Default 'false'
+            True or False. Check the calcualte statistics box or not. Default False
 
         method:
             Name of one of the copasi parameter estimation algorithms. Valid arguments: 
@@ -2393,9 +2394,9 @@ class ParameterEstimation():
             is the starting line for data as an integer. Default is a list of 1's and this
             rarely needs to be changed.
             
-        normalize_weights_per_experiment':['true']*len(self.experiment_files),
+        normalize_weights_per_experiment':[True]*len(self.experiment_files),
             List with the same number elements as you have experiment files. Each element
-            is 'true' or 'false' and correlates to ticking the
+            is True or False and correlates to ticking the
             normalize wieghts per experiment box in the copasi gui. Default [true]*len(experiments)
             
         row_containing_names:
@@ -2416,23 +2417,23 @@ class ParameterEstimation():
             Options are: ['mean','mean_squared','stardard_deviation','value_scaling']
             
         save: 
-            One of 'false','duplicate' or 'overwrite'. If duplicate, use the name in 
+            One of False,'duplicate' or 'overwrite'. If duplicate, use the name in 
             the keyword argument OutputML to save the file.
 
 
         prune_headers:
             Copasi uses references to distinguish between variable types. The report
-            output usually contains these references in variable names. 'true' removes 
-            the references while 'false' leaves them in. 
-        scheduled':'false'
-            'true' or 'false'. Check the box called 'executable' in the top right hand
+            output usually contains these references in variable names. True removes 
+            the references while False leaves them in. 
+        scheduled':False
+            True or False. Check the box called 'executable' in the top right hand
             corner of the Copasi GUI. This tells Copasi to shedule a parameter estimation 
-            task when using CopasiSE. This should be 'true' of you are running a parameter
-            estimation from the parameter estimation task via the pycopi but 'false' when you 
+            task when using CopasiSE. This should be True of you are running a parameter
+            estimation from the parameter estimation task via the pycopi but False when you 
             want to set up a repeat item in the scan task with the parameter estimation subtask
             
         use_config_start_values:
-            Default set to 'false'. Determines whether the starting parameters 
+            Default set to False. Determines whether the starting parameters 
             from within the fitItemTemplate.xlsx are use for starting values
             in the parameter estimation or not
                  
@@ -2449,7 +2450,7 @@ class ParameterEstimation():
 #            estimation runs
             
         plot:
-            Whether to plot result or not. Defualt='true'
+            Whether to plot result or not. Defualt=True
             
         font_size:
             Control graph label font size
@@ -2458,7 +2459,7 @@ class ParameterEstimation():
             Control graph axis font size
 
         extra_title:
-            When savefig='true', given the saved
+            When savefig=True, given the saved
             file an extra label in the file path
 
         line_width:
@@ -2476,7 +2477,7 @@ class ParameterEstimation():
             line before word wrap. Default=30. 
             
         show:
-            When not using iPython, use show='true' to display graphs
+            When not using iPython, use show=True to display graphs
             
         ylimit: default==None, restrict amount of data shown on y axis. 
         Useful for honing in on small confidence intervals
@@ -2515,17 +2516,17 @@ class ParameterEstimation():
                  'local_parameters': self.GMQ.get_local_kinetic_parameters_cns().keys(),
                  'quantity_type':'concentration',
                  'report_name':default_report_name,
-                 'append': 'false', 
-                 'set_report':'true',
-                 'confirm_overwrite': 'false',
+                 'append': False, 
+                 'set_report':True,
+                 'confirm_overwrite': False,
                  'config_filename':config_file,
-                 'overwrite_config_file':'false',
-                 'prune_headers':'true',
-                 'update_model':'false',
-                 'randomize_start_values':'true',
-                 'create_parameter_sets':'false',
-                 'calculate_statistics':'false',
-                 'use_config_start_values':'false',
+                 'overwrite_config_file':False,
+                 'prune_headers':True,
+                 'update_model':False,
+                 'randomize_start_values':True,
+                 'create_parameter_sets':False,
+                 'calculate_statistics':False,
+                 'use_config_start_values':False,
                  #method options
                  'method':'GeneticAlgorithm',
                  #'DifferentialEvolution',
@@ -2545,20 +2546,20 @@ class ParameterEstimation():
                  'cooling_factor':0.85,
                  #experiment definition options
                  #need to include options for defining multiple experimental files at once
-                 'row_orientation':['true']*len(self.experiment_files),
+                 'row_orientation':[True]*len(self.experiment_files),
                  'experiment_type':['timecourse']*len(self.experiment_files),
                  'first_row':[str(1)]*len(self.experiment_files),
-                 'normalize_weights_per_experiment':['true']*len(self.experiment_files),
+                 'normalize_weights_per_experiment':[True]*len(self.experiment_files),
                  'row_containing_names':[str(1)]*len(self.experiment_files),
                  'separator':['\t']*len(self.experiment_files),
                  'weight_method':['mean_squared']*len(self.experiment_files),
                  'save':'overwrite',  
-                 'scheduled':'false',
-                 'Verbose':'false',
+                 'scheduled':False,
+                 'Verbose':False,
                  'lower_bound':0.000001,
                  'upper_bound':1000000,
-#                 'run':'false',
-                 'plot':'false',
+#                 'run':False,
+                 'plot':False,
                  '''
                  The below arguments get passed to the parameter
                  estimation plotting class
@@ -2570,8 +2571,8 @@ class ParameterEstimation():
                  'axis_size':15,
                  'extra_title':None,
                  'line_width':3,
-                 'show':'false',
-                 'savefig':'false',
+                 'show':False,
+                 'savefig':False,
                  'title_wrap_size':30,
                  'ylimit':None,
                  'xlimit':None,
@@ -2609,25 +2610,25 @@ class ParameterEstimation():
                      'SteepestDescent','TruncatedNewton','GeneticAlgorithm',
                      'GeneticAlgorithmSR']
         assert self.kwargs.get('method').lower() in [i.lower() for i in self.method_list],'{} is not a copasi PE method. Choose one of: {}'.format(self.kwargs.get('method'),self.method_list)
-        assert self.kwargs.get('Verbose') in ['true','false']
-        assert self.kwargs.get('append') in ['true','false']
-        assert self.kwargs.get('confirm_overwrite') in ['true','false']
+        assert self.kwargs.get('Verbose') in [True,False]
+        assert self.kwargs.get('append') in [True,False]
+        assert self.kwargs.get('confirm_overwrite') in [True,False]
         
-        if self.kwargs['append']=='true':
+        if self.kwargs['append']==True:
             self.kwargs['append']=str(1)
         else:
             self.kwargs['append']=str(0)
             
-        if self.kwargs['confirm_overwrite']=='true':
+        if self.kwargs['confirm_overwrite']==True:
             self.kwargs['confirm_overwrite']=str(1)
         else:
             self.kwargs['confirm_overwrite']=str(0)        
             
         self.kwargs['method']=self.kwargs.get('method').lower()
         if self.kwargs['method']=='currentsolutionstatistics':
-            if self.kwargs['randomize_start_values']=='true':
+            if self.kwargs['randomize_start_values']==True:
                 raise Errors.InputError('Cannot run current solution statistics with \'randomize_start_values\' set to \'true\'.' )
-        write_to_file_list=['duplicate','overwrite','false']
+        write_to_file_list=['duplicate','overwrite',False]
         assert self.kwargs.get('save') in write_to_file_list  
         
         assert isinstance(self.kwargs.get('local_parameters'),list)
@@ -2643,7 +2644,7 @@ class ParameterEstimation():
         for i in self.kwargs.get('metabolites'):
             assert i in self.GMQ.get_IC_cns().keys()
 
-        if self.kwargs['use_config_start_values'] not in ['true','false']:
+        if self.kwargs['use_config_start_values'] not in [True,False]:
             raise Errors.InputError(''' Argument to the use_config_start_values must be \'true\' or \'false\' not {}'''.format(self.kwargs['use_config_start_values']))
 
 
@@ -2715,19 +2716,19 @@ class ParameterEstimation():
     
 
             
-        assert self.kwargs.get('create_parameter_sets') in ['false','true']
-        if self.kwargs.get('create_parameter_sets')=='false':
+        assert self.kwargs.get('create_parameter_sets') in [False,True]
+        if self.kwargs.get('create_parameter_sets')==False:
             self.kwargs['create_parameter_sets']=str(0)
         else:
             self.kwargs['create_parameter_sets']=str(1)
             
-        assert self.kwargs.get('calculate_statistics') in ['false','true']
-        if self.kwargs.get('calculate_statistics')=='false':
+        assert self.kwargs.get('calculate_statistics') in [False,True]
+        if self.kwargs.get('calculate_statistics')==False:
             self.kwargs['calculate_statistics']=str(0)
         else:
             self.kwargs['calculate_statistics']=str(1)
 
-        assert self.kwargs.get('plot') in ['false','true']
+        assert self.kwargs.get('plot') in [False,True]
 
 
 
@@ -2777,8 +2778,8 @@ class ParameterEstimation():
         self.report_dict['variable']=self.kwargs.get('variable')
         self.report_dict['report_type']='parameter_estimation'
         
-        assert self.kwargs.get('set_report') in ['false','true']
-#        assert self.kwargs.get('run') in ['true','false']
+        assert self.kwargs.get('set_report') in [False,True]
+#        assert self.kwargs.get('run') in [True,False]
         
         
         '''
@@ -2808,13 +2809,13 @@ class ParameterEstimation():
         pass
 
     def run(self):
-        if self.kwargs.get('plot')=='false':
+        if self.kwargs.get('plot')==False:
             LOG.debug('running ParameterEstimation. Data reported to file: {}'.format(self.kwargs['report_name']))
             self.copasiML=run(self.copasi_file,Task='parameter_estimation')
             return self.copasiML
         else:
             ##run with 'mode' set to false just unchecks the executable boxes.
-            self.copasiML=run(self.copasi_file,Task='parameter_estimation',mode='false')
+            self.copasiML=run(self.copasi_file,Task='parameter_estimation',mode=False)
             ## Now run with check_call
             subprocess.check_call('CopasiSE "{}"'.format(self.copasi_file),shell=True)
             self.plot()
@@ -2901,12 +2902,12 @@ class ParameterEstimation():
 
         
     def write_item_template(self):
-        if os.path.isfile(self.kwargs.get('config_filename'))==False or self.kwargs.get('overwrite_config_file')=='true':
+        if os.path.isfile(self.kwargs.get('config_filename'))==False or self.kwargs.get('overwrite_config_file')==True:
             self.get_item_template().to_excel(self.kwargs.get('config_filename'))
         return  'writing template. {} set to {} and {} is {}'.format('overwrite_config_file',self.kwargs.get('overwrite_config_file'),'config_filename',self.kwargs.get('config_filename'))
 
     def write_config_template(self):
-        if os.path.isfile(self.kwargs.get('config_filename'))==False or self.kwargs.get('overwrite_config_file')=='true':
+        if os.path.isfile(self.kwargs.get('config_filename'))==False or self.kwargs.get('overwrite_config_file')==True:
             self.get_item_template().to_excel(self.kwargs.get('config_filename'))
         return  'writing template. {} set to {} and {} is {}'.format('overwrite_config_file',self.kwargs.get('overwrite_config_file'),'config_filename',self.kwargs.get('config_filename'))
 
@@ -2936,7 +2937,7 @@ class ParameterEstimation():
         subA1={'name': 'Affected Cross Validation Experiments'}
         subA2={'name': 'Affected Experiments'}
         subA3={'type': 'cn', 'name': 'lower_bound', 'value': str(item['lower_bound'])}
-        if self.kwargs.get('use_config_start_values')=='true':
+        if self.kwargs.get('use_config_start_values')==True:
             subA5={'type': 'float', 'name': 'StartValue', 'value': str(item['StartValue'])}
         
         subA6={'type': 'cn', 'name': 'upper_bound', 'value': str(item['upper_bound'])}
@@ -2944,7 +2945,7 @@ class ParameterEstimation():
         etree.SubElement(new_element,'ParameterGroup',attrib=subA1)
         etree.SubElement(new_element,'ParameterGroup',attrib=subA2)
         etree.SubElement(new_element,'Parameter',attrib=subA3)
-        if self.kwargs.get('use_config_start_values')=='true':
+        if self.kwargs.get('use_config_start_values')==True:
             etree.SubElement(new_element,'Parameter',attrib=subA5)
         etree.SubElement(new_element,'Parameter',attrib=subA6)
         
@@ -3165,7 +3166,7 @@ class ParameterEstimation():
         for i in self.copasiML.xpath(query):
             i.attrib.update(scheluled_attrib)
             for j in list(i):
-                if self.kwargs.get('set_report')=='true':
+                if self.kwargs.get('set_report')==True:
                     if self.kwargs.get('report_name')!=None:
                         if 'append' in j.attrib.keys():
                             j.attrib.update(report_attrib)
@@ -3254,7 +3255,7 @@ class ParameterEstimation():
         '''
         Use the PlotPEData class to plot results 
         '''
-#        if self.kwargs.get('update_model')=='true':
+#        if self.kwargs.get('update_model')==True:
 #            copasi_file=self.copasi_file
 #        else:
 #            #copasi_file=self.copasi_file[:-4]+'_temp.cps'
@@ -3289,20 +3290,20 @@ class Scan():
             
         append:
             Check the append button in copasi scan task.
-            Options are ['true' or 'false'], default='false'
+            Options are [True or False], default=False
             
         confirm_overwrite:
             Check the confirm overwrite button in copasi scan.
-            Options are ['true' or 'false'], default='false'
+            Options are [True or False], default=False
 
         OutputML:
             If save set to duplicate, this is the name of 
-            the duplicated copasi file.Options are ['true' or 'false'], 
-            default='false'
+            the duplicated copasi file.Options are [True or False], 
+            default=False
             
         update_model:
             Check the update model button in copasi scan task
-            Options are ['true' or 'false'], default='false'
+            Options are [True or False], default=False
         
         subtask:
             A valid scan subtask. Options are:
@@ -3317,11 +3318,11 @@ class Scan():
             
         output_in_subtask:
             Check the output_in_subtask button in copasi scan task
-            Options are ['true' or 'false'], default='false'
+            Options are [True or False], default=False
 
         adjust_initial_conditions:
             Check the adjust_initial_conditions button in copasi scan task
-            Options are ['true' or 'false'], default='false'
+            Options are [True or False], default=False
             
         number_of_steps:
             Corresponds to the Intervals box in Copasi GUI or number
@@ -3335,7 +3336,7 @@ class Scan():
 
         log10: 
             Corresponds to the log10 box in Copasi GUI.
-            Options are ['true' or 'false'], default='false'.  
+            Options are [True or False], default=False.  
             
         distribution_type:
             When scan_type set to 'random_sampling', can be any of
@@ -3346,19 +3347,19 @@ class Scan():
             Defaults to the first key in the GMQ.get_metabolites() method
 
         scheduled: 
-            Corresponds to the scheduled box in Copasi GUI. Default='true'.
+            Corresponds to the scheduled box in Copasi GUI. Default=True.
             
         save:
-            Can be one of ['duplicate','false','overwrite']. Duplicate
+            Can be one of ['duplicate',False,'overwrite']. Duplicate
             will copy copasi file to different file name. Default='overwrite'
             
         clear_scans:
-            'true' or 'false'. If 'true' will remove all scans present before
+            True or False. If True will remove all scans present before
             adding scans. If false, will add another scan in addition to any
-            scans alredy present.Default='true'
+            scans alredy present.Default=True
             
         run:
-            run Scan task or not. 'true' or 'false' or 'SGE'. Default='false'
+            run Scan task or not. True or False or 'SGE'. Default=False
             
     '''
     def __init__(self,copasi_file,**kwargs):
@@ -3374,27 +3375,27 @@ class Scan():
                  'global_quantities':self.GMQ.get_global_quantities().keys(),
                  'quantity_type':'concentration',
                  'report_name':default_report_name,
-                 'append': 'false', 
-                 'confirm_overwrite': 'false',
+                 'append': False, 
+                 'confirm_overwrite': False,
                  #'OutputML':default_outputML,
                  #
-                 'update_model':'false',
+                 'update_model':False,
                  'subtask':'parameter_estimation',
                  'report_type':'profilelikelihood',
-                 'output_in_subtask':'false',
-                 'adjust_initial_conditions':'false',
+                 'output_in_subtask':False,
+                 'adjust_initial_conditions':False,
                  'number_of_steps':10,
                  'maximum':100,
                  'minimum':0.01,
-                 'log10':'false',
+                 'log10':False,
                  'distribution_type':'normal',
                  'scan_type':'scan',
                  #scan object specific (for scan and random_sampling scan_types)
                  'variable':self.GMQ.get_metabolites().keys()[0],
-                 'scheduled':'true',
+                 'scheduled':True,
                  'save':'overwrite',
-                 'clear_scans':'true',#if true, will remove all scans present then add new scan
-                 'run':'false'}
+                 'clear_scans':True,#if true, will remove all scans present then add new scan
+                 'run':False}
                                   
                  
                      
@@ -3405,21 +3406,21 @@ class Scan():
         self.kwargs=options
         
         #correct output_in_subtask and AsjestInitialConditions
-        assert self.kwargs.get('output_in_subtask') in ['false','true']
-        assert self.kwargs.get('adjust_initial_conditions') in ['false','true']
-        assert self.kwargs.get('log10') in ['false','true'],'{} is not either \'false\' or \'true\''.format(self.kwargs.get('log10'))
+        assert self.kwargs.get('output_in_subtask') in [False,True]
+        assert self.kwargs.get('adjust_initial_conditions') in [False,True]
+        assert self.kwargs.get('log10') in [False,True],'{} is not either \'false\' or \'true\''.format(self.kwargs.get('log10'))
         
-        if self.kwargs.get('output_in_subtask')=='false':
+        if self.kwargs.get('output_in_subtask')==False:
             self.kwargs['output_in_subtask']=str(0)
         else:
             self.kwargs['output_in_subtask']=str(1)
             
-        if self.kwargs.get('adjust_initial_conditions')=='false':
+        if self.kwargs.get('adjust_initial_conditions')==False:
             self.kwargs['adjust_initial_conditions']=str(0)
         else:
             self.kwargs['adjust_initial_conditions']=str(1)
         
-        if self.kwargs.get('log10')=='false':
+        if self.kwargs.get('log10')==False:
             self.kwargs['log10']=str(0)
         else:
             self.kwargs['log10']=str(1)
@@ -3443,9 +3444,9 @@ class Scan():
         assert self.kwargs.get('distribution_type') in dist_types
         assert self.kwargs.get('scan_type') in scan_types
         assert self.kwargs.get('quantity_type') in quantity_type_list
-        assert self.kwargs.get('scheduled') in ['true','false']
-        assert self.kwargs.get('clear_scans') in ['true','false']
-        assert self.kwargs.get('run') in ['true','false','SGE']
+        assert self.kwargs.get('scheduled') in [True,False]
+        assert self.kwargs.get('clear_scans') in [True,False]
+        assert self.kwargs.get('run') in [True,False,'SGE']
 
 
         #numericify the some keyword arguments
@@ -3490,10 +3491,10 @@ class Scan():
 
 #        if self.kwargs.get('report_type')=='time_course':
 #            self.kwargs['report_type']='time-course'
-        write_to_file_list=['duplicate','overwrite','false']
+        write_to_file_list=['duplicate','overwrite',False]
         assert self.kwargs.get('save') in write_to_file_list,'{} not in {}'.format(self.kwargs.get('save'),write_to_file_list)
         
-        if self.kwargs.get('clear_scans')=='true':
+        if self.kwargs.get('clear_scans')==True:
             self.copasiML=self.remove_scans()
             self.copasiML=self.save()
         self.copasiML=self.define_report()
@@ -3641,9 +3642,9 @@ class Scan():
     def run(self):
         R=run(self.copasi_file,Task='scan',mode=self.kwargs.get('run'))
         
-        if self.kwargs.get('run')=='false':
+        if self.kwargs.get('run')==False:
             return None
-        elif self.kwargs.get('run')=='true':
+        elif self.kwargs.get('run')==True:
             return R
         elif self.kwargs.get('run')=='SGE':
             return R
@@ -3668,11 +3669,11 @@ class run():
             'crosssection','linearnoiseapproximation']
             
         save:
-            Either 'false','duplicate' or 'overwrite'. Should probably remain 
+            Either False,'duplicate' or 'overwrite'. Should probably remain 
             on 'overwrite', the default. 
             
         mode:
-            'true', 'false','multiprocess', or 'SGE'. Default is 'true' but can be turned off if you 
+            True, False,'multiprocess', or 'SGE'. Default is True but can be turned off if you 
             want to uncheck all executable boxes then check the Task executable
             
         max_time:
@@ -3687,7 +3688,7 @@ class run():
 
         options={'Task':'time_course',
                  'save':'overwrite',
-                 'mode':'true',
+                 'mode':True,
                  'max_time':None}
 
 
@@ -3729,7 +3730,7 @@ class run():
 
         self.copasiML=self.set_task()
         self.save()
-        if self.kwargs.get('mode')=='true':
+        if self.kwargs.get('mode')==True:
             try:
                 self.run()
             except Errors.CopasiError:
@@ -3753,9 +3754,9 @@ class run():
 
     def set_task(self):
         for i in self.copasiML.find('{http://www.copasi.org/static/schema}ListOfTasks'):
-            i.attrib['scheduled']='false' #set all to false
+            i.attrib['scheduled']=False #set all to false
             if self.kwargs.get('Task')== i.attrib['type'].lower():
-                i.attrib['scheduled']='true'
+                i.attrib['scheduled']=True
 
         return self.copasiML
 
@@ -3833,7 +3834,7 @@ class InsertParameters16():
             If save set to 'duplicate', this is the duplicate filename
             
         save:
-            either 'false','overwrite' or 'duplicate',default=overwrite
+            either False,'overwrite' or 'duplicate',default=overwrite
                 
         parameter_dict:
             A python dictionary with keys correponding to parameters in the model
@@ -4106,7 +4107,7 @@ class PruneCopasiHeaders():
     
     kwargs:
         replace:
-            'true' or 'false', if 'true' will overwrite the filename. If 'false'
+            True or False, if True will overwrite the filename. If False
             write new file to new_path. If for_pruning a dataframe this argument is
             ignored. 
             
@@ -4116,13 +4117,13 @@ class PruneCopasiHeaders():
         
 
     '''
-    def __init__(self,for_pruning,replace='false',new_path=None):
+    def __init__(self,for_pruning,replace=False,new_path=None):
         self.for_pruning=for_pruning
         self.replace=replace
         
 #        assert self.mode in ['singlePE','multiPE,'time_course']
         
-        if replace not in ['true','false']:
+        if replace not in [True,False]:
             raise Errors.InputError('\'replace\' keyword should be either \'true\' or \'false\' ')
 
             
@@ -4175,7 +4176,7 @@ class PruneCopasiHeaders():
         assert len(df.columns)==len(new_titles)
         df.columns=new_titles
         if self.from_file:
-            if self.replace=='true':
+            if self.replace==True:
                 os.remove(self.for_pruning)
                 self.new_path=self.for_pruning
             df.to_csv(self.new_path,sep='\t',index=False)
@@ -4207,17 +4208,17 @@ class runMultiplePEs():
                  'global_quantities':self.GMQ.get_global_quantities().keys(),
                  'local_parameters': self.GMQ.get_local_kinetic_parameters_cns().keys(),
                  'quantity_type':'concentration',
-                 'append': 'false', 
-                 'set_report':'true',
-                 'confirm_overwrite': 'false',
+                 'append': False, 
+                 'set_report':True,
+                 'confirm_overwrite': False,
                  'config_filename':None,
-                 'overwrite_config_file':'false',
-                 'prune_headers':'true',
-                 'update_model':'false',
-                 'randomize_start_values':'true',
-                 'create_parameter_sets':'false',
-                 'calculate_statistics':'false',
-                 'use_config_start_values':'false',
+                 'overwrite_config_file':False,
+                 'prune_headers':True,
+                 'update_model':False,
+                 'randomize_start_values':True,
+                 'create_parameter_sets':False,
+                 'calculate_statistics':False,
+                 'use_config_start_values':False,
                  #method options
                  'method':'GeneticAlgorithm',
                  #'DifferentialEvolution',
@@ -4237,20 +4238,20 @@ class runMultiplePEs():
                  'cooling_factor':0.85,
                  #experiment definition options
                  #need to include options for defining multiple experimental files at once
-                 'row_orientation':['true']*len(self.experiment_files),
+                 'row_orientation':[True]*len(self.experiment_files),
                  'experiment_type':['timecourse']*len(self.experiment_files),
                  'first_row':[str(1)]*len(self.experiment_files),
-                 'normalize_weights_per_experiment':['true']*len(self.experiment_files),
+                 'normalize_weights_per_experiment':[True]*len(self.experiment_files),
                  'row_containing_names':[str(1)]*len(self.experiment_files),
                  'separator':['\t']*len(self.experiment_files),
                  'weight_method':['mean_squared']*len(self.experiment_files),
                  'save':'overwrite',  
-                 'scheduled':'false',
-                 'Verbose':'false',
+                 'scheduled':False,
+                 'Verbose':False,
                  'lower_bound':0.000001,
                  'upper_bound':1000000,
-#                 'run':'false',
-                 'plot':'false',
+#                 'run':False,
+                 'plot':False,
                  '''
                  The below arguments get passed to the parameter
                  estimation plotting class
@@ -4262,8 +4263,8 @@ class runMultiplePEs():
                  'axis_size':15,
                  'extra_title':None,
                  'line_width':3,
-                 'show':'false',
-                 'savefig':'false',
+                 'show':False,
+                 'savefig':False,
                  'title_wrap_size':30,
                  'ylimit':None,
                  'xlimit':None,
@@ -4360,7 +4361,7 @@ class runMultiplePEs():
                  subtask='parameter_estimation', #this is the default, but included here for demonstration anyway
                  report_type='parameter_estimation', ## report automatically set up within copasi. 
                  report_name=self.report_files[num],
-                 run='false') #run the scan task automatically in the background
+                 run=False) #run the scan task automatically in the background
             LOG.info('Setup Took {} seconds'.format(time.time() - start))    
         
     ##void    
@@ -4405,7 +4406,7 @@ class runMultiplePEs():
              subtask='parameter_estimation', #this is the default, but included here for demonstration anyway
              report_type='parameter_estimation', ## report automatically set up within copasi. 
              report_name=report,
-             run='false') )#run the scan task automatically in the background
+             run=False) )#run the scan task automatically in the background
         LOG.info('Setup Took {} seconds'.format(time.time() - start))
 
     ##void
@@ -4576,19 +4577,19 @@ class MultimodelFit():
                  'output_dir':None,
                  ##default parameters for ParameterEstimation
                  'method':'GeneticAlgorithm',
-                 'plot':'false',
+                 'plot':False,
                  'quantity_type':'concentration',
-                 'append': 'false', 
-                 'set_report':'true',
-                 'confirm_overwrite': 'false',
+                 'append': False, 
+                 'set_report':True,
+                 'confirm_overwrite': False,
                  'config_filename':'PEConfigFile.xlsx',
-                 'overwrite_config_file':'false',
-                 'prune_headers':'true',
-                 'update_model':'false',
-                 'randomize_start_values':'true',
-                 'create_parameter_sets':'false',
-                 'calculate_statistics':'false',
-                 'use_config_start_values':'false',
+                 'overwrite_config_file':False,
+                 'prune_headers':True,
+                 'update_model':False,
+                 'randomize_start_values':True,
+                 'create_parameter_sets':False,
+                 'calculate_statistics':False,
+                 'use_config_start_values':False,
                  #method options
                  'method':'GeneticAlgorithm',
                  #'DifferentialEvolution',
@@ -4608,15 +4609,15 @@ class MultimodelFit():
                  'cooling_factor':0.85,
                  #experiment definition options
                  #need to include options for defining multiple experimental files at once
-                 'row_orientation':['true']*len(self.exp_files),
+                 'row_orientation':[True]*len(self.exp_files),
                  'experiment_type':['timecourse']*len(self.exp_files),
                  'first_row':[str(1)]*len(self.exp_files),
-                 'normalize_weights_per_experiment':['true']*len(self.exp_files),
+                 'normalize_weights_per_experiment':[True]*len(self.exp_files),
                  'row_containing_names':[str(1)]*len(self.exp_files),
                  'separator':['\t']*len(self.exp_files),
                  'weight_method':['mean_squared']*len(self.exp_files),
                  'save':'overwrite',  
-                 'scheduled':'false',
+                 'scheduled':False,
                  'lower_bound':0.000001,
                  'upper_bound':1000000}
         
@@ -4821,7 +4822,7 @@ class InsertParameters():
             If save set to 'duplicate', this is the duplicate filename
             
         save:
-            either 'false','overwrite' or 'duplicate',default=overwrite
+            either False,'overwrite' or 'duplicate',default=overwrite
                 
         parameter_dict:
             A python dictionary with keys correponding to parameters in the model
@@ -5227,7 +5228,7 @@ if __name__=='__main__':
     report = os.path.join(dire, 'timecourse_report.txt')
     # TimeCourse(f, Intervals=10, StepSize=100,
     #            End=1000, report_name=report,
-    #            # plot='true',savefig='true')
+    #            # plot=True,savefig=True)
     PE=runMultiplePEs(f,report,
                       copy_number=5,
                       pe_number=3)
@@ -5238,7 +5239,7 @@ if __name__=='__main__':
 
     # S=Scan(f,scan_type='repeat',number_of_steps=10,
     #        report_type='parameter_estimation',
-    #        subtask='parameter_estimation',run = 'true')
+    #        subtask='parameter_estimation',run = True)
     # os.system('CopasiUI {}'.format(f))
 #    os.system('CopasiSE {}'.format(f))
 
