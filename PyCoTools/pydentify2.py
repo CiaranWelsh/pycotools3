@@ -147,7 +147,7 @@ class ProfileLikelihood():
                  'UpperBoundMultiplier':1000,
                  'LowerBoundMultiplier':1000,
                  'NumberOfSteps':10,
-                 'Log':'true',
+                 'Log10':'true',
                  'IterationLimit':50,
                  'Tolerance':1e-5,
                  'Rho':0.2,
@@ -217,7 +217,7 @@ class ProfileLikelihood():
         if self.kwargs.get('NumProcesses')>multiprocessing.cpu_count():
             raise Errors.Errors.InputError('You have selected {} processes but your computer only has {} available'.format(self.kwargs.get('NumProcesses'),multiprocessing.cpu_count()))
         
-        assert self.kwargs.get('Log') in ['false','true']
+        assert self.kwargs.get('Log10') in ['false','true']
 
         
         self.cps_dct=self.copy_copasi_files_and_insert_parameters()
@@ -445,7 +445,7 @@ class ProfileLikelihood():
                                      NumberOfSteps=self.kwargs.get('NumberOfSteps'),
                                      Maximum=ub,
                                      Minimum=lb,
-                                     Log=self.kwargs.get('Log'),
+                                     Log=self.kwargs.get('Log10'),
                                      Scheduled='true',
                                      Save='overwrite',
                                      ClearScans='true')
