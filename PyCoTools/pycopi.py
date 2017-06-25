@@ -4285,40 +4285,17 @@ class RunMultiplePEs():
         self._do_checks()
         self._create_defaults()
         self._create_output_directory()
-        
-#        dire,fle=os.path.split(self.kwargs['ReportName']) ## for making sub-result directories
-#        self.output_dir=os.path.join(dire,'MultiplePEResults')
-
-#        self.PE_dct={'ReportName':self.kwargs['ReportName'],
-#                     'Plot':self.kwargs['Plot'],
-#                     'RandomizeStartValues':self.kwargs['RandomizeStartValues'],
-#                     'ConfigFilename':self.kwargs['ConfigFilename'],
-#                     'NumberOfGenerations':self.kwargs['NumberOfGenerations'],
-#                     'RandomNumberGenerator':self.kwargs['RandomNumberGenerator'],
-#                     'Seed':self.kwargs['Seed'],
-#                     'Pf':self.kwargs['Pf'],
-#                     'IterationLimit':self.kwargs['IterationLimit'],
-#                     'Tolerance':self.kwargs['Tolerance'],
-#                     'Rho':self.kwargs['Rho'],
-#                     'Scale':self.kwargs['Scale'],
-#                     'SwarmSize':self.kwargs['SwarmSize'],
-#                     'StdDeviation':self.kwargs['StdDeviation'],
-#                     'NumberOfIterations':self.kwargs['NumberOfIterations'],
-#                     'StartTemperature':self.kwargs['StartTemperature'],
-#                     'CoolingFactor':self.kwargs['CoolingFactor'],
-#                     'PopulationSize':self.kwargs['PopulationSize'],
-#                     'Method':self.kwargs['Method'] }
         self.PE_dct=deepcopy(self.kwargs)
         del self.PE_dct['OutputDir']
         del self.PE_dct['CopyNumber']
         del self.PE_dct['NumberOfPEs']
         del self.PE_dct['Run']
-        
-        
+
+
         self.report_files=self.enumerate_PE_output()
         LOG.debug('Create an instance of ParameterEstimation')
         self.PE=ParameterEstimation(self.copasi_file,self.experiment_files,**self.PE_dct)
-        
+#
         
     def set_up(self):
         '''
@@ -4427,9 +4404,8 @@ class RunMultiplePEs():
              ReportType='parameter_estimation', ## report automatically set up within copasi. 
              ReportName=report,
              Run='false') )#run the scan task automatically in the background
-        LOG.info('Setup Took {} seconds'.format(time.time() - start))      
-        
-        
+        LOG.info('Setup Took {} seconds'.format(time.time() - start))
+
     ##void
     def _create_defaults(self):
         '''
@@ -5193,6 +5169,7 @@ Please check the headers of your PE data are consistent with your model paramete
             
 if __name__=='__main__':
     pass
+<<<<<<< HEAD
     # f=r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps'
     #
     # dire = os.path.dirname(f)
@@ -5206,6 +5183,51 @@ if __name__=='__main__':
     # PE.write_config_template()
     # PE.set_up()
     # PE.run()
+=======
+    
+
+#    f=r'C:\Users\Ciaran\Documents\CopasiVer19KholodenkoTests\M1.cps'
+#
+#    dire = os.path.dirname(f)
+#
+#    report = os.path.join(dire, 'timecourse_report.txt')
+#    
+#    PE=ParameterEstimation(f,report)
+##    PE.write_item_template()
+##    PE.set_up()
+##    PE.run()
+#
+#    I=InsertParameters(f,ParameterPath = PE.kwargs['ReportName'])    
+#    print I.insert_locals()
+##    print os.system('CopasiUI {}'.format(f))
+#
+#    '''
+#    First get look up type structure for model, metabolites compartments 
+#    and model values (the objectReferences)
+#    
+#    Then extract order and replace the existing string under the initial state tag
+#    
+#    Hopefully this would work. 
+    '''
+
+
+
+=======
+
+    f=r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps'
+
+    dire = os.path.dirname(f)
+    report = os.path.join(dire, 'timecourse_report.txt')
+    # TimeCourse(f, Intervals=10, StepSize=100,
+    #            End=1000, ReportName=report,
+    #            # Plot='true',SaveFig='true')
+    PE=RunMultiplePEs(f,report,
+                      CopyNumber=5,
+                      NumberOfPEs=3)
+    PE.write_config_template()
+    PE.set_up()
+    PE.run()
+>>>>>>> origin/CopasiVersion19
 
 
     # S=Scan(f,ScanType='repeat',NumberOfSteps=10,
@@ -5228,7 +5250,6 @@ if __name__=='__main__':
 #     print I.parameters.transpose()
 #
 # #    print '\n\n\n'
-
 
 
 # #    os.system('CopasiUI {}'.format(f))
