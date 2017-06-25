@@ -1065,8 +1065,8 @@ class Bool2Str():
         
         self.acceptable_kwargs = ['append','confirm_overwrite','update_model',
                                   'output_in_subtask','adjust_initial_conditions',
-                                  'log10','randomize_start_values','create_parameter_sets',
-                                  'calculate_statistics','scheduled','output_event']
+                                  'log10','randomize_start_values',
+                                  'scheduled','output_event']
     
     def convert(self,boolean):
         if boolean == True:
@@ -1679,7 +1679,6 @@ class ExperimentMapper():
         self.CParser=CopasiMLParser(self.copasi_file)
         self.copasiML=self.CParser.copasiML 
         self.GMQ=GetModelQuantities(self.copasi_file)
-        default_outputML=os.path.split(self.copasi_file)[1][:-4]+'_Duplicate.cps'
 
         options={    
                  'row_orientation':[True]*len(self.experiment_files),
