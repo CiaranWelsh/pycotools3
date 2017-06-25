@@ -185,7 +185,7 @@ class GetModelQuantities():
         """
         collection= {}
         for i in self.copasiML.iter():
-            if  i.tag == '{http://www.copasi.org/static/schema}ListOfmetabolites':
+            if  i.tag == '{http://www.copasi.org/static/schema}ListOfMetabolites':
                 for j in i:
                     collection[j.attrib['key']] = j.attrib['name']
         return collection
@@ -196,7 +196,7 @@ class GetModelQuantities():
         """
         collection= {}
         for i in self.copasiML.iter():
-            if  i.tag == '{http://www.copasi.org/static/schema}ListOfmodelValues':
+            if  i.tag == '{http://www.copasi.org/static/schema}ListOfModelValues':
                 for j in i:
                     collection[j.attrib['key']] = j.attrib['name']
         return collection
@@ -1462,7 +1462,7 @@ class TimeCourse(object):
                         elif k.attrib['name'] == 'Continue on Simultaneous Events':
                             k.attrib['value'] = '0'
 
-                        elif k.attrib['name'] == 'Integrate Reduced model':
+                        elif k.attrib['name'] == 'Integrate Reduced Model':
                             k.attrib['value'] = '0'
 
                         elif k.attrib['name'] == 'Relative Tolerance':
@@ -2721,7 +2721,7 @@ class ParameterEstimation():
                         if match2!=[]:
                             match2=match2[0]
                     elif match=='InitialConcentration':
-                        match2=re.findall('metabolites\[(.*)\]',j.attrib['value'])
+                        match2=re.findall('Metabolites\[(.*)\]',j.attrib['value'])
                         if match2!=[]:
                             match2=match2[0]
                     if match2!=[]:
@@ -2757,7 +2757,7 @@ class ParameterEstimation():
                                 i.getparent().remove(i)
                     #remove IC parameters from PE task
                     elif match=='InitialConcentration' or match=='InitialParticleNumber':
-                        pattern='metabolites\[(.*)\],Reference=(.*)'
+                        pattern='Metabolites\[(.*)\],Reference=(.*)'
                         match2_copasiML=re.findall(pattern,j.attrib['value'])
                         if match2_copasiML!=[]:
                             if match2_copasiML[0][1]=='InitialConcentration' or match2_copasiML[0][1]=='InitialParticleNumber':
@@ -2840,7 +2840,7 @@ class ParameterEstimation():
             else:
                 subA4={'type': 'cn', 'name': 'ObjectCN', 'value': str(item['cn'])+',Reference=InitialParticleNumber'}
 
-        elif item['simulationType']=='ode' and item['type']=='modelValue':
+        elif item['simulationType']=='ode' and item['type']=='ModelValue':
             if self.kwargs.get('quantity_type')=='concentration':
                 subA4={'type': 'cn', 'name': 'ObjectCN', 'value': str(item['cn'])+',Reference=InitialConcentration'}
             else:
@@ -3019,7 +3019,7 @@ class ParameterEstimation():
         '''
         
         scheluled_attrib={'scheduled': self.kwargs.get('scheduled'),
-                          'updatemodel': self.kwargs.get('update_model')}
+                          'updateModel': self.kwargs.get('update_model')}
                           
         report_attrib={'append': self.kwargs.get('append'),
                        'reference': self.get_report_key(),
@@ -4379,7 +4379,7 @@ class RunMultiplePEs():
     
 
 
-class MultimodelFit():
+class MultiModelFit():
     '''
     Coordinate a systematic multi model fitting parameter estimation and 
     compare results using AIC/BIC. 
@@ -4496,7 +4496,7 @@ class MultimodelFit():
         
         for key in kwargs.keys():
             if key not in options.keys():
-                raise Errors.InputError('{} is not a keyword argument for MultimodelFit'.format(key))
+                raise Errors.InputError('{} is not a keyword argument for MultiModelFit'.format(key))
         options.update( kwargs) 
         self.kwargs=options    
         self.kwargs = Bool2Str(self.kwargs).convert_dct()
