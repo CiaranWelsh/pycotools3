@@ -491,11 +491,11 @@ class Automaton(object):
                 if preamble_id=='Environment':
                     environment_id=re.findall('(\w+)$',rule)[0]
                     self.states.append(environment_id)
-                elif preamble_id=='Seed':
+                elif preamble_id=='seed':
                     seeds=re.findall('= (.*)',rule)[0]
                     
-            except IndexError:
-                LOG.warning('No Enviornment or Seed set. Default enviornment (Empty) is being used without any initial conditions')
+            except indexError:
+                LOG.warning('No Enviornment or seed set. Default enviornment (Empty) is being used without any initial conditions')
         
         if preamble_id==0:
             return None
@@ -504,7 +504,7 @@ class Automaton(object):
             LOG.warning('No Enviornment specified. Using default (Empty)')
         
         if seeds==None:
-            LOG.warning('No Seed set. Initial conditions are black')
+            LOG.warning('No seed set. Initial conditions are black')
             
         return environment_id,seeds
         
@@ -524,7 +524,7 @@ class Automaton(object):
         for i in range(len(pattern)):
             d[i][pattern[i][0]]= map(int,pattern[i][1].split(','))
             
-        LOG.debug('Seeding {}:\n\nSeed Dict=\n\t{}'.format(self.seeds,d))
+        LOG.debug('seeding {}:\n\nseed Dict=\n\t{}'.format(self.seeds,d))
         for seed in d:
             self.lattice[ d[seed].values()[0][0]] = Cell(d[seed].keys()[0],x=d[seed].values()[0][0])
         return d
@@ -536,7 +536,7 @@ if __name__=='__main__':
     
     rules='''
     %%Environment = White
-    %%Seed = Black<5,4>, Black<9,4>
+    %%seed = Black<5,4>, Black<9,4>
     Black -> White
     White + Black -> Black  ##comments are possible. 
     Black + White -> Black
@@ -545,7 +545,7 @@ if __name__=='__main__':
     '''
     rules='''
     %%Environment = White
-    %%Seed = Black<5>, Black<9>
+    %%seed = Black<5>, Black<9>
     -> Black<5> : constant_production
     '''    
     

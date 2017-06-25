@@ -75,7 +75,7 @@ def read_computation_time_pickle(pickle_file):
 def get_num_parameters(model):
     '''
     Args:
-        model. Model to get information from 
+        model. model to get information from 
         
     =======================
     returns:

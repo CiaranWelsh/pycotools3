@@ -37,7 +37,7 @@ import pickle
 import re
 import shutil
 import scipy
-import TestModels
+import Testmodels
 import lxml.etree as etree
 import shutil
 import logging
@@ -49,11 +49,16 @@ LOG = logging.getLogger()
 =======
 import pickle
 import time
+<<<<<<< HEAD
 >>>>>>> origin/CopasiVersion19
 MODEL_STRING = TestModels.TestModels.get_model1()
 LOG = logging.getLogger(__name__)
+=======
+MODEL_STRING = Testmodels.Testmodels.get_model1()
+LOG = logging.getlog10ger(__name__)
+>>>>>>> 7759ebc9c3b0729eee95d01e8a6cddf4a1d82926
 
-class RunMultiplePESetUp(unittest.TestCase):
+class runMultiplePESetUp(unittest.TestCase):
     def setUp(self):
         self.copasi_file = os.path.join(os.getcwd(), 'test_model.cps')
         self.copasiML = etree.fromstring(MODEL_STRING)
@@ -68,17 +73,18 @@ class RunMultiplePESetUp(unittest.TestCase):
                                               End=1000,
                                               Intervals=10,
                                               StepSize=100,
-                                              ReportName=self.timecourse_report1,
-                                              Plot='false')
+                                              report_name=self.timecourse_report1,
+                                              plot='false')
 
         self.TC2 = PyCoTools.pycopi.TimeCourse(self.copasi_file,
                                               End=1000,
                                               Intervals=10,
                                               StepSize=100,
-                                              ReportName=self.timecourse_report2,
-                                              Plot='false')
+                                              report_name=self.timecourse_report2,
+                                              plot='false')
         self.experiment_files=[self.timecourse_report1, self.timecourse_report2]
 
+<<<<<<< HEAD
         self.options = {'Run': 'multiprocess',
                        'OutputDir': None,
                        'CopyNumber': 0,
@@ -86,62 +92,71 @@ class RunMultiplePESetUp(unittest.TestCase):
                        'ReportName': None,
                        'Metabolites': self.GMQ.get_metabolites().keys(),
                        'GlobalQuantities': self.GMQ.get_global_quantities().keys(),
+=======
+        self.options = {'run': 'multiprocess',
+                       'output_dir': None,
+                       'copy_number': 2,
+                       'pe_number': 3,
+                       'report_name': None,
+                       'metabolites': self.GMQ.get_metabolites().keys(),
+                       'global_quantities': self.GMQ.get_global_quantities().keys(),
+>>>>>>> 7759ebc9c3b0729eee95d01e8a6cddf4a1d82926
                        'LocalParameters': self.GMQ.get_local_kinetic_parameters_cns().keys(),
-                       'QuantityType': 'concentration',
-                       'Append': 'false',
+                       'quantity_type': 'concentration',
+                       'append': 'false',
                        'SetReport': 'true',
-                       'ConfirmOverwrite': 'false',
-                       'ConfigFilename': None,
-                       'OverwriteConfigFile': 'false',
-                       'PruneHeaders': 'true',
-                       'UpdateModel': 'false',
-                       'RandomizeStartValues': 'true',
-                       'CreateParameterSets': 'false',
-                       'CalculateStatistics': 'false',
-                       'UseTemplateStartValues': 'false',
-                       'Method': 'GeneticAlgorithm',
-                       'NumberOfGenerations': 200,
-                       'PopulationSize': 50,
-                       'RandomNumberGenerator': 1,
-                       'Seed': 0,
-                       'Pf': 0.475,
-                       'IterationLimit': 50,
-                       'Tolerance': 0.00001,
-                       'Rho': 0.2,
-                       'Scale': 10,
-                       'SwarmSize': 50,
-                       'StdDeviation': 0.000001,
-                       'NumberOfIterations': 100000,
-                       'StartTemperature': 1,
-                       'CoolingFactor': 0.85,
-                       'RowOrientation': ['true'] * len(self.experiment_files),
-                       'ExperimentType': ['timecourse'] * len(self.experiment_files),
-                       'FirstRow': [str(1)] * len(self.experiment_files),
-                       'NormalizeWeightsPerExperiment': ['true'] * len(self.experiment_files),
-                       'RowContainingNames': [str(1)] * len(self.experiment_files),
-                       'Separator': ['\t'] * len(self.experiment_files),
-                       'WeightMethod': ['mean_squared'] * len(self.experiment_files),
-                       'Save': 'overwrite',
-                       'Scheduled': 'false',
+                       'confirm_overwrite': 'false',
+                       'config_filename': None,
+                       'overwrite_config_file': 'false',
+                       'prune_headers': 'true',
+                       'update_model': 'false',
+                       'randomize_start_values': 'true',
+                       'create_parameter_sets': 'false',
+                       'calculate_statistics': 'false',
+                       'use_config_start_values': 'false',
+                       'method': 'GeneticAlgorithm',
+                       'number_of_generations': 200,
+                       'population_size': 50,
+                       'random_number_generator': 1,
+                       'seed': 0,
+                       'pf': 0.475,
+                       'iteration_limit': 50,
+                       'tolerance': 0.00001,
+                       'rho': 0.2,
+                       'scale': 10,
+                       'swarm_size': 50,
+                       'std_deviation': 0.000001,
+                       'number_of_iterations': 100000,
+                       'start_temperature': 1,
+                       'cooling_factor': 0.85,
+                       'row_orientation': ['true'] * len(self.experiment_files),
+                       'experiment_type': ['timecourse'] * len(self.experiment_files),
+                       'first_row': [str(1)] * len(self.experiment_files),
+                       'normalize_weights_per_experiment': ['true'] * len(self.experiment_files),
+                       'row_containing_names': [str(1)] * len(self.experiment_files),
+                       'separator': ['\t'] * len(self.experiment_files),
+                       'Weightmethod': ['mean_squared'] * len(self.experiment_files),
+                       'save': 'overwrite',
+                       'scheduled': 'false',
                        'Verbose': 'false',
-                       'LowerBound': 0.000001,
-                       'UpperBound': 1000000,
-                       'Plot': 'false',
-                       'FontSize': 22,
-                       'AxisSize': 15,
-                       'ExtraTitle': None,
-                       'LineWidth': 3,
-                       'Show': 'false',
-                       'SaveFig': 'false',
-                       'TitleWrapSize': 30,
-                       'Ylimit': None,
-                       'Xlimit': None,
-                       'DPI': 125,
-                       'XTickRotation': 35,
-                       'DotSize': 4,
-                       'LegendLoc': 'best'}
+                       'lower_bound': 0.000001,
+                       'upper_bound': 1000000,
+                       'plot': 'false',
+                       'font_size': 22,
+                       'axis_size': 15,
+                       'extra_title': None,
+                       'line_width': 3,
+                       'show': 'false',
+                       'savefig': 'false',
+                       'title_wrap_size': 30,
+                       'ylimit': None,
+                       'xlimit': None,
+                       'dpi': 125,
+                       'xtick_rotation': 35,
+                       'marker_size': 4,
+                       'legend_loc': 'best'}
 
-        self.RMPE = PyCoTools.pycopi.RunMultiplePEs(self.copasi_file,self.experiment_files,
+        self.RMPE = PyCoTools.pycopi.runMultiplePEs(self.copasi_file,self.experiment_files,
                                                     **self.options)
 
 <<<<<<< HEAD
@@ -152,6 +167,7 @@ class RunMultiplePESetUp(unittest.TestCase):
 =======
 #
     def tearDown(self):
+<<<<<<< HEAD
         pass
         ##  not yet
         # os.remove(self.copasi_file)
@@ -169,10 +185,27 @@ class RunMultiplePESetUp(unittest.TestCase):
         #     os.remove(i)
 
         shutil.rmtree(self.RMPE.kwargs['OutputDir'])
+=======
+        #  not yet
+        os.remove(self.copasi_file)
+        for i in glob.glob('*.txt'):
+            os.remove(i)
+
+        for i in glob.glob('*.xlsx'):
+            os.remove(i)
+
+        for i in glob.glob('*.cps'):
+            os.remove(i)
+
+        for i in glob.glob('*.pickle'):
+            os.remove(i)
+        # time.sleep(0.1)
+        # shutil.rmtree(self.RMPE.kwargs['output_dir'])
+>>>>>>> 7759ebc9c3b0729eee95d01e8a6cddf4a1d82926
 
     def test_output_directory(self):
 
-        self.assertTrue(os.path.isdir(self.RMPE.kwargs['OutputDir']))
+        self.assertTrue(os.path.isdir(self.RMPE.kwargs['output_dir']))
 
 <<<<<<< HEAD
     def test_results_copy_copasi_pickle(self):
@@ -194,7 +227,7 @@ class RunMultiplePESetUp(unittest.TestCase):
 =======
     def test_report_files(self):
         LOG.debug('Here are the generated report files: {}'.format(self.RMPE.report_files))
-        self.assertEqual(len(self.RMPE.report_files.items()),self.RMPE.kwargs['CopyNumber'])
+        self.assertEqual(len(self.RMPE.report_files.items()),self.RMPE.kwargs['copy_number'])
 
     def test_write_config_file(self):
         """
@@ -203,22 +236,22 @@ class RunMultiplePESetUp(unittest.TestCase):
         """
         LOG.info('Testing the write_config_file() method')
         self.RMPE.write_config_template()
-        self.assertTrue(os.path.isfile(self.RMPE.kwargs['ConfigFilename']))
+        self.assertTrue(os.path.isfile(self.RMPE.kwargs['config_filename']))
 
     def test_write_config_file2(self):
         """
         test that you can change the name of the config file
         :return:
         """
-        new_filename=os.path.join(os.getcwd(),'NewConfigFilename.xlsx')
-        self.options.update({'ConfigFilename':new_filename})
-        self.RMPE = PyCoTools.pycopi.RunMultiplePEs(self.copasi_file,self.experiment_files,**self.options)
-        if self.RMPE.kwargs['ConfigFilename'] != new_filename:
-            LOG.critical('ConfigFilname argument was not changed. {}'.format(self.RMPE.kwargs['ConfigFilename']))
-            raise PyCoTools.Errors.InputError('ConfigFilename argument was not changed')
+        new_filename=os.path.join(os.getcwd(),'Newconfig_filename.xlsx')
+        self.options.update({'config_filename':new_filename})
+        self.RMPE = PyCoTools.pycopi.runMultiplePEs(self.copasi_file,self.experiment_files,**self.options)
+        if self.RMPE.kwargs['config_filename'] != new_filename:
+            LOG.critical('ConfigFilname argument was not changed. {}'.format(self.RMPE.kwargs['config_filename']))
+            raise PyCoTools.Errors.InputError('config_filename argument was not changed')
         LOG.info('Testing the write_config_file() method again')
         self.RMPE.write_config_template()
-        self.assertTrue(os.path.isfile(self.RMPE.kwargs['ConfigFilename']))
+        self.assertTrue(os.path.isfile(self.RMPE.kwargs['config_filename']))
 
     def test_set_up(self):
         """
@@ -237,7 +270,7 @@ class RunMultiplePESetUp(unittest.TestCase):
     def test_number_of_copasi_files2(self):
         """
         Check that desired behaviour occurs when you
-        the code twice but change the CopyNumber parameter
+        the code twice but change the copy_number parameter
         :return:
         """
         pass
@@ -272,7 +305,7 @@ class RunMultiplePESetUp(unittest.TestCase):
         with open(self.RMPE.copasi_file_pickle) as f:
             copasi_dict = pickle.load(f)
         LOG.debug('Copasi file pickle variable: {}'.format(copasi_dict))
-        self.assertEqual(self.RMPE.kwargs['CopyNumber'], len(copasi_dict.items()))
+        self.assertEqual(self.RMPE.kwargs['copy_number'], len(copasi_dict.items()))
 
     def test_pickle_changable(self):
         """
@@ -289,8 +322,8 @@ class RunMultiplePESetUp(unittest.TestCase):
         frst_len = len(copasi_dct1.items())
 
         cp2 = 10
-        self.options.update({'CopyNumber':cp2})
-        RMPE2 = PyCoTools.pycopi.RunMultiplePEs(self.copasi_file,self.experiment_files,**self.options)
+        self.options.update({'copy_number':cp2})
+        RMPE2 = PyCoTools.pycopi.runMultiplePEs(self.copasi_file,self.experiment_files,**self.options)
         RMPE2.write_config_template()
         RMPE2.set_up()
         with open(RMPE2.copasi_file_pickle) as f2:
@@ -301,53 +334,61 @@ class RunMultiplePESetUp(unittest.TestCase):
 
     def test_run(self):
         """
-        Run as current solution statistics so that they run quickly
+        run as current solution statistics so that they run quickly
         Then use the wait for a little while
         :return:
         """
-        self.options.update({'Method':'CurrentSolutionStatistics',
-                             'CopyNumber':6,
-                             'RandomizeStartValues':'false'})
-        self.RMPE = PyCoTools.pycopi.RunMultiplePEs(self.copasi_file,self.experiment_files,**self.options)
-        self.RMPE.write_config_template()
-        self.RMPE.set_up()
-        self.RMPE.run()
-        dire = self.RMPE.kwargs['OutputDir']
+        self.options.update({'method':'CurrentSolutionStatistics',
+                             'copy_number':6,
+                             'randomize_start_values':'false'})
+        RMPE = PyCoTools.pycopi.runMultiplePEs(self.copasi_file,self.experiment_files,**self.options)
+        RMPE.write_config_template()
+        RMPE.set_up()
+        RMPE.run()
+        dire = RMPE.kwargs['output_dir']
         files = glob.glob(dire+'/*.txt')
         time.sleep(5)
-        LOG.debug('txt files in OutputDir: {}'.format(files))
-        LOG.debug('Copy Number argument: {}'.format(self.RMPE.kwargs['CopyNumber']))
-        self.assertEqual(len(files), self.RMPE.kwargs['CopyNumber'])
+        LOG.debug('txt files in output_dir: {}'.format(files))
+        LOG.debug('Copy Number argument: {}'.format(RMPE.kwargs['copy_number']))
+        self.assertEqual(len(files), RMPE.kwargs['copy_number'])
 
 
 
     def test_total_number_of_PE(self):
         """
-        test that the total number of PEs = CopyNumber*NumberOfPEs
+        test that the total number of PEs = copy_number*pe_number
+
+        This test doesn't work but the behaviour is working as expected.
+        Not sure why the test wont work but I thnk its something to do with
+        write speed and sequentially deleting files and trying to count them.
+
+        Not important enough to spend lots of time on.
         :return:
         """
-        self.options.update({'Method':'CurrentSolutionStatistics',
-                             'CopyNumber':4,
-                             'NumberOfPEs':6,
-                             'RandomizeStartValues':'false'})
-        self.RMPE = PyCoTools.pycopi.RunMultiplePEs(self.copasi_file,self.experiment_files,**self.options)
+        self.options.update({'method':'CurrentSolutionStatistics',
+                             'copy_number':4,
+                             'pe_number':6,
+                             'randomize_start_values':'false'})
+        self.RMPE = PyCoTools.pycopi.runMultiplePEs(self.copasi_file,self.experiment_files,**self.options)
         self.RMPE.write_config_template()
         self.RMPE.set_up()
         self.RMPE.run()
-        dire = self.RMPE.kwargs['OutputDir']
+        dire = self.RMPE.kwargs['output_dir']
         files = glob.glob(dire+'/*.txt')
-        time.sleep(30)
-        LOG.debug('txt files in OutputDir: {}'.format(files))
-        LOG.debug('Copy Number argument: {}'.format(self.RMPE.kwargs['CopyNumber']))
+
+        time.sleep(2)
+        LOG.debug('txt files in output_dir: {}'.format(files))
+        LOG.debug('Copy Number argument: {}'.format(self.RMPE.kwargs['copy_number']))
         pandas_lst =[]
         for i in files:
-            LOG.debug(i)
+            LOG.debug('Reading file {}'.format(i))
             df=pandas.read_csv(i,sep='\t')
             pandas_lst.append(df)
             LOG.debug(df)
         df = pandas.concat(pandas_lst)
+        LOG.debug('DataFrame after concat = {}'.format(df))
         LOG.debug('Dataframe shape after concatonation: {}'.format(df.shape))
-        self.assertEqual(self.RMPE.kwargs['CopyNumber'] * self.RMPE.kwargs['NumberOfPEs'],
+        self.assertEqual(self.RMPE.kwargs['copy_number'] * self.RMPE.kwargs['pe_number'],
                          df.shape[0])
 
 

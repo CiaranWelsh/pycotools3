@@ -4,7 +4,7 @@ class InputError(Exception):
 class CopasiError(Exception):
     pass
 
-class NoMetabolitesError(Exception):
+class NometabolitesError(Exception):
     pass
 
 class IncompatibleStringError(Exception):
@@ -17,11 +17,11 @@ class ExperimentMappingError(Exception):
 class ReportDoesNotExistError(Exception):
     pass
 
-class ParameterEstimationPlottingError(Exception):
+class ParameterEstimationplottingError(Exception):
     pass
 
 
-class IndexOutOfBounds(Exception):
+class indexOutOfBounds(Exception):
     pass
 
 
@@ -33,6 +33,9 @@ class FileDoesNotExistError(Exception):
 class NotImplementedError(Exception):
     pass
 
+
+class ParameterInputError(Exception):
+    pass
 
 
 
