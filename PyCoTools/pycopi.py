@@ -1065,8 +1065,7 @@ class Bool2Str():
         
         self.acceptable_kwargs = ['append','confirm_overwrite','update_model',
                                   'output_in_subtask','adjust_initial_conditions',
-                                  'log10','randomize_start_values',
-                                  'scheduled','output_event']
+                                  'randomize_start_values','log10','scheduled','output_event']
     
     def convert(self,boolean):
         if boolean == True:
@@ -3044,7 +3043,7 @@ class ParameterEstimation():
                         j.attrib.update(report_attrib)
                 if list(j)!=[]:
                     for k in list(j):
-                        if k.attrib['name']=='Randomize start Values':
+                        if k.attrib['name']=='Randomize Start Values':
                             k.attrib.update(randomize_start_values)
                         elif k.attrib['name']=='Calculate Statistics':
                             k.attrib.update(calculate_stats)
