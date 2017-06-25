@@ -198,11 +198,11 @@ class ProfileLikelihood():
 
         self.cps_dct=self.copy_copasi_files_and_insert_parameters()
         self.copy_data_files()
-#        self.cps_dct= self.setup_report()
-#        self.cps_dct=self.setup_scan()
-#        self.cps_dct=self.setup_PE_task()        
+        self.cps_dct= self.setup_report()
+        self.cps_dct=self.setup_scan()
+        self.cps_dct=self.setup_PE_task()        
         self.save()
-#        os.chdir(os.path.dirname(self.copasi_file))
+        os.chdir(os.path.dirname(self.copasi_file))
         self.run()
 
     def save(self):
@@ -315,28 +315,26 @@ class ProfileLikelihood():
         self.IA_dir = self.kwargs['results_directory']
         q='//*[@name="File Name"]'
         data_file_dct={}
-#        print self.copasi_file
         for i in self.copasiML.xpath(q):
-#            print i
             data_path= os.path.join(os.path.dirname(self.copasi_file),i.attrib['value'])
             LOG.debug('Data path is: {}'.format( data_path))
-#            data_file_dct[i.attrib['value']]=data_path
-#            if self.kwargs.get('index')==-1:
-#                IA_dir1=os.path.join(self.IA_dir,'-1')
-#                new_data_file1=os.path.join(IA_dir1,i.attrib['value'])
-#                copyfile(data_path,new_data_file1)
-#                
-#            elif isinstance(self.kwargs.get('index'),int):
-#                IA_dir2=os.path.join(self.IA_dir,str(self.kwargs.get('index')))
-#                new_data_file2=os.path.join(IA_dir2,i.attrib['value'])
-#                copyfile(data_path,new_data_file2)
-#                
-#            elif isinstance(self.kwargs.get('index'),list):
-#                for j in self.kwargs.get('index'):
-#                    IA_dir3=os.path.join(self.IA_dir,str(j))
-#                    new_data_file3=os.path.join(IA_dir3,i.attrib['value'])
-#                    copyfile(data_path,new_data_file3)
-#        return data_file_dct
+            data_file_dct[i.attrib['value']]=data_path
+            if self.kwargs.get('index')==-1:
+                IA_dir1=os.path.join(self.IA_dir,'-1')
+                new_data_file1=os.path.join(IA_dir1,i.attrib['value'])
+                copyfile(data_path,new_data_file1)
+                
+            elif isinstance(self.kwargs.get('index'),int):
+                IA_dir2=os.path.join(self.IA_dir,str(self.kwargs.get('index')))
+                new_data_file2=os.path.join(IA_dir2,i.attrib['value'])
+                copyfile(data_path,new_data_file2)
+                
+            elif isinstance(self.kwargs.get('index'),list):
+                for j in self.kwargs.get('index'):
+                    IA_dir3=os.path.join(self.IA_dir,str(j))
+                    new_data_file3=os.path.join(IA_dir3,i.attrib['value'])
+                    copyfile(data_path,new_data_file3)
+        return data_file_dct
 
     def setup_PE_task(self):
         '''
@@ -735,10 +733,6 @@ class Plot():
         if isinstance(self.kwargs.get('InterpolationResolution'),int)!=True:
             raise TypeError('InterpolationResolution argument should be of type int')
 
-            
-            
-
-
         if self.kwargs.get('ylimit')!=None:
             assert isinstance(self.kwargs.get('ylimit'),str)
             
@@ -758,60 +752,57 @@ class Plot():
             LOG.critical('Experimental Files not None')
             self.kwargs['experiment_files']=self.get_experiment_files_in_use()
             
-            
         self.PL_dir=self.get_PL_dir()
         self.indices=self.get_index_dirs()
         self.result_paths=self.get_results()
-        self.data=self.parse_results() 
-        
-        
-        '''
-        The below arguments rely on the above code. Do not change
-        the ordering!
-        
-        '''
-        #default dof is num estimated parameters minus 1 but can be manually overrider by specifying dof keyword
-        if self.kwargs.get('dof')==None:
-            self.kwargs['dof']=self.degrees_of_freedom()
-        if self.kwargs.get('dof')==None:
-            raise Errors.InputError('Please specify argument to dof keyword')
-        
-        #defult n is number of data points in your data set. 
-        #This can be overridden by manually specifying n
-        
-        if self.kwargs.get('n')==None :
-            self.kwargs['n']=self.num_data_points()
-        assert self.kwargs.get('n')!=None        
-        
-        if self.kwargs.get('mode') not in ['all','one','none']:
-            raise Errors.InputError('{} is not a valid mode. mode should be either all or one'.format(self.kwargs.get('mode')))
+        print self.result_paths
+#        self.data=self.parse_results() 
+#        
+#        
+#        '''
+#        The below arguments rely on the above code. Do not change
+#        the ordering!
+#        
+#        '''
+#        #default dof is num estimated parameters minus 1 but can be manually overrider by specifying dof keyword
+#        if self.kwargs.get('dof')==None:
+#            self.kwargs['dof']=self.degrees_of_freedom()
+#        if self.kwargs['dof']==None:
+#            raise Errors.InputError('Please specify argument to dof keyword')
+#        
+#        #defult n is number of data points in your data set. 
+#        #This can be overridden by manually specifying n
+#        
+#        if self.kwargs.get('n')==None :
+#            self.kwargs['n']=self.num_data_points()
+#        assert self.kwargs.get('n')!=None        
+#        
+#        if self.kwargs.get('mode') not in ['all','one','none']:
+#            raise Errors.InputError('{} is not a valid mode. mode should be either all or one'.format(self.kwargs.get('mode')))
 #
-
-  
-
-        if self.kwargs.get('mode')!='all':
-            if self.kwargs.get('plot_parameter') not in self.list_parameters():
-                raise Errors.InputError('{} is not a valid Parameter. Your parameters are: {}'.format(self.kwargs.get('plot_parameter'),self.list_parameters()))
-
-            if isinstance(self.kwargs.get('index'),int):
-                if self.kwargs.get('plot_index') != self.kwargs.get('index'):
-                    raise Errors.InputError('{} is not an index in your Indices: {}'.format(self.kwargs.get('plot_index'),self.kwargs.get('index')))
-            
-            elif isinstance(self.kwargs.get('index'),list):
-                if self.kwargs.get('plot_index') not in self.kwargs.get('index'):
-                    raise Errors.InputError('{} is not an index in your Indices: {}'.format(self.kwargs.get('plot_index'),self.kwargs.get('index')))
-
-
-        if self.kwargs.get('mode')=='all':
-            self.plot_all()
-        elif self.kwargs.get('mode')=='one':
-            self.plot1(self.kwargs.get('plot_index'),self.kwargs.get('plot_parameter'))
-            
-        
-        self.plot_chi2_CI()
-        CI=self.calc_chi2_CI()
-        for i in CI:
-            LOG.info( 'Confidence level for index {} is {} or {} on a log10 scale'.format(i,CI[i],numpy.log10(CI[i])))
+#        if self.kwargs.get('mode')!='all':
+#            if self.kwargs.get('plot_parameter') not in self.list_parameters():
+#                raise Errors.InputError('{} is not a valid Parameter. Your parameters are: {}'.format(self.kwargs.get('plot_parameter'),self.list_parameters()))
+#
+#            if isinstance(self.kwargs.get('index'),int):
+#                if self.kwargs.get('plot_index') != self.kwargs.get('index'):
+#                    raise Errors.InputError('{} is not an index in your Indices: {}'.format(self.kwargs.get('plot_index'),self.kwargs.get('index')))
+#            
+#            elif isinstance(self.kwargs.get('index'),list):
+#                if self.kwargs.get('plot_index') not in self.kwargs.get('index'):
+#                    raise Errors.InputError('{} is not an index in your Indices: {}'.format(self.kwargs.get('plot_index'),self.kwargs.get('index')))
+#
+#
+#        if self.kwargs.get('mode')=='all':
+#            self.plot_all()
+#        elif self.kwargs.get('mode')=='one':
+#            self.plot1(self.kwargs.get('plot_index'),self.kwargs.get('plot_parameter'))
+#            
+#        
+#        self.plot_chi2_CI()
+#        CI=self.calc_chi2_CI()
+#        for i in CI:
+#            LOG.info( 'Confidence level for index {} is {} or {} on a log10 scale'.format(i,CI[i],numpy.log10(CI[i])))
             
     def get_PL_dir(self):
         '''
@@ -867,7 +858,6 @@ class Plot():
         
         return l
         
-        
     def get_results(self):
         d={}
         for i in  self.indices:
@@ -901,22 +891,19 @@ class Plot():
 
 
     def num_estimated_params(self):
-#        try:
+        """
+        
+        """
         first_key= self.data.keys()[0]
         count= len( self.data[first_key].keys())
         return count
-#        except AttributeError:
-#            raise Errors.InputError('index set to -1 and therefore a parameter_path is not present to count data points. Specify an argument to n kwarg')
         
         
     def degrees_of_freedom(self):
         '''
         The number of parameters being estimated minus 1
         '''
-#        try:
         return self.num_estimated_params()-1
-#        except AttributeError:
-#            raise Errors.InputError('index set to -1 and therefore a parameter_path is not present to count number of parameter. Specify an argument to dof kwarg')
         
     def num_data_points(self):
         '''
@@ -958,7 +945,8 @@ class Plot():
         i.e. gets the cut off point for chi2 dist with dof and alpha . 
         '''
         nums= numpy.arange(0,100,0.1)
-        table=zip(nums,scipy.stats.chi2.cdf(nums,self.kwargs.get('dof')) )
+        table=zip(nums,scipy.stats.chi2.cdf(nums,self.kwargs['dof']) )
+        print table
         for i in table:
             if i[1]<=alpha:
                 chi2_df_alpha=i[0]
@@ -1185,4 +1173,4 @@ class Plot():
 
         
 if __name__=='__main__':
-    pass
+    execfile(r'C:\Users\Ciaran\Documents\CopasiVer19KholodenkoTests\test_Script.py')
