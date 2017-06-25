@@ -4766,7 +4766,7 @@ All annotations are generalized as the model details general TGFb pathway dynami
       </Method>
     </Task>
     <Task key="Task_16" name="Scan" type="scan" scheduled="true" updateModel="false">
-      <Report append="false" confirmOverwrite="false" reference="Report_32" target="/home/b3053674/Documents/PyCoTools/PyCoTools/Examples/Celliere2011Example/MultipleParameterEsimationAnalysis/ParameterFit0.txt"/><Problem>
+      <Report append="false" confirmOverwrite="false" reference="Report_32" target="/home/b3053674/Documents/PyCoTools/PyCoTools/Examples/Celliere2011Example/MultipleParameterEsimationAnalysis/ParameterFit2.txt"/><Problem>
         <Parameter name="Subtask" type="unsignedInteger" value="5"/>
         <ParameterGroup name="ScanItems">
         <ParameterGroup name="ScanItem"><Parameter name="Number of steps" type="unsignedInteger" value="2"/><Parameter name="Type" type="unsignedInteger" value="0"/><Parameter name="Object" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[TGFbR],Reference=InitialConcentration"/></ParameterGroup></ParameterGroup>
