@@ -685,15 +685,12 @@ class Reports():
         self.copasiML=self.clear_all_reports()
         self.copasiML=self.run()
         
-
-#        LOG.debug('setting up a report with the following settings:')
-#        for i in self.kwargs:
-#            LOG.debug('\t'+str([i, self.kwargs[i]]))
             
         self.copasiML=self.save()
         
     def save(self):
         self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
+        return self.copasiML
         
     def save_dep(self):
         if self.kwargs.get('save')=='duplicate':
@@ -831,8 +828,6 @@ class Reports():
         comment=comment #get rid of annoying squiggly line above
         table=etree.SubElement(report,'Table')
         table.attrib['printTitle']=str(1)
-        #Objects for the report to report
-#        time=etree.SubElement(table,'Object')
 
         '''
         generate more SubElements dynamically
@@ -868,6 +863,8 @@ class Reports():
                 
         Object=etree.SubElement(table,'Object')
         Object.attrib['cn']="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"
+        LOG.debug('Reports PE setup copasiML {}'.format(self.copasiML))
+
         return self.copasiML     
 
 
@@ -885,7 +882,7 @@ class Reports():
         elif self.kwargs.get('report_type')=='time_course':
             self.copasiML=self.timecourse()
             LOG.debug('created a \'time_course\' type report')
-        elif self.kwargs.get('report_type')=='none':
+        elif self.kwargs.get('report_type')==None:
             self.copasiML=self.copasiML
             LOG.debug('created a \'none\' type report')
         return self.copasiML
@@ -1715,7 +1712,7 @@ class ExperimentMapper():
         l=[]
         assert isinstance(self.kwargs.get('row_orientation'),list)
         for i in self.kwargs.get('row_orientation'):
-            assert i in [True,False]
+            assert i in [True,False,'true','false']
             if i==True:
                 l.append(str(1))
             else:
@@ -1741,7 +1738,7 @@ class ExperimentMapper():
         l=[]
         assert isinstance(self.kwargs.get('normalize_weights_per_experiment'),list)
         for i in self.kwargs.get('normalize_weights_per_experiment'):
-            assert i in [True,False],'{} should be true or false'.format(i)
+            assert i in [True,False,'true','false'],'{} should be true or false'.format(i)
             if i==True:
                 l.append(str(1))
             else:
@@ -2172,7 +2169,7 @@ class ParameterEstimation():
     Instead the user should initialize an instance of the ParameterEstimation 
     class with all the relevant keyword arguments. Subsequently use the 
     write_item_template() method and modify the resulting xlsx in your copasi file
-    directory. save the file then close and run the set_up() method to define your
+    directory. save the file then close and run the setup()() method to define your
     optimization problem. When run is set to True, the parameter estimation will
     automatically run in CopasiSE. If plot is also set to True, a plot comparing 
     experimental and simulated profiles are produced. Profiles are saved
@@ -2490,7 +2487,6 @@ class ParameterEstimation():
         self.kwargs_experiment['separator']=self.kwargs.get('separator')
         self.kwargs_experiment['weight_method']=self.kwargs.get('weight_method')
         self.kwargs_experiment['save']=self.kwargs.get('save')
-        self.kwargs_experiment['OutputML']=self.kwargs.get('OutputML')
         
 #        for i in self.kwargs_experiment.keys():
 #            assert len(self.experiment_files)==len(self.kwargs_experiment.get(i)),'{} is {} and {} is {}'.format(self.experiment_files,len(self.experiment_files),(self.kwargs_experiment.get(i)),len(self.kwargs_experiment.get(i)))
@@ -2502,9 +2498,8 @@ class ParameterEstimation():
                      'SteepestDescent','TruncatedNewton','GeneticAlgorithm',
                      'GeneticAlgorithmSR']
         assert self.kwargs.get('method').lower() in [i.lower() for i in self.method_list],'{} is not a copasi PE method. Choose one of: {}'.format(self.kwargs.get('method'),self.method_list)
-        assert self.kwargs.get('Verbose') in [True,False]
-        assert self.kwargs.get('append') in [True,False]
-        assert self.kwargs.get('confirm_overwrite') in [True,False]
+        assert self.kwargs.get('append') in [True,False,'true','false']
+        assert self.kwargs.get('confirm_overwrite') in [True,False,'true','false']
         
         if self.kwargs['append']==True:
             self.kwargs['append']=str(1)
@@ -2536,7 +2531,7 @@ class ParameterEstimation():
         for i in self.kwargs.get('metabolites'):
             assert i in self.GMQ.get_IC_cns().keys()
 
-        if self.kwargs['use_config_start_values'] not in [True,False]:
+        if self.kwargs['use_config_start_values'] not in [True,False,'true','false']:
             raise Errors.InputError(''' Argument to the use_config_start_values must be \'true\' or \'false\' not {}'''.format(self.kwargs['use_config_start_values']))
 
 
@@ -2608,19 +2603,19 @@ class ParameterEstimation():
     
 
             
-        assert self.kwargs.get('create_parameter_sets') in [False,True]
+        assert self.kwargs.get('create_parameter_sets') in [False,True,'false','true']
         if self.kwargs.get('create_parameter_sets')==False:
             self.kwargs['create_parameter_sets']=str(0)
         else:
             self.kwargs['create_parameter_sets']=str(1)
             
-        assert self.kwargs.get('calculate_statistics') in [False,True]
+        assert self.kwargs.get('calculate_statistics') in [False,True,'false','true']
         if self.kwargs.get('calculate_statistics')==False:
             self.kwargs['calculate_statistics']=str(0)
         else:
             self.kwargs['calculate_statistics']=str(1)
 
-        assert self.kwargs.get('plot') in [False,True]
+        assert self.kwargs.get('plot') in [False,True,'false','true']
 
 
 
@@ -2666,7 +2661,6 @@ class ParameterEstimation():
         self.report_dict['append']=self.kwargs.get('append')
         self.report_dict['confirm_overwrite']=self.kwargs.get('confirm_overwrite')
         self.report_dict['save']=self.kwargs.get('save')
-        self.report_dict['OutputML']=self.kwargs.get('OutputML')
         self.report_dict['variable']=self.kwargs.get('variable')
         self.report_dict['report_type']='parameter_estimation'
         
@@ -2794,11 +2788,11 @@ class ParameterEstimation():
     def write_config_template(self):
         if os.path.isfile(self.kwargs.get('config_filename'))==False or self.kwargs.get('overwrite_config_file')==True:
             self.get_item_template().to_excel(self.kwargs.get('config_filename'))
-        return  'writing template. {} set to {} and {} is {}'.format('overwrite_config_file',self.kwargs.get('overwrite_config_file'),'config_filename',self.kwargs.get('config_filename'))
+            LOG.info(  'writing config template. {} set to {} and {} is {}'.format('overwrite_config_file',self.kwargs.get('overwrite_config_file'),'config_filename',self.kwargs.get('config_filename')))
 
         
     def read_item_template(self):
-        assert os.path.isfile(self.kwargs.get('config_filename'))==True,'ConfigFile does not exist. run \'write_item_template\' method and modify it how you like then rerun this method'
+        assert os.path.isfile(self.kwargs.get('config_filename'))==True,'ConfigFile does not exist. run \'write_item_template\' method and modify it how you like then run the setup()  method again.'
         return pandas.read_excel(self.kwargs.get('config_filename'))
     
     def add_fit_item(self,item):
@@ -2893,7 +2887,7 @@ class ParameterEstimation():
         '''
         #Build xML for method. Root=method for now. Will be merged with CoapsiML later
         method_params={'name':self.method_name, 'type':self.method_type}
-        method_element=etree.Element('method',attrib=method_params)
+        method_element=etree.Element('Method',attrib=method_params)
 
         #list of attribute dictionaries 
         #Evolutionary strategy parametery
@@ -3095,14 +3089,13 @@ class ParameterEstimation():
                 df=df.drop('concentration',axis=1)
             df_list_ICs.append(df)
         l=df_list_local+df_list_global+df_list_ICs
-        assert len(l)!=0,'No ICs, local or global quantities in your model'
+        assert len(l)!=0,'No ICs, local or global quantities in your model. This is a problem'
         df= pandas.concat(l)
-        df=df.rename(columns={'value':'StartValue'})
-        df['LowerBound']=[self.kwargs.get('lower_bound')]*df.shape[0]
-#        df['startValue']=[self.kwargs.get('startValue')]*df.shape[0]
-        df['LowerBound']=[self.kwargs.get('upper_bound')]*df.shape[0]
-        df.index.name='Parameter'
-        order=['StartValue','LowerBound','UpperBound','simulationType','type','cn']
+        df=df.rename(columns={'value':'start_value'})
+        df['lower_bound']=[self.kwargs.get('lower_bound')]*df.shape[0]
+        df['upper_bound']=[self.kwargs.get('upper_bound')]*df.shape[0]
+        df.index.name='parameter'
+        order=['start_value','lower_bound','upper_bound','simulationType','type','cn']
         df=df[order]
         return df
 
@@ -3113,8 +3106,19 @@ class ParameterEstimation():
         self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
         return self.copasiML
 
+    def setup(self):
+        EM=ExperimentMapper(self.copasi_file,self.experiment_files,**self.kwargs_experiment)
+        self.copasiML=EM.copasiML
+        self.copasiML=self.define_report()
+        self.copasiML=self.remove_all_fit_items()
+        self.copasiML=self.set_PE_method()
+        self.copasiML=self.set_PE_options()
+        self.copasiML=self.insert_all_fit_items()
+        self.copasiML=self.save()
+        
             
     def set_up(self):
+        LOG.warning('The set_up method is deprecated. Use setup() method instead')
         EM=ExperimentMapper(self.copasi_file,self.experiment_files,**self.kwargs_experiment)
         self.copasiML=EM.copasiML
         self.copasiML=self.define_report()
@@ -3237,8 +3241,6 @@ class Scan():
                  'report_name':default_report_name,
                  'append': False, 
                  'confirm_overwrite': False,
-                 #'OutputML':default_outputML,
-                 #
                  'update_model':False,
                  'subtask':'parameter_estimation',
                  'report_type':'profilelikelihood',
@@ -3267,9 +3269,9 @@ class Scan():
         self.kwargs = Bool2Str(self.kwargs).convert_dct()
         
         #correct output_in_subtask and AsjestInitialConditions
-        assert self.kwargs.get('output_in_subtask') in [False,True]
-        assert self.kwargs.get('adjust_initial_conditions') in [False,True]
-        assert self.kwargs.get('log10') in [False,True],'{} is not either \'false\' or \'true\''.format(self.kwargs.get('log10'))
+        assert self.kwargs.get('output_in_subtask') in [False,True,'false','true']
+        assert self.kwargs.get('adjust_initial_conditions') in [False,True,'false','true']
+        assert self.kwargs.get('log10') in [False,True,'false','true'],'{} is not either \'false\' or \'true\''.format(self.kwargs.get('log10'))
         
         if self.kwargs.get('output_in_subtask')==False:
             self.kwargs['output_in_subtask']=str(0)
@@ -3305,9 +3307,9 @@ class Scan():
         assert self.kwargs.get('distribution_type') in dist_types
         assert self.kwargs.get('scan_type') in scan_types
         assert self.kwargs.get('quantity_type') in quantity_type_list
-        assert self.kwargs.get('scheduled') in [True,False]
-        assert self.kwargs.get('clear_scans') in [True,False]
-        assert self.kwargs.get('run') in [True,False,'SGE']
+        assert self.kwargs.get('scheduled') in [True,False,'true','false']
+        assert self.kwargs.get('clear_scans') in [True,False,'true','false']
+        assert self.kwargs.get('run') in [True,False,'true','false','SGE']
 
 
         #numericify the some keyword arguments
@@ -3357,7 +3359,7 @@ class Scan():
         
         if self.kwargs.get('clear_scans')==True:
             self.copasiML=self.remove_scans()
-            self.copasiML=self.save()
+            self.copasiML=self.save()    ##extra save - is this needed. Yes, I've checked - do not remove!
         self.copasiML=self.define_report()
         self.copasiML=self.create_scan()
         self.copasiML=self.set_scan_options()
@@ -3386,6 +3388,7 @@ class Scan():
         self.report_dict['variable']=self.kwargs.get('variable')
         self.report_dict['report_type']=self.kwargs.get('report_type')
         R= Reports(self.copasi_file,**self.report_dict)
+
         return R.copasiML
         
         
@@ -3696,9 +3699,6 @@ class InsertParameters16():
         report_name;
             Unused. Delete?
             
-        OutputML:
-            If save set to 'duplicate', this is the duplicate filename
-            
         save:
             either False,'overwrite' or 'duplicate',default=overwrite
                 
@@ -3992,7 +3992,7 @@ class PruneCopasiHeaders():
         
 #        assert self.mode in ['singlePE','multiPE,'time_course']
         
-        if replace not in [True,False]:
+        if replace not in [True,False,'true','false']:
             raise Errors.InputError('\'replace\' keyword should be either \'true\' or \'false\' ')
 
             
@@ -4163,20 +4163,29 @@ class RunMultiplePEs():
         LOG.debug('Create an instance of ParameterEstimation')
         self.PE=ParameterEstimation(self.copasi_file,self.experiment_files,**self.PE_dct)
 #
+
+
+    def setup(self):
+        '''
+        Analogous to the set_up method of the ParameterEstimation class but this time
+        setup both the PE and Scan tasks       
+        '''
+        
+        self.PE.set_up()
+        self.sub_copasi_files=self.copy_copasi()
+        self._setup_scan()
+    
+
         
     def set_up(self):
         '''
         Analogous to the set_up method of the ParameterEstimation class but this time
         setup both the PE and Scan tasks       
         '''
-
+        LOG.warning('set_up method is deprecated. Use setup() method instead')
         self.PE.set_up()
         self.sub_copasi_files=self.copy_copasi()
         self._setup_scan()
-    
-#        if os.path.isfile(self.config_filename)!=True:
-#            self.PE.write_item_template()
-#        LOG.debug('calling the set_up method of the ParameterEstimation class')
  
     def run(self):
         '''
@@ -4413,7 +4422,7 @@ class MultimodelFit():
             modify the last columns which contain xml code for that variable. 
         4): 
             Once each model folder has a config file specific for that model
-            use the set_up() method. Then open one of the child copasi files
+            use the setup()() method. Then open one of the child copasi files
             in order to check that things are configured how you'd like them before 
             using the run() method. 
             
@@ -4550,7 +4559,16 @@ class MultimodelFit():
         for RMPE in self.RMPE_dct:
             self.RMPE_dct[RMPE].write_config_template()
             
+    def setup(self):
+        '''
+        A user interface class which calls the corresponding
+        method (setup) from the runMultiplePEs class per model. 
+        Perform the ParameterEstimation.setup() method on each model. 
         
+        '''
+        for RMPE in self.RMPE_dct:
+            self.RMPE_dct[RMPE].setup()
+            
     def set_up(self):
         '''
         A user interface class which calls the corresponding
@@ -4558,6 +4576,7 @@ class MultimodelFit():
         Perform the ParameterEstimation.set_up() method on each model. 
         
         '''
+        LOG.warning('The set_up method is deprecated. Use setup() method instead')
         for RMPE in self.RMPE_dct:
             self.RMPE_dct[RMPE].set_up()
 

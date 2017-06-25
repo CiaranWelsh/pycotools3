@@ -1,4 +1,4 @@
-<!-- generated with COPASI 4.16 (Build 104) (http://www.copasi.org) at 2017-02-02 16:45:43 UTC --><?oxygen RNGSchema="http://www.copasi.org/static/schema/CopasiML.rng" type="xml"?><COPASI xmlns="http://www.copasi.org/static/schema" versionMajor="4" versionMinor="16" versionDevel="104" copasiSourcesModified="0">
+<!-- generated with COPASI 4.19 (Build 140) (http://www.copasi.org) at 2017-06-25 11:03:26 UTC --><?oxygen RNGSchema="http://www.copasi.org/static/schema/CopasiML.rng" type="xml"?><COPASI xmlns="http://www.copasi.org/static/schema" versionMajor="4" versionMinor="19" versionDevel="140" copasiSourcesModified="0">
   <ListOfFunctions>
     <Function key="Function_13" name="Mass action (irreversible)" type="MassAction" reversible="false">
       <MiriamAnnotation>
@@ -108,7 +108,7 @@ Reaction scheme where the products are created from the reactants and the change
       </ListOfParameterDescriptions>
     </Function>
   </ListOfFunctions>
-  <Model key="Model_3" name="Celliere2011 - Plasticity of TGF-beta Signalling" simulationType="time" timeUnit="s" volumeUnit="l" areaUnit="m&#178;" lengthUnit="m" quantityUnit="pmol" type="deterministic" avogadroConstant="6.02214179e+023">
+  <Model key="Model_3" name="Celliere2011 - Plasticity of TGF-beta Signalling" simulationType="time" timeUnit="s" volumeUnit="l" areaUnit="m&#178;" lengthUnit="m" quantityUnit="pmol" type="deterministic" avogadroConstant="6.02214179e+23">
     <MiriamAnnotation>
 <rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
   <rdf:Description rdf:about="#Model_3">
@@ -137,22 +137,6 @@ Reaction scheme where the products are created from the reactants and the change
     </dcterms:created>
     <dcterms:creator>
       <rdf:Bag>
-        <rdf:li>
-          <rdf:Description>
-            <vCard:EMAIL>tjstruck@email.arizona.edu</vCard:EMAIL>
-            <vCard:N>
-              <rdf:Description>
-                <vCard:Family>Struck</vCard:Family>
-                <vCard:Given>Travis</vCard:Given>
-              </rdf:Description>
-            </vCard:N>
-            <vCard:ORG>
-              <rdf:Description>
-                <vCard:Orgname>University of Arizona</vCard:Orgname>
-              </rdf:Description>
-            </vCard:ORG>
-          </rdf:Description>
-        </rdf:li>
         <rdf:li>
           <rdf:Description>
             <vCard:EMAIL>georgios.fengos@bsse.ethz.ch</vCard:EMAIL>
@@ -261,6 +245,22 @@ Reaction scheme where the products are created from the reactants and the change
             <vCard:ORG>
               <rdf:Description>
                 <vCard:Orgname>EMBL-EBI</vCard:Orgname>
+              </rdf:Description>
+            </vCard:ORG>
+          </rdf:Description>
+        </rdf:li>
+        <rdf:li>
+          <rdf:Description>
+            <vCard:EMAIL>tjstruck@email.arizona.edu</vCard:EMAIL>
+            <vCard:N>
+              <rdf:Description>
+                <vCard:Family>Struck</vCard:Family>
+                <vCard:Given>Travis</vCard:Given>
+              </rdf:Description>
+            </vCard:N>
+            <vCard:ORG>
+              <rdf:Description>
+                <vCard:Orgname>University of Arizona</vCard:Orgname>
               </rdf:Description>
             </vCard:ORG>
           </rdf:Description>
@@ -2132,9 +2132,9 @@ Assigned the range of 10E-5 to 10E-1 by the model authors as there were no previ
           <Product metabolite="Metabolite_1" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4420" name="k1" value="0.00446"/>
+          <Constant key="Parameter_4382" name="k1" value="0.00446"/>
         </ListOfConstants>
-        <KineticLaw function="Function_13">
+        <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm]">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_81">
               <SourceParameter reference="ModelValue_1"/>
@@ -2213,9 +2213,9 @@ Assigned the range of 10E-5 to 10E-1 by the model authors as there were no previ
           <Product metabolite="Metabolite_3" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4419" name="k1" value="4.39e-006"/>
+          <Constant key="Parameter_4381" name="k1" value="4.39e-06"/>
         </ListOfConstants>
-        <KineticLaw function="Function_13">
+        <KineticLaw function="Function_13" unitType="Default">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_81">
               <SourceParameter reference="ModelValue_2"/>
@@ -2285,9 +2285,9 @@ Assigned the range of 10E-5 to 10E-1 by the model authors as there were no previ
           <Product metabolite="Metabolite_5" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4418" name="k1" value="0.324"/>
+          <Constant key="Parameter_4380" name="k1" value="0.324"/>
         </ListOfConstants>
-        <KineticLaw function="Function_13">
+        <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm]">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_81">
               <SourceParameter reference="ModelValue_3"/>
@@ -2356,9 +2356,9 @@ Assigned the range of 10E-5 to 10E-1 by the model authors as there were no previ
           <Product metabolite="Metabolite_3" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4417" name="k1" value="0.00192"/>
+          <Constant key="Parameter_4379" name="k1" value="0.00192"/>
         </ListOfConstants>
-        <KineticLaw function="Function_13">
+        <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm]">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_81">
               <SourceParameter reference="ModelValue_4"/>
@@ -2454,9 +2454,9 @@ Assigned the range of 10E-5 to 10E-1 by the model authors as there were no previ
           <Product metabolite="Metabolite_7" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4416" name="k1" value="0.000549"/>
+          <Constant key="Parameter_4378" name="k1" value="0.000549"/>
         </ListOfConstants>
-        <KineticLaw function="Function_13">
+        <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm]">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_81">
               <SourceParameter reference="ModelValue_12"/>
@@ -2546,9 +2546,9 @@ Assigned the range of 10E-5 to 10E-1 by the model authors as there were no previ
           <Product metabolite="Metabolite_21" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4415" name="k1" value="1.29e-005"/>
+          <Constant key="Parameter_4377" name="k1" value="1.29e-05"/>
         </ListOfConstants>
-        <KineticLaw function="Function_13">
+        <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm]">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_81">
               <SourceParameter reference="ModelValue_13"/>
@@ -2639,9 +2639,9 @@ Assigned the range of 10E-5 to 10E-1 by the model authors as there were no previ
           <Modifier metabolite="Metabolite_9" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4414" name="k7" value="9.35e-006"/>
+          <Constant key="Parameter_4376" name="k7" value="9.35e-06"/>
         </ListOfConstants>
-        <KineticLaw function="Function_43">
+        <KineticLaw function="Function_43" unitType="Default" scalingCompartment="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm]">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_271">
               <SourceParameter reference="Metabolite_9"/>
@@ -2708,9 +2708,9 @@ Assigned the range of 10E-5 to 10E-1 by the model authors as there were no previ
           <Product metabolite="Metabolite_23" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4413" name="k1" value="0.0104"/>
+          <Constant key="Parameter_4375" name="k1" value="0.0104"/>
         </ListOfConstants>
-        <KineticLaw function="Function_13">
+        <KineticLaw function="Function_13" unitType="Default">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_81">
               <SourceParameter reference="ModelValue_6"/>
@@ -2774,9 +2774,9 @@ Assigned the range of 10E-5 to 10E-1 by the model authors as there were no previ
           <Product metabolite="Metabolite_9" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4412" name="k1" value="0.00075"/>
+          <Constant key="Parameter_4374" name="k1" value="0.00075"/>
         </ListOfConstants>
-        <KineticLaw function="Function_13">
+        <KineticLaw function="Function_13" unitType="Default">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_81">
               <SourceParameter reference="ModelValue_7"/>
@@ -2846,9 +2846,9 @@ This reaction represents homodimerization of phosphorylated Smads.</pre>
           <Product metabolite="Metabolite_15" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4411" name="k1" value="5.12e-008"/>
+          <Constant key="Parameter_4373" name="k1" value="5.12e-08"/>
         </ListOfConstants>
-        <KineticLaw function="Function_13">
+        <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm]">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_81">
               <SourceParameter reference="ModelValue_8"/>
@@ -2919,9 +2919,9 @@ This reaction represents dissociation of the homodimer Smad_P_Smad_P into two ph
           <Product metabolite="Metabolite_11" stoichiometry="2"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4410" name="k1" value="0.00923"/>
+          <Constant key="Parameter_4372" name="k1" value="0.00923"/>
         </ListOfConstants>
-        <KineticLaw function="Function_13">
+        <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm]">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_81">
               <SourceParameter reference="ModelValue_9"/>
@@ -3013,9 +3013,9 @@ This reaction represents the binding of Smad_P and CoSmad to form the heterodime
           <Product metabolite="Metabolite_17" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4409" name="k1" value="5.12e-008"/>
+          <Constant key="Parameter_4371" name="k1" value="5.12e-08"/>
         </ListOfConstants>
-        <KineticLaw function="Function_13">
+        <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm]">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_81">
               <SourceParameter reference="ModelValue_8"/>
@@ -3098,9 +3098,9 @@ This reaction represents the dissociation of the Smad_P_CoSmad heterodimer into 
           <Product metabolite="Metabolite_13" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4408" name="k1" value="0.00923"/>
+          <Constant key="Parameter_4370" name="k1" value="0.00923"/>
         </ListOfConstants>
-        <KineticLaw function="Function_13">
+        <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm]">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_81">
               <SourceParameter reference="ModelValue_9"/>
@@ -3166,9 +3166,9 @@ This reaction represents the transport of CoSmad to the nucleus from the cytopla
           <Product metabolite="Metabolite_31" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4407" name="k1" value="0.0104"/>
+          <Constant key="Parameter_4369" name="k1" value="0.0104"/>
         </ListOfConstants>
-        <KineticLaw function="Function_13">
+        <KineticLaw function="Function_13" unitType="Default">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_81">
               <SourceParameter reference="ModelValue_6"/>
@@ -3234,9 +3234,9 @@ This reaction represents the transport of CoSmad from the nucleus to the cytopla
           <Product metabolite="Metabolite_13" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4406" name="k1" value="0.00075"/>
+          <Constant key="Parameter_4368" name="k1" value="0.00075"/>
         </ListOfConstants>
-        <KineticLaw function="Function_13">
+        <KineticLaw function="Function_13" unitType="Default">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_81">
               <SourceParameter reference="ModelValue_7"/>
@@ -3318,10 +3318,10 @@ This reaction represents the transport of CoSmad from the nucleus to the cytopla
           <Product metabolite="Metabolite_25" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4405" name="k12" value="0.0513"/>
-          <Constant key="Parameter_4404" name="k8" value="0.0104"/>
+          <Constant key="Parameter_4367" name="k12" value="0.0513"/>
+          <Constant key="Parameter_4366" name="k8" value="0.0104"/>
         </ListOfConstants>
-        <KineticLaw function="Function_40">
+        <KineticLaw function="Function_40" unitType="Default">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_258">
               <SourceParameter reference="Metabolite_15"/>
@@ -3397,9 +3397,9 @@ This reaction represents the transport of CoSmad from the nucleus to the cytopla
           <Product metabolite="Metabolite_27" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4403" name="k1" value="0.0104"/>
+          <Constant key="Parameter_4365" name="k1" value="0.0104"/>
         </ListOfConstants>
-        <KineticLaw function="Function_13">
+        <KineticLaw function="Function_13" unitType="Default">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_81">
               <SourceParameter reference="ModelValue_6"/>
@@ -3472,9 +3472,9 @@ This reaction represents the transport of CoSmad from the nucleus to the cytopla
           <Product metabolite="Metabolite_11" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4402" name="k1" value="0.00075"/>
+          <Constant key="Parameter_4364" name="k1" value="0.00075"/>
         </ListOfConstants>
-        <KineticLaw function="Function_13">
+        <KineticLaw function="Function_13" unitType="Default">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_81">
               <SourceParameter reference="ModelValue_7"/>
@@ -3547,10 +3547,10 @@ This reaction represents the transport of CoSmad from the nucleus to the cytopla
           <Product metabolite="Metabolite_29" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4401" name="k12" value="0.0513"/>
-          <Constant key="Parameter_4400" name="k8" value="0.0104"/>
+          <Constant key="Parameter_4363" name="k12" value="0.0513"/>
+          <Constant key="Parameter_4362" name="k8" value="0.0104"/>
         </ListOfConstants>
-        <KineticLaw function="Function_44">
+        <KineticLaw function="Function_44" unitType="Default">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_276">
               <SourceParameter reference="Metabolite_17"/>
@@ -3628,9 +3628,9 @@ This reaction represents the transport of CoSmad from the nucleus to the cytopla
           <Product metabolite="Metabolite_23" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4399" name="k1" value="0.00164"/>
+          <Constant key="Parameter_4361" name="k1" value="0.00164"/>
         </ListOfConstants>
-        <KineticLaw function="Function_13">
+        <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus]">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_81">
               <SourceParameter reference="ModelValue_11"/>
@@ -3705,9 +3705,9 @@ This reaction represents the transport of CoSmad from the nucleus to the cytopla
           <Product metabolite="Metabolite_25" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4398" name="k1" value="5.12e-008"/>
+          <Constant key="Parameter_4360" name="k1" value="5.12e-08"/>
         </ListOfConstants>
-        <KineticLaw function="Function_13">
+        <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus]">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_81">
               <SourceParameter reference="ModelValue_8"/>
@@ -3789,9 +3789,9 @@ All annotations are generalized as the model details general TGFb pathway dynami
           <Product metabolite="Metabolite_27" stoichiometry="2"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4397" name="k1" value="0.00923"/>
+          <Constant key="Parameter_4359" name="k1" value="0.00923"/>
         </ListOfConstants>
-        <KineticLaw function="Function_13">
+        <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus]">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_81">
               <SourceParameter reference="ModelValue_9"/>
@@ -3898,9 +3898,9 @@ Most annotations are generalized as the model details general TGFb pathway dynam
           <Product metabolite="Metabolite_29" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4396" name="k1" value="5.12e-008"/>
+          <Constant key="Parameter_4358" name="k1" value="5.12e-08"/>
         </ListOfConstants>
-        <KineticLaw function="Function_13">
+        <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus]">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_81">
               <SourceParameter reference="ModelValue_8"/>
@@ -4008,9 +4008,9 @@ All annotations are generalized as the model details general TGFb pathway dynami
           <Product metabolite="Metabolite_31" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4395" name="k1" value="0.00923"/>
+          <Constant key="Parameter_4357" name="k1" value="0.00923"/>
         </ListOfConstants>
-        <KineticLaw function="Function_13">
+        <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus]">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_81">
               <SourceParameter reference="ModelValue_9"/>
@@ -4090,11 +4090,11 @@ All annotations are generalized as the model details general TGFb pathway dynami
           <Modifier metabolite="Metabolite_29" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4394" name="h" value="2.06"/>
-          <Constant key="Parameter_4393" name="k14" value="0.038"/>
-          <Constant key="Parameter_4392" name="k15" value="28.52"/>
+          <Constant key="Parameter_4356" name="h" value="2.06"/>
+          <Constant key="Parameter_4355" name="k14" value="0.038"/>
+          <Constant key="Parameter_4354" name="k15" value="28.52"/>
         </ListOfConstants>
-        <KineticLaw function="Function_41">
+        <KineticLaw function="Function_41" unitType="Default" scalingCompartment="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus]">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_262">
               <SourceParameter reference="Metabolite_29"/>
@@ -4170,9 +4170,9 @@ All annotations are generalized as the model details general TGFb pathway dynami
           <Product metabolite="Metabolite_19" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4391" name="k1" value="0.0214"/>
+          <Constant key="Parameter_4353" name="k1" value="0.0214"/>
         </ListOfConstants>
-        <KineticLaw function="Function_13">
+        <KineticLaw function="Function_13" unitType="Default">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_81">
               <SourceParameter reference="ModelValue_16"/>
@@ -4241,9 +4241,9 @@ All annotations are generalized as the model details general TGFb pathway dynami
           <Substrate metabolite="Metabolite_19" stoichiometry="1"/>
         </ListOfSubstrates>
         <ListOfConstants>
-          <Constant key="Parameter_4390" name="k1" value="8.05e-005"/>
+          <Constant key="Parameter_4352" name="k1" value="8.05e-05"/>
         </ListOfConstants>
-        <KineticLaw function="Function_13">
+        <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm]">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_81">
               <SourceParameter reference="ModelValue_17"/>
@@ -4321,9 +4321,9 @@ All annotations are generalized as the model details general TGFb pathway dynami
           <Modifier metabolite="Metabolite_19" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4389" name="k18" value="0.0434"/>
+          <Constant key="Parameter_4351" name="k18" value="0.0434"/>
         </ListOfConstants>
-        <KineticLaw function="Function_42">
+        <KineticLaw function="Function_42" unitType="Default" scalingCompartment="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm]">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_266">
               <SourceParameter reference="Metabolite_19"/>
@@ -4384,9 +4384,9 @@ All annotations are generalized as the model details general TGFb pathway dynami
           <Substrate metabolite="Metabolite_21" stoichiometry="1"/>
         </ListOfSubstrates>
         <ListOfConstants>
-          <Constant key="Parameter_4388" name="k1" value="0.000412"/>
+          <Constant key="Parameter_4350" name="k1" value="0.000412"/>
         </ListOfConstants>
-        <KineticLaw function="Function_13">
+        <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm]">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_81">
               <SourceParameter reference="ModelValue_19"/>
@@ -4415,40 +4415,40 @@ All annotations are generalized as the model details general TGFb pathway dynami
           <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[I_Smad_TGFb_TGFbR_P]" value="0" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad]" value="9695648281899998" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad_P]" value="0" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[CoSmad]" value="1.66211113404e+016" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[CoSmad]" value="1.66211113404e+16" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad_P_Smad_P]" value="0" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad_P_CoSmad]" value="0" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[I_Smad_mRNA2]" value="0" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[I_Smad]" value="0" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_N]" value="4.9381562678e+016" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_N]" value="4.9381562678e+16" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_P_Smad_P_N]" value="0" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_P_N]" value="0" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_P_CoSmad_N]" value="0" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[CoSmad_N]" value="8.1298914165e+016" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[CoSmad_N]" value="8.1298914165e+16" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[I_Smad_mRNA1]" value="0" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[extracellular],Vector=Metabolites[TGFb]" value="277018522340000" type="Species" simulationType="fixed"/>
         </ModelParameterGroup>
         <ModelParameterGroup cn="String=Initial Global Quantities" type="Group">
-          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[h]" value="1.77613e-05" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k1]" value="2.70581e-06" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k2]" value="4.31214e-06" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k3]" value="0.25089" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k4]" value="0.00105254" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k7]" value="8.96039e-06" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k8]" value="0.00775449" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k9]" value="0.000580404" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k10]" value="0.000164576" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k11]" value="31.4093" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k12]" value="2.16575" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k13]" value="0.00145202" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k5]" value="0.0117673" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k6]" value="1.06713e-06" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k14]" value="0.0593576" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k15]" value="1.93725e-06" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k16]" value="0.0163616" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k17]" value="1.00024e-06" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k18]" value="0.042215" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k19]" value="0.000174697" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[h]" value="2.06" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k1]" value="0.00446" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k2]" value="4.39e-06" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k3]" value="0.324" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k4]" value="0.00192" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k7]" value="9.35e-06" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k8]" value="0.0104" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k9]" value="0.00075" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k10]" value="5.12e-08" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k11]" value="0.009229999999999999" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k12]" value="0.0513" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k13]" value="0.00164" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k5]" value="0.000549" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k6]" value="1.29e-05" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k14]" value="0.038" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k15]" value="28.52" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k16]" value="0.0214" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k17]" value="8.050000000000001e-05" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k18]" value="0.0434" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k19]" value="0.000412" type="ModelValue" simulationType="fixed"/>
         </ModelParameterGroup>
         <ModelParameterGroup cn="String=Kinetic Parameters" type="Group">
           <ModelParameterGroup cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Reactions[r1]" type="Reaction">
@@ -4459,7 +4459,7 @@ All annotations are generalized as the model details general TGFb pathway dynami
             </ModelParameter>
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Reactions[r2]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Reactions[r2],ParameterGroup=Parameters,Parameter=k1" value="4.39e-006" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Reactions[r2],ParameterGroup=Parameters,Parameter=k1" value="4.39e-06" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k2],Reference=InitialValue&gt;
               </InitialExpression>
@@ -4487,14 +4487,14 @@ All annotations are generalized as the model details general TGFb pathway dynami
             </ModelParameter>
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Reactions[r6]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Reactions[r6],ParameterGroup=Parameters,Parameter=k1" value="1.29e-005" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Reactions[r6],ParameterGroup=Parameters,Parameter=k1" value="1.29e-05" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k6],Reference=InitialValue&gt;
               </InitialExpression>
             </ModelParameter>
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Reactions[r7]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Reactions[r7],ParameterGroup=Parameters,Parameter=k7" value="9.35e-006" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Reactions[r7],ParameterGroup=Parameters,Parameter=k7" value="9.35e-06" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k7],Reference=InitialValue&gt;
               </InitialExpression>
@@ -4515,7 +4515,7 @@ All annotations are generalized as the model details general TGFb pathway dynami
             </ModelParameter>
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Reactions[r10]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Reactions[r10],ParameterGroup=Parameters,Parameter=k1" value="5.12e-008" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Reactions[r10],ParameterGroup=Parameters,Parameter=k1" value="5.12e-08" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k10],Reference=InitialValue&gt;
               </InitialExpression>
@@ -4529,7 +4529,7 @@ All annotations are generalized as the model details general TGFb pathway dynami
             </ModelParameter>
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Reactions[r12]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Reactions[r12],ParameterGroup=Parameters,Parameter=k1" value="5.12e-008" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Reactions[r12],ParameterGroup=Parameters,Parameter=k1" value="5.12e-08" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k10],Reference=InitialValue&gt;
               </InitialExpression>
@@ -4602,7 +4602,7 @@ All annotations are generalized as the model details general TGFb pathway dynami
             </ModelParameter>
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Reactions[r21]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Reactions[r21],ParameterGroup=Parameters,Parameter=k1" value="5.12e-008" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Reactions[r21],ParameterGroup=Parameters,Parameter=k1" value="5.12e-08" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k10],Reference=InitialValue&gt;
               </InitialExpression>
@@ -4616,7 +4616,7 @@ All annotations are generalized as the model details general TGFb pathway dynami
             </ModelParameter>
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Reactions[r23]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Reactions[r23],ParameterGroup=Parameters,Parameter=k1" value="5.12e-008" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Reactions[r23],ParameterGroup=Parameters,Parameter=k1" value="5.12e-08" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k10],Reference=InitialValue&gt;
               </InitialExpression>
@@ -4654,7 +4654,7 @@ All annotations are generalized as the model details general TGFb pathway dynami
             </ModelParameter>
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Reactions[r27]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Reactions[r27],ParameterGroup=Parameters,Parameter=k1" value="8.050000000000001e-005" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Reactions[r27],ParameterGroup=Parameters,Parameter=k1" value="8.050000000000001e-05" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k17],Reference=InitialValue&gt;
               </InitialExpression>
@@ -4722,7 +4722,7 @@ All annotations are generalized as the model details general TGFb pathway dynami
       <StateTemplateVariable objectReference="ModelValue_19"/>
     </StateTemplate>
     <InitialState type="initialState">
-      0 0 0 0 0 1.66211113404e+016 4.9381562678e+016 0 0 0 0 0 9695648281899998 8.1298914165e+016 1398943537817000 0 0 0 277018522340000 2.3 1 1 2.06 0.00446 4.39e-006 0.324 0.00192 9.35e-006 0.0104 0.00075 5.12e-008 0.009229999999999999 0.0513 0.00164 0.000549 1.29e-005 0.038 28.52 0.0214 8.050000000000001e-005 0.0434 0.000412 
+      0 0 0 0 0 1.66211113404e+16 4.9381562678e+16 0 0 0 0 0 9695648281899998 8.1298914165e+16 1398943537817000 0 0 0 277018522340000 2.3 1 1 2.06 0.00446 4.39e-06 0.324 0.00192 9.35e-06 0.0104 0.00075 5.12e-08 0.009229999999999999 0.0513 0.00164 0.000549 1.29e-05 0.038 28.52 0.0214 8.050000000000001e-05 0.0434 0.000412 
     </InitialState>
   </Model>
   <ListOfTasks>
@@ -4733,7 +4733,7 @@ All annotations are generalized as the model details general TGFb pathway dynami
         <Parameter name="StabilityAnalysisRequested" type="bool" value="1"/>
       </Problem>
       <Method name="Enhanced Newton" type="EnhancedNewton">
-        <Parameter name="Resolution" type="unsignedFloat" value="1e-009"/>
+        <Parameter name="Resolution" type="unsignedFloat" value="1e-09"/>
         <Parameter name="Derivation Factor" type="unsignedFloat" value="0.001"/>
         <Parameter name="Use Newton" type="bool" value="1"/>
         <Parameter name="Use Integration" type="bool" value="1"/>
@@ -4745,14 +4745,16 @@ All annotations are generalized as the model details general TGFb pathway dynami
       </Method>
     </Task>
     <Task key="Task_15" name="Time-Course" type="timeCourse" scheduled="true" updateModel="false">
-      <Report reference="Report_18" target="/home/b3053674/Documents/PyCoTools/PyCoTools/Examples/Celliere2011Example/Celliere2011_TimeCourse.txt" append="false" confirmOverwrite="false" type="Deterministic(LSODA)" name="Deterministic (LSODA)"/>
+      <Report reference="Report_18" target="" append="false" confirmOverwrite="false" type="Deterministic(LSODA)" name="Deterministic (LSODA)"/>
       <Problem type="Deterministic(LSODA)" name="Deterministic (LSODA)">
+        <Parameter name="AutomaticStepSize" type="bool" value="0"/>
         <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
         <Parameter name="StepSize" type="float" value="100"/>
         <Parameter name="Duration" type="float" value="1000"/>
         <Parameter name="TimeSeriesRequested" type="bool" value="1"/>
         <Parameter name="OutputStartTime" type="float" value="0.0"/>
         <Parameter name="Output Event" type="bool" value="false"/>
+        <Parameter name="Start in Steady State" type="bool" value="0"/>
         <Parameter name="Continue on Simultaneous Events" type="bool" value="0"/>
       </Problem>
       <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
@@ -4760,14 +4762,14 @@ All annotations are generalized as the model details general TGFb pathway dynami
         <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-6"/>
         <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
         <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+        <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
       </Method>
     </Task>
     <Task key="Task_16" name="Scan" type="scan" scheduled="false" updateModel="false">
-      <Report reference="Report_41" target="" append="false" confirmOverwrite="false"/>
       <Problem>
         <Parameter name="Subtask" type="unsignedInteger" value="5"/>
         <ParameterGroup name="ScanItems">
-          </ParameterGroup>
+        </ParameterGroup>
         <Parameter name="Output in subtask" type="bool" value="0"/>
         <Parameter name="Adjust initial conditions" type="bool" value="0"/>
       </Problem>
@@ -4802,35 +4804,205 @@ All annotations are generalized as the model details general TGFb pathway dynami
         <Parameter name="Seed" type="unsignedInteger" value="0"/>
       </Method>
     </Task>
-    <Task key="Task_19" name="Parameter Estimation" type="parameterFitting" scheduled="false" updateModel="false">
-      <Report reference="Report_92" target="D:\MPhil\Python\My_Python_Modules\Modelling_Tools\PyCoTools\PyCoTools\Examples\Celliere2011Example\Celliere2011_PE_results.txt" append="0" confirmOverwrite="0"/>
+    <Task key="Task_19" name="Parameter Estimation" type="parameterFitting" scheduled="false" updateModel="false" updatemodel="false">
+      <Report reference="Report_32" target="/home/b3053674/Documents/PyCoTools/PyCoTools/Examples/Celliere2011Example/Celliere2011_PE_results.txt" append="0" confirmOverwrite="0"/>
       <Problem>
         <Parameter name="Maximize" type="bool" value="0"/>
-        <Parameter name="Randomize Start Values" type="bool" value="false"/>
-        <Parameter name="Calculate Statistics" type="bool" value="0"/>
+        <Parameter name="Randomize Start Values" type="bool" value="0"/>
+        <Parameter name="Calculate Statistics" type="bool" value="1"/>
         <ParameterGroup name="OptimizationItemList">
-          <ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k13],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k12],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k11],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k10],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k17],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k16],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k15],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k14],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[h],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k19],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k18],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k3],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k2],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k1],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k7],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k6],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k5],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k4],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k9],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k8],Reference=InitialValue"/></ParameterGroup></ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[TGFbR],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="1010"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[CoSmad],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="12000"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad_P],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="0"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_P_N],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="0"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[I_Smad_mRNA1],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="0"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[I_Smad_mRNA2],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="0"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[TGFb_TGFbR],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="0"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad_P_Smad_P],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="0"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad_P_CoSmad],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="0"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_P_Smad_P_N],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="0"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[I_Smad],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="0"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[CoSmad_N],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="135000"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="6999.999999999999"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[TGFb_TGFbR_P],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="0"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_N],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="82000"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_P_CoSmad_N],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="0"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[I_Smad_TGFb_TGFbR_P],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="0"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+        <ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[TGFbR],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[CoSmad],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad_P],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_P_N],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[I_Smad_mRNA1],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[I_Smad_mRNA2],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[TGFb_TGFbR],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad_P_Smad_P],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad_P_CoSmad],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_P_Smad_P_N],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[I_Smad],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[CoSmad_N],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[TGFb_TGFbR_P],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_N],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_P_CoSmad_N],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[I_Smad_TGFb_TGFbR_P],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[TGFbR],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[CoSmad],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad_P],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_P_N],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[I_Smad_mRNA1],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[I_Smad_mRNA2],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[TGFb_TGFbR],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad_P_Smad_P],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad_P_CoSmad],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_P_Smad_P_N],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[I_Smad],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[CoSmad_N],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[TGFb_TGFbR_P],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_N],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_P_CoSmad_N],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[I_Smad_TGFb_TGFbR_P],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k13],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k12],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k11],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k10],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k17],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k16],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k15],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k14],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[h],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k19],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k18],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k3],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k2],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k1],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k7],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k6],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k5],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k4],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k9],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k8],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[TGFbR],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[CoSmad],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad_P],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_P_N],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[I_Smad_mRNA1],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[I_Smad_mRNA2],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[TGFb_TGFbR],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad_P_Smad_P],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad_P_CoSmad],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_P_Smad_P_N],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[I_Smad],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[CoSmad_N],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[TGFb_TGFbR_P],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_N],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_P_CoSmad_N],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[I_Smad_TGFb_TGFbR_P],Reference=InitialConcentration"/></ParameterGroup></ParameterGroup>
         <ParameterGroup name="OptimizationConstraintList">
         </ParameterGroup>
         <Parameter name="Steady-State" type="cn" value="CN=Root,Vector=TaskList[Steady-State]"/>
         <Parameter name="Time-Course" type="cn" value="CN=Root,Vector=TaskList[Time-Course]"/>
-        <Parameter name="Create Parameter Sets" type="bool" value="0"/>
+        <Parameter name="Create Parameter Sets" type="bool" value="1"/>
         <ParameterGroup name="Experiment Set">
-          <ParameterGroup name="Experiment_0"><Parameter name="Data is Row Oriented" type="bool" value="1"/><Parameter name="Experiment Type" type="unsignedInteger" value="1"/><Parameter name="File Name" type="file" value="NoisyCelliere2011TimeCourseOutput.txt"/><Parameter name="First Row" type="unsignedInteger" value="1"/><Parameter name="Key" type="key" value="Experiment_0"/><Parameter name="Last Row" type="unsignedInteger" value="52"/><Parameter name="Normalize Weights per Experiment" type="bool" value="1"/><Parameter name="Number of Columns" type="unsignedInteger" value="19"/><ParameterGroup name="Object Map"><ParameterGroup name="0"><Parameter name="Role" type="unsignedInteger" value="3"/></ParameterGroup><ParameterGroup name="1"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[TGFbR],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="2"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[CoSmad],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="3"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad_P],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="4"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_P_N],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="5"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[I_Smad_mRNA1],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="6"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[I_Smad_mRNA2],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="7"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[TGFb_TGFbR],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="8"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad_P_Smad_P],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="9"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad_P_CoSmad],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="10"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_P_Smad_P_N],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="11"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[I_Smad],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="12"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[extracellular],Vector=Metabolites[TGFb],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="13"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[CoSmad_N],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="14"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="15"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[TGFb_TGFbR_P],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="16"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_N],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="17"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_P_CoSmad_N],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="18"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[I_Smad_TGFb_TGFbR_P],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup></ParameterGroup><Parameter name="Row containing Names" type="unsignedInteger" value="1"/><Parameter name="Separator" type="string" value="&#9;"/><Parameter name="Weight Method" type="unsignedInteger" value="1"/></ParameterGroup></ParameterGroup>
+          <ParameterGroup name="Experiment_0"><Parameter name="Data is Row Oriented" type="bool" value="1"/><Parameter name="Experiment Type" type="unsignedInteger" value="1"/><Parameter name="File Name" type="file" value="Celliere2011_TimeCourse.txt"/><Parameter name="First Row" type="unsignedInteger" value="1"/><Parameter name="Key" type="key" value="Experiment_0"/><Parameter name="Last Row" type="unsignedInteger" value="12"/><Parameter name="Normalize Weights per Experiment" type="bool" value="1"/><Parameter name="Number of Columns" type="unsignedInteger" value="19"/><ParameterGroup name="Object Map"><ParameterGroup name="0"><Parameter name="Role" type="unsignedInteger" value="3"/></ParameterGroup><ParameterGroup name="1"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[TGFbR],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="2"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[CoSmad],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="3"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad_P],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="4"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_P_N],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="5"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[I_Smad_mRNA1],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="6"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[I_Smad_mRNA2],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="7"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[TGFb_TGFbR],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="8"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad_P_Smad_P],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="9"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad_P_CoSmad],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="10"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_P_Smad_P_N],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="11"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[I_Smad],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="12"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[extracellular],Vector=Metabolites[TGFb],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="13"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[CoSmad_N],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="14"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="15"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[TGFb_TGFbR_P],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="16"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_N],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="17"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_P_CoSmad_N],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="18"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[I_Smad_TGFb_TGFbR_P],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup></ParameterGroup><Parameter name="Row containing Names" type="unsignedInteger" value="1"/><Parameter name="separator" type="string" value="&#9;"/><Parameter name="Weight Method" type="unsignedInteger" value="2"/></ParameterGroup></ParameterGroup>
         <ParameterGroup name="Validation Set">
           <Parameter name="Threshold" type="unsignedInteger" value="5"/>
           <Parameter name="Weight" type="unsignedFloat" value="1"/>
         </ParameterGroup>
       </Problem>
-      <Method name="Current Solution Statistics" type="CurrentSolutionStatistics"/></Task>
+      <Method name="Genetic Algorithm" type="GeneticAlgorithm"><Parameter name="Number of Generations" type="unsignedInteger" value="200"/><Parameter name="Population Size" type="unsignedInteger" value="50"/><Parameter name="Random Number Generator" type="unsignedInteger" value="1"/><Parameter name="Seed" type="unsignedInteger" value="0"/></Method></Task>
     <Task key="Task_20" name="Metabolic Control Analysis" type="metabolicControlAnalysis" scheduled="false" updateModel="false">
       <Report reference="Report_13" target="" append="1" confirmOverwrite="1"/>
       <Problem>
         <Parameter name="Steady-State" type="key" value="Task_14"/>
       </Problem>
       <Method name="MCA Method (Reder)" type="MCAMethod(Reder)">
-        <Parameter name="Modulation Factor" type="unsignedFloat" value="1e-009"/>
-        <Parameter name="Use Reeder" type="bool" value="1"/>
+        <Parameter name="Modulation Factor" type="unsignedFloat" value="1e-09"/>
+        <Parameter name="Use Reder" type="bool" value="1"/>
         <Parameter name="Use Smallbone" type="bool" value="1"/>
       </Method>
     </Task>
@@ -4844,8 +5016,8 @@ All annotations are generalized as the model details general TGFb pathway dynami
       <Method name="Wolf Method" type="WolfMethod">
         <Parameter name="Orthonormalization Interval" type="unsignedFloat" value="1"/>
         <Parameter name="Overall time" type="unsignedFloat" value="1000"/>
-        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-006"/>
-        <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-012"/>
+        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+        <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
         <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
       </Method>
     </Task>
@@ -4859,7 +5031,7 @@ All annotations are generalized as the model details general TGFb pathway dynami
         <Parameter name="OutputStartTime" type="float" value="0"/>
       </Problem>
       <Method name="ILDM (LSODA,Deuflhard)" type="TimeScaleSeparation(ILDM,Deuflhard)">
-        <Parameter name="Deuflhard Tolerance" type="unsignedFloat" value="1e-006"/>
+        <Parameter name="Deuflhard Tolerance" type="unsignedFloat" value="1e-06"/>
       </Method>
     </Task>
     <Task key="Task_23" name="Sensitivities" type="sensitivities" scheduled="false" updateModel="false">
@@ -4875,11 +5047,15 @@ All annotations are generalized as the model details general TGFb pathway dynami
             <Parameter name="SingleObject" type="cn" value=""/>
             <Parameter name="ObjectListType" type="unsignedInteger" value="41"/>
           </ParameterGroup>
+          <ParameterGroup name="Variables">
+            <Parameter name="SingleObject" type="cn" value=""/>
+            <Parameter name="ObjectListType" type="unsignedInteger" value="0"/>
+          </ParameterGroup>
         </ParameterGroup>
       </Problem>
       <Method name="Sensitivities Method" type="SensitivitiesMethod">
         <Parameter name="Delta factor" type="unsignedFloat" value="0.001"/>
-        <Parameter name="Delta minimum" type="unsignedFloat" value="1e-012"/>
+        <Parameter name="Delta minimum" type="unsignedFloat" value="1e-12"/>
       </Method>
     </Task>
     <Task key="Task_24" name="Moieties" type="moieties" scheduled="false" updateModel="false">
@@ -4890,13 +5066,14 @@ All annotations are generalized as the model details general TGFb pathway dynami
     </Task>
     <Task key="Task_25" name="Cross Section" type="crosssection" scheduled="false" updateModel="false">
       <Problem>
+        <Parameter name="AutomaticStepSize" type="bool" value="0"/>
         <Parameter name="StepNumber" type="unsignedInteger" value="100"/>
         <Parameter name="StepSize" type="float" value="0.01"/>
         <Parameter name="Duration" type="float" value="1"/>
         <Parameter name="TimeSeriesRequested" type="bool" value="1"/>
         <Parameter name="OutputStartTime" type="float" value="0"/>
         <Parameter name="Output Event" type="bool" value="0"/>
-        <Parameter name="Continue on Simultaneous Events" type="bool" value="0"/>
+        <Parameter name="Start in Steady State" type="bool" value="0"/>
         <Parameter name="LimitCrossings" type="bool" value="0"/>
         <Parameter name="NumCrossingsLimit" type="unsignedInteger" value="0"/>
         <Parameter name="LimitOutTime" type="bool" value="0"/>
@@ -4904,20 +5081,22 @@ All annotations are generalized as the model details general TGFb pathway dynami
         <Parameter name="PositiveDirection" type="bool" value="1"/>
         <Parameter name="NumOutCrossingsLimit" type="unsignedInteger" value="0"/>
         <Parameter name="LimitUntilConvergence" type="bool" value="0"/>
-        <Parameter name="ConvergenceTolerance" type="float" value="1e-006"/>
+        <Parameter name="ConvergenceTolerance" type="float" value="1e-06"/>
         <Parameter name="Threshold" type="float" value="0"/>
         <Parameter name="DelayOutputUntilConvergence" type="bool" value="0"/>
-        <Parameter name="OutputConvergenceTolerance" type="float" value="1e-006"/>
+        <Parameter name="OutputConvergenceTolerance" type="float" value="1e-06"/>
         <ParameterText name="TriggerExpression" type="expression">
           
         </ParameterText>
         <Parameter name="SingleVariable" type="cn" value=""/>
+        <Parameter name="Continue on Simultaneous Events" type="bool" value="0"/>
       </Problem>
       <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
         <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
-        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-006"/>
-        <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-012"/>
+        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+        <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
         <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+        <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
       </Method>
     </Task>
     <Task key="Task_26" name="Linear Noise Approximation" type="linearNoiseApproximation" scheduled="false" updateModel="false">
@@ -5079,7 +5258,7 @@ All annotations are generalized as the model details general TGFb pathway dynami
         <Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[I_Smad_TGFb_TGFbR_P],Reference=Concentration"/>
       </Table>
     </Report>
-    <Report taskType="parameterFitting" separator="&#9;" precision="6" key="Report_92" name="parameter_estimation"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[TGFbR],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[CoSmad],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad_P],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_P_N],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[I_Smad_mRNA1],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[I_Smad_mRNA2],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[TGFb_TGFbR],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad_P_Smad_P],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad_P_CoSmad],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_P_Smad_P_N],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[I_Smad],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[extracellular],Vector=Metabolites[TGFb],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[CoSmad_N],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[TGFb_TGFbR_P],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_N],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_P_CoSmad_N],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[I_Smad_TGFb_TGFbR_P],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k13],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k12],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k11],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k10],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k17],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k16],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k15],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k14],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[h],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k19],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k18],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k3],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k2],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k1],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k7],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k6],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k5],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k4],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k9],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k8],Reference=InitialValue"/><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/></Table></Report></ListOfReports>
+    <Report taskType="parameterFitting" separator="&#9;" precision="6" key="Report_32" name="parameter_estimation"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[TGFbR],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[CoSmad],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad_P],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_P_N],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[I_Smad_mRNA1],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[I_Smad_mRNA2],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[TGFb_TGFbR],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad_P_Smad_P],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad_P_CoSmad],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_P_Smad_P_N],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[I_Smad],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[extracellular],Vector=Metabolites[TGFb],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[CoSmad_N],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[Smad],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[TGFb_TGFbR_P],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_N],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[nucleus],Vector=Metabolites[Smad_P_CoSmad_N],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Compartments[cytoplasm],Vector=Metabolites[I_Smad_TGFb_TGFbR_P],Reference=InitialConcentration"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k13],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k12],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k11],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k10],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k17],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k16],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k15],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k14],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[h],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k19],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k18],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k3],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k2],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k1],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k7],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k6],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k5],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k4],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k9],Reference=InitialValue"/><Object cn="CN=Root,Model=Celliere2011 - Plasticity of TGF-beta Signalling,Vector=Values[k8],Reference=InitialValue"/><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/></Table></Report></ListOfReports>
   <ListOfPlots>
     <PlotSpecification name="Concentrations, Volumes, and Global Quantity Values" type="Plot2D" active="1">
       <Parameter name="log X" type="bool" value="0"/>
@@ -5369,4 +5548,16 @@ All annotations are generalized as the model details general TGFb pathway dynami
     <SBMLMap SBMLid="r8" COPASIkey="Reaction_7"/>
     <SBMLMap SBMLid="r9" COPASIkey="Reaction_8"/>
   </SBMLReference>
+  <ListOfUnitDefinitions>
+    <UnitDefinition key="Unit_0" name="meter" symbol="m">
+      <Expression>
+        m
+      </Expression>
+    </UnitDefinition>
+    <UnitDefinition key="Unit_2" name="second" symbol="s">
+      <Expression>
+        s
+      </Expression>
+    </UnitDefinition>
+  </ListOfUnitDefinitions>
 </COPASI>
