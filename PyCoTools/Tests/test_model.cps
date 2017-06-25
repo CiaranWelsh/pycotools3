@@ -153,7 +153,7 @@
                   <Product metabolite="Metabolite_9" stoichiometry="1"/>
                 </ListOfProducts>
                 <ListOfConstants>
-                  <Constant key="Parameter_4438" name="k1" value="0.1"/>
+                  <Constant key="Parameter_4438" name="k1" value="10.0"/>
                 </ListOfConstants>
                 <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=New Model,Vector=Compartments[nuc]">
                   <ListOfCallParameters>
@@ -269,9 +269,7 @@
               <StateTemplateVariable objectReference="ModelValue_1"/>
               <StateTemplateVariable objectReference="ModelValue_2"/>
             </StateTemplate>
-            <InitialState type="initialState">
-              0 6.022140857000001e+021 6.022140856999989e+023 6.022140856999983e+024 6.022140857000001e+022 6.022140856999986e+020 6.022140857000001e+025 1.999999999999998 1 5 50 1 
-            </InitialState>
+            <InitialState type="initialState">0 3.011070895e+21 6.022140857e+23 6.022140857e+24 6.022140857e+22 6.022140857e+20 6.022140857e+25 1.999999999999998 1 5 15.0 1</InitialState>
           </Model>
           <ListOfTasks>
             <Task key="Task_14" name="Steady-State" type="steadyState" scheduled="false" updateModel="false">
@@ -292,25 +290,30 @@
                 <Parameter name="Maximum duration for backward integration" type="unsignedFloat" value="1000000"/>
               </Method>
             </Task>
+<<<<<<< HEAD
             <Task key="Task_15" name="Time-Course" type="timeCourse" scheduled="true" updateModel="false">
 <<<<<<< HEAD
               <Report append="false" confirmOverwrite="false" reference="Report_80" target="C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\TimeCourse2.txt" type="Deterministic(LSODA)" name="Deterministic (LSODA)"/><Problem type="Deterministic(LSODA)" name="Deterministic (LSODA)">
 =======
               <Report append="false" confirmOverwrite="false" reference="Report_62" target="" type="Deterministic(LSODA)" name="Deterministic (LSODA)"/><Problem type="Deterministic(LSODA)" name="Deterministic (LSODA)">
 >>>>>>> origin/CopasiVersion19
+=======
+            <Task key="Task_15" name="Time-Course" type="timeCourse" scheduled="false" updateModel="false">
+              <Problem>
+>>>>>>> 7759ebc9c3b0729eee95d01e8a6cddf4a1d82926
                 <Parameter name="AutomaticStepSize" type="bool" value="0"/>
-                <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
-                <Parameter name="StepSize" type="float" value="100"/>
+                <Parameter name="StepNumber" type="unsignedInteger" value="100"/>
+                <Parameter name="StepSize" type="float" value="10"/>
                 <Parameter name="Duration" type="float" value="1000"/>
                 <Parameter name="TimeSeriesRequested" type="bool" value="1"/>
-                <Parameter name="OutputStartTime" type="float" value="0.0"/>
-                <Parameter name="Output Event" type="bool" value="false"/>
+                <Parameter name="OutputStartTime" type="float" value="0"/>
+                <Parameter name="Output Event" type="bool" value="0"/>
                 <Parameter name="Start in Steady State" type="bool" value="0"/>
               </Problem>
               <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
                 <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
-                <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-6"/>
-                <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+                <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-006"/>
+                <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-012"/>
                 <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
                 <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
               </Method>
@@ -356,6 +359,7 @@
             </Task>
             <Task key="Task_19" name="Parameter Estimation" type="parameterFitting" scheduled="false" updateModel="false">
 <<<<<<< HEAD
+<<<<<<< HEAD
               <Report reference="Report_12" target="" append="1" confirmOverwrite="1"/>
               <Problem>
                 <Parameter name="Maximize" type="bool" value="0"/>
@@ -365,13 +369,20 @@
                 </ParameterGroup>
 =======
               <Report reference="Report_48" target="/home/b3053674/Documents/PyCoTools/PyCoTools/Tests/ParameterFit.txt" append="0" confirmOverwrite="0"/>
+=======
+              <Report reference="Report_12" target="" append="1" confirmOverwrite="1"/>
+>>>>>>> 7759ebc9c3b0729eee95d01e8a6cddf4a1d82926
               <Problem>
                 <Parameter name="Maximize" type="bool" value="0"/>
-                <Parameter name="Randomize Start Values" type="bool" value="false"/>
-                <Parameter name="Calculate Statistics" type="bool" value="0"/>
+                <Parameter name="Randomize Start Values" type="bool" value="0"/>
+                <Parameter name="Calculate Statistics" type="bool" value="1"/>
                 <ParameterGroup name="OptimizationItemList">
+<<<<<<< HEAD
                 <ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Reactions[reaction_3],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Reactions[reaction_4],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Reactions[reaction_1],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Reactions[reaction_2],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Reactions[reaction],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Values[two],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Values[three],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[E],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[D],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[F],Reference=InitialConcentration"/></ParameterGroup></ParameterGroup>
 >>>>>>> origin/CopasiVersion19
+=======
+                </ParameterGroup>
+>>>>>>> 7759ebc9c3b0729eee95d01e8a6cddf4a1d82926
                 <ParameterGroup name="OptimizationConstraintList">
                 </ParameterGroup>
                 <Parameter name="Steady-State" type="cn" value="CN=Root,Vector=TaskList[Steady-State]"/>
@@ -379,16 +390,23 @@
                 <Parameter name="Create Parameter Sets" type="bool" value="0"/>
                 <ParameterGroup name="Experiment Set">
 <<<<<<< HEAD
+<<<<<<< HEAD
                 </ParameterGroup>
 =======
                 <ParameterGroup name="Experiment_0"><Parameter name="Data is Row Oriented" type="bool" value="1"/><Parameter name="Experiment Type" type="unsignedInteger" value="1"/><Parameter name="File Name" type="file" value="TimeCourse1.txt"/><Parameter name="First Row" type="unsignedInteger" value="1"/><Parameter name="Key" type="key" value="Experiment_0"/><Parameter name="Last Row" type="unsignedInteger" value="12"/><Parameter name="Normalize Weights per Experiment" type="bool" value="1"/><Parameter name="Number of Columns" type="unsignedInteger" value="10"/><ParameterGroup name="Object Map"><ParameterGroup name="0"><Parameter name="Role" type="unsignedInteger" value="3"/></ParameterGroup><ParameterGroup name="1"><Parameter name="Object CN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="2"><Parameter name="Object CN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="3"><Parameter name="Object CN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="4"><Parameter name="Object CN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[E],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="5"><Parameter name="Object CN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[D],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="6"><Parameter name="Object CN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[F],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="7"><Parameter name="Object CN" type="cn" value="CN=Root,Model=New Model,Vector=Values[assignment_global_var],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="8"><Parameter name="Object CN" type="cn" value="CN=Root,Model=New Model,Vector=Values[two],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="9"><Parameter name="Object CN" type="cn" value="CN=Root,Model=New Model,Vector=Values[three],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup></ParameterGroup><Parameter name="Row containing Names" type="unsignedInteger" value="1"/><Parameter name="Separator" type="string" value="&#9;"/><Parameter name="Weight Method" type="unsignedInteger" value="2"/></ParameterGroup></ParameterGroup>
 >>>>>>> origin/CopasiVersion19
+=======
+                </ParameterGroup>
+>>>>>>> 7759ebc9c3b0729eee95d01e8a6cddf4a1d82926
                 <ParameterGroup name="Validation Set">
                   <Parameter name="Weight" type="unsignedFloat" value="1"/>
                   <Parameter name="Threshold" type="unsignedInteger" value="5"/>
                 </ParameterGroup>
               </Problem>
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 7759ebc9c3b0729eee95d01e8a6cddf4a1d82926
               <Method name="Evolutionary Programming" type="EvolutionaryProgram">
                 <Parameter name="Number of Generations" type="unsignedInteger" value="200"/>
                 <Parameter name="Population Size" type="unsignedInteger" value="20"/>
@@ -396,9 +414,12 @@
                 <Parameter name="Seed" type="unsignedInteger" value="0"/>
               </Method>
             </Task>
+<<<<<<< HEAD
 =======
               <Method name="Current Solution Statistics" type="CurrentSolutionStatistics"/></Task>
 >>>>>>> origin/CopasiVersion19
+=======
+>>>>>>> 7759ebc9c3b0729eee95d01e8a6cddf4a1d82926
             <Task key="Task_20" name="Metabolic Control Analysis" type="metabolicControlAnalysis" scheduled="false" updateModel="false">
               <Report reference="Report_13" target="" append="1" confirmOverwrite="1"/>
               <Problem>
@@ -637,10 +658,14 @@
               </Footer>
             </Report>
 <<<<<<< HEAD
+<<<<<<< HEAD
           <Report taskType="Time-Course" separator="&#9;" precision="6" key="Report_80" name="Time-Course"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=New Model,Reference=Time"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[E],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[D],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[F],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Values[assignment_global_var],Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Values[two],Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Values[three],Reference=Value"/></Table></Report></ListOfReports>
 =======
           <Report taskType="Time-Course" separator="&#9;" precision="6" key="Report_62" name="Time-Course"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=New Model,Reference=Time"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[E],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[D],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[F],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Values[assignment_global_var],Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Values[two],Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Values[three],Reference=Value"/></Table></Report><Report taskType="parameterFitting" separator="&#9;" precision="6" key="Report_48" name="parameter_estimation"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=InitialConcentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=InitialConcentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=InitialConcentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[E],Reference=InitialConcentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[D],Reference=InitialConcentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[F],Reference=InitialConcentration"/><Object cn="CN=Root,Model=New Model,Vector=Values[assignment_global_var],Reference=InitialValue"/><Object cn="CN=Root,Model=New Model,Vector=Values[two],Reference=InitialValue"/><Object cn="CN=Root,Model=New Model,Vector=Values[three],Reference=InitialValue"/><Object cn="CN=Root,Model=New Model,Vector=Reactions[reaction_3],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Reactions[reaction_4],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Reactions[reaction_1],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Reactions[reaction_2],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Reactions[reaction],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/></Table></Report></ListOfReports>
 >>>>>>> origin/CopasiVersion19
+=======
+          </ListOfReports>
+>>>>>>> 7759ebc9c3b0729eee95d01e8a6cddf4a1d82926
           <ListOfPlots>
             <PlotSpecification name="Concentrations, Volumes, and Global Quantity Values" type="Plot2D" active="1">
               <Parameter name="log X" type="bool" value="0"/>

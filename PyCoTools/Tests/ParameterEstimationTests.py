@@ -36,10 +36,10 @@ import time
 import re
 import shutil 
 import scipy
-import TestModels
+import Testmodels
 import lxml.etree as etree
 
-MODEL_STRING = TestModels.TestModels.get_model1()
+MODEL_STRING = Testmodels.Testmodels.get_model1()
 
 
 
@@ -64,42 +64,42 @@ class ParameterEstimationTests(unittest.TestCase):
         self.GMQ=PyCoTools.pycopi.GetModelQuantities(self.copasi_file)
             
         self.parameter_estimation_options={#report variables
-                 'Metabolites':self.GMQ.get_metabolites().keys(),
-                 'GlobalQuantities':self.GMQ.get_global_quantities().keys(),
-                 'QuantityType':'concentration',
-                 'ReportName':os.path.join(os.path.dirname(self.copasi_file),'PE_testing.txt'),
-                 'Append': 'true', 
-                 'ConfirmOverwrite': 'true',
-                 'ConfigFilename':os.path.join(os.path.dirname(self.copasi_file),'ItemTemplate.xlsx'),
-                 'OverwriteConfigFile':'true',
+                 'metabolites':self.GMQ.get_metabolites().keys(),
+                 'global_quantities':self.GMQ.get_global_quantities().keys(),
+                 'quantity_type':'concentration',
+                 'report_name':os.path.join(os.path.dirname(self.copasi_file),'PE_testing.txt'),
+                 'append': 'true', 
+                 'confirm_overwrite': 'true',
+                 'config_filename':os.path.join(os.path.dirname(self.copasi_file),'ItemTemplate.xlsx'),
+                 'overwrite_config_file':'true',
                  #
-                 'UpdateModel':'true',
-                 'RandomizeStartValues':'true',
-                 'CreateParameterSets':'false',
-                 'CalculateStatistics':'true',
+                 'update_model':'true',
+                 'randomize_start_values':'true',
+                 'create_parameter_sets':'false',
+                 'calculate_statistics':'true',
                  #method options
-                 'Method':'ScatterSearch',
+                 'method':'ScatterSearch',
                  #'DifferentialEvolution',
-                 'NumberOfGenerations':64,
-                 'PopulationSize':10,
-                 'RandomNumberGenerator':4,
-                 'Seed':0,
-                 'Pf':0.675,
-                 'IterationLimit':1140,
-                 'Tolerance':0.1,
-                 'Rho':0.2,
-                 'Scale':100,
-                 'SwarmSize':500,
-                 'StdDeviation':0.0000004641,
-                 'NumberOfIterations':1516400000,
-                 'StartTemperature':100,
-                 'CoolingFactor':0.85498,
+                 'number_of_generations':64,
+                 'population_size':10,
+                 'random_number_generator':4,
+                 'seed':0,
+                 'pf':0.675,
+                 'iteration_limit':1140,
+                 'tolerance':0.1,
+                 'rho':0.2,
+                 'scale':100,
+                 'swarm_size':500,
+                 'std_deviation':0.0000004641,
+                 'number_of_iterations':1516400000,
+                 'start_temperature':100,
+                 'cooling_factor':0.85498,
                  #experiment definition options
-                 'Save':'overwrite',   
-                 'Scheduled':'true'
+                 'save':'overwrite',   
+                 'scheduled':'true'
                  }
-        self.TC=PyCoTools.pycopi.TimeCourse(self.copasi_file,StepSize=100,Plot='false',Intervals=50,End=5000,ReportName=self.timecourse_report_name)
-        self.TC2=PyCoTools.pycopi.TimeCourse(self.copasi_file,StepSize=100,Plot='false',Intervals=60,End=6000,ReportName=self.timecourse_report_name2)
+        self.TC=PyCoTools.pycopi.TimeCourse(self.copasi_file,StepSize=100,plot='false',Intervals=50,End=5000,report_name=self.timecourse_report_name)
+        self.TC2=PyCoTools.pycopi.TimeCourse(self.copasi_file,StepSize=100,plot='false',Intervals=60,End=6000,report_name=self.timecourse_report_name2)
         
         self.time_course_reports=[self.timecourse_report_name,self.timecourse_report_name2]
         for i in self.time_course_reports:
@@ -113,13 +113,13 @@ class ParameterEstimationTests(unittest.TestCase):
         '''
         PE=PyCoTools.pycopi.ParameterEstimation(self.copasi_file,
                                                         self.time_course_reports,
-                                                        PopulationSize=2,
-                                                        NumberOfGenerations=2,
-                                                        RandomizeStartValues='false',
-                                                        ReportName=self.PE_report_name,
-                                                        Save='overwrite')
+                                                        population_size=2,
+                                                        number_of_generations=2,
+                                                        randomize_start_values='false',
+                                                        report_name=self.PE_report_name,
+                                                        save='overwrite')
         PE.write_item_template()
-        self.assertTrue(os.path.isfile(PE.kwargs.get('ConfigFilename')))
+        self.assertTrue(os.path.isfile(PE.kwargs.get('config_filename')))
 #        
     def test_insert_fit_items(self):
         '''
@@ -128,11 +128,11 @@ class ParameterEstimationTests(unittest.TestCase):
         '''
         PE=PyCoTools.pycopi.ParameterEstimation(self.copasi_file,
                                                         self.time_course_reports,
-                                                        PopulationSize=2,
-                                                        NumberOfGenerations=2,
-                                                        RandomizeStartValues='false',
-                                                        ReportName=self.PE_report_name,
-                                                        Save='overwrite')
+                                                        population_size=2,
+                                                        number_of_generations=2,
+                                                        randomize_start_values='false',
+                                                        report_name=self.PE_report_name,
+                                                        save='overwrite')
         PE.write_config_template()
         PE.copasiML=PE.remove_all_fit_items()
         PE.copasiML= PE.insert_all_fit_items()
@@ -152,7 +152,7 @@ class ParameterEstimationTests(unittest.TestCase):
         tasks=PE.copasiML.find('{http://www.copasi.org/static/schema}ListOfTasks')
         for i in tasks:
             if i.attrib['name']=='Parameter Estimation':
-                self.assertEqual(i[-1].attrib['type'].lower(),self.parameter_estimation_options['Method'].lower())
+                self.assertEqual(i[-1].attrib['type'].lower(),self.parameter_estimation_options['method'].lower())
 
     def test_set_PE_options(self):
         PE=PyCoTools.pycopi.ParameterEstimation(self.copasi_file,
@@ -164,7 +164,7 @@ class ParameterEstimationTests(unittest.TestCase):
         tasks=PE.copasiML.find('{http://www.copasi.org/static/schema}ListOfTasks')
         for i in tasks:
             if i.attrib['name']=='Parameter Estimation':
-                self.assertEqual(i.attrib['scheduled'],self.parameter_estimation_options['Scheduled'])
+                self.assertEqual(i.attrib['scheduled'],self.parameter_estimation_options['scheduled'])
 
 
     def tearDown(self):

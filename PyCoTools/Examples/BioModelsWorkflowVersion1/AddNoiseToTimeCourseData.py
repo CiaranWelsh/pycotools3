@@ -135,16 +135,16 @@ def add_noise(experiment_path_list):
 
 if __name__=='__main__':
     d=os.path.join(os.getcwd(),'PydentifyingBiomodels')
-#    model_dir=os.path.join(os.getcwd(),'Models')
+#    model_dir=os.path.join(os.getcwd(),'models')
     '''
-    Get a handle to the time course results from the RunTimeCourseForEachModel.py 
+    Get a handle to the time course results from the runTimeCourseForEachmodel.py 
     script
     '''
     timecourse_pickle=os.path.join(os.getcwd(),'timecourseResultPickle.pickle')
-    assert os.path.isfile(timecourse_pickle),'{} is not a file. Have you ran the RunTimeCourseForEachModel.py script yet?'.format(timecourse_pickle)
+    assert os.path.isfile(timecourse_pickle),'{} is not a file. Have you ran the runTimeCourseForEachmodel.py script yet?'.format(timecourse_pickle)
     cps_dirs=get_cps_dirs(d)
     '''
-    get timecourse results paths from the RunTimeCourse script
+    get timecourse results paths from the runTimeCourse script
     '''
     with open(timecourse_pickle) as f:
         result,time_d= pickle.load(f)    
@@ -177,8 +177,8 @@ if __name__=='__main__':
 
 
 
-    d=r'D:\MPhil\Model_Building\Models\Exercises\VilarForPoster\Vilar2006_TGFbeta\tc.txt'
-    d2=r'D:\MPhil\Model_Building\Models\Exercises\VilarForPoster\Vilar2006_TGFbeta\tc2.txt'
+    d=r'D:\MPhil\model_Building\models\Exercises\VilarForPoster\Vilar2006_TGFbeta\tc.txt'
+    d2=r'D:\MPhil\model_Building\models\Exercises\VilarForPoster\Vilar2006_TGFbeta\tc2.txt'
 
     df=add_noise1(d)
     print df.to_csv(d2,sep='\t')

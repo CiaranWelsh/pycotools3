@@ -34,19 +34,19 @@ def get_cps(directory):
 def worker(cps):
     
     TC=PyCoTools.pycopi.TimeCourse(cps,
-                     GlobalQuantities=None,
+                     global_quantities=None,
                      Intervals=1000,
                      StepSize=0.1,
                      End=100,
-                     LineColor='black',
-                     SaveFig='true',
-                     Save='overwrite',
-                     Plot='true')    
+                     Linecolor='black',
+                     savefig='true',
+                     save='overwrite',
+                     plot='true')    
     return TC
 
 def run_timecourse(cps,n,pickle_path,ignore_previously_completed=False):
     '''
-    Run a time course for each copasi file in the cps dict
+    run a time course for each copasi file in the cps dict
     
     cps:
         dictionary of copasi files 
@@ -61,15 +61,15 @@ def run_timecourse(cps,n,pickle_path,ignore_previously_completed=False):
         dict[sucess|fail]=[result|error] (where '|' mean 'or')
         
         Any time course which already exists is skipped
-        Models that produce a copasi error are ignored
-        Models that are too big to run in just a few seconds can be skipped
+        models that produce a copasi error are ignored
+        models that are too big to run in just a few seconds can be skipped
         by using KeyboardInterrutp. Many big models were manually deleted
         from the analysis.
         all data is pickled for later use
         
         Any model without any metabolites was ignored
         
-        Models with non-ascii characters in the name were ignored
+        models with non-ascii characters in the name were ignored
         
         
     '''
@@ -80,7 +80,7 @@ def run_timecourse(cps,n,pickle_path,ignore_previously_completed=False):
     result['successful']={}
     result['CopasiError']={}
     result['KeyboardInterrupt']={}
-    result['NoMetabolitesError']={}
+    result['NometabolitesError']={}
     result['IncompatibleStringError']={}
     result['OverNSpecies']={}
     result['already_completed']={}
@@ -94,7 +94,7 @@ def run_timecourse(cps,n,pickle_path,ignore_previously_completed=False):
 
         try:
             
-            GMQ=PyCoTools.pycopi.GetModelQuantities(i)
+            GMQ=PyCoTools.pycopi.GetmodelQuantities(i)
             if len(GMQ.get_IC_cns())>n:
                 result['OverNSpecies'][i]=i
                 print '...over n species'
@@ -105,15 +105,15 @@ def run_timecourse(cps,n,pickle_path,ignore_previously_completed=False):
                     print '...already completed'
                     continue
             TC=PyCoTools.pycopi.TimeCourse(i,
-                                 GlobalQuantities=None,
+                                 global_quantities=None,
                                  Intervals=1000,
                                  StepSize=0.1,
                                  End=100,
-                                 ReportName=time_course_name,
-                                 LineColor='black',
-                                 SaveFig='true',
-                                 Save='overwrite',
-                                 Plot='true')
+                                 report_name=time_course_name,
+                                 Linecolor='black',
+                                 savefig='true',
+                                 save='overwrite',
+                                 plot='true')
             print '...successful'
             result['successful'][i]=TC.data
             end=time.time()
@@ -142,13 +142,13 @@ def run_timecourse(cps,n,pickle_path,ignore_previously_completed=False):
             result['KeyboardInterrupt'][i]='KeyboardInterrupt'
             print 'running {}: unsucessful. User quit'.format(i)
             continue
-        except PyCoTools.Errors.NoMetabolitesError as E:
+        except PyCoTools.Errors.NometabolitesError as E:
             '''
             Some models downloaded from biomodels don't have any metabolites
             and therefore we cannot run a time course with them
             '''
-            result['NoMetabolitesError'][i]=E
-            print 'unsuccessful: NoMetabolitesError'
+            result['NometabolitesError'][i]=E
+            print 'unsuccessful: NometabolitesError'
         except PyCoTools.Errors.IncompatibleStringError as E:
             '''
             Some models use non-ascii characters. Non-ascii characters are not 
@@ -180,7 +180,7 @@ if __name__=='__main__':
     
     '''
     This is the path to the pickle containing paths to the xml
-    files. This file is produced by the 'ConvertModelsToCps.py' script. 
+    files. This file is produced by the 'ConvertmodelsToCps.py' script. 
     Read the paths from the script and manipulate strings to get the paths
     to cps rather than xml
     '''
@@ -195,7 +195,7 @@ if __name__=='__main__':
         Raise error if path does not exist
         '''
         if os.path.isfile(f)!=True:
-            raise FileDoesNotExistError('{} doesn\' exist. Ensure you have ran the ConvertModelsToCps.py file properly'.format(i))
+            raise FileDoesNotExistError('{} doesn\' exist. Ensure you have ran the ConvertmodelsToCps.py file properly'.format(i))
         cps_list.append(f[:-4]+'.cps')
     
     '''
@@ -216,13 +216,13 @@ if __name__=='__main__':
     print out some stats about the program performance 
     '''
     print res[0].keys()
-    print 'total number of copasi models: {}'.format(len(res[0]['successful'].keys()) + len(res[0]['CopasiError'].keys()) + len(res[0]['IncompatibleStringError'].keys()) + len(res[0]['IncompatibleStringError'].keys()) + len(res[0]['NoMetabolitesError'].keys()) + len(res[0]['KeyboardInterrupt'].keys()) + len(res[0]['OverNSpecies'].keys()))
+    print 'total number of copasi models: {}'.format(len(res[0]['successful'].keys()) + len(res[0]['CopasiError'].keys()) + len(res[0]['IncompatibleStringError'].keys()) + len(res[0]['IncompatibleStringError'].keys()) + len(res[0]['NometabolitesError'].keys()) + len(res[0]['KeyboardInterrupt'].keys()) + len(res[0]['OverNSpecies'].keys()))
     print 'number of successful time courses: {}'.format(len(res[0]['successful'].keys()))
 
     print 'number failed because model contains more than N species: {}'.format(len(res[0]['OverNSpecies'].keys()))
     print 'number failed with copasi error: {}'.format(len(res[0]['CopasiError'].keys()))
     print 'number failed because the model contains non-ascii characters: {}'.format(len(res[0]['IncompatibleStringError'].keys()))
-    print 'number failed because model has no metabolites: {}'.format(len(res[0]['NoMetabolitesError'].keys()))
+    print 'number failed because model has no metabolites: {}'.format(len(res[0]['NometabolitesError'].keys()))
     print 'number failed because of keyboardInterrupt: {}'.format(len(res[0]['KeyboardInterrupt'].keys()))
 
     print 'number failed because of FileDoesNotExistError: {}'.format(len(res[0]['FileDoesNotExistError'].keys()))
@@ -301,19 +301,19 @@ if __name__=='__main__':
 #def worker(cps):
 #    
 #    TC=PyCoTools.pycopi.TimeCourse(cps,
-#                     GlobalQuantities=None,
+#                     global_quantities=None,
 #                     Intervals=1000,
 #                     StepSize=0.1,
 #                     End=100,
-#                     LineColor='black',
-#                     SaveFig='true',
-#                     Save='overwrite',
-#                     Plot='true')    
+#                     Linecolor='black',
+#                     savefig='true',
+#                     save='overwrite',
+#                     plot='true')    
 #    return TC
 #
 #def run_timecourse(cps,n,pickle_path,ignore_previously_completed=False):
 #    '''
-#    Run a time course for each copasi file in the cps dict
+#    run a time course for each copasi file in the cps dict
 #    
 #    cps:
 #        dictionary of copasi files 
@@ -328,15 +328,15 @@ if __name__=='__main__':
 #        dict[sucess|fail]=[result|error] (where '|' mean 'or')
 #        
 #        Any time course which already exists is skipped
-#        Models that produce a copasi error are ignored
-#        Models that are too big to run in just a few seconds can be skipped
+#        models that produce a copasi error are ignored
+#        models that are too big to run in just a few seconds can be skipped
 #        by using KeyboardInterrutp. Many big models were manually deleted
 #        from the analysis.
 #        all data is pickled for later use
 #        
 #        Any model without any metabolites was ignored
 #        
-#        Models with non-ascii characters in the name were ignored
+#        models with non-ascii characters in the name were ignored
 #        
 #        
 #    '''
@@ -347,7 +347,7 @@ if __name__=='__main__':
 #    result['successful']={}
 #    result['CopasiError']={}
 #    result['KeyboardInterrupt']={}
-#    result['NoMetabolitesError']={}
+#    result['NometabolitesError']={}
 #    result['IncompatibleStringError']={}
 #    result['OverNSpecies']={}
 #    result['already_completed']={}
@@ -361,7 +361,7 @@ if __name__=='__main__':
 #
 #        try:
 #            
-#            GMQ=PyCoTools.pycopi.GetModelQuantities(i)
+#            GMQ=PyCoTools.pycopi.GetmodelQuantities(i)
 #            if len(GMQ.get_IC_cns())>n:
 #                result['OverNSpecies'][i]=i
 #                print '...over n species'
@@ -372,15 +372,15 @@ if __name__=='__main__':
 #                    print '...already completed'
 #                    continue
 #            TC=PyCoTools.pycopi.TimeCourse(i,
-#                                 GlobalQuantities=None,
+#                                 global_quantities=None,
 #                                 Intervals=1000,
 #                                 StepSize=0.1,
 #                                 End=100,
-#                                 ReportName=time_course_name,
-#                                 LineColor='black',
-#                                 SaveFig='true',
-#                                 Save='overwrite',
-#                                 Plot='true')
+#                                 report_name=time_course_name,
+#                                 Linecolor='black',
+#                                 savefig='true',
+#                                 save='overwrite',
+#                                 plot='true')
 #            print '...successful'
 #            result['successful'][i]=TC.data
 #            end=time.time()
@@ -409,13 +409,13 @@ if __name__=='__main__':
 #            result['KeyboardInterrupt'][i]='KeyboardInterrupt'
 #            print 'running {}: unsucessful. User quit'.format(i)
 #            continue
-#        except PyCoTools.Errors.NoMetabolitesError as E:
+#        except PyCoTools.Errors.NometabolitesError as E:
 #            '''
 #            Some models downloaded from biomodels don't have any metabolites
 #            and therefore we cannot run a time course with them
 #            '''
-#            result['NoMetabolitesError'][i]=E
-#            print 'unsuccessful: NoMetabolitesError'
+#            result['NometabolitesError'][i]=E
+#            print 'unsuccessful: NometabolitesError'
 #        except PyCoTools.Errors.IncompatibleStringError as E:
 #            '''
 #            Some models use non-ascii characters. Non-ascii characters are not 
@@ -447,7 +447,7 @@ if __name__=='__main__':
 #    
 #    '''
 #    This is the path to the pickle containing paths to the xml
-#    files. This file is produced by the 'ConvertModelsToCps.py' script. 
+#    files. This file is produced by the 'ConvertmodelsToCps.py' script. 
 #    Read the paths from the script and manipulate strings to get the paths
 #    to cps rather than xml
 #    '''
@@ -462,7 +462,7 @@ if __name__=='__main__':
 #        Raise error if path does not exist
 #        '''
 #        if os.path.isfile(f)!=True:
-#            raise FileDoesNotExistError('{} doesn\' exist. Ensure you have ran the ConvertModelsToCps.py file properly'.format(i))
+#            raise FileDoesNotExistError('{} doesn\' exist. Ensure you have ran the ConvertmodelsToCps.py file properly'.format(i))
 #        cps_list.append(f[:-4]+'.cps')
 #    
 #    '''
@@ -483,13 +483,13 @@ if __name__=='__main__':
 #    print out some stats about the program performance 
 #    '''
 #    print res[0].keys()
-#    print 'total number of copasi models: {}'.format(len(res[0]['successful'].keys()) + len(res[0]['CopasiError'].keys()) + len(res[0]['IncompatibleStringError'].keys()) + len(res[0]['IncompatibleStringError'].keys()) + len(res[0]['NoMetabolitesError'].keys()) + len(res[0]['KeyboardInterrupt'].keys()) + len(res[0]['OverNSpecies'].keys()))
+#    print 'total number of copasi models: {}'.format(len(res[0]['successful'].keys()) + len(res[0]['CopasiError'].keys()) + len(res[0]['IncompatibleStringError'].keys()) + len(res[0]['IncompatibleStringError'].keys()) + len(res[0]['NometabolitesError'].keys()) + len(res[0]['KeyboardInterrupt'].keys()) + len(res[0]['OverNSpecies'].keys()))
 #    print 'number of successful time courses: {}'.format(len(res[0]['successful'].keys()))
 #
 #    print 'number failed because model contains more than N species: {}'.format(len(res[0]['OverNSpecies'].keys()))
 #    print 'number failed with copasi error: {}'.format(len(res[0]['CopasiError'].keys()))
 #    print 'number failed because the model contains non-ascii characters: {}'.format(len(res[0]['IncompatibleStringError'].keys()))
-#    print 'number failed because model has no metabolites: {}'.format(len(res[0]['NoMetabolitesError'].keys()))
+#    print 'number failed because model has no metabolites: {}'.format(len(res[0]['NometabolitesError'].keys()))
 #    print 'number failed because of keyboardInterrupt: {}'.format(len(res[0]['KeyboardInterrupt'].keys()))
 #
 #    print 'number failed because of FileDoesNotExistError: {}'.format(len(res[0]['FileDoesNotExistError'].keys()))

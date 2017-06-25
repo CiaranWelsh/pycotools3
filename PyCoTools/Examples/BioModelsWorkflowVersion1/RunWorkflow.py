@@ -12,19 +12,19 @@ current_dir=os.getcwd()
 #else:
 #    raise WrongDirError('Your not in the right directory')
     
-#execfile(os.path.join(current_dir,'DownloadCuratedModelsFromBioModels.py'))
+#execfile(os.path.join(current_dir,'DownloadCuratedmodelsFromBiomodels.py'))
 #os.chdir(current_dir)
-#execfile(os.path.join(current_dir,'ConvertModelsToCps.py'))
+#execfile(os.path.join(current_dir,'ConvertmodelsToCps.py'))
 #os.chdir(current_dir)
 #execfile(os.path.join(current_dir,'MedianNumberOfParameter.py'))
 #os.chdir(current_dir)
-#execfile(os.path.join(current_dir,'RunTimeCourseForEachModel.py'))
+#execfile(os.path.join(current_dir,'runTimeCourseForEachmodel.py'))
 #os.chdir(current_dir)
 #execfile(os.path.join(current_dir,'AddNoiseToTimeCourseData.py'))
 #os.chdir(current_dir)
-#execfile(os.path.join(current_dir,'PlotSpaceSpaceForEachModel.py'))
+#execfile(os.path.join(current_dir,'plotSpaceSpaceForEachmodel.py'))
 #os.chdir(current_dir)
-execfile(os.path.join(current_dir,'RunParameterEstimationForEachModel.py'))
+execfile(os.path.join(current_dir,'runParameterEstimationForEachmodel.py'))
 os.chdir(current_dir)
 #execfile(os.path.join(current_dir,'PrunePEDataHeaders.py'))
 #
@@ -32,9 +32,9 @@ os.chdir(current_dir)
 '''
 These two not ready yet 
 '''
-#execfile('RunProfileLikelihoodOnEachModel.py')
+#execfile('runProfileLikelihoodOnEachmodel.py')
 #
-#execfile('PlotPLs.py')
+#execfile('plotPLs.py')
 
 
 
