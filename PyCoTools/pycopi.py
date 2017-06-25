@@ -4143,7 +4143,7 @@ class RunMultiplePEs():
         
         for key in kwargs.keys():
             if key not in options.keys():
-                raise Errors.InputError('{} is not a keyword argument for runMutliplePEs'.format(key))
+                raise Errors.InputError('{} is not a keyword argument for RunMutliplePEs'.format(key))
         options.update( kwargs) 
         self.kwargs=options       
         self.kwargs = Bool2Str(self.kwargs).convert_dct()
@@ -4187,7 +4187,6 @@ class RunMultiplePEs():
  
     def run(self):
         '''
-        If run=mutliprocess:
         '''
         ##load cps from pickle in case run not being use straignt after set_up
         if self.kwargs['run']=='SGE':
@@ -4206,7 +4205,27 @@ class RunMultiplePEs():
             elif self.kwargs['run']=='SGE':
                 Run(self.sub_copasi_files[i],mode='SGE',task='scan')
                     
-                
+    def copy_copasi(self):
+        '''
+        Copy copasi files m times to run separetly on a single 
+        computer
+        
+        returns:
+            dict[model_number]=cps_file
+        '''
+        LOG.info('Copying copasi file {} times'.format(self.kwargs['copy_number']))
+        sub_copasi_files_dct={}
+        copasi_path,copasi_filename=os.path.split(self.copasi_file)
+        for i in range(1,self.kwargs['copy_number']):
+            new_cps=os.path.join(copasi_path,copasi_filename[:-4]+'_{}.cps'.format(str(i)))
+            shutil.copy(self.copasi_file,new_cps)
+            sub_copasi_files_dct[i]= new_cps
+        sub_copasi_files_dct[0]=self.copasi_file
+        
+        with open(self.copasi_file_pickle,'w')as f:
+            pickle.dump(sub_copasi_files_dct,f)
+            
+        return sub_copasi_files_dct                
             
     def write_config_template(self):
         '''
@@ -4216,28 +4235,6 @@ class RunMultiplePEs():
         LOG.debug('config_filename is {}'.format(self.PE.kwargs['config_filename']))
         self.PE.write_config_template()
         
-        
-    def _setup_scan2(self):
-        '''
-        Set up n repeat items with number_of_steps repeats of parameter estimation
-        Set run to false as we want to use the multiprocess mode of the run class
-        to process all m files at once in CopasiSE
-        
-        Remember scan needs iterating over because each file needs an unique report
-        name
-        '''
-        import time
-        for num in range(self.kwargs['copy_number']):
-            LOG.info('setting up scan for model number {}'.format(num))
-            start=time.time()
-            Scan(self.sub_copasi_files[num],
-                 scan_type='repeat', #set up repeat item under scan. 
-                 number_of_steps=self.kwargs['pe_number'], #run the parameter estimation task 3 times
-                 subtask='parameter_estimation', #this is the default, but included here for demonstration anyway
-                 report_type='parameter_estimation', ## report automatically set up within copasi. 
-                 report_name=self.report_files[num],
-                 run=False) #run the scan task automatically in the background
-            LOG.info('Setup Took {} seconds'.format(time.time() - start))    
         
     ##void    
     def _setup_scan(self):
@@ -4329,27 +4326,7 @@ class RunMultiplePEs():
         self.kwargs['output_dir']=os.path.abspath(self.kwargs['output_dir'])
             
     
-    def copy_copasi(self):
-        '''
-        Copy copasi files m times to run separetly on a single 
-        computer
-        
-        returns:
-            dict[model_number]=cps_file
-        '''
-        LOG.info('Copying copasi file {} times'.format(self.kwargs['copy_number']))
-        sub_copasi_files_dct={}
-        copasi_path,copasi_filename=os.path.split(self.copasi_file)
-        for i in range(1,self.kwargs['copy_number']):
-            new_cps=os.path.join(copasi_path,copasi_filename[:-4]+'_{}.cps'.format(str(i)))
-            shutil.copy(self.copasi_file,new_cps)
-            sub_copasi_files_dct[i]= new_cps
-        sub_copasi_files_dct[0]=self.copasi_file
-        
-        with open(self.copasi_file_pickle,'w')as f:
-            pickle.dump(sub_copasi_files_dct,f)
-            
-        return sub_copasi_files_dct
+
     
     def _create_output_directory(self):
         '''
