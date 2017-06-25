@@ -4745,7 +4745,7 @@ All annotations are generalized as the model details general TGFb pathway dynami
       </Method>
     </Task>
     <Task key="Task_15" name="Time-Course" type="timeCourse" scheduled="true" updateModel="false">
-      <Report reference="Report_18" target="" append="false" confirmOverwrite="false" type="Deterministic(LSODA)" name="Deterministic (LSODA)"/>
+      <Report reference="Report_18" target="/home/b3053674/Documents/PyCoTools/PyCoTools/Examples/Celliere2011Example/Celliere2011_TimeCourse.txt" append="false" confirmOverwrite="false" type="Deterministic(LSODA)" name="Deterministic (LSODA)"/>
       <Problem type="Deterministic(LSODA)" name="Deterministic (LSODA)">
         <Parameter name="AutomaticStepSize" type="bool" value="0"/>
         <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
