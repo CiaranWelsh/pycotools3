@@ -162,48 +162,49 @@ class ProfileLikelihood():
 #        if self.kwargs.get('parameter_path')!=None and self.kwargs.get('index') !=-1 and self.kwargs.get('index')!=None:
 #            self.kwargs['index']=98
         self.PE_data=self.read_PE_data()
-        if self.kwargs.get('max_time')!=None:
-            if isinstance(self.kwargs.get('max_time'),(float,int))!=True:
-                raise Errors.InputError('max_time argument should be float or int')
-        
-        if self.kwargs.get('index') !=None:
-            assert isinstance(self.kwargs.get('index'),(list,int)),'index must be an integer or a list of integers'
-        if isinstance(self.kwargs.get('index'),list):
-            for i in self.kwargs.get('index'):
-                assert isinstance(i,int),'index is int type'
-                try:
-                    assert i<=self.PE_data.shape[0],'PE data contains {} parameter estimations. You have indicated that you want to use run {}'.format(self.PE_data.shape[0],i)
-                except AttributeError:
-                    raise Errors.Errors.InputError('No data')
-        elif isinstance(self.kwargs.get('index'),list):
-            assert self.kwargs.get('index')<=self.PE_data.shape[0],'PE data contains {} parameter estimations. You have indicated that you want to use run {}'.format(self.PE_data.shape[0],self.kwargs.get('index'))
-
-        if self.GMQ.get_fit_items()=={}:
-            raise Errors.InputError('Your copasi file doesnt have a parameter estimation defined')
-        #convert some numeric input variables to string
-        self.kwargs['upper_bound_multiplier']=str(self.kwargs['upper_bound_multiplier'])
-        self.kwargs['lower_bound_multiplier']=str(self.kwargs['lower_bound_multiplier'])
-        self.kwargs['number_of_steps']=str(self.kwargs['number_of_steps'])
-        self.kwargs['iteration_limit']=str(self.kwargs['iteration_limit'])
-        self.kwargs['tolerance']=str(self.kwargs['tolerance'])
-        self.kwargs['rho']=str(self.kwargs['rho'])
-        
-        if self.kwargs.get('run') not in [False,'slow','multiprocess','SGE']:
-            raise Errors.InputError('\'run\' keyword must be one of \'slow\', \'false\',\'multiprocess\', or \'SGE\'')
-
-        assert self.kwargs.get('quantity_type') in ['concentration','particle_number']
-
-        
-        assert self.kwargs.get('log10') in [False,True]
-
-        self.cps_dct=self.copy_copasi_files_and_insert_parameters()
-        self.copy_data_files()
-        self.cps_dct= self.setup_report()
-        self.cps_dct=self.setup_scan()
-        self.cps_dct=self.setup_PE_task()        
-        self.save()
-        os.chdir(os.path.dirname(self.copasi_file))
-        self.run()
+        print self.PE_data
+#        if self.kwargs.get('max_time')!=None:
+#            if isinstance(self.kwargs.get('max_time'),(float,int))!=True:
+#                raise Errors.InputError('max_time argument should be float or int')
+#        
+#        if self.kwargs.get('index') !=None:
+#            assert isinstance(self.kwargs.get('index'),(list,int)),'index must be an integer or a list of integers'
+#        if isinstance(self.kwargs.get('index'),list):
+#            for i in self.kwargs.get('index'):
+#                assert isinstance(i,int),'index is int type'
+#                try:
+#                    assert i<=self.PE_data.shape[0],'PE data contains {} parameter estimations. You have indicated that you want to use run {}'.format(self.PE_data.shape[0],i)
+#                except AttributeError:
+#                    raise Errors.Errors.InputError('No data')
+#        elif isinstance(self.kwargs.get('index'),list):
+#            assert self.kwargs.get('index')<=self.PE_data.shape[0],'PE data contains {} parameter estimations. You have indicated that you want to use run {}'.format(self.PE_data.shape[0],self.kwargs.get('index'))
+#
+#        if self.GMQ.get_fit_items()=={}:
+#            raise Errors.InputError('Your copasi file doesnt have a parameter estimation defined')
+#        #convert some numeric input variables to string
+#        self.kwargs['upper_bound_multiplier']=str(self.kwargs['upper_bound_multiplier'])
+#        self.kwargs['lower_bound_multiplier']=str(self.kwargs['lower_bound_multiplier'])
+#        self.kwargs['number_of_steps']=str(self.kwargs['number_of_steps'])
+#        self.kwargs['iteration_limit']=str(self.kwargs['iteration_limit'])
+#        self.kwargs['tolerance']=str(self.kwargs['tolerance'])
+#        self.kwargs['rho']=str(self.kwargs['rho'])
+#        
+#        if self.kwargs.get('run') not in [False,'slow','multiprocess','SGE']:
+#            raise Errors.InputError('\'run\' keyword must be one of \'slow\', \'false\',\'multiprocess\', or \'SGE\'')
+#
+#        assert self.kwargs.get('quantity_type') in ['concentration','particle_number']
+#
+#        
+#        assert self.kwargs.get('log10') in [False,True]
+#
+#        self.cps_dct=self.copy_copasi_files_and_insert_parameters()
+#        self.copy_data_files()
+#        self.cps_dct= self.setup_report()
+#        self.cps_dct=self.setup_scan()
+#        self.cps_dct=self.setup_PE_task()        
+#        self.save()
+#        os.chdir(os.path.dirname(self.copasi_file))
+#        self.run()
 
     def save(self):
         self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
