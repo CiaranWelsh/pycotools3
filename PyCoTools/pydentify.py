@@ -124,7 +124,7 @@ class ProfileLikelihood():
         self.GMQ=pycopi.GetModelQuantities(self.copasi_file)
         os.chdir(os.path.dirname(self.copasi_file))
 
-        default_outputML=os.path.split(self.copasi_file)[1][:-4]+'_Duplicate.cps'
+        default_results_directory = os.path.join(os.path.dirname(self.copasi_file),'ProfileLikelihoods')
         options={#report variables
                  'save':'overwrite',
                  'index':-1,
@@ -140,7 +140,7 @@ class ProfileLikelihood():
                  'run':False,
                  'Verbose':True,
                  'max_time':None,
-                 'results_directory':None}
+                 'results_directory':default_results_directory}
                  
 
         for i in kwargs.keys():
@@ -198,11 +198,11 @@ class ProfileLikelihood():
 
         self.cps_dct=self.copy_copasi_files_and_insert_parameters()
         self.copy_data_files()
-        self.cps_dct= self.setup_report()
-        self.cps_dct=self.setup_scan()
-        self.cps_dct=self.setup_PE_task()        
+#        self.cps_dct= self.setup_report()
+#        self.cps_dct=self.setup_scan()
+#        self.cps_dct=self.setup_PE_task()        
         self.save()
-        os.chdir(os.path.dirname(self.copasi_file))
+#        os.chdir(os.path.dirname(self.copasi_file))
         self.run()
 
     def save(self):
@@ -306,34 +306,37 @@ class ProfileLikelihood():
         Note that you must have your data files int the same directory as the 
         cps file you want to perform profile likeliood on. 
         '''
-        if self.kwargs['result_directory'] == None:
-            self.IA_dir=os.path.join(os.path.dirname(self.copasi_file),'ProfileLikelihoods')
-        if os.path.abspath(self.kwargs['results_directory'])!=True:
-            self.IA_dir = os.path.join(os.path.dirname(self.copasi_file),self.kwargs['results_directory'])
-        else:
-            self.IA_dir = self.kwargs['results_directory']
+#        if self.kwargs['results_directory'] == None:
+#            self.IA_dir=os.path.join(os.path.dirname(self.copasi_file),'ProfileLikelihoods')
+#        if os.path.abspath(self.kwargs['results_directory'])!=True:
+#            self.IA_dir = os.path.join(os.path.dirname(self.copasi_file),self.kwargs['results_directory'])
+#        else:
+#            self.IA_dir = self.kwargs['results_directory']
+        self.IA_dir = self.kwargs['results_directory']
         q='//*[@name="File Name"]'
         data_file_dct={}
 #        print self.copasi_file
         for i in self.copasiML.xpath(q):
+#            print i
             data_path= os.path.join(os.path.dirname(self.copasi_file),i.attrib['value'])
-            data_file_dct[i.attrib['value']]=data_path
-            if self.kwargs.get('index')==-1:
-                IA_dir1=os.path.join(self.IA_dir,'-1')
-                new_data_file1=os.path.join(IA_dir1,i.attrib['value'])
-                copyfile(data_path,new_data_file1)
-                
-            elif isinstance(self.kwargs.get('index'),int):
-                IA_dir2=os.path.join(self.IA_dir,str(self.kwargs.get('index')))
-                new_data_file2=os.path.join(IA_dir2,i.attrib['value'])
-                copyfile(data_path,new_data_file2)
-                
-            elif isinstance(self.kwargs.get('index'),list):
-                for j in self.kwargs.get('index'):
-                    IA_dir3=os.path.join(self.IA_dir,str(j))
-                    new_data_file3=os.path.join(IA_dir3,i.attrib['value'])
-                    copyfile(data_path,new_data_file3)
-        return data_file_dct
+            LOG.debug('Data path is: {}'.format( data_path))
+#            data_file_dct[i.attrib['value']]=data_path
+#            if self.kwargs.get('index')==-1:
+#                IA_dir1=os.path.join(self.IA_dir,'-1')
+#                new_data_file1=os.path.join(IA_dir1,i.attrib['value'])
+#                copyfile(data_path,new_data_file1)
+#                
+#            elif isinstance(self.kwargs.get('index'),int):
+#                IA_dir2=os.path.join(self.IA_dir,str(self.kwargs.get('index')))
+#                new_data_file2=os.path.join(IA_dir2,i.attrib['value'])
+#                copyfile(data_path,new_data_file2)
+#                
+#            elif isinstance(self.kwargs.get('index'),list):
+#                for j in self.kwargs.get('index'):
+#                    IA_dir3=os.path.join(self.IA_dir,str(j))
+#                    new_data_file3=os.path.join(IA_dir3,i.attrib['value'])
+#                    copyfile(data_path,new_data_file3)
+#        return data_file_dct
 
     def setup_PE_task(self):
         '''
@@ -440,7 +443,7 @@ class ProfileLikelihood():
         for i in self.cps_dct.keys():
             for j in self.cps_dct[i]:
                 LOG.debug( 'running {}'.format(j))
-                res[self.cps_dct[i][j]]= pycopi.Run(self.cps_dct[i][j],task='scan',max_time=self.kwargs.get('max_time'),mode='slow').run()
+                res[self.cps_dct[i][j]]= pycopi.Run(self.cps_dct[i][j],task='scan',mode='slow').run()
         return res
         
     def multi_run(self):
@@ -623,6 +626,7 @@ class Plot():
         self.GMQ=pycopi.GetModelQuantities(self.copasi_file)
         os.chdir(os.path.dirname(self.copasi_file))
 
+    
         options={#report variables
                  'experiment_files':None,
                  'parameter_path':None,                 
@@ -657,6 +661,7 @@ class Plot():
                  'log10':False,
                  'use_pickle':False,
                  'overwrite_pickle':False,
+                 'results_directory':None,
                  }
                  
         for i in kwargs.keys():
