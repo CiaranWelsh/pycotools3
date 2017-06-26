@@ -2747,6 +2747,7 @@ class ParameterEstimation():
                             if match2_item!=[]:
                                 if match2_item==match2_copasiML:
                                     i.getparent().remove(i)
+                    
                     #rempve global parameters from PE task 
                     elif match=='InitialValue':
                         pattern='Values\[(.*)\].*Reference=(.*)'
@@ -2755,6 +2756,7 @@ class ParameterEstimation():
                             match2_item=re.findall(pattern,item['value'])
                             if match2_item==match2_copasiML:
                                 i.getparent().remove(i)
+                    
                     #remove IC parameters from PE task
                     elif match=='InitialConcentration' or match=='InitialParticleNumber':
                         pattern='Metabolites\[(.*)\],Reference=(.*)'
