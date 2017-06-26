@@ -638,7 +638,6 @@ class Reports():
             assert i in options.keys(),'{} is not a keyword argument for Reports'.format(i)
         options.update( kwargs) 
         self.kwargs=options
-        self.kwargs = Bool2Str(self.kwargs).convert_dct()
         
         if isinstance(self.kwargs.get('metabolites'),str):
             self.kwargs['metabolites']=[self.kwargs.get('metabolites')]
@@ -681,6 +680,8 @@ class Reports():
             elif self.kwargs.get('report_type')=='parameter_estimation':
                 default_report_name=os.path.split(self.copasi_file)[1][:-4]+'_parameter_estimation.txt'
             self.kwargs.update({'report_name':default_report_name})
+
+        self.kwargs = Bool2Str(self.kwargs).convert_dct()
 
         self.copasiML=self.clear_all_reports()
         self.copasiML=self.run()
@@ -913,146 +914,6 @@ class Reports():
         return self.copasiML
         
 
-#==============================================================================
-class ParsePEDataDeprecated():
-    '''
-    Deprecated on 28-01-2017. Keep until you know it 
-    wont mess up the rest of your code. 
-    
-    
-    parse parameter estimation data from file
-    
-    Positional args:
-        results_path:
-            Full path to a results file or folder of files containing 
-            parameter estimation results
-            
-    NOTE: this class is functional but will be replaced by PEAnalysis.ParsePEData
-    '''
-    def __init__(self,results_path,**kwargs):
-        self.results_path=results_path #either file or folder
-        self.cwd=os.path.dirname(self.results_path)
-        os.chdir(self.cwd)
-        self.pickle_path=os.path.join(self.cwd,'PEData.pickle')
-        self.pickle_path_log=os.path.join(self.cwd,'PEData_log.pickle')
-        options={
-                 'from_pickle':False,
-                 'overwrite_pickle':False}   
-        options.update(kwargs)
-        self.kwargs= options
-        self.kwargs = Bool2Str(self.kwargs).convert_dct()
-        
-        assert os.path.exists(self.results_path),'{} does not exist'.format(self.results_path)
-        if os.path.isdir(self.results_path):
-            self.mode='folder'
-        elif os.path.isfile(self.results_path):
-            self.mode='file'
-            
-        
-        #main methods of class
-        self.data=self.read_data()
-        self.data= self.remove_copasi_headers()
-        self.data=self.rename_RSS(self.data)
-        self.data=self.sort_data(self.data)
-        
-
-      
-    def remove_copasi_headers(self):
-        '''
-        Use the PruneCopasiHeaders class to truncate copasi style formatting 
-        conventions        
-        '''
-        n=self.data.shape[1]-1 #We minus 1 to account for not counting the parameter estimation header 3 lines down
-        l=[]
-        for i in self.data:
-            if i !='TaskList[Parameter Estimation].(Problem)Parameter Estimation.Best Value':
-                match= re.findall('.*\[(.*)\].*',i)
-                l.append(match)
-        if n==len(l):
-            data=PruneCopasiHeaders(self.data,replace=True).df
-            return data
-        else:
-            return self.data
-        
-    def read_folder(self):
-        '''
-        read folder of tab separated csv files i.e. the output from copasi
-        '''
-        assert os.path.isdir(self.results_path),'{} is not a real directory'.format(self.results_path)
-        df_list=[]
-        for i in os.listdir(self.results_path):
-            path=os.path.join(self.results_path,i)
-            if os.path.splitext(path)[1]=='.txt':
-                df=pandas.read_csv(path,sep='\t')
-                df_list.append(df)
-        return pandas.concat(df_list)
-                
-    def rename_RSS(self,data):
-        '''
-        change the RSS from copasi output to RSS
-        '''
-        b='TaskList[Parameter Estimation].(Problem)Parameter Estimation.Best Value'
-        if b in data.keys():
-            data=data.rename(columns={b:'RSS'})
-        return data
-
-        
-    def sort_data(self,data):
-        '''
-        sort data in order of increasing RSS
-        '''
-        data.sort_values('RSS',inplace=True)
-        data.reset_index(drop=True,inplace=True)
-        return data
-
-        
-    def read_file(self):
-        assert self.mode=='file','mode not file'
-        _,ext=os.path.splitext(self.results_path)
-        assert ext in ['.txt','.xlsx','.xls','.csv'],'parameter file is not .txt, .xlsx, .xls, .csv'
-        if ext=='.txt':
-            return pandas.read_csv(self.results_path,sep='\t')
-        elif ext=='xlsx' or 'xls':
-            return pandas.read_excel(self.results_path)
-        elif ext=='.csv':
-            return pandas.read_csv(self.results_path)
-
-
-    def write_pickle(self,data):
-        assert isinstance(data,pandas.core.frame.DataFrame)
-        if self.kwargs.get('from_pickle')==True:
-            if self.kwargs.get('overwrite_pickle') == True:     
-                if os.path.isfile(self.pickle_path):
-                    os.remove(self.pickle_path)
-                data.to_pickle(self.pickle_path)
-                return True
-            elif self.kwargs.get('overwrite_pickle')==False:
-                return False
-        elif self.kwargs.get('from_pickle')==False:
-            return False
-                
-            
-    def read_pickle(self):
-        assert os.path.isfile(self.pickle_path),'pickle path does\'t exist'
-        return pandas.read_pickle(self.pickle_path)
-            
-    
-    def read_data(self):
-        if self.kwargs.get('from_pickle')==False:
-            if self.mode=='file':
-                data=self.read_file()
-            elif self.mode=='folder':
-                data=self.read_folder()
-            self.write_pickle(data)
-            return data
-        elif self.kwargs.get('from_pickle')==True:
-            if os.path.isfile(self.pickle_path)==False:
-                self.kwargs['from_pickle']=False
-                data=self.read_data()
-            else:
-                data=self.read_pickle()
-        return data
-    
 class Bool2Str():
     """
     copasiML expects strings and we pythoners want to use python booleans not strings
@@ -1261,7 +1122,6 @@ class TimeCourse(object):
             options.update(kwargs)
             
             self.kwargs = options
-            self.kwargs = Bool2Str(self.kwargs).convert_dct()
 
             '''
             if the below three kwargs are a single entry they can be a string. 
@@ -1354,7 +1214,7 @@ class TimeCourse(object):
             assert self.kwargs.get('savefig') in [False, True]
 
             # convert some numeric kwargs to str
-
+            self.kwargs = Bool2Str(self.kwargs).convert_dct()
             self.kwargs['intervals'] = str(self.kwargs.get('intervals'))
             self.kwargs['step_size'] = str(self.kwargs.get('step_size'))
             self.kwargs['end'] = str(self.kwargs.get('end'))
@@ -1693,7 +1553,6 @@ class ExperimentMapper():
             assert i in options.keys(),'{} is not a keyword argument for TimeCourse'.format(i)
         options.update( kwargs) 
         self.kwargs=options
-        self.kwargs = Bool2Str(self.kwargs).convert_dct()
 
         #assign numberic values to weight_method   
         for i in range(len(self.kwargs.get('weight_method'))):
@@ -1762,6 +1621,9 @@ class ExperimentMapper():
             assert isinstance(i,str),'separator should be given asa python list'
         
         assert self.kwargs.get('save') in [False,'duplicate','overwrite']
+        
+        self.kwargs = Bool2Str(self.kwargs).convert_dct()
+
         
         #run the experiment mapper        
         self.map_experiments()
@@ -2397,7 +2259,6 @@ class ParameterEstimation():
         default_report_name=os.path.join(os.path.dirname(self.copasi_file),
                                          os.path.split(self.copasi_file)[1][:-4]+'_PE_results.txt')
         config_file= os.path.join(os.path.dirname(self.copasi_file),'PEConfigFile.xlsx')
-        default_outputML=os.path.join(os.path.dirname(self.copasi_file),'_Duplicate.cps')
         options={#report variables
                  'metabolites':self.GMQ.get_IC_cns().keys(),
                  'global_quantities':self.GMQ.get_global_quantities().keys(),
@@ -2473,7 +2334,6 @@ class ParameterEstimation():
             assert i in options.keys(),'{} is not a keyword argument for ParameterEstimation'.format(i)
         options.update( kwargs) 
         self.kwargs=options
-        self.kwargs = Bool2Str(self.kwargs).convert_dct()
         #second dict to separate arguments for the experiment mapper
         self.kwargs_experiment={}
         
@@ -2627,7 +2487,7 @@ class ParameterEstimation():
             self.kwargs['local_parameters']=[self.kwargs.get('local_parameters')]
 
 
-
+        self.kwargs = Bool2Str(self.kwargs).convert_dct()
 
         self.kwargs['number_of_generations']=str(self.kwargs.get('number_of_generations'))
         self.kwargs['population_size']=str(self.kwargs.get('population_size'))
@@ -4193,7 +4053,6 @@ class MultiModelFit():
                 raise Errors.InputError('{} is not a keyword argument for MultiModelFit'.format(key))
         options.update( kwargs) 
         self.kwargs=options    
-        self.kwargs = Bool2Str(self.kwargs).convert_dct()
         
         
         self.sub_cps_dirs=self.create_workspace()
