@@ -525,7 +525,29 @@ class GetModelQuantities():
                         match2=re.findall('Metabolites\[(.*)\]',j.attrib['value'])[0]
                     d[match2]=j.attrib    
         return d
-        
+    
+    def get_fit_item_order(self):
+        '''
+        return all parameters that are present in the fit items of the
+        parameter estimation task
+        '''
+        lst =[]
+        query='//*[@name="FitItem"]'
+        for i in self.copasiML.xpath(query):
+            for j in list(i):
+                if j.attrib['name']=='ObjectCN':
+                    match=re.findall('Reference=(.*)',j.attrib['value'])[0]
+                    if match=='Value':
+                        match2=re.findall('Reactions\[(.*)\].*Parameter=(.*),', j.attrib['value'])[0]
+                        match2='({}).{}'.format(match2[0],match2[1])
+                        lst.append(match2)
+                    elif match=='InitialValue':
+                        match2=re.findall('Values\[(.*)\]', j.attrib['value'])[0]
+                        lst.append(match2)
+                    elif match=='InitialConcentration':
+                        match2=re.findall('Metabolites\[(.*)\]',j.attrib['value'])[0]
+                        lst.append(match2)
+        return lst
 
     def get_all_model_variables(self):
         '''
@@ -795,9 +817,80 @@ class Reports():
             cn= self.GMQ.get_local_kinetic_parameters_cns()[self.kwargs.get('variable')]['cn']+',Reference=Value'#{}'.format(self.kwargs.get('quantity_type'))
         etree.SubElement(table,'Object',attrib={'cn':cn})
         etree.SubElement(table,'Object',attrib={'cn':"CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"})
-        return self.copasiML        
+        return self.copasiML
 
-    def parameter_estimation_with_function_evaluations(self):
+    def parameter_estimation_with_function_evaluations2(self):
+        '''
+        Define a parameter estimation report and include the progression
+        of the parameter estimation (function evaluations).
+        Defaults to including all
+        metabolites, global variables and local variables with the RSS best value
+        These can be over-ridden with the global_quantities, LocalParameters and metabolites
+        keywords.
+        '''
+        # get existing report keys
+        keys = []
+        for i in self.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports'):
+            keys.append(i.attrib['key'])
+            if i.attrib['name'] == 'parameter_estimation':
+                self.copasiML = self.remove_report('parameter_estimation')
+
+        new_key = 'Report_32'
+        while new_key in keys:
+            new_key = 'Report_{}'.format(numpy.random.randint(30, 100))
+        report_attributes = {'precision': '6',
+                             'separator': '\t',
+                             'name': 'parameter_estimation',
+                             'key': new_key,
+                             'taskType': 'parameterFitting'}
+
+        ListOfReports = self.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports')
+        report = etree.SubElement(ListOfReports, 'Report')
+        report.attrib.update(report_attributes)
+        comment = etree.SubElement(report, 'Comment')
+        comment = comment  # get rid of annoying squiggly line above
+        table = etree.SubElement(report, 'Table')
+        table.attrib['printTitle'] = str(1)
+
+        '''
+        generate more SubElements dynamically
+        '''
+        # for metabolites
+        if self.kwargs.get('metabolites') != None:
+            for i in self.kwargs.get('metabolites'):
+                assert i in self.GMQ.get_IC_cns().keys()
+                if self.kwargs.get('quantity_type') == 'concentration':
+                    cn = self.GMQ.get_IC_cns()[i]['cn'] + ',Reference=InitialConcentration'
+                elif self.kwargs.get('quantity_type') == 'particle_numbers':
+                    cn = self.GMQ.get_IC_cns()[i]['cn'] + ',Reference=InitialParticleNumber'
+                    # add to xml
+                Object = etree.SubElement(table, 'Object')
+                Object.attrib['cn'] = cn
+
+        # for global quantities
+        if self.kwargs.get('global_quantities') != None:
+            for i in self.kwargs.get('global_quantities'):
+                cn = self.GMQ.get_global_quantities_cns()[i]['cn'] + ',Reference=InitialValue'
+                # add to xml
+                Object = etree.SubElement(table, 'Object')
+                Object.attrib['cn'] = cn
+
+        # for local quantities
+        if self.kwargs.get('local_parameters') != None:
+            for i in self.kwargs.get('local_parameters'):
+                cn = self.GMQ.get_local_kinetic_parameters_cns()[i]['cn'] + ',Reference=Value'
+                # add to xml
+                Object = etree.SubElement(table, 'Object')
+                Object.attrib['cn'] = cn
+
+        Object = etree.SubElement(table, 'Object')
+        Object.attrib[
+            'cn'] = "CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"
+        LOG.debug('Reports PE setup copasiML {}'.format(self.copasiML))
+
+        return self.copasiML
+
+    def set_parameter_estimation_report(self):
         '''
         Define a parameter estimation report and include the progression 
         of the parameter estimation (function evaluations).
@@ -819,7 +912,7 @@ class Reports():
         report_attributes={'precision': '6', 
                            'separator': '\t',
                            'name': 'parameter_estimation',
-                           'key':new_key, 
+                           'key': new_key,
                            'taskType': 'parameterFitting'}
         
         ListOfReports=self.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports')
@@ -827,45 +920,47 @@ class Reports():
         report.attrib.update(report_attributes)
         comment=etree.SubElement(report,'Comment') 
         comment=comment #get rid of annoying squiggly line above
-        table=etree.SubElement(report,'Table')
-        table.attrib['printTitle']=str(1)
+        footer=etree.SubElement(report,'Footer')
+        LOG.info('footer is: {}'.format(footer))
+        #footer.attrib['printTitle']=str(1)
 
-        '''
-        generate more SubElements dynamically
-        '''
-        #for metabolites
-        if self.kwargs.get('metabolites')!=None:
-            for i in self.kwargs.get('metabolites'):
-                assert i in self.GMQ.get_IC_cns().keys()
-                if self.kwargs.get('quantity_type')=='concentration':
-                    cn= self.GMQ.get_IC_cns()[i]['cn']+',Reference=InitialConcentration'
-                elif self.kwargs.get('quantity_type')=='particle_numbers':
-                    cn= self.GMQ.get_IC_cns()[i]['cn']+',Reference=InitialParticleNumber'
-            #add to xml
-                Object=etree.SubElement(table,'Object')
-                Object.attrib['cn']=cn
-
-        #for global quantities 
-        if self.kwargs.get('global_quantities')!=None:
-            for i in self.kwargs.get('global_quantities'):
-                cn= self.GMQ.get_global_quantities_cns()[i]['cn']+',Reference=InitialValue'
-                #add to xml
-                Object=etree.SubElement(table,'Object')
-                Object.attrib['cn']=cn
+        # '''
+        # generate more SubE  lements dynamically
+        # '''
+        # #for metabolites
+        # if self.kwargs.get('metabolites')!=None:
+        #     for i in self.kwargs.get('metabolites'):
+        #         assert i in self.GMQ.get_IC_cns().keys()
+        #         if self.kwargs.get('quantity_type')=='concentration':
+        #             cn= self.GMQ.get_IC_cns()[i]['cn']+',Reference=InitialConcentration'
+        #         elif self.kwargs.get('quantity_type')=='particle_numbers':
+        #             cn= self.GMQ.get_IC_cns()[i]['cn']+',Reference=InitialParticleNumber'
+        #     #add to xml
+        #         Object=etree.SubElement(table,'Object')
+        #         Object.attrib['cn']=cn
+        #
+        # #for global quantities
+        # if self.kwargs.get('global_quantities')!=None:
+        #     for i in self.kwargs.get('global_quantities'):
+        #         cn= self.GMQ.get_global_quantities_cns()[i]['cn']+',Reference=InitialValue'
+        #         #add to xml
+        #         Object=etree.SubElement(table,'Object')
+        #         Object.attrib['cn']=cn
+        #
+        # #for local quantities
+        # if self.kwargs.get('local_parameters')!=None:
+        #     for i in self.kwargs.get('local_parameters'):
+        #         cn= self.GMQ.get_local_kinetic_parameters_cns()[i]['cn']+',Reference=Value'
+        #         #add to xml
+        #         Object=etree.SubElement(table,'Object')
+        #         Object.attrib['cn']=cn
                 
-        #for local quantities 
-        if self.kwargs.get('local_parameters')!=None:
-            for i in self.kwargs.get('local_parameters'):
-                cn= self.GMQ.get_local_kinetic_parameters_cns()[i]['cn']+',Reference=Value'
-                #add to xml
-                Object=etree.SubElement(table,'Object')
-                Object.attrib['cn']=cn
                 
-                
-        Object=etree.SubElement(table,'Object')
+        Object=etree.SubElement(footer,'Object')
+        Object.attrib['cn']="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"
+        Object=etree.SubElement(footer,'Object')
         Object.attrib['cn']="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"
         LOG.debug('Reports PE setup copasiML {}'.format(self.copasiML))
-
         return self.copasiML     
 
 
@@ -876,7 +971,7 @@ class Reports():
         '''
         if self.kwargs.get('report_type')=='parameter_estimation':
             LOG.debug('created a \'parameter_estimation\' report')
-            self.copasiML=self.parameter_estimation_with_function_evaluations()
+            self.copasiML=self.set_parameter_estimation_report()
         elif self.kwargs.get('report_type')=='profilelikelihood':
             self.copasiML=self.profile_likelihood()
             LOG.debug('created a \'profile_likelihod\' type report')
@@ -2547,17 +2642,41 @@ class ParameterEstimation():
     def run(self):
         if self.kwargs.get('plot')==False:
             LOG.debug('running ParameterEstimation. Data reported to file: {}'.format(self.kwargs['report_name']))
-            self.copasiML=Run(self.copasi_file,task='parameter_estimation')
+            self.copasiML = Run(self.copasi_file, task='parameter_estimation')
+            self.format_results()
             return self.copasiML
         else:
             ##Run with 'mode' set to false just unchecks the executable boxes.
             self.copasiML=Run(self.copasi_file,task='parameter_estimation',mode=False)
             ## Now run with check_call
             subprocess.check_call('CopasiSE "{}"'.format(self.copasi_file),shell=True)
+            self.format_results()
             self.plot()
         return self.copasiML
-        
-        
+
+    def format_results(self):
+        """
+        Results come without headers - parse the results
+        give them the proper headers then overwrite the file again
+        :return:
+        """
+        data = pandas.read_csv(self.kwargs['report_name'], sep='\t', header=None)
+        LOG.debug('data is \n{}'.format(data))
+        LOG.debug('fit items: {}'.format(self.GMQ.get_fit_item_order()))
+        data = data.drop(data.columns[0], axis=1)
+        LOG.debug('dropped data:\n {}'.format(data))
+        LOG.debug('14: \n{}'.format(data[14]))
+        LOG.debug('14 type: \n{}'.format(type(data[14])))
+        LOG.debug(data[14].str[1:])
+        data[14] = data[14].str[1:]
+        num = data.shape[0]
+        names = self.GMQ.get_fit_item_order()+['RSS']
+        data.columns = names
+        os.remove(self.kwargs['report_name'])
+        data.to_csv(self.kwargs['report_name'],sep='\t')
+        return data
+
+
     def convert_to_string(self,num):
         '''
         convert a number to a string        
