@@ -1181,19 +1181,16 @@ class Plot():
             
     def plot_all(self):
         if isinstance(self.kwargs.get('index'),int)and self.kwargs.get('index')==-1:
-#            print self.data
             try:
                 for i in self.data[-1]:
                     LOG.debug('Plot index: {}, plot parameter: {}'.format(-1,i))
                     self.plot1(self.kwargs['index'],i)
             except KeyError:
                 raise Errors.InputError('index out of bounds, i.e. index>number PE runs')
-#                
+                
         if isinstance(self.kwargs.get('index'),int) and self.kwargs.get('index')!=-1:
             for i in self.data[self.kwargs.get('index')]:
                 self.plot1(self.kwargs.get('index'),i)
-#            except KeyError:
-#                raise Errors.InputError('index out of bounds, i.e. index>number PE runs')
                 
         elif isinstance(self.kwargs.get('index'),list):
             for i in reversed(self.kwargs.get('index')):
