@@ -125,3 +125,1529 @@ DEBUG:PyCoTools.pycopi:pycopi:120:Model written to /home/b3053674/Documents/PyCo
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
 INFO:root:test:53:Parameters after insertion: <bound method DataFrame.transpose of    (reaction_3).k1  B  two
 0               10  5   15>
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:950:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:939:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xc3cbac8>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:950:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:939:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xc4346c8>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:950:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:939:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xb644708>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:950:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:939:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xc3c91c8>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:950:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:939:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xc3d2c88>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:951:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:940:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xc3d2688>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:952:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:902:footer is: <Element Footer at 0xb4ebec8>
+DEBUG:PyCoTools.pycopi:pycopi:941:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xb6542c8>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:952:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:902:footer is: <Element Footer at 0xc340a48>
+DEBUG:PyCoTools.pycopi:pycopi:941:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xc95cf08>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1147:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0xb8dc448>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:958:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:958:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1462:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1469:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1978:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:1981:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:951:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:902:footer is: <Element Footer at 0xc41ba88>
+DEBUG:PyCoTools.pycopi:pycopi:941:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xb4a9908>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2622:running ParameterEstimation. Data reported to file: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_PE_results.txt
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1147:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0xa50fbc8>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:958:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:958:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1462:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1469:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1978:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:1981:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:951:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:902:footer is: <Element Footer at 0xc3f11c8>
+DEBUG:PyCoTools.pycopi:pycopi:941:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xc33a2c8>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2622:running ParameterEstimation. Data reported to file: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_PE_results.txt
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1147:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0xc2c0388>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:958:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:958:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1462:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1469:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1978:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:1981:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:951:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:902:footer is: <Element Footer at 0xb8dcc48>
+DEBUG:PyCoTools.pycopi:pycopi:941:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xb8dcc88>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2622:running ParameterEstimation. Data reported to file: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_PE_results.txt
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2624:format_results is None
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1147:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0xc41bec8>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:958:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:958:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1462:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1469:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1978:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:1981:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:951:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:902:footer is: <Element Footer at 0xc2c05c8>
+DEBUG:PyCoTools.pycopi:pycopi:941:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xc2c0648>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2622:running ParameterEstimation. Data reported to file: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_PE_results.txt
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1147:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0xb67bfc8>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:958:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:958:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1462:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1469:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1978:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:1981:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:951:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:902:footer is: <Element Footer at 0xb68f5c8>
+DEBUG:PyCoTools.pycopi:pycopi:941:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xb68ff88>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2622:running ParameterEstimation. Data reported to file: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_PE_results.txt
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2624:format_results is None
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1147:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0xc4d3908>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:958:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:958:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1462:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1469:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1978:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:1981:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:951:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:902:footer is: <Element Footer at 0xb8dc3c8>
+DEBUG:PyCoTools.pycopi:pycopi:941:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xb64eb48>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2622:running ParameterEstimation. Data reported to file: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_PE_results.txt
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2641:data is   0        1         2        3       4        5       6         7        8   \
+0  (  195.372  0.000007  0.07739  143717  3067.96  15.001  0.000063  1.69724   
+
+         9         10        11       12       13        14  
+0  0.001836  0.011489  0.034187  0.00001  91709.3  )10.9987  
+DEBUG:PyCoTools.pycopi:pycopi:2642:fit items: {'A': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=InitialConcentration'}, '(reaction_4).k1': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[reaction_4],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}, '(reaction_1).k1': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[reaction_1],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}, 'E': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[E],Reference=InitialConcentration'}, 'D': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[D],Reference=InitialConcentration'}, 'F': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[F],Reference=InitialConcentration'}, 'C': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=InitialConcentration'}, '(reaction).k1': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[reaction],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}, 'two': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Values[two],Reference=InitialValue'}, '(reaction_3).k1': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[reaction_3],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}, 'B': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=InitialConcentration'}, 'three': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Values[three],Reference=InitialValue'}, '(reaction_2).k1': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[reaction_2],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}}
+DEBUG:PyCoTools.pycopi:pycopi:2624:format_results is None
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:534:[<Element {http://www.copasi.org/static/schema}ParameterGroup at 0xc3d5508>, <Element {http://www.copasi.org/static/schema}ParameterGroup at 0xc3d5708>, <Element {http://www.copasi.org/static/schema}ParameterGroup at 0xc3d5788>, <Element {http://www.copasi.org/static/schema}ParameterGroup at 0xc3d5cc8>, <Element {http://www.copasi.org/static/schema}ParameterGroup at 0xc3d5148>, <Element {http://www.copasi.org/static/schema}ParameterGroup at 0xc29d2c8>, <Element {http://www.copasi.org/static/schema}ParameterGroup at 0xc29d588>, <Element {http://www.copasi.org/static/schema}ParameterGroup at 0xc29dbc8>, <Element {http://www.copasi.org/static/schema}ParameterGroup at 0xc29dc08>, <Element {http://www.copasi.org/static/schema}ParameterGroup at 0xc29ddc8>, <Element {http://www.copasi.org/static/schema}ParameterGroup at 0xc29de88>, <Element {http://www.copasi.org/static/schema}ParameterGroup at 0xc29dc88>, <Element {http://www.copasi.org/static/schema}ParameterGroup at 0xc29df48>]
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:534:[<Element {http://www.copasi.org/static/schema}ParameterGroup at 0xb4a7088>, <Element {http://www.copasi.org/static/schema}ParameterGroup at 0xb4a7048>, <Element {http://www.copasi.org/static/schema}ParameterGroup at 0xb4a7c48>, <Element {http://www.copasi.org/static/schema}ParameterGroup at 0xc4c6e88>, <Element {http://www.copasi.org/static/schema}ParameterGroup at 0xb675c08>, <Element {http://www.copasi.org/static/schema}ParameterGroup at 0xb675288>, <Element {http://www.copasi.org/static/schema}ParameterGroup at 0xb675e88>, <Element {http://www.copasi.org/static/schema}ParameterGroup at 0xb6759c8>, <Element {http://www.copasi.org/static/schema}ParameterGroup at 0xc2928c8>, <Element {http://www.copasi.org/static/schema}ParameterGroup at 0xc292348>, <Element {http://www.copasi.org/static/schema}ParameterGroup at 0xc292548>, <Element {http://www.copasi.org/static/schema}ParameterGroup at 0xc292d48>, <Element {http://www.copasi.org/static/schema}ParameterGroup at 0xc292e88>]
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1169:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0xcc3a6c8>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1484:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1491:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:2000:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:2003:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:973:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xd192388>
+DEBUG:PyCoTools.pycopi:pycopi:963:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xc3cbe88>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2644:running ParameterEstimation. Data reported to file: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_PE_results.txt
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2663:data is   0       1         2         3         4        5        6        7   \
+0  (  146.97  0.000473  0.120782  0.025803  6.08602  14.9901  1.01278   
+
+        8        9       10       11       12        13           14  
+0  0.05009  11467.4  511489  1.50189  5199.87  0.000442  )0.00318923  
+DEBUG:PyCoTools.pycopi:pycopi:2664:fit items: {'A': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=InitialConcentration'}, '(reaction_4).k1': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[reaction_4],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}, '(reaction_1).k1': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[reaction_1],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}, 'E': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[E],Reference=InitialConcentration'}, 'D': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[D],Reference=InitialConcentration'}, 'F': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[F],Reference=InitialConcentration'}, 'C': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=InitialConcentration'}, '(reaction).k1': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[reaction],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}, 'two': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Values[two],Reference=InitialValue'}, '(reaction_3).k1': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[reaction_3],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}, 'B': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=InitialConcentration'}, 'three': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Values[three],Reference=InitialValue'}, '(reaction_2).k1': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[reaction_2],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}}
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1169:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0xd08f148>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1484:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1491:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:2000:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:2003:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:973:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xc339488>
+DEBUG:PyCoTools.pycopi:pycopi:963:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xc339c48>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2644:running ParameterEstimation. Data reported to file: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_PE_results.txt
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2663:data is   0        1         2        3         4      5       6         7      8   \
+0  (  219.129  0.057142  2410.94  0.006118  14671  14.994  0.996139  434.6   
+
+        9        10       11        12       13            14  
+0  5.90418  446.737  50.0856  0.695605  125.484  )0.000580097  
+DEBUG:PyCoTools.pycopi:pycopi:2664:fit items: {'A': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=InitialConcentration'}, '(reaction_4).k1': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[reaction_4],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}, '(reaction_1).k1': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[reaction_1],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}, 'E': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[E],Reference=InitialConcentration'}, 'D': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[D],Reference=InitialConcentration'}, 'F': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[F],Reference=InitialConcentration'}, 'C': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=InitialConcentration'}, '(reaction).k1': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[reaction],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}, 'two': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Values[two],Reference=InitialValue'}, '(reaction_3).k1': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[reaction_3],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}, 'B': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=InitialConcentration'}, 'three': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Values[three],Reference=InitialValue'}, '(reaction_2).k1': {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[reaction_2],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}}
+DEBUG:PyCoTools.pycopi:pycopi:2646:format_results is None
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1169:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0xc4c6e08>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1484:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1491:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:2000:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:2003:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:973:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xc3d5dc8>
+DEBUG:PyCoTools.pycopi:pycopi:963:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xd091648>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2644:running ParameterEstimation. Data reported to file: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_PE_results.txt
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2663:data is   0         1        2         3        4        5        6         7   \
+0  (  0.646943  9437.91  0.000518  4.13916  15.1788  14.9985  0.000002   
+
+        8         9         10       11       12       13       14  
+0  84.7954  0.004636  0.000003  3103.97  32.0331  0.00085  )11.001  
+DEBUG:PyCoTools.pycopi:pycopi:2664:fit items: ['(reaction_3).k1', '(reaction_4).k1', '(reaction_1).k1', '(reaction_2).k1', '(reaction).k1', 'two', 'three', 'A', 'C', 'B', 'E', 'D', 'F']
+DEBUG:PyCoTools.pycopi:pycopi:2646:format_results is None
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1169:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0xb6ffac8>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1484:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1491:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:2000:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:2003:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:973:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xa519308>
+DEBUG:PyCoTools.pycopi:pycopi:963:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xc8b67c8>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2644:running ParameterEstimation. Data reported to file: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_PE_results.txt
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2663:data is   0        1         2         3         4         5        6         7   \
+0  (  5790.59  0.000558  0.000092  0.000022  0.018683  15.0513  0.073758   
+
+        8         9         10       11        12      13        14  
+0  2.99904  0.000001  0.001012  131.024  0.011809  193804  )9.46869  
+DEBUG:PyCoTools.pycopi:pycopi:2664:fit items: ['(reaction_3).k1', '(reaction_4).k1', '(reaction_1).k1', '(reaction_2).k1', '(reaction).k1', 'two', 'three', 'A', 'C', 'B', 'E', 'D', 'F']
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1169:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0xb4dbc08>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1484:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1491:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:2000:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:2003:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:973:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xc95cec8>
+DEBUG:PyCoTools.pycopi:pycopi:963:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xc95c388>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2644:running ParameterEstimation. Data reported to file: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_PE_results.txt
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2663:data is   0        1         2         3         4        5        6         7   \
+0  (  17219.4  0.000194  0.000132  0.000001  322.397  14.9931  0.000012   
+
+       8         9         10       11        12        13        14  
+0  183948  0.040642  0.000001  8.39086  0.000002  0.002808  )11.0034  
+DEBUG:PyCoTools.pycopi:pycopi:2664:fit items: ['(reaction_3).k1', '(reaction_4).k1', '(reaction_1).k1', '(reaction_2).k1', '(reaction).k1', 'two', 'three', 'A', 'C', 'B', 'E', 'D', 'F']
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1169:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0xd091388>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1484:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1491:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:2000:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:2003:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:973:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xb654ac8>
+DEBUG:PyCoTools.pycopi:pycopi:963:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xd0959c8>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2644:running ParameterEstimation. Data reported to file: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_PE_results.txt
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2663:data is   0         1         2        3        4         5        6         7   \
+0  (  0.307873  0.000004  8.37104  0.00069  0.000002  14.9999  0.000072   
+
+         8        9        10        11        12        13        14  
+0  0.236126  193.138  22.1612  0.000004  0.000003  0.000351  )11.0776  
+DEBUG:PyCoTools.pycopi:pycopi:2664:fit items: ['(reaction_3).k1', '(reaction_4).k1', '(reaction_1).k1', '(reaction_2).k1', '(reaction).k1', 'two', 'three', 'A', 'C', 'B', 'E', 'D', 'F']
+DEBUG:PyCoTools.pycopi:pycopi:2666:dropped data:
+          1         2        3        4         5        6         7   \
+0  0.307873  0.000004  8.37104  0.00069  0.000002  14.9999  0.000072   
+
+         8        9        10        11        12        14  
+0  0.236126  193.138  22.1612  0.000004  0.000003  )11.0776  
+DEBUG:PyCoTools.pycopi:pycopi:2646:format_results is None
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1169:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0xcc35d88>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1484:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1491:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:2000:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:2003:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:973:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xd75c908>
+DEBUG:PyCoTools.pycopi:pycopi:963:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xd175f88>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2644:running ParameterEstimation. Data reported to file: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_PE_results.txt
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2663:data is 
+  0       1         2         3       4         5        6         7   \
+0  (  0.8377  0.035296  0.000069  500636  0.002821  14.9983  0.000002   
+
+         8       9        10       11       12        13        14  
+0  0.000011  938443  1.54528  144.827  386.779  0.053828  )11.0146  
+DEBUG:PyCoTools.pycopi:pycopi:2664:fit items: ['(reaction_3).k1', '(reaction_4).k1', '(reaction_1).k1', '(reaction_2).k1', '(reaction).k1', 'two', 'three', 'A', 'C', 'B', 'E', 'D', 'F']
+DEBUG:PyCoTools.pycopi:pycopi:2666:dropped data:
+        1         2         3       4         5        6         7         8   \
+0  0.8377  0.035296  0.000069  500636  0.002821  14.9983  0.000002  0.000011   
+
+       9        10       11       12        14  
+0  938443  1.54528  144.827  386.779  )11.0146  
+DEBUG:PyCoTools.pycopi:pycopi:2646:format_results is None
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1169:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0xd091108>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1484:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1491:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:2000:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:2003:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:973:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xd18eec8>
+DEBUG:PyCoTools.pycopi:pycopi:963:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xc3d28c8>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2644:running ParameterEstimation. Data reported to file: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_PE_results.txt
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2663:data is 
+  0       1         2         3         4        5        6         7   \
+0  (  2.2777  0.000001  0.000001  0.000027  38.7604  15.0302  0.973805   
+
+         8         9        10        11        12      13       14  
+0  0.000132  0.000001  1906.96  0.000001  0.021524  1.0449  )0.0192  
+DEBUG:PyCoTools.pycopi:pycopi:2664:fit items: ['(reaction_3).k1', '(reaction_4).k1', '(reaction_1).k1', '(reaction_2).k1', '(reaction).k1', 'two', 'three', 'A', 'C', 'B', 'E', 'D', 'F']
+DEBUG:PyCoTools.pycopi:pycopi:2666:dropped data:
+        1         2         3         4        5        6         7         8   \
+0  2.2777  0.000001  0.000001  0.000027  38.7604  15.0302  0.973805  0.000132   
+
+         9        10        11        12       14  
+0  0.000001  1906.96  0.000001  0.021524  )0.0192  
+DEBUG:PyCoTools.pycopi:pycopi:2667:14: 
+0    )0.0192
+Name: 14, dtype: object
+DEBUG:PyCoTools.pycopi:pycopi:2646:format_results is None
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1169:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0xd175ac8>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1484:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1491:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:2000:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:2003:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:973:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xd1c1708>
+DEBUG:PyCoTools.pycopi:pycopi:963:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xc3cb888>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2644:running ParameterEstimation. Data reported to file: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_PE_results.txt
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2663:data is 
+  0        1        2        3        4         5        6        7   \
+0  (  0.00001  28.4179  0.00018  187.491  0.000019  14.9738  1.00911   
+
+         8       9       10       11       12        13          14  
+0  0.002521  1.8183  110510  5.35371  2631.55  0.518373  )0.0866784  
+DEBUG:PyCoTools.pycopi:pycopi:2664:fit items: ['(reaction_3).k1', '(reaction_4).k1', '(reaction_1).k1', '(reaction_2).k1', '(reaction).k1', 'two', 'three', 'A', 'C', 'B', 'E', 'D', 'F']
+DEBUG:PyCoTools.pycopi:pycopi:2666:dropped data:
+         1        2        3        4         5        6        7         8   \
+0  0.00001  28.4179  0.00018  187.491  0.000019  14.9738  1.00911  0.002521   
+
+       9       10       11       12          14  
+0  1.8183  110510  5.35371  2631.55  )0.0866784  
+DEBUG:PyCoTools.pycopi:pycopi:2667:14: 
+0    )0.0866784
+Name: 14, dtype: object
+DEBUG:PyCoTools.pycopi:pycopi:2668:14 type: 
+<class 'pandas.core.series.Series'>
+DEBUG:PyCoTools.pycopi:pycopi:2669:0    0.0866784
+Name: 14, dtype: object
+DEBUG:PyCoTools.pycopi:pycopi:2646:format_results is None
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1169:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0xc3cbd48>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1484:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1491:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:2000:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:2003:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:973:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xcacb348>
+DEBUG:PyCoTools.pycopi:pycopi:963:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xd093888>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2644:running ParameterEstimation. Data reported to file: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_PE_results.txt
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2663:data is 
+  0        1         2         3        4         5        6        7   \
+0  (  13115.1  0.830626  0.000038  6.33477  0.065468  14.9954  1.00169   
+
+         8         9        10       11       12        13           14  
+0  0.000011  0.000003  3.48386  227.096  31259.8  0.015063  )0.00192833  
+DEBUG:PyCoTools.pycopi:pycopi:2664:fit items: ['(reaction_3).k1', '(reaction_4).k1', '(reaction_1).k1', '(reaction_2).k1', '(reaction).k1', 'two', 'three', 'A', 'C', 'B', 'E', 'D', 'F']
+DEBUG:PyCoTools.pycopi:pycopi:2666:dropped data:
+         1         2         3        4         5        6        7         8   \
+0  13115.1  0.830626  0.000038  6.33477  0.065468  14.9954  1.00169  0.000011   
+
+         9        10       11       12           14  
+0  0.000003  3.48386  227.096  31259.8  )0.00192833  
+DEBUG:PyCoTools.pycopi:pycopi:2667:14: 
+0    )0.00192833
+Name: 14, dtype: object
+DEBUG:PyCoTools.pycopi:pycopi:2668:14 type: 
+<class 'pandas.core.series.Series'>
+DEBUG:PyCoTools.pycopi:pycopi:2669:0    0.00192833
+Name: 14, dtype: object
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1169:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0xc2c08c8>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1484:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1491:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:2000:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:2003:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:973:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xd08fc48>
+DEBUG:PyCoTools.pycopi:pycopi:963:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xd08fac8>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2644:running ParameterEstimation. Data reported to file: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_PE_results.txt
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2663:data is 
+  0       1         2        3        4      5        6         7         8   \
+0  (  576328  0.510556  31.0638  989.563  42302  15.0007  0.000001  0.009065   
+
+        9         10       11        12        13   14  
+0  7.95782  0.058468  0.00509  0.121737  0.000022  )11  
+DEBUG:PyCoTools.pycopi:pycopi:2664:fit items: ['(reaction_3).k1', '(reaction_4).k1', '(reaction_1).k1', '(reaction_2).k1', '(reaction).k1', 'two', 'three', 'A', 'C', 'B', 'E', 'D', 'F']
+DEBUG:PyCoTools.pycopi:pycopi:2666:dropped data:
+        1         2        3        4      5        6         7         8   \
+0  576328  0.510556  31.0638  989.563  42302  15.0007  0.000001  0.009065   
+
+        9         10       11        12   14  
+0  7.95782  0.058468  0.00509  0.121737  )11  
+DEBUG:PyCoTools.pycopi:pycopi:2667:14: 
+0    )11
+Name: 14, dtype: object
+DEBUG:PyCoTools.pycopi:pycopi:2668:14 type: 
+<class 'pandas.core.series.Series'>
+DEBUG:PyCoTools.pycopi:pycopi:2669:0    11
+Name: 14, dtype: object
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1169:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0xc8b4dc8>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1484:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1491:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:2000:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:2003:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:973:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xd75b488>
+DEBUG:PyCoTools.pycopi:pycopi:963:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xd75fd08>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2644:running ParameterEstimation. Data reported to file: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_PE_results.txt
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2663:data is 
+  0         1        2         3       4        5        6        7        8   \
+0  (  0.000207  2514.19  0.000586  513194  711.078  14.9948  1.01876  386.339   
+
+         9         10       11        12       13          14  
+0  0.000525  0.000708  267.363  0.000014  0.36938  )0.0409861  
+DEBUG:PyCoTools.pycopi:pycopi:2664:fit items: ['(reaction_3).k1', '(reaction_4).k1', '(reaction_1).k1', '(reaction_2).k1', '(reaction).k1', 'two', 'three', 'A', 'C', 'B', 'E', 'D', 'F']
+DEBUG:PyCoTools.pycopi:pycopi:2666:dropped data:
+          1        2         3       4        5        6        7        8   \
+0  0.000207  2514.19  0.000586  513194  711.078  14.9948  1.01876  386.339   
+
+         9         10       11        12          14  
+0  0.000525  0.000708  267.363  0.000014  )0.0409861  
+DEBUG:PyCoTools.pycopi:pycopi:2667:14: 
+0    )0.0409861
+Name: 14, dtype: object
+DEBUG:PyCoTools.pycopi:pycopi:2668:14 type: 
+<class 'pandas.core.series.Series'>
+DEBUG:PyCoTools.pycopi:pycopi:2669:0    0.0409861
+Name: 14, dtype: object
+DEBUG:PyCoTools.pycopi:pycopi:2671:<class 'pandas.core.series.Series'>
+DEBUG:PyCoTools.pycopi:pycopi:2646:format_results is None
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1169:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0xd79a5c8>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1484:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1491:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:2000:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:2003:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:973:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xd091ac8>
+DEBUG:PyCoTools.pycopi:pycopi:963:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xd41bf48>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2644:running ParameterEstimation. Data reported to file: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_PE_results.txt
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2663:data is 
+  0         1         2         3         4        5        6         7   \
+0  (  0.000002  0.004479  0.000058  0.028181  2550.82  15.0016  0.002171   
+
+         8        9         10       11        12        13        14  
+0  0.248581  235.234  0.000021  37.8574  0.331345  0.000023  )10.9544  
+DEBUG:PyCoTools.pycopi:pycopi:2664:fit items: ['(reaction_3).k1', '(reaction_4).k1', '(reaction_1).k1', '(reaction_2).k1', '(reaction).k1', 'two', 'three', 'A', 'C', 'B', 'E', 'D', 'F']
+DEBUG:PyCoTools.pycopi:pycopi:2666:dropped data:
+          1         2         3         4        5        6         7   \
+0  0.000002  0.004479  0.000058  0.028181  2550.82  15.0016  0.002171   
+
+         8        9         10       11        12        14  
+0  0.248581  235.234  0.000021  37.8574  0.331345  )10.9544  
+DEBUG:PyCoTools.pycopi:pycopi:2667:14: 
+0    )10.9544
+Name: 14, dtype: object
+DEBUG:PyCoTools.pycopi:pycopi:2668:14 type: 
+<class 'pandas.core.series.Series'>
+DEBUG:PyCoTools.pycopi:pycopi:2669:0    10.9544
+Name: 14, dtype: object
+DEBUG:PyCoTools.pycopi:pycopi:2671:<class 'pandas.core.series.Series'>
+DEBUG:PyCoTools.pycopi:pycopi:2646:format_results is None
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1169:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0xb66f108>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1484:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1491:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:2000:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:2003:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:973:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xb6a2408>
+DEBUG:PyCoTools.pycopi:pycopi:963:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xd561808>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2644:running ParameterEstimation. Data reported to file: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_PE_results.txt
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2663:data is 
+  0        1         2       3         4         5        6         7   \
+0  (  92909.5  0.102875  318991  0.262818  0.042331  14.9893  0.000368   
+
+         8        9         10        11       12        13        14  
+0  0.000001  9.10405  0.466996  0.000231  0.00023  0.000121  )10.9933  
+DEBUG:PyCoTools.pycopi:pycopi:2664:fit items: ['(reaction_3).k1', '(reaction_4).k1', '(reaction_1).k1', '(reaction_2).k1', '(reaction).k1', 'two', 'three', 'A', 'C', 'B', 'E', 'D', 'F']
+DEBUG:PyCoTools.pycopi:pycopi:2666:dropped data:
+         1         2       3         4         5        6         7         8   \
+0  92909.5  0.102875  318991  0.262818  0.042331  14.9893  0.000368  0.000001   
+
+        9         10        11       12        13        14  
+0  9.10405  0.466996  0.000231  0.00023  0.000121  )10.9933  
+DEBUG:PyCoTools.pycopi:pycopi:2667:14: 
+0    )10.9933
+Name: 14, dtype: object
+DEBUG:PyCoTools.pycopi:pycopi:2668:14 type: 
+<class 'pandas.core.series.Series'>
+DEBUG:PyCoTools.pycopi:pycopi:2669:0    10.9933
+Name: 14, dtype: object
+DEBUG:PyCoTools.pycopi:pycopi:2671:<class 'pandas.core.series.Series'>
+DEBUG:PyCoTools.pycopi:pycopi:2646:format_results is None
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1169:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0xba3fd88>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1484:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1491:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:2000:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:2003:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:973:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xc9d0248>
+DEBUG:PyCoTools.pycopi:pycopi:963:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xcc48948>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2644:running ParameterEstimation. Data reported to file: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_PE_results.txt
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2663:data is 
+  0        1         2        3         4        5       6       7         8   \
+0  (  1.42557  0.000138  91790.9  0.014306  978.143  14.989  1.0315  0.013409   
+
+         9        10      11        12       13          14  
+0  0.006737  178.329  471379  0.000001  9.96791  )0.0125043  
+DEBUG:PyCoTools.pycopi:pycopi:2664:fit items: ['(reaction_3).k1', '(reaction_4).k1', '(reaction_1).k1', '(reaction_2).k1', '(reaction).k1', 'two', 'three', 'A', 'C', 'B', 'E', 'D', 'F']
+DEBUG:PyCoTools.pycopi:pycopi:2666:dropped data:
+         1         2        3         4        5       6       7         8   \
+0  1.42557  0.000138  91790.9  0.014306  978.143  14.989  1.0315  0.013409   
+
+         9        10      11        12       13          14  
+0  0.006737  178.329  471379  0.000001  9.96791  )0.0125043  
+DEBUG:PyCoTools.pycopi:pycopi:2667:14: 
+0    )0.0125043
+Name: 14, dtype: object
+DEBUG:PyCoTools.pycopi:pycopi:2668:14 type: 
+<class 'pandas.core.series.Series'>
+DEBUG:PyCoTools.pycopi:pycopi:2669:0    0.0125043
+Name: 14, dtype: object
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1169:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0xb6a3748>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1484:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1491:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:2000:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:2003:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:973:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xd7c8908>
+DEBUG:PyCoTools.pycopi:pycopi:963:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xcac5588>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2644:running ParameterEstimation. Data reported to file: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_PE_results.txt
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2663:data is 
+  0        1       2         3        4         5        6        7       8   \
+0  (  30247.9  365230  0.002555  18.8219  0.000171  14.9863  1.01833  685873   
+
+        9         10        11       12       13          14  
+0  2.61671  0.251607  0.015825  418.186  22755.1  )0.0834074  
+DEBUG:PyCoTools.pycopi:pycopi:2664:fit items: ['(reaction_3).k1', '(reaction_4).k1', '(reaction_1).k1', '(reaction_2).k1', '(reaction).k1', 'two', 'three', 'A', 'C', 'B', 'E', 'D', 'F']
+DEBUG:PyCoTools.pycopi:pycopi:2666:dropped data:
+         1       2         3        4         5        6        7       8   \
+0  30247.9  365230  0.002555  18.8219  0.000171  14.9863  1.01833  685873   
+
+        9         10        11       12       13          14  
+0  2.61671  0.251607  0.015825  418.186  22755.1  )0.0834074  
+DEBUG:PyCoTools.pycopi:pycopi:2667:14: 
+0    )0.0834074
+Name: 14, dtype: object
+DEBUG:PyCoTools.pycopi:pycopi:2668:14 type: 
+<class 'pandas.core.series.Series'>
+DEBUG:PyCoTools.pycopi:pycopi:2669:0    0.0834074
+Name: 14, dtype: object
+DEBUG:PyCoTools.pycopi:pycopi:2671:float64
+DEBUG:PyCoTools.pycopi:pycopi:2646:format_results is None
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1169:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0xc33ca48>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1484:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1491:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:2000:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:2003:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:973:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xd0920c8>
+DEBUG:PyCoTools.pycopi:pycopi:963:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xd769708>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2644:running ParameterEstimation. Data reported to file: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_PE_results.txt
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2663:data is 
+  0       1       2       3       4        5        6        7        8   \
+0  (  616532  506282  605819  176240  3.92815  14.9944  1.00613  2627.26   
+
+         9        10      11        12       13          14  
+0  0.019758  89594.5  866.97  0.139635  57645.4  )0.0007684  
+DEBUG:PyCoTools.pycopi:pycopi:2664:fit items: ['(reaction_3).k1', '(reaction_4).k1', '(reaction_1).k1', '(reaction_2).k1', '(reaction).k1', 'two', 'three', 'A', 'C', 'B', 'E', 'D', 'F']
+DEBUG:PyCoTools.pycopi:pycopi:2666:dropped data:
+        1       2       3       4        5        6        7        8   \
+0  616532  506282  605819  176240  3.92815  14.9944  1.00613  2627.26   
+
+         9        10      11        12       13          14  
+0  0.019758  89594.5  866.97  0.139635  57645.4  )0.0007684  
+DEBUG:PyCoTools.pycopi:pycopi:2667:14: 
+0    )0.0007684
+Name: 14, dtype: object
+DEBUG:PyCoTools.pycopi:pycopi:2668:14 type: 
+<class 'pandas.core.series.Series'>
+DEBUG:PyCoTools.pycopi:pycopi:2669:0    0.0007684
+Name: 14, dtype: object
+DEBUG:PyCoTools.pycopi:pycopi:2672:       1       2       3       4        5        6        7        8   \
+0  616532  506282  605819  176240  3.92815  14.9944  1.00613  2627.26   
+
+         9        10      11        12       13         14  
+0  0.019758  89594.5  866.97  0.139635  57645.4  0.0007684  
+DEBUG:PyCoTools.pycopi:pycopi:2646:format_results is None
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1169:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0xd18d048>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1484:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1491:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:2000:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:2003:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:973:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xdaa4108>
+DEBUG:PyCoTools.pycopi:pycopi:963:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xc33ca48>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2644:running ParameterEstimation. Data reported to file: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_PE_results.txt
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2663:data is 
+  0        1        2       3        4        5        6         7         8   \
+0  (  21051.1  64.7008  382700  648.297  4.37097  15.0216  0.006228  0.143395   
+
+         9       10        11        12        13        14  
+0  0.735911  228665  0.122738  0.000005  0.010098  )10.8686  
+DEBUG:PyCoTools.pycopi:pycopi:2664:fit items: ['(reaction_3).k1', '(reaction_4).k1', '(reaction_1).k1', '(reaction_2).k1', '(reaction).k1', 'two', 'three', 'A', 'C', 'B', 'E', 'D', 'F']
+DEBUG:PyCoTools.pycopi:pycopi:2666:dropped data:
+         1        2       3        4        5        6         7         8   \
+0  21051.1  64.7008  382700  648.297  4.37097  15.0216  0.006228  0.143395   
+
+         9       10        11        12        13        14  
+0  0.735911  228665  0.122738  0.000005  0.010098  )10.8686  
+DEBUG:PyCoTools.pycopi:pycopi:2667:14: 
+0    )10.8686
+Name: 14, dtype: object
+DEBUG:PyCoTools.pycopi:pycopi:2668:14 type: 
+<class 'pandas.core.series.Series'>
+DEBUG:PyCoTools.pycopi:pycopi:2669:0    10.8686
+Name: 14, dtype: object
+DEBUG:PyCoTools.pycopi:pycopi:2646:format_results is    (reaction_3).k1  (reaction_4).k1  (reaction_1).k1  (reaction_2).k1  \
+0          21051.1          64.7008           382700          648.297   
+
+   (reaction).k1      two     three         A         C       B         E  \
+0        4.37097  15.0216  0.006228  0.143395  0.735911  228665  0.122738   
+
+          D         F      RSS  
+0  0.000005  0.010098  10.8686  
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1169:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0xd559748>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1484:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1491:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:2000:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:2003:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:973:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xdab1948>
+DEBUG:PyCoTools.pycopi:pycopi:963:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xdaa46c8>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2644:running ParameterEstimation. Data reported to file: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_PE_results.txt
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2664:data is 
+  0       1        2        3         4         5        6        7   \
+0  (  461495  649.149  2143.11  0.000195  0.001196  15.0012  1.00657   
+
+         8        9         10      11        12        13          14  
+0  0.000811  10.4835  0.004206  7403.4  0.000005  0.000014  )0.0305451  
+DEBUG:PyCoTools.pycopi:pycopi:2665:fit items: ['(reaction_3).k1', '(reaction_4).k1', '(reaction_1).k1', '(reaction_2).k1', '(reaction).k1', 'two', 'three', 'A', 'C', 'B', 'E', 'D', 'F']
+DEBUG:PyCoTools.pycopi:pycopi:2667:dropped data:
+        1        2        3         4         5        6        7         8   \
+0  461495  649.149  2143.11  0.000195  0.001196  15.0012  1.00657  0.000811   
+
+        9         10      11        12        13          14  
+0  10.4835  0.004206  7403.4  0.000005  0.000014  )0.0305451  
+DEBUG:PyCoTools.pycopi:pycopi:2668:14: 
+0    )0.0305451
+Name: 14, dtype: object
+DEBUG:PyCoTools.pycopi:pycopi:2669:14 type: 
+<class 'pandas.core.series.Series'>
+DEBUG:PyCoTools.pycopi:pycopi:2670:0    0.0305451
+Name: 14, dtype: object
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1169:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0xb67b388>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:980:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1484:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:1491:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3038:{'(reaction_3).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[reaction_3],ParameterGroup=Parameters,Parameter=k1', 'value': '10'}, '(reaction_4).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[reaction_4],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(reaction_1).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[reaction_1],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(reaction_2).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[reaction_2],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(reaction).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[reaction],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:2770:writing config template. overwrite_config_file set to False and config_filename is C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:2000:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:2003:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:973:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xd96fc08>
+DEBUG:PyCoTools.pycopi:pycopi:963:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xb4db508>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2644:running ParameterEstimation. Data reported to file: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model_PE_results.txt
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file test_model.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:2664:data is 
+  0       1        2         3         4         5        6         7   \
+0  (  851940  254.539  0.000014  0.002472  0.023278  14.9996  0.000925   
+
+         8       9         10      11        12       13        14  
+0  0.000008  440051  0.000002  502985  0.000737  1.09499  )10.9819  
+DEBUG:PyCoTools.pycopi:pycopi:2665:fit items: ['(reaction_3).k1', '(reaction_4).k1', '(reaction_1).k1', '(reaction_2).k1', '(reaction).k1', 'two', 'three', 'A', 'C', 'B', 'E', 'D', 'F']
+DEBUG:PyCoTools.pycopi:pycopi:2667:dropped data:
+        1        2         3         4         5        6         7         8   \
+0  851940  254.539  0.000014  0.002472  0.023278  14.9996  0.000925  0.000008   
+
+       9         10      11        12       13        14  
+0  440051  0.000002  502985  0.000737  1.09499  )10.9819  
+DEBUG:PyCoTools.pycopi:pycopi:2668:14: 
+0    )10.9819
+Name: 14, dtype: object
+DEBUG:PyCoTools.pycopi:pycopi:2669:14 type: 
+<class 'pandas.core.series.Series'>
+DEBUG:PyCoTools.pycopi:pycopi:2670:0    10.9819
+Name: 14, dtype: object
