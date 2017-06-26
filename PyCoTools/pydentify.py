@@ -162,49 +162,46 @@ class ProfileLikelihood():
 #        if self.kwargs.get('parameter_path')!=None and self.kwargs.get('index') !=-1 and self.kwargs.get('index')!=None:
 #            self.kwargs['index']=98
         self.PE_data=self.read_PE_data()
-        print self.PE_data
-#        if self.kwargs.get('max_time')!=None:
-#            if isinstance(self.kwargs.get('max_time'),(float,int))!=True:
-#                raise Errors.InputError('max_time argument should be float or int')
+#        print self.PE_data
 #        
-#        if self.kwargs.get('index') !=None:
-#            assert isinstance(self.kwargs.get('index'),(list,int)),'index must be an integer or a list of integers'
-#        if isinstance(self.kwargs.get('index'),list):
-#            for i in self.kwargs.get('index'):
-#                assert isinstance(i,int),'index is int type'
-#                try:
-#                    assert i<=self.PE_data.shape[0],'PE data contains {} parameter estimations. You have indicated that you want to use run {}'.format(self.PE_data.shape[0],i)
-#                except AttributeError:
-#                    raise Errors.Errors.InputError('No data')
-#        elif isinstance(self.kwargs.get('index'),list):
-#            assert self.kwargs.get('index')<=self.PE_data.shape[0],'PE data contains {} parameter estimations. You have indicated that you want to use run {}'.format(self.PE_data.shape[0],self.kwargs.get('index'))
+        if self.kwargs.get('index') !=None:
+            assert isinstance(self.kwargs.get('index'),(list,int)),'index must be an integer or a list of integers'
+        if isinstance(self.kwargs.get('index'),list):
+            for i in self.kwargs.get('index'):
+                assert isinstance(i,int),'index is int type'
+                try:
+                    assert i<=self.PE_data.shape[0],'PE data contains {} parameter estimations. You have indicated that you want to use run {}'.format(self.PE_data.shape[0],i)
+                except AttributeError:
+                    raise Errors.Errors.InputError('No data')
+        elif isinstance(self.kwargs.get('index'),list):
+            assert self.kwargs.get('index')<=self.PE_data.shape[0],'PE data contains {} parameter estimations. You have indicated that you want to use run {}'.format(self.PE_data.shape[0],self.kwargs.get('index'))
 #
-#        if self.GMQ.get_fit_items()=={}:
-#            raise Errors.InputError('Your copasi file doesnt have a parameter estimation defined')
-#        #convert some numeric input variables to string
-#        self.kwargs['upper_bound_multiplier']=str(self.kwargs['upper_bound_multiplier'])
-#        self.kwargs['lower_bound_multiplier']=str(self.kwargs['lower_bound_multiplier'])
-#        self.kwargs['number_of_steps']=str(self.kwargs['number_of_steps'])
-#        self.kwargs['iteration_limit']=str(self.kwargs['iteration_limit'])
-#        self.kwargs['tolerance']=str(self.kwargs['tolerance'])
-#        self.kwargs['rho']=str(self.kwargs['rho'])
-#        
-#        if self.kwargs.get('run') not in [False,'slow','multiprocess','SGE']:
-#            raise Errors.InputError('\'run\' keyword must be one of \'slow\', \'false\',\'multiprocess\', or \'SGE\'')
-#
-#        assert self.kwargs.get('quantity_type') in ['concentration','particle_number']
-#
-#        
-#        assert self.kwargs.get('log10') in [False,True]
-#
-#        self.cps_dct=self.copy_copasi_files_and_insert_parameters()
-#        self.copy_data_files()
-#        self.cps_dct= self.setup_report()
-#        self.cps_dct=self.setup_scan()
-#        self.cps_dct=self.setup_PE_task()        
-#        self.save()
-#        os.chdir(os.path.dirname(self.copasi_file))
-#        self.run()
+        if self.GMQ.get_fit_items()=={}:
+            raise Errors.InputError('Your copasi file doesnt have a parameter estimation defined')
+        #convert some numeric input variables to string
+        self.kwargs['upper_bound_multiplier']=str(self.kwargs['upper_bound_multiplier'])
+        self.kwargs['lower_bound_multiplier']=str(self.kwargs['lower_bound_multiplier'])
+        self.kwargs['number_of_steps']=str(self.kwargs['number_of_steps'])
+        self.kwargs['iteration_limit']=str(self.kwargs['iteration_limit'])
+        self.kwargs['tolerance']=str(self.kwargs['tolerance'])
+        self.kwargs['rho']=str(self.kwargs['rho'])
+        
+        if self.kwargs.get('run') not in [False,'slow','multiprocess','SGE']:
+            raise Errors.InputError('\'run\' keyword must be one of \'slow\', \'false\',\'multiprocess\', or \'SGE\'')
+
+        assert self.kwargs.get('quantity_type') in ['concentration','particle_number']
+
+        
+        assert self.kwargs.get('log10') in [False,True]
+
+        self.cps_dct=self.copy_copasi_files_and_insert_parameters()
+        self.copy_data_files()
+        self.cps_dct= self.setup_report()
+        self.cps_dct=self.setup_scan()
+        self.cps_dct=self.setup_PE_task()        
+        self.save()
+        os.chdir(os.path.dirname(self.copasi_file))
+        self.run()
 
     def save(self):
         self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
@@ -570,7 +567,7 @@ class Plot():
         show:
             When not using iPython, use show=True to display graphs
             
-        InterpolationResolution;
+        interpolation_resolution;
             Number of points to split line into for interpolation. Defualt=1000
             
         ylimit: 
@@ -646,7 +643,7 @@ class Plot():
                  'multiplot':False,
                  'savefig':False,
                  'interpolation_kind':'slinear',
-                 'InterpolationResolution':1000,
+                 'interpolation_resolution':1000,
                  'title_wrap_size':30,
                  'ylimit':None,
                  'xlimit':None,
@@ -724,15 +721,15 @@ class Plot():
         if isinstance(self.kwargs.get('interpolation_kind'),str)!=True:
             raise TypeError('interpolation_kind argument should be of type str')
             
-        if isinstance(self.kwargs.get('InterpolationResolution'),int)!=True:
-            raise TypeError('InterpolationResolution argument should be of type int')
+        if isinstance(self.kwargs.get('interpolation_resolution'),int)!=True:
+            raise TypeError('interpolation_resolution argument should be of type int')
 
         if isinstance(self.kwargs.get('title_wrap_size'),int)!=True:
             raise TypeError('title_wrap_size argument should be of type int')
 
 
-        if isinstance(self.kwargs.get('InterpolationResolution'),int)!=True:
-            raise TypeError('InterpolationResolution argument should be of type int')
+        if isinstance(self.kwargs.get('interpolation_resolution'),int)!=True:
+            raise TypeError('interpolation_resolution argument should be of type int')
 
         if self.kwargs.get('ylimit')!=None:
             assert isinstance(self.kwargs.get('ylimit'),str)
@@ -756,54 +753,63 @@ class Plot():
         self.PL_dir=self.get_PL_dir()
         self.indices=self.get_index_dirs()
         self.result_paths=self.get_results()
-        print self.result_paths
-#        self.data=self.parse_results() 
-#        
-#        
-#        '''
-#        The below arguments rely on the above code. Do not change
-#        the ordering!
-#        
-#        '''
-#        #default dof is num estimated parameters minus 1 but can be manually overrider by specifying dof keyword
-#        if self.kwargs.get('dof')==None:
-#            self.kwargs['dof']=self.degrees_of_freedom()
-#        if self.kwargs['dof']==None:
-#            raise Errors.InputError('Please specify argument to dof keyword')
-#        
-#        #defult n is number of data points in your data set. 
-#        #This can be overridden by manually specifying n
-#        
-#        if self.kwargs.get('n')==None :
-#            self.kwargs['n']=self.num_data_points()
-#        assert self.kwargs.get('n')!=None        
-#        
-#        if self.kwargs.get('mode') not in ['all','one','none']:
-#            raise Errors.InputError('{} is not a valid mode. mode should be either all or one'.format(self.kwargs.get('mode')))
-#
-#        if self.kwargs.get('mode')!='all':
-#            if self.kwargs.get('plot_parameter') not in self.list_parameters():
-#                raise Errors.InputError('{} is not a valid Parameter. Your parameters are: {}'.format(self.kwargs.get('plot_parameter'),self.list_parameters()))
-#
-#            if isinstance(self.kwargs.get('index'),int):
-#                if self.kwargs.get('plot_index') != self.kwargs.get('index'):
-#                    raise Errors.InputError('{} is not an index in your Indices: {}'.format(self.kwargs.get('plot_index'),self.kwargs.get('index')))
+        self.data=self.parse_results() 
+        self.trim_infinite_values()
+        
+        
+        '''
+        The below arguments rely on the above code. Do not change
+        the ordering!
+        
+        '''
+        #default dof is num estimated parameters minus 1 but can be manually overrider by specifying dof keyword
+        if self.kwargs.get('dof')==None:
+            self.kwargs['dof']=self.degrees_of_freedom()
+        if self.kwargs['dof']==None:
+            raise Errors.InputError('Please specify argument to dof keyword')
+        
+        #defult n is number of data points in your data set. 
+        #This can be overridden by manually specifying n
+        
+        if self.kwargs.get('n')==None :
+            self.kwargs['n']=self.num_data_points()
+        assert self.kwargs.get('n')!=None        
+        
+        if self.kwargs.get('mode') not in ['all','one','none']:
+            raise Errors.InputError('{} is not a valid mode. mode should be either all or one'.format(self.kwargs.get('mode')))
+
+        if self.kwargs.get('mode')!='all':
+            if self.kwargs.get('plot_parameter') not in self.list_parameters():
+                raise Errors.InputError('{} is not a valid Parameter. Your parameters are: {}'.format(self.kwargs.get('plot_parameter'),self.list_parameters()))
+
+            if isinstance(self.kwargs.get('index'),int):
+                if self.kwargs.get('plot_index') != self.kwargs.get('index'):
+                    raise Errors.InputError('{} is not an index in your Indices: {}'.format(self.kwargs.get('plot_index'),self.kwargs.get('index')))
+            
+            elif isinstance(self.kwargs.get('index'),list):
+                if self.kwargs.get('plot_index') not in self.kwargs.get('index'):
+                    raise Errors.InputError('{} is not an index in your Indices: {}'.format(self.kwargs.get('plot_index'),self.kwargs.get('index')))
+
+
+        if self.kwargs.get('mode')=='all':
+            self.plot_all()
+        elif self.kwargs.get('mode')=='one':
+            self.plot1(self.kwargs.get('plot_index'),self.kwargs.get('plot_parameter'))
+            
+        
+        self.plot_chi2_CI()
+        CI=self.calc_chi2_CI()
+        for i in CI:
+            LOG.info( 'Confidence level for index {} is {} or {} on a log10 scale'.format(i,CI[i],numpy.log10(CI[i])))
 #            
-#            elif isinstance(self.kwargs.get('index'),list):
-#                if self.kwargs.get('plot_index') not in self.kwargs.get('index'):
-#                    raise Errors.InputError('{} is not an index in your Indices: {}'.format(self.kwargs.get('plot_index'),self.kwargs.get('index')))
-#
-#
-#        if self.kwargs.get('mode')=='all':
-#            self.plot_all()
-#        elif self.kwargs.get('mode')=='one':
-#            self.plot1(self.kwargs.get('plot_index'),self.kwargs.get('plot_parameter'))
-#            
-#        
-#        self.plot_chi2_CI()
-#        CI=self.calc_chi2_CI()
-#        for i in CI:
-#            LOG.info( 'Confidence level for index {} is {} or {} on a log10 scale'.format(i,CI[i],numpy.log10(CI[i])))
+    def trim_infinite_values(self):
+        LOG.info('removing infinite values from PL data.')
+        for index in self.data:
+            for param in self.data[index]:
+                self.data[index][param] = self.data[index][param].replace([numpy.inf, -numpy.inf], numpy.nan)
+                self.data[index][param].dropna(how='any',inplace=True)    
+                print self.data[index][param]
+        return self.data
             
     def get_PL_dir(self):
         '''
@@ -947,7 +953,6 @@ class Plot():
         '''
         nums= numpy.arange(0,100,0.1)
         table=zip(nums,scipy.stats.chi2.cdf(nums,self.kwargs['dof']) )
-        print table
         for i in table:
             if i[1]<=alpha:
                 chi2_df_alpha=i[0]
@@ -1056,11 +1061,13 @@ class Plot():
             if e.message=='invalid literal for float(): 1.#INF':
                 return True
 
+        LOG.debug('Interpolation kind arg: {}'.format(self.kwargs['interpolation_kind']))
+        LOG.debug('len parameter_val: {}'.format(len(parameter_val)))
         #now get your interpolation on...
-        f=interp1d(parameter_val,RSS_val,kind=self.kwargs.get('interpolation_kind'))
+        f=interp1d(parameter_val,RSS_val,kind=self.kwargs['interpolation_kind'])
         interp_parameter_value=numpy.linspace(min(parameter_val),
                                               max(parameter_val), 
-                                              num=self.kwargs.get('InterpolationResolution')*len(parameter_val), endpoint=True)
+                                              num=self.kwargs['interpolation_resolution']*len(parameter_val), endpoint=True)
         interp_RSS_value=f(interp_parameter_value)        
         handle=plt.plot(interp_parameter_value,interp_RSS_value,'black')
         plt.setp(handle,'color','black',linewidth=self.kwargs.get('line_width'))
@@ -1174,4 +1181,5 @@ class Plot():
 
         
 if __name__=='__main__':
-    execfile(r'C:\Users\Ciaran\Documents\CopasiVer19KholodenkoTests\test_Script.py')
+    pass
+#    execfile(r'C:\Users\Ciaran\Documents\CopasiVer19KholodenkoTests\test_Script.py')
