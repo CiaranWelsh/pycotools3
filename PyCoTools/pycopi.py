@@ -2815,11 +2815,11 @@ class ParameterEstimation():
         item= all_items.loc[item]
         subA1={'name': 'Affected Cross Validation Experiments'}
         subA2={'name': 'Affected Experiments'}
-        subA3={'type': 'cn', 'name': 'LowerBound', 'value': str(item['LowerBound'])}
+        subA3={'type': 'cn', 'name': 'LowerBound', 'value': str(item['lower_bound'])}
         if self.kwargs.get('use_config_start_values')==True:
-            subA5={'type': 'float', 'name': 'StartValue', 'value': str(item['StartValue'])}
+            subA5={'type': 'float', 'name': 'StartValue', 'value': str(item['startValue'])}
         
-        subA6={'type': 'cn', 'name': 'UpperBound', 'value': str(item['UpperBound'])}
+        subA6={'type': 'cn', 'name': 'UpperBound', 'value': str(item['upper_bound'])}
         
         etree.SubElement(new_element,'ParameterGroup',attrib=subA1)
         etree.SubElement(new_element,'ParameterGroup',attrib=subA2)
