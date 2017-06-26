@@ -3266,7 +3266,7 @@ class Scan():
             assert i in options.keys(),'{} is not a keyword argument for Scan'.format(i)
         options.update( kwargs) 
         self.kwargs=options
-        self.kwargs = Bool2Str(self.kwargs).convert_dct()
+        
         
         #correct output_in_subtask and AsjestInitialConditions
         assert self.kwargs.get('output_in_subtask') in [False,True,'false','true']
@@ -3288,6 +3288,8 @@ class Scan():
         else:
             self.kwargs['log10']=str(1)
             
+            
+        self.kwargs = Bool2Str(self.kwargs).convert_dct()
         
         subtasks=['steady_state','time_course',
                    'metabolic_control_nalysis',
@@ -3463,70 +3465,17 @@ class Scan():
 
 
         
-    def create_scan2(self):
-        '''
-        need to find a report key which corresponds to the report we want to use
-        '''
-        #get cn value
-        if self.kwargs.get('variable') in self.GMQ.get_IC_cns().keys():
-            if self.kwargs.get('quantity_type')=='concentration':
-                cn= self.GMQ.get_IC_cns()[self.kwargs.get('variable')]['cn']+',Reference=InitialConcentration'
-            elif self.kwargs.get('quantity_type')=='particle_number':
-                cn= self.GMQ.get_IC_cns()[self.kwargs.get('variable')]['cn']+',Reference=InitialParticleNumber'
-        elif self.kwargs.get('variable') in self.GMQ.get_global_quantities_cns().keys():
-            cn= self.GMQ.get_global_quantities_cns()[self.kwargs.get('variable')]['cn']+',Reference=InitialValue'
-        elif self.kwargs.get('variable') in self.GMQ.get_local_kinetic_parameters_cns().keys():
-            cn =self.GMQ.get_local_kinetic_parameters_cns()[self.kwargs.get('variable')]['cn']+',Reference=Value'
-
-
-        number_of_steps_attrib={'type': 'unsignedInteger', 'name': 'Number of steps', 'value': self.kwargs.get('number_of_steps')}
-        scan_item={'type': 'cn', 'name': 'Object', 'value': cn}
-        type_attrib={'type': 'unsignedInteger', 'name': 'Type', 'value': self.kwargs.get('scan_type')}
-        maximum_attrib={'type': 'float', 'name': 'Maximum', 'value': self.kwargs.get('maximum')}
-        minimum_attrib={'type': 'float', 'name': 'Minimum', 'value': self.kwargs.get('minimum')}
-        log_attrib={'type': 'bool', 'name': 'log', 'value': self.kwargs.get('log10')}
-        dist_type_attrib={'type': 'unsignedInteger', 'name': 'Distribution type', 'value': self.kwargs.get('distribution_type')}
-
-        scanItem_element=etree.Element('ParameterGroup',attrib={'name':'ScanItem'})
-        
-        LOG.debug('scan type number is : {}'.format(self.kwargs['scan_type']))
-        
-        if self.kwargs.get('scan_type')=='1':
-            etree.SubElement(scanItem_element,'Parameter',attrib=number_of_steps_attrib)
-            etree.SubElement(scanItem_element,'Parameter',attrib=scan_item)
-            etree.SubElement(scanItem_element,'Parameter',attrib=type_attrib)
-            etree.SubElement(scanItem_element,'Parameter',attrib=maximum_attrib)
-            etree.SubElement(scanItem_element,'Parameter',attrib=minimum_attrib)
-            etree.SubElement(scanItem_element,'Parameter',attrib=log_attrib)
-        elif self.kwargs.get('scan_type')=='0':
-            etree.SubElement(scanItem_element,'Parameter',attrib=number_of_steps_attrib)
-            etree.SubElement(scanItem_element,'Parameter',attrib=type_attrib)
-            etree.SubElement(scanItem_element,'Parameter',attrib=scan_item)
-        elif self.kwargs.get('scan_type')=='2':
-            etree.SubElement(scanItem_element,'Parameter',attrib=number_of_steps_attrib)
-            etree.SubElement(scanItem_element,'Parameter',attrib=type_attrib)
-            etree.SubElement(scanItem_element,'Parameter',attrib=scan_item)
-            etree.SubElement(scanItem_element,'Parameter',attrib=minimum_attrib)
-            etree.SubElement(scanItem_element,'Parameter',attrib=maximum_attrib)
-            etree.SubElement(scanItem_element,'Parameter',attrib=log_attrib)
-            etree.SubElement(scanItem_element,'Parameter',attrib=dist_type_attrib)
-
-        query='//*[@name="ScanItems"]'
-        for i in self.copasiML.xpath(query):
-            i.append(scanItem_element)
-        return self.copasiML
-
-
     def set_scan_options(self):
         report_attrib={'append': self.kwargs.get('append'), 
                        'target': self.kwargs.get('report_name'), 
                        'reference': self.get_report_key(),
                        'confirmOverwrite': self.kwargs.get('confirm_overwrite')}
-                       
+        
+        LOG.debug('output during subtask value is: {}'.format(self.kwargs['output_in_subtask']))
+#        LOG.debug()
         subtask_attrib={'type': 'unsignedInteger', 'name': 'Subtask', 'value': self.kwargs.get('subtask')}
-        output_in_subtask_attrib={'type': 'bool', 'name': 'Output in subtask', 'value': self.kwargs.get('output_in_subtask')}
+        output_in_subtask_attrib={'type': 'bool', 'name': 'Output in subtask', 'value': self.kwargs['output_in_subtask']}
         adjust_initial_conditions_attrib={'type': 'bool', 'name': 'Adjust initial conditions', 'value': self.kwargs.get('adjust_initial_conditions')}
-        scheduled_attrib={'scheduled': self.kwargs.get('scheduled'), 'updateModel': self.kwargs.get('update_model')}
         scheduled_attrib={'scheduled': self.kwargs.get('scheduled'), 'updateModel': self.kwargs.get('update_model')}
 
         R=etree.Element('Report',attrib=report_attrib)
