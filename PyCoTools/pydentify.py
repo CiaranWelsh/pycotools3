@@ -754,7 +754,7 @@ class Plot():
         self.indices=self.get_index_dirs()
         self.result_paths=self.get_results()
         self.data=self.parse_results() 
-        self.trim_infinite_values()
+#        self.data = self.trim_infinite_values()
         
         
         '''
@@ -791,10 +791,10 @@ class Plot():
                     raise Errors.InputError('{} is not an index in your Indices: {}'.format(self.kwargs.get('plot_index'),self.kwargs.get('index')))
 
 
-        if self.kwargs.get('mode')=='all':
+        if self.kwargs['mode']=='all':
             self.plot_all()
-        elif self.kwargs.get('mode')=='one':
-            self.plot1(self.kwargs.get('plot_index'),self.kwargs.get('plot_parameter'))
+        elif self.kwargs['mode']=='one':
+            self.plot1(self.kwargs['plot_index'],self.kwargs['plot_parameter'])
             
         
         self.plot_chi2_CI()
@@ -808,7 +808,6 @@ class Plot():
             for param in self.data[index]:
                 self.data[index][param] = self.data[index][param].replace([numpy.inf, -numpy.inf], numpy.nan)
                 self.data[index][param].dropna(how='any',inplace=True)    
-                print self.data[index][param]
         return self.data
             
     def get_PL_dir(self):
@@ -875,15 +874,38 @@ class Plot():
                     f,ext=os.path.splitext(j)
                     d[int(os.path.split(i)[1])][f]=os.path.join(i,j)
         return d
+
+
         
     def parse_results(self):
         df_dict={}
+        experiment_files= [os.path.split(i)[1] for i in self.kwargs['experiment_files'] ]
+        experiment_files = list(set(experiment_files))
+        LOG.debug('These are experiment keys: {}'.format(experiment_files))
+        for index in self.result_paths:
+            df_dict[index]={}
+            for param in self.result_paths[index]:
+                if os.path.split( self.result_paths[index][param])[1] not in experiment_files:
+                    data= pandas.read_csv(self.result_paths[index][param],sep='\t')#self.kwargs['separator'])
+                    best_value_str='TaskList[Parameter Estimation].(Problem)Parameter Estimation.Best Value'
+                    data=data.rename(columns={best_value_str:'rss'})
+                    df_dict[index][param]=data
+        return df_dict
+        
+    def remove_experimental_files(self):
+        '''
+        Remove experimental data files from list of fiels to plot
+        '''
+        df_dict={}
 
         experiment_keys= [os.path.splitext(i)[0] for i in self.kwargs['experiment_files']]
+        experiment_keys = list(set(experiment_keys))
+        LOG.debug('These are experiment keys: {}'.format(experiment_keys))
         for i in self.result_paths:
             df_dict[i]={}
             for j in self.result_paths[i]:
-                if j not in experiment_keys:
+                LOG.debug('result path j: {}'.format(self.result_paths[i][j]))
+                if self.result_paths[i][j] not in experiment_keys:
                     data= pandas.read_csv(self.result_paths[i][j],sep='\t')#self.kwargs['separator'])
                     best_value_str='TaskList[Parameter Estimation].(Problem)Parameter Estimation.Best Value'
                     data=data.rename(columns={best_value_str:'rss'})
@@ -1040,7 +1062,7 @@ class Plot():
         LOG.debug('best parameter value is {}'.format(best_parameter_value))
         
         if best_parameter_value != None:
-            if self.kwargs['Log10']==True:
+            if self.kwargs['log10']==True:
                 best_parameter_value = round(numpy.log10(float(best_parameter_value)),6)
                 
                 
@@ -1050,6 +1072,7 @@ class Plot():
             plt.figure()
         ax = plt.subplot(111)
         if self.kwargs['log10']==True:
+            LOG.debug('data before log10: {}'.format(self.data[index][parameter]))
             data= numpy.log10(self.data[index][parameter])
         else:
             data= self.data[index][parameter]
@@ -1101,7 +1124,10 @@ class Plot():
             plt.plot(best_parameter_value,best_RSS_value,'ro',markersize=self.kwargs.get('marker_size'))
         
         #plot labels
-        plt.title('\n'.join(wrap('{},OriginalParameterValue={}'.format(parameter,best_parameter_value),self.kwargs.get('TitleWrapSize'))),fontsize=self.kwargs.get('FontSize'))
+        if self.kwargs['log10']:
+            plt.title('{}\nlog10({})'.format(parameter,best_parameter_value))
+        else:
+            plt.title('{}\n{}'.format(parameter,best_parameter_value))
 
         
         if self.kwargs['log10']==True:
@@ -1158,7 +1184,8 @@ class Plot():
 #            print self.data
             try:
                 for i in self.data[-1]:
-                    self.plot1(self.kwargs.get('index'),i)
+                    LOG.debug('Plot index: {}, plot parameter: {}'.format(-1,i))
+                    self.plot1(self.kwargs['index'],i)
             except KeyError:
                 raise Errors.InputError('index out of bounds, i.e. index>number PE runs')
 #                
