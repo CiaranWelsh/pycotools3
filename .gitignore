@@ -50,5 +50,7 @@ Temporary Items
 
 
 #my gitignore files 
-.idea/*
-.tox/*
+.idea
+./PyCoTools/*.pyc
+./PyCoTools/Tests/*.pyc
+
