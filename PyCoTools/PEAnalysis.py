@@ -80,12 +80,12 @@ class ParsePEData():
             Allow one to overwrite the pickle file automatically
             produced for speed. Default=False
     '''
-    def __init__(self,results_path,use_pickle=False,overwrite_pickle=True,
-                 remove_infinite_RSS=False,pickle_path=None):
+    def __init__(self,results_path,use_pickle=False,overwrite_pickle=True,drop_constants = False,
+                 pickle_path=None):
         #input argument variables
         
+        self.drop_constants = drop_constants        
         self.results_path=results_path #either file or folder
-        self.remove_infinite_RSS=remove_infinite_RSS
         #change directory
         LOG.info('Parsing data from {} into python'.format(self.results_path))
         assert os.path.exists(self.results_path),'{} does not exist'.format(self.results_path)
@@ -109,27 +109,28 @@ class ParsePEData():
             
         if self.use_pickle not in [True,False]:
             raise Errors.InputError('The argument use_pickle only accepts \'true\' or \'false\'')
-
+            
+        if self.drop_constants not in [True,False]:
+            raise Errors.InputError('The argument drop_constants only accepts \'true\' or \'false\'')
+            
         if self.overwrite_pickle not in [True,False]:
             raise Errors.InputError('The argument overwrite_pickle only accepts \'true\' or \'false\'')
 
-        if self.remove_infinite_RSS not in [True,False]:
-            raise Errors.InputError('The argument overwrite_pickle only accepts \'true\' or \'false\'')            
-        
         self.data=self.read_data()
         if self.data.empty==True:
             raise Errors.InputError('DataFrame is empty. Your PE data has not been read.')
         self.data=self.rename_RSS(self.data)
         self.data=self.sort_data(self.data)
         self.data=self.data.dropna()
-        self.data=self.filter_constants(self.data)
+        if self.drop_constants:
+            self.data=self.filter_constants(self.data)
         self.data=self.remove_infinite_RSS()
         self.data=pycopi.PruneCopasiHeaders(self.data).prune()
         try:
             self.log_data=self.log10_conversion()
         except AttributeError:
             raise TypeError('Could not convert to log10 scale. Chances are this is because you have infinite RSS values in your parameter estimation data. Try changing the optimization settings')
-            
+#            
 
 
 
@@ -538,7 +539,7 @@ class PlotScatters(object):
 
         options={'from_pickle':False,
                  'truncate_mode':'tolerance', #either 'below_x' or 'percent' for method of truncation. 
-                 'log10':False,
+                 'log10':True,
                  'x':100,           #if below_x: this is the x boundary. If percent: this is the percent of data to keep
                  'axis_size':15,
                  'font_size':22,
@@ -548,7 +549,6 @@ class PlotScatters(object):
                  'savefig':False,
                  'dpi':125,
                  'extra_title':None,
-                 'log10':False,
                  'show':False,
                  'colour_map':'jet_r',
                  'results_directory':None,
@@ -1112,8 +1112,9 @@ class EvaluateOptimizationPerformance(object):
         self.results_path=results_path
         #keywrod arguments
         options={#parse data options
-                 'truncate_mode':'tolerance', #either 'below_x' or 'percent' for method of truncation.
-                 'log10':100,           #if below_x: this is the x boundary. If percent: this is the percent of data to keep
+                 'truncate_mode':'percent', #either 'below_x' or 'percent' for method of truncation.
+                 'x':100,           #if below_x: this is the x boundary. If percent: this is the percent of data to keep
+                 'log10':True,
                  #graph options
                  'axis_size':15,
                  'show':False,
@@ -1151,7 +1152,6 @@ class EvaluateOptimizationPerformance(object):
         
         ## Set size of axes font
         matplotlib.rcParams.update({'font.size':self.kwargs.get('axis_size')})
-        
         
         self.plot_rss()
         os.chdir(os.path.dirname(self.results_path))
@@ -1605,7 +1605,7 @@ class ModelSelection():
     def _get_results_directories(self):
         '''
         Find the results directories embedded within MultimodelFit
-        and runMultiplePEs. 
+        and RunMutliplePEs. 
         '''
         LOG.debug('Finding location of parameter estimation results:')
         dct=self.multi_model_fit.results_folder_dct

@@ -7,7 +7,7 @@ PyCoTools/__init__.py
 PyCoTools/cellular_automata.py
 PyCoTools/logging_config.conf
 PyCoTools/pycopi.py
-PyCoTools/pydentify2.py
+PyCoTools/pydentify.py
 PyCoTools.egg-info/PKG-INFO
 PyCoTools.egg-info/SOURCES.txt
 PyCoTools.egg-info/dependency_links.txt
@@ -53,10 +53,7 @@ PyCoTools/Examples/KholodenkoExample/FilePaths.pyc
 PyCoTools/Examples/KholodenkoExample/Kholodenko.cps
 PyCoTools/Examples/KholodenkoExample/Kholodenko2000Network.xml
 PyCoTools/Examples/KholodenkoExample/KholodenkoNetworkImage.PNG
-PyCoTools/Examples/KholodenkoExample/KholodenkoTimeCourseOutput.txt
 PyCoTools/Examples/KholodenkoExample/Kholodenko_PE_results.txt
-PyCoTools/Examples/KholodenkoExample/Kholodenko_TimeCourse.txt
-PyCoTools/Examples/KholodenkoExample/Kholodenko_temp_TimeCourse.txt
 PyCoTools/Examples/KholodenkoExample/LocalPEData.txt
 PyCoTools/Examples/KholodenkoExample/LocalPEData0.txt
 PyCoTools/Examples/KholodenkoExample/ModelCalibrationWorkflow.ipynb
@@ -78,9 +75,9 @@ PyCoTools/Examples/KholodenkoExample/__init__.py
 PyCoTools/Examples/KholodenkoExample/fitItemTemplate.JPG
 PyCoTools/Examples/KholodenkoExample/fitItemTemplate.xlsx
 PyCoTools/Examples/KholodenkoExample/log.log
+PyCoTools/PyCoToolsTutorial/CleanUp.py
 PyCoTools/PyCoToolsTutorial/FilePaths.py
 PyCoTools/PyCoToolsTutorial/Getting Model Quantities.ipynb
-PyCoTools/PyCoToolsTutorial/Identifiability Analysis.ipynb
 PyCoTools/PyCoToolsTutorial/InsertParameters.ipynb
 PyCoTools/PyCoToolsTutorial/InstallationAndConfiguration.ipynb
 PyCoTools/PyCoToolsTutorial/Kholodenko.cps
@@ -88,7 +85,6 @@ PyCoTools/PyCoToolsTutorial/ModelSelection.ipynb
 PyCoTools/PyCoToolsTutorial/MultipleParameterEstimations.ipynb
 PyCoTools/PyCoToolsTutorial/ParameterEstimationAnalysis.ipynb
 PyCoTools/PyCoToolsTutorial/Profile Likelihoods.ipynb
-PyCoTools/PyCoToolsTutorial/PyCoToolsTutorial.html
 PyCoTools/PyCoToolsTutorial/PyCoToolsTutorial.ipynb
 PyCoTools/PyCoToolsTutorial/References.ipynb
 PyCoTools/PyCoToolsTutorial/Scan.ipynb
@@ -121,11 +117,13 @@ PyCoTools/Tests/PhasePlotTests.py
 PyCoTools/Tests/PlotBoxplotTests.py
 PyCoTools/Tests/PruneCopasiParameterTests.py
 PyCoTools/Tests/ReportTests.py
+PyCoTools/Tests/RunMultiplePEsTests.py
 PyCoTools/Tests/ScanTests.py
 PyCoTools/Tests/TestModels.py
 PyCoTools/Tests/TimeCourseTests.py
-PyCoTools/Tests/VilarModel2006pycopitestModel.cps
 PyCoTools/Tests/__init__.py
 PyCoTools/Tests/pydentify2_setup_tests.py
 PyCoTools/Tests/pydentifyTestsFromParametersInModel.py
 PyCoTools/Tests/pydentify_tests.py
+PyCoTools/Tests/test.py
+PyCoTools/Tests/test_model.cps
