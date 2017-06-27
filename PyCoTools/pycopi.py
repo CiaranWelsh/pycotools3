@@ -922,40 +922,6 @@ class Reports():
         comment=comment #get rid of annoying squiggly line above
         footer=etree.SubElement(report,'Footer')
         LOG.info('footer is: {}'.format(footer))
-        #footer.attrib['printTitle']=str(1)
-
-        # '''
-        # generate more SubE  lements dynamically
-        # '''
-        # #for metabolites
-        # if self.kwargs.get('metabolites')!=None:
-        #     for i in self.kwargs.get('metabolites'):
-        #         assert i in self.GMQ.get_IC_cns().keys()
-        #         if self.kwargs.get('quantity_type')=='concentration':
-        #             cn= self.GMQ.get_IC_cns()[i]['cn']+',Reference=InitialConcentration'
-        #         elif self.kwargs.get('quantity_type')=='particle_numbers':
-        #             cn= self.GMQ.get_IC_cns()[i]['cn']+',Reference=InitialParticleNumber'
-        #     #add to xml
-        #         Object=etree.SubElement(table,'Object')
-        #         Object.attrib['cn']=cn
-        #
-        # #for global quantities
-        # if self.kwargs.get('global_quantities')!=None:
-        #     for i in self.kwargs.get('global_quantities'):
-        #         cn= self.GMQ.get_global_quantities_cns()[i]['cn']+',Reference=InitialValue'
-        #         #add to xml
-        #         Object=etree.SubElement(table,'Object')
-        #         Object.attrib['cn']=cn
-        #
-        # #for local quantities
-        # if self.kwargs.get('local_parameters')!=None:
-        #     for i in self.kwargs.get('local_parameters'):
-        #         cn= self.GMQ.get_local_kinetic_parameters_cns()[i]['cn']+',Reference=Value'
-        #         #add to xml
-        #         Object=etree.SubElement(table,'Object')
-        #         Object.attrib['cn']=cn
-                
-                
         Object=etree.SubElement(footer,'Object')
         Object.attrib['cn']="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"
         Object=etree.SubElement(footer,'Object')
