@@ -889,7 +889,7 @@
       </Method>
     </Task>
     <Task key="Task_16" name="Scan" type="scan" scheduled="true" updateModel="false">
-      <Report append="false" confirmOverwrite="false" reference="Report_38" target="C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Fit2Results\ParameterFit0.txt"/><Problem>
+      <Report append="false" confirmOverwrite="false" reference="Report_38" target="C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Fit2Results\ParameterFit1.txt"/><Problem>
         <Parameter name="Subtask" type="unsignedInteger" value="5"/>
         <ParameterGroup name="ScanItems">
           <ParameterGroup name="ScanItem"><Parameter name="Number of steps" type="unsignedInteger" value="2"/><Parameter name="Type" type="unsignedInteger" value="0"/><Parameter name="Object" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP],Reference=InitialConcentration"/></ParameterGroup></ParameterGroup>

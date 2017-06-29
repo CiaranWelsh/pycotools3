@@ -1459,32 +1459,16 @@ class PlotPEData(object):
             '''
             need to subtract 1 from the intervals
             '''
-            TC=pycopi.TimeCourse(self.copasi_file,Start=0,
-                          End=self.exp_times[i]['end'],
-                          Intervals=self.exp_times[i]['end'],
-                          StepSize=1,
+            TC=pycopi.TimeCourse(self.copasi_file,start=0,
+                          end=self.exp_times[i]['end'],
+                          intervals=self.exp_times[i]['end'],
+                          step_size=1,
                           plot=False)
             P=pycopi.PruneCopasiHeaders(TC.data,replace=True)
             data_dct[i]=P.df
         return data_dct
 
 
-#    def simulate_time_course(self):
-#        data_dct={}
-#        for i in self.exp_times:
-#            '''
-#            need to subtract 1 from the intervals
-#            '''
-#            TC=pycopi.TimeCourse(self.copasi_file,Start=self.exp_times[i]['Start'],
-#                          End=self.exp_times[i]['End'],
-#                          Intervals=self.exp_times[i]['End'],
-#                          StepSize=1,plot=False)
-#            P=pycopi.PruneCopasiHeaders(TC.data,replace=True)
-#            data_dct[i]=P.df
-#        return data_dct
-        
-        
-                            
     def plot1(self,fle,parameter):
         '''
         plot one parameter of one experiment. for iterating over in 

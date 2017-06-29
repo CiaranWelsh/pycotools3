@@ -1327,8 +1327,12 @@ class TimeCourse(object):
             
             self.save()
             self.run()
+            
+            ##read the data. Needed for passing data to the 
+            ## parameter estimation plotting module so leave 
+            ## it here. 
+            self.data = self.read_sim_data()
             if self.kwargs.get('plot') == True:
-                self.data = self.read_sim_data()
                 self.plot()
 
         def _do_checks(self):
@@ -2080,7 +2084,40 @@ class PhaseSpace(TimeCourse):
         for i in self.combinations:
             self.plot1phase(i[0],i[1])
 
-#==============================================================================
+class FormatPEData():
+    def __init__(self,copasi_file,report_name):
+        self.copasi_file = copasi_file
+        self.GMQ = GetModelQuantities(self.copasi_file)
+        self.report_name = report_name
+        if os.path.isfile(self.report_name)!=True:
+            raise Errors.InputError('file {} does not exist'.format(self.report_name))
+            
+        try:
+            self.format = self.format_results()
+        except IOError:
+            raise Errors.FileIsEmptyError('{} is empty and therefore cannot be read by pandas. Make sure you have waited until there is data in the parameter estimation file before formatting parameter estimation output')
+        
+        
+    def format_results(self):
+        """
+        Results come without headers - parse the results
+        give them the proper headers then overwrite the file again
+        :return:
+        """
+        data = pandas.read_csv(self.report_name, sep='\t', header=None)
+        data = data.drop(data.columns[0], axis=1)
+        LOG.debug('Shape of estimated parameters: {}'.format(data.shape))
+        width = data.shape[1]
+        ## remove the extra bracket
+        data[width] = data[width].str[1:]
+#        num = data.shape[0]
+        names = self.GMQ.get_fit_item_order()+['RSS']
+        data.columns = names
+        os.remove(self.report_name)
+        data.to_csv(self.report_name,sep='\t',index=False)
+        return data
+
+
 class ParameterEstimation():
     '''
     Set up and run a parameter estimation in copasi. Since each parameter estimation
@@ -2607,36 +2644,36 @@ class ParameterEstimation():
         if self.kwargs.get('plot')==False:
             LOG.debug('running ParameterEstimation. Data reported to file: {}'.format(self.kwargs['report_name']))
             self.copasiML = Run(self.copasi_file, task='parameter_estimation')
-            self.format_results()
+            FormatPEData(self.copasi_file, self.kwargs['report_name'])
             return self.copasiML
         else:
             ##Run with 'mode' set to false just unchecks the executable boxes.
             self.copasiML=Run(self.copasi_file,task='parameter_estimation',mode=False)
             ## Now run with check_call
             subprocess.check_call('CopasiSE "{}"'.format(self.copasi_file),shell=True)
-            self.format_results()
+            FormatPEData(self.copasi_file, self.kwargs['report_name'])
             self.plot()
         return self.copasiML
 
-    def format_results(self):
-        """
-        Results come without headers - parse the results
-        give them the proper headers then overwrite the file again
-        :return:
-        """
-        data = pandas.read_csv(self.kwargs['report_name'], sep='\t', header=None)
-        data = data.drop(data.columns[0], axis=1)
-        LOG.debug('Shape of estimated parameters: {}'.format(data.shape))
-        width = data.shape[1]
-        ## remove the extra bracket
-        data[width] = data[width].str[1:]
-        num = data.shape[0]
-        names = self.GMQ.get_fit_item_order()+['RSS']
-        data.columns = names
-        os.remove(self.kwargs['report_name'])
-        data.to_csv(self.kwargs['report_name'],sep='\t',index=False)
-        LOG.debug('These are your estimated parameters: {}'.format(data.transpose()))
-        return data
+#    def format_results(self):
+#        """
+#        Results come without headers - parse the results
+#        give them the proper headers then overwrite the file again
+#        :return:
+#        """
+#        data = pandas.read_csv(self.kwargs['report_name'], sep='\t', header=None)
+#        data = data.drop(data.columns[0], axis=1)
+#        LOG.debug('Shape of estimated parameters: {}'.format(data.shape))
+#        width = data.shape[1]
+#        ## remove the extra bracket
+#        data[width] = data[width].str[1:]
+#        num = data.shape[0]
+#        names = self.GMQ.get_fit_item_order()+['RSS']
+#        data.columns = names
+#        os.remove(self.kwargs['report_name'])
+#        data.to_csv(self.kwargs['report_name'],sep='\t',index=False)
+#        LOG.debug('These are your estimated parameters: {}'.format(data.transpose()))
+#        return data
 
 
     def convert_to_string(self,num):
@@ -3734,7 +3771,7 @@ class RunMultiplePEs():
                  'global_quantities':self.GMQ.get_global_quantities().keys(),
                  'local_parameters': self.GMQ.get_local_kinetic_parameters_cns().keys(),
                  'quantity_type':'concentration',
-                 'append': False, 
+                 'append': True, 
                  'confirm_overwrite': False,
                  'config_filename':None,
                  'overwrite_config_file':False,
@@ -3862,6 +3899,15 @@ class RunMultiplePEs():
                 Run(self.sub_copasi_files[i],mode='multiprocess',task='scan')
             elif self.kwargs['run']=='SGE':
                 Run(self.sub_copasi_files[i],mode='SGE',task='scan')
+                
+    def format_output(self):
+        '''
+        recursively try and format the output. 
+        This function will be in a futile cycle until
+        the first set of results are output from copasi. 
+        '''
+        for i in glob.glob(self.kwargs['results_directory']+'/*'):
+            FormatPEData(self.copasi_file,i)
                     
     def copy_copasi(self):
         '''
@@ -4674,9 +4720,6 @@ class InsertParameters():
         self.kwargs=options
         self.kwargs = Bool2Str(self.kwargs).convert_dct()
         
-        LOG.debug('These are kwargs {}'.format(self.kwargs))
-        
-#        assert os.path.exists(self.parameter_path),'{} doesn\'t exist'.format(self.parameter_path)
         assert self.kwargs.get('quantity_type') in ['concentration','particle_numbers']
         if self.kwargs.get('parameter_dict') != None:
             if isinstance(self.kwargs.get('parameter_dict'),dict)!=True:
@@ -4773,7 +4816,6 @@ Please check the headers of your PE data are consistent with your model paramete
             k,v = re.findall(  '\((.*)\)\.(.*)',i  ) [0]
             local_dct[k]=v
 
-        LOG.debug('Constructing a dict of reaction:parameter for local parameters: {}'.format(local_dct))
         
         ## Iterate over all local parameters that we want to insert
         ## Identify the list of reactions ,match for the current reaction
