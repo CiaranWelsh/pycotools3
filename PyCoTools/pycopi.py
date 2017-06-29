@@ -1326,6 +1326,8 @@ class TimeCourse(object):
             '''
             
             self.save()
+#            print self.get_report_key()
+##            print self.report_definition()
             self.run()
             
             if self.kwargs.get('plot') == True:
@@ -1397,14 +1399,14 @@ class TimeCourse(object):
             return self.copasiML
 
         def report_definition(self):
-            Reports(self.copasi_file, **self.report_options).copasiML
-            return self.copasiML
+            return Reports(self.copasi_file, **self.report_options).copasiML
 
         def get_report_key(self):
             '''
             cros reference the timecourse task with the newly created
             time course reort to get the key
             '''
+            LOG.debug('getting report key')
             for i in self.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports'):
                 if i.attrib['name'] == 'Time-Course':
                     key = i.attrib['key']
@@ -1417,6 +1419,8 @@ class TimeCourse(object):
             were to put the results
             '''
             self.copasiML = self.report_definition()
+#            time.sleep(0.1)
+#            self.save()
             key = self.get_report_key()
 
             arg_dct = {'append': self.kwargs.get('append'),
@@ -1434,7 +1438,7 @@ class TimeCourse(object):
                 if present == False:
                     report = etree.Element('Report', attrib=arg_dct)
                     i.insert(0, report)
-                    #        self.save()
+                    self.save()   #This save is needed in order to save the report befor euse
             return self.copasiML
 
         def run(self):
