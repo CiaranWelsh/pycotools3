@@ -2,9 +2,9 @@ import os
 from lxml import etree 
 import argparse
 import shutil
-import pandas
-import glob
-import re
+#import pandas
+#import glob
+#import re
 '''
 
  This file is part of PyCoTools.
