@@ -4684,7 +4684,23 @@ Please check the headers of your PE data are consistent with your model paramete
     def save(self):
         self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
         return self.copasiML
-        
+
+
+
+class HighThroughputFit():
+    """
+    The aim of this class is to build a way
+    of fitting high throughput data sets to
+    a single abstract model.
+
+    The reason this class is being built is
+    to model microarray data with an abstract
+    model of transcription. In principle this
+    idea can be extended to other models and data
+    """
+
+    def __init__(self,abstract_model_file):
+        self.abstract_model_file = abstract_model_file
         
 #==============================================================================
 
