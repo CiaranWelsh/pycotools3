@@ -1326,10 +1326,7 @@ class TimeCourse(object):
             '''
             
             self.save()
-#            print self.get_report_key()
-##            print self.report_definition()
             self.run()
-            
             if self.kwargs.get('plot') == True:
                 self.data = self.read_sim_data()
                 self.plot()
@@ -1418,9 +1415,6 @@ class TimeCourse(object):
             Use the report defined in self.create_report to tell copasi
             were to put the results
             '''
-            self.copasiML = self.report_definition()
-#            time.sleep(0.1)
-#            self.save()
             key = self.get_report_key()
 
             arg_dct = {'append': self.kwargs.get('append'),
