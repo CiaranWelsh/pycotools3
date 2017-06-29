@@ -922,40 +922,6 @@ class Reports():
         comment=comment #get rid of annoying squiggly line above
         footer=etree.SubElement(report,'Footer')
         LOG.info('footer is: {}'.format(footer))
-        #footer.attrib['printTitle']=str(1)
-
-        # '''
-        # generate more SubE  lements dynamically
-        # '''
-        # #for metabolites
-        # if self.kwargs.get('metabolites')!=None:
-        #     for i in self.kwargs.get('metabolites'):
-        #         assert i in self.GMQ.get_IC_cns().keys()
-        #         if self.kwargs.get('quantity_type')=='concentration':
-        #             cn= self.GMQ.get_IC_cns()[i]['cn']+',Reference=InitialConcentration'
-        #         elif self.kwargs.get('quantity_type')=='particle_numbers':
-        #             cn= self.GMQ.get_IC_cns()[i]['cn']+',Reference=InitialParticleNumber'
-        #     #add to xml
-        #         Object=etree.SubElement(table,'Object')
-        #         Object.attrib['cn']=cn
-        #
-        # #for global quantities
-        # if self.kwargs.get('global_quantities')!=None:
-        #     for i in self.kwargs.get('global_quantities'):
-        #         cn= self.GMQ.get_global_quantities_cns()[i]['cn']+',Reference=InitialValue'
-        #         #add to xml
-        #         Object=etree.SubElement(table,'Object')
-        #         Object.attrib['cn']=cn
-        #
-        # #for local quantities
-        # if self.kwargs.get('local_parameters')!=None:
-        #     for i in self.kwargs.get('local_parameters'):
-        #         cn= self.GMQ.get_local_kinetic_parameters_cns()[i]['cn']+',Reference=Value'
-        #         #add to xml
-        #         Object=etree.SubElement(table,'Object')
-        #         Object.attrib['cn']=cn
-                
-                
         Object=etree.SubElement(footer,'Object')
         Object.attrib['cn']="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"
         Object=etree.SubElement(footer,'Object')
@@ -1361,7 +1327,6 @@ class TimeCourse(object):
             
             self.save()
             self.run()
-            
             if self.kwargs.get('plot') == True:
                 self.data = self.read_sim_data()
                 self.plot()
@@ -1431,14 +1396,14 @@ class TimeCourse(object):
             return self.copasiML
 
         def report_definition(self):
-            Reports(self.copasi_file, **self.report_options).copasiML
-            return self.copasiML
+            return Reports(self.copasi_file, **self.report_options).copasiML
 
         def get_report_key(self):
             '''
             cros reference the timecourse task with the newly created
             time course reort to get the key
             '''
+            LOG.debug('getting report key')
             for i in self.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports'):
                 if i.attrib['name'] == 'Time-Course':
                     key = i.attrib['key']
@@ -1450,7 +1415,6 @@ class TimeCourse(object):
             Use the report defined in self.create_report to tell copasi
             were to put the results
             '''
-            self.copasiML = self.report_definition()
             key = self.get_report_key()
 
             arg_dct = {'append': self.kwargs.get('append'),
@@ -1468,7 +1432,7 @@ class TimeCourse(object):
                 if present == False:
                     report = etree.Element('Report', attrib=arg_dct)
                     i.insert(0, report)
-                    #        self.save()
+                    self.save()   #This save is needed in order to save the report befor euse
             return self.copasiML
 
         def run(self):
@@ -4718,7 +4682,23 @@ Please check the headers of your PE data are consistent with your model paramete
     def save(self):
         self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
         return self.copasiML
-        
+
+
+
+class HighThroughputFit():
+    """
+    The aim of this class is to build a way
+    of fitting high throughput data sets to
+    a single abstract model.
+
+    The reason this class is being built is
+    to model microarray data with an abstract
+    model of transcription. In principle this
+    idea can be extended to other models and data
+    """
+
+    def __init__(self,abstract_model_file):
+        self.abstract_model_file = abstract_model_file
         
 #==============================================================================
 
