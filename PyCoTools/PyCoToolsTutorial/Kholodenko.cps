@@ -780,7 +780,7 @@
           <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos-P]" value="6022140856999999" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1]" value="1.68619943996e+017" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-P]" value="6022140856999999" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP]" value="1.806642537e+016" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP]" value="2.408856716e+16" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2]" value="1.68619943996e+017" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-P]" value="6022140856999999" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-PP]" value="6022140856999999" type="Species" simulationType="reactions"/>
@@ -845,7 +845,7 @@
       <StateTemplateVariable objectReference="Metabolite_15"/>
       <StateTemplateVariable objectReference="Compartment_1"/>
     </StateTemplate>
-    <InitialState type="initialState">0 6.022140857e+15 6.022140857e+15 5.4199267713e+16 1.68619943996e+17 1.68619943996e+17 1.806642537e+16 6.022140857e+15 6.022140857e+15 1</InitialState>
+    <InitialState type="initialState">0 6.022140857e+15 6.022140857e+15 5.4199267713e+16 1.68619943996e+17 1.68619943996e+17 2.408856716e+16 6.022140857e+15 6.022140857e+15 1</InitialState>
   </Model>
   <ListOfTasks>
     <Task key="Task_14" name="Steady-State" type="steadyState" scheduled="false" updateModel="false">
@@ -1175,7 +1175,7 @@
             </ParameterGroup>
             <Parameter name="LowerBound" type="cn" value="1e-06"/>
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP],Reference=InitialConcentration"/>
-            <Parameter name="StartValue" type="float" value="30.0"/>
+            <Parameter name="StartValue" type="float" value="40.0"/>
             <Parameter name="UpperBound" type="cn" value="1000000"/>
           </ParameterGroup>
           <ParameterGroup name="FitItem">

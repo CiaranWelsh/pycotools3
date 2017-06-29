@@ -4312,6 +4312,293 @@ class MultiModelFit():
         return cps_list,exp_list
         
 #==============================================================================
+class InsertParameters16():
+    '''
+    Insert parameters from a file, dictionary or a pandas dataframe into a copasi
+    file. 
+    
+    Positional Arguments:
+    
+        copasi_file:
+            The copasi file you want to enter parameters into
+    
+    **Kwargs
+        Index:
+            Index of parameter estimation run to input into the copasi file. 
+            The index is ordered by rank of best fit, with 0 being the best.
+            Default=0            
+            
+        QuantityType:
+            Either 'particle_number' or 'concentration'. Default='concentration'
+            
+        ReportName;
+            Unused. Delete?
+            
+        OutputML:
+            If Save set to 'duplicate', this is the duplicate filename
+            
+        Save:
+            either 'false','overwrite' or 'duplicate',default=overwrite
+                
+        ParameterDict:
+            A python dictionary with keys correponding to parameters in the model
+            and values the parameters (dict[parameter_name]=parameter value). 
+            Default=None
+            
+        DF:
+            A pandas dataframe with parameters being column names matching 
+            parameters in your model and RSS values and rows being individual 
+            parameter estimationruns. In this case, ensure you have set the 
+            Index parameter to the index you want to use. Dataframes are 
+            automatically sorted by the RSS column. 
+            
+        ParameterPath:
+            Full path to a parameter estimation file ('.txt','.xls','.xlsx' or 
+            '.csv') or a folder containing parameter estimation files. 
+        
+    '''
+    def __init__(self,copasi_file,**kwargs):
+        '''
+        coapsi_file = file you want to insert
+        kwargs:
+            Index: If not specified default to -1
+                    can be int or list of ints
+        '''
+        self.copasi_file=copasi_file
+        self.CParser=CopasiMLParser(self.copasi_file)
+        self.copasiML=self.CParser.copasiML 
+        self.GMQ=GetModelQuantities(self.copasi_file)
+
+        default_report_name=os.path.split(self.copasi_file)[1][:-4]+'_PE_results.txt'
+        default_outputML=os.path.split(self.copasi_file)[1][:-4]+'_Duplicate.cps'
+        options={#report variables
+                 'Metabolites':self.GMQ.get_metabolites().keys(),
+                 'GlobalQuantities':self.GMQ.get_global_quantities().keys(),
+                 'QuantityType':'concentration',
+                 'ReportName':default_report_name,
+                 'OutputML':default_outputML,
+                 'Save':'overwrite',
+                 'Index':0,
+                 'ParameterDict':None,
+                 'DF':None,
+                 'ParameterPath':None,
+                 
+                 }
+                     
+        for i in kwargs.keys():
+            assert i in options.keys(),'{} is not a keyword argument for InsertParameters'.format(i)
+        options.update( kwargs) 
+        self.kwargs=options
+        
+#        assert os.path.exists(self.parameter_path),'{} doesn\'t exist'.format(self.parameter_path)
+        assert self.kwargs.get('QuantityType') in ['concentration','particle_numbers']
+        if self.kwargs.get('ParameterDict') != None:
+            if isinstance(self.kwargs.get('ParameterDict'),dict)!=True:
+                raise Errors.InputError('Argument to \'ParameterDict\' keyword needs to be of type dict')
+            for i in self.kwargs.get('ParameterDict').keys():
+                if i not in self.GMQ.get_all_model_variables().keys():
+                    raise Errors.InputError('Parameter \'{}\' is not in your model. \n\nThese are in your model:\n{}'.format(i,sorted(self.GMQ.get_all_model_variables().keys())))
+                
+        if self.kwargs.get('ParameterDict')==None and self.kwargs.get('ParameterPath')==None and self.kwargs.get('DF') is None:
+            raise Errors.InputError('You need to give at least one of ParameterDict,ParameterPath or DF keyword arguments')
+        
+        assert isinstance(self.kwargs.get('Index'),int)
+                
+            
+        #make sure user gives the right number of arguments
+        num=0
+        if self.kwargs.get('ParameterDict')!=None:
+            num+=1
+        if self.kwargs.get('DF') is not None:
+            num+=1
+        if self.kwargs.get('ParameterPath')!=None:
+            num+=1
+        if num!=1:
+            raise Errors.InputError('You need to supply exactly one of ParameterDict,ParameterPath or df keyord argument. You cannot give two or three.')
+        
+#        self.check_parameter_consistancy()
+        self.parameters=self.get_parameters()   
+        LOG.info('Best Estimated Parameters: {}'.format(self.parameters.transpose()))
+        self.parameters= self.replace_gl_and_lt()
+        self.insert_all()
+        #change
+
+    def save(self):
+        if self.kwargs.get('Save')=='duplicate':
+            self.CParser.write_copasi_file(self.kwargs.get('OutputML'),self.copasiML)
+        elif self.kwargs.get('Save')=='overwrite':
+            self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
+        return self.copasiML
+
+
+    def check_parameter_consistancy_deprecated(self):
+        '''
+        raise an error if no parameters in the PE header match 
+        parameters in model
+        '''
+        model_parameter_names= set(self.GMQ.get_all_model_variables().keys())
+        input_parameter_names= set(list(self.get_parameters().keys()))
+        intersection=list( model_parameter_names.intersection(input_parameter_names))
+        if intersection==[]:
+            raise Errors.InputError('''The parameters in your parameter estimation data are not in your model.\
+Please check the headers of your PE data are consistent with your model parameter names.''' )
+            
+    def check_parameter_consistancy(self,df):
+        '''
+        raise an error if no parameters in the PE header match 
+        parameters in model
+        
+        args:
+            df:
+                containing parameters to compare with parameters
+                in the model
+        '''
+        model_parameter_names= set(self.GMQ.get_all_model_variables().keys())
+        input_parameter_names= set(list(df.keys()))
+        intersection=list( model_parameter_names.intersection(input_parameter_names))
+        if intersection==[]:
+            raise Errors.InputError('''The parameters in your parameter estimation data are not in your model.\
+Please check the headers of your PE data are consistent with your model parameter names.''' )            
+            
+    def get_parameters(self):
+        '''
+        Get parameters depending on the type of input. 
+        Converge on a pandas dataframe. 
+        Columns = parameters, rows = parameter sets
+        
+        Use check parameter consistency to see
+        whether headers have been pruned or not. If not try pruning them
+        '''
+        if self.kwargs.get('ParameterDict')!=None:
+            assert isinstance(self.kwargs.get('ParameterDict'),dict),'The ParameterDict argument takes a Python dictionary'
+            for i in self.kwargs.get('ParameterDict'):
+                assert i in self.GMQ.get_all_model_variables().keys(),'{} is not a parameter. These are your parameters:{}'.format(i,self.GMQ.get_all_model_variables().keys())
+            return pandas.DataFrame(self.kwargs.get('ParameterDict'),index=[0])
+        
+        if self.kwargs.get('ParameterPath')!=None:
+            PED=PEAnalysis.ParsePEData(self.kwargs.get('ParameterPath'))
+            if isinstance(self.kwargs.get('Index'),int):
+                return pandas.DataFrame(PED.data.iloc[self.kwargs.get('Index')]).transpose()
+            else: 
+                return PED.data.iloc[self.kwargs.get('Index')]
+        if self.kwargs.get('DF') is not None:
+            df= pandas.DataFrame(self.kwargs.get('DF').iloc[self.kwargs.get('Index')]).transpose()
+        try:
+            self.check_parameter_consistancy(df)
+        except Errors.InputError:
+            df=PruneCopasiHeaders(df).prune()
+            self.check_parameter_consistancy(df)
+        return df
+
+    def insert_locals(self):
+        '''
+        
+        '''
+        #first isolate the local parameters 
+        local=self.GMQ.get_local_kinetic_parameters_cns().keys()
+        for i in local:
+            query='//*[@cn="{}"]'.format( self.GMQ.get_local_kinetic_parameters_cns()[i]['cn'])
+            for j in self.copasiML.xpath( query):
+                if i in self.parameters.keys():
+                    j.attrib['value']=str(float(self.parameters[i]))
+        return self.copasiML
+                    
+    def insert_global(self):
+        glob= self.GMQ.get_global_quantities_cns().keys()
+        for i in glob:
+            query='//*[@cn="{}"]'.format( self.GMQ.get_global_quantities_cns()[i]['cn'])
+            for j in self.copasiML.xpath(query):
+                if i in self.parameters.keys() and j.attrib['simulationType']!='assignment':
+                    j.attrib['value']=str(float(self.parameters[i]))
+        return self.copasiML
+
+    def insert_ICs(self):
+        IC=self.GMQ.get_IC_cns()
+        for i in IC:
+            query='//*[@cn="{}"]'.format( self.GMQ.get_IC_cns()[i]['cn'])
+            for j in self.copasiML.xpath(query):
+                if i in self.parameters.keys() and j.attrib['simulationType']=='reactions':
+                    if self.kwargs.get('QuantityType')=='concentration':
+                        particles=self.GMQ.convert_molar_to_particles(float(self.parameters[i]),self.GMQ.get_quantity_units(),float(IC[i]['compartment_volume']))#,self.GMQ.get_volume_unit())
+##                        particles=self.parameters[i]
+                    elif self.kwargs.get('QuantityType')=='particle_numbers':
+                        particles=self.parameters[i]
+                    j.attrib['value']=str(float(particles))
+        return self.copasiML
+
+
+
+    def insert_fit_items(self):
+        '''
+        insert parameters into fit items
+        '''
+        copasiML=self.copasiML
+        query="//*[@name='OptimizationItemList']"
+        ICs_and_global=None
+        reaction=None
+        parameter=None
+        for i in copasiML.xpath(query):
+            for j in list(i):
+                for k in list(j):
+                    if k.attrib['name']=='ObjectCN':
+                        pattern1='Vector=(?!Reactions).*\[(.*)\]'#match global and IC parameters but not local
+                        search1= re.findall(pattern1,k.attrib['value'])
+                        
+                        if search1 !=[]:
+                            ICs_and_global=search1[0]
+                    if k.attrib['name']=='StartValue':
+                        if ICs_and_global !=None:
+                            if ICs_and_global in self.parameters.keys():
+                                k.attrib['value']=str(float(self.parameters[ICs_and_global]))
+                    #now again for local parameters
+                    if k.attrib['name']=='ObjectCN':
+                        pattern2='Vector=Reactions\[(.*)\].*Parameter=(.*),'
+                        search2= re.findall(pattern2,k.attrib['value'])
+
+                        if search2!=[]:
+                            reaction,parameter= search2[0]
+                            local= '({}).{}'.format(reaction,parameter)
+                    if k.attrib['name']=='StartValue':
+                        if reaction != None and parameter !=None:
+                            if local in self.parameters.keys():
+                                k.attrib['value']=str(float(self.parameters[local]))
+                            else:
+                                continue
+        return self.copasiML
+        
+    def get_current_parameters_deprecated(self):
+        '''
+        Deprecated. Just use self.GMQ.get_all_model_variables()
+        '''
+        return self.GMQ.get_all_model_variables()
+        
+
+
+    def replace_gl_and_lt(self):
+        '''
+        replace greater than and less than symbols for XML purposes
+        '''
+        l=[]
+        for i in self.parameters.keys():
+            i= i.replace('<','\<')
+            i=i.replace('>','\>')
+            l.append(i)
+        self.parameters.columns=pandas.Index(l)
+        return self.parameters
+            
+        
+    def insert_all(self):
+        self.copasiML=self.insert_locals()
+#        self.save() 
+        self.copasiML=self.insert_global()
+#        self.save()
+        self.copasiML=self.insert_ICs()
+#        self.save()
+        self.copasiML=self.insert_fit_items()
+        self.save()
+#        os.chdir(os.path.dirname(self.copasi_file))
+
+
 
 class InsertParameters():
     '''
@@ -4675,6 +4962,11 @@ Please check the headers of your PE data are consistent with your model paramete
         self.copasiML=self.insert_locals()
         self.copasiML = self.insert_global_and_ICs()
         self.copasiML=self.insert_fit_items()
+        
+        ##
+        self.copasiML = self.insert_global()
+        self.copasiML = self.insert_ICs()
+        
         self.save()
         
     def save(self):
