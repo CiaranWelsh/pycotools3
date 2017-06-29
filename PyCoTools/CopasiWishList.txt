@@ -1,0 +1,2 @@
+1) Enable reactions to be manually moved up and down in the UI reactions task. I like to group together reactions. 
+2) Fix headers for reports. Maybe include another default report for parameter estimation which collects just the best parameter values. 

@@ -3774,6 +3774,7 @@ class RunMultiplePEs():
                  'append': True, 
                  'confirm_overwrite': False,
                  'config_filename':None,
+                 'output_in_subtask':False,
                  'overwrite_config_file':False,
                  'prune_headers':True,
                  'update_model':False,
@@ -3850,12 +3851,12 @@ class RunMultiplePEs():
         del self.PE_dct['copy_number']
         del self.PE_dct['pe_number']
         del self.PE_dct['run']
+        del self.PE_dct['output_in_subtask']
 
 
         self.report_files=self.enumerate_PE_output()
         LOG.debug('Create an instance of ParameterEstimation')
         self.PE=ParameterEstimation(self.copasi_file,self.experiment_files,**self.PE_dct)
-#
 
 
     def setup(self):
@@ -3982,7 +3983,10 @@ class RunMultiplePEs():
              subtask='parameter_estimation', #this is the default, but included here for demonstration anyway
              report_type='parameter_estimation', ## report automatically set up within copasi. 
              report_name=report,
-             run=False) )#run the scan task automatically in the background
+             run=False,#run the scan task automatically in the background
+             append = self.kwargs['append'],
+             confirm_overwrite = self.kwargs['confirm_overwrite'],
+             output_in_subtask = self.kwargs['output_in_subtask']) )
         LOG.info('Setup Took {} seconds'.format(time.time() - start))
 
     ##void

@@ -1,4 +1,7 @@
-<!-- generated with COPASI 4.19 (Build 140) (http://www.copasi.org) at 2017-06-29 20:26:51 UTC --><?oxygen RNGSchema="http://www.copasi.org/static/schema/CopasiML.rng" type="xml"?><COPASI xmlns="http://www.copasi.org/static/schema" versionMajor="4" versionMinor="19" versionDevel="140" copasiSourcesModified="0">
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generated with COPASI 4.19 (Build 140) (http://www.copasi.org) at 2017-06-29 22:51:41 UTC -->
+<?oxygen RNGSchema="http://www.copasi.org/static/schema/CopasiML.rng" type="xml"?>
+<COPASI xmlns="http://www.copasi.org/static/schema" versionMajor="4" versionMinor="19" versionDevel="140" copasiSourcesModified="0">
   <ListOfFunctions>
     <Function key="Function_40" name="Function for MAPKKK activation" type="UserDefined" reversible="false">
       <Expression>
@@ -108,9 +111,14 @@
       </ListOfParameterDescriptions>
     </Function>
   </ListOfFunctions>
-  <Model key="Model_3" name="Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade" simulationType="time" timeUnit="s" volumeUnit="l" areaUnit="m&#178;" lengthUnit="m" quantityUnit="nmol" type="deterministic" avogadroConstant="6.022140857e+023">
+  <Model key="Model_3" name="Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade" simulationType="time" timeUnit="s" volumeUnit="l" areaUnit="m²" lengthUnit="m" quantityUnit="nmol" type="deterministic" avogadroConstant="6.022140857e+023">
     <MiriamAnnotation>
-<rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
+<rdf:RDF
+   xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#"
+   xmlns:bqbiol="http://biomodels.net/biology-qualifiers/"
+   xmlns:dcterms="http://purl.org/dc/terms/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
   <rdf:Description rdf:about="#Model_3">
     <bqbiol:hasTaxon>
       <rdf:Bag>
@@ -221,7 +229,7 @@
   <rdf:Description rdf:about="#Metabolite_1">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/P09560"/>
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/P09560" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -234,7 +242,7 @@
   <rdf:Description rdf:about="#Metabolite_3">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/P09560"/>
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/P09560" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -247,7 +255,7 @@
   <rdf:Description rdf:about="#Metabolite_5">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/Q05116"/>
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/Q05116" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -260,7 +268,7 @@
   <rdf:Description rdf:about="#Metabolite_7">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/Q05116"/>
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/Q05116" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -273,7 +281,7 @@
   <rdf:Description rdf:about="#Metabolite_9">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/Q05116"/>
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/Q05116" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -286,7 +294,7 @@
   <rdf:Description rdf:about="#Metabolite_11">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/P26696"/>
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/P26696" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -299,7 +307,7 @@
   <rdf:Description rdf:about="#Metabolite_13">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/P26696"/>
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/P26696" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -312,7 +320,7 @@
   <rdf:Description rdf:about="#Metabolite_15">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/P26696"/>
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/P26696" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -327,14 +335,14 @@
   <rdf:Description rdf:about="#Reaction_0">
     <CopasiMT:isHomologTo>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_525"/>
+        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_525" />
       </rdf:Bag>
     </CopasiMT:isHomologTo>
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/ec-code/2.7.11.1"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0000185"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0008349"/>
+        <rdf:li rdf:resource="http://identifiers.org/ec-code/2.7.11.1" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0000185" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0008349" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -384,9 +392,9 @@
   <rdf:Description rdf:about="#Reaction_1">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/ec-code/3.1.3.16"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006470"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0051390"/>
+        <rdf:li rdf:resource="http://identifiers.org/ec-code/3.1.3.16" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006470" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0051390" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -422,14 +430,14 @@
   <rdf:Description rdf:about="#Reaction_2">
     <CopasiMT:isHomologTo>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_614"/>
+        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_614" />
       </rdf:Bag>
     </CopasiMT:isHomologTo>
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/ec-code/2.7.11.25"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0004709"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006468"/>
+        <rdf:li rdf:resource="http://identifiers.org/ec-code/2.7.11.25" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0004709" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006468" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -471,15 +479,15 @@
   <rdf:Description rdf:about="#Reaction_3">
     <CopasiMT:isHomologTo>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_614"/>
+        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_614" />
       </rdf:Bag>
     </CopasiMT:isHomologTo>
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/ec-code/2.7.11.25"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0000186"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0004709"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006468"/>
+        <rdf:li rdf:resource="http://identifiers.org/ec-code/2.7.11.25" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0000186" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0004709" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006468" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -521,9 +529,9 @@
   <rdf:Description rdf:about="#Reaction_4">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/ec-code/3.1.3.16"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006470"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0051389"/>
+        <rdf:li rdf:resource="http://identifiers.org/ec-code/3.1.3.16" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006470" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0051389" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -559,8 +567,8 @@
   <rdf:Description rdf:about="#Reaction_5">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/ec-code/3.1.3.16"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006470"/>
+        <rdf:li rdf:resource="http://identifiers.org/ec-code/3.1.3.16" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006470" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -596,15 +604,15 @@
   <rdf:Description rdf:about="#Reaction_6">
     <CopasiMT:hasVersion>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_136"/>
-        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_2247"/>
+        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_136" />
+        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_2247" />
       </rdf:Bag>
     </CopasiMT:hasVersion>
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/ec-code/2.7.12.2"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0004708"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006468"/>
+        <rdf:li rdf:resource="http://identifiers.org/ec-code/2.7.12.2" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0004708" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006468" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -646,16 +654,16 @@
   <rdf:Description rdf:about="#Reaction_7">
     <CopasiMT:hasVersion>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_136"/>
-        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_2247"/>
+        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_136" />
+        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_2247" />
       </rdf:Bag>
     </CopasiMT:hasVersion>
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/ec-code/2.7.12.2"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0000187"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0004708"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006468"/>
+        <rdf:li rdf:resource="http://identifiers.org/ec-code/2.7.12.2" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0000187" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0004708" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006468" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -697,9 +705,9 @@
   <rdf:Description rdf:about="#Reaction_8">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/ec-code/3.1.3.16"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0000188"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006470"/>
+        <rdf:li rdf:resource="http://identifiers.org/ec-code/3.1.3.16" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0000188" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006470" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -735,8 +743,8 @@
   <rdf:Description rdf:about="#Reaction_9">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/ec-code/3.1.3.16"/>
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006470"/>
+        <rdf:li rdf:resource="http://identifiers.org/ec-code/3.1.3.16" />
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006470" />
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -776,13 +784,13 @@
           <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol]" value="1" type="Compartment" simulationType="fixed"/>
         </ModelParameterGroup>
         <ModelParameterGroup cn="String=Initial Species Values" type="Group">
-          <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos]" value="602214178.9999998" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos]" value="602214178.9999996" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos-P]" value="80198668860" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1]" value="930968921.4579999" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-P]" value="920201331.9369998" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP]" value="624899587.1229998" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2]" value="640623399.3369998" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-P]" value="757790190.0029998" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-P]" value="920201331.9369994" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP]" value="624899587.1229997" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2]" value="640623399.3369994" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-P]" value="757790190.0029994" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-PP]" value="802787633.4579999" type="Species" simulationType="reactions"/>
         </ModelParameterGroup>
         <ModelParameterGroup cn="String=Initial Global Quantities" type="Group">
@@ -846,7 +854,7 @@
       <StateTemplateVariable objectReference="Compartment_1"/>
     </StateTemplate>
     <InitialState type="initialState">
-      0 920201331.9369998 757790190.0029998 602214178.9999998 930968921.4579999 640623399.3369998 624899587.1229998 80198668860 802787633.4579999 1 
+      0 920201331.9369994 757790190.0029994 602214178.9999996 930968921.4579999 640623399.3369994 624899587.1229997 80198668860 802787633.4579999 1 
     </InitialState>
   </Model>
   <ListOfTasks>
@@ -869,32 +877,38 @@
       </Method>
     </Task>
     <Task key="Task_15" name="Time-Course" type="timeCourse" scheduled="false" updateModel="false">
-      <Report reference="Report_30" target="" append="false" confirmOverwrite="false" type="Deterministic(LSODA)" name="Deterministic (LSODA)"/>
-      <Problem type="Deterministic(LSODA)" name="Deterministic (LSODA)">
+      <Report reference="Report_18" target="" append="0" confirmOverwrite="0"/>
+      <Problem>
         <Parameter name="AutomaticStepSize" type="bool" value="0"/>
-        <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
-        <Parameter name="StepSize" type="float" value="100"/>
+        <Parameter name="StepNumber" type="unsignedInteger" value="1"/>
+        <Parameter name="StepSize" type="float" value="1000"/>
         <Parameter name="Duration" type="float" value="1000"/>
         <Parameter name="TimeSeriesRequested" type="bool" value="1"/>
-        <Parameter name="OutputStartTime" type="float" value="0.0"/>
-        <Parameter name="Output Event" type="bool" value="false"/>
+        <Parameter name="OutputStartTime" type="float" value="0"/>
+        <Parameter name="Output Event" type="bool" value="0"/>
         <Parameter name="Start in Steady State" type="bool" value="0"/>
       </Problem>
       <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
         <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
-        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-6"/>
-        <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-006"/>
+        <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-012"/>
         <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
         <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
       </Method>
     </Task>
     <Task key="Task_16" name="Scan" type="scan" scheduled="true" updateModel="false">
-      <Report append="false" confirmOverwrite="false" reference="Report_38" target="C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Fit2Results\ParameterFit1.txt"/><Problem>
+      <Report reference="Report_19" target="Fit1Results/ParameterFit3.txt" append="0" confirmOverwrite="0"/>
+      <Problem>
         <Parameter name="Subtask" type="unsignedInteger" value="5"/>
         <ParameterGroup name="ScanItems">
-          <ParameterGroup name="ScanItem"><Parameter name="Number of steps" type="unsignedInteger" value="2"/><Parameter name="Type" type="unsignedInteger" value="0"/><Parameter name="Object" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP],Reference=InitialConcentration"/></ParameterGroup></ParameterGroup>
-        <Parameter name="Output in subtask" type="bool" value="false"/>
-        <Parameter name="Adjust initial conditions" type="bool" value="false"/>
+          <ParameterGroup name="ScanItem">
+            <Parameter name="Number of steps" type="unsignedInteger" value="4"/>
+            <Parameter name="Object" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP],Reference=InitialConcentration"/>
+            <Parameter name="Type" type="unsignedInteger" value="0"/>
+          </ParameterGroup>
+        </ParameterGroup>
+        <Parameter name="Output in subtask" type="bool" value="0"/>
+        <Parameter name="Adjust initial conditions" type="bool" value="0"/>
       </Problem>
       <Method name="Scan Framework" type="ScanFramework">
       </Method>
@@ -928,26 +942,383 @@
       </Method>
     </Task>
     <Task key="Task_19" name="Parameter Estimation" type="parameterFitting" scheduled="false" updateModel="false">
-      <Report reference="Report_32" target="" append="false" confirmOverwrite="false"/>
+      <Report reference="Report_12" target="" append="0" confirmOverwrite="0"/>
       <Problem>
         <Parameter name="Maximize" type="bool" value="0"/>
-        <Parameter name="Randomize Start Values" type="bool" value="true"/>
+        <Parameter name="Randomize Start Values" type="bool" value="1"/>
         <Parameter name="Calculate Statistics" type="bool" value="0"/>
         <ParameterGroup name="OptimizationItemList">
-          <ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK],ParameterGroup=Parameters,Parameter=KK3,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=K1,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-PP],ParameterGroup=Parameters,Parameter=V9,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK],ParameterGroup=Parameters,Parameter=k7,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=k8,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK inactivation],ParameterGroup=Parameters,Parameter=KK2,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK inactivation],ParameterGroup=Parameters,Parameter=V2,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK],ParameterGroup=Parameters,Parameter=k3,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=k4,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-PP],ParameterGroup=Parameters,Parameter=KK5,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-PP],ParameterGroup=Parameters,Parameter=KK9,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=KK6,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=KK4,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=V1,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=Ki,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK],ParameterGroup=Parameters,Parameter=KK7,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=KK10,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=KK8,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-PP],ParameterGroup=Parameters,Parameter=V5,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=V10,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=V6,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=n,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-P],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-PP],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos-P],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1],Reference=InitialConcentration"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-P],Reference=InitialConcentration"/></ParameterGroup></ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK],ParameterGroup=Parameters,Parameter=KK3,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="38.1214"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=K1,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="0.0002028632792324538"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-PP],ParameterGroup=Parameters,Parameter=V9,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="0.005482184743650248"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK],ParameterGroup=Parameters,Parameter=k7,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="4.456333716331739"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=k8,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="0.03922277899010996"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK inactivation],ParameterGroup=Parameters,Parameter=KK2,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="1.444259409291574e-005"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK inactivation],ParameterGroup=Parameters,Parameter=V2,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="178.0649811569948"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK],ParameterGroup=Parameters,Parameter=k3,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="43152.91870103326"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=k4,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="1718.77189651979"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-PP],ParameterGroup=Parameters,Parameter=KK5,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="5450.832510051179"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-PP],ParameterGroup=Parameters,Parameter=KK9,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="5.844033965599347"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=KK6,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="0.01440158278098896"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=KK4,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="0.2601098378055478"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=V1,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="2642.343863111713"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=Ki,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="0.902021535851844"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK],ParameterGroup=Parameters,Parameter=KK7,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="0.484988119793602"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=KK10,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="27.63940549164894"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=KK8,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="6.726777112029894"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-PP],ParameterGroup=Parameters,Parameter=V5,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="3.430806671254784"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=V10,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="0.001151155195901883"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=V6,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="1.113356227148259e-005"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=n,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="3832.980866575591"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="0.0003296673966420691"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="0.1316547200099842"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="1407.373884605722"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-P],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="0.001217341356158511"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-PP],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="0.004350313999503812"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos-P],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="0.1042679740505683"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="2.656595021870599e-006"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-P],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="28.51741843136094"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+        </ParameterGroup>
         <ParameterGroup name="OptimizationConstraintList">
         </ParameterGroup>
         <Parameter name="Steady-State" type="cn" value="CN=Root,Vector=TaskList[Steady-State]"/>
         <Parameter name="Time-Course" type="cn" value="CN=Root,Vector=TaskList[Time-Course]"/>
         <Parameter name="Create Parameter Sets" type="bool" value="0"/>
         <ParameterGroup name="Experiment Set">
-          <ParameterGroup name="Experiment_0"><Parameter name="Data is Row Oriented" type="bool" value="1"/><Parameter name="Experiment Type" type="unsignedInteger" value="1"/><Parameter name="File Name" type="file" value="MultipleParameterEstimationData.txt"/><Parameter name="First Row" type="unsignedInteger" value="1"/><Parameter name="Key" type="key" value="Experiment_0"/><Parameter name="Last Row" type="unsignedInteger" value="12"/><Parameter name="Normalize Weights per Experiment" type="bool" value="1"/><Parameter name="Number of Columns" type="unsignedInteger" value="9"/><ParameterGroup name="Object Map"><ParameterGroup name="0"><Parameter name="Role" type="unsignedInteger" value="3"/></ParameterGroup><ParameterGroup name="1"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="2"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="3"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="4"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-P],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="5"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-PP],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="6"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos-P],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="7"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="8"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-P],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup></ParameterGroup><Parameter name="Row containing Names" type="unsignedInteger" value="1"/><Parameter name="separator" type="string" value="&#9;"/><Parameter name="Weight Method" type="unsignedInteger" value="2"/></ParameterGroup></ParameterGroup>
+          <ParameterGroup name="Experiment_0">
+            <Parameter name="Data is Row Oriented" type="bool" value="1"/>
+            <Parameter name="Experiment Type" type="unsignedInteger" value="1"/>
+            <Parameter name="File Name" type="file" value="kholodenko_TimeCourse.txt"/>
+            <Parameter name="First Row" type="unsignedInteger" value="1"/>
+            <Parameter name="Key" type="key" value="Experiment_0"/>
+            <Parameter name="Last Row" type="unsignedInteger" value="12"/>
+            <Parameter name="Normalize Weights per Experiment" type="bool" value="1"/>
+            <Parameter name="Number of Columns" type="unsignedInteger" value="9"/>
+            <ParameterGroup name="Object Map">
+              <ParameterGroup name="0">
+                <Parameter name="Role" type="unsignedInteger" value="3"/>
+              </ParameterGroup>
+              <ParameterGroup name="1">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="2">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="3">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="4">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-P],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="5">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-PP],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="6">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos-P],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="7">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="8">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-P],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+            </ParameterGroup>
+            <Parameter name="Row containing Names" type="unsignedInteger" value="1"/>
+            <Parameter name="Separator" type="string" value="&#x09;"/>
+            <Parameter name="Weight Method" type="unsignedInteger" value="2"/>
+            <Parameter name="separator" type="string" value="&#x09;"/>
+          </ParameterGroup>
+        </ParameterGroup>
         <ParameterGroup name="Validation Set">
           <Parameter name="Threshold" type="unsignedInteger" value="5"/>
           <Parameter name="Weight" type="unsignedFloat" value="1"/>
         </ParameterGroup>
       </Problem>
-      <Method name="Genetic Algorithm" type="GeneticAlgorithm"><Parameter name="Number of Generations" type="unsignedInteger" value="200"/><Parameter name="Population Size" type="unsignedInteger" value="50"/><Parameter name="Random Number Generator" type="unsignedInteger" value="1"/><Parameter name="Seed" type="unsignedInteger" value="0"/></Method></Task>
+      <Method name="Genetic Algorithm" type="GeneticAlgorithm">
+        <Parameter name="Number of Generations" type="unsignedInteger" value="20"/>
+        <Parameter name="Population Size" type="unsignedInteger" value="10"/>
+        <Parameter name="Random Number Generator" type="unsignedInteger" value="1"/>
+        <Parameter name="Seed" type="unsignedInteger" value="0"/>
+      </Method>
+    </Task>
     <Task key="Task_20" name="Metabolic Control Analysis" type="metabolicControlAnalysis" scheduled="false" updateModel="false">
       <Report reference="Report_13" target="" append="1" confirmOverwrite="1"/>
       <Problem>
@@ -1061,7 +1432,7 @@
     </Task>
   </ListOfTasks>
   <ListOfReports>
-    <Report key="Report_9" name="Steady-State" taskType="steadyState" separator="&#9;" precision="6">
+    <Report key="Report_9" name="Steady-State" taskType="steadyState" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -1069,7 +1440,7 @@
         <Object cn="CN=Root,Vector=TaskList[Steady-State]"/>
       </Footer>
     </Report>
-    <Report key="Report_10" name="Elementary Flux Modes" taskType="fluxMode" separator="&#9;" precision="6">
+    <Report key="Report_10" name="Elementary Flux Modes" taskType="fluxMode" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -1077,55 +1448,55 @@
         <Object cn="CN=Root,Vector=TaskList[Elementary Flux Modes],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_11" name="Optimization" taskType="optimization" separator="&#9;" precision="6">
+    <Report key="Report_11" name="Optimization" taskType="optimization" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
       <Header>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Object=Description"/>
         <Object cn="String=\[Function Evaluations\]"/>
-        <Object cn="Separator=&#9;"/>
+        <Object cn="Separator=&#x09;"/>
         <Object cn="String=\[Best Value\]"/>
-        <Object cn="Separator=&#9;"/>
+        <Object cn="Separator=&#x09;"/>
         <Object cn="String=\[Best Parameters\]"/>
       </Header>
       <Body>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Problem=Optimization,Reference=Function Evaluations"/>
-        <Object cn="Separator=&#9;"/>
+        <Object cn="Separator=&#x09;"/>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Problem=Optimization,Reference=Best Value"/>
-        <Object cn="Separator=&#9;"/>
+        <Object cn="Separator=&#x09;"/>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Problem=Optimization,Reference=Best Parameters"/>
       </Body>
       <Footer>
-        <Object cn="String=&#10;"/>
+        <Object cn="String=&#x0a;"/>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_12" name="Parameter Estimation" taskType="parameterFitting" separator="&#9;" precision="6">
+    <Report key="Report_12" name="Parameter Estimation" taskType="parameterFitting" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
       <Header>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Object=Description"/>
         <Object cn="String=\[Function Evaluations\]"/>
-        <Object cn="Separator=&#9;"/>
+        <Object cn="Separator=&#x09;"/>
         <Object cn="String=\[Best Value\]"/>
-        <Object cn="Separator=&#9;"/>
+        <Object cn="Separator=&#x09;"/>
         <Object cn="String=\[Best Parameters\]"/>
       </Header>
       <Body>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Function Evaluations"/>
-        <Object cn="Separator=&#9;"/>
+        <Object cn="Separator=&#x09;"/>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/>
-        <Object cn="Separator=&#9;"/>
+        <Object cn="Separator=&#x09;"/>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"/>
       </Body>
       <Footer>
-        <Object cn="String=&#10;"/>
+        <Object cn="String=&#x0a;"/>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_13" name="Metabolic Control Analysis" taskType="metabolicControlAnalysis" separator="&#9;" precision="6">
+    <Report key="Report_13" name="Metabolic Control Analysis" taskType="metabolicControlAnalysis" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -1133,11 +1504,11 @@
         <Object cn="CN=Root,Vector=TaskList[Metabolic Control Analysis],Object=Description"/>
       </Header>
       <Footer>
-        <Object cn="String=&#10;"/>
+        <Object cn="String=&#x0a;"/>
         <Object cn="CN=Root,Vector=TaskList[Metabolic Control Analysis],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_14" name="Lyapunov Exponents" taskType="lyapunovExponents" separator="&#9;" precision="6">
+    <Report key="Report_14" name="Lyapunov Exponents" taskType="lyapunovExponents" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -1145,11 +1516,11 @@
         <Object cn="CN=Root,Vector=TaskList[Lyapunov Exponents],Object=Description"/>
       </Header>
       <Footer>
-        <Object cn="String=&#10;"/>
+        <Object cn="String=&#x0a;"/>
         <Object cn="CN=Root,Vector=TaskList[Lyapunov Exponents],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_15" name="Time Scale Separation Analysis" taskType="timeScaleSeparationAnalysis" separator="&#9;" precision="6">
+    <Report key="Report_15" name="Time Scale Separation Analysis" taskType="timeScaleSeparationAnalysis" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -1157,11 +1528,11 @@
         <Object cn="CN=Root,Vector=TaskList[Time Scale Separation Analysis],Object=Description"/>
       </Header>
       <Footer>
-        <Object cn="String=&#10;"/>
+        <Object cn="String=&#x0a;"/>
         <Object cn="CN=Root,Vector=TaskList[Time Scale Separation Analysis],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_16" name="Sensitivities" taskType="sensitivities" separator="&#9;" precision="6">
+    <Report key="Report_16" name="Sensitivities" taskType="sensitivities" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -1169,11 +1540,11 @@
         <Object cn="CN=Root,Vector=TaskList[Sensitivities],Object=Description"/>
       </Header>
       <Footer>
-        <Object cn="String=&#10;"/>
+        <Object cn="String=&#x0a;"/>
         <Object cn="CN=Root,Vector=TaskList[Sensitivities],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_17" name="Linear Noise Approximation" taskType="linearNoiseApproximation" separator="&#9;" precision="6">
+    <Report key="Report_17" name="Linear Noise Approximation" taskType="linearNoiseApproximation" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -1181,595 +1552,34 @@
         <Object cn="CN=Root,Vector=TaskList[Linear Noise Approximation],Object=Description"/>
       </Header>
       <Footer>
-        <Object cn="String=&#10;"/>
+        <Object cn="String=&#x0a;"/>
         <Object cn="CN=Root,Vector=TaskList[Linear Noise Approximation],Object=Result"/>
       </Footer>
     </Report>
-    <Report taskType="Time-Course" separator="&#9;" precision="6" key="Report_30" name="Time-Course"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Reference=Time"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP],Reference=Concentration"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2],Reference=Concentration"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos],Reference=Concentration"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-P],Reference=Concentration"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-PP],Reference=Concentration"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos-P],Reference=Concentration"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1],Reference=Concentration"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-P],Reference=Concentration"/></Table></Report><Report taskType="parameterFitting" separator="&#9;" precision="6" key="Report_38" name="parameter_estimation"><Comment/><Footer><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"/><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/></Footer></Report></ListOfReports>
-  <ListOfPlots>
-    <PlotSpecification name="Parameter Estimation Result" type="Plot2D" active="1">
-      <Parameter name="log X" type="bool" value="0"/>
-      <Parameter name="log Y" type="bool" value="0"/>
-      <ListOfPlotItems>
-        <PlotItem name="Experiment_0,[Mek1-PP](Measured Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="3"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Color" type="string" value="#FF0000"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[0],Reference=Measured Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Mek1-PP](Fitted Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="0"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Color" type="string" value="#FF0000"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[0],Reference=Fitted Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Mek1-PP](Weighted Error)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="2"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="2"/>
-          <Parameter name="Color" type="string" value="#FF0000"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[0],Reference=Weighted Error"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Erk2](Measured Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="3"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Color" type="string" value="#0000FF"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[1],Reference=Measured Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Erk2](Fitted Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="0"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Color" type="string" value="#0000FF"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[1],Reference=Fitted Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Erk2](Weighted Error)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="2"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="2"/>
-          <Parameter name="Color" type="string" value="#0000FF"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[1],Reference=Weighted Error"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Mos](Measured Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="3"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Color" type="string" value="#00E600"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[2],Reference=Measured Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Mos](Fitted Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="0"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Color" type="string" value="#00E600"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[2],Reference=Fitted Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Mos](Weighted Error)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="2"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="2"/>
-          <Parameter name="Color" type="string" value="#00E600"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[2],Reference=Weighted Error"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Erk2-P](Measured Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="3"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Color" type="string" value="#00BEF0"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[3],Reference=Measured Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Erk2-P](Fitted Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="0"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Color" type="string" value="#00BEF0"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[3],Reference=Fitted Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Erk2-P](Weighted Error)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="2"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="2"/>
-          <Parameter name="Color" type="string" value="#00BEF0"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[3],Reference=Weighted Error"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Erk2-PP](Measured Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="3"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Color" type="string" value="#F000FF"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[4],Reference=Measured Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Erk2-PP](Fitted Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="0"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Color" type="string" value="#F000FF"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[4],Reference=Fitted Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Erk2-PP](Weighted Error)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="2"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="2"/>
-          <Parameter name="Color" type="string" value="#F000FF"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[4],Reference=Weighted Error"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Mos-P](Measured Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="3"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Color" type="string" value="#F0C800"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[5],Reference=Measured Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Mos-P](Fitted Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="0"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Color" type="string" value="#F0C800"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[5],Reference=Fitted Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Mos-P](Weighted Error)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="2"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="2"/>
-          <Parameter name="Color" type="string" value="#F0C800"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[5],Reference=Weighted Error"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Mek1](Measured Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="3"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Color" type="string" value="#FF0000"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[6],Reference=Measured Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Mek1](Fitted Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="0"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Color" type="string" value="#FF0000"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[6],Reference=Fitted Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Mek1](Weighted Error)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="2"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="2"/>
-          <Parameter name="Color" type="string" value="#FF0000"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[6],Reference=Weighted Error"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Mek1-P](Measured Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="3"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Color" type="string" value="#0000FF"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[7],Reference=Measured Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Mek1-P](Fitted Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="0"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Color" type="string" value="#0000FF"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[7],Reference=Fitted Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_0,[Mek1-P](Weighted Error)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="2"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="2"/>
-          <Parameter name="Color" type="string" value="#0000FF"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_0,Vector=Fitted Points[7],Reference=Weighted Error"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_1,[Mek1-PP](Measured Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="3"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Color" type="string" value="#00E600"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Measured Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_1,[Mek1-PP](Fitted Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="0"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Color" type="string" value="#00E600"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Fitted Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_1,[Mek1-PP](Weighted Error)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="2"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="2"/>
-          <Parameter name="Color" type="string" value="#00E600"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Weighted Error"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_1,[Erk2](Measured Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="3"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Color" type="string" value="#00BEF0"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[1],Reference=Measured Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_1,[Erk2](Fitted Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="0"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Color" type="string" value="#00BEF0"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[1],Reference=Fitted Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_1,[Erk2](Weighted Error)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="2"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="2"/>
-          <Parameter name="Color" type="string" value="#00BEF0"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[1],Reference=Weighted Error"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_1,[Mos](Measured Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="3"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Color" type="string" value="#F000FF"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[2],Reference=Measured Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_1,[Mos](Fitted Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="0"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Color" type="string" value="#F000FF"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[2],Reference=Fitted Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_1,[Mos](Weighted Error)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="2"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="2"/>
-          <Parameter name="Color" type="string" value="#F000FF"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[2],Reference=Weighted Error"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_1,[Erk2-P](Measured Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="3"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Color" type="string" value="#F0C800"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[3],Reference=Measured Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_1,[Erk2-P](Fitted Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="0"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Color" type="string" value="#F0C800"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[3],Reference=Fitted Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_1,[Erk2-P](Weighted Error)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="2"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="2"/>
-          <Parameter name="Color" type="string" value="#F0C800"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[3],Reference=Weighted Error"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_1,[Erk2-PP](Measured Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="3"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Color" type="string" value="#FF0000"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[4],Reference=Measured Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_1,[Erk2-PP](Fitted Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="0"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Color" type="string" value="#FF0000"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[4],Reference=Fitted Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_1,[Erk2-PP](Weighted Error)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="2"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="2"/>
-          <Parameter name="Color" type="string" value="#FF0000"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[4],Reference=Weighted Error"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_1,[Mos-P](Measured Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="3"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Color" type="string" value="#0000FF"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[5],Reference=Measured Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_1,[Mos-P](Fitted Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="0"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Color" type="string" value="#0000FF"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[5],Reference=Fitted Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_1,[Mos-P](Weighted Error)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="2"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="2"/>
-          <Parameter name="Color" type="string" value="#0000FF"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[5],Reference=Weighted Error"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_1,[Mek1](Measured Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="3"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Color" type="string" value="#00E600"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[6],Reference=Measured Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_1,[Mek1](Fitted Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="0"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Color" type="string" value="#00E600"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[6],Reference=Fitted Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_1,[Mek1](Weighted Error)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="2"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="2"/>
-          <Parameter name="Color" type="string" value="#00E600"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[6],Reference=Weighted Error"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_1,[Mek1-P](Measured Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="3"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
-          <Parameter name="Color" type="string" value="#00BEF0"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[7],Reference=Measured Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_1,[Mek1-P](Fitted Value)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="0"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Color" type="string" value="#00BEF0"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[7],Reference=Fitted Value"/>
-          </ListOfChannels>
-        </PlotItem>
-        <PlotItem name="Experiment_1,[Mek1-P](Weighted Error)" type="Curve2D">
-          <Parameter name="Line type" type="unsignedInteger" value="2"/>
-          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
-          <Parameter name="Line width" type="unsignedFloat" value="1"/>
-          <Parameter name="Symbol subtype" type="unsignedInteger" value="2"/>
-          <Parameter name="Color" type="string" value="#00BEF0"/>
-          <Parameter name="Recording Activity" type="string" value="after"/>
-          <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[7],Reference=Weighted Error"/>
-          </ListOfChannels>
-        </PlotItem>
-      </ListOfPlotItems>
-    </PlotSpecification>
-  </ListOfPlots>
+    <Report key="Report_18" name="Time-Course" taskType="unset" separator="&#x09;" precision="6">
+      <Comment>
+      </Comment>
+      <Table printTitle="1">
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Reference=Time"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP],Reference=Concentration"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2],Reference=Concentration"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos],Reference=Concentration"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-P],Reference=Concentration"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-PP],Reference=Concentration"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos-P],Reference=Concentration"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1],Reference=Concentration"/>
+        <Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-P],Reference=Concentration"/>
+      </Table>
+    </Report>
+    <Report key="Report_19" name="parameter_estimation" taskType="parameterFitting" separator="&#x09;" precision="6">
+      <Comment>
+      </Comment>
+      <Footer>
+        <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"/>
+        <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/>
+      </Footer>
+    </Report>
+  </ListOfReports>
   <GUI>
   </GUI>
   <SBMLReference file="BIOMD0000000010.xml">
