@@ -1,4 +1,4 @@
-<!-- generated with COPASI 4.19 (Build 140) (http://www.copasi.org) at 2017-06-29 14:41:53 UTC --><?oxygen RNGSchema="http://www.copasi.org/static/schema/CopasiML.rng" type="xml"?><COPASI xmlns="http://www.copasi.org/static/schema" versionMajor="4" versionMinor="19" versionDevel="140" copasiSourcesModified="0">
+<!-- generated with COPASI 4.19 (Build 140) (http://www.copasi.org) at 2017-06-29 16:57:44 UTC --><?oxygen RNGSchema="http://www.copasi.org/static/schema/CopasiML.rng" type="xml"?><COPASI xmlns="http://www.copasi.org/static/schema" versionMajor="4" versionMinor="19" versionDevel="140" copasiSourcesModified="0">
   <ListOfFunctions>
     <Function key="Function_40" name="Function for MAPKKK activation" type="UserDefined" reversible="false">
       <Expression>
@@ -868,32 +868,32 @@
         <Parameter name="Maximum duration for backward integration" type="unsignedFloat" value="1000000"/>
       </Method>
     </Task>
-    <Task key="Task_15" name="Time-Course" type="timeCourse" scheduled="true" updateModel="false">
-      <Problem>
+    <Task key="Task_15" name="Time-Course" type="timeCourse" scheduled="false" updateModel="false">
+      <Report append="false" confirmOverwrite="false" reference="Report_30" target="" type="Deterministic(LSODA)" name="Deterministic (LSODA)"/><Problem type="Deterministic(LSODA)" name="Deterministic (LSODA)">
         <Parameter name="AutomaticStepSize" type="bool" value="0"/>
         <Parameter name="StepNumber" type="unsignedInteger" value="50"/>
         <Parameter name="StepSize" type="float" value="20"/>
         <Parameter name="Duration" type="float" value="1000"/>
         <Parameter name="TimeSeriesRequested" type="bool" value="1"/>
-        <Parameter name="OutputStartTime" type="float" value="0"/>
-        <Parameter name="Output Event" type="bool" value="0"/>
+        <Parameter name="OutputStartTime" type="float" value="0.0"/>
+        <Parameter name="Output Event" type="bool" value="false"/>
         <Parameter name="Start in Steady State" type="bool" value="0"/>
       </Problem>
       <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
         <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
-        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-6"/>
         <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
         <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
         <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
       </Method>
     </Task>
-    <Task key="Task_16" name="Scan" type="scan" scheduled="false" updateModel="false">
-      <Problem>
+    <Task key="Task_16" name="Scan" type="scan" scheduled="true" updateModel="false">
+      <Report append="true" confirmOverwrite="false" reference="Report_78" target="ParameterScanOfTimeCourse.txt"/><Problem>
         <Parameter name="Subtask" type="unsignedInteger" value="1"/>
         <ParameterGroup name="ScanItems">
-        </ParameterGroup>
-        <Parameter name="Output in subtask" type="bool" value="1"/>
-        <Parameter name="Adjust initial conditions" type="bool" value="0"/>
+        <ParameterGroup name="ScanItem"><Parameter name="Number of steps" type="unsignedInteger" value="10"/><Parameter name="Object" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos-P],Reference=InitialConcentration"/><Parameter name="Type" type="unsignedInteger" value="1"/><Parameter name="Maximum" type="float" value="10"/><Parameter name="Minimum" type="float" value="1"/><Parameter name="log" type="bool" value="false"/></ParameterGroup></ParameterGroup>
+        <Parameter name="Output in subtask" type="bool" value="false"/>
+        <Parameter name="Adjust initial conditions" type="bool" value="false"/>
       </Problem>
       <Method name="Scan Framework" type="ScanFramework">
       </Method>
@@ -1190,7 +1190,7 @@
         <Object cn="CN=Root,Vector=TaskList[Linear Noise Approximation],Object=Result"/>
       </Footer>
     </Report>
-  <Report taskType="Time-Course" separator="&#9;" precision="6" key="Report_73" name="Time-Course"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Reference=Time"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP],Reference=Concentration"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2],Reference=Concentration"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos],Reference=Concentration"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-P],Reference=Concentration"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-PP],Reference=Concentration"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos-P],Reference=Concentration"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1],Reference=Concentration"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-P],Reference=Concentration"/></Table></Report></ListOfReports>
+  <Report taskType="Time-Course" separator="&#9;" precision="6" key="Report_78" name="Time-Course"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Reference=Time"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP],Reference=Concentration"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2],Reference=Concentration"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos],Reference=Concentration"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-P],Reference=Concentration"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-PP],Reference=Concentration"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos-P],Reference=Concentration"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1],Reference=Concentration"/><Object cn="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-P],Reference=Concentration"/></Table></Report></ListOfReports>
   <GUI>
   </GUI>
   <SBMLReference file="BIOMD0000000010.xml">
