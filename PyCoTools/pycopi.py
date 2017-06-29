@@ -4808,14 +4808,12 @@ Please check the headers of your PE data are consistent with your model paramete
             mod_value = re.findall('ModelValue',state)
             compartment = re.findall('Compartment',state)
             if model !=[]:
-                LOG.debug('State {} is model'.format(state))
                 assert metab == []
                 assert mod_value == []
                 assert compartment ==[]
                 state_values.append(str(0))
                 LOG.debug('Added 0 for first parameter in sequence')
             elif metab !=[]:
-                LOG.debug('State {} is metab'.format(state))
                 assert model == []
                 assert mod_value == []
                 assert compartment == []
@@ -4834,7 +4832,6 @@ Please check the headers of your PE data are consistent with your model paramete
                 state_values.append(str(float(metab_val)))
 
             elif mod_value !=[]:
-                LOG.debug('State {} is Global variable'.format(state))
 
                 assert model == []
                 assert metab == []
@@ -4874,7 +4871,6 @@ Please check the headers of your PE data are consistent with your model paramete
                 if i in self.parameters.keys() and j.attrib['simulationType']=='reactions':
                     if self.kwargs.get('quantity_type')=='concentration':
                         particles=self.GMQ.convert_molar_to_particles(float(self.parameters[i]),self.GMQ.get_quantity_units(),float(IC[i]['compartment_volume']))#,self.GMQ.get_volume_unit())
-##                        particles=self.parameters[i]
                     elif self.kwargs.get('quantity_type')=='particle_numbers':
                         particles=self.parameters[i]
                     j.attrib['value']=str(float(particles))
