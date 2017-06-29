@@ -4642,3 +4642,141 @@ DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed i
 INFO:PyCoTools.pycopi:pycopi:3987:Setup Took 0.945999860764 seconds
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
 DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_3.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:2109:Shape of estimated parameters: (1, 31)
+DEBUG:PyCoTools.pycopi:pycopi:2118:These are your estimated parameters:                                                0
+(phosphorylation of MAPKK).KK3            54.931
+(MAPKKK activation).K1               0.000142888
+(dephosphorylation of MAPK-PP).V9        2672.63
+(phosphorylation of MAPK).k7             125.029
+(phosphorylation of MAPK-P).k8            329605
+(MAPKKK inactivation).KK2               0.154383
+(MAPKKK inactivation).V2             0.000159096
+(phosphorylation of MAPKK).k3           0.124947
+(phosphorylation of MAPKK-P).k4         0.243935
+(dephosphorylation of MAPKK-PP).KK5       305491
+(dephosphorylation of MAPK-PP).KK9       106.642
+(dephosphorylation of MAPKK-P).KK6    0.00238904
+(phosphorylation of MAPKK-P).KK4        0.353703
+(MAPKKK activation).V1                     29346
+(MAPKKK activation).Ki               0.000295476
+(phosphorylation of MAPK).KK7        1.66882e-06
+(dephosphorylation of MAPK-P).KK10       0.12732
+(phosphorylation of MAPK-P).KK8      0.000155651
+(dephosphorylation of MAPKK-PP).V5       2.90519
+(dephosphorylation of MAPK-P).V10    3.91733e-06
+(dephosphorylation of MAPKK-P).V6          1e-06
+(MAPKKK activation).n                    75.6283
+Mek1-PP                              1.12444e-06
+Erk2                                 1.37906e-06
+Mos                                        1e-06
+Erk2-P                               1.01324e-06
+Erk2-PP                                    1e-06
+Mos-P                                0.000133095
+Mek1                                 1.04755e-06
+Mek1-P                               2.09755e-06
+RSS                                  4.5555e-012
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:2109:Shape of estimated parameters: (1, 31)
+DEBUG:PyCoTools.pycopi:pycopi:2118:These are your estimated parameters:                                                 0
+(phosphorylation of MAPKK).KK3            12.8098
+(MAPKKK activation).K1                0.000160043
+(dephosphorylation of MAPK-PP).V9       0.0016282
+(phosphorylation of MAPK).k7              56.7252
+(phosphorylation of MAPK-P).k8            41934.7
+(MAPKKK inactivation).KK2                  256384
+(MAPKKK inactivation).V2              1.44093e-06
+(phosphorylation of MAPKK).k3         4.74125e-05
+(phosphorylation of MAPKK-P).k4           79.2154
+(dephosphorylation of MAPKK-PP).KK5     0.0751162
+(dephosphorylation of MAPK-PP).KK9        153.177
+(dephosphorylation of MAPKK-P).KK6     0.00442927
+(phosphorylation of MAPKK-P).KK4          123.448
+(MAPKKK activation).V1                    11.9297
+(MAPKKK activation).Ki                    1.68619
+(phosphorylation of MAPK).KK7         1.96846e-05
+(dephosphorylation of MAPK-P).KK10         779133
+(phosphorylation of MAPK-P).KK8       9.55549e-05
+(dephosphorylation of MAPKK-PP).V5     1.1606e-06
+(dephosphorylation of MAPK-P).V10     1.15477e-06
+(dephosphorylation of MAPKK-P).V6     1.23703e-06
+(MAPKKK activation).n                     6906.59
+Mek1-PP                                     1e-06
+Erk2                                  1.08744e-06
+Mos                                   1.11884e-06
+Erk2-P                                1.30196e-06
+Erk2-PP                                1.1183e-06
+Mos-P                                 0.000132673
+Mek1                                  1.18222e-06
+Mek1-P                                1.61939e-06
+RSS                                  4.03032e-012
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:2109:Shape of estimated parameters: (1, 31)
+DEBUG:PyCoTools.pycopi:pycopi:2118:These are your estimated parameters:                                                 0
+(phosphorylation of MAPKK).KK3        1.88221e-06
+(MAPKKK activation).K1                   0.169736
+(dephosphorylation of MAPK-PP).V9       0.0111016
+(phosphorylation of MAPK).k7              7106.92
+(phosphorylation of MAPK-P).k8            4095.16
+(MAPKKK inactivation).KK2                  399783
+(MAPKKK inactivation).V2               0.00336409
+(phosphorylation of MAPKK).k3         7.90298e-06
+(phosphorylation of MAPKK-P).k4       2.09254e-05
+(dephosphorylation of MAPKK-PP).KK5        102525
+(dephosphorylation of MAPK-PP).KK9         582985
+(dephosphorylation of MAPKK-P).KK6        13090.7
+(phosphorylation of MAPKK-P).KK4           360639
+(MAPKKK activation).V1                     176745
+(MAPKKK activation).Ki                    571.588
+(phosphorylation of MAPK).KK7         0.000317699
+(dephosphorylation of MAPK-P).KK10        57.0918
+(phosphorylation of MAPK-P).KK8       0.000117996
+(dephosphorylation of MAPKK-PP).V5    0.000177393
+(dephosphorylation of MAPK-P).V10         7698.57
+(dephosphorylation of MAPKK-P).V6      0.00665867
+(MAPKKK activation).n                  0.00158088
+Mek1-PP                               1.04748e-06
+Erk2                                  1.47503e-06
+Mos                                   1.00434e-06
+Erk2-P                                1.04528e-06
+Erk2-PP                               1.19439e-06
+Mos-P                                 0.000133006
+Mek1                                  1.90165e-06
+Mek1-P                                1.28877e-06
+RSS                                  3.49012e-012
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:2109:Shape of estimated parameters: (1, 31)
+DEBUG:PyCoTools.pycopi:pycopi:2118:These are your estimated parameters:                                                 0
+(phosphorylation of MAPKK).KK3         0.00194375
+(MAPKKK activation).K1                   0.114426
+(dephosphorylation of MAPK-PP).V9        0.198885
+(phosphorylation of MAPK).k7          0.000109211
+(phosphorylation of MAPK-P).k8            82405.2
+(MAPKKK inactivation).KK2             3.17965e-06
+(MAPKKK inactivation).V2              2.43024e-06
+(phosphorylation of MAPKK).k3             111.619
+(phosphorylation of MAPKK-P).k4       2.57584e-06
+(dephosphorylation of MAPKK-PP).KK5        447365
+(dephosphorylation of MAPK-PP).KK9        31630.3
+(dephosphorylation of MAPKK-P).KK6        152.378
+(phosphorylation of MAPKK-P).KK4           126579
+(MAPKKK activation).V1                    20.6437
+(MAPKKK activation).Ki                  0.0389078
+(phosphorylation of MAPK).KK7          0.00067141
+(dephosphorylation of MAPK-P).KK10        19.9835
+(phosphorylation of MAPK-P).KK8        0.00371933
+(dephosphorylation of MAPKK-PP).V5      0.0125551
+(dephosphorylation of MAPK-P).V10       0.0545751
+(dephosphorylation of MAPKK-P).V6         1293.17
+(MAPKKK activation).n                    0.578068
+Mek1-PP                               1.13861e-06
+Erk2                                        1e-06
+Mos                                   1.25327e-06
+Erk2-P                                1.41686e-06
+Erk2-PP                               2.10363e-06
+Mos-P                                 0.000132976
+Mek1                                  2.11964e-06
+Mek1-P                                1.14761e-06
+RSS                                  1.35046e-011
+INFO:PyCoTools.PEAnalysis:PEAnalysis:90:Parsing data from C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Fit2Results into python
+DEBUG:PyCoTools.PEAnalysis:PEAnalysis:350:calculating tolerance
