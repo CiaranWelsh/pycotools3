@@ -2625,19 +2625,17 @@ class ParameterEstimation():
         :return:
         """
         data = pandas.read_csv(self.kwargs['report_name'], sep='\t', header=None)
-        LOG.debug('data is \n{}'.format(data))
-        LOG.debug('fit items: {}'.format(self.GMQ.get_fit_item_order()))
         data = data.drop(data.columns[0], axis=1)
-        LOG.debug('dropped data:\n {}'.format(data))
-        LOG.debug('14: \n{}'.format(data[14]))
-        LOG.debug('14 type: \n{}'.format(type(data[14])))
-        LOG.debug(data[14].str[1:])
-        data[14] = data[14].str[1:]
+        LOG.debug('Shape of estimated parameters: {}'.format(data.shape))
+        width = data.shape[1]
+        ## remove the extra bracket
+        data[width] = data[width].str[1:]
         num = data.shape[0]
         names = self.GMQ.get_fit_item_order()+['RSS']
         data.columns = names
         os.remove(self.kwargs['report_name'])
-        data.to_csv(self.kwargs['report_name'],sep='\t')
+        data.to_csv(self.kwargs['report_name'],sep='\t',index=False)
+        LOG.debug('These are your estimated parameters: {}'.format(data.transpose()))
         return data
 
 
@@ -2735,7 +2733,7 @@ class ParameterEstimation():
 
         
     def read_item_template(self):
-        assert os.path.isfile(self.kwargs.get('config_filename'))==True,'ConfigFile does not exist. run \'write_item_template\' method and modify it how you like then run the setup()  method again.'
+        assert os.path.isfile(self.kwargs.get('config_filename'))==True,'config_filename does not exist. run \'write_config_template()\' method and modify it how you like then run the setup()  method again.'
         return pandas.read_excel(self.kwargs.get('config_filename'))
     
     def add_fit_item(self,item):
