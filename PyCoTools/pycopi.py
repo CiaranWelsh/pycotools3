@@ -921,7 +921,6 @@ class Reports():
         comment=etree.SubElement(report,'Comment') 
         comment=comment #get rid of annoying squiggly line above
         footer=etree.SubElement(report,'Footer')
-        LOG.info('footer is: {}'.format(footer))
         Object=etree.SubElement(footer,'Object')
         Object.attrib['cn']="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"
         Object=etree.SubElement(footer,'Object')
@@ -3358,7 +3357,7 @@ class Scan():
         '''
         
         '''
-        logging.info('defining report')
+        logging.info('defining report for model: {}'.format(os.path.split(self.copasi_file)[1]))
         self.report_dict={}
         self.report_dict['metabolites']=self.kwargs.get('metabolites')
         self.report_dict['global_quantities']=self.kwargs.get('global_quantities')
@@ -3859,13 +3858,22 @@ class RunMultiplePEs():
         self.PE=ParameterEstimation(self.copasi_file,self.experiment_files,**self.PE_dct)
 
 
+    def __getitem__(self,key):
+        """
+        
+        """
+        if key not in self.kwargs.keys():
+            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
+            
+        return self.kwargs[key]
+
     def setup(self):
         '''
         Analogous to the set_up method of the ParameterEstimation class but this time
         setup both the PE and Scan tasks       
         '''
         
-        self.PE.set_up()
+        self.PE.setup()
         self.sub_copasi_files=self.copy_copasi()
         self._setup_scan()
     
@@ -3954,7 +3962,7 @@ class RunMultiplePEs():
 
         q=Queue.Queue()
         for num in range(self.kwargs['copy_number']):
-            LOG.info('setting up scan for model : {}'.format(self.sub_copasi_files[num]))
+            LOG.info('setting up scan for model : {}'.format(os.path.split(self.sub_copasi_files[num])[1]))
             t=threading.Thread(target=self._setup1scan,
                                args =  (q,self.sub_copasi_files[num] , self.report_files[num])  )
             t.daemon=True
@@ -4260,7 +4268,7 @@ class MultiModelFit():
         '''
         LOG.warning('The set_up method is deprecated. Use setup() method instead')
         for RMPE in self.RMPE_dct:
-            self.RMPE_dct[RMPE].set_up()
+            self.RMPE_dct[RMPE].setup()
 
 
     def run(self):
@@ -4753,6 +4761,12 @@ class InsertParameters():
         self.parameters= self.replace_gl_and_lt()
         self.insert_all()
         #change
+        
+    def __getitem__(self,key):
+        if key not in self.kwargs.keys():
+            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
+            
+        return self.kwargs[key]
 
     def check_parameter_consistancy(self,df):
         '''

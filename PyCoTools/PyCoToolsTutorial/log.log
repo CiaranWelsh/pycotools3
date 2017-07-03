@@ -4780,3 +4780,587 @@ Mek1-P                                1.14761e-06
 RSS                                  1.35046e-011
 INFO:PyCoTools.PEAnalysis:PEAnalysis:90:Parsing data from C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Fit2Results into python
 DEBUG:PyCoTools.PEAnalysis:PEAnalysis:350:calculating tolerance
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1135:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0xaf9c788>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:946:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:1410:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:1452:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:1459:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:1465:Reading timecourse
+DEBUG:PyCoTools.pycopi:pycopi:1467:pruning headers of copasi files of COPASI references
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3760:Performing multi parameter fit for model at:
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:3999:Using default report name:
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\ParameterFit.txt
+DEBUG:PyCoTools.pycopi:pycopi:4008:config_filename is None. Reassigning config_filename
+INFO:PyCoTools.pycopi:pycopi:4043:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:4056:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:3858:Create an instance of ParameterEstimation
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+INFO:PyCoTools.pycopi:pycopi:3939:writing PE config template for model: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:3940:config_filename is C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\PEConfigFile.xlsx
+WARNING:PyCoTools.pycopi:pycopi:3879:set_up method is deprecated. Use setup() method instead
+WARNING:PyCoTools.pycopi:pycopi:3099:The set_up method is deprecated. Use setup() method instead
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1968:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:1971:Mapping experiment MultipleParameterEstimationData.txt
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:939:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xaf84848>
+DEBUG:PyCoTools.pycopi:pycopi:929:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xaf84ac8>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+INFO:PyCoTools.pycopi:pycopi:3921:Copying copasi file 4 times
+INFO:PyCoTools.pycopi:pycopi:3957:setting up scan for model : C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+INFO:PyCoTools.pycopi:pycopi:3957:setting up scan for model : C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3303:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('scan', 1)
+INFO:PyCoTools.pycopi:pycopi:3957:setting up scan for model : C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3303:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+INFO:PyCoTools.pycopi:pycopi:3957:setting up scan for model : C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_3.cps
+INFO:root:pycopi:3361:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3303:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('random_sampling', 2)
+INFO:root:pycopi:3361:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3303:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('repeat', 0)
+INFO:root:pycopi:3361:defining report
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:939:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xbfcb5c8>
+DEBUG:PyCoTools.pycopi:pycopi:929:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xbcda8c8>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_3.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+INFO:root:pycopi:3361:defining report
+DEBUG:PyCoTools.pycopi:pycopi:939:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xbfcb648>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:929:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xc0024c8>
+DEBUG:PyCoTools.pycopi:pycopi:939:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:3452:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_1.cps
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xbfcbec8>
+DEBUG:PyCoTools.pycopi:pycopi:929:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xbfcb948>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:939:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xbfcbec8>
+DEBUG:PyCoTools.pycopi:pycopi:3452:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:929:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xbfcbc08>
+INFO:PyCoTools.pycopi:pycopi:3990:Setup Took 1.08999991417 seconds
+INFO:PyCoTools.pycopi:pycopi:3965:<PyCoTools.pycopi.Scan instance at 0x000000000BCD05C8>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_3.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:3452:output during subtask value is: false
+INFO:PyCoTools.pycopi:pycopi:3990:Setup Took 1.07999992371 seconds
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_2.cps
+INFO:PyCoTools.pycopi:pycopi:3898:running model: 0
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3452:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_3.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+INFO:PyCoTools.pycopi:pycopi:3898:running model: 1
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_2.cps
+INFO:PyCoTools.pycopi:pycopi:3990:Setup Took 1.13100004196 seconds
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_3.cps
+INFO:PyCoTools.pycopi:pycopi:3990:Setup Took 1.0150001049 seconds
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_1.cps
+INFO:PyCoTools.pycopi:pycopi:3898:running model: 2
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_2.cps
+INFO:PyCoTools.pycopi:pycopi:3898:running model: 3
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_3.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3760:Performing multi parameter fit for model at:
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:3999:Using default report name:
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\ParameterFit.txt
+DEBUG:PyCoTools.pycopi:pycopi:4008:config_filename is None. Reassigning config_filename
+INFO:PyCoTools.pycopi:pycopi:4043:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Fit1Results
+DEBUG:PyCoTools.pycopi:pycopi:4056:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:3858:Create an instance of ParameterEstimation
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+INFO:PyCoTools.pycopi:pycopi:3939:writing PE config template for model: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:3940:config_filename is C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\PEConfigFile.xlsx
+WARNING:PyCoTools.pycopi:pycopi:3879:set_up method is deprecated. Use setup() method instead
+WARNING:PyCoTools.pycopi:pycopi:3099:The set_up method is deprecated. Use setup() method instead
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1968:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:1971:Mapping experiment MultipleParameterEstimationData.txt
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:939:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xbcda9c8>
+DEBUG:PyCoTools.pycopi:pycopi:929:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xbcd7dc8>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+INFO:PyCoTools.pycopi:pycopi:3921:Copying copasi file 4 times
+INFO:PyCoTools.pycopi:pycopi:3957:setting up scan for model : C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+INFO:PyCoTools.pycopi:pycopi:3957:setting up scan for model : C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:3303:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+INFO:PyCoTools.pycopi:pycopi:3957:setting up scan for model : C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+INFO:root:pycopi:3361:defining report
+DEBUG:PyCoTools.pycopi:pycopi:3303:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('random_sampling', 2)
+INFO:PyCoTools.pycopi:pycopi:3957:setting up scan for model : C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_3.cps
+DEBUG:PyCoTools.pycopi:pycopi:3303:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:939:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('scan', 1)
+INFO:root:pycopi:3361:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xbff1cc8>
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:929:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xbcc9988>
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:3303:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:3452:output during subtask value is: false
+INFO:root:pycopi:3361:defining report
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:939:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('repeat', 0)
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xc021bc8>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:929:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xc021548>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+INFO:PyCoTools.pycopi:pycopi:3990:Setup Took 2.22899985313 seconds
+INFO:PyCoTools.pycopi:pycopi:3965:<PyCoTools.pycopi.Scan instance at 0x000000000BCD7F88>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_3.cps
+INFO:root:pycopi:3361:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3452:output during subtask value is: false
+INFO:PyCoTools.pycopi:pycopi:3898:running model: 0
+DEBUG:PyCoTools.pycopi:pycopi:939:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xafa14c8>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:929:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xbcb0648>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_2.cps
+INFO:PyCoTools.pycopi:pycopi:3898:running model: 1
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:939:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:3990:Setup Took 2.70200014114 seconds
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xbccac08>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:929:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xbcdcf48>
+DEBUG:PyCoTools.pycopi:pycopi:3452:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_3.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+INFO:PyCoTools.pycopi:pycopi:3898:running model: 2
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:3452:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+INFO:PyCoTools.pycopi:pycopi:3990:Setup Took 2.90999984741 seconds
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_3.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+INFO:PyCoTools.pycopi:pycopi:3898:running model: 3
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_3.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+INFO:PyCoTools.pycopi:pycopi:3990:Setup Took 2.64299988747 seconds
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_3.cps
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1135:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0xaff9a48>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:946:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:1410:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:1452:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:1459:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:1465:Reading timecourse
+DEBUG:PyCoTools.pycopi:pycopi:1467:pruning headers of copasi files of COPASI references
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3760:Performing multi parameter fit for model at:
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:3999:Using default report name:
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\ParameterFit.txt
+DEBUG:PyCoTools.pycopi:pycopi:4008:config_filename is None. Reassigning config_filename
+INFO:PyCoTools.pycopi:pycopi:4043:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:4056:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:3858:Create an instance of ParameterEstimation
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+INFO:PyCoTools.pycopi:pycopi:3939:writing PE config template for model: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:3940:config_filename is C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\PEConfigFile.xlsx
+WARNING:PyCoTools.pycopi:pycopi:3879:set_up method is deprecated. Use setup() method instead
+WARNING:PyCoTools.pycopi:pycopi:3099:The set_up method is deprecated. Use setup() method instead
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1968:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:1971:Mapping experiment MultipleParameterEstimationData.txt
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:939:created a 'parameter_estimation' report
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xb000ac8>
+DEBUG:PyCoTools.pycopi:pycopi:929:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xaff8cc8>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+INFO:PyCoTools.pycopi:pycopi:3921:Copying copasi file 4 times
+INFO:PyCoTools.pycopi:pycopi:3957:setting up scan for model : C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3303:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('random_sampling', 2)
+INFO:PyCoTools.pycopi:pycopi:3957:setting up scan for model : C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+INFO:root:pycopi:3361:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3303:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('scan', 1)
+INFO:PyCoTools.pycopi:pycopi:3957:setting up scan for model : C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:939:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xbc64e48>
+DEBUG:PyCoTools.pycopi:pycopi:929:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xbc82048>
+INFO:PyCoTools.pycopi:pycopi:3957:setting up scan for model : C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_3.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+INFO:root:pycopi:3361:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3303:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:3452:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:3303:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3305:scan type to number tuple: ('random_sampling', 2)
+INFO:root:pycopi:3361:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:939:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_3.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xbc87ec8>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+INFO:root:pycopi:3361:defining report
+DEBUG:PyCoTools.pycopi:pycopi:929:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xbc52308>
+INFO:PyCoTools.pycopi:pycopi:3990:Setup Took 0.669999837875 seconds
+INFO:PyCoTools.pycopi:pycopi:3965:<PyCoTools.pycopi.Scan instance at 0x000000000BCA59C8>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+INFO:PyCoTools.pycopi:pycopi:3898:running model: 0
+DEBUG:PyCoTools.pycopi:pycopi:939:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3452:output during subtask value is: false
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xbc87848>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:929:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xbca7088>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_2.cps
+INFO:PyCoTools.pycopi:pycopi:3898:running model: 1
+DEBUG:PyCoTools.pycopi:pycopi:939:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+INFO:PyCoTools.pycopi:pycopi:924:footer is: <Element Footer at 0xbc63188>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:929:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xbc3d388>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+INFO:PyCoTools.pycopi:pycopi:3990:Setup Took 0.917999982834 seconds
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_3.cps
+DEBUG:PyCoTools.pycopi:pycopi:3452:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_1.cps
+INFO:PyCoTools.pycopi:pycopi:3898:running model: 2
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_2.cps
+INFO:PyCoTools.pycopi:pycopi:3990:Setup Took 0.982000112534 seconds
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:3452:output during subtask value is: false
+INFO:PyCoTools.pycopi:pycopi:3898:running model: 3
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_3.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_3.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_3.cps
+INFO:PyCoTools.pycopi:pycopi:3990:Setup Took 0.993000030518 seconds
+INFO:root:__init__:26:Initializing PyCoTools
+INFO:root:__init__:27:Initializing logging System
+INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1134:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0xb1bc288>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:945:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:1409:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:1451:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:1458:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:1464:Reading timecourse
+DEBUG:PyCoTools.pycopi:pycopi:1466:pruning headers of copasi files of COPASI references
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3759:Performing multi parameter fit for model at:
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:4007:Using default report name:
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\ParameterFit.txt
+DEBUG:PyCoTools.pycopi:pycopi:4016:config_filename is None. Reassigning config_filename
+INFO:PyCoTools.pycopi:pycopi:4051:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Fit1Results
+DEBUG:PyCoTools.pycopi:pycopi:4064:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:3857:Create an instance of ParameterEstimation
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+INFO:PyCoTools.pycopi:pycopi:3947:writing PE config template for model: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:3948:config_filename is C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\PEConfigFile.xlsx
+WARNING:PyCoTools.pycopi:pycopi:3887:set_up method is deprecated. Use setup() method instead
+WARNING:PyCoTools.pycopi:pycopi:3098:The set_up method is deprecated. Use setup() method instead
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:1967:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:1970:Mapping experiment MultipleParameterEstimationData.txt
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:938:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:928:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xb1cfc48>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+INFO:PyCoTools.pycopi:pycopi:3929:Copying copasi file 4 times
+INFO:PyCoTools.pycopi:pycopi:3965:setting up scan for model : C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3302:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:3304:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:3304:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:3304:scan type to number tuple: ('random_sampling', 2)
+INFO:PyCoTools.pycopi:pycopi:3965:setting up scan for model : C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+INFO:root:pycopi:3360:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+INFO:PyCoTools.pycopi:pycopi:3965:setting up scan for model : C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3302:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3304:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:3304:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:3304:scan type to number tuple: ('random_sampling', 2)
+INFO:PyCoTools.pycopi:pycopi:3965:setting up scan for model : C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_3.cps
+DEBUG:PyCoTools.pycopi:pycopi:938:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:928:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xbc343c8>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3302:kwargs[scan_type is: repeat
+INFO:root:pycopi:3360:defining report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3304:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3304:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3304:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:3302:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:3304:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:3304:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:3304:scan type to number tuple: ('random_sampling', 2)
+INFO:root:pycopi:3360:defining report
+DEBUG:PyCoTools.pycopi:pycopi:3451:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_3.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+INFO:root:pycopi:3360:defining report
+DEBUG:PyCoTools.pycopi:pycopi:938:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:928:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xbbf5088>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+INFO:PyCoTools.pycopi:pycopi:3998:Setup Took 0.884999990463 seconds
+INFO:PyCoTools.pycopi:pycopi:3973:<PyCoTools.pycopi.Scan instance at 0x000000000BC45B88>
+DEBUG:PyCoTools.pycopi:pycopi:938:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:928:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xbc39f88>
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_2.cps
+INFO:PyCoTools.pycopi:pycopi:3906:running model: 0
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3451:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps
+INFO:PyCoTools.pycopi:pycopi:3906:running model: 1
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:938:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3451:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:928:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xbc11748>
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_1.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_3.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_2.cps
+INFO:PyCoTools.pycopi:pycopi:3906:running model: 2
+INFO:PyCoTools.pycopi:pycopi:3998:Setup Took 2.36600017548 seconds
+INFO:PyCoTools.pycopi:pycopi:3998:Setup Took 2.27100014687 seconds
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:3451:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_2.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_3.cps
+INFO:PyCoTools.pycopi:pycopi:3906:running model: 3
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko_3.cps has been parsed into Python
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_3.cps
+INFO:PyCoTools.pycopi:pycopi:3998:Setup Took 2.32099986076 seconds
+DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_3.cps
+INFO:PyCoTools.PEAnalysis:PEAnalysis:90:Parsing data from C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Fit1Results into python
