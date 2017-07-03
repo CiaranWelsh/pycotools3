@@ -48,22 +48,14 @@ import pandas
 import matplotlib.pyplot as plt
 import scipy 
 import numpy 
-import Queue
 import os
 import matplotlib
 from textwrap import wrap
 import itertools
-import unittest
 import seaborn as sns
 import pycopi,Errors
-import re
-import seaborn as sns
 import logging
-from subprocess import check_call,Popen
-import threading
-#import ipyparallel
-#import math
-
+import glob
 LOG=logging.getLogger(__name__)
 
 class ParsePEData():
@@ -80,10 +72,10 @@ class ParsePEData():
             Allow one to overwrite the pickle file automatically
             produced for speed. Default=False
     '''
-    def __init__(self,results_path,use_pickle=False,overwrite_pickle=True,drop_constants = False,
+    def __init__(self,copasi_file, results_path,use_pickle=False,overwrite_pickle=True,drop_constants = False,
                  pickle_path=None):
         #input argument variables
-        
+        self.copasi_file = copasi_file
         self.drop_constants = drop_constants        
         self.results_path=results_path #either file or folder
         #change directory
@@ -97,7 +89,6 @@ class ParsePEData():
             self.pickle_path_log=os.path.join(self.cwd,'PEData_log.pickle')
         else:
             self.pickle_path_log=os.path.join(os.path.dirname(self.pickle_path),os.path.splitext(self.pickle_path)[0][:6]+'_log.pickle')
-#        self.from_pickle=True
         self.use_pickle=use_pickle
         self.overwrite_pickle=overwrite_pickle
         
@@ -116,21 +107,20 @@ class ParsePEData():
         if self.overwrite_pickle not in [True,False]:
             raise Errors.InputError('The argument overwrite_pickle only accepts \'true\' or \'false\'')
 
-        self.data=self.read_data()
+        self.data=self.read_data()#
         if self.data.empty==True:
             raise Errors.InputError('DataFrame is empty. Your PE data has not been read.')
-        self.data=self.rename_RSS(self.data)
+#        self.data=self.rename_RSS(self.data)
         self.data=self.sort_data(self.data)
         self.data=self.data.dropna()
         if self.drop_constants:
             self.data=self.filter_constants(self.data)
         self.data=self.remove_infinite_RSS()
-        self.data=pycopi.PruneCopasiHeaders(self.data).prune()
+#        self.data=pycopi.PruneCopasiHeaders(self.data).prune()
         try:
             self.log_data=self.log10_conversion()
         except AttributeError:
             raise TypeError('Could not convert to log10 scale. Chances are this is because you have infinite RSS values in your parameter estimation data. Try changing the optimization settings')
-#            
 
 
 
@@ -157,11 +147,10 @@ class ParsePEData():
         '''
         assert os.path.isdir(self.results_path),'{} is not a real directory'.format(self.results_path)
         df_list=[]
-        for i in os.listdir(self.results_path):
-            path=os.path.join(self.results_path,i)
-            if os.path.splitext(path)[1]=='.txt':
-                df=pandas.read_csv(path,sep='\t')
-                df_list.append(df)
+        for path in glob.glob(os.path.join(self.results_path,'*')):
+            pycopi.FormatPEData(self.copasi_file, path)
+            df=pandas.read_csv(path, sep='\t')
+            df_list.append(df)
         return pandas.concat(df_list)
                 
     def rename_RSS(self,data):
@@ -188,6 +177,7 @@ class ParsePEData():
         _,ext=os.path.splitext(self.results_path)
         if ext not in ['.txt','.xlsx','.xls','.csv','.pickle']:
             raise Errors.InputError('parameter file {} is not a is not .pickle, .txt, .xlsx, .xls or .csv'.format(self.results_path))
+        pycopi.FormatPEData(self.copasi_file,self.results_path)
         if ext=='.txt':
             return pandas.read_csv(self.results_path,sep='\t')
         elif ext=='xlsx' or ext=='xls':
@@ -1864,8 +1854,10 @@ class ModelSelection():
         
         
 if __name__=='__main__':
-    pass
-
+    f=r"C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko.cps"
+    d=r"C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Fit6Results"
+    
+    print ParsePEData(f,d).data
     
     
     
