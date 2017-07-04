@@ -5086,6 +5086,7 @@ if __name__=='__main__':
     pass
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -5176,6 +5177,9 @@ if __name__=='__main__':
 #     print I.parameters.transpose()
 #
 # #    print '\n\n\n'
+=======
+    
+>>>>>>> parent of f077657... See long description
 
 
 # #    os.system('CopasiUI {}'.format(f))
