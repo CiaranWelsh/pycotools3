@@ -3964,7 +3964,12 @@ class RunMultiplePEs():
                 check_call('qhost')
             except Errors.NotImplementedError:
                 LOG.warning('Attempting to run in SGE mode but SGE specific commands are unavailable. Switching to \'multiprocess\' mode')
+<<<<<<< HEAD
+                self.kwargs['Run']='multiprocess'
+                self.run()
+=======
                 self.kwargs['run']='multiprocess'
+>>>>>>> 7759ebc9c3b0729eee95d01e8a6cddf4a1d82926
         if os.path.isfile(self.copasi_file_pickle):
             with open(self.copasi_file_pickle) as f:
                 self.sub_copasi_files=pickle.load(f)
@@ -4107,7 +4112,33 @@ class RunMultiplePEs():
         self.kwargs['results_directory']=os.path.abspath(self.kwargs['results_directory'])
             
     
+<<<<<<< HEAD
+    def copy_copasi(self):
+        '''
+        Copy copasi files m times to run separetly on a single 
+        computer
+        
+        returns:
+            dict[model_number]=cps_file
+        '''
+        LOG.info('Copying copasi file {} times'.format(self.kwargs['copy_number']))
+        sub_copasi_files_dct={}
+        copasi_path,copasi_filename=os.path.split(self.copasi_file)
+        for i in range(1,self.kwargs['copy_number']):
+            new_cps=os.path.join(copasi_path,copasi_filename[:-4]+'_{}.cps'.format(str(i)))
+            shutil.copy(self.copasi_file,new_cps)
+            sub_copasi_files_dct[i]= new_cps
+        sub_copasi_files_dct[0]=self.copasi_file
 
+        # if os.path.isfile(self.copasi_file_pickle):
+        #     os.remove(self.copasi_file_pickle)
+        with open(self.copasi_file_pickle,'w')as f:
+            pickle.dump(sub_copasi_files_dct,f)
+            
+        return sub_copasi_files_dct
+=======
+
+>>>>>>> CopasiVersion19Develop
     
     def _create_output_directory(self):
         '''
@@ -5111,7 +5142,129 @@ Please check the headers of your PE data are consistent with your model paramete
 
 if __name__=='__main__':
     pass
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    # f=r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps'
+    #
+    # dire = os.path.dirname(f)
+    # report = os.path.join(dire, 'timecourse_report.txt')
+    # # TimeCourse(f, Intervals=10, StepSize=100,
+    # #            End=1000, ReportName=report,
+    # #            # Plot='true',SaveFig='true')
+    # PE=RunMultiplePEs(f,report,
+    #                   CopyNumber=5,
+    #                   NumberOfPEs=3)
+    # PE.write_config_template()
+    # PE.set_up()
+    # PE.run()
+=======
+    
+=======
+>>>>>>> CopasiVersion19Develop
 
+<<<<<<< HEAD
+#    f=r'C:\Users\Ciaran\Documents\CopasiVer19KholodenkoTests\M1.cps'
+#
+#    dire = os.path.dirname(f)
+#
+#    report = os.path.join(dire, 'timecourse_report.txt')
+#    
+#    PE=ParameterEstimation(f,report)
+##    PE.write_item_template()
+##    PE.set_up()
+##    PE.run()
+#
+#    I=InsertParameters(f,ParameterPath = PE.kwargs['ReportName'])    
+#    print I.insert_locals()
+##    print os.system('CopasiUI {}'.format(f))
+#
+#    '''
+#    First get look up type structure for model, metabolites compartments 
+#    and model values (the objectReferences)
+#    
+#    Then extract order and replace the existing string under the initial state tag
+#    
+#    Hopefully this would work. 
+    '''
+
+
+
+=======
+
+    f=r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps'
+
+    dire = os.path.dirname(f)
+    report = os.path.join(dire, 'timecourse_report.txt')
+    # TimeCourse(f, Intervals=10, StepSize=100,
+    #            End=1000, ReportName=report,
+    #            # Plot='true',SaveFig='true')
+    PE=RunMultiplePEs(f,report,
+                      CopyNumber=5,
+                      NumberOfPEs=3)
+    PE.write_config_template()
+    PE.set_up()
+    PE.run()
+>>>>>>> origin/CopasiVersion19
+
+>>>>>>> CopasiVersion19
+
+    # S=Scan(f,ScanType='repeat',NumberOfSteps=10,
+    #        ReportType='parameter_estimation',
+    #        SubTask='parameter_estimation',Run = 'true')
+    # os.system('CopasiUI {}'.format(f))
+#    os.system('CopasiSE {}'.format(f))
+
+##    EM=ExperimentMapper(f,report)
+#    PE = ParameterEstimation(f,report)
+#    PE.write_config_template()
+#    PE.set_up()
+#    PE.run()
+
+#     d={'A':5,'B':10,'one':15,'(second).k1':20,'another':25,'new_com':1000}
+#
+#     d={'A':100,'B':1000,'C':10000,'D':100000,'new_com':100}
+#
+#     I=InsertParameters(f,ParameterDict=d)
+#     print I.parameters.transpose()
+#
+# #    print '\n\n\n'
+
+
+# #    os.system('CopasiUI {}'.format(f))
+# #    print I.insert_initial_state()
+# #    print os.system('CopasiUI {}'.format(f))
+#
+#     '''
+#     First get look up type structure for model, metabolites compartments
+#     and model values (the objectReferences)
+#
+#     Then extract order and replace the existing string under the initial state tag
+#
+#     Hopefully this would work.
+#     '''
+#     GMQ=GetModelQuantities(f)
+#
+#     # print GMQ.convert_molar_to_particles(1,'mmol',0.5)
+#
+#
+# #    print GMQ.get_all_model_variables().keys()
+#
+#     '''
+#     copasi answer
+#     mmol per liter: 1 -> 6.022140857e+20
+#
+#     '''
+#
+#
+#
+#
+#
+#
+#
+=======
+>>>>>>> 7759ebc9c3b0729eee95d01e8a6cddf4a1d82926
 
 
 
