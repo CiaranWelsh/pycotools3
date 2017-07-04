@@ -5088,6 +5088,7 @@ if __name__=='__main__':
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -5108,6 +5109,9 @@ if __name__=='__main__':
     
 =======
 >>>>>>> CopasiVersion19Develop
+=======
+    
+>>>>>>> parent of f077657... See long description
 
 <<<<<<< HEAD
 #    f=r'C:\Users\Ciaran\Documents\CopasiVer19KholodenkoTests\M1.cps'
