@@ -130,12 +130,6 @@ class GetModelQuantities():
     keywords:
         quantity_type:
             either 'concentration' (default) or 'particle_numbers'. 
-            
-            
-    ===============
-    Idea for this class:
-        assemble all information about the model into a dict and 
-        use the __getitem__ method to retrieve the desired quantity. 
     '''
     
     def __init__(self,copasi_file,quantity_type='concentration'):
@@ -716,14 +710,6 @@ class Reports():
         
             
         self.copasiML=self.save()
-
-
-    def __getitem__(self,key):
-        if key not in self.kwargs.keys():
-            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
-            
-        return self.kwargs[key]
-
         
     def save(self):
         self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
@@ -934,7 +920,7 @@ class Reports():
         report.attrib.update(report_attributes)
         comment=etree.SubElement(report,'Comment') 
         comment=comment #get rid of annoying squiggly line above
-        footer=etree.SubElement(report,'Body')
+        footer=etree.SubElement(report,'Footer')
         Object=etree.SubElement(footer,'Object')
         Object.attrib['cn']="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"
         Object=etree.SubElement(footer,'Object')
@@ -1348,14 +1334,6 @@ class TimeCourse(object):
             if self.kwargs.get('plot') == True:
                 self.plot()
 
-
-        def __getitem__(self,key):
-            if key not in self.kwargs.keys():
-                raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
-            
-            return self.kwargs[key]
-    
-    
         def _do_checks(self):
             """
             
@@ -1716,12 +1694,6 @@ class ExperimentMapper():
         if self.kwargs.get('save')!=False:
             self.save()
         
-    def __getitem__(self,key):
-        if key not in self.kwargs.keys():
-            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
-            
-        return self.kwargs[key]
-
         
     def get_existing_experiments(self):
         existing_experiment_list=[]
@@ -2112,22 +2084,6 @@ class PhaseSpace(TimeCourse):
             self.plot1phase(i[0],i[1])
 
 class FormatPEData():
-    '''
-    Extract names of estimated parameters from the parameter estimation 
-    task in the correct order to give a parameter estimation output
-    file the correct headers. 
-    
-    Args:
-        copasi_file:
-            Path to copasi file
-            
-        report_name:
-            Name of file to format
-            
-    ========
-    Original formatted results are automatically overwritten by the formatted
-    results. They are also available within the format attribute as well.
-    '''
     def __init__(self,copasi_file,report_name):
         self.copasi_file = copasi_file
         self.GMQ = GetModelQuantities(self.copasi_file)
@@ -2147,18 +2103,13 @@ class FormatPEData():
         give them the proper headers then overwrite the file again
         :return:
         """
-        
-        try:
-            data = pandas.read_csv(self.report_name, sep='\t')
-            data['RSS']
-            return data
-        except KeyError:
-            data = pandas.read_csv(self.report_name, sep='\t',header = None)
-            data = data.drop(data.columns[0], axis=1)
+        data = pandas.read_csv(self.report_name, sep='\t', header=None)
+        data = data.drop(data.columns[0], axis=1)
         LOG.debug('Shape of estimated parameters: {}'.format(data.shape))
         width = data.shape[1]
         ## remove the extra bracket
         data[width] = data[width].str[1:]
+#        num = data.shape[0]
         names = self.GMQ.get_fit_item_order()+['RSS']
         data.columns = names
         os.remove(self.report_name)
@@ -2687,14 +2638,6 @@ class ParameterEstimation():
         self.PlotPEDataKwargs['legend_loc']=self.kwargs.get('legend_loc')
         self.PlotPEDataKwargs['prune_headers']=self.kwargs.get('prune_headers')
         self.PlotPEDataKwargs['separator']=self.kwargs.get('separator')
-
-
-    def __getitem__(self,key):
-        if key not in self.kwargs.keys():
-            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
-            
-        return self.kwargs[key]
-
         
     def run(self):
         if self.kwargs.get('plot')==False:
@@ -3404,11 +3347,6 @@ class Scan():
         self.copasiML=self.save()
         self.run()
         
-    def __getitem__(self,key):
-        if key not in self.kwargs.keys():
-            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
-            
-        return self.kwargs[key]
             
     def save(self):
         self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
@@ -3661,11 +3599,7 @@ class Run():
         Process(run(self.copasi_file))
 
 
-    def __getitem__(self,key):
-        if key not in self.kwargs.keys():
-            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
-            
-        return self.kwargs[key]
+
 
     def set_task(self):
         for i in self.copasiML.find('{http://www.copasi.org/static/schema}ListOfTasks'):
@@ -3836,7 +3770,7 @@ class RunMultiplePEs():
                  'global_quantities':self.GMQ.get_global_quantities().keys(),
                  'local_parameters': self.GMQ.get_local_kinetic_parameters_cns().keys(),
                  'quantity_type':'concentration',
-                 'append': False, 
+                 'append': True, 
                  'confirm_overwrite': False,
                  'config_filename':None,
                  'output_in_subtask':False,
@@ -3974,7 +3908,7 @@ class RunMultiplePEs():
             with open(self.copasi_file_pickle) as f:
                 self.sub_copasi_files=pickle.load(f)
         for i in self.sub_copasi_files:
-            LOG.info('running model: {}'.format(os.path.split(self.sub_copasi_files[i])[1]))
+            LOG.info('running model: {}'.format(i))
             if self.kwargs['run']=='multiprocess':
                 Run(self.sub_copasi_files[i],mode='multiprocess',task='scan')
             elif self.kwargs['run']=='SGE':
@@ -4041,6 +3975,7 @@ class RunMultiplePEs():
             time.sleep(0.1)
             
         s=q.get()
+        LOG.info(str(s))
         ## Since this is being executed in parallel sometimes
         ## we get process clashes. Not sure exactly whats going on
         ## but introducing a small delay seems to fix
@@ -4065,7 +4000,7 @@ class RunMultiplePEs():
              append = self.kwargs['append'],
              confirm_overwrite = self.kwargs['confirm_overwrite'],
              output_in_subtask = self.kwargs['output_in_subtask']) )
-        LOG.debug('Setup Took {} seconds'.format(time.time() - start))
+        LOG.info('Setup Took {} seconds'.format(time.time() - start))
 
     ##void
     def _create_defaults(self):
@@ -4293,14 +4228,6 @@ class MultiModelFit():
         self.sub_cps_dirs=self.create_workspace()
         self.RMPE_dct=self.instantiate_run_multi_PEs_class()
         self.results_folder_dct=self.get_output_directories()
-
-
-    def __getitem__(self,key):
-        if key not in self.kwargs.keys():
-            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
-            
-        return self.kwargs[key]
-
         
     def instantiate_run_multi_PEs_class(self):
         '''
@@ -4585,12 +4512,6 @@ class InsertParameters16():
         self.insert_all()
         #change
 
-    def __getitem__(self,key):
-        if key not in self.kwargs.keys():
-            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
-            
-        return self.kwargs[key]
-    
     def save(self):
         if self.kwargs.get('Save')=='duplicate':
             self.CParser.write_copasi_file(self.kwargs.get('OutputML'),self.copasiML)
@@ -5140,8 +5061,30 @@ Please check the headers of your PE data are consistent with your model paramete
         return self.copasiML
 
 
+
+class HighThroughputFit():
+    """
+    The aim of this class is to build a way
+    of fitting high throughput data sets to
+    a single abstract model.
+
+    The reason this class is being built is
+    to model microarray data with an abstract
+    model of transcription. In principle this
+    idea can be extended to other models and data
+    """
+
+    def __init__(self,abstract_model_file):
+        self.abstract_model_file = abstract_model_file
+        
+#==============================================================================
+
+            
+        
+            
 if __name__=='__main__':
     pass
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
@@ -5188,6 +5131,9 @@ if __name__=='__main__':
 #    
 #    Hopefully this would work. 
     '''
+=======
+    
+>>>>>>> parent of f077657... See long description
 
 
 
