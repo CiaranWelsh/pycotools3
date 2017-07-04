@@ -542,6 +542,7 @@ DEBUG:PyCoTools.pycopi:pycopi:119:model written to /home/b3053674/Documents/PyCo
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
 DEBUG:PyCoTools.pycopi:pycopi:108:copasi file Kholodenko.cps has been parsed into Python
 DEBUG:PyCoTools.pycopi:pycopi:119:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+<<<<<<< HEAD
 INFO:root:__init__:26:Initializing PyCoTools
 INFO:root:__init__:27:Initializing logging System
 INFO:root:__init__:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
@@ -5364,3 +5365,5 @@ DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyC
 INFO:PyCoTools.pycopi:pycopi:3998:Setup Took 2.32099986076 seconds
 DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Kholodenko_3.cps
 INFO:PyCoTools.PEAnalysis:PEAnalysis:90:Parsing data from C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Fit1Results into python
+=======
+>>>>>>> parent of 78db89b... mistake made somewhere down the line as tutorials have disappeared from CopasiVersion19Develop

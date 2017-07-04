@@ -415,7 +415,7 @@ class PlotHistogram(object):
         #keywrod arguments
 
         options={'from_pickle':False,
-                 'truncate_mode':'percent', #either 'below_x' or 'percent' for method of truncation. 
+                 'truncate_mode':'tolerance', #either 'below_x' or 'percent' for method of truncation. 
                  'log10':False,
                  'x':100,           #if below_x: this is the x boundary. If percent: this is the percent of data to keep
                  'bins':100,
@@ -538,7 +538,7 @@ class PlotScatters(object):
         #keywrod arguments
 
         options={'from_pickle':False,
-                 'truncate_mode':'percent', #either 'below_x' or 'percent' for method of truncation. 
+                 'truncate_mode':'tolerance', #either 'below_x' or 'percent' for method of truncation. 
                  'log10':True,
                  'x':100,           #if below_x: this is the x boundary. If percent: this is the percent of data to keep
                  'axis_size':15,
@@ -671,7 +671,7 @@ class PlotHexMap(object):
         #keywrod arguments
 
         options={'from_pickle':False,
-                 'truncate_mode':'percen', #either 'below_x' or 'percent' for method of truncation. 
+                 'truncate_mode':'tolerance', #either 'below_x' or 'percent' for method of truncation. 
                  'log10':False,
                  'grid_size':25,
                  'x':100,           #if below_x: this is the x boundary. If percent: this is the percent of data to keep
@@ -881,7 +881,7 @@ class PlotBoxplot(object):
         self.results_path=results_path
         #keywrod arguments
         options={#parse data options
-                 'truncate_mode':'percen', #either 'below_x' or 'percent' for method of truncation. 
+                 'truncate_mode':'tolerance', #either 'below_x' or 'percent' for method of truncation. 
                  'log10':True,
                  'parse_mode':'folder',
                  'from_pickle':True,
@@ -1014,7 +1014,7 @@ class PlotHeatMap():
         #keywrod arguments
         options={#parse data options
                  'from_pickle':False,
-                 'truncate_mode':'percen', #either 'below_x' or 'percent' for method of truncation. 
+                 'truncate_mode':'tolerance', #either 'below_x' or 'percent' for method of truncation. 
                  'log10':True,
                  'parse_mode':'folder',
                  #truncate data options
@@ -1459,16 +1459,32 @@ class PlotPEData(object):
             '''
             need to subtract 1 from the intervals
             '''
-            TC=pycopi.TimeCourse(self.copasi_file,start=0,
-                          end=self.exp_times[i]['end'],
-                          intervals=self.exp_times[i]['end'],
-                          step_size=1,
+            TC=pycopi.TimeCourse(self.copasi_file,Start=0,
+                          End=self.exp_times[i]['end'],
+                          Intervals=self.exp_times[i]['end'],
+                          StepSize=1,
                           plot=False)
             P=pycopi.PruneCopasiHeaders(TC.data,replace=True)
             data_dct[i]=P.df
         return data_dct
 
 
+#    def simulate_time_course(self):
+#        data_dct={}
+#        for i in self.exp_times:
+#            '''
+#            need to subtract 1 from the intervals
+#            '''
+#            TC=pycopi.TimeCourse(self.copasi_file,Start=self.exp_times[i]['Start'],
+#                          End=self.exp_times[i]['End'],
+#                          Intervals=self.exp_times[i]['End'],
+#                          StepSize=1,plot=False)
+#            P=pycopi.PruneCopasiHeaders(TC.data,replace=True)
+#            data_dct[i]=P.df
+#        return data_dct
+        
+        
+                            
     def plot1(self,fle,parameter):
         '''
         plot one parameter of one experiment. for iterating over in 
