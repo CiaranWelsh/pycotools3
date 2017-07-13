@@ -38,8 +38,6 @@ class ParameterInputError(Exception):
     pass
 
 
-class FileIsEmptyError(Exception):
-    pass
 
 
 
