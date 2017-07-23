@@ -2824,15 +2824,9 @@ class ParameterEstimation():
         :return:
         """
         data = pandas.read_csv(self.kwargs['report_name'], sep='\t', header=None)
-        LOG.debug('data is \n{}'.format(data))
-        LOG.debug('fit items: {}'.format(self.GMQ.get_fit_item_order()))
         data = data.drop(data.columns[0], axis=1)
-        LOG.debug('dropped data:\n {}'.format(data))
-        LOG.debug('14: \n{}'.format(data[14]))
-        LOG.debug('14 type: \n{}'.format(type(data[14])))
-        LOG.debug(data[14].str[1:])
-        data[14] = data[14].str[1:]
-        num = data.shape[0]
+        rss_col = data.columns[-1]
+        data[ rss_col] = data[rss_col].str[1:]
         names = self.GMQ.get_fit_item_order()+['RSS']
         data.columns = names
         os.remove(self.kwargs['report_name'])
@@ -4699,18 +4693,19 @@ Please check the headers of your PE data are consistent with your model paramete
         
         '''
         ## get local parameters
-        local=self.GMQ.get_local_kinetic_parameters_cns().keys()
+        local=sorted(self.GMQ.get_local_kinetic_parameters_cns().keys())
         ## remove local parameters from complete list depending on whether
         ## user wants to insert anything for that parameter or not
         local= [i for i in self.parameters if i in local]
-        LOG.debug('Local parameters being inserted into mode: {}'.format(local))
-        ## create a dict[reaction]=parameter type dict to help
+        LOG.debug('Local parameters being inserted into model: {}'.format(local))
+        ## create a dict[parameter]=reactiontype dict to help
         ## navidate the xml
         local_dct={}
         for i in local:
             k,v = re.findall(  '\((.*)\)\.(.*)',i  ) [0]
-            local_dct[k]=v
-
+            local_dct[v]=k
+            
+#        print (local_dct, len(local_dct))
         LOG.debug('Constructing a dict of reaction:parameter for local parameters: {}'.format(local_dct))
         
         ## Iterate over all local parameters that we want to insert
@@ -4719,7 +4714,7 @@ Please check the headers of your PE data are consistent with your model paramete
         ## match with the parameter then insert the str(float(*.)) representation
         ## of the parameter value into the value attribute for the constant
         ## element
-        for reaction,parameter in local_dct.items():
+        for parameter, reaction in local_dct.items():
             for i in self.copasiML.iter():
                 if  i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
                     for j in i:
@@ -4931,7 +4926,8 @@ class HighThroughputFit():
         
             
 if __name__=='__main__':
-    model = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps'
+    execfile('/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/testing_kholodenko_manually.py')
+#    model = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps'
     
 #    TimeCourse
 #    GMQ = GetModelQuantities(model)
