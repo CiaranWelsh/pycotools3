@@ -1459,13 +1459,13 @@ class PlotPEData(object):
             '''
             need to subtract 1 from the intervals
             '''
-            TC=pycopi.TimeCourse(self.copasi_file,Start=0,
-                          End=self.exp_times[i]['end'],
-                          Intervals=self.exp_times[i]['end'],
-                          StepSize=1,
+            TC=pycopi.TimeCourse(self.copasi_file,start=0,
+                          end=self.exp_times[i]['end'],
+                          intervals=self.exp_times[i]['end'],
+                          step_size=1,
                           plot=False)
-            P=pycopi.PruneCopasiHeaders(TC.data,replace=True)
-            data_dct[i]=P.df
+            df = pandas.read_csv(TC.kwargs['report_name'], sep='\t')
+            data_dct[i]=df
         return data_dct
 
 
@@ -1569,11 +1569,11 @@ class PlotPEData(object):
         '''
         plot all parameters
         '''
-        LOG.warning('the plotting function is temporarily disabled')
-#        for f in self.experiment_files:
-#            dire,p= os.path.split(f)
-#            fle=os.path.splitext(p)[0]  
-#            self.plot1file(f)
+#        LOG.warning('the plotting function is temporarily disabled')
+        for f in self.experiment_files:
+            dire,p= os.path.split(f)
+            fle=os.path.splitext(p)[0]  
+            self.plot1file(f)
 
     
     
