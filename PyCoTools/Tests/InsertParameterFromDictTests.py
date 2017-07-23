@@ -63,7 +63,7 @@ class TestInsertPEFromDict(unittest.TestCase):
         
             
     def test_local(self):
-        print self.M.get_reactions()
+        print self.M.get_local_parameters()
         
         
         
