@@ -1087,7 +1087,6 @@ class Reports():
         comment=etree.SubElement(report,'Comment') 
         comment=comment #get rid of annoying squiggly line above
         footer=etree.SubElement(report,'Footer')
-        LOG.info('footer is: {}'.format(footer))
         Object=etree.SubElement(footer,'Object')
         Object.attrib['cn']="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"
         Object=etree.SubElement(footer,'Object')
@@ -1493,7 +1492,7 @@ class TimeCourse(object):
             
             self.save()
             self.run()
-            if self.kwargs.get('plot') == True:
+            if self.kwargs['plot'] == True:
                 self.data = self.read_sim_data()
                 self.plot()
 
@@ -3970,6 +3969,7 @@ class RunMultiplePEs():
                  'lower_bound':0.000001,
                  'upper_bound':1000000,
                  'plot':False,
+                 'output_in_subtask':False,
                  '''
                  The below arguments get passed to the parameter
                  estimation plotting class
@@ -4003,18 +4003,29 @@ class RunMultiplePEs():
         self._do_checks()
         self._create_defaults()
         self._create_output_directory()
+        
+        ## create copy of kwargs and remove those that we do not wnt to pass to ParameterEstimation
         self.PE_dct=deepcopy(self.kwargs)
         del self.PE_dct['results_directory']
         del self.PE_dct['copy_number']
         del self.PE_dct['pe_number']
         del self.PE_dct['run']
+        del self.PE_dct['output_in_subtask']
 
 
         self.report_files=self.enumerate_PE_output()
         LOG.debug('Create an instance of ParameterEstimation')
         self.PE=ParameterEstimation(self.copasi_file,self.experiment_files,**self.PE_dct)
-#
 
+
+    def format_results(self):
+        """
+        Copasi output does not have headers. This function 
+        gives PE data output headers
+        """
+        for report_file in self.report_files:
+            FormatPEData(self.copasi_file, self.report_files[report_file])
+        return self.report_files
 
     def setup(self):
         '''
@@ -4053,10 +4064,7 @@ class RunMultiplePEs():
                 self.sub_copasi_files=pickle.load(f)
         for i in self.sub_copasi_files:
             LOG.info('running model: {}'.format(i))
-            if self.kwargs['run']=='multiprocess':
-                Run(self.sub_copasi_files[i],mode='multiprocess',task='scan')
-            elif self.kwargs['run']=='SGE':
-                Run(self.sub_copasi_files[i],mode='SGE',task='scan')
+            Run(self.sub_copasi_files[i],mode=self.kwargs['run'],task='scan')
                     
     def copy_copasi(self):
         '''
@@ -4181,30 +4189,6 @@ class RunMultiplePEs():
             self.kwargs['results_directory']='MultipleParameterEsimationAnalysis'
         self.kwargs['results_directory']=os.path.abspath(self.kwargs['results_directory'])
             
-    
-    def copy_copasi(self):
-        '''
-        Copy copasi files m times to run separetly on a single 
-        computer
-        
-        returns:
-            dict[model_number]=cps_file
-        '''
-        LOG.info('Copying copasi file {} times'.format(self.kwargs['copy_number']))
-        sub_copasi_files_dct={}
-        copasi_path,copasi_filename=os.path.split(self.copasi_file)
-        for i in range(1,self.kwargs['copy_number']):
-            new_cps=os.path.join(copasi_path,copasi_filename[:-4]+'_{}.cps'.format(str(i)))
-            shutil.copy(self.copasi_file,new_cps)
-            sub_copasi_files_dct[i]= new_cps
-        sub_copasi_files_dct[0]=self.copasi_file
-
-        # if os.path.isfile(self.copasi_file_pickle):
-        #     os.remove(self.copasi_file_pickle)
-        with open(self.copasi_file_pickle,'w')as f:
-            pickle.dump(sub_copasi_files_dct,f)
-            
-        return sub_copasi_files_dct
     
     def _create_output_directory(self):
         '''
