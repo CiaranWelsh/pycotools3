@@ -105,13 +105,11 @@ class CopasiMLParser():
         Parse xml doc with lxml 
         '''
         tree= etree.parse(self.copasi_file)
-        LOG.debug('copasi file {} has been parsed into Python'.format(os.path.split(self.copasi_file)[1]))
         return tree
 
     def write_copasi_file(self,copasi_filename, copasiML):
         '''
         write to file with lxml write function
-
         '''
         #first convert the copasiML to a root element tree
         root=etree.ElementTree(copasiML)
@@ -119,7 +117,175 @@ class CopasiMLParser():
         LOG.debug('model written to {}'.format(copasi_filename))
 
 #==============================================================================
+class Model():
+    """
+    This class is the replacement for GetModelQuantities. Currently supporting
+    'getters' for model quantities. There is space for the 'setters' but this 
+    is not implemented yet. 
+    """
+    def __init__(self, copasi_file):
+        self.copasi_file = copasi_file
+        self.copasiML = CopasiMLParser(self.copasi_file).copasiML
+        
+        
+    def get_time_unit(self):
+        """
+        
+        """
+        
+        query =  '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
+        return self.copasiML.xpath(query)[0].attrib['timeUnit']    
+    
+    def get_model_name(self):
+        """
+        
+        """
+        query =  '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
+        return self.copasiML.xpath(query)[0].attrib['name']            
 
+    def get_volume_unit(self):
+        query =  '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
+        return self.copasiML.xpath(query)[0].attrib['volumeUnit']
+    
+    def get_quantity_unit(self):
+        query =  '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
+        return self.copasiML.xpath(query)[0].attrib['quantityUnit']  
+    
+    def get_area_unit(self):
+        query =  '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
+        return self.copasiML.xpath(query)[0].attrib['areaUnit']  
+    
+    def get_length_unit(self):
+        query =  '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
+        return self.copasiML.xpath(query)[0].attrib['lengthUnit']  
+    
+    def get_avagadro(self):
+        query =  '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
+        return float(self.copasiML.xpath(query)[0].attrib['avogadroConstant'] ) 
+    
+    
+    def get_model_key(self):
+        """
+        Get the model reference - the 'key' from self.get_model_units
+        """
+        query =  '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
+        return self.copasiML.xpath(query)[0].attrib['key']  
+    
+    def get_compartments(self, attribute=None):
+        """
+        Get dict of compartments. dict[compartment_name] = corresponding xml code as nested dict
+        """
+        key_list = [None,'dimensionality', 'simulationType', 'name', 'key']
+        if attribute not in key_list:
+            raise Errors.InputError('{} not in {}'.format(attribute, key_list))
+            
+            
+        collection= {}
+        for i in self.copasiML.iter():
+            if  i.tag == '{http://www.copasi.org/static/schema}ListOfCompartments':
+                for j in i:
+                    if attribute==None:
+                        collection[j.attrib['key']] = j.attrib
+                    else:
+                        collection[j.attrib['key']] = j.attrib[attribute]
+        return collection
+    
+        
+    def get_parameters(self):
+        """
+        Nested dict. level1 is local, global or metab. second level is parameter name. 
+        third is xml code
+        """
+        pass
+    
+    
+ 
+    
+    
+    def get_metabolites(self, attribute=None):
+        """
+
+        """
+        key_list = [None, 'key', 'name', 'simulationType', 'compartment']
+        if attribute not in key_list:
+            raise Errors.InputError('{} not in {}'.format(attribute, key_list))
+        collection= {}
+        for i in self.copasiML.iter():
+            if  i.tag == '{http://www.copasi.org/static/schema}ListOfMetabolites':
+                for j in i:
+                    if attribute==None:
+                        collection[j.attrib['key']] = j.attrib
+                    else:
+                        collection[j.attrib['key']] = j.attrib[attribute]
+        return collection
+
+    def get_global_quantities(self, attribute=None):
+        """
+        """
+        key_list = [None, 'key', 'name', 'simulationType']
+        if attribute not in key_list:
+            raise Errors.InputError('{} not in {}'.format(attribute, key_list))
+        collection= {}
+        for i in self.copasiML.iter():
+            if  i.tag == '{http://www.copasi.org/static/schema}ListOfModelValues':
+                for j in i:
+                    if attribute==None:
+                        collection[j.attrib['key']] = j.attrib
+                    else:
+                        collection[j.attrib['key']] = j.attrib[attribute]
+        return collection
+    
+    
+    def get_local_parameters(self, attribute=None):
+        """
+        i.e. get local parmeters
+        """
+        key_list = [None, 'value',' name','key']
+        if attribute not in key_list:
+            raise Errors.InputError('{} not in {}'.format(attribute, key_list))
+            
+            
+        collection= {}
+        for i in self.copasiML.iter():
+            if  i.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
+                if attribute == None:
+                    for j in i:
+                        collection[j.attrib['key']] = j.attrib
+                else:
+                    for j in i:
+                        collection[j.attrib['key']] = j.attrib[attribute]
+        return collection    
+    
+    def get_reactions(self, attribute=None):
+        """
+        
+        """
+        key_list = [None,'key', 'name', 'reversible', 'fast']
+        if attribute not in key_list:
+            raise Errors.InputError('{} not in {}'.format(attribute, key_list))
+            
+        collection={}
+        for i in self.copasiML.iter():
+            if i.tag=='{http://www.copasi.org/static/schema}ListOfReactions':
+                for j in i:
+                    if attribute == None:
+                        collection[j.attrib['key']] = j.attrib
+                    else:
+                        collection[j.attribute['key']] = j.attrib[attribute]
+        return collection
+    
+    def get_state_template(self):
+        """
+
+        """
+        collection= []
+        for i in self.copasiML.iter():
+            if  i.tag == '{http://www.copasi.org/static/schema}StateTemplate':
+                for j in i:
+                    collection.append(j.attrib['objectReference'])
+        return collection     
+    
+    
 class GetModelQuantities():
     '''
     Positional arguments:
@@ -4752,6 +4918,8 @@ class HighThroughputFit():
     to model microarray data with an abstract
     model of transcription. In principle this
     idea can be extended to other models and data
+    
+    Just an idea t the moment. not implemented
     """
 
     def __init__(self,abstract_model_file):
@@ -4764,8 +4932,12 @@ class HighThroughputFit():
             
 if __name__=='__main__':
     model = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps'
-    GMQ = GetModelQuantities(model)
-    I = InsertParameters(model, parameter_dict = {'(TestREaction).k2':6})
+    
+#    TimeCourse
+#    GMQ = GetModelQuantities(model)
+#    I = InsertParameters(model, parameter_dict = {'(TestREaction).k2':6})
+#    M=Model(model)
+#    print M.get_reactions()
 
 
 
