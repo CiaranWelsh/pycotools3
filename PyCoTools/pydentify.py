@@ -400,7 +400,7 @@ class ProfileLikelihood():
                                      clear_scans=True)
         return self.cps_dct
         
-    def run(self):
+    def run_slow(self):
         '''
         run using one process, separately, one after another
         '''
@@ -408,8 +408,28 @@ class ProfileLikelihood():
         for i in self.cps_dct.keys():
             for j in self.cps_dct[i]:
                 LOG.debug( 'running {}'.format(j))
-                res[self.cps_dct[i][j]]= pycopi.Run(self.cps_dct[i][j],task='scan',mode=self['run']).run()
+                res[self.cps_dct[i][j]]= pycopi.Run(self.cps_dct[i][j],task='scan',mode='slow').run()
         return res
+    
+    def multi_run(self):
+        
+        def run(f):
+            import pycopi
+            LOG.info('Running {}'.format(f))
+            pycopi.Run(f, task = 'scan', mode='multiprocess').run()
+            
+        from multiprocessing import Pool
+        pool = Pool(processes=4)
+        for index in self.cps_dct:
+            result = pool.apply_async(run, (self.cps_dct[index].values(),))
+            pool.close()
+            pool.join()
+        
+    def run(self):
+        if self['run']=='slow':
+            self.run_slow()
+        elif self['run']=='multiprocess':
+            self.multi_run()
 
 #==============================================================================
 class FormatPLData():

@@ -33,7 +33,7 @@ pl_f='/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/Profil
 
 #os.system('CopasiUI {}'.format(model))
 
-PL = PyCoTools.pydentify.ProfileLikelihood(model, parameter_path=dire, run='multiprocess', index=0, iteration_limit=10, 
+PL = PyCoTools.pydentify.ProfileLikelihood(model, run='slow', index=-1, iteration_limit=10, 
                                            number_of_steps = 1,
                                            tolerance = 1e-1)
 
