@@ -1,2 +1,12 @@
-Unnamed: 0	(phosphorylation of MAPKK).KK3	(MAPKKK activation).K1	(dephosphorylation of MAPK-PP).V9	(phosphorylation of MAPK).k7	(phosphorylation of MAPK-P).k8	(MAPKKK inactivation).KK2	(MAPKKK inactivation).V2	(phosphorylation of MAPKK).k3	(phosphorylation of MAPKK-P).k4	(TestREaction).k1	(dephosphorylation of MAPKK-PP).KK5	(dephosphorylation of MAPK-PP).KK9	(dephosphorylation of MAPKK-P).KK6	(phosphorylation of MAPKK-P).KK4	(MAPKKK activation).V1	(MAPKKK activation).Ki	(phosphorylation of MAPK).KK7	(dephosphorylation of MAPK-P).KK10	(phosphorylation of MAPK-P).KK8	(dephosphorylation of MAPKK-PP).V5	(dephosphorylation of MAPK-P).V10	(dephosphorylation of MAPKK-P).V6	(MAPKKK activation).n	test_globl	Mek1-PP	A	Erk2	B	Mos	Erk2-P	Erk2-PP	Mos-P	Mek1	Mek1-P	RSS
-0	223602	52.7786	0.0545457	2.16843e-05	1.82532	1.29046e-06	393.116	3.91947	6.76763e-05	0.162227	236230	95208.1	0.00607107	2252.14	504.802	71.5069	412491	5.20358e-05	0.0664119	19465.7	0.000615195	1.17552e-06	1e-06	1.06937e-06	1e-06	1.29732e-06	1.02711e-06	1.02484e-06	1.11674e-06	1.22536e-06	1.05391e-06	1.39729e-06	0.000117738	0.000397442	38619.1
+[A]_0	TaskList[Parameter Estimation].(Problem)Parameter Estimation.Best Value
+0.01	31966.3
+10.009	84.9879
+20.008	7400.54
+30.007	39.7325
+40.006	6.5663
+50.005	1.20524
+60.004	7.96818
+70.003	654.182
+80.002	1.28999
+90.001	0.355359
+100	0.0667229

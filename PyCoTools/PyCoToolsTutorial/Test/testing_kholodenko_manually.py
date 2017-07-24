@@ -17,12 +17,47 @@ model = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/Kho
 
 dire = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/MultipleParameterEstimationResults'
 
+pl_d='/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ProfileLikelihood/0/(phosphorylation_of_MAPKK).KK3.txt'
+pl_f='/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ProfileLikelihood/0/(phosphorylation_of_MAPKK).KK3.cps'
 
-PL = PyCoTools.pydentify.ProfileLikelihood(model, parameter_path=dire, run='slow')
+#PyCoTools.pydentify.FormatPLData(pl_f, pl_d).format
 
 
+#P = PyCoTools.pydentify.Plot(model, parameter_path = dire, index=0, mode='one', plot_index = 0, plot_parameter='(dephosphorylation of MAPK-PP).V9')
+#
+#PyCoTools.pycopi.Reports(model, report_type='profilelikelihood2', variable='A')
+##
+#os.system('CopasiUI {}'.format(model))
+#S=PyCoTools.pycopi.Scan(model, scan_type='scan', variable='A')
 
 
+#os.system('CopasiUI {}'.format(model))
+
+PL = PyCoTools.pydentify.ProfileLikelihood(model, parameter_path=dire, run='multiprocess', index=0, iteration_limit=10, 
+                                           number_of_steps = 1,
+                                           tolerance = 1e-1)
+
+#f=r'/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ProfileLikelihood/-1/B.cps'
+#import subprocess
+#
+#def run(copasi_file):
+#    '''
+#    Process the copasi file using CopasiSE
+#    Must be Copasi version 16
+#    
+#    '''
+#    args=['CopasiSE',"{}".format(copasi_file)] 
+#    p=subprocess.Popen(args,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=False)
+#    output,err= p.communicate()
+#    d={}
+#    d['output']=output
+#    d['error']=err
+#    if err!='':
+#       raise PyCoTools.Errors.CopasiError('Failed with Copasi error: \n\n'+d['error'])
+#    return d['output']
+#
+#run(f)
+#
 
 
 #TC = PyCoTools.pycopi.TimeCourse(model, end = 1000, step_size=1, intervals=1000,

@@ -31,7 +31,7 @@ import pycopi,Errors, PEAnalysis,Misc
 import glob
 import multiprocessing
 import subprocess
-from shutil import copyfile
+from shutil import copyfile, copy2
 import math
 import matplotlib
 import matplotlib.pyplot as plt
@@ -96,9 +96,8 @@ class ProfileLikelihood():
         self.GMQ=pycopi.GetModelQuantities(self.copasi_file)
         os.chdir(os.path.dirname(self.copasi_file))
 
-        default_results_directory = os.path.join(os.path.dirname(self.copasi_file),'ProfileLikelihoods')
+        default_results_directory = os.path.join(os.path.dirname(self.copasi_file),'ProfileLikelihood')
         options={#report variables
-                 'save':'overwrite',
                  'index':-1,
                  'parameter_path':None,
                  'quantity_type':'concentration',
@@ -110,8 +109,6 @@ class ProfileLikelihood():
                  'tolerance':1e-5,
                  'rho':0.2,
                  'run':False,
-                 'Verbose':True,
-                 'max_time':None,
                  'results_directory':default_results_directory}
                  
 
@@ -202,14 +199,14 @@ class ProfileLikelihood():
         elif self.mode=='file':
             return PEAnalysis.ParsePEData(self.kwargs.get('parameter_path')).data
 
-    def copy_copasi_files_and_insert_parameters(self):
+    def copy_copasi_files_and_insert_parameters(self,IA_dir=None):
         '''
         Its easier to do these two functions together
         1) create relevant folders and copy copasi file into these based on the index parameter
         '''
         cps_dct={}
         estimated_parameters= self.GMQ.get_fit_items().keys()
-        IA_dir=os.path.join(os.path.dirname(self.copasi_file),'ProfileLikelihood')
+        IA_dir=self.kwargs['results_directory']
         if os.path.isdir(IA_dir)==False:
             os.mkdir(IA_dir)
         os.chdir(IA_dir)
@@ -281,12 +278,6 @@ class ProfileLikelihood():
         Note that you must have your data files int the same directory as the 
         cps file you want to perform profile likeliood on. 
         '''
-#        if self.kwargs['results_directory'] == None:
-#            self.IA_dir=os.path.join(os.path.dirname(self.copasi_file),'ProfileLikelihoods')
-#        if os.path.abspath(self.kwargs['results_directory'])!=True:
-#            self.IA_dir = os.path.join(os.path.dirname(self.copasi_file),self.kwargs['results_directory'])
-#        else:
-#            self.IA_dir = self.kwargs['results_directory']
         self.IA_dir = self.kwargs['results_directory']
         q='//*[@name="File Name"]'
         data_file_dct={}
@@ -300,7 +291,7 @@ class ProfileLikelihood():
                 copyfile(data_path,new_data_file1)
                 
             elif isinstance(self.kwargs.get('index'),int):
-                IA_dir2=os.path.join(self.IA_dir,str(self.kwargs.get('index')))
+                IA_dir2=os.path.join(self.IA_dir,str(self.kwargs['index']))
                 new_data_file2=os.path.join(IA_dir2,i.attrib['value'])
                 copyfile(data_path,new_data_file2)
                 
@@ -316,12 +307,12 @@ class ProfileLikelihood():
         remove parameter of interest from parameter estimation task
         and change method parameters 
         '''
-        method_params={'name':'Hooke &amp; Jeeves', 'type':'HookeJeeves'}
-        iteration_limit={'type': 'unsignedInteger', 'name': 'Iteration Limit', 'value': self.kwargs.get('iteration_limit')}
-        tolerance={'type': 'float', 'name': 'tolerance', 'value': self.kwargs.get('tolerance')}
-        rho={'type': 'float', 'name': 'rho', 'value': self.kwargs.get('rho')}
+        method_params={'name':"Hooke &amp; Jeeves", 'type':'HookeJeeves'}
+        iteration_limit={'type': 'unsignedInteger', 'name': 'Iteration Limit', 'value': self.kwargs['iteration_limit']}
+        tolerance={'type': 'float', 'name': 'Tolerance', 'value': self.kwargs['tolerance']}
+        rho={'type': 'float', 'name': 'Rho', 'value': self.kwargs.get('rho')}
 
-        method_element=pycopi.etree.Element('method',attrib=method_params)
+        method_element=pycopi.etree.Element('Method',attrib=method_params)
         pycopi.etree.SubElement(method_element,'Parameter',attrib=iteration_limit)
         pycopi.etree.SubElement(method_element,'Parameter',attrib=tolerance)
         pycopi.etree.SubElement(method_element,'Parameter',attrib=rho)
@@ -373,8 +364,8 @@ class ProfileLikelihood():
         for i in self.cps_dct:
             for j in self.cps_dct[i]:
                 st=Misc.RemoveNonAscii(j).filter
-                pycopi.Reports(self.cps_dct[i][j],report_type='profilelikelihood',
-                               report_name=st+'.txt',save='overwrite',variable=j)
+                pycopi.Reports(self.cps_dct[i][j],report_type='parameter_estimation',
+                               report_name=st+'.txt',save='overwrite')
         return self.cps_dct
         
     def setup_scan(self):
@@ -393,12 +384,13 @@ class ProfileLikelihood():
                 
                 pycopi.Scan(self.cps_dct[i][j],
                                      variable=j,
-                                     report_name=Misc.RemoveNonAscii(j).filter+'.txt',
-                                     report_type='profilelikelihood',
+                                     report_name=os.path.join(os.path.dirname(self.cps_dct[i][j]), Misc.RemoveNonAscii(j).filter+'.txt' ),
+                                     report_type='profilelikelihood2',
                                      subtask='parameter_estimation',
                                      scan_type='scan',
-                                     output_in_subtask=False,
+                                     output_in_subtask=True,
                                      adjust_initial_conditions=False,
+                                     append = False,
                                      number_of_steps=self.kwargs.get('number_of_steps'),
                                      maximum=ub,
                                      minimum=lb,
@@ -408,7 +400,7 @@ class ProfileLikelihood():
                                      clear_scans=True)
         return self.cps_dct
         
-    def run_slow(self):
+    def run(self):
         '''
         run using one process, separately, one after another
         '''
@@ -416,46 +408,46 @@ class ProfileLikelihood():
         for i in self.cps_dct.keys():
             for j in self.cps_dct[i]:
                 LOG.debug( 'running {}'.format(j))
-                res[self.cps_dct[i][j]]= pycopi.Run(self.cps_dct[i][j],task='scan',mode='slow').run()
+                res[self.cps_dct[i][j]]= pycopi.Run(self.cps_dct[i][j],task='scan',mode=self['run']).run()
         return res
-        
-    def multi_run(self):
-        def run(x):
-            subprocess.Popen('CopasiSE "{}"'.format(x))
-        if self.kwargs.get('NumProcesses')==0:
-            return False
-        else:
-            pool=multiprocessing.Pool(self.kwargs.get('NumProcesses'))
-            for i in self.cps_dct.keys():
-                for j in self.cps_dct[i]:
-                    pool.Process(run(self.cps_dct[i][j]))
-            return True
-                
-    def run_SGE(self):
-        for i in self.cps_dct.keys():
-            for j in self.cps_dct[i]:
-                with open('run_script.sh','w') as f:
-                    f.write('#!/bin/bash\n#$ -V -cwd\nmodule addapps/COPASI/4.16.104-Linux-64bit\nCopasiSE "{}"'.format(self.cps_dct[i][j]))
-                os.system('qsub {}'.format('run_script.sh'))
-                os.remove('run_script.sh')         
-        return True
-                
-    def run(self):
-        if self.kwargs.get('run')==False:
-            return False
-        elif self.kwargs.get('run')=='multiprocess':
-            self.multi_run()
-            return True
-        elif self.kwargs.get('run')=='slow':
-            self.run_slow()
-            return True
-        elif self.kwargs.get('run')=='SGE':
-            self.run_SGE()
-            return True
-
 
 #==============================================================================
+class FormatPLData():
+    def __init__(self,copasi_file,report_name):
+        self.copasi_file = copasi_file
+        self.GMQ = pycopi.GetModelQuantities(self.copasi_file)
+        self.report_name = report_name
+        if os.path.isfile(self.report_name)!=True:
+            raise Errors.InputError('file {} does not exist'.format(self.report_name))
             
+        try:
+            self.format = self.format_results()
+        except IOError:
+            raise Errors.FileIsEmptyError('{} is empty and therefore cannot be read by pandas. Make sure you have waited until there is data in the parameter estimation file before formatting parameter estimation output')
+        
+        
+    def format_results(self):
+        """
+        Results come without headers - parse the results
+        give them the proper headers then overwrite the file again
+        :return:
+        """
+        
+        data = pandas.read_csv(self.report_name, sep='\t', header=None, skiprows=[0])
+        data = data.drop(data.columns[1], axis=1)
+        data.columns = range(data.shape[1])
+        LOG.debug('Shape of estimated parameters: {}'.format(data.shape))
+        width = data.shape[1]
+        
+        data = data.drop(data.columns[-2], axis=1)
+        data.columns = range(data.shape[1])
+        poe = os.path.split(self.copasi_file)[1][:-4]
+        names = [poe]+self.GMQ.get_fit_item_order()+['RSS']
+        data.columns = names
+        data.to_csv(self.report_name,sep='\t',index=False)
+        return data
+
+        
 class Plot():
     """
     After ProfileLikelihood class has been run, the plot class will plot the
@@ -494,13 +486,13 @@ class Plot():
             Degrees of freedom. The number of parameters that you want to calculate
             profile likelihoods for minus 1 is calcualted automatically. This is 
             default but can be overridden by specifying an argument to this keyword
-            
+        
         rss:
             Residual Sum of Squared. The objective function used as a measure of distance
             of the experimental to simulated data. The rss is minimized by copasi's 
             parameter estimation algorithms. The smaller the better. This value is 
             automatically taken from parameter estimation data if the index kwarg 
-            is anything other than minus 1. when index=-1, the rss value must be 
+            is anything other than minus 1x. when index=-1, the rss value must be 
             given to this argument for the calculation of the chi squared based 
             confidence interval
         font_size:
@@ -721,60 +713,68 @@ class Plot():
         self.PL_dir=self.get_PL_dir()
         self.indices=self.get_index_dirs()
         self.result_paths=self.get_results()
-        self.data=self.parse_results() 
-#        self.data = self.trim_infinite_values()
-        
-        
-        '''
-        The below arguments rely on the above code. Do not change
-        the ordering!
-        
-        '''
-        #default dof is num estimated parameters minus 1 but can be manually overrider by specifying dof keyword
-        if self.kwargs.get('dof')==None:
-            self.kwargs['dof']=self.degrees_of_freedom()
-        if self.kwargs['dof']==None:
-            raise Errors.InputError('Please specify argument to dof keyword')
-        
-        #defult n is number of data points in your data set. 
-        #This can be overridden by manually specifying n
-        
-        if self.kwargs.get('n')==None :
-            self.kwargs['n']=self.num_data_points()
-        assert self.kwargs.get('n')!=None        
-        
-        if self.kwargs.get('mode') not in ['all','one','none']:
-            raise Errors.InputError('{} is not a valid mode. mode should be either all or one'.format(self.kwargs.get('mode')))
-
-        if self.kwargs.get('mode')!='all':
-            if self.kwargs.get('plot_parameter') not in self.list_parameters():
-                raise Errors.InputError('{} is not a valid Parameter. Your parameters are: {}'.format(self.kwargs.get('plot_parameter'),self.list_parameters()))
-
-            if isinstance(self.kwargs.get('index'),int):
-                if self.kwargs.get('plot_index') != self.kwargs.get('index'):
-                    raise Errors.InputError('{} is not an index in your Indices: {}'.format(self.kwargs.get('plot_index'),self.kwargs.get('index')))
-            
-            elif isinstance(self.kwargs.get('index'),list):
-                if self.kwargs.get('plot_index') not in self.kwargs.get('index'):
-                    raise Errors.InputError('{} is not an index in your Indices: {}'.format(self.kwargs.get('plot_index'),self.kwargs.get('index')))
-
-
-        if self.kwargs['mode']=='all':
-            self.plot_all()
-        elif self.kwargs['mode']=='one':
-            self.plot1(self.kwargs['plot_index'],self.kwargs['plot_parameter'])
-            
-        
-        self.plot_chi2_CI()
-        CI=self.calc_chi2_CI()
-        for i in CI:
-            LOG.info( 'Confidence level for index {} is {} or {} on a log10 scale'.format(i,CI[i],numpy.log10(CI[i])))
+        self.formatted_data = self.format_pl_data()
+#        self.data=self.parse_results() 
+#        print self.data
+##        self.data = self.trim_infinite_values()
+#        
+#        
+#        '''
+#        The below arguments rely on the above code. Do not change
+#        the ordering!
+#        
+#        '''
+#        #default dof is num estimated parameters minus 1 but can be manually overrider by specifying dof keyword
+#        if self.kwargs.get('dof')==None:
+#            self.kwargs['dof']=self.degrees_of_freedom()
+#        if self.kwargs['dof']==None:
+#            raise Errors.InputError('Please specify argument to dof keyword')
+#        
+#        #defult n is number of data points in your data set. 
+#        #This can be overridden by manually specifying n
+#        
+#        if self.kwargs.get('n')==None :
+#            self.kwargs['n']=self.num_data_points()
+#        assert self.kwargs.get('n')!=None        
+#        
+#        if self.kwargs.get('mode') not in ['all','one','none']:
+#            raise Errors.InputError('{} is not a valid mode. mode should be either all or one'.format(self.kwargs.get('mode')))
+#
+#        if self.kwargs.get('mode')!='all':
+#            if self.kwargs.get('plot_parameter') not in self.list_parameters():
+#                raise Errors.InputError('{} is not a valid Parameter. Your parameters are: {}'.format(self.kwargs.get('plot_parameter'),self.list_parameters()))
+#
+#            if isinstance(self.kwargs.get('index'),int):
+#                if self.kwargs.get('plot_index') != self.kwargs.get('index'):
+#                    raise Errors.InputError('{} is not an index in your Indices: {}'.format(self.kwargs.get('plot_index'),self.kwargs.get('index')))
+#            
+#            elif isinstance(self.kwargs.get('index'),list):
+#                if self.kwargs.get('plot_index') not in self.kwargs.get('index'):
+#                    raise Errors.InputError('{} is not an index in your Indices: {}'.format(self.kwargs.get('plot_index'),self.kwargs.get('index')))
+#
+#
+#        if self.kwargs['mode']=='all':
+#            self.plot_all()
+#        elif self.kwargs['mode']=='one':
+#            self.plot1(self.kwargs['plot_index'],self.kwargs['plot_parameter'])
+#            
+#        
+#        self.plot_chi2_CI()
+#        CI=self.calc_chi2_CI()
+#        for i in CI:
+#            LOG.info( 'Confidence level for index {} is {} or {} on a log10 scale'.format(i,CI[i],numpy.log10(CI[i])))
 
     def __getitem__(self,key):
         if key not in self.kwargs.keys():
             raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
             
         return self.kwargs[key]
+    
+    def format_pl_data(self):
+        """
+        
+        """
+        print self.get_results
             
     def trim_infinite_values(self):
         LOG.info('removing infinite values from PL data.')
@@ -1179,4 +1179,5 @@ class Plot():
 
         
 if __name__=='__main__':
-    pass
+    execfile('/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/testing_kholodenko_manually.py')
+

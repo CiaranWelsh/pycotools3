@@ -307,6 +307,13 @@ class GetModelQuantities():
                 
 #        self.all_params=self.get_global_quantities_cns().keys()+self.get_IC_cns().keys()+self.get_local_kinetic_parameters_cns().keys()
         assert self.quantity_type in ['concentration','particle_number']
+
+
+    def __getitem__(self,key):
+        if key not in self.kwargs.keys():
+            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
+        return self.kwargs[key]
+
         
     def convert_particles_to_molar(self,particles,mol_unit,compartment_volume):#,vol_unit):
         '''
@@ -848,7 +855,7 @@ class Reports():
             self.kwargs['confirm_overwrite']=str(0)
                  
                  
-        self.report_types=['none','profilelikelihood','time_course','parameter_estimation']
+        self.report_types=['none','profilelikelihood', 'profilelikelihood2','time_course','parameter_estimation']
         assert self.kwargs.get('report_type') in self.report_types,'valid report types include {}'.format(self.report_types)
         
         write_to_file_list=['duplicate','overwrite',False]
@@ -863,6 +870,9 @@ class Reports():
         if self.kwargs.get('report_name')==None:
             if self.kwargs.get('report_type')=='profilelikelihood':
                 default_report_name=os.path.split(self.copasi_file)[1][:-4]+'_profilelikelihood.txt'
+            if self.kwargs.get('report_type')=='profilelikelihood2':
+                default_report_name=os.path.split(self.copasi_file)[1][:-4]+'_profilelikelihood2.txt'
+
             elif self.kwargs.get('report_type')=='time_course':
                 default_report_name=os.path.split(self.copasi_file)[1][:-4]+'_time_course.txt'
             elif self.kwargs.get('report_type')=='parameter_estimation':
@@ -876,6 +886,13 @@ class Reports():
         
             
         self.copasiML=self.save()
+
+
+    def __getitem__(self,key):
+        if key not in self.kwargs.keys():
+            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
+        return self.kwargs[key]
+
         
     def save(self):
         self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
@@ -984,6 +1001,49 @@ class Reports():
         etree.SubElement(table,'Object',attrib={'cn':cn})
         etree.SubElement(table,'Object',attrib={'cn':"CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"})
         return self.copasiML
+    
+    
+    def profile_likelihood2(self):
+        '''
+        Create report of a parameter and best value for a parameter estimation 
+        for profile likelihoods
+        '''
+        #get existing report keys
+        keys=[]
+        for i in self.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports'):
+            keys.append(i.attrib['key'])
+            if i.attrib['name']=='profilelikelihood2':
+                self.remove_report('profilelikelihood2')
+        
+        new_key='Report_31'
+        while new_key in keys:
+            new_key='Report_{}'.format(numpy.random.randint(30,100))
+        
+        report_attributes={'precision': '6', 
+                           'separator': '\t',
+                           'name': 'profilelikelihood2',
+                           'key':new_key, 
+                           'taskType': 'Scan'}
+        
+        ListOfReports=self.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports')
+        report=etree.SubElement(ListOfReports,'Report')
+        report.attrib.update(report_attributes)
+        
+        comment=etree.SubElement(report,'Comment') 
+        table=etree.SubElement(report,'Table')
+        table.attrib['printTitle']=str(1)
+        if self.kwargs.get('variable') in self.kwargs.get('metabolites'):
+            cn= self.GMQ.get_IC_cns()[self.kwargs.get('variable')]['cn']+',Reference=InitialConcentration'#{}'.format(self.kwargs.get('quantity_type'))
+        if self.kwargs.get('variable') in self.kwargs.get('global_quantities'):
+            cn= self.GMQ.get_global_quantities_cns()[self.kwargs.get('variable')]['cn']+',Reference=InitialValue'#{}'.format(self.kwargs.get('quantity_type'))
+        if self.kwargs.get('variable') in self.GMQ.get_local_kinetic_parameters_cns().keys():
+            cn= self.GMQ.get_local_kinetic_parameters_cns()[self.kwargs.get('variable')]['cn']+',Reference=Value'#{}'.format(self.kwargs.get('quantity_type'))
+        etree.SubElement(table,'Object',attrib={'cn':cn})
+        etree.SubElement(table,'Object',attrib={'cn':"CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"})
+        etree.SubElement(table,'Object',attrib={'cn':"CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"})
+        return self.copasiML
+    
+    
 
     def parameter_estimation_with_function_evaluations2(self):
         '''
@@ -1085,7 +1145,6 @@ class Reports():
         report=etree.SubElement(ListOfReports,'Report')
         report.attrib.update(report_attributes)
         comment=etree.SubElement(report,'Comment') 
-        comment=comment #get rid of annoying squiggly line above
         footer=etree.SubElement(report,'Footer')
         Object=etree.SubElement(footer,'Object')
         Object.attrib['cn']="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"
@@ -1106,6 +1165,9 @@ class Reports():
         elif self.kwargs.get('report_type')=='profilelikelihood':
             self.copasiML=self.profile_likelihood()
             LOG.debug('created a \'profile_likelihod\' type report')
+        elif self.kwargs.get('report_type')=='profilelikelihood2':
+            self.copasiML=self.profile_likelihood2()
+            LOG.debug('created a \'profile_likelihod2\' type report')
         elif self.kwargs.get('report_type')=='time_course':
             self.copasiML=self.timecourse()
             LOG.debug('created a \'time_course\' type report')
@@ -1496,6 +1558,12 @@ class TimeCourse(object):
                 self.data = self.read_sim_data()
                 self.plot()
 
+        def __getitem__(self,key):
+            if key not in self.kwargs.keys():
+                raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
+                return self.kwargs[key]
+    
+    
         def _do_checks(self):
             """
             
@@ -2669,7 +2737,7 @@ class ParameterEstimation():
             self.method_type='EvolutionaryProgram'
 
         if self.kwargs.get('method')=='HookeJeeves'.lower():
-            self.method_name='Hooke &amp; Jeeves'
+            self.method_name='Hooke &amp; Jeeves' 
             self.method_type='HookeJeeves'
 
         if self.kwargs.get('method')=='LevenbergMarquardt'.lower():
@@ -2800,6 +2868,11 @@ class ParameterEstimation():
         self.PlotPEDataKwargs['legend_loc']=self.kwargs.get('legend_loc')
         self.PlotPEDataKwargs['prune_headers']=self.kwargs.get('prune_headers')
         self.PlotPEDataKwargs['separator']=self.kwargs.get('separator')
+
+    def __getitem__(self,key):
+        if key not in self.kwargs.keys():
+            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
+        return self.kwargs[key]
         
     def run(self):
         if self.kwargs.get('plot')==False:
@@ -3433,7 +3506,7 @@ class Scan():
                    'sensitivities','linear_noise_approximation',
                    'cross_section','time_scale_separation_analysis']
                    
-        report_types=['none','profilelikelihood','time_course','parameter_estimation']
+        report_types=['none','profilelikelihood','time_course','parameter_estimation', 'profilelikelihood2']
         dist_types=['normal','uniform','poisson','gamma']
         scan_types=['scan','repeat','random_sampling']
         quantity_type_list=['particle_number','concentration']
@@ -3505,6 +3578,11 @@ class Scan():
         self.copasiML=self.save()
         self.run()
         
+    def __getitem__(self,key):
+        if key not in self.kwargs.keys():
+            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
+        return self.kwargs[key]
+
             
     def save(self):
         self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
@@ -3707,6 +3785,7 @@ class Run():
         self.kwargs = Bool2Str(self.kwargs).convert_dct()
 
 
+
         tasks=['steady_state','time_course',
                'scan','fluxmode','optimization',
                'parameter_estimation','metaboliccontrolanalysis',
@@ -3747,13 +3826,17 @@ class Run():
         elif self.kwargs.get('mode')=='multiprocess':
             self.multi_run()
 
-
+    def __getitem__(self,key):
+        if key not in self.kwargs.keys():
+            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
+        return self.kwargs[key]
 
     def multi_run(self):
         def run(x):
             if os.path.isfile(x)!=True:
                 raise Errors.FileDoesNotExistError('{} is not a file'.format(self.copasi_file))
             subprocess.Popen(['CopasiSE',self.copasi_file])
+        print 'look: {}'.format(self.copasi_file)
         Process(run(self.copasi_file))
 
 
@@ -3773,20 +3856,26 @@ class Run():
         Must be Copasi version 16
         
         '''
-        args=['CopasiSE',"{}".format(self.copasi_file)]
-        p=subprocess.Popen(args,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=True)
-        output,err= p.communicate()
-        d={}
-        d['output']=output
-        d['error']=err
-        if err!='':
-            try:
-                self.run_linux()
-            except:
-                raise Errors.CopasiError('Failed with Copasi error: \n\n'+d['error'])
-        return d['output']
+        try:
+            LOG.info('Running... {}'.format(self.copasi_file))
+            args=["CopasiSE","{}".format(self.copasi_file)]
+            p=subprocess.Popen(args,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=False)
+            output,err= p.communicate()
+            d={}
+            d['output']=output
+            d['error']=err
+            if err!='':
+               raise Errors.CopasiError('Failed with Copasi error: \n\n'+d['error'])
+            return d['output']
+        except Errors.CopasiError:
+            LOG.warning('Failed to run using subprocess.Popen(). Trying with os.system')
+            self.run_with_os_system()
 
-    def run_linux(self):
+    def run_with_check_call(self):
+        print self.copasi_file
+        subprocess.check_call(["CopasiSE",r"{}".format(self.copasi_file) ])
+
+    def run_with_os_system(self):
         os.system('CopasiSE "{}"'.format(self.copasi_file) )
 
 
@@ -4017,7 +4106,11 @@ class RunMultiplePEs():
         LOG.debug('Create an instance of ParameterEstimation')
         self.PE=ParameterEstimation(self.copasi_file,self.experiment_files,**self.PE_dct)
 
-
+    def __getitem__(self,key):
+        if key not in self.kwargs.keys():
+            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
+        return self.kwargs[key]
+    
     def format_results(self):
         """
         Copasi output does not have headers. This function 
@@ -4343,6 +4436,12 @@ class MultiModelFit():
         self.sub_cps_dirs=self.create_workspace()
         self.RMPE_dct=self.instantiate_run_multi_PEs_class()
         self.results_folder_dct=self.get_output_directories()
+
+    def __getitem__(self,key):
+        if key not in self.kwargs.keys():
+            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
+        return self.kwargs[key]
+
         
     def instantiate_run_multi_PEs_class(self):
         '''
@@ -4910,7 +5009,8 @@ class HighThroughputFit():
         
             
 if __name__=='__main__':
-    execfile('/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/testing_kholodenko_manually.py')
+    pass
+#    execfile('/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/testing_kholodenko_manually.py')
 #    model = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps'
     
 #    TimeCourse
