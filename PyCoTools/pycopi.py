@@ -3834,9 +3834,8 @@ class Run():
     def multi_run(self):
         def run(x):
             if os.path.isfile(x)!=True:
-                raise Errors.FileDoesNotExistError('{} is not a file'.format(self.copasi_file))
-            subprocess.Popen(['CopasiSE',self.copasi_file])
-        print 'look: {}'.format(self.copasi_file)
+                raise Errors.FileDoesNotExistError('{} is not a file'.format(x))
+            subprocess.Popen(['CopasiSE',x])
         Process(run(self.copasi_file))
 
 
