@@ -19,11 +19,26 @@ dire = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/Mult
 
 pl_d='/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ProfileLikelihood/0/(phosphorylation_of_MAPKK).KK3.txt'
 pl_f='/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ProfileLikelihood/0/(phosphorylation_of_MAPKK).KK3.cps'
+#
+#
+#
+#
+#PyCoTools.pycopi.Reports(model, report_type='multi_parameter_estimation')
+#
+#
+#
+#os.system('CopasiUI {}'.format(model))
+
+
+
+
+
+
 
 #PyCoTools.pydentify.FormatPLData(pl_f, pl_d).format
 
 
-#P = PyCoTools.pydentify.Plot(model, parameter_path = dire, index=0, mode='one', plot_index = 0, plot_parameter='(dephosphorylation of MAPK-PP).V9')
+#P = PyCoTools.pydentify.Plot(model, parameter_path = dire, rss=0.1)#, index=0)#, mode='one', plot_index = 0, plot_parameter='(dephosphorylation of MAPK-PP).V9')
 #
 #PyCoTools.pycopi.Reports(model, report_type='profilelikelihood2', variable='A')
 ##
@@ -66,11 +81,15 @@ pl_f='/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/Profil
 #
 TC = PyCoTools.pycopi.TimeCourse(model, end = 1000, step_size=1, intervals=1000,
                             plot=False)
-##
+
+#print TC['report_name']
+#
+PyCoTools.Misc.add_noise(TC['report_name'])
+####
 RMPE = PyCoTools.pycopi.RunMultiplePEs(model, TC.kwargs['report_name'], copy_number = 4,
                                        pe_number = 25, population_size = 20, 
                                        number_of_generations=20, results_directory = 'test1')
-
+#
 #RMPE.write_config_template()
 RMPE.setup()
 RMPE.run()

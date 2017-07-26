@@ -855,7 +855,8 @@ class Reports():
             self.kwargs['confirm_overwrite']=str(0)
                  
                  
-        self.report_types=['none','profilelikelihood', 'profilelikelihood2','time_course','parameter_estimation']
+        self.report_types=[None,'profilelikelihood', 'profilelikelihood2',
+                           'time_course','parameter_estimation', 'multi_parameter_estimation']
         assert self.kwargs.get('report_type') in self.report_types,'valid report types include {}'.format(self.report_types)
         
         write_to_file_list=['duplicate','overwrite',False]
@@ -870,13 +871,15 @@ class Reports():
         if self.kwargs.get('report_name')==None:
             if self.kwargs.get('report_type')=='profilelikelihood':
                 default_report_name=os.path.split(self.copasi_file)[1][:-4]+'_profilelikelihood.txt'
-            if self.kwargs.get('report_type')=='profilelikelihood2':
+            elif self.kwargs.get('report_type')=='profilelikelihood2':
                 default_report_name=os.path.split(self.copasi_file)[1][:-4]+'_profilelikelihood2.txt'
 
             elif self.kwargs.get('report_type')=='time_course':
                 default_report_name=os.path.split(self.copasi_file)[1][:-4]+'_time_course.txt'
             elif self.kwargs.get('report_type')=='parameter_estimation':
                 default_report_name=os.path.split(self.copasi_file)[1][:-4]+'_parameter_estimation.txt'
+            elif self['report_type'] == 'multi_parameter_estimation':
+                default_report_name=os.path.split(self.copasi_file)[1][:-4]+'_multi_parameter_estimation.txt'
             self.kwargs.update({'report_name':default_report_name})
 
         self.kwargs = Bool2Str(self.kwargs).convert_dct()
@@ -1152,8 +1155,43 @@ class Reports():
         Object.attrib['cn']="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"
         LOG.debug('Reports PE setup copasiML {}'.format(self.copasiML))
         return self.copasiML     
-
-
+    
+    def set_multi_parameter_estimation_report(self):
+        '''
+        Define a parameter estimation report and include the progression 
+        of the parameter estimation (function evaluations).
+        Defaults to including all
+        metabolites, global variables and local variables with the RSS best value
+        These can be over-ridden with the global_quantities, LocalParameters and metabolites
+        keywords. 
+        '''
+        #get existing report keys
+        keys=[]
+        for i in self.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports'):
+            keys.append(i.attrib['key'])            
+            if i.attrib['name']=='multi_parameter_estimation':
+                self.copasiML=self.remove_report('multi_parameter_estimation')
+        
+        new_key='Report_32'
+        while new_key  in keys:
+            new_key='Report_{}'.format(numpy.random.randint(30,100))
+        report_attributes={'precision': '6', 
+                           'separator': '\t',
+                           'name': 'multi_parameter_estimation',
+                           'key': new_key,
+                           'taskType': 'parameterFitting'}
+        
+        ListOfReports=self.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports')
+        report=etree.SubElement(ListOfReports,'Report')
+        report.attrib.update(report_attributes)
+        comment=etree.SubElement(report,'Comment') 
+        table=etree.SubElement(report,'Table')
+        table.attrib['printTitle']=str(1)
+        etree.SubElement(table,'Object',attrib={'cn':"CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"})
+        etree.SubElement(table,'Object',attrib={'cn':"CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"})
+        return self.copasiML
+    
+    
 
     def run(self):
         '''
@@ -1161,19 +1199,28 @@ class Reports():
         '''
         if self.kwargs.get('report_type')=='parameter_estimation':
             LOG.debug('created a \'parameter_estimation\' report')
-            self.copasiML=self.set_parameter_estimation_report()
+            self.copasiML=self.set_parameter_estimation_report()        
+            
+        elif self['report_type']=='multi_parameter_estimation':
+            LOG.debug('created a \'parameter_estimation\' report')
+            self.copasiML=self.set_multi_parameter_estimation_report()
+            
         elif self.kwargs.get('report_type')=='profilelikelihood':
             self.copasiML=self.profile_likelihood()
             LOG.debug('created a \'profile_likelihod\' type report')
+            
         elif self.kwargs.get('report_type')=='profilelikelihood2':
             self.copasiML=self.profile_likelihood2()
             LOG.debug('created a \'profile_likelihod2\' type report')
+            
         elif self.kwargs.get('report_type')=='time_course':
             self.copasiML=self.timecourse()
             LOG.debug('created a \'time_course\' type report')
+            
         elif self.kwargs.get('report_type')==None:
             self.copasiML=self.copasiML
             LOG.debug('created a \'none\' type report')
+            
         return self.copasiML
         
     def remove_report(self,report_name):
@@ -1561,7 +1608,7 @@ class TimeCourse(object):
         def __getitem__(self,key):
             if key not in self.kwargs.keys():
                 raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
-                return self.kwargs[key]
+            return self.kwargs[key]
     
     
         def _do_checks(self):
@@ -3506,14 +3553,15 @@ class Scan():
                    'sensitivities','linear_noise_approximation',
                    'cross_section','time_scale_separation_analysis']
                    
-        report_types=['none','profilelikelihood','time_course','parameter_estimation', 'profilelikelihood2']
+        report_types=[None,'profilelikelihood','time_course','parameter_estimation', 
+                      'multi_parameter_estimation', 'profilelikelihood2']
         dist_types=['normal','uniform','poisson','gamma']
         scan_types=['scan','repeat','random_sampling']
         quantity_type_list=['particle_number','concentration']
         
                    
         assert self.kwargs.get('subtask') in subtasks                   
-        assert self.kwargs.get('report_type') in report_types,'{} is not in {}'.format(self.kwargs.get('report_type'),report_types)
+        assert self.kwargs.get('report_type') in report_types,'{} is not in {}'.format(self['report_type'],report_types)
         assert self.kwargs.get('distribution_type') in dist_types
         assert self.kwargs.get('scan_type') in scan_types
         assert self.kwargs.get('quantity_type') in quantity_type_list
@@ -4173,7 +4221,7 @@ class RunMultiplePEs():
                  'global_quantities':self.GMQ.get_global_quantities().keys(),
                  'local_parameters': self.GMQ.get_local_kinetic_parameters_cns().keys(),
                  'quantity_type':'concentration',
-                 'append': True, 
+                 'append': False, 
                  'confirm_overwrite': False,
                  'config_filename':None,
                  'overwrite_config_file':False,
@@ -4386,7 +4434,7 @@ class RunMultiplePEs():
              scan_type='repeat', #set up repeat item under scan. 
              number_of_steps=self.kwargs['pe_number'], #run the parameter estimation task 3 times
              subtask='parameter_estimation', #this is the default, but included here for demonstration anyway
-             report_type='parameter_estimation', ## report automatically set up within copasi. 
+             report_type='multi_parameter_estimation', ## report automatically set up within copasi. 
              report_name=report,
              run=False,#run the scan task automatically in the background
              append = self.kwargs['append'],

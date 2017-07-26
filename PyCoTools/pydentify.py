@@ -657,7 +657,7 @@ class Plot():
                  'plot_parameter':None,
                  'marker_size':4,
                  'separator':'\t',
-                 'log10':False,
+                 'log10':True,
                  'use_pickle':False,
                  'overwrite_pickle':False,
                  'results_directory':None,
