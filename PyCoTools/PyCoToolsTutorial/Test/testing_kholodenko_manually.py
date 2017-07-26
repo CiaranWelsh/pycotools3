@@ -13,6 +13,7 @@ import os, glob
 
 
 model = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/Kholodenko.cps'
+model2 = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/Kholodenko_1.cps'
 
 
 dire = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/MultipleParameterEstimationResults'
@@ -21,7 +22,29 @@ pl_d='/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/Profil
 pl_f='/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ProfileLikelihood/0/(phosphorylation_of_MAPKK).KK3.cps'
 #
 #
-#
+
+results = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/test1'
+PE = PyCoTools.PEAnalysis.ParsePEData(results)
+
+print PE
+
+#I = PyCoTools.pycopi.InsertParameters(model2, parameter_path = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/test1', index=0)
+#print I.transpose().sort_index()
+
+
+
+
+
+
+
+
+
+
+#d = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/test1/ParameterFit1.txt'
+#1
+#PyCoTools.pycopi.FormatPEData(model2, d, report_type = 'multi_parameter_estimation')
+
+
 #
 #PyCoTools.pycopi.Reports(model, report_type='multi_parameter_estimation')
 #
@@ -79,20 +102,29 @@ pl_f='/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/Profil
 #
 
 #
-TC = PyCoTools.pycopi.TimeCourse(model, end = 1000, step_size=1, intervals=1000,
-                            plot=False)
-
-#print TC['report_name']
-#
-PyCoTools.Misc.add_noise(TC['report_name'])
-####
-RMPE = PyCoTools.pycopi.RunMultiplePEs(model, TC.kwargs['report_name'], copy_number = 4,
-                                       pe_number = 25, population_size = 20, 
-                                       number_of_generations=20, results_directory = 'test1')
-#
+#TC = PyCoTools.pycopi.TimeCourse(model, end = 1000, step_size=1, intervals=1000,
+#                            plot=False)
+#PyCoTools.Misc.add_noise(TC['report_name'])
+#RMPE = PyCoTools.pycopi.RunMultiplePEs(model, TC.kwargs['report_name'], copy_number = 4,
+#                                       pe_number = 25, population_size = 20, 
+#                                       number_of_generations=20, results_directory = 'test1')
+###
 #RMPE.write_config_template()
-RMPE.setup()
-RMPE.run()
+#RMPE.setup()
+#RMPE.run()
+#RMPE.format_results()
+
+
+
+
+
+
+
+
+
+
+
+
 #RMPE.format_results()
 #PE = PyCoTools.pycopi.ParameterEstimation(model, TC.kwargs['report_name'],
 #                                          method = 'GeneticAlgorithm',

@@ -2361,17 +2361,29 @@ class PhaseSpace(TimeCourse):
             self.plot1phase(i[0],i[1])
 
 class FormatPEData():
-    def __init__(self,copasi_file,report_name):
+    def __init__(self,copasi_file,report_name, report_type='parameter_estimation'):
         self.copasi_file = copasi_file
+        self.report_type = report_type
         self.GMQ = GetModelQuantities(self.copasi_file)
         self.report_name = report_name
+        
+        available_report_types = ['parameter_estimation','multi_parameter_estimation']
+        if self.report_type not in available_report_types:
+            raise Errors.InputError('{} not in {}'.format(self.report_type,available_report_types))
+            
         if os.path.isfile(self.report_name)!=True:
             raise Errors.InputError('file {} does not exist'.format(self.report_name))
-            
-        try:
-            self.format = self.format_results()
-        except IOError:
-            raise Errors.FileIsEmptyError('{} is empty and therefore cannot be read by pandas. Make sure you have waited until there is data in the parameter estimation file before formatting parameter estimation output')
+        
+        if self.report_type=='parameter_estimation':
+            try:
+                self.format = self.format_results()
+            except IOError:
+                raise Errors.FileIsEmptyError('{} is empty and therefore cannot be read by pandas. Make sure you have waited until there is data in the parameter estimation file before formatting parameter estimation output')
+        elif self.report_type=='multi_parameter_estimation':
+            try:
+                self.format = self.format_multi_results()
+            except IOError:
+                raise Errors.FileIsEmptyError('{} is empty and therefore cannot be read by pandas. Make sure you have waited until there is data in the parameter estimation file before formatting parameter estimation output')
         
         
     def format_results(self):
@@ -2392,6 +2404,31 @@ class FormatPEData():
         os.remove(self.report_name)
         data.to_csv(self.report_name,sep='\t',index=False)
         return data
+    
+    def format_multi_results(self):
+        """
+        Results come without headers - parse the results
+        give them the proper headers then overwrite the file again
+        :return:
+        """
+
+        data = pandas.read_csv(self.report_name, sep='\t', header=None, skiprows=[0])
+        bracket_columns = data[data.columns[[0,-2]]]
+        if bracket_columns.iloc[0].iloc[0] != '(':
+            data = pandas.read_csv(self.report_name, sep='\t')
+            return data
+        else:
+            data = data.drop(data.columns[[1,-2]], axis=1)
+            data.columns = range(data.shape[1])
+            LOG.debug('Shape of estimated parameters: {}'.format(data.shape))
+            ### parameter of interest has been removed. 
+            names = self.GMQ.get_fit_item_order()+['RSS']
+            if os.path.isfile(self.report_name):
+                os.remove(self.report_name)
+            data.columns = names
+            data.to_csv(self.report_name, sep='\t', index=False)
+            return self.report_name
+    
 
 
 class ParameterEstimation():
@@ -4321,7 +4358,7 @@ class RunMultiplePEs():
         gives PE data output headers
         """
         for report_file in self.report_files:
-            FormatPEData(self.copasi_file, self.report_files[report_file])
+            FormatPEData(self.copasi_file, self.report_files[report_file], report_type='multi_parameter_estimation')
         return self.report_files
 
     def setup(self):
@@ -5214,7 +5251,7 @@ class HighThroughputFit():
             
 if __name__=='__main__':
     pass
-#    execfile('/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/testing_kholodenko_manually.py')
+    execfile('/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/testing_kholodenko_manually.py')
 #    model = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps'
     
 #    TimeCourse
