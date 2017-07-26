@@ -5367,3 +5367,138 @@ DEBUG:PyCoTools.pycopi:pycopi:119:model written to C:\Users\Ciaran\Documents\PyC
 INFO:PyCoTools.PEAnalysis:PEAnalysis:90:Parsing data from C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Fit1Results into python
 =======
 >>>>>>> parent of 78db89b... mistake made somewhere down the line as tutorials have disappeared from CopasiVersion19Develop
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+INFO:root:<ipython-input-14-51fdbdaaaecd>:<module>:8:<PyCoTools.pycopi.GetModelQuantities instance at 0x7f3bd5a6acb0>
+INFO:root:<ipython-input-14-51fdbdaaaecd>:<module>:11:nmol
+INFO:root:<ipython-input-14-51fdbdaaaecd>:<module>:14:s
+INFO:root:<ipython-input-14-51fdbdaaaecd>:<module>:17:Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade
+INFO:root:<ipython-input-14-51fdbdaaaecd>:<module>:20:Metabolites:
+INFO:root:<ipython-input-15-859a34def00f>:<module>:11:kholodenko model is here: /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+INFO:root:<ipython-input-15-859a34def00f>:<module>:12:checking kholodenko model exists:... True
+INFO:root:<ipython-input-16-3dfed588546f>:<module>:11:kholodenko model is here: /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+INFO:root:<ipython-input-16-3dfed588546f>:<module>:12:checking kholodenko model exists:... True
+INFO:root:<ipython-input-17-7f28eee02f06>:<module>:11:kholodenko model is here: /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+INFO:root:<ipython-input-17-7f28eee02f06>:<module>:12:checking kholodenko model exists:... True
+INFO:root:<ipython-input-18-9f5569c20c3b>:<module>:11:kholodenko model is here: /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+INFO:root:<ipython-input-18-9f5569c20c3b>:<module>:12:checking kholodenko model exists:... True
+INFO:root:<ipython-input-19-9f5569c20c3b>:<module>:11:kholodenko model is here: /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+INFO:root:<ipython-input-19-9f5569c20c3b>:<module>:12:checking kholodenko model exists:... True
+INFO:root:<ipython-input-20-51fdbdaaaecd>:<module>:8:<PyCoTools.pycopi.GetModelQuantities instance at 0x7f3bd563b908>
+INFO:root:<ipython-input-20-51fdbdaaaecd>:<module>:11:nmol
+INFO:root:<ipython-input-20-51fdbdaaaecd>:<module>:14:s
+INFO:root:<ipython-input-20-51fdbdaaaecd>:<module>:17:Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade
+INFO:root:<ipython-input-20-51fdbdaaaecd>:<module>:20:Metabolites:
+INFO:root:<ipython-input-21-dfb33e4e58ac>:<module>:8:<PyCoTools.pycopi.GetModelQuantities instance at 0x7f3bd54db7e8>
+INFO:root:<ipython-input-21-dfb33e4e58ac>:<module>:11:nmol
+INFO:root:<ipython-input-21-dfb33e4e58ac>:<module>:14:s
+INFO:root:<ipython-input-21-dfb33e4e58ac>:<module>:17:Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade
+INFO:root:<ipython-input-21-dfb33e4e58ac>:<module>:20:Metabolites:
+INFO:root:<ipython-input-22-9f5569c20c3b>:<module>:11:kholodenko model is here: /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+INFO:root:<ipython-input-22-9f5569c20c3b>:<module>:12:checking kholodenko model exists:... True
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4615:These are kwargs {'index': 0, 'metabolites': ['Mek1-PP', 'A', 'Erk2', 'B', 'Mos', 'Erk2-P', 'Erk2-PP', 'Mos-P', 'Mek1', 'Mek1-P'], 'parameter_path': None, 'quantity_type': 'concentration', 'df': None, 'global_quantities': [], 'save': 'overwrite', 'parameter_dict': {'(MAPKKK activation).K1': 10}, 'report_name': 'Kholodenko_PE_results.txt'}
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:4706:Local parameters being inserted into mode: ['(MAPKKK activation).K1']
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:4714:Constructing a dict of reaction:parameter for local parameters: {'MAPKKK activation': 'K1'}
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4738:States:	 ['Model_3', 'Metabolite_7', 'Metabolite_13', 'Metabolite_1', 'Metabolite_5', 'Metabolite_11', 'Metabolite_17', 'Metabolite_9', 'Metabolite_15', 'Metabolite_3', 'Metabolite_19', 'Compartment_1']
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4749:State Model_3 is model
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4754:Added 0 for first parameter in sequence
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_7 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_13 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_1 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_5 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_11 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_17 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_9 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_15 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_3 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_19 is metab
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4615:These are kwargs {'index': 0, 'metabolites': ['Mek1-PP', 'A', 'Erk2', 'B', 'Mos', 'Erk2-P', 'Erk2-PP', 'Mos-P', 'Mek1', 'Mek1-P'], 'parameter_path': None, 'quantity_type': 'concentration', 'df': None, 'global_quantities': [], 'save': 'overwrite', 'parameter_dict': {'(MAPKKK activation).K1': 1000}, 'report_name': 'Kholodenko_PE_results.txt'}
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:4706:Local parameters being inserted into mode: ['(MAPKKK activation).K1']
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:4714:Constructing a dict of reaction:parameter for local parameters: {'MAPKKK activation': 'K1'}
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4738:States:	 ['Model_3', 'Metabolite_7', 'Metabolite_13', 'Metabolite_1', 'Metabolite_5', 'Metabolite_11', 'Metabolite_17', 'Metabolite_9', 'Metabolite_15', 'Metabolite_3', 'Metabolite_19', 'Compartment_1']
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4749:State Model_3 is model
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4754:Added 0 for first parameter in sequence
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_7 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_13 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_1 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_5 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_11 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_17 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_9 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_15 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_3 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_19 is metab
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4615:These are kwargs {'index': 0, 'metabolites': ['Mek1-PP', 'A', 'Erk2', 'B', 'Mos', 'Erk2-P', 'Erk2-PP', 'Mos-P', 'Mek1', 'Mek1-P'], 'parameter_path': None, 'quantity_type': 'concentration', 'df': None, 'global_quantities': [], 'save': 'overwrite', 'parameter_dict': {'(MAPKKK activation).K1': 8123}, 'report_name': 'Kholodenko_PE_results.txt'}
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:4706:Local parameters being inserted into mode: ['(MAPKKK activation).K1']
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:4714:Constructing a dict of reaction:parameter for local parameters: {'MAPKKK activation': 'K1'}
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4738:States:	 ['Model_3', 'Metabolite_7', 'Metabolite_13', 'Metabolite_1', 'Metabolite_5', 'Metabolite_11', 'Metabolite_17', 'Metabolite_9', 'Metabolite_15', 'Metabolite_3', 'Metabolite_19', 'Compartment_1']
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4749:State Model_3 is model
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4754:Added 0 for first parameter in sequence
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_7 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_13 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_1 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_5 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_11 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_17 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_9 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_15 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_3 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_19 is metab
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4615:These are kwargs {'index': 0, 'metabolites': ['Mek1-PP', 'A', 'Erk2', 'B', 'Mos', 'Erk2-P', 'Erk2-PP', 'Mos-P', 'Mek1', 'Mek1-P'], 'parameter_path': None, 'quantity_type': 'concentration', 'df': None, 'global_quantities': [], 'save': 'overwrite', 'parameter_dict': {'(MAPKKK activation).K1': 8123}, 'report_name': 'Kholodenko_PE_results.txt'}
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:4706:Local parameters being inserted into mode: ['(MAPKKK activation).K1']
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:4714:Constructing a dict of reaction:parameter for local parameters: {'MAPKKK activation': 'K1'}
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4738:States:	 ['Model_3', 'Metabolite_7', 'Metabolite_13', 'Metabolite_1', 'Metabolite_5', 'Metabolite_11', 'Metabolite_17', 'Metabolite_9', 'Metabolite_15', 'Metabolite_3', 'Metabolite_19', 'Compartment_1']
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4749:State Model_3 is model
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4754:Added 0 for first parameter in sequence
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_7 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_13 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_1 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_5 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_11 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_17 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_9 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_15 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_3 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_19 is metab
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4615:These are kwargs {'index': 0, 'metabolites': ['Mek1-PP', 'A', 'Erk2', 'B', 'Mos', 'Erk2-P', 'Erk2-PP', 'Mos-P', 'Mek1', 'Mek1-P'], 'parameter_path': None, 'quantity_type': 'concentration', 'df': None, 'global_quantities': [], 'save': 'overwrite', 'parameter_dict': {'(MAPKKK activation).K1': 8123}, 'report_name': 'Kholodenko_PE_results.txt'}
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:4706:Local parameters being inserted into mode: ['(MAPKKK activation).K1']
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:4714:Constructing a dict of reaction:parameter for local parameters: {'MAPKKK activation': 'K1'}
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4738:States:	 ['Model_3', 'Metabolite_7', 'Metabolite_13', 'Metabolite_1', 'Metabolite_5', 'Metabolite_11', 'Metabolite_17', 'Metabolite_9', 'Metabolite_15', 'Metabolite_3', 'Metabolite_19', 'Compartment_1']
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4749:State Model_3 is model
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4754:Added 0 for first parameter in sequence
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_7 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_13 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_1 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_5 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_11 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_17 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_9 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_15 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_3 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_19 is metab
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4615:These are kwargs {'index': 0, 'metabolites': ['Mek1-PP', 'A', 'Erk2', 'B', 'Mos', 'Erk2-P', 'Erk2-PP', 'Mos-P', 'Mek1', 'Mek1-P'], 'parameter_path': None, 'quantity_type': 'concentration', 'df': None, 'global_quantities': [], 'save': 'overwrite', 'parameter_dict': {'(MAPKKK activation).K1': 8123}, 'report_name': 'Kholodenko_PE_results.txt'}
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:4706:Local parameters being inserted into mode: ['(MAPKKK activation).K1']
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:4714:Constructing a dict of reaction:parameter for local parameters: {'MAPKKK activation': 'K1'}
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4738:States:	 ['Model_3', 'Metabolite_7', 'Metabolite_13', 'Metabolite_1', 'Metabolite_5', 'Metabolite_11', 'Metabolite_17', 'Metabolite_9', 'Metabolite_15', 'Metabolite_3', 'Metabolite_19', 'Compartment_1']
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4749:State Model_3 is model
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4754:Added 0 for first parameter in sequence
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_7 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_13 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_1 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_5 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_11 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_17 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_9 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_15 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_3 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:4756:State Metabolite_19 is metab
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps
