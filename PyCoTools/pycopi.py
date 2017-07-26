@@ -2379,6 +2379,8 @@ class FormatPEData():
                 self.format = self.format_results()
             except IOError:
                 raise Errors.FileIsEmptyError('{} is empty and therefore cannot be read by pandas. Make sure you have waited until there is data in the parameter estimation file before formatting parameter estimation output')
+            except pandas.parser.CParserError:
+                raise Errors.InputError('Pandas cannot read data file. Ensure you are using report_type=\'multi_parameter_estimation\' for multiple parameter estimation classes')
         elif self.report_type=='multi_parameter_estimation':
             try:
                 self.format = self.format_multi_results()
@@ -2418,7 +2420,7 @@ class FormatPEData():
             data = pandas.read_csv(self.report_name, sep='\t')
             return data
         else:
-            data = data.drop(data.columns[[1,-2]], axis=1)
+            data = data.drop(data.columns[[0,-2]], axis=1)
             data.columns = range(data.shape[1])
             LOG.debug('Shape of estimated parameters: {}'.format(data.shape))
             ### parameter of interest has been removed. 
@@ -4921,7 +4923,6 @@ class InsertParameters():
                  'parameter_dict':None,
                  'df':None,
                  'parameter_path':None,
-                 
                  }
                      
         for i in kwargs.keys():
