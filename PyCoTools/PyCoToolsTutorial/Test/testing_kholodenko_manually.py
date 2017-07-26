@@ -10,7 +10,7 @@ import site
 site.addsitedir('/home/b3053674/Documents/PyCoTools')
 import PyCoTools
 import os, glob
-
+import numpy
 
 model = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/Kholodenko.cps'
 model2 = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/Kholodenko_1.cps'
@@ -23,21 +23,75 @@ pl_f='/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/Profil
 #
 #
 
-results = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/test1'
-PE = PyCoTools.PEAnalysis.ParsePEData(results)
-
-print PE
-
-#I = PyCoTools.pycopi.InsertParameters(model2, parameter_path = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/test1', index=0)
-#print I.transpose().sort_index()
+results_d = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/Test4'
+results_f = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/test1/ParameterFit1.txt'
 
 
 
+#PyCoTools.pycopi.FormatPEData(model, '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ParameterFit0.txt', 
+#                              report_type='multi_parameter_estimation')
+
+
+TC = PyCoTools.pycopi.TimeCourse(model, end = 1000, step_size=100, intervals=10,
+                            plot=False)
+#noisy = PyCoTools.Misc.add_noise(TC['report_name'])
+#if os.path.isfile(TC['report_name']):
+#    os.remove(TC['report_name'])
+#noisy.to_csv(TC['report_name'], sep='\t')
+#RMPE = PyCoTools.pycopi.RunMultiplePEs(model, TC['report_name'], copy_number = 4,
+#                                       pe_number = 25, population_size = 50, 
+#                                       number_of_generations=200, results_directory = 'Test4')
+###
+##RMPE.write_config_template()
+#RMPE.setup()
+#RMPE.run()
+#RMPE.format_results()
 
 
 
+#data = PyCoTools.PEAnalysis.ParsePEData(results_d , log10=True).data
+#PyCoTools.PEAnalysis.Boxplot(data, results_directory=os.path.dirname(model), save=True)
+##
+#PyCoTools.PEAnalysis.RssVsIterations(data, results_directory=os.path.dirname(model), save=True)
+#
+#
+#
+#[PyCoTools.PEAnalysis.Pca(data, results_directory=os.path.dirname(model), save=True, orientation=i) for i in ['parameters','iterations'] ]
+#PyCoTools.PEAnalysis.Histograms(data, results_directory=os.path.dirname(model), save=True)
+#PyCoTools.PEAnalysis.Scatters(data, results_directory=os.path.dirname(model), save=True)
 
 
+
+#PyCoTools.PEAnalysis.PlotParameterEnsemble(model, 
+#                                           TC['report_name'], 
+#                                           results_d, save=True,
+#                                           results_directory=os.path.dirname(model))
+#I = PyCoTools.pycopi.InsertParameters(model2, parameter_path = results_d, index=0)
+#print I.parameters.transpose().sort_index()
+#
+#
+#os.system('CopasiUI {}'.format(model2))
+
+#import pandas
+#import seaborn
+#
+#time = [0, 100, 200, 0, 100, 200]
+#experiment = [0,0,0,1,1,1]
+#A = [0 ,5 ,10, 1, 3, 6]
+#B= [0,6,11, 3,6, 9]
+#C= [4,9,13, 5, 6, 8]
+#D= [5, 10, 3,7,9, 10]
+#
+#df = pandas.DataFrame(numpy.array([experiment, time, 
+#                                    A, B, C, D])).transpose()
+#df.columns = ['Experiment','Time','A','B','C','D']
+##print df
+#seaborn.tsplot(data=df, time='Time', unit='Experiment', value='A')
+
+#                        ,
+#                        repeat2_species1,
+#                        repeat1_species2,
+#                        repeat2_species2])
 
 
 #d = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/test1/ParameterFit1.txt'
@@ -50,7 +104,6 @@ print PE
 #
 #
 #
-#os.system('CopasiUI {}'.format(model))
 
 
 
