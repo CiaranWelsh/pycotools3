@@ -33,9 +33,13 @@ pl_f='/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/Profil
 
 #os.system('CopasiUI {}'.format(model))
 
-PL = PyCoTools.pydentify.ProfileLikelihood(model, run='slow', index=-1, iteration_limit=10, 
-                                           number_of_steps = 1,
-                                           tolerance = 1e-1)
+#PL = PyCoTools.pydentify.ProfileLikelihood(model, run='slow', index=-1, iteration_limit=25, 
+#                                           number_of_steps = 10,
+#                                           tolerance = 1e-3)
+
+#PyCoTools.pydentify.Plot(model, rss=0.01, index=-1, mode='one',
+#                         plot_index=-1, plot_parameter='(MAPKKK activation).K1',
+#                         log10=True)
 
 #f=r'/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ProfileLikelihood/-1/B.cps'
 #import subprocess
@@ -59,17 +63,17 @@ PL = PyCoTools.pydentify.ProfileLikelihood(model, run='slow', index=-1, iteratio
 #run(f)
 #
 
-
-#TC = PyCoTools.pycopi.TimeCourse(model, end = 1000, step_size=1, intervals=1000,
-#                            plot=False)
 #
-#RMPE = PyCoTools.pycopi.RunMultiplePEs(model, TC.kwargs['report_name'], copy_number = 4,
-#                                       pe_number = 2, population_size = 20, 
-#                                       number_of_generations=20)
+TC = PyCoTools.pycopi.TimeCourse(model, end = 1000, step_size=1, intervals=1000,
+                            plot=False)
+##
+RMPE = PyCoTools.pycopi.RunMultiplePEs(model, TC.kwargs['report_name'], copy_number = 4,
+                                       pe_number = 25, population_size = 20, 
+                                       number_of_generations=20, results_directory = 'test1')
 
 #RMPE.write_config_template()
-#RMPE.setup()
-#RMPE.run()
+RMPE.setup()
+RMPE.run()
 #RMPE.format_results()
 #PE = PyCoTools.pycopi.ParameterEstimation(model, TC.kwargs['report_name'],
 #                                          method = 'GeneticAlgorithm',
