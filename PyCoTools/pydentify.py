@@ -37,8 +37,11 @@ import matplotlib
 import matplotlib.pyplot as plt
 from scipy.interpolate import interp1d
 import logging
+import seaborn
+import pickle
 
 LOG=logging.getLogger(__name__)
+
 
 
 class ProfileLikelihood():
@@ -97,6 +100,7 @@ class ProfileLikelihood():
         os.chdir(os.path.dirname(self.copasi_file))
 
         default_results_directory = os.path.join(os.path.dirname(self.copasi_file),'ProfileLikelihood')
+        default_pickle_path = os.path.join(os.path.dirname(self.copasi_file),'ProfileLikelihoodPickle.pickle')
         options={#report variables
                  'index':-1,
                  'parameter_path':None,
@@ -109,7 +113,8 @@ class ProfileLikelihood():
                  'tolerance':1e-5,
                  'rho':0.2,
                  'run':False,
-                 'results_directory':default_results_directory}
+                 'results_directory':default_results_directory, 
+                 'pickle_path': default_pickle_path}
                  
 
         for i in kwargs.keys():
@@ -170,6 +175,9 @@ class ProfileLikelihood():
         self.cps_dct=self.setup_PE_task()        
         self.save()
         os.chdir(os.path.dirname(self.copasi_file))
+        
+        ## write pickle
+        self.write_pickle()
         self.run()
 
     def __getitem__(self,key):
@@ -177,6 +185,11 @@ class ProfileLikelihood():
             raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
         return self.kwargs[key]
     
+    def write_pickle(self):
+        with open(self['pickle_path'], 'w') as f:
+            pickle.dump(self.cps_dct, f)
+            
+            
     def save(self):
         self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
         
@@ -433,8 +446,9 @@ class ProfileLikelihood():
 
 #==============================================================================
 class FormatPLData():
-    def __init__(self,copasi_file,report_name):
+    def __init__(self,copasi_file,report_name,suffix='_formatted'):
         self.copasi_file = copasi_file
+        self.suffix = suffix
         self.GMQ = pycopi.GetModelQuantities(self.copasi_file)
         self.report_name = report_name
         if os.path.isfile(self.report_name)!=True:
@@ -454,18 +468,27 @@ class FormatPLData():
         """
         
         data = pandas.read_csv(self.report_name, sep='\t', header=None, skiprows=[0])
-        data = data.drop(data.columns[1], axis=1)
-        data.columns = range(data.shape[1])
-        LOG.debug('Shape of estimated parameters: {}'.format(data.shape))
-        width = data.shape[1]
-        
-        data = data.drop(data.columns[-2], axis=1)
-        data.columns = range(data.shape[1])
-        poe = os.path.split(self.copasi_file)[1][:-4]
-        names = [poe]+self.GMQ.get_fit_item_order()+['RSS']
-        data.columns = names
-        data.to_csv(self.report_name,sep='\t',index=False)
-        return data
+        bracket_columns = data[data.columns[[1,-2]]]
+        if bracket_columns.iloc[0].iloc[0] != '(':
+            data = pandas.read_csv(self.report_name, sep='\t')
+
+            LOG.info('skipping')
+            return data
+        else:
+            data = data.drop(data.columns[[1,-2]], axis=1)
+            data.columns = range(data.shape[1])
+            LOG.debug('Shape of estimated parameters: {}'.format(data.shape))
+            poe = os.path.split(self.copasi_file)[1][:-4]
+            ### parameter of interest has been removed. 
+            names = [poe]+self.GMQ.get_fit_item_order()+['RSS']
+            data.columns = names
+#            d,f = os.path.split(self.report_name)
+#            new_report_name = os.path.join(d,f[:-4]+'_'+self.suffix+'.txt')
+            data.to_csv(self.report_name, sep='\t', index=False)
+            return self.report_name
+    
+    
+    
 
         
 class Plot():
@@ -638,6 +661,8 @@ class Plot():
                  'use_pickle':False,
                  'overwrite_pickle':False,
                  'results_directory':None,
+                 
+                 
                  }
                  
         for i in kwargs.keys():
@@ -730,59 +755,62 @@ class Plot():
             LOG.critical('Experimental Files not None')
             self.kwargs['experiment_files']=self.get_experiment_files_in_use()
             
-        self.PL_dir=self.get_PL_dir()
-        self.indices=self.get_index_dirs()
-        self.result_paths=self.get_results()
-        self.formatted_data = self.format_pl_data()
+        self.PL_dir = self.get_PL_dir()
+        self.indices = self.get_index_dirs()
+        self.result_paths = self.get_results()
+        self.data = self.format_pl_data()
+#        self.results = self.format_results_keys()
+        
+#        print self.results#[-1]['(dephosphorylation_of_MAPK-P).KK10']
 #        self.data=self.parse_results() 
 #        print self.data
-##        self.data = self.trim_infinite_values()
-#        
-#        
-#        '''
-#        The below arguments rely on the above code. Do not change
-#        the ordering!
-#        
-#        '''
-#        #default dof is num estimated parameters minus 1 but can be manually overrider by specifying dof keyword
-#        if self.kwargs.get('dof')==None:
-#            self.kwargs['dof']=self.degrees_of_freedom()
-#        if self.kwargs['dof']==None:
-#            raise Errors.InputError('Please specify argument to dof keyword')
-#        
-#        #defult n is number of data points in your data set. 
-#        #This can be overridden by manually specifying n
-#        
-#        if self.kwargs.get('n')==None :
-#            self.kwargs['n']=self.num_data_points()
-#        assert self.kwargs.get('n')!=None        
-#        
-#        if self.kwargs.get('mode') not in ['all','one','none']:
-#            raise Errors.InputError('{} is not a valid mode. mode should be either all or one'.format(self.kwargs.get('mode')))
+#        self.data = self.trim_infinite_values()
+        
+        
+        '''
+        The below arguments rely on the above code. Do not change
+        the ordering!
+        
+        '''
+        #default dof is num estimated parameters minus 1 but can be manually overrider by specifying dof keyword
+        if self.kwargs.get('dof')==None:
+            self.kwargs['dof']=self.degrees_of_freedom()
+        if self.kwargs['dof']==None:
+            raise Errors.InputError('Please specify argument to dof keyword')
+        
+        #defult n is number of data points in your data set. 
+        #This can be overridden by manually specifying n
+        
+        if self.kwargs.get('n')==None :
+            self.kwargs['n']=self.num_data_points()
+        assert self.kwargs.get('n')!=None        
+        
+        if self.kwargs.get('mode') not in ['all','one',None]:
+            raise Errors.InputError('{} is not a valid mode. mode should be either all or one'.format(self.kwargs.get('mode')))
+
+        if self.kwargs.get('mode')!='all':
+            if self['plot_parameter'] not in self.list_parameters():
+                raise Errors.InputError('{} is not a valid Parameter. Your parameters are: {}'.format(self.kwargs.get('plot_parameter'),self.list_parameters()))
+
+            if isinstance(self.kwargs.get('index'),int):
+                if self.kwargs.get('plot_index') != self.kwargs.get('index'):
+                    raise Errors.InputError('{} is not an index in your Indices: {}'.format(self.kwargs.get('plot_index'),self.kwargs.get('index')))
+            
+            elif isinstance(self.kwargs.get('index'),list):
+                if self.kwargs.get('plot_index') not in self.kwargs.get('index'):
+                    raise Errors.InputError('{} is not an index in your Indices: {}'.format(self.kwargs.get('plot_index'),self.kwargs.get('index')))
 #
-#        if self.kwargs.get('mode')!='all':
-#            if self.kwargs.get('plot_parameter') not in self.list_parameters():
-#                raise Errors.InputError('{} is not a valid Parameter. Your parameters are: {}'.format(self.kwargs.get('plot_parameter'),self.list_parameters()))
-#
-#            if isinstance(self.kwargs.get('index'),int):
-#                if self.kwargs.get('plot_index') != self.kwargs.get('index'):
-#                    raise Errors.InputError('{} is not an index in your Indices: {}'.format(self.kwargs.get('plot_index'),self.kwargs.get('index')))
-#            
-#            elif isinstance(self.kwargs.get('index'),list):
-#                if self.kwargs.get('plot_index') not in self.kwargs.get('index'):
-#                    raise Errors.InputError('{} is not an index in your Indices: {}'.format(self.kwargs.get('plot_index'),self.kwargs.get('index')))
-#
-#
-#        if self.kwargs['mode']=='all':
-#            self.plot_all()
-#        elif self.kwargs['mode']=='one':
-#            self.plot1(self.kwargs['plot_index'],self.kwargs['plot_parameter'])
-#            
-#        
-#        self.plot_chi2_CI()
-#        CI=self.calc_chi2_CI()
-#        for i in CI:
-#            LOG.info( 'Confidence level for index {} is {} or {} on a log10 scale'.format(i,CI[i],numpy.log10(CI[i])))
+
+        if self.kwargs['mode']=='all':
+            self.plot_all()
+        elif self.kwargs['mode']=='one':
+            self.plot1(self.kwargs['plot_index'],self.kwargs['plot_parameter'])
+            
+        
+        self.plot_chi2_CI()
+        CI=self.calc_chi2_CI()
+        for i in CI:
+            LOG.info( 'Confidence level for index {} is {} or {} on a log10 scale'.format(i,CI[i],numpy.log10(CI[i])))
 
     def __getitem__(self,key):
         if key not in self.kwargs.keys():
@@ -790,11 +818,26 @@ class Plot():
             
         return self.kwargs[key]
     
+    
+#    def format_results_keys(self):
+#        """
+#        Output from format_pl_data has keys with words separated by underscore
+#        """
+    
     def format_pl_data(self):
         """
         
         """
-        print self.get_results
+        res = {}
+        for i in self.result_paths:
+            res[i] = {}
+            for j in self.result_paths[i]:
+                cps = self.result_paths[i][j][:-4]+'.cps'
+                try:
+                    res[i][j] = FormatPLData(cps, self.result_paths[i][j], suffix = 'formated').format
+                except Errors.FileDoesNotExistError:
+                    pass
+        return res
             
     def trim_infinite_values(self):
         LOG.info('removing infinite values from PL data.')
@@ -864,9 +907,8 @@ class Plot():
             os.chdir(i)
             d[int(os.path.split(i)[1])]={}
             for j in glob.glob('*.txt'):
-#                if os.path.splitext(j)[0]  in [Misc.RemoveNonAscii(i).filter for i in self.GMQ.get_fit_items().keys()]:
-                    f,ext=os.path.splitext(j)
-                    d[int(os.path.split(i)[1])][f]=os.path.join(i,j)
+                f,ext=os.path.splitext(j)
+                d[int(os.path.split(i)[1])][f]=os.path.join(i,j)
         return d
 
 
@@ -881,34 +923,32 @@ class Plot():
             for param in self.result_paths[index]:
                 if os.path.split( self.result_paths[index][param])[1] not in experiment_files:
                     data= pandas.read_csv(self.result_paths[index][param],sep='\t')#self.kwargs['separator'])
-                    best_value_str='TaskList[Parameter Estimation].(Problem)Parameter Estimation.Best Value'
-                    data=data.rename(columns={best_value_str:'rss'})
                     df_dict[index][param]=data
         return df_dict
         
-    def remove_experimental_files(self):
-        '''
-        Remove experimental data files from list of fiels to plot
-        '''
-        df_dict={}
-
-        experiment_keys= [os.path.splitext(i)[0] for i in self.kwargs['experiment_files']]
-        experiment_keys = list(set(experiment_keys))
-        LOG.debug('These are experiment keys: {}'.format(experiment_keys))
-        for i in self.result_paths:
-            df_dict[i]={}
-            for j in self.result_paths[i]:
-                LOG.debug('result path j: {}'.format(self.result_paths[i][j]))
-                if self.result_paths[i][j] not in experiment_keys:
-                    data= pandas.read_csv(self.result_paths[i][j],sep='\t')#self.kwargs['separator'])
-                    best_value_str='TaskList[Parameter Estimation].(Problem)Parameter Estimation.Best Value'
-                    data=data.rename(columns={best_value_str:'rss'})
-#                    if self.kwargs['log10']==True:
-#                        df_dict[i][j]=numpy.log10(data)
-#                    else:
-                    df_dict[i][j]=data
-        return df_dict
-#        
+#    def remove_experimental_files(self):
+#        '''
+#        Remove experimental data files from list of fiels to plot
+#        '''
+#        df_dict={}
+#
+#        experiment_keys= [os.path.splitext(i)[0] for i in self.kwargs['experiment_files']]
+#        experiment_keys = list(set(experiment_keys))
+#        LOG.debug('These are experiment keys: {}'.format(experiment_keys))
+#        for i in self.result_paths:
+#            df_dict[i]={}
+#            for j in self.result_paths[i]:
+#                LOG.debug('result path j: {}'.format(self.result_paths[i][j]))
+#                if self.result_paths[i][j] not in experiment_keys:
+#                    data= pandas.read_csv(self.result_paths[i][j],sep='\t')#self.kwargs['separator'])
+#                    best_value_str='TaskList[Parameter Estimation].(Problem)Parameter Estimation.Best Value'
+#                    data=data.rename(columns={best_value_str:'rss'})
+##                    if self.kwargs['log10']==True:
+##                        df_dict[i][j]=numpy.log10(data)
+##                    else:
+#                    df_dict[i][j]=data
+#        return df_dict
+##        
     def list_parameters(self):
         return sorted(self.GMQ.get_all_model_variables().keys())
 
@@ -1051,13 +1091,21 @@ class Plot():
             that the CI line is calculated correctly
             that the red dot is in the correct place
         '''
-        matplotlib.pyplot.rcParams.update({'font.size':self.kwargs.get('axis_size')})
+        seaborn.set_context(context='poster', font_scale=3)
+
+#        matplotlib.pyplot.rcParams.update({'font.size':self.kwargs.get('axis_size')})
         best_parameter_value=self.get_original_value(index,parameter)  
         LOG.debug('best parameter value is {}'.format(best_parameter_value))
-        
+
         if best_parameter_value != None:
             if self.kwargs['log10']==True:
                 best_parameter_value = round(numpy.log10(float(best_parameter_value)),6)
+                
+        try:
+            data = self.data[index][parameter]
+        except KeyError:
+            parameter = parameter.replace(' ','_')
+            data = self.data[index][parameter]
                 
                 
         if self.kwargs.get('multiplot')==True:
@@ -1066,10 +1114,15 @@ class Plot():
             plt.figure()
         ax = plt.subplot(111)
         if self.kwargs['log10']==True:
-            LOG.debug('data before log10: {}'.format(self.data[index][parameter]))
-            data= numpy.log10(self.data[index][parameter])
+            LOG.debug('data before log10: {}'.format(data))
+            data= numpy.log10(data)
         else:
-            data= self.data[index][parameter]
+            data= data
+            
+        data = data[data.columns[[0,-1]]]
+            
+            
+            
         parameter_val,RSS_val=(data[data.keys()[0]],data[data.keys()[1]])
         #plot parameter vs rss once as green circles the other as lines
         try:

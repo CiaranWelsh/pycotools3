@@ -3733,8 +3733,166 @@ class Scan():
         # elif self.kwargs.get('run')=='SGE':
         #     return R
 #==============================================================================            
-            
 class Run():
+    '''
+    run a copasi file using CopasiSE. run will deactivate all tasks from 
+    being executable via CopasiSE then activate the task you want to run, 
+    then run it. 
+    
+    copasi_file:
+        The copasi file you want to run 
+    
+    **kwargs:
+    
+        task:
+            Any valid copasi task. Default=time_course. Options are 
+            ['steady_state','time_course','scan','fluxmode','optimization',
+            'parameter_estimation','metaboliccontrolanalysis','lyapunovexponents',
+            'timescaleseparationanalysis','sensitivities','moieties',
+            'crosssection','linearnoiseapproximation']
+            
+        save:
+            Either False,'duplicate' or 'overwrite'. Should probably remain 
+            on 'overwrite', the default. 
+            
+        mode:
+            True, False,'multiprocess', or 'SGE'. Default is True but can be turned off if you 
+            want to uncheck all executable boxes then check the task executable
+            
+        max_time:
+            Default None. Max time in seconds for copasi to be allowed to run
+    '''
+    def __init__(self,copasi_file,**kwargs):
+        self.copasi_file=copasi_file
+        self.CParser=CopasiMLParser(self.copasi_file)
+        self.copasiML=self.CParser.copasiML
+        self.GMQ=GetModelQuantities(self.copasi_file)
+        self.SGE_job_file=os.path.splitext(self.copasi_file)[0]+'.sh'
+
+        options={'task':'time_course',
+                 'save':'overwrite',
+                 'mode':True,
+                 'max_time':None}
+
+
+
+        #values need to be lower case for copasiML
+        for i in kwargs.keys():
+            assert i in options.keys(),'{} is not a keyword argument for run'.format(i)
+        options.update( kwargs)
+        self.kwargs=options
+        self.kwargs = Bool2Str(self.kwargs).convert_dct()
+
+
+        tasks=['steady_state','time_course',
+               'scan','fluxmode','optimization',
+               'parameter_estimation','metaboliccontrolanalysis',
+               'lyapunovexponents','timescaleseparationanalysis',
+               'sensitivities','moieties','crosssection',
+               'linearnoiseapproximation']
+
+
+
+        if  self.kwargs.get('task') not in tasks:
+            raise Errors.InputError('{} is not a valid task. Choose from {}'.format(self.kwargs.get('task'),tasks))
+        if self.kwargs.get('max_time')!=None:
+            if isinstance(self.kwargs.get('max_time'),(float,int))!=True:
+                raise TypeError('max_time argument must be float or int')
+
+        if self.kwargs.get('task')=='time_course':
+            self.kwargs['task']='timecourse'
+
+        elif self.kwargs.get('task')=='parameter_estimation':
+            self.kwargs['task']='parameterfitting'
+
+        elif self.kwargs.get('task')=='steady_state':
+            self.kwargs['task']='steadystate'
+
+        if os.path.isfile(self.copasi_file)!=True:
+            raise Errors.FileDoesNotExistError('{} is not a file'.format(self.copasi_file))
+
+
+        self.copasiML=self.set_task()
+        self.save()
+        if self.kwargs.get('mode')==True:
+            try:
+                self.run()
+            except Errors.CopasiError:
+                self.run_linux()
+        elif self.kwargs.get('mode')=='SGE':
+            self.submit_copasi_job_SGE()
+        elif self.kwargs.get('mode')=='multiprocess':
+            self.multi_run()
+
+
+
+    def multi_run(self):
+        def run(x):
+            if os.path.isfile(x)!=True:
+                raise Errors.FileDoesNotExistError('{} is not a file'.format(self.copasi_file))
+            subprocess.Popen(['CopasiSE',self.copasi_file])
+        Process(run(self.copasi_file))
+
+
+
+
+    def set_task(self):
+        for i in self.copasiML.find('{http://www.copasi.org/static/schema}ListOfTasks'):
+            i.attrib['scheduled']="false" #set all to false
+            if self.kwargs.get('task')== i.attrib['type'].lower():
+                i.attrib['scheduled']="true"
+
+        return self.copasiML
+
+    def run(self):
+        '''
+        Process the copasi file using CopasiSE
+        Must be Copasi version 16
+        
+        '''
+        args=['CopasiSE',"{}".format(self.copasi_file)]
+        p=subprocess.Popen(args,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=True)
+        output,err= p.communicate()
+        d={}
+        d['output']=output
+        d['error']=err
+        if err!='':
+            try:
+                self.run_linux()
+            except:
+                raise Errors.CopasiError('Failed with Copasi error: \n\n'+d['error'])
+        return d['output']
+
+    def run_linux(self):
+        os.system('CopasiSE "{}"'.format(self.copasi_file) )
+
+
+    def submit_copasi_job_SGE(self):
+        '''
+        Submit copasi file as job to SGE based job scheduler. 
+        '''
+        with open(self.SGE_job_file,'w') as f:
+            f.write('#!/bin/bash\n#$ -V -cwd\nmodule add apps/COPASI/4.16.104-Linux-64bit\nCopasiSE {}'.format(self.copasi_file))
+        ## -N option for job name 
+        os.system('qsub {} -N {} '.format(self.SGE_job_file,self.SGE_job_file))
+        ## remove .sh file after used. 
+        os.remove(self.SGE_job_file)
+        
+    def save(self):
+        self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
+        return self.copasiML
+
+
+    def save_dep(self):
+        if self.kwargs.get('save')=='duplicate':
+            self.CParser.write_copasi_file(self.kwargs.get('OutputML'),self.copasiML)
+        elif self.kwargs.get('save')=='overwrite':
+            self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
+        return self.copasiML
+
+
+        
+class Run2():
     '''
     run a copasi file using CopasiSE. run will deactivate all tasks from 
     being executable via CopasiSE then activate the task you want to run, 
@@ -3836,9 +3994,8 @@ class Run():
             if os.path.isfile(x)!=True:
                 raise Errors.FileDoesNotExistError('{} is not a file'.format(x))
             subprocess.Popen(['CopasiSE',x])
+            os.system('CopasiSE {}'.format(x))
         Process(run(self.copasi_file))
-
-
 
 
     def set_task(self):
