@@ -5251,25 +5251,4 @@ class HighThroughputFit():
         
             
 if __name__=='__main__':
-<<<<<<< HEAD
-<<<<<<< HEAD
     pass
-=======
-    model = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps'
-    GMQ = GetModelQuantities(model)
-    I = InsertParameters(model, parameter_dict = {'(TestREaction).k2':6})
-=======
-    pass
-    execfile('/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/testing_kholodenko_manually.py')
-#    model = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Kholodenko.cps'
-    
-#    TimeCourse
-#    GMQ = GetModelQuantities(model)
-#    I = InsertParameters(model, parameter_dict = {'(TestREaction).k2':6})
-#    M=Model(model)
-#    print M.get_reactions()
->>>>>>> CopasiVersion19Develop
-
-
-
->>>>>>> CopasiVersion19Develop
