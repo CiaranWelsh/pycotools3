@@ -1106,10 +1106,22 @@ class ModelSelection():
     '''
     ## could give
     '''
-    def __init__(self,multi_model_fit):
+    def __init__(self,multi_model_fit, **kwargs):
         LOG.debug('Instantiate ModelSelection class')
         self.multi_model_fit=multi_model_fit
         self.number_models=self.get_num_models()
+        
+        options={#report variables
+                 'save':False,
+                 'output_directory':self.multi_model_fit.project_dir,
+                 'dpi':300}
+                 
+        for i in kwargs.keys():
+            assert i in options.keys(),'{} is not a keyword argument for ModelSelection'.format(i)
+        options.update( kwargs) 
+        self.kwargs=options  
+        
+        
 #        if self.model_selection_filename==None:
 #            self.model_selection_filename=os.path.join(self.multi_model_fit.wd,'ModelSelectionData.xlsx')
         self.results_folder_dct=self._get_results_directories()
@@ -1117,10 +1129,14 @@ class ModelSelection():
         self.GMQ_dct=self._get_GMQ_dct()
         self.number_model_parameters=self._get_number_estimated_model_parameters()
         self.number_observations=self._get_n()
-        
         self.model_selection_data=self.calculate_model_selection_criteria()
         
-    
+
+    def __getitem__(self,key):
+        if key not in self.kwargs.keys():
+            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
+        return self.kwargs[key]
+
     def get_num_models(self):
         return len(self.multi_model_fit.cps_files)
     ## void
@@ -1291,19 +1307,29 @@ class ModelSelection():
         '''
         
         '''
-        sns.set_context(context='poster',font_scale=3)
-        for i in range(len(self.model_selection_data.keys())):
-            keys=self.model_selection_data.keys()
-            LOG.debug(keys[i])
-            LOG.debug('plotting {}'.format(keys[i]))
-            plt.figure(1)
-#            plt.subplot(311)
-            LOG.debug(self.model_selection_data[keys[i][0]])
-            sns.boxplot(data=self.model_selection_data[keys[i][0]],
-#                        x=self.model_selection_data.index,
-                        y='RSS',
-                        )
-            
+        data = self.model_selection_data
+        
+        data = data.unstack()
+        data = data.reset_index()
+        data = data.rename(columns={'level_0':'Model',
+                                    'level_1':'Metric',
+                                    0:'Score'})
+#        print data
+        for metric in data['Metric'].unique():
+            plt.figure()
+            seaborn.boxplot(data = data[data['Metric']==metric],
+                            x='Model',y='Score')
+            plt.xticks(rotation='vertical')
+            plt.title('{} Scores'.format(metric))
+            plt.xlabel(' ')
+            if self['save']:
+                save_dir = os.path.join(self['output_directory'], 'ModelSelectionGraphs')
+                if os.path.isdir(save_dir)!=True:
+                    os.mkdir(save_dir)
+                os.chdir(save_dir)
+                fname = os.path.join(save_dir, '{}.jpeg'.format(metric))
+                plt.savefig(fname, dpi=self['dpi'], bbox_inches='tight')
+  
         
         
         
@@ -1360,7 +1386,7 @@ class ModelSelection():
         
         for cps, res in self.multi_model_fit.results_folder_dct.items():
             LOG.debug('running current solution statistics PE with:\t {}'.format(cps))
-            pycopi.InsertParameters(cps,parameter_path=res)
+            pycopi.InsertParameters(cps,parameter_path=res, index=0)
             PE=pycopi.ParameterEstimation(cps,self.multi_model_fit.exp_files,
                                        randomize_start_values=False,
                                        method='CurrentSolutionStatistics',
@@ -1368,6 +1394,7 @@ class ModelSelection():
                                        )
             PE.set_up()
             PE.run()
+            PE.format_results()
             
             
     def get_best_parameters(self,filename=None):
@@ -1391,10 +1418,13 @@ class ModelSelection():
         Compare all the parameters accross multiple models 
         in a bar chart averaging and STD for a parameter accross
         all models. 
+        
+        May have a problem with different models have different 
+        parameters as they are not directly comparible
         '''
         best_parameters=self.get_best_parameters()
         data= best_parameters.loc[parameter_list].transpose()
-        f=sns.barplot(data=numpy.log10(data))
+        f=seaborn.barplot(data=numpy.log10(data))
         f.set_xticklabels(parameter_list,rotation=90)
         plt.legend(loc=(1,1))
         plt.title('Barplot Comparing Parameter Estimation Results for specific\nParameters accross all models')

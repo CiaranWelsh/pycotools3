@@ -2975,7 +2975,7 @@ class ParameterEstimation():
             ##Run with 'mode' set to false just unchecks the executable boxes.
             self.copasiML=Run(self.copasi_file,task='parameter_estimation',mode=False)
             ## Now run with check_call
-            subprocess.check_call('CopasiSE "{}"'.format(self.copasi_file),shell=True)
+            os.system('CopasiSE "{}"'.format(self.copasi_file))
             self.format_results()
             self.plot()
         return self.copasiML
@@ -2986,15 +2986,16 @@ class ParameterEstimation():
         give them the proper headers then overwrite the file again
         :return:
         """
-        data = pandas.read_csv(self.kwargs['report_name'], sep='\t', header=None)
-        data = data.drop(data.columns[0], axis=1)
-        rss_col = data.columns[-1]
-        data[ rss_col] = data[rss_col].str[1:]
-        names = self.GMQ.get_fit_item_order()+['RSS']
-        data.columns = names
-        os.remove(self.kwargs['report_name'])
-        data.to_csv(self.kwargs['report_name'],sep='\t')
-        return data
+        FormatPEData(self.copasi_file, self['report_name'], report_type='parameter_estimation')
+#        data = pandas.read_csv(self.kwargs['report_name'], sep='\t', header=None)
+#        data = data.drop(data.columns[0], axis=1)
+#        rss_col = data.columns[-1]
+#        data[ rss_col] = data[rss_col].str[1:]
+#        names = self.GMQ.get_fit_item_order()+['RSS']
+#        data.columns = names
+#        os.remove(self.kwargs['report_name'])
+#        data.to_csv(self.kwargs['report_name'],sep='\t')
+#        return data
 
 
     def convert_to_string(self,num):
