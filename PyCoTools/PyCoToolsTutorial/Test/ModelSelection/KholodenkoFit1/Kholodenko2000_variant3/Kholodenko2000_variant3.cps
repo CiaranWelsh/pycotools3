@@ -1,13 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- generated with COPASI 4.19 (Build 140) (http://www.copasi.org) at 2017-07-26 22:42:18 UTC -->
-<?oxygen RNGSchema="http://www.copasi.org/static/schema/CopasiML.rng" type="xml"?>
-<COPASI xmlns="http://www.copasi.org/static/schema" versionMajor="4" versionMinor="19" versionDevel="140" copasiSourcesModified="0">
+<!-- generated with COPASI 4.19 (Build 140) (http://www.copasi.org) at 2017-07-26 22:42:18 UTC --><?oxygen RNGSchema="http://www.copasi.org/static/schema/CopasiML.rng" type="xml"?><COPASI xmlns="http://www.copasi.org/static/schema" versionMajor="4" versionMinor="19" versionDevel="140" copasiSourcesModified="0">
   <ListOfFunctions>
     <Function key="Function_13" name="Mass action (irreversible)" type="MassAction" reversible="false">
       <MiriamAnnotation>
 <rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <rdf:Description rdf:about="#Function_13">
-   <CopasiMT:is rdf:resource="urn:miriam:obo.sbo:SBO:0000041" />
+   <CopasiMT:is rdf:resource="urn:miriam:obo.sbo:SBO:0000041"/>
    </rdf:Description>
    </rdf:RDF>
       </MiriamAnnotation>
@@ -20,7 +17,7 @@ Reaction scheme where the products are created from the reactants and the change
 </body>
       </Comment>
       <Expression>
-        k1*PRODUCT&lt;substrate_i>
+        k1*PRODUCT&lt;substrate_i&gt;
       </Expression>
       <ListOfParameterDescriptions>
         <ParameterDescription key="FunctionParameter_81" name="k1" order="0" role="constant"/>
@@ -49,14 +46,9 @@ Reaction scheme where the products are created from the reactants and the change
       </ListOfParameterDescriptions>
     </Function>
   </ListOfFunctions>
-  <Model key="Model_6" name="Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade" simulationType="time" timeUnit="s" volumeUnit="l" areaUnit="m²" lengthUnit="m" quantityUnit="nmol" type="deterministic" avogadroConstant="6.022140857e+23">
+  <Model key="Model_6" name="Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade" simulationType="time" timeUnit="s" volumeUnit="l" areaUnit="m&#178;" lengthUnit="m" quantityUnit="nmol" type="deterministic" avogadroConstant="6.022140857e+23">
     <MiriamAnnotation>
-<rdf:RDF
-   xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#"
-   xmlns:bqbiol="http://biomodels.net/biology-qualifiers/"
-   xmlns:dcterms="http://purl.org/dc/terms/"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
+<rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
   <rdf:Description rdf:about="#Model_6">
     <bqbiol:hasTaxon>
       <rdf:Bag>
@@ -167,7 +159,7 @@ Reaction scheme where the products are created from the reactants and the change
   <rdf:Description rdf:about="#Metabolite_27">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/P09560" />
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/P09560"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -180,7 +172,7 @@ Reaction scheme where the products are created from the reactants and the change
   <rdf:Description rdf:about="#Metabolite_23">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/P09560" />
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/P09560"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -193,7 +185,7 @@ Reaction scheme where the products are created from the reactants and the change
   <rdf:Description rdf:about="#Metabolite_19">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/Q05116" />
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/Q05116"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -206,7 +198,7 @@ Reaction scheme where the products are created from the reactants and the change
   <rdf:Description rdf:about="#Metabolite_9">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/Q05116" />
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/Q05116"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -219,7 +211,7 @@ Reaction scheme where the products are created from the reactants and the change
   <rdf:Description rdf:about="#Metabolite_37">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/Q05116" />
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/Q05116"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -232,7 +224,7 @@ Reaction scheme where the products are created from the reactants and the change
   <rdf:Description rdf:about="#Metabolite_39">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/P26696" />
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/P26696"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -245,7 +237,7 @@ Reaction scheme where the products are created from the reactants and the change
   <rdf:Description rdf:about="#Metabolite_41">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/P26696" />
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/P26696"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -258,7 +250,7 @@ Reaction scheme where the products are created from the reactants and the change
   <rdf:Description rdf:about="#Metabolite_43">
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/uniprot/P26696" />
+        <rdf:li rdf:resource="http://identifiers.org/uniprot/P26696"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -269,9 +261,7 @@ Reaction scheme where the products are created from the reactants and the change
     <ListOfModelValues>
       <ModelValue key="ModelValue_0" name="Mos_tot" simulationType="assignment">
         <MiriamAnnotation>
-<rdf:RDF
-   xmlns:dcterms="http://purl.org/dc/terms/"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#ModelValue_0">
     <dcterms:created>
       <rdf:Description>
@@ -283,14 +273,12 @@ Reaction scheme where the products are created from the reactants and the change
 
         </MiriamAnnotation>
         <Expression>
-          &lt;CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos-P],Reference=Concentration>+&lt;CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos],Reference=Concentration>
+          &lt;CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos-P],Reference=Concentration&gt;+&lt;CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos],Reference=Concentration&gt;
         </Expression>
       </ModelValue>
       <ModelValue key="ModelValue_1" name="Mos-P_tot" simulationType="assignment">
         <MiriamAnnotation>
-<rdf:RDF
-   xmlns:dcterms="http://purl.org/dc/terms/"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#ModelValue_1">
     <dcterms:created>
       <rdf:Description>
@@ -302,14 +290,12 @@ Reaction scheme where the products are created from the reactants and the change
 
         </MiriamAnnotation>
         <Expression>
-          &lt;CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos-P],Reference=Concentration>
+          &lt;CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mos-P],Reference=Concentration&gt;
         </Expression>
       </ModelValue>
       <ModelValue key="ModelValue_2" name="Mek_tot" simulationType="assignment">
         <MiriamAnnotation>
-<rdf:RDF
-   xmlns:dcterms="http://purl.org/dc/terms/"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#ModelValue_2">
     <dcterms:created>
       <rdf:Description>
@@ -321,14 +307,12 @@ Reaction scheme where the products are created from the reactants and the change
 
         </MiriamAnnotation>
         <Expression>
-          &lt;CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-P],Reference=Concentration>+&lt;CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP],Reference=Concentration>+&lt;CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1],Reference=Concentration>
+          &lt;CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-P],Reference=Concentration&gt;+&lt;CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP],Reference=Concentration&gt;+&lt;CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1],Reference=Concentration&gt;
         </Expression>
       </ModelValue>
       <ModelValue key="ModelValue_3" name="Mek-P_tot" simulationType="assignment">
         <MiriamAnnotation>
-<rdf:RDF
-   xmlns:dcterms="http://purl.org/dc/terms/"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#ModelValue_3">
     <dcterms:created>
       <rdf:Description>
@@ -340,14 +324,12 @@ Reaction scheme where the products are created from the reactants and the change
 
         </MiriamAnnotation>
         <Expression>
-          &lt;CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP],Reference=Concentration>+&lt;CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-P],Reference=Concentration>
+          &lt;CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP],Reference=Concentration&gt;+&lt;CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-P],Reference=Concentration&gt;
         </Expression>
       </ModelValue>
       <ModelValue key="ModelValue_4" name="Erk_tot" simulationType="ode">
         <MiriamAnnotation>
-<rdf:RDF
-   xmlns:dcterms="http://purl.org/dc/terms/"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#ModelValue_4">
     <dcterms:created>
       <rdf:Description>
@@ -359,14 +341,12 @@ Reaction scheme where the products are created from the reactants and the change
 
         </MiriamAnnotation>
         <Expression>
-          &lt;CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-P],Reference=Concentration>+&lt;CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-PP],Reference=Concentration>+&lt;CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2],Reference=Concentration>
+          &lt;CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-P],Reference=Concentration&gt;+&lt;CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-PP],Reference=Concentration&gt;+&lt;CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2],Reference=Concentration&gt;
         </Expression>
       </ModelValue>
       <ModelValue key="ModelValue_5" name="Erk-P_tot" simulationType="assignment">
         <MiriamAnnotation>
-<rdf:RDF
-   xmlns:dcterms="http://purl.org/dc/terms/"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#ModelValue_5">
     <dcterms:created>
       <rdf:Description>
@@ -378,7 +358,7 @@ Reaction scheme where the products are created from the reactants and the change
 
         </MiriamAnnotation>
         <Expression>
-          &lt;CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-P],Reference=Concentration>+&lt;CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-PP],Reference=Concentration>
+          &lt;CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-P],Reference=Concentration&gt;+&lt;CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Erk2-PP],Reference=Concentration&gt;
         </Expression>
       </ModelValue>
     </ListOfModelValues>
@@ -394,14 +374,14 @@ Reaction scheme where the products are created from the reactants and the change
     </dcterms:created>
     <CopasiMT:isHomologTo>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_525" />
+        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_525"/>
       </rdf:Bag>
     </CopasiMT:isHomologTo>
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/ec-code/2.7.11.1" />
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0000185" />
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0008349" />
+        <rdf:li rdf:resource="http://identifiers.org/ec-code/2.7.11.1"/>
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0000185"/>
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0008349"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -438,9 +418,9 @@ Reaction scheme where the products are created from the reactants and the change
     </dcterms:created>
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/ec-code/3.1.3.16" />
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006470" />
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0051390" />
+        <rdf:li rdf:resource="http://identifiers.org/ec-code/3.1.3.16"/>
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006470"/>
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0051390"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -483,14 +463,14 @@ Reaction scheme where the products are created from the reactants and the change
     </dcterms:created>
     <CopasiMT:isHomologTo>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_614" />
+        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_614"/>
       </rdf:Bag>
     </CopasiMT:isHomologTo>
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/ec-code/2.7.11.25" />
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0004709" />
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006468" />
+        <rdf:li rdf:resource="http://identifiers.org/ec-code/2.7.11.25"/>
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0004709"/>
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006468"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -533,15 +513,15 @@ Reaction scheme where the products are created from the reactants and the change
     </dcterms:created>
     <CopasiMT:isHomologTo>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_614" />
+        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_614"/>
       </rdf:Bag>
     </CopasiMT:isHomologTo>
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/ec-code/2.7.11.25" />
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0000186" />
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0004709" />
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006468" />
+        <rdf:li rdf:resource="http://identifiers.org/ec-code/2.7.11.25"/>
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0000186"/>
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0004709"/>
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006468"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -584,9 +564,9 @@ Reaction scheme where the products are created from the reactants and the change
     </dcterms:created>
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/ec-code/3.1.3.16" />
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006470" />
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0051389" />
+        <rdf:li rdf:resource="http://identifiers.org/ec-code/3.1.3.16"/>
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006470"/>
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0051389"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -623,8 +603,8 @@ Reaction scheme where the products are created from the reactants and the change
     </dcterms:created>
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/ec-code/3.1.3.16" />
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006470" />
+        <rdf:li rdf:resource="http://identifiers.org/ec-code/3.1.3.16"/>
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006470"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -661,15 +641,15 @@ Reaction scheme where the products are created from the reactants and the change
     </dcterms:created>
     <CopasiMT:hasVersion>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_136" />
-        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_2247" />
+        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_136"/>
+        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_2247"/>
       </rdf:Bag>
     </CopasiMT:hasVersion>
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/ec-code/2.7.12.2" />
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0004708" />
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006468" />
+        <rdf:li rdf:resource="http://identifiers.org/ec-code/2.7.12.2"/>
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0004708"/>
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006468"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -712,16 +692,16 @@ Reaction scheme where the products are created from the reactants and the change
     </dcterms:created>
     <CopasiMT:hasVersion>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_136" />
-        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_2247" />
+        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_136"/>
+        <rdf:li rdf:resource="http://identifiers.org/reactome/REACT_2247"/>
       </rdf:Bag>
     </CopasiMT:hasVersion>
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/ec-code/2.7.12.2" />
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0000187" />
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0004708" />
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006468" />
+        <rdf:li rdf:resource="http://identifiers.org/ec-code/2.7.12.2"/>
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0000187"/>
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0004708"/>
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006468"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -764,9 +744,9 @@ Reaction scheme where the products are created from the reactants and the change
     </dcterms:created>
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/ec-code/3.1.3.16" />
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0000188" />
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006470" />
+        <rdf:li rdf:resource="http://identifiers.org/ec-code/3.1.3.16"/>
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0000188"/>
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006470"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -803,8 +783,8 @@ Reaction scheme where the products are created from the reactants and the change
     </dcterms:created>
     <CopasiMT:isVersionOf>
       <rdf:Bag>
-        <rdf:li rdf:resource="http://identifiers.org/ec-code/3.1.3.16" />
-        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006470" />
+        <rdf:li rdf:resource="http://identifiers.org/ec-code/3.1.3.16"/>
+        <rdf:li rdf:resource="http://identifiers.org/go/GO:0006470"/>
       </rdf:Bag>
     </CopasiMT:isVersionOf>
   </rdf:Description>
@@ -951,13 +931,13 @@ Reaction scheme where the products are created from the reactants and the change
         <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
       </Method>
     </Task>
-    <Task key="Task_2" name="Scan" type="scan" scheduled="false" updateModel="false">
-      <Problem>
-        <Parameter name="Subtask" type="unsignedInteger" value="1"/>
+    <Task key="Task_2" name="Scan" type="scan" scheduled="true" updateModel="false">
+      <Report append="false" confirmOverwrite="false" reference="Report_33" target="/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant3/MultipleParameterEsimationAnalysis/ParameterFit0.txt"/><Problem>
+        <Parameter name="Subtask" type="unsignedInteger" value="5"/>
         <ParameterGroup name="ScanItems">
-        </ParameterGroup>
-        <Parameter name="Output in subtask" type="bool" value="1"/>
-        <Parameter name="Adjust initial conditions" type="bool" value="0"/>
+        <ParameterGroup name="ScanItem"><Parameter name="Number of steps" type="unsignedInteger" value="50"/><Parameter name="Type" type="unsignedInteger" value="0"/><Parameter name="Object" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP],Reference=InitialConcentration"/></ParameterGroup></ParameterGroup>
+        <Parameter name="Output in subtask" type="bool" value="false"/>
+        <Parameter name="Adjust initial conditions" type="bool" value="false"/>
       </Problem>
       <Method name="Scan Framework" type="ScanFramework">
       </Method>
@@ -991,32 +971,26 @@ Reaction scheme where the products are created from the reactants and the change
       </Method>
     </Task>
     <Task key="Task_5" name="Parameter Estimation" type="parameterFitting" scheduled="false" updateModel="false">
-      <Report reference="Report_3" target="" append="1" confirmOverwrite="1"/>
+      <Report reference="Report_32" target="" append="false" confirmOverwrite="false"/>
       <Problem>
         <Parameter name="Maximize" type="bool" value="0"/>
-        <Parameter name="Randomize Start Values" type="bool" value="0"/>
-        <Parameter name="Calculate Statistics" type="bool" value="1"/>
+        <Parameter name="Randomize Start Values" type="bool" value="true"/>
+        <Parameter name="Calculate Statistics" type="bool" value="0"/>
         <ParameterGroup name="OptimizationItemList">
-        </ParameterGroup>
+        <ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="0.001"/><Parameter name="UpperBound" type="cn" value="1000.0"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK],ParameterGroup=Parameters,Parameter=K,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="0.001"/><Parameter name="UpperBound" type="cn" value="1000.0"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="0.001"/><Parameter name="UpperBound" type="cn" value="1000.0"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=K,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="0.001"/><Parameter name="UpperBound" type="cn" value="1000.0"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-PP],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="0.001"/><Parameter name="UpperBound" type="cn" value="1000.0"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="0.001"/><Parameter name="UpperBound" type="cn" value="1000.0"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK],ParameterGroup=Parameters,Parameter=K,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="0.001"/><Parameter name="UpperBound" type="cn" value="1000.0"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-PP],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="0.001"/><Parameter name="UpperBound" type="cn" value="1000.0"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK inactivation],ParameterGroup=Parameters,Parameter=K,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="0.001"/><Parameter name="UpperBound" type="cn" value="1000.0"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="0.001"/><Parameter name="UpperBound" type="cn" value="1000.0"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=K,Reference=Value"/></ParameterGroup></ParameterGroup>
         <ParameterGroup name="OptimizationConstraintList">
         </ParameterGroup>
         <Parameter name="Steady-State" type="cn" value="CN=Root,Vector=TaskList[Steady-State]"/>
         <Parameter name="Time-Course" type="cn" value="CN=Root,Vector=TaskList[Time-Course]"/>
         <Parameter name="Create Parameter Sets" type="bool" value="0"/>
         <ParameterGroup name="Experiment Set">
-        </ParameterGroup>
+        <ParameterGroup name="Experiment_0"><Parameter name="Data is Row Oriented" type="bool" value="1"/><Parameter name="Experiment Type" type="unsignedInteger" value="1"/><Parameter name="File Name" type="file" value="/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant1_TimeCourse.txt"/><Parameter name="First Row" type="unsignedInteger" value="1"/><Parameter name="Key" type="key" value="Experiment_0"/><Parameter name="Last Row" type="unsignedInteger" value="12"/><Parameter name="Normalize Weights per Experiment" type="bool" value="1"/><Parameter name="Number of Columns" type="unsignedInteger" value="7"/><ParameterGroup name="Object Map"><ParameterGroup name="0"><Parameter name="Role" type="unsignedInteger" value="3"/></ParameterGroup><ParameterGroup name="1"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Values[Mek_tot],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="2"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Values[Erk_tot],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="3"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Values[Erk-P_tot],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="4"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Values[Mos-P_tot],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="5"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Values[Mek-P_tot],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="6"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Values[Mos_tot],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup></ParameterGroup><Parameter name="Row containing Names" type="unsignedInteger" value="1"/><Parameter name="separator" type="string" value="&#9;"/><Parameter name="Weight Method" type="unsignedInteger" value="2"/></ParameterGroup></ParameterGroup>
         <ParameterGroup name="Validation Set">
           <Parameter name="Threshold" type="unsignedInteger" value="5"/>
           <Parameter name="Weight" type="unsignedFloat" value="1"/>
         </ParameterGroup>
       </Problem>
-      <Method name="Evolutionary Programming" type="EvolutionaryProgram">
-        <Parameter name="Number of Generations" type="unsignedInteger" value="200"/>
-        <Parameter name="Population Size" type="unsignedInteger" value="20"/>
-        <Parameter name="Random Number Generator" type="unsignedInteger" value="1"/>
-        <Parameter name="Seed" type="unsignedInteger" value="0"/>
-      </Method>
-    </Task>
+      <Method name="Genetic Algorithm" type="GeneticAlgorithm"><Parameter name="Number of Generations" type="unsignedInteger" value="300"/><Parameter name="Population Size" type="unsignedInteger" value="100"/><Parameter name="Random Number Generator" type="unsignedInteger" value="1"/><Parameter name="Seed" type="unsignedInteger" value="0"/></Method></Task>
     <Task key="Task_6" name="Metabolic Control Analysis" type="metabolicControlAnalysis" scheduled="false" updateModel="false">
       <Report reference="Report_4" target="" append="1" confirmOverwrite="1"/>
       <Problem>
@@ -1130,7 +1104,7 @@ Reaction scheme where the products are created from the reactants and the change
     </Task>
   </ListOfTasks>
   <ListOfReports>
-    <Report key="Report_0" name="Steady-State" taskType="steadyState" separator="&#x09;" precision="6">
+    <Report key="Report_0" name="Steady-State" taskType="steadyState" separator="&#9;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -1138,7 +1112,7 @@ Reaction scheme where the products are created from the reactants and the change
         <Object cn="CN=Root,Vector=TaskList[Steady-State]"/>
       </Footer>
     </Report>
-    <Report key="Report_1" name="Elementary Flux Modes" taskType="fluxMode" separator="&#x09;" precision="6">
+    <Report key="Report_1" name="Elementary Flux Modes" taskType="fluxMode" separator="&#9;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -1146,55 +1120,55 @@ Reaction scheme where the products are created from the reactants and the change
         <Object cn="CN=Root,Vector=TaskList[Elementary Flux Modes],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_2" name="Optimization" taskType="optimization" separator="&#x09;" precision="6">
+    <Report key="Report_2" name="Optimization" taskType="optimization" separator="&#9;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
       <Header>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Object=Description"/>
         <Object cn="String=\[Function Evaluations\]"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="Separator=&#9;"/>
         <Object cn="String=\[Best Value\]"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="Separator=&#9;"/>
         <Object cn="String=\[Best Parameters\]"/>
       </Header>
       <Body>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Problem=Optimization,Reference=Function Evaluations"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="Separator=&#9;"/>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Problem=Optimization,Reference=Best Value"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="Separator=&#9;"/>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Problem=Optimization,Reference=Best Parameters"/>
       </Body>
       <Footer>
-        <Object cn="String=&#x0a;"/>
+        <Object cn="String=&#10;"/>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_3" name="Parameter Estimation" taskType="parameterFitting" separator="&#x09;" precision="6">
+    <Report key="Report_3" name="Parameter Estimation" taskType="parameterFitting" separator="&#9;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
       <Header>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Object=Description"/>
         <Object cn="String=\[Function Evaluations\]"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="Separator=&#9;"/>
         <Object cn="String=\[Best Value\]"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="Separator=&#9;"/>
         <Object cn="String=\[Best Parameters\]"/>
       </Header>
       <Body>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Function Evaluations"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="Separator=&#9;"/>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="Separator=&#9;"/>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"/>
       </Body>
       <Footer>
-        <Object cn="String=&#x0a;"/>
+        <Object cn="String=&#10;"/>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_4" name="Metabolic Control Analysis" taskType="metabolicControlAnalysis" separator="&#x09;" precision="6">
+    <Report key="Report_4" name="Metabolic Control Analysis" taskType="metabolicControlAnalysis" separator="&#9;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -1202,11 +1176,11 @@ Reaction scheme where the products are created from the reactants and the change
         <Object cn="CN=Root,Vector=TaskList[Metabolic Control Analysis],Object=Description"/>
       </Header>
       <Footer>
-        <Object cn="String=&#x0a;"/>
+        <Object cn="String=&#10;"/>
         <Object cn="CN=Root,Vector=TaskList[Metabolic Control Analysis],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_5" name="Lyapunov Exponents" taskType="lyapunovExponents" separator="&#x09;" precision="6">
+    <Report key="Report_5" name="Lyapunov Exponents" taskType="lyapunovExponents" separator="&#9;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -1214,11 +1188,11 @@ Reaction scheme where the products are created from the reactants and the change
         <Object cn="CN=Root,Vector=TaskList[Lyapunov Exponents],Object=Description"/>
       </Header>
       <Footer>
-        <Object cn="String=&#x0a;"/>
+        <Object cn="String=&#10;"/>
         <Object cn="CN=Root,Vector=TaskList[Lyapunov Exponents],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_6" name="Time Scale Separation Analysis" taskType="timeScaleSeparationAnalysis" separator="&#x09;" precision="6">
+    <Report key="Report_6" name="Time Scale Separation Analysis" taskType="timeScaleSeparationAnalysis" separator="&#9;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -1226,11 +1200,11 @@ Reaction scheme where the products are created from the reactants and the change
         <Object cn="CN=Root,Vector=TaskList[Time Scale Separation Analysis],Object=Description"/>
       </Header>
       <Footer>
-        <Object cn="String=&#x0a;"/>
+        <Object cn="String=&#10;"/>
         <Object cn="CN=Root,Vector=TaskList[Time Scale Separation Analysis],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_7" name="Sensitivities" taskType="sensitivities" separator="&#x09;" precision="6">
+    <Report key="Report_7" name="Sensitivities" taskType="sensitivities" separator="&#9;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -1238,11 +1212,11 @@ Reaction scheme where the products are created from the reactants and the change
         <Object cn="CN=Root,Vector=TaskList[Sensitivities],Object=Description"/>
       </Header>
       <Footer>
-        <Object cn="String=&#x0a;"/>
+        <Object cn="String=&#10;"/>
         <Object cn="CN=Root,Vector=TaskList[Sensitivities],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_8" name="Linear Noise Approximation" taskType="linearNoiseApproximation" separator="&#x09;" precision="6">
+    <Report key="Report_8" name="Linear Noise Approximation" taskType="linearNoiseApproximation" separator="&#9;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -1250,11 +1224,11 @@ Reaction scheme where the products are created from the reactants and the change
         <Object cn="CN=Root,Vector=TaskList[Linear Noise Approximation],Object=Description"/>
       </Header>
       <Footer>
-        <Object cn="String=&#x0a;"/>
+        <Object cn="String=&#10;"/>
         <Object cn="CN=Root,Vector=TaskList[Linear Noise Approximation],Object=Result"/>
       </Footer>
     </Report>
-  </ListOfReports>
+  <Report taskType="parameterFitting" separator="&#9;" precision="6" key="Report_32" name="parameter_estimation"><Comment/><Footer><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"/><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/></Footer></Report><Report taskType="parameterFitting" separator="&#9;" precision="6" key="Report_33" name="multi_parameter_estimation"><Comment/><Table printTitle="1"><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"/><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/></Table></Report></ListOfReports>
   <GUI>
   </GUI>
   <SBMLReference file="Kholodenko2000.xml">
