@@ -2878,3 +2878,204 @@ INFO:PyCoTools.pycopi:pycopi:run:4402:running model: 2
 DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/Kholodenko_2.cps
 INFO:PyCoTools.pycopi:pycopi:run:4402:running model: 3
 DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/Kholodenko_3.cps
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:format_multi_results:2425:Shape of estimated parameters: (50, 15)
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4249:Performing multi parameter fit for model at:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant2/Kholodenko2000_variant2_test.cps
+DEBUG:PyCoTools.pycopi:pycopi:_create_defaults:4492:Using default report name:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant2/ParameterFit.txt
+DEBUG:PyCoTools.pycopi:pycopi:_create_defaults:4501:config_filename is None. Reassigning config_filename
+INFO:PyCoTools.pycopi:pycopi:_create_output_directory:4534:creating a directory for analysis in : 
+
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant2/MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:4547:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4349:Create an instance of ParameterEstimation
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4249:Performing multi parameter fit for model at:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant2/Kholodenko2000_variant2_test.cps
+DEBUG:PyCoTools.pycopi:pycopi:_create_defaults:4492:Using default report name:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant2/ParameterFit.txt
+DEBUG:PyCoTools.pycopi:pycopi:_create_defaults:4501:config_filename is None. Reassigning config_filename
+INFO:PyCoTools.pycopi:pycopi:_create_output_directory:4534:creating a directory for analysis in : 
+
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant2/MultipleParameterEsimationAnalysis
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:4547:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4349:Create an instance of ParameterEstimation
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4249:Performing multi parameter fit for model at:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant2/Kholodenko2000_variant2_test.cps
+DEBUG:PyCoTools.pycopi:pycopi:_create_defaults:4492:Using default report name:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant2/ParameterFit.txt
+DEBUG:PyCoTools.pycopi:pycopi:_create_defaults:4501:config_filename is None. Reassigning config_filename
+INFO:PyCoTools.pycopi:pycopi:_create_output_directory:4534:creating a directory for analysis in : 
+
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant2/MultipleParameterEsimationAnalysis
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:4547:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4349:Create an instance of ParameterEstimation
+DEBUG:PyCoTools.pycopi:pycopi:format_multi_results:2425:Shape of estimated parameters: (50, 15)
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:format_multi_results:2425:Shape of estimated parameters: (50, 15)
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:format_multi_results:2425:Shape of estimated parameters: (50, 15)
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:format_multi_results:2425:Shape of estimated parameters: (50, 15)
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1409:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8a91623b48>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/Kholodenko2000_variant1.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1218:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/Kholodenko2000_variant1.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1686:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1728:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/Kholodenko2000_variant1.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/Kholodenko2000_variant1.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1735:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:read_sim_data:1741:Reading timecourse
+DEBUG:PyCoTools.pycopi:pycopi:read_sim_data:1743:pruning headers of copasi files of COPASI references
+DEBUG:PyCoTools.pycopi:pycopi:plot:1751:plotting time course
+DEBUG:PyCoTools.pycopi:pycopi:read_fit_config:4841:Reading fit configuration
+DEBUG:PyCoTools.pycopi:pycopi:read_fit_config:4847:These are the cps files in your fit config:
+DEBUG:PyCoTools.pycopi:pycopi:read_fit_config:4849:Kholodenko2000_variant1.cps
+DEBUG:PyCoTools.pycopi:pycopi:read_fit_config:4849:Kholodenko2000_variant2.cps
+DEBUG:PyCoTools.pycopi:pycopi:read_fit_config:4849:Kholodenko2000_variant3.cps
+DEBUG:PyCoTools.pycopi:pycopi:read_fit_config:4852:These are the experiment files in your fit config:
+DEBUG:PyCoTools.pycopi:pycopi:read_fit_config:4857:Kholodenko2000_variant1_TimeCourse.txt
+INFO:PyCoTools.pycopi:pycopi:create_workspace:4801:Creating workspace from project_dir
+DEBUG:PyCoTools.pycopi:pycopi:create_workspace:4802:Creating Workspace from files in: 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1
+DEBUG:PyCoTools.pycopi:pycopi:create_workspace:4806:New Working directory is:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1
+DEBUG:PyCoTools.pycopi:pycopi:create_workspace:4811:changing directory to project_dir: 
+(/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1) to read relevent .cps and exp files
+DEBUG:PyCoTools.pycopi:pycopi:create_workspace:4812:Creating a directory in working directory for each of the model files
+INFO:PyCoTools.pycopi:pycopi:create_workspace:4827:Workspace created
+DEBUG:PyCoTools.pycopi:pycopi:instantiate_run_multi_PEs_class:4705:instantiating an instance of runMultiplePEs for each model
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4254:Performing multi parameter fit for model at:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant3/Kholodenko2000_variant3.cps
+DEBUG:PyCoTools.pycopi:pycopi:_create_defaults:4500:Using default report name:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant3/ParameterFit.txt
+INFO:PyCoTools.pycopi:pycopi:_create_output_directory:4542:creating a directory for analysis in : 
+
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant3/MultipleParameterEsimationAnalysis
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:4555:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4354:Create an instance of ParameterEstimation
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4254:Performing multi parameter fit for model at:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant2/Kholodenko2000_variant2.cps
+DEBUG:PyCoTools.pycopi:pycopi:_create_defaults:4500:Using default report name:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant2/ParameterFit.txt
+INFO:PyCoTools.pycopi:pycopi:_create_output_directory:4542:creating a directory for analysis in : 
+
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant2/MultipleParameterEsimationAnalysis
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:4555:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4354:Create an instance of ParameterEstimation
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4254:Performing multi parameter fit for model at:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant1/Kholodenko2000_variant1.cps
+DEBUG:PyCoTools.pycopi:pycopi:_create_defaults:4500:Using default report name:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant1/ParameterFit.txt
+INFO:PyCoTools.pycopi:pycopi:_create_output_directory:4542:creating a directory for analysis in : 
+
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant1/MultipleParameterEsimationAnalysis
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:4555:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4354:Create an instance of ParameterEstimation
+DEBUG:PyCoTools.pycopi:pycopi:instantiate_run_multi_PEs_class:4715:Each instance of RunMultiplePEs is being held in a dct:
+{'/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant1/Kholodenko2000_variant1.cps': <PyCoTools.pycopi.RunMultiplePEs instance at 0x7f8a8fcddf80>, '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant2/Kholodenko2000_variant2.cps': <PyCoTools.pycopi.RunMultiplePEs instance at 0x7f8a8fcdd128>, '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant3/Kholodenko2000_variant3.cps': <PyCoTools.pycopi.RunMultiplePEs instance at 0x7f8a910d3758>}
+DEBUG:PyCoTools.pycopi:pycopi:get_output_directories:4723:getting output directories
+DEBUG:PyCoTools.pycopi:pycopi:get_output_directories:4726:output directory for model 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant1/Kholodenko2000_variant1.cps:
+DEBUG:PyCoTools.pycopi:pycopi:get_output_directories:4727:		/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant1/MultipleParameterEsimationAnalysis
+DEBUG:PyCoTools.pycopi:pycopi:get_output_directories:4726:output directory for model 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant2/Kholodenko2000_variant2.cps:
+DEBUG:PyCoTools.pycopi:pycopi:get_output_directories:4727:		/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant2/MultipleParameterEsimationAnalysis
+DEBUG:PyCoTools.pycopi:pycopi:get_output_directories:4726:output directory for model 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant3/Kholodenko2000_variant3.cps:
+DEBUG:PyCoTools.pycopi:pycopi:get_output_directories:4727:		/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant3/MultipleParameterEsimationAnalysis
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1409:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8a8e0fccf8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/Kholodenko2000_variant1.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1218:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/Kholodenko2000_variant1.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1686:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1728:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/Kholodenko2000_variant1.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/Kholodenko2000_variant1.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1735:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:read_fit_config:4841:Reading fit configuration
+DEBUG:PyCoTools.pycopi:pycopi:read_fit_config:4847:These are the cps files in your fit config:
+DEBUG:PyCoTools.pycopi:pycopi:read_fit_config:4849:Kholodenko2000_variant1.cps
+DEBUG:PyCoTools.pycopi:pycopi:read_fit_config:4849:Kholodenko2000_variant2.cps
+DEBUG:PyCoTools.pycopi:pycopi:read_fit_config:4849:Kholodenko2000_variant3.cps
+DEBUG:PyCoTools.pycopi:pycopi:read_fit_config:4852:These are the experiment files in your fit config:
+DEBUG:PyCoTools.pycopi:pycopi:read_fit_config:4857:Kholodenko2000_variant1_TimeCourse.txt
+INFO:PyCoTools.pycopi:pycopi:create_workspace:4801:Creating workspace from project_dir
+DEBUG:PyCoTools.pycopi:pycopi:create_workspace:4802:Creating Workspace from files in: 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1
+DEBUG:PyCoTools.pycopi:pycopi:create_workspace:4806:New Working directory is:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1
+DEBUG:PyCoTools.pycopi:pycopi:create_workspace:4811:changing directory to project_dir: 
+(/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1) to read relevent .cps and exp files
+DEBUG:PyCoTools.pycopi:pycopi:create_workspace:4812:Creating a directory in working directory for each of the model files
+INFO:PyCoTools.pycopi:pycopi:create_workspace:4827:Workspace created
+DEBUG:PyCoTools.pycopi:pycopi:instantiate_run_multi_PEs_class:4705:instantiating an instance of runMultiplePEs for each model
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4254:Performing multi parameter fit for model at:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant3/Kholodenko2000_variant3.cps
+DEBUG:PyCoTools.pycopi:pycopi:_create_defaults:4500:Using default report name:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant3/ParameterFit.txt
+INFO:PyCoTools.pycopi:pycopi:_create_output_directory:4542:creating a directory for analysis in : 
+
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant3/MultipleParameterEsimationAnalysis
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:4555:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4354:Create an instance of ParameterEstimation
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4254:Performing multi parameter fit for model at:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant2/Kholodenko2000_variant2.cps
+DEBUG:PyCoTools.pycopi:pycopi:_create_defaults:4500:Using default report name:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant2/ParameterFit.txt
+INFO:PyCoTools.pycopi:pycopi:_create_output_directory:4542:creating a directory for analysis in : 
+
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant2/MultipleParameterEsimationAnalysis
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:4555:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4354:Create an instance of ParameterEstimation
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4254:Performing multi parameter fit for model at:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant1/Kholodenko2000_variant1.cps
+DEBUG:PyCoTools.pycopi:pycopi:_create_defaults:4500:Using default report name:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant1/ParameterFit.txt
+INFO:PyCoTools.pycopi:pycopi:_create_output_directory:4542:creating a directory for analysis in : 
+
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant1/MultipleParameterEsimationAnalysis
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:4555:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4354:Create an instance of ParameterEstimation
+DEBUG:PyCoTools.pycopi:pycopi:instantiate_run_multi_PEs_class:4715:Each instance of RunMultiplePEs is being held in a dct:
+{'/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant1/Kholodenko2000_variant1.cps': <PyCoTools.pycopi.RunMultiplePEs instance at 0x7f8a8fd5dbd8>, '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant2/Kholodenko2000_variant2.cps': <PyCoTools.pycopi.RunMultiplePEs instance at 0x7f8a90e23ea8>, '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant3/Kholodenko2000_variant3.cps': <PyCoTools.pycopi.RunMultiplePEs instance at 0x7f8a90151ea8>}
+DEBUG:PyCoTools.pycopi:pycopi:get_output_directories:4723:getting output directories
+DEBUG:PyCoTools.pycopi:pycopi:get_output_directories:4726:output directory for model 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant1/Kholodenko2000_variant1.cps:
+DEBUG:PyCoTools.pycopi:pycopi:get_output_directories:4727:		/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant1/MultipleParameterEsimationAnalysis
+DEBUG:PyCoTools.pycopi:pycopi:get_output_directories:4726:output directory for model 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant2/Kholodenko2000_variant2.cps:
+DEBUG:PyCoTools.pycopi:pycopi:get_output_directories:4727:		/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant2/MultipleParameterEsimationAnalysis
+DEBUG:PyCoTools.pycopi:pycopi:get_output_directories:4726:output directory for model 
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant3/Kholodenko2000_variant3.cps:
+DEBUG:PyCoTools.pycopi:pycopi:get_output_directories:4727:		/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant3/MultipleParameterEsimationAnalysis

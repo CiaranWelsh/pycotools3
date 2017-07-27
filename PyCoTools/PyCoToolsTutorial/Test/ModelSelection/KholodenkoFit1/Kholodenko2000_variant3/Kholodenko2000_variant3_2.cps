@@ -932,7 +932,7 @@ Reaction scheme where the products are created from the reactants and the change
       </Method>
     </Task>
     <Task key="Task_2" name="Scan" type="scan" scheduled="true" updateModel="false">
-      <Report append="false" confirmOverwrite="false" reference="Report_68" target="/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant3/MultipleParameterEsimationAnalysis/ParameterFit2.txt"/><Problem>
+      <Report append="false" confirmOverwrite="false" reference="Report_99" target="/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ModelSelection/KholodenkoFit1/Kholodenko2000_variant3/MultipleParameterEsimationAnalysis/ParameterFit2.txt"/><Problem>
         <Parameter name="Subtask" type="unsignedInteger" value="5"/>
         <ParameterGroup name="ScanItems">
         <ParameterGroup name="ScanItem"><Parameter name="Number of steps" type="unsignedInteger" value="50"/><Parameter name="Type" type="unsignedInteger" value="0"/><Parameter name="Object" type="cn" value="CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Compartments[uVol],Vector=Metabolites[Mek1-PP],Reference=InitialConcentration"/></ParameterGroup></ParameterGroup>
@@ -1228,7 +1228,7 @@ Reaction scheme where the products are created from the reactants and the change
         <Object cn="CN=Root,Vector=TaskList[Linear Noise Approximation],Object=Result"/>
       </Footer>
     </Report>
-  <Report taskType="parameterFitting" separator="&#9;" precision="6" key="Report_32" name="parameter_estimation"><Comment/><Footer><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"/><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/></Footer></Report><Report taskType="parameterFitting" separator="&#9;" precision="6" key="Report_68" name="multi_parameter_estimation"><Comment/><Table printTitle="1"><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"/><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/></Table></Report></ListOfReports>
+  <Report taskType="parameterFitting" separator="&#9;" precision="6" key="Report_32" name="parameter_estimation"><Comment/><Footer><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"/><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/></Footer></Report><Report taskType="parameterFitting" separator="&#9;" precision="6" key="Report_99" name="multi_parameter_estimation"><Comment/><Table printTitle="1"><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"/><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/></Table></Report></ListOfReports>
   <GUI>
   </GUI>
   <SBMLReference file="Kholodenko2000.xml">

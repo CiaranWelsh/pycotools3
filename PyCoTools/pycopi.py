@@ -2425,6 +2425,11 @@ class FormatPEData():
             LOG.debug('Shape of estimated parameters: {}'.format(data.shape))
             ### parameter of interest has been removed. 
             names = self.GMQ.get_fit_item_order()+['RSS']
+            if self.GMQ.get_fit_item_order() == []:
+                raise Errors.SomethingWentHorriblyWrongError('Parameter Estimation task is empty')
+            if len(names) != data.shape[1]:
+                raise Errors.SomethingWentHorriblyWrongError('length of parameter estimation data does not equal number of parameters estimated')
+                
             if os.path.isfile(self.report_name):
                 os.remove(self.report_name)
             data.columns = names
@@ -4359,8 +4364,15 @@ class RunMultiplePEs():
         Copasi output does not have headers. This function 
         gives PE data output headers
         """
-        for report_file in self.report_files:
-            FormatPEData(self.copasi_file, self.report_files[report_file], report_type='multi_parameter_estimation')
+        try:
+            cps_keys = self.sub_copasi_files.keys()
+        except AttributeError:
+            self.setup()
+            cps_keys = self.sub_copasi_files.keys()
+        report_keys = self.report_files.keys()
+        for i in range(len(self.report_files)):
+            FormatPEData(self.sub_copasi_files[cps_keys[i]], self.report_files[report_keys[i]],
+                         report_type='multi_parameter_estimation')
         return self.report_files
 
     def setup(self):
@@ -4861,7 +4873,7 @@ class MultiModelFit():
         Method for giving appropiate headers to parameter estimation data
         """
         for RMPE in self.RMPE_dct:
-            self.RMPE_dct[RMPE].format_data()
+            self.RMPE_dct[RMPE].format_results()
 #        [RMPE.format_data() for RMPE in self.RMPE_dct[RMPE]]
             
         
@@ -5260,4 +5272,4 @@ class HighThroughputFit():
         
             
 if __name__=='__main__':
-    pass
+    execfile('/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/testing_kholodenko_manually.py')
