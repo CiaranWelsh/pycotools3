@@ -4854,6 +4854,17 @@ class MultiModelFit():
         if exp_list==[]:
             raise Errors.InputError('No experiment files in your project')
         return cps_list,exp_list
+    
+    
+    def format_data(self):
+        """
+        Method for giving appropiate headers to parameter estimation data
+        """
+        for RMPE in self.RMPE_dct:
+            self.RMPE_dct[RMPE].format_data()
+#        [RMPE.format_data() for RMPE in self.RMPE_dct[RMPE]]
+            
+        
         
 
 class InsertParameters():
