@@ -694,8 +694,6 @@ class PlotParameterEnsemble():
             times[i]['intervals']=int(d[i].shape[0])-1
         return times
         
-    
-    
     def simulate_ensemble(self):
         """
         
@@ -730,10 +728,6 @@ class PlotParameterEnsemble():
         data = self.ensemble_data.reset_index(level=1, drop=True)
         data.index.name = 'ParameterFitIndex'
         data = data.reset_index()
-#        print data
-#        data = data.drop('level_1' , axis=1)
-#        data.columns = ['Unit']+list(data.columns[1:])
-#        data['condition'] = 'One'
         for parameter in data.keys():
             plt.figure()
             seaborn.tsplot(data, time='Time', value=parameter,
@@ -749,11 +743,6 @@ class PlotParameterEnsemble():
     
     
     
-        
-        
-            
-            
-
 class PlotPEData(object):
     '''
     plot a parameter estimation run against experimental data. 

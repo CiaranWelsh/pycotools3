@@ -38,13 +38,13 @@ results_f = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test
 #if os.path.isfile(TC['report_name']):
 #    os.remove(TC['report_name'])
 #noisy.to_csv(TC['report_name'], sep='\t')
-RMPE = PyCoTools.pycopi.RunMultiplePEs(model, TC['report_name'], copy_number = 4,
-                                       pe_number = 25, population_size = 100, 
-                                       number_of_generations=400, results_directory = 'Test1')
-##
-#RMPE.write_config_template()
-RMPE.setup()
-RMPE.run()
+#RMPE = PyCoTools.pycopi.RunMultiplePEs(model, TC['report_name'], copy_number = 4,
+#                                       pe_number = 25, population_size = 100, 
+#                                       number_of_generations=400, results_directory = 'Test1')
+###
+##RMPE.write_config_template()
+#RMPE.setup()
+#RMPE.run()
 #RMPE.format_results()
 
 
