@@ -56,6 +56,7 @@ import logging
 from subprocess import check_call,Popen
 import glob
 import numpy 
+from textwrap import wrap
 from sklearn.decomposition import PCA
 LOG=logging.getLogger(__name__)
 
@@ -1015,7 +1016,7 @@ class PlotPEData(object):
         plot one parameter of one experiment. for iterating over in 
         other functions
         '''
-        sns.set_context(context='poster',font_scale=2)
+        seaborn.set_context(context='poster',font_scale=2)
         if fle not in self.experiment_files:
             raise Errors.InputError('{} not in {}'.format(fle,self.exp_times))
         if parameter not in self.sim_data[fle].keys() and parameter not in self.experiment_data[fle].keys():

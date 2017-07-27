@@ -28,12 +28,78 @@ results_f = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test
 
 
 
+
+
+
+
+import pandas
+import os,glob
+import site
+site.addsitedir(r'/home/b3053674/Documents/PyCoTools')
+import PyCoTools
+from PyCoTools.PyCoToolsTutorial import test_models
+
+TM = test_models.TestModels()
+kholodenko_string = TM.get_kholodenko_variant1()
+dire = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial'
+kholodenko_model = os.path.join(dire, 'kholodenko_model.cps')
+
+with open(kholodenko_model, 'w') as f:
+    f.write(kholodenko_string)
+    
+    
+#GMQ = PyCoTools.pycopi.GetModelQuantities(kholodenko_model)
+#print GMQ.get_local_kinetic_parameters_cns()    
+    
+    
+
+report= 'parameter_estimation_synthetic_data.txt'
+TC=PyCoTools.pycopi.TimeCourse(kholodenko_model,end=1000,intervals=10,step_size=100,
+                            report_name = report, global_quantities=None)
+
+
+## Give fake data a meaningful name
+data1 = TC['report_name']
+
+
+
+
+
+
+
+
+
+from PyCoTools.pycopi import ParameterEstimation 
+
+report = 'parameter_estimation_data2.txt'
+PE=ParameterEstimation(kholodenko_model,data1,method='GeneticAlgorithm',plot=True,
+                       population_size = 100,number_of_generations= 300,
+                       report_name = report, lower_bound=0.1, upper_bound=100,
+                       metabolites=[], global_quantities=[])
+
+
+PE.write_config_template()
+PE.setup()
+PE.run()
+#PE.format_results()
+
+os.system('CopasiUI {}'.format(kholodenko_model))
+#
+
+
+
+
+
+
 #PyCoTools.pycopi.FormatPEData(model, '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/ParameterFit0.txt', 
 #                              report_type='multi_parameter_estimation')
 
 
-TC = PyCoTools.pycopi.TimeCourse(model, end = 1000, step_size=100, intervals=10,
-                            plot=False)
+#TC = PyCoTools.pycopi.TimeCourse(model, end = 1000, step_size=100, intervals=10,
+#                            plot=False)
+
+
+
 #noisy = PyCoTools.Misc.add_noise(TC['report_name'])
 #if os.path.isfile(TC['report_name']):
 #    os.remove(TC['report_name'])
