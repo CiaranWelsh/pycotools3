@@ -14,7 +14,7 @@
 
  You should have received a copy of the GNU Lesser General Public License
  along with PyCoTools.  If not, see <http://www.gnu.org/licenses/>.
-TimeC
+
 
  This file is intended to provide a COPASI user an alternative to 
  using the official python-copasi API. At present support is 
@@ -4431,6 +4431,7 @@ class RunMultiplePEs():
         LOG.info('writing PE config template for model: {}'.format(self.copasi_file))
         LOG.debug('config_filename is {}'.format(self.PE.kwargs['config_filename']))
         self.PE.write_config_template()
+        return self.PE['config_filename']
         
         
     ##void    
@@ -4610,8 +4611,7 @@ class MultiModelFit():
                 
             All other kwargs are described in runMultiplePEs or ParameterEstimation
     '''
-    def __init__(self,project_config,outdir,**kwargs):
-        self.outdir=outdir
+    def __init__(self,project_config,**kwargs):
         self.project_dir=project_config
 #        self.config_filename=config_filename
         self.do_checks()
@@ -4696,18 +4696,11 @@ class MultiModelFit():
         '''
         LOG.debug('instantiating an instance of runMultiplePEs for each model')
         dct={}
-#        run_multiple_pes_kwargs=self.kwargs
-#        del run_multiple_pes_kwargs['method']
-#        if self.kwargs['config_filename']==None:
-#            self.kwargs['config_filename']='PEConfigFile.xlsx'
             
         for cps_dir in self.sub_cps_dirs:
             os.chdir(cps_dir)
             if os.path.isabs(self.kwargs['config_filename']):
                 self.kwargs['config_filename']=os.path.split(self.kwargs['config_filename'])[1]
-#            LOG.debug('config_filename is {}'.format(self.kwargs['config_filename']))
-#            self.kwargs['config_filename']=os.path.join(cps_dir,self.kwargs['config_filename'])
-#            LOG.debug('config filename after modification is: {}'.format(self.kwargs['config_filename']))
             dct[self.sub_cps_dirs[cps_dir]]=RunMultiplePEs(self.sub_cps_dirs[cps_dir],
                                                            self.exp_files,**self.kwargs)
             
@@ -4733,10 +4726,15 @@ class MultiModelFit():
         A class to write a config file template for each 
         model in the analysis. Calls the corresponding
         write_config_template from the runMultiplePEs class
+        ===returns=== 
+        list of config files
         '''
+        conf_list=[]
         for RMPE in self.RMPE_dct:
-            self.RMPE_dct[RMPE].write_config_template()
-            
+            f = self.RMPE_dct[RMPE].write_config_template()
+            conf_list.append(f)
+        return conf_list 
+    
     def setup(self):
         '''
         A user interface class which calls the corresponding
@@ -4795,7 +4793,7 @@ class MultiModelFit():
         LOG.info('Creating workspace from project_dir')
         LOG.debug('Creating Workspace from files in: \n{}'.format(self.project_dir))
         ## Create entire working directory for analysis
-        self.wd=os.path.join(self.project_dir,self.outdir)
+        self.wd=self.project_dir
         
         LOG.debug('New Working directory is:\n{}'.format(self.wd))
         if os.path.isdir(self.wd)!=True:
