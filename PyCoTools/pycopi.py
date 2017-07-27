@@ -3355,10 +3355,30 @@ class ParameterEstimation():
         
       
     def get_item_template(self):
+        '''
+         'metabolites':self.GMQ.get_IC_cns().keys(),
+         'global_quantities':self.GMQ.get_global_quantities().keys(),
+         'local_parameters': self.GMQ.get_local_kinetic_parameters_cns().keys(),
+        '''        
         local_params= self.GMQ.get_local_kinetic_parameters_cns()
+        
+        for key in local_params.keys():
+            if key not in self['local_parameters']:
+                del local_params[key]
+                
         LOG.debug(local_params)
         global_params= self.GMQ.get_global_quantities_cns()
+        
+        for key in global_params.keys():
+            if key not in self['global_quantities']:
+                del global_params[key]
+                
         IC_params= self.GMQ.get_IC_cns()
+        
+        for key in IC_params.keys():
+            if key not in self['metabolites']:
+                del IC_params[key]
+                
         df_list_local=[]
         df_list_global=[]
         df_list_ICs=[]
