@@ -3944,6 +3944,7 @@ INFO:PyCoTools.pycopi:pycopi:run:4435:running model: 4
 DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_4.cps
 INFO:PyCoTools.pycopi:pycopi:run:4435:running model: 5
 DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_5.cps
+<<<<<<< HEAD
 INFO:root:__init__:<module>:26:Initializing PyCoTools
 INFO:root:__init__:<module>:27:Initializing logging System
 INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
@@ -4214,3 +4215,5 @@ INFO:PyCoTools.pycopi:pycopi:run:4436:running model: 4
 DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_4.cps
 INFO:PyCoTools.pycopi:pycopi:run:4436:running model: 5
 DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_5.cps
+=======
+>>>>>>> 3943bd6... commit
