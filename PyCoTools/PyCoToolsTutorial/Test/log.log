@@ -3583,3 +3583,364 @@ DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1156:Reports PE se
 DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
 DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
 DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:format_results:2399:Shape of estimated parameters: (1, 23)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4976:These are kwargs {'index': 0, 'df':    (phosphorylation of MAPKK).KK3  (MAPKKK activation).K1  \
+0                          25.513                0.221883   
+
+   (dephosphorylation of MAPK-PP).V9  (phosphorylation of MAPK).k7  \
+0                            1.37247                      0.143666   
+
+   (phosphorylation of MAPK-P).k8  (MAPKKK inactivation).KK2  \
+0                        0.229363                   0.121368   
+
+   (MAPKKK inactivation).V2  (phosphorylation of MAPKK).k3  \
+0                  0.102785                       0.104803   
+
+   (phosphorylation of MAPKK-P).k4  (dephosphorylation of MAPKK-PP).KK5  \
+0                              0.1                              10.6407   
+
+    ...     (MAPKKK activation).V1  (MAPKKK activation).Ki  \
+0   ...                    19.0444                 6.79604   
+
+   (phosphorylation of MAPK).KK7  (dephosphorylation of MAPK-P).KK10  \
+0                        73.8969                             0.71537   
+
+   (phosphorylation of MAPK-P).KK8  (dephosphorylation of MAPKK-PP).V5  \
+0                           59.778                            0.706336   
+
+   (dephosphorylation of MAPK-P).V10  (dephosphorylation of MAPKK-P).V6  \
+0                           0.237709                            1.00756   
+
+   (MAPKKK activation).n      RSS  
+0                44.7973  7995.23  
+
+[1 rows x 23 columns], 'report_name': 'kholodenko_model_PE_results.txt', 'metabolites': ['Mek1-PP', 'Erk2', 'Mos', 'Erk2-P', 'Erk2-PP', 'Mos-P', 'Mek1', 'Mek1-P'], 'parameter_path': None, 'quantity_type': 'concentration', 'global_quantities': ['Mek_tot', 'Erk_tot', 'Erk-P_tot', 'Mos-P_tot', 'Mek-P_tot', 'Mos_tot'], 'save': 'overwrite', 'parameter_dict': None}
+INFO:PyCoTools.pycopi:pycopi:check_parameter_consistancy:5021:Model parameter names: set(['Erk-P_tot', 'Erk_tot', '(phosphorylation of MAPKK).KK3', '(MAPKKK activation).K1', 'Erk2-P', '(dephosphorylation of MAPK-PP).V9', 'Mos-P', '(phosphorylation of MAPK).k7', 'Mos-P_tot', 'Mos_tot', '(phosphorylation of MAPK-P).k8', '(MAPKKK inactivation).KK2', '(MAPKKK inactivation).V2', 'Mos', 'Mek_tot', 'Erk2-PP', '(phosphorylation of MAPKK).k3', '(phosphorylation of MAPKK-P).k4', '(dephosphorylation of MAPKK-PP).KK5', 'uVol', '(phosphorylation of MAPK-P).KK8', '(dephosphorylation of MAPK-PP).KK9', '(dephosphorylation of MAPKK-P).KK6', '(phosphorylation of MAPKK-P).KK4', 'Erk2', '(MAPKKK activation).V1', '(MAPKKK activation).Ki', 'Mek-P_tot', '(phosphorylation of MAPK).KK7', '(dephosphorylation of MAPK-P).KK10', 'Mek1-PP', '(dephosphorylation of MAPKK-PP).V5', '(dephosphorylation of MAPK-P).V10', 'Mek1', 'Mek1-P', '(dephosphorylation of MAPKK-P).V6', '(MAPKKK activation).n'])
+INFO:PyCoTools.pycopi:pycopi:check_parameter_consistancy:5022:
+
+
+INFO:PyCoTools.pycopi:pycopi:check_parameter_consistancy:5023:Input parameter names: set(['(phosphorylation of MAPKK).KK3', '(MAPKKK activation).K1', '(dephosphorylation of MAPK-PP).V9', '(phosphorylation of MAPK).k7', '(phosphorylation of MAPK-P).k8', '(MAPKKK inactivation).KK2', '(MAPKKK inactivation).V2', '(phosphorylation of MAPKK).k3', '(phosphorylation of MAPKK-P).k4', '(dephosphorylation of MAPKK-PP).KK5', '(dephosphorylation of MAPK-PP).KK9', '(dephosphorylation of MAPKK-P).KK6', '(phosphorylation of MAPKK-P).KK4', '(MAPKKK activation).V1', '(MAPKKK activation).Ki', '(phosphorylation of MAPK).KK7', '(dephosphorylation of MAPK-P).KK10', '(phosphorylation of MAPK-P).KK8', '(dephosphorylation of MAPKK-PP).V5', '(dephosphorylation of MAPK-P).V10', 'RSS', '(dephosphorylation of MAPKK-P).V6', '(MAPKKK activation).n'])
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5067:Local parameters being inserted into model: ['(phosphorylation of MAPKK).KK3', '(MAPKKK activation).K1', '(dephosphorylation of MAPK-PP).V9', '(phosphorylation of MAPK).k7', '(phosphorylation of MAPK-P).k8', '(MAPKKK inactivation).KK2', '(MAPKKK inactivation).V2', '(phosphorylation of MAPKK).k3', '(phosphorylation of MAPKK-P).k4', '(dephosphorylation of MAPKK-PP).KK5', '(dephosphorylation of MAPK-PP).KK9', '(dephosphorylation of MAPKK-P).KK6', '(phosphorylation of MAPKK-P).KK4', '(MAPKKK activation).V1', '(MAPKKK activation).Ki', '(phosphorylation of MAPK).KK7', '(dephosphorylation of MAPK-P).KK10', '(phosphorylation of MAPK-P).KK8', '(dephosphorylation of MAPKK-PP).V5', '(dephosphorylation of MAPK-P).V10', '(dephosphorylation of MAPKK-P).V6', '(MAPKKK activation).n']
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5076:Constructing a dict of reaction:parameter for local parameters: {'KK9': 'dephosphorylation of MAPK-PP', 'KK8': 'phosphorylation of MAPK-P', 'KK5': 'dephosphorylation of MAPKK-PP', 'KK4': 'phosphorylation of MAPKK-P', 'KK7': 'phosphorylation of MAPK', 'KK6': 'dephosphorylation of MAPKK-P', 'KK3': 'phosphorylation of MAPKK', 'KK2': 'MAPKKK inactivation', 'K1': 'MAPKKK activation', 'k3': 'phosphorylation of MAPKK', 'V1': 'MAPKKK activation', 'V2': 'MAPKKK inactivation', 'k7': 'phosphorylation of MAPK', 'V5': 'dephosphorylation of MAPKK-PP', 'V6': 'dephosphorylation of MAPKK-P', 'k4': 'phosphorylation of MAPKK-P', 'V9': 'dephosphorylation of MAPK-PP', 'k8': 'phosphorylation of MAPK-P', 'Ki': 'MAPKKK activation', 'KK10': 'dephosphorylation of MAPK-P', 'V10': 'dephosphorylation of MAPK-P', 'n': 'MAPKKK activation'}
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5100:States:	 ['Model_7', 'Metabolite_45', 'Metabolite_51', 'Metabolite_33', 'Metabolite_11', 'Metabolite_49', 'Metabolite_47', 'Metabolite_1', 'Metabolite_53', 'ModelValue_11', 'ModelValue_10', 'ModelValue_9', 'ModelValue_8', 'ModelValue_7', 'ModelValue_6', 'Compartment_6']
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5111:State Model_7 is model
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5116:Added 0 for first parameter in sequence
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5118:State Metabolite_45 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5118:State Metabolite_51 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5118:State Metabolite_33 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5118:State Metabolite_11 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5118:State Metabolite_49 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5118:State Metabolite_47 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5118:State Metabolite_1 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5118:State Metabolite_53 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5137:State ModelValue_11 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5137:State ModelValue_10 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5137:State ModelValue_9 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5137:State ModelValue_8 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5137:State ModelValue_7 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5137:State ModelValue_6 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1409:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8a91624ab8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1218:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1686:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1728:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1735:Time course ran
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1409:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8a9099d488>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1218:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1686:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1728:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1735:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2244:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2247:Mapping experiment parameter_estimation_synthetic_data.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1201:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1156:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8a90afe098>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:format_results:2399:Shape of estimated parameters: (1, 23)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4976:These are kwargs {'index': 0, 'df':    (phosphorylation of MAPKK).KK3  (MAPKKK activation).K1  \
+0                           100.0                 33.4599   
+
+   (dephosphorylation of MAPK-PP).V9  (phosphorylation of MAPK).k7  \
+0                           0.120864                       0.10823   
+
+   (phosphorylation of MAPK-P).k8  (MAPKKK inactivation).KK2  \
+0                         1.45562                   0.193581   
+
+   (MAPKKK inactivation).V2  (phosphorylation of MAPKK).k3  \
+0                       0.1                            0.1   
+
+   (phosphorylation of MAPKK-P).k4  (dephosphorylation of MAPKK-PP).KK5  \
+0                              0.1                              24.5261   
+
+    ...     (MAPKKK activation).V1  (MAPKKK activation).Ki  \
+0   ...                   0.617073                 99.7871   
+
+   (phosphorylation of MAPK).KK7  (dephosphorylation of MAPK-P).KK10  \
+0                        84.1248                            0.296337   
+
+   (phosphorylation of MAPK-P).KK8  (dephosphorylation of MAPKK-PP).V5  \
+0                          6.41459                             1.04921   
+
+   (dephosphorylation of MAPK-P).V10  (dephosphorylation of MAPKK-P).V6  \
+0                            92.0166                            1.05711   
+
+   (MAPKKK activation).n      RSS  
+0                16.1641  10041.9  
+
+[1 rows x 23 columns], 'report_name': 'kholodenko_model_PE_results.txt', 'metabolites': ['Mek1-PP', 'Erk2', 'Mos', 'Erk2-P', 'Erk2-PP', 'Mos-P', 'Mek1', 'Mek1-P'], 'parameter_path': None, 'quantity_type': 'concentration', 'global_quantities': ['Mek_tot', 'Erk_tot', 'Erk-P_tot', 'Mos-P_tot', 'Mek-P_tot', 'Mos_tot'], 'save': 'overwrite', 'parameter_dict': None}
+INFO:PyCoTools.pycopi:pycopi:check_parameter_consistancy:5021:Model parameter names: set(['Erk-P_tot', 'Erk_tot', '(phosphorylation of MAPKK).KK3', '(MAPKKK activation).K1', 'Erk2-P', '(dephosphorylation of MAPK-PP).V9', 'Mos-P', '(phosphorylation of MAPK).k7', 'Mos-P_tot', 'Mos_tot', '(phosphorylation of MAPK-P).k8', '(MAPKKK inactivation).KK2', '(MAPKKK inactivation).V2', 'Mos', 'Mek_tot', 'Erk2-PP', '(phosphorylation of MAPKK).k3', '(phosphorylation of MAPKK-P).k4', '(dephosphorylation of MAPKK-PP).KK5', 'uVol', '(phosphorylation of MAPK-P).KK8', '(dephosphorylation of MAPK-PP).KK9', '(dephosphorylation of MAPKK-P).KK6', '(phosphorylation of MAPKK-P).KK4', 'Erk2', '(MAPKKK activation).V1', '(MAPKKK activation).Ki', 'Mek-P_tot', '(phosphorylation of MAPK).KK7', '(dephosphorylation of MAPK-P).KK10', 'Mek1-PP', '(dephosphorylation of MAPKK-PP).V5', '(dephosphorylation of MAPK-P).V10', 'Mek1', 'Mek1-P', '(dephosphorylation of MAPKK-P).V6', '(MAPKKK activation).n'])
+INFO:PyCoTools.pycopi:pycopi:check_parameter_consistancy:5022:
+
+
+INFO:PyCoTools.pycopi:pycopi:check_parameter_consistancy:5023:Input parameter names: set(['(phosphorylation of MAPKK).KK3', '(MAPKKK activation).K1', '(dephosphorylation of MAPK-PP).V9', '(phosphorylation of MAPK).k7', '(phosphorylation of MAPK-P).k8', '(MAPKKK inactivation).KK2', '(MAPKKK inactivation).V2', '(phosphorylation of MAPKK).k3', '(phosphorylation of MAPKK-P).k4', '(dephosphorylation of MAPKK-PP).KK5', '(dephosphorylation of MAPK-PP).KK9', '(dephosphorylation of MAPKK-P).KK6', '(phosphorylation of MAPKK-P).KK4', '(MAPKKK activation).V1', '(MAPKKK activation).Ki', '(phosphorylation of MAPK).KK7', '(dephosphorylation of MAPK-P).KK10', '(phosphorylation of MAPK-P).KK8', '(dephosphorylation of MAPKK-PP).V5', '(dephosphorylation of MAPK-P).V10', 'RSS', '(dephosphorylation of MAPKK-P).V6', '(MAPKKK activation).n'])
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5067:Local parameters being inserted into model: ['(phosphorylation of MAPKK).KK3', '(MAPKKK activation).K1', '(dephosphorylation of MAPK-PP).V9', '(phosphorylation of MAPK).k7', '(phosphorylation of MAPK-P).k8', '(MAPKKK inactivation).KK2', '(MAPKKK inactivation).V2', '(phosphorylation of MAPKK).k3', '(phosphorylation of MAPKK-P).k4', '(dephosphorylation of MAPKK-PP).KK5', '(dephosphorylation of MAPK-PP).KK9', '(dephosphorylation of MAPKK-P).KK6', '(phosphorylation of MAPKK-P).KK4', '(MAPKKK activation).V1', '(MAPKKK activation).Ki', '(phosphorylation of MAPK).KK7', '(dephosphorylation of MAPK-P).KK10', '(phosphorylation of MAPK-P).KK8', '(dephosphorylation of MAPKK-PP).V5', '(dephosphorylation of MAPK-P).V10', '(dephosphorylation of MAPKK-P).V6', '(MAPKKK activation).n']
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5076:Constructing a dict of reaction:parameter for local parameters: {'KK9': 'dephosphorylation of MAPK-PP', 'KK8': 'phosphorylation of MAPK-P', 'KK5': 'dephosphorylation of MAPKK-PP', 'KK4': 'phosphorylation of MAPKK-P', 'KK7': 'phosphorylation of MAPK', 'KK6': 'dephosphorylation of MAPKK-P', 'KK3': 'phosphorylation of MAPKK', 'KK2': 'MAPKKK inactivation', 'K1': 'MAPKKK activation', 'k3': 'phosphorylation of MAPKK', 'V1': 'MAPKKK activation', 'V2': 'MAPKKK inactivation', 'k7': 'phosphorylation of MAPK', 'V5': 'dephosphorylation of MAPKK-PP', 'V6': 'dephosphorylation of MAPKK-P', 'k4': 'phosphorylation of MAPKK-P', 'V9': 'dephosphorylation of MAPK-PP', 'k8': 'phosphorylation of MAPK-P', 'Ki': 'MAPKKK activation', 'KK10': 'dephosphorylation of MAPK-P', 'V10': 'dephosphorylation of MAPK-P', 'n': 'MAPKKK activation'}
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5100:States:	 ['Model_7', 'Metabolite_45', 'Metabolite_51', 'Metabolite_33', 'Metabolite_11', 'Metabolite_49', 'Metabolite_47', 'Metabolite_1', 'Metabolite_53', 'ModelValue_11', 'ModelValue_10', 'ModelValue_9', 'ModelValue_8', 'ModelValue_7', 'ModelValue_6', 'Compartment_6']
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5111:State Model_7 is model
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5116:Added 0 for first parameter in sequence
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5118:State Metabolite_45 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5118:State Metabolite_51 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5118:State Metabolite_33 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5118:State Metabolite_11 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5118:State Metabolite_49 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5118:State Metabolite_47 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5118:State Metabolite_1 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5118:State Metabolite_53 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5137:State ModelValue_11 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5137:State ModelValue_10 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5137:State ModelValue_9 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5137:State ModelValue_8 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5137:State ModelValue_7 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5137:State ModelValue_6 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1409:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8a6b9ab4d0>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1218:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1686:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1728:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1735:Time course ran
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1409:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8a8dfe9560>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1218:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1686:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1728:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1735:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2244:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2247:Mapping experiment parameter_estimation_synthetic_data.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1201:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1156:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8a6e8d5ea8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:format_results:2399:Shape of estimated parameters: (1, 23)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4976:These are kwargs {'index': 0, 'df':    (phosphorylation of MAPKK).KK3  (MAPKKK activation).K1  \
+0                         9.44133                  21.057   
+
+   (dephosphorylation of MAPK-PP).V9  (phosphorylation of MAPK).k7  \
+0                           0.802707                           0.1   
+
+   (phosphorylation of MAPK-P).k8  (MAPKKK inactivation).KK2  \
+0                        0.108247                      100.0   
+
+   (MAPKKK inactivation).V2  (phosphorylation of MAPKK).k3  \
+0                  0.478535                            0.1   
+
+   (phosphorylation of MAPKK-P).k4  (dephosphorylation of MAPKK-PP).KK5  \
+0                         0.166292                              5.43695   
+
+    ...     (MAPKKK activation).V1  (MAPKKK activation).Ki  \
+0   ...                    1.45713                0.526504   
+
+   (phosphorylation of MAPK).KK7  (dephosphorylation of MAPK-P).KK10  \
+0                       0.133211                             6.25329   
+
+   (phosphorylation of MAPK-P).KK8  (dephosphorylation of MAPKK-PP).V5  \
+0                            100.0                            0.398252   
+
+   (dephosphorylation of MAPK-P).V10  (dephosphorylation of MAPKK-P).V6  \
+0                              16.42                           0.442086   
+
+   (MAPKKK activation).n      RSS  
+0                 1.3861  13343.3  
+
+[1 rows x 23 columns], 'report_name': 'kholodenko_model_PE_results.txt', 'metabolites': ['Mek1-PP', 'Erk2', 'Mos', 'Erk2-P', 'Erk2-PP', 'Mos-P', 'Mek1', 'Mek1-P'], 'parameter_path': None, 'quantity_type': 'concentration', 'global_quantities': ['Mek_tot', 'Erk_tot', 'Erk-P_tot', 'Mos-P_tot', 'Mek-P_tot', 'Mos_tot'], 'save': 'overwrite', 'parameter_dict': None}
+INFO:PyCoTools.pycopi:pycopi:check_parameter_consistancy:5021:Model parameter names: set(['Erk-P_tot', 'Erk_tot', '(phosphorylation of MAPKK).KK3', '(MAPKKK activation).K1', 'Erk2-P', '(dephosphorylation of MAPK-PP).V9', 'Mos-P', '(phosphorylation of MAPK).k7', 'Mos-P_tot', 'Mos_tot', '(phosphorylation of MAPK-P).k8', '(MAPKKK inactivation).KK2', '(MAPKKK inactivation).V2', 'Mos', 'Mek_tot', 'Erk2-PP', '(phosphorylation of MAPKK).k3', '(phosphorylation of MAPKK-P).k4', '(dephosphorylation of MAPKK-PP).KK5', 'uVol', '(phosphorylation of MAPK-P).KK8', '(dephosphorylation of MAPK-PP).KK9', '(dephosphorylation of MAPKK-P).KK6', '(phosphorylation of MAPKK-P).KK4', 'Erk2', '(MAPKKK activation).V1', '(MAPKKK activation).Ki', 'Mek-P_tot', '(phosphorylation of MAPK).KK7', '(dephosphorylation of MAPK-P).KK10', 'Mek1-PP', '(dephosphorylation of MAPKK-PP).V5', '(dephosphorylation of MAPK-P).V10', 'Mek1', 'Mek1-P', '(dephosphorylation of MAPKK-P).V6', '(MAPKKK activation).n'])
+INFO:PyCoTools.pycopi:pycopi:check_parameter_consistancy:5022:
+
+
+INFO:PyCoTools.pycopi:pycopi:check_parameter_consistancy:5023:Input parameter names: set(['(phosphorylation of MAPKK).KK3', '(MAPKKK activation).K1', '(dephosphorylation of MAPK-PP).V9', '(phosphorylation of MAPK).k7', '(phosphorylation of MAPK-P).k8', '(MAPKKK inactivation).KK2', '(MAPKKK inactivation).V2', '(phosphorylation of MAPKK).k3', '(phosphorylation of MAPKK-P).k4', '(dephosphorylation of MAPKK-PP).KK5', '(dephosphorylation of MAPK-PP).KK9', '(dephosphorylation of MAPKK-P).KK6', '(phosphorylation of MAPKK-P).KK4', '(MAPKKK activation).V1', '(MAPKKK activation).Ki', '(phosphorylation of MAPK).KK7', '(dephosphorylation of MAPK-P).KK10', '(phosphorylation of MAPK-P).KK8', '(dephosphorylation of MAPKK-PP).V5', '(dephosphorylation of MAPK-P).V10', 'RSS', '(dephosphorylation of MAPKK-P).V6', '(MAPKKK activation).n'])
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5067:Local parameters being inserted into model: ['(phosphorylation of MAPKK).KK3', '(MAPKKK activation).K1', '(dephosphorylation of MAPK-PP).V9', '(phosphorylation of MAPK).k7', '(phosphorylation of MAPK-P).k8', '(MAPKKK inactivation).KK2', '(MAPKKK inactivation).V2', '(phosphorylation of MAPKK).k3', '(phosphorylation of MAPKK-P).k4', '(dephosphorylation of MAPKK-PP).KK5', '(dephosphorylation of MAPK-PP).KK9', '(dephosphorylation of MAPKK-P).KK6', '(phosphorylation of MAPKK-P).KK4', '(MAPKKK activation).V1', '(MAPKKK activation).Ki', '(phosphorylation of MAPK).KK7', '(dephosphorylation of MAPK-P).KK10', '(phosphorylation of MAPK-P).KK8', '(dephosphorylation of MAPKK-PP).V5', '(dephosphorylation of MAPK-P).V10', '(dephosphorylation of MAPKK-P).V6', '(MAPKKK activation).n']
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5076:Constructing a dict of reaction:parameter for local parameters: {'KK9': 'dephosphorylation of MAPK-PP', 'KK8': 'phosphorylation of MAPK-P', 'KK5': 'dephosphorylation of MAPKK-PP', 'KK4': 'phosphorylation of MAPKK-P', 'KK7': 'phosphorylation of MAPK', 'KK6': 'dephosphorylation of MAPKK-P', 'KK3': 'phosphorylation of MAPKK', 'KK2': 'MAPKKK inactivation', 'K1': 'MAPKKK activation', 'k3': 'phosphorylation of MAPKK', 'V1': 'MAPKKK activation', 'V2': 'MAPKKK inactivation', 'k7': 'phosphorylation of MAPK', 'V5': 'dephosphorylation of MAPKK-PP', 'V6': 'dephosphorylation of MAPKK-P', 'k4': 'phosphorylation of MAPKK-P', 'V9': 'dephosphorylation of MAPK-PP', 'k8': 'phosphorylation of MAPK-P', 'Ki': 'MAPKKK activation', 'KK10': 'dephosphorylation of MAPK-P', 'V10': 'dephosphorylation of MAPK-P', 'n': 'MAPKKK activation'}
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5100:States:	 ['Model_7', 'Metabolite_45', 'Metabolite_51', 'Metabolite_33', 'Metabolite_11', 'Metabolite_49', 'Metabolite_47', 'Metabolite_1', 'Metabolite_53', 'ModelValue_11', 'ModelValue_10', 'ModelValue_9', 'ModelValue_8', 'ModelValue_7', 'ModelValue_6', 'Compartment_6']
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5111:State Model_7 is model
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5116:Added 0 for first parameter in sequence
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5118:State Metabolite_45 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5118:State Metabolite_51 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5118:State Metabolite_33 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5118:State Metabolite_11 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5118:State Metabolite_49 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5118:State Metabolite_47 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5118:State Metabolite_1 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5118:State Metabolite_53 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5137:State ModelValue_11 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5137:State ModelValue_10 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5137:State ModelValue_9 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5137:State ModelValue_8 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5137:State ModelValue_7 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5137:State ModelValue_6 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1409:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8a90271320>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1218:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1686:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1728:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1735:Time course ran
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1409:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8a91699cf8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1218:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1686:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1728:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1735:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4275:Performing multi parameter fit for model at:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:_create_defaults:4534:config_filename is None. Reassigning config_filename
+INFO:PyCoTools.pycopi:pycopi:_create_output_directory:4567:creating a directory for analysis in : 
+
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:4580:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4375:Create an instance of ParameterEstimation
+WARNING:PyCoTools.pycopi:pycopi:set_up:3441:The set_up method is deprecated. Use setup() method instead
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2244:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2247:Mapping experiment parameter_estimation_synthetic_data.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1201:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1156:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8a6b976fc8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+INFO:PyCoTools.pycopi:pycopi:copy_copasi:4446:Copying copasi file 6 times
+INFO:PyCoTools.pycopi:pycopi:_setup_scan:4483:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3646:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+INFO:root:pycopi:define_report:3709:defining report
+INFO:PyCoTools.pycopi:pycopi:_setup_scan:4483:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:set_scan_options:3800:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3646:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+INFO:PyCoTools.pycopi:pycopi:_setup1scan:4516:Setup Took 0.13657283783 seconds
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_1.cps
+INFO:root:pycopi:define_report:3709:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_1.cps
+INFO:PyCoTools.pycopi:pycopi:_setup_scan:4483:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:set_scan_options:3800:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_1.cps
+INFO:PyCoTools.pycopi:pycopi:_setup1scan:4516:Setup Took 0.129481077194 seconds
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3646:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_2.cps
+INFO:root:pycopi:define_report:3709:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_2.cps
+INFO:PyCoTools.pycopi:pycopi:_setup_scan:4483:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_3.cps
+DEBUG:PyCoTools.pycopi:pycopi:set_scan_options:3800:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_2.cps
+INFO:PyCoTools.pycopi:pycopi:_setup1scan:4516:Setup Took 0.127035140991 seconds
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3646:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_3.cps
+INFO:root:pycopi:define_report:3709:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_3.cps
+INFO:PyCoTools.pycopi:pycopi:_setup_scan:4483:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_4.cps
+DEBUG:PyCoTools.pycopi:pycopi:set_scan_options:3800:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_3.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_3.cps
+INFO:PyCoTools.pycopi:pycopi:_setup1scan:4516:Setup Took 0.121664047241 seconds
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3646:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_4.cps
+INFO:root:pycopi:define_report:3709:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_4.cps
+INFO:PyCoTools.pycopi:pycopi:_setup_scan:4483:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_5.cps
+DEBUG:PyCoTools.pycopi:pycopi:set_scan_options:3800:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_4.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_4.cps
+INFO:PyCoTools.pycopi:pycopi:_setup1scan:4516:Setup Took 0.123848199844 seconds
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3646:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_5.cps
+INFO:root:pycopi:define_report:3709:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_5.cps
+INFO:PyCoTools.pycopi:pycopi:_setup_scan:4491:<PyCoTools.pycopi.Scan instance at 0x7f8a90778680>
+DEBUG:PyCoTools.pycopi:pycopi:set_scan_options:3800:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_5.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_5.cps
+INFO:PyCoTools.pycopi:pycopi:_setup1scan:4516:Setup Took 0.124366998672 seconds
+INFO:PyCoTools.pycopi:pycopi:run:4435:running model: 0
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+INFO:PyCoTools.pycopi:pycopi:run:4435:running model: 1
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_1.cps
+INFO:PyCoTools.pycopi:pycopi:run:4435:running model: 2
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_2.cps
+INFO:PyCoTools.pycopi:pycopi:run:4435:running model: 3
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_3.cps
+INFO:PyCoTools.pycopi:pycopi:run:4435:running model: 4
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_4.cps
+INFO:PyCoTools.pycopi:pycopi:run:4435:running model: 5
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_5.cps
