@@ -140,7 +140,7 @@ class Boxplot():
                  'xtick_rotation':'vertical',
                  'ylabel':'Estimated Parameter\n Value(Log10)',
                  'title':'Boxplot Showing Distribution of Parameter Estimates',
-                 'save':False,
+                 'savefig':False,
                  'results_directory':os.path.join(os.getcwd(), 'BoxplotResults'),
                  'dpi':300}
         
@@ -185,7 +185,7 @@ class Boxplot():
             plt.xticks(rotation=self['xtick_rotation'])
             plt.title(self['title'])
             plt.ylabel(self['ylabel'])
-            if self['save']:
+            if self['savefig']:
                 boxplot_dir = os.path.join(self['results_directory'], 'Boxplots')
                 if os.path.isdir(boxplot_dir)!=True:
                     os.mkdir(boxplot_dir)
@@ -223,7 +223,7 @@ class RssVsIterations():
                  'xtick_rotation':'horizontal',
                  'ylabel':'Iteration',
                  'title':'RSS Versus Iteration',
-                 'save':False,
+                 'savefig':False,
                  'results_directory':os.path.join(os.getcwd(), 'RssVsIteration'),
                  'dpi':300}
         
@@ -267,7 +267,7 @@ class RssVsIterations():
         plt.xticks(rotation=self['xtick_rotation'])
         plt.title(self['title'])
         plt.ylabel(self['ylabel'])
-        if self['save']:
+        if self['savefig']:
             save_dir = os.path.join(self['results_directory'], 'RssVsIteration')
             if os.path.isdir(save_dir)!=True:
                 os.mkdir(save_dir)
@@ -293,7 +293,7 @@ class Pca():
                  'log10':False,
                  'ylabel':'Iteration',
                  'title':'RSS Versus Iteration',
-                 'save':False,
+                 'savefig':False,
                  'results_directory':os.path.join(os.getcwd(), 'PCAPlots'),
                  'dpi':300,
                  'n_components':2,
@@ -348,7 +348,7 @@ class Pca():
         plt.ylabel('PC2')
         plt.xlabel('PC1')
         plt.title(title)
-        if self['save']:
+        if self['savefig']:
             save_dir = os.path.join(self['results_directory'], 'PCA')
             if os.path.isdir(save_dir)!=True:
                 os.mkdir(save_dir)
@@ -367,7 +367,7 @@ class Histograms():
                  'x':100,
                  'xtick_rotation':'horizontal',
                  'ylabel':'Frequency',
-                 'save':False,
+                 'savefig':False,
                  'results_directory':os.path.join(os.getcwd(), 'Histograms'),
                  'dpi':300}
         
@@ -407,7 +407,7 @@ class Histograms():
             seaborn.distplot(self.data[parameter])
             plt.ylabel(self['ylabel'])
             plt.title('Parameter Distribution, n={}'.format(self.data[parameter].shape[0]))
-            if self['save']:
+            if self['savefig']:
                 save_dir = os.path.join(self['results_directory'], 'Histograms')
                 if os.path.isdir(save_dir)!=True:
                     os.mkdir(save_dir)
@@ -433,7 +433,7 @@ class Scatters():
                  'x':100,
                  'xtick_rotation':'horizontal',
                  'ylabel':'Frequency',
-                 'save':False,
+                 'savefig':False,
                  'results_directory':os.path.join(os.getcwd(), 'Scatters'),
                  'dpi':300}
         
@@ -474,7 +474,7 @@ class Scatters():
         
 #        plt.ylabel(self['ylabel'])
 #        plt.title('Parameter Distribution, n={}'.format(self.data[parameter].shape[0]))
-        if self['save']:
+        if self['savefig']:
             save_dir = os.path.join(self['results_directory'], 'ScatterMatrix')
             if os.path.isdir(save_dir)!=True:
                 os.mkdir(save_dir)
@@ -610,7 +610,7 @@ class PlotParameterEnsemble():
                  'x':5,
                  'xtick_rotation':'horizontal',
                  'ylabel':'Frequency',
-                 'save':False,
+                 'savefig':False,
                  'results_directory':os.path.join(os.getcwd(), 'Scatters'),
                  'dpi':300,
                  'resolution':10} ##resolution: intervals in time course
@@ -734,7 +734,7 @@ class PlotParameterEnsemble():
             seaborn.tsplot(data, time='Time', value=parameter,
                              unit='ParameterFitIndex')
             plt.title('Ensemble Time Course\n for {} (n={})'.format(parameter, self.param_data.shape[0]))
-            if self['save']:
+            if self['savefig']:
                 save_dir = os.path.join(self['results_directory'], 'EnsemblePlots')
                 if os.path.isdir(save_dir)!=True:
                     os.mkdir(save_dir)
@@ -773,9 +773,9 @@ class PlotPEData(object):
             Either 'particle_number' or 'concentration'. Default='concentration'
             
         OutputML:
-            If save set to 'duplicate', this is the duplicate filename. 
+            If savefig set to 'duplicate', this is the duplicate filename. 
             
-        save:
+        savefig:
             either False,'overwrite' or 'duplicate'
             
         parameter_dict:
@@ -815,7 +815,7 @@ class PlotPEData(object):
         default_outputML=os.path.split(self.copasi_file)[1][:-4]+'_Duplicate.cps'
         options={#report variables
                  'report_name':default_report_name,
-                 'save':'overwrite',
+                 'savefig':False,
                  'index':0,
                  'line_width':4,
                  'prune_headers':True,
@@ -972,7 +972,7 @@ class PlotPEData(object):
         return pandas.DataFrame(df.iloc[-1]).transpose()
     
     def insert_parameters(self):
-        pycopi.InsertParameters(self.copasi_file,df=self.parameters,save='overwrite')
+        pycopi.InsertParameters(self.copasi_file,df=self.parameters)
         return self.copasi_file
         
         
@@ -1113,7 +1113,7 @@ class ModelSelection():
         self.number_models=self.get_num_models()
         
         options={#report variables
-                 'save':False,
+                 'savefig':False,
                  'output_directory':self.multi_model_fit.project_dir,
                  'dpi':300}
                  
@@ -1323,12 +1323,12 @@ class ModelSelection():
             plt.xticks(rotation='vertical')
             plt.title('{} Scores'.format(metric))
             plt.xlabel(' ')
-            if self['save']:
+            if self['savefig']:
                 save_dir = os.path.join(self['output_directory'], 'ModelSelectionGraphs')
                 if os.path.isdir(save_dir)!=True:
                     os.mkdir(save_dir)
                 os.chdir(save_dir)
-                fname = os.path.join(save_dir, '{}.jpeg'.format(metric))
+                fname = os.path.join(save_dir, '{}.png'.format(metric))
                 plt.savefig(fname, dpi=self['dpi'], bbox_inches='tight')
   
         
