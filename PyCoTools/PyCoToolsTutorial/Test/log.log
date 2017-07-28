@@ -3945,6 +3945,9 @@ DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053
 INFO:PyCoTools.pycopi:pycopi:run:4435:running model: 5
 DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_5.cps
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8d9ed61... commit to revert
 INFO:root:__init__:<module>:26:Initializing PyCoTools
 INFO:root:__init__:<module>:27:Initializing logging System
 INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
@@ -4215,6 +4218,7 @@ INFO:PyCoTools.pycopi:pycopi:run:4436:running model: 4
 DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_4.cps
 INFO:PyCoTools.pycopi:pycopi:run:4436:running model: 5
 DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_5.cps
+<<<<<<< HEAD
 =======
 >>>>>>> 3943bd6... commit
 INFO:root:__init__:<module>:26:Initializing PyCoTools
@@ -26837,3 +26841,5 @@ DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAP
 DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(phosphorylation_of_MAPK).k7.cps
 =======
 >>>>>>> ad790207fbd64bd409009e1a0c34655ba2e8d094
+=======
+>>>>>>> 8d9ed61... commit to revert
