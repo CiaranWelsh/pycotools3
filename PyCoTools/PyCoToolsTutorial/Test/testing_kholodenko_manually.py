@@ -64,25 +64,33 @@ data1 = TC['report_name']
 
 from PyCoTools.pycopi import RunMultiplePEs
 
+#%% 
+report = 'parameter_estimation_data.txt'
+RMPE=RunMultiplePEs(kholodenko_model,data1, copy_number=6, pe_number=50,
+                       method='GeneticAlgorithm',plot=True,
+                       population_size = 100,number_of_generations= 300,
+                       report_name = report, lower_bound=0.1, upper_bound=100,
+                       metabolites=[], global_quantities=[], savefig=True,
+                       font_size=40)
 
-'''
-This is multi param est stuff
-'''
-#report = 'parameter_estimation_data2.txt'
-#RMPE=RunMultiplePEs(kholodenko_model,data1, copy_number=6, pe_number=50,
-#                       method='GeneticAlgorithm',plot=True,
-#                       population_size = 100,number_of_generations= 300,
-#                       report_name = report, lower_bound=0.1, upper_bound=100,
-#                       metabolites=[], global_quantities=[], savefig=True,
-#                       font_size=40)
+#%%
+#RMPE.write_config_template()
+#%% 
+RMPE.setup()
+#%%
+RMPE.run()
+#%% 
+
+#RMPE.format_results()
+#PyCoTools.PEAnalysis.ParsePEData(RMPE['results_directory'])
+
+
 #
-#
-##RMPE.write_config_template()
-#RMPE.setup()
-#RMPE.run()
-'''
-End of multi param est stuff
-'''
+##%%
+#RMPE.format_results()
+#'''
+#End of multi param est stuff
+#'''
 #PE.format_results()
 
 #os.system('CopasiUI {}'.format(kholodenko_model))
@@ -91,7 +99,9 @@ End of multi param est stuff
 
 
 
+#from PyCoTools import PEAnalysis
 
+#PEAnalysis.Boxplot(RMPE['results_directory'])
 
 
 

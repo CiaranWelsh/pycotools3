@@ -4392,6 +4392,7 @@ class RunMultiplePEs():
             cps_keys = self.sub_copasi_files.keys()
         report_keys = self.report_files.keys()
         for i in range(len(self.report_files)):
+#            LOG.info('{}, {}'.format(self.sub_copasi_files[cps_keys[i]], self.report_files[report_keys[i]]))
             FormatPEData(self.sub_copasi_files[cps_keys[i]], self.report_files[report_keys[i]],
                          report_type='multi_parameter_estimation')
         return self.report_files
