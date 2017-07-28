@@ -3944,3 +3944,273 @@ INFO:PyCoTools.pycopi:pycopi:run:4435:running model: 4
 DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_4.cps
 INFO:PyCoTools.pycopi:pycopi:run:4435:running model: 5
 DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_5.cps
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1409:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f0bcebd8a28>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1218:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1686:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1728:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1735:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4275:Performing multi parameter fit for model at:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:_create_defaults:4534:config_filename is None. Reassigning config_filename
+INFO:PyCoTools.pycopi:pycopi:_create_output_directory:4567:creating a directory for analysis in : 
+
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:4580:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4375:Create an instance of ParameterEstimation
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1409:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f0bcee3a8c0>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1218:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1686:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1728:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1735:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4275:Performing multi parameter fit for model at:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:_create_defaults:4534:config_filename is None. Reassigning config_filename
+INFO:PyCoTools.pycopi:pycopi:_create_output_directory:4567:creating a directory for analysis in : 
+
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:4580:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4375:Create an instance of ParameterEstimation
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1409:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f0be2b846c8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1218:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1686:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1728:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1735:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4275:Performing multi parameter fit for model at:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:_create_defaults:4534:config_filename is None. Reassigning config_filename
+INFO:PyCoTools.pycopi:pycopi:_create_output_directory:4567:creating a directory for analysis in : 
+
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:4580:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4375:Create an instance of ParameterEstimation
+WARNING:PyCoTools.pycopi:pycopi:set_up:3441:The set_up method is deprecated. Use setup() method instead
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2244:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2247:Mapping experiment parameter_estimation_synthetic_data.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1201:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1156:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7f0bce9ba950>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+INFO:PyCoTools.pycopi:pycopi:copy_copasi:4446:Copying copasi file 6 times
+INFO:PyCoTools.pycopi:pycopi:_setup_scan:4483:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3646:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+INFO:root:pycopi:define_report:3709:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+INFO:PyCoTools.pycopi:pycopi:_setup_scan:4483:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:set_scan_options:3800:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+INFO:PyCoTools.pycopi:pycopi:_setup1scan:4516:Setup Took 0.12562584877 seconds
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3646:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_1.cps
+INFO:root:pycopi:define_report:3709:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_1.cps
+INFO:PyCoTools.pycopi:pycopi:_setup_scan:4483:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:set_scan_options:3800:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_1.cps
+INFO:PyCoTools.pycopi:pycopi:_setup1scan:4516:Setup Took 0.125194787979 seconds
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3646:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_2.cps
+INFO:root:pycopi:define_report:3709:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_2.cps
+INFO:PyCoTools.pycopi:pycopi:_setup_scan:4483:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_3.cps
+DEBUG:PyCoTools.pycopi:pycopi:set_scan_options:3800:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_2.cps
+INFO:PyCoTools.pycopi:pycopi:_setup1scan:4516:Setup Took 0.124652862549 seconds
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3646:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_3.cps
+INFO:root:pycopi:define_report:3709:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_3.cps
+INFO:PyCoTools.pycopi:pycopi:_setup_scan:4483:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_4.cps
+DEBUG:PyCoTools.pycopi:pycopi:set_scan_options:3800:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_3.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_3.cps
+INFO:PyCoTools.pycopi:pycopi:_setup1scan:4516:Setup Took 0.123194932938 seconds
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3646:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_4.cps
+INFO:root:pycopi:define_report:3709:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_4.cps
+INFO:PyCoTools.pycopi:pycopi:_setup_scan:4483:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_5.cps
+DEBUG:PyCoTools.pycopi:pycopi:set_scan_options:3800:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_4.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_4.cps
+INFO:PyCoTools.pycopi:pycopi:_setup1scan:4516:Setup Took 0.123381137848 seconds
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3646:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_5.cps
+INFO:root:pycopi:define_report:3709:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_5.cps
+INFO:PyCoTools.pycopi:pycopi:_setup_scan:4491:<PyCoTools.pycopi.Scan instance at 0x7f0bce9c00e0>
+DEBUG:PyCoTools.pycopi:pycopi:set_scan_options:3800:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_5.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_5.cps
+INFO:PyCoTools.pycopi:pycopi:_setup1scan:4516:Setup Took 0.122245073318 seconds
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1409:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f0bcd7e27a0>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1218:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1686:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1728:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1735:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4275:Performing multi parameter fit for model at:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:_create_defaults:4535:config_filename is None. Reassigning config_filename
+INFO:PyCoTools.pycopi:pycopi:_create_output_directory:4568:creating a directory for analysis in : 
+
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:4581:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4375:Create an instance of ParameterEstimation
+WARNING:PyCoTools.pycopi:pycopi:set_up:3441:The set_up method is deprecated. Use setup() method instead
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2244:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2247:Mapping experiment parameter_estimation_synthetic_data.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1201:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1156:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7f0bcd83e950>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+INFO:PyCoTools.pycopi:pycopi:copy_copasi:4447:Copying copasi file 6 times
+INFO:PyCoTools.pycopi:pycopi:_setup_scan:4484:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3646:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+INFO:root:pycopi:define_report:3709:defining report
+INFO:PyCoTools.pycopi:pycopi:_setup_scan:4484:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3646:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:set_scan_options:3800:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+INFO:PyCoTools.pycopi:pycopi:_setup1scan:4517:Setup Took 0.139155864716 seconds
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_1.cps
+INFO:root:pycopi:define_report:3709:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_1.cps
+INFO:PyCoTools.pycopi:pycopi:_setup_scan:4484:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:set_scan_options:3800:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_1.cps
+INFO:PyCoTools.pycopi:pycopi:_setup1scan:4517:Setup Took 0.126731872559 seconds
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3646:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_2.cps
+INFO:root:pycopi:define_report:3709:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_2.cps
+INFO:PyCoTools.pycopi:pycopi:_setup_scan:4484:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_3.cps
+DEBUG:PyCoTools.pycopi:pycopi:set_scan_options:3800:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_2.cps
+INFO:PyCoTools.pycopi:pycopi:_setup1scan:4517:Setup Took 0.129391908646 seconds
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3646:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_3.cps
+INFO:root:pycopi:define_report:3709:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_3.cps
+INFO:PyCoTools.pycopi:pycopi:_setup_scan:4484:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_4.cps
+DEBUG:PyCoTools.pycopi:pycopi:set_scan_options:3800:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_3.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_3.cps
+INFO:PyCoTools.pycopi:pycopi:_setup1scan:4517:Setup Took 0.127026796341 seconds
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3646:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_4.cps
+INFO:root:pycopi:define_report:3709:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_4.cps
+INFO:PyCoTools.pycopi:pycopi:_setup_scan:4484:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_5.cps
+DEBUG:PyCoTools.pycopi:pycopi:set_scan_options:3800:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_4.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_4.cps
+INFO:PyCoTools.pycopi:pycopi:_setup1scan:4517:Setup Took 0.124880075455 seconds
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3646:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_5.cps
+INFO:root:pycopi:define_report:3709:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_5.cps
+INFO:PyCoTools.pycopi:pycopi:_setup_scan:4492:<PyCoTools.pycopi.Scan instance at 0x7f0bcd83e638>
+DEBUG:PyCoTools.pycopi:pycopi:set_scan_options:3800:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_5.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_5.cps
+INFO:PyCoTools.pycopi:pycopi:_setup1scan:4517:Setup Took 0.122437953949 seconds
+INFO:PyCoTools.pycopi:pycopi:run:4436:running model: 0
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+INFO:PyCoTools.pycopi:pycopi:run:4436:running model: 1
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_1.cps
+INFO:PyCoTools.pycopi:pycopi:run:4436:running model: 2
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_2.cps
+INFO:PyCoTools.pycopi:pycopi:run:4436:running model: 3
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_3.cps
+INFO:PyCoTools.pycopi:pycopi:run:4436:running model: 4
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_4.cps
+INFO:PyCoTools.pycopi:pycopi:run:4436:running model: 5
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_5.cps
