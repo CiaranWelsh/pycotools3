@@ -4403,8 +4403,13 @@ class RunMultiplePEs():
             cps_keys = self.sub_copasi_files.keys()
         report_keys = self.report_files.keys()
         for i in range(len(self.report_files)):
+<<<<<<< HEAD
             try:
                 FormatPEData(self.sub_copasi_files[cps_keys[i]], self.report_files[report_keys[i]],
+=======
+#            LOG.info('{}, {}'.format(self.sub_copasi_files[cps_keys[i]], self.report_files[report_keys[i]]))
+            FormatPEData(self.sub_copasi_files[cps_keys[i]], self.report_files[report_keys[i]],
+>>>>>>> 8d9ed61... commit to revert
                          report_type='multi_parameter_estimation')
             except Errors.InputError:
                 LOG.warning('{} is empty. Cannot parse. Skipping this file'.format(self.report_files[report_keys[i]]))

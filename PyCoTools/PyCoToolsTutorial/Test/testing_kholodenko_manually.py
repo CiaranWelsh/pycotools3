@@ -68,9 +68,40 @@ from PyCoTools.pycopi import RunMultiplePEs
 #report = 'parameter_5s()
 ##RMPE.run()
 
+<<<<<<< HEAD
 #results_directory = r'/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults'
 
 model = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps'
+=======
+#%% 
+report = 'parameter_estimation_data.txt'
+RMPE=RunMultiplePEs(kholodenko_model,data1, copy_number=6, pe_number=50,
+                       method='GeneticAlgorithm',plot=True,
+                       population_size = 100,number_of_generations= 300,
+                       report_name = report, lower_bound=0.1, upper_bound=100,
+                       metabolites=[], global_quantities=[], savefig=True,
+                       font_size=40)
+
+#%%
+#RMPE.write_config_template()
+#%% 
+RMPE.setup()
+#%%
+RMPE.run()
+#%% 
+
+#RMPE.format_results()
+#PyCoTools.PEAnalysis.ParsePEData(RMPE['results_directory'])
+
+
+#
+##%%
+#RMPE.format_results()
+#'''
+#End of multi param est stuff
+#'''
+#PE.format_results()
+>>>>>>> 8d9ed61... commit to revert
 
 <<<<<<< HEAD
 #GMQ = PyCoTools.pycopi.GetModelQuantities(model)
@@ -94,10 +125,15 @@ GMQ = PyCoTools.pycopi.GetModelQuantities(model)
 #print GMQ.get_IC_cns()
 #parameter_path = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults'
 
+<<<<<<< HEAD
 >>>>>>> ad790207fbd64bd409009e1a0c34655ba2e8d094
 #PyCoTools.pydentify.ProfileLikelihood(model, parameter_path=parameter_path,
 #                                      index = [0,1,2,3,4], run='slow', log10=True)
+=======
+#from PyCoTools import PEAnalysis
+>>>>>>> 8d9ed61... commit to revert
 
+#PEAnalysis.Boxplot(RMPE['results_directory'])
 
 
 #print os.path.isdir(results_directory)
