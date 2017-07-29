@@ -11499,3 +11499,1754 @@ DEBUG:PyCoTools.pycopi:pycopi:run:1734:setting up deterministic time course
 DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
 DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
 DEBUG:PyCoTools.pycopi:pycopi:run:1741:Time course ran
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0xe721808>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1692:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1734:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1741:Time course ran
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:479:skipping
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:476:skipping
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
+INFO:PyCoTools.pydentify:pydentify:format_results:476:Data already formatted. Skipping the formatting
