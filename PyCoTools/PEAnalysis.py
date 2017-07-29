@@ -47,24 +47,35 @@ import string
 import pandas 
 import matplotlib.pyplot as plt
 import scipy 
-import numpy 
-import Queue
 import os
 import matplotlib
-from textwrap import wrap
 import itertools
-import unittest
-import seaborn as sns
-import pycopi,Errors
-import re
-import seaborn as sns
+import pycopi,Errors, Misc
+import seaborn 
 import logging
 from subprocess import check_call,Popen
-import threading
-#import ipyparallel
-#import math
-
+import glob
+import numpy 
+from textwrap import wrap
+from sklearn.decomposition import PCA
+from sklearn import linear_model
+from sklearn import model_selection
 LOG=logging.getLogger(__name__)
+
+SEABORN_OPTIONS = {'context':'poster',
+                   'font_scale':2}
+
+seaborn.set_context(context=SEABORN_OPTIONS['context'], font_scale=SEABORN_OPTIONS['font_scale'])
+    
+
+def make_default_results_directory(data, savefig, results_directory):
+    if savefig:
+        if results_directory == None:
+            if isinstance(data, str):
+                results_directory = os.path.join(os.path.dirname(data))
+            if isinstance(data, pandas.core.frame.DataFrame):
+                raise Errors.InputError('data is of type {}. The path of your analysis cannot be inferred and therefore you much specify an argument to the results_directory keyword')
+    return results_directory 
 
 class ParsePEData():
     '''
@@ -80,212 +91,675 @@ class ParsePEData():
             Allow one to overwrite the pickle file automatically
             produced for speed. Default=False
     '''
-    def __init__(self,results_path,use_pickle=False,overwrite_pickle=True,drop_constants = False,
-                 pickle_path=None):
-        #input argument variables
-        
-        self.drop_constants = drop_constants        
-        self.results_path=results_path #either file or folder
-        #change directory
-        LOG.info('Parsing data from {} into python'.format(self.results_path))
-        assert os.path.exists(self.results_path),'{} does not exist'.format(self.results_path)
-        self.cwd=os.path.dirname(os.path.abspath(self.results_path))
-        os.chdir(self.cwd)
-        self.pickle_path=pickle_path
-        if self.pickle_path==None:
-            self.pickle_path=os.path.join(self.cwd,'PEData.pickle')
-            self.pickle_path_log=os.path.join(self.cwd,'PEData_log.pickle')
+    def __init__(self,results_path, sep='\t', log10=False):
+        self.results_path = results_path
+        self.log10 = log10
+        self.sep = sep
+
+        if self.log10:
+            self.data = numpy.log10(self._read_data())
         else:
-            self.pickle_path_log=os.path.join(os.path.dirname(self.pickle_path),os.path.splitext(self.pickle_path)[0][:6]+'_log.pickle')
-#        self.from_pickle=True
-        self.use_pickle=use_pickle
-        self.overwrite_pickle=overwrite_pickle
+            self.data = self._read_data()
         
         
-        if os.path.isdir(self.results_path):
-            self.mode='folder'
-        elif os.path.isfile(self.results_path):
-            self.mode='file'
-            
-        if self.use_pickle not in [True,False]:
-            raise Errors.InputError('The argument use_pickle only accepts \'true\' or \'false\'')
-            
-        if self.drop_constants not in [True,False]:
-            raise Errors.InputError('The argument drop_constants only accepts \'true\' or \'false\'')
-            
-        if self.overwrite_pickle not in [True,False]:
-            raise Errors.InputError('The argument overwrite_pickle only accepts \'true\' or \'false\'')
-
-        self.data=self.read_data()
-        if self.data.empty==True:
-            raise Errors.InputError('DataFrame is empty. Your PE data has not been read.')
-        self.data=self.rename_RSS(self.data)
-        self.data=self.sort_data(self.data)
-        self.data=self.data.dropna()
-        if self.drop_constants:
-            self.data=self.filter_constants(self.data)
-        self.data=self.remove_infinite_RSS()
-        self.data=pycopi.PruneCopasiHeaders(self.data).prune()
-        try:
-            self.log_data=self.log10_conversion()
-        except AttributeError:
-            raise TypeError('Could not convert to log10 scale. Chances are this is because you have infinite RSS values in your parameter estimation data. Try changing the optimization settings')
-#            
-
-
-
-    def remove_infinite_RSS(self):
-        for i in self.data['RSS']:
-            if i=='1.#INF' :
-                LOG.info('Your PE data contains infinite RSS values. These data will be removed''')
-                self.remove_infinite_RSS=True
-        if self.remove_infinite_RSS==True:
-            return self.data[self.data['RSS']!='1.#INF'].reset_index(drop=True)
+        
+    def _read_data(self):
+        """
+        
+        """
+        if os.path.isfile(self.results_path):
+            return self.read_PE_data_file(self.results_path)
+        elif os.path.isdir(self.results_path):
+            return self.read_PE_data_folder()
         else:
-            return self.data
-        
-        
-    def filter_constants(self,df):
-        if self.data.shape[0]==1:
-            return self.data
-        else:
-            return df.loc[:, (df != df.ix[0]).any()] 
-        
-    def read_folder(self):
-        '''
-        read folder of tab separated csv files i.e. the output from copasi
-        '''
-        assert os.path.isdir(self.results_path),'{} is not a real directory'.format(self.results_path)
-        df_list=[]
-        for i in os.listdir(self.results_path):
-            path=os.path.join(self.results_path,i)
-            if os.path.splitext(path)[1]=='.txt':
-                df=pandas.read_csv(path,sep='\t')
-                df_list.append(df)
-        return pandas.concat(df_list)
-                
-    def rename_RSS(self,data):
-        '''
-        change the RSS from copasi output to RSS
-        '''
-        b='TaskList[Parameter Estimation].(Problem)Parameter Estimation.Best Value'
-        if b in data.keys():
-            data=data.rename(columns={b:'RSS'})
-        return data
+            raise Errors.InputError('results_path argument should be a PE data file or folder of identically formed PE data files')
 
+    
+    def read_PE_data_file(self, path):
+        """
         
-    def sort_data(self,data):
-        '''
-        sort data in order of increasing RSS
-        '''
-        data.sort_values('RSS',inplace=True)
-        data.reset_index(drop=True,inplace=True)
-        return data
+        """
+        ## check that the data has been formatted before entry into PEAnalysis module
+        data = pandas.read_csv(path, sep='\t', header=None, skiprows=0)
+        for i in data.iloc[0]:
+            if i=='(':
+                raise Errors.InputError('Brackets are still in your data file. Ensure you\'ve properly formatted PE data using the format_results() method')
+        return pandas.read_csv(path, sep=self.sep).sort_values(by='RSS').reset_index(drop=True)
 
+    def read_PE_data_folder(self):
+        """
         
-    def read_file(self):
-        assert self.mode=='file','mode not file'
-        _,ext=os.path.splitext(self.results_path)
-        if ext not in ['.txt','.xlsx','.xls','.csv','.pickle']:
-            raise Errors.InputError('parameter file {} is not a is not .pickle, .txt, .xlsx, .xls or .csv'.format(self.results_path))
-        if ext=='.txt':
-            return pandas.read_csv(self.results_path,sep='\t')
-        elif ext=='xlsx' or ext=='xls':
-            return pandas.read_excel(self.results_path)
-        elif ext=='.csv':
-            return pandas.read_csv(self.results_path)
-        elif ext=='.pickle':
-            return pandas.read_pickle(self.results_path)
+        """
+        ## check that the data has been formatted before entry into PEAnalysis module
+        df_list = []
+        for i in glob.glob(os.path.join(self.results_path,'*.txt')):
+            df_list.append(self.read_PE_data_file(i))
             
-    def read_pickle(self):
-        if os.path.isfile(self.pickle_path)!=True:
-            raise Errors.InputError('Pickle path does not exist')
-        return pandas.read_pickle(self.pickle_path)
+        return pandas.concat(df_list).sort_values(by='RSS').reset_index(drop=True)
+    
+    
+
+    
+class Boxplot():
+    def __init__(self, data, **kwargs):
+        self.data = data
+        
+        options={'sep':'\t',
+                 'log10':False,
+                 'truncate_mode':'percent',
+                 'x':100,
+                 'num_per_plot':6,
+                 'xtick_rotation':'vertical',
+                 'ylabel':'Estimated Parameter\n Value(Log10)',
+                 'title':'Boxplot Showing Distribution of Parameter Estimates',
+                 'savefig':False,
+                 'results_directory':None,
+                 'dpi':300}
+        
+        for i in kwargs.keys():
+            assert i in options.keys(),'{} is not a keyword argument for Boxplot'.format(i)
+        options.update( kwargs)  
+        self.kwargs=options
+
+        ## set default results_directory
+        if kwargs['savefig']:
+            if self['results_directory'] == None:
+                if isinstance(data, str):
+                    self['results_directory'] = os.path.join(os.path.dirname(self.data))
+                if isinstance(data, pandas.core.frame.DataFrame):
+                    raise Errors.InputError('data is of type {}. The path of your analysis cannot be inferred and therefore you much specify an argument to the results_directory keyword')
  
 
+        
+        self.data = self.read_data()
+        self.data = self.truncate_data()
+        self.plot()
+
+    def __getitem__(self,key):
+        if key not in self.kwargs.keys():
+            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
+        return self.kwargs[key]
+    
+    def __setitem__(self,key,value):
+        self.kwargs[key] = value
+
     def read_data(self):
-        '''
-        Read data. The self.for_testing variable only exists for
-        sign posting the tests for this class
-        '''
-        self.for_testing=None
-        def read():
-            if self.mode=='file':
-                return self.read_file()
-            elif self.mode=='folder':
-                return self.read_folder()
-                
-                
-        if self.use_pickle==False:
-            self.for_testing='pickle_false'
-            data=read()
-            data.to_pickle(self.pickle_path)
-            return data
-
-        if self.use_pickle==True:
-            if self.overwrite_pickle==False:
-                self.for_testing='pickle_true_overwrite_false'
-                return self.read_pickle()
-
-            elif self.overwrite_pickle==True:
-                self.for_testing='pickle_true_overwrite_true'
-                if os.path.isfile(self.pickle_path):
-                    os.remove(self.pickle_path)
-                self.use_pickle==False
-                data=read()
-                data.to_pickle(self.pickle_path)
-                return data 
-
-    def log10_conversion(self):
-        return numpy.log10(self.data)
-
-#==============================================================================
-
-class WritePEData():
-    '''
-    Write the sorted parameter estimation data as a flat xlsx file
-    Args
-        results_path:
-            The path to the results file or folder of files with parameter
-            estimation data in
-    **kwargs 
-        log10:
-    '''
-    def __init__(self,results_path,**kwargs):
-        self.results_path=results_path
-        self.PED=ParsePEData(self.results_path)
+        """
+        Both a pandas.DataFrame or a file or list of files can be passed
+        as the data argument. 
+        """
+        if isinstance(self.data, pandas.core.frame.DataFrame)!=True:
+            return ParsePEData(self.data, sep=self['sep'], log10=self['log10']).data
+        else:
+            return self.data
+    
+    def plot(self):
+        """
         
+        """
+            
+        labels=self.divide_data()
+        for label_set in range(len(labels)):
+            plt.figure()#        
+            data = self.data[labels[label_set]]
+            seaborn.boxplot(data = data )
+            plt.xticks(rotation=self['xtick_rotation'])
+            plt.title(self['title'])
+            plt.ylabel(self['ylabel'])
+            if self['savefig']:
+                boxplot_dir = os.path.join(self['results_directory'], 'Boxplots')
+                if os.path.isdir(boxplot_dir)!=True:
+                    os.mkdir(boxplot_dir)
+                os.chdir(boxplot_dir)
+                plt.savefig(os.path.join(boxplot_dir, 'Boxplot{}.jpeg'.format(label_set)), dpi=self['dpi'], bbox_inches='tight')
         
-        options={'log10':False,
-                 
-                     }
+    def truncate_data(self):
+        """
+        
+        """
+        return TruncateData(self.data,mode=self['truncate_mode'],x=self['x'], log10=self['log10']).data
+
+            
+    def divide_data(self):
+        n_vars=len(self.data.keys())
+        n_per_plot= self['num_per_plot']
+#        assert n_per_plot<n_vars,'number of variables per plot must be smaller than the number of variables'
+        int_division= n_vars//n_per_plot
+        remainder=n_vars-(n_per_plot*int_division)
+        l=[]
+        for i in range(int_division):
+            l.append(self.data.keys()[i*n_per_plot:(i+1)*n_per_plot])
+        l.append(self.data.keys()[-remainder:])
+        return [list(i) for i in l]
+        
+    
+class RssVsIterations():
+    def __init__(self, data, **kwargs):
+        self.data = data
+        
+        options={'sep':'\t',
+                 'log10':True,
+                 'truncate_mode':'percent',
+                 'x':100,
+                 'xtick_rotation':'horizontal',
+                 'ylabel':'RSS (Log10)',
+                 'title':'RSS Versus Iteration',
+                 'savefig':False,
+                 'results_directory':None,
+                 'dpi':300}
+        
         for i in kwargs.keys():
-            assert i in options.keys(),'{} is not a keyword argument for TruncateData'.format(i)
+            assert i in options.keys(),'{} is not a keyword argument for RssVsIteration'.format(i)
+        options.update( kwargs)  
+        self.kwargs=options
+
+        self['results_directory'] = make_default_results_directory(self.data, self['savefig'], self['results_directory'])
+        
+        self.data = self.read_data()
+        self.data = self.truncate_data()
+        
+        self['title'] = self['title']+'(n={})'.format(self.data.shape[0])
+
+        
+        
+        LOG.info('plotting RSS Vs Iterations')
+        self.plot()
+
+    def __getitem__(self,key):
+        if key not in self.kwargs.keys():
+            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
+        return self.kwargs[key]
+    
+    def __setitem__(self,key,value):
+        self.kwargs[key] = value
+        
+    def read_data(self):
+        """
+        Both a pandas.DataFrame or a file or list of files can be passed
+        as the data argument. 
+        """
+        if isinstance(self.data, pandas.core.frame.DataFrame)!=True:
+            return ParsePEData(self.data, sep=self['sep'], log10=self['log10']).data
+        else:
+            return self.data
+    
+    def plot(self):
+        """
+        
+        """
+            
+        plt.figure()#        
+        plt.plot(range(self.data['RSS'].shape[0]), self.data['RSS'].sort_values(ascending=True))
+        plt.xticks(rotation=self['xtick_rotation'])
+        plt.title(self['title'])
+        plt.ylabel(self['ylabel'])
+        plt.xlabel('Rank of Best Fit')
+        if self['savefig']:
+            save_dir = os.path.join(self['results_directory'], 'RssVsIteration')
+            if os.path.isdir(save_dir)!=True:
+                os.mkdir(save_dir)
+            os.chdir(save_dir)
+            plt.savefig(os.path.join(save_dir, 'RssVsIteration.jpeg'), dpi=self['dpi'], bbox_inches='tight')
+        
+    def truncate_data(self):
+        """
+        
+        """
+        return TruncateData(self.data,mode=self['truncate_mode'],x=self['x'], log10=self['log10']).data
+
+
+
+ 
+    
+    
+class Pca():
+    def __init__(self, data, **kwargs):
+        self.data = data
+        
+        options={'sep':'\t',
+                 'truncate_mode':'percent',
+                 'x':100,
+                 'log10':False,
+                 'ylabel':None,
+                 'xlabel':None,
+                 'title':None,
+                 'savefig':False,
+                 'results_directory':None,
+                 'dpi':300,
+                 'n_components':2,
+                 'by':'parameters', ##iterations or parameters
+                 'legend_position':(30,17,1.25), ##Horizontal, verticle, line spacing
+                 'legend_fontsize': 25}
+        
+        for i in kwargs.keys():
+            assert i in options.keys(),'{} is not a keyword argument for RssVsIteration'.format(i)
         options.update( kwargs)  
         self.kwargs=options
         
-        if self.kwargs.get('log10')==True:
-            self.data=numpy.log10(self.PED.data)
-            self.data_file=os.path.join(os.path.dirname(self.results_path),'pe_data_log.xlsx')
+        if self['by'] not in ['parameters','iterations']:
+            raise Errors.InputError('{} not in {}'.format(self['by'], ['parameters','iterations']))
+        self['results_directory'] = make_default_results_directory(self.data, self['savefig'], self['results_directory'])
+        self.data = self.read_data()
+        self.data = self.truncate_data()
+        
+        if self['ylabel']==None:
+            if self['log10']==False:
+                self['ylabel'] = 'PC2'
+            elif self['log10']==True:
+                self['ylabel'] = 'PC2(Log10)'
+            else:
+                raise Errors.SomethingWentHorriblyWrongError('{} not in {}'.format(self['ylabel'], [True, False]))
+        
+        if self['xlabel']==None:
+            if self['log10']==False:
+                self['xlabel'] = 'PC1'
+            elif self['log10']==True:
+                self['xlabel'] = 'PC1(Log10)'
+            else:
+                raise Errors.SomethingWentHorriblyWrongError('{} not in {}'.format(self['ylabel'], [True, False]))
+ 
+        
+        LOG.info('plotting PCA {}'.format(self['by']))
+        self.pca()
+        
+        
+    def __getitem__(self,key):
+        if key not in self.kwargs.keys():
+            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
+        return self.kwargs[key]
+    
+    def __setitem__(self,key,value):
+        self.kwargs[key] = value
+        
+        
+    def truncate_data(self):
+        """
+        
+        """
+        return TruncateData(self.data,mode=self['truncate_mode'],x=self['x'], log10=self['log10']).data
+
+
+        
+    def read_data(self):
+        """
+        Both a pandas.DataFrame or a file or list of files can be passed
+        as the data argument. 
+        """
+        if isinstance(self.data, pandas.core.frame.DataFrame)!=True:
+            return ParsePEData(self.data, sep=self['sep'], log10=self['log10']).data
+        else:
+            return self.data
+        
+        
+    def pca(self):
+        pca = PCA(n_components=self['n_components'])
+        self.data = self.data.drop('RSS',axis=1)
+        if self['by']=='parameters':
+            projected = pca.fit(self.data.transpose()).transform(self.data.transpose())
+            projected = pandas.DataFrame(projected, index=self.data.columns)
+            labels = self.data.columns
+            title = 'PCA Grouping Parameters (n={})'.format(len(labels))
 
         else:
-            self.data=self.PED.data
-            self.data_file=os.path.join(os.path.dirname(self.results_path),'PE_Data.xlsx')
+            projected = pca.fit(self.data).transform(self.data)
+            projected = pandas.DataFrame(projected, index=self.data.index)
+            labels = list(self.data.index)
+            title = 'PCA Grouping PE Replicates (n={})'.format(len(labels))
             
-        if os.path.isfile(self.data_file):
-            os.remove(self.data_file)
+        fig, ax = plt.subplots()
+#        = plt.figure()
+        ax.plot(projected[0],projected[1], 'o')
+        plt.ylabel(self['ylabel'])
+        plt.xlabel(self['xlabel'])
+        plt.title(title)
+        for i, txt in enumerate(labels):
+            ax.annotate(str(i), (projected[0][i], projected[1][i]))
+#            ax.text('{}: {}'.format(i,txt), (0,-5))
+            if self['by']=='parameters':
+                ax.text(self['legend_position'][0],self['legend_position'][1]-i*self['legend_position'][2],
+                    '{}: {}'.format(i,txt),fontsize=self['legend_fontsize'])
+        if self['savefig']:
+            save_dir = os.path.join(self['results_directory'], 'PCA')
+            if os.path.isdir(save_dir)!=True:
+                os.mkdir(save_dir)
+            os.chdir(save_dir)
+            plt.savefig(os.path.join(save_dir, 'PCA_{}.jpeg'.format(self['by'])), dpi=self['dpi'], bbox_inches='tight')
+
         
-        self.data= self.prune_headers()
-        self.write_to_xlsx()
-        
-    def prune_headers(self):
-        return pycopi.PruneCopasiHeaders(self.data).df
     
-    def write_to_xlsx(self):
-        if self.kwargs.get('log10')==True:
-            self.data.to_excel(self.data_file)
+class Histograms():
+    def __init__(self, data, **kwargs):
+        self.data = data
+        
+        options={'sep':'\t',
+                 'log10':False,
+                 'truncate_mode':'percent',
+                 'x':100,
+                 'xtick_rotation':'horizontal',
+                 'ylabel':'Frequency',
+                 'savefig':False,
+                 'results_directory':None,
+                 'dpi':300,
+                 'title_fontsize':35}
+        
+        for i in kwargs.keys():
+            assert i in options.keys(),'{} is not a keyword argument for RssVsIteration'.format(i)
+        options.update( kwargs)  
+        self.kwargs=options
+        self['results_directory'] = make_default_results_directory(self.data, self['savefig'], self['results_directory'])
+        LOG.warning('save {}'.format(self['results_directory']))
+        self.data = self.read_data()
+        self.data = self.truncate_data()
+        LOG.info('plotting histograms')
+        self.plot()
+
+    def __getitem__(self,key):
+        if key not in self.kwargs.keys():
+            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
+        return self.kwargs[key]
+    
+    def __setitem__(self,key,value):
+        self.kwargs[key] = value
+        
+    def read_data(self):
+        """
+        Both a pandas.DataFrame or a file or list of files can be passed
+        as the data argument. 
+        """
+        if isinstance(self.data, pandas.core.frame.DataFrame)!=True:
+            return ParsePEData(self.data, sep=self['sep'], log10=self['log10']).data
         else:
-            self.data.to_excel(self.data_file)
+            return self.data
+    
+    def plot(self):
+        """
+        
+        """
+        for parameter in self.data.keys():
+            plt.figure()
+            seaborn.distplot(self.data[parameter])
+            plt.ylabel(self['ylabel'])
+            plt.title('{},n={}'.format(parameter, self.data[parameter].shape[0]), fontsize=self['title_fontsize'])
+            if self['savefig']:
+                save_dir = os.path.join(self['results_directory'], 'Histograms')
+                if os.path.isdir(save_dir)!=True:
+                    os.mkdir(save_dir)
+                os.chdir(save_dir)
+                fname = os.path.join(save_dir, Misc.RemoveNonAscii(parameter).filter+'.jpeg')
+                plt.savefig(fname, dpi=self['dpi'], bbox_inches='tight')
+            
+    def truncate_data(self):
+        """
+        
+        """
+        return TruncateData(self.data, mode=self['truncate_mode'], x=self['x'], log10=self['log10']).data
+    
+
+
+class Scatters():
+    def __init__(self, data, **kwargs):
+        self.data = data
+        
+        options={'sep':'\t',
+                 'log10':False,
+                 'truncate_mode':'percent',
+                 'x':100,
+                 'xtick_rotation':'horizontal',
+                 'ylabel':'Frequency',
+                 'savefig':False,
+                 'results_directory':None,
+                 'dpi':300}
+        
+        for i in kwargs.keys():
+            assert i in options.keys(),'{} is not a keyword argument for Scatters'.format(i)
+        options.update( kwargs)  
+        self.kwargs=options
+        self['results_directory'] = make_default_results_directory(self.data, self['savefig'], self['results_directory'])
+        self.data = self.read_data()
+        self.data = self.truncate_data()
+        self['title'] = self['title']+'(n={})'.format(self.data.shape[0])
+        self.plot()
+
+    def __getitem__(self,key):
+        if key not in self.kwargs.keys():
+            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
+        return self.kwargs[key]
+    
+    def __setitem__(self,key,value):
+        self.kwargs[key] = value
+        
+    def read_data(self):
+        """
+        Both a pandas.DataFrame or a file or list of files can be passed
+        as the data argument. 
+        """
+        if isinstance(self.data, pandas.core.frame.DataFrame)!=True:
+            return ParsePEData(self.data, sep=self['sep'], log10=self['log10']).data
+        else:
+            return self.data
+    
+    def plot(self):
+        """
+        
+        """
+#        for parameter in self.data.keys():
+        plt.figure()
+        plt.ioff()
+#        seaborn.pairplot(self.data,hue='RSS',size=5 )
+        
+#        plt.ylabel(self['ylabel'])
+#        plt.title('Parameter Distribution, n={}'.format(self.data[parameter].shape[0]))
+        if self['savefig']:
+            save_dir = os.path.join(self['results_directory'], 'ScatterMatrix')
+            if os.path.isdir(save_dir)!=True:
+                os.mkdir(save_dir)
+            os.chdir(save_dir)
+            fname = os.path.join(save_dir, 'ScatterMatrix.jpeg')
+            plt.savefig(fname, dpi=self['dpi'], bbox_inches='tight')
+        plt.ion()
+            
+    def truncate_data(self):
+        """
+        
+        """
+        return TruncateData(self.data, mode=self['truncate_mode'], x=self['x'], log10=self['log10']).data
+    
+class LinearRegression():
+    def __init__(self, data, **kwargs):
+        self.data = data
+        
+        options={'model':linear_model.LassoCV,
+                 'sep':'\t',
+                 'log10':False,
+                 'truncate_mode':'percent',
+                 'x':100,
+                 'xtick_rotation':'horizontal',
+                 'ylabel':'Frequency',
+                 'savefig':False,
+                 'results_directory':None,
+                 'n_alphas':100, 
+                 'max_iter':20000,
+                 'dpi':300,
+                 'y':'RSS',
+                 'title_fontsize':35}
+        
+        for i in kwargs.keys():
+            assert i in options.keys(),'{} is not a keyword argument for Scatters'.format(i)
+        options.update( kwargs)  
+        self.kwargs=options
+        self['results_directory'] = make_default_results_directory(self.data, self['savefig'], self['results_directory'])
+        self.data = self.read_data()
+        self.data = self.truncate_data()
+        self['title'] = self['title']+'(n={})'.format(self.data.shape[0])
+
+        self.scores, self.coef = self.compute_coefficients()
+        self.coef = self.coef.fillna(value=0)
+        
+        self.plot_rss()
+        self.plot_scores()
+        self.plot_coef()
+
+    def __getitem__(self,key):
+        if key not in self.kwargs.keys():
+            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
+        return self.kwargs[key]
+    
+    def __setitem__(self,key,value):
+        self.kwargs[key] = value
+        
+    def read_data(self):
+        """
+        Both a pandas.DataFrame or a file or list of files can be passed
+        as the data argument. 
+        """
+        if isinstance(self.data, pandas.core.frame.DataFrame)!=True:
+            return ParsePEData(self.data, sep=self['sep'], log10=self['log10']).data
+        else:
+            return self.data
+    
+    def compute1coef(self, parameter):
+        """
+        Compute coefficients for a single parameter
+        using self['model'] from sklearn
+        """
+#        print self.data[y]
+        y = numpy.array(self.data[parameter])
+        X = self.data.drop(parameter, axis=1)
+        X_train, X_test, y_train, y_test = model_selection.train_test_split(X, y)
+        
+        model = self['model'](fit_intercept=True, n_alphas=self['n_alphas'],
+                    max_iter=self['max_iter'])
+        
+        model.fit(X_train,y_train)
+        df = pandas.DataFrame(model.coef_, index=X.columns, columns=[parameter])#.sort_values(by='Coefficients')
+        df['abs_values'] = numpy.absolute(df[parameter])
+        df = df.sort_values(by='abs_values', ascending=False)
+        df = df.drop('abs_values', axis=1)
+        scores = [model.score(X_train, y_train), model.score(X_test, y_test)]
+        scores = pandas.DataFrame(scores, index=['TrainScore','TestScore'])
+        return scores, df
+    
+    def compute_coefficients(self):
+        parameters = list(self.data.columns)
+        df_dct = {}
+        score_dct={}
+        for y in parameters:
+            score_dct[y], df_dct[y] = self.compute1coef(y)
+            
+        df1 = pandas.concat(score_dct,axis=1).transpose().sort_values(by='TestScore',
+                           ascending=False)
+        df2 = pandas.concat(df_dct,axis=1)
+        return df1, df2
+    
+    def plot_scores(self):
+        """
+        
+        """
+        plt.figure()
+        seaborn.heatmap(self.scores)
+        plt.title('Model Fitting Test and Train Scores', fontsize=self['title_fontsize'])
+        if self['savefig']:
+            save_dir = os.path.join(self['results_directory'], 'LinearRegression')
+            if os.path.isdir(save_dir)!=True:
+                os.mkdir(save_dir)
+            os.chdir(save_dir)
+            fname = os.path.join(save_dir, 'linregress_scores.jpeg')
+            plt.savefig(fname, dpi=self['dpi'], bbox_inches='tight')        
+        
+        
+    def plot_rss(self):
+        plt.figure()
+        seaborn.heatmap(self.coef['RSS'].sort_values(by='RSS', ascending=False))        
+        plt.title('Lasso Regression. Y=RSS, X=all other Parameters', fontsize=self['title_fontsize'])
+        if self['savefig']:
+            save_dir = os.path.join(self['results_directory'], 'LinearRegression')
+            if os.path.isdir(save_dir)!=True:
+                os.mkdir(save_dir)
+            os.chdir(save_dir)
+            fname = os.path.join(save_dir, 'linregress_RSS.jpeg')
+            plt.savefig(fname, dpi=self['dpi'], bbox_inches='tight')        
+                
+        
+    def plot_coef(self):
+        """
+        
+        """
+        
+        
+        self.coef = self.coef.drop('RSS', axis=1)
+        self.coef = self.coef.drop('RSS', axis=0)
+#        print self.coef
+        plt.figure()
+        seaborn.heatmap(self.coef)
+        plt.title('Coefficient Heatmap. Parameters Vs Parameters',fontsize=self['title_fontsize'])
+        plt.xlabel('')
+        if self['savefig']:
+            save_dir = os.path.join(self['results_directory'], 'LinearRegression')
+            if os.path.isdir(save_dir)!=True:
+                os.mkdir(save_dir)
+            os.chdir(save_dir)
+            fname = os.path.join(save_dir, 'linregress_parameters.jpeg')
+            plt.savefig(fname, dpi=self['dpi'], bbox_inches='tight')        
+        
+
+        
+        
+        
+    def truncate_data(self):
+        """
+        
+        """
+        return TruncateData(self.data, mode=self['truncate_mode'], x=self['x'], log10=self['log10']).data
+    
+
+
+#==============================================================================
+#
+#class WritePEData():
+#    '''
+#    Write the sorted parameter estimation data as a flat xlsx file
+#    Args
+#        results_path:
+#            The path to the results file or folder of files with parameter
+#            estimation data in
+#    **kwargs 
+#        log10:
+#    '''
+#    def __init__(self,results_path,**kwargs):
+#        self.results_path=results_path
+#        self.PED=ParsePEData(self.results_path)
+#        
+#        
+#        options={'log10':False,
+#                 
+#                     }
+#        for i in kwargs.keys():
+#            assert i in options.keys(),'{} is not a keyword argument for TruncateData'.format(i)
+#        options.update( kwargs)  
+#        self.kwargs=options
+#        
+#        if self.kwargs.get('log10')==True:
+#            self.data=numpy.log10(self.PED.data)
+#            self.data_file=os.path.join(os.path.dirname(self.results_path),'pe_data_log.xlsx')
+#
+#        else:
+#            self.data=self.PED.data
+#            self.data_file=os.path.join(os.path.dirname(self.results_path),'PE_Data.xlsx')
+#            
+#        if os.path.isfile(self.data_file):
+#            os.remove(self.data_file)
+#        
+#        self.data= self.prune_headers()
+#        self.write_to_xlsx()
+#        
+#    def prune_headers(self):
+#        return pycopi.PruneCopasiHeaders(self.data).df
+#    
+#    def write_to_xlsx(self):
+#        if self.kwargs.get('log10')==True:
+#            self.data.to_excel(self.data_file)
+#        else:
+#            self.data.to_excel(self.data_file)
     
 #==============================================================================    
 class TruncateData():
@@ -302,7 +776,7 @@ class TruncateData():
             The parameter estiamtion data for truncation. This is a pandas dataframe. 
             
     kwargs:
-        truncate_mode:
+        mode:
             Two modes accepted. When set to 'percent' take xth percentile of 
             data. when set to 'below_x', truncate data below the value x. Pay
             attention to whether you are in log10 mode or not. 
@@ -310,13 +784,13 @@ class TruncateData():
         x:
             Either xth percentive or value to truncate data below. 
     '''
-    def __init__(self,data,truncate_mode='percent',x=100,tolerance=0.001):
+    def __init__(self,data,mode='percent',x=100, log10=False):
         self.data=data
-        self.truncate_mode=truncate_mode        
+        self.mode=mode        
         self.x=x
-        self.tolerance=tolerance
+        self.log10=log10
         assert isinstance(self.data,pandas.core.frame.DataFrame)
-        assert self.truncate_mode in ['below_x','percent','tolerance']
+        assert self.mode in ['below_x','percent']
         
         self.data=self.truncate()
         
@@ -336,888 +810,170 @@ class TruncateData():
         return self.data.iloc[:x_quantile]
             
     def truncate(self):
-        if self.truncate_mode=='below_x':
+        if self.mode=='below_x':
             return self.below_x()#self.data
-        elif self.truncate_mode=='percent':
+        elif self.mode=='percent':
             return self.top_x_percent()
-        elif self.truncate_mode=='tolerance':
-            return self.by_tolerance()
         
-    def by_tolerance(self):
-        '''
-        Get data indices where RSS[i+1] - RSS[i] < tolerance
-        '''
-        LOG.debug('calculating tolerance')
-        RSS_diff= self.data['RSS'].diff()
-        idx=RSS_diff[RSS_diff<self.tolerance]
-        idx= list(idx.index)
-        return self.data.iloc[idx]
         
-
-#==============================================================================
-class PlotHistogram(object):
-    '''
-    plot parameter estimation results as histogram
-    Args:
-        results_path:
-            Path to file or folder of files containing parameter estimation data
-            to plot
-    **kwargs:
-         truncate_mode:
-             'below_x', #either 'below_x' or 'percent' for method of truncation. 
-         log10:
-             False,
-         x:
-             100,           #if below_x: this is the x boundary. If percent: this is the percent of data to keep
-    **kwargs which correspond to matplotlib.pyplot.hist keyword arguments. 
-    More information about these can be found in the matplotlib documentation 
-         bins:
-             Number of bins to use. Default=100,
-         axis_size:
-             Font size for the axis. Default=15
-         font_size:
-             Font size for the graph labels. Default=22
-         normed:
-             True or 'false. Whether to make the plot integrate to 1. 
-             Default=False
-         color:
-             plot colour. Default='red',     
-         xrotation:
-             25,   #rotation for x tick axis
-         title_wrap_size:
-             Number of characters to use before word wrapping the title. Default=35  
-         orientation:
-             'horizontal' or 'vertical', default='vertical'
-         savefig:
-             True or False. save to a folder called histograms in results directory. 
-             Default=False
-         dpi:
-             Resolution to use when savefig=True. The larger this value the 
-             higher the resolution. Default=125. 
-         extra_title:
-             When savefig=True, save with extra_title appended to the filepath. 
-             Default=None
-         show:
-             True or False. When not using iPython and graphs are not automatically 
-             displayed in shell, this determines whether the plots are opened in a
-             window or not. Default=False
+class EnsembleTimeCourse():
+    def __init__(self, copasi_file, experiment_files, param_data, **kwargs):
+        self.copasi_file = copasi_file
+        self.param_data = param_data
+        self.experiment_files = experiment_files
         
-         results_directory:
-             Name of the directory to store parameter estimation results. 
-             Default= 'Histograms'
-                     
-                 
-    '''
-    def __init__(self,results_path,**kwargs):
-        #arguments
-#        self.copasi_file=copasi_file
-        self.results_path=results_path
-        #keywrod arguments
-
-        options={'from_pickle':False,
-                 'truncate_mode':'tolerance', #either 'below_x' or 'percent' for method of truncation. 
-                 'log10':False,
-                 'x':100,           #if below_x: this is the x boundary. If percent: this is the percent of data to keep
-                 'bins':100,
-                 'axis_size':15,
-                 'font_size':22,
-                 'normed':False,
-                 'color':'red',
-                 'xrotation':25,
-                 'title_wrap_size':35,
-                 'orientation':'vertical',
+        if isinstance(self.experiment_files, str):
+            self.experiment_files = [self.experiment_files]
+        
+        options={'sep':'\t',
+#                 'log10':False,
+                 'truncate_mode':'percent',
+                 'x':1,
+                 'xtick_rotation':'horizontal',
+                 'ylabel':'Frequency',
                  'savefig':False,
-                 'dpi':125,
-                 'extra_title':None,
-                 'log10':False,
-                 'show':False,
-                 'variable':None,
-                 'results_directory':None,
-                 'colour_map':'plasma',
-                 'tolerance':0.0001,
-                 }
+                 'results_directory':os.path.dirname(self.copasi_file),
+                 'dpi':300,
+                 'resolution':10,
+                 'check_as_you_plot':False} ##resolution: intervals in time course
+        
         for i in kwargs.keys():
-            assert i in options.keys(),'{} is not a keyword argument for TruncateData'.format(i)
+            assert i in options.keys(),'{} is not a keyword argument for ParameterEnsemble'.format(i)
         options.update( kwargs)  
         self.kwargs=options
-        assert self.kwargs.get('truncate_mode') in ['below_x','percent','tolerance']
+        self.param_data = self.read_param_data()
+        self.param_data = self.truncate_param_data()
+        self.experiment_data = self.parse_experimental_files()
+        self.exp_times = self.get_experiment_times()
+#        self.simulate_ensemble()
+        self.ensemble_data =  self.simulate_ensemble()
+#        print self.ensemble_data
         
-        if self.kwargs['log10'] not in [True,False]:
-            raise Errors.InputError('log10 should be string. Either \'true\' or \'false\' ')
-        #Other 
-        self.PED=ParsePEData(self.results_path)
-
-        #create a directory and change to it
-        if self.kwargs.get('results_directory')==None:
-            self.results_dir=os.path.join(os.path.dirname(self.results_path),'Histograms')
-        else:
-            self.results_dir=self.kwargs.get('results_directory')
-        if self.kwargs.get('savefig')==True:
-            if os.path.isdir(self.results_dir)!=True:
-                os.mkdir(self.results_dir)
-            os.chdir(self.results_dir)
+#        os.system('CopasiUI {}'.format(self.copasi_file))
+#        print self.ensemble_data
+        self.ensemble_data.index = self.ensemble_data.index.rename(['Index','Time'])
+        self.plot()
+##        
         
-        #attributes
-        self.data=self.PED.data.dropna()
-        self.log_data=self.PED.log_data.dropna()
-        self.truncated_data=self.truncate_data()
-        #main method
-        self.testing_variable=self.plot_all() #only assigned to variable for testing purposes
-        os.chdir('..')
-        
-    def list_parameters(self):
-        return self.data.keys()
-    
-    def truncate_data(self):
-        if self.kwargs.get('log10')==False:
-            TC=TruncateData(self.data,truncate_mode=self.kwargs.get('truncate_mode'),x=self.kwargs.get('x'),tolerance=self.kwargs['tolerance'])
-            return TC.data
-        elif self.kwargs.get('log10')==True:
-            TC=TruncateData(self.log_data,truncate_mode=self.kwargs.get('truncate_mode'),x=self.kwargs.get('x'),tolerance=self.kwargs['tolerance'])
-            return TC.data
-        
-    def plot1(self,variable='RSS'):
-        '''
-        variable: variable to plot. Default= 'RSS'
-        '''
-        matplotlib.rcParams.update({'font.size': 22})
-        assert variable in self.truncated_data.keys(),'{} is not in your PE results: {}'.format(variable,self.truncated_data.keys())
-        data= self.truncated_data[variable]
-        plt.figure()
-        plt.hist(data,
-                 bins=self.kwargs.get('bins'),
-                 color=self.kwargs.get('color'),
-                 normed=self.kwargs.get('normed'),
-                 orientation=self.kwargs.get('orientation'))
-        
-        #pretty stuff
-        ax=plt.subplot(1,1,1)
-        ax.spines['right'].set_color('none')
-        ax.spines['top'].set_color('none')
-        ax.xaxis.set_ticks_position('bottom')
-        ax.yaxis.set_ticks_position('left')
-        ax.spines['left'].set_smart_bounds(True)
-        ax.spines['bottom'].set_smart_bounds(True)
-        
-        #labels
-#        plt.title('\n'.join(wrap('{},n={}'.format(variable,self.data.shape[1])) ),35  )
-        plt.title('\n'.join(wrap('{},n={}'.format(variable,data.shape[0]),
-                                 self.kwargs.get('title_wrap_size'))),
-                                 fontsize=self.kwargs.get('font_size'))
-        plt.ylabel('Frequency in bin')
-        plt.xticks(rotation=self.kwargs.get('xrotation'))
-        if self.kwargs.get('log10')==True:
-            plt.xlabel('Parameter Value(log10)',fontsize=self.kwargs.get('font_size'))
-        else:
-            plt.xlabel('Parameter Value',fontsize=self.kwargs.get('font_size'))
-        
-        #savefig options
-        if self.kwargs.get('savefig')==True:
-            if self.kwargs.get('extra_title')!=None:
-                assert isinstance(self.kwargs.get('extra_title'),str),'extra title should be a string'
-                plt.savefig(variable+'_'+self.kwargs.get('extra_title')+'.png',bbox_inches='tight',format='png',dpi=self.kwargs.get('dpi'))
-            else:
-                plt.savefig(variable+'.png',format='png',bbox_inches='tight',dpi=self.kwargs.get('dpi'))
-        if self.kwargs.get('show')==True:
-            plt.show()
-    
-    def plot_all(self):
-        for i in self.truncated_data:
-            self.plot1(i)
-        return True
-
-
-        
-#==============================================================================            
-class PlotScatters(object):
-    '''
-    plot all possible combinations of scatter graph
-    '''
-    def __init__(self,results_path,**kwargs):
-        self.results_path=results_path
-        #keywrod arguments
-
-        options={'from_pickle':False,
-                 'truncate_mode':'tolerance', #either 'below_x' or 'percent' for method of truncation. 
-                 'log10':True,
-                 'x':100,           #if below_x: this is the x boundary. If percent: this is the percent of data to keep
-                 'axis_size':15,
-                 'font_size':22,
-                 'color':'red',
-                 'xrotation':25,
-                 'title_wrap_size':35,
-                 'savefig':False,
-                 'dpi':125,
-                 'extra_title':None,
-                 'show':False,
-                 'colour_map':'jet_r',
-                 'results_directory':None,
-                 'tolerance':0.0001,
-                     }
-        for i in kwargs.keys():
-            assert i in options.keys(),'{} is not a keyword argument for TruncateData'.format(i)
-        options.update( kwargs)  
-        self.kwargs=options
-        assert self.kwargs.get('truncate_mode') in ['below_x','percent','tolerance']
-        
-        #Other classes
-        self.PED=ParsePEData(self.results_path)
-        
-        #create a directory and change to it
-        if self.kwargs['results_directory']==None:
-            self.results_dir=os.path.join(os.path.dirname(self.results_path),'Scatters')
-        else:
-            self.results_dir=self.kwargs['results_directory']
-            
-        if self.kwargs.get('savefig')==True:
-            if os.path.isdir(self.results_dir)!=True:
-                os.mkdir(self.results_dir)
-            os.chdir(self.results_dir)
-        
-        
-        #attributes
-        self.data=self.PED.data
-        self.log_data=self.PED.log_data.dropna()
-        self.truncated_data=self.truncate_data()
-        self.testing_variable=self.plot_scatters()
-
-    def list_parameters(self):
-        return self.data.keys()
-    
-        
-    def truncate_data(self):
-        if self.kwargs.get('log10')==False:
-            TC=TruncateData(self.data,truncate_mode=self.kwargs.get('truncate_mode'),x=self.kwargs.get('x'),tolerance=self.kwargs['tolerance'])
-            return TC.data
-        elif self.kwargs.get('log10')==True:
-            TC=TruncateData(self.log_data,truncate_mode=self.kwargs.get('truncate_mode'),x=self.kwargs.get('x'),tolerance=self.kwargs['tolerance'])
-            return TC.data
-            
-    def plot1_scatter(self,x_specie,y_specie,data):
-        assert x_specie in self.truncated_data.keys(),'x_specie is not in your PE data set'
-        assert y_specie in self.truncated_data.keys(),'y_specie is not in your PE data set'
-        matplotlib.rcParams.update({'font.size':self.kwargs.get('axis_size')})   
-        x_data=self.truncated_data[x_specie]
-        y_data=self.truncated_data[y_specie]
-        plt.figure()
-        plt.scatter(x_data,y_data,c=self.truncated_data['RSS'],cmap=self.kwargs['colour_map'])
-        cb=plt.colorbar()
-        cb.set_label('RSS')
-        #pretty stuff
-        ax=plt.subplot(1,1,1)
-        ax.spines['right'].set_color('none')
-        ax.spines['top'].set_color('none')
-        ax.xaxis.set_ticks_position('bottom')
-        ax.yaxis.set_ticks_position('left')
-        ax.spines['left'].set_smart_bounds(True)
-        ax.spines['bottom'].set_smart_bounds(True)
-        
-        #labels
-#        plt.title('\n'.join(wrap('{},n={}'.format(variable,self.data.shape[1])) ),35  )
-        plt.title('\n'.join(wrap('n={},log10={}'.format(x_data.shape[0],self.kwargs.get('log10')),
-                                 self.kwargs.get('title_wrap_size'))),fontsize=self.kwargs.get('font_size'))
-        plt.ylabel('\n'.join(wrap(y_specie,self.kwargs.get('title_wrap_size'))),fontsize=self.kwargs.get('font_size'))
-        plt.xticks(rotation=self.kwargs.get('xrotation'))
-        if self.kwargs.get('log10')==True:
-            plt.xlabel(x_specie,fontsize=self.kwargs.get('font_size'))
-        else:
-            plt.xlabel(x_specie,fontsize=self.kwargs.get('font_size'))
-        
-        x_specie=x_specie.replace('(','')
-        x_specie=x_specie.replace(')','')
-        y_specie=y_specie.replace('(','')
-        y_specie=y_specie.replace(')','')
-#        savefig options
-        if self.kwargs.get('savefig')==True:
-            if self.kwargs.get('extra_title')!=None:
-                assert isinstance(self.kwargs.get('extra_title'),str),'extra title should be a string'
-                plt.savefig('{}_vs_{}'.format(x_specie,y_specie)+'_'+self.kwargs.get('extra_title')+'.png',bbox_inches='tight',format='png',dpi=self.kwargs.get('dpi'))
-            else:
-                plt.savefig('{}_vs_{}'.format(x_specie,y_specie)+'.png',format='png',bbox_inches='tight',dpi=self.kwargs.get('dpi'))
-        if self.kwargs.get('show')==True:
-            plt.show()
-        else:
-            plt.close()
-#            
-            
-    def binomial_coefficient(self,n,k):
-        assert isinstance(n,int)
-        assert isinstance(k,int)
-        from scipy.misc import factorial
-        return factorial(n)/(factorial(k)*factorial(n-k))
-        
-        
-    def get_combinations(self):
-        comb=itertools.combinations(self.truncated_data.keys(),2)
-#        comb=[i for i in comb]
-        return comb
-        
-    def plot_scatters(self):
-        '''
         
         '''
-        comb=self.get_combinations()
-        for x,y in comb:
-            self.plot1_scatter(x,y,self.truncated_data) 
-        
-        return True
-
-class PlotHexMap(object):
-    '''
-    plot all possible combinations of scatter graph
-    '''
-    def __init__(self,results_path,**kwargs):
-        self.results_path=results_path
-        #keywrod arguments
-
-        options={'from_pickle':False,
-                 'truncate_mode':'tolerance', #either 'below_x' or 'percent' for method of truncation. 
-                 'log10':False,
-                 'grid_size':25,
-                 'x':100,           #if below_x: this is the x boundary. If percent: this is the percent of data to keep
-                 'axis_size':15,
-                 'font_size':22,
-                 'bins':'log',
-                 'colorMap':'jet_r',
-                 'xrotation':25,
-                 'title_wrap_size':25,
-                 'savefig':False,
-                 'dpi':125,
-                 'extra_title':None,
-                 'show':False,
-                 'mode':'counts',
-                 'marginals':False,
-                 'colour_map':'jet_r',
-                 'results_directory':None,
-                 'tolerance':0.001
-                     }
-        for i in kwargs.keys():
-            assert i in options.keys(),'{} is not a keyword argument for plotHexMap'.format(i)
-        options.update( kwargs)  
-        self.kwargs=options
-        assert self.kwargs.get('truncate_mode') in ['below_x','percent','tolerance']
-        if self.kwargs['mode'] not in ['counts','RSS']:
-            raise Errors.InputError('{} not in {}'.format(self.kwargs['mode'],['counts','RSS']))        
-        
-        if self.kwargs['marginals'] not in [True,False]:
-            raise Errors.InputError('{} not argument for marginals'.format(self.kwargs['marginals']))
-            
-        if self.kwargs['marginals']==True:
-            self.kwargs['marginals']=True
-        else:
-            self.kwargs['marginals']=False
-        self.PED=ParsePEData(self.results_path)
-        
-        #create a directory and change to it
-        if self.kwargs['results_directory']==None:
-            if self.kwargs['mode']=='RSS':
-                self.results_dir=os.path.join(os.path.dirname(self.results_path),'HexplotsByRSS')
-            else:
-                self.results_dir=os.path.join(os.path.dirname(self.results_path),'HexplotsByCounts')
-        else:
-            self.results_dir=self.kwargs['results_directory']
-        if self.kwargs.get('savefig')==True:
-            if os.path.isdir(self.results_dir)!=True:
-                os.mkdir(self.results_dir)
-            os.chdir(self.results_dir)
-            
-
-        
-        
-        #attributes
-        self.data=self.PED.data
-        self.log_data=self.PED.log_data.dropna()
-        self.truncated_data=self.truncate_data()
-        self.testing_variable=self.plot_hex_maps()
-
-    def list_parameters(self):
-        return self.data.keys()
-    
-        
-    def truncate_data(self):
-        if self.kwargs.get('log10')==False:
-            TC=TruncateData(self.data,truncate_mode=self.kwargs.get('truncate_mode'),x=self.kwargs.get('x'),tolerance=self.kwargs['tolerance'])
-            return TC.data
-        elif self.kwargs.get('log10')==True:
-            TC=TruncateData(self.log_data,truncate_mode=self.kwargs.get('truncate_mode'),x=self.kwargs.get('x'),tolerance=self.kwargs['tolerance'])
-            return TC.data
-            
-    def plot1_hex(self,x_specie,y_specie,data):
-        assert x_specie in self.truncated_data.keys(),'x_specie is not in your PE data set'
-        assert y_specie in self.truncated_data.keys(),'y_specie is not in your PE data set'
-        matplotlib.rcParams.update({'font.size':self.kwargs.get('axis_size')})   
-        
-        
-        x_data=self.truncated_data[x_specie]
-        y_data=self.truncated_data[y_specie]
-        plt.figure()
-        if self.kwargs['mode']=='RSS':
-            plt.hexbin(x_data,y_data,cmap=self.kwargs['colour_map'],C=self.truncated_data['RSS'],bins=self.kwargs['bins'],gridsize=self.kwargs['grid_size'])
-            cb=plt.colorbar()
-            if self.kwargs['bins']=='log':
-                cb.set_label('RSS(log)')   
-            else:
-                cb.set_label('RSS')
-        else:
-            plt.hexbin(x_data,y_data,cmap=self.kwargs['colour_map'],gridsize=self.kwargs['grid_size'],bins=self.kwargs['bins'])
-            cb=plt.colorbar()
-            if self.kwargs['bins']=='log':
-                cb.set_label('Counts (log)')        
-            else:
-                cb.set_label('Counts')
-
-        #pretty stuff
-        ax=plt.subplot(1,1,1)
-        ax.spines['right'].set_color('none')
-        ax.spines['top'].set_color('none')
-        ax.xaxis.set_ticks_position('bottom')
-        ax.yaxis.set_ticks_position('left')
-        ax.spines['left'].set_smart_bounds(True)
-        ax.spines['bottom'].set_smart_bounds(True)
-#        
-        #labels
-        plt.title('\n'.join(wrap('n={},log10={},bins={},grid_size={}'.format(x_data.shape[0],self.kwargs.get('log10'),self.kwargs['bins'],self.kwargs['grid_size']),
-                                 self.kwargs.get('title_wrap_size'))),fontsize=self.kwargs.get('font_size'))
-        plt.ylabel('\n'.join(wrap(y_specie,self.kwargs.get('title_wrap_size'))),fontsize=self.kwargs.get('font_size'))
-        plt.xticks(rotation=self.kwargs.get('xrotation'))
-        if self.kwargs.get('log10')==True:
-            plt.xlabel(x_specie,fontsize=self.kwargs.get('font_size'))
-        else:
-            plt.xlabel(x_specie,fontsize=self.kwargs.get('font_size'))
-        
-        
-        x_specie=x_specie.replace('(','')
-        x_specie=x_specie.replace(')','')
-        y_specie=y_specie.replace('(','')
-        y_specie=y_specie.replace(')','')
-#        savefig options
-        if self.kwargs.get('savefig')==True:
-            if self.kwargs.get('extra_title')!=None:
-                assert isinstance(self.kwargs.get('extra_title'),str),'extra title should be a string'
-                plt.savefig('{}_vs_{}'.format(x_specie,y_specie)+'_'+self.kwargs.get('extra_title')+'.png',bbox_inches='tight',format='png',dpi=self.kwargs.get('dpi'))
-            else:
-                plt.savefig('{}_vs_{}'.format(x_specie,y_specie)+'.png',format='png',bbox_inches='tight',dpi=self.kwargs.get('dpi'))
-        if self.kwargs.get('show')==True:
-            plt.show()
-        else:
-            plt.close()
-#            
-            
-    def binomial_coefficient(self,n,k):
-        assert isinstance(n,int)
-        assert isinstance(k,int)
-        from scipy.misc import factorial
-        return factorial(n)/(factorial(k)*factorial(n-k))
-        
-        
-    def get_combinations(self):
-        comb=itertools.combinations(self.truncated_data.keys(),2)
-#        comb=[i for i in comb]
-        return comb
-        
-    def plot_hex_maps(self):
-        '''
+        To plot a parameter ensemble:
+            1) input parmeters into model
+            2) plot time course with same data points (time as experimental data)
+            3) plot distributions
         
         '''
-        comb=self.get_combinations()
-        for x,y in comb:
-            self.plot1_hex(x,y,self.truncated_data)
-        return True
-#==============================================================================
-class PlotBoxplot(object):
-    '''
-    Visualize your PE data as boxplots. 
-    
-    args:
-        results_path:
-            A parameter esitmation results file or a folder of parameter 
-            estimation results files. 
-            
-    **kwargs:
-         num_per_plot:
-            How many parameters to include in a box plot before producing 
-            multiple figure. Default=None -  means all will be in one figure. 
-    
-         truncate_mode:
-             'below_x', #either 'below_x' or 'percent' for method of truncation. 
-         log10:
-             False,
-         x:
-             Corresponding parameter for truncate_mode. See entry for
-             the TruncateData class. Default=100           
-    kwargs which correspond to matplotlib.pyplot.hist keyword arguments. 
-    More information about these can be found in the matplotlib documentation 
-         axis_size:
-             Font size for the axis. Default=15
-         font_size:
-             Font size for the graph labels. Default=22
-         normed:
-             True or 'false. Whether to make the plot integrate to 1. 
-             Default=False
-         color:
-             plot colour. Default='red',     
-         xrotation:
-             25,   #rotation for x tick axis
-         title_wrap_size:
-             Number of characters to use before word wrapping the title. Default=35  
-         orientation:
-             'horizontal' or 'vertical', default='vertical'
-         savefig:
-             True or False. save to a folder called boxplots in results directory. 
-             Default=False
-         dpi:
-             Resolution to use when savefig=True. The larger this value the 
-             higher the resolution. Default=125. 
-         extra_title:
-             When savefig=True, save with extra_title appended to the filepath. 
-             Default=None
-         show:
-             True or False. When not using iPython and graphs are not automatically 
-             displayed in shell, this determines whether the plots are opened in a
-             window or not. Default=False
-    
-    '''
-    def __init__(self,results_path,**kwargs):
-        self.results_path=results_path
-        #keywrod arguments
-        options={#parse data options
-                 'truncate_mode':'tolerance', #either 'below_x' or 'percent' for method of truncation. 
-                 'log10':True,
-                 'parse_mode':'folder',
-                 'from_pickle':True,
-                 #truncate data options
-                 'x':100,           #if below_x: this is the x boundary. If percent: this is the percent of data to keep
-                 #graph options
-                 'axis_size':15,
-                 'show':False,
-                 'font_size':22,
-                 'color':'red',
-                 'xrotation':90,
-                 'title_wrap_size':35,
-                 'savefig':False,
-                 'dpi':125,
-                 'extra_title':None,
-                 'custom_title':None,
-                 #boxplot specific options
-                 'num_per_plot':None,
-                 'results_directory':None,
-                 'tolerance':0.001,
-                 'num_per_plot':10,
-                     }
-        for i in kwargs.keys():
-            assert i in options.keys(),'{} is not a keyword argument for TruncateData'.format(i)
-        options.update( kwargs)  
-        self.kwargs=options
-        assert self.kwargs.get('truncate_mode') in ['below_x','percent','tolerance']
         
-        if self.kwargs.get('custom_title')!=None:
-            assert isinstance(self.kwargs.get('custom_title'),str)
-        #Other classes
-        self.PED=ParsePEData(self.results_path)
-        #create a directory and change to it
-        if self.kwargs['results_directory']==None:
-            self.results_dir=os.path.join(os.path.dirname(self.results_path),'Boxplots')
+#        self.plot()
+
+    def __getitem__(self,key):
+        if key not in self.kwargs.keys():
+            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
+        return self.kwargs[key]
+
+    def __setitem__(self,key,value):
+        self.kwargs[key] = value    
+    
+    def read_param_data(self):
+        """
+        Both a pandas.DataFrame or a file or list of files can be passed
+        as the data argument. 
+        """
+        if isinstance(self.param_data, pandas.core.frame.DataFrame)!=True:
+            return ParsePEData(self.param_data, sep=self['sep'], log10=False).data
         else:
-            self.results_dir=self.kwargs['results_directory']
-        if os.path.isdir(self.results_dir)!=True:
-            os.mkdir(self.results_dir)
-        os.chdir(self.results_dir)
-        
-        #attributes
-        self.data=self.PED.data
-        self.log_data=self.PED.log_data
-        self.truncated_data=self.truncate_data()
-        if self.kwargs.get('num_per_plot')==None:
-            self.kwargs['num_per_plot']=self.truncated_data.shape[1]
-        self.boxplot()
-
-    def list_parameters(self):
-        return self.data.keys()
+            return self.param_data
     
-        
-    def truncate_data(self):
-        if self.kwargs.get('log10')==False:
-            TC=TruncateData(self.data,truncate_mode=self.kwargs.get('truncate_mode'),x=self.kwargs.get('x'),tolerance=self.kwargs['tolerance'])
-            return TC.data
-        elif self.kwargs.get('log10')==True:
-            TC=TruncateData(self.log_data,truncate_mode=self.kwargs.get('truncate_mode'),x=self.kwargs.get('x'),tolerance=self.kwargs['tolerance'])
-            return TC.data
             
-    def divide_data(self):
-        n_vars=len(self.truncated_data.keys())
-        n_per_plot= self.kwargs.get('num_per_plot')
-#        assert n_per_plot<n_vars,'number of variables per plot must be smaller than the number of variables'
-        int_division= n_vars//n_per_plot
-        remainder=n_vars-(n_per_plot*int_division)
-        l=[]
-        for i in range(int_division):
-            l.append(self.truncated_data.keys()[i*n_per_plot:(i+1)*n_per_plot])
-        l.append(self.truncated_data.keys()[-remainder:])
-        return [list(i) for i in l]
+    def truncate_param_data(self):
+        """
         
+        """    
+        return TruncateData(self.param_data, 
+                            mode=self['truncate_mode'],x=self['x'], 
+                            log10=False).data
 
-    def boxplot(self):
-        '''
+
+    def parse_experimental_files(self):
+        df_dct={}
+        for i in range(len(self.experiment_files)):
+            df=pandas.read_csv(self.experiment_files[i],sep=self['sep'][i])
+            df_dct[self.experiment_files[i]]=df
+        return df_dct
         
-        '''
-        matplotlib.rcParams.update({'font.size':self.kwargs.get('axis_size')}) 
-        labels=self.divide_data()
-        for i in range(len(labels)):
+    
+    def get_experiment_times(self):
+        d={}
+        for i in self.experiment_data:
+            d[i]={}
+            for j in self.experiment_data[i].keys():
+                if j.lower()=='time':
+                    d[i]= self.experiment_data[i][j]
+                    
+        times={}
+        for i in d:
+            times[i]={}
+            times[i]['start']=d[i].iloc[0]
+            times[i]['end']=d[i].iloc[-1]
+            times[i]['step_size']=d[i].iloc[1]-d[i].iloc[0]
+            '''
+            subtract 1 from intervals to account for header
+            '''
+            times[i]['intervals']=int(d[i].shape[0])-1
+        return times
+        
+    def simulate_ensemble(self):
+        """
+        
+        """
+#        d = {}
+        
+        ## collect end times for each experiment
+        ##in order to find the biggest
+        end_times = []
+        for i in self.exp_times:
+            ## start creating a results dict while were at it
+#            d[i] = {}
+            end_times.append(self.exp_times[i]['end'])
+        step_size =  max(end_times)/self['resolution']
+        
+        d={}
+        for i in range(self.param_data.shape[0]):
+            I=pycopi.InsertParameters(self.copasi_file, df=self.param_data, index=i)
+            TC = pycopi.TimeCourse(self.copasi_file, end = max(end_times), 
+                                             step_size = step_size, 
+                                             intervals = self['resolution'], 
+                                             plot=False)
+            if self['check_as_you_plot']:
+                LOG.info('These are parameters for index:{}\n\n{}'.format(i,
+                         I.parameters.transpose().sort_index()))
+                os.system('CopasiUI {}'.format(self.copasi_file))
+            d[i] = pandas.read_csv(TC['report_name'], sep='\t')
+        return pandas.concat(d)
+    
+    
+    def plot(self):
+        """
+        
+        """
+        data = self.ensemble_data.reset_index(level=1, drop=True)
+        data.index.name = 'ParameterFitIndex'
+        data = data.reset_index()
+        for parameter in data.keys():
             plt.figure()
-#            data= self.truncated_data[labels[i]]
-            self.truncated_data[labels[i]].boxplot(rot=self.kwargs.get('xrotation'),return_type='axes')
-            #pretty stuff
-            ax=plt.subplot(1,1,1)
-            ax.spines['right'].set_color('none')
-            ax.spines['top'].set_color('none')
-            ax.xaxis.set_ticks_position('bottom')
-            ax.yaxis.set_ticks_position('left')
-            ax.spines['left'].set_smart_bounds(True)
-            ax.spines['bottom'].set_smart_bounds(True)
-            
-            #labels
-            if self.kwargs.get('custom_title')==None:
-                plt.title('\n'.join(wrap('Distribution of parameter values from {} PE runs'.format(self.truncated_data.shape[0]),
-                                     self.kwargs.get('title_wrap_size'))),fontsize=self.kwargs.get('font_size'))
-            else:
-                plt.title('\n'.join(wrap(self.kwargs.get('custom_title'),self.truncated_data.shape[0]),
-                                         self.kwargs.get('title_wrap_size')),fontsize=self.kwargs.get('font_size'))
-
-            if self.kwargs.get('log10')==True:
-                plt.ylabel('Parameter Values (log10)',fontsize=self.kwargs.get('font_size'))
-            else:
-                plt.ylabel('Parameter Values',fontsize=self.kwargs.get('font_size'))
-
-            plt.xticks(rotation=self.kwargs.get('xrotation'))
-            
-    #        savefig options
-            if self.kwargs.get('savefig')==True:
-                if self.kwargs.get('extra_title')!=None:
-                    assert isinstance(self.kwargs.get('extra_title'),str),'extra title should be a string'
-                    plt.savefig('boxplot_{}'.format(i)+'_'+self.kwargs.get('extra_title')+'.png',bbox_inches='tight',format='png',dpi=self.kwargs.get('dpi'))
-                else:
-                    plt.savefig('boxplot_{}'.format(i)+'.png',format='png',bbox_inches='tight',dpi=self.kwargs.get('dpi'))
-            if self.kwargs.get('show')==True:
-                plt.show()
-                
-
-
-                
-#==============================================================================    
-class PlotHeatMap():
-    '''
-    plot Pearsons correlation as heat map. Still under development. 
-    '''
-    def __init__(self,copasi_file,results_path,**kwargs):
-        self.copasi_file=copasi_file
-        self.results_path=results_path
-        #keywrod arguments
-        options={#parse data options
-                 'from_pickle':False,
-                 'truncate_mode':'tolerance', #either 'below_x' or 'percent' for method of truncation. 
-                 'log10':True,
-                 'parse_mode':'folder',
-                 #truncate data options
-                 'x':100,           #if below_x: this is the x boundary. If percent: this is the percent of data to keep
-                 #graph options
-                 'axis_size':8,
-                 'show':False,
-                 'font_size':22,
-                 'color':'red',
-                 'xrotation':90,
-                 'title_wrap_size':35,
-                 'savefig':False,
-                 'dpi':300,
-                 'extra_title':None,
-                 #boxplot specific options
-                 'sym':True,
-                 'grid':True,
-                 'tolerance':0.001,
-                 
-                     }
-        for i in kwargs.keys():
-            assert i in options.keys(),'{} is not a keyword argument for TruncateData'.format(i)
-        options.update( kwargs)  
-        self.kwargs=options
-        assert self.kwargs.get('truncate_mode') in ['below_x','percent','tolerance']
-        
-        #Other classes
-        self.PED=ParsePEData(self.copasi_file,self.results_path,
-                             mode=self.kwargs.get('parse_mode'),
-                             from_pickle=self.kwargs.get('from_pickle'),
-                             log10=self.kwargs.get('log10'))
-        #create a directory and change to it
-        self.cwd=self.PED.cwd
-        self.results_dir=os.path.join(self.cwd,'HeatMaps')
-        if os.path.isdir(self.results_dir)!=True:
-            os.mkdir(self.results_dir)
-        os.chdir(self.results_dir)
-        
-
-
-
-        #attributes
-        self.data=self.PED.data
-        self.log_data=self.PED.log_data
-        self.truncated_data=self.truncate_data()
-        if self.kwargs.get('num_per_plot')==None:
-            self.kwargs['num_per_plot']=self.truncated_data.shape[1]
-        self.boxplot()
-
-    def list_parameters(self):
-        return self.data.keys()
+            seaborn.tsplot(data, time='Time', value=parameter,
+                             unit='ParameterFitIndex')
+            plt.title('Ensemble Time Course\n for {} (n={})'.format(parameter, self.param_data.shape[0]))
+            if self['savefig']:
+                save_dir = os.path.join(self['results_directory'], 'EnsemblePlots')
+                if os.path.isdir(save_dir)!=True:
+                    os.mkdir(save_dir)
+                os.chdir(save_dir)
+                fname = os.path.join(save_dir, '{}.jpeg'.format(Misc.RemoveNonAscii(parameter).filter))
+                plt.savefig(fname, dpi=self['dpi'], bbox_inches='tight')
     
-        
-    def truncate_data(self):
-        if self.kwargs.get('log10')==False:
-            TC=TruncateData(self.data,truncate_mode=self.kwargs.get('truncate_mode'),x=self.kwargs.get('x'),tolerance=self.kwargs['tolerance'])
-            return TC.data
-        elif self.kwargs.get('log10')==True:
-            TC=TruncateData(self.log_data,truncate_mode=self.kwargs.get('truncate_mode'),x=self.kwargs.get('x'),tolerance=self.kwargs['tolerance'])
-            return TC.data
-            
-    def divide_data(self):
-        n_vars=len(self.truncated_data.keys())
-        n_per_plot= self.kwargs.get('num_per_plot')
-#        assert n_per_plot<n_vars,'number of variables per plot must be smaller than the number of variables'
-        int_division= n_vars//n_per_plot
-        remainder=n_vars-(n_per_plot*int_division)
-        l=[]
-        for i in range(int_division):
-            l.append(self.truncated_data.keys()[i*n_per_plot:(i+1)*n_per_plot])
-        l.append(self.truncated_data.keys()[-remainder:])
-        return [list(i) for i in l]
-
-
-
-    def get_variance(self):
-        print 
-
-
-
-class EvaluateOptimizationPerformance(object):
-    '''
-    plot your data RSS Vs Rank of best fit as evaluated by RSS value. This should
-    highlight whether your optimization is finding a minimum and also help map 
-    your local and (apparant) global minimum.
     
-    Args:
-        results_path. File or folder of files containing parameter estimation 
-        data
-        
-    **kwargs: 
-        Same as for the other classes in PEAnalaysis
-    '''
-    def __init__(self,results_path,**kwargs):
-        self.results_path=results_path
-        #keywrod arguments
-        options={#parse data options
-                 'truncate_mode':'percent', #either 'below_x' or 'percent' for method of truncation.
-                 'x':100,           #if below_x: this is the x boundary. If percent: this is the percent of data to keep
-                 'log10':True,
-                 #graph options
-                 'axis_size':15,
-                 'show':False,
-                 'font_size':22,
-                 'color':'red',
-                 'xrotation':90,
-                 'title_wrap_size':35,
-                 'savefig':False,
-                 'dpi':300,
-                 'extra_title':None,
-                 'custom_title':None,
-                 'results_directory':None,
-                 'tolerance':0.001}
-        
-        for i in kwargs.keys():
-            assert i in options.keys(),'{} is not a keyword argument for TruncateData'.format(i)
-        options.update( kwargs)  
-        self.kwargs=options
-        assert self.kwargs.get('truncate_mode') in ['below_x','percent','tolerance']
-        
-        
-        #Other classes
-        self.PED=ParsePEData(self.results_path)
-#        self.tolerance_index
-        self.data=self.truncate_data()
-        
-        #create a directory and change to it
-        if self.kwargs['results_directory']==None:
-            self.results_dir=os.path.join(os.path.dirname(self.results_path),'OptimizationPerformanceGraph')
-        else:
-            self.results_dir=self.kwargs['results_directory']
-        if os.path.isdir(self.results_dir)!=True:
-            os.mkdir(self.results_dir)
-        os.chdir(self.results_dir)
-        
-        ## Set size of axes font
-        matplotlib.rcParams.update({'font.size':self.kwargs.get('axis_size')})
-        
-        self.plot_rss()
-        os.chdir(os.path.dirname(self.results_path))
-        
-    def truncate_data(self):
-        if self.kwargs.get('log10')==False:
-            TC=TruncateData(self.PED.data,truncate_mode=self.kwargs.get('truncate_mode'),x=self.kwargs.get('x'),tolerance=self.kwargs['tolerance'])
-            return TC.data
-        elif self.kwargs.get('log10')==True:
-            TC=TruncateData(self.PED.log_data,truncate_mode=self.kwargs.get('truncate_mode'),x=self.kwargs.get('x'),tolerance=self.kwargs['tolerance'])
-            return TC.data
-                             
-    def plot_rss(self):
-        '''
-        
-        '''
-        iterations=numpy.log10(range(self.data.shape[0]))
-        rss=self.data['RSS']
-            
-        plt.figure()
-        plt.plot(iterations,rss,'ro')
-        
-        #pretty stuff
-        ax=plt.subplot(1,1,1)
-        ax.spines['right'].set_color('none')
-        ax.spines['top'].set_color('none')
-        ax.xaxis.set_ticks_position('bottom')
-        ax.yaxis.set_ticks_position('left')
-        ax.spines['left'].set_smart_bounds(True)
-        ax.spines['bottom'].set_smart_bounds(True)
-        
-        #labels
-        if self.kwargs.get('custom_title')==None:
-            plt.title('\n'.join(wrap('RSS values for {} iterations'.format(len(rss)),
-                                 self.kwargs.get('title_wrap_size'))),fontsize=self.kwargs.get('font_size'))
-        else:
-            plt.title('\n'.join(wrap(self.kwargs.get('custom_title'),self.truncated_data.shape[0]),
-                                     self.kwargs.get('title_wrap_size')),fontsize=self.kwargs.get('font_size'))
-
-        if self.kwargs.get('log10')==True:
-            plt.ylabel('RSS Values (log10)',fontsize=self.kwargs.get('font_size'))
-            plt.xlabel('Rank of Best Fit (log10)',fontsize=self.kwargs.get('font_size'))
-        else:
-            plt.ylabel('Optimization Iteration',fontsize=self.kwargs.get('font_size'))
-            plt.xlabel('Rank of Best Fit',fontsize=self.kwargs.get('font_size'))
-            
-        plt.xticks(rotation=self.kwargs.get('xrotation'))
-        
-        if self.kwargs['log10']==True:
-            self.kwargs['extra_title']='(log10)'
-        
-#        savefig options
-        if self.kwargs.get('savefig')==True:
-            if self.kwargs.get('extra_title')!=None:
-                if isinstance(self.kwargs.get('extra_title'),str)==False:
-                    raise Errors.InputError('extra title should be a string')
-                plt.savefig('RSSVsITerations'+'_'+self.kwargs.get('extra_title')+'.png',bbox_inches='tight',format='png',dpi=self.kwargs.get('dpi'))
-            else:
-                plt.savefig('RSSVsITerations'+'.png',format='png',bbox_inches='tight',dpi=self.kwargs.get('dpi'))
-        if self.kwargs.get('show')==True:
-            plt.show()
-            
-
-#==============================================================================
-
-
+    
 class PlotPEData(object):
     '''
     plot a parameter estimation run against experimental data. 
@@ -1247,9 +1003,9 @@ class PlotPEData(object):
             Either 'particle_number' or 'concentration'. Default='concentration'
             
         OutputML:
-            If save set to 'duplicate', this is the duplicate filename. 
+            If savefig set to 'duplicate', this is the duplicate filename. 
             
-        save:
+        savefig:
             either False,'overwrite' or 'duplicate'
             
         parameter_dict:
@@ -1286,10 +1042,9 @@ class PlotPEData(object):
 
         default_report_name=os.path.join(os.path.dirname(self.copasi_file),
                                          os.path.split(self.copasi_file)[1][:-4]+'_PE_results.txt')
-        default_outputML=os.path.split(self.copasi_file)[1][:-4]+'_Duplicate.cps'
         options={#report variables
                  'report_name':default_report_name,
-                 'save':'overwrite',
+                 'savefig':False,
                  'index':0,
                  'line_width':4,
                  'prune_headers':True,
@@ -1446,7 +1201,7 @@ class PlotPEData(object):
         return pandas.DataFrame(df.iloc[-1]).transpose()
     
     def insert_parameters(self):
-        pycopi.InsertParameters(self.copasi_file,df=self.parameters,save='overwrite')
+        pycopi.InsertParameters(self.copasi_file,df=self.parameters)
         return self.copasi_file
         
         
@@ -1459,13 +1214,13 @@ class PlotPEData(object):
             '''
             need to subtract 1 from the intervals
             '''
-            TC=pycopi.TimeCourse(self.copasi_file,Start=0,
-                          End=self.exp_times[i]['end'],
-                          Intervals=self.exp_times[i]['end'],
-                          StepSize=1,
+            TC=pycopi.TimeCourse(self.copasi_file,start=0,
+                          end=self.exp_times[i]['end'],
+                          intervals=self.exp_times[i]['end'],
+                          step_size=1,
                           plot=False)
-            P=pycopi.PruneCopasiHeaders(TC.data,replace=True)
-            data_dct[i]=P.df
+            df = pandas.read_csv(TC.kwargs['report_name'], sep='\t')
+            data_dct[i]=df
         return data_dct
 
 
@@ -1490,7 +1245,7 @@ class PlotPEData(object):
         plot one parameter of one experiment. for iterating over in 
         other functions
         '''
-        sns.set_context(context='poster',font_scale=2)
+        seaborn.set_context(context='poster',font_scale=2)
         if fle not in self.experiment_files:
             raise Errors.InputError('{} not in {}'.format(fle,self.exp_times))
         if parameter not in self.sim_data[fle].keys() and parameter not in self.experiment_data[fle].keys():
@@ -1569,11 +1324,11 @@ class PlotPEData(object):
         '''
         plot all parameters
         '''
-        LOG.warning('the plotting function is temporarily disabled')
-#        for f in self.experiment_files:
-#            dire,p= os.path.split(f)
-#            fle=os.path.splitext(p)[0]  
-#            self.plot1file(f)
+#        LOG.warning('the plotting function is temporarily disabled')
+        for f in self.experiment_files:
+            dire,p= os.path.split(f)
+            fle=os.path.splitext(p)[0]  
+            self.plot1file(f)
 
     
     
@@ -1581,10 +1336,22 @@ class ModelSelection():
     '''
     ## could give
     '''
-    def __init__(self,multi_model_fit):
+    def __init__(self,multi_model_fit, **kwargs):
         LOG.debug('Instantiate ModelSelection class')
         self.multi_model_fit=multi_model_fit
         self.number_models=self.get_num_models()
+        
+        options={#report variables
+                 'savefig':False,
+                 'output_directory':self.multi_model_fit.project_dir,
+                 'dpi':300}
+                 
+        for i in kwargs.keys():
+            assert i in options.keys(),'{} is not a keyword argument for ModelSelection'.format(i)
+        options.update( kwargs) 
+        self.kwargs=options  
+        
+        
 #        if self.model_selection_filename==None:
 #            self.model_selection_filename=os.path.join(self.multi_model_fit.wd,'ModelSelectionData.xlsx')
         self.results_folder_dct=self._get_results_directories()
@@ -1592,10 +1359,17 @@ class ModelSelection():
         self.GMQ_dct=self._get_GMQ_dct()
         self.number_model_parameters=self._get_number_estimated_model_parameters()
         self.number_observations=self._get_n()
-        
         self.model_selection_data=self.calculate_model_selection_criteria()
         
-    
+
+    def __getitem__(self,key):
+        if key not in self.kwargs.keys():
+            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
+        return self.kwargs[key]
+
+    def __setitem__(self,key,value):
+        self.kwargs[key] = value
+        
     def get_num_models(self):
         return len(self.multi_model_fit.cps_files)
     ## void
@@ -1766,19 +1540,29 @@ class ModelSelection():
         '''
         
         '''
-        sns.set_context(context='poster',font_scale=3)
-        for i in range(len(self.model_selection_data.keys())):
-            keys=self.model_selection_data.keys()
-            LOG.debug(keys[i])
-            LOG.debug('plotting {}'.format(keys[i]))
-            plt.figure(1)
-#            plt.subplot(311)
-            LOG.debug(self.model_selection_data[keys[i][0]])
-            sns.boxplot(data=self.model_selection_data[keys[i][0]],
-#                        x=self.model_selection_data.index,
-                        y='RSS',
-                        )
-            
+        data = self.model_selection_data
+        
+        data = data.unstack()
+        data = data.reset_index()
+        data = data.rename(columns={'level_0':'Model',
+                                    'level_1':'Metric',
+                                    0:'Score'})
+#        print data
+        for metric in data['Metric'].unique():
+            plt.figure()
+            seaborn.boxplot(data = data[data['Metric']==metric],
+                            x='Model',y='Score')
+            plt.xticks(rotation='vertical')
+            plt.title('{} Scores'.format(metric))
+            plt.xlabel(' ')
+            if self['savefig']:
+                save_dir = os.path.join(self['output_directory'], 'ModelSelectionGraphs')
+                if os.path.isdir(save_dir)!=True:
+                    os.mkdir(save_dir)
+                os.chdir(save_dir)
+                fname = os.path.join(save_dir, '{}.png'.format(metric))
+                plt.savefig(fname, dpi=self['dpi'], bbox_inches='tight')
+  
         
         
         
@@ -1835,7 +1619,7 @@ class ModelSelection():
         
         for cps, res in self.multi_model_fit.results_folder_dct.items():
             LOG.debug('running current solution statistics PE with:\t {}'.format(cps))
-            pycopi.InsertParameters(cps,parameter_path=res)
+            pycopi.InsertParameters(cps,parameter_path=res, index=0)
             PE=pycopi.ParameterEstimation(cps,self.multi_model_fit.exp_files,
                                        randomize_start_values=False,
                                        method='CurrentSolutionStatistics',
@@ -1843,6 +1627,7 @@ class ModelSelection():
                                        )
             PE.set_up()
             PE.run()
+            PE.format_results()
             
             
     def get_best_parameters(self,filename=None):
@@ -1866,10 +1651,13 @@ class ModelSelection():
         Compare all the parameters accross multiple models 
         in a bar chart averaging and STD for a parameter accross
         all models. 
+        
+        May have a problem with different models have different 
+        parameters as they are not directly comparible
         '''
         best_parameters=self.get_best_parameters()
         data= best_parameters.loc[parameter_list].transpose()
-        f=sns.barplot(data=numpy.log10(data))
+        f=seaborn.barplot(data=numpy.log10(data))
         f.set_xticklabels(parameter_list,rotation=90)
         plt.legend(loc=(1,1))
         plt.title('Barplot Comparing Parameter Estimation Results for specific\nParameters accross all models')
@@ -1880,7 +1668,7 @@ class ModelSelection():
         
         
 if __name__=='__main__':
-    pass
+    execfile('/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/testing_kholodenko_manually.py')
 
     
     

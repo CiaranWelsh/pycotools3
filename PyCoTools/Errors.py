@@ -39,7 +39,8 @@ class ParameterInputError(Exception):
 
 
 
-
+class SomethingWentHorriblyWrongError(Exception):
+    pass
 
 
 

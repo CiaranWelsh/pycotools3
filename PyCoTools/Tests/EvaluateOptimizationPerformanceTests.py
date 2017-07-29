@@ -31,10 +31,10 @@ import glob
 import os
 import shutil 
 
-import Testmodels
+import TestModels
 import lxml.etree as etree
 
-MODEL_STRING = Testmodels.Testmodels.get_model1()
+MODEL_STRING = TestModels.Testmodels.get_model1()
 
 
 
