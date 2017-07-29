@@ -21,12 +21,15 @@ class ParameterEstimationplottingError(Exception):
     pass
 
 
-class indexOutOfBounds(Exception):
+class IndexOutOfBounds(Exception):
     pass
 
 
 
 class FileDoesNotExistError(Exception):
+    pass
+
+class FolderDoesNotExistError(Exception):
     pass
 
 

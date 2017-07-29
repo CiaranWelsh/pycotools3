@@ -118,7 +118,8 @@ pl_dir = r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\Profi
 model = r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\kholodenko_model_1.cps'
 parameter_path = r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\MultipleParameterEstimationResults'
 #'/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood'
-PL = PyCoTools.pydentify.ParsePLData(model,pl_dir, parameter_path=parameter_path,
+PL = PyCoTools.pydentify.ParsePLData(model,pl_dir,
+                                     parameter_path=parameter_path,
                                      index=[0,1])
 data = PL.data
 #print data
@@ -126,10 +127,14 @@ data = PL.data
 keys = list(PL.data.keys())
 
 for k in keys:
-    PyCoTools.pydentify.Plot2(PL.data, x=k, y='RSS',
-                              savefig=True, 
-                              log10=False,
-                              results_directory = r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial')
+    y='(MAPKKK activation).K1'
+    if k!=y:
+        PyCoTools.pydentify.Plot2(PL.data, x=k,
+                          y=y,
+                          savefig=True, 
+                          log10=False,
+                          plot_cl=False,
+                          results_directory = r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial')
     
 
 
