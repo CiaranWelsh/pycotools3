@@ -11151,3 +11151,351 @@ INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
 INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
 INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
 INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f0bbcf61c20>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1692:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1734:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1741:Time course ran
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f0bcc160ab8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1692:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1734:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1741:Time course ran
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f0bcd2f2b90>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1692:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1734:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1741:Time course ran
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f0bbcff73b0>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1692:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1734:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1741:Time course ran
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f0bcc3fb758>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1692:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1734:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1741:Time course ran
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f0bcd32f440>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1692:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1734:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1741:Time course ran
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:PyCoTools.pydentify:pydentify:format_results:478:skipping
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f0bbc9a27a0>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1692:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1734:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:117:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1741:Time course ran

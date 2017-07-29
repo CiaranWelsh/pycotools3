@@ -104,19 +104,21 @@ model = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholoden
 #PyCoTools.pydentify.ProfileLikelihood(model, parameter_path=RMPE['results_directory'],
 #                                      index = [0,1], run='slow', log10=True)
 
-path = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults'
-PyCoTools.pydentify.Plot(model, parameter_path=path, 
-                         index=[0,1], log10=True,
-                         mode='one',plot_parameter='(phosphorylation_of_MAPK).KK7',
-                         plot_index=0)
+#path = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults'
+#PyCoTools.pydentify.Plot2(model, parameter_path=path, 
+#                         index=[0,1], log10=True,
+#                         mode='one',plot_parameter='(MAPKKK activation).K1',
+#                         plot_index=0)
 
 
 
 
+pl_dir = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood'
+PL = PyCoTools.pydentify.ParsePLData(pl_dir)
 
-
-
-
+'''
+sort out PL boundaries when running PL
+'''
 
 
 
