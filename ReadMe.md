@@ -8,14 +8,12 @@ Use:
         
 ## Version Notice
         
-This package was developed on Python 2.7 and Copasi version 16. Since version 16 three Copasi versions were released in 
-quick sucession and some featuers about how copasi reads the CopasiML have apparantly changed. For this reason the current release
-of PyCoTools works on Copasi Version 16 and previous releases. Efforts will be made to develop a PyCoTools for the newest version of Copasi 
-(version 19 at the date of writing this)
+
+Since version 16 three Copasi versions were released in quick sucession and some featuers about how copasi reads the CopasiML have apparantly changed. For this reason the current release of PyCoTools works on Copasi Version 16 and previous releases. Efforts are being made to develop a PyCoTools for the newest version of Copasi. By and large the code downloadable on the CopasiVersion19 branch is functional but not fully tested which is why pip will still install the CopasiVersion16 branch.
 
 
 ## Tutorial
-A full tutorial on how to use PyCoTools can be found [here](https://github.com/CiaranWelsh/PyCoTools/blob/master/PyCoTools/PyCoToolsTutorial/PyCoToolsTutorial.ipynb)
+A full tutorial on how to use PyCoTools can be found [here](https://github.com/CiaranWelsh/PyCoTools/tree/CopasiVersion19/PyCoTools/PyCoToolsTutorial)
 
 ## pycopi
 The `pycopi` module is a set of python classes for interfacing with copasi via python. 
