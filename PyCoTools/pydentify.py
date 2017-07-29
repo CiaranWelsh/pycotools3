@@ -1358,7 +1358,10 @@ class Plot2():
                  'estimator':numpy.mean,
                  'n_boot':10000, 
                  'ci_band_level':95, ## CI for estimator bootstrap
-                 'err_style':'ci_band'}
+                 'err_style':'ci_band',
+                 'savefig':False,
+                 'results_directory':os.getcwd(),
+                 'dpi':300}
         
         
         for i in kwargs.keys():
@@ -1366,8 +1369,6 @@ class Plot2():
         options.update( kwargs) 
         self.kwargs=options  
         
-#        if self['log10']:
-#            self.data = numpy.log10(self.data)
         self.parameter_list = sorted(list(self.data.columns))
         
         if self['x'] == None:
@@ -1407,6 +1408,7 @@ class Plot2():
         """
         
         """
+        n = list(set(self.data.index.get_level_values(0)))
 #        print self.data
 #        print self['x']
         for label, df in self.data.groupby(level=[2]):
@@ -1426,12 +1428,21 @@ class Plot2():
                                         'YParameter'])
         except UnboundLocalError:
             return 1
+        
+#        import math
+#        print math.log10(data)
         data = data.reset_index()
+        
+        if self['log10']:
+            data['ConfidenceLevel'] = numpy.log10(data['ConfidenceLevel'])
+            data['Value'] = numpy.log10(data['Value'])
+            data['ScannedParameterValue'] = numpy.log10(data['ScannedParameterValue'])
+        
         cl_data = data[['ParameterSetRank','ConfidenceLevel',
                         'ScannedParameterValue']]
         cl_data = cl_data.drop_duplicates()
-        print cl_data.head()
-
+        plt.figure()
+#        print numpy.log10(data)
         ax1 = seaborn.tsplot(data=cl_data,
                        time='ScannedParameterValue',
                        value='ConfidenceLevel', 
@@ -1452,28 +1463,18 @@ class Plot2():
                        err_style=self['err_style'],
                        n_boot=self['n_boot'],
                        ci=self['ci_band_level'])
-        
-#        '''
-#        currently I have a matrix. Better to have
-#        sigle 
-#        '''
-#        n = list(set(self.data.index.get_level_values(0)))
-#        plt.title('Profile Likelihoods For Parameter \nSet Ranks {}'.format(n))
-#        plt.xlabel('Parameter Value')
-#        print self.get_confidence_level()
+        plt.title('ProfileLikelihood(n={})'.format(n))
+        if self['savefig']:
+            save_dir = os.path.join(self['results_directory'], 'ProfileLikelihood')
+            if os.path.isdir(save_dir)!=True:
+                os.mkdir(save_dir)
+            os.chdir(save_dir)
+            plt.savefig(os.path.join(save_dir, '{}Vs{}.jpeg'.format(self['x'],self['y'])  ),
+                        dpi=self['dpi'], bbox_inches='tight')
 
     
     
     
-    
-
-
-
-
-
-
-
-
 class ParsePLData():
     """
     get data from file into an appropriate format
@@ -1498,8 +1499,7 @@ class ParsePLData():
                  'num_data_points':None,
                  'experiment_files':None,
                  'alpha':0.95,
-                 'log10':True,
-                 }
+                 'log10':True}
         
         
         for i in kwargs.keys():
@@ -1538,7 +1538,6 @@ class ParsePLData():
         
 
         self.data = self.get_confidence_level()
-            
 
 
     def __getitem__(self,key):
@@ -1584,6 +1583,10 @@ class ParsePLData():
         res = {}
         for index_dir in self.index_dirs:
             i = os.path.split(index_dir)[1]
+            try:
+                int(i)
+            except ValueError:
+                raise Errors.InputError('Cannot convert {} to int. Check there are no extra files in your profile likelihood directory'.format(i) )
             res[int(i)] = {}
             for f in glob.glob(os.path.join(index_dir,'*.txt')):
                 dire, fle = os.path.split(f)

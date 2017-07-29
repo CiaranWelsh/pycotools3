@@ -120,10 +120,16 @@ parameter_path = r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutori
 #'/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood'
 PL = PyCoTools.pydentify.ParsePLData(model,pl_dir, parameter_path=parameter_path,
                                      index=[0,1])
+data = PL.data
+#print data
+##data =numpy.log10(PL.data)
 keys = list(PL.data.keys())
 
 for k in keys:
-    PyCoTools.pydentify.Plot2(PL.data, x=k, y='RSS')
+    PyCoTools.pydentify.Plot2(PL.data, x=k, y='RSS',
+                              savefig=True, 
+                              log10=False,
+                              results_directory = r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial')
     
 
 
