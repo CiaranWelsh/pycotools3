@@ -476,7 +476,7 @@ class FormatPLData():
             data = pandas.read_csv(self.report_name, sep='\t')
 
             LOG.info('skipping')
-            return data
+            return self.report_name
         else:
             data = data.drop(data.columns[[1,-2]], axis=1)
             data.columns = range(data.shape[1])
@@ -804,6 +804,7 @@ class Plot():
                     raise Errors.InputError('{} is not an index in your Indices: {}'.format(self.kwargs.get('plot_index'),self.kwargs.get('index')))
 
 
+#        self.interpolate_data()
         if self.kwargs['mode']=='all':
             self.plot_all()
         elif self.kwargs['mode']=='one':
@@ -964,7 +965,9 @@ class Plot():
 #        return df_dict
 ##        
     def list_parameters(self):
-        return sorted(self.GMQ.get_all_model_variables().keys())
+        return self.GMQ.get_fit_items().keys()
+#        first_index = self.data.keys()[0]
+#        return sorted(self.data[first_index].keys())
 
 
     def num_estimated_params(self):
@@ -1005,10 +1008,10 @@ class Plot():
         else:
             PED= PEAnalysis.ParsePEData(self.kwargs.get('parameter_path'))
             if isinstance(self.kwargs.get('index'),int):
-                rss[self['index']]=PED.data.iloc[self['index']['rss']]
+                rss[self['index']]=PED.data.iloc[self['index']['RSS']]
             elif isinstance(self.kwargs.get('index'),list):
                 for i in self.kwargs.get('index'):
-                    rss[i]=PED.data.iloc[i]['rss']
+                    rss[i]=PED.data.iloc[i]['RSS']
             return rss
         
     def chi2_lookup_table(self,alpha):
@@ -1094,7 +1097,7 @@ class Plot():
             return best_parameter_value
             
 
-    def plot1_dep(self,index,parameter):
+    def plot1(self,index,parameter):
         '''
         plot one parameter. 
         
@@ -1138,7 +1141,7 @@ class Plot():
         parameter_val,RSS_val=(data[data.keys()[0]],data[data.keys()[1]])
         #plot parameter vs rss once as green circles the other as lines
         try:
-            plt.plot(parameter_val,RSS_val,'bo',markersize=self.kwargs.get('marker_size'))
+            plt.plot(parameter_val,RSS_val,'bo')#,markersize=self.kwargs.get('marker_size'))
         except ValueError as e:
             if e.message=='invalid literal for float(): 1.#INF':
                 return True
@@ -1152,7 +1155,7 @@ class Plot():
                                               num=self.kwargs['interpolation_resolution']*len(parameter_val), endpoint=True)
         interp_RSS_value=f(interp_parameter_value)        
         handle=plt.plot(interp_parameter_value,interp_RSS_value,'black')
-        plt.setp(handle,'color','black',linewidth=self.kwargs.get('line_width'))
+        plt.setp(handle,'color','black')#,linewidth=self.kwargs.get('line_width'))
         
         #plot the confidence interval 
         if self.kwargs.get('log10')==True:
@@ -1161,13 +1164,13 @@ class Plot():
             CI= self.calc_chi2_CI()[index]
         
         
-        plt.plot(parameter_val,[CI]*len(parameter_val),'g--',linewidth=self.kwargs.get('line_width'))
+        plt.plot(parameter_val,[CI]*len(parameter_val),'g--')#,linewidth=self.kwargs.get('line_width'))
 #        print self.GMQ.get_all_model_variables()
 #        print parameter
         st=Misc.RemoveNonAscii(parameter).filter
 #        print st
         
-        
+        print LOG.warning(best_parameter_value)
 
         if best_parameter_value!=None:         
             #best parameter value contains the model value for pparameter
@@ -1180,7 +1183,7 @@ class Plot():
             minimum_index= abs_diff_df.idxmin()[parameter]
             best_parameter_value= interp_df.iloc[minimum_index][parameter]
             best_RSS_value=interp_df.iloc[minimum_index]['rss']
-            plt.plot(best_parameter_value,best_RSS_value,'ro',markersize=self.kwargs.get('marker_size'))
+            plt.plot(best_parameter_value,best_RSS_value,'ro')#,markersize=self.kwargs.get('marker_size'))
         
         #plot labels
         if self.kwargs['log10']:
@@ -1190,11 +1193,11 @@ class Plot():
 
         
         if self.kwargs['log10']==True:
-            plt.xlabel('Parameter Value (log10)',fontsize=self.kwargs.get('font_size'))  
-            plt.ylabel('rss (log10)',fontsize=self.kwargs.get('font_size'))
+            plt.xlabel('Parameter Value (log10)')#,fontsize=self.kwargs.get('font_size'))  
+            plt.ylabel('RSS (log10)')#,fontsize=self.kwargs.get('font_size'))
         else:
-            plt.xlabel('Parameter Value',fontsize=self.kwargs.get('font_size'))         
-            plt.ylabel('rss',fontsize=self.kwargs.get('font_size'))
+            plt.xlabel('Parameter Value')#,fontsize=self.kwargs.get('font_size'))         
+            plt.ylabel('RSS')#,fontsize=self.kwargs.get('font_size'))
        #pretty stuff
 
         ax.spines['right'].set_color('none')
@@ -1208,7 +1211,7 @@ class Plot():
         plt.xticks(rotation=self.kwargs.get('xtick_rotation'))
         
         ##legend
-        plt.legend(loc='best')
+        plt.legend(loc=(1,0))
         #options for changing the plot axis
         if self.kwargs.get('ylimit')!=None:
             ax.set_ylim(self.kwargs.get('ylimit'))
@@ -1239,11 +1242,30 @@ class Plot():
             return True
             
         
-    def plot1(self, index, parameter):
-        """
+#    def interpolate_data(self):
+#        res = {}
+#        for index in self.data:
+#            res[index] = {}
+#            for parameter in self.data[index]:
+#                print self.data[index][parameter]
+#                f=interp1d(self.data[index][parameter],RSS_val,kind=self.kwargs['interpolation_kind'])
+#                interp_parameter_value=numpy.linspace(min(self.data[index][parameter]),
+#                                              max(self.data[index][parameter]), 
+#                                              num=self['interpolation_resolution']*len(min(self.data[index][parameter]),
+#                                                      endpoint=True) )
+#                res[index][parameter]=f(interp_parameter_value)        
+#        return res
+#                handle=plt.plot(interp_parameter_value,interp_RSS_value,'black')        
         
-        """
-        print self.data[index][parameter]
+#    def plot1(self, index, parameter):
+#        """
+#        plot a single normal plot 
+#        but optionally plot a fill plot for when
+#        user has multiple indexes
+#        """
+#        print self.interpolate_data
+#        print self.data[index][parameter]
+#        print self.data[index][parameter]
 
     def plot_all(self):
         if isinstance(self.kwargs.get('index'),int)and self.kwargs.get('index')==-1:
@@ -1319,6 +1341,351 @@ class ChiSquaredtatistics():
         '''
         return self.rss * math.exp(  (  self.get_chi2_alpha()/self.num_data_points  )  )
         
+    
+    
+class Plot2():
+    def __init__(self,copasi_file,**kwargs):
+        self.copasi_file=copasi_file
+        self.CParser=pycopi.CopasiMLParser(self.copasi_file)
+        self.copasiML=self.CParser.copasiML
+        self.GMQ=pycopi.GetModelQuantities(self.copasi_file)
+        os.chdir(os.path.dirname(self.copasi_file))
+
+    
+        options={#report variables
+                 'experiment_files':None,
+                 'parameter_path':None,                 
+                 'index':-1,
+                 'alpha':0.95,
+                 'dof':None,
+                 'n':None,
+                 'rss':None,
+                 'quantity_type':'concentration',
+                 
+                 #graph features
+                 'font_size':22,
+                 'axis_size':15,
+                 'extra_title':None,
+                 'line_width':3,
+                 'bins':100,
+                 'show':False,
+                 'multiplot':False,
+                 'savefig':False,
+                 'interpolation_kind':'slinear',
+                 'interpolation_resolution':1000,
+                 'title_wrap_size':30,
+                 'ylimit':None,
+                 'xlimit':None,
+                 'dpi':125,
+                 'xtick_rotation':35,
+                 'mode':'all',
+                 'plot_index':-1,
+                 'plot_parameter':None,
+                 'marker_size':4,
+                 'separator':'\t',
+                 'log10':True,
+                 'use_pickle':False,
+                 'overwrite_pickle':False,
+                 'results_directory':None,
+                 
+                 
+                 }
+        
+        
+        for i in kwargs.keys():
+            assert i in options.keys(),'{} is not a keyword argument for plot'.format(i)
+        options.update( kwargs) 
+        self.kwargs=options  
+        self.PL_dir = self.get_PL_dir()
+        self.index_dirs = self.get_index_dirs()
+        
+        self.results_paths = self.get_result_paths()
+        
+        if self['experiment_files']==None:
+            self['experiment_files'] = self.get_experiment_files_in_use()
+        self.parse_results()
+        
+        
+        
+    def __getitem__(self,key):
+        if key not in self.kwargs:
+            raise Errors.InputError('{} not in {}'.format(key, self.kwargs.keys()))
+        return self.kwargs[key]
+    
+    def __setitem__(self,key, value):
+        self.kwargs[key] = value
+        
+    def get_PL_dir(self):
+        '''
+        Find the ProfleLikelihood directory within the same directory as copasi_file
+        '''
+        d=os.path.dirname(self.copasi_file)
+        if self.kwargs['results_directory']==None:
+            path= os.path.join(d,'ProfileLikelihood')
+        if self.kwargs['results_directory']!=None:
+            if os.path.abspath(self.kwargs['results_directory'])==False:
+                path = os.path.join(os.path.dirname(self.copasi_file),self.kwargs['results_directory'])
+            else:
+                path = self.kwargs['results_directory']
+            assert os.path.isdir(path),'The current directory: {} \t does not contain a directory called ProfileLikelihood, have you used the ProfileLikelihood class with the run option enabled?'.format(d)
+        return path
+    
+    def get_index_dirs(self):
+        '''
+        Under the ProfileLikelihood folder are a list of folders named after
+        the integer rank of best fit (.e. -1,0,1,2 ...)
+        returns list of these directories
+        '''
+        dirs= os.listdir(self.PL_dir)
+        dirs2= [os.path.join(self.PL_dir,i) for i in dirs]
+        for i in dirs2:
+            assert os.path.isdir(i)
+        return dirs2
+    
+    def format_pl_data(self):
+        """
+        
+        """
+        res = {}
+        for i in self.result_paths:
+            res[i] = {}
+            for j in self.result_paths[i]:
+                cps = self.result_paths[i][j][:-4]+'.cps'
+                try:
+                    res[i][j] = FormatPLData(cps, self.result_paths[i][j], suffix = 'formated').format
+                except Errors.FileDoesNotExistError:
+                    pass
+        return res
+        
+    def log10_transformation(self):
+        """
+        Conevrt data to lo10 scale
+        """
+        res = {}
+        for index in self.data:
+            res[index] = {}
+        
+        for index in self.data:
+            for parameter in self.data[index]:
+                res[index][parameter] = numpy.log10(self.data[index][parameter])
+        return res
+    
+
+            
+    def get_index_dirs_as_dict(self):
+        '''
+        returns dict[index]=directory to index
+        '''
+        d={}
+        dirs= os.listdir(self.PL_dir)
+        dirs2= [os.path.join(self.PL_dir,i) for i in dirs]
+        for i in dirs2:
+            assert os.path.isdir(i)
+            split=os.path.split(i)[1]
+            d[int(split)]=i
+        return d
+        
+    def get_experiment_files_in_use(self):
+        '''
+        Need to exclude data files fromlist of parameters to plot
+        '''
+        query='//*[@name="File Name"]'
+        l=[]
+        for i in self.copasiML.xpath(query):
+            f=os.path.abspath(i.attrib['value'])
+            if os.path.isfile(f)!=True:
+                raise Errors.InputError('Experimental files in use cannot be automatically determined. Please give a list of experiment file paths to the experiment_files keyword'.format())
+            l.append(os.path.abspath(i.attrib['value']))
+        
+        return l
+        
+    def get_result_paths(self):
+        d={}
+        for i in  self.index_dirs:
+            os.chdir(i)
+            d[int(os.path.split(i)[1])]={}
+            for j in glob.glob('*.txt'):
+                f,ext=os.path.splitext(j)
+                d[int(os.path.split(i)[1])][f]=os.path.join(i,j)
+        return d
+
+
+        
+    def parse_results(self):
+        df_dict={}
+        experiment_files= [os.path.split(i)[1] for i in self.kwargs['experiment_files'] ]
+        experiment_files = list(set(experiment_files))
+        LOG.debug('These are experiment keys: {}'.format(experiment_files))
+        for index in self.result_paths:
+            df_dict[index]={}
+            for param in self.result_paths[index]:
+                if os.path.split( self.result_paths[index][param])[1] not in experiment_files:
+                    data= pandas.read_csv(self.result_paths[index][param],sep='\t')#self.kwargs['separator'])
+                    df_dict[index][param]=data
+        return df_dict
+    
+    
+    
+    
+
+
+
+
+
+
+
+
+class ParsePLData():
+    """
+    get data from file into an appropriate format
+    1) ensure data is properly formatted with headers
+    2) read data into a df. 
+        index 1 = parameter set
+        index 2 = parameter of interest 
+        index 3 = best parameter value
+        index 4 = parameter scan value
+            data = matrix
+    """
+    def __init__(self,pl_directory,**kwargs):
+        self.pl_directory = pl_directory
+
+    
+        options={
+                 
+                 }
+        for i in kwargs.keys():
+            assert i in options.keys(),'{} is not a keyword argument for plot'.format(i)
+        options.update( kwargs) 
+
+        self.kwargs=options  
+        
+
+        self.index_dirs = self.get_index_dirs()
+        self.pl_data_files = self.get_pl_data_files()
+        self.pl_data_files = self.format_pl_data_files()
+#        print self.pl_data_files[0].keys()
+        self.data = self.parse_data()
+        self.get_parameter_of_interest()
+            
+##        print self.data.to_csv('/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/pl_data.test.csv')
+#                
+##        self.results_paths = self.get_result_paths()
+#        
+##        if self['experiment_files']==None:
+##            self['experiment_files'] = self.get_experiment_files_in_use()
+#        self.parse_results()
+        
+        
+        
+    def __getitem__(self,key):
+        if key not in self.kwargs:
+            raise Errors.InputError('{} not in {}'.format(key, self.kwargs.keys()))
+        return self.kwargs[key]
+    
+    def __setitem__(self,key, value):
+        self.kwargs[key] = value
+        
+    def get_parameter_of_interest(self):
+        """
+        
+        """
+        nans = {}
+        print self.data[self.data.isnull()]
+#        for key in self.data:
+#            nans[key] = {}
+#            param_index = sorted(list(set(self.data[key].index.get_level_values(1))))
+#            print self.data.isnull()
+#            for index in self.data[key].index:
+#                print self.data[key].loc[index]
+#                if self.data[key].loc[index]=='nan':#numpy.nan:
+#                    print self.data[key].loc[index]
+#                    nans[key][index] = self.data[key].loc[index]
+#        print nans
+            
+    def get_PL_dir(self):
+        '''
+        Find the ProfleLikelihood directory within the same directory as copasi_file
+        '''
+        d=os.path.dirname(self.copasi_file)
+        if self.kwargs['results_directory']==None:
+            path= os.path.join(d,'ProfileLikelihood')
+        if self.kwargs['results_directory']!=None:
+            if os.path.abspath(self.kwargs['results_directory'])==False:
+                path = os.path.join(os.path.dirname(self.copasi_file),self.kwargs['results_directory'])
+            else:
+                path = self.kwargs['results_directory']
+            assert os.path.isdir(path),'The current directory: {} \t does not contain a directory called ProfileLikelihood, have you used the ProfileLikelihood class with the run option enabled?'.format(d)
+        return path
+    
+    def get_index_dirs(self):
+        '''
+        Under the ProfileLikelihood folder are a list of folders named after
+        the integer rank of best fit (.e. -1,0,1,2 ...)
+        returns list of these directories
+        '''
+        dirs= os.listdir(self.pl_directory)
+        dirs2= [os.path.join(self.pl_directory,i) for i in dirs]
+        for i in dirs2:
+            assert os.path.isdir(i)
+        return dirs2
+    
+    
+    def get_pl_data_files(self):
+        """
+        return all text files in 
+        """
+        res = {}
+        for index_dir in self.index_dirs:
+            i = os.path.split(index_dir)[1]
+            res[int(i)] = {}
+            for f in glob.glob(os.path.join(index_dir,'*.txt')):
+                dire, fle = os.path.split(f)
+                res[int(i)][fle] = f
+        return res
+            
+    def format_pl_data_files(self):
+        """
+        
+        """
+        res = {}
+        for i in self.pl_data_files:
+            res[i] = {}
+            for j in self.pl_data_files[i]:
+                cps = self.pl_data_files[i][j][:-4]+'.cps'
+                try:
+                    res[i][j] = FormatPLData(cps, self.pl_data_files[i][j], suffix = 'formated').format
+                except Errors.FileDoesNotExistError:
+                    pass
+        return res
+        
+    
+    def parse_data(self):
+        """
+        
+        """
+        res = {}
+        df_dct = {}
+        for index in self.pl_data_files:
+            res[index] = {}
+            for data_file in self.pl_data_files[index]:
+                res[index][data_file] = pandas.read_csv( self.pl_data_files[index][data_file], 
+                   sep='\t',
+                   index_col=0)
+            df_dct[index] = pandas.concat(res[index])
+        df = pandas.concat(df_dct)
+        df.index = df.index.rename(['Rank','Parameter File','Scanned Parameter Value'])
+        return df
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 #==============================================================================
 
         
