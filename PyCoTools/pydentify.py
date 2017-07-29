@@ -1361,7 +1361,8 @@ class Plot2():
                  'err_style':'ci_band',
                  'savefig':False,
                  'results_directory':os.getcwd(),
-                 'dpi':300}
+                 'dpi':300,
+                 'plot_cl':True}
         
         
         for i in kwargs.keys():
@@ -1391,7 +1392,8 @@ class Plot2():
                 if y_param not in self.parameter_list:
                     raise Errors.InputError('{} not in {}'.format(y_param, self.parameter_list))
                 
-        
+        if self['y'] == self['x']:
+            raise Errors.InputError('x parameter {} cannot equal y parameter {}'.format(self['x'],self['y']))
         self.plot()
 
 
@@ -1429,29 +1431,26 @@ class Plot2():
         except UnboundLocalError:
             return 1
         
-#        import math
-#        print math.log10(data)
         data = data.reset_index()
         
         if self['log10']:
             data['ConfidenceLevel'] = numpy.log10(data['ConfidenceLevel'])
             data['Value'] = numpy.log10(data['Value'])
             data['ScannedParameterValue'] = numpy.log10(data['ScannedParameterValue'])
-        
-        cl_data = data[['ParameterSetRank','ConfidenceLevel',
-                        'ScannedParameterValue']]
-        cl_data = cl_data.drop_duplicates()
         plt.figure()
-#        print numpy.log10(data)
-        ax1 = seaborn.tsplot(data=cl_data,
-                       time='ScannedParameterValue',
-                       value='ConfidenceLevel', 
-                       unit='ParameterSetRank',
-                       color='green',linestyle='--',
-                       estimator=self['estimator'],
-                       err_style=self['err_style'],
-                       n_boot=self['n_boot'],
-                       ci=self['ci_band_level'])
+        if self['plot_cl']:
+            cl_data = data[['ParameterSetRank','ConfidenceLevel',
+                        'ScannedParameterValue']]
+            cl_data = cl_data.drop_duplicates()
+            seaborn.tsplot(data=cl_data,
+                           time='ScannedParameterValue',
+                           value='ConfidenceLevel', 
+                           unit='ParameterSetRank',
+                           color='green',linestyle='--',
+                           estimator=self['estimator'],
+                           err_style=self['err_style'],
+                           n_boot=self['n_boot'],
+                           ci=self['ci_band_level'])
 
 
         seaborn.tsplot(data=data, 
@@ -1523,6 +1522,7 @@ class ParsePLData():
             self['experiment_files'] = self.get_experiment_files_in_use()
 
         self.index_dirs = self.get_index_dirs()
+        
         self.pl_data_files = self.get_pl_data_files()
         self.pl_data_files = self.format_pl_data_files()
         self.data = self.parse_data()
@@ -1538,6 +1538,7 @@ class ParsePLData():
         
 
         self.data = self.get_confidence_level()
+        
 
 
     def __getitem__(self,key):
@@ -1548,20 +1549,6 @@ class ParsePLData():
     def __setitem__(self,key, value):
         self.kwargs[key] = value
         
-    def get_PL_dir(self):
-        '''
-        Find the ProfleLikelihood directory within the same directory as copasi_file
-        '''
-        d=os.path.dirname(self.copasi_file)
-        if self.kwargs['results_directory']==None:
-            path= os.path.join(d,'ProfileLikelihood')
-        if self.kwargs['results_directory']!=None:
-            if os.path.abspath(self.kwargs['results_directory'])==False:
-                path = os.path.join(os.path.dirname(self.copasi_file),self.kwargs['results_directory'])
-            else:
-                path = self.kwargs['results_directory']
-            assert os.path.isdir(path),'The current directory: {} \t does not contain a directory called ProfileLikelihood, have you used the ProfileLikelihood class with the run option enabled?'.format(d)
-        return path
     
     def get_index_dirs(self):
         '''
@@ -1569,11 +1556,19 @@ class ParsePLData():
         the integer rank of best fit (.e. -1,0,1,2 ...)
         returns list of these directories
         '''
-        dirs= os.listdir(self.pl_directory)
-        dirs2= [os.path.join(self.pl_directory,i) for i in dirs]
-        for i in dirs2:
-            assert os.path.isdir(i)
-        return dirs2
+        l = []
+        for i in glob.glob(os.path.join(self.pl_directory,'*')):
+            if os.path.isdir(i):
+                dire, fle = os.path.split(i)
+                try:
+                    int(fle)
+                    l.append(i)
+                except ValueError:
+                    LOG.warning('{} is not a number and therefore does not contain a profile likleihood analysis. It will be ignored')
+                    continue
+                if os.path.isdir(i)!=True:
+                    raise Errors.FolderDoesNotExistError(i)
+        return l
     
     
     def get_pl_data_files(self):
