@@ -42,7 +42,7 @@ from PyCoTools.PyCoToolsTutorial import test_models
 
 TM = test_models.TestModels()
 kholodenko_string = TM.get_kholodenko_variant1()
-dire = r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial'
+dire = r'/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial'
 kholodenko_model = os.path.join(dire, 'kholodenko_model.cps')
 
 with open(kholodenko_model, 'w') as f:
@@ -66,7 +66,7 @@ data1 = TC['report_name']
 from PyCoTools.pycopi import RunMultiplePEs
 
 report = 'parameter_estimation_data2.txt'
-RMPE=RunMultiplePEs(kholodenko_model,data1, copy_number=6, pe_number=100,
+RMPE=RunMultiplePEs(kholodenko_model,data1, copy_number=12, pe_number=100,
                        method='ParticleSwarm',plot=True,
                        swarm_size=100, iteration_limit=2000,
                        report_name = report, lower_bound=0.1, upper_bound=100,
@@ -114,16 +114,16 @@ RMPE.run()
 
 
 #
-pl_dir = r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\ProfileLikelihood'
-model = r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\kholodenko_model_1.cps'
-parameter_path = r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\MultipleParameterEstimationResults'
-#'/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood'
-PL = PyCoTools.pydentify.ParsePLData(model,pl_dir, parameter_path=parameter_path,
-                                     index=[0,1])
-keys = list(PL.data.keys())
-
-for k in keys:
-    PyCoTools.pydentify.Plot2(PL.data, x=k, y='RSS')
+#pl_dir = r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\ProfileLikelihood'
+#model = r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\kholodenko_model_1.cps'
+#parameter_path = r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\MultipleParameterEstimationResults'
+##'/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood'
+#PL = PyCoTools.pydentify.ParsePLData(model,pl_dir, parameter_path=parameter_path,
+#                                     index=[0,1])
+#keys = list(PL.data.keys())
+#
+#for k in keys:
+#    PyCoTools.pydentify.Plot2(PL.data, x=k, y='RSS')
     
 
 
