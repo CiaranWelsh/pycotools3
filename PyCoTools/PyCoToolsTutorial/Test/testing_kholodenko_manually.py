@@ -62,45 +62,8 @@ TC=PyCoTools.pycopi.TimeCourse(kholodenko_model,end=1000,intervals=10,step_size=
 data1 = TC['report_name']
 
 
-from PyCoTools.pycopi import RunMultiplePEs
+#from PyCoTools.pycopi import RunMultiplePEs
 
-<<<<<<< HEAD
-#%% 
-report = 'parameter_estimation_data.txt'
-RMPE=RunMultiplePEs(kholodenko_model,data1, copy_number=6, pe_number=50,
-                       method='GeneticAlgorithm',plot=True,
-                       population_size = 100,number_of_generations= 300,
-                       report_name = report, lower_bound=0.1, upper_bound=100,
-                       metabolites=[], global_quantities=[], savefig=True,
-                       font_size=40)
-
-#%%
-#RMPE.write_config_template()
-#%% 
-RMPE.setup()
-#%%
-RMPE.run()
-#%% 
-
-#RMPE.format_results()
-#PyCoTools.PEAnalysis.ParsePEData(RMPE['results_directory'])
-
-
-#
-##%%
-#RMPE.format_results()
-#'''
-#End of multi param est stuff
-#'''
-#PE.format_results()
-
-#os.system('CopasiUI {}'.format(kholodenko_model))
-
-=======
-
-'''
-This is multi param est stuff
-'''
 #report = 'parameter_estimation_data2.txt'
 #RMPE=RunMultiplePEs(kholodenko_model,data1, copy_number=6, pe_number=50,
 #                       method='GeneticAlgorithm',plot=True,
@@ -108,60 +71,50 @@ This is multi param est stuff
 #                       report_name = report, lower_bound=0.1, upper_bound=100,
 #                       metabolites=[], global_quantities=[], savefig=True,
 #                       font_size=40)
-#
-#
-##RMPE.write_config_template()
+
+#RMPE.write_config_template()
 #RMPE.setup()
+#RMPE.format_results()
 #RMPE.run()
-'''
-End of multi param est stuff
-'''
-#PE.format_results()
->>>>>>> 3943bd6... commit
 
-#os.system('CopasiUI {}'.format(kholodenko_model))
+#print PyCoTools.PEAnalysis.ParsePEData(RMPE['results_directory']).data
 
+#PyCoTools.PEAnalysis.Boxplot(data=RMPE['results_directory'], log10=True, savefig=True, num_per_plot=23)
+#PyCoTools.PEAnalysis.RssVsIterations(RMPE['results_directory'], log10=True,savefig=True)
+#PyCoTools.PEAnalysis.Histograms(RMPE['results_directory'], log10=True, savefig=True,title_fontsize=40 )
 
-
-<<<<<<< HEAD
-#from PyCoTools import PEAnalysis
-=======
->>>>>>> 3943bd6... commit
-
-#PEAnalysis.Boxplot(RMPE['results_directory'])
-
-
-
+#PyCoTools.PEAnalysis.EnsembleTimeCourse(kholodenko_model, data1, RMPE['results_directory'], 
+#                                           savefig=True,
+#                                           )
+#PyCoTools.PEAnalysis.Pca(RMPE['results_directory'], log10=True, savefig=True, by='parameters')
+#PyCoTools.PEAnalysis.Pca(RMPE['results_directory'],
+#                         log10=True, savefig=True, by='iterations',
+#                         x=10)
+#
+#PyCoTools.PEAnalysis.LinearRegression(RMPE['results_directory'],
+#                                      savefig=True, title_fontsize=70)
 
 
 
+#'''
+#profile likelihood stuff
+#'''
+model = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_1.cps'
+#
+#PyCoTools.pydentify.ProfileLikelihood(model, parameter_path=RMPE['results_directory'],
+#                                      index = [0,1], run='slow', log10=True)
 
-
-
-
-
-
-
-<<<<<<< HEAD
-=======
-
->>>>>>> 3943bd6... commit
-
-
+path = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults'
+PyCoTools.pydentify.Plot(model, parameter_path=path, 
+                         index=[0,1], log10=True,
+                         mode='one',plot_parameter='(phosphorylation_of_MAPK).KK7',
+                         plot_index=0)
 
 
 
 
 
 
-
-
-
-
-<<<<<<< HEAD
-=======
-
->>>>>>> 3943bd6... commit
 
 
 

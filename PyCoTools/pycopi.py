@@ -314,6 +314,8 @@ class GetModelQuantities():
             raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
         return self.kwargs[key]
 
+    def __setitem__(self,key,value):
+        self.kwargs[key] = value
         
     def convert_particles_to_molar(self,particles,mol_unit,compartment_volume):#,vol_unit):
         '''
@@ -896,6 +898,8 @@ class Reports():
             raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
         return self.kwargs[key]
 
+    def __setitem__(self,key,value):
+        self.kwargs[key] = value
         
     def save(self):
         self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
@@ -1610,7 +1614,9 @@ class TimeCourse(object):
                 raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
             return self.kwargs[key]
     
-    
+        def __setitem__(self,key,value):
+            self.kwargs[key] = value
+        
         def _do_checks(self):
             """
             
@@ -2964,6 +2970,9 @@ class ParameterEstimation():
         if key not in self.kwargs.keys():
             raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
         return self.kwargs[key]
+
+    def __setitem__(self,key,value):
+        self.kwargs[key] = value
         
     def run(self):
         if self.kwargs.get('plot')==False:
@@ -3696,6 +3705,8 @@ class Scan():
             raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
         return self.kwargs[key]
 
+    def __setitem__(self,key,value):
+        self.kwargs[key] = value
             
     def save(self):
         self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
@@ -4102,6 +4113,10 @@ class Run2():
             raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
         return self.kwargs[key]
 
+    def __setitem__(self,key,value):
+        self.kwargs[key] = value
+        
+        
     def multi_run(self):
         def run(x):
             if os.path.isfile(x)!=True:
@@ -4379,7 +4394,10 @@ class RunMultiplePEs():
         if key not in self.kwargs.keys():
             raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
         return self.kwargs[key]
-    
+
+    def __setitem__(self,key,value):
+        self.kwargs[key] = value
+        
     def format_results(self):
         """
         Copasi output does not have headers. This function 
@@ -4719,6 +4737,8 @@ class MultiModelFit():
             raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
         return self.kwargs[key]
 
+    def __setitem__(self,key,value):
+        self.kwargs[key] = value
         
     def instantiate_run_multi_PEs_class(self):
         '''

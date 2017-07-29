@@ -184,7 +184,10 @@ class ProfileLikelihood():
         if key not in self.kwargs.keys():
             raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
         return self.kwargs[key]
-    
+
+    def __setitem__(self,key,value):
+        self.kwargs[key] = value
+        
     def write_pickle(self):
         with open(self['pickle_path'], 'w') as f:
             pickle.dump(self.cps_dct, f)
@@ -758,13 +761,10 @@ class Plot():
         self.PL_dir = self.get_PL_dir()
         self.indices = self.get_index_dirs()
         self.result_paths = self.get_results()
+#        print self.result_paths
         self.data = self.format_pl_data()
-#        self.results = self.format_results_keys()
-        
-#        print self.results#[-1]['(dephosphorylation_of_MAPK-P).KK10']
-#        self.data=self.parse_results() 
-#        print self.data
-#        self.data = self.trim_infinite_values()
+        if self['log10']:
+            self.data = self.log10_transformation()
         
         
         '''
@@ -777,6 +777,7 @@ class Plot():
             self.kwargs['dof']=self.degrees_of_freedom()
         if self.kwargs['dof']==None:
             raise Errors.InputError('Please specify argument to dof keyword')
+            
         
         #defult n is number of data points in your data set. 
         #This can be overridden by manually specifying n
@@ -784,11 +785,13 @@ class Plot():
         if self.kwargs.get('n')==None :
             self.kwargs['n']=self.num_data_points()
         assert self.kwargs.get('n')!=None        
-        
+
         if self.kwargs.get('mode') not in ['all','one',None]:
             raise Errors.InputError('{} is not a valid mode. mode should be either all or one'.format(self.kwargs.get('mode')))
+            
+            
 
-        if self.kwargs.get('mode')!='all':
+        if self.kwargs.get('mode')=='one':
             if self['plot_parameter'] not in self.list_parameters():
                 raise Errors.InputError('{} is not a valid Parameter. Your parameters are: {}'.format(self.kwargs.get('plot_parameter'),self.list_parameters()))
 
@@ -799,7 +802,7 @@ class Plot():
             elif isinstance(self.kwargs.get('index'),list):
                 if self.kwargs.get('plot_index') not in self.kwargs.get('index'):
                     raise Errors.InputError('{} is not an index in your Indices: {}'.format(self.kwargs.get('plot_index'),self.kwargs.get('index')))
-#
+
 
         if self.kwargs['mode']=='all':
             self.plot_all()
@@ -818,11 +821,22 @@ class Plot():
             
         return self.kwargs[key]
     
-    
-#    def format_results_keys(self):
-#        """
-#        Output from format_pl_data has keys with words separated by underscore
-#        """
+    def __setitem__(self,key,value):
+        self.kwargs[key] = value
+        
+        
+    def log10_transformation(self):
+        """
+        Conevrt data to lo10 scale
+        """
+        res = {}
+        for index in self.data:
+            res[index] = {}
+        
+        for index in self.data:
+            for parameter in self.data[index]:
+                res[index][parameter] = numpy.log10(self.data[index][parameter])
+        return res
     
     def format_pl_data(self):
         """
@@ -989,11 +1003,9 @@ class Plot():
             rss[-1]= self.kwargs.get('rss')
             return rss
         else:
-            PED= PEAnalysis.ParsePEData(self.kwargs.get('parameter_path'),
-                                        use_pickle=self.kwargs['use_pickle'],
-                                        overwrite_pickle=False)#self.kwargs['overwrite_pickle'])
+            PED= PEAnalysis.ParsePEData(self.kwargs.get('parameter_path'))
             if isinstance(self.kwargs.get('index'),int):
-                rss[self.kwargs.get('index')]=PED.data.iloc[self.kwargs.get('index')]['rss']
+                rss[self['index']]=PED.data.iloc[self['index']['rss']]
             elif isinstance(self.kwargs.get('index'),list):
                 for i in self.kwargs.get('index'):
                     rss[i]=PED.data.iloc[i]['rss']
@@ -1082,7 +1094,7 @@ class Plot():
             return best_parameter_value
             
 
-    def plot1(self,index,parameter):
+    def plot1_dep(self,index,parameter):
         '''
         plot one parameter. 
         
@@ -1226,6 +1238,13 @@ class Plot():
         else:
             return True
             
+        
+    def plot1(self, index, parameter):
+        """
+        
+        """
+        print self.data[index][parameter]
+
     def plot_all(self):
         if isinstance(self.kwargs.get('index'),int)and self.kwargs.get('index')==-1:
             try:
@@ -1244,14 +1263,66 @@ class Plot():
                 for j in self.data[i]:
                     self.plot1(i,j)
 
+class ChiSquaredtatistics():
+    def __init__(self, rss, dof, num_data_points, alpha, plot_chi2=False):
+        self.alpha = alpha
+        self.dof = dof
+        self.rss = rss
+        self.num_data_points = num_data_points
+        self.CI = self.calc_chi2_CI()
 
+    def chi2_lookup_table(self,alpha):
+        '''
+        Looks at the cdf of a chi2 distribution at incriments of 
+        0.1 between 0 and 100. 
+        
+        Returns the x axis value at which the alpha interval has been crossed, 
+        i.e. gets the cut off point for chi2 dist with dof and alpha . 
+        '''
+        nums= numpy.arange(0,100,0.1)
+        table=zip(nums,scipy.stats.chi2.cdf(nums,self.dof) )
+        for i in table:
+            if i[1]<=alpha:
+                chi2_df_alpha=i[0]
+        return chi2_df_alpha  
+        
+    def get_chi2_alpha(self):
+        '''
+        return the chi2 threshold for cut off point alpha and dof degrees of freedom
+        '''
+        dct={}
+        alphas=numpy.arange(0,1,0.01)
+        for i in alphas:
+            dct[round(i,3)]=self.chi2_lookup_table(i)
+        return dct[self.alpha]
 
-
+    def plot_chi2_CI(self):
+        '''
+        Visualize where the alpha cut off is on the chi2 distribution
+        '''
+        x = numpy.linspace(scipy.stats.chi2.ppf(0.01, self.dof),scipy.stats.chi2.ppf(0.99, self.dof), 100)
+        
+        plt.figure()        
+        plt.plot(x, scipy.stats.chi2.pdf(x, self.dof),'k-', lw=4, label='chi2 pdf')
+        
+        y_alpha=numpy.linspace(plt.ylim()[0],plt.ylim()[1])
+        x_alpha=[self.get_chi2_alpha()]*len(y_alpha)
+        
+        plt.plot(x_alpha,y_alpha,'--',linewidth=4)
+        plt.xlabel('x',fontsize=22)
+        plt.ylabel('Probability',fontsize=22)
+        plt.title('Chi2 distribution with {} dof'.format(self.dof),fontsize=22)
+        
+        
+    def calc_chi2_CI(self):
+        '''
+        '''
+        return self.rss * math.exp(  (  self.get_chi2_alpha()/self.num_data_points  )  )
         
 #==============================================================================
 
         
 if __name__=='__main__':
-    pass
-#    execfile('/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/testing_kholodenko_manually.py')
+#    pass
+    execfile('/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/testing_kholodenko_manually.py')
 
