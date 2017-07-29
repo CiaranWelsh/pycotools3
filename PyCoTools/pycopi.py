@@ -68,8 +68,6 @@ LOG=logging.getLogger(__name__)
 sns.set_context(context='poster',
                 font_scale=3)
 
-#==========================================================================
-
 
 class CopasiMLParser():
 
