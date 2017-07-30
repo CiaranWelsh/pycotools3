@@ -26615,3 +26615,7 @@ DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of M
 DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/0/(dephosphorylation_of_MAPKK-PP).KK5.cps
 DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPKK-PP).KK5
 DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(dephosphorylation_of_MAPKK-PP).KK5.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPK-PP).KK9
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/0/(dephosphorylation_of_MAPK-PP).KK9.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPKK-P).KK6
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/0/(dephosphorylation_of_MAPKK-P).KK6.cps
