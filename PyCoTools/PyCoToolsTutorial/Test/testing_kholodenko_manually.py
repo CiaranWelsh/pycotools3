@@ -123,8 +123,8 @@ PyCoTools.PEAnalysis.Pca(results_directory,
 #model = r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\kholodenko_model_1.cps'
 #parameter_path = r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\MultipleParameterEstimationResults'
 ##'/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood'
-#PL = PyCoTools.pydentify.ParsePLData(model,pl_dir, parameter_path=parameter_path,
-#                                     index=[0,1])
+PL = PyCoTools.pydentify.ParsePLData(model,pl_dir, parameter_path=parameter_path,
+                                     index=[0,1])
 #keys = list(PL.data.keys())
 #
 #for k in keys:

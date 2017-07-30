@@ -1,8 +1,8 @@
 Metadata-Version: 1.1
 Name: PyCoTools
-Version: 4.0.3
+Version: 4.0.5
 Summary: A python toolbox for COPASI
-Home-page: https://github.com/CiaranWelsh/PyCoTools
+Home-page: https://pypi.python.org/pypi/PyCoTools
 Author: Ciaran Welsh
 Author-email: c.welsh2@newcastle.ac.uk
 License: GPL4
