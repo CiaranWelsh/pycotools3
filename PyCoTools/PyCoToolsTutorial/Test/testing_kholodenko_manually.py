@@ -54,31 +54,32 @@ with open(kholodenko_model, 'w') as f:
     
     
 #
-#report= 'parameter_estimation_synthetic_data.txt'
-#TC=PyCoTools.pycopi.TimeCourse(kholodenko_model,end=1000,intervals=10,step_size=100,
-#                            report_name = report, global_quantities=None)
+report= 'parameter_estimation_synthetic_data.txt'
+TC=PyCoTools.pycopi.TimeCourse(kholodenko_model,end=1000,intervals=10,step_size=100,
+                            report_name = report, global_quantities=None)
+#
+#
+## Give fake data a meaningful name
+data1 = TC['report_name']
 ##
 ##
-### Give fake data a meaningful name
-#data1 = TC['report_name']
+from PyCoTools.pycopi import RunMultiplePEs
 ##
-##
-#from PyCoTools.pycopi import RunMultiplePEs
-##
-#report = 'parameter_estimation_data2.txt'
-#RMPE=RunMultiplePEs(kholodenko_model,data1, copy_number=12, pe_number=100,
-#                       method='ParticleSwarm',plot=True,
-#                       swarm_size=100, iteration_limit=2000,
-#                       report_name = report, lower_bound=0.1, upper_bound=100,
-#                       metabolites=[], global_quantities=[], savefig=True,
-#                       font_size=40)
-###
-###RMPE.write_config_template()
-###RMPE.setup()
-#RMPE.format_results()
+#report = 'parameter_5s()
 ##RMPE.run()
 
-results_directory = r'/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults'
+#results_directory = r'/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults'
+
+model = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps'
+
+GMQ = PyCoTools.pycopi.GetModelQuantities(model)
+#print GMQ.get_IC_cns()
+#parameter_path = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults'
+
+#PyCoTools.pydentify.ProfileLikelihood(model, parameter_path=parameter_path,
+#                                      index = [0,1,2,3,4], run='slow', log10=True)
+
+
 
 #print os.path.isdir(results_directory)
 #print RMPE['results_directory'] ==results_directory
@@ -91,8 +92,8 @@ results_directory = r'/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTuto
 #PyCoTools.PEAnalysis.EnsembleTimeCourse(kholodenko_model, data1, results_directory,
 #                                           savefig=True,
 #                                           )
-PyCoTools.PEAnalysis.Pca(results_directory, 
-                         log10=True, savefig=True, by='parameters')
+#PyCoTools.PEAnalysis.Pca(results_directory, 
+#                         log10=True, savefig=True, by='parameters')
 #PyCoTools.PEAnalysis.Pca(results_directory,
 #                         log10=True, savefig=True, by='iterations',
 #                         annotate=False)
@@ -107,8 +108,7 @@ PyCoTools.PEAnalysis.Pca(results_directory,
 #'''
 #model = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_1.cps'
 #
-#PyCoTools.pydentify.ProfileLikelihood(model, parameter_path=RMPE['results_directory'],
-#                                      index = [0,1], run='slow', log10=True)
+
 
 #path = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults'
 #PyCoTools.pydentify.Plot2(model, parameter_path=path, 
@@ -119,17 +119,21 @@ PyCoTools.PEAnalysis.Pca(results_directory,
 
 
 #
+
+
+#pl_dir = 
 #pl_dir = r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\ProfileLikelihood'
 #model = r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\kholodenko_model_1.cps'
 #parameter_path = r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\MultipleParameterEstimationResults'
 ##'/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood'
 #PL = PyCoTools.pydentify.ParsePLData(model,pl_dir, parameter_path=parameter_path,
-#                                     index=[0,1])
+#                                     index=[0,1,2,3,4], log10=True)
 #keys = list(PL.data.keys())
 #
 #for k in keys:
 #    PyCoTools.pydentify.Plot2(PL.data, x=k, y='RSS')
-    
+
+
 
 
 
