@@ -889,6 +889,8 @@ class Reports():
         
             
         self.copasiML=self.save()
+        
+        
 
 
     def __getitem__(self,key):
@@ -1449,7 +1451,6 @@ class TimeCourse(object):
                        'dpi': 125,
                        'marker_size': 5,
                        'graph_directory': None,
-
                        }
             # values need to be lower case for copasiML
             for i in kwargs.keys():
@@ -2997,15 +2998,6 @@ class ParameterEstimation():
         :return:
         """
         FormatPEData(self.copasi_file, self['report_name'], report_type='parameter_estimation')
-#        data = pandas.read_csv(self.kwargs['report_name'], sep='\t', header=None)
-#        data = data.drop(data.columns[0], axis=1)
-#        rss_col = data.columns[-1]
-#        data[ rss_col] = data[rss_col].str[1:]
-#        names = self.GMQ.get_fit_item_order()+['RSS']
-#        data.columns = names
-#        os.remove(self.kwargs['report_name'])
-#        data.to_csv(self.kwargs['report_name'],sep='\t')
-#        return data
 
 
     def convert_to_string(self,num):
@@ -5042,9 +5034,6 @@ class InsertParameters():
         '''
         model_parameter_names= set(self.GMQ.get_all_model_variables().keys())
         input_parameter_names= set(list(df.keys()))
-        LOG.info('Model parameter names: {}'.format(model_parameter_names))
-        LOG.info('\n\n')
-        LOG.info('Input parameter names: {}'.format(input_parameter_names))
         intersection=list( model_parameter_names.intersection(input_parameter_names))
         if intersection==[]:
             raise Errors.ParameterInputError('''The parameters in your parameter estimation data are not in your model.\
