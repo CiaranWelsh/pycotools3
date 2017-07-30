@@ -8,7 +8,7 @@ Created on Sun Jul 23 16:47:47 2017
 
 import site
 #site.addsitedir('/home/b3053674/Documents/PyCoTools')
-site.addsitedir(r'C:\Users\Ciaran\Documents\PyCoTools')
+site.addsitedir(r'/home/b3053674/Documents/PyCoTools')
 import PyCoTools
 import os, glob
 import numpy
@@ -54,45 +54,50 @@ with open(kholodenko_model, 'w') as f:
     
     
 #
-report= 'parameter_estimation_synthetic_data.txt'
-TC=PyCoTools.pycopi.TimeCourse(kholodenko_model,end=1000,intervals=10,step_size=100,
-                            report_name = report, global_quantities=None)
-#
-#
-## Give fake data a meaningful name
-data1 = TC['report_name']
-
-
-from PyCoTools.pycopi import RunMultiplePEs
-
-report = 'parameter_estimation_data2.txt'
-RMPE=RunMultiplePEs(kholodenko_model,data1, copy_number=12, pe_number=100,
-                       method='ParticleSwarm',plot=True,
-                       swarm_size=100, iteration_limit=2000,
-                       report_name = report, lower_bound=0.1, upper_bound=100,
-                       metabolites=[], global_quantities=[], savefig=True,
-                       font_size=40)
-
-RMPE.write_config_template()
-RMPE.setup()
+#report= 'parameter_estimation_synthetic_data.txt'
+#TC=PyCoTools.pycopi.TimeCourse(kholodenko_model,end=1000,intervals=10,step_size=100,
+#                            report_name = report, global_quantities=None)
+##
+##
+### Give fake data a meaningful name
+#data1 = TC['report_name']
+##
+##
+#from PyCoTools.pycopi import RunMultiplePEs
+##
+#report = 'parameter_estimation_data2.txt'
+#RMPE=RunMultiplePEs(kholodenko_model,data1, copy_number=12, pe_number=100,
+#                       method='ParticleSwarm',plot=True,
+#                       swarm_size=100, iteration_limit=2000,
+#                       report_name = report, lower_bound=0.1, upper_bound=100,
+#                       metabolites=[], global_quantities=[], savefig=True,
+#                       font_size=40)
+###
+###RMPE.write_config_template()
+###RMPE.setup()
 #RMPE.format_results()
-RMPE.run()
+##RMPE.run()
 
-#print PyCoTools.PEAnalysis.ParsePEData(RMPE['results_directory']).data
+results_directory = r'/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults'
 
-#PyCoTools.PEAnalysis.Boxplot(data=RMPE['results_directory'], log10=True, savefig=True, num_per_plot=23)
-#PyCoTools.PEAnalysis.RssVsIterations(RMPE['results_directory'], log10=True,savefig=True)
-#PyCoTools.PEAnalysis.Histograms(RMPE['results_directory'], log10=True, savefig=True,title_fontsize=40 )
+#print os.path.isdir(results_directory)
+#print RMPE['results_directory'] ==results_directory
+#print PyCoTools.PEAnalysis.ParsePEData(results_directory).data
 
-#PyCoTools.PEAnalysis.EnsembleTimeCourse(kholodenko_model, data1, RMPE['results_directory'], 
+#PyCoTools.PEAnalysis.Boxplot(results_directory, log10=True, savefig=True, num_per_plot=23)
+#PyCoTools.PEAnalysis.RssVsIterations(results_directory, log10=True,savefig=True)
+#PyCoTools.PEAnalysis.Histograms(results_directory, log10=True, savefig=True,title_fontsize=40 )
+
+#PyCoTools.PEAnalysis.EnsembleTimeCourse(kholodenko_model, data1, results_directory,
 #                                           savefig=True,
 #                                           )
-#PyCoTools.PEAnalysis.Pca(RMPE['results_directory'], log10=True, savefig=True, by='parameters')
-#PyCoTools.PEAnalysis.Pca(RMPE['results_directory'],
+PyCoTools.PEAnalysis.Pca(results_directory, 
+                         log10=True, savefig=True, by='parameters')
+#PyCoTools.PEAnalysis.Pca(results_directory,
 #                         log10=True, savefig=True, by='iterations',
-#                         x=10)
+#                         annotate=False)
 #
-#PyCoTools.PEAnalysis.LinearRegression(RMPE['results_directory'],
+#PyCoTools.PEAnalysis.LinearRegression(results_directory,
 #                                      savefig=True, title_fontsize=70)
 
 
