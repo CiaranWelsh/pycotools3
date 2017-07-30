@@ -37,7 +37,7 @@ import  setuptools
 #version
 MAJOR = 4
 MINOR = 0
-MICRO = 2
+MICRO = 3
 
 #=======
 __version__ = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
@@ -46,9 +46,9 @@ setup(
   name = 'PyCoTools',
   packages = ['PyCoTools'], # this must be the same as the name above
   version = __version__,
-  description = 'A python copasi toolbox',
+  description = 'A python toolbox for COPASI',
   author = 'Ciaran Welsh',
-  requires=['lxml','argparse','pandas','numpy','scipy','matplotlib.pyplot'],
+  requires=['lxml','argparse','pandas','numpy','scipy','matplotlib.pyplot','scipy','seaborn','sklearn'],
   package_data={'PyCoTools':['*.py','Documentation/*.pdf',
                              'logging_config.conf',
                              'Documentation/*.html','Licence.txt',
@@ -72,7 +72,7 @@ setup(
 #  platform=['windows','linux'],
   install_requires=['pandas','numpy','scipy','matplotlib',
                     'lxml'],
-  long_description='''Tools for using Copasi via Python and calculating profile likelihoods. See Github page for more details''')
+  long_description='''Tools for using Copasi via Python and calculating profile likelihoods. See Github page and documentation for more details''')
 
 
 
