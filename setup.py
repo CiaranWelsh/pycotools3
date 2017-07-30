@@ -30,14 +30,14 @@ Setup tools for PyCoTools
 
 """
 
-from distutils.core import setup
-import  setuptools 
+#from distutils.core import setup
+from setuptools import setup
 
 
 #version
 MAJOR = 4
 MINOR = 0
-MICRO = 3
+MICRO = 6
 
 #=======
 __version__ = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
@@ -64,9 +64,11 @@ setup(
                              'PyCoToolsTutorial/*.html',
                              'PyCoToolsTutorial/*.cps']},
   author_email = 'c.welsh2@newcastle.ac.uk',
-  url = 'https://github.com/CiaranWelsh/PyCoTools', # use the URL to the github repo
+  url = 'https://pypi.python.org/pypi/PyCoTools',
+  #url = 'https://github.com/CiaranWelsh/PyCoTools', # use the URL to the github repo
 #  download_url = 'https://github.com/b3053674/pydentify/tarball/0.1',
-  keywords = ['systems biology','modelling','biological','networks','copasi','identifiability analysis','profile likelihood'],
+  keywords = ['systems biology','modelling','biological',
+              'networks','copasi','identifiability analysis','profile likelihood'],
 #  include_package_data=False,
   license='GPL4',
 #  platform=['windows','linux'],
