@@ -24,6 +24,7 @@ PyCoTools/PyCoToolsTutorial/Kholodenko.cps
 PyCoTools/PyCoToolsTutorial/KholodenkoModelSelection.ipynb
 PyCoTools/PyCoToolsTutorial/ModelSelection.ipynb
 PyCoTools/PyCoToolsTutorial/ParameterEstimationAnalysis.ipynb
+PyCoTools/PyCoToolsTutorial/ProfileLikelihoodPickle.pickle
 PyCoTools/PyCoToolsTutorial/PyCoToolsTutorial.ipynb
 PyCoTools/PyCoToolsTutorial/References.ipynb
 PyCoTools/PyCoToolsTutorial/Scripts.ipynb
