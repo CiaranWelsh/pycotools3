@@ -2417,8 +2417,11 @@ class FormatPEData():
         give them the proper headers then overwrite the file again
         :return:
         """
-
-        data = pandas.read_csv(self.report_name, sep='\t', header=None, skiprows=[0])
+        try:
+            data = pandas.read_csv(self.report_name, sep='\t', header=None, skiprows=[0])
+        except:
+            LOG.warning('No Columns to parse from file. {} is empty. Returned None'.format(self.report_name))
+            return None
         bracket_columns = data[data.columns[[0,-2]]]
         if bracket_columns.iloc[0].iloc[0] != '(':
             data = pandas.read_csv(self.report_name, sep='\t')
@@ -3715,7 +3718,7 @@ class Scan():
         '''
         
         '''
-        logging.info('defining report')
+        logging.debug('defining report')
         self.report_dict={}
         self.report_dict['metabolites']=self.kwargs.get('metabolites')
         self.report_dict['global_quantities']=self.kwargs.get('global_quantities')
@@ -4408,9 +4411,12 @@ class RunMultiplePEs():
             cps_keys = self.sub_copasi_files.keys()
         report_keys = self.report_files.keys()
         for i in range(len(self.report_files)):
-#            LOG.info('{}, {}'.format(self.sub_copasi_files[cps_keys[i]], self.report_files[report_keys[i]]))
-            FormatPEData(self.sub_copasi_files[cps_keys[i]], self.report_files[report_keys[i]],
+            try:
+                FormatPEData(self.sub_copasi_files[cps_keys[i]], self.report_files[report_keys[i]],
                          report_type='multi_parameter_estimation')
+            except Errors.InputError:
+                LOG.warning('{} is empty. Cannot parse. Skipping this file'.format(self.report_files[report_keys[i]]))
+                continue
         return self.report_files
 
     def setup(self):
@@ -4460,7 +4466,7 @@ class RunMultiplePEs():
         returns:
             dict[model_number]=cps_file
         '''
-        LOG.info('Copying copasi file {} times'.format(self.kwargs['copy_number']))
+        LOG.debug('Copying copasi file {} times'.format(self.kwargs['copy_number']))
         sub_copasi_files_dct={}
         copasi_path,copasi_filename=os.path.split(self.copasi_file)
         for i in range(1,self.kwargs['copy_number']):
@@ -4497,7 +4503,7 @@ class RunMultiplePEs():
 
         q=Queue.Queue()
         for num in range(self.kwargs['copy_number']):
-            LOG.info('setting up scan for model : {}'.format(self.sub_copasi_files[num]))
+            LOG.debug('setting up scan for model : {}'.format(self.sub_copasi_files[num]))
             t=threading.Thread(target=self._setup1scan,
                                args =  (q,self.sub_copasi_files[num] , self.report_files[num])  )
             t.daemon=True
@@ -4505,7 +4511,6 @@ class RunMultiplePEs():
             time.sleep(0.1)
             
         s=q.get()
-        LOG.info(str(s))
         ## Since this is being executed in parallel sometimes
         ## we get process clashes. Not sure exactly whats going on
         ## but introducing a small delay seems to fix
@@ -4530,7 +4535,7 @@ class RunMultiplePEs():
              append = self.kwargs['append'],
              confirm_overwrite = self.kwargs['confirm_overwrite'],
              output_in_subtask = self.kwargs['output_in_subtask']) )
-        LOG.info('Setup Took {} seconds'.format(time.time() - start))
+        LOG.debug('Setup Took {} seconds'.format(time.time() - start))
 
     ##void
     def _create_defaults(self):
@@ -4581,7 +4586,7 @@ class RunMultiplePEs():
         '''
         
         '''
-        LOG.info('creating a directory for analysis in : \n\n{}'.format(self.kwargs['results_directory']))
+        LOG.debug('creating a directory for analysis in : \n\n{}'.format(self.kwargs['results_directory']))
         if os.path.isdir(self.kwargs['results_directory'])!=True:
             os.mkdir(self.kwargs['results_directory'])
                 

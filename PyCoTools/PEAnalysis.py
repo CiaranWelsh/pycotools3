@@ -120,7 +120,16 @@ class ParsePEData():
         
         """
         ## check that the data has been formatted before entry into PEAnalysis module
-        data = pandas.read_csv(path, sep='\t', header=None, skiprows=0)
+        try:
+            data = pandas.read_csv(path, sep='\t', header=None, skiprows=0)
+        except pandas.parser.CParserError:
+            LOG.warning('Cannot parse data from {}'.format(path))
+            return None
+        if data.shape == (1,2):
+            if data.iloc[0][0] == 'TaskList[Parameter Estimation].(Problem)Parameter Estimation.Best Parameters':
+                if data.iloc[0][1] == 'TaskList[Parameter Estimation].(Problem)Parameter Estimation.Best Value':
+                    LOG.warning('Data file "{}" only contains nothing. File ignored'.format(path))
+                    return None
         for i in data.iloc[0]:
             if i=='(':
                 raise Errors.InputError('Brackets are still in your data file. Ensure you\'ve properly formatted PE data using the format_results() method')
@@ -151,7 +160,7 @@ class Boxplot():
                  'num_per_plot':6,
                  'xtick_rotation':'vertical',
                  'ylabel':'Estimated Parameter\n Value(Log10)',
-                 'title':'Boxplot Showing Distribution of Parameter Estimates',
+                 'title':'Parameter Distributions',
                  'savefig':False,
                  'results_directory':None,
                  'dpi':300}
@@ -204,7 +213,7 @@ class Boxplot():
             data = self.data[labels[label_set]]
             seaborn.boxplot(data = data )
             plt.xticks(rotation=self['xtick_rotation'])
-            plt.title(self['title'])
+            plt.title(self['title']+'(n={})'.format(data.shape[0]))
             plt.ylabel(self['ylabel'])
             if self['savefig']:
                 boxplot_dir = os.path.join(self['results_directory'], 'Boxplots')
@@ -291,7 +300,7 @@ class RssVsIterations():
         plt.figure()#        
         plt.plot(range(self.data['RSS'].shape[0]), self.data['RSS'].sort_values(ascending=True))
         plt.xticks(rotation=self['xtick_rotation'])
-        plt.title(self['title'])
+        plt.title(self['title'])#+'(n={})'.format(self.data.shape[0]))
         plt.ylabel(self['ylabel'])
         plt.xlabel('Rank of Best Fit')
         if self['savefig']:
@@ -328,8 +337,10 @@ class Pca():
                  'dpi':300,
                  'n_components':2,
                  'by':'parameters', ##iterations or parameters
-                 'legend_position':(30,17,1.25), ##Horizontal, verticle, line spacing
-                 'legend_fontsize': 25}
+                 'legend_position':None, ##Horizontal, verticle, line spacing
+                 'legend_fontsize': 25,
+                 'cmap':'viridis',
+                 'annotate':False}
         
         for i in kwargs.keys():
             assert i in options.keys(),'{} is not a keyword argument for RssVsIteration'.format(i)
@@ -360,6 +371,11 @@ class Pca():
  
         
         LOG.info('plotting PCA {}'.format(self['by']))
+        
+        if self['by'] == 'parameters':
+            self['annotate']=True
+            if self['legen_position']==None:
+                raise Errors.InputError('When data reduction is by \'parameters\' you should specify an argument to legend_position. i.e. legend_position=(10,10,1,5) for hori)
         self.pca()
         
         
@@ -393,28 +409,34 @@ class Pca():
         
     def pca(self):
         pca = PCA(n_components=self['n_components'])
+        rss = self.data['RSS']
         self.data = self.data.drop('RSS',axis=1)
+        fig, ax = plt.subplots()
         if self['by']=='parameters':
             projected = pca.fit(self.data.transpose()).transform(self.data.transpose())
             projected = pandas.DataFrame(projected, index=self.data.columns)
             labels = self.data.columns
-            title = 'PCA Grouping Parameters (n={})'.format(len(labels))
+            title = 'PCA by Parameters (n={})'.format(len(labels))
+            sc = ax.scatter(projected[0], projected[1])#, c=projected['RSS'], cmap=self['cmap'])
+
 
         else:
             projected = pca.fit(self.data).transform(self.data)
             projected = pandas.DataFrame(projected, index=self.data.index)
             labels = list(self.data.index)
-            title = 'PCA Grouping PE Replicates (n={})'.format(len(labels))
+            title = 'PCA by Iterations (n={})'.format(len(labels))
+            projected = pandas.concat([rss, projected], axis=1)
+            sc = ax.scatter(projected[0], projected[1], c=projected['RSS'], cmap=self['cmap'])
+            cb = plt.colorbar(sc)
+            cb.ax.set_title('RSS')
             
-        fig, ax = plt.subplots()
-#        = plt.figure()
-        ax.plot(projected[0],projected[1], 'o')
+            
         plt.ylabel(self['ylabel'])
         plt.xlabel(self['xlabel'])
         plt.title(title)
         for i, txt in enumerate(labels):
-            ax.annotate(str(i), (projected[0][i], projected[1][i]))
-#            ax.text('{}: {}'.format(i,txt), (0,-5))
+            if self['annotate']:
+                ax.annotate(str(i), (projected[0][i], projected[1][i]))
             if self['by']=='parameters':
                 ax.text(self['legend_position'][0],self['legend_position'][1]-i*self['legend_position'][2],
                     '{}: {}'.format(i,txt),fontsize=self['legend_fontsize'])
@@ -657,7 +679,8 @@ class LinearRegression():
         """
         plt.figure()
         seaborn.heatmap(self.scores)
-        plt.title('Model Fitting Test and Train Scores', fontsize=self['title_fontsize'])
+        plt.title('Model Fitting Test and Train Scores'+'(n={})'.format(self.data.shape[0]),
+                  fontsize=self['title_fontsize'])
         if self['savefig']:
             save_dir = os.path.join(self['results_directory'], 'LinearRegression')
             if os.path.isdir(save_dir)!=True:
@@ -670,7 +693,7 @@ class LinearRegression():
     def plot_rss(self):
         plt.figure()
         seaborn.heatmap(self.coef['RSS'].sort_values(by='RSS', ascending=False))        
-        plt.title('Lasso Regression. Y=RSS, X=all other Parameters', fontsize=self['title_fontsize'])
+        plt.title('Lasso Regression. Y=RSS, X=all other Parameters'+'(n={})'.format(data.shape[0]), fontsize=self['title_fontsize'])
         if self['savefig']:
             save_dir = os.path.join(self['results_directory'], 'LinearRegression')
             if os.path.isdir(save_dir)!=True:
