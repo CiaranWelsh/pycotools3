@@ -1,0 +1,2 @@
+(dephosphorylation of MAPKK-PP).KK5	TaskList[Parameter Estimation].(Problem)Parameter Estimation.Best Parameters	TaskList[Parameter Estimation].(Problem)Parameter Estimation.Best Value
+0.015	(	43.2756	0.100942	0.335514	0.100001	0.1	11.7279	0.133073	0.1	0.128463	0.116834	0.100105	100	0.417868	91.5394	0.365967	97.7089	100	1.50235	29.5759	1.89417	2.2049	)	4300.15
