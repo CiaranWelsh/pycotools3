@@ -70,11 +70,14 @@ from PyCoTools.pycopi import RunMultiplePEs
 
 #results_directory = r'/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults'
 
-model = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_1.cps'
-parameter_path = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults'
+model = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps'
 
-PyCoTools.pydentify.ProfileLikelihood(model, parameter_path=parameter_path,
-                                      index = [0,1,2,3,4], run='slow', log10=True)
+GMQ = PyCoTools.pycopi.GetModelQuantities(model)
+#print GMQ.get_IC_cns()
+#parameter_path = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults'
+
+#PyCoTools.pydentify.ProfileLikelihood(model, parameter_path=parameter_path,
+#                                      index = [0,1,2,3,4], run='slow', log10=True)
 
 
 
