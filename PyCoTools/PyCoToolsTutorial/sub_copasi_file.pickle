@@ -11,10 +11,13 @@ p3
 sI3
 S'/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_3.cps'
 p4
+<<<<<<< HEAD
 sI4
 S'/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_4.cps'
 p5
 sI5
 S'/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_5.cps'
 p6
+=======
+>>>>>>> ad790207fbd64bd409009e1a0c34655ba2e8d094
 s.
