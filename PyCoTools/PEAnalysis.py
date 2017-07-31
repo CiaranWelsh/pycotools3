@@ -376,11 +376,7 @@ class Pca():
         
         if self['by'] == 'parameters':
             self['annotate']=True
-<<<<<<< HEAD
             if self['legend_position']==None:
-=======
-            if self['legen_position']==None:
->>>>>>> ad790207fbd64bd409009e1a0c34655ba2e8d094
                 raise Errors.InputError('When data reduction is by \'parameters\' you should specify an argument to legend_position. i.e. legend_position=(10,10,1,5) for horizontal, vertical and linespacing')
         self.pca()
         

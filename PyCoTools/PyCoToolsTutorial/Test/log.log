@@ -26845,3 +26845,646 @@ DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053
 >>>>>>> 8d9ed61... commit to revert
 DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPK-P).k8
 DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(phosphorylation_of_MAPK-P).k8.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK inactivation).KK2
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(MAPKKK_inactivation).KK2.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK activation).n
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(MAPKKK_activation).n.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPKK).KK3
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(phosphorylation_of_MAPKK).KK3.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK inactivation).V2
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(MAPKKK_inactivation).V2.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPKK).k3
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(phosphorylation_of_MAPKK).k3.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK activation).K1
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(MAPKKK_activation).K1.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPK-PP).V9
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(dephosphorylation_of_MAPK-PP).V9.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPKK-P).k4
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(phosphorylation_of_MAPKK-P).k4.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPK).k7
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(phosphorylation_of_MAPK).k7.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPKK-PP).KK5
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(dephosphorylation_of_MAPKK-PP).KK5.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPK-P).k8
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(phosphorylation_of_MAPK-P).k8.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK inactivation).KK2
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(MAPKKK_inactivation).KK2.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK inactivation).V2
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(MAPKKK_inactivation).V2.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPK-PP).KK9
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(dephosphorylation_of_MAPK-PP).KK9.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPKK-P).KK6
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(dephosphorylation_of_MAPKK-P).KK6.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPKK).k3
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(phosphorylation_of_MAPKK).k3.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPKK-P).k4
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(phosphorylation_of_MAPKK-P).k4.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPKK-P).KK4
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(phosphorylation_of_MAPKK-P).KK4.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPKK-PP).KK5
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(dephosphorylation_of_MAPKK-PP).KK5.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK activation).V1
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(MAPKKK_activation).V1.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK activation).Ki
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(MAPKKK_activation).Ki.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPK-PP).KK9
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(dephosphorylation_of_MAPK-PP).KK9.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPK).KK7
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(phosphorylation_of_MAPK).KK7.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPK-P).KK10
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(dephosphorylation_of_MAPK-P).KK10.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPKK-P).KK6
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(dephosphorylation_of_MAPKK-P).KK6.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPK-P).KK8
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(phosphorylation_of_MAPK-P).KK8.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPKK-P).KK4
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(phosphorylation_of_MAPKK-P).KK4.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPKK-PP).V5
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(dephosphorylation_of_MAPKK-PP).V5.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPK-P).V10
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(dephosphorylation_of_MAPK-P).V10.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK activation).V1
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(MAPKKK_activation).V1.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPKK-P).V6
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(dephosphorylation_of_MAPKK-P).V6.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK activation).Ki
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(MAPKKK_activation).Ki.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPK).KK7
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(phosphorylation_of_MAPK).KK7.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPK-P).KK10
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(dephosphorylation_of_MAPK-P).KK10.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK activation).n
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(MAPKKK_activation).n.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPK-P).KK8
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(phosphorylation_of_MAPK-P).KK8.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPKK).KK3
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(phosphorylation_of_MAPKK).KK3.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPKK-PP).V5
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(dephosphorylation_of_MAPKK-PP).V5.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPK-P).V10
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(dephosphorylation_of_MAPK-P).V10.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK activation).K1
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(MAPKKK_activation).K1.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPKK-P).V6
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(dephosphorylation_of_MAPKK-P).V6.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPK-PP).V9
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(dephosphorylation_of_MAPK-PP).V9.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPK).k7
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(phosphorylation_of_MAPK).k7.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK activation).n
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(MAPKKK_activation).n.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPK-P).k8
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(phosphorylation_of_MAPK-P).k8.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPKK).KK3
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(phosphorylation_of_MAPKK).KK3.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK inactivation).KK2
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(MAPKKK_inactivation).KK2.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK inactivation).V2
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(MAPKKK_inactivation).V2.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK activation).K1
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(MAPKKK_activation).K1.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPK-PP).V9
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(dephosphorylation_of_MAPK-PP).V9.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPKK).k3
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(phosphorylation_of_MAPKK).k3.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPK).k7
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(phosphorylation_of_MAPK).k7.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPK-P).k8
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(phosphorylation_of_MAPK-P).k8.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPKK-P).k4
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(phosphorylation_of_MAPKK-P).k4.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK inactivation).KK2
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(MAPKKK_inactivation).KK2.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK inactivation).V2
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(MAPKKK_inactivation).V2.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPKK-PP).KK5
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(dephosphorylation_of_MAPKK-PP).KK5.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPKK).k3
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(phosphorylation_of_MAPKK).k3.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPKK-P).k4
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(phosphorylation_of_MAPKK-P).k4.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPK-PP).KK9
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(dephosphorylation_of_MAPK-PP).KK9.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPKK-PP).KK5
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(dephosphorylation_of_MAPKK-PP).KK5.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPKK-P).KK6
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(dephosphorylation_of_MAPKK-P).KK6.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPK-PP).KK9
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(dephosphorylation_of_MAPK-PP).KK9.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPKK-P).KK4
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(phosphorylation_of_MAPKK-P).KK4.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPKK-P).KK6
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(dephosphorylation_of_MAPKK-P).KK6.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK activation).V1
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(MAPKKK_activation).V1.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK activation).Ki
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(MAPKKK_activation).Ki.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPKK-P).KK4
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(phosphorylation_of_MAPKK-P).KK4.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPK).KK7
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(phosphorylation_of_MAPK).KK7.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK activation).V1
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(MAPKKK_activation).V1.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPK-P).KK10
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(dephosphorylation_of_MAPK-P).KK10.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPK-P).KK8
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(phosphorylation_of_MAPK-P).KK8.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK activation).Ki
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(MAPKKK_activation).Ki.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPKK-PP).V5
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(dephosphorylation_of_MAPKK-PP).V5.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPK).KK7
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(phosphorylation_of_MAPK).KK7.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPK-P).V10
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(dephosphorylation_of_MAPK-P).V10.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPK-P).KK10
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(dephosphorylation_of_MAPK-P).KK10.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPK-P).KK8
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(phosphorylation_of_MAPK-P).KK8.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPKK-P).V6
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(dephosphorylation_of_MAPKK-P).V6.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPKK-PP).V5
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(dephosphorylation_of_MAPKK-PP).V5.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPK-P).V10
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(dephosphorylation_of_MAPK-P).V10.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK activation).n
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(MAPKKK_activation).n.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPKK).KK3
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(phosphorylation_of_MAPKK).KK3.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPKK-P).V6
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(dephosphorylation_of_MAPKK-P).V6.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK activation).K1
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(MAPKKK_activation).K1.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPK-PP).V9
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(dephosphorylation_of_MAPK-PP).V9.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPK).k7
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(phosphorylation_of_MAPK).k7.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK activation).n
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(MAPKKK_activation).n.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPKK).KK3
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/4/(phosphorylation_of_MAPKK).KK3.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPK-P).k8
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(phosphorylation_of_MAPK-P).k8.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK inactivation).KK2
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(MAPKKK_inactivation).KK2.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK activation).K1
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/4/(MAPKKK_activation).K1.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK inactivation).V2
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(MAPKKK_inactivation).V2.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPK-PP).V9
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/4/(dephosphorylation_of_MAPK-PP).V9.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPKK).k3
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(phosphorylation_of_MAPKK).k3.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPK).k7
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/4/(phosphorylation_of_MAPK).k7.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPK-P).k8
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/4/(phosphorylation_of_MAPK-P).k8.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPKK-P).k4
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(phosphorylation_of_MAPKK-P).k4.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK inactivation).KK2
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/4/(MAPKKK_inactivation).KK2.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK inactivation).V2
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/4/(MAPKKK_inactivation).V2.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPKK).k3
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/4/(phosphorylation_of_MAPKK).k3.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPKK-PP).KK5
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(dephosphorylation_of_MAPKK-PP).KK5.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPKK-P).k4
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/4/(phosphorylation_of_MAPKK-P).k4.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPK-PP).KK9
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(dephosphorylation_of_MAPK-PP).KK9.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPKK-P).KK6
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(dephosphorylation_of_MAPKK-P).KK6.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPKK-PP).KK5
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/4/(dephosphorylation_of_MAPKK-PP).KK5.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPKK-P).KK4
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPK-PP).KK9
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(phosphorylation_of_MAPKK-P).KK4.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/4/(dephosphorylation_of_MAPK-PP).KK9.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPKK-P).KK6
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK activation).V1
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(MAPKKK_activation).V1.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/4/(dephosphorylation_of_MAPKK-P).KK6.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPKK-P).KK4
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK activation).Ki
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/3/(MAPKKK_activation).Ki.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/4/(phosphorylation_of_MAPKK-P).KK4.cps
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+WARNING:PyCoTools.pycopi:pycopi:format_multi_results:2427:No Columns to parse from file. /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults is empty. Returned None
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+WARNING:PyCoTools.pycopi:pycopi:format_multi_results:2427:No Columns to parse from file. /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults is empty. Returned None
+WARNING:PyCoTools.pycopi:pycopi:format_multi_results:2427:No Columns to parse from file. /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data219.txt is empty. Returned None
+DEBUG:PyCoTools.pycopi:pycopi:format_multi_results:2436:Shape of estimated parameters: (7, 23)
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+WARNING:PyCoTools.pycopi:pycopi:format_multi_results:2427:No Columns to parse from file. /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults is empty. Returned None
+WARNING:PyCoTools.pycopi:pycopi:format_multi_results:2427:No Columns to parse from file. /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data219.txt is empty. Returned None
+DEBUG:PyCoTools.pycopi:pycopi:format_multi_results:2436:Shape of estimated parameters: (7, 23)
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7fcd26b7cbd8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4297:Performing multi parameter fit for model at:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:_create_defaults:4553:Using default report name:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ParameterFit.txt
+DEBUG:PyCoTools.pycopi:pycopi:_create_defaults:4562:config_filename is None. Reassigning config_filename
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:4595:creating a directory for analysis in : 
+
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:4608:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4397:Create an instance of ParameterEstimation
+INFO:PyCoTools.pycopi:pycopi:write_config_template:4493:writing PE config template for model: /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_config_template:4494:config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3385:{'(phosphorylation of MAPKK).KK3': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK],ParameterGroup=Parameters,Parameter=KK3', 'value': '15'}, '(MAPKKK activation).K1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=K1', 'value': '10'}, '(dephosphorylation of MAPK-PP).V9': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-PP],ParameterGroup=Parameters,Parameter=V9', 'value': '0.5'}, '(phosphorylation of MAPK).k7': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK],ParameterGroup=Parameters,Parameter=k7', 'value': '0.025'}, '(phosphorylation of MAPK-P).k8': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=k8', 'value': '0.025'}, '(MAPKKK inactivation).KK2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK inactivation],ParameterGroup=Parameters,Parameter=KK2', 'value': '8'}, '(MAPKKK inactivation).V2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK inactivation],ParameterGroup=Parameters,Parameter=V2', 'value': '0.25'}, '(phosphorylation of MAPKK).k3': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK],ParameterGroup=Parameters,Parameter=k3', 'value': '0.025'}, '(phosphorylation of MAPKK-P).k4': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=k4', 'value': '0.025'}, '(dephosphorylation of MAPKK-PP).KK5': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-PP],ParameterGroup=Parameters,Parameter=KK5', 'value': '15'}, '(dephosphorylation of MAPK-PP).KK9': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-PP],ParameterGroup=Parameters,Parameter=KK9', 'value': '15'}, '(dephosphorylation of MAPKK-P).KK6': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=KK6', 'value': '15'}, '(phosphorylation of MAPKK-P).KK4': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=KK4', 'value': '15'}, '(MAPKKK activation).V1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=V1', 'value': '2.5'}, '(MAPKKK activation).Ki': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=Ki', 'value': '9'}, '(phosphorylation of MAPK).KK7': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK],ParameterGroup=Parameters,Parameter=KK7', 'value': '15'}, '(dephosphorylation of MAPK-P).KK10': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=KK10', 'value': '15'}, '(phosphorylation of MAPK-P).KK8': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[phosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=KK8', 'value': '15'}, '(dephosphorylation of MAPKK-PP).V5': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-PP],ParameterGroup=Parameters,Parameter=V5', 'value': '0.75'}, '(dephosphorylation of MAPK-P).V10': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPK-P],ParameterGroup=Parameters,Parameter=V10', 'value': '0.5'}, '(dephosphorylation of MAPKK-P).V6': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[dephosphorylation of MAPKK-P],ParameterGroup=Parameters,Parameter=V6', 'value': '0.75'}, '(MAPKKK activation).n': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade,Vector=Reactions[MAPKKK activation],ParameterGroup=Parameters,Parameter=n', 'value': '1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3107:writing config template. overwrite_config_file set to False and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/PEConfigFile.xlsx
+WARNING:PyCoTools.pycopi:pycopi:set_up:3457:The set_up method is deprecated. Use setup() method instead
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2249:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2252:Mapping experiment /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1160:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7fcd26f09c20>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:copy_copasi:4475:Copying copasi file 1 times
+DEBUG:PyCoTools.pycopi:pycopi:_setup_scan:4512:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3662:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3664:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3664:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3664:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:root:pycopi:define_report:3727:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:1209:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:set_scan_options:3818:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:_setup1scan:4544:Setup Took 0.120846986771 seconds
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7fcd26d9ed40>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4297:Performing multi parameter fit for model at:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:_create_defaults:4553:Using default report name:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ParameterFit.txt
+DEBUG:PyCoTools.pycopi:pycopi:_create_defaults:4562:config_filename is None. Reassigning config_filename
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:4595:creating a directory for analysis in : 
+
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:4608:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4397:Create an instance of ParameterEstimation
+WARNING:PyCoTools.pycopi:pycopi:set_up:3457:The set_up method is deprecated. Use setup() method instead
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2249:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2252:Mapping experiment /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1160:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7fcd381095a8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:copy_copasi:4475:Copying copasi file 1 times
+DEBUG:PyCoTools.pycopi:pycopi:_setup_scan:4512:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3662:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3664:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3664:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3664:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:root:pycopi:define_report:3727:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:1209:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:set_scan_options:3818:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:_setup1scan:4544:Setup Took 0.150313138962 seconds
+DEBUG:PyCoTools.pycopi:pycopi:format_multi_results:2436:Shape of estimated parameters: (2, 23)
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7fcd26db2c68>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4297:Performing multi parameter fit for model at:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:_create_defaults:4553:Using default report name:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ParameterFit.txt
+DEBUG:PyCoTools.pycopi:pycopi:_create_defaults:4562:config_filename is None. Reassigning config_filename
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:4595:creating a directory for analysis in : 
+
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:4608:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4397:Create an instance of ParameterEstimation
+WARNING:PyCoTools.pycopi:pycopi:set_up:3457:The set_up method is deprecated. Use setup() method instead
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2249:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2252:Mapping experiment /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1160:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7fcd26db25f0>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:copy_copasi:4475:Copying copasi file 1 times
+DEBUG:PyCoTools.pycopi:pycopi:_setup_scan:4512:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3662:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3664:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3664:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3664:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:root:pycopi:define_report:3727:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:1209:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:set_scan_options:3818:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:_setup1scan:4544:Setup Took 0.150830030441 seconds
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7fcd2673e518>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4297:Performing multi parameter fit for model at:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:_create_defaults:4553:Using default report name:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ParameterFit.txt
+DEBUG:PyCoTools.pycopi:pycopi:_create_defaults:4562:config_filename is None. Reassigning config_filename
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:4595:creating a directory for analysis in : 
+
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:4608:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4397:Create an instance of ParameterEstimation
+WARNING:PyCoTools.pycopi:pycopi:set_up:3457:The set_up method is deprecated. Use setup() method instead
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2249:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2252:Mapping experiment /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1160:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7fcd26db2680>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:copy_copasi:4475:Copying copasi file 3 times
+DEBUG:PyCoTools.pycopi:pycopi:_setup_scan:4512:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3662:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3664:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3664:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3664:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:root:pycopi:define_report:3727:defining report
+DEBUG:PyCoTools.pycopi:pycopi:_setup_scan:4512:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1209:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3662:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3664:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3664:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3664:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:set_scan_options:3818:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:_setup1scan:4544:Setup Took 0.140517950058 seconds
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_1.cps
+DEBUG:root:pycopi:define_report:3727:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:1209:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:_setup_scan:4512:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:set_scan_options:3818:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:_setup1scan:4544:Setup Took 0.122226953506 seconds
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3662:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3664:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3664:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3664:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_2.cps
+DEBUG:root:pycopi:define_report:3727:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:1209:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:set_scan_options:3818:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:_setup1scan:4544:Setup Took 0.121124982834 seconds
+DEBUG:PyCoTools.pycopi:pycopi:format_multi_results:2436:Shape of estimated parameters: (2, 23)
+WARNING:PyCoTools.pycopi:pycopi:format_multi_results:2427:No Columns to parse from file. /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/ParameterFit2.txt is empty. Returned None
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7fcd26f970e0>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4297:Performing multi parameter fit for model at:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:_create_defaults:4553:Using default report name:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ParameterFit.txt
+DEBUG:PyCoTools.pycopi:pycopi:_create_defaults:4562:config_filename is None. Reassigning config_filename
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:4595:creating a directory for analysis in : 
+
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:4608:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4397:Create an instance of ParameterEstimation
+WARNING:PyCoTools.pycopi:pycopi:set_up:3457:The set_up method is deprecated. Use setup() method instead
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2249:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2252:Mapping experiment /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1160:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7fcd26f63560>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:copy_copasi:4475:Copying copasi file 3 times
+DEBUG:PyCoTools.pycopi:pycopi:_setup_scan:4512:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3662:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3664:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3664:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3664:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:root:pycopi:define_report:3727:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:1209:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:_setup_scan:4512:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:set_scan_options:3818:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:_setup1scan:4544:Setup Took 0.124191045761 seconds
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3662:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3664:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3664:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3664:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_1.cps
+DEBUG:root:pycopi:define_report:3727:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:1209:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:_setup_scan:4512:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:set_scan_options:3818:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_1.cps
+DEBUG:PyCoTools.pycopi:pycopi:_setup1scan:4544:Setup Took 0.125537872314 seconds
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3662:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3664:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3664:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3664:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_2.cps
+DEBUG:root:pycopi:define_report:3727:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:1209:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:set_scan_options:3818:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_2.cps
+DEBUG:PyCoTools.pycopi:pycopi:_setup1scan:4544:Setup Took 0.119622945786 seconds
+WARNING:PyCoTools.pycopi:pycopi:format_multi_results:2427:No Columns to parse from file. /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/ParameterFit0.txt is empty. Returned None
+WARNING:PyCoTools.pycopi:pycopi:format_multi_results:2427:No Columns to parse from file. /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/ParameterFit1.txt is empty. Returned None
+WARNING:PyCoTools.pycopi:pycopi:format_multi_results:2427:No Columns to parse from file. /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/ParameterFit2.txt is empty. Returned None
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+WARNING:PyCoTools.pycopi:pycopi:format_multi_results:2427:No Columns to parse from file. /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data219.txt is empty. Returned None
+DEBUG:PyCoTools.pycopi:pycopi:format_multi_results:2436:Shape of estimated parameters: (7, 23)
+DEBUG:PyCoTools.pycopi:pycopi:format_multi_results:2436:Shape of estimated parameters: (5, 23)
+DEBUG:PyCoTools.pycopi:pycopi:format_multi_results:2436:Shape of estimated parameters: (7, 23)
+DEBUG:PyCoTools.pycopi:pycopi:format_multi_results:2436:Shape of estimated parameters: (7, 23)
+DEBUG:PyCoTools.pycopi:pycopi:format_multi_results:2436:Shape of estimated parameters: (3, 23)
+DEBUG:PyCoTools.pycopi:pycopi:format_multi_results:2436:Shape of estimated parameters: (5, 23)
+DEBUG:PyCoTools.pycopi:pycopi:format_multi_results:2436:Shape of estimated parameters: (2, 23)
+DEBUG:PyCoTools.pycopi:pycopi:format_multi_results:2436:Shape of estimated parameters: (3, 23)
+DEBUG:PyCoTools.pycopi:pycopi:format_multi_results:2436:Shape of estimated parameters: (5, 23)
+DEBUG:PyCoTools.pycopi:pycopi:format_multi_results:2436:Shape of estimated parameters: (14, 23)
+DEBUG:PyCoTools.pycopi:pycopi:format_multi_results:2436:Shape of estimated parameters: (9, 23)
+DEBUG:PyCoTools.pycopi:pycopi:format_multi_results:2436:Shape of estimated parameters: (10, 23)
+DEBUG:PyCoTools.pycopi:pycopi:format_multi_results:2436:Shape of estimated parameters: (10, 23)
+DEBUG:PyCoTools.pycopi:pycopi:format_multi_results:2436:Shape of estimated parameters: (6, 23)
+WARNING:PyCoTools.pycopi:pycopi:format_multi_results:2427:No Columns to parse from file. /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data24.txt is empty. Returned None
+DEBUG:PyCoTools.pycopi:pycopi:format_multi_results:2436:Shape of estimated parameters: (2, 23)
+DEBUG:PyCoTools.pycopi:pycopi:format_multi_results:2436:Shape of estimated parameters: (4, 23)
+DEBUG:PyCoTools.pycopi:pycopi:format_multi_results:2436:Shape of estimated parameters: (3, 23)
+DEBUG:PyCoTools.pycopi:pycopi:format_multi_results:2436:Shape of estimated parameters: (8, 23)
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (14, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (14, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (14, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (10, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (14, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (6, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
+DEBUG:PyCoTools.pydentify:pydentify:format_results:481:Shape of estimated parameters: (11, 23)
