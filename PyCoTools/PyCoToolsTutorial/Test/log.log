@@ -26619,3 +26619,218 @@ DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of M
 DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/0/(dephosphorylation_of_MAPK-PP).KK9.cps
 DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPKK-P).KK6
 DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/0/(dephosphorylation_of_MAPKK-P).KK6.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPK-PP).KK9
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(dephosphorylation_of_MAPK-PP).KK9.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPKK-P).KK4
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/0/(phosphorylation_of_MAPKK-P).KK4.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPKK-P).KK6
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(dephosphorylation_of_MAPKK-P).KK6.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK activation).V1
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/0/(MAPKKK_activation).V1.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPKK-P).KK4
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK activation).Ki
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/0/(MAPKKK_activation).Ki.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(phosphorylation_of_MAPKK-P).KK4.cps
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f092ed827e8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/ParameterFit3.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:131:Data file "/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data219.txt" only contains nothing. File ignored
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/ParameterFit1.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data216.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/ParameterFit0.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data218.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data215.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/ParameterFit4.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/ParameterFit2.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data214.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data212.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/ParameterFit5.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data213.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:131:Data file "/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data24.txt" only contains nothing. File ignored
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data217.txt
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f092eb1c3f8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/ParameterFit3.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:131:Data file "/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data219.txt" only contains nothing. File ignored
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/ParameterFit1.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data216.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/ParameterFit0.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data218.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data215.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/ParameterFit4.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/ParameterFit2.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data214.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data212.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/ParameterFit5.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data213.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:131:Data file "/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data24.txt" only contains nothing. File ignored
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data217.txt
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPK).KK7
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK activation).V1
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/0/(phosphorylation_of_MAPK).KK7.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(MAPKKK_activation).V1.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPK-P).KK10
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/0/(dephosphorylation_of_MAPK-P).KK10.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPK-P).KK8
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/0/(phosphorylation_of_MAPK-P).KK8.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPKK-PP).V5
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/0/(dephosphorylation_of_MAPKK-PP).V5.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK activation).Ki
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(MAPKKK_activation).Ki.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPK-P).V10
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/0/(dephosphorylation_of_MAPK-P).V10.cps
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f092ea21f38>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f092ea21fc8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4283:Performing multi parameter fit for model at:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:_create_defaults:4539:Using default report name:
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ParameterFit.txt
+DEBUG:PyCoTools.pycopi:pycopi:_create_defaults:4548:config_filename is None. Reassigning config_filename
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:4581:creating a directory for analysis in : 
+
+/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:4594:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4383:Create an instance of ParameterEstimation
+WARNING:PyCoTools.pycopi:pycopi:set_up:3443:The set_up method is deprecated. Use setup() method instead
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2249:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2252:Mapping experiment /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_TimeCourse.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1160:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7f092ead2d88>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:copy_copasi:4461:Copying copasi file 1 times
+DEBUG:PyCoTools.pycopi:pycopi:_setup_scan:4498:setting up scan for model : /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3648:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3650:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3650:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:3650:scan type to number tuple: ('random_sampling', 2)
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:root:pycopi:define_report:3713:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:1209:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:set_scan_options:3804:output during subtask value is: false
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:_setup1scan:4530:Setup Took 0.144797801971 seconds
+WARNING:PyCoTools.pycopi:pycopi:format_results:4410:/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/ParameterFit0.txt is empty. Cannot parse. Skipping this file
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7fa2e24b2560>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:131:Data file "/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data219.txt" only contains nothing. File ignored
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data21.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data29.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data27.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data216.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data218.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data25.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data22.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data215.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data20.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data214.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data212.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data28.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data213.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data210.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:131:Data file "/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data24.txt" only contains nothing. File ignored
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data211.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data217.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data23.txt
+WARNING:PyCoTools.PEAnalysis:PEAnalysis:read_PE_data_file:126:Cannot parse data from /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults/parameter_estimation_data26.txt
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPK).KK7
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(phosphorylation_of_MAPK).KK7.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPKK-P).V6
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/0/(dephosphorylation_of_MAPKK-P).V6.cps
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f092ea0db00>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f092ea73638>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPK-P).KK10
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(dephosphorylation_of_MAPK-P).KK10.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK activation).n
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/0/(MAPKKK_activation).n.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPKK).KK3
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(phosphorylation_of_MAPKK).KK3.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPK-P).KK8
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(phosphorylation_of_MAPK-P).KK8.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPKK-PP).V5
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(dephosphorylation_of_MAPKK-PP).V5.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPK-P).V10
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(dephosphorylation_of_MAPK-P).V10.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK activation).K1
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(MAPKKK_activation).K1.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPK-PP).V9
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(dephosphorylation_of_MAPK-PP).V9.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of MAPKK-P).V6
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(dephosphorylation_of_MAPKK-P).V6.cps
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPK).k7
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(phosphorylation_of_MAPK).k7.cps
