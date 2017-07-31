@@ -72,10 +72,22 @@ from PyCoTools.pycopi import RunMultiplePEs
 
 model = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps'
 
-GMQ = PyCoTools.pycopi.GetModelQuantities(model)
+#GMQ = PyCoTools.pycopi.GetModelQuantities(model)
 #print GMQ.get_IC_cns()
-#parameter_path = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults'
+parameter_path = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults'
+cp = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model_1.cps'
 
+for i in os.listdir(parameter_path):
+    PyCoTools.pycopi.FormatPEData(cp, os.path.abspath(i), report_type='multi_parameter_estimation')
+
+#TC = PyCoTools.pycopi.TimeCourse(model, end=1000, step_size=100, intervals=10)
+#RMPE= PyCoTools.pycopi.RunMultiplePEs(model,TC['report_name'])
+#RMPE.setup()
+#RMPE.format_results()
+
+
+#data = PyCoTools.PEAnalysis.ParsePEData(parameter_path).data
+#print data.to_pickle(os.path.join(os.path.dirname(model), 'KholodenkoPEData.pickle') )
 #PyCoTools.pydentify.ProfileLikelihood(model, parameter_path=parameter_path,
 #                                      index = [0,1,2,3,4], run='slow', log10=True)
 
