@@ -72,6 +72,7 @@ from PyCoTools.pycopi import RunMultiplePEs
 
 model = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps'
 
+<<<<<<< HEAD
 #GMQ = PyCoTools.pycopi.GetModelQuantities(model)
 #print GMQ.get_IC_cns()
 parameter_path = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults'
@@ -88,6 +89,12 @@ for i in os.listdir(parameter_path):
 
 #data = PyCoTools.PEAnalysis.ParsePEData(parameter_path).data
 #print data.to_pickle(os.path.join(os.path.dirname(model), 'KholodenkoPEData.pickle') )
+=======
+GMQ = PyCoTools.pycopi.GetModelQuantities(model)
+#print GMQ.get_IC_cns()
+#parameter_path = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults'
+
+>>>>>>> ad790207fbd64bd409009e1a0c34655ba2e8d094
 #PyCoTools.pydentify.ProfileLikelihood(model, parameter_path=parameter_path,
 #                                      index = [0,1,2,3,4], run='slow', log10=True)
 

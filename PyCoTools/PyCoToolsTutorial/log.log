@@ -1089,6 +1089,7 @@ DEBUG:PyCoTools.pycopi:pycopi:format_multi_results:2433:Shape of estimated param
 DEBUG:PyCoTools.pycopi:pycopi:format_multi_results:2433:Shape of estimated parameters: (2, 23)
 DEBUG:PyCoTools.pycopi:pycopi:format_multi_results:2433:Shape of estimated parameters: (2, 23)
 DEBUG:PyCoTools.pycopi:pycopi:format_multi_results:2433:Shape of estimated parameters: (2, 23)
+<<<<<<< HEAD
 INFO:root:__init__:<module>:26:Initializing PyCoTools
 INFO:root:__init__:<module>:27:Initializing logging System
 INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
@@ -12665,3 +12666,5 @@ DEBUG:PyCoTools.pycopi:pycopi:_setup1scan:4530:Setup Took 0.152444124222 seconds
 INFO:PyCoTools.PEAnalysis:PEAnalysis:__init__:375:plotting PCA parameters
 INFO:PyCoTools.PEAnalysis:PEAnalysis:__init__:375:plotting PCA parameters
 INFO:PyCoTools.PEAnalysis:PEAnalysis:__init__:375:plotting PCA parameters
+=======
+>>>>>>> ad790207fbd64bd409009e1a0c34655ba2e8d094
