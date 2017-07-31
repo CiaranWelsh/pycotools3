@@ -26843,3 +26843,5 @@ DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053
 >>>>>>> ad790207fbd64bd409009e1a0c34655ba2e8d094
 =======
 >>>>>>> 8d9ed61... commit to revert
+DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (phosphorylation of MAPK-P).k8
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/1/(phosphorylation_of_MAPK-P).k8.cps
