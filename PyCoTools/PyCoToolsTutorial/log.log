@@ -12668,3 +12668,29 @@ INFO:PyCoTools.PEAnalysis:PEAnalysis:__init__:375:plotting PCA parameters
 INFO:PyCoTools.PEAnalysis:PEAnalysis:__init__:375:plotting PCA parameters
 =======
 >>>>>>> ad790207fbd64bd409009e1a0c34655ba2e8d094
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+INFO:root:<ipython-input-3-f58b6052b3b5>:<module>:23:written kholodenko model to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+INFO:root:<ipython-input-3-f58b6052b3b5>:<module>:24:Checking that kholodenko file exists: ... True
+DEBUG:PyCoTools.pycopi:pycopi:__init__:4992:These are kwargs {'index': 0, 'metabolites': ['Mek1-PP', 'Erk2', 'Mos', 'Erk2-P', 'Erk2-PP', 'Mos-P', 'Mek1', 'Mek1-P'], 'parameter_path': None, 'quantity_type': 'concentration', 'df': None, 'global_quantities': ['Mek_tot', 'Erk_tot', 'Erk-P_tot', 'Mos-P_tot', 'Mek-P_tot', 'Mos_tot'], 'save': 'overwrite', 'parameter_dict': {'(MAPKKK activation).K1': 8123}, 'report_name': 'kholodenko_model_PE_results.txt'}
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5080:Local parameters being inserted into model: ['(MAPKKK activation).K1']
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5089:Constructing a dict of reaction:parameter for local parameters: {'K1': 'MAPKKK activation'}
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5113:States:	 ['Model_7', 'Metabolite_45', 'Metabolite_51', 'Metabolite_33', 'Metabolite_11', 'Metabolite_49', 'Metabolite_47', 'Metabolite_1', 'Metabolite_53', 'ModelValue_11', 'ModelValue_10', 'ModelValue_9', 'ModelValue_8', 'ModelValue_7', 'ModelValue_6', 'Compartment_6']
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5124:State Model_7 is model
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5129:Added 0 for first parameter in sequence
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5131:State Metabolite_45 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5131:State Metabolite_51 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5131:State Metabolite_33 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5131:State Metabolite_11 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5131:State Metabolite_49 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5131:State Metabolite_47 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5131:State Metabolite_1 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5131:State Metabolite_53 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5150:State ModelValue_11 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5150:State ModelValue_10 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5150:State ModelValue_9 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5150:State ModelValue_8 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5150:State ModelValue_7 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5150:State ModelValue_6 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps

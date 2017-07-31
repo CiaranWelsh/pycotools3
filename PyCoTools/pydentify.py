@@ -847,7 +847,7 @@ class Plot():
             for j in self.result_paths[i]:
                 cps = self.result_paths[i][j][:-4]+'.cps'
                 try:
-                    res[i][j] = FormatPLData(cps, self.result_paths[i][j], suffix = 'formated').format
+                    res[i][j] = FormatPLData(cps, self.result_paths[i][j]).format
                 except Errors.FileDoesNotExistError:
                     pass
         return res
@@ -881,11 +881,12 @@ class Plot():
         the integer rank of best fit (.e. -1,0,1,2 ...)
         returns list of these directories
         '''
-        dirs= os.listdir(self.PL_dir)
-        dirs2= [os.path.join(self.PL_dir,i) for i in dirs]
-        for i in dirs2:
+        dirs = os.listdir(self.PL_dir)
+        dirs = [os.path.join(self.PL_dir,i) for i in dirs]
+        dirs = [i for i in dirs if os.path.isdir(i)]
+        for i in dirs:
             assert os.path.isdir(i)
-        return dirs2
+        return dirs
         
     def get_index_dirs_as_dict(self):
         '''

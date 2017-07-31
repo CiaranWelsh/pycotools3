@@ -1,0 +1,1 @@
+(phosphorylation of MAPKK-P).KK4	TaskList[Parameter Estimation].(Problem)Parameter Estimation.Best Parameters	TaskList[Parameter Estimation].(Problem)Parameter Estimation.Best Value

@@ -2376,8 +2376,11 @@ class FormatPEData():
         if self.report_type not in available_report_types:
             raise Errors.InputError('{} not in {}'.format(self.report_type,available_report_types))
             
-        if os.path.isfile(self.report_name)!=True:
-            raise Errors.InputError('file {} does not exist'.format(self.report_name))
+#        if os.path.isdir(self.report_name):
+#            for i in os.listdir(self.report_name):
+                
+#        if os.path.isfile(self.report_name)!=True:
+#            raise Errors.InputError('file {} does not exist'.format(self.report_name))
         
         if self.report_type=='parameter_estimation':
             try:
@@ -2443,6 +2446,18 @@ class FormatPEData():
             data.columns = names
             data.to_csv(self.report_name, sep='\t', index=False)
             return self.report_name
+    
+    @staticmethod
+    def format_folder(copasi_file, folder, report_type='multi_parameter_estimation'):
+        """
+        Format entire folder of similar PE data files
+        """
+        for i in glob.glob(os.path.join(folder, '*.txt')):
+            FormatPEData(copasi_file, i, report_type=report_type)
+#        for i in os.listdir(folder):
+            
+        
+        
     
 
 
@@ -4403,13 +4418,8 @@ class RunMultiplePEs():
             cps_keys = self.sub_copasi_files.keys()
         report_keys = self.report_files.keys()
         for i in range(len(self.report_files)):
-<<<<<<< HEAD
             try:
                 FormatPEData(self.sub_copasi_files[cps_keys[i]], self.report_files[report_keys[i]],
-=======
-#            LOG.info('{}, {}'.format(self.sub_copasi_files[cps_keys[i]], self.report_files[report_keys[i]]))
-            FormatPEData(self.sub_copasi_files[cps_keys[i]], self.report_files[report_keys[i]],
->>>>>>> 8d9ed61... commit to revert
                          report_type='multi_parameter_estimation')
             except Errors.InputError:
                 LOG.warning('{} is empty. Cannot parse. Skipping this file'.format(self.report_files[report_keys[i]]))
