@@ -2746,12 +2746,7 @@ class ParameterEstimation():
                  'upper_bound':1000000,
 #                 'run':False,
                  'plot':False,
-                 '''
-                 The below arguments get passed to the parameter
-                 estimation plotting class
-                 '''
-                 
-                 'line_width':4,
+                 'results_directory':os.path.join(os.path.dirname(self.copasi_file), 'ParameterEstimationPlots'),
                  #graph features
                  'font_size':22,
                  'axis_size':15,
@@ -2982,10 +2977,11 @@ class ParameterEstimation():
         self.PlotPEDataKwargs['legend_loc']=self.kwargs.get('legend_loc')
         self.PlotPEDataKwargs['prune_headers']=self.kwargs.get('prune_headers')
         self.PlotPEDataKwargs['separator']=self.kwargs.get('separator')
+        self.PlotPEDataKwargs['results_directory']=self.kwargs.get('results_directory')
 
     def __getitem__(self,key):
         if key not in self.kwargs.keys():
-            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
+            raise TypeError('{} not in {}'.format(key,sorted(self.kwargs.keys())))
         return self.kwargs[key]
 
     def __setitem__(self,key,value):
