@@ -57,21 +57,18 @@ class _ParameterEstimationBase(_BaseTest):
     def setUp(self):
         super(_ParameterEstimationBase, self).setUp()
         
-        self.parameter_estimation_options={#report variables
+        self.parameter_estimation_options={
                  'metabolites':self.GMQ.get_IC_cns().keys(),
                  'global_quantities':self.GMQ.get_global_quantities().keys(),
                  'append': True, 
                  'confirm_overwrite': True,
                  'overwrite_config_file':True,
-                 #
                  'update_model':True,
                  'randomize_start_values':True,
                  'create_parameter_sets':True,
                  'calculate_statistics':True,
-                 #method options
-                 'method':'ScatterSearch',
-                 #'DifferentialEvolution',
-                 'number_of_generations':64,
+                 'method':'GeneticAlgorithm',
+                 'number_of_generations':10,
                  'population_size':10,
                  'random_number_generator':4,
                  'seed':0,
@@ -85,7 +82,6 @@ class _ParameterEstimationBase(_BaseTest):
                  'number_of_iterations':1516400000,
                  'start_temperature':100,
                  'cooling_factor':0.85498,
-                 #experiment definition options
                  'scheduled':True,
                  'plot':True,
                  'savefig':True
