@@ -1898,18 +1898,17 @@ class ExperimentMapper():
         options.update( kwargs) 
         self.kwargs=options
 
-        #assign numberic values to weight_method   
-        for i in range(len(self.kwargs.get('weight_method'))):
-            assert self.kwargs.get('weight_method')[i] in ['mean','mean_squared','stardard_deviation','value_scaling']
-            if self.kwargs.get('weight_method')[i]=='mean':
-                self.kwargs.get('weight_method')[int(i)]=str(1)
-            if self.kwargs.get('weight_method')[i]=='mean_squared':
-                self.kwargs.get('weight_method')[int(i)]=str(2)
-            if self.kwargs.get('weight_method')[i]=='stardard_deviation':
-                self.kwargs.get('weight_method')[int(i)]=str(3)
-            if self.kwargs.get('weight_method')[i]=='value_scaling':
-                self.kwargs.get('weight_method')[int(i)]=str(4) 
-        
+        weight_method_string = ['mean','mean_squared','stardard_deviation','value_scaling']
+        weight_method_numbers = [str(i) for i in [1,2,3,4] ]
+        weight_method_dict = dict(zip(weight_method_string, weight_method_numbers))
+        self['weight_method'] = [weight_method_dict[i] for i in self['weight_method']  ]
+
+
+        experiment_type_string = ['steadystate','timecourse']
+        experiment_type_numbers = [str(i) for i in [0,1] ]
+        experiment_type_dict = dict(zip(experiment_type_string, experiment_type_numbers))
+        self['experiment_type'] = [experiment_type_dict[i] for i in self['experiment_type']]
+                
         l=[]
         assert isinstance(self.kwargs.get('row_orientation'),list)
         for i in self.kwargs.get('row_orientation'):
@@ -1920,14 +1919,6 @@ class ExperimentMapper():
                 l.append(str(0))
         self.kwargs['row_orientation']=l
 
-        assert isinstance(self.kwargs.get('experiment_type'),list)
-        for i in range(len(self.kwargs.get('experiment_type'))):
-            assert self.kwargs.get('experiment_type')[i] in ['steadystate','timecourse']
-            if self.kwargs.get('experiment_type')[i]=='steadystate':
-                self.kwargs.get('experiment_type')[i]=str(0)
-            else:
-                self.kwargs.get('experiment_type')[i]=str(1)
-
         assert isinstance(self.kwargs.get('first_row'),list)
         l=[]
         for i in self.kwargs.get('first_row'):
@@ -1935,6 +1926,7 @@ class ExperimentMapper():
             assert i!=str(0)
             l.append(str(i))
         self.kwargs['first_row']=l
+        print self['first_row']
         
         l=[]
         assert isinstance(self.kwargs.get('normalize_weights_per_experiment'),list)
@@ -1976,6 +1968,13 @@ class ExperimentMapper():
         if self.kwargs.get('save')!=False:
             self.save()
         
+    def __getitem__(self, key):
+        if key not in self.kwargs:
+            raise Errors.InputError('{} not in {}'.format(key, self.kwargs))
+        return self.kwargs[key]
+    
+    def __setitem__(self,key, value):
+        self.kwargs[key] = value
         
     def get_existing_experiments(self):
         existing_experiment_list=[]
@@ -2048,7 +2047,7 @@ class ExperimentMapper():
         ObjectMap={'name': 'Object Map'}
         row_containing_names={'type': 'unsignedInteger', 'name': 'Row containing Names', 'value': self.kwargs.get('row_containing_names')[index]}
         separator={'type': 'string', 'name': 'separator', 'value': self.kwargs.get('separator')[index]}
-        weight_method={'type': 'unsignedInteger', 'name': 'Weight Method', 'value': self.kwargs.get('weight_method')[index]}
+        weight_method={'type': 'unsignedInteger', 'name': 'Weight Method', 'value': self['weight_method'][index]}
 
         etree.SubElement(Exp,'Parameter',attrib=row_orientation)
         etree.SubElement(Exp,'Parameter',attrib=experiment_type)
@@ -2744,10 +2743,8 @@ class ParameterEstimation():
                  'scheduled':False,
                  'lower_bound':0.000001,
                  'upper_bound':1000000,
-#                 'run':False,
                  'plot':False,
                  'results_directory':os.path.join(os.path.dirname(self.copasi_file), 'ParameterEstimationPlots'),
-                 #graph features
                  'font_size':22,
                  'axis_size':15,
                  'extra_title':None,
@@ -2765,7 +2762,8 @@ class ParameterEstimation():
                      
         #values need to be lower case for copasiML
         for i in kwargs.keys():
-            assert i in options.keys(),'{} is not a keyword argument for ParameterEstimation'.format(i)
+            if i not in options.keys():
+                raise Errors.InputError('{} is not a keyword argument for ParameterEstimation'.format(i) )
         options.update( kwargs) 
         self.kwargs=options
         #second dict to separate arguments for the experiment mapper
@@ -3105,8 +3103,16 @@ class ParameterEstimation():
 
         
     def read_item_template(self):
-        assert os.path.isfile(self.kwargs.get('config_filename'))==True,'ConfigFile does not exist. run \'write_item_template\' method and modify it how you like then run the setup()  method again.'
-        return pandas.read_excel(self.kwargs.get('config_filename'))
+        if os.path.isfile(self.kwargs.get('config_filename'))!=True:
+            raise Errors.InputError('ConfigFile does not exist. run \'write_item_template\' method and modify it how you like then run the setup()  method again.')
+        df = pandas.read_excel(self.kwargs.get('config_filename'))
+        parameter_names = list(df[df.columns[0]])
+        
+        model_parameters = self.GMQ.get_all_model_variables().keys()
+        for parameter in parameter_names:
+            if parameter not in model_parameters:
+                raise Errors.InputError('{} not in {}\n\n Ensure you are using the correct PE config file!'.format(parameter, model_parameters))
+        return df 
     
     def add_fit_item(self,item):
         '''
@@ -4293,6 +4299,10 @@ class RunMultiplePEs():
             raise Errors.InputError('{} doesn\'t exist'.format(self.copasi_file))
         LOG.debug('Performing multi parameter fit for model at:\n{}'.format(self.copasi_file))
         
+        if isinstance(self.experiment_files, str):
+            self.experiment_files = [self.experiment_files]
+        
+        
         ## Pickle file to store directories of sub copasi files
         self.copasi_file_pickle=os.path.join(os.path.dirname(self.copasi_file),'sub_copasi_file.pickle')
         default_results_directory = os.path.join(os.path.dirname(self.copasi_file),'MultipleParameterEstimationResults')
@@ -4347,17 +4357,11 @@ class RunMultiplePEs():
                  'upper_bound':1000000,
                  'plot':False,
                  'output_in_subtask':False,
-                 '''
-                 The below arguments get passed to the parameter
-                 estimation plotting class
-                 '''
-                 
                  'line_width':4,
                  #graph features
                  'font_size':22,
                  'axis_size':15,
                  'extra_title':None,
-                 'line_width':3,
                  'show':False,
                  'savefig':False,
                  'title_wrap_size':30,
@@ -4428,13 +4432,13 @@ class RunMultiplePEs():
         setup both the PE and Scan tasks       
         '''
         
-        self.PE.set_up()
+        self.PE.setup()
         self.sub_copasi_files=self.copy_copasi()
         self._setup_scan()
     
 
         
-    def set_up(self):
+    def set_up_dep(self):
         '''
         Analogous to the set_up method of the ParameterEstimation class but this time
         setup both the PE and Scan tasks       
@@ -4487,7 +4491,7 @@ class RunMultiplePEs():
         '''
         
         '''
-        LOG.info('writing PE config template for model: {}'.format(self.copasi_file))
+        LOG.debug('writing PE config template for model: {}'.format(self.copasi_file))
         LOG.debug('config_filename is {}'.format(self.PE.kwargs['config_filename']))
         self.PE.write_config_template()
         return self.PE['config_filename']
@@ -4805,7 +4809,7 @@ class MultiModelFit():
         for RMPE in self.RMPE_dct:
             self.RMPE_dct[RMPE].setup()
             
-    def set_up(self):
+    def set_up_dep(self):
         '''
         A user interface class which calls the corresponding
         method (set_up) from the runMultiplePEs class per model. 
