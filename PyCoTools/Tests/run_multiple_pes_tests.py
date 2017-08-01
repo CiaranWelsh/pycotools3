@@ -121,81 +121,13 @@ class RunMultiplePETests(base_tests._MultiParameterEstimationBase):
         with open(self.RMPE.copasi_file_pickle) as f:
             copasi_dict = pickle.load(f)
         self.assertEqual(int(self.RMPE.kwargs['copy_number']), len(copasi_dict.items()))
-#
-#    def test_pickle_changable(self):
-#        """
-#        Test that pickle is written every time in order to direct
-#        the correct number of copasi copies to run
-#        :return:
-#        """
-#        self.RMPE.write_config_template()
-#        self.RMPE.setup()
-#        with open(self.RMPE.copasi_file_pickle) as f1:
-#            copasi_dct1 = pickle.load(f1)
-#
-#        first_len = len(copasi_dct1.items())
-#
-#        cp2 = 10
-#        self.options.update({'copy_number':cp2})
-#        RMPE2 = PyCoTools.pycopi.runMultiplePEs(self.copasi_file,self.experiment_files,**self.options)
-#        RMPE2.write_config_template()
-#        RMPE2.setup()
-#        with open(RMPE2.copasi_file_pickle) as f2:
-#            copasi_dct2 = pickle.load(f2)
-#
-#        self.assertEqual(cp2,len(copasi_dct2))
-##
-##
-#    def test_run(self):
-#        """
-#        run as current solution statistics so that they run quickly
-#        Then use the wait for a little while
-#        :return:
-#        """
-#        self.options.update({'method':'CurrentSolutionStatistics',
-#                             'copy_number':6,
-#                             'randomize_start_values':'false'})
-#        RMPE = PyCoTools.pycopi.runMultiplePEs(self.copasi_file,self.experiment_files,**self.options)
-#        RMPE.write_config_template()
-#        RMPE.setup()
-#        RMPE.run()
-#        dire = RMPE.kwargs['output_dir']
-#        files = glob.glob(dire+'/*.txt')
-#        time.sleep(5)
-#        self.assertEqual(len(files), RMPE.kwargs['copy_number'])
-#
-#
-#
-#    def test_total_number_of_PE(self):
-#        """
-#        test that the total number of PEs = copy_number*pe_number
-#
-#        This test doesn't work but the behaviour is working as expected.
-#        Not sure why the test wont work but I thnk its something to do with
-#        write speed and sequentially deleting files and trying to count them.
-#
-#        Not important enough to spend lots of time on.
-#        :return:
-#        """
-#        self.options.update({'method':'CurrentSolutionStatistics',
-#                             'copy_number':4,
-#                             'pe_number':6,
-#                             'randomize_start_values':'false'})
-#        self.RMPE = PyCoTools.pycopi.runMultiplePEs(self.copasi_file,self.experiment_files,**self.options)
-#        self.RMPE.write_config_template()
-#        self.RMPE.setup()
-#        self.RMPE.run()
-#        dire = self.RMPE.kwargs['output_dir']
-#        files = glob.glob(dire+'/*.txt')
-#
-#        time.sleep(2)
-#        pandas_lst =[]
-#        for i in files:
-#            df=pandas.read_csv(i,sep='\t')
-#            pandas_lst.append(df)
-#        df = pandas.concat(pandas_lst)
-#        self.assertEqual(self.RMPE.kwargs['copy_number'] * self.RMPE.kwargs['pe_number'],
-#                         df.shape[0])
+
+    def test_total_number_of_PE(self):
+        """
+        test that the total number of PEs = copy_number*pe_number
+        :return:
+        """
+        self.assertEqual(self.data.shape[0], self.RMPE['copy_number']*self.RMPE['pe_number'] )
 
 
 if __name__=='__main__':
