@@ -1039,7 +1039,7 @@ class PlotPEData(object):
             Full path to a parameter estimation file ('.txt','.xls','.xlsx' or 
             '.csv') or a folder containing parameter estimation files. 
             
-        output_directory:
+        results_directory:
             Name of an output directory. 
         
     '''
@@ -1078,7 +1078,7 @@ class PlotPEData(object):
                  'xtick_rotation':35,
                  'marker_size':10,
                  'legend_loc':(1,0),
-                 'output_directory':os.path.join(os.path.dirname(self.copasi_file),'ParameterEstimationplots'),
+                 'results_directory':os.path.join(os.path.dirname(self.copasi_file),'ParameterEstimationplots'),
                  'plot':True,                 
                  'separator':['\t']*len(self.experiment_files),
                  
@@ -1172,7 +1172,7 @@ class PlotPEData(object):
         
         
     def change_directory(self):
-        dire=os.path.join(os.path.dirname(self.copasi_file),'ParameterEstimationplots')
+        dire=os.path.join(os.path.dirname(self.copasi_file),'ParameterEstimationPlots')
         if os.path.isdir(dire)==False:
             os.mkdir(dire)
         os.chdir(dire)
@@ -1313,9 +1313,9 @@ class PlotPEData(object):
         if self.kwargs.get('savefig')==True:
             if self.kwargs.get('extra_title')!=None:
                 assert isinstance(self.kwargs.get('extra_title'),str),'extra title should be a string'
-                fle=os.path.join(self.kwargs.get('output_directory'),'{}_{}.png'.format(parameter,self.kwargs.get('extra_title')))                
+                fle=os.path.join(self.kwargs.get('results_directory'),'{}_{}.png'.format(parameter,self.kwargs.get('extra_title')))                
             else:
-                fle=os.path.join(self.kwargs.get('output_directory'),'{}.png'.format(parameter))
+                fle=os.path.join(self.kwargs.get('results_directory'),'{}.png'.format(parameter))
             plt.savefig(fle,dpi=self.kwargs.get('dpi'),bbox_inches='tight')
 
         if self.kwargs.get('show')==True:
@@ -1358,7 +1358,7 @@ class ModelSelection():
         
         options={#report variables
                  'savefig':False,
-                 'output_directory':self.multi_model_fit.project_dir,
+                 'results_directory':self.multi_model_fit.project_dir,
                  'dpi':300}
                  
         for i in kwargs.keys():
@@ -1571,7 +1571,7 @@ class ModelSelection():
             plt.title('{} Scores'.format(metric))
             plt.xlabel(' ')
             if self['savefig']:
-                save_dir = os.path.join(self['output_directory'], 'ModelSelectionGraphs')
+                save_dir = os.path.join(self['results_directory'], 'ModelSelectionGraphs')
                 if os.path.isdir(save_dir)!=True:
                     os.mkdir(save_dir)
                 os.chdir(save_dir)
