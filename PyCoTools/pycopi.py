@@ -1926,7 +1926,6 @@ class ExperimentMapper():
             assert i!=str(0)
             l.append(str(i))
         self.kwargs['first_row']=l
-        print self['first_row']
         
         l=[]
         assert isinstance(self.kwargs.get('normalize_weights_per_experiment'),list)
