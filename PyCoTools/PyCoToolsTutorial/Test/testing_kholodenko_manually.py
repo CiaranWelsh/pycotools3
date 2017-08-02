@@ -45,10 +45,31 @@ kholodenko_string = TM.get_kholodenko_variant1()
 dire = r'/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial'
 kholodenko_model = os.path.join(dire, 'kholodenko_model.cps')
 
-with open(kholodenko_model, 'w') as f:
-    f.write(kholodenko_string)
+#with open(kholodenko_model, 'w') as f:
+#    f.write(kholodenko_string)
     
-    
+pl_dire = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood'
+pe_dir = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults'
+
+
+#TC = PyCoTools.pycopi.TimeCourse(kholodenko_model, end=1000, step_size=100, intervals=10)
+#PE = PyCoTools.pycopi.ParameterEstimation(kholodenko_model, TC['report_name'],
+#                                          )
+#PE.write_config_template()
+#PE.setup()
+data = PyCoTools.pydentify.ParsePLData(kholodenko_model, pl_dire, parameter_path=pe_dir,
+                                       index=[0,1]).data
+                                       
+                                       
+PyCoTools.pydentify.Plot(data, x='(MAPKKK activation).K1',y='RSS')
+
+
+
+
+'''
+do ensemble time course again
+'''
+
 #GMQ = PyCoTools.pycopi.GetModelQuantities(kholodenko_model)
 #print GMQ.get_local_kinetic_parameters_cns()    
     
@@ -78,7 +99,7 @@ with open(kholodenko_model, 'w') as f:
 #RMPE.format_results()
 ##RMPE.run()
 
-results_directory = r'/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults'
+#results_directory = r'/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/MultipleParameterEstimationResults'
 
 #print os.path.isdir(results_directory)
 #print RMPE['results_directory'] ==results_directory
@@ -91,9 +112,9 @@ results_directory = r'/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTuto
 #PyCoTools.PEAnalysis.EnsembleTimeCourse(kholodenko_model, data1, results_directory,
 #                                           savefig=True,
 #                                           )
-PyCoTools.PEAnalysis.Pca(results_directory, 
-                         log10=True, savefig=True, by='parameters')
-#PyCoTools.PEAnalysis.Pca(results_directory,
+#PyCoTools.PEAnalysis.Pca(results_directory, 
+#                         log10=True, savefig=True, by='parameters')
+##PyCoTools.PEAnalysis.Pca(results_directory,
 #                         log10=True, savefig=True, by='iterations',
 #                         annotate=False)
 #
@@ -119,14 +140,14 @@ PyCoTools.PEAnalysis.Pca(results_directory,
 
 
 #
-#pl_dir = r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\ProfileLikelihood'
-#model = r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\kholodenko_model_1.cps'
-#parameter_path = r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\MultipleParameterEstimationResults'
-##'/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood'
-PL = PyCoTools.pydentify.ParsePLData(model,pl_dir, parameter_path=parameter_path,
-                                     index=[0,1])
-#keys = list(PL.data.keys())
-#
+##pl_dir = r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\ProfileLikelihood'
+##model = r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\kholodenko_model_1.cps'
+##parameter_path = r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\PyCoToolsTutorial\MultipleParameterEstimationResults'
+###'/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood'
+#PL = PyCoTools.pydentify.ParsePLData(model,pl_dir, parameter_path=parameter_path,
+#                                     index=[0,1])
+##keys = list(PL.data.keys())
+##
 #for k in keys:
 #    PyCoTools.pydentify.Plot2(PL.data, x=k, y='RSS')
     

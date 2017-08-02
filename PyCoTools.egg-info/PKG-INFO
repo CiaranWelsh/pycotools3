@@ -1,0 +1,20 @@
+Metadata-Version: 1.1
+Name: PyCoTools
+Version: 4.1.2
+Summary: A python toolbox for COPASI
+Home-page: https://github.com/CiaranWelsh/PyCoTools
+Author: Ciaran Welsh
+Author-email: c.welsh2@newcastle.ac.uk
+License: GPL4
+Description: Tools for using Copasi via Python and calculating profile likelihoods. See Github page and documentation for more details
+Keywords: systems biology,modelling,biological,networks,copasi,identifiability analysis,profile likelihood
+Platform: UNKNOWN
+Requires: lxml
+Requires: argparse
+Requires: pandas
+Requires: numpy
+Requires: scipy
+Requires: matplotlib
+Requires: scipy
+Requires: seaborn
+Requires: sklearn
