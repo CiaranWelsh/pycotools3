@@ -64,7 +64,6 @@ setup(
                              'PyCoToolsTutorial/*.html',
                              'PyCoToolsTutorial/*.cps']},
   author_email = 'c.welsh2@newcastle.ac.uk',
-
   url = 'https://github.com/CiaranWelsh/PyCoTools', # use the URL to the github repo
 
   keywords = ['systems biology','modelling','biological',
