@@ -5096,8 +5096,11 @@ Please check the headers of your PE data are consistent with your model paramete
         ## navidate the xml
         local_dct={}
         for i in local:
-            k,v = re.findall(  '\((.*)\)\.(.*)',i  ) [0]
-            local_dct[v]=k
+            local_dct[i] = {}
+            
+        for i in local:
+            reaction_name, parameter_name = re.findall(  '\((.*)\)\.(.*)',i  ) [0]
+            local_dct[i][reaction_name]=parameter_name
             
 #        print (local_dct, len(local_dct))
         LOG.debug('Constructing a dict of reaction:parameter for local parameters: {}'.format(local_dct))
@@ -5108,16 +5111,17 @@ Please check the headers of your PE data are consistent with your model paramete
         ## match with the parameter then insert the str(float(*.)) representation
         ## of the parameter value into the value attribute for the constant
         ## element
-        for parameter, reaction in local_dct.items():
-            for i in self.copasiML.iter():
-                if  i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
-                    for j in i:
-                        if j.attrib['name'] == reaction:
-                            for k in j: 
-                                if k.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
-                                    for l in k:
-                                        if l.attrib['name']==parameter:
-                                            l.attrib['value'] = str(float(self.parameters['({}).{}'.format(reaction,parameter)]))
+        for parameter_key, reaction in local_dct.items():
+            print parameter, reaction
+#            for i in self.copasiML.iter():
+#                if  i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
+#                    for j in i:
+#                        if j.attrib['name'] == reaction:
+#                            for k in j: 
+#                                if k.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
+#                                    for l in k:
+#                                        if l.attrib['name']==parameter:
+#                                            l.attrib['value'] = str(float(self.parameters['({}).{}'.format(reaction,parameter)]))
         return self.copasiML
     
     def assemble_state_values(self):
