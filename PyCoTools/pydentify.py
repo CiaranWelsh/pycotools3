@@ -1371,7 +1371,10 @@ class Plot():
                  'plot_cl':True,
                  'title':None,
                  'xlabel':None,
-                 'ylabel':None}
+                 'ylabel':None,
+                 'color_palette':'bright',
+                 'legend_location':None,
+                 }
         
         
         for i in kwargs.keys():
@@ -1404,13 +1407,13 @@ class Plot():
                 if y_param not in self.parameter_list:
                     raise Errors.InputError('{} not in {}'.format(y_param, self.parameter_list))
                 
-        if self['y'] == self['x']:
-            raise Errors.InputError('x parameter {} cannot equal y parameter {}'.format(self['x'],self['y']))
+            
         
         n = list(set(self.data.index.get_level_values(0)))
         if self['title'] == None:
             self['title'] = 'Profile Likelihood for\n{} (Rank={})'.format(self['x'],n)
         
+        self.data.rename(columns={'ParameterOfInterestValue':self['x']})
         
         self.plot()
         
@@ -1430,6 +1433,9 @@ class Plot():
         """
         
         """
+        if self['y'] == self['x']:
+            LOG.warning( Errors.InputError('x parameter {} cannot equal y parameter {}. Plot function returned None'.format(self['x'],self['y']))  )
+            return None
         
         for label, df in self.data.groupby(level=[2]):
             if label== self['x']:
@@ -1470,7 +1476,7 @@ class Plot():
                            n_boot=self['n_boot'],
                            ci=self['ci_band_level'])
 
-
+        seaborn.color_palette('husl',8)
         seaborn.tsplot(data=data, 
                        time='ParameterOfInterestValue',
                        value='Value',
@@ -1479,12 +1485,18 @@ class Plot():
                        estimator=self['estimator'],
                        err_style=self['err_style'],
                        n_boot=self['n_boot'],
-                       ci=self['ci_band_level'])
+                       ci=self['ci_band_level'],
+                       color=seaborn.color_palette(self['color_palette'],len(self['y']))
+                       )
         plt.title(self['title'])
         if self['ylabel']!=None:
             plt.ylabel(self['ylabel'])
         if self['xlabel']!=None:
             plt.xlabel(self['x_label'])
+            
+        if self['legend_location']!=None:
+            plt.legend(loc=self['legend_location'])
+            
         if self['savefig']:
             save_dir = os.path.join(self['results_directory'], 'ProfileLikelihood')
             if os.path.isdir(save_dir)!=True:
@@ -1520,7 +1532,8 @@ class ParsePLData():
                  'num_data_points':None,
                  'experiment_files':None,
                  'alpha':0.95,
-                 'log10':True}
+                 'log10':True,
+                 }
         
         
         for i in kwargs.keys():
@@ -1560,7 +1573,7 @@ class ParsePLData():
         
 
         self.data = self.get_confidence_level()
-#        self.convert_to_float()
+        self.data = self.data.drop('ParameterFile', axis=1)
         
 
 

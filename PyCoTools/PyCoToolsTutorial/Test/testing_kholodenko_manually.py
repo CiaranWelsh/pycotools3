@@ -59,12 +59,15 @@ pe_dir = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Multipl
 #PE.setup()
 data = PyCoTools.pydentify.ParsePLData(kholodenko_model, pl_dire, parameter_path=pe_dir,
                                        index=[0,1]).data
-                                       
-                                       
-PyCoTools.pydentify.Plot(data, x='(MAPKKK activation).K1',y='RSS')
+keys = data.keys()
+#print keys
+#for i,k in enumerate(keys):
+#    print k
+PyCoTools.pydentify.Plot(data, x='(MAPKKK activation).K1',y=[keys[2],keys[1], keys[3], 'RSS'],
+                         color_palette='deep', legend_location=(1,0))
 
 
-
+#print data.to_csv(os.path.join(os.path.dirname(kholodenko_model), 'test.csv') )
 
 '''
 do ensemble time course again

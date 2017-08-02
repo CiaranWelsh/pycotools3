@@ -98,34 +98,5 @@ class ParameterEstimationTests(base_tests._ParameterEstimationBase):
         self.assertTrue(os.path.isdir(self.PE['results_directory']) )
         
         
-    def test_results_folder(self):
-        """
-        
-        """
-        self.PE.write_config_template()
-        self.PE.setup()
-        self.PE.run()
-        self.assertTrue(len(self.GMQ.get_fit_items()), 
-                        len(os.listdir(self.PE['results_directory'])))
-            
-        
-        
-
-
-    def tearDown(self):
-        super(ParameterEstimationTests,self).tearDown()
-        
-        for i in glob.glob('*.txt'):
-            os.remove(i)
-            
-        for i in glob.glob('*.xlsx'):
-            os.remove(i)
-            
-        shutil.rmtree(self.PE['results_directory'])
-
-
-
-
-        
 if __name__=='__main__':
     unittest.main()
