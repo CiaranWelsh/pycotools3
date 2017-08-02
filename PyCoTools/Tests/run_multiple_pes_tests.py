@@ -48,43 +48,43 @@ class RunMultiplePETests(base_tests._MultiParameterEstimationBase):
         super(RunMultiplePETests, self).setUp()
         
 
-#    def test_output_directory(self):
+    def test_output_directory(self):
+
+        self.assertTrue(os.path.isdir(self.RMPE.kwargs['results_directory']))
+
+    def test_report_files(self):
+        self.assertEqual(len(self.RMPE.report_files.items()),self.RMPE.kwargs['copy_number'])
+
+    def test_write_config_file(self):
+        """
+        Test that RMPE produces a config file
+        :return:
+        """
+        self.RMPE.write_config_template()
+        self.assertTrue(os.path.isfile(self.RMPE.kwargs['config_filename']))
 #
-#        self.assertTrue(os.path.isdir(self.RMPE.kwargs['results_directory']))
-#
-#    def test_report_files(self):
-#        self.assertEqual(len(self.RMPE.report_files.items()),self.RMPE.kwargs['copy_number'])
-#
-#    def test_write_config_file(self):
-#        """
-#        Test that RMPE produces a config file
-#        :return:
-#        """
-#        self.RMPE.write_config_template()
-#        self.assertTrue(os.path.isfile(self.RMPE.kwargs['config_filename']))
-##
-#    def test_write_config_file2(self):
-#        """
-#        test that you can change the name of the config file
-#        :return:
-#        """
-#        new_filename=os.path.join(os.getcwd(),'Newconfig_filename.xlsx')
-#        self.options.update({'config_filename':new_filename})
-#        self.RMPE = PyCoTools.pycopi.RunMultiplePEs(self.copasi_file,
-#                                                    self.RMPE.experiment_files,
-#                                                    **self.options)
-#        if self.RMPE.kwargs['config_filename'] != new_filename:
-#            raise PyCoTools.Errors.InputError('config_filename argument was not changed')
-#        self.RMPE.write_config_template()
-#        self.assertTrue(os.path.isfile(self.RMPE.kwargs['config_filename']))
-#
-#    def test_number_of_copasi_files(self):
-#        """
-#        make sure we have the correct number of files
-#        :return:
-#        """
-#        num = self.RMPE['copy_number']
-#        self.assertEqual(len(self.RMPE.sub_copasi_files), num)
+    def test_write_config_file2(self):
+        """
+        test that you can change the name of the config file
+        :return:
+        """
+        new_filename=os.path.join(os.getcwd(),'Newconfig_filename.xlsx')
+        self.options.update({'config_filename':new_filename})
+        self.RMPE = PyCoTools.pycopi.RunMultiplePEs(self.copasi_file,
+                                                    self.RMPE.experiment_files,
+                                                    **self.options)
+        if self.RMPE.kwargs['config_filename'] != new_filename:
+            raise PyCoTools.Errors.InputError('config_filename argument was not changed')
+        self.RMPE.write_config_template()
+        self.assertTrue(os.path.isfile(self.RMPE.kwargs['config_filename']))
+
+    def test_number_of_copasi_files(self):
+        """
+        make sure we have the correct number of files
+        :return:
+        """
+        num = self.RMPE['copy_number']
+        self.assertEqual(len(self.RMPE.sub_copasi_files), num)
 
     def test_scan(self):
         """
