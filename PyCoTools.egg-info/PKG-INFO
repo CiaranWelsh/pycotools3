@@ -1,6 +1,10 @@
 Metadata-Version: 1.1
 Name: PyCoTools
+<<<<<<< HEAD
 Version: 4.0.5
+=======
+Version: 4.0.7
+>>>>>>> CopasiVersion19Develop
 Summary: A python toolbox for COPASI
 Home-page: https://pypi.python.org/pypi/PyCoTools
 Author: Ciaran Welsh
