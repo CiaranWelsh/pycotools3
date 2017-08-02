@@ -27,7 +27,8 @@ Date:
 '''
 
 import site
-site.addsitedir('/home/b3053674/Documents/PyCoTools')
+#site.addsitedir('/home/b3053674/Documents/PyCoTools')
+site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
 import PyCoTools
 from PyCoTools.PyCoToolsTutorial import test_models
 import unittest
@@ -95,6 +96,20 @@ class ParameterEstimationTests(base_tests._ParameterEstimationBase):
         self.PE.setup()
         self.PE.run()
         self.assertTrue(os.path.isdir(self.PE['results_directory']) )
+        
+        
+    def test_results_folder(self):
+        """
+        
+        """
+        self.PE.write_config_template()
+        self.PE.setup()
+        self.PE.run()
+        self.assertTrue(len(self.GMQ.get_fit_items()), 
+                        len(os.listdir(self.PE['results_directory'])))
+            
+        
+        
 
 
     def tearDown(self):
@@ -105,6 +120,8 @@ class ParameterEstimationTests(base_tests._ParameterEstimationBase):
             
         for i in glob.glob('*.xlsx'):
             os.remove(i)
+            
+        shutil.rmtree(self.PE['results_directory'])
 
 
 
