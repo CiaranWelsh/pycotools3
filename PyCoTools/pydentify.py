@@ -1368,7 +1368,10 @@ class Plot():
                  'savefig':False,
                  'results_directory':os.getcwd(),
                  'dpi':300,
-                 'plot_cl':True}
+                 'plot_cl':True,
+                 'title':None,
+                 'xlabel':None,
+                 'ylabel':None}
         
         
         for i in kwargs.keys():
@@ -1403,7 +1406,15 @@ class Plot():
                 
         if self['y'] == self['x']:
             raise Errors.InputError('x parameter {} cannot equal y parameter {}'.format(self['x'],self['y']))
+        
+        n = list(set(self.data.index.get_level_values(0)))
+        if self['title'] == None:
+            self['title'] = 'Profile Likelihood for\n{} (Rank={})'.format(self['x'],n)
+        
+        
         self.plot()
+        
+        
 
 
     def __getitem__(self,key):
@@ -1419,7 +1430,7 @@ class Plot():
         """
         
         """
-        n = list(set(self.data.index.get_level_values(0)))
+        
         for label, df in self.data.groupby(level=[2]):
             if label== self['x']:
                 data = df[self['y']]
@@ -1469,7 +1480,11 @@ class Plot():
                        err_style=self['err_style'],
                        n_boot=self['n_boot'],
                        ci=self['ci_band_level'])
-        plt.title('ProfileLikelihood(n={})'.format(n))
+        plt.title(self['title'])
+        if self['ylabel']!=None:
+            plt.ylabel(self['ylabel'])
+        if self['xlabel']!=None:
+            plt.xlabel(self['x_label'])
         if self['savefig']:
             save_dir = os.path.join(self['results_directory'], 'ProfileLikelihood')
             if os.path.isdir(save_dir)!=True:
@@ -1680,7 +1695,11 @@ class ParsePLData():
             l.append( i.shape[0]*(i.shape[1]-1))
         s= sum(l)
         if s==0:
-            raise Errors.InputError('Number of data points cannot be 0. This is wrong')
+            raise Errors.InputError('''Number of data points cannot be 0.
+Experimental data is inferred from the parameter estimation task definition. 
+It might be that copasi_file refers to a 'fresh' copy of the model.
+Try redefining the same parameter estimation problem that you used in the profile likelihood, 
+using the setup method but not running the parameter estimation before trying again.''')
         return s
 
     def get_rss(self):
