@@ -1,12 +1,16 @@
 Metadata-Version: 1.1
 Name: PyCoTools
 <<<<<<< HEAD
+<<<<<<< HEAD
 Version: 4.0.5
 =======
 Version: 4.0.7
 >>>>>>> CopasiVersion19Develop
+=======
+Version: 4.1.1
+>>>>>>> 3dd287f4cfd6624ccb3d51b4e0593dae8b916ddd
 Summary: A python toolbox for COPASI
-Home-page: https://pypi.python.org/pypi/PyCoTools
+Home-page: https://github.com/CiaranWelsh/PyCoTools
 Author: Ciaran Welsh
 Author-email: c.welsh2@newcastle.ac.uk
 License: GPL4
@@ -18,7 +22,7 @@ Requires: argparse
 Requires: pandas
 Requires: numpy
 Requires: scipy
-Requires: matplotlib.pyplot
+Requires: matplotlib
 Requires: scipy
 Requires: seaborn
 Requires: sklearn
