@@ -49,8 +49,6 @@ class _BaseTest(unittest.TestCase):
         for i in glob.glob(os.path.join(dire, '*.pickle') ):
             os.remove(i)
             
-        del self.GMQ
-        del self.copasi_file            
             
 class _TimeCourseBase(_BaseTest):
     
@@ -62,8 +60,6 @@ class _TimeCourseBase(_BaseTest):
         
     def tearDown(self):
         super(_TimeCourseBase, self).tearDown()
-        os.remove(self.TC['report_name'])
-        del self.TC
         
 class _ParameterEstimationBase(_BaseTest):
     """
@@ -122,10 +118,8 @@ class _ParameterEstimationBase(_BaseTest):
         self.PE = PyCoTools.pycopi.ParameterEstimation(self.copasi_file,[self.TC1['report_name'],self.TC2['report_name'] ],
                                                         **self.parameter_estimation_options)
         
-    def tearDown(self):
-        super(_ParameterEstimationBase, self).tearDown()
-        os.remove(self.TC1['report_name'])
-        os.remove(self.TC2['report_name'])    
+#    def tearDown(self):
+#        super(_ParameterEstimationBase, self).tearDown()
     
     
 class _MultiParameterEstimationBase(_BaseTest):

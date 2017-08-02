@@ -3098,7 +3098,7 @@ class ParameterEstimation():
     def write_config_template(self):
         if os.path.isfile(self.kwargs.get('config_filename'))==False or self.kwargs.get('overwrite_config_file')==True:
             self.get_item_template().to_excel(self.kwargs.get('config_filename'))
-            LOG.info(  'writing config template. {} set to {} and {} is {}'.format('overwrite_config_file',self.kwargs.get('overwrite_config_file'),'config_filename',self.kwargs.get('config_filename')))
+            LOG.debug(  'writing config template. {} set to {} and {} is {}'.format('overwrite_config_file',self.kwargs.get('overwrite_config_file'),'config_filename',self.kwargs.get('config_filename')))
 
         
     def read_item_template(self):

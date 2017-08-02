@@ -37,8 +37,8 @@ class _BaseTest(unittest.TestCase):
         for i in glob.glob(os.path.join(dire,'*.xlsx') ):
             os.remove(i)
             
-        for i in glob.glob(os.path.join(dire, '*.cps') ):
-            os.remove(i)            
+#        for i in glob.glob(os.path.join(dire, '*.cps') ):
+#            os.remove(i)            
 
         for i in glob.glob(os.path.join(dire, '*.txt') ):
             os.remove(i)
@@ -49,8 +49,6 @@ class _BaseTest(unittest.TestCase):
         for i in glob.glob(os.path.join(dire, '*.pickle') ):
             os.remove(i)
             
-        del self.GMQ
-        del self.copasi_file            
             
 class _TimeCourseBase(_BaseTest):
     
@@ -62,8 +60,6 @@ class _TimeCourseBase(_BaseTest):
         
     def tearDown(self):
         super(_TimeCourseBase, self).tearDown()
-        os.remove(self.TC['report_name'])
-        del self.TC
         
 class _ParameterEstimationBase(_BaseTest):
     """
@@ -124,8 +120,8 @@ class _ParameterEstimationBase(_BaseTest):
         
     def tearDown(self):
         super(_ParameterEstimationBase, self).tearDown()
-        os.remove(self.TC1['report_name'])
-        os.remove(self.TC2['report_name'])    
+        if os.path.isdir(self.PE['results_directory']):
+            shutil.rmtree(self.PE['results_directory'])
     
     
 class _MultiParameterEstimationBase(_BaseTest):
@@ -135,7 +131,14 @@ class _MultiParameterEstimationBase(_BaseTest):
         ## do time course
         self.TC=PyCoTools.pycopi.TimeCourse(self.copasi_file,step_size=100,plot=False,
                                                intervals=50,end=5000)
-
+        
+        ## add noise
+        noisy_data = PyCoTools.Misc.add_noise(self.TC['report_name'])
+        os.remove(self.TC['report_name'])
+        noisy_data.to_csv(self.Tc['report_name'], sep='\t')
+        
+        
+        
         self.options={'copy_number':2,
                       'pe_number':2,
                       'population_size':10,
@@ -186,7 +189,8 @@ class _MultiParameterEstimationBase(_BaseTest):
 
     def tearDown(self):
         super(_MultiParameterEstimationBase, self).tearDown()
-        shutil.rmtree(self.RMPE['results_directory'])
+        if os.path.isdir(self.RMPE['results_directory']):
+            shutil.rmtree(self.RMPE['results_directory'])
         
 
 

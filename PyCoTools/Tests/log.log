@@ -31383,3 +31383,1221 @@ DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053
 DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
 DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3382:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
 INFO:PyCoTools.pycopi:pycopi:write_config_template:3104:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbbb99050>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb8a19878>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbc3ad3f8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb89f6cf8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2247:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report1.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report2.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1160:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbc216830>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:format_results:2405:Shape of estimated parameters: (1, 9)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:5006:These are kwargs {'index': 0, 'metabolites': ['A', 'C', 'B'], 'parameter_path': None, 'quantity_type': 'concentration', 'df':    (ADeg).k1  (B2C).k2  (C2A).k1       A2B       B2C         A         C  \
+0    8364.34   12211.0  0.000009  0.872655  0.000218  0.081161  0.175302   
+
+          B     RSS  
+0  0.000012  479.38  , 'global_quantities': ['A2B', 'B2C'], 'save': 'overwrite', 'parameter_dict': None, 'report_name': 'test_model_PE_results.txt'}
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5094:Local parameters being inserted into model: ['(ADeg).k1', '(B2C).k2', '(C2A).k1']
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5103:Constructing a dict of reaction:parameter for local parameters: {'k2': 'B2C', 'k1': 'C2A'}
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5127:States:	 ['Model_3', 'Metabolite_1', 'Metabolite_3', 'Metabolite_5', 'Compartment_1', 'Compartment_3', 'ModelValue_0', 'ModelValue_1']
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5138:State Model_3 is model
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5143:Added 0 for first parameter in sequence
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5145:State Metabolite_1 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5145:State Metabolite_3 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5145:State Metabolite_5 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5164:State ModelValue_0 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5164:State ModelValue_1 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbba36dd0>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb9192c68>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb8c37d40>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb859a758>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2247:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report1.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report2.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1160:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbc439098>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb7fe64d0>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb7fe6128>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2247:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report1.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report2.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1160:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb9142ea8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb7feb1b8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb8c36248>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb7fcb248>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb858e5a8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb8c362d8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb8c374d0>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2247:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report1.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report2.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1160:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb859d8c0>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:format_results:2405:Shape of estimated parameters: (1, 9)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:5006:These are kwargs {'index': 0, 'metabolites': ['A', 'C', 'B'], 'parameter_path': None, 'quantity_type': 'concentration', 'df':    (ADeg).k1  (B2C).k2  (C2A).k1       A2B       B2C         A         C  \
+0   0.000001  0.000021  0.000004  0.146403  0.000005  0.002104  0.306511   
+
+          B     RSS  
+0  0.010585  669.02  , 'global_quantities': ['A2B', 'B2C'], 'save': 'overwrite', 'parameter_dict': None, 'report_name': 'test_model_PE_results.txt'}
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5094:Local parameters being inserted into model: ['(ADeg).k1', '(B2C).k2', '(C2A).k1']
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5103:Constructing a dict of reaction:parameter for local parameters: {'k2': 'B2C', 'k1': 'C2A'}
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5127:States:	 ['Model_3', 'Metabolite_1', 'Metabolite_3', 'Metabolite_5', 'Compartment_1', 'Compartment_3', 'ModelValue_0', 'ModelValue_1']
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5138:State Model_3 is model
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5143:Added 0 for first parameter in sequence
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5145:State Metabolite_1 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5145:State Metabolite_3 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5145:State Metabolite_5 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5164:State ModelValue_0 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5164:State ModelValue_1 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb9136dd0>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb7fcbfc8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb869f9e0>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb8c813b0>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2247:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report1.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report2.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1160:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbba996c8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb870da28>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbc2803f8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2247:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report1.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report2.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1160:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbbe69fc8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb8742cf8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb8c93908>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb7fc45a8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbc43bb48>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbc208a28>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb8742a70>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2247:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report1.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report2.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1160:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbbf03f80>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:format_results:2405:Shape of estimated parameters: (1, 9)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:5006:These are kwargs {'index': 0, 'metabolites': ['A', 'C', 'B'], 'parameter_path': None, 'quantity_type': 'concentration', 'df':    (ADeg).k1  (B2C).k2  (C2A).k1       A2B      B2C         A         C  \
+0   0.266376  0.199698  0.000021  0.237184  7.03992  0.000415  0.000003   
+
+          B     RSS  
+0  0.028393  341.97  , 'global_quantities': ['A2B', 'B2C'], 'save': 'overwrite', 'parameter_dict': None, 'report_name': 'test_model_PE_results.txt'}
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5094:Local parameters being inserted into model: ['(ADeg).k1', '(B2C).k2', '(C2A).k1']
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5103:Constructing a dict of reaction:parameter for local parameters: {'k2': 'B2C', 'k1': 'C2A'}
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5127:States:	 ['Model_3', 'Metabolite_1', 'Metabolite_3', 'Metabolite_5', 'Compartment_1', 'Compartment_3', 'ModelValue_0', 'ModelValue_1']
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5138:State Model_3 is model
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5143:Added 0 for first parameter in sequence
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5145:State Metabolite_1 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5145:State Metabolite_3 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5145:State Metabolite_5 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5164:State ModelValue_0 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5164:State ModelValue_1 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb7df20e0>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb8e640e0>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb8c45e18>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbba8fef0>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2247:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report1.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report2.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1160:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb863ab00>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb8742b00>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb85968c0>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2247:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report1.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report2.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1160:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbc01dbd8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb7fea170>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb7e2ef38>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb7e2ec68>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb7e2eea8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb858cb48>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb802c758>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2247:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report1.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report2.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1160:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbc208b90>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:format_results:2405:Shape of estimated parameters: (1, 9)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:5006:These are kwargs {'index': 0, 'metabolites': ['A', 'C', 'B'], 'parameter_path': None, 'quantity_type': 'concentration', 'df':    (ADeg).k1  (B2C).k2  (C2A).k1      A2B       B2C         A         C  \
+0    569.179   21.4356  0.000001  0.00945  0.931714  0.000934  0.790817   
+
+         B      RSS  
+0  0.00026  630.176  , 'global_quantities': ['A2B', 'B2C'], 'save': 'overwrite', 'parameter_dict': None, 'report_name': 'test_model_PE_results.txt'}
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5094:Local parameters being inserted into model: ['(ADeg).k1', '(B2C).k2', '(C2A).k1']
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5103:Constructing a dict of reaction:parameter for local parameters: {'k2': 'B2C', 'k1': 'C2A'}
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5127:States:	 ['Model_3', 'Metabolite_1', 'Metabolite_3', 'Metabolite_5', 'Compartment_1', 'Compartment_3', 'ModelValue_0', 'ModelValue_1']
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5138:State Model_3 is model
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5143:Added 0 for first parameter in sequence
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5145:State Metabolite_1 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5145:State Metabolite_3 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5145:State Metabolite_5 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5164:State ModelValue_0 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5164:State ModelValue_1 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb8742440>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb8662248>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbc421518>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbc421098>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2247:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report1.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report2.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1160:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbba60d40>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbc2e6b00>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb7fc3e18>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2247:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report1.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report2.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1160:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb851d680>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbba36320>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb7fc62d8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb7e1eb90>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb7e1e9e0>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbc0eb998>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb812eb00>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2247:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report1.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report2.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1160:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbc2e6758>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:format_results:2405:Shape of estimated parameters: (1, 9)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:5006:These are kwargs {'index': 0, 'metabolites': ['A', 'C', 'B'], 'parameter_path': None, 'quantity_type': 'concentration', 'df':    (ADeg).k1  (B2C).k2  (C2A).k1      A2B       B2C         A         C  \
+0   0.000714   0.00008   2.12356  5.29108  0.001358  0.040044  0.000144   
+
+        B      RSS  
+0  1.6716  659.875  , 'global_quantities': ['A2B', 'B2C'], 'save': 'overwrite', 'parameter_dict': None, 'report_name': 'test_model_PE_results.txt'}
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5094:Local parameters being inserted into model: ['(ADeg).k1', '(B2C).k2', '(C2A).k1']
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5103:Constructing a dict of reaction:parameter for local parameters: {'k2': 'B2C', 'k1': 'C2A'}
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5127:States:	 ['Model_3', 'Metabolite_1', 'Metabolite_3', 'Metabolite_5', 'Compartment_1', 'Compartment_3', 'ModelValue_0', 'ModelValue_1']
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5138:State Model_3 is model
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5143:Added 0 for first parameter in sequence
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5145:State Metabolite_1 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5145:State Metabolite_3 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5145:State Metabolite_5 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5164:State ModelValue_0 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5164:State ModelValue_1 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbc208128>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbc01de18>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb8596ab8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb862f050>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2247:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report1.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report2.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1160:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb892ffc8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb858ccf8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb858cdd0>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2247:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report1.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report2.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1160:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbc3e2998>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb8a277e8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb800e830>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb869fe18>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb87032d8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb858c6c8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbc239c68>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2247:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report1.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report2.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1160:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbbc2e5a8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:format_results:2405:Shape of estimated parameters: (1, 9)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:5006:These are kwargs {'index': 0, 'metabolites': ['A', 'C', 'B'], 'parameter_path': None, 'quantity_type': 'concentration', 'df':    (ADeg).k1  (B2C).k2  (C2A).k1       A2B      B2C         A      C  \
+0    4242.91  0.728338   5.92478  0.025922  5.57353  0.000064  18.65   
+
+          B      RSS  
+0  0.000005  383.491  , 'global_quantities': ['A2B', 'B2C'], 'save': 'overwrite', 'parameter_dict': None, 'report_name': 'test_model_PE_results.txt'}
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5094:Local parameters being inserted into model: ['(ADeg).k1', '(B2C).k2', '(C2A).k1']
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5103:Constructing a dict of reaction:parameter for local parameters: {'k2': 'B2C', 'k1': 'C2A'}
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5127:States:	 ['Model_3', 'Metabolite_1', 'Metabolite_3', 'Metabolite_5', 'Compartment_1', 'Compartment_3', 'ModelValue_0', 'ModelValue_1']
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5138:State Model_3 is model
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5143:Added 0 for first parameter in sequence
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5145:State Metabolite_1 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5145:State Metabolite_3 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5145:State Metabolite_5 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5164:State ModelValue_0 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5164:State ModelValue_1 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8be01796c8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbbefeb48>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb91343f8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb8654ea8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2247:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report1.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report2.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1160:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbba8f7e8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbc0d8c68>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbbef2c68>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2247:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report1.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report2.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1160:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbc280878>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb8c2fc20>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbc045440>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb7e2e290>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb86e5cf8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb87c1b90>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb87c1710>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2247:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report1.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report2.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1160:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbc0ca2d8>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:format_results:2405:Shape of estimated parameters: (1, 9)
+DEBUG:PyCoTools.pycopi:pycopi:__init__:5006:These are kwargs {'index': 0, 'metabolites': ['A', 'C', 'B'], 'parameter_path': None, 'quantity_type': 'concentration', 'df':    (ADeg).k1  (B2C).k2  (C2A).k1       A2B      B2C         A         C  \
+0    36546.6   59292.2  323016.0  0.103455  1.98153  0.000004  0.002867   
+
+          B      RSS  
+0  0.000205  508.714  , 'global_quantities': ['A2B', 'B2C'], 'save': 'overwrite', 'parameter_dict': None, 'report_name': 'test_model_PE_results.txt'}
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5094:Local parameters being inserted into model: ['(ADeg).k1', '(B2C).k2', '(C2A).k1']
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5103:Constructing a dict of reaction:parameter for local parameters: {'k2': 'B2C', 'k1': 'C2A'}
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5127:States:	 ['Model_3', 'Metabolite_1', 'Metabolite_3', 'Metabolite_5', 'Compartment_1', 'Compartment_3', 'ModelValue_0', 'ModelValue_1']
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5138:State Model_3 is model
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5143:Added 0 for first parameter in sequence
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5145:State Metabolite_1 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5145:State Metabolite_3 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5145:State Metabolite_5 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5164:State ModelValue_0 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5164:State ModelValue_1 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbc21be60>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbbbef758>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbc222248>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbc319170>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2247:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report1.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report2.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1160:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbbbd6710>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb913f0e0>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbc39b170>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2247:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report1.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2250:Mapping experiment report2.txt
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1205:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:set_parameter_estimation_report:1160:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb9175d40>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bb8848128>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:__init__:1413:CopasiML: <Element {http://www.copasi.org/static/schema}COPASI at 0x7f8bbc0eb248>
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1222:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1691:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:run:1733:setting up deterministic time course
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:run:1740:Time course ran
+DEBUG:PyCoTools.pycopi:pycopi:get_item_template:3387:{'(ADeg).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}, '(B2C).k2': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2', 'value': '0.1'}, '(C2A).k1': {'simulationType': 'fixed', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1'}}
+INFO:PyCoTools.pycopi:pycopi:write_config_template:3101:writing config template. overwrite_config_file set to True and config_filename is /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/PEConfigFile.xlsx

@@ -32,6 +32,7 @@ PyCoTools/PyCoToolsTutorial/Tutorial5ParameterEstimationAnalysis.ipynb
 PyCoTools/PyCoToolsTutorial/Tutorial7InsertParameters.ipynb
 PyCoTools/PyCoToolsTutorial/Tutorial9Scripts.ipynb
 PyCoTools/PyCoToolsTutorial/__init__.py
+PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
 PyCoTools/PyCoToolsTutorial/sub_copasi_file.pickle
 PyCoTools/PyCoToolsTutorial/test_models.py
 PyCoTools/Scripts/__init__.py

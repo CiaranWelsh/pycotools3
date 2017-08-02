@@ -37,7 +37,7 @@ from setuptools import setup
 #version
 MAJOR = 4
 MINOR = 1
-MICRO = 2
+MICRO = 3
 
 
 __version__ = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
@@ -48,7 +48,9 @@ setup(
   version = __version__,
   description = 'A python toolbox for COPASI',
   author = 'Ciaran Welsh',
-  requires=['lxml','argparse','pandas','numpy','scipy','matplotlib','scipy','seaborn','sklearn'],
+  requires=['lxml','argparse','pandas','numpy','scipy',
+            'matplotlib','scipy','seaborn','sklearn',
+            'openpyxl','xlrd'],
   package_data={'PyCoTools':['*.py','Documentation/*.pdf',
                              'logging_config.conf',
                              'Documentation/*.html','Licence.txt',

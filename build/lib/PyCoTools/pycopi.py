@@ -3103,7 +3103,7 @@ class ParameterEstimation():
         
     def read_item_template(self):
         if os.path.isfile(self.kwargs.get('config_filename'))!=True:
-            raise Errors.InputError('ConfigFile does not exist. run \'write_item_template\' method and modify it how you like then run the setup()  method again.')
+            raise Errors.InputError('ConfigFile does not exist. run \'write_config_template\' method and modify it how you like then run the setup()  method again.')
         df = pandas.read_excel(self.kwargs.get('config_filename'))
         parameter_names = list(df[df.columns[0]])
         
