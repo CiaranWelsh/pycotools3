@@ -48,8 +48,14 @@ class ModelTests(base_tests._BaseTest):
     def test_get_local_parameters(self):
         """
         
+        
+        
         """
-        print self.GMQ.get_local_parameters()
+        if self.test_model == 'test_model1':
+            locals = {'(ADeg).k1': 0.1, '(B2C).k2': 0.1, '(C2A).k1': 0.1}
+#            os.system('CopasiUI {}'.format(self.copasi_file))
+            print self.M.get_local_parameters()
+#            print self.M.get_local_parameter_key2name_mapping
         
         
         

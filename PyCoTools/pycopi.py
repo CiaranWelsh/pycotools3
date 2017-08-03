@@ -234,25 +234,51 @@ class Model():
         return collection
     
     
-    def get_local_parameters(self, attribute=None):
+
+    def get_local_parameters(self, attribute='name'):
         """
         i.e. get local parmeters
         """
-        key_list = [None, 'value',' name','key']
+        key_list = ['value', 'name', 'key', 'reference']
         if attribute not in key_list:
             raise Errors.InputError('{} not in {}'.format(attribute, key_list))
             
-            
         collection= {}
-        for i in self.copasiML.iter():
+        
+        for i in self.copasiML.iter() :
             if  i.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
-                if attribute == None:
-                    for j in i:
-                        collection[j.attrib['key']] = j.attrib
-                else:
-                    for j in i:
-                        collection[j.attrib['key']] = j.attrib[attribute]
-        return collection    
+                reaction_name = i.getparent().attrib['name']
+                collection[reaction_name] = {}
+                reaction_key = i.getparent().attrib['key']
+                for j in i:
+                    collection[reaction_name][j.attrib['name']] = j.attrib
+        
+        df_dct = {}            
+        for reaction_dct in  collection:
+            for parameter_dct in collection[reaction_dct]:
+                print pandas.DataFrame(collection[reaction_dct][parameter_dct] )
+#            df_dct[i] = pandas.DataFrame(collection[i])
+            
+#        print pandas.concat(df_dct)
+                    
+        query='//*[@cn="String=Kinetic Parameters"]'
+        d={}
+        for i in self.copasiML.xpath(query):
+            for j in list(i):
+                for k in list(j):
+                    if k.attrib['simulationType']=='fixed':
+                        match=re.findall('Reactions\[(.*)\].*Parameter=(.*)',k.attrib['cn'])[0]
+                        assert isinstance(match,tuple),'get species regex hasn\'t been found. Do you have species in your model?'
+                        assert match !=None
+                        assert match !=[]                
+                        assert len(match)==2
+                        match='({}).{}'.format(match[0],match[1])
+                        d[match]=k.attrib['cn']
+#                        
+        reference_df = pandas.DataFrame(d, index=['Reference']).transpose()
+#        print pandas.DataFrame(collection, index=[0])
+#        return collection 
+
     
     def get_reactions(self, attribute=None):
         """
@@ -395,7 +421,7 @@ class GetModelQuantities():
             if  i.tag == '{http://www.copasi.org/static/schema}ListOfModelValues':
                 for j in i:
                     collection[j.attrib['key']] = j.attrib['name']
-        return collection    
+        return collection
     
     def get_compartment_object_reference(self):
         """
