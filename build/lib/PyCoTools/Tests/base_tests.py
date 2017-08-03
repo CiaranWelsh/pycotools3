@@ -118,8 +118,10 @@ class _ParameterEstimationBase(_BaseTest):
         self.PE = PyCoTools.pycopi.ParameterEstimation(self.copasi_file,[self.TC1['report_name'],self.TC2['report_name'] ],
                                                         **self.parameter_estimation_options)
         
-#    def tearDown(self):
-#        super(_ParameterEstimationBase, self).tearDown()
+    def tearDown(self):
+        super(_ParameterEstimationBase, self).tearDown()
+        if os.path.isdir(self.PE['results_directory']):
+            shutil.rmtree(self.PE['results_directory'])
     
     
 class _MultiParameterEstimationBase(_BaseTest):
@@ -129,7 +131,14 @@ class _MultiParameterEstimationBase(_BaseTest):
         ## do time course
         self.TC=PyCoTools.pycopi.TimeCourse(self.copasi_file,step_size=100,plot=False,
                                                intervals=50,end=5000)
-
+        
+        ## add noise
+        noisy_data = PyCoTools.Misc.add_noise(self.TC['report_name'])
+        os.remove(self.TC['report_name'])
+        noisy_data.to_csv(self.Tc['report_name'], sep='\t')
+        
+        
+        
         self.options={'copy_number':2,
                       'pe_number':2,
                       'population_size':10,
@@ -180,7 +189,8 @@ class _MultiParameterEstimationBase(_BaseTest):
 
     def tearDown(self):
         super(_MultiParameterEstimationBase, self).tearDown()
-        shutil.rmtree(self.RMPE['results_directory'])
+        if os.path.isdir(self.RMPE['results_directory']):
+            shutil.rmtree(self.RMPE['results_directory'])
         
 
 

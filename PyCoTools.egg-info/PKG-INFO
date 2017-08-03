@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: PyCoTools
-Version: 4.1.3
+Version: 4.1.5
 Summary: A python toolbox for COPASI
 Home-page: https://github.com/CiaranWelsh/PyCoTools
 Author: Ciaran Welsh
@@ -18,3 +18,5 @@ Requires: matplotlib
 Requires: scipy
 Requires: seaborn
 Requires: sklearn
+Requires: openpyxl
+Requires: xlrd

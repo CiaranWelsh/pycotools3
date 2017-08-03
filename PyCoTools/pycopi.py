@@ -197,9 +197,6 @@ class Model():
         pass
     
     
- 
-    
-    
     def get_metabolites(self, attribute=None):
         """
 
@@ -215,7 +212,10 @@ class Model():
                         collection[j.attrib['key']] = j.attrib
                     else:
                         collection[j.attrib['key']] = j.attrib[attribute]
-        return collection
+        return collection 
+    
+    
+
 
     def get_global_quantities(self, attribute=None):
         """
@@ -363,6 +363,18 @@ class GetModelQuantities():
                     collection[j.attrib['key']] = j.attrib['name']
         return collection
 
+    def get_metabolites_key2name_mapping(self):
+        """
+        Get the model reference - the 'key' from self.get_model_units
+        """
+        collection= {}
+        for i in self.copasiML.iter():
+            if  i.tag == '{http://www.copasi.org/static/schema}ListOfMetabolites':
+                for j in i:
+                    collection[j.attrib['key']] = j.attrib['name']
+        return collection
+
+
     def get_global_object_reference(self):
         """
         Get the model reference - the 'key' from self.get_model_units
@@ -373,6 +385,17 @@ class GetModelQuantities():
                 for j in i:
                     collection[j.attrib['key']] = j.attrib['name']
         return collection
+    
+    def get_global_quantities_key2name_mapping(self):
+        """
+        Get the model reference - the 'key' from self.get_model_units
+        """
+        collection= {}
+        for i in self.copasiML.iter():
+            if  i.tag == '{http://www.copasi.org/static/schema}ListOfModelValues':
+                for j in i:
+                    collection[j.attrib['key']] = j.attrib['name']
+        return collection    
     
     def get_compartment_object_reference(self):
         """
@@ -525,6 +548,73 @@ class GetModelQuantities():
         if len(metab_dct.keys())==0:
             raise Errors.NometabolitesError('There are no metabolites in {}'.format(self.get_model_name()))
         return metab_dct
+    
+    def get_initial_state_metabolites(self):
+        query = '//*[@type="initialState"]'
+        for i in self.copasiML.xpath(query):
+            state_values = i.text
+        state_values = state_values.split(' ')
+        mapping =  self.get_metabolites_key2name_mapping()
+        dct = dict(zip(self.get_state_template(), state_values))
+        return {j:dct[i] for (i,j) in mapping.items() if i in dct.keys()}
+
+    def get_initial_state_global_quantities(self):
+        query = '//*[@type="initialState"]'
+        for i in self.copasiML.xpath(query):
+            state_values = i.text
+        state_values = state_values.split(' ')
+        mapping =  self.get_global_quantities_key2name_mapping()
+        dct = dict(zip(self.get_state_template(), state_values))
+        return {j:dct[i] for (i,j) in mapping.items() if i in dct.keys()}
+    
+    
+    def get_metabolites2(self):
+        '''
+        Deprecated. Use get_ICs_cns() inst
+        returns dict of metabolites in the 'species' menu
+        '''
+        metab_dct={}
+        query='//*[@cn="String=Initial Species Values"]'
+        for i in self.copasiML.xpath(query):
+            print self.get_state_template()
+#            for j in list(i):
+#                match=re.findall('.*Vector=Metabolites\[(.*)\]',j.attrib['cn'])
+#                                
+#                if match==[]:
+#                    return self.copasiML
+#                else:
+#                    compartment_match=re.findall('Compartments\[(.*)\],',j.attrib['cn'])
+#                    
+#                    comp=re.findall('Compartments\[(.*?)\]',j.attrib['cn'])[0]
+#                    if self.quantity_type=='concentration':
+#                        compartment_vol= float(self.get_compartments()[comp]['value'])
+#                    else:
+#                        compartment_vol=1
+#                    metab_dct[match[0]]={}
+#                    metab_dct[match[0]]['particle_numbers']=j.attrib['value']
+#                    concentration= self.convert_particles_to_molar(j.attrib['value'],self.get_quantity_units(),compartment_vol)
+#                    metab_dct[match[0]]['concentration']=concentration
+#                    metab_dct[match[0]]['compartment']=compartment_match[0]
+#        if len(metab_dct.keys())==0:
+#            raise Errors.NometabolitesError('There are no metabolites in {}'.format(self.get_model_name()))
+        return metab_dct
+    
+    def get_metabolites3(self, attribute=None):
+        """
+
+        """
+        key_list = [None, 'key', 'name', 'simulationType', 'compartment']
+        if attribute not in key_list:
+            raise Errors.InputError('{} not in {}'.format(attribute, key_list))
+        collection= {}
+        for i in self.copasiML.iter():
+            if  i.tag == '{http://www.copasi.org/static/schema}ListOfMetabolites':
+                for j in i:
+                    if attribute==None:
+                        collection[j.attrib['key']] = j.attrib
+                    else:
+                        collection[j.attrib['key']] = j.attrib[attribute]
+        return collection     
         
     def get_state_template(self):
         """
@@ -4031,7 +4121,7 @@ class Run():
         ## -N option for job name 
         os.system('qsub {} -N {} '.format(self.SGE_job_file,self.SGE_job_file))
         ## remove .sh file after used. 
-        os.remove(self.SGE_job_file)
+#        os.remove(self.SGE_job_file)
         
     def save(self):
         self.CParser.write_copasi_file(self.copasi_file,self.copasiML)

@@ -49,9 +49,11 @@ PyCoTools/Scripts/run_PL.py
 PyCoTools/Scripts/run_local_chaser_PEs.py
 PyCoTools/Scripts/run_multiple_PEs.py
 PyCoTools/Scripts/submit_copasi_multijob.py
-PyCoTools/Tests/RunMultiplePEsTests.py
 PyCoTools/Tests/__init__.py
 PyCoTools/Tests/base_tests.py
+PyCoTools/Tests/get_model_quantities.py
+PyCoTools/Tests/insert_parameters_from_dict.py
+PyCoTools/Tests/model_tests.py
 PyCoTools/Tests/parameter_estimation_tests.py
 PyCoTools/Tests/run_multiple_pes_tests.py
 PyCoTools/Tests/scan_tests.py
