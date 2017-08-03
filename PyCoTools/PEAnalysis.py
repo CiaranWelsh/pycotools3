@@ -874,20 +874,20 @@ class EnsembleTimeCourse():
             self.experiment_files = [self.experiment_files]
         
         options={'sep':'\t',
-#                 'log10':False,
+                 'y_parameter':None,
                  'truncate_mode':'index',
                  'x':100,
                  'xtick_rotation':'horizontal',
                  'ylabel':'Frequency',
                  'savefig':False,
-                 'results_directory':os.path.dirname(self.copasi_file),
+                 'results_directory':None,
                  'dpi':300,
                  'step_size':1,
                  'check_as_you_plot':False,
                  'estimator':numpy.mean,
-                 'n_boot':20000,
-                 'ci':0.95,
-                 'color':'bright'} ##resolution: intervals in time course
+                 'n_boot':10000,
+                 'ci':95,
+                 'color':'deep'} ##resolution: intervals in time course
         
         for i in kwargs.keys():
             assert i in options.keys(),'{} is not a keyword argument for ParameterEnsemble'.format(i)
@@ -899,6 +899,24 @@ class EnsembleTimeCourse():
         self.exp_times = self.get_experiment_times()
         self.ensemble_data =  self.simulate_ensemble()
         self.ensemble_data.index = self.ensemble_data.index.rename(['Index','Time'])
+        
+        if self['y_parameter'] == None:
+            self['y_parameter']=list(self.ensemble_data.keys() )
+        
+        if isinstance(self['y_parameter'], list)!=True:
+            self['y_parameter'] = [self['y_parameter']]
+            
+            
+        for param in self['y_parameter']:
+            if param not in self.ensemble_data.keys():
+                raise Errors.InputError('{} not in your data set. {}'.format(param, self.ensemble_data.keys()))
+        
+        if self['results_directory'] == None:
+            self['results_directory'] = os.path.join(os.path.dirname(self.copasi_file), 'EnsembleTimeCourses' )
+            
+        if os.path.abspath(self['results_directory'])!=True:
+            self['results_directory'] = os.path.join(os.path.dirname(self.copasi_file), self['results_directory'])
+
         self.plot()
 
     def __getitem__(self,key):
@@ -994,26 +1012,26 @@ class EnsembleTimeCourse():
         data = self.ensemble_data.reset_index(level=1, drop=True)
         data.index.name = 'ParameterFitIndex'
         data = data.reset_index()
-        for parameter in data.keys():
+        for parameter in self['y_parameter']:
             if parameter not in ['ParameterFitIndex','Time']:
                 plt.figure()
-                seaborn.tsplot(data, time='Time', value=parameter,
+                ax = seaborn.tsplot(data, time='Time', value=parameter,
                                  unit='ParameterFitIndex',
                                  estimator=self['estimator'],
                                  n_boot=self['n_boot'],
                                  ci=self['ci'],
-                                 color=self['color']
-                                 )
+                                 color=self['color'])
+                
                 plt.plot(self.experiment_data[ self.experiment_data.keys()[0]  ]['Time'], 
                                               self.experiment_data[self.experiment_data.keys()[0]  ][parameter],
                                               'ro')
                 plt.title('Ensemble Time Course\n for {} (n={})'.format(parameter, self.param_data.shape[0]))
                 if self['savefig']:
-                    save_dir = os.path.join(self['results_directory'], 'EnsemblePlots')
-                    if os.path.isdir(save_dir)!=True:
-                        os.mkdir(save_dir)
-                    os.chdir(save_dir)
-                    fname = os.path.join(save_dir, '{}.jpeg'.format(Misc.RemoveNonAscii(parameter).filter))
+#                    save_dir = os.path.join(self['results_directory'], 'EnsemblePlots')
+                    if os.path.isdir(self['results_directory'])!=True:
+                        os.makedirs(self['results_directory'])
+                    os.chdir(self['results_directory'])
+                    fname = os.path.join(self['results_directory'], '{}.jpeg'.format(Misc.RemoveNonAscii(parameter).filter))
                     plt.savefig(fname, dpi=self['dpi'], bbox_inches='tight')
         
     

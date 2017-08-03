@@ -34614,3 +34614,72 @@ DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5173:State Metabolite_5 is m
 DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5192:State ModelValue_0 is Global variable
 DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5192:State ModelValue_1 is Global variable
 DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:5028:These are kwargs {'index': 0, 'metabolites': ['A', 'C', 'B'], 'parameter_path': None, 'quantity_type': 'concentration', 'df': None, 'global_quantities': ['A2B', 'B2C'], 'save': 'overwrite', 'parameter_dict': {'(C2A).k1': 1.3471210474342565, '(B2C).k2': 1.186764637302521, '(ADeg).k1': 0.8899467853294569}, 'report_name': 'test_model_PE_results.txt'}
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5117:Local parameters being inserted into model: ['(ADeg).k1', '(B2C).k2', '(C2A).k1']
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5128:Constructing a dict of reaction:parameter for local parameters: {'(C2A).k1': {'C2A': 'k1'}, '(B2C).k2': {'B2C': 'k2'}, '(ADeg).k1': {'ADeg': 'k1'}}
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5154:States:	 ['Model_3', 'Metabolite_1', 'Metabolite_3', 'Metabolite_5', 'Compartment_1', 'Compartment_3', 'ModelValue_0', 'ModelValue_1']
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5165:State Model_3 is model
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5170:Added 0 for first parameter in sequence
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5172:State Metabolite_1 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5172:State Metabolite_3 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5172:State Metabolite_5 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5191:State ModelValue_0 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5191:State ModelValue_1 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:5028:These are kwargs {'index': 0, 'metabolites': ['A', 'C', 'B'], 'parameter_path': None, 'quantity_type': 'concentration', 'df': None, 'global_quantities': ['A2B', 'B2C'], 'save': 'overwrite', 'parameter_dict': {'A': 0.8195178557418651, 'C': 0.7838737092655643, 'B': 2.5647973324466475}, 'report_name': 'test_model_PE_results.txt'}
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5117:Local parameters being inserted into model: []
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5128:Constructing a dict of reaction:parameter for local parameters: {}
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5154:States:	 ['Model_3', 'Metabolite_1', 'Metabolite_3', 'Metabolite_5', 'Compartment_1', 'Compartment_3', 'ModelValue_0', 'ModelValue_1']
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5165:State Model_3 is model
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5170:Added 0 for first parameter in sequence
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5172:State Metabolite_1 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5172:State Metabolite_3 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5172:State Metabolite_5 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5191:State ModelValue_0 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5191:State ModelValue_1 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:5028:These are kwargs {'index': 0, 'metabolites': ['A', 'C', 'B'], 'parameter_path': None, 'quantity_type': 'concentration', 'df': None, 'global_quantities': ['A2B', 'B2C'], 'save': 'overwrite', 'parameter_dict': {'(C2A).k1': 1.3794667658303106, '(B2C).k2': 0.8477956450650985, '(ADeg).k1': 0.36265769370943846}, 'report_name': 'test_model_PE_results.txt'}
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5117:Local parameters being inserted into model: ['(ADeg).k1', '(B2C).k2', '(C2A).k1']
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5128:Constructing a dict of reaction:parameter for local parameters: {'(C2A).k1': {'C2A': 'k1'}, '(B2C).k2': {'B2C': 'k2'}, '(ADeg).k1': {'ADeg': 'k1'}}
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5154:States:	 ['Model_3', 'Metabolite_1', 'Metabolite_3', 'Metabolite_5', 'Compartment_1', 'Compartment_3', 'ModelValue_0', 'ModelValue_1']
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5165:State Model_3 is model
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5170:Added 0 for first parameter in sequence
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5172:State Metabolite_1 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5172:State Metabolite_3 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5172:State Metabolite_5 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5191:State ModelValue_0 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5191:State ModelValue_1 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:__init__:5028:These are kwargs {'index': 0, 'metabolites': ['A', 'C', 'B'], 'parameter_path': None, 'quantity_type': 'concentration', 'df': None, 'global_quantities': ['A2B', 'B2C'], 'save': 'overwrite', 'parameter_dict': {'A': 0.1885716422830318, 'C': 1.8311927047286183, 'B': 0.29307088525350966}, 'report_name': 'test_model_PE_results.txt'}
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5117:Local parameters being inserted into model: []
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5128:Constructing a dict of reaction:parameter for local parameters: {}
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5154:States:	 ['Model_3', 'Metabolite_1', 'Metabolite_3', 'Metabolite_5', 'Compartment_1', 'Compartment_3', 'ModelValue_0', 'ModelValue_1']
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5165:State Model_3 is model
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5170:Added 0 for first parameter in sequence
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5172:State Metabolite_1 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5172:State Metabolite_3 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5172:State Metabolite_5 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5191:State ModelValue_0 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5191:State ModelValue_1 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
+INFO:root:__init__:<module>:26:Initializing PyCoTools
+INFO:root:__init__:<module>:27:Initializing logging System
+INFO:root:__init__:<module>:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:__init__:5028:These are kwargs {'index': 0, 'metabolites': ['A', 'C', 'B'], 'parameter_path': None, 'quantity_type': 'concentration', 'df': None, 'global_quantities': ['A2B', 'B2C'], 'save': 'overwrite', 'parameter_dict': {'(C2A).k1': 2.6750245493025284, '(B2C).k2': 0.32425574234161214, '(ADeg).k1': 0.1803629227775062}, 'report_name': 'test_model_PE_results.txt'}
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5117:Local parameters being inserted into model: ['(ADeg).k1', '(B2C).k2', '(C2A).k1']
+DEBUG:PyCoTools.pycopi:pycopi:insert_locals:5128:Constructing a dict of reaction:parameter for local parameters: {'(C2A).k1': {'C2A': 'k1'}, '(B2C).k2': {'B2C': 'k2'}, '(ADeg).k1': {'ADeg': 'k1'}}
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5154:States:	 ['Model_3', 'Metabolite_1', 'Metabolite_3', 'Metabolite_5', 'Compartment_1', 'Compartment_3', 'ModelValue_0', 'ModelValue_1']
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5165:State Model_3 is model
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5170:Added 0 for first parameter in sequence
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5172:State Metabolite_1 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5172:State Metabolite_3 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5172:State Metabolite_5 is metab
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5191:State ModelValue_0 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:assemble_state_values:5191:State ModelValue_1 is Global variable
+DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps
