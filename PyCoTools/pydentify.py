@@ -438,12 +438,35 @@ class ProfileLikelihood():
             result = pool.apply_async(run, (self.cps_dct[index].values(),))
             pool.close()
             pool.join()
-        
+
+    def run_SGE2(self):
+        '''
+        run using one process, separately, one after another
+        '''
+        res={}
+        for i in self.cps_dct.keys():
+            for j in self.cps_dct[i]:
+                LOG.info( 'running {}'.format(j))
+                res[self.cps_dct[i][j]]= pycopi.Run(self.cps_dct[i][j],
+                   task='scan',mode='SGE').run()
+        return res
+    
+    def run_SGE(self):
+        for i in self.cps_dct.keys():
+            for j in self.cps_dct[i]:
+                with open('run_script.sh','w') as f:
+                    f.write('#!/bin/bash\n#$ -V -cwd\nmodule addapps/COPASI/4.16.104-Linux-64bit\nCopasiSE "{}"'.format(self.cps_dct[i][j]))
+                os.system('qsub {}'.format('run_script.sh'))
+                os.remove('run_script.sh')         
+        return True
+    
     def run(self):
         if self['run']=='slow':
             self.run_slow()
         elif self['run']=='multiprocess':
             self.multi_run()
+        elif self['run'] == 'SGE':
+            self.run_SGE()
 
 #==============================================================================
 class FormatPLData():
@@ -470,8 +493,8 @@ class FormatPLData():
             data = pandas.read_csv(self.report_name, sep='\t', header=None, skiprows=[0])
         except pandas.parser.CParserError as e:
             raise Errors.InputError('Report {} caused Error --> {}'.format(self.report_name, e.message))
-        except:
-            raise Errors.InputError('File is empty. Check {}'.format(self.report_name))
+#        except:
+#            raise Errors.InputError('File is empty. Check {}'.format(self.report_name))
         bracket_columns = data[data.columns[[1,-2]]]
         if bracket_columns.iloc[0].iloc[0] != '(':
             data = pandas.read_csv(self.report_name, sep='\t')
@@ -1366,9 +1389,15 @@ class Plot():
                  'ci_band_level':95, ## CI for estimator bootstrap
                  'err_style':'ci_band',
                  'savefig':False,
-                 'results_directory':os.getcwd(),
+                 'results_directory':None,
                  'dpi':300,
-                 'plot_cl':True}
+                 'plot_cl':True,
+                 'title':None,
+                 'xlabel':None,
+                 'ylabel':None,
+                 'color_palette':'bright',
+                 'legend_location':None,
+                 }
         
         
         for i in kwargs.keys():
@@ -1401,9 +1430,19 @@ class Plot():
                 if y_param not in self.parameter_list:
                     raise Errors.InputError('{} not in {}'.format(y_param, self.parameter_list))
                 
-        if self['y'] == self['x']:
-            raise Errors.InputError('x parameter {} cannot equal y parameter {}'.format(self['x'],self['y']))
+        if self['savefig']:
+            if self['results_directory']==None:
+                raise Errors.InputError('Please specify argument to results_directory')
+        
+        n = list(set(self.data.index.get_level_values(0)))
+        if self['title'] == None:
+            self['title'] = 'Profile Likelihood for\n{} (Rank={})'.format(self['x'],n)
+        
+        self.data.rename(columns={'ParameterOfInterestValue':self['x']})
+        
         self.plot()
+        
+        
 
 
     def __getitem__(self,key):
@@ -1419,7 +1458,10 @@ class Plot():
         """
         
         """
-        n = list(set(self.data.index.get_level_values(0)))
+        if self['y'] == self['x']:
+            LOG.warning( Errors.InputError('x parameter {} cannot equal y parameter {}. Plot function returned None'.format(self['x'],self['y']))  )
+            return None
+        
         for label, df in self.data.groupby(level=[2]):
             if label== self['x']:
                 data = df[self['y']]
@@ -1459,7 +1501,7 @@ class Plot():
                            n_boot=self['n_boot'],
                            ci=self['ci_band_level'])
 
-
+        seaborn.color_palette('husl',8)
         seaborn.tsplot(data=data, 
                        time='ParameterOfInterestValue',
                        value='Value',
@@ -1468,14 +1510,24 @@ class Plot():
                        estimator=self['estimator'],
                        err_style=self['err_style'],
                        n_boot=self['n_boot'],
-                       ci=self['ci_band_level'])
-        plt.title('ProfileLikelihood(n={})'.format(n))
+                       ci=self['ci_band_level'],
+                       color=seaborn.color_palette(self['color_palette'],len(self['y']))
+                       )
+        plt.title(self['title'])
+        if self['ylabel']!=None:
+            plt.ylabel(self['ylabel'])
+        if self['xlabel']!=None:
+            plt.xlabel(self['x_label'])
+            
+        if self['legend_location']!=None:
+            plt.legend(loc=self['legend_location'])
+            
         if self['savefig']:
-            save_dir = os.path.join(self['results_directory'], 'ProfileLikelihood')
-            if os.path.isdir(save_dir)!=True:
-                os.mkdir(save_dir)
-            os.chdir(save_dir)
-            plt.savefig(os.path.join(save_dir, '{}Vs{}.jpeg'.format(self['x'],self['y'])  ),
+#            save_dir = os.path.join(self['results_directory'], 'ProfileLikelihood')
+            if os.path.isdir(self['results_directory'])!=True:
+                os.makedirs(self['results_directory'])
+            os.chdir(self['results_directory'])
+            plt.savefig(os.path.join(self['results_directory'], '{}Vs{}.jpeg'.format(self['x'],self['y'])  ),
                         dpi=self['dpi'], bbox_inches='tight')
 
     
@@ -1505,7 +1557,8 @@ class ParsePLData():
                  'num_data_points':None,
                  'experiment_files':None,
                  'alpha':0.95,
-                 'log10':True}
+                 'log10':True,
+                 }
         
         
         for i in kwargs.keys():
@@ -1543,9 +1596,8 @@ class ParsePLData():
         if self['rss'] == None:
             self['rss'] = self.get_rss()
         
-
         self.data = self.get_confidence_level()
-#        self.convert_to_float()
+        self.data = self.data.drop('ParameterFile', axis=1)
         
 
 
@@ -1594,6 +1646,9 @@ class ParsePLData():
             for f in glob.glob(os.path.join(index_dir,'*.txt')):
                 dire, fle = os.path.split(f)
                 res[int(i)][fle] = f
+        if res == {}:
+            raise Errors.InputError('Can\'t find PL data files. Have you given the correct path to profile likelihood directory?')
+            
         return res
             
     def format_pl_data_files(self):
@@ -1680,7 +1735,11 @@ class ParsePLData():
             l.append( i.shape[0]*(i.shape[1]-1))
         s= sum(l)
         if s==0:
-            raise Errors.InputError('Number of data points cannot be 0. This is wrong')
+            raise Errors.InputError('''Number of data points cannot be 0.
+Experimental data is inferred from the parameter estimation task definition. 
+It might be that copasi_file refers to a 'fresh' copy of the model.
+Try redefining the same parameter estimation problem that you used in the profile likelihood, 
+using the setup method but not running the parameter estimation before trying again.''')
         return s
 
     def get_rss(self):
@@ -1710,12 +1769,13 @@ class ParsePLData():
                                        self['alpha']).CL
                   
         ranks = list(self.data.index.get_level_values(0))
+#        print CL_dct
         CL_list = [CL_dct[i] for i in ranks]
         self.data['ConfidenceLevel'] = CL_list
         self.data = self.data.reset_index()
         self.data = self.data.set_index(['ParameterSetRank','ConfidenceLevel','ParameterOfInterest','ParameterOfInterestValue'])
         return self.data
-    
+#    
     
     
     

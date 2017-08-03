@@ -30,16 +30,16 @@ Setup tools for PyCoTools
 
 """
 
-from distutils.core import setup
-import  setuptools 
+#from distutils.core import setup
+from setuptools import setup
 
 
 #version
 MAJOR = 4
-MINOR = 0
-MICRO = 7
+MINOR = 1
+MICRO = 5
 
-#=======
+
 __version__ = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
 setup(
@@ -48,7 +48,9 @@ setup(
   version = __version__,
   description = 'A python toolbox for COPASI',
   author = 'Ciaran Welsh',
-  requires=['lxml','argparse','pandas','numpy','scipy','matplotlib.pyplot','scipy','seaborn','sklearn'],
+  requires=['lxml','argparse','pandas','numpy','scipy',
+            'matplotlib','scipy','seaborn','sklearn',
+            'openpyxl','xlrd'],
   package_data={'PyCoTools':['*.py','Documentation/*.pdf',
                              'logging_config.conf',
                              'Documentation/*.html','Licence.txt',
@@ -65,11 +67,11 @@ setup(
                              'PyCoToolsTutorial/*.cps']},
   author_email = 'c.welsh2@newcastle.ac.uk',
   url = 'https://github.com/CiaranWelsh/PyCoTools', # use the URL to the github repo
-#  download_url = 'https://github.com/b3053674/pydentify/tarball/0.1',
-  keywords = ['systems biology','modelling','biological','networks','copasi','identifiability analysis','profile likelihood'],
-#  include_package_data=False,
+
+  keywords = ['systems biology','modelling','biological',
+              'networks','copasi','identifiability analysis','profile likelihood'],
+
   license='GPL4',
-#  platform=['windows','linux'],
   install_requires=['pandas','numpy','scipy','matplotlib',
                     'lxml', 'seaborn','sklearn'],
   long_description='''Tools for using Copasi via Python and calculating profile likelihoods. See Github page and documentation for more details''')
