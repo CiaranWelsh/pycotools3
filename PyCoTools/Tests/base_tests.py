@@ -37,8 +37,8 @@ class _BaseTest(unittest.TestCase):
         for i in glob.glob(os.path.join(dire,'*.xlsx') ):
             os.remove(i)
             
-#        for i in glob.glob(os.path.join(dire, '*.cps') ):
-#            os.remove(i)            
+        for i in glob.glob(os.path.join(dire, '*.cps') ):
+            os.remove(i)            
 
         for i in glob.glob(os.path.join(dire, '*.txt') ):
             os.remove(i)
