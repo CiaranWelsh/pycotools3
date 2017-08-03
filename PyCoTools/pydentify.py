@@ -438,12 +438,26 @@ class ProfileLikelihood():
             result = pool.apply_async(run, (self.cps_dct[index].values(),))
             pool.close()
             pool.join()
-        
+
+    def run_SGE(self):
+        '''
+        run using one process, separately, one after another
+        '''
+        res={}
+        for i in self.cps_dct.keys():
+            for j in self.cps_dct[i]:
+                LOG.debug( 'running {}'.format(j))
+                res[self.cps_dct[i][j]]= pycopi.Run(self.cps_dct[i][j],
+                   task='scan',mode='SGE').run()
+        return res
+    
     def run(self):
         if self['run']=='slow':
             self.run_slow()
         elif self['run']=='multiprocess':
             self.multi_run()
+        elif self['run'] == 'SGE':
+            self.run_SGE()
 
 #==============================================================================
 class FormatPLData():

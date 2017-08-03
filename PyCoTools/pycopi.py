@@ -496,7 +496,7 @@ class GetModelQuantities():
         string=self.check_ascii(string)
         return re.findall('Model=(.*),Vector=C',string)[0]
         
-    def get_metabolites_dep(self):
+    def get_metabolites(self):
         '''
         Deprecated. Use get_ICs_cns() inst
         returns dict of metabolites in the 'species' menu
@@ -553,7 +553,7 @@ class GetModelQuantities():
         return model_val_dct
 #        
                         
-    def get_local_parameters(self):
+    def get_local_parameters_dep(self):
         '''
         return dict of local parameters used in your model
         '''
@@ -569,6 +569,29 @@ class GetModelQuantities():
                         parameters['({}).{}'.format(match[0][0],match[0][1])]=k.attrib['value']
         return parameters
 
+    def get_local_parameters(self):
+        '''
+        return dict of local parameters used in your model
+        '''
+        global_kinetic_parameters = self.get_global_kinetic_parameters_cns().keys()
+#        query='//*[@cn="String=Kinetic Parameters"]'
+        query = 'Reaction'
+        parameters={}
+        count=0
+        for i in self.copasiML.iter():
+            if i.tag == '{http://www.copasi.org/static/schema}Constant':
+#                print i.getparent().getparent().attrib
+                reaction_name = i.getparent().getparent().attrib['name']
+                parameter_name = i.attrib['name']
+                key2 = "({}).{}".format(reaction_name, parameter_name)
+                if key2 in global_kinetic_parameters:
+                    continue
+                parameters[key2] = {}
+                parameters[key2] = float(i.attrib['value'])
+                count+=1
+        return parameters
+    
+    
     def get_compartments(self):
         '''
         returns a dict of compartments in your model
@@ -2452,7 +2475,6 @@ class FormatPEData():
         """
         for i in glob.glob(os.path.join(folder, '*.txt')):
             FormatPEData(copasi_file, i, report_type=report_type)
-#        for i in os.listdir(folder):
             
         
         
@@ -5033,6 +5055,7 @@ class InsertParameters():
         
         self.parameters=self.get_parameters()
         self.parameters= self.replace_gl_and_lt()
+#        self.insert_locals()
         self.insert_all()
         #change
 
@@ -5095,9 +5118,11 @@ Please check the headers of your PE data are consistent with your model paramete
         ## create a dict[parameter]=reactiontype dict to help
         ## navidate the xml
         local_dct={}
-        for i in local:
-            k,v = re.findall(  '\((.*)\)\.(.*)',i  ) [0]
-            local_dct[v]=k
+        for full_param in local:
+            local_dct[full_param]={}
+            k,v = re.findall(  '\((.*)\)\.(.*)', full_param ) [0]
+            local_dct[full_param][k] = v
+            
             
 #        print (local_dct, len(local_dct))
         LOG.debug('Constructing a dict of reaction:parameter for local parameters: {}'.format(local_dct))
@@ -5108,16 +5133,18 @@ Please check the headers of your PE data are consistent with your model paramete
         ## match with the parameter then insert the str(float(*.)) representation
         ## of the parameter value into the value attribute for the constant
         ## element
-        for parameter, reaction in local_dct.items():
-            for i in self.copasiML.iter():
-                if  i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
-                    for j in i:
-                        if j.attrib['name'] == reaction:
-                            for k in j: 
-                                if k.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
-                                    for l in k:
-                                        if l.attrib['name']==parameter:
-                                            l.attrib['value'] = str(float(self.parameters['({}).{}'.format(reaction,parameter)]))
+#        print local_dct
+        for key in local_dct:
+            for reaction_name, parameter_name in local_dct[key].items():
+                for element_tags in self.copasiML.iter():
+                    if  element_tags.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
+                        for reaction in element_tags:
+                            if reaction.attrib['name'] == reaction_name:
+                                for reaction_element in reaction:
+                                    if reaction_element.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
+                                        for constant_xml in reaction_element:
+                                            if constant_xml.attrib['name'] == parameter_name:
+                                                constant_xml.attrib['value'] = str(float(self.parameters['({}).{}'.format(reaction_name,parameter_name)]))
         return self.copasiML
     
     def assemble_state_values(self):
@@ -5224,7 +5251,7 @@ Please check the headers of your PE data are consistent with your model paramete
         for i in glob:
             query='//*[@cn="{}"]'.format( self.GMQ.get_global_quantities_cns()[i]['cn'])
             for j in self.copasiML.xpath(query):
-                if i in self.parameters.keys() and j.attrib['Simulationtype']!='assignment':
+                if i in self.parameters.keys() and j.attrib['SimulationType']!='assignment':
                     j.attrib['value']=str(float(self.parameters[i]))
         return self.copasiML
 
@@ -5321,4 +5348,5 @@ class HighThroughputFit():
             
 if __name__=='__main__':
     pass
-#    execfile('/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/testing_kholodenko_manually.py')
+#    execfile('/home/b3053674/Documents/Models/2017/08_Aug/PyCoToolsTests/RunPEs.py')
+        #    execfile('/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/testing_kholodenko_manually.py')
