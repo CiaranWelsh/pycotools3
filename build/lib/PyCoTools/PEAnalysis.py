@@ -171,7 +171,7 @@ class Boxplot():
         self.kwargs=options
 
         ## set default results_directory
-        if kwargs['savefig']:
+        if self['savefig']:
             if self['results_directory'] == None:
                 if isinstance(data, str):
                     self['results_directory'] = os.path.join(os.path.dirname(self.data))
@@ -340,10 +340,12 @@ class Pca():
                  'legend_position':None, ##Horizontal, verticle, line spacing
                  'legend_fontsize': 25,
                  'cmap':'viridis',
-                 'annotate':False}
+                 'annotate':False,
+                 'annotation_fontsize':25,
+                 }
         
         for i in kwargs.keys():
-            assert i in options.keys(),'{} is not a keyword argument for RssVsIteration'.format(i)
+            assert i in options.keys(),'{} is not a keyword argument for Pca'.format(i)
         options.update( kwargs)  
         self.kwargs=options
         
@@ -374,8 +376,8 @@ class Pca():
         
         if self['by'] == 'parameters':
             self['annotate']=True
-            if self['legen_position']==None:
-                raise Errors.InputError('When data reduction is by \'parameters\' you should specify an argument to legend_position. i.e. legend_position=(10,10,1,5) for hori)
+            if self['legend_position']==None:
+                raise Errors.InputError('When data reduction is by \'parameters\' you should specify an argument to legend_position. i.e. legend_position=(10,10,1,5) for horizontal, vertical and linespacing')
         self.pca()
         
         
@@ -436,7 +438,7 @@ class Pca():
         plt.title(title)
         for i, txt in enumerate(labels):
             if self['annotate']:
-                ax.annotate(str(i), (projected[0][i], projected[1][i]))
+                ax.annotate(str(i), (projected[0][i], projected[1][i]), fontsize=self['annotation_fontsize'])
             if self['by']=='parameters':
                 ax.text(self['legend_position'][0],self['legend_position'][1]-i*self['legend_position'][2],
                     '{}: {}'.format(i,txt),fontsize=self['legend_fontsize'])
@@ -840,6 +842,13 @@ class TruncateData():
         
         
 class EnsembleTimeCourse():
+    """
+    
+    
+    To Do:
+        - Build option for including experimental data on the plots 
+    """
+    
     def __init__(self, copasi_file, experiment_files, param_data, **kwargs):
         self.copasi_file = copasi_file
         self.param_data = param_data
@@ -851,7 +860,7 @@ class EnsembleTimeCourse():
         options={'sep':'\t',
 #                 'log10':False,
                  'truncate_mode':'percent',
-                 'x':1,
+                 'x':100,
                  'xtick_rotation':'horizontal',
                  'ylabel':'Frequency',
                  'savefig':False,
@@ -868,26 +877,9 @@ class EnsembleTimeCourse():
         self.param_data = self.truncate_param_data()
         self.experiment_data = self.parse_experimental_files()
         self.exp_times = self.get_experiment_times()
-#        self.simulate_ensemble()
         self.ensemble_data =  self.simulate_ensemble()
-#        print self.ensemble_data
-        
-#        os.system('CopasiUI {}'.format(self.copasi_file))
-#        print self.ensemble_data
         self.ensemble_data.index = self.ensemble_data.index.rename(['Index','Time'])
         self.plot()
-##        
-        
-        
-        '''
-        To plot a parameter ensemble:
-            1) input parmeters into model
-            2) plot time course with same data points (time as experimental data)
-            3) plot distributions
-        
-        '''
-        
-#        self.plot()
 
     def __getitem__(self,key):
         if key not in self.kwargs.keys():
@@ -1047,7 +1039,7 @@ class PlotPEData(object):
             Full path to a parameter estimation file ('.txt','.xls','.xlsx' or 
             '.csv') or a folder containing parameter estimation files. 
             
-        output_directory:
+        results_directory:
             Name of an output directory. 
         
     '''
@@ -1086,7 +1078,7 @@ class PlotPEData(object):
                  'xtick_rotation':35,
                  'marker_size':10,
                  'legend_loc':(1,0),
-                 'output_directory':os.path.join(os.path.dirname(self.copasi_file),'ParameterEstimationplots'),
+                 'results_directory':os.path.join(os.path.dirname(self.copasi_file),'ParameterEstimationplots'),
                  'plot':True,                 
                  'separator':['\t']*len(self.experiment_files),
                  
@@ -1180,7 +1172,7 @@ class PlotPEData(object):
         
         
     def change_directory(self):
-        dire=os.path.join(os.path.dirname(self.copasi_file),'ParameterEstimationplots')
+        dire=os.path.join(os.path.dirname(self.copasi_file),'ParameterEstimationPlots')
         if os.path.isdir(dire)==False:
             os.mkdir(dire)
         os.chdir(dire)
@@ -1321,9 +1313,9 @@ class PlotPEData(object):
         if self.kwargs.get('savefig')==True:
             if self.kwargs.get('extra_title')!=None:
                 assert isinstance(self.kwargs.get('extra_title'),str),'extra title should be a string'
-                fle=os.path.join(self.kwargs.get('output_directory'),'{}_{}.png'.format(parameter,self.kwargs.get('extra_title')))                
+                fle=os.path.join(self.kwargs.get('results_directory'),'{}_{}.png'.format(parameter,self.kwargs.get('extra_title')))                
             else:
-                fle=os.path.join(self.kwargs.get('output_directory'),'{}.png'.format(parameter))
+                fle=os.path.join(self.kwargs.get('results_directory'),'{}.png'.format(parameter))
             plt.savefig(fle,dpi=self.kwargs.get('dpi'),bbox_inches='tight')
 
         if self.kwargs.get('show')==True:
@@ -1366,7 +1358,7 @@ class ModelSelection():
         
         options={#report variables
                  'savefig':False,
-                 'output_directory':self.multi_model_fit.project_dir,
+                 'results_directory':self.multi_model_fit.project_dir,
                  'dpi':300}
                  
         for i in kwargs.keys():
@@ -1579,7 +1571,7 @@ class ModelSelection():
             plt.title('{} Scores'.format(metric))
             plt.xlabel(' ')
             if self['savefig']:
-                save_dir = os.path.join(self['output_directory'], 'ModelSelectionGraphs')
+                save_dir = os.path.join(self['results_directory'], 'ModelSelectionGraphs')
                 if os.path.isdir(save_dir)!=True:
                     os.mkdir(save_dir)
                 os.chdir(save_dir)
@@ -1691,7 +1683,8 @@ class ModelSelection():
         
         
 if __name__=='__main__':
-    execfile('/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/testing_kholodenko_manually.py')
+    pass
+#    execfile('/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/testing_kholodenko_manually.py')
 
     
     

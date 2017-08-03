@@ -274,20 +274,20 @@ Reaction scheme where the products are created from the reactants and the change
         <Parameter name="Maximum duration for backward integration" type="unsignedFloat" value="1000000"/>
       </Method>
     </Task>
-    <Task key="Task_15" name="Time-Course" type="timeCourse" scheduled="false" updateModel="false">
-      <Problem>
+    <Task key="Task_15" name="Time-Course" type="timeCourse" scheduled="true" updateModel="false">
+      <Report append="false" confirmOverwrite="false" reference="Report_53" target="report2.txt" type="Deterministic(LSODA)" name="Deterministic (LSODA)"/><Problem type="Deterministic(LSODA)" name="Deterministic (LSODA)">
         <Parameter name="AutomaticStepSize" type="bool" value="0"/>
-        <Parameter name="StepNumber" type="unsignedInteger" value="100"/>
-        <Parameter name="StepSize" type="float" value="0.01"/>
-        <Parameter name="Duration" type="float" value="1"/>
+        <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+        <Parameter name="StepSize" type="float" value="100"/>
+        <Parameter name="Duration" type="float" value="1000"/>
         <Parameter name="TimeSeriesRequested" type="bool" value="1"/>
-        <Parameter name="OutputStartTime" type="float" value="0"/>
-        <Parameter name="Output Event" type="bool" value="0"/>
+        <Parameter name="OutputStartTime" type="float" value="0.0"/>
+        <Parameter name="Output Event" type="bool" value="false"/>
         <Parameter name="Start in Steady State" type="bool" value="0"/>
       </Problem>
       <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
         <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
-        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-6"/>
         <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
         <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
         <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
@@ -596,7 +596,7 @@ Reaction scheme where the products are created from the reactants and the change
         <Object cn="CN=Root,Vector=TaskList[Linear Noise Approximation],Object=Result"/>
       </Footer>
     </Report>
-  </ListOfReports>
+  <Report taskType="Time-Course" separator="&#9;" precision="6" key="Report_53" name="Time-Course"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=New Model,Reference=Time"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Values[A2B],Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Values[B2C],Reference=Value"/></Table></Report></ListOfReports>
   <GUI>
   </GUI>
   <ListOfUnitDefinitions>

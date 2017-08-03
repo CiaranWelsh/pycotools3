@@ -37,7 +37,7 @@ import logging
 import seaborn
 import pickle
 import difflib
-
+from shutil import copyfile
 LOG=logging.getLogger(__name__)
 
 
@@ -447,9 +447,8 @@ class ProfileLikelihood():
 
 #==============================================================================
 class FormatPLData():
-    def __init__(self,copasi_file,report_name,suffix='_formatted'):
+    def __init__(self,copasi_file,report_name):
         self.copasi_file = copasi_file
-        self.suffix = suffix
         self.GMQ = pycopi.GetModelQuantities(self.copasi_file)
         self.report_name = report_name
         if os.path.isfile(self.report_name)!=True:
@@ -467,8 +466,12 @@ class FormatPLData():
         give them the proper headers then overwrite the file again
         :return:
         """
-        
-        data = pandas.read_csv(self.report_name, sep='\t', header=None, skiprows=[0])
+        try:
+            data = pandas.read_csv(self.report_name, sep='\t', header=None, skiprows=[0])
+        except pandas.parser.CParserError as e:
+            raise Errors.InputError('Report {} caused Error --> {}'.format(self.report_name, e.message))
+        except:
+            raise Errors.InputError('File is empty. Check {}'.format(self.report_name))
         bracket_columns = data[data.columns[[1,-2]]]
         if bracket_columns.iloc[0].iloc[0] != '(':
             data = pandas.read_csv(self.report_name, sep='\t')
@@ -492,7 +495,7 @@ class FormatPLData():
     
 
         
-class Plot():
+class Plot2():
     """
     After ProfileLikelihood class has been run, the plot class will plot the
     profile likelihoods for you. 
@@ -760,7 +763,8 @@ class Plot():
         self.indices = self.get_index_dirs()
         self.result_paths = self.get_results()
 #        print self.result_paths
-        self.data = self.format_pl_data()
+        self.format_pl_data()
+        self.data = self.parse_results()
         if self['log10']:
             self.data = self.log10_transformation()
         
@@ -829,12 +833,13 @@ class Plot():
         Conevrt data to lo10 scale
         """
         res = {}
-        for index in self.data:
-            res[index] = {}
-        
-        for index in self.data:
-            for parameter in self.data[index]:
-                res[index][parameter] = numpy.log10(self.data[index][parameter])
+        for column in self.data:
+            res[column] = {}
+            for parameter in self.data[column ]:
+                try:
+                    res[column ][parameter] = numpy.log10(self.data[column ][parameter])
+                except AttributeError:
+                    LOG.critical('Cannot perform log10 transformation on string.\n{}'.format(self.data[column][parameter]))
         return res
     
     def format_pl_data(self):
@@ -847,7 +852,7 @@ class Plot():
             for j in self.result_paths[i]:
                 cps = self.result_paths[i][j][:-4]+'.cps'
                 try:
-                    res[i][j] = FormatPLData(cps, self.result_paths[i][j], suffix = 'formated').format
+                    res[i][j] = FormatPLData(cps, self.result_paths[i][j]).format
                 except Errors.FileDoesNotExistError:
                     pass
         return res
@@ -881,11 +886,12 @@ class Plot():
         the integer rank of best fit (.e. -1,0,1,2 ...)
         returns list of these directories
         '''
-        dirs= os.listdir(self.PL_dir)
-        dirs2= [os.path.join(self.PL_dir,i) for i in dirs]
-        for i in dirs2:
+        dirs = os.listdir(self.PL_dir)
+        dirs = [os.path.join(self.PL_dir,i) for i in dirs]
+        dirs = [i for i in dirs if os.path.isdir(i)]
+        for i in dirs:
             assert os.path.isdir(i)
-        return dirs2
+        return dirs
         
     def get_index_dirs_as_dict(self):
         '''
@@ -1347,7 +1353,7 @@ class ChiSquaredStatistics():
         
     
     
-class Plot2():
+class Plot():
     def __init__(self,data, **kwargs):
         self.data = data
 
@@ -1362,13 +1368,22 @@ class Plot2():
                  'savefig':False,
                  'results_directory':os.getcwd(),
                  'dpi':300,
-                 'plot_cl':True}
+                 'plot_cl':True,
+                 'title':None,
+                 'xlabel':None,
+                 'ylabel':None,
+                 'color_palette':'bright',
+                 'legend_location':None,
+                 }
         
         
         for i in kwargs.keys():
             assert i in options.keys(),'{} is not a keyword argument for plot'.format(i)
         options.update( kwargs) 
         self.kwargs=options  
+        
+        if isinstance(self.data, pandas.core.frame.DataFrame)!=True:
+            raise Errors.InputError('{} should be a dataframe. Parse data with ParsePEData first.'.format(self.data))
         
         self.parameter_list = sorted(list(self.data.columns))
         
@@ -1392,9 +1407,17 @@ class Plot2():
                 if y_param not in self.parameter_list:
                     raise Errors.InputError('{} not in {}'.format(y_param, self.parameter_list))
                 
-        if self['y'] == self['x']:
-            raise Errors.InputError('x parameter {} cannot equal y parameter {}'.format(self['x'],self['y']))
+            
+        
+        n = list(set(self.data.index.get_level_values(0)))
+        if self['title'] == None:
+            self['title'] = 'Profile Likelihood for\n{} (Rank={})'.format(self['x'],n)
+        
+        self.data.rename(columns={'ParameterOfInterestValue':self['x']})
+        
         self.plot()
+        
+        
 
 
     def __getitem__(self,key):
@@ -1410,14 +1433,13 @@ class Plot2():
         """
         
         """
-        n = list(set(self.data.index.get_level_values(0)))
-#        print self.data
-#        print self['x']
+        if self['y'] == self['x']:
+            LOG.warning( Errors.InputError('x parameter {} cannot equal y parameter {}. Plot function returned None'.format(self['x'],self['y']))  )
+            return None
+        
         for label, df in self.data.groupby(level=[2]):
-#            print label
             if label== self['x']:
                 data = df[self['y']]
-#                print data
                 if isinstance(data, pandas.core.frame.Series):
                     data = pandas.DataFrame(data)
                 if isinstance(data, pandas.core.frame.DataFrame):
@@ -1426,24 +1448,26 @@ class Plot2():
             data.index = data.index.rename(['ParameterSetRank',
                                         'ConfidenceLevel',
                                         'ParameterOfInterest',
-                                        'ScannedParameterValue',
+                                        'ParameterOfInterestValue',
                                         'YParameter'])
         except UnboundLocalError:
             return 1
         
         data = data.reset_index()
-        
         if self['log10']:
             data['ConfidenceLevel'] = numpy.log10(data['ConfidenceLevel'])
             data['Value'] = numpy.log10(data['Value'])
-            data['ScannedParameterValue'] = numpy.log10(data['ScannedParameterValue'])
+            data['ParameterOfInterestValue'] = numpy.log10(data['ParameterOfInterestValue'])
+            
+
+
         plt.figure()
         if self['plot_cl']:
             cl_data = data[['ParameterSetRank','ConfidenceLevel',
-                        'ScannedParameterValue']]
+                        'ParameterOfInterestValue']]
             cl_data = cl_data.drop_duplicates()
             seaborn.tsplot(data=cl_data,
-                           time='ScannedParameterValue',
+                           time='ParameterOfInterestValue',
                            value='ConfidenceLevel', 
                            unit='ParameterSetRank',
                            color='green',linestyle='--',
@@ -1452,17 +1476,27 @@ class Plot2():
                            n_boot=self['n_boot'],
                            ci=self['ci_band_level'])
 
-
+        seaborn.color_palette('husl',8)
         seaborn.tsplot(data=data, 
-                       time='ScannedParameterValue',
+                       time='ParameterOfInterestValue',
                        value='Value',
                        condition='YParameter',
                        unit='ParameterSetRank',
                        estimator=self['estimator'],
                        err_style=self['err_style'],
                        n_boot=self['n_boot'],
-                       ci=self['ci_band_level'])
-        plt.title('ProfileLikelihood(n={})'.format(n))
+                       ci=self['ci_band_level'],
+                       color=seaborn.color_palette(self['color_palette'],len(self['y']))
+                       )
+        plt.title(self['title'])
+        if self['ylabel']!=None:
+            plt.ylabel(self['ylabel'])
+        if self['xlabel']!=None:
+            plt.xlabel(self['x_label'])
+            
+        if self['legend_location']!=None:
+            plt.legend(loc=self['legend_location'])
+            
         if self['savefig']:
             save_dir = os.path.join(self['results_directory'], 'ProfileLikelihood')
             if os.path.isdir(save_dir)!=True:
@@ -1498,7 +1532,8 @@ class ParsePLData():
                  'num_data_points':None,
                  'experiment_files':None,
                  'alpha':0.95,
-                 'log10':True}
+                 'log10':True,
+                 }
         
         
         for i in kwargs.keys():
@@ -1538,6 +1573,7 @@ class ParsePLData():
         
 
         self.data = self.get_confidence_level()
+        self.data = self.data.drop('ParameterFile', axis=1)
         
 
 
@@ -1598,7 +1634,7 @@ class ParsePLData():
             for j in self.pl_data_files[i]:
                 cps = self.pl_data_files[i][j][:-4]+'.cps'
                 try:
-                    res[i][j] = FormatPLData(cps, self.pl_data_files[i][j], suffix = 'formated').format
+                    res[i][j] = FormatPLData(cps, self.pl_data_files[i][j]).format
                 except Errors.FileDoesNotExistError:
                     pass
         return res
@@ -1620,20 +1656,11 @@ class ParsePLData():
                    index_col=0)
             df_dct[index] = pandas.concat(res[index])
         df = pandas.concat(df_dct)
-        df.index = df.index.rename(['ParameterSetRank','ParameterFile','ScannedParameterValue'])
+        df.index = df.index.rename(['ParameterSetRank','ParameterFile','ParameterOfInterestValue'])
         return df
 
     def infer_parameter_of_interest(self):
         """
-#        In the case where spaces in parameer names have been 
-#        relaced with underscores, we get a mismatch when trying to
-#        use these parameter names in keys to dict's that store 
-#        our data. 
-#        
-#        This method measuers the similarity score between 
-#        the file names and parameter names from the concatonated
-#        dataframe. Taking the maximum ratio (highest is exact match ==1)
-#        to be the parameter of interest should overcome this problem
         """
         parameters = sorted(list(self.data.columns))
         filenames = sorted(list(set(self.data.index.get_level_values(1))))
@@ -1641,16 +1668,11 @@ class ParsePLData():
         zipped =  dict(zip(filenames, parameters))
         self.data = self.data.reset_index(level=1)
         l = []
-#        print zipped
         for i in self.data['ParameterFile']:
             l.append( zipped[i])
         self.data['ParameterOfInterest'] = l
         return self.data 
-#        similarity_scores = [difflib.SequenceMatcher(a=data_file[:-4].lower(),
-#                                      b=parameter_name.lower()).ratio() for parameter_name in list(df_temp.columns)]
-#        similarity_scores = pandas.DataFrame(similarity_scores, index=df.columns, columns = ['Similarity Score']).sort_values(by='Similarity Score', ascending=False)
-#        LOG.warning('data file--> {}'.format(data_file[:-4]))
-#        LOG.warning('similarity scores --> {}'.format(similarity_scores))
+    
 
     
     def get_experiment_files_in_use(self):
@@ -1686,13 +1708,17 @@ class ParsePLData():
             l.append( i.shape[0]*(i.shape[1]-1))
         s= sum(l)
         if s==0:
-            raise Errors.InputError('Number of data points cannot be 0. This is wrong')
+            raise Errors.InputError('''Number of data points cannot be 0.
+Experimental data is inferred from the parameter estimation task definition. 
+It might be that copasi_file refers to a 'fresh' copy of the model.
+Try redefining the same parameter estimation problem that you used in the profile likelihood, 
+using the setup method but not running the parameter estimation before trying again.''')
         return s
 
     def get_rss(self):
         rss={}
 
-        if self.kwargs.get('index')==-1:
+        if self['index']==-1:
             assert self['rss']!=None
             rss[-1]= self['rss']
             return rss
@@ -1719,7 +1745,7 @@ class ParsePLData():
         CL_list = [CL_dct[i] for i in ranks]
         self.data['ConfidenceLevel'] = CL_list
         self.data = self.data.reset_index()
-        self.data = self.data.set_index(['ParameterSetRank','ConfidenceLevel','ParameterOfInterest','ScannedParameterValue'])
+        self.data = self.data.set_index(['ParameterSetRank','ConfidenceLevel','ParameterOfInterest','ParameterOfInterestValue'])
         return self.data
     
     
@@ -1732,6 +1758,6 @@ class ParsePLData():
 
         
 if __name__=='__main__':
-#    pass
-    execfile('./PyCoToolsTutorial/Test/testing_kholodenko_manually.py')
+    pass
+#    execfile('./PyCoToolsTutorial/Test/testing_kholodenko_manually.py')
 

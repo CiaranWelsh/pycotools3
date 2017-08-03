@@ -1,18 +1,8 @@
+#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
-import PyCoTools
-import unittest
-import os
-from lxml import etree
-import glob
-import sys
-# sys.path.insert(0, os.path.abspath("."))
+"""
+Created on Tue Aug  1 16:05:51 2017
 
-__all__=[]
-for i in glob.glob('*.py'):
-    mod = i[:-3]
-    __all__.append(mod)
-
-#print __all__
-
-
+@author: b3053674
+"""
 
