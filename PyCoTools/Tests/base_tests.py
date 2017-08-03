@@ -24,10 +24,18 @@ class _BaseTest(unittest.TestCase):
         -> Take string model from TestModels and write to file
         -> Initiate GetModelQuantities
     """
-    def setUp(self):
+    def setUp(self, test_model='test_model1'):
         self.copasi_file = os.path.join(os.getcwd(), 'test_model.cps')
+        self.test_model = test_model
+        tests = ['test_model1', 'kholodenko_model']
+        if self.test_model not in tests:
+            raise PyCoTools.Errors.InputError('{} not in {}'.format(self.test_model, test_models) )
+
         with open(self.copasi_file,'w') as f:
-            f.write(test_models.TestModels.get_model1())
+            if self.test_model=='test_model1':
+                f.write(test_models.TestModels.get_model1())
+            elif self.test_model=='kholodenko_model':
+                f.write(test_models.TestModels.get_model2())
             
         self.GMQ = PyCoTools.pycopi.GetModelQuantities(self.copasi_file)
         self.M = PyCoTools.pycopi.Model(self.copasi_file)
