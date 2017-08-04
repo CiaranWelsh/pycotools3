@@ -39,7 +39,7 @@ import logging
 
 LOG=logging.getLogger(__name__)
 
-def convert_particles_to_molar(self,particles,mol_unit,compartment_volume):#,vol_unit):
+def convert_particles_to_molar(particles,mol_unit,compartment_volume):#,vol_unit):
     '''
     Converts particle numbers to Molarity. 
     particles=number of particles you want to convert
@@ -63,7 +63,7 @@ def convert_particles_to_molar(self,particles,mol_unit,compartment_volume):#,vol
         molarity=float(particles)
     return round(molarity,33)
 
-def convert_molar_to_particles(self,moles,mol_unit,compartment_volume):
+def convert_molar_to_particles(moles,mol_unit,compartment_volume):
     '''
     Converts particle numbers to Molarity. 
     particles=number of particles you want to convert
