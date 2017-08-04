@@ -25,7 +25,8 @@ Date:
  
 """
 import site
-site.addsitedir('/home/b3053674/Documents/PyCoTools')
+#site.addsitedir('/home/b3053674/Documents/PyCoTools')
+site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
 import PyCoTools
 from PyCoTools.PyCoToolsTutorial import test_models
 from PyCoTools.Tests import base_tests
@@ -42,14 +43,11 @@ class GetModelQuantitiesTests(base_tests._BaseTest):
         super(GetModelQuantitiesTests, self).setUp()
         
         
-        
-        
-        
     def test_get_local_parameters(self):
         """
         
         """
-        pass
+        print self.GMQ.get_local_parameters()
 #        print self.GMQ.get_local_parameters()
         
         
