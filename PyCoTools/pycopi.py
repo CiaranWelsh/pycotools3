@@ -181,12 +181,23 @@ class Model():
         collection= {}
         for i in self.copasiML.iter():
             if  i.tag == '{http://www.copasi.org/static/schema}ListOfCompartments':
+                df_list = []
                 for j in i:
-                    if attribute==None:
-                        collection[j.attrib['key']] = j.attrib
-                    else:
-                        collection[j.attrib['key']] = j.attrib[attribute]
-        return collection
+                    values = j.attrib.values()
+                    df_list.append(pandas.DataFrame(values, index=['ID','Name','SimulationType','Value']).transpose()  )
+        df = pandas.concat(df_list)
+        df = df.set_index('Name')
+        df['Value'] = [int(i) for i in df['Value']]
+        return df
+#                    if attribute==None:
+#                    collection[j.attrib['key']] = pandas.DataFrame(j.attrib)
+#                    print collection
+#                    print pandas.DataFrame(collection)
+
+                    
+#                    else:
+#                        collection[j.attrib['key']] = j.attrib[attribute]
+#        return collection
     
         
     def get_parameters(self):
@@ -197,117 +208,170 @@ class Model():
         pass
     
     
-    def get_metabolites(self, attribute=None):
-        """
+#    def get_metabolites(self, attribute=None):
+#        """
+#
+#        """
+#        key_list = [None, 'key', 'name', 'simulationType', 'compartment']
+#        if attribute not in key_list:
+#            raise Errors.InputError('{} not in {}'.format(attribute, key_list))
+#        collection= {}
+#        for i in self.copasiML.iter():
+#            if  i.tag == '{http://www.copasi.org/static/schema}ListOfMetabolites':
+#                for j in i:
+#                    if attribute==None:
+#                        collection[j.attrib['key']] = j.attrib
+#                    else:
+#                        collection[j.attrib['key']] = j.attrib[attribute]
+#        return collection 
+#    
+    
 
-        """
-        key_list = [None, 'key', 'name', 'simulationType', 'compartment']
-        if attribute not in key_list:
-            raise Errors.InputError('{} not in {}'.format(attribute, key_list))
-        collection= {}
-        for i in self.copasiML.iter():
-            if  i.tag == '{http://www.copasi.org/static/schema}ListOfMetabolites':
-                for j in i:
-                    if attribute==None:
-                        collection[j.attrib['key']] = j.attrib
-                    else:
-                        collection[j.attrib['key']] = j.attrib[attribute]
-        return collection 
+#
+#    def get_global_quantities(self, attribute=None):
+#        """
+#        
+#        ===returns===
+#        pandas.DataFrame containing name, value, key and reference 
+#        for global variables. 
+#        """
+#        key_list = [None, 'key', 'name', 'simulationType']
+#        if attribute not in key_list:
+#            raise Errors.InputError('{} not in {}'.format(attribute, key_list))
+#        collection= {}
+#        for i in self.copasiML.iter():
+#            if  i.tag == '{http://www.copasi.org/static/schema}ListOfModelValues':
+#                for j in i:
+#                    if attribute==None:
+#                        collection[j.attrib['key']] = j.attrib
+#                    else:
+#                        collection[j.attrib['key']] = j.attrib[attribute]
+#        return collection
     
     
 
-
-    def get_global_quantities(self, attribute=None):
+    def get_local_parameters(self):
         """
-        """
-        key_list = [None, 'key', 'name', 'simulationType']
-        if attribute not in key_list:
-            raise Errors.InputError('{} not in {}'.format(attribute, key_list))
-        collection= {}
-        for i in self.copasiML.iter():
-            if  i.tag == '{http://www.copasi.org/static/schema}ListOfModelValues':
-                for j in i:
-                    if attribute==None:
-                        collection[j.attrib['key']] = j.attrib
-                    else:
-                        collection[j.attrib['key']] = j.attrib[attribute]
-        return collection
-    
-    
-
-    def get_local_parameters(self, attribute='name'):
-        """
-        i.e. get local parmeters
-        """
-        key_list = ['value', 'name', 'key', 'reference']
-        if attribute not in key_list:
-            raise Errors.InputError('{} not in {}'.format(attribute, key_list))
-            
-        collection= {}
+        Get local parameters from the model. 
         
+        ====returns===
+        DataFrame containing name, value, key and reference for 
+        local parmeters
+        """
+        def get_local_parameter_reference_df():
+            
+            query='//*[@cn="String=Kinetic Parameters"]'
+            d={}
+            for i in self.copasiML.xpath(query):
+                for j in list(i):
+                    for k in list(j):
+                        if k.attrib['simulationType']=='fixed':
+                            match=re.findall('Reactions\[(.*)\].*Parameter=(.*)',k.attrib['cn'])[0]
+                            assert isinstance(match,tuple),'get species regex hasn\'t been found. Do you have species in your model?'
+                            assert match !=None
+                            assert match !=[]                
+                            assert len(match)==2
+                            match='({}).{}'.format(match[0],match[1])
+                            d[match]=k.attrib['cn']
+
+            reference_df = pandas.DataFrame(d, index=['Reference']).transpose()
+            return reference_df
+        
+        reference_df = get_local_parameter_reference_df()
+        
+        collection= {}
         for i in self.copasiML.iter() :
             if  i.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
                 reaction_name = i.getparent().attrib['name']
-                collection[reaction_name] = {}
-                reaction_key = i.getparent().attrib['key']
                 for j in i:
-                    collection[reaction_name][j.attrib['name']] = j.attrib
+                    collection[j.attrib['key']] = (reaction_name, j.attrib['name'], float(j.attrib['value']) )                    
+        df = pandas.DataFrame(collection, index=['Reaction','Parameter', 'Value']).transpose()
         
-        df_dct = {}            
-        for reaction_dct in  collection:
-            for parameter_dct in collection[reaction_dct]:
-                print pandas.DataFrame(collection[reaction_dct][parameter_dct] )
-#            df_dct[i] = pandas.DataFrame(collection[i])
-            
-#        print pandas.concat(df_dct)
-                    
-        query='//*[@cn="String=Kinetic Parameters"]'
-        d={}
+        reaction_parameter_name = []
+        for i in range(df.shape[0]):
+            reaction_parameter_name .append('({}).{}'.format(df['Reaction'].iloc[i], df['Parameter'].iloc[i])  )
+        df.index.name='ParameterKey'
+        df['ReactionParameterID'] = reaction_parameter_name
+        df = df.reset_index()
+        df = df.set_index('ReactionParameterID')
+        
+        '''
+        Here I've chosen to merge the reference and df frames using
+        'inner' because this way it seems to filter out the local
+        parmeters which are assigned to global variables. Using how='outer'
+        will return all parameters instead. 
+        '''
+        return  df.merge(reference_df, left_index=True, right_index=True, how='inner')
+    
+#    def get_reactions(self, attribute=None):
+#        """
+#        
+#        """
+#        key_list = [None,'key', 'name', 'reversible', 'fast']
+#        if attribute not in key_list:
+#            raise Errors.InputError('{} not in {}'.format(attribute, key_list))
+#            
+#        collection={}
+#        for i in self.copasiML.iter():
+#            if i.tag=='{http://www.copasi.org/static/schema}ListOfReactions':
+#                for j in i:
+#                    if attribute == None:
+#                        collection[j.attrib['key']] = j.attrib
+#                    else:
+#                        collection[j.attribute['key']] = j.attrib[attribute]
+#        return collection
+#    
+#    def get_state_template(self):
+#        """
+#
+#        """
+#        collection= []
+#        for i in self.copasiML.iter():
+#            if  i.tag == '{http://www.copasi.org/static/schema}StateTemplate':
+#                for j in i:
+#                    collection.append(j.attrib['objectReference'])
+#        return collection     
+    
+    def get_metabolites(self):
+        '''
+
+        '''
+        metab_dct={}
+        query='//*[@cn="String=Initial Species Values"]'
         for i in self.copasiML.xpath(query):
             for j in list(i):
-                for k in list(j):
-                    if k.attrib['simulationType']=='fixed':
-                        match=re.findall('Reactions\[(.*)\].*Parameter=(.*)',k.attrib['cn'])[0]
-                        assert isinstance(match,tuple),'get species regex hasn\'t been found. Do you have species in your model?'
-                        assert match !=None
-                        assert match !=[]                
-                        assert len(match)==2
-                        match='({}).{}'.format(match[0],match[1])
-                        d[match]=k.attrib['cn']
-#                        
-        reference_df = pandas.DataFrame(d, index=['Reference']).transpose()
-#        print pandas.DataFrame(collection, index=[0])
-#        return collection 
-
+                print j.attrib
+                match=re.findall('.*Vector=Metabolites\[(.*)\]',j.attrib['cn'])
+                                
+                if match==[]:
+                    return self.copasiML
+                else:
+                    compartment_match=re.findall('Compartments\[(.*)\],',j.attrib['cn'])
+                    
+                    comp=re.findall('Compartments\[(.*?)\]',j.attrib['cn'])[0]
+                    compartment_vol = self.get_compartments().loc[comp]['Value']
+                    metab_dct[match[0]]={}
+                    metab_dct[match[0]]['particle_numbers']=j.attrib['value']
+                    concentration= self.convert_particles_to_molar(j.attrib['value'],
+                                                                   self.get_quantity_units(),
+                                                                   compartment_vol)
+                    metab_dct[match[0]]['concentration']=concentration
+#                    metab_dct[match[0]]['compartment']=compartment_match[0]
+                    print metab_dct
+#        if len(metab_dct.keys())==0:
+#            raise Errors.NometabolitesError('There are no metabolites in {}'.format(self.get_model_name()))
+#        print metab_dct
+#                query = '//*[@type="initialState"]'
+#        for i in self.copasiML.xpath(query):
+#            state_values = i.text
+#        state_values = state_values.split(' ')
+#        mapping =  self.get_global_quantities_key2name_mapping()
+#        dct = dict(zip(self.get_state_template(), state_values))
+#        return {j:dct[i] for (i,j) in mapping.items() if i in dct.keys()}
+#    
     
-    def get_reactions(self, attribute=None):
-        """
-        
-        """
-        key_list = [None,'key', 'name', 'reversible', 'fast']
-        if attribute not in key_list:
-            raise Errors.InputError('{} not in {}'.format(attribute, key_list))
-            
-        collection={}
-        for i in self.copasiML.iter():
-            if i.tag=='{http://www.copasi.org/static/schema}ListOfReactions':
-                for j in i:
-                    if attribute == None:
-                        collection[j.attrib['key']] = j.attrib
-                    else:
-                        collection[j.attribute['key']] = j.attrib[attribute]
-        return collection
+#        return metab_dct
     
-    def get_state_template(self):
-        """
-
-        """
-        collection= []
-        for i in self.copasiML.iter():
-            if  i.tag == '{http://www.copasi.org/static/schema}StateTemplate':
-                for j in i:
-                    collection.append(j.attrib['objectReference'])
-        return collection     
     
     
 class GetModelQuantities():
@@ -573,6 +637,8 @@ class GetModelQuantities():
                     metab_dct[match[0]]['compartment']=compartment_match[0]
         if len(metab_dct.keys())==0:
             raise Errors.NometabolitesError('There are no metabolites in {}'.format(self.get_model_name()))
+        
+        
         return metab_dct
     
     def get_initial_state_metabolites(self):

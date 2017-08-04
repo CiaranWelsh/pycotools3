@@ -25,7 +25,8 @@ Date:
  
 """
 import site
-site.addsitedir('/home/b3053674/Documents/PyCoTools')
+#site.addsitedir('/home/b3053674/Documents/PyCoTools')
+site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
 import PyCoTools
 from PyCoTools.PyCoToolsTutorial import test_models
 from PyCoTools.Tests import base_tests
@@ -41,23 +42,65 @@ class ModelTests(base_tests._BaseTest):
     def setUp(self):
         super(ModelTests, self).setUp()
         
-        
-        
-        
-        
-    def test_get_local_parameters(self):
+    def test_get_local_parameters_keys_model1(self):
         """
-        
-        
-        
+        Ensure we can successfully get local 
+        parameters for model1        
         """
         if self.test_model == 'test_model1':
             locals = {'(ADeg).k1': 0.1, '(B2C).k2': 0.1, '(C2A).k1': 0.1}
-#            os.system('CopasiUI {}'.format(self.copasi_file))
-            print self.M.get_local_parameters()
-#            print self.M.get_local_parameter_key2name_mapping
-        
-        
+            keys = sorted(locals.keys())
+            self.assertListEqual(sorted(list(self.M.get_local_parameters().index)),
+                                 sorted(keys) )
+            
+    def test_get_local_parameters_values_model1(self):
+        """
+        Ensure we can successfully get local 
+        parameters for model1        
+        """
+        if self.test_model == 'test_model1':
+            locals = {'(ADeg).k1': 0.1, '(B2C).k2': 0.1, '(C2A).k1': 0.1}
+            values = sorted(locals.values())
+            self.assertListEqual(sorted(list(self.M.get_local_parameters()['Value'])),
+                                 sorted(values) )
+
+
+    def test_get_compartments(self):
+        """
+        Ensure we can successfully get local 
+        parameters for model1        
+        """
+        if self.test_model == 'test_model1':
+            compartment_IDs = ['Compartment_1', 'Compartment_3']
+            compartment_names = ['nuc','cyt']
+            compartment_values = [3,3]
+            compartments_df = self.M.get_compartments()
+            for i in range(3):
+                k = compartments_df.keys()[i]
+                if k == 'Name':
+                    self.assertListEqual(  list(compartments_df[k] ), compartment_names)
+                elif k == 'IDs':
+                    self.assertListEqual(  list(compartments_df[k] ), compartment_IDs)
+                elif k == 'Value':
+                    self.assertListEqual(  list(compartments_df[k] ), compartment_values)  
+#            
+#    def test_get_global_quntities_keys_model1(self):
+#        """
+#        Ensure we can successfully get local 
+#        parameters for model1        
+#        """
+#        if self.test_model == 'test_model1':
+#            locals = {'(ADeg).k1': 0.1, '(B2C).k2': 0.1, '(C2A).k1': 0.1}
+#            values = sorted(locals.values())
+#            self.assertListEqual(sorted(list(self.M.get_local_parameters()['Value'])),
+#                                 sorted(values) )
+
+            
+#    def test_get_global_quantities(self):
+#        print self.M.get_global_quantities()
+            
+    def test_get_metabolites(self):
+        print self.M.get_metabolites()
         
         
 if __name__=='__main__':

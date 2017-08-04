@@ -199,8 +199,7 @@ class _MultiParameterEstimationBase(_BaseTest):
         super(_MultiParameterEstimationBase, self).tearDown()
         if os.path.isdir(self.RMPE['results_directory']):
             shutil.rmtree(self.RMPE['results_directory'])
-        
-
+    
 
 if __name__=='__main__':
     unittest.main()
