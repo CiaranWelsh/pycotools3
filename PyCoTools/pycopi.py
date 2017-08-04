@@ -16,20 +16,6 @@
  along with PyCoTools.  If not, see <http://www.gnu.org/licenses/>.
 
 
- This file is intended to provide a COPASI user an alternative to 
- using the official python-copasi API. At present support is 
- provided for:
-     -running time courses
-     -performing parameter estimation
-     -performing parameter scans
-     -extracting model variables and quantities
-     -creating reports (for parameter estimation, 
-     profile likelihood and time course)
-     -inserting parameters from file, folder of files, pandas dataframe
-     or python dictionary
-     
-
-
  $Author: Ciaran Welsh
  $Date: 12-09-2016 
  Time:  13:33
@@ -49,7 +35,7 @@ import os
 import subprocess
 import re
 import pickle
-import PEAnalysis,Errors
+import PEAnalysis,Errors, Misc
 import matplotlib
 import matplotlib.pyplot as plt
 from textwrap import wrap
@@ -114,6 +100,9 @@ class CopasiMLParser():
         root.write(copasi_filename)
         LOG.debug('model written to {}'.format(copasi_filename))
 
+
+
+
 #==============================================================================
 class Model():
     """
@@ -169,15 +158,10 @@ class Model():
         query =  '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
         return self.copasiML.xpath(query)[0].attrib['key']  
     
-    def get_compartments(self, attribute=None):
+    def get_compartments(self):
         """
         Get dict of compartments. dict[compartment_name] = corresponding xml code as nested dict
         """
-        key_list = [None,'dimensionality', 'simulationType', 'name', 'key']
-        if attribute not in key_list:
-            raise Errors.InputError('{} not in {}'.format(attribute, key_list))
-            
-            
         collection= {}
         for i in self.copasiML.iter():
             if  i.tag == '{http://www.copasi.org/static/schema}ListOfCompartments':
@@ -200,53 +184,36 @@ class Model():
 #        return collection
     
         
-    def get_parameters(self):
+    def get_global_quantities(self):
         """
-        Nested dict. level1 is local, global or metab. second level is parameter name. 
-        third is xml code
-        """
-        pass
-    
-    
-#    def get_metabolites(self, attribute=None):
-#        """
-#
-#        """
-#        key_list = [None, 'key', 'name', 'simulationType', 'compartment']
-#        if attribute not in key_list:
-#            raise Errors.InputError('{} not in {}'.format(attribute, key_list))
-#        collection= {}
-#        for i in self.copasiML.iter():
-#            if  i.tag == '{http://www.copasi.org/static/schema}ListOfMetabolites':
-#                for j in i:
-#                    if attribute==None:
-#                        collection[j.attrib['key']] = j.attrib
-#                    else:
-#                        collection[j.attrib['key']] = j.attrib[attribute]
-#        return collection 
-#    
-    
 
-#
-#    def get_global_quantities(self, attribute=None):
-#        """
-#        
-#        ===returns===
-#        pandas.DataFrame containing name, value, key and reference 
-#        for global variables. 
-#        """
-#        key_list = [None, 'key', 'name', 'simulationType']
-#        if attribute not in key_list:
-#            raise Errors.InputError('{} not in {}'.format(attribute, key_list))
-#        collection= {}
-#        for i in self.copasiML.iter():
-#            if  i.tag == '{http://www.copasi.org/static/schema}ListOfModelValues':
-#                for j in i:
-#                    if attribute==None:
-#                        collection[j.attrib['key']] = j.attrib
-#                    else:
-#                        collection[j.attrib['key']] = j.attrib[attribute]
-#        return collection
+        ===returns===
+        pandas.DataFrame containing name, value, key and reference
+        for global variables.
+        """
+
+        def get_global_quantities_key2name_mapping():
+            """
+            Get the model reference - the 'key' from self.get_model_units
+            """
+            collection = {}
+            for i in self.copasiML.iter():
+                if i.tag == '{http://www.copasi.org/static/schema}ListOfModelValues':
+                    for j in i:
+                            collection[j.attrib['key']] = j.attrib['name']
+            return collection
+
+        # print get_global_quantities_key2name_mapping()
+
+        print self.get_initial_state_global_quantities()
+       # collection= {}
+       #
+       #Dont take conc or from here
+       # for i in self.copasiML.iter():
+       #     if  i.tag == '{http://www.copasi.org/static/schema}ListOfModelValues':
+       #         for j in i:
+       #              collection[j.attrib['key']] = j.attrib
+       # return collection
     
     
 
@@ -331,49 +298,117 @@ class Model():
 #                for j in i:
 #                    collection.append(j.attrib['objectReference'])
 #        return collection     
+
+    def get_state_template(self):
+        """
+        Get states (metabolites and globals) in the order they are read by Copasi
+        from the StateTemplate element.
+        
+        ===Returns===
+        list. 
+        """
+        collection= []
+        for i in self.copasiML.iter():
+            if  i.tag == '{http://www.copasi.org/static/schema}StateTemplate':
+                for j in i:
+                    collection.append(j.attrib['objectReference'])
+        return collection   
     
     def get_metabolites(self):
         '''
 
         '''
+            
+        def get_metabolites_key2name_mapping():
+            """
+                Get the model reference - the 'key' from self.get_model_units7
+                Only needed by get_metabolites() so hide scope from outer class
+            """
+            collection= {}
+            for i in self.copasiML.iter():
+                if  i.tag == '{http://www.copasi.org/static/schema}ListOfMetabolites':
+                    for j in i:
+                        collection[j.attrib['key']] = j.attrib['name']
+            return collection
+
+        def get_reference():
+            """
+            Get copasi references for transient metabolite quantities.
+            These are strings begining with cn in the xml
+            :return:
+            pandas.DataFrame
+            """
+
+            query='//*[@cn="String=Initial Species Values"]'
+            d={}
+            for i in self.copasiML.xpath(query):
+                for j in list(i):
+                    match= re.findall('Metabolites\[(.*)\]', j.attrib['cn'])[0]
+                    assert isinstance(match.encode('utf8'),str),'{} is not a string but a {}'.format(match,type(match))
+                    assert match is not  None
+                    assert match !=[]
+                    d[match]=j.attrib['cn']
+            return d #pandas.DataFrame(d, index=[0]).transpose()
+
         metab_dct={}
         query='//*[@cn="String=Initial Species Values"]'
         for i in self.copasiML.xpath(query):
             for j in list(i):
-                print j.attrib
                 match=re.findall('.*Vector=Metabolites\[(.*)\]',j.attrib['cn'])
-                                
                 if match==[]:
                     return self.copasiML
                 else:
-                    compartment_match=re.findall('Compartments\[(.*)\],',j.attrib['cn'])
                     
                     comp=re.findall('Compartments\[(.*?)\]',j.attrib['cn'])[0]
                     compartment_vol = self.get_compartments().loc[comp]['Value']
                     metab_dct[match[0]]={}
-                    metab_dct[match[0]]['particle_numbers']=j.attrib['value']
-                    concentration= self.convert_particles_to_molar(j.attrib['value'],
-                                                                   self.get_quantity_units(),
-                                                                   compartment_vol)
-                    metab_dct[match[0]]['concentration']=concentration
-#                    metab_dct[match[0]]['compartment']=compartment_match[0]
-                    print metab_dct
-#        if len(metab_dct.keys())==0:
-#            raise Errors.NometabolitesError('There are no metabolites in {}'.format(self.get_model_name()))
-#        print metab_dct
-#                query = '//*[@type="initialState"]'
-#        for i in self.copasiML.xpath(query):
-#            state_values = i.text
-#        state_values = state_values.split(' ')
-#        mapping =  self.get_global_quantities_key2name_mapping()
-#        dct = dict(zip(self.get_state_template(), state_values))
-#        return {j:dct[i] for (i,j) in mapping.items() if i in dct.keys()}
-#    
-    
-#        return metab_dct
-    
-    
-    
+                    metab_dct[match[0]][comp]={}
+
+        if len(metab_dct.keys())==0:
+            raise Errors.NometabolitesError('There are no metabolites in {}'.format(self.get_model_name()))
+        query = '//*[@type="initialState"]'
+        for i in self.copasiML.xpath(query):
+            state_values = i.text
+        state_values = state_values.strip()
+        state_values = state_values.split(' ')
+        state_values = [ i for i in state_values if i not in ['',' ','\n','\t']]
+        mapping =  get_metabolites_key2name_mapping()
+        dct = dict(zip(self.get_state_template(), state_values))
+        particle_numbers = {j:dct[i] for (i,j) in mapping.items() if i in dct.keys()}
+
+        part = []
+        conc = []
+        ref = []
+        m = []
+        c = []
+        for metab in metab_dct:
+            m.append(metab)
+            for comp in metab_dct[metab]:
+                c.append(comp)
+                part.append(float(particle_numbers[metab]) )
+
+                conc.append(Misc.convert_particles_to_molar(float(particle_numbers[metab]),
+                                                      self.get_quantity_unit(),
+                                                      self.get_compartments().loc[comp]['Value'])  )
+                ref.append(get_reference()[metab]  )
+
+        df = pandas.DataFrame([m,c, part, conc, ref],
+                               index=['Metabolite', 'Compartment',
+                                      'Particles', 'Concentration',
+                                      'Reference']).transpose()
+        return df.set_index('Metabolite')
+
+    def get_initial_state_global_quantities(self):
+        query = '//*[@type="initialState"]'
+        for i in self.copasiML.xpath(query):
+            state_values = i.text
+        state_values = state_values.split(' ')
+        mapping =  self.get_global_quantities_key2name_mapping()
+        dct = dict(zip(self.get_state_template(), state_values))
+        return {j:dct[i] for (i,j) in mapping.items() if i in dct.keys()}
+
+
+
 class GetModelQuantities():
     '''
     Positional arguments:

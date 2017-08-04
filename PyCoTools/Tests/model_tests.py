@@ -100,8 +100,19 @@ class ModelTests(base_tests._BaseTest):
 #        print self.M.get_global_quantities()
             
     def test_get_metabolites(self):
-        print self.M.get_metabolites()
-        
+        """
+        Test that model 1 has three metabolites
+        :return: None
+        """
+        self.assertEqual(self.M.get_metabolites().shape[0],3)
+
+
+    def test_get_global_quntities(self):
+        """
+
+        :return:
+        """
+        print self.M.get_global_quantities()
         
 if __name__=='__main__':
     unittest.main()
