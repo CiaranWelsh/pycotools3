@@ -63,16 +63,26 @@ class UnitsTests(_test_base._BaseTest):
         self.assertEqual(self.Model.key, 'Model_3')
 
 
-    # def test_metabolites(self):
-    #     print self.Model.metabolites()
+    def test_metabolites(self):
+        self.assertEqual(len(self.Model.metabolites), 3)
+
+
     def test_compartments(self):
         self.assertEqual(len(self.Model.compartments() ),2)
 
-    def test_compartments2(self):
-        self.assertTrueisinstance( [i for i in self.Model.compartments()], 2)
+    def test_global_quantities(self):
+        # print self.Model.global_quantities()
+        self.assertEqual(len(self.Model.global_quantities()), 3)
+
+    def test_local_parameters(self):
+        print self.Model.local_parameters
 
 
+    # def test_compartments2(self):
+    #     self.assertTrue(isinstance(, [i for i in self.Model.compartments()], 2) )
 
+
+    # def
 
 
 

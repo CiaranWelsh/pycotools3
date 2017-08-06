@@ -35,7 +35,8 @@ import unittest
 class TestMetabolites(_test_base._BaseTest):
     def setUp(self):
         super(TestMetabolites, self).setUp()
-        self.nucleus = PyCoTools.model.Compartment(name='Nuc', size=5)
+        self.nucleus = PyCoTools.model.Compartment(name='Nuc', value=5,
+                                                   type='fixed', key='compartment_1')
         self.A = PyCoTools.model.Metabolite(name='A', compartment=self.nucleus,
                                              concentration=5)
     def test_string_method(self):
@@ -43,7 +44,7 @@ class TestMetabolites(_test_base._BaseTest):
 
         :return:
         """
-        string = "Metabolite(compartment=Compartment(name='Nuc',  size=5), concentration=5, name='A')"
+        string =  "Metabolite(compartment=Compartment(key='compartment_1',  name='Nuc',  type='fixed',  value=5), concentration=5, name='A')"
         self.assertEqual(string, self.A.__str__())
 
     def test_error(self):

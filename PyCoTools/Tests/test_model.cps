@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- generated with COPASI 4.19 (Build 140) (http://www.copasi.org) at 2017-07-23 12:42:12 UTC -->
+<!-- generated with COPASI 4.19 (Build 140) (http://www.copasi.org) at 2017-08-06 11:58:31 UTC -->
 <?oxygen RNGSchema="http://www.copasi.org/static/schema/CopasiML.rng" type="xml"?>
 <COPASI xmlns="http://www.copasi.org/static/schema" versionMajor="4" versionMinor="19" versionDevel="140" copasiSourcesModified="0">
   <ListOfFunctions>
@@ -54,7 +54,7 @@ Reaction scheme where the products are created from the reactants and the change
       </ListOfParameterDescriptions>
     </Function>
   </ListOfFunctions>
-  <Model key="Model_3" name="New Model" simulationType="time" timeUnit="s" volumeUnit="ml" areaUnit="m²" lengthUnit="m" quantityUnit="mmol" type="deterministic" avogadroConstant="6.022140857e+23">
+  <Model key="Model_3" name="New Model" simulationType="time" timeUnit="s" volumeUnit="ml" areaUnit="m²" lengthUnit="m" quantityUnit="mmol" type="deterministic" avogadroConstant="6.022140857e+023">
     <MiriamAnnotation>
 <rdf:RDF
    xmlns:dcterms="http://purl.org/dc/terms/"
@@ -88,6 +88,25 @@ Reaction scheme where the products are created from the reactants and the change
       </ModelValue>
       <ModelValue key="ModelValue_1" name="B2C" simulationType="fixed">
       </ModelValue>
+      <ModelValue key="ModelValue_2" name="ThisIsAssignment" simulationType="assignment">
+        <MiriamAnnotation>
+<rdf:RDF
+   xmlns:dcterms="http://purl.org/dc/terms/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:about="#ModelValue_2">
+    <dcterms:created>
+      <rdf:Description>
+        <dcterms:W3CDTF>2017-08-06T11:01:31Z</dcterms:W3CDTF>
+      </rdf:Description>
+    </dcterms:created>
+  </rdf:Description>
+</rdf:RDF>
+
+        </MiriamAnnotation>
+        <Expression>
+          &lt;CN=Root,Model=New Model,Vector=Values[A2B],Reference=Value>+&lt;CN=Root,Model=New Model,Vector=Values[B2C],Reference=Value>
+        </Expression>
+      </ModelValue>
     </ListOfModelValues>
     <ListOfReactions>
       <Reaction key="Reaction_0" name="A2B" reversible="false" fast="false">
@@ -112,7 +131,7 @@ Reaction scheme where the products are created from the reactants and the change
           <Product metabolite="Metabolite_3" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4429" name="k1" value="4"/>
+          <Constant key="Parameter_4394" name="k1" value="4"/>
         </ListOfConstants>
         <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=New Model,Vector=Compartments[nuc]">
           <ListOfCallParameters>
@@ -127,9 +146,7 @@ Reaction scheme where the products are created from the reactants and the change
       </Reaction>
       <Reaction key="Reaction_1" name="B2C" reversible="true" fast="false">
         <MiriamAnnotation>
-<rdf:RDF
-   xmlns:dcterms="http://purl.org/dc/terms/"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Reaction_1">
     <dcterms:created>
       <rdf:Description>
@@ -138,7 +155,6 @@ Reaction scheme where the products are created from the reactants and the change
     </dcterms:created>
   </rdf:Description>
 </rdf:RDF>
-
         </MiriamAnnotation>
         <ListOfSubstrates>
           <Substrate metabolite="Metabolite_3" stoichiometry="1"/>
@@ -147,8 +163,8 @@ Reaction scheme where the products are created from the reactants and the change
           <Product metabolite="Metabolite_5" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4430" name="k1" value="9"/>
-          <Constant key="Parameter_4433" name="k2" value="0.1"/>
+          <Constant key="Parameter_4393" name="k1" value="9"/>
+          <Constant key="Parameter_4392" name="k2" value="0.1"/>
         </ListOfConstants>
         <KineticLaw function="Function_14" unitType="Default" scalingCompartment="CN=Root,Model=New Model,Vector=Compartments[nuc]">
           <ListOfCallParameters>
@@ -159,7 +175,7 @@ Reaction scheme where the products are created from the reactants and the change
               <SourceParameter reference="Metabolite_3"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_67">
-              <SourceParameter reference="Parameter_4433"/>
+              <SourceParameter reference="Parameter_4392"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_71">
               <SourceParameter reference="Metabolite_5"/>
@@ -175,12 +191,12 @@ Reaction scheme where the products are created from the reactants and the change
           <Product metabolite="Metabolite_1" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4431" name="k1" value="0.1"/>
+          <Constant key="Parameter_4391" name="k1" value="0.1"/>
         </ListOfConstants>
         <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=New Model,Vector=Compartments[nuc]">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_81">
-              <SourceParameter reference="Parameter_4431"/>
+              <SourceParameter reference="Parameter_4391"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_79">
               <SourceParameter reference="Metabolite_5"/>
@@ -189,16 +205,30 @@ Reaction scheme where the products are created from the reactants and the change
         </KineticLaw>
       </Reaction>
       <Reaction key="Reaction_3" name="ADeg" reversible="false" fast="false">
+        <MiriamAnnotation>
+<rdf:RDF
+   xmlns:dcterms="http://purl.org/dc/terms/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:about="#Reaction_3">
+    <dcterms:created>
+      <rdf:Description>
+        <dcterms:W3CDTF>2017-08-06T12:06:22Z</dcterms:W3CDTF>
+      </rdf:Description>
+    </dcterms:created>
+  </rdf:Description>
+</rdf:RDF>
+
+        </MiriamAnnotation>
         <ListOfSubstrates>
           <Substrate metabolite="Metabolite_1" stoichiometry="1"/>
         </ListOfSubstrates>
         <ListOfConstants>
-          <Constant key="Parameter_4432" name="k1" value="0.1"/>
+          <Constant key="Parameter_4390" name="k1" value="0.1"/>
         </ListOfConstants>
         <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=New Model,Vector=Compartments[nuc]">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_81">
-              <SourceParameter reference="Parameter_4432"/>
+              <SourceParameter reference="Parameter_4390"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_79">
               <SourceParameter reference="Metabolite_1"/>
@@ -217,13 +247,14 @@ Reaction scheme where the products are created from the reactants and the change
           <ModelParameter cn="CN=Root,Model=New Model,Vector=Compartments[cyt]" value="3" type="Compartment" simulationType="fixed"/>
         </ModelParameterGroup>
         <ModelParameterGroup cn="String=Initial Species Values" type="Group">
-          <ModelParameter cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A]" value="6.022140856999987e+20" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B]" value="6.022140856999987e+20" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C]" value="6.022140856999988e+20" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A]" value="6.022140856999986e+020" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B]" value="6.022140856999986e+020" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C]" value="6.022140856999986e+020" type="Species" simulationType="reactions"/>
         </ModelParameterGroup>
         <ModelParameterGroup cn="String=Initial Global Quantities" type="Group">
           <ModelParameter cn="CN=Root,Model=New Model,Vector=Values[A2B]" value="4" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=New Model,Vector=Values[B2C]" value="9" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=New Model,Vector=Values[ThisIsAssignment]" value="13" type="ModelValue" simulationType="assignment"/>
         </ModelParameterGroup>
         <ModelParameterGroup cn="String=Kinetic Parameters" type="Group">
           <ModelParameterGroup cn="CN=Root,Model=New Model,Vector=Reactions[A2B]" type="Reaction">
@@ -255,13 +286,14 @@ Reaction scheme where the products are created from the reactants and the change
       <StateTemplateVariable objectReference="Metabolite_1"/>
       <StateTemplateVariable objectReference="Metabolite_3"/>
       <StateTemplateVariable objectReference="Metabolite_5"/>
+      <StateTemplateVariable objectReference="ModelValue_2"/>
       <StateTemplateVariable objectReference="Compartment_1"/>
       <StateTemplateVariable objectReference="Compartment_3"/>
       <StateTemplateVariable objectReference="ModelValue_0"/>
       <StateTemplateVariable objectReference="ModelValue_1"/>
     </StateTemplate>
     <InitialState type="initialState">
-      0 6.022140856999987e+20 6.022140856999987e+20 6.022140856999988e+20 1 3 4 9 
+      0 6.022140856999986e+020 6.022140856999986e+020 6.022140856999986e+020 13 1 3 4 9 
     </InitialState>
   </Model>
   <ListOfTasks>
@@ -272,7 +304,7 @@ Reaction scheme where the products are created from the reactants and the change
         <Parameter name="StabilityAnalysisRequested" type="bool" value="1"/>
       </Problem>
       <Method name="Enhanced Newton" type="EnhancedNewton">
-        <Parameter name="Resolution" type="unsignedFloat" value="1e-09"/>
+        <Parameter name="Resolution" type="unsignedFloat" value="1e-009"/>
         <Parameter name="Derivation Factor" type="unsignedFloat" value="0.001"/>
         <Parameter name="Use Newton" type="bool" value="1"/>
         <Parameter name="Use Integration" type="bool" value="1"/>
@@ -296,8 +328,8 @@ Reaction scheme where the products are created from the reactants and the change
       </Problem>
       <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
         <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
-        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
-        <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-006"/>
+        <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-012"/>
         <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
         <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
       </Method>
@@ -357,8 +389,8 @@ Reaction scheme where the products are created from the reactants and the change
         <ParameterGroup name="Experiment Set">
         </ParameterGroup>
         <ParameterGroup name="Validation Set">
-          <Parameter name="Weight" type="unsignedFloat" value="1"/>
           <Parameter name="Threshold" type="unsignedInteger" value="5"/>
+          <Parameter name="Weight" type="unsignedFloat" value="1"/>
         </ParameterGroup>
       </Problem>
       <Method name="Evolutionary Programming" type="EvolutionaryProgram">
@@ -374,7 +406,7 @@ Reaction scheme where the products are created from the reactants and the change
         <Parameter name="Steady-State" type="key" value="Task_14"/>
       </Problem>
       <Method name="MCA Method (Reder)" type="MCAMethod(Reder)">
-        <Parameter name="Modulation Factor" type="unsignedFloat" value="1e-09"/>
+        <Parameter name="Modulation Factor" type="unsignedFloat" value="1e-009"/>
         <Parameter name="Use Reder" type="bool" value="1"/>
         <Parameter name="Use Smallbone" type="bool" value="1"/>
       </Method>
@@ -389,8 +421,8 @@ Reaction scheme where the products are created from the reactants and the change
       <Method name="Wolf Method" type="WolfMethod">
         <Parameter name="Orthonormalization Interval" type="unsignedFloat" value="1"/>
         <Parameter name="Overall time" type="unsignedFloat" value="1000"/>
-        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
-        <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-006"/>
+        <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-012"/>
         <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
       </Method>
     </Task>
@@ -404,7 +436,7 @@ Reaction scheme where the products are created from the reactants and the change
         <Parameter name="OutputStartTime" type="float" value="0"/>
       </Problem>
       <Method name="ILDM (LSODA,Deuflhard)" type="TimeScaleSeparation(ILDM,Deuflhard)">
-        <Parameter name="Deuflhard Tolerance" type="unsignedFloat" value="1e-06"/>
+        <Parameter name="Deuflhard Tolerance" type="unsignedFloat" value="1e-006"/>
       </Method>
     </Task>
     <Task key="Task_23" name="Sensitivities" type="sensitivities" scheduled="false" updateModel="false">
@@ -428,7 +460,7 @@ Reaction scheme where the products are created from the reactants and the change
       </Problem>
       <Method name="Sensitivities Method" type="SensitivitiesMethod">
         <Parameter name="Delta factor" type="unsignedFloat" value="0.001"/>
-        <Parameter name="Delta minimum" type="unsignedFloat" value="1e-12"/>
+        <Parameter name="Delta minimum" type="unsignedFloat" value="1e-012"/>
       </Method>
     </Task>
     <Task key="Task_24" name="Moieties" type="moieties" scheduled="false" updateModel="false">
@@ -454,10 +486,10 @@ Reaction scheme where the products are created from the reactants and the change
         <Parameter name="PositiveDirection" type="bool" value="1"/>
         <Parameter name="NumOutCrossingsLimit" type="unsignedInteger" value="0"/>
         <Parameter name="LimitUntilConvergence" type="bool" value="0"/>
-        <Parameter name="ConvergenceTolerance" type="float" value="1e-06"/>
+        <Parameter name="ConvergenceTolerance" type="float" value="1e-006"/>
         <Parameter name="Threshold" type="float" value="0"/>
         <Parameter name="DelayOutputUntilConvergence" type="bool" value="0"/>
-        <Parameter name="OutputConvergenceTolerance" type="float" value="1e-06"/>
+        <Parameter name="OutputConvergenceTolerance" type="float" value="1e-006"/>
         <ParameterText name="TriggerExpression" type="expression">
           
         </ParameterText>
@@ -465,8 +497,8 @@ Reaction scheme where the products are created from the reactants and the change
       </Problem>
       <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
         <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
-        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
-        <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-006"/>
+        <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-012"/>
         <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
         <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
       </Method>
