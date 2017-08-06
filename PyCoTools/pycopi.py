@@ -807,8 +807,7 @@ class GetModelQuantities():
                 parameters[key2] = float(i.attrib['value'])
                 count+=1
         return parameters
-    
-    
+
     def get_compartments(self):
         '''
         returns a dict of compartments in your model

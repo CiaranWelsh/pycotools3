@@ -99,7 +99,15 @@ class Model(_base._ModelBase):
             if i.tag == '{http://www.copasi.org/static/schema}StateTemplate':
                 for j in i:
                     collection.append(j.attrib['objectReference'])
-        return set(collection)
+
+        query = '//*[@type="initialState"]'
+        for i in self.model.xpath(query):
+            state_values = i.text
+
+        state_values = state_values.split(' ')
+        state_values = [i for i in state_values if i not in ['',' ', '\n']]
+        state_values = [float(i) for i in state_values]
+        return  dict(zip(collection, state_values))
 
     def compartments(self):
         """
@@ -116,7 +124,7 @@ class Model(_base._ModelBase):
         # return pandas.concat([i.as_df() for i in lst], axis=1)
         return lst
 
-    # @property
+    @property
     def metabolites(self):
         """
         List of model metabolites as type metabolite
@@ -124,17 +132,149 @@ class Model(_base._ModelBase):
 
         name, compartment, key, conc, particle
         """
-        query='//*[@cn="String=Initial Species Values"]'
+        collection = {}
+        for i in self.model.iter():
+            if i.tag == '{http://www.copasi.org/static/schema}ListOfMetabolites':
+                for j in i:
+                    collection[j.attrib['key']] = dict(j.attrib)
+
+
+        for key in collection:
+            collection[key]['particle_number'] = self.states[key]
+
+
+        keys = [collection[metab]['compartment'] for metab in collection]
+        comp_dct = {}
+        for key in keys:
+            comp_dct[key] = [i for i in self.compartments()  if i.key==key][0]
+
+        for key in collection:
+            comp_key = collection[key]['compartment']
+            collection[key]['compartment']=comp_dct[comp_key]
+
+        lst = []
+        for key in collection:
+            lst.append(Metabolite(name=collection[key]['name'],
+                            compartment=collection[key]['compartment'],
+                            key=collection[key]['key'],
+                            particle_number=collection[key]['particle_number']) )
+
+        return lst
+
+
+    def global_quantities(self):
+        '''
+        return global quantities in your model that have simulationType='fixed'
+        Note: This method does not return global quantities with simulationType='assignment'
+        but I'm not sure whether they are needed just yet.
+        :return:list
+        '''
+        model_values = {}
+        for i in self.model.iter():
+            """
+            This loop gets model value name, key and simulation type
+            """
+            if i.tag == '{http://www.copasi.org/static/schema}ListOfModelValues':
+                for j in i:
+                    model_values[j.attrib['key']] = dict(j.attrib)
+        # print model_values
+
+        collection = {}
+        query='//*[@cn="String=Initial Global Quantities"]'
+        d={}
+        for i in self.model.xpath(query):
+            '''
+            gets name, simulationType and value
+            '''
+            for j in list(i):
+                match= re.findall('Values\[(.*)\]',j.attrib['cn'])[0]
+                assert isinstance(match.encode('utf8'),str),'{} should be a string but is instead a {}'.format(match,type(match))
+                assert match !=None
+                assert match !=[]
+                d[match]=j.attrib['value']
+        #
+        for key in model_values:
+            name = model_values[key]['name']
+            model_values[key]['value'] = d[name]
+
+
+        lst = []
+        for key in model_values:
+            lst.append(GlobalQuantity(name=model_values[key]['name'],
+                                      key=model_values[key]['key'],
+                                      type=model_values[key]['simulationType'],
+                                      value=model_values[key]['value']))
+        return lst
+
+    @property
+    def local_parameters(self):
+        '''
+        return dict of local parameters used in your model
+        '''
+        # print [i.type for i in self.global_quantities()]
+        # global_kinetic_parameters = self.get_global_kinetic_parameters_cns().keys()
+        #        query='//*[@cn="String=Kinetic Parameters"]'
+
+
+        '''
+        The below code gets all local parameters regardless
+        of whether they are actually being used or not. 
+        It could be better if we filter this list to only
+        local parameters which are actively being used for 
+        reaction rate. 
+        
+        
+        '''
+
+
+        query='//*[@cn="String=Kinetic Parameters"]'
+        d={}
         for i in self.model.xpath(query):
             for j in list(i):
-                match=re.findall('.*Vector=Metabolites\[(.*)\]',j.attrib['cn'])
-                if match == []:
-                    return self.copasiML
-                else:
+                for k in list(j):
+                    if k.attrib['simulationType']=='fixed':
+                        match=re.findall('Reactions\[(.*)\].*Parameter=(.*)',k.attrib['cn'])[0]
+                        assert isinstance(match,tuple),'get species regex hasn\'t been found. Do you have species in your model?'
+                        assert match !=None
+                        assert match !=[]
+                        assert len(match)==2
+                        match='({}).{}'.format(match[0],match[1])
+                        d[match]=k.attrib
 
-                    comp = re.findall('Compartments\[(.*?)\]', j.attrib['cn'])[0]
-                    compartment_vol = self.get_compartments().loc[comp]['Value']
-        return
+        print d.values()
+
+        constants= {}
+        for i in self.model.iter():
+            if i.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
+                for j in i:
+                    constants[j.attrib['key']] = j.attrib['name']
+                    print j.attrib
+
+        print constants
+        # for key in d:
+        #     print key, d[key]
+            # d[key]['key']=constants[key]#constants
+
+        # print d
+
+        # parameters = {}
+        # count = 0
+        # for i in self.model.iter():
+        #     if i.tag == '{http://www.copasi.org/static/schema}Constant':
+        #         reaction_name = i.getparent().getparent().attrib['name']
+        #         parameter_name = i.attrib['name']
+        #         key2 = "({}).{}".format(reaction_name, parameter_name)
+        #         #if key2 in global_kinetic_parameters:
+        #             #continue
+        #         parameters[key2] = {}
+        #         parameters[key2] = float(i.attrib['value'])
+        #         count += 1
+        # return parameters
+
+
+
+
+
 
 class Compartment(_base._Base):
     def __init__(self, **kwargs):
@@ -153,6 +293,9 @@ class Compartment(_base._Base):
 
     def __str__(self):
         return 'Compartment({})'.format(self.as_string())
+
+    def __repr__(self):
+        return self.__str__()
 
     def _do_checks(self):
         """
@@ -192,7 +335,6 @@ class Metabolite(_base._Base):
                 raise Errors.InputError('Attribute not allowed. {} not in {}'.format(key, allowed_keys) )
         ##update all keys to none
         self._do_checks()
-        # print self.as_string()
 
 
     def __str__(self):
@@ -201,6 +343,10 @@ class Metabolite(_base._Base):
         :return:
         """
         return 'Metabolite({})'.format(self.as_string())
+
+
+    def __repr__(self):
+        return self.__str__()
 
     def _do_checks(self):
         """
@@ -318,13 +464,74 @@ class GlobalQuantity(_base._Base):
     def __str__(self):
         return 'GlobalQuantity({})'.format(self.as_string())
 
+    def __repr__(self):
+        return self.__str__()
+
 
 class Reaction(_base._Base):
     """
     Reactions have rectants, products, rate laws and parameters
     Not sure if this is a priority just yet
+
+
+    Here's an idea. Would it be a good idea to have just
+    a Parmeter class which a scope property which defines
+    whether its a model parameter or specific to a individual
+    reaction.
     """
-    pass
+    def __init__(self, **kwargs):
+        super(Reaction, self).__init__(*kwargs)
+        self.allowed_keys = ['name',
+                        'key',
+                        'reactants',
+                        'products',
+                        'rate_law'
+                        'parameters']
+        for key in self.kwargs:
+            if key not in allowed_keys:
+                raise Errors.InputError('{} not valid key. Valid keys are: {}'.format(key, self.allowed_keys))
+
+        def __str__(self):
+            return 'Reaction({})'.format(self.as_string())
+
+        def __repr__(self):
+            return self.__str__()
+
+    def do_checks(selfs, instance=isinstance()):
+        """
+
+
+        :return:
+        """
+        if isinstance(self.reactants, list):
+            for i in self.reactants:
+                if isinstance(i, Metabolite)==False:
+                    raise Error.InputError('{} should be a Metabolite'.format(i))
+        if isinstance(self.reactants, Metabolite)==False:
+            raise Error.InputError('{} should be a Metabolite'.format(self.reactants))
+
+        if isinstance(self.products, list):
+            for i in self.products:
+                if isinstance(i, Metabolite) == False:
+                    raise Error.InputError('{} should be a Metabolite'.format(i))
+        if isinstance(self.products, Metabolite) == False:
+            raise Error.InputError('{} should be a Metabolite'.format(self.reactants))
+
+        if isinstance(self.products, list):
+            for i in self.products:
+                if isinstance(i, Metabolite) == False:
+                    raise Error.InputError('{} should be a Metabolite'.format(i))
+        if isinstance(self.products, Metabolite) == False:
+            raise Error.InputError('{} should be a Metabolite'.format(self.reactants))
+
+
+class Function():
+    """
+    Class to hold copasi function definitions for rate laws
+    """
+                # def  x(self):
+    #     print
+
 
 
 

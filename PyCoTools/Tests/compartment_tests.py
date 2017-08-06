@@ -36,7 +36,8 @@ import unittest
 class TestCompartments(_test_base._BaseTest):
     def setUp(self):
         super(TestCompartments, self).setUp()
-        self.comp = Compartment(name='Nucleus', size=5)
+        self.comp = Compartment(name='Nucleus', value=5,
+                                type='fixed', key='compartment_1')
 
     def test_checks(self):
         """
@@ -51,10 +52,10 @@ class TestCompartments(_test_base._BaseTest):
         self.assertEqual(self.comp.name, 'Nucleus')
 
     def test_comp_size(self):
-        self.assertEqual(self.comp.size, 5)
+        self.assertEqual(self.comp.value, 5)
 
     def test_compartment_str(self):
-        comp_str = "Compartment(name='Nucleus', size=5)"
+        comp_str = "Compartment(key='compartment_1', name='Nucleus', type='fixed', value=5)"
         self.assertEqual(comp_str, self.comp.__str__())
 
     def test_reference(self):
