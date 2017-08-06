@@ -102,91 +102,6 @@ class CopasiMLParser():
 
 
 
-class Compartment(_base._Kwargs):
-    def __init__(self, **kwargs):
-        super(Compartment, self).__init__(**kwargs)
-        self.allowed_keys = {'name',
-                             'size'}
-
-        for key in self.kwargs:
-            if key not in self.allowed_keys:
-                raise Errors.InputError('Attribute not allowed. {} not in {}'.format(key, allowed_attributes))
-
-        self._do_checks()
-
-    def __str__(self):
-        return 'Compartment({})'.format(self.as_string())
-
-    def _do_checks(self):
-        """
-        Make sure none of the arguments are empty
-        :return: void
-        """
-        for attr in self.allowed_keys:
-            if attr not in sorted(self.__dict__.keys() ):
-                raise Errors.InputError('Required attribute not specified: {}'.format(attr))
-
-    @property
-    def reference(self):
-        return 'Vector=Compartments[{}]'.format(self.name)
-
-    def as_df(self):
-        print
-
-class Metabolite(_base._Kwargs):
-    def __init__(self, **kwargs):
-        super(Metabolite, self).__init__(**kwargs)
-        allowed_keys = {'compartment',
-                        'name',
-                        'particle_number',
-                        'concentration'}
-
-        for key in kwargs:
-            if key not in allowed_keys:
-                raise Errors.InputError('Attribute not allowed. {} not in {}'.format(key, allowed_keys) )
-        ##update all keys to none
-        self._do_checks()
-        # print self.as_string()
-
-
-    def __str__(self):
-        """
-
-        :return:
-        """
-        return 'Metabolite({})'.format(self.as_string())
-
-    def _do_checks(self):
-        """
-
-        :return:
-        """
-        if isinstance(self.compartment, PyCoTools.pycopi.Compartment)!=True:
-            raise Errors.InputError('compartment argument should be of type PyCoTools.pycopi.Compartment')
-
-        print type(self).name
-
-
-    @property
-    def reference(self):
-        """
-        The copasi object reference for
-        transient metabolite
-        :return:
-        """
-        return 'Vector=Metabolites[{}]'.format(self.name)
-
-
-
-
-class GlobalQuantity():
-    def __init__(self):
-        pass
-
-class LocalParameters():
-    def __init__(self):
-        pass
-
 
 #==============================================================================
 class Model():
@@ -331,7 +246,7 @@ class Model():
         
         reference_df = get_local_parameter_reference_df()
         
-        collection= {}
+        collection = {}
         for i in self.copasiML.iter() :
             if  i.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
                 reaction_name = i.getparent().attrib['name']
