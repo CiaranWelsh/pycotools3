@@ -35,8 +35,8 @@ import unittest
 class TestMetabolites(_test_base._BaseTest):
     def setUp(self):
         super(TestMetabolites, self).setUp()
-        self.nucleus = PyCoTools.pycopi.Compartment(name='Nuc', size=5)
-        self.A = PyCoTools.pycopi.Metabolite(name='A', compartment=self.nucleus,
+        self.nucleus = PyCoTools.model.Compartment(name='Nuc', size=5)
+        self.A = PyCoTools.model.Metabolite(name='A', compartment=self.nucleus,
                                              concentration=5)
     def test_string_method(self):
         """
@@ -46,34 +46,44 @@ class TestMetabolites(_test_base._BaseTest):
         string = "Metabolite(compartment=Compartment(name='Nuc',  size=5), concentration=5, name='A')"
         self.assertEqual(string, self.A.__str__())
 
+    def test_error(self):
+        """
+        test that Metabolite raises error if
+        neither particle number or concentration
+        is called.
+
+        Learn how to do this when you have internet
+        :return:
+        """
+        pass
+
     def test_name(self):
         self.assertEqual(self.A.name, 'A')
 
     def test_compartment(self):
+
+
         self.assertEqual(self.A.compartment, self.nucleus)
 
     def test_reference(self):
         self.assertEqual(self.A.reference, 'Vector=Metabolites[A]')
 
-    # def test_particle_numbers(self):
-    #     A = PyCoTools.pycopi.Metabolite(particle_number=10e23)
-    #     self.assertTrue(A.particle_number, 10e23)
-    #
-    # def test_concentration(self):
-    #     """
-    #     Test metabolite particle number to concentration conversion
-    #
-    #     When concentration is changed, particle numbers change accordingly
-    #     When particle number is changes, concenrtation is changes accordingly
-    #     :param self:
-    #     :return:
-    #     """
-    #     A = PyCoTools.pycopi.Metabolite(concentration=5)
-    #     self.assertTrue(A.concentration, 5)
-    #
-    # def test_base(self):
-    #     B = PyCoTools.pycopi._Kwargs(none=None)
-    #     print B.none
+    def test_particle_numbers(self):
+        A = PyCoTools.model.Metabolite(particle_number=10e23, compartment=self.nucleus)
+        self.assertTrue(A.particle_number, 10e23)
+
+    def test_concentration(self):
+        """
+        Test metabolite particle number to concentration conversion
+
+        When concentration is changed, particle numbers change accordingly
+        When particle number is changes, concenrtation is changes accordingly
+        :param self:
+        :return:
+        """
+        A = PyCoTools.model.Metabolite(concentration=5, compartment=self.nucleus)
+        self.assertTrue(A.concentration, 5)
+
 
 if __name__=='__main__':
     unittest.main()

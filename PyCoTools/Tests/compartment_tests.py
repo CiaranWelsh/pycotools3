@@ -26,7 +26,7 @@ import site
 
 site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
 import PyCoTools
-from PyCoTools.pycopi import Compartment
+from PyCoTools.model import Compartment
 from PyCoTools.Tests import _test_base
 import os, glob
 import pandas
