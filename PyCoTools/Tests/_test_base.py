@@ -43,8 +43,7 @@ class _BaseTest(unittest.TestCase):
                 f.write(test_models.TestModels.get_model2())
             
         self.GMQ = PyCoTools.pycopi.GetModelQuantities(self.copasi_file)
-        self.M = PyCoTools.pycopi.Model(self.copasi_file)
-            
+
     def tearDown(self):
         dire = os.path.dirname(self.copasi_file)
         for i in glob.glob(os.path.join(dire,'*.xlsx') ):
@@ -148,7 +147,7 @@ class _MultiParameterEstimationBase(_BaseTest):
         ## add noise
         noisy_data = PyCoTools.Misc.add_noise(self.TC['report_name'])
         os.remove(self.TC['report_name'])
-        noisy_data.to_csv(self.Tc['report_name'], sep='\t')
+        noisy_data.to_csv(self.TC['report_name'], sep='\t')
         
         
         

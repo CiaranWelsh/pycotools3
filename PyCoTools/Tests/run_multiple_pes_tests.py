@@ -37,13 +37,13 @@ import glob
 import os
 import shutil 
 import pandas
-from PyCoTools.Tests import base_tests
+from PyCoTools.Tests import _test_base
 
 
 
 
 
-class RunMultiplePETests(base_tests._MultiParameterEstimationBase):
+class RunMultiplePETests(_test_base._MultiParameterEstimationBase):
     def setUp(self):
         super(RunMultiplePETests, self).setUp()
         
