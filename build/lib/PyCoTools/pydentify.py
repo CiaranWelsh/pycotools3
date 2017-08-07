@@ -438,12 +438,35 @@ class ProfileLikelihood():
             result = pool.apply_async(run, (self.cps_dct[index].values(),))
             pool.close()
             pool.join()
-        
+
+    def run_SGE2(self):
+        '''
+        run using one process, separately, one after another
+        '''
+        res={}
+        for i in self.cps_dct.keys():
+            for j in self.cps_dct[i]:
+                LOG.info( 'running {}'.format(j))
+                res[self.cps_dct[i][j]]= pycopi.Run(self.cps_dct[i][j],
+                   task='scan',mode='SGE').run()
+        return res
+    
+    def run_SGE(self):
+        for i in self.cps_dct.keys():
+            for j in self.cps_dct[i]:
+                with open('run_script.sh','w') as f:
+                    f.write('#!/bin/bash\n#$ -V -cwd\nmodule addapps/COPASI/4.16.104-Linux-64bit\nCopasiSE "{}"'.format(self.cps_dct[i][j]))
+                os.system('qsub {}'.format('run_script.sh'))
+                os.remove('run_script.sh')         
+        return True
+    
     def run(self):
         if self['run']=='slow':
             self.run_slow()
         elif self['run']=='multiprocess':
             self.multi_run()
+        elif self['run'] == 'SGE':
+            self.run_SGE()
 
 #==============================================================================
 class FormatPLData():
@@ -470,8 +493,8 @@ class FormatPLData():
             data = pandas.read_csv(self.report_name, sep='\t', header=None, skiprows=[0])
         except pandas.parser.CParserError as e:
             raise Errors.InputError('Report {} caused Error --> {}'.format(self.report_name, e.message))
-        except:
-            raise Errors.InputError('File is empty. Check {}'.format(self.report_name))
+#        except:
+#            raise Errors.InputError('File is empty. Check {}'.format(self.report_name))
         bracket_columns = data[data.columns[[1,-2]]]
         if bracket_columns.iloc[0].iloc[0] != '(':
             data = pandas.read_csv(self.report_name, sep='\t')
@@ -1571,7 +1594,6 @@ class ParsePLData():
         if self['rss'] == None:
             self['rss'] = self.get_rss()
         
-
         self.data = self.get_confidence_level()
         self.data = self.data.drop('ParameterFile', axis=1)
         
@@ -1622,6 +1644,9 @@ class ParsePLData():
             for f in glob.glob(os.path.join(index_dir,'*.txt')):
                 dire, fle = os.path.split(f)
                 res[int(i)][fle] = f
+        if res == {}:
+            raise Errors.InputError('Can\'t find PL data files. Have you given the correct path to profile likelihood directory?')
+            
         return res
             
     def format_pl_data_files(self):
@@ -1742,12 +1767,13 @@ using the setup method but not running the parameter estimation before trying ag
                                        self['alpha']).CL
                   
         ranks = list(self.data.index.get_level_values(0))
+#        print CL_dct
         CL_list = [CL_dct[i] for i in ranks]
         self.data['ConfidenceLevel'] = CL_list
         self.data = self.data.reset_index()
         self.data = self.data.set_index(['ParameterSetRank','ConfidenceLevel','ParameterOfInterest','ParameterOfInterestValue'])
         return self.data
-    
+#    
     
     
     

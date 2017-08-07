@@ -100,6 +100,8 @@ class ParsePEData():
             self.data = numpy.log10(self._read_data())
         else:
             self.data = self._read_data()
+            
+        self.data = self.data.sort_values(by='RSS', ascending=True)
         
         
         
@@ -377,7 +379,7 @@ class Pca():
         if self['by'] == 'parameters':
             self['annotate']=True
             if self['legend_position']==None:
-                raise Errors.InputError('When data reduction is by \'parameters\' you should specify an argument to legend_position. i.e. legend_position=(10,10,1,5) for horizontal, vertical and linespacing')
+                raise Errors.InputError('When data reduction is by \'parameters\' you should specify an argument to legend_position. i.e. legend_position=(10,10,1.5) for horizontal, vertical and linespacing')
         self.pca()
         
         
@@ -807,7 +809,7 @@ class TruncateData():
             attention to whether you are in log10 mode or not. 
             
         x:
-            Either xth percentive or value to truncate data below. 
+            Either xth percentive,  value to truncate data below or list specifying an index of best fit
     '''
     def __init__(self,data,mode='percent',x=100, log10=False):
         self.data=data
@@ -815,7 +817,7 @@ class TruncateData():
         self.x=x
         self.log10=log10
         assert isinstance(self.data,pandas.core.frame.DataFrame)
-        assert self.mode in ['below_x','percent']
+        assert self.mode in ['below_x', 'percent', 'ranks']
         
         self.data=self.truncate()
         
@@ -833,12 +835,26 @@ class TruncateData():
             raise Errors.InputError('{} should be between 0 and 100')
         x_quantile= int(numpy.round(self.data.shape[0]*(float(self.x)/100.0)))
         return self.data.iloc[:x_quantile]
+    
+    def ranks(self):
+        return self.data.iloc[self.x]
             
     def truncate(self):
         if self.mode=='below_x':
             return self.below_x()#self.data
         elif self.mode=='percent':
             return self.top_x_percent()
+        elif self.mode=='ranks':
+            return self.ranks()
+        
+#    def __getitem__(self,key):
+#        if key not in self.kwargs.keys():
+#            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
+#        return self.kwargs[key]
+#
+#    def __setitem__(self,key,value):
+#        self.kwargs[key] = value    
+    
         
         
 class EnsembleTimeCourse():
@@ -858,16 +874,20 @@ class EnsembleTimeCourse():
             self.experiment_files = [self.experiment_files]
         
         options={'sep':'\t',
-#                 'log10':False,
-                 'truncate_mode':'percent',
+                 'y_parameter':None,
+                 'truncate_mode':'index',
                  'x':100,
                  'xtick_rotation':'horizontal',
                  'ylabel':'Frequency',
                  'savefig':False,
-                 'results_directory':os.path.dirname(self.copasi_file),
+                 'results_directory':None,
                  'dpi':300,
-                 'resolution':10,
-                 'check_as_you_plot':False} ##resolution: intervals in time course
+                 'step_size':1,
+                 'check_as_you_plot':False,
+                 'estimator':numpy.mean,
+                 'n_boot':10000,
+                 'ci':95,
+                 'color':'deep'} ##resolution: intervals in time course
         
         for i in kwargs.keys():
             assert i in options.keys(),'{} is not a keyword argument for ParameterEnsemble'.format(i)
@@ -879,6 +899,24 @@ class EnsembleTimeCourse():
         self.exp_times = self.get_experiment_times()
         self.ensemble_data =  self.simulate_ensemble()
         self.ensemble_data.index = self.ensemble_data.index.rename(['Index','Time'])
+        
+        if self['y_parameter'] == None:
+            self['y_parameter']=list(self.ensemble_data.keys() )
+        
+        if isinstance(self['y_parameter'], list)!=True:
+            self['y_parameter'] = [self['y_parameter']]
+            
+            
+        for param in self['y_parameter']:
+            if param not in self.ensemble_data.keys():
+                raise Errors.InputError('{} not in your data set. {}'.format(param, self.ensemble_data.keys()))
+        
+        if self['results_directory'] == None:
+            self['results_directory'] = os.path.join(os.path.dirname(self.copasi_file), 'EnsembleTimeCourses' )
+            
+        if os.path.abspath(self['results_directory'])!=True:
+            self['results_directory'] = os.path.join(os.path.dirname(self.copasi_file), self['results_directory'])
+
         self.plot()
 
     def __getitem__(self,key):
@@ -950,18 +988,18 @@ class EnsembleTimeCourse():
             ## start creating a results dict while were at it
 #            d[i] = {}
             end_times.append(self.exp_times[i]['end'])
-        step_size =  max(end_times)/self['resolution']
+        intervals =  max(end_times)/self['step_size']
         
         d={}
         for i in range(self.param_data.shape[0]):
+            LOG.info('inserting parameter set {}'.format(i))
             I=pycopi.InsertParameters(self.copasi_file, df=self.param_data, index=i)
+            LOG.info(I.parameters.transpose().sort_index())
             TC = pycopi.TimeCourse(self.copasi_file, end = max(end_times), 
-                                             step_size = step_size, 
-                                             intervals = self['resolution'], 
+                                             step_size = self['step_size'], 
+                                             intervals = intervals, 
                                              plot=False)
             if self['check_as_you_plot']:
-                LOG.info('These are parameters for index:{}\n\n{}'.format(i,
-                         I.parameters.transpose().sort_index()))
                 os.system('CopasiUI {}'.format(self.copasi_file))
             d[i] = pandas.read_csv(TC['report_name'], sep='\t')
         return pandas.concat(d)
@@ -974,19 +1012,28 @@ class EnsembleTimeCourse():
         data = self.ensemble_data.reset_index(level=1, drop=True)
         data.index.name = 'ParameterFitIndex'
         data = data.reset_index()
-        for parameter in data.keys():
-            plt.figure()
-            seaborn.tsplot(data, time='Time', value=parameter,
-                             unit='ParameterFitIndex')
-            plt.title('Ensemble Time Course\n for {} (n={})'.format(parameter, self.param_data.shape[0]))
-            if self['savefig']:
-                save_dir = os.path.join(self['results_directory'], 'EnsemblePlots')
-                if os.path.isdir(save_dir)!=True:
-                    os.mkdir(save_dir)
-                os.chdir(save_dir)
-                fname = os.path.join(save_dir, '{}.jpeg'.format(Misc.RemoveNonAscii(parameter).filter))
-                plt.savefig(fname, dpi=self['dpi'], bbox_inches='tight')
-    
+        for parameter in self['y_parameter']:
+            if parameter not in ['ParameterFitIndex','Time']:
+                plt.figure()
+                ax = seaborn.tsplot(data, time='Time', value=parameter,
+                                 unit='ParameterFitIndex',
+                                 estimator=self['estimator'],
+                                 n_boot=self['n_boot'],
+                                 ci=self['ci'],
+                                 color=self['color'])
+                
+                plt.plot(self.experiment_data[ self.experiment_data.keys()[0]  ]['Time'], 
+                                              self.experiment_data[self.experiment_data.keys()[0]  ][parameter],
+                                              'ro')
+                plt.title('Ensemble Time Course\n for {} (n={})'.format(parameter, self.param_data.shape[0]))
+                if self['savefig']:
+#                    save_dir = os.path.join(self['results_directory'], 'EnsemblePlots')
+                    if os.path.isdir(self['results_directory'])!=True:
+                        os.makedirs(self['results_directory'])
+                    os.chdir(self['results_directory'])
+                    fname = os.path.join(self['results_directory'], '{}.jpeg'.format(Misc.RemoveNonAscii(parameter).filter))
+                    plt.savefig(fname, dpi=self['dpi'], bbox_inches='tight')
+        
     
     
 class PlotPEData(object):
