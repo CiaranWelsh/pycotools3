@@ -131,8 +131,9 @@ class GetModelQuantities():
 
     def __setitem__(self,key,value):
         self.kwargs[key] = value
-        
-    def convert_particles_to_molar(self,particles,mol_unit,compartment_volume):#,vol_unit):
+
+    @staticmethod
+    def convert_particles_to_molar(particles,mol_unit,compartment_volume):#,vol_unit):
         '''
         Converts particle numbers to Molarity. 
         particles=number of particles you want to convert
@@ -410,7 +411,7 @@ class GetModelQuantities():
                 part.append(float(particle_numbers[metab]))
 
                 conc.append(Misc.convert_particles_to_molar(float(particle_numbers[metab]),
-                                                            self.get_quantity_unit(),
+                                                            self.get_quantity_units(),
                                                             self.get_compartments().loc[comp]['Value']))
                 ref.append(get_reference()[metab])
 
@@ -437,55 +438,6 @@ class GetModelQuantities():
         mapping =  self.get_global_quantities_key2name_mapping()
         dct = dict(zip(self.get_state_template(), state_values))
         return {j:dct[i] for (i,j) in mapping.items() if i in dct.keys()}
-    
-    
-    def get_metabolites2(self):
-        '''
-        Deprecated. Use get_ICs_cns() inst
-        returns dict of metabolites in the 'species' menu
-        '''
-        metab_dct={}
-        query='//*[@cn="String=Initial Species Values"]'
-        for i in self.copasiML.xpath(query):
-            print self.get_state_template()
-#            for j in list(i):
-#                match=re.findall('.*Vector=Metabolites\[(.*)\]',j.attrib['cn'])
-#                                
-#                if match==[]:
-#                    return self.copasiML
-#                else:
-#                    compartment_match=re.findall('Compartments\[(.*)\],',j.attrib['cn'])
-#                    
-#                    comp=re.findall('Compartments\[(.*?)\]',j.attrib['cn'])[0]
-#                    if self.quantity_type=='concentration':
-#                        compartment_vol= float(self.get_compartments()[comp]['value'])
-#                    else:
-#                        compartment_vol=1
-#                    metab_dct[match[0]]={}
-#                    metab_dct[match[0]]['particle_numbers']=j.attrib['value']
-#                    concentration= self.convert_particles_to_molar(j.attrib['value'],self.get_quantity_units(),compartment_vol)
-#                    metab_dct[match[0]]['concentration']=concentration
-#                    metab_dct[match[0]]['compartment']=compartment_match[0]
-#        if len(metab_dct.keys())==0:
-#            raise Errors.NometabolitesError('There are no metabolites in {}'.format(self.get_model_name()))
-        return metab_dct
-    
-    def get_metabolites3(self, attribute=None):
-        """
-
-        """
-        key_list = [None, 'key', 'name', 'simulationType', 'compartment']
-        if attribute not in key_list:
-            raise Errors.InputError('{} not in {}'.format(attribute, key_list))
-        collection= {}
-        for i in self.copasiML.iter():
-            if  i.tag == '{http://www.copasi.org/static/schema}ListOfMetabolites':
-                for j in i:
-                    if attribute==None:
-                        collection[j.attrib['key']] = j.attrib
-                    else:
-                        collection[j.attrib['key']] = j.attrib[attribute]
-        return collection     
         
     def get_state_template(self):
         """
@@ -585,19 +537,21 @@ class GetModelQuantities():
         '''
         return df.merge(reference_df, left_index=True, right_index=True, how='inner')
 
-    
-
     def get_compartments(self):
-        '''
-        returns a dict of compartments in your model
-        '''
-        d={}
-        query='//*[@cn="String=Initial Compartment Sizes"]'
-        for i in self.copasiML.xpath(query):
-            for j in list(i):
-                match=re.findall('Compartments\[(.*)\]', j.attrib['cn'])[0]
-                d[match]= j.attrib
-        return d
+        """
+        Get dict of compartments. dict[compartment_name] = corresponding xml code as nested dict
+        """
+        collection= {}
+        for i in self.copasiML.iter():
+            if  i.tag == '{http://www.copasi.org/static/schema}ListOfCompartments':
+                df_list = []
+                for j in i:
+                    values = j.attrib.values()
+                    df_list.append(pandas.DataFrame(values, index=['ID','Name','SimulationType','Value']).transpose()  )
+        df = pandas.concat(df_list)
+        df = df.set_index('Name')
+        df['Value'] = [int(i) for i in df['Value']]
+        return df
         
         
     def compartment_lookup(self,metab):
