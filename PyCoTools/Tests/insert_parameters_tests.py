@@ -36,13 +36,13 @@ import glob
 import os
 import shutil 
 import pandas
-from PyCoTools.Tests import test_base
+from PyCoTools.Tests import _test_base
 from random import shuffle, random
 from PyCoTools.pycopi import InsertParameters
 
 
 
-class InsertParametersTests(test_base._MultiParameterEstimationBase):
+class InsertParametersTests(_test_base._MultiParameterEstimationBase):
     def setUp(self):
         super(InsertParametersTests, self).setUp()
         self.metabolites = self.GMQ.get_IC_cns()
