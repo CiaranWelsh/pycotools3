@@ -24,61 +24,30 @@ Date:
  Object:
  
 """
+
+import pickle
 import site
-site.addsitedir('/home/b3053674/Documents/PyCoTools')
+#site.addsitedir('/home/b3053674/Documents/PyCoTools')
+site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
 import PyCoTools
 from PyCoTools.PyCoToolsTutorial import test_models
-from PyCoTools.Tests import base_tests
 import unittest
 import glob
 import os
 import shutil 
 import pandas
-import random
+from PyCoTools.Tests import _test_base
+import subprocess
+
+
+
+
+class CopasiMLParserTests(_test_base._BaseTest):
+    def setUp(self):
+        super(CopasiMLParserTests, self).setUp()
+        
+
 
 #
-class ModelTests(base_tests._BaseTest):
-    def setUp(self):
-        super(ModelTests, self).setUp()
-        
-        
-        
-        
-        
-    def test_get_local_parameters(self):
-        """
-        
-        """
-        print self.GMQ.get_local_parameters()
-        
-        
-        
-        
-if __name__=='__main__':
+if __name__ == '__main__':
     unittest.main()
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        

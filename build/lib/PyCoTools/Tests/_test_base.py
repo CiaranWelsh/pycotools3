@@ -4,6 +4,11 @@
 Created on Tue Aug  1 14:43:23 2017
 
 @author: b3053674
+
+This file provides a set of base classes for PyCoTools.Tests only.
+It is not used in PyCoTools itself.
+
+
 """
 
 import site
@@ -24,21 +29,28 @@ class _BaseTest(unittest.TestCase):
         -> Take string model from TestModels and write to file
         -> Initiate GetModelQuantities
     """
-    def setUp(self):
+    def setUp(self, test_model='test_model1'):
         self.copasi_file = os.path.join(os.getcwd(), 'test_model.cps')
+        self.test_model = test_model
+        tests = ['test_model1', 'kholodenko_model']
+        if self.test_model not in tests:
+            raise PyCoTools.Errors.InputError('{} not in {}'.format(self.test_model, test_models) )
+
         with open(self.copasi_file,'w') as f:
-            f.write(test_models.TestModels.get_model1())
+            if self.test_model=='test_model1':
+                f.write(test_models.TestModels.get_model1())
+            elif self.test_model=='kholodenko_model':
+                f.write(test_models.TestModels.get_model2())
             
         self.GMQ = PyCoTools.pycopi.GetModelQuantities(self.copasi_file)
-        self.M = PyCoTools.pycopi.Model(self.copasi_file)
-            
+
     def tearDown(self):
         dire = os.path.dirname(self.copasi_file)
         for i in glob.glob(os.path.join(dire,'*.xlsx') ):
             os.remove(i)
             
-        for i in glob.glob(os.path.join(dire, '*.cps') ):
-            os.remove(i)            
+        # for i in glob.glob(os.path.join(dire, '*.cps') ):
+        #     os.remove(i)
 
         for i in glob.glob(os.path.join(dire, '*.txt') ):
             os.remove(i)
@@ -135,7 +147,7 @@ class _MultiParameterEstimationBase(_BaseTest):
         ## add noise
         noisy_data = PyCoTools.Misc.add_noise(self.TC['report_name'])
         os.remove(self.TC['report_name'])
-        noisy_data.to_csv(self.Tc['report_name'], sep='\t')
+        noisy_data.to_csv(self.TC['report_name'], sep='\t')
         
         
         
@@ -191,8 +203,7 @@ class _MultiParameterEstimationBase(_BaseTest):
         super(_MultiParameterEstimationBase, self).tearDown()
         if os.path.isdir(self.RMPE['results_directory']):
             shutil.rmtree(self.RMPE['results_directory'])
-        
-
+    
 
 if __name__=='__main__':
     unittest.main()
