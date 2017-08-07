@@ -37,7 +37,7 @@ from setuptools import setup
 #version
 MAJOR = 4
 MINOR = 1
-MICRO = 3
+MICRO = 6
 
 
 __version__ = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
@@ -73,7 +73,7 @@ setup(
 
   license='GPL4',
   install_requires=['pandas','numpy','scipy','matplotlib',
-                    'lxml', 'seaborn','sklearn'],
+                    'lxml', 'seaborn','sklearn','openpyxl','xlrd'],
   long_description='''Tools for using Copasi via Python and calculating profile likelihoods. See Github page and documentation for more details''')
 
 
