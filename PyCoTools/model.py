@@ -206,71 +206,13 @@ class Model(_base._ModelBase):
                                       value=model_values[key]['value']))
         return lst
 
-    def reactions(self):
-        """
-
-        key, name, reversible,
-        prmeter, substrate, products, stoiciometry
-
-        reaction class needs a stoiciometry
-        :return:
-        """
-        reactions = {}
-        for i in self.model.iter():
-            if i.tag=='{http://www.copasi.org/static/schema}ListOfReactions':
-                for j in list(i):
-                    reactions[j.attrib['key']] = {}
-                    reactions[j.attrib['key']]['name'] = j.attrib['name']
-                    reactions[j.attrib['key']]['reversible'] = j.attrib['reversible']
-                    for k in list(j):
-                        if k.tag == '{http://www.copasi.org/static/schema}ListOfSubstrates':
-                            for substrate in list(k):
-                                # print substrate.attrib['metabolite']
-                                substrate_list = [l for l in self.metabolites if l.key in substrate.attrib['metabolite']]
-                                substrate_list = [l.to_substrate() for l in substrate_list]
-                        elif k.tag == '{http://www.copasi.org/static/schema}ListOfProducts':
-                            for product in list(k):
-                                # print substrate.attrib['metabolite']
-                                product_list = [l for l in self.metabolites if l.key in product.attrib['metabolite']]
-                                product_list = [l.to_product() for l in product_list]
-
-                        elif k.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
-                            for constant in list(k):
-                                print constant.attrib
-                                # print substrate.attrib['metabolite']
-                                # constant_list = [l for l in self.metabolites if l.key in product.attrib['metabolite']]
-                                # product_list = [l.to_product() for l in product_list]
-                        # print k.tag
-                                        # print [Substrate(l) for l in subtrate_list]
-                                # print [i.key for i in self.metabolites if i==substrate.attrib['metabolite']]
-
-                                # print self.metabolites[substrate.attrib['key']]
-                                # print substrate.attrib
-                        # reactions[j.attrib['key']]['function'] = k.attrib['function']
-                        # k.attrib
-
-
     @property
     def local_parameters(self):
-        '''
-        return dict of local parameters used in your model
-        '''
-        # print [i.type for i in self.global_quantities()]
-        # global_kinetic_parameters = self.get_global_kinetic_parameters_cns().keys()
-        #        query='//*[@cn="String=Kinetic Parameters"]'
+        """
+        return local parameters used in your model
 
-
-        '''
-        The below code gets all local parameters regardless
-        of whether they are actually being used or not. 
-        It could be better if we filter this list to only
-        local parameters which are actively being used for 
-        reaction rate. 
-        
-        
-        '''
-
-
+        :return:list of Parameters
+        """
         query='//*[@cn="String=Kinetic Parameters"]'
         d={}
         for i in self.model.xpath(query):
@@ -292,24 +234,114 @@ class Model(_base._ModelBase):
                 reaction_name = i.getparent().getparent().attrib['name']
                 parameter_name = i.attrib['name']
                 id = "({}).{}".format(reaction_name, parameter_name)
-                #if key2 in global_kinetic_parameters:
-                    #continue
                 parameters[id] = {}
                 parameters[id] = i.attrib['key']
-                # parameters[i.attrib['key']] = {}
-                # parameters[i.attrib['key']] = id
                 count += 1
-        # print parameters
-        # return parameters
 
-        for key in parameters:
-            if key in d.keys():
-                d['key'] = parameters[key]
-
-        lst = []
+        lst =[]
         for param in parameters:
-            print param, parameters#[param.keys()]
-            # lst.append(LocalParameter(**parameters[param]))
+            if param in d.keys():
+                d[param]['key'] = parameters[param]
+                lst.append(LocalParameter(**d[param]))
+                # print d[param]
+        return lst
+
+    @property
+    def functions(self):
+        """
+        get model functions
+        :return: return list of functions from ListOfFunctions
+        """
+        lst = []
+        for element in self.model.iter():
+            if element.tag == '{http://www.copasi.org/static/schema}ListOfFunctions':
+                for child in list(element):
+                    lst.append( Function(**child.attrib) )
+        return lst
+
+    @property
+    def number_of_reactions(self):
+        count = 0
+        for i in self.model.iter():
+            if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
+                for j in list(i):
+                    count = count + 1
+        return count
+
+    # def reactions(self):
+    #     """
+    #
+    #     key, name, reversible,
+    #     prmeter, substrate, products, stoiciometry
+    #
+    #     reaction class needs a stoiciometry
+    #     :return:
+    #
+    #
+    #     Count the number of reactions in the model and hold as constant.
+    #     Then iterate over the number of reactions rather than the reactiosn themselves.
+    #     This way if  reaction doesnt have a substrate or product we catch it.
+    #
+    #     I think this way is slightly failing. Maybe I can write a method for building individual
+    #     reactions rather than all reactions at the same time from ListOfReactions.
+    #     """
+    #     reactions = {}
+    #     s = []
+    #     p = []
+    #     c = []
+    #     f = []
+    #
+    #     for i in self.model.iter():
+    #         if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
+    #             for j in list(i):
+    #                 reactions[j.attrib['key']] = {}
+    #                 reactions[j.attrib['key']]['name'] = j.attrib['name']
+    #                 reactions[j.attrib['key']]['reversible'] = j.attrib['reversible']
+    #                 for k in list(j):
+    #                     if k.tag == '{http://www.copasi.org/static/schema}ListOfSubstrates':
+    #                         for substrate in list(k):
+    #                             print substrate.attrib
+                            # for substrate_num in range(self.number_of_reactions):
+                                # print k[1]
+                                # print [l for l in self.metabolites if l.key in k]
+                                # substrate_list = [l for l in self.metabolites if l.key in k[substrate_num].attrib['metabolite']]
+                                # substrate_list = [l.to_substrate() for l in substrate_list]
+                                # s.append(substrate_list)
+                        # elif k.tag == '{http://www.copasi.org/static/schema}ListOfProducts':
+                        #     for product_num in range(self.number_of_reactions):
+                        #         print self.number_of_reactions
+                                # print substrate.attrib['metabolite']
+                                # product_list = [l for l in self.metabolites if l.key in k[product_num].attrib['metabolite']]
+                                # product_list = [l.to_product() for l in product_list]
+                                # p.append(product_list)
+        # for i in p:
+        #     print i
+                        # elif k.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
+                        #     for constant in list(k):
+                        #         constant_list = [l for l in self.local_parameters if l.key in constant.attrib['key']]
+                        #         c.append(constant_list)
+                        # elif k.tag == '{http://www.copasi.org/static/schema}KineticLaw':
+                        #     function_list = [l for l in self.functions if l.key in k.attrib['function']]
+                        #     f.append(function_list)
+
+        # print len(s), len(p), len(c), len(f)
+
+        # print len(s), len(p)
+        # for i in p:
+        #     print i
+        # if len(s)!= len(p):
+        #     raise Errors.SomethingWentHorriblyWrongError(
+        #         'number of substrate lists not equal to number of product lists')
+        #
+        # if len(s) != len(c):
+        #     raise Errors.SomethingWentHorriblyWrongError(
+        #         'number of constant lists not equal to number of product lists')
+        #
+        # if len(s) != len(f):
+        #     raise Errors.SomethingWentHorriblyWrongError(
+        #         'number of function lists not equal to number of product lists')
+#
+
 
 
 
@@ -571,11 +603,11 @@ class Reaction(_base._Base):
     def __init__(self, **kwargs):
         super(Reaction, self).__init__(**kwargs)
         self.allowed_keys = ['name',
-                        'key',
-                        'reactants',
-                        'products',
-                        'rate_law',
-                        'parameters']
+                             'key',
+                             'reactants',
+                             'products',
+                             'rate_law',
+                             'parameters']
         for key in self.kwargs:
             if key not in self.allowed_keys:
                 raise Errors.InputError('{} not valid key. Valid keys are: {}'.format(key, self.allowed_keys))
@@ -644,7 +676,10 @@ class LocalParameter(_base._Base):
         super(LocalParameter, self).__init__(**kwargs)
         allowed_keys = {'name',
                         'key',
-                        'value'}
+                        'value',
+                        'simulationType',
+                        'type',
+                        'cn'}
 
 
         for key in self.kwargs:
