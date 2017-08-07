@@ -36,13 +36,13 @@ import glob
 import os
 import shutil 
 import pandas
-from PyCoTools.Tests import base_tests
+from PyCoTools.Tests import test_base
 from random import shuffle, random
 from PyCoTools.pycopi import InsertParameters
 
 
 
-class InsertParametersTests(base_tests._MultiParameterEstimationBase):
+class InsertParametersTests(test_base._MultiParameterEstimationBase):
     def setUp(self):
         super(InsertParametersTests, self).setUp()
         self.metabolites = self.GMQ.get_IC_cns()
@@ -68,11 +68,12 @@ class InsertParametersTests(base_tests._MultiParameterEstimationBase):
         
     def test_local_k1s(self):
         k1s = [i for i in self.local_parameters if 'k1' in i]
-        shuffle(k1s)
-        old = dict(zip(k1s, [self.local_parameters[i] for i in k1s]))
-        new= dict(zip(k1s, [i*random() for i in range(1,len(k1s)+1)]))
-        print new
-        InsertParameters(self.copasi_file, parameter_dict=new)
+        print kls
+        # shuffle(k1s)
+        # old = dict(zip(k1s, [self.local_parameters[i] for i in k1s]))
+        # new= dict(zip(k1s, [i*random() for i in range(1,len(k1s)+1)]))
+        # print new
+        # InsertParameters(self.copasi_file, parameter_dict=new)
         
 #        os.system('CopasiUI {}'.format(self.copasi_file))
         

@@ -335,38 +335,90 @@ class GetModelQuantities():
         string= self.get_IC_cns()[first]['cn']
         string=self.check_ascii(string)
         return re.findall('Model=(.*),Vector=C',string)[0]
-        
+
     def get_metabolites(self):
         '''
-        Deprecated. Use get_ICs_cns() inst
-        returns dict of metabolites in the 'species' menu
         '''
-        metab_dct={}
-        query='//*[@cn="String=Initial Species Values"]'
+
+        def get_metabolites_key2name_mapping():
+            """
+                Get the model reference - the 'key' from self.get_model_units7
+                Only needed by get_metabolites() so hide scope from outer class
+            """
+            collection = {}
+            for i in self.copasiML.iter():
+                if i.tag == '{http://www.copasi.org/static/schema}ListOfMetabolites':
+                    for j in i:
+                        collection[j.attrib['key']] = j.attrib['name']
+            return collection
+
+        def get_reference():
+            """
+            Get copasi references for transient metabolite quantities.
+            These are strings begining with cn in the xml
+            :return:
+            pandas.DataFrame
+            """
+
+            query = '//*[@cn="String=Initial Species Values"]'
+            d = {}
+            for i in self.copasiML.xpath(query):
+                for j in list(i):
+                    match = re.findall('Metabolites\[(.*)\]', j.attrib['cn'])[0]
+                    assert isinstance(match.encode('utf8'), str), '{} is not a string but a {}'.format(match,
+                                                                                                       type(match))
+                    assert match is not None
+                    assert match != []
+                    d[match] = j.attrib['cn']
+            return d  # pandas.DataFrame(d, index=[0]).transpose()
+
+        metab_dct = {}
+        query = '//*[@cn="String=Initial Species Values"]'
         for i in self.copasiML.xpath(query):
             for j in list(i):
-                match=re.findall('.*Vector=Metabolites\[(.*)\]',j.attrib['cn'])
-                                
-                if match==[]:
+                match = re.findall('.*Vector=Metabolites\[(.*)\]', j.attrib['cn'])
+                if match == []:
                     return self.copasiML
                 else:
-                    compartment_match=re.findall('Compartments\[(.*)\],',j.attrib['cn'])
-                    
-                    comp=re.findall('Compartments\[(.*?)\]',j.attrib['cn'])[0]
-                    if self.quantity_type=='concentration':
-                        compartment_vol= float(self.get_compartments()[comp]['value'])
-                    else:
-                        compartment_vol=1
-                    metab_dct[match[0]]={}
-                    metab_dct[match[0]]['particle_numbers']=j.attrib['value']
-                    concentration= self.convert_particles_to_molar(j.attrib['value'],self.get_quantity_units(),compartment_vol)
-                    metab_dct[match[0]]['concentration']=concentration
-                    metab_dct[match[0]]['compartment']=compartment_match[0]
-        if len(metab_dct.keys())==0:
+
+                    comp = re.findall('Compartments\[(.*?)\]', j.attrib['cn'])[0]
+                    compartment_vol = self.get_compartments().loc[comp]['Value']
+                    metab_dct[match[0]] = {}
+                    metab_dct[match[0]][comp] = {}
+
+        if len(metab_dct.keys()) == 0:
             raise Errors.NometabolitesError('There are no metabolites in {}'.format(self.get_model_name()))
-        
-        
-        return metab_dct
+        query = '//*[@type="initialState"]'
+        for i in self.copasiML.xpath(query):
+            state_values = i.text
+        state_values = state_values.strip()
+        state_values = state_values.split(' ')
+        state_values = [i for i in state_values if i not in ['', ' ', '\n', '\t']]
+        mapping = get_metabolites_key2name_mapping()
+        dct = dict(zip(self.get_state_template(), state_values))
+        particle_numbers = {j: dct[i] for (i, j) in mapping.items() if i in dct.keys()}
+
+        part = []
+        conc = []
+        ref = []
+        m = []
+        c = []
+        for metab in metab_dct:
+            m.append(metab)
+            for comp in metab_dct[metab]:
+                c.append(comp)
+                part.append(float(particle_numbers[metab]))
+
+                conc.append(Misc.convert_particles_to_molar(float(particle_numbers[metab]),
+                                                            self.get_quantity_unit(),
+                                                            self.get_compartments().loc[comp]['Value']))
+                ref.append(get_reference()[metab])
+
+        df = pandas.DataFrame([m, c, part, conc, ref],
+                              index=['Metabolite', 'Compartment',
+                                     'Particles', 'Concentration',
+                                     'Reference']).transpose()
+        return df.set_index('Metabolite')
     
     def get_initial_state_metabolites(self):
         query = '//*[@type="initialState"]'
@@ -479,26 +531,61 @@ class GetModelQuantities():
         return parameters
 
     def get_local_parameters(self):
-        '''
-        return dict of local parameters used in your model
-        '''
-        global_kinetic_parameters = self.get_global_kinetic_parameters_cns().keys()
-#        query='//*[@cn="String=Kinetic Parameters"]'
-        query = 'Reaction'
-        parameters={}
-        count=0
+        """
+        Get local parameters from the model.
+
+        ====returns===
+        DataFrame containing name, value, key and reference for
+        local parmeters
+        """
+
+        def get_local_parameter_reference_df():
+
+            query = '//*[@cn="String=Kinetic Parameters"]'
+            d = {}
+            for i in self.copasiML.xpath(query):
+                for j in list(i):
+                    for k in list(j):
+                        if k.attrib['simulationType'] == 'fixed':
+                            match = re.findall('Reactions\[(.*)\].*Parameter=(.*)', k.attrib['cn'])[0]
+                            assert isinstance(match,
+                                              tuple), 'get species regex hasn\'t been found. Do you have species in your model?'
+                            assert match != None
+                            assert match != []
+                            assert len(match) == 2
+                            match = '({}).{}'.format(match[0], match[1])
+                            d[match] = k.attrib['cn']
+
+            reference_df = pandas.DataFrame(d, index=['Reference']).transpose()
+            return reference_df
+
+        reference_df = get_local_parameter_reference_df()
+
+        collection = {}
         for i in self.copasiML.iter():
-            if i.tag == '{http://www.copasi.org/static/schema}Constant':
-#                print i.getparent().getparent().attrib
-                reaction_name = i.getparent().getparent().attrib['name']
-                parameter_name = i.attrib['name']
-                key2 = "({}).{}".format(reaction_name, parameter_name)
-                if key2 in global_kinetic_parameters:
-                    continue
-                parameters[key2] = {}
-                parameters[key2] = float(i.attrib['value'])
-                count+=1
-        return parameters
+            if i.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
+                reaction_name = i.getparent().attrib['name']
+                for j in i:
+                    collection[j.attrib['key']] = (reaction_name, j.attrib['name'], float(j.attrib['value']))
+        df = pandas.DataFrame(collection, index=['Reaction', 'Parameter', 'Value']).transpose()
+
+        reaction_parameter_name = []
+        for i in range(df.shape[0]):
+            reaction_parameter_name.append('({}).{}'.format(df['Reaction'].iloc[i], df['Parameter'].iloc[i]))
+        df.index.name = 'ParameterKey'
+        df['ReactionParameterID'] = reaction_parameter_name
+        df = df.reset_index()
+        df = df.set_index('ReactionParameterID')
+
+        '''
+        Here I've chosen to merge the reference and df frames using
+        'inner' because this way it seems to filter out the local
+        parmeters which are assigned to global variables. Using how='outer'
+        will return all parameters instead. 
+        '''
+        return df.merge(reference_df, left_index=True, right_index=True, how='inner')
+
+    
 
     def get_compartments(self):
         '''
