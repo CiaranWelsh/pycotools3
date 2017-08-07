@@ -74,6 +74,12 @@ class _Base(object):
         """
         return self.kwargs
 
+    # def __getattr__(self, item):
+    #     return self.kwargs[item]
+    #
+    # def __setattr__(self, key, value):
+    #     self.kwargs[key] = value
+
 
 
 class _ModelBase(_Base):

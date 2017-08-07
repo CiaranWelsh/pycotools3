@@ -86,6 +86,62 @@ class TestMetabolites(_test_base._BaseTest):
         self.assertTrue(A.concentration, 5)
 
 
+class TestSubstrate(_test_base._BaseTest):
+    def setUp(self):
+        super(TestSubstrate, self).setUp()
+        self.nucleus = PyCoTools.model.Compartment(name='Nuc', value=5,
+                                                   type='fixed', key='compartment_1')
+        self.A = PyCoTools.model.Substrate(name='A', compartment=self.nucleus,
+                                           concentration=5, particle_number=5,
+                                           stoiciometry=1, reaction_key='reaction_1')
+
+    def test_name(self):
+        self.assertEqual(self.A.name, 'A')
+
+    def test_comp(self):
+        self.assertEqual(self.A.compartment, self.nucleus)
+
+    def test_concentration(self):
+        self.assertEqual(self.A.concentration, 5)
+
+    def test_stoiciometry(self):
+        self.assertEqual(self.A.stoiciometry, 1)
+
+    def test_reaction_key(self):
+        self.assertEqual(self.A.reaction_key, 'reaction_1')
+
+    def test_to_substrate(self):
+        # print self.B.to_substrate()
+        self.assertTrue(isinstance(self.A.to_substrate(), PyCoTools.model.Substrate))
+
+
+class TestProduct(_test_base._BaseTest):
+    def setUp(self):
+        super(TestProduct, self).setUp()
+        self.nucleus = PyCoTools.model.Compartment(name='Nuc', value=5,
+                                                   type='fixed', key='compartment_1')
+        self.B = PyCoTools.model.Product(name='B', compartment=self.nucleus,
+                                         concentration=60,
+                                         stoiciometry=1, reaction_key='reaction_1',
+                                         particle_number=1220)
+
+    def test_name(self):
+        self.assertEqual(self.B.name, 'B')
+
+    def test_comp(self):
+        self.assertEqual(self.B.compartment, self.nucleus)
+
+    def test_concentration(self):
+        self.assertEqual(self.B.concentration, 60)
+
+    def test_stoiciometry(self):
+        self.assertEqual(self.B.stoiciometry, 1)
+
+    def test_reaction_key(self):
+        self.assertEqual(self.B.reaction_key, 'reaction_1')
+
+
+
 if __name__=='__main__':
     unittest.main()
 
