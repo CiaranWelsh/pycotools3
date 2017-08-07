@@ -5,3 +5,5 @@ matplotlib
 lxml
 seaborn
 sklearn
+openpyxl
+xlrd
