@@ -29,7 +29,7 @@ import site
 site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
 import PyCoTools
 from PyCoTools.PyCoToolsTutorial import test_models
-from PyCoTools.Tests import base_tests
+from PyCoTools.Tests import _test_base
 import unittest
 import glob
 import os
@@ -38,7 +38,7 @@ import pandas
 import random
 
 #
-class GetModelQuantitiesTests(base_tests._BaseTest):
+class GetModelQuantitiesTests(_test_base._BaseTest):
     def setUp(self):
         super(GetModelQuantitiesTests, self).setUp()
         
