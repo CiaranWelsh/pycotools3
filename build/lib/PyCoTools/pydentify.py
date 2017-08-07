@@ -1389,7 +1389,7 @@ class Plot():
                  'ci_band_level':95, ## CI for estimator bootstrap
                  'err_style':'ci_band',
                  'savefig':False,
-                 'results_directory':os.getcwd(),
+                 'results_directory':None,
                  'dpi':300,
                  'plot_cl':True,
                  'title':None,
@@ -1430,7 +1430,9 @@ class Plot():
                 if y_param not in self.parameter_list:
                     raise Errors.InputError('{} not in {}'.format(y_param, self.parameter_list))
                 
-            
+        if self['savefig']:
+            if self['results_directory']==None:
+                raise Errors.InputError('Please specify argument to results_directory')
         
         n = list(set(self.data.index.get_level_values(0)))
         if self['title'] == None:
@@ -1521,11 +1523,11 @@ class Plot():
             plt.legend(loc=self['legend_location'])
             
         if self['savefig']:
-            save_dir = os.path.join(self['results_directory'], 'ProfileLikelihood')
-            if os.path.isdir(save_dir)!=True:
-                os.mkdir(save_dir)
-            os.chdir(save_dir)
-            plt.savefig(os.path.join(save_dir, '{}Vs{}.jpeg'.format(self['x'],self['y'])  ),
+#            save_dir = os.path.join(self['results_directory'], 'ProfileLikelihood')
+            if os.path.isdir(self['results_directory'])!=True:
+                os.makedirs(self['results_directory'])
+            os.chdir(self['results_directory'])
+            plt.savefig(os.path.join(self['results_directory'], '{}Vs{}.jpeg'.format(self['x'],self['y'])  ),
                         dpi=self['dpi'], bbox_inches='tight')
 
     

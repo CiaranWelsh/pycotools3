@@ -25,10 +25,11 @@ Date:
  
 """
 import site
-site.addsitedir('/home/b3053674/Documents/PyCoTools')
+# site.addsitedir('/home/b3053674/Documents/PyCoTools')
+site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
 import PyCoTools
 from PyCoTools.PyCoToolsTutorial import test_models
-from PyCoTools.Tests import base_tests
+from PyCoTools.Tests import _test_base
 import unittest
 import glob
 import os
@@ -37,7 +38,7 @@ import pandas
 import random
 
 
-class TestInsertPEFromDict(base_tests._BaseTest):
+class TestInsertPEFromDict(_test_base._BaseTest):
     def setUp(self):
         super(TestInsertPEFromDict, self).setUp()
 
@@ -61,18 +62,15 @@ class TestInsertPEFromDict(base_tests._BaseTest):
         names = self.GMQ.get_metabolites().keys()
         values = [i*random.random() for i in range(1, len(names)+1)]
         parameter_dict = dict(zip(names, values))
-#        print parameter_dict
-#        os.system('CopasiUI {}'.format(self.copasi_file))
         I = PyCoTools.pycopi.InsertParameters(self.copasi_file,
-                                       parameter_dict=parameter_dict)
+                                      parameter_dict=parameter_dict)
         GMQ = PyCoTools.pycopi.GetModelQuantities(self.copasi_file)
-#        os.system('CopasiUI {}'.format(self.copasi_file))
         conc = {}
         for metab in GMQ.get_metabolites():
             conc[metab] = GMQ.get_metabolites()[metab]['concentration']
-        
+
         for i in conc:
-            self.assertAlmostEqual(float(I.parameters[i]), conc[i]  )
+            self.assertAlmostEqual(float(I.parameters[i] ), conc[i])
 
 
 
