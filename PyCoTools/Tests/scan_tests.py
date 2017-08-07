@@ -34,12 +34,12 @@ import glob
 import os
 import shutil 
 import pandas
-from PyCoTools.Tests import base_tests
+from PyCoTools.Tests import _test_base
 import re
 
 
 
-class ScanTests(base_tests._BaseTest):
+class ScanTests(_test_base._BaseTest):
     def setUp(self):
         super(ScanTests, self).setUp()
         
