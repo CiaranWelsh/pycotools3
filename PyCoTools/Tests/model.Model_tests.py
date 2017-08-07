@@ -75,18 +75,26 @@ class ModelTests(_test_base._BaseTest):
         self.assertEqual(len(self.Model.global_quantities), 3)
 
     def test_local_parameters(self):
-        print self.Model.local_parameters
+        self.assertTrue(len(self.Model.local_parameters), 3)
 
+    def test_local_parameters2(self):
+        [self.assertTrue(isinstance(i, PyCoTools.model.LocalParameter) ) for i in self.Model.local_parameters ]
 
-    # def test_compartments2(self):
-    #     self.assertTrue(isinstance(, [i for i in self.Model.compartments()], 2) )
+    def test_functions(self):
+        self.assertTrue(len(self.Model.functions), 2)
 
+    def test_functions2(self):
+        [self.assertTrue(isinstance(i, PyCoTools.model.Function) for i in self.Model.functions) ]
 
-    # def
     # def test_reactions(self):
     #     print self.Model.reactions()
 
+    def test_number_of_reactions(self):
+        self.assertEqual(self.Model.number_of_reactions, 4)
 
+
+    # def test_reactions(self):
+    #     print self.Model.reactions()
 
 
 
