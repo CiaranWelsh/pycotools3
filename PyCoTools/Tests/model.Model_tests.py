@@ -35,9 +35,9 @@ from lxml import etree
 
 
 
-class UnitsTests(_test_base._BaseTest):
+class ModelTests(_test_base._BaseTest):
     def setUp(self):
-        super(UnitsTests, self).setUp()
+        super(ModelTests, self).setUp()
         self.Model = PyCoTools.model.Model(self.copasi_file)
 
     def test_time_unit(self):
@@ -72,7 +72,7 @@ class UnitsTests(_test_base._BaseTest):
 
     def test_global_quantities(self):
         # print self.Model.global_quantities()
-        self.assertEqual(len(self.Model.global_quantities()), 3)
+        self.assertEqual(len(self.Model.global_quantities), 3)
 
     def test_local_parameters(self):
         print self.Model.local_parameters
@@ -83,7 +83,8 @@ class UnitsTests(_test_base._BaseTest):
 
 
     # def
-
+    # def test_reactions(self):
+    #     print self.Model.reactions()
 
 
 

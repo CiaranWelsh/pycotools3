@@ -161,7 +161,7 @@ class Model(_base._ModelBase):
 
         return lst
 
-
+    @property
     def global_quantities(self):
         '''
         return global quantities in your model that have simulationType='fixed'
@@ -206,6 +206,50 @@ class Model(_base._ModelBase):
                                       value=model_values[key]['value']))
         return lst
 
+    def reactions(self):
+        """
+
+        key, name, reversible,
+        prmeter, substrate, products, stoiciometry
+
+        reaction class needs a stoiciometry
+        :return:
+        """
+        reactions = {}
+        for i in self.model.iter():
+            if i.tag=='{http://www.copasi.org/static/schema}ListOfReactions':
+                for j in list(i):
+                    reactions[j.attrib['key']] = {}
+                    reactions[j.attrib['key']]['name'] = j.attrib['name']
+                    reactions[j.attrib['key']]['reversible'] = j.attrib['reversible']
+                    for k in list(j):
+                        if k.tag == '{http://www.copasi.org/static/schema}ListOfSubstrates':
+                            for substrate in list(k):
+                                # print substrate.attrib['metabolite']
+                                substrate_list = [l for l in self.metabolites if l.key in substrate.attrib['metabolite']]
+                                substrate_list = [l.to_substrate() for l in substrate_list]
+                        elif k.tag == '{http://www.copasi.org/static/schema}ListOfProducts':
+                            for product in list(k):
+                                # print substrate.attrib['metabolite']
+                                product_list = [l for l in self.metabolites if l.key in product.attrib['metabolite']]
+                                product_list = [l.to_product() for l in product_list]
+
+                        elif k.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
+                            for constant in list(k):
+                                print constant.attrib
+                                # print substrate.attrib['metabolite']
+                                # constant_list = [l for l in self.metabolites if l.key in product.attrib['metabolite']]
+                                # product_list = [l.to_product() for l in product_list]
+                        # print k.tag
+                                        # print [Substrate(l) for l in subtrate_list]
+                                # print [i.key for i in self.metabolites if i==substrate.attrib['metabolite']]
+
+                                # print self.metabolites[substrate.attrib['key']]
+                                # print substrate.attrib
+                        # reactions[j.attrib['key']]['function'] = k.attrib['function']
+                        # k.attrib
+
+
     @property
     def local_parameters(self):
         '''
@@ -233,7 +277,7 @@ class Model(_base._ModelBase):
             for j in list(i):
                 for k in list(j):
                     if k.attrib['simulationType']=='fixed':
-                        match=re.findall('Reactions\[(.*)\].*Parameter=(.*)',k.attrib['cn'])[0]
+                        match=re.findall('Reactions\[(.*)\].*Parameter=(.*)', k.attrib['cn'])[0]
                         assert isinstance(match,tuple),'get species regex hasn\'t been found. Do you have species in your model?'
                         assert match !=None
                         assert match !=[]
@@ -241,38 +285,31 @@ class Model(_base._ModelBase):
                         match='({}).{}'.format(match[0],match[1])
                         d[match]=k.attrib
 
-        print d.values()
-
-        constants= {}
+        parameters = {}
+        count = 0
         for i in self.model.iter():
-            if i.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
-                for j in i:
-                    constants[j.attrib['key']] = j.attrib['name']
-                    print j.attrib
-
-        print constants
-        # for key in d:
-        #     print key, d[key]
-            # d[key]['key']=constants[key]#constants
-
-        # print d
-
-        # parameters = {}
-        # count = 0
-        # for i in self.model.iter():
-        #     if i.tag == '{http://www.copasi.org/static/schema}Constant':
-        #         reaction_name = i.getparent().getparent().attrib['name']
-        #         parameter_name = i.attrib['name']
-        #         key2 = "({}).{}".format(reaction_name, parameter_name)
-        #         #if key2 in global_kinetic_parameters:
-        #             #continue
-        #         parameters[key2] = {}
-        #         parameters[key2] = float(i.attrib['value'])
-        #         count += 1
+            if i.tag == '{http://www.copasi.org/static/schema}Constant':
+                reaction_name = i.getparent().getparent().attrib['name']
+                parameter_name = i.attrib['name']
+                id = "({}).{}".format(reaction_name, parameter_name)
+                #if key2 in global_kinetic_parameters:
+                    #continue
+                parameters[id] = {}
+                parameters[id] = i.attrib['key']
+                # parameters[i.attrib['key']] = {}
+                # parameters[i.attrib['key']] = id
+                count += 1
+        # print parameters
         # return parameters
 
+        for key in parameters:
+            if key in d.keys():
+                d['key'] = parameters[key]
 
-
+        lst = []
+        for param in parameters:
+            print param, parameters#[param.keys()]
+            # lst.append(LocalParameter(**parameters[param]))
 
 
 
@@ -324,29 +361,28 @@ class Metabolite(_base._Base):
     """
     def __init__(self, **kwargs):
         super(Metabolite, self).__init__(**kwargs)
-        allowed_keys = {'compartment',
-                        'key',
-                        'name',
-                        'particle_number',
-                        'concentration'}
+        self.allowed_keys = ['compartment',
+                             'key',
+                             'name',
+                             'particle_number',
+                             'concentration',
+                             'stoiciometry',
+                             'reaction_key'
+                             ]
 
         for key in kwargs:
-            if key not in allowed_keys:
-                raise Errors.InputError('Attribute not allowed. {} not in {}'.format(key, allowed_keys) )
+            if key not in self.allowed_keys:
+                raise Errors.InputError('Attribute not allowed. {} not in {}'.format(key, self.allowed_keys) )
         ##update all keys to none
         self._do_checks()
 
-
     def __str__(self):
-        """
-
-        :return:
-        """
         return 'Metabolite({})'.format(self.as_string())
-
 
     def __repr__(self):
         return self.__str__()
+
+
 
     def _do_checks(self):
         """
@@ -423,6 +459,59 @@ class Metabolite(_base._Base):
             particles=float(moles)
         return particles
 
+    def to_substrate(self):
+        return Substrate(**self.kwargs)
+
+    def to_product(self):
+        return Product(**self.kwargs)
+
+class Substrate(Metabolite):
+    def __init__(self, **kwargs):
+        super(Substrate, self).__init__(**kwargs)
+
+        ## in addition to Metboliteproperties
+        ## substrates and products need
+        ## stoiciometry
+
+        for key in self.kwargs:
+            if key not in self.allowed_keys:
+                raise Errors.InputError('{} not in {}'.format(key, self.allowed_keys))
+
+    def __str__(self):
+        """
+
+        :return:
+        """
+        return 'Substrate({})'.format(self.as_string())
+
+
+    def __repr__(self):
+        return self.__str__()
+
+
+class Product(Metabolite):
+    def __init__(self, **kwargs):
+        super(Product, self).__init__(**kwargs)
+
+        ## in addition to Metboliteproperties
+        ## substrates and products need
+        ## stoiciometry
+
+        for key in self.kwargs:
+            if key not in self.allowed_keys:
+                raise Errors.InputError('{} not in {}'.format(key, self.allowed_keys))
+
+    def __str__(self):
+        """
+
+        :return:
+        """
+        return 'Product({})'.format(self.as_string())
+
+
+    def __repr__(self):
+        return self.__str__()
+
 class GlobalQuantity(_base._Base):
     """
     Global quantities have names and are associated with a vlue.
@@ -480,15 +569,15 @@ class Reaction(_base._Base):
     reaction.
     """
     def __init__(self, **kwargs):
-        super(Reaction, self).__init__(*kwargs)
+        super(Reaction, self).__init__(**kwargs)
         self.allowed_keys = ['name',
                         'key',
                         'reactants',
                         'products',
-                        'rate_law'
+                        'rate_law',
                         'parameters']
         for key in self.kwargs:
-            if key not in allowed_keys:
+            if key not in self.allowed_keys:
                 raise Errors.InputError('{} not valid key. Valid keys are: {}'.format(key, self.allowed_keys))
 
         def __str__(self):
@@ -497,7 +586,7 @@ class Reaction(_base._Base):
         def __repr__(self):
             return self.__str__()
 
-    def do_checks(selfs, instance=isinstance()):
+    def do_checks(self):
         """
 
 
@@ -525,12 +614,27 @@ class Reaction(_base._Base):
             raise Error.InputError('{} should be a Metabolite'.format(self.reactants))
 
 
-class Function():
+class Function(_base._Base):
     """
     Class to hold copasi function definitions for rate laws
     """
-                # def  x(self):
-    #     print
+
+    def __init__(self, **kwargs):
+        super(Function, self).__init__(**kwargs)
+        allowed_keys = ['name',
+                        'key',
+                        'type',
+                        'reversible']
+
+        for key in self.kwargs:
+            if key not in allowed_keys:
+                raise Errors.InputError('{} not in {}'.format(key, allowed_keys))
+
+    def __str__(self):
+        return 'Function({})'.format(self.as_string())
+
+    def __repr__(self):
+        return self.__str__()
 
 
 
@@ -543,7 +647,15 @@ class LocalParameter(_base._Base):
                         'value'}
 
 
+        for key in self.kwargs:
+            if key not in allowed_keys:
+                raise Errors.InputError('{} not in {}'.format(key, allowed_keys))
 
+    def __str__(self):
+        return 'LocalParameter({})'.format(self.as_string())
+
+    def __repr__(self):
+        return self.__str__()
 
 
 
