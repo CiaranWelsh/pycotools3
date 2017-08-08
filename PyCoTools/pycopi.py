@@ -366,8 +366,6 @@ class GetModelQuantities():
                     metab_dct[match[0]]['compartment']=compartment_match[0]
         if len(metab_dct.keys())==0:
             raise Errors.NometabolitesError('There are no metabolites in {}'.format(self.get_model_name()))
-        
-        
         return metab_dct
     
     def get_initial_state_metabolites(self):

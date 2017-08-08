@@ -43,7 +43,7 @@ class _BaseTest(unittest.TestCase):
                 f.write(test_models.TestModels.get_model2())
             
         self.GMQ = PyCoTools.pycopi.GetModelQuantities(self.copasi_file)
-        self.M = PyCoTools.pycopi.Model(self.copasi_file)
+        self.M = PyCoTools.model.Model(self.copasi_file)
             
     def tearDown(self):
         dire = os.path.dirname(self.copasi_file)
