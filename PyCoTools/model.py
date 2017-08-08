@@ -268,6 +268,15 @@ class Model(_base._ModelBase):
                     count = count + 1
         return count
 
+
+    def reactions(self):
+        """
+
+        :return:
+        """
+
+
+        
     # def reactions(self):
     #     """
     #
@@ -348,10 +357,10 @@ class Model(_base._ModelBase):
 class Compartment(_base._Base):
     def __init__(self, **kwargs):
         super(Compartment, self).__init__(**kwargs)
-        self.allowed_keys = {'name',
-                             'key',
-                             'value',
-                             'type'}
+        self.allowed_keys = {'name':None,
+                             'key':None,
+                             'value':None,
+                             'type':None}
 
         for key in self.kwargs:
             if key not in self.allowed_keys:
@@ -393,14 +402,14 @@ class Metabolite(_base._Base):
     """
     def __init__(self, **kwargs):
         super(Metabolite, self).__init__(**kwargs)
-        self.allowed_keys = ['compartment',
-                             'key',
-                             'name',
-                             'particle_number',
-                             'concentration',
-                             'stoiciometry',
-                             'reaction_key'
-                             ]
+        self.allowed_keys = {'compartment':None,
+                             'key':None,
+                             'name':None,
+                             'particle_number':None,
+                             'concentration':None,
+                             'stoiciometry':None,
+                             'reaction_key':None
+                             }
 
         for key in kwargs:
             if key not in self.allowed_keys:
@@ -413,8 +422,6 @@ class Metabolite(_base._Base):
 
     def __repr__(self):
         return self.__str__()
-
-
 
     def _do_checks(self):
         """
@@ -501,10 +508,6 @@ class Substrate(Metabolite):
     def __init__(self, **kwargs):
         super(Substrate, self).__init__(**kwargs)
 
-        ## in addition to Metboliteproperties
-        ## substrates and products need
-        ## stoiciometry
-
         for key in self.kwargs:
             if key not in self.allowed_keys:
                 raise Errors.InputError('{} not in {}'.format(key, self.allowed_keys))
@@ -524,10 +527,6 @@ class Substrate(Metabolite):
 class Product(Metabolite):
     def __init__(self, **kwargs):
         super(Product, self).__init__(**kwargs)
-
-        ## in addition to Metboliteproperties
-        ## substrates and products need
-        ## stoiciometry
 
         for key in self.kwargs:
             if key not in self.allowed_keys:
@@ -563,10 +562,10 @@ class GlobalQuantity(_base._Base):
     def __init__(self, **kwargs):
         super(GlobalQuantity, self).__init__(**kwargs)
 
-        allowed_keys = {'name',
-                        'key',
-                        'type',
-                        'value',
+        allowed_keys = {'name':None,
+                        'key':None,
+                        'type':None,
+                        'value':None,
                         }
 
         for key in kwargs:
@@ -602,12 +601,12 @@ class Reaction(_base._Base):
     """
     def __init__(self, **kwargs):
         super(Reaction, self).__init__(**kwargs)
-        self.allowed_keys = ['name',
-                             'key',
-                             'reactants',
-                             'products',
-                             'rate_law',
-                             'parameters']
+        self.allowed_keys = {'name':None,
+                             'key':None,
+                             'reactants':None,
+                             'products':None,
+                             'rate_law':None,
+                             'parameters':None}
         for key in self.kwargs:
             if key not in self.allowed_keys:
                 raise Errors.InputError('{} not valid key. Valid keys are: {}'.format(key, self.allowed_keys))
@@ -653,10 +652,10 @@ class Function(_base._Base):
 
     def __init__(self, **kwargs):
         super(Function, self).__init__(**kwargs)
-        allowed_keys = ['name',
-                        'key',
-                        'type',
-                        'reversible']
+        allowed_keys = {'name':None,
+                        'key':None,
+                        'type':None,
+                        'reversible':None}
 
         for key in self.kwargs:
             if key not in allowed_keys:
