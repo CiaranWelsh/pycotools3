@@ -36,15 +36,15 @@ import glob
 import os
 import shutil 
 import pandas
-from PyCoTools.Tests import base_tests
+from PyCoTools.Tests import _test_base
 import subprocess
 
 
 
 
-class CopasiMLParserTests(base_tests._BaseTest):
+class CopasiMLParserTests(_test_base._BaseTest):
     def setUp(self):
-        super(RunMultiplePETests, self).setUp()
+        super(CopasiMLParserTests, self).setUp()
         
 
     def test_file_was_written(self):

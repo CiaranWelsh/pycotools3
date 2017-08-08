@@ -40,21 +40,23 @@ class ModelTests(_test_base._BaseTest):
         super(ModelTests, self).setUp()
         self.Model = PyCoTools.model.Model(self.copasi_file)
 
+
+
     def test_time_unit(self):
-        self.assertEqual(self.Model.time, 's')
+        self.assertEqual(self.Model.time_unit, 's')
 
     def test_model_name(self):
         self.assertEqual(self.Model.name, 'New Model')
 
 
     def test_volume(self):
-        self.assertEqual(self.Model.volume, 'ml')
+        self.assertEqual(self.Model.volume_unit, 'ml')
 
     def test_quantity(self):
-        self.assertEqual(self.Model.area, u'm\xb2')
+        self.assertEqual(self.Model.area_unit, u'm\xb2')
 
     def test_length(self):
-        self.assertEqual(self.Model.length, 'm')
+        self.assertEqual(self.Model.length_unit, 'm')
 
     def test_avagadro(self):
         self.assertEqual(self.Model.avagadro, 6.022140857e+23)
@@ -86,15 +88,14 @@ class ModelTests(_test_base._BaseTest):
     def test_functions2(self):
         [self.assertTrue(isinstance(i, PyCoTools.model.Function) for i in self.Model.functions) ]
 
-    # def test_reactions(self):
-    #     print self.Model.reactions()
-
     def test_number_of_reactions(self):
         self.assertEqual(self.Model.number_of_reactions, 4)
 
 
-    # def test_reactions(self):
-    #     print self.Model.reactions()
+    def test_reactions(self):
+        self.assertEqual(len( self.Model.reactions() ), 4)
+
+
 
 
 
