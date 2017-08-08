@@ -36,11 +36,11 @@ import glob
 import os
 import shutil 
 import pandas
-from PyCoTools.Tests import base_tests
+from PyCoTools.Tests import _test_base
 
 
 
-class ParameterEstimationTests(base_tests._ParameterEstimationBase):
+class ParameterEstimationTests(_test_base._ParameterEstimationBase):
 
     def setUp(self):
         super(ParameterEstimationTests, self).setUp()
