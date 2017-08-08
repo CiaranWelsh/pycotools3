@@ -37,8 +37,16 @@ class Model(_base._ModelBase):
     def __init__(self, model, **kwargs):
         super(Model, self).__init__(model, **kwargs)
 
+    def __str__(self):
+        return 'Model(name={}, time_unit={}, volume_unit={}, quantity_unit={})'.format(self.name,
+                                                                                       self.time_unit,
+                                                                                       self.volume_unit,
+                                                                                       self.quantity_unit)
+
+    def __repr__(self):
+        return self.__str__()
     @property
-    def time(self):
+    def time_unit(self):
         """
 
         :return:
@@ -55,22 +63,22 @@ class Model(_base._ModelBase):
         return self.model.xpath(query)[0].attrib['name']
 
     @property
-    def volume(self):
+    def volume_unit(self):
         query = '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
         return self.model.xpath(query)[0].attrib['volumeUnit']
 
     @property
-    def quantity(self):
+    def quantity_unit(self):
         query = '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
         return self.model.xpath(query)[0].attrib['quantityUnit']
 
     @property
-    def area(self):
+    def area_unit(self):
         query = '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
         return self.model.xpath(query)[0].attrib['areaUnit']
 
     @property
-    def length(self):
+    def length_unit(self):
         query = '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
         return self.model.xpath(query)[0].attrib['lengthUnit']
 
@@ -271,88 +279,44 @@ class Model(_base._ModelBase):
 
     def reactions(self):
         """
-
+{'name':None,
+                             'key':None,
+                             'reactants':None,
+                             'products':None,
+                             'rate_law':None,
+                             'parameters':None}
         :return:
         """
-
-
-        
-    # def reactions(self):
-    #     """
-    #
-    #     key, name, reversible,
-    #     prmeter, substrate, products, stoiciometry
-    #
-    #     reaction class needs a stoiciometry
-    #     :return:
-    #
-    #
-    #     Count the number of reactions in the model and hold as constant.
-    #     Then iterate over the number of reactions rather than the reactiosn themselves.
-    #     This way if  reaction doesnt have a substrate or product we catch it.
-    #
-    #     I think this way is slightly failing. Maybe I can write a method for building individual
-    #     reactions rather than all reactions at the same time from ListOfReactions.
-    #     """
-    #     reactions = {}
-    #     s = []
-    #     p = []
-    #     c = []
-    #     f = []
-    #
-    #     for i in self.model.iter():
-    #         if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
-    #             for j in list(i):
-    #                 reactions[j.attrib['key']] = {}
-    #                 reactions[j.attrib['key']]['name'] = j.attrib['name']
-    #                 reactions[j.attrib['key']]['reversible'] = j.attrib['reversible']
-    #                 for k in list(j):
-    #                     if k.tag == '{http://www.copasi.org/static/schema}ListOfSubstrates':
-    #                         for substrate in list(k):
-    #                             print substrate.attrib
-                            # for substrate_num in range(self.number_of_reactions):
-                                # print k[1]
-                                # print [l for l in self.metabolites if l.key in k]
-                                # substrate_list = [l for l in self.metabolites if l.key in k[substrate_num].attrib['metabolite']]
-                                # substrate_list = [l.to_substrate() for l in substrate_list]
-                                # s.append(substrate_list)
-                        # elif k.tag == '{http://www.copasi.org/static/schema}ListOfProducts':
-                        #     for product_num in range(self.number_of_reactions):
-                        #         print self.number_of_reactions
-                                # print substrate.attrib['metabolite']
-                                # product_list = [l for l in self.metabolites if l.key in k[product_num].attrib['metabolite']]
-                                # product_list = [l.to_product() for l in product_list]
-                                # p.append(product_list)
-        # for i in p:
-        #     print i
-                        # elif k.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
-                        #     for constant in list(k):
-                        #         constant_list = [l for l in self.local_parameters if l.key in constant.attrib['key']]
-                        #         c.append(constant_list)
-                        # elif k.tag == '{http://www.copasi.org/static/schema}KineticLaw':
-                        #     function_list = [l for l in self.functions if l.key in k.attrib['function']]
-                        #     f.append(function_list)
-
-        # print len(s), len(p), len(c), len(f)
-
-        # print len(s), len(p)
-        # for i in p:
-        #     print i
-        # if len(s)!= len(p):
-        #     raise Errors.SomethingWentHorriblyWrongError(
-        #         'number of substrate lists not equal to number of product lists')
-        #
-        # if len(s) != len(c):
-        #     raise Errors.SomethingWentHorriblyWrongError(
-        #         'number of constant lists not equal to number of product lists')
-        #
-        # if len(s) != len(f):
-        #     raise Errors.SomethingWentHorriblyWrongError(
-        #         'number of function lists not equal to number of product lists')
-#
-
-
-
+        reactions_dct = {}
+        for i in self.model.iter():
+            if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
+                for j in list(i):
+                    for k in list(j):
+                        list_of_substrates = None
+                        list_of_products = None
+                        list_of_constants = None
+                        function_list = None
+                        if k.tag == '{http://www.copasi.org/static/schema}ListOfSubstrates':
+                            for l in list(k):
+                                list_of_substrates = [m for m in self.metabolites if m.key in l.attrib['metabolite'] ]
+                                list_of_substrates = [m.to_substrate() for m in list_of_substrates]
+                        elif k.tag == '{http://www.copasi.org/static/schema}ListOfProducts':
+                            for l in list(k):
+                                list_of_products = [m for m in self.metabolites if
+                                                    m.key in l.attrib['metabolite']]
+                                list_of_products = [m.to_product() for m in list_of_products]
+                        elif k.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
+                            for l in list(k):
+                                list_of_constants = [m for m in self.local_parameters if m.key in l.attrib['key']]
+                        elif k.tag == '{http://www.copasi.org/static/schema}KineticLaw':
+                            function_list = [m for m in self.functions if m.key in k.attrib['function']]
+                    r = Reaction(name=j.attrib['name'], key=j.attrib['key'],
+                                   reactants=list_of_substrates,
+                                   products = list_of_products,
+                                   parameters = list_of_constants,
+                                   rate_law=function_list)
+                    reactions_dct[r.name] = r
+        return reactions_dct
 
 class Compartment(_base._Base):
     def __init__(self, **kwargs):
@@ -611,11 +575,11 @@ class Reaction(_base._Base):
             if key not in self.allowed_keys:
                 raise Errors.InputError('{} not valid key. Valid keys are: {}'.format(key, self.allowed_keys))
 
-        def __str__(self):
-            return 'Reaction({})'.format(self.as_string())
+    def __str__(self):
+        return 'Reaction({})'.format(self.as_string())
 
-        def __repr__(self):
-            return self.__str__()
+    def __repr__(self):
+        return self.__str__()
 
     def do_checks(self):
         """
