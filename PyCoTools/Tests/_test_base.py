@@ -27,7 +27,7 @@ class _BaseTest(unittest.TestCase):
     """
     class for all tests to inherit from. 
         -> Take string model from TestModels and write to file
-        -> Initiate GetModelQuantities
+        -> Initiate model
     """
     def setUp(self, test_model='test_model1'):
         self.copasi_file = os.path.join(os.getcwd(), 'test_model.cps')
@@ -42,8 +42,8 @@ class _BaseTest(unittest.TestCase):
             elif self.test_model=='kholodenko_model':
                 f.write(test_models.TestModels.get_model2())
             
-        self.GMQ = PyCoTools.pycopi.GetModelQuantities(self.copasi_file)
-        self.M = PyCoTools.model.Model(self.copasi_file)
+        # self.GMQ = PyCoTools.pycopi.GetModelQuantities(self.copasi_file)
+        self.model = PyCoTools.model.Model(self.copasi_file)
             
     def tearDown(self):
         dire = os.path.dirname(self.copasi_file)

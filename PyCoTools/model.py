@@ -32,19 +32,22 @@ import os, glob
 import pandas
 import unittest
 import re
+from copy import deepcopy
 
 class Model(_base._ModelBase):
     def __init__(self, model, **kwargs):
         super(Model, self).__init__(model, **kwargs)
 
     def __str__(self):
-        return 'Model(name={}, time_unit={}, volume_unit={}, quantity_unit={})'.format(self.name,
-                                                                                       self.time_unit,
-                                                                                       self.volume_unit,
-                                                                                       self.quantity_unit)
+        return 'Model(name={}, time_unit={}, volume_unit={}, quantity_unit={})'.format(self.name, self.time_unit,self.volume_unit, self.quantity_unit)
 
     def __repr__(self):
         return self.__str__()
+
+    @property
+    def xml(self):
+        return self.model
+
     @property
     def time_unit(self):
         """
@@ -232,27 +235,20 @@ class Model(_base._ModelBase):
                         assert match !=None
                         assert match !=[]
                         assert len(match)==2
-                        match='({}).{}'.format(match[0],match[1])
-                        d[match]=k.attrib
+                        match_key='({}).{}'.format(match[0],match[1])
+                        ## copy to new variable just incase
+                        ## this messes with the xml when I
+                        ## write to file
+                        results_dict = deepcopy(k.attrib)
+                        results_dict['reaction_name']=match[0]
+                        results_dict['name'] = match[1]
+                        del results_dict['cn']
+                        d[match_key]=results_dict
 
-        parameters = {}
-        count = 0
-        for i in self.model.iter():
-            if i.tag == '{http://www.copasi.org/static/schema}Constant':
-                reaction_name = i.getparent().getparent().attrib['name']
-                parameter_name = i.attrib['name']
-                id = "({}).{}".format(reaction_name, parameter_name)
-                parameters[id] = {}
-                parameters[id] = i.attrib['key']
-                count += 1
-
-        lst =[]
-        for param in parameters:
-            if param in d.keys():
-                d[param]['key'] = parameters[param]
-                lst.append(LocalParameter(**d[param]))
-                # print d[param]
-        return lst
+        dct = {}
+        for param in d:
+            dct[param] = LocalParameter(**d[param])
+        return dct
 
     @property
     def functions(self):
@@ -503,7 +499,6 @@ class Product(Metabolite):
         """
         return 'Product({})'.format(self.as_string())
 
-
     def __repr__(self):
         return self.__str__()
 
@@ -637,23 +632,27 @@ class Function(_base._Base):
 class LocalParameter(_base._Base):
     def __init__(self, **kwargs):
         super(LocalParameter, self).__init__(**kwargs)
-        allowed_keys = {'name',
-                        'key',
-                        'value',
-                        'simulationType',
-                        'type',
-                        'cn'}
+        allowed_keys = {'name':None,
+                        'key':None,
+                        'value':None,
+                        'simulationType':None,
+                        'type':None,
+                        'reaction_name': None}
 
 
         for key in self.kwargs:
             if key not in allowed_keys:
-                raise Errors.InputError('{} not in {}'.format(key, allowed_keys))
+                raise Errors.InputError('{} not in {}'.format(key, allowed_keys.keys()))
 
     def __str__(self):
         return 'LocalParameter({})'.format(self.as_string())
 
     def __repr__(self):
         return self.__str__()
+
+    @property
+    def reference(self):
+        return ",Vector=Reactions[{}],ParameterGroup=Parameters,Parameter={}".format(self.reaction_name, self.name)
 
 
 

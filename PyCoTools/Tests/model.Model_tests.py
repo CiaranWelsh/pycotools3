@@ -77,10 +77,20 @@ class ModelTests(_test_base._BaseTest):
         self.assertEqual(len(self.Model.global_quantities), 3)
 
     def test_local_parameters(self):
+        '''
+        Currently giving the wrong keys
+        :return:
+        '''
         self.assertTrue(len(self.Model.local_parameters), 3)
-
+    #
     def test_local_parameters2(self):
-        [self.assertTrue(isinstance(i, PyCoTools.model.LocalParameter) ) for i in self.Model.local_parameters ]
+        [self.assertTrue(isinstance(i, PyCoTools.model.LocalParameter) ) for (j,i) in self.Model.local_parameters.items() ]
+
+    def test_local_parameters3(self):
+        keys = self.Model.local_parameters.keys()
+        keys_in_local_parameters = sorted(['reaction_name', 'name', 'value', 'simulationType', 'kwargs', 'type'])
+        # self.assertListEqual(sorted(self.Model.local_parameters[keys[0]].__dict__.keys(), keys_in_local_parameters  )  )
+        self.assertListEqual(sorted(self.Model.local_parameters[keys[0]].__dict__.keys()), keys_in_local_parameters)
 
     def test_functions(self):
         self.assertTrue(len(self.Model.functions), 2)
@@ -92,8 +102,14 @@ class ModelTests(_test_base._BaseTest):
         self.assertEqual(self.Model.number_of_reactions, 4)
 
 
-    def test_reactions(self):
-        self.assertEqual(len( self.Model.reactions() ), 4)
+    # def test_reactions(self):
+    #     self.assertEqual(len( self.Model.reactions() ), 4)
+
+
+    def test_xml(self):
+        self.assertTrue(isinstance(self.Model.xml, etree._Element))
+
+
 
 
 
