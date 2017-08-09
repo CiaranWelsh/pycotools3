@@ -16,7 +16,6 @@ For a detailed description of the major features in PyCoTools see the [tutorial]
 
 
 ## pycopi
----Note--- Feature list currently outdated. 
 
 The `pycopi` module is a set of python classes for interfacing with copasi via python. 
 
@@ -31,19 +30,19 @@ This can be used when a user wantes to setup an anaysis not native to COPASI, as
         
         - `ParameterEstimation`   - Automate the setting up of a parameter estimation in copasi. 
                                 
-                                - Run a parameter estiamtion through copasi Via python and visualize 
+                                  - Run a parameter estiamtion through copasi Via python and visualize 
                                   the results
         
         - `ExperimentMapper`      - Automate the process of mapping model species to experimental data. 
-                                  Used by ParameterEstimation class
+                                    Used by ParameterEstimation class
         
         - `TimeCourse`            - Simulate a time course using Copasi. Parse this data into python 
-                                  and plot it optionally. 
+                                    and plot it optionally. 
         
         - `PhaseSpace`            - Produce plots in phase space.
         
         - `Scan`                  - Automate the process of setting up a parameter scan. All three 
-                                  scan, repeat and random number generation) are supported. 
+                                    scan, repeat and random number generation) are supported. 
         
         - `Run`                   - Submit copasi file to CopasiSE. Unticks all 'executable boxes' then ticks 
                                   the executable box of interest. 
@@ -69,44 +68,41 @@ The `PEAnalysis` module provides a number of convenient classes for visualizing 
                                   This class is used implicitely within the plotting classes and an 
                                   interface is provided as an option.
         
-        - `PlotHistogram`         - Plot histogram for each parameter in your estiation file
+        - `Histogram`         - Plot histogram for each parameter in your estiation file
         
-        - `PlotScatters`          - Plot all combinations of scatter graph
+        - `Scatters`          - Plot all combinations of scatter graph
         
-        - `PlotBoxPlots`          - visualize variance with box plots
+        - `Boxplots`          - visualize variance with box plots
         
-        - `PlotOptimizationPerformance` - evaluate optimization performance with plot of (ordered) 
+        - `RssVsIteration`    - evaluate optimization performance with plot of (ordered) 
                                         likelihood Vs iteration. The flatter the graph the better. 
-        - `Hex graphs`                  - Like scatters or histograms depending on whether the 'RSS' kwarg 
-                                        is passes to the `Mode` argument or not 
-## Pydentify2      
+        - `Pca`               - Principle component analysis on PE data
 
-The `pydentify2` module uses the `pycopi` module to fully automate the process outlined by Schaber 2012: Easy Identifiability Analysis in Copasi. 
+	- `LinearRegression`  - Lasso regression on PE data 
+ 
+## Pydentify     
+
+The `pydentify` module uses the `pycopi` module to fully automate the process outlined by Schaber 2012: Easy Identifiability Analysis in Copasi. 
    
     Features Include:
         
         - `ProfileLikelihood`     - Setup and run profile likleihood for a model around current parameters
                                 
-                                - Optionally take parameters from a file (copasi output file for example) 
-                                and perform profile likelihood around these parameters
+                                  - Optionally take parameters from a file (copasi output file for example) 
+                                    and perform profile likelihood around these parameters
                                 
-                                - Optionally take multiple sets of parameters from parameter estimation output 
-                                file and perform profile likelihoods around each of them. 
+                                  - Optionally take multiple sets of parameters from parameter estimation output 
+                                    file and perform profile likelihoods around each of them. 
                                 
-                                - Optionally run on a cluster (sun grid engine is implemented but modular 
-                                nature of the code means this bit can be replaced by code for any job scheduler)
+                                  - Optionally run on a cluster (sun grid engine is implemented but modular 
+                                    nature of the code means this bit can be replaced by code for any job scheduler)
 
         - `Plot`                  - Plotting facilities for profile likleihood output. 
         
-                                - Chi2 based confidence interval is automatically calculated and 
-                                plotted as red dotted line for determining identifiability status. 
-                                    
-                                    -   This calculation requires the number of data points used in the parameter estimation, 
-                                        the number of parameters estimated and the residual sum of squares 
-                                        value for the current point in parameter space and your data. For this reason 
-                                        when using the Plot feature with a profile likelihood calculated around parameters 
-                                        already in the model, these values need to be suplied. When parameter estiamtion 
-                                        data is used from file, the Plot class determines them for itself. 
+                                  - Chi2 based confidence interval is automatically calculated and 
+                                    plotted as red dotted line for determining identifiability status.
+
+                                  - Choose the x and y variables
                                     
   
 
