@@ -51,7 +51,7 @@ class ReportsTests(_test_base._BaseTest):
         super(ReportsTests, self).setUp()
 
     def test(self):
-        print PyCoTools.pycopi.Reports(self.model)
+        PyCoTools.pycopi.Reports(self.model)
 
 
 

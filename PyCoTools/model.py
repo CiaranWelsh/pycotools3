@@ -654,7 +654,8 @@ class LocalParameter(_base._Base):
     def reference(self):
         return ",Vector=Reactions[{}],ParameterGroup=Parameters,Parameter={}".format(self.reaction_name, self.name)
 
-
+    # def to_element(self):
+    #     pass
 
 
 
