@@ -21,10 +21,15 @@
 
 This module provides a set of base classes that are used in PyCoTools
 """
-
+# import model as m
 import pycopi
+# import model
 import pandas
 from lxml import etree
+import Errors
+# from model import Model
+
+
 class _Base(object):
     """
     Base class for setting class attributes
@@ -34,6 +39,11 @@ class _Base(object):
 
         self.__dict__.update((key, value) for key, value in self.kwargs.items() )
 
+    def __str__(self):
+        return "_Base({})".format(self.as_string())
+
+    def __repr__(self):
+        return self.__str__()
 
     def as_string(self):
         """
@@ -57,14 +67,25 @@ class _Base(object):
         string = ','.join(str_list)
         return string.replace(',', ', ')
 
+    # def as_df(self):
+    #     """
+    #     Convert kwargs to 1D df
+    #     :return: pandas.DataFrame
+    #     """
+    #     df = pandas.DataFrame(self.kwargs, index=[self.key]).transpose()
+    #     df.index.name = 'Property'
+    #     df = df.drop('key', index=1)
+    #     return df
+
+
     def as_df(self):
         """
         Convert kwargs to 1D df
         :return: pandas.DataFrame
         """
-        df = pandas.DataFrame(self.kwargs, index=[self.kwargs['key']]).transpose()
+        df = pandas.DataFrame(self.kwargs, index=['Value']).transpose()
         df.index.name = 'Property'
-        df = df.drop('key', index=1)
+        # df = df.drop('key', index=1)
         return df
 
     def as_dict(self):
@@ -74,42 +95,17 @@ class _Base(object):
         """
         return self.kwargs
 
-    # def __getattr__(self, item):
-    #     return self.kwargs[item]
-    #
-    # def __setattr__(self, key, value):
-    #     self.kwargs[key] = value
-
-
 
 class _ModelBase(_Base):
-    def __init__(self, model, **kwargs):
+    def __init__(self, mod, **kwargs):
         super(_ModelBase, self).__init__(**kwargs)
-        assert isinstance(model, (str, etree._Element))
-        self.model = model
+        self.model = mod
         self.model = self.read_model()
 
     def read_model(self):
-        if isinstance(self.model, etree._Element):
-            return self.model
-        elif isinstance(self.model, str):
+        if isinstance(self.model, str):
             return pycopi.CopasiMLParser(self.model).copasiML
         else:
-            raise Errors.InputError('Model shold be either etree._Element or string to copasi file')
-
-
-#
-#
-# class _ModelBase2(_Base):
-#     def __init__(self, model, **kwargs):
-#         super(_ModelBase2, self).__init__()
-#         self.kwargs = kwargs
-#         self.model = model
-
-
-
-
-# if __name__ == '__main__':
-#     MB2 = _ModelBase2('string')
-#     print MB2.test()
+            ## should be model.Model or etree._Element
+            return self.model
 
