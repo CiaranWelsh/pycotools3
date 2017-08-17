@@ -665,10 +665,6 @@ class GetModelQuantities_dep():
         for i in self.copasiML.xpath(query):
             files.append(os.path.abspath(i.attrib['value']))
         return files
-        
-
-
-#==============================================================================
 
 class Reports(_base._ModelBase):
     '''
@@ -728,11 +724,6 @@ class Reports(_base._ModelBase):
     def __init__(self,model,**kwargs):
         super(Reports, self).__init__(model, **kwargs)
         self.model=model
-        # self.CParser=CopasiMLParser(self.copasi_file)
-        # self.copasiML=self.CParser.copasiML
-        # self.GMQ=GetModelQuantities(self.copasi_file)
-        
-#        default_report_name=os.path.split(self.copasi_file)[1][:-4]+'_PE_results.txt'
 
         self.allowed_properties={#report variables
                  'metabolites': self.model.metabolites,
@@ -753,11 +744,6 @@ class Reports(_base._ModelBase):
             if key not in self.allowed_properties:
                 raise Errors.InputError('{} not in {}'.format(key, self.allowed_properties.keys()))
         self.update_properties(self.allowed_properties)
-
-        # for i in kwargs.keys():
-        #     assert i in options.keys(), '{} is not a keyword argument for Reports'.format(i)
-        # options.update( kwargs)
-        # self.kwargs=options
 
         if isinstance(self.metabolites,str):
             self.metabolites = [self.metabolites]
@@ -788,15 +774,6 @@ class Reports(_base._ModelBase):
         quantity_types=['particle_numbers','concentration']
         assert self.quantity_type in quantity_types
 
-        # if self.directory == None:
-        #     LOG.warning('directory argument is empty. Attempting to change it to the same directory as your copasi file')
-        #
-            # try:
-            # dire = os.path.split(self.model)[1]
-            #
-            # except
-            #
-            # self.directory = os.getcwd()
 
         if self.report_name == None:
             if self.report_type == 'profilelikelihood':
@@ -816,34 +793,6 @@ class Reports(_base._ModelBase):
 
 
 
-        # self.model.xml=self.clear_all_reports()
-        # self.model.xml=self.run()
-    #
-    #
-    #     self.copasiML=self.save()
-    #
-    #
-    #
-    #
-    # def __getitem__(self,key):
-    #     if key not in self.kwargs.keys():
-    #         raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
-    #     return self.kwargs[key]
-    #
-    # def __setitem__(self,key,value):
-    #     self.kwargs[key] = value
-    #
-    # def save(self):
-    #     self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
-    #     return self.copasiML
-    #
-    # def save_dep(self):
-    #     if self.kwargs.get('save')=='duplicate':
-    #         self.CParser.write_copasi_file(self.kwargs.get('OutputML'),self.copasiML)
-    #     elif self.kwargs.get('save')=='overwrite':
-    #         self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
-    #     return self.copasiML
-    #
     def timecourse(self):
         '''
         creates a report to collect time course results.
@@ -936,10 +885,10 @@ class Reports(_base._ModelBase):
         while new_key in keys:
             new_key='Report_{}'.format(numpy.random.randint(30,100))
         report_attributes = {'precision': '6',
-                           'separator': '\t',
-                           'name': 'profilelikelihood',
-                           'key':new_key,
-                           'taskType': 'Scan'}
+                             'separator': '\t',
+                             'name': 'profilelikelihood',
+                             'key': new_key,
+                             'taskType': 'Scan'}
 
         ListOfReports=self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports')
         report=etree.SubElement(ListOfReports,'Report')
@@ -954,8 +903,8 @@ class Reports(_base._ModelBase):
             cn = '{},{}'.format(self.model.reference, self.variable.reference_initial)
         elif self.variable.name in [i.name for i in self.local_parameters]:
             cn = '{},{}'.format(self.model.reference, self.variable.reference)
-        etree.SubElement(table,'Object',attrib={'cn':cn})
-        etree.SubElement(table,'Object',attrib={'cn':"CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"})
+        etree.SubElement(table,'Object',attrib={'cn': cn})
+        etree.SubElement(table,'Object',attrib={'cn': "CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"})
         return self.model
 
 
@@ -1242,14 +1191,69 @@ class TimeCourse(object):
 
         '''
 
-        def __init__(self, copasi_file, **kwargs):
-            self.copasi_file = copasi_file
-            self.CParser = CopasiMLParser(self.copasi_file)
-            self.copasiML = self.CParser.copasiML
-            LOG.debug('CopasiML: {}'.format(self.copasiML))
-            self.GMQ = GetModelQuantities(self.copasi_file)
-            default_report_name = os.path.join(os.path.dirname(self.copasi_file),'{}_TimeCourse.txt'.format(os.path.split(self.copasi_file)[1][:-4]))
-            options = {'intervals': '100',
+        class Reports(_base._ModelBase):
+            '''
+            Creates reports in copasi output specification section.
+            Use:
+                -the report_type kwarg to specify which type of report you want to make
+                -the metabolites and global_quantities kwargs to specify which parameters
+                to include
+
+
+
+            args:
+                copasi_file:
+                    The copasi file you want to add a report too
+
+            **kwargs:
+
+                report_type:
+                    Which report to write. Options:
+                        profilelikleihood:
+                            - for Pydentify, shouldn't need to manually touch this
+                        time_course:
+                            -a table of time Vs concentrations. Included values are specified to the metabolites and//or global_quantities arguments
+                    parameter_estimation:
+                            -a table of values from a parameter estimation and the residual sum of squares value for each run.
+
+
+                metabolites:
+                    A list of valid model metabolites you want to include in the report. Default=All metabolites
+
+                global_quantities;
+                    List of valid global quantities that you want to include in the report. Default=All global variables
+
+                quantity_type:
+                    Either 'concentration' or 'particle_number'. Switch between having report output in either concentration of in particle_numbers.
+
+                report_name:
+                    Name of the report. Default depends on kwarg report_type
+
+                append:
+                    True or False. append to report. Default False
+
+                confirm_overwrite:
+                    True or False.  Default= False
+
+                save:
+                    either False,'overwrite' or 'duplicate'.
+                    false: don't write to file
+                    overwrite: overwrite copasi_file
+                    duplicate: write a new file named using the kwarg OutputML
+
+
+                variable:
+                    When report_type is profilelikelihood, theta is the parameter of interest
+
+            '''
+
+        def __init__(self, model, **kwargs):
+            super(TimeCourse, self).__init__(model, **kwargs)
+            self.model = model
+
+            default_report_name = os.path.join(os.getcwd(), 'TimeCourse.txt')
+
+            self.allowed_properties = {'intervals': '100',
                        'step_size': '0.01',
                        'end': '1',
                        'relative_tolerance': '1e-6',
@@ -1258,12 +1262,11 @@ class TimeCourse(object):
                        'start': '0.0',
                        'update_model': False,
                        # report variables
-                       'metabolites': self.GMQ.get_IC_cns().keys(),
-                       'global_quantities': self.GMQ.get_global_quantities().keys(),
+                       'metabolites': self.model.metabolites(),
+                       'global_quantities': self.model.global_quantities(),
                        'quantity_type': 'concentration',
                        'report_name': default_report_name,
                        'append': False,
-                       #                 'target': 'cheese.txt',
                        'confirm_overwrite': False,
                        'simulation_type': 'deterministic',
                        'output_event': False,
@@ -1289,80 +1292,114 @@ class TimeCourse(object):
                        'graph_directory': None,
                        }
 
-            '''
-            It'd be good to implement the @memorize decorator so
-            that we can recall a time course that has already been 
-            calculated without actually calculating
-            '''
-            # values need to be lower case for copasiML
-            for i in kwargs.keys():
-                assert i in options.keys(), '{} is not a keyword argument for TimeCourse'.format(i)
-                #            kwargs[i]=str(kwargs[i]).lower()
-                #            assert isinstance(kwargs[i],str),'all optional arguments passed shold be lower case strings'
-            options.update(kwargs)
-            
-            self.kwargs = options
+            for key in self.kwargs:
+                if key not in self.allowed_properties:
+                    raise Errors.InputError('{} not in {}'.format(key, self.allowed_properties.keys()))
+            self.update_properties(self.allowed_properties)
 
+
+
+        # def __init__(self, copasi_file, **kwargs):
+        #     self.copasi_file = copasi_file
+        #     self.CParser = CopasiMLParser(self.copasi_file)
+        #     self.copasiML = self.CParser.copasiML
+        #     LOG.debug('CopasiML: {}'.format(self.copasiML))
+        #     self.GMQ = GetModelQuantities(self.copasi_file)
+        #     default_report_name = os.path.join(os.path.dirname(self.copasi_file),'{}_TimeCourse.txt'.format(os.path.split(self.copasi_file)[1][:-4]))
+        #     options = {'intervals': '100',
+        #                'step_size': '0.01',
+        #                'end': '1',
+        #                'relative_tolerance': '1e-6',
+        #                'absolute_tolerance': '1e-12',
+        #                'max_internal_steps': '10000',
+        #                'start': '0.0',
+        #                'update_model': False,
+        #                # report variables
+        #                'metabolites': self.GMQ.get_IC_cns().keys(),
+        #                'global_quantities': self.GMQ.get_global_quantities().keys(),
+        #                'quantity_type': 'concentration',
+        #                'report_name': default_report_name,
+        #                'append': False,
+        #                #                 'target': 'cheese.txt',
+        #                'confirm_overwrite': False,
+        #                'simulation_type': 'deterministic',
+        #                'output_event': False,
+        #                'scheduled': True,
+        #                'save': 'overwrite',
+        #                'prune_headers': True,
+        #
+        #                # graph options
+        #                'plot': False,
+        #                'line_width': 2,
+        #                'line_color': 'k',
+        #                'marker_color': 'r',
+        #                'line_style': '-',
+        #                'marker_style': 'o',
+        #                'axis_size': 15,
+        #                'font_size': 22,
+        #                'xtick_rotation': 0,
+        #                'title_wrap_size': 35,
+        #                'savefig': False,
+        #                'extra_title': None,
+        #                'dpi': 125,
+        #                'marker_size': 5,
+        #                'graph_directory': None,
+        #                }
+#
+#             '''
+#             It'd be good to implement the @memorize decorator so
+#             that we can recall a time course that has already been
+#             calculated without actually calculating
+#             '''
+#             # values need to be lower case for copasiML
+#             for i in kwargs.keys():
+#                 assert i in options.keys(), '{} is not a keyword argument for TimeCourse'.format(i)
+#                 #            kwargs[i]=str(kwargs[i]).lower()
+#                 #            assert isinstance(kwargs[i],str),'all optional arguments passed shold be lower case strings'
+#             options.update(kwargs)
+#
+#             self.kwargs = options
+#
             '''
-            if the below three kwargs are a single entry they can be a string. 
+            if the below three kwargs are a single entry they can be a string.
             In this case, put them back into a list to ensure a smooth ride
             '''
-            if isinstance(self.kwargs.get('metabolites'), str):
-                self.kwargs['metabolites'] = [self.kwargs.get('metabolites')]
+            if isinstance(self.metabolites, PyCoTools.pycopi.Metabolite):
+                self.metabolites = [self.metabolites]
 
-            if isinstance(self.kwargs.get('global_quantities'), str):
-                self.kwargs['global_quantities'] = [self.kwargs.get('global_quantities')]
+            if isinstance(self.global_quantities, PyCoTools.pycopi.GlobalQuantity):
+                self.global_quantities = [self.global_quantities]
 
-            if isinstance(self.kwargs.get('local_parameters'), str):
-                self.kwargs['local_parameters'] = [self.kwargs.get('local_parameters')]
+            if isinstance(self.local_parameters, str):
+                self.local_parameters = [self.local_parameters]
 
             # Ensure consistecny for time variables
-            assert float(self.kwargs.get('end')) == float(self.kwargs.get('step_size')) * float(self.kwargs.get(
-                'intervals')), 'end should equal Interval Size times Number of intervals but {}!={}*{}'.format(
-                self.kwargs.get('end'), self.kwargs.get('step_size'), self.kwargs.get('intervals'))
-
-            # make sure metabolites and modelValues are lists
-            if self.kwargs.get('metabolites') != None:
-                assert isinstance(self.kwargs.get('metabolites'),
-                                  list), 'Keyword argument metabolites should be a Python list'
-                for i in self.kwargs.get('metabolites'):
-                    assert i in self.GMQ.get_IC_cns().keys(), '{} is not a Metabolite in this model. These are metabolites in this model: {}'.format(
-                        i, self.GMQ.get_IC_cns().keys())
-
-            if self.kwargs.get('global_quantities') != None:
-                assert isinstance(self.kwargs.get('global_quantities'),
-                                  list), 'Keyword argument global_quantities should be a Python list'
-                for i in self.kwargs.get('global_quantities'):
-                    assert i in self.GMQ.get_global_quantities().keys(), '{} is not a global variable in this model. These are global variables in this model: {}'.format(
-                        i, self.GMQ.get_global_quantities())
+            if float(self.end) != float(self.step_size) * float(self.intervals):
+                raise Errors.TimeCourseError(
+                    'end should equal Interval Size times Number of intervals but {}!={}*{}'.format(
+                        self.end, self.step_size, self.intervals)
 
             # only accept deterministic or stochastic
-            assert self.kwargs.get('simulation_type') in ['deterministic', 'stochastic']
+            assert self.simulation_type in ['deterministic', 'stochastic']
 
-            #
-
-            # this bit of code helps keep the keyword arguments consistant
-            assert self.kwargs.get('quantity_type').lower() in ['concentration', 'particle_number']
+            assert self.quantity_type.lower() in ['concentration', 'particle_number']
 
             # report arguments
 
-            if self.kwargs.get('prune_headers') not in [True, False,'true','false']:
-                raise Errors.InputError('prune_headers kwarg must be either \'true\' or \'false\'')
-
-            if self.kwargs.get('append') not in [True, False,'true','false']:
-                raise Errors.InputError('append kwarg must be either \'true\' or \'false\'')
-
-            if self.kwargs.get('confirm_overwrite') not in [True, False,'true','false']:
-                raise Errors.InputError('confirm_overwrite kwarg must be either \'true\' or \'false\'')
-
-            if self.kwargs.get('output_event') not in [True, False,'true','false']:
-                raise Errors.InputError('OutputEvent kwarg must be either \'true\' or \'false\'')
-
-            if self.kwargs.get('scheduled') not in [True, False,'true','false']:
-                raise Errors.InputError('scheduled kwarg must be either \'true\' or \'false\'')
-
-            if self.kwargs.get('plot') not in [True, False,'true','false']:
-                raise Errors.InputError('plot kwarg must be either \'true\' or \'false\'')
+            # if self.kwargs.get('append') not in [True, False,'true','false']:
+            #     raise Errors.InputError('append kwarg must be either \'true\' or \'false\'')
+            #
+            # if self.kwargs.get('confirm_overwrite') not in [True, False,'true','false']:
+            #     raise Errors.InputError('confirm_overwrite kwarg must be either \'true\' or \'false\'')
+            #
+            # if self.kwargs.get('output_event') not in [True, False,'true','false']:
+            #     raise Errors.InputError('OutputEvent kwarg must be either \'true\' or \'false\'')
+            #
+            # if self.kwargs.get('scheduled') not in [True, False,'true','false']:
+            #     raise Errors.InputError('scheduled kwarg must be either \'true\' or \'false\'')
+            #
+            # if self.kwargs.get('plot') not in [True, False,'true','false']:
+            #     raise Errors.InputError('plot kwarg must be either \'true\' or \'false\'')
 
             self.kwargs['line_width'] = int(self.kwargs.get('line_width'))
             self.kwargs['axis_size'] = int(self.kwargs.get('axis_size'))
@@ -1371,30 +1408,30 @@ class TimeCourse(object):
             self.kwargs['title_wrap_size'] = int(self.kwargs.get('title_wrap_size'))
             self.kwargs['dpi'] = int(self.kwargs.get('dpi'))
 
-            if self.kwargs.get('append') == True:
-                self.kwargs['append'] == str(1)
+            if self.append == True:
+                self.append == str(1)
             else:
-                self.kwargs['append'] == str(0)
+                self.append == str(0)
 
-            if self.kwargs.get('confirm_overwrite') == True:
-                self.kwargs['confirm_overwrite'] == str(1)
+            if self.confirm_overwrite == True:
+                selfconfirm_overwrite == str(1)
             else:
-                self.kwargs['confirm_overwrite'] == str(0)
+                self.confirm_overwrite == str(0)
 
-            if self.kwargs.get('output_event') == True:
-                self.kwargs['output_event'] == str(1)
+            if self.output_event == True:
+                self.output_event == str(1)
             else:
-                self.kwargs['output_event'] == str(0)
+                self.output_event == str(0)
 
-            if self.kwargs.get('scheduled') == True:
-                self.kwargs['scheduled'] == str(1)
+            if self.scheduled == True:
+                self.scheduled == str(1)
             else:
-                self.kwargs['scheduled'] == str(0)
+                self.scheduled == str(0)
 
-            assert self.kwargs.get('savefig') in [False, True]
+            assert self.savefig in [False, True]
 
             # convert some numeric kwargs to str
-            self.kwargs = Bool2Str(self.kwargs).convert_dct()
+            # self.kwargs = Bool2Str(self.kwargs).convert_dct()
             self.kwargs['intervals'] = str(self.kwargs.get('intervals'))
             self.kwargs['step_size'] = str(self.kwargs.get('step_size'))
             self.kwargs['end'] = str(self.kwargs.get('end'))
@@ -1435,242 +1472,242 @@ class TimeCourse(object):
             self.report_options['save'] = self.kwargs.get('save')
             self.report_options['update_model'] = self.kwargs.get('update_model')
             self.report_options['report_type'] = 'time_course'  # self.kwargs.get('report_type')
-
-            # other keywords that are non optional for time course
-            self.kwargs['report_type'] = 'time_course'
-            matplotlib.rcParams.update({'font.size': self.kwargs.get('axis_size')})
-            '''
-            All methods required for time course are 
-            called with run
-            '''
-            
-            self.save()
-            self.run()
-            if self.kwargs['plot'] == True:
-                self.data = self.read_sim_data()
-                self.plot()
-
-        def __getitem__(self,key):
-            if key not in self.kwargs.keys():
-                raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
-            return self.kwargs[key]
-    
-        def __setitem__(self,key,value):
-            self.kwargs[key] = value
-        
-        def _do_checks(self):
-            """
-            
-            """
-            
-
-        def save(self):
-            self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
-            return self.copasiML
-
-        def save_dep(self):
-            if self.kwargs.get('save') == 'duplicate':
-                self.CParser.write_copasi_file(self.kwargs.get('OutputML'), self.copasiML)
-            elif self.kwargs.get('save') == 'overwrite':
-                self.CParser.write_copasi_file(self.copasi_file, self.copasiML)
-            return self.copasiML
-
-        def set_deterministic(self):
-            '''
-            set parameters for deterministic timecourse
-            '''
-            query = "//*[@name='Time-Course']" and "//*[@type='timeCourse']"
-            method_params = {'type': 'Deterministic(LSODA)', 'name': 'Deterministic (LSODA)'}
-            for i in self.copasiML.xpath(query):
-                # make available to coapsiSE
-                i.attrib['scheduled'] = self.kwargs.get('scheduled')
-                for j in list(i):
-                    j.attrib['type'] = method_params['type']
-                    j.attrib['name'] = method_params['name']
-                    for k in list(j):
-                        if k.attrib['name'] == 'Duration':
-                            k.attrib['value'] = self.kwargs.get('end')
-
-                        if k.attrib['name'] == 'StepNumber':
-                            k.attrib['value'] = self.kwargs.get('intervals')
-
-                        elif k.attrib['name'] == 'StepSize':
-                            k.attrib['value'] = self.kwargs.get('step_size')
-
-                        elif k.attrib['name'] == 'TimeSeriesRequested':
-                            k.attrib['value'] = '1'
-
-                        elif k.attrib['name'] == 'OutputStartTime':
-                            k.attrib['value'] = self.kwargs.get('start')
-
-                        elif k.attrib['name'] == 'Output Event':
-                            k.attrib['value'] = self.kwargs.get('output_event')
-
-                        elif k.attrib['name'] == 'Continue on Simultaneous Events':
-                            k.attrib['value'] = '0'
-
-                        elif k.attrib['name'] == 'Integrate Reduced Model':
-                            k.attrib['value'] = '0'
-
-                        elif k.attrib['name'] == 'Relative Tolerance':
-                            k.attrib['value'] = self.kwargs.get('relative_tolerance')
-
-                        elif k.attrib['name'] == 'Absolute Tolerance':
-                            k.attrib['value'] = self.kwargs.get('absolute_tolerance')
-
-                        elif k.attrib['name'] == 'MaxInternalSteps':
-                            k.attrib['value'] = self.kwargs.get('max_internal_steps')
-            return self.copasiML
-
-        def report_definition(self):
-            return Reports(self.copasi_file, **self.report_options).copasiML
-
-        def get_report_key(self):
-            '''
-            cros reference the timecourse task with the newly created
-            time course reort to get the key
-            '''
-            LOG.debug('getting report key')
-            for i in self.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports'):
-                if i.attrib['name'] == 'Time-Course':
-                    key = i.attrib['key']
-            assert key != None, 'have you ran the report_definition method?'
-            return key
-
-        def set_report(self):
-            '''
-            Use the report defined in self.create_report to tell copasi
-            were to put the results
-            '''
-            key = self.get_report_key()
-
-            arg_dct = {'append': self.kwargs.get('append'),
-                       'target': self.kwargs.get('report_name'),
-                       'reference': key,
-                       'confirmOverwrite': self.kwargs.get('confirm_overwrite')}
-            query = "//*[@name='Time-Course']" and "//*[@type='timeCourse']"
-            present = False
-            #        query='//Report'
-            for i in self.copasiML.xpath(query):
-                for j in list(i):
-                    if 'append' and 'target' in j.attrib.keys():
-                        present = True
-                        j.attrib.update(arg_dct)
-                if present == False:
-                    report = etree.Element('Report', attrib=arg_dct)
-                    i.insert(0, report)
-                    self.save()   #This save is needed in order to save the report befor euse
-            return self.copasiML
-
-        def run(self):
-            '''
-            run a time course. Use keyword argument:
-                simulation_type='deterministic' #default
-                SumulationType='stochastic' #still to be written
-            '''
-            if self.kwargs.get('simulation_type') == 'deterministic':
-                self.copasiML = self.report_definition()
-                self.copasiML = self.set_report()
-                self.copasiML = self.set_deterministic()
-                LOG.debug('setting up deterministic time course')
-            elif self.kwargs.get('simulation_type') == 'stochastic':
-                raise Errors.NotImplementedError('There is space in this class to write code to Run a stochastic simulation but it is not yet written')
-##                
-#            # save to duplicate copasi file
-            self.save()
-            R = Run(self.copasi_file, task='time_course')
-            LOG.debug('Time course ran')
-            return R
-
-        def read_sim_data(self):
-            data_output = os.path.join(os.path.dirname(self.copasi_file), self.kwargs['report_name'])
-            # trim copasi style headers
-            LOG.debug('Reading timecourse')
-            if self.kwargs.get('prune_headers') == True:
-                LOG.debug('pruning headers of copasi files of COPASI references')
-                PruneCopasiHeaders(data_output, replace=True)
-            return pandas.read_csv(data_output, sep='\t')
-
-        def plot(self):
-            '''
-
-            '''
-            LOG.debug('plotting time course')
-            ## Create directory for graphs
-            if self.kwargs['graph_directory'] == None:
-                dire = os.path.join(os.path.dirname(self.copasi_file), 'TimeCourseGraphs')
-                if os.path.isdir(dire) != True:
-                    os.mkdir(dire)
-                os.chdir(dire)
-
-            for i in self.data:
-                if i.lower() != 'time':
-                    plt.figure()
-                    ax = plt.subplot(111)
-                    plt.plot(self.data['Time'], self.data[i],
-                             linewidth=self.kwargs.get('line_width'), color=self.kwargs.get('line_color'),
-                             linestyle=self.kwargs.get('line_style'), marker='o',
-                             markerfacecolor=self.kwargs.get('marker_color'), markersize=self.kwargs.get('marker_size'))
-                    #                plt.plot(self.data['Time'],self.data[i],color=self.kwargs.get('marker_color'),marker=self.kwargs.get('marker_style'))
-
-
-                    # plot labels
-                    plt.title('\n'.join(wrap('Time-Course for {}'.format(i), self.kwargs.get('title_wrap_size'))),
-                              fontsize=self.kwargs.get('font_size'))
-                    if self.kwargs.get('quantity_type') == 'concentration':
-                        try:
-                            plt.ylabel('Concentration ({})'.format(self.GMQ.get_quantity_units().encode('ascii')),
-                                       fontsize=self.kwargs.get('font_size'))
-                        except UnicodeEncodeError:
-                            plt.ylabel('Concentration (micromol)', fontsize=self.kwargs.get('font_size'))
-                    if self.kwargs.get('quantity_type') == 'particle_number':
-                        plt.ylabel('Particle Numbers', fontsize=self.kwargs.get('font_size'))
-
-                    plt.xlabel('Time ({})'.format(self.GMQ.get_time_unit()), fontsize=self.kwargs.get('font_size'))
-
-                    # pretty stuff
-
-                    ax.spines['right'].set_color('none')
-                    ax.spines['top'].set_color('none')
-                    ax.xaxis.set_ticks_position('bottom')
-                    ax.yaxis.set_ticks_position('left')
-                    ax.spines['left'].set_smart_bounds(True)
-                    ax.spines['bottom'].set_smart_bounds(True)
-
-                    # xtick rotation
-                    plt.xticks(rotation=self.kwargs.get('xtick_rotation'))
-
-                    # options for changing the plot axis
-                    if self.kwargs.get('ylimit') != None:
-                        ax.set_ylim(self.kwargs.get('ylimit'))
-                    if self.kwargs.get('xlimit') != None:
-                        ax.set_xlim(self.kwargs.get('xlimit'))
-
-                    def save_plot():
-                        def replace_non_ascii(st):
-                            for j in st:
-                                if j not in string.ascii_letters + string.digits + '_-[]':
-                                    st = re.sub('\{}'.format(j), '__', st)
-                            return st
-
-                        filename = {}
-                        name = replace_non_ascii(i)
-                        filename[i] = os.path.join(dire, name + '.png')
-
-                        if self.kwargs.get('extra_title') != None:
-                            plt.savefig(name + '_' + self.kwargs.get('extra_title') + '.png', bbox_inches='tight',
-                                        format='png', dpi=self.kwargs.get('dpi'))
-                        else:
-                            plt.savefig(filename[i], format='png', bbox_inches='tight', dpi=self.kwargs.get('dpi'))
-                        return filename
-
-                    if self.kwargs.get('show') == True:
-                        plt.show()
-
-                    # save figure options
-                    if self.kwargs.get('savefig') == True:
-                        os.chdir(os.path.dirname(self.copasi_file))
-                        save_plot()
+#
+#             # other keywords that are non optional for time course
+#             self.kwargs['report_type'] = 'time_course'
+#             matplotlib.rcParams.update({'font.size': self.kwargs.get('axis_size')})
+#             '''
+#             All methods required for time course are
+#             called with run
+#             '''
+#
+#             self.save()
+#             self.run()
+#             if self.kwargs['plot'] == True:
+#                 self.data = self.read_sim_data()
+#                 self.plot()
+#
+#         def __getitem__(self,key):
+#             if key not in self.kwargs.keys():
+#                 raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
+#             return self.kwargs[key]
+#
+#         def __setitem__(self,key,value):
+#             self.kwargs[key] = value
+#
+#         def _do_checks(self):
+#             """
+#
+#             """
+#
+#
+#         def save(self):
+#             self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
+#             return self.copasiML
+#
+#         def save_dep(self):
+#             if self.kwargs.get('save') == 'duplicate':
+#                 self.CParser.write_copasi_file(self.kwargs.get('OutputML'), self.copasiML)
+#             elif self.kwargs.get('save') == 'overwrite':
+#                 self.CParser.write_copasi_file(self.copasi_file, self.copasiML)
+#             return self.copasiML
+#
+#         def set_deterministic(self):
+#             '''
+#             set parameters for deterministic timecourse
+#             '''
+#             query = "//*[@name='Time-Course']" and "//*[@type='timeCourse']"
+#             method_params = {'type': 'Deterministic(LSODA)', 'name': 'Deterministic (LSODA)'}
+#             for i in self.copasiML.xpath(query):
+#                 # make available to coapsiSE
+#                 i.attrib['scheduled'] = self.kwargs.get('scheduled')
+#                 for j in list(i):
+#                     j.attrib['type'] = method_params['type']
+#                     j.attrib['name'] = method_params['name']
+#                     for k in list(j):
+#                         if k.attrib['name'] == 'Duration':
+#                             k.attrib['value'] = self.kwargs.get('end')
+#
+#                         if k.attrib['name'] == 'StepNumber':
+#                             k.attrib['value'] = self.kwargs.get('intervals')
+#
+#                         elif k.attrib['name'] == 'StepSize':
+#                             k.attrib['value'] = self.kwargs.get('step_size')
+#
+#                         elif k.attrib['name'] == 'TimeSeriesRequested':
+#                             k.attrib['value'] = '1'
+#
+#                         elif k.attrib['name'] == 'OutputStartTime':
+#                             k.attrib['value'] = self.kwargs.get('start')
+#
+#                         elif k.attrib['name'] == 'Output Event':
+#                             k.attrib['value'] = self.kwargs.get('output_event')
+#
+#                         elif k.attrib['name'] == 'Continue on Simultaneous Events':
+#                             k.attrib['value'] = '0'
+#
+#                         elif k.attrib['name'] == 'Integrate Reduced Model':
+#                             k.attrib['value'] = '0'
+#
+#                         elif k.attrib['name'] == 'Relative Tolerance':
+#                             k.attrib['value'] = self.kwargs.get('relative_tolerance')
+#
+#                         elif k.attrib['name'] == 'Absolute Tolerance':
+#                             k.attrib['value'] = self.kwargs.get('absolute_tolerance')
+#
+#                         elif k.attrib['name'] == 'MaxInternalSteps':
+#                             k.attrib['value'] = self.kwargs.get('max_internal_steps')
+#             return self.copasiML
+#
+#         def report_definition(self):
+#             return Reports(self.copasi_file, **self.report_options).copasiML
+#
+#         def get_report_key(self):
+#             '''
+#             cros reference the timecourse task with the newly created
+#             time course reort to get the key
+#             '''
+#             LOG.debug('getting report key')
+#             for i in self.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports'):
+#                 if i.attrib['name'] == 'Time-Course':
+#                     key = i.attrib['key']
+#             assert key != None, 'have you ran the report_definition method?'
+#             return key
+#
+#         def set_report(self):
+#             '''
+#             Use the report defined in self.create_report to tell copasi
+#             were to put the results
+#             '''
+#             key = self.get_report_key()
+#
+#             arg_dct = {'append': self.kwargs.get('append'),
+#                        'target': self.kwargs.get('report_name'),
+#                        'reference': key,
+#                        'confirmOverwrite': self.kwargs.get('confirm_overwrite')}
+#             query = "//*[@name='Time-Course']" and "//*[@type='timeCourse']"
+#             present = False
+#             #        query='//Report'
+#             for i in self.copasiML.xpath(query):
+#                 for j in list(i):
+#                     if 'append' and 'target' in j.attrib.keys():
+#                         present = True
+#                         j.attrib.update(arg_dct)
+#                 if present == False:
+#                     report = etree.Element('Report', attrib=arg_dct)
+#                     i.insert(0, report)
+#                     self.save()   #This save is needed in order to save the report befor euse
+#             return self.copasiML
+#
+#         def run(self):
+#             '''
+#             run a time course. Use keyword argument:
+#                 simulation_type='deterministic' #default
+#                 SumulationType='stochastic' #still to be written
+#             '''
+#             if self.kwargs.get('simulation_type') == 'deterministic':
+#                 self.copasiML = self.report_definition()
+#                 self.copasiML = self.set_report()
+#                 self.copasiML = self.set_deterministic()
+#                 LOG.debug('setting up deterministic time course')
+#             elif self.kwargs.get('simulation_type') == 'stochastic':
+#                 raise Errors.NotImplementedError('There is space in this class to write code to Run a stochastic simulation but it is not yet written')
+# ##
+# #            # save to duplicate copasi file
+#             self.save()
+#             R = Run(self.copasi_file, task='time_course')
+#             LOG.debug('Time course ran')
+#             return R
+#
+#         def read_sim_data(self):
+#             data_output = os.path.join(os.path.dirname(self.copasi_file), self.kwargs['report_name'])
+#             # trim copasi style headers
+#             LOG.debug('Reading timecourse')
+#             if self.kwargs.get('prune_headers') == True:
+#                 LOG.debug('pruning headers of copasi files of COPASI references')
+#                 PruneCopasiHeaders(data_output, replace=True)
+#             return pandas.read_csv(data_output, sep='\t')
+#
+#         def plot(self):
+#             '''
+#
+#             '''
+#             LOG.debug('plotting time course')
+#             ## Create directory for graphs
+#             if self.kwargs['graph_directory'] == None:
+#                 dire = os.path.join(os.path.dirname(self.copasi_file), 'TimeCourseGraphs')
+#                 if os.path.isdir(dire) != True:
+#                     os.mkdir(dire)
+#                 os.chdir(dire)
+#
+#             for i in self.data:
+#                 if i.lower() != 'time':
+#                     plt.figure()
+#                     ax = plt.subplot(111)
+#                     plt.plot(self.data['Time'], self.data[i],
+#                              linewidth=self.kwargs.get('line_width'), color=self.kwargs.get('line_color'),
+#                              linestyle=self.kwargs.get('line_style'), marker='o',
+#                              markerfacecolor=self.kwargs.get('marker_color'), markersize=self.kwargs.get('marker_size'))
+#                     #                plt.plot(self.data['Time'],self.data[i],color=self.kwargs.get('marker_color'),marker=self.kwargs.get('marker_style'))
+#
+#
+#                     # plot labels
+#                     plt.title('\n'.join(wrap('Time-Course for {}'.format(i), self.kwargs.get('title_wrap_size'))),
+#                               fontsize=self.kwargs.get('font_size'))
+#                     if self.kwargs.get('quantity_type') == 'concentration':
+#                         try:
+#                             plt.ylabel('Concentration ({})'.format(self.GMQ.get_quantity_units().encode('ascii')),
+#                                        fontsize=self.kwargs.get('font_size'))
+#                         except UnicodeEncodeError:
+#                             plt.ylabel('Concentration (micromol)', fontsize=self.kwargs.get('font_size'))
+#                     if self.kwargs.get('quantity_type') == 'particle_number':
+#                         plt.ylabel('Particle Numbers', fontsize=self.kwargs.get('font_size'))
+#
+#                     plt.xlabel('Time ({})'.format(self.GMQ.get_time_unit()), fontsize=self.kwargs.get('font_size'))
+#
+#                     # pretty stuff
+#
+#                     ax.spines['right'].set_color('none')
+#                     ax.spines['top'].set_color('none')
+#                     ax.xaxis.set_ticks_position('bottom')
+#                     ax.yaxis.set_ticks_position('left')
+#                     ax.spines['left'].set_smart_bounds(True)
+#                     ax.spines['bottom'].set_smart_bounds(True)
+#
+#                     # xtick rotation
+#                     plt.xticks(rotation=self.kwargs.get('xtick_rotation'))
+#
+#                     # options for changing the plot axis
+#                     if self.kwargs.get('ylimit') != None:
+#                         ax.set_ylim(self.kwargs.get('ylimit'))
+#                     if self.kwargs.get('xlimit') != None:
+#                         ax.set_xlim(self.kwargs.get('xlimit'))
+#
+#                     def save_plot():
+#                         def replace_non_ascii(st):
+#                             for j in st:
+#                                 if j not in string.ascii_letters + string.digits + '_-[]':
+#                                     st = re.sub('\{}'.format(j), '__', st)
+#                             return st
+#
+#                         filename = {}
+#                         name = replace_non_ascii(i)
+#                         filename[i] = os.path.join(dire, name + '.png')
+#
+#                         if self.kwargs.get('extra_title') != None:
+#                             plt.savefig(name + '_' + self.kwargs.get('extra_title') + '.png', bbox_inches='tight',
+#                                         format='png', dpi=self.kwargs.get('dpi'))
+#                         else:
+#                             plt.savefig(filename[i], format='png', bbox_inches='tight', dpi=self.kwargs.get('dpi'))
+#                         return filename
+#
+#                     if self.kwargs.get('show') == True:
+#                         plt.show()
+#
+#                     # save figure options
+#                     if self.kwargs.get('savefig') == True:
+#                         os.chdir(os.path.dirname(self.copasi_file))
+#                         save_plot()
 
 
 #==============================================================================            
