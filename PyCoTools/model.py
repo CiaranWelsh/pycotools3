@@ -38,6 +38,11 @@ class Model(_base._ModelBase):
     def __init__(self, model, **kwargs):
         super(Model, self).__init__(model, **kwargs)
 
+        ## fill this dict after class is finished
+        self.allowed_keys = {}
+        self.update_properties(self.allowed_keys)
+
+
     def __str__(self):
         return 'Model(name={}, time_unit={}, volume_unit={}, quantity_unit={})'.format(self.name, self.time_unit,self.volume_unit, self.quantity_unit)
 
@@ -374,6 +379,7 @@ class Metabolite(_base._Base):
         for key in kwargs:
             if key not in self.allowed_keys:
                 raise Errors.InputError('Attribute not allowed. {} not in {}'.format(key, self.allowed_keys) )
+        self.update_properties(self.allowed_keys)
         ##update all keys to none
         self._do_checks()
 
@@ -471,6 +477,7 @@ class Substrate(Metabolite):
         for key in self.kwargs:
             if key not in self.allowed_keys:
                 raise Errors.InputError('{} not in {}'.format(key, self.allowed_keys))
+        self.update_properties(self.allowed_keys)
 
     def __str__(self):
         """
@@ -521,16 +528,17 @@ class GlobalQuantity(_base._Base):
     def __init__(self, **kwargs):
         super(GlobalQuantity, self).__init__(**kwargs)
 
-        allowed_keys = {'name':None,
+        self.allowed_properties = {'name':None,
                         'key':None,
                         'type':None,
                         'value':None,
                         }
 
         for key in kwargs:
-            if key not in allowed_keys:
-                raise Errors.InputError('Attribute not allowed. {} not in {}'.format(key, allowed_keys) )
-        ##update all keys to none
+            if key not in self.allowed_properties:
+                raise Errors.InputError('Attribute not allowed. {} not in {}'.format(key, self.allowed_properties.keys()) )
+        self.update_properties(self.allowed_properties)
+
         self._do_checks()
 
     def _do_checks(self):
@@ -560,15 +568,16 @@ class Reaction(_base._Base):
     """
     def __init__(self, **kwargs):
         super(Reaction, self).__init__(**kwargs)
-        self.allowed_keys = {'name':None,
+        self.allowed_properties = {'name':None,
                              'key':None,
                              'reactants':None,
                              'products':None,
                              'rate_law':None,
                              'parameters':None}
         for key in self.kwargs:
-            if key not in self.allowed_keys:
-                raise Errors.InputError('{} not valid key. Valid keys are: {}'.format(key, self.allowed_keys))
+            if key not in self.allowed_properties:
+                raise Errors.InputError('{} not valid key. Valid keys are: {}'.format(key, self.allowed_properties))
+        self.update_properties(self.allowed_properties)
 
     def __str__(self):
         return 'Reaction({})'.format(self.as_string())
@@ -611,14 +620,15 @@ class Function(_base._Base):
 
     def __init__(self, **kwargs):
         super(Function, self).__init__(**kwargs)
-        allowed_keys = {'name':None,
+        self.allowed_properties = {'name':None,
                         'key':None,
                         'type':None,
                         'reversible':None}
 
         for key in self.kwargs:
-            if key not in allowed_keys:
-                raise Errors.InputError('{} not in {}'.format(key, allowed_keys))
+            if key not in self.allowed_properties:
+                raise Errors.InputError('{} not in {}'.format(key, allowed_properties))
+        self.update_properties(self.allowed_properties)
 
     def __str__(self):
         return 'Function({})'.format(self.as_string())
@@ -626,13 +636,10 @@ class Function(_base._Base):
     def __repr__(self):
         return self.__str__()
 
-
-
-
 class LocalParameter(_base._Base):
     def __init__(self, **kwargs):
         super(LocalParameter, self).__init__(**kwargs)
-        allowed_keys = {'name':None,
+        self.allowed_properties = {'name':None,
                         'key':None,
                         'value':None,
                         'simulationType':None,
@@ -641,8 +648,9 @@ class LocalParameter(_base._Base):
 
 
         for key in self.kwargs:
-            if key not in allowed_keys:
-                raise Errors.InputError('{} not in {}'.format(key, allowed_keys.keys()))
+            if key not in self.allowed_properties:
+                raise Errors.InputError('{} not in {}'.format(key, self.allowed_properties.keys()))
+        self.update_properties(self.allowed_properties)
 
     def __str__(self):
         return 'LocalParameter({})'.format(self.as_string())
