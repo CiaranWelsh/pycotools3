@@ -46,7 +46,8 @@ class SomethingWentHorriblyWrongError(Exception):
     pass
 
 
-
+class TimeCourseError(Exception):
+    pass
 
 
 
