@@ -74,15 +74,7 @@ class CopasiMLParser():
             raise Errors.FileDoesNotExistError('{} is not a copasi file'.format(self.copasi_file))
         self.copasiMLTree=self._parse_copasiML()
         self.copasiML=self.copasiMLTree.getroot()
-        
-        
-        '''
-        Recently changed this class to use lxml built in functions
-        rather that pythons standard write and read methods. Hopefully this
-        should help some of the performance issues. The below two comments are required for
-        the old class. Keep them commented out until you remove the deprecations fully 
-        '''
-        #self.dir=os.path.dirname(self.copasi_file)
+
         os.chdir(os.path.dirname(self.copasi_file))
             
     def _parse_copasiML(self):
@@ -743,18 +735,18 @@ class Reports(_base._ModelBase):
 #        default_report_name=os.path.split(self.copasi_file)[1][:-4]+'_PE_results.txt'
 
         self.allowed_properties={#report variables
-                 'metabolites':[i.name for i in self.model.metabolites],
-                 'global_quantities':[i.name for i in self.model.global_quantities],
-                 'local_parameters':[i for i in self.model.local_parameters],
+                 'metabolites': self.model.metabolites,
+                 'global_quantities': self.model.global_quantities,
+                 'local_parameters':self.model.local_parameters,
                  'quantity_type':'concentration',
                  'report_name':None,
                  'append': False,
                  'confirm_overwrite': False,
-                 'separator':'\t',
-                 'update_model':False,
-                 'report_type':'parameter_estimation',
-                 'variable':[i.name for i in self.model.metabolites][0], #only for profile_likelihood
-                 'directory':None,
+                 'separator': '\t',
+                 'update_model': False,
+                 'report_type': 'parameter_estimation',
+                 'variable': self.model.metabolites[0], #only for profile_likelihood
+                 'directory': None,
                  }
 
         for key in self.kwargs:
@@ -775,6 +767,8 @@ class Reports(_base._ModelBase):
         if isinstance(self.local_parameters, str):
             self.local_parameters = [self.local_parameters]
 
+        if self.quantity_type not in ['concentration','particle_number']:
+            raise Errors.InputError('{} not concentration or particle_number'.format(self.quantity_type))
 
         if self.append == True:
             self.append = str(1)
@@ -894,303 +888,205 @@ class Reports(_base._ModelBase):
         if self.metabolites != None:
             for i in self.metabolites:
                 if self.quantity_type == 'concentration':
+                    '''
+                    A coapsi 'reference' for metabolite in report
+                    looks like this:
+                        "CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration"
+                    '''
                     # cn= self.model.metabolites[i].reference
-                    print self.metabolites
-                    # cn= self.GMQ.get_IC_cns()[i]['cn']+',Reference=Concentration'
-        #         elif self.kwargs.get('quantity_type')=='particle_numbers':
-        #             cn= self.GMQ.get_IC_cns()[i]['cn']+',Reference=ParticleNumber'
-        #     #add to xml
-        #         Object=etree.SubElement(table,'Object')
-        #         Object.attrib['cn']=cn
-        #
-        # #for global quantities
-        # if self.kwargs.get('global_quantities')!=None:
-        #     for i in self.kwargs.get('global_quantities'):
-        #         cn= self.GMQ.get_global_quantities_cns()[i]['cn']+',Reference=Value'
-        #         Object=etree.SubElement(table,'Object')
-        #         Object.attrib['cn']=cn
-        # return self.copasiML
+                    # print self.model.reference
+                    cn = '{},{},{}'.format(self.model.reference,
+                                               i.compartment.reference,
+                                               i.reference_transient)
+                elif self.quantity_type == 'particle_number':
+                    cn = '{},{},{}'.format(self.model.reference,
+                                                                     i.compartment.reference,
+                                                                     i.reference)
+
+            #add to xml
+                Object=etree.SubElement(table,'Object')
+                Object.attrib['cn']=cn
+
+        #for global quantities
+        if self.global_quantities != None:
+            for i in self.global_quantities:
+                """
+                A Copasi 'reference' for global_quantities in report
+                looks like this:
+                    cn="CN=Root,Model=New Model,Vector=Values[B2C],Reference=Value"
+                """
+                cn = '{},{}'.format(self.model.reference, i.reference_transient)
+                Object=etree.SubElement(table,'Object')
+                Object.attrib['cn']=cn
+        return self.model
     #
-    # def profile_likelihood(self):
-    #     '''
-    #     Create report of a parameter and best value for a parameter estimation
-    #     for profile likelihoods
-    #     '''
-    #     #get existing report keys
-    #     keys=[]
-    #     for i in self.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports'):
-    #         keys.append(i.attrib['key'])
-    #         if i.attrib['name']=='profilelikelihood':
-    #             self.remove_report('profilelikelihood')
-    #
-    #     new_key='Report_31'
-    #     while new_key in keys:
-    #         new_key='Report_{}'.format(numpy.random.randint(30,100))
-    #     report_attributes={'precision': '6',
-    #                        'separator': '\t',
-    #                        'name': 'profilelikelihood',
-    #                        'key':new_key,
-    #                        'taskType': 'Scan'}
-    #
-    #     ListOfReports=self.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports')
-    #     report=etree.SubElement(ListOfReports,'Report')
-    #     report.attrib.update(report_attributes)
-    #
-    #     comment=etree.SubElement(report,'Comment')
-    #     table=etree.SubElement(report,'Table')
-    #     table.attrib['printTitle']=str(1)
-    #     if self.kwargs.get('variable') in self.kwargs.get('metabolites'):
-    #         cn= self.GMQ.get_IC_cns()[self.kwargs.get('variable')]['cn']+',Reference=InitialConcentration'#{}'.format(self.kwargs.get('quantity_type'))
-    #     if self.kwargs.get('variable') in self.kwargs.get('global_quantities'):
-    #         cn= self.GMQ.get_global_quantities_cns()[self.kwargs.get('variable')]['cn']+',Reference=InitialValue'#{}'.format(self.kwargs.get('quantity_type'))
-    #     if self.kwargs.get('variable') in self.GMQ.get_local_kinetic_parameters_cns().keys():
-    #         cn= self.GMQ.get_local_kinetic_parameters_cns()[self.kwargs.get('variable')]['cn']+',Reference=Value'#{}'.format(self.kwargs.get('quantity_type'))
-    #     etree.SubElement(table,'Object',attrib={'cn':cn})
-    #     etree.SubElement(table,'Object',attrib={'cn':"CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"})
-    #     return self.copasiML
-    #
-    #
-    # def profile_likelihood2(self):
-    #     '''
-    #     Create report of a parameter and best value for a parameter estimation
-    #     for profile likelihoods
-    #     '''
-    #     #get existing report keys
-    #     keys=[]
-    #     for i in self.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports'):
-    #         keys.append(i.attrib['key'])
-    #         if i.attrib['name']=='profilelikelihood2':
-    #             self.remove_report('profilelikelihood2')
-    #
-    #     new_key='Report_31'
-    #     while new_key in keys:
-    #         new_key='Report_{}'.format(numpy.random.randint(30,100))
-    #
-    #     report_attributes={'precision': '6',
-    #                        'separator': '\t',
-    #                        'name': 'profilelikelihood2',
-    #                        'key':new_key,
-    #                        'taskType': 'Scan'}
-    #
-    #     ListOfReports=self.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports')
-    #     report=etree.SubElement(ListOfReports,'Report')
-    #     report.attrib.update(report_attributes)
-    #
-    #     comment=etree.SubElement(report,'Comment')
-    #     table=etree.SubElement(report,'Table')
-    #     table.attrib['printTitle']=str(1)
-    #     if self.kwargs.get('variable') in self.kwargs.get('metabolites'):
-    #         cn= self.GMQ.get_IC_cns()[self.kwargs.get('variable')]['cn']+',Reference=InitialConcentration'#{}'.format(self.kwargs.get('quantity_type'))
-    #     if self.kwargs.get('variable') in self.kwargs.get('global_quantities'):
-    #         cn= self.GMQ.get_global_quantities_cns()[self.kwargs.get('variable')]['cn']+',Reference=InitialValue'#{}'.format(self.kwargs.get('quantity_type'))
-    #     if self.kwargs.get('variable') in self.GMQ.get_local_kinetic_parameters_cns().keys():
-    #         cn= self.GMQ.get_local_kinetic_parameters_cns()[self.kwargs.get('variable')]['cn']+',Reference=Value'#{}'.format(self.kwargs.get('quantity_type'))
-    #     etree.SubElement(table,'Object',attrib={'cn':cn})
-    #     etree.SubElement(table,'Object',attrib={'cn':"CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"})
-    #     etree.SubElement(table,'Object',attrib={'cn':"CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"})
-    #     return self.copasiML
-    #
-    #
-    #
-    # def parameter_estimation_with_function_evaluations2(self):
-    #     '''
-    #     Define a parameter estimation report and include the progression
-    #     of the parameter estimation (function evaluations).
-    #     Defaults to including all
-    #     metabolites, global variables and local variables with the RSS best value
-    #     These can be over-ridden with the global_quantities, LocalParameters and metabolites
-    #     keywords.
-    #     '''
-    #     # get existing report keys
-    #     keys = []
-    #     for i in self.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports'):
-    #         keys.append(i.attrib['key'])
-    #         if i.attrib['name'] == 'parameter_estimation':
-    #             self.copasiML = self.remove_report('parameter_estimation')
-    #
-    #     new_key = 'Report_32'
-    #     while new_key in keys:
-    #         new_key = 'Report_{}'.format(numpy.random.randint(30, 100))
-    #     report_attributes = {'precision': '6',
-    #                          'separator': '\t',
-    #                          'name': 'parameter_estimation',
-    #                          'key': new_key,
-    #                          'taskType': 'parameterFitting'}
-    #
-    #     ListOfReports = self.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports')
-    #     report = etree.SubElement(ListOfReports, 'Report')
-    #     report.attrib.update(report_attributes)
-    #     comment = etree.SubElement(report, 'Comment')
-    #     comment = comment  # get rid of annoying squiggly line above
-    #     table = etree.SubElement(report, 'Table')
-    #     table.attrib['printTitle'] = str(1)
-    #
-    #     '''
-    #     generate more SubElements dynamically
-    #     '''
-    #     # for metabolites
-    #     if self.kwargs.get('metabolites') != None:
-    #         for i in self.kwargs.get('metabolites'):
-    #             assert i in self.GMQ.get_IC_cns().keys()
-    #             if self.kwargs.get('quantity_type') == 'concentration':
-    #                 cn = self.GMQ.get_IC_cns()[i]['cn'] + ',Reference=InitialConcentration'
-    #             elif self.kwargs.get('quantity_type') == 'particle_numbers':
-    #                 cn = self.GMQ.get_IC_cns()[i]['cn'] + ',Reference=InitialParticleNumber'
-    #                 # add to xml
-    #             Object = etree.SubElement(table, 'Object')
-    #             Object.attrib['cn'] = cn
-    #
-    #     # for global quantities
-    #     if self.kwargs.get('global_quantities') != None:
-    #         for i in self.kwargs.get('global_quantities'):
-    #             cn = self.GMQ.get_global_quantities_cns()[i]['cn'] + ',Reference=InitialValue'
-    #             # add to xml
-    #             Object = etree.SubElement(table, 'Object')
-    #             Object.attrib['cn'] = cn
-    #
-    #     # for local quantities
-    #     if self.kwargs.get('local_parameters') != None:
-    #         for i in self.kwargs.get('local_parameters'):
-    #             cn = self.GMQ.get_local_kinetic_parameters_cns()[i]['cn'] + ',Reference=Value'
-    #             # add to xml
-    #             Object = etree.SubElement(table, 'Object')
-    #             Object.attrib['cn'] = cn
-    #
-    #     Object = etree.SubElement(table, 'Object')
-    #     Object.attrib[
-    #         'cn'] = "CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"
-    #     LOG.debug('Reports PE setup copasiML {}'.format(self.copasiML))
-    #
-    #     return self.copasiML
-    #
-    # def set_parameter_estimation_report(self):
-    #     '''
-    #     Define a parameter estimation report and include the progression
-    #     of the parameter estimation (function evaluations).
-    #     Defaults to including all
-    #     metabolites, global variables and local variables with the RSS best value
-    #     These can be over-ridden with the global_quantities, LocalParameters and metabolites
-    #     keywords.
-    #     '''
-    #     #get existing report keys
-    #     keys=[]
-    #     for i in self.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports'):
-    #         keys.append(i.attrib['key'])
-    #         if i.attrib['name']=='parameter_estimation':
-    #             self.copasiML=self.remove_report('parameter_estimation')
-    #
-    #     new_key='Report_32'
-    #     while new_key  in keys:
-    #         new_key='Report_{}'.format(numpy.random.randint(30,100))
-    #     report_attributes={'precision': '6',
-    #                        'separator': '\t',
-    #                        'name': 'parameter_estimation',
-    #                        'key': new_key,
-    #                        'taskType': 'parameterFitting'}
-    #
-    #     ListOfReports=self.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports')
-    #     report=etree.SubElement(ListOfReports,'Report')
-    #     report.attrib.update(report_attributes)
-    #     comment=etree.SubElement(report,'Comment')
-    #     footer=etree.SubElement(report,'Footer')
-    #     Object=etree.SubElement(footer,'Object')
-    #     Object.attrib['cn']="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"
-    #     Object=etree.SubElement(footer,'Object')
-    #     Object.attrib['cn']="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"
-    #     LOG.debug('Reports PE setup copasiML {}'.format(self.copasiML))
-    #     return self.copasiML
-    #
-    # def set_multi_parameter_estimation_report(self):
-    #     '''
-    #     Define a parameter estimation report and include the progression
-    #     of the parameter estimation (function evaluations).
-    #     Defaults to including all
-    #     metabolites, global variables and local variables with the RSS best value
-    #     These can be over-ridden with the global_quantities, LocalParameters and metabolites
-    #     keywords.
-    #     '''
-    #     #get existing report keys
-    #     keys=[]
-    #     for i in self.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports'):
-    #         keys.append(i.attrib['key'])
-    #         if i.attrib['name']=='multi_parameter_estimation':
-    #             self.copasiML=self.remove_report('multi_parameter_estimation')
-    #
-    #     new_key='Report_32'
-    #     while new_key  in keys:
-    #         new_key='Report_{}'.format(numpy.random.randint(30,100))
-    #     report_attributes={'precision': '6',
-    #                        'separator': '\t',
-    #                        'name': 'multi_parameter_estimation',
-    #                        'key': new_key,
-    #                        'taskType': 'parameterFitting'}
-    #
-    #     ListOfReports=self.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports')
-    #     report=etree.SubElement(ListOfReports,'Report')
-    #     report.attrib.update(report_attributes)
-    #     comment=etree.SubElement(report,'Comment')
-    #     table=etree.SubElement(report,'Table')
-    #     table.attrib['printTitle']=str(1)
-    #     etree.SubElement(table,'Object',attrib={'cn':"CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"})
-    #     etree.SubElement(table,'Object',attrib={'cn':"CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"})
-    #     return self.copasiML
-    #
-    #
-    #
-    # def run(self):
-    #     '''
-    #     Execute code that builds the report defined by the kwargs
-    #     '''
-    #     if self.kwargs.get('report_type')=='parameter_estimation':
-    #         LOG.debug('created a \'parameter_estimation\' report')
-    #         self.copasiML=self.set_parameter_estimation_report()
-    #
-    #     elif self['report_type']=='multi_parameter_estimation':
-    #         LOG.debug('created a \'parameter_estimation\' report')
-    #         self.copasiML=self.set_multi_parameter_estimation_report()
-    #
-    #     elif self.kwargs.get('report_type')=='profilelikelihood':
-    #         self.copasiML=self.profile_likelihood()
-    #         LOG.debug('created a \'profile_likelihod\' type report')
-    #
-    #     elif self.kwargs.get('report_type')=='profilelikelihood2':
-    #         self.copasiML=self.profile_likelihood2()
-    #         LOG.debug('created a \'profile_likelihod2\' type report')
-    #
-    #     elif self.kwargs.get('report_type')=='time_course':
-    #         self.copasiML=self.timecourse()
-    #         LOG.debug('created a \'time_course\' type report')
-    #
-    #     elif self.kwargs.get('report_type')==None:
-    #         self.copasiML=self.copasiML
-    #         LOG.debug('created a \'none\' type report')
-    #
-    #     return self.copasiML
-    #
-    # def remove_report(self,report_name):
-    #     '''
-    #     remove report called report_name
-    #     '''
-    #     assert report_name in self.report_types,'{} not a valid report type. These are valid report types: {}'.format(report_name,self.report_types)
-    #     for i in self.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports'):
-    #         if report_name=='time_course':
-    #             report_name='time-course'
-    #         if i.attrib['name'].lower()==report_name.lower():
-    #             i.getparent().remove(i)
-    #     return self.copasiML
-    #
-    #
-    # def clear_all_reports(self):
-    #     '''
-    #     Having multile reports defined at once can be really annoying
-    #     and give you unexpected results. Use this function to remove all reports
-    #     before defining a new one to ensure you only have one active report any once.
-    #     '''
-    #     for i in self.copasiML.find('{http://www.copasi.org/static/schema}ListOfTasks'):
-    #         for j in list(i):
-    #             if 'target' in j.attrib.keys():
-    #                 j.attrib['target']=''
-    #     return self.copasiML
+    def profile_likelihood(self):
+        '''
+        Create report of a parameter and best value for a parameter estimation
+        for profile likelihoods
+        '''
+        #get existing report keys
+        keys=[]
+        for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
+            keys.append(i.attrib['key'])
+            if i.attrib['name']=='profilelikelihood':
+                self.remove_report('profilelikelihood')
+
+        new_key='Report_31'
+        while new_key in keys:
+            new_key='Report_{}'.format(numpy.random.randint(30,100))
+        report_attributes = {'precision': '6',
+                           'separator': '\t',
+                           'name': 'profilelikelihood',
+                           'key':new_key,
+                           'taskType': 'Scan'}
+
+        ListOfReports=self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports')
+        report=etree.SubElement(ListOfReports,'Report')
+        report.attrib.update(report_attributes)
+
+        comment=etree.SubElement(report,'Comment')
+        table=etree.SubElement(report,'Table')
+        table.attrib['printTitle']=str(1)
+        if self.variable.name in [i.name for i in self.metabolites]:
+            cn = '{},{}'.format( self.model.reference, self.variable.reference_initial )
+        elif self.variable.name in [i.name for i in self.global_quantities]:
+            cn = '{},{}'.format(self.model.reference, self.variable.reference_initial)
+        elif self.variable.name in [i.name for i in self.local_parameters]:
+            cn = '{},{}'.format(self.model.reference, self.variable.reference)
+        etree.SubElement(table,'Object',attrib={'cn':cn})
+        etree.SubElement(table,'Object',attrib={'cn':"CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"})
+        return self.model
+
+
+    def parameter_estimation(self):
+        '''
+        Define a parameter estimation report and include the progression
+        of the parameter estimation (function evaluations).
+        Defaults to including all
+        metabolites, global variables and local variables with the RSS best value
+        These can be over-ridden with the global_quantities, LocalParameters and metabolites
+        keywords.
+        '''
+        #get existing report keys
+        keys=[]
+        for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
+            keys.append(i.attrib['key'])
+            if i.attrib['name']=='parameter_estimation':
+                self.model.xml=self.remove_report('parameter_estimation')
+
+        new_key='Report_32'
+        while new_key  in keys:
+            new_key='Report_{}'.format(numpy.random.randint(30,100))
+        report_attributes={'precision': '6',
+                           'separator': '\t',
+                           'name': 'parameter_estimation',
+                           'key': new_key,
+                           'taskType': 'parameterFitting'}
+
+        ListOfReports=self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports')
+        report=etree.SubElement(ListOfReports,'Report')
+        report.attrib.update(report_attributes)
+        comment=etree.SubElement(report,'Comment')
+        footer=etree.SubElement(report,'Footer')
+        Object=etree.SubElement(footer,'Object')
+        Object.attrib['cn']="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"
+        Object=etree.SubElement(footer,'Object')
+        Object.attrib['cn']="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"
+        LOG.debug('Reports PE setup copasiML {}'.format(self.model.xml))
+        return self.model
+
+    def multi_parameter_estimation(self):
+        '''
+        Define a parameter estimation report and include the progression
+        of the parameter estimation (function evaluations).
+        Defaults to including all
+        metabolites, global variables and local variables with the RSS best value
+        These can be over-ridden with the global_quantities, LocalParameters and metabolites
+        keywords.
+        '''
+        #get existing report keys
+        keys=[]
+        for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
+            keys.append(i.attrib['key'])
+            if i.attrib['name']=='multi_parameter_estimation':
+                self.model.xml=self.remove_report('multi_parameter_estimation')
+
+        new_key='Report_32'
+        while new_key  in keys:
+            new_key='Report_{}'.format(numpy.random.randint(30,100))
+        report_attributes={'precision': '6',
+                           'separator': '\t',
+                           'name': 'multi_parameter_estimation',
+                           'key': new_key,
+                           'taskType': 'parameterFitting'}
+
+        ListOfReports=self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports')
+        report=etree.SubElement(ListOfReports,'Report')
+        report.attrib.update(report_attributes)
+        comment=etree.SubElement(report,'Comment')
+        table=etree.SubElement(report,'Table')
+        table.attrib['printTitle']=str(1)
+        etree.SubElement(table,'Object',attrib={'cn':"CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"})
+        etree.SubElement(table,'Object',attrib={'cn':"CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"})
+        return self.model
+
+
+
+    def run(self):
+        '''
+        Execute code that builds the report defined by the kwargs
+        '''
+        if self.report_type == 'parameter_estimation':
+            LOG.debug('created a \'parameter_estimation\' report')
+            self.model = self.parameter_estimation()
+
+        elif self.report_type  == 'multi_parameter_estimation':
+            LOG.debug('created a \'parameter_estimation\' report')
+            self.model =self.multi_parameter_estimation()
+
+        elif self.report_type == 'profilelikelihood':
+            self.model = self.profile_likelihood()
+            LOG.debug('created a \'profile_likelihod\' type report')
+
+        elif self.report_type == 'time_course':
+            self.model = self.timecourse()
+            LOG.debug('created a \'time_course\' type report')
+
+        elif self.report_type == None:
+            self.model = self.model
+            LOG.debug('created a \'none\' type report')
+
+        return self.model
+
+    def remove_report(self,report_name):
+        """
+
+        remove report called report_name
+        :param report_name:
+        :return: PyCoTools.model.Model
+        """
+        assert report_name in self.report_types,'{} not a valid report type. These are valid report types: {}'.format(report_name,self.report_types)
+        for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
+            if report_name=='time_course':
+                report_name='time-course'
+            if i.attrib['name'].lower() == report_name.lower():
+                i.getparent().remove(i)
+        return self.model
+
+
+    def clear_all_reports(self):
+        """
+        Having multile reports defined at once can be really annoying
+        and give you unexpected results. Use this function to remove all reports
+        before defining a new one to ensure you only have one active report any once.
+        :return:
+        """
+        for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfTasks'):
+            for j in list(i):
+                if 'target' in j.attrib.keys():
+                    j.attrib['target']=''
+        return self.model
 
 
 class Bool2Str():
@@ -1392,6 +1288,12 @@ class TimeCourse(object):
                        'marker_size': 5,
                        'graph_directory': None,
                        }
+
+            '''
+            It'd be good to implement the @memorize decorator so
+            that we can recall a time course that has already been 
+            calculated without actually calculating
+            '''
             # values need to be lower case for copasiML
             for i in kwargs.keys():
                 assert i in options.keys(), '{} is not a keyword argument for TimeCourse'.format(i)

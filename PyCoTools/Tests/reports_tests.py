@@ -50,13 +50,82 @@ class ReportsTests(_test_base._BaseTest):
     def setUp(self):
         super(ReportsTests, self).setUp()
 
-    def test(self):
-        # PyCoTools.pycopi.New(self.copasi_file, A='a')
-        R = PyCoTools.pycopi.Reports(self.model)
-        print R.timecourse()
+    def test_time_course_report_exists(self):
+        R = PyCoTools.pycopi.Reports(self.model, quantity_type='concentration')
+        self.model = R.timecourse()
+        self.model.save(self.copasi_file, self.model.xml)
+        model_for_test = PyCoTools.pycopi.CopasiMLParser(self.copasi_file).copasiML
+        ListOfReports = model_for_test .find('{http://www.copasi.org/static/schema}ListOfReports')
+        for report in ListOfReports:
+            if report.attrib['name'] == 'Time-Course':
+                timecourse_report_element = report
+        self.assertTrue(timecourse_report_element.attrib['name'], 'Time-Course')
+
+    def test_time_course_correct_elements(self):
+        R = PyCoTools.pycopi.Reports(self.model, quantity_type='concentration')
+        self.model = R.timecourse()
+        self.model.save(self.copasi_file, self.model.xml)
+        model_for_test = PyCoTools.pycopi.CopasiMLParser(self.copasi_file).copasiML
+        ListOfReports = model_for_test.find('{http://www.copasi.org/static/schema}ListOfReports')
+        for report in ListOfReports:
+            if report.attrib['name'] == 'Time-Course':
+                timecourse_report_element = report
+        lst = []
+        for i in timecourse_report_element:
+            for j in list(i):
+                lst.append(j.attrib['cn'])
+
+        ## test the contents of a few of the table entries
+        self.assertTrue('Reference=Time' in lst[0])
+        self.assertTrue('Vector=Metabolites[B]' in lst[1])
+        self.assertTrue('Vector=Values[B2C]' in lst[5])
+
+
+    '''
+    I should also runn a time course and test for the data contents
+    Will do this after the time course task is ready
+    '''
 
 
 
+
+    def test_profile_likelihood_exists(self):
+        R = PyCoTools.pycopi.Reports(self.model, quantity_type='concentration')
+        self.model = R.profile_likelihood()
+        self.model.save(self.copasi_file, self.model.xml)
+        model_for_test = PyCoTools.pycopi.CopasiMLParser(self.copasi_file).copasiML
+        ListOfReports = model_for_test.find('{http://www.copasi.org/static/schema}ListOfReports')
+        for report in ListOfReports:
+            if report.attrib['name'] == 'profilelikelihood':
+                profile_likelihood_report_element = report
+        self.assertTrue(profile_likelihood_report_element .attrib['name'], 'profilelikelihood')
+
+
+
+    def test_parameter_estimation_exists(self):
+        R = PyCoTools.pycopi.Reports(self.model, quantity_type='concentration')
+        self.model = R.parameter_estimation()
+        self.model.save(self.copasi_file, self.model.xml)
+        model_for_test = PyCoTools.pycopi.CopasiMLParser(self.copasi_file).copasiML
+
+        ListOfReports = model_for_test.find('{http://www.copasi.org/static/schema}ListOfReports')
+        for report in ListOfReports:
+            if report.attrib['name'] == 'parameter_estimation':
+                parameter_estimation_report_element = report
+        self.assertTrue(parameter_estimation_report_element.attrib['name'], 'parameter_estimation')
+
+
+
+    def test_multi_parameter_estimation_exists(self):
+        R = PyCoTools.pycopi.Reports(self.model, quantity_type='concentration')
+        self.model = R.multi_parameter_estimation()
+        self.model.save(self.copasi_file, self.model.xml)
+        model_for_test = PyCoTools.pycopi.CopasiMLParser(self.copasi_file).copasiML
+        ListOfReports = model_for_test.find('{http://www.copasi.org/static/schema}ListOfReports')
+        for report in ListOfReports:
+            if report.attrib['name'] == 'multi_parameter_estimation':
+                multi_parameter_estimation_report_element = report
+        self.assertTrue(multi_parameter_estimation_report_element.attrib['name'], 'multi_parameter_estimation')
 
 
 

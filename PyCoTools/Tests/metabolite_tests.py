@@ -66,8 +66,11 @@ class TestMetabolites(_test_base._BaseTest):
 
         self.assertEqual(self.A.compartment, self.nucleus)
 
-    def test_reference(self):
-        self.assertEqual(self.A.reference, 'Vector=Metabolites[A]')
+    def test_reference_initial(self):
+        self.assertEqual(self.A.reference_initial, 'Vector=Metabolites[A],Reference=InitialConcentration')
+
+    def test_reference_transient(self):
+        self.assertEqual(self.A.reference_transient, 'Vector=Metabolites[A],Reference=Concentration')
 
     def test_particle_numbers(self):
         A = PyCoTools.model.Metabolite(particle_number=10e23, compartment=self.nucleus)

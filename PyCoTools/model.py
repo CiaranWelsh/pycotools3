@@ -50,6 +50,10 @@ class Model(_base._ModelBase):
         return self.__str__()
 
     @property
+    def reference(self):
+        return "CN=Root,Model={}".format(self.name)
+
+    @property
     def xml(self):
         return self.model
 
@@ -403,13 +407,23 @@ class Metabolite(_base._Base):
             raise Errors.InputError('Must specify either concentration or particle numbers')
 
     @property
-    def reference(self):
+    def reference_initial(self):
         """
         The copasi object reference for
         transient metabolite
         :return:
         """
-        return 'Vector=Metabolites[{}]'.format(self.name)
+        return 'Vector=Metabolites[{}],Reference=InitialConcentration'.format(self.name)
+
+
+    @property
+    def reference_transient(self):
+        """
+        The copasi object reference for
+        transient metabolite
+        :return:
+        """
+        return 'Vector=Metabolites[{}],Reference=Concentration'.format(self.name)
 
     @staticmethod
     def convert_particles_to_molar(particles, mol_unit, compartment_volume):#,vol_unit):
@@ -548,11 +562,32 @@ class GlobalQuantity(_base._Base):
         if self.type == 'assignment':
             Errors.NotImplementedError('Assignments not yet implemented')
 
+        if self.name == None:
+            raise Errors.InputError('name property cannot be None')
+
     def __str__(self):
         return 'GlobalQuantity({})'.format(self.as_string())
 
     def __repr__(self):
         return self.__str__()
+
+    @property
+    def reference_transient(self):
+        """
+        compose the transient reference for the global quantity.
+            i.e. not initial concentration
+        :return: string
+        """
+        return "Vector=Values[{}],Reference=Value".format(self.name)
+
+    @property
+    def reference_initial(self):
+        """
+        compose the transient reference for the global quantity.
+            i.e. not initial concentration
+        :return: string
+        """
+        return "Vector=Values[{}],Reference=InitialValue".format(self.name)
 
 
 class Reaction(_base._Base):
@@ -568,12 +603,12 @@ class Reaction(_base._Base):
     """
     def __init__(self, **kwargs):
         super(Reaction, self).__init__(**kwargs)
-        self.allowed_properties = {'name':None,
-                             'key':None,
-                             'reactants':None,
-                             'products':None,
-                             'rate_law':None,
-                             'parameters':None}
+        self.allowed_properties = {'name': None,
+                             'key': None,
+                             'reactants': None,
+                             'products': None,
+                             'rate_law': None,
+                             'parameters': None}
         for key in self.kwargs:
             if key not in self.allowed_properties:
                 raise Errors.InputError('{} not valid key. Valid keys are: {}'.format(key, self.allowed_properties))
@@ -660,7 +695,7 @@ class LocalParameter(_base._Base):
 
     @property
     def reference(self):
-        return ",Vector=Reactions[{}],ParameterGroup=Parameters,Parameter={}".format(self.reaction_name, self.name)
+        return ",Vector=Reactions[{}],ParameterGroup=Parameters,Parameter={},Reference=Value".format(self.reaction_name, self.name)
 
     # def to_element(self):
     #     pass

@@ -24,6 +24,7 @@ This module provides a set of base classes that are used in PyCoTools
 # import model as m
 import pycopi
 # import model
+import os
 import pandas
 from lxml import etree
 import Errors
@@ -134,7 +135,8 @@ class _ModelBase(_Base):
         :param copasiML:
         :return:
         """
+        if os.path.isfile(copasi_filename):
+            os.remove(copasi_filename)
         # first convert the copasiML to a root element tree
         root = etree.ElementTree(copasiML)
         root.write(copasi_filename)
-        LOG.debug('model written to {}'.format(copasi_filename))

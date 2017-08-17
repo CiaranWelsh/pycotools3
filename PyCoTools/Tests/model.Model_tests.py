@@ -62,6 +62,8 @@ class ModelTests(_test_base._BaseTest):
     def test_model_key(self):
         self.assertEqual(self.Model.key, 'Model_3')
 
+    def test_reference(self):
+        self.assertTrue('CN=Root,Model=New Model', self.model.reference)
 
     def test_metabolites(self):
         self.assertEqual(len(self.Model.metabolites), 3)
@@ -69,7 +71,6 @@ class ModelTests(_test_base._BaseTest):
     def test_metabolites(self):
         for i in self.Model.metabolites:
             self.assertTrue(isinstance(i, PyCoTools.model.Metabolite))
-
 
     def test_compartments(self):
         self.assertEqual(len(self.Model.compartments() ),2)

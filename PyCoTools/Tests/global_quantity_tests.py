@@ -49,8 +49,16 @@ class TestGlobalQuantities(_test_base._BaseTest):
         A = PyCoTools.model.GlobalQuantity(name='A', type='fixed', value=5)
         self.assertTrue(isinstance(A.value, (int, float)) )
 
-    # def test_assignment_type(self):
-    #     A = PyCoTools.model.GlobalQuantity(name='A', type='assignment', value='5 + 10 * B')
+    def test_reference_transient(self):
+        A = PyCoTools.model.GlobalQuantity(name='A', type='fixed', value=5)
+        self.assertTrue(A.reference_transient, 'Vector=Values[A],Reference=Value')
+
+    def test_reference_initial(self):
+        A = PyCoTools.model.GlobalQuantity(name='A', type='fixed', value=5)
+        self.assertTrue(A.reference_initial, 'Vector=Values[A],Reference=InitialValue')
+
+            # def test_assignment_type(self):
+            #     A = PyCoTools.model.GlobalQuantity(name='A', type='assignment', value='5 + 10 * B')
 
 
 if __name__=='__main__':
