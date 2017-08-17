@@ -40,8 +40,6 @@ class ModelTests(_test_base._BaseTest):
         super(ModelTests, self).setUp()
         self.Model = PyCoTools.model.Model(self.copasi_file)
 
-
-
     def test_time_unit(self):
         self.assertEqual(self.Model.time_unit, 's')
 
@@ -68,6 +66,10 @@ class ModelTests(_test_base._BaseTest):
     def test_metabolites(self):
         self.assertEqual(len(self.Model.metabolites), 3)
 
+    def test_metabolites(self):
+        for i in self.Model.metabolites:
+            self.assertTrue(isinstance(i, PyCoTools.model.Metabolite))
+
 
     def test_compartments(self):
         self.assertEqual(len(self.Model.compartments() ),2)
@@ -88,7 +90,8 @@ class ModelTests(_test_base._BaseTest):
 
     def test_local_parameters3(self):
         keys = self.Model.local_parameters.keys()
-        keys_in_local_parameters = sorted(['reaction_name', 'name', 'value', 'simulationType', 'kwargs', 'type'])
+        keys_in_local_parameters = sorted(['reaction_name', 'name', 'value', 'simulationType', 'kwargs', 'type',
+                                           'allowed_properties', 'key'])
         # self.assertListEqual(sorted(self.Model.local_parameters[keys[0]].__dict__.keys(), keys_in_local_parameters  )  )
         self.assertListEqual(sorted(self.Model.local_parameters[keys[0]].__dict__.keys()), keys_in_local_parameters)
 

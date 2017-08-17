@@ -67,17 +67,6 @@ class _Base(object):
         string = ','.join(str_list)
         return string.replace(',', ', ')
 
-    # def as_df(self):
-    #     """
-    #     Convert kwargs to 1D df
-    #     :return: pandas.DataFrame
-    #     """
-    #     df = pandas.DataFrame(self.kwargs, index=[self.key]).transpose()
-    #     df.index.name = 'Property'
-    #     df = df.drop('key', index=1)
-    #     return df
-
-
     def as_df(self):
         """
         Convert kwargs to 1D df
@@ -95,6 +84,34 @@ class _Base(object):
         """
         return self.kwargs
 
+    def update_properties(self, kwargs):
+        """
+        method for updating kwargs from subclasses
+
+        usage in subclass:
+            class New(_base._ModelBase):
+                def __init__(self, model, **kwargs):
+                    super(New, self).__init__(model, **kwargs)
+
+                    options = {'A':'not_a',
+                               'B':'b'}
+
+                    self.update_kwargs(options)
+                    print self.A
+                    print self.B
+        output:
+            >>> print PyCoTools.pycopi.New(self.copasi_file, A='a')
+                a
+                b
+
+        :param kwargs: dict of options for subclass
+        :return: void
+        """
+        for k in kwargs:
+            try:
+                getattr(self,k)
+            except AttributeError:
+                setattr(self, k, kwargs[k])
 
 class _ModelBase(_Base):
     def __init__(self, mod, **kwargs):
@@ -109,3 +126,15 @@ class _ModelBase(_Base):
             ## should be model.Model or etree._Element
             return self.model
 
+    @staticmethod
+    def save(copasi_filename, copasiML):
+        """
+        Save copasiML to copasi_filename. Static.
+        :param copasi_filename:
+        :param copasiML:
+        :return:
+        """
+        # first convert the copasiML to a root element tree
+        root = etree.ElementTree(copasiML)
+        root.write(copasi_filename)
+        LOG.debug('model written to {}'.format(copasi_filename))

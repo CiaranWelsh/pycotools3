@@ -51,7 +51,9 @@ class ReportsTests(_test_base._BaseTest):
         super(ReportsTests, self).setUp()
 
     def test(self):
-        PyCoTools.pycopi.Reports(self.model)
+        # PyCoTools.pycopi.New(self.copasi_file, A='a')
+        R = PyCoTools.pycopi.Reports(self.model)
+        print R.timecourse()
 
 
 

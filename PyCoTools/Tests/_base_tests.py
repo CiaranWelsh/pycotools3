@@ -122,6 +122,31 @@ class BaseModelTests(_test_base._BaseTest):
 # #     def test_test(self):
 # #         print self.model_base.model
 
+
+    def test_update_properties(self):
+        class New(PyCoTools._base._ModelBase):
+            def __init__(self, model, **kwargs):
+                super(New, self).__init__(model, **kwargs)
+
+                options = {'A': 'not_a',
+                           'B': 'b'}
+
+                self.update_properties(options)
+
+                for i in kwargs.keys():
+                    assert i in options.keys(), '{} is not a keyword argument for Reports'.format(i)
+                options.update(kwargs)
+                self.kwargs = options
+                self.list_of_output = []
+                self.list_of_output.append( self.A )
+                self.list_of_output.append(self.B )
+                self.list_of_output.append(self.kwargs['A'] )
+                self.list_of_output.append(self.kwargs['B'] )
+        new_class = New(self.copasi_file, A='a')
+        expected_output = ['a','b','a','b']
+        self.assertListEqual(new_class.list_of_output, expected_output)
+
+
 if __name__ == '__main__':
     unittest.main()
 
