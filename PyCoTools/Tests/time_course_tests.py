@@ -26,7 +26,9 @@ Date:
 
  '''
 import site
-site.addsitedir('/home/b3053674/Documents/PyCoTools')
+# site.addsitedir('/home/b3053674/Documents/PyCoTools')
+site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
+
 import PyCoTools
 from PyCoTools.PyCoToolsTutorial import test_models
 import unittest
@@ -34,18 +36,86 @@ import glob
 import os
 import shutil 
 import pandas
-from PyCoTools.Tests import base_tests
+from PyCoTools.Tests import _test_base
 
 
 
-class TimeCourseTests(base_tests._BaseTest):
+class TimeCourseTests(_test_base._BaseTest):
     def setUp(self):
         super(TimeCourseTests, self).setUp()
 
-        
-    def test(self):
-        TC = PyCoTools.pycopi.TimeCourse()
+    def test_deterministic1(self):
+        TC = PyCoTools.pycopi.TimeCourse(self.model, end=1000,
+                                         step_size=100,
+                                         intervals=10)
+        self.model = TC.set_deterministic()
+        self.model.save(self.copasi_file, self.model.xml)
+        model_for_test = PyCoTools.pycopi.CopasiMLParser(self.copasi_file).copasiML
+        query = "//*[@name='Time-Course']" and "//*[@type='timeCourse']"
+        for i in model_for_test.xpath(query):
+            for j in list(i):
+                self.assertTrue(j.attrib['name'] == 'Deterministic (LSODA)')
 
+    def test_deterministic2(self):
+        TC = PyCoTools.pycopi.TimeCourse(self.model, end=1000,
+                                         step_size=100,
+                                         intervals=10)
+        self.model = TC.set_deterministic()
+        self.model.save(self.copasi_file, self.model.xml)
+        model_for_test = PyCoTools.pycopi.CopasiMLParser(self.copasi_file).copasiML
+        query = "//*[@name='Time-Course']" and "//*[@type='timeCourse']"
+        for i in model_for_test.xpath(query):
+            for j in list(i):
+                self.assertTrue(j.attrib['type'] == 'Deterministic(LSODA)')
+
+    def test_deterministic3(self):
+        TC = PyCoTools.pycopi.TimeCourse(self.model, end=1000,
+                                         step_size=100,
+                                         intervals=10)
+        self.model = TC.set_deterministic()
+        self.model.save(self.copasi_file, self.model.xml)
+        model_for_test = PyCoTools.pycopi.CopasiMLParser(self.copasi_file).copasiML
+        query = "//*[@name='Time-Course']" and "//*[@type='timeCourse']"
+        for i in model_for_test.xpath(query):
+            for j in list(i):
+                for k in list(j):
+                    if k.attrib['name'] == 'Duration':
+                        self.assertTrue(k.attrib['value'] == str(1000))
+
+    def test_deterministic4(self):
+        TC = PyCoTools.pycopi.TimeCourse(self.model, end=1000,
+                                         step_size=100,
+                                         intervals=10)
+        self.model = TC.set_deterministic()
+        self.model.save(self.copasi_file, self.model.xml)
+        model_for_test = PyCoTools.pycopi.CopasiMLParser(self.copasi_file).copasiML
+        query = "//*[@name='Time-Course']" and "//*[@type='timeCourse']"
+        for i in model_for_test.xpath(query):
+            for j in list(i):
+                for k in list(j):
+                    if k.attrib['name'] == 'StepSize':
+                        self.assertTrue(k.attrib['value'] == str(TC.step_size))
+
+    def test_deterministic5(self):
+        TC = PyCoTools.pycopi.TimeCourse(self.model, end=1000,
+                                         step_size=100,
+                                         intervals=10)
+        self.model = TC.set_deterministic()
+        self.model.save(self.copasi_file, self.model.xml)
+        model_for_test = PyCoTools.pycopi.CopasiMLParser(self.copasi_file).copasiML
+        query = "//*[@name='Time-Course']" and "//*[@type='timeCourse']"
+        for i in model_for_test.xpath(query):
+            for j in list(i):
+                for k in list(j):
+                    if k.attrib['name'] == 'Absolute Tolerance':
+                        self.assertTrue(k.attrib['value'] == str(TC.absolute_tolerance))
+
+
+
+
+
+
+                                            # os.system('CopasiUI {}'.format(self.copasi_file))
     # def test_report_setup(self):
     #     ListOfReports=self.TC.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports')
     #     for i in ListOfReports:
