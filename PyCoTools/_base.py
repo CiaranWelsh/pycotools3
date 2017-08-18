@@ -87,7 +87,7 @@ class _Base(object):
 
     def update_properties(self, kwargs):
         """
-        method for updating kwargs from subclasses
+        method for updating properties from subclasses kwargs
 
         usage in subclass:
             class New(_base._ModelBase):
@@ -110,9 +110,78 @@ class _Base(object):
         """
         for k in kwargs:
             try:
-                getattr(self,k)
+                getattr(self, k)
             except AttributeError:
                 setattr(self, k, kwargs[k])
+
+    def update_kwargs(self, new_kwargs):
+        """
+        Method for updating options
+        defined by user with default options
+        :param new_kwargs: dict
+        :return: void
+        """
+        return self.kwargs.update(new_kwargs)
+
+    @staticmethod
+    def convert_bool_to_numeric(dct):
+        """
+        CopasiML uses 1's and 0's for True or False in some
+        but not all places. When one of these options
+        is required by the user and is specified as bool,
+        this class converts them into 1's or 0's.
+
+        Use this method in early on in constructor for
+        all subclasses where this applies.
+
+        Usage in subclass:
+            class New(PyCoTools._base._ModelBase):
+                def __init__(self, model, **kwargs):
+                    super(New, self).__init__(model, **kwargs)
+
+                    options = {'append': True,
+                               'confirm_overwrite': False,
+                               'output_event': False,
+                               'scheduled': True,
+                               'plot': True}
+
+                    options = self.convert_bool_to_numeric(options)
+                    self.update_properties(options)
+
+
+        :param: dct. Python dictionary.  __dict__ or kwargs or options
+        :return:
+        """
+        lst = ['append',
+               'confirm_overwrite',
+               'output_event',
+               'scheduled',
+               'automatic_step_size',
+               'start_in_steady_state',
+
+               ]
+        for k, v in dct.items():
+            if k in lst:
+                if v == True:
+                    dct[k] = '1'
+                elif v == False:
+                    dct[k] = '0'
+                else:
+                    raise Exception
+        return dct
+
+    @staticmethod
+    def check_integrity(allowed, given):
+        """
+        Method to raise an error when a wrong
+        kwarg is passed to a subclass
+        :param: allowed. List of allowed kwargs
+        :param: given. List of kwargs given by user or default
+        :return: 0
+        """
+        for key in given:
+            if key not in allowed:
+                raise Errors.InputError('{} not in {}'.format(key, allowed))
 
 class _ModelBase(_Base):
     def __init__(self, mod, **kwargs):

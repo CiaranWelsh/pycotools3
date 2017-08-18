@@ -725,20 +725,19 @@ class Reports(_base._ModelBase):
         super(Reports, self).__init__(model, **kwargs)
         self.model=model
 
-        self.allowed_properties={#report variables
-                 'metabolites': self.model.metabolites,
-                 'global_quantities': self.model.global_quantities,
-                 'local_parameters':self.model.local_parameters,
-                 'quantity_type':'concentration',
-                 'report_name':None,
-                 'append': False,
-                 'confirm_overwrite': False,
-                 'separator': '\t',
-                 'update_model': False,
-                 'report_type': 'parameter_estimation',
-                 'variable': self.model.metabolites[0], #only for profile_likelihood
-                 'directory': None,
-                 }
+        self.allowed_properties={'metabolites': self.model.metabolites,
+                                 'global_quantities': self.model.global_quantities,
+                                 'local_parameters':self.model.local_parameters,
+                                 'quantity_type':'concentration',
+                                 'report_name':None,
+                                 'append': False,
+                                 'confirm_overwrite': False,
+                                 'separator': '\t',
+                                 'update_model': False,
+                                 'report_type': 'parameter_estimation',
+                                 'variable': self.model.metabolites[0], #only for profile_likelihood
+                                 'directory': None,
+                                 }
 
         for key in self.kwargs:
             if key not in self.allowed_properties:
@@ -1074,10 +1073,106 @@ class Bool2Str():
                     self.dct.update({kwarg:"false"})
 #                
         return self.dct
-            
-    
 
-class TimeCourse(object):
+class TimeCourse(_base._ModelBase):
+
+    def __init__(self, model, **kwargs):
+        super(TimeCourse, self).__init__(model, **kwargs)
+        self.model = model
+
+        default_report_name = os.path.join(os.getcwd(), 'TimeCourse.txt')
+
+        self.default_properties = {'intervals': '100',
+                                   'step_size': '0.01',
+                                   'end': '1',
+                                   'relative_tolerance': '1e-6',
+                                   'absolute_tolerance': '1e-12',
+                                   'max_internal_steps': '10000',
+                                   'start': '0.0',
+                                   'update_model': False,
+                                   # report variables
+                                   'metabolites': self.model.metabolites,
+                                   'global_quantities': self.model.global_quantities,
+                                   'quantity_type': 'concentration',
+                                   'report_name': default_report_name,
+                                   'append': False,
+                                   'confirm_overwrite': False,
+                                   'simulation_type': 'deterministic',
+                                   'output_event': False,
+                                   'scheduled': True,
+                                   'automatic_step_size': False,
+                                   'start_in_steady_state': False,
+                                   }
+
+
+        self.convert_bool_to_numeric(self.default_properties)
+        self.update_kwargs(self.default_properties)
+        self.update_properties(self.default_properties)
+        self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
+
+
+    def __str__(self):
+        return "TimeCourse({})".format(self.as_string())
+
+    def set_deterministic(self):
+        """
+
+        :return:
+        """
+        query = "//*[@name='Time-Course']" and "//*[@type='timeCourse']"
+        method_params = {'type': 'Deterministic(LSODA)', 'name': 'Deterministic (LSODA)'}
+        for i in self.model.xml.xpath(query):
+            # make available to coapsiSE
+            i.attrib['scheduled'] = self.scheduled
+            for j in list(i):
+                j.attrib['type'] = method_params['type']
+                j.attrib['name'] = method_params['name']
+                for k in list(j):
+                    if k.attrib['name'] == 'AutomaticStepSize':
+                        k.attrib['value'] = str(self.automatic_step_size)
+
+                    if k.attrib['name'] == 'Start in Steady State':
+                        k.attrib['value'] = str(self.start_in_steady_state)
+
+                    if k.attrib['name'] == 'Duration':
+                        k.attrib['value'] = str(self.end)
+
+                    if k.attrib['name'] == 'StepNumber':
+                        k.attrib['value'] = str(self.intervals)
+
+                    elif k.attrib['name'] == 'StepSize':
+                        k.attrib['value'] = str(self.step_size)
+
+                    elif k.attrib['name'] == 'TimeSeriesRequested':
+                        k.attrib['value'] = '1'
+
+                    elif k.attrib['name'] == 'OutputStartTime':
+                        k.attrib['value'] = str(self.start)
+
+                    elif k.attrib['name'] == 'Output Event':
+                        k.attrib['value'] = self.output_event
+
+                    elif k.attrib['name'] == 'Continue on Simultaneous Events':
+                        k.attrib['value'] = '0'
+
+                    elif k.attrib['name'] == 'Integrate Reduced Model':
+                        k.attrib['value'] = '0'
+
+                    elif k.attrib['name'] == 'Relative Tolerance':
+                        k.attrib['value'] = str(self.relative_tolerance)
+
+                    elif k.attrib['name'] == 'Absolute Tolerance':
+                        k.attrib['value'] = str(self.absolute_tolerance)
+
+                    elif k.attrib['name'] == 'MaxInternalSteps':
+                        k.attrib['value'] = str(self.max_internal_steps)
+        return self.model
+
+
+
+
+
+class TimeCourse2(_base._ModelBase):
         '''
         run a time course using Copasi. Ensure, you specify the corrent amount
         of time you want simulating. Do this by ensuring that end=step_size*intervals.
@@ -1191,62 +1286,6 @@ class TimeCourse(object):
 
         '''
 
-        class Reports(_base._ModelBase):
-            '''
-            Creates reports in copasi output specification section.
-            Use:
-                -the report_type kwarg to specify which type of report you want to make
-                -the metabolites and global_quantities kwargs to specify which parameters
-                to include
-
-
-
-            args:
-                copasi_file:
-                    The copasi file you want to add a report too
-
-            **kwargs:
-
-                report_type:
-                    Which report to write. Options:
-                        profilelikleihood:
-                            - for Pydentify, shouldn't need to manually touch this
-                        time_course:
-                            -a table of time Vs concentrations. Included values are specified to the metabolites and//or global_quantities arguments
-                    parameter_estimation:
-                            -a table of values from a parameter estimation and the residual sum of squares value for each run.
-
-
-                metabolites:
-                    A list of valid model metabolites you want to include in the report. Default=All metabolites
-
-                global_quantities;
-                    List of valid global quantities that you want to include in the report. Default=All global variables
-
-                quantity_type:
-                    Either 'concentration' or 'particle_number'. Switch between having report output in either concentration of in particle_numbers.
-
-                report_name:
-                    Name of the report. Default depends on kwarg report_type
-
-                append:
-                    True or False. append to report. Default False
-
-                confirm_overwrite:
-                    True or False.  Default= False
-
-                save:
-                    either False,'overwrite' or 'duplicate'.
-                    false: don't write to file
-                    overwrite: overwrite copasi_file
-                    duplicate: write a new file named using the kwarg OutputML
-
-
-                variable:
-                    When report_type is profilelikelihood, theta is the parameter of interest
-
-            '''
-
         def __init__(self, model, **kwargs):
             super(TimeCourse, self).__init__(model, **kwargs)
             self.model = model
@@ -1254,43 +1293,43 @@ class TimeCourse(object):
             default_report_name = os.path.join(os.getcwd(), 'TimeCourse.txt')
 
             self.allowed_properties = {'intervals': '100',
-                       'step_size': '0.01',
-                       'end': '1',
-                       'relative_tolerance': '1e-6',
-                       'absolute_tolerance': '1e-12',
-                       'max_internal_steps': '10000',
-                       'start': '0.0',
-                       'update_model': False,
-                       # report variables
-                       'metabolites': self.model.metabolites(),
-                       'global_quantities': self.model.global_quantities(),
-                       'quantity_type': 'concentration',
-                       'report_name': default_report_name,
-                       'append': False,
-                       'confirm_overwrite': False,
-                       'simulation_type': 'deterministic',
-                       'output_event': False,
-                       'scheduled': True,
-                       'save': 'overwrite',
-                       'prune_headers': True,
+                                       'step_size': '0.01',
+                                       'end': '1',
+                                       'relative_tolerance': '1e-6',
+                                       'absolute_tolerance': '1e-12',
+                                       'max_internal_steps': '10000',
+                                       'start': '0.0',
+                                       'update_model': False,
+                                       # report variables
+                                       'metabolites': self.model.metabolites,
+                                       'global_quantities': self.model.global_quantities,
+                                       'quantity_type': 'concentration',
+                                       'report_name': default_report_name,
+                                       'append': False,
+                                       'confirm_overwrite': False,
+                                       'simulation_type': 'deterministic',
+                                       'output_event': False,
+                                       'scheduled': True,
+                                       'save': 'overwrite',
+                                       'prune_headers': True,
 
-                       # graph options
-                       'plot': False,
-                       'line_width': 2,
-                       'line_color': 'k',
-                       'marker_color': 'r',
-                       'line_style': '-',
-                       'marker_style': 'o',
-                       'axis_size': 15,
-                       'font_size': 22,
-                       'xtick_rotation': 0,
-                       'title_wrap_size': 35,
-                       'savefig': False,
-                       'extra_title': None,
-                       'dpi': 125,
-                       'marker_size': 5,
-                       'graph_directory': None,
-                       }
+                                       # graph options
+                                       'plot': False,
+                                       'line_width': 2,
+                                       'line_color': 'k',
+                                       'marker_color': 'r',
+                                       'line_style': '-',
+                                       'marker_style': 'o',
+                                       'axis_size': 15,
+                                       'font_size': 22,
+                                       'xtick_rotation': 0,
+                                       'title_wrap_size': 35,
+                                       'savefig': False,
+                                       'extra_title': None,
+                                       'dpi': 125,
+                                       'marker_size': 5,
+                                       'graph_directory': None,
+                                       }
 
             for key in self.kwargs:
                 if key not in self.allowed_properties:
@@ -1299,52 +1338,55 @@ class TimeCourse(object):
 
 
 
-        # def __init__(self, copasi_file, **kwargs):
-        #     self.copasi_file = copasi_file
-        #     self.CParser = CopasiMLParser(self.copasi_file)
-        #     self.copasiML = self.CParser.copasiML
-        #     LOG.debug('CopasiML: {}'.format(self.copasiML))
-        #     self.GMQ = GetModelQuantities(self.copasi_file)
-        #     default_report_name = os.path.join(os.path.dirname(self.copasi_file),'{}_TimeCourse.txt'.format(os.path.split(self.copasi_file)[1][:-4]))
-        #     options = {'intervals': '100',
-        #                'step_size': '0.01',
-        #                'end': '1',
-        #                'relative_tolerance': '1e-6',
-        #                'absolute_tolerance': '1e-12',
-        #                'max_internal_steps': '10000',
-        #                'start': '0.0',
-        #                'update_model': False,
-        #                # report variables
-        #                'metabolites': self.GMQ.get_IC_cns().keys(),
-        #                'global_quantities': self.GMQ.get_global_quantities().keys(),
-        #                'quantity_type': 'concentration',
-        #                'report_name': default_report_name,
-        #                'append': False,
-        #                #                 'target': 'cheese.txt',
-        #                'confirm_overwrite': False,
-        #                'simulation_type': 'deterministic',
-        #                'output_event': False,
-        #                'scheduled': True,
-        #                'save': 'overwrite',
-        #                'prune_headers': True,
-        #
-        #                # graph options
-        #                'plot': False,
-        #                'line_width': 2,
-        #                'line_color': 'k',
-        #                'marker_color': 'r',
-        #                'line_style': '-',
-        #                'marker_style': 'o',
-        #                'axis_size': 15,
-        #                'font_size': 22,
-        #                'xtick_rotation': 0,
-        #                'title_wrap_size': 35,
-        #                'savefig': False,
-        #                'extra_title': None,
-        #                'dpi': 125,
-        #                'marker_size': 5,
-        #                'graph_directory': None,
-        #                }
+        def set_deterministic(self):
+            """
+
+            :return:
+            """
+            query = "//*[@name='Time-Course']" and "//*[@type='timeCourse']"
+            method_params = {'type': 'Deterministic(LSODA)', 'name': 'Deterministic (LSODA)'}
+            for i in self.model.xml.xpath(query):
+                # make available to coapsiSE
+                i.attrib['scheduled'] = self.scheduled
+                for j in list(i):
+                    j.attrib['type'] = method_params['type']
+                    j.attrib['name'] = method_params['name']
+                    for k in list(j):
+                        if k.attrib['name'] == 'Duration':
+                            k.attrib['value'] = self.end
+
+                        if k.attrib['name'] == 'StepNumber':
+                            k.attrib['value'] = self.intervals
+
+                        elif k.attrib['name'] == 'StepSize':
+                            k.attrib['value'] = self.step_size
+
+                        elif k.attrib['name'] == 'TimeSeriesRequested':
+                            k.attrib['value'] = '1'
+
+                        elif k.attrib['name'] == 'OutputStartTime':
+                            k.attrib['value'] = self.start
+
+                        elif k.attrib['name'] == 'Output Event':
+                            k.attrib['value'] = self.output_event
+
+                        elif k.attrib['name'] == 'Continue on Simultaneous Events':
+                            k.attrib['value'] = '0'
+
+                        elif k.attrib['name'] == 'Integrate Reduced Model':
+                            k.attrib['value'] = '0'
+
+                        elif k.attrib['name'] == 'Relative Tolerance':
+                            k.attrib['value'] = self.relative_tolerance
+
+                        elif k.attrib['name'] == 'Absolute Tolerance':
+                            k.attrib['value'] = self.absolute_tolerance
+
+                        elif k.attrib['name'] == 'MaxInternalSteps':
+                            k.attrib['value'] = self.max_internal_steps
+            return self.model
+
+
 #
 #             '''
 #             It'd be good to implement the @memorize decorator so
@@ -1377,10 +1419,10 @@ class TimeCourse(object):
             if float(self.end) != float(self.step_size) * float(self.intervals):
                 raise Errors.TimeCourseError(
                     'end should equal Interval Size times Number of intervals but {}!={}*{}'.format(
-                        self.end, self.step_size, self.intervals)
+                        self.end, self.step_size, self.intervals) )
 
             # only accept deterministic or stochastic
-            assert self.simulation_type in ['deterministic', 'stochastic']
+            # assert self.simulation_type in ['deterministic', 'stochastic']
 
             assert self.quantity_type.lower() in ['concentration', 'particle_number']
 
@@ -1432,24 +1474,24 @@ class TimeCourse(object):
 
             # convert some numeric kwargs to str
             # self.kwargs = Bool2Str(self.kwargs).convert_dct()
-            self.kwargs['intervals'] = str(self.kwargs.get('intervals'))
-            self.kwargs['step_size'] = str(self.kwargs.get('step_size'))
-            self.kwargs['end'] = str(self.kwargs.get('end'))
-            self.kwargs['relative_tolerance'] = str(self.kwargs.get('relative_tolerance'))
-            self.kwargs['absolute_tolerance'] = str(self.kwargs.get('absolute_tolerance'))
-            self.kwargs['max_internal_steps'] = str(self.kwargs.get('max_internal_steps'))
-            self.kwargs['start'] = str(self.kwargs.get('start'))
+            self.intervals = str(self.intervals)
+            self.step_size = str(self.step_size)
+            self.end = str(self.end)
+            self.relative_tolerance = str(self.relative_tolerance)
+            self.absolute_tolerance = str(self.absolute_tolerance)
+            self.max_internal_steps = str(self.max_internal_steps)
+            self.start = str(self.start)
 
-            if isinstance(self.kwargs.get('marker_size'), int):
-                self.kwargs['marker_size'] = float(self.kwargs.get('marker_size'))
+            if isinstance(self.marker_size, int):
+                self.marker_size = float(self.marker_size)
 
-            assert isinstance(self.kwargs.get('marker_size'), float)
+            assert isinstance(self.marker_size, float)
 
-            assert self.kwargs.get('line_style') in ['-', '--', '-.', ':', 'None', ' ', '']
-            assert isinstance(self.kwargs.get('line_width'), int), '{} is not int'.format(
-                type(self.kwargs.get('line_width')))
+            assert self.line_style in ['-', '--', '-.', ':', 'None', ' ', '']
+            assert isinstance(self.line_width, int), '{} is not int'.format(
+                type(self.line_width) )
 
-            assert self.kwargs.get('marker_style') in ['o', 'v', '^', '<', '>', '8', 's', 'p', '*', 'h', 'H', 'D', 'd']
+            assert self.marker_style in ['o', 'v', '^', '<', '>', '8', 's', 'p', '*', 'h', 'H', 'D', 'd']
 
             color_dct = {'b': 'blue',
                          'g': 'green',
@@ -1459,18 +1501,18 @@ class TimeCourse(object):
                          'y': 'yellow',
                          'k': 'black',
                          'w': 'white'}
-            assert self.kwargs.get('line_color') in color_dct.keys() + color_dct.values()
-            assert self.kwargs.get('marker_color') in color_dct.keys() + color_dct.values()
+            assert self.line_color in color_dct.keys() + color_dct.values()
+            assert self.marker_color in color_dct.keys() + color_dct.values()
 
             self.report_options = {}  # report variables
-            self.report_options['metabolites'] = self.kwargs.get('metabolites')
-            self.report_options['global_quantities'] = self.kwargs.get('global_quantities')
-            self.report_options['quantity_type'] = self.kwargs.get('quantity_type')
-            self.report_options['report_name'] = self.kwargs.get('report_name')
-            self.report_options['append'] = self.kwargs.get('append')
-            self.report_options['confirm_overwrite'] = self.kwargs.get('confirm_overwrite')
-            self.report_options['save'] = self.kwargs.get('save')
-            self.report_options['update_model'] = self.kwargs.get('update_model')
+            self.report_options['metabolites'] = self.metabolites
+            self.report_options['global_quantities'] = self.global_quantities
+            self.report_options['quantity_type'] = self.quantity_type
+            self.report_options['report_name'] = self.report_name
+            self.report_options['append'] = self.append
+            self.report_options['confirm_overwrite'] = self.confirm_overwrite
+            self.report_options['save'] = self.save
+            self.report_options['update_model'] = self.update_model
             self.report_options['report_type'] = 'time_course'  # self.kwargs.get('report_type')
 #
 #             # other keywords that are non optional for time course
