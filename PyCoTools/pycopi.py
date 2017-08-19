@@ -97,17 +97,19 @@ class CopasiMLParser():
 class Run(_base._ModelBase):
     def __init__(self, model, **kwargs):
         super(Run, self).__init__(model, **kwargs)
+        print self.model
 
-        self.default_properties = {'task': 'time_course',
-                                   'save': 'overwrite',
-                                   'mode': True,
-                                   'max_time': None}
 
-        self.convert_bool_to_numeric(self.default_properties)
-        self.update_kwargs(self.default_properties)
-        self.update_properties(self.default_properties)
-        self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
-        self.do_checks()
+        # self.default_properties = {'task': 'time_course',
+        #                            'save': 'overwrite',
+        #                            'mode': True,
+        #                            'max_time': None}
+        #
+        # self.convert_bool_to_numeric(self.default_properties)
+        # self.update_kwargs(self.default_properties)
+        # self.update_properties(self.default_properties)
+        # self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
+        # self.do_checks()
 
 
     def __str__(self):
@@ -134,12 +136,17 @@ class Run(_base._ModelBase):
     #
     #     Process(run(self.copasi_file))
     #
-    def set_task(self):
-        for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfTasks'):
-            i.attrib['scheduled'] = "false"  # set all to false
-            if self.task == i.attrib['type'].lower():
-                i.attrib['scheduled'] = "true"
-        return self.model
+    # def set_task(self):
+    #     """
+    #
+    #     :return:
+    #     """
+    #     print self.model
+        # for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfTasks'):
+        #     i.attrib['scheduled'] = "false"  # set all to false
+        #     if self.task == i.attrib['type'].lower():
+        #         i.attrib['scheduled'] = "true"
+        # return self.model
     #
     # def run(self):
     #     '''

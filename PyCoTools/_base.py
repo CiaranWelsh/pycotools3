@@ -28,6 +28,7 @@ import os
 import pandas
 from lxml import etree
 import Errors
+
 from contextlib import contextmanager
 # from model import Model
 
@@ -191,9 +192,14 @@ class _ModelBase(_Base):
     def __init__(self, mod, **kwargs):
         super(_ModelBase, self).__init__(**kwargs)
         self.model = mod
-        self.model = self.read_model()
+        self.model = self.read_xml()
 
-    def read_model(self):
+    def read_xml(self):
+        """
+        if self.model is str (path to copasi file)
+        return the xml. If already a model, do nothing.
+        :return:
+        """
         if isinstance(self.model, str):
             return pycopi.CopasiMLParser(self.model).copasiML
         else:
