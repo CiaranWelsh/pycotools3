@@ -53,7 +53,7 @@ class ReportsTests(_test_base._BaseTest):
     def test_time_course_report_exists(self):
         R = PyCoTools.pycopi.Reports(self.model, quantity_type='concentration')
         self.model = R.timecourse()
-        self.model.save(self.copasi_file, self.model.xml)
+        self.model.save(self.copasi_file)
         model_for_test = PyCoTools.pycopi.CopasiMLParser(self.copasi_file).copasiML
         ListOfReports = model_for_test .find('{http://www.copasi.org/static/schema}ListOfReports')
         for report in ListOfReports:
@@ -64,7 +64,7 @@ class ReportsTests(_test_base._BaseTest):
     def test_time_course_correct_elements(self):
         R = PyCoTools.pycopi.Reports(self.model, quantity_type='concentration')
         self.model = R.timecourse()
-        self.model.save(self.copasi_file, self.model.xml)
+        self.model.save(self.copasi_file)
         model_for_test = PyCoTools.pycopi.CopasiMLParser(self.copasi_file).copasiML
         ListOfReports = model_for_test.find('{http://www.copasi.org/static/schema}ListOfReports')
         for report in ListOfReports:
@@ -92,7 +92,7 @@ class ReportsTests(_test_base._BaseTest):
     def test_profile_likelihood_exists(self):
         R = PyCoTools.pycopi.Reports(self.model, quantity_type='concentration')
         self.model = R.profile_likelihood()
-        self.model.save(self.copasi_file, self.model.xml)
+        self.model.save(self.copasi_file)
         model_for_test = PyCoTools.pycopi.CopasiMLParser(self.copasi_file).copasiML
         ListOfReports = model_for_test.find('{http://www.copasi.org/static/schema}ListOfReports')
         for report in ListOfReports:
@@ -105,7 +105,7 @@ class ReportsTests(_test_base._BaseTest):
     def test_parameter_estimation_exists(self):
         R = PyCoTools.pycopi.Reports(self.model, quantity_type='concentration')
         self.model = R.parameter_estimation()
-        self.model.save(self.copasi_file, self.model.xml)
+        self.model.save(self.copasi_file)
         model_for_test = PyCoTools.pycopi.CopasiMLParser(self.copasi_file).copasiML
 
         ListOfReports = model_for_test.find('{http://www.copasi.org/static/schema}ListOfReports')
@@ -119,7 +119,7 @@ class ReportsTests(_test_base._BaseTest):
     def test_multi_parameter_estimation_exists(self):
         R = PyCoTools.pycopi.Reports(self.model, quantity_type='concentration')
         self.model = R.multi_parameter_estimation()
-        self.model.save(self.copasi_file, self.model.xml)
+        self.model.save(self.copasi_file)
         model_for_test = PyCoTools.pycopi.CopasiMLParser(self.copasi_file).copasiML
         ListOfReports = model_for_test.find('{http://www.copasi.org/static/schema}ListOfReports')
         for report in ListOfReports:
