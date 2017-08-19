@@ -42,11 +42,14 @@ class RunTests(_test_base._BaseTest):
         super(RunTests, self).setUp()
 
     def test(self):
-        R=PyCoTools.pycopi.Run(self.copasi_file)
-        model = R.set_task()
-        model.save(self.copasi_file)
-        new_model = PyCoTools.pycopi.CopasiMLParser(self.copasi_file).copasiML
-        print new_model
+        print PyCoTools.model.Model(self.model)
+        # R=PyCoTools.pycopi.Run(self.copasi_file)
+        # print R.model
+        # model = R.set_task()
+        # print model
+        # model.save(self.copasi_file)
+        # new_model = PyCoTools.pycopi.CopasiMLParser(self.copasi_file).copasiML
+        # print new_model
 
 
 
