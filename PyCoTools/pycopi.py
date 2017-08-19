@@ -46,6 +46,7 @@ import glob
 import seaborn as sns
 from copy import deepcopy
 from subprocess import check_call
+from collections import OrderedDict
 
 
 
@@ -93,60 +94,169 @@ class CopasiMLParser():
         root.write(copasi_filename)
         LOG.debug('model written to {}'.format(copasi_filename))
 
+class Run(_base._ModelBase):
+    def __init__(self, model, **kwargs):
+        super(Run, self).__init__(model, **kwargs)
+
+        self.default_properties = {'task': 'time_course',
+                                   'save': 'overwrite',
+                                   'mode': True,
+                                   'max_time': None}
+
+        self.convert_bool_to_numeric(self.default_properties)
+        self.update_kwargs(self.default_properties)
+        self.update_properties(self.default_properties)
+        self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
+        self.do_checks()
+
+
+    def __str__(self):
+        return 'Run({})'.format(self.as_string())
+
+
+    #     self.copasiML = self.set_task()
+    #     self.save()
+    #     if self.kwargs.get('mode') == True:
+    #         try:
+    #             self.run()
+    #         except Errors.CopasiError:
+    #             self.run_linux()
+    #     elif self.kwargs.get('mode') == 'SGE':
+    #         self.submit_copasi_job_SGE()
+    #     elif self.kwargs.get('mode') == 'multiprocess':
+    #         self.multi_run()
+    #
+    # def multi_run(self):
+    #     def run(x):
+    #         if os.path.isfile(x) != True:
+    #             raise Errors.FileDoesNotExistError('{} is not a file'.format(self.copasi_file))
+    #         subprocess.Popen(['CopasiSE', self.copasi_file])
+    #
+    #     Process(run(self.copasi_file))
+    #
+    def set_task(self):
+        for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfTasks'):
+            i.attrib['scheduled'] = "false"  # set all to false
+            if self.task == i.attrib['type'].lower():
+                i.attrib['scheduled'] = "true"
+        return self.model
+    #
+    # def run(self):
+    #     '''
+    #     Process the copasi file using CopasiSE
+    #     Must be Copasi version 16
+    #
+    #     '''
+    #     args = ['CopasiSE', "{}".format(self.copasi_file)]
+    #     p = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    #     output, err = p.communicate()
+    #     d = {}
+    #     d['output'] = output
+    #     d['error'] = err
+    #     if err != '':
+    #         try:
+    #             self.run_linux()
+    #         except:
+    #             raise Errors.CopasiError('Failed with Copasi error: \n\n' + d['error'])
+    #     return d['output']
+    #
+    # def run_linux(self):
+    #     os.system('CopasiSE "{}"'.format(self.copasi_file))
+    #
+    # def submit_copasi_job_SGE(self):
+    #     '''
+    #     Submit copasi file as job to SGE based job scheduler.
+    #     '''
+    #     with open(self.SGE_job_file, 'w') as f:
+    #         f.write('#!/bin/bash\n#$ -V -cwd\nmodule add apps/COPASI/4.16.104-Linux-64bit\nCopasiSE {}'.format(
+    #             self.copasi_file))
+    #     ## -N option for job name
+    #     os.system('qsub {} -N {} '.format(self.SGE_job_file, self.SGE_job_file))
+    #     ## remove .sh file after used.
+    #
+    # #        os.remove(self.SGE_job_file)
+    #
+    # def save(self):
+    #     self.CParser.write_copasi_file(self.copasi_file, self.copasiML)
+    #     return self.copasiML
+    #
+    # def save_dep(self):
+    #     if self.kwargs.get('save') == 'duplicate':
+    #         self.CParser.write_copasi_file(self.kwargs.get('OutputML'), self.copasiML)
+    #     elif self.kwargs.get('save') == 'overwrite':
+    #         self.CParser.write_copasi_file(self.copasi_file, self.copasiML)
+    #     return self.copasiML
+    #
+
+
+    def do_checks(self):
+        """
+        Varify integrity of user input
+        :return:
+        """
+        tasks = ['steady_state', 'time_course',
+                 'scan', 'fluxmode', 'optimization',
+                 'parameter_estimation', 'metaboliccontrolanalysis',
+                 'lyapunovexponents', 'timescaleseparationanalysis',
+                 'sensitivities', 'moieties', 'crosssection',
+                 'linearnoiseapproximation']
+        if self.task not in tasks:
+            raise Errors.InputError('{} not in list of tasks. List of tasks are: {}'.format(self.task, tasks))
+
 class Reports(_base._ModelBase):
     '''
-    Creates reports in copasi output specification section. 
-    Use: 
+    Creates reports in copasi output specification section.
+    Use:
         -the report_type kwarg to specify which type of report you want to make
         -the metabolites and global_quantities kwargs to specify which parameters
         to include
-        
-    
-    
+
+
+
     args:
         copasi_file:
             The copasi file you want to add a report too
-        
+
     **kwargs:
 
-        report_type: 
+        report_type:
             Which report to write. Options:
                 profilelikleihood:
                     - for Pydentify, shouldn't need to manually touch this
                 time_course:
                     -a table of time Vs concentrations. Included values are specified to the metabolites and//or global_quantities arguments
             parameter_estimation:
-                    -a table of values from a parameter estimation and the residual sum of squares value for each run. 
+                    -a table of values from a parameter estimation and the residual sum of squares value for each run.
 
-    
+
         metabolites:
             A list of valid model metabolites you want to include in the report. Default=All metabolites
-        
+
         global_quantities;
             List of valid global quantities that you want to include in the report. Default=All global variables
-        
+
         quantity_type:
-            Either 'concentration' or 'particle_number'. Switch between having report output in either concentration of in particle_numbers. 
+            Either 'concentration' or 'particle_number'. Switch between having report output in either concentration of in particle_numbers.
 
         report_name:
             Name of the report. Default depends on kwarg report_type
-        
-        append: 
+
+        append:
             True or False. append to report. Default False
-        
-        confirm_overwrite: 
+
+        confirm_overwrite:
             True or False.  Default= False
-        
-        save: 
-            either False,'overwrite' or 'duplicate'. 
+
+        save:
+            either False,'overwrite' or 'duplicate'.
             false: don't write to file
             overwrite: overwrite copasi_file
             duplicate: write a new file named using the kwarg OutputML
 
-            
+
         variable:
             When report_type is profilelikelihood, theta is the parameter of interest
-    
+
     '''
     def __init__(self,model,**kwargs):
         super(Reports, self).__init__(model, **kwargs)
@@ -217,7 +327,10 @@ class Reports(_base._ModelBase):
 
         self.__dict__ = Bool2Str(self.__dict__).convert_dct()
 
+        self.run()
 
+    def __str__(self):
+        return 'Report({})'.format(self.as_string())
 
     def timecourse(self):
         '''
@@ -463,7 +576,6 @@ class Reports(_base._ModelBase):
                     j.attrib['target']=''
         return self.model
 
-
 class Bool2Str():
     """
     copasiML expects strings and we pythoners want to use python booleans not strings
@@ -473,11 +585,11 @@ class Bool2Str():
         self.dct = dct
         if isinstance(self.dct,dict)!=True:
             raise Errors.InputError('Input must be dict')
-        
+
         self.acceptable_kwargs = ['append','confirm_overwrite','update_model',
                                   'output_in_subtask','adjust_initial_conditions',
                                   'randomize_start_values','log10','scheduled','output_event']
-    
+
     def convert(self,boolean):
         if boolean == True:
             return "true"
@@ -485,12 +597,12 @@ class Bool2Str():
             return "false"
         else:
             raise Errors.InputError('Input should be boolean not {}'.format(isinstance(boolean)))
-            
+
     def convert_dct(self):
         """
-        
+
         ----
-        return 
+        return
         """
         for kwarg in self.dct.keys():
             if kwarg in self.acceptable_kwargs:
@@ -498,24 +610,28 @@ class Bool2Str():
                     self.dct.update({kwarg:"true"})
                 else:
                     self.dct.update({kwarg:"false"})
-#                
+#
         return self.dct
 
 class TimeCourse(_base._ModelBase):
+    """
+
+    Change the plotting functions of time course.
+    Create new class. Like viz in ecell4 for visualizing
+    the data. This will give more flexibility than what we presently have.
+    The idea is that user will be able to enter x or y variable,
+    or multiple such variables for the y axis to plot whatever they like.
+    """
 
     def __init__(self, model, **kwargs):
         super(TimeCourse, self).__init__(model, **kwargs)
-        self.model = model
 
         default_report_name = os.path.join(os.getcwd(), 'TimeCourse.txt')
 
-        self.default_properties = {'intervals': '100',
-                                   'step_size': '0.01',
-                                   'end': '1',
-                                   'relative_tolerance': '1e-6',
-                                   'absolute_tolerance': '1e-12',
-                                   'max_internal_steps': '10000',
-                                   'start': '0.0',
+        self.default_properties = {'intervals': 100,
+                                   'step_size': 0.01,
+                                   'end': 1,
+                                   'start': 0,
                                    'update_model': False,
                                    # report variables
                                    'metabolites': self.model.metabolites,
@@ -524,662 +640,581 @@ class TimeCourse(_base._ModelBase):
                                    'report_name': default_report_name,
                                    'append': False,
                                    'confirm_overwrite': False,
-                                   'simulation_type': 'deterministic',
+                                   'method': 'deterministic',
                                    'output_event': False,
                                    'scheduled': True,
                                    'automatic_step_size': False,
                                    'start_in_steady_state': False,
-                                   }
+                                   'integrate_reduced_model': False,
+                                   'relative_tolerance': 1e-6,
+                                   'absolute_tolerance': 1e-12,
+                                   'max_internal_steps': 10000,
+                                   'max_internal_step_size': 0,
+                                   'subtype': 2,
+                                   'use_random_seed': True,
+                                   'random_seed': 1,
+                                   'epsilon': 0.001,
+                                   'lower_limit': 800,
+                                   'upper_limit': 1000,
+                                   'partitioning_interval': 1,
+                                   'runge_kutta_step_size': 0.001,
+                                   'run': False}
 
 
         self.convert_bool_to_numeric(self.default_properties)
         self.update_kwargs(self.default_properties)
         self.update_properties(self.default_properties)
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
+        self.do_checks()
 
+        self.set_timecourse()
+        self.set_report()
+
+
+    def do_checks(self):
+        """
+        method for checking user input
+        :return: void
+        """
+        method_list = ['deterministic',
+                       'direct',
+                       'gibson_bruck,'
+                       'tau_leap',
+                       'adaptive_tau_leap',
+                       'hybrid_runge_kutta',
+                       'hybrid_lsoda',
+                       'hybrid_rk45']
+        if self.method not in method_list:
+            raise Errors.InputError('{} is not a valid method. These are valid methods {}'.format(self.method, method_list))
 
     def __str__(self):
         return "TimeCourse({})".format(self.as_string())
 
-    def set_deterministic(self):
+    def create_task(self):
+        """
+        Begin creating the segment of xml needed
+        for a time course. Define task and problem
+        definition. This section of xml is common to all
+        methods
+
+        Should look like this:
+
+            <Task key="Task_15" name="Time-Course" type="timeCourse" scheduled="false" updateModel="false">
+              <Problem>
+                <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+                <Parameter name="StepNumber" type="unsignedInteger" value="100"/>
+                <Parameter name="StepSize" type="float" value="0.01"/>
+                <Parameter name="Duration" type="float" value="1"/>
+                <Parameter name="TimeSeriesRequested" type="bool" value="1"/>
+                <Parameter name="OutputStartTime" type="float" value="0"/>
+                <Parameter name="Output Event" type="bool" value="0"/>
+                <Parameter name="Start in Steady State" type="bool" value="0"/>
+              </Problem>
+
+        :return: lxml.etree._Element
         """
 
-        :return:
+        task = etree.Element('Task', attrib={'key': 'Task_15',
+                                             'name': 'Time-Course',
+                                             'type': 'timeCourse',
+                                             'scheduled': 'false',
+                                             'update_model': 'false'})
+        problem = etree.SubElement(task, 'Problem')
+
+        etree.SubElement(problem,
+                         'Parameter',
+                         attrib={'name': 'AutomaticStepSize',
+                                 'type': 'bool',
+                                 'value': self.automatic_step_size})
+
+        etree.SubElement(problem,
+                         'Parameter',
+                         attrib={'name': 'StepNumber',
+                                 'type': 'unsignedInteger',
+                                 'value': str(self.intervals)})
+
+        etree.SubElement(problem,
+                         'Parameter',
+                         attrib={'name': 'StepSize',
+                                 'type': 'float',
+                                 'value': str(self.step_size)})
+
+        etree.SubElement(problem,
+                         'Parameter',
+                         attrib={'name': 'Duration',
+                                 'type': 'float',
+                                 'value': str(self.end)})
+
+        etree.SubElement(problem,
+                         'Parameter',
+                         attrib={'name': 'TimeSeriesRequested',
+                                 'type': 'float',
+                                 'value': '1'})
+
+        etree.SubElement(problem,
+                         'Parameter',
+                         attrib={'name': 'OutputStartTime',
+                                 'type': 'float',
+                                 'value': str(self.start)})
+
+        etree.SubElement(problem,
+                         'Parameter',
+                         attrib={'name': 'Output Event',
+                                 'type': 'bool',
+                                 'value': self.output_event})
+
+        etree.SubElement(problem,
+                         'Parameter',
+                         attrib={'name': 'Start in Steady State',
+                                 'type': 'bool',
+                                 'value': self.start_in_steady_state})
+
+        return task
+
+    def set_timecourse(self):
         """
-        query = "//*[@name='Time-Course']" and "//*[@type='timeCourse']"
-        method_params = {'type': 'Deterministic(LSODA)', 'name': 'Deterministic (LSODA)'}
-        for i in self.model.xml.xpath(query):
-            # make available to coapsiSE
-            i.attrib['scheduled'] = self.scheduled
-            for j in list(i):
-                j.attrib['type'] = method_params['type']
-                j.attrib['name'] = method_params['name']
-                for k in list(j):
-                    if k.attrib['name'] == 'AutomaticStepSize':
-                        k.attrib['value'] = str(self.automatic_step_size)
+        Set method specific sections of xml. This
+        is a method element after the problem element
+        that looks like this:
 
-                    if k.attrib['name'] == 'Start in Steady State':
-                        k.attrib['value'] = str(self.start_in_steady_state)
+        :return: lxml.etree._Element
+        """
+        if self.method == 'deterministic':
+            timecourse = self.deterministic()
+        elif self.method == 'gibson_bruck':
+            timecourse = self.gibson_bruck()
+        elif self.method == 'direct':
+            timecourse = self.direct()
+        elif self.method == 'tau_leap':
+            timecourse = self.tau_leap()
+        elif self.method == 'adaptive_tau_leap':
+            timecourse = self.adaptive_tau_leap()
+        elif self.method == 'hybrid_runge_kutta':
+            timecourse = self.hybrid_runge_kutta()
+        elif self.method == 'hybrid_lsoda':
+            timecourse = self.hybrid_lsoda()
+        elif self.method == 'hybrid_rk45':
+            timecourse = self.hybrid_rk45()
 
-                    if k.attrib['name'] == 'Duration':
-                        k.attrib['value'] = str(self.end)
-
-                    if k.attrib['name'] == 'StepNumber':
-                        k.attrib['value'] = str(self.intervals)
-
-                    elif k.attrib['name'] == 'StepSize':
-                        k.attrib['value'] = str(self.step_size)
-
-                    elif k.attrib['name'] == 'TimeSeriesRequested':
-                        k.attrib['value'] = '1'
-
-                    elif k.attrib['name'] == 'OutputStartTime':
-                        k.attrib['value'] = str(self.start)
-
-                    elif k.attrib['name'] == 'Output Event':
-                        k.attrib['value'] = self.output_event
-
-                    elif k.attrib['name'] == 'Continue on Simultaneous Events':
-                        k.attrib['value'] = '0'
-
-                    elif k.attrib['name'] == 'Integrate Reduced Model':
-                        k.attrib['value'] = '0'
-
-                    elif k.attrib['name'] == 'Relative Tolerance':
-                        k.attrib['value'] = str(self.relative_tolerance)
-
-                    elif k.attrib['name'] == 'Absolute Tolerance':
-                        k.attrib['value'] = str(self.absolute_tolerance)
-
-                    elif k.attrib['name'] == 'MaxInternalSteps':
-                        k.attrib['value'] = str(self.max_internal_steps)
+        list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
+        for task in self.model.xml.find(list_of_tasks):
+            if task.attrib['name'] == 'Time-Course':
+                ##remove old time course
+                task.getparent().remove(task)
+        ## insert new time course
+        self.model.xml.find(list_of_tasks).insert(1, timecourse)
+        LOG.debug('Timecourse task element is:\n\n{}'.format(etree.tostring(timecourse, pretty_print=True) ))
         return self.model
 
 
+    def deterministic(self):
+        """
+          <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+            <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+            <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-006"/>
+            <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-012"/>
+            <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+            <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+          </Method>
+        :return:lxml.etree._Element
+        """
+        method = etree.Element('Method', attrib={'name': 'Deterministic (LSODA)',
+                                                 'type':'Deterministic(LSODA)'})
+
+        dct = {'name': 'Integrate Reduced Model',
+               'type': 'bool',
+               'value': self.integrate_reduced_model}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        dct = {'name': 'Relative Tolerance',
+               'type': 'unsignedFloat',
+               'value': str(self.relative_tolerance)}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        dct = {'name': 'Absolute Tolerance',
+               'type': 'unsignedFloat',
+               'value': str(self.absolute_tolerance)}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        dct = {'name': 'Max Internal Steps',
+               'type': 'unsignedInteger',
+               'value': str(self.max_internal_steps)}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        dct = {'name': 'Max Internal Step Size',
+               'type': 'unsignedFloat',
+               'value': str(self.max_internal_step_size)}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        task = self.create_task()
+        task.append(method)
+        return task
+
+    def gibson_bruck(self):
+        """
+          <Method name="Stochastic (Gibson + Bruck)" type="DirectMethod">
+            <Parameter name="Max Internal Steps" type="integer" value="1000000"/>
+            <Parameter name="Subtype" type="unsignedInteger" value="2"/>
+            <Parameter name="Use Random Seed" type="bool" value="0"/>
+            <Parameter name="Random Seed" type="unsignedInteger" value="1"/>
+          </Method>
+        </Task>
+        :return:
+        """
+        method = etree.Element('Method', attrib={'name': 'Stochastic (Gibson + Bruck)',
+                                                 'type': 'DirectMethod'})
+
+        dct = {'name': 'Max Internal Steps',
+               'type': 'unsignedInteger',
+               'value': str(self.max_internal_steps)}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        dct = {'name': 'Subtype',
+               'type': 'unsignedInteger',
+               'value': str(self.subtype)}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        dct = {'name': 'Use Random Seed',
+               'type': 'bool',
+               'value': self.use_random_seed}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        dct = {'name': 'Random Seed',
+               'type': 'unsignedInteger',
+               'value': str(self.random_seed)}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        task = self.create_task()
+        task.append(method)
+        return task
+
+    def direct(self):
+        """
+          <Method name="Stochastic (Direct method)" type="Stochastic">
+            <Parameter name="Max Internal Steps" type="integer" value="1000000"/>
+            <Parameter name="Use Random Seed" type="bool" value="0"/>
+            <Parameter name="Random Seed" type="unsignedInteger" value="1"/>
+          </Method>
+        </Task>
+        :return:
+        """
+        method = etree.Element('Method', attrib={'name': 'Stochastic (Direct method)',
+                                                 'type': 'Stochastic'})
+
+        dct = {'name': 'Max Internal Steps',
+               'type': 'unsignedInteger',
+               'value': str(self.max_internal_steps)}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        dct = {'name': 'Use Random Seed',
+               'type': 'bool',
+               'value': self.use_random_seed}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        dct = {'name': 'Random Seed',
+               'type': 'unsignedInteger',
+               'value': str(self.random_seed)}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        task = self.create_task()
+        task.append(method)
+        return task
+
+    def tau_leap(self):
+        """
+          <Method name="Stochastic (τ-Leap)" type="TauLeap">
+            <Parameter name="Epsilon" type="float" value="0.001"/>
+            <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+            <Parameter name="Use Random Seed" type="bool" value="0"/>
+            <Parameter name="Random Seed" type="unsignedInteger" value="1"/>
+          </Method>
+        </Task>
+        :return:
+        """
+        method = etree.Element('Method', attrib={'name': 'Stochastic (τ-Leap)',
+                                                 'type': 'TauLeap'})
+
+        dct = {'name': 'Epsilon',
+               'type': 'float',
+               'value': self.epsilon}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        dct = {'name': 'Max Internal Steps',
+               'type': 'unsignedInteger',
+               'value': str(self.max_internal_steps)}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        dct = {'name': 'Use Random Seed',
+               'type': 'bool',
+               'value': self.use_random_seed}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        dct = {'name': 'Random Seed',
+               'type': 'unsignedInteger',
+               'value': str(self.random_seed)}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        task = self.create_task()
+        task.append(method)
+        return task
+
+    def adaptive_tau_leap(self):
+        """
+          </Problem>
+          <Method name="Stochastic (Adaptive SSA/τ-Leap)" type="AdaptiveSA">
+            <Parameter name="Epsilon" type="float" value="0.03"/>
+            <Parameter name="Max Internal Steps" type="integer" value="1000000"/>
+            <Parameter name="Use Random Seed" type="bool" value="0"/>
+            <Parameter name="Random Seed" type="unsignedInteger" value="1"/>
+          </Method>
+        </Task>
+        :return:
+        """
+        method = etree.Element('Method', attrib={'name': 'Stochastic (Adaptive SSA/τ-Leap)',
+                                                 'type': 'AdaptiveSA'})
+
+        dct = {'name': 'Epsilon',
+               'type': 'float',
+               'value': self.epsilon}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        dct = {'name': 'Max Internal Steps',
+               'type': 'unsignedInteger',
+               'value': str(self.max_internal_steps)}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        dct = {'name': 'Use Random Seed',
+               'type': 'bool',
+               'value': self.use_random_seed}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        dct = {'name': 'Random Seed',
+               'type': 'unsignedInteger',
+               'value': str(self.random_seed)}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        task = self.create_task()
+        task.append(method)
+        return task
+
+    def hybrid_runge_kutta(self):
+        """
+
+          <Method name="Hybrid (Runge-Kutta)" type="Hybrid">
+            <Parameter name="Max Internal Steps" type="integer" value="1000000"/>
+            <Parameter name="Lower Limit" type="float" value="800"/>
+            <Parameter name="Upper Limit" type="float" value="1000"/>
+            <Parameter name="Partitioning Interval" type="unsignedInteger" value="1"/>
+            <Parameter name="Use Random Seed" type="bool" value="0"/>
+            <Parameter name="Random Seed" type="unsignedInteger" value="1"/>
+            <Parameter name="Runge Kutta Stepsize" type="float" value="0.001"/>
+          </Method>
+        </Task>
+        :return:
+        """
+        method = etree.Element('Method', attrib={'name': 'Hybrid (Runge-Kutta)',
+                                                 'type': 'Hybrid'})
+
+        dct = {'name': 'Max Internal Steps',
+               'type': 'unsignedInteger',
+               'value': str(self.max_internal_steps)}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        dct = {'name': 'Lower Limit',
+               'type': 'float',
+               'value': str(self.lower_limit)}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        dct = {'name': 'Upper Limit',
+               'type': 'float',
+               'value': str(self.upper_limit) }
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        dct = {'name': 'Partitioning Interval',
+               'type': 'unsignedInteger',
+               'value': str(self.partitioning_interval)}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        dct = {'name': 'Use Random Seed',
+               'type': 'bool',
+               'value': self.use_random_seed}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        dct = {'name': 'Random Seed',
+               'type': 'unsignedInteger',
+               'value': str(self.random_seed)}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        dct = {'name': 'Runge-Kutta Stepsize',
+               'type': 'float',
+               'value': str(self.runge_kutta_step_size)}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+        task = self.create_task()
+        task.append(method)
+        return task
+
+    def hybrid_lsoda(self):
+        """
+      <Method name="Hybrid (LSODA)" type="Hybrid (LSODA)">
+        <Parameter name="Max Internal Steps" type="integer" value="1000000"/>
+        <Parameter name="Lower Limit" type="float" value="800"/>
+        <Parameter name="Upper Limit" type="float" value="1000"/>
+        <Parameter name="Partitioning Interval" type="unsignedInteger" value="1"/>
+        <Parameter name="Use Random Seed" type="bool" value="0"/>
+        <Parameter name="Random Seed" type="unsignedInteger" value="1"/>
+        <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-006"/>
+        <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-012"/>
+        <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+      </Method>
+    </Task>
+        :return:
+        """
+        method = etree.Element('Method', attrib={'name': 'Hybrid (LSODA)',
+                                                 'type': 'Hybrid (LSODA)'})
+        dct = {'name': 'Max Internal Steps',
+               'type': 'unsignedInteger',
+               'value': str(self.max_internal_steps)}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        dct = {'name': 'Lower Limit',
+               'type': 'float',
+               'value': str(self.lower_limit)}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        dct = {'name': 'Upper Limit',
+               'type': 'float',
+               'value': str(self.upper_limit) }
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        dct = {'name': 'Partitioning Interval',
+               'type': 'unsignedInteger',
+               'value': str(self.partitioning_interval)}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        dct = {'name': 'Use Random Seed',
+               'type': 'bool',
+               'value': self.use_random_seed}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        dct = {'name': 'Random Seed',
+               'type': 'unsignedInteger',
+               'value': str(self.random_seed)}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        dct = {'name': 'Integrate Reduced Model',
+               'type': 'bool',
+               'value': self.integrate_reduced_model}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        dct = {'name': 'Relative Tolerance',
+               'type': 'unsignedFloat',
+               'value': str(self.relative_tolerance)}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        dct = {'name': 'Absolute Tolerance',
+               'type': 'unsignedFloat',
+               'value': str(self.absolute_tolerance)}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        dct = {'name': 'Max Internal Step Size',
+               'type': 'unsignedFloat',
+               'value': str(self.max_internal_step_size)}
+        etree.SubElement(method, 'Parameter', attrib=dct)
+
+        task = self.create_task()
+        task.append(method)
+        return task
+
+    def hybrid_rk45(self):
+        """
+          <Method name="Hybrid (RK-45)" type="Hybrid (DSA-ODE45)">
+            <Parameter name="Max Internal Steps" type="unsignedInteger" value="100000"/>
+            <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-006"/>
+            <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-009"/>
+            <Parameter name="Partitioning Strategy" type="string" value="User specified Partition"/>
+            <ParameterGroup name="Deterministic Reactions">
+            </ParameterGroup>
+            <Parameter name="Use Random Seed" type="bool" value="0"/>
+            <Parameter name="Random Seed" type="unsignedInteger" value="1"/>
+          </Method>
+        </Task>
+
+        :return:
+        """
+        raise Errors.NotImplementedError('The hybrid-RK-45 method is not yet implemented')
+
+    def set_report(self):
+        """
+        ser a time course report containing time
+        and all species or global quantities defined by the user.
+
+        :return: PyCoTools.model.Model
+        """
+        report_options = {'metabolites': self.metabolites,
+                          'global_quantities': self.global_quantities,
+                          'quantity_type': self.quantity_type,
+                          'report_name': self.report_name,
+                          'append': self.append,
+                          'confirm_overwrite': self.confirm_overwrite,
+                          'update_model': self.update_model,
+                          'report_type': 'time_course'}
+        ## create a time course report
+        self.model = Reports(self.model, **report_options).model
+
+        ## get the report key
+        key = self.get_report_key()
+        arg_dct = {'append': self.append,
+                   'target': self.report_name,
+                   'reference': key,
+                   'confirmOverwrite': self.confirm_overwrite}
+
+        query = "//*[@name='Time-Course']" and "//*[@type='timeCourse']"
+        present = False
+        for i in self.model.xml.xpath(query):
+            for j in list(i):
+                if 'append' and 'target' in j.attrib.keys():
+                    present = True
+                    j.attrib.update(arg_dct)
+            if present == False:
+                report = etree.Element('Report', attrib=arg_dct)
+                i.insert(0, report)
+        return self.model
 
 
-
-class TimeCourse2(_base._ModelBase):
+    def get_report_key(self):
         '''
-        run a time course using Copasi. Ensure, you specify the corrent amount
-        of time you want simulating. Do this by ensuring that end=step_size*intervals.
-        Set plot=True to automatically plot the results which can be found in a file
-        in the same directory as your copasi file in a folder named after your report_name
-        kwarg
-
-        NOTE: Space has been left for addition of code to interface with the other
-        copasi solvers. Currently only deterministic is supported.
-
-        args:
-            copasi_file - the copasi file you want to do a time course on
-
-
-        **kwargs:
-            For arguments related to plotting, see the documentation for plot
-
-            intervals:
-                How many intervals between start and end. Default=100
-
-            step_size:
-                How big each time increment is. Default='0.01',
-
-            start:
-                starting point of stimulation. Default=0.0
-
-            end:
-                The end point of the time course. Default=1.
-
-            #integration options
-            relative_tolerance:
-                Default='1e-6',
-
-            absolute_tolerance:
-                Default='1e-12',
-
-            max_internal_steps:
-                Default='10000',
-
-            update_model:
-                Not really needed in time course. Do not change. Default=False
-
-            metabolites:
-                A list of which metabolites to include in output. Default=all
-
-            global_quantities:
-                A list of global quantities to include in the output. Default is all global quantities
-
-            quantity_type:
-                Either 'particle_numbers' or 'concentration',
-
-            report_name:
-                Name of the output report. Default is name of the copasi file with _TimeCourse appended'
-
-            append:
-                append to the report, True or False , default=False
-
-            confirm_overwrite:
-                Report confirm overwrite , True or False , default=False
-
-            simulation_type:
-                Either 'stochastic' or 'deterministic'. default='deterministic'. IMPORTANT: stochastic not yet implemented but there is room for it
-
-            OutputEvent:
-                Output event or not, default =False
-
-            scheduled:
-                True or False. Enables running the simulation by CopasiSE. Default=True,
-
-            save:
-                save the copasi file with the changes. Either False,'overwrite' or 'duplicate'
-
-            prune_headers:
-                Copasi automatically prints out copasi references to output files. Set
-                this to True to  prune the references off leaving just the variable name,
-                True or False, default=True
-
-            #graph options
-            plot:
-                Whether to plot the graphs or not
-
-            savefig:
-                Whether to save the figures to file or not
-
-            extra_title:
-                If savefig=True,give the filename an extra identifier
-
-            line_width:
-                Passed to Matplotlib.pyplot.plot. Thickness of the line
-
-            line_color:
-                Passed to Matplotlib.pyplot.plot. color of the line
-
-            marker_color:
-                Passed to Matplotlib.pyplot.plot. color of the dots
-
-            line_style:
-                Passed to Matplotlib.pyplot.plot. Style of line
-
-            marker_style:
-                Passed to Matplotlib.pyplot.plot. Style of marker
-
-            dpi:
-                Passed to Matplotlib.pyplot.plot.
-
-            xtick_rotation:
-                Passed to Matplotlib.pyplot.plot. Rotate x labels
-
-            title_wrap_size:
-                Number of characters before word wrapping the title
-
+        cros reference the timecourse task with the newly created
+        time course reort to get the key
         '''
+        LOG.debug('getting report key')
+        for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
+            if i.attrib['name'] == 'Time-Course':
+                key = i.attrib['key']
+        assert key != None, 'have you ran the report_definition method?'
+        return key
 
-        def __init__(self, model, **kwargs):
-            super(TimeCourse, self).__init__(model, **kwargs)
-            self.model = model
+    # def run(self):
+    #     '''
+    #     run a time course. Use keyword argument:
+    #         simulation_type='deterministic' #default
+    #         SumulationType='stochastic' #still to be written
+    #     '''
+    #     if self.kwargs.get('simulation_type') == 'deterministic':
+    #         self.copasiML = self.report_definition()
+    #         self.copasiML = self.set_report()
+    #         self.copasiML = self.set_deterministic()
+    #         LOG.debug('setting up deterministic time course')
+    #     elif self.kwargs.get('simulation_type') == 'stochastic':
+    #         raise Errors.NotImplementedError(
+    #             'There is space in this class to write code to Run a stochastic simulation but it is not yet written')
+    #     ##
+    #     #            # save to duplicate copasi file
+    #     self.save()
+    #     R = Run(self.copasi_file, task='time_course')
+    #     LOG.debug('Time course ran')
+    #     return R
 
-            default_report_name = os.path.join(os.getcwd(), 'TimeCourse.txt')
-
-            self.allowed_properties = {'intervals': '100',
-                                       'step_size': '0.01',
-                                       'end': '1',
-                                       'relative_tolerance': '1e-6',
-                                       'absolute_tolerance': '1e-12',
-                                       'max_internal_steps': '10000',
-                                       'start': '0.0',
-                                       'update_model': False,
-                                       # report variables
-                                       'metabolites': self.model.metabolites,
-                                       'global_quantities': self.model.global_quantities,
-                                       'quantity_type': 'concentration',
-                                       'report_name': default_report_name,
-                                       'append': False,
-                                       'confirm_overwrite': False,
-                                       'simulation_type': 'deterministic',
-                                       'output_event': False,
-                                       'scheduled': True,
-                                       'save': 'overwrite',
-                                       'prune_headers': True,
-
-                                       # graph options
-                                       'plot': False,
-                                       'line_width': 2,
-                                       'line_color': 'k',
-                                       'marker_color': 'r',
-                                       'line_style': '-',
-                                       'marker_style': 'o',
-                                       'axis_size': 15,
-                                       'font_size': 22,
-                                       'xtick_rotation': 0,
-                                       'title_wrap_size': 35,
-                                       'savefig': False,
-                                       'extra_title': None,
-                                       'dpi': 125,
-                                       'marker_size': 5,
-                                       'graph_directory': None,
-                                       }
-
-            for key in self.kwargs:
-                if key not in self.allowed_properties:
-                    raise Errors.InputError('{} not in {}'.format(key, self.allowed_properties.keys()))
-            self.update_properties(self.allowed_properties)
-
-
-
-        def set_deterministic(self):
-            """
-
-            :return:
-            """
-            query = "//*[@name='Time-Course']" and "//*[@type='timeCourse']"
-            method_params = {'type': 'Deterministic(LSODA)', 'name': 'Deterministic (LSODA)'}
-            for i in self.model.xml.xpath(query):
-                # make available to coapsiSE
-                i.attrib['scheduled'] = self.scheduled
-                for j in list(i):
-                    j.attrib['type'] = method_params['type']
-                    j.attrib['name'] = method_params['name']
-                    for k in list(j):
-                        if k.attrib['name'] == 'Duration':
-                            k.attrib['value'] = self.end
-
-                        if k.attrib['name'] == 'StepNumber':
-                            k.attrib['value'] = self.intervals
-
-                        elif k.attrib['name'] == 'StepSize':
-                            k.attrib['value'] = self.step_size
-
-                        elif k.attrib['name'] == 'TimeSeriesRequested':
-                            k.attrib['value'] = '1'
-
-                        elif k.attrib['name'] == 'OutputStartTime':
-                            k.attrib['value'] = self.start
-
-                        elif k.attrib['name'] == 'Output Event':
-                            k.attrib['value'] = self.output_event
-
-                        elif k.attrib['name'] == 'Continue on Simultaneous Events':
-                            k.attrib['value'] = '0'
-
-                        elif k.attrib['name'] == 'Integrate Reduced Model':
-                            k.attrib['value'] = '0'
-
-                        elif k.attrib['name'] == 'Relative Tolerance':
-                            k.attrib['value'] = self.relative_tolerance
-
-                        elif k.attrib['name'] == 'Absolute Tolerance':
-                            k.attrib['value'] = self.absolute_tolerance
-
-                        elif k.attrib['name'] == 'MaxInternalSteps':
-                            k.attrib['value'] = self.max_internal_steps
-            return self.model
-
-
-#
-#             '''
-#             It'd be good to implement the @memorize decorator so
-#             that we can recall a time course that has already been
-#             calculated without actually calculating
-#             '''
-#             # values need to be lower case for copasiML
-#             for i in kwargs.keys():
-#                 assert i in options.keys(), '{} is not a keyword argument for TimeCourse'.format(i)
-#                 #            kwargs[i]=str(kwargs[i]).lower()
-#                 #            assert isinstance(kwargs[i],str),'all optional arguments passed shold be lower case strings'
-#             options.update(kwargs)
-#
-#             self.kwargs = options
-#
-            '''
-            if the below three kwargs are a single entry they can be a string.
-            In this case, put them back into a list to ensure a smooth ride
-            '''
-            if isinstance(self.metabolites, PyCoTools.pycopi.Metabolite):
-                self.metabolites = [self.metabolites]
-
-            if isinstance(self.global_quantities, PyCoTools.pycopi.GlobalQuantity):
-                self.global_quantities = [self.global_quantities]
-
-            if isinstance(self.local_parameters, str):
-                self.local_parameters = [self.local_parameters]
-
-            # Ensure consistecny for time variables
-            if float(self.end) != float(self.step_size) * float(self.intervals):
-                raise Errors.TimeCourseError(
-                    'end should equal Interval Size times Number of intervals but {}!={}*{}'.format(
-                        self.end, self.step_size, self.intervals) )
-
-            # only accept deterministic or stochastic
-            # assert self.simulation_type in ['deterministic', 'stochastic']
-
-            assert self.quantity_type.lower() in ['concentration', 'particle_number']
-
-            # report arguments
-
-            # if self.kwargs.get('append') not in [True, False,'true','false']:
-            #     raise Errors.InputError('append kwarg must be either \'true\' or \'false\'')
-            #
-            # if self.kwargs.get('confirm_overwrite') not in [True, False,'true','false']:
-            #     raise Errors.InputError('confirm_overwrite kwarg must be either \'true\' or \'false\'')
-            #
-            # if self.kwargs.get('output_event') not in [True, False,'true','false']:
-            #     raise Errors.InputError('OutputEvent kwarg must be either \'true\' or \'false\'')
-            #
-            # if self.kwargs.get('scheduled') not in [True, False,'true','false']:
-            #     raise Errors.InputError('scheduled kwarg must be either \'true\' or \'false\'')
-            #
-            # if self.kwargs.get('plot') not in [True, False,'true','false']:
-            #     raise Errors.InputError('plot kwarg must be either \'true\' or \'false\'')
-
-            self.kwargs['line_width'] = int(self.kwargs.get('line_width'))
-            self.kwargs['axis_size'] = int(self.kwargs.get('axis_size'))
-            self.kwargs['axis_size'] = int(self.kwargs.get('axis_size'))
-            self.kwargs['xtick_rotation'] = int(self.kwargs.get('xtick_rotation'))
-            self.kwargs['title_wrap_size'] = int(self.kwargs.get('title_wrap_size'))
-            self.kwargs['dpi'] = int(self.kwargs.get('dpi'))
-
-            if self.append == True:
-                self.append == str(1)
-            else:
-                self.append == str(0)
-
-            if self.confirm_overwrite == True:
-                selfconfirm_overwrite == str(1)
-            else:
-                self.confirm_overwrite == str(0)
-
-            if self.output_event == True:
-                self.output_event == str(1)
-            else:
-                self.output_event == str(0)
-
-            if self.scheduled == True:
-                self.scheduled == str(1)
-            else:
-                self.scheduled == str(0)
-
-            assert self.savefig in [False, True]
-
-            # convert some numeric kwargs to str
-            # self.kwargs = Bool2Str(self.kwargs).convert_dct()
-            self.intervals = str(self.intervals)
-            self.step_size = str(self.step_size)
-            self.end = str(self.end)
-            self.relative_tolerance = str(self.relative_tolerance)
-            self.absolute_tolerance = str(self.absolute_tolerance)
-            self.max_internal_steps = str(self.max_internal_steps)
-            self.start = str(self.start)
-
-            if isinstance(self.marker_size, int):
-                self.marker_size = float(self.marker_size)
-
-            assert isinstance(self.marker_size, float)
-
-            assert self.line_style in ['-', '--', '-.', ':', 'None', ' ', '']
-            assert isinstance(self.line_width, int), '{} is not int'.format(
-                type(self.line_width) )
-
-            assert self.marker_style in ['o', 'v', '^', '<', '>', '8', 's', 'p', '*', 'h', 'H', 'D', 'd']
-
-            color_dct = {'b': 'blue',
-                         'g': 'green',
-                         'r': 'red',
-                         'c': 'cyan',
-                         'm': 'magenta',
-                         'y': 'yellow',
-                         'k': 'black',
-                         'w': 'white'}
-            assert self.line_color in color_dct.keys() + color_dct.values()
-            assert self.marker_color in color_dct.keys() + color_dct.values()
-
-            self.report_options = {}  # report variables
-            self.report_options['metabolites'] = self.metabolites
-            self.report_options['global_quantities'] = self.global_quantities
-            self.report_options['quantity_type'] = self.quantity_type
-            self.report_options['report_name'] = self.report_name
-            self.report_options['append'] = self.append
-            self.report_options['confirm_overwrite'] = self.confirm_overwrite
-            self.report_options['save'] = self.save
-            self.report_options['update_model'] = self.update_model
-            self.report_options['report_type'] = 'time_course'  # self.kwargs.get('report_type')
-#
-#             # other keywords that are non optional for time course
-#             self.kwargs['report_type'] = 'time_course'
-#             matplotlib.rcParams.update({'font.size': self.kwargs.get('axis_size')})
-#             '''
-#             All methods required for time course are
-#             called with run
-#             '''
-#
-#             self.save()
-#             self.run()
-#             if self.kwargs['plot'] == True:
-#                 self.data = self.read_sim_data()
-#                 self.plot()
-#
-#         def __getitem__(self,key):
-#             if key not in self.kwargs.keys():
-#                 raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
-#             return self.kwargs[key]
-#
-#         def __setitem__(self,key,value):
-#             self.kwargs[key] = value
-#
-#         def _do_checks(self):
-#             """
-#
-#             """
-#
-#
-#         def save(self):
-#             self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
-#             return self.copasiML
-#
-#         def save_dep(self):
-#             if self.kwargs.get('save') == 'duplicate':
-#                 self.CParser.write_copasi_file(self.kwargs.get('OutputML'), self.copasiML)
-#             elif self.kwargs.get('save') == 'overwrite':
-#                 self.CParser.write_copasi_file(self.copasi_file, self.copasiML)
-#             return self.copasiML
-#
-#         def set_deterministic(self):
-#             '''
-#             set parameters for deterministic timecourse
-#             '''
-#             query = "//*[@name='Time-Course']" and "//*[@type='timeCourse']"
-#             method_params = {'type': 'Deterministic(LSODA)', 'name': 'Deterministic (LSODA)'}
-#             for i in self.copasiML.xpath(query):
-#                 # make available to coapsiSE
-#                 i.attrib['scheduled'] = self.kwargs.get('scheduled')
-#                 for j in list(i):
-#                     j.attrib['type'] = method_params['type']
-#                     j.attrib['name'] = method_params['name']
-#                     for k in list(j):
-#                         if k.attrib['name'] == 'Duration':
-#                             k.attrib['value'] = self.kwargs.get('end')
-#
-#                         if k.attrib['name'] == 'StepNumber':
-#                             k.attrib['value'] = self.kwargs.get('intervals')
-#
-#                         elif k.attrib['name'] == 'StepSize':
-#                             k.attrib['value'] = self.kwargs.get('step_size')
-#
-#                         elif k.attrib['name'] == 'TimeSeriesRequested':
-#                             k.attrib['value'] = '1'
-#
-#                         elif k.attrib['name'] == 'OutputStartTime':
-#                             k.attrib['value'] = self.kwargs.get('start')
-#
-#                         elif k.attrib['name'] == 'Output Event':
-#                             k.attrib['value'] = self.kwargs.get('output_event')
-#
-#                         elif k.attrib['name'] == 'Continue on Simultaneous Events':
-#                             k.attrib['value'] = '0'
-#
-#                         elif k.attrib['name'] == 'Integrate Reduced Model':
-#                             k.attrib['value'] = '0'
-#
-#                         elif k.attrib['name'] == 'Relative Tolerance':
-#                             k.attrib['value'] = self.kwargs.get('relative_tolerance')
-#
-#                         elif k.attrib['name'] == 'Absolute Tolerance':
-#                             k.attrib['value'] = self.kwargs.get('absolute_tolerance')
-#
-#                         elif k.attrib['name'] == 'MaxInternalSteps':
-#                             k.attrib['value'] = self.kwargs.get('max_internal_steps')
-#             return self.copasiML
-#
-#         def report_definition(self):
-#             return Reports(self.copasi_file, **self.report_options).copasiML
-#
-#         def get_report_key(self):
-#             '''
-#             cros reference the timecourse task with the newly created
-#             time course reort to get the key
-#             '''
-#             LOG.debug('getting report key')
-#             for i in self.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports'):
-#                 if i.attrib['name'] == 'Time-Course':
-#                     key = i.attrib['key']
-#             assert key != None, 'have you ran the report_definition method?'
-#             return key
-#
-#         def set_report(self):
-#             '''
-#             Use the report defined in self.create_report to tell copasi
-#             were to put the results
-#             '''
-#             key = self.get_report_key()
-#
-#             arg_dct = {'append': self.kwargs.get('append'),
-#                        'target': self.kwargs.get('report_name'),
-#                        'reference': key,
-#                        'confirmOverwrite': self.kwargs.get('confirm_overwrite')}
-#             query = "//*[@name='Time-Course']" and "//*[@type='timeCourse']"
-#             present = False
-#             #        query='//Report'
-#             for i in self.copasiML.xpath(query):
-#                 for j in list(i):
-#                     if 'append' and 'target' in j.attrib.keys():
-#                         present = True
-#                         j.attrib.update(arg_dct)
-#                 if present == False:
-#                     report = etree.Element('Report', attrib=arg_dct)
-#                     i.insert(0, report)
-#                     self.save()   #This save is needed in order to save the report befor euse
-#             return self.copasiML
-#
-#         def run(self):
-#             '''
-#             run a time course. Use keyword argument:
-#                 simulation_type='deterministic' #default
-#                 SumulationType='stochastic' #still to be written
-#             '''
-#             if self.kwargs.get('simulation_type') == 'deterministic':
-#                 self.copasiML = self.report_definition()
-#                 self.copasiML = self.set_report()
-#                 self.copasiML = self.set_deterministic()
-#                 LOG.debug('setting up deterministic time course')
-#             elif self.kwargs.get('simulation_type') == 'stochastic':
-#                 raise Errors.NotImplementedError('There is space in this class to write code to Run a stochastic simulation but it is not yet written')
-# ##
-# #            # save to duplicate copasi file
-#             self.save()
-#             R = Run(self.copasi_file, task='time_course')
-#             LOG.debug('Time course ran')
-#             return R
-#
-#         def read_sim_data(self):
-#             data_output = os.path.join(os.path.dirname(self.copasi_file), self.kwargs['report_name'])
-#             # trim copasi style headers
-#             LOG.debug('Reading timecourse')
-#             if self.kwargs.get('prune_headers') == True:
-#                 LOG.debug('pruning headers of copasi files of COPASI references')
-#                 PruneCopasiHeaders(data_output, replace=True)
-#             return pandas.read_csv(data_output, sep='\t')
-#
-#         def plot(self):
-#             '''
-#
-#             '''
-#             LOG.debug('plotting time course')
-#             ## Create directory for graphs
-#             if self.kwargs['graph_directory'] == None:
-#                 dire = os.path.join(os.path.dirname(self.copasi_file), 'TimeCourseGraphs')
-#                 if os.path.isdir(dire) != True:
-#                     os.mkdir(dire)
-#                 os.chdir(dire)
-#
-#             for i in self.data:
-#                 if i.lower() != 'time':
-#                     plt.figure()
-#                     ax = plt.subplot(111)
-#                     plt.plot(self.data['Time'], self.data[i],
-#                              linewidth=self.kwargs.get('line_width'), color=self.kwargs.get('line_color'),
-#                              linestyle=self.kwargs.get('line_style'), marker='o',
-#                              markerfacecolor=self.kwargs.get('marker_color'), markersize=self.kwargs.get('marker_size'))
-#                     #                plt.plot(self.data['Time'],self.data[i],color=self.kwargs.get('marker_color'),marker=self.kwargs.get('marker_style'))
-#
-#
-#                     # plot labels
-#                     plt.title('\n'.join(wrap('Time-Course for {}'.format(i), self.kwargs.get('title_wrap_size'))),
-#                               fontsize=self.kwargs.get('font_size'))
-#                     if self.kwargs.get('quantity_type') == 'concentration':
-#                         try:
-#                             plt.ylabel('Concentration ({})'.format(self.GMQ.get_quantity_units().encode('ascii')),
-#                                        fontsize=self.kwargs.get('font_size'))
-#                         except UnicodeEncodeError:
-#                             plt.ylabel('Concentration (micromol)', fontsize=self.kwargs.get('font_size'))
-#                     if self.kwargs.get('quantity_type') == 'particle_number':
-#                         plt.ylabel('Particle Numbers', fontsize=self.kwargs.get('font_size'))
-#
-#                     plt.xlabel('Time ({})'.format(self.GMQ.get_time_unit()), fontsize=self.kwargs.get('font_size'))
-#
-#                     # pretty stuff
-#
-#                     ax.spines['right'].set_color('none')
-#                     ax.spines['top'].set_color('none')
-#                     ax.xaxis.set_ticks_position('bottom')
-#                     ax.yaxis.set_ticks_position('left')
-#                     ax.spines['left'].set_smart_bounds(True)
-#                     ax.spines['bottom'].set_smart_bounds(True)
-#
-#                     # xtick rotation
-#                     plt.xticks(rotation=self.kwargs.get('xtick_rotation'))
-#
-#                     # options for changing the plot axis
-#                     if self.kwargs.get('ylimit') != None:
-#                         ax.set_ylim(self.kwargs.get('ylimit'))
-#                     if self.kwargs.get('xlimit') != None:
-#                         ax.set_xlim(self.kwargs.get('xlimit'))
-#
-#                     def save_plot():
-#                         def replace_non_ascii(st):
-#                             for j in st:
-#                                 if j not in string.ascii_letters + string.digits + '_-[]':
-#                                     st = re.sub('\{}'.format(j), '__', st)
-#                             return st
-#
-#                         filename = {}
-#                         name = replace_non_ascii(i)
-#                         filename[i] = os.path.join(dire, name + '.png')
-#
-#                         if self.kwargs.get('extra_title') != None:
-#                             plt.savefig(name + '_' + self.kwargs.get('extra_title') + '.png', bbox_inches='tight',
-#                                         format='png', dpi=self.kwargs.get('dpi'))
-#                         else:
-#                             plt.savefig(filename[i], format='png', bbox_inches='tight', dpi=self.kwargs.get('dpi'))
-#                         return filename
-#
-#                     if self.kwargs.get('show') == True:
-#                         plt.show()
-#
-#                     # save figure options
-#                     if self.kwargs.get('savefig') == True:
-#                         os.chdir(os.path.dirname(self.copasi_file))
-#                         save_plot()
-
-
-#==============================================================================            
 class ExperimentMapper():
     '''
     Class to map variables from a parameter estimation item template which 
@@ -1600,9 +1635,6 @@ class ExperimentMapper():
             self.save()
         return self.copasiML
         
-
-#==============================================================================
-
 class PhaseSpace(TimeCourse):
     '''
     Inherits from TimeCourse
@@ -1801,11 +1833,6 @@ class FormatPEData():
         for i in glob.glob(os.path.join(folder, '*.txt')):
             FormatPEData(copasi_file, i, report_type=report_type)
             
-        
-        
-    
-
-
 class ParameterEstimation():
     '''
     Set up and run a parameter estimation in copasi. Since each parameter estimation
@@ -2817,8 +2844,6 @@ class ParameterEstimation():
         self.PL=PEAnalysis.PlotPEData(self.copasi_file,self.experiment_files,self.kwargs.get('report_name'),
                         **self.PlotPEDataKwargs)
 
-#==============================================================================
-
 class Scan():
     '''
     Positional Args:
@@ -2914,83 +2939,83 @@ class Scan():
     def __init__(self,copasi_file,**kwargs):
         self.copasi_file=copasi_file
         self.CParser=CopasiMLParser(self.copasi_file)
-        self.copasiML=self.CParser.copasiML 
+        self.copasiML=self.CParser.copasiML
         self.GMQ=GetModelQuantities(self.copasi_file)
-        
+
         default_report_name=os.path.split(self.copasi_file)[1][:-4]+'_PE_results.txt'
         #default_outputML=os.path.split(self.copasi_file)[1][:-4]+'_Duplicate.cps'
         options={#report variables
-                 'metabolites':self.GMQ.get_IC_cns().keys(),
-                 'global_quantities':self.GMQ.get_global_quantities().keys(),
-                 'quantity_type':'concentration',
-                 'report_name':default_report_name,
-                 'append': False, 
-                 'confirm_overwrite': False,
-                 'update_model':False,
-                 'subtask':'parameter_estimation',
-                 'report_type':'profilelikelihood',
-                 'output_in_subtask':False,
-                 'adjust_initial_conditions':False,
-                 'number_of_steps':10,
-                 'maximum':100,
-                 'minimum':0.01,
-                 'log10':False,
-                 'distribution_type':'normal',
-                 'scan_type':'scan',
-                 #scan object specific (for scan and random_sampling scan_types)
-                 'variable':self.GMQ.get_IC_cns().keys()[0],
-                 'scheduled':True,
-                 'save':'overwrite',
-                 'clear_scans':True,#if true, will remove all scans present then add new scan
-                 'run':False}
-                                  
-                 
-                     
+            'metabolites':self.GMQ.get_IC_cns().keys(),
+            'global_quantities':self.GMQ.get_global_quantities().keys(),
+            'quantity_type':'concentration',
+            'report_name':default_report_name,
+            'append': False,
+            'confirm_overwrite': False,
+            'update_model':False,
+            'subtask':'parameter_estimation',
+            'report_type':'profilelikelihood',
+            'output_in_subtask':False,
+            'adjust_initial_conditions':False,
+            'number_of_steps':10,
+            'maximum':100,
+            'minimum':0.01,
+            'log10':False,
+            'distribution_type':'normal',
+            'scan_type':'scan',
+            #scan object specific (for scan and random_sampling scan_types)
+            'variable':self.GMQ.get_IC_cns().keys()[0],
+            'scheduled':True,
+            'save':'overwrite',
+            'clear_scans':True,#if true, will remove all scans present then add new scan
+            'run':False}
+
+
+
         #values need to be lower case for copasiML
         for i in kwargs.keys():
             assert i in options.keys(),'{} is not a keyword argument for Scan'.format(i)
-        options.update( kwargs) 
+        options.update( kwargs)
         self.kwargs=options
-        
-        
+
+
         #correct output_in_subtask and AsjestInitialConditions
         assert self.kwargs.get('output_in_subtask') in [False,True,'false','true']
         assert self.kwargs.get('adjust_initial_conditions') in [False,True,'false','true']
         assert self.kwargs.get('log10') in [False,True,'false','true'],'{} is not either \'false\' or \'true\''.format(self.kwargs.get('log10'))
-        
+
         if self.kwargs.get('output_in_subtask')==False:
             self.kwargs['output_in_subtask']=str(0)
         else:
             self.kwargs['output_in_subtask']=str(1)
-            
+
         if self.kwargs.get('adjust_initial_conditions')==False:
             self.kwargs['adjust_initial_conditions']=str(0)
         else:
             self.kwargs['adjust_initial_conditions']=str(1)
-        
+
         if self.kwargs.get('log10')==False:
             self.kwargs['log10']=str(0)
         else:
             self.kwargs['log10']=str(1)
-            
-            
+
+
         self.kwargs = Bool2Str(self.kwargs).convert_dct()
-        
+
         subtasks=['steady_state','time_course',
-                   'metabolic_control_nalysis',
-                   'lyapunov_exponents',
-                   'optimiztion','parameter_estimation',
-                   'sensitivities','linear_noise_approximation',
-                   'cross_section','time_scale_separation_analysis']
-                   
-        report_types=[None,'profilelikelihood','time_course','parameter_estimation', 
+                  'metabolic_control_nalysis',
+                  'lyapunov_exponents',
+                  'optimiztion','parameter_estimation',
+                  'sensitivities','linear_noise_approximation',
+                  'cross_section','time_scale_separation_analysis']
+
+        report_types=[None,'profilelikelihood','time_course','parameter_estimation',
                       'multi_parameter_estimation', 'profilelikelihood2']
         dist_types=['normal','uniform','poisson','gamma']
         scan_types=['scan','repeat','random_sampling']
         quantity_type_list=['particle_number','concentration']
-        
-                   
-        assert self.kwargs.get('subtask') in subtasks                   
+
+
+        assert self.kwargs.get('subtask') in subtasks
         assert self.kwargs.get('report_type') in report_types,'{} is not in {}'.format(self['report_type'],report_types)
         assert self.kwargs.get('distribution_type') in dist_types
         assert self.kwargs.get('scan_type') in scan_types
@@ -3005,22 +3030,22 @@ class Scan():
         for i in zip(subtasks,subtask_numbers):
             if i[0]==self.kwargs['subtask']:
                 self.kwargs['subtask']=str(i[1])
-        
+
         #numericidy type keywork arguments 
         scan_type_numbers=[1,0,2]
         LOG.debug('kwargs[scan_type is: {}'.format(self.kwargs['scan_type']))
         for i in zip(scan_types,scan_type_numbers):
             LOG.debug('scan type to number tuple: {}'.format(i))
             if i[0]==self.kwargs['scan_type']:
-                self.kwargs['scan_type']=str(i[1])   
-                
+                self.kwargs['scan_type']=str(i[1])
+
         dist_types_numbers=[0,1,2,3]
         for i in zip(dist_types,dist_types_numbers):
             if i[0]==self.kwargs['distribution_type']:
-                self.kwargs['distribution_type']=str(i[1])    
-                
+                self.kwargs['distribution_type']=str(i[1])
+
         assert self.kwargs.get('variable') in self.GMQ.get_IC_cns().keys() or self.GMQ.get_global_quantities_cns().keys() or self.GMQ.get_local_kinetic_parameters_cns()
-        
+
         #convert what needs to be a string to a string
         self.kwargs['output_in_subtask']=str(self.kwargs['output_in_subtask'])
         self.kwargs['adjust_initial_conditions']=str(self.kwargs['adjust_initial_conditions'])
@@ -3032,21 +3057,21 @@ class Scan():
         assert isinstance(self.kwargs.get('number_of_steps'),(float,int,str))
         assert isinstance(self.kwargs.get('maximum'),(float,int,str))
         assert isinstance(self.kwargs.get('minimum'),(float,int,str))
-        
+
         if isinstance(self.kwargs.get('number_of_steps'),(float,int)):
             self.kwargs['number_of_steps']=str(self.kwargs.get('number_of_steps'))
-            
+
         if isinstance(self.kwargs.get('maximum'),(float,int)):
             self.kwargs['maximum']=str(self.kwargs.get('maximum'))
-            
+
         if isinstance(self.kwargs.get('minimum'),(float,int)):
             self.kwargs['minimum']=str(self.kwargs.get('minimum'))
 
-#        if self.kwargs.get('report_type')=='time_course':
-#            self.kwargs['report_type']='time-course'
+        #        if self.kwargs.get('report_type')=='time_course':
+        #            self.kwargs['report_type']='time-course'
         write_to_file_list=['duplicate','overwrite',False]
         assert self.kwargs.get('save') in write_to_file_list,'{} not in {}'.format(self.kwargs.get('save'),write_to_file_list)
-        
+
         if self.kwargs.get('clear_scans')==True:
             self.copasiML=self.remove_scans()
             self.copasiML=self.save()    ##extra save - is this needed. Yes, I've checked - do not remove!
@@ -3055,7 +3080,7 @@ class Scan():
         self.copasiML=self.set_scan_options()
         self.copasiML=self.save()
         self.run()
-        
+
     def __getitem__(self,key):
         if key not in self.kwargs.keys():
             raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
@@ -3063,12 +3088,12 @@ class Scan():
 
     def __setitem__(self,key,value):
         self.kwargs[key] = value
-            
+
     def save(self):
         self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
         return self.copasiML
-                
-        
+
+
     def define_report(self):
         '''
         
@@ -3087,8 +3112,8 @@ class Scan():
         R= Reports(self.copasi_file,**self.report_dict)
 
         return R.copasiML
-        
-        
+
+
     def get_report_key(self):
         '''
         
@@ -3103,7 +3128,7 @@ class Scan():
         if key==None:
             raise Errors.ReportDoesNotExistError('Report doesn\'t exist. Check to see if you have either defined the report manually or used the pycopi.Reports class')
         return key
-    
+
     def create_scan(self):
         '''
         need to find a report key which corresponds to the report we want to use
@@ -3119,7 +3144,7 @@ class Scan():
         elif self.kwargs.get('variable') in self.GMQ.get_local_kinetic_parameters_cns().keys():
             cn =self.GMQ.get_local_kinetic_parameters_cns()[self.kwargs.get('variable')]['cn']+',Reference=Value'
 
-        
+
         number_of_steps_attrib={'type': 'unsignedInteger', 'name': 'Number of steps', 'value': self.kwargs['number_of_steps']}
         scan_item_attrib={'type': 'cn', 'name': 'Object', 'value': cn}
         type_attrib={'type': 'unsignedInteger', 'name': 'Type', 'value': self.kwargs['scan_type']}
@@ -3128,7 +3153,7 @@ class Scan():
         log_attrib={'type': 'bool', 'name': 'log', 'value': self.kwargs['log10']}
         dist_type_attrib={'type': 'unsignedInteger', 'name': 'Distribution type', 'value': self.kwargs['distribution_type']}
         scanItem_element=etree.Element('ParameterGroup',attrib={'name':'ScanItem'})
-        
+
         ## regular scan
         if self.kwargs['scan_type']=='1':
             etree.SubElement(scanItem_element,'Parameter',attrib=number_of_steps_attrib)
@@ -3157,15 +3182,15 @@ class Scan():
         return self.copasiML
 
 
-        
+
     def set_scan_options(self):
-        report_attrib={'append': self.kwargs.get('append'), 
-                       'target': self.kwargs.get('report_name'), 
+        report_attrib={'append': self.kwargs.get('append'),
+                       'target': self.kwargs.get('report_name'),
                        'reference': self.get_report_key(),
                        'confirmOverwrite': self.kwargs.get('confirm_overwrite')}
-        
+
         LOG.debug('output during subtask value is: {}'.format(self.kwargs['output_in_subtask']))
-#        LOG.debug()
+        #        LOG.debug()
         subtask_attrib={'type': 'unsignedInteger', 'name': 'Subtask', 'value': self.kwargs.get('subtask')}
         output_in_subtask_attrib={'type': 'bool', 'name': 'Output in subtask', 'value': self.kwargs['output_in_subtask']}
         adjust_initial_conditions_attrib={'type': 'bool', 'name': 'Adjust initial conditions', 'value': self.kwargs.get('adjust_initial_conditions')}
@@ -3194,444 +3219,18 @@ class Scan():
                     if k.attrib['name']=='Adjust initial conditions':
                         k.attrib.update(adjust_initial_conditions_attrib)
         return self.copasiML
-        
+
     def remove_scans(self):
         query='//*[@name="ScanItems"]'
         for i in self.copasiML.xpath(query):
             for j in list(i):
                 i.remove(j)
-#            i.getparent().remove(i)
-        return self.copasiML
-        
-    def run(self):
-        R=Run(self.copasi_file,task='scan',mode=self.kwargs.get('run'))
-        #
-        # if self.kwargs.get('run')==False:
-        #     return None
-        # elif self.kwargs.get('run')==True:
-        #     return R
-        # elif self.kwargs.get('run')=='SGE':
-        #     return R
-#==============================================================================            
-class Run():
-    '''
-    run a copasi file using CopasiSE. run will deactivate all tasks from 
-    being executable via CopasiSE then activate the task you want to run, 
-    then run it. 
-    
-    copasi_file:
-        The copasi file you want to run 
-    
-    **kwargs:
-    
-        task:
-            Any valid copasi task. Default=time_course. Options are 
-            ['steady_state','time_course','scan','fluxmode','optimization',
-            'parameter_estimation','metaboliccontrolanalysis','lyapunovexponents',
-            'timescaleseparationanalysis','sensitivities','moieties',
-            'crosssection','linearnoiseapproximation']
-            
-        save:
-            Either False,'duplicate' or 'overwrite'. Should probably remain 
-            on 'overwrite', the default. 
-            
-        mode:
-            True, False,'multiprocess', or 'SGE'. Default is True but can be turned off if you 
-            want to uncheck all executable boxes then check the task executable
-            
-        max_time:
-            Default None. Max time in seconds for copasi to be allowed to run
-    '''
-    def __init__(self,copasi_file,**kwargs):
-        self.copasi_file=copasi_file
-        self.CParser=CopasiMLParser(self.copasi_file)
-        self.copasiML=self.CParser.copasiML
-        self.GMQ=GetModelQuantities(self.copasi_file)
-        self.SGE_job_file=os.path.splitext(self.copasi_file)[0]+'.sh'
-
-        options={'task':'time_course',
-                 'save':'overwrite',
-                 'mode':True,
-                 'max_time':None}
-
-
-
-        #values need to be lower case for copasiML
-        for i in kwargs.keys():
-            assert i in options.keys(),'{} is not a keyword argument for run'.format(i)
-        options.update( kwargs)
-        self.kwargs=options
-        self.kwargs = Bool2Str(self.kwargs).convert_dct()
-
-
-        tasks=['steady_state','time_course',
-               'scan','fluxmode','optimization',
-               'parameter_estimation','metaboliccontrolanalysis',
-               'lyapunovexponents','timescaleseparationanalysis',
-               'sensitivities','moieties','crosssection',
-               'linearnoiseapproximation']
-
-
-
-        if  self.kwargs.get('task') not in tasks:
-            raise Errors.InputError('{} is not a valid task. Choose from {}'.format(self.kwargs.get('task'),tasks))
-        if self.kwargs.get('max_time')!=None:
-            if isinstance(self.kwargs.get('max_time'),(float,int))!=True:
-                raise TypeError('max_time argument must be float or int')
-
-        if self.kwargs.get('task')=='time_course':
-            self.kwargs['task']='timecourse'
-
-        elif self.kwargs.get('task')=='parameter_estimation':
-            self.kwargs['task']='parameterfitting'
-
-        elif self.kwargs.get('task')=='steady_state':
-            self.kwargs['task']='steadystate'
-
-        if os.path.isfile(self.copasi_file)!=True:
-            raise Errors.FileDoesNotExistError('{} is not a file'.format(self.copasi_file))
-
-
-        self.copasiML=self.set_task()
-        self.save()
-        if self.kwargs.get('mode')==True:
-            try:
-                self.run()
-            except Errors.CopasiError:
-                self.run_linux()
-        elif self.kwargs.get('mode')=='SGE':
-            self.submit_copasi_job_SGE()
-        elif self.kwargs.get('mode')=='multiprocess':
-            self.multi_run()
-
-
-
-    def multi_run(self):
-        def run(x):
-            if os.path.isfile(x)!=True:
-                raise Errors.FileDoesNotExistError('{} is not a file'.format(self.copasi_file))
-            subprocess.Popen(['CopasiSE',self.copasi_file])
-        Process(run(self.copasi_file))
-
-
-
-
-    def set_task(self):
-        for i in self.copasiML.find('{http://www.copasi.org/static/schema}ListOfTasks'):
-            i.attrib['scheduled']="false" #set all to false
-            if self.kwargs.get('task')== i.attrib['type'].lower():
-                i.attrib['scheduled']="true"
-
+                #            i.getparent().remove(i)
         return self.copasiML
 
     def run(self):
-        '''
-        Process the copasi file using CopasiSE
-        Must be Copasi version 16
-        
-        '''
-        args=['CopasiSE',"{}".format(self.copasi_file)]
-        p=subprocess.Popen(args,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=True)
-        output,err= p.communicate()
-        d={}
-        d['output']=output
-        d['error']=err
-        if err!='':
-            try:
-                self.run_linux()
-            except:
-                raise Errors.CopasiError('Failed with Copasi error: \n\n'+d['error'])
-        return d['output']
+        R = Run(self.copasi_file, task='scan', mode=self.kwargs.get('run'))
 
-    def run_linux(self):
-        os.system('CopasiSE "{}"'.format(self.copasi_file) )
-
-
-    def submit_copasi_job_SGE(self):
-        '''
-        Submit copasi file as job to SGE based job scheduler. 
-        '''
-        with open(self.SGE_job_file,'w') as f:
-            f.write('#!/bin/bash\n#$ -V -cwd\nmodule add apps/COPASI/4.16.104-Linux-64bit\nCopasiSE {}'.format(self.copasi_file))
-        ## -N option for job name 
-        os.system('qsub {} -N {} '.format(self.SGE_job_file,self.SGE_job_file))
-        ## remove .sh file after used. 
-#        os.remove(self.SGE_job_file)
-        
-    def save(self):
-        self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
-        return self.copasiML
-
-
-    def save_dep(self):
-        if self.kwargs.get('save')=='duplicate':
-            self.CParser.write_copasi_file(self.kwargs.get('OutputML'),self.copasiML)
-        elif self.kwargs.get('save')=='overwrite':
-            self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
-        return self.copasiML
-
-
-        
-class Run2():
-    '''
-    run a copasi file using CopasiSE. run will deactivate all tasks from 
-    being executable via CopasiSE then activate the task you want to run, 
-    then run it. 
-    
-    copasi_file:
-        The copasi file you want to run 
-    
-    **kwargs:
-    
-        task:
-            Any valid copasi task. Default=time_course. Options are 
-            ['steady_state','time_course','scan','fluxmode','optimization',
-            'parameter_estimation','metaboliccontrolanalysis','lyapunovexponents',
-            'timescaleseparationanalysis','sensitivities','moieties',
-            'crosssection','linearnoiseapproximation']
-            
-        save:
-            Either False,'duplicate' or 'overwrite'. Should probably remain 
-            on 'overwrite', the default. 
-            
-        mode:
-            True, False,'multiprocess', or 'SGE'. Default is True but can be turned off if you 
-            want to uncheck all executable boxes then check the task executable
-            
-        max_time:
-            Default None. Max time in seconds for copasi to be allowed to run
-    '''
-    def __init__(self,copasi_file,**kwargs):
-        self.copasi_file=copasi_file
-        self.CParser=CopasiMLParser(self.copasi_file)
-        self.copasiML=self.CParser.copasiML
-        self.GMQ=GetModelQuantities(self.copasi_file)
-        self.SGE_job_file=os.path.splitext(self.copasi_file)[0]+'.sh'
-
-        options={'task':'time_course',
-                 'save':'overwrite',
-                 'mode':True,
-                 'max_time':None}
-
-
-
-        #values need to be lower case for copasiML
-        for i in kwargs.keys():
-            assert i in options.keys(),'{} is not a keyword argument for run'.format(i)
-        options.update( kwargs)
-        self.kwargs=options
-        self.kwargs = Bool2Str(self.kwargs).convert_dct()
-
-
-
-        tasks=['steady_state','time_course',
-               'scan','fluxmode','optimization',
-               'parameter_estimation','metaboliccontrolanalysis',
-               'lyapunovexponents','timescaleseparationanalysis',
-               'sensitivities','moieties','crosssection',
-               'linearnoiseapproximation']
-
-
-
-        if  self.kwargs.get('task') not in tasks:
-            raise Errors.InputError('{} is not a valid task. Choose from {}'.format(self.kwargs.get('task'),tasks))
-        if self.kwargs.get('max_time')!=None:
-            if isinstance(self.kwargs.get('max_time'),(float,int))!=True:
-                raise TypeError('max_time argument must be float or int')
-
-        if self.kwargs.get('task')=='time_course':
-            self.kwargs['task']='timecourse'
-
-        elif self.kwargs.get('task')=='parameter_estimation':
-            self.kwargs['task']='parameterfitting'
-
-        elif self.kwargs.get('task')=='steady_state':
-            self.kwargs['task']='steadystate'
-
-        if os.path.isfile(self.copasi_file)!=True:
-            raise Errors.FileDoesNotExistError('{} is not a file'.format(self.copasi_file))
-
-
-        self.copasiML=self.set_task()
-        self.save()
-        if self.kwargs.get('mode')==True:
-            try:
-                self.run()
-            except Errors.CopasiError:
-                self.run_linux()
-        elif self.kwargs.get('mode')=='SGE':
-            self.submit_copasi_job_SGE()
-        elif self.kwargs.get('mode')=='multiprocess':
-            self.multi_run()
-
-    def __getitem__(self,key):
-        if key not in self.kwargs.keys():
-            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
-        return self.kwargs[key]
-
-    def __setitem__(self,key,value):
-        self.kwargs[key] = value
-        
-        
-    def multi_run(self):
-        def run(x):
-            if os.path.isfile(x)!=True:
-                raise Errors.FileDoesNotExistError('{} is not a file'.format(x))
-            subprocess.Popen(['CopasiSE',x])
-            os.system('CopasiSE {}'.format(x))
-        Process(run(self.copasi_file))
-
-
-    def set_task(self):
-        for i in self.copasiML.find('{http://www.copasi.org/static/schema}ListOfTasks'):
-            i.attrib['scheduled']="false" #set all to false
-            if self.kwargs.get('task')== i.attrib['type'].lower():
-                i.attrib['scheduled']="true"
-
-        return self.copasiML
-
-    def run(self):
-        '''
-        Process the copasi file using CopasiSE
-        Must be Copasi version 16
-        
-        '''
-        try:
-            LOG.info('Running... {}'.format(self.copasi_file))
-            args=["CopasiSE","{}".format(self.copasi_file)]
-            p=subprocess.Popen(args,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=False)
-            output,err= p.communicate()
-            d={}
-            d['output']=output
-            d['error']=err
-            if err!='':
-               raise Errors.CopasiError('Failed with Copasi error: \n\n'+d['error'])
-            return d['output']
-        except Errors.CopasiError:
-            LOG.warning('Failed to run using subprocess.Popen(). Trying with os.system')
-            self.run_with_os_system()
-
-    def run_with_check_call(self):
-        print self.copasi_file
-        subprocess.check_call(["CopasiSE",r"{}".format(self.copasi_file) ])
-
-    def run_with_os_system(self):
-        os.system('CopasiSE "{}"'.format(self.copasi_file) )
-
-
-    def submit_copasi_job_SGE(self):
-        '''
-        Submit copasi file as job to SGE based job scheduler. 
-        '''
-        with open(self.SGE_job_file,'w') as f:
-            f.write('#!/bin/bash\n#$ -V -cwd\nmodule add apps/COPASI/4.16.104-Linux-64bit\nCopasiSE {}'.format(self.copasi_file))
-        ## -N option for job name 
-        os.system('qsub {} -N {} '.format(self.SGE_job_file,self.SGE_job_file))
-        ## remove .sh file after used. 
-        os.remove(self.SGE_job_file)
-        
-    def save(self):
-        self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
-        return self.copasiML
-
-
-    def save_dep(self):
-        if self.kwargs.get('save')=='duplicate':
-            self.CParser.write_copasi_file(self.kwargs.get('OutputML'),self.copasiML)
-        elif self.kwargs.get('save')=='overwrite':
-            self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
-        return self.copasiML
-
-class PruneCopasiHeaders():
-    '''
-    COPASI uses references to distinguish model components (like InitialConcentration 
-    or InitialParticleNumber). These are printed to file with copasi results and
-    its therefore useful to have a way to remove these references, leaving only the 
-    model component as it is in the model. 
-    
-    Args:
-        for_pruning: either a full path to the file you want to prune or 
-        a pandas dataframe
-    
-    kwargs:
-        replace:
-            True or False, if True will overwrite the filename. If False
-            write new file to new_path. If for_pruning a dataframe this argument is
-            ignored. 
-            
-        new_path: 
-            When replace='false 'new_path' is the output filename. Ignored when 
-            for_pruning is a pandas dataframe.
-        
-
-    '''
-    def __init__(self,for_pruning,replace=False,new_path=None):
-        self.for_pruning=for_pruning
-        self.replace=replace
-        
-#        assert self.mode in ['singlePE','multiPE,'time_course']
-        
-        if replace not in [True,False,'true','false']:
-            raise Errors.InputError('\'replace\' keyword should be either \'true\' or \'false\' ')
-
-            
-        self.from_file=False
-        self.from_df=False
-        if isinstance(self.for_pruning,str) and os.path.isfile(self.for_pruning):
-            self.from_file=True
-        elif isinstance(for_pruning,pandas.core.frame.DataFrame):
-            self.from_df=True
-                
-        if self.from_file:
-            if new_path==None:
-                self.new_path= os.path.splitext(self.for_pruning)[0]+'_pruned_titles.txt'
-            else:
-                self.new_path=new_path
-        
-#        if self.mode=='time_course':
-        if self.from_file:
-            self.new_path=self.prune()
-        elif self.from_df:
-            self.df=self.prune()
-    
-    
-    def prune(self):
-        '''
-        
-        '''
-        
-        '''
-        for time course we're using index but for PE were not. Need to make this consistant!
-        '''
-        if self.from_file==True:
-            df=pandas.DataFrame.from_csv(self.for_pruning,sep='\t',index_col=None)
-        elif self.from_df==True:
-            df=self.for_pruning
-        l=list( df.keys())
-        new_titles=[] 
-        for j in l:
-            #match anything between two square brackets with regex
-            match= re.findall('.*\[(.*)\]',j)
-            #we need the residual sum of squares value to be called 'RSS'
-            #and everything else to be an exact match to the corresponding
-            #model element
-            if match==[]:
-                new_titles.append(j)
-            elif match[0]=='Parameter Estimation':
-                new_titles.append('RSS')
-            else:
-                new_titles.append(match[0])
-        assert len(df.columns)==len(new_titles)
-        df.columns=new_titles
-        if self.from_file:
-            if self.replace==True:
-                os.remove(self.for_pruning)
-                self.new_path=self.for_pruning
-            df.to_csv(self.new_path,sep='\t',index=False)
-            return self.new_path
-        elif self.from_df:
-            return df
-        
 class RunMultiplePEs():
     '''
     
@@ -3960,8 +3559,6 @@ class RunMultiplePEs():
                                   fle[:-4]+'{}.txt'.format(str(i)))
             dct[i]=new_file
         return dct
-    
-
 
 class MultiModelFit():
     '''
@@ -4272,10 +3869,6 @@ class MultiModelFit():
         """
         for RMPE in self.RMPE_dct:
             self.RMPE_dct[RMPE].format_results()
-#        [RMPE.format_data() for RMPE in self.RMPE_dct[RMPE]]
-            
-        
-        
 
 class InsertParameters():
     '''
@@ -4644,8 +4237,6 @@ Please check the headers of your PE data are consistent with your model paramete
         self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
         return self.copasiML
 
-
-
 class HighThroughputFit():
     """
     The aim of this class is to build a way
@@ -4662,12 +4253,7 @@ class HighThroughputFit():
 
     def __init__(self,abstract_model_file):
         self.abstract_model_file = abstract_model_file
-        
-#==============================================================================
 
-            
-        
-            
 if __name__=='__main__':
     pass
 #    execfile('/home/b3053674/Documents/Models/2017/08_Aug/PyCoToolsTests/RunPEs.py')

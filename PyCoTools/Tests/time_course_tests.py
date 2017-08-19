@@ -20,10 +20,7 @@
 Author:
     Ciaran Welsh
 Date:
-    12/03/2017
-
- Object:
-
+    19-08-2017
  '''
 import site
 # site.addsitedir('/home/b3053674/Documents/PyCoTools')
@@ -37,201 +34,55 @@ import os
 import shutil 
 import pandas
 from PyCoTools.Tests import _test_base
+from lxml import etree
 
 
-
-class TimeCourseTests(_test_base._BaseTest):
+class DeterministicTimeCourseTests(_test_base._BaseTest):
     def setUp(self):
-        super(TimeCourseTests, self).setUp()
+        super(DeterministicTimeCourseTests, self).setUp()
+        self.TC = PyCoTools.pycopi.TimeCourse(self.model, end=1000,
+                                              step_size=100, intervals=10,
+                                              max_internal_steps=25)
+        self.timecourse = self.TC.set_timecourse()
+        self.timecourse.save(self.copasi_file)
+        self.new_model = PyCoTools.pycopi.CopasiMLParser(self.copasi_file).copasiML
+        self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
+        self.list_of_reports = '{http://www.copasi.org/static/schema}ListOfReports'
 
-    def test_deterministic1(self):
-        TC = PyCoTools.pycopi.TimeCourse(self.model, end=1000,
-                                         step_size=100,
-                                         intervals=10)
-        self.model = TC.set_deterministic()
-        self.model.save(self.copasi_file, self.model.xml)
-        model_for_test = PyCoTools.pycopi.CopasiMLParser(self.copasi_file).copasiML
-        query = "//*[@name='Time-Course']" and "//*[@type='timeCourse']"
-        for i in model_for_test.xpath(query):
-            for j in list(i):
-                self.assertTrue(j.attrib['name'] == 'Deterministic (LSODA)')
+    def test_report_definition(self):
+        for i in self.new_model.find(self.list_of_reports):
+            if i.attrib['name'] == 'Time-Course':
+                self.assertTrue(i.attrib['name'] == 'Time-Course')
 
-    def test_deterministic2(self):
-        TC = PyCoTools.pycopi.TimeCourse(self.model, end=1000,
-                                         step_size=100,
-                                         intervals=10)
-        self.model = TC.set_deterministic()
-        self.model.save(self.copasi_file, self.model.xml)
-        model_for_test = PyCoTools.pycopi.CopasiMLParser(self.copasi_file).copasiML
-        query = "//*[@name='Time-Course']" and "//*[@type='timeCourse']"
-        for i in model_for_test.xpath(query):
-            for j in list(i):
-                self.assertTrue(j.attrib['type'] == 'Deterministic(LSODA)')
+    def test_deterministic_options1(self):
+        """
 
-    def test_deterministic3(self):
-        TC = PyCoTools.pycopi.TimeCourse(self.model, end=1000,
-                                         step_size=100,
-                                         intervals=10)
-        self.model = TC.set_deterministic()
-        self.model.save(self.copasi_file, self.model.xml)
-        model_for_test = PyCoTools.pycopi.CopasiMLParser(self.copasi_file).copasiML
-        query = "//*[@name='Time-Course']" and "//*[@type='timeCourse']"
-        for i in model_for_test.xpath(query):
-            for j in list(i):
-                for k in list(j):
-                    if k.attrib['name'] == 'Duration':
-                        self.assertTrue(k.attrib['value'] == str(1000))
+        """
+        for i in self.new_model.find(self.list_of_tasks):
+            if i.attrib['name'] == 'Time-Course':
+                self.assertTrue(i[1].attrib['name'] == 'Deterministic (LSODA)' )
+        return 0
 
-    def test_deterministic4(self):
-        TC = PyCoTools.pycopi.TimeCourse(self.model, end=1000,
-                                         step_size=100,
-                                         intervals=10)
-        self.model = TC.set_deterministic()
-        self.model.save(self.copasi_file, self.model.xml)
-        model_for_test = PyCoTools.pycopi.CopasiMLParser(self.copasi_file).copasiML
-        query = "//*[@name='Time-Course']" and "//*[@type='timeCourse']"
-        for i in model_for_test.xpath(query):
-            for j in list(i):
-                for k in list(j):
-                    if k.attrib['name'] == 'StepSize':
-                        self.assertTrue(k.attrib['value'] == str(TC.step_size))
+    def test_deterministic_options2(self):
+        """
 
-    def test_deterministic5(self):
-        TC = PyCoTools.pycopi.TimeCourse(self.model, end=1000,
-                                         step_size=100,
-                                         intervals=10)
-        self.model = TC.set_deterministic()
-        self.model.save(self.copasi_file, self.model.xml)
-        model_for_test = PyCoTools.pycopi.CopasiMLParser(self.copasi_file).copasiML
-        query = "//*[@name='Time-Course']" and "//*[@type='timeCourse']"
-        for i in model_for_test.xpath(query):
-            for j in list(i):
-                for k in list(j):
-                    if k.attrib['name'] == 'Absolute Tolerance':
-                        self.assertTrue(k.attrib['value'] == str(TC.absolute_tolerance))
+        """
+        for i in self.new_model.find(self.list_of_tasks):
+            if i.attrib['name'] == 'Time-Course':
+                for j in list(i[1]):
+                    if j.attrib['name'] == 'Relative Tolerance':
+                        self.assertTrue(j.attrib['value'] == str(self.TC.relative_tolerance ))
+
+    def test_deterministic_options3(self):
+        """
+
+        """
+        for i in self.new_model.find(self.list_of_tasks):
+            if i.attrib['name'] == 'Time-Course':
+                for j in list(i[1]):
+                    if j.attrib['name'] == 'Max Internal Steps':
+                        self.assertTrue(j.attrib['value'] == str(self.TC.max_internal_steps))
 
 
-
-
-
-
-                                            # os.system('CopasiUI {}'.format(self.copasi_file))
-    # def test_report_setup(self):
-    #     ListOfReports=self.TC.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports')
-    #     for i in ListOfReports:
-    #         if i.attrib['name']=='Time-Course':
-    #             boolean=True
-    #     self.assertTrue(boolean)
-
-
-    # def test_scheduled(self):
-    #     query="//*[@name='Time-Course']" and "//*[@type='timeCourse']"
-    #     for i in self.TC.copasiML.xpath(query):
-    #          self.assertEqual(i.attrib['scheduled'],self.TC['scheduled'])
-    #
-    # def test_update_model(self):
-    #     query="//*[@name='Time-Course']" and "//*[@type='timeCourse']"
-    #     for i in self.TC.copasiML.xpath(query):
-    #         self.assertEqual(i.attrib['updateModel'],self.TC.kwargs.get('update_model'))
-    #
-    #
-    #
-    #
-    # def test_report_append(self):
-    #     query="//*[@name='Time-Course']" and "//*[@type='timeCourse']"
-    #     for i in self.TC.copasiML.xpath(query):
-    #         self.assertEqual(i[0].attrib['append'],self.TC['append'])
-    #
-    # def test_report_name(self):
-    #     self.TC.copasiML=self.TC.set_report()
-    #     query="//*[@name='Time-Course']" and "//*[@type='timeCourse']"
-    #     for i in self.TC.copasiML.xpath(query):
-    #         self.assertEqual(i[0].attrib['target'],self.TC.kwargs.get('report_name'))
-    #
-    #
-    # def test_confirm_overwrite(self):
-    #     self.TC.copasiML=self.TC.set_report()
-    #     query="//*[@name='Time-Course']" and "//*[@type='timeCourse']"
-    #     for i in self.TC.copasiML.xpath(query):
-    #         self.assertEqual(i[0].attrib['confirmOverwrite'],self.TC.kwargs.get('confirm_overwrite'))
-    #
-    # def test_relative_tolerance(self):
-    #     test_element= self.TC.copasiML[2][1]
-    #     for i in list(test_element):
-    #         if i.attrib['name']=='Relative tolerance':
-    #             self.assertEqual(i.attrib['value'],self.TC['Relativetolerance'])#,
-    #
-    #
-    # def test_integrate_reduced_model(self):
-    #     test_element= self.TC.copasiML[2][1]
-    #     for i in list(test_element):
-    #         if i.attrib['name']=='Integrate Reduced model':
-    #             self.assertEqual(i.attrib['value'],str(0))
-    #
-    # def test_absolute_tolerance(self):
-    #     self.TC=PyCoTools.pycopi.TimeCourse(self.copasi_file)
-    #     test_element= self.TC.copasiML[2][1]
-    #     for i in list(test_element):
-    #         if i.attrib['name']=='Absolute tolerance':
-    #             self.assertEqual(i.attrib['value'],self.TC['Absolutetolerance'])
-    #
-    # def test_max_internal_steps(self):
-    #     test_element= self.TC.copasiML[2][1]
-    #     for i in list(test_element):
-    #         if i.attrib['name']=='MaxInternalSteps':
-    #             self.assertEqual(i.attrib['value'],self.TC['MaxInternalSteps'])
-    #
-    # def test_step_number(self):
-    #     test_element= self.TC.copasiML[2][1]
-    #     for i in list(test_element):
-    #         if i.attrib['name']=='StepNumber':
-    #             self.assertEqual(i.attrib['value'],self.TC['StepNumber'])
-    #
-    # def test_step_size(self):
-    #     self.TC=PyCoTools.pycopi.TimeCourse(self.copasi_file)
-    #     test_element= self.TC.copasiML[2][1]
-    #     for i in list(test_element):
-    #         if i.attrib['name']=='StepSize':
-    #             self.assertEqual(i.attrib['value'],self.TC['step_size'])
-    #
-    # def test_duration(self):
-    #     test_element= self.TC.copasiML[2][1]
-    #     for i in list(test_element):
-    #         if i.attrib['name']=='Duration':
-    #             self.assertEqual(i.attrib['value'],self.TC['end'])
-    #
-    # def test_time_series_requested(self):
-    #     test_element= self.TC.copasiML[2][1]
-    #     for i in list(test_element):
-    #         if i.attrib['name']=='TimeSeriesRequested':
-    #             self.assertEqual(i.attrib['value'],'1')
-    #
-    # def test_output_start_time(self):
-    #     test_element= self.TC.copasiML[2][1]
-    #     for i in list(test_element):
-    #         if i.attrib['name']=='OutputStartTime':
-    #             self.assertEqual(i.attrib['value'],self.TC['start'])
-    # def test_continue_on_simultaneous(self):
-    #     test_element= self.TC.copasiML[2][1]
-    #     for i in list(test_element):
-    #         if i.attrib['name']=='Continue on Simultaneous':
-    #             self.assertEqual(i.attrib['value'],str(0))
-    #
-    # def test_output_event(self):
-    #     test_element= self.TC.copasiML[2][1]
-    #     for i in list(test_element):
-    #         if i.attrib['name']=='Output Event':
-    #             self.assertEqual(i.attrib['value'],self.TC['output_event'])
-    #
-    # def test_data_production(self):
-    #     data_file=os.path.join(os.getcwd(),self.TC.kwargs.get('report_name'))
-    #     self.assertTrue(os.path.isfile(data_file))
-    #
-    # def test_data_not_empty(self):
-    #     data_file=os.path.join(os.getcwd(),self.TC.kwargs.get('report_name'))
-    #     data= pandas.read_csv(data_file,sep='\t')
-    #     self.assertIsNot(data.shape,(0,0))
-
-            
 if __name__=='__main__':
     unittest.main()
