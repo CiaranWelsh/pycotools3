@@ -32,17 +32,17 @@ import os, glob
 import pandas
 import unittest
 import re
+from lxml import etree
 from copy import deepcopy
 
-class Model(object):
-    def __init__(self, copasi_file, **kwargs):
-        """
 
-        :param model:
-        :param kwargs:
-        """
-        self.copasi_file = copasi_file
-        self.xml = pycopi.CopasiMLParser(self.copasi_file).copasiML
+class Model(_base._ModelBase):
+    def __init__(self, model, **kwargs):
+        super(Model, self).__init__(model, **kwargs)
+
+        ## fill this dict after class is finished
+        self.allowed_keys = {}
+        self.update_properties(self.allowed_keys)
 
     def __str__(self):
         return 'Model(name={}, time_unit={}, volume_unit={}, quantity_unit={})'.format(self.name, self.time_unit,self.volume_unit, self.quantity_unit)
@@ -54,51 +54,49 @@ class Model(object):
     def reference(self):
         return "CN=Root,Model={}".format(self.name)
 
-    # @property
-    # def xml(self):
-    #     return self.xml
+    @property
+    def xml(self):
+        return self.model
 
     @property
     def time_unit(self):
         """
-
         :return:
         """
         query = '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
-        return self.xml.xpath(query)[0].attrib['timeUnit']
+        return self.model.xpath(query)[0].attrib['timeUnit']
 
     @property
     def name(self):
         """
-
         """
         query = '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
-        return self.xml.xpath(query)[0].attrib['name']
+        return self.model.xpath(query)[0].attrib['name']
 
     @property
     def volume_unit(self):
         query = '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
-        return self.xml.xpath(query)[0].attrib['volumeUnit']
+        return self.model.xpath(query)[0].attrib['volumeUnit']
 
     @property
     def quantity_unit(self):
         query = '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
-        return self.xml.xpath(query)[0].attrib['quantityUnit']
+        return self.model.xpath(query)[0].attrib['quantityUnit']
 
     @property
     def area_unit(self):
         query = '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
-        return self.xml.xpath(query)[0].attrib['areaUnit']
+        return self.model.xpath(query)[0].attrib['areaUnit']
 
     @property
     def length_unit(self):
         query = '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
-        return self.xml.xpath(query)[0].attrib['lengthUnit']
+        return self.model.xpath(query)[0].attrib['lengthUnit']
 
     @property
     def avagadro(self):
         query = '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
-        return float(self.xml.xpath(query)[0].attrib['avogadroConstant'])
+        return float(self.model.xpath(query)[0].attrib['avogadroConstant'])
 
     @property
     def key(self):
@@ -106,7 +104,7 @@ class Model(object):
         Get the model reference - the 'key' from self.get_model_units
         """
         query = '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
-        return self.xml.xpath(query)[0].attrib['key']
+        return self.model.xpath(query)[0].attrib['key']
 
     @property
     def states(self):
@@ -116,13 +114,13 @@ class Model(object):
         :Returns: set.
         """
         collection = []
-        for i in self.xml.iter():
+        for i in self.model.iter():
             if i.tag == '{http://www.copasi.org/static/schema}StateTemplate':
                 for j in i:
                     collection.append(j.attrib['objectReference'])
 
         query = '//*[@type="initialState"]'
-        for i in self.xml.xpath(query):
+        for i in self.model.xpath(query):
             state_values = i.text
 
         state_values = state_values.split(' ')
@@ -136,7 +134,7 @@ class Model(object):
         """
         collection= {}
         lst = []
-        for i in self.xml.iter():
+        for i in self.model.iter():
             if  i.tag == '{http://www.copasi.org/static/schema}ListOfCompartments':
                 df_list = []
                 for j in i:
@@ -150,11 +148,10 @@ class Model(object):
         """
         List of model metabolites as type metabolite
         :return: Metabolite
-
         name, compartment, key, conc, particle
         """
         collection = {}
-        for i in self.xml.iter():
+        for i in self.model.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfMetabolites':
                 for j in i:
                     collection[j.attrib['key']] = dict(j.attrib)
@@ -191,7 +188,7 @@ class Model(object):
         :return:list
         '''
         model_values = {}
-        for i in self.xml.iter():
+        for i in self.model.iter():
             """
             This loop gets model value name, key and simulation type
             """
@@ -203,7 +200,7 @@ class Model(object):
         collection = {}
         query='//*[@cn="String=Initial Global Quantities"]'
         d={}
-        for i in self.xml.xpath(query):
+        for i in self.model.xpath(query):
             '''
             gets name, simulationType and value
             '''
@@ -231,12 +228,11 @@ class Model(object):
     def local_parameters(self):
         """
         return local parameters used in your model
-
         :return:list of Parameters
         """
         query='//*[@cn="String=Kinetic Parameters"]'
         d={}
-        for i in self.xml.xpath(query):
+        for i in self.model.xpath(query):
             for j in list(i):
                 for k in list(j):
                     if k.attrib['simulationType']=='fixed':
@@ -267,7 +263,7 @@ class Model(object):
         :return: return list of functions from ListOfFunctions
         """
         lst = []
-        for element in self.xml.iter():
+        for element in self.model.iter():
             if element.tag == '{http://www.copasi.org/static/schema}ListOfFunctions':
                 for child in list(element):
                     lst.append( Function(**child.attrib) )
@@ -276,7 +272,7 @@ class Model(object):
     @property
     def number_of_reactions(self):
         count = 0
-        for i in self.xml.iter():
+        for i in self.model.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
                 for j in list(i):
                     count = count + 1
@@ -294,7 +290,7 @@ class Model(object):
         :return:
         """
         reactions_dct = {}
-        for i in self.xml.iter():
+        for i in self.model.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
                 for j in list(i):
                     for k in list(j):
@@ -323,6 +319,40 @@ class Model(object):
                                    rate_law=function_list)
                     reactions_dct[r.name] = r
         return reactions_dct
+
+class Compartment(_base._Base):
+    def __init__(self, **kwargs):
+        super(Compartment, self).__init__(**kwargs)
+        self.allowed_keys = {'name':None,
+                             'key':None,
+                             'value':None,
+                             'type':None}
+
+        for key in self.kwargs:
+            if key not in self.allowed_keys:
+                raise Errors.InputError('Attribute not allowed. {} not in {}'.format(key, self.allowed_keys))
+
+        self._do_checks()
+
+
+    def __str__(self):
+        return 'Compartment({})'.format(self.as_string())
+
+    def __repr__(self):
+        return self.__str__()
+
+    def _do_checks(self):
+        """
+        Make sure none of the arguments are empty
+        :return: void
+        """
+        for attr in self.allowed_keys:
+            if attr not in sorted(self.__dict__.keys() ):
+                raise Errors.InputError('Required attribute not specified: {}'.format(attr))
+
+    @property
+    def reference(self):
+        return 'Vector=Compartments[{}]'.format(self.name)
 
 class Compartment(_base._Base):
     def __init__(self, **kwargs):

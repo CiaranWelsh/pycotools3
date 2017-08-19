@@ -28,6 +28,7 @@ import os
 import pandas
 from lxml import etree
 import Errors
+# from model import Model
 
 from contextlib import contextmanager
 # from model import Model
@@ -201,6 +202,7 @@ class _ModelBase(_Base):
         :return:
         """
         if isinstance(self.model, str):
+
             return pycopi.CopasiMLParser(self.model).copasiML
         else:
             ## should be model.Model or etree._Element

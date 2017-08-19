@@ -95,7 +95,15 @@ class CopasiMLParser():
         LOG.debug('model written to {}'.format(copasi_filename))
 
 class Run(_base._ModelBase):
+    """
+
+    """
     def __init__(self, model, **kwargs):
+        """
+
+        :param model: either pre-parsed xml or copasi_file
+        :param kwargs:
+        """
         super(Run, self).__init__(model, **kwargs)
         print self.model
 
@@ -202,11 +210,11 @@ class Run(_base._ModelBase):
         :return:
         """
         tasks = ['steady_state', 'time_course',
-                 'scan', 'fluxmode', 'optimization',
-                 'parameter_estimation', 'metaboliccontrolanalysis',
-                 'lyapunovexponents', 'timescaleseparationanalysis',
-                 'sensitivities', 'moieties', 'crosssection',
-                 'linearnoiseapproximation']
+                 'scan', 'flux_mode', 'optimization',
+                 'parameter_estimation', 'metabolic_control_analysis',
+                 'lyapunov_exponents', 'time_scale_separation_analysis',
+                 'sensitivities', 'moieties', 'cross_section',
+                 'linear_noise_approximation']
         if self.task not in tasks:
             raise Errors.InputError('{} not in list of tasks. List of tasks are: {}'.format(self.task, tasks))
 
@@ -468,7 +476,7 @@ class Reports(_base._ModelBase):
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
             keys.append(i.attrib['key'])
             if i.attrib['name']=='parameter_estimation':
-                self.model.xml=self.remove_report('parameter_estimation')
+                self.model.xml = self.remove_report('parameter_estimation')
 
         new_key='Report_32'
         while new_key  in keys:

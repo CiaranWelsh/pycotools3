@@ -42,8 +42,8 @@ class RunTests(_test_base._BaseTest):
         super(RunTests, self).setUp()
 
     def test(self):
-        print PyCoTools.model.Model(self.model)
-        # R=PyCoTools.pycopi.Run(self.copasi_file)
+        # print PyCoTools.model.Model(self.model)
+        R=PyCoTools.pycopi.Run(self.model)
         # print R.model
         # model = R.set_task()
         # print model
