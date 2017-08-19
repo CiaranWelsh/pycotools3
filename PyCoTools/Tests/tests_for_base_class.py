@@ -45,25 +45,12 @@ class TestBase(_test_base._BaseTest):
         ## and the kwargs dict
         self.assertEqual(len(self._base.__dict__), 4)
 
-    def test(self):
-        print self._base
-
     def test_set_random_attribute(self):
         self.assertEqual(self._base.A, 'a')
 
     def test_set_random_attribute2(self):
         self.assertEqual(self._base.B, 'b')
 
-    # def test_name(self):
-    #     """
-    #     Test that assignments work in a subclass
-    #     :return:
-    #     """
-    #     print PyCoTools.model
-#         # comp = PyCoTools.model.Compartment(name='A', size=5)
-#         # self.assertTrue(comp.name=='A')
-#         # self.assertRaises(PyCoTools.pycopi.Compartment(not_a_key='raise exception'), PyCoTools.Errors.InputError)
-#
     def test_setattr(self):
         self._base.A = 4
         self.assertEqual(self._base.A, 4)
@@ -73,7 +60,6 @@ class TestBase(_test_base._BaseTest):
         self.assertEqual(kwarg_string,self._base.as_string() )
 
     def test_as_df_index(self):
-        # print self._base.as_df()
         index = ['A','B','key']
         self.assertListEqual(list(self._base.as_df().index ), index)
 
@@ -114,15 +100,6 @@ class BaseModelTests(_test_base._BaseTest):
     def test_as_string(self):
         self.assertTrue(isinstance(self._model_base_from_string.as_string(), str))
 
-# # class BaseModel2Tests(_test_base._BaseTest):
-# #     def setUp(self):
-# #         super(BaseModel2Tests, self).setUp()
-# #         self.model_base = PyCoTools._base._ModelBase(self.copasi_file)
-# # #
-# #     def test_test(self):
-# #         print self.model_base.model
-
-
     def test_update_properties(self):
         class New(PyCoTools._base._ModelBase):
             def __init__(self, model, **kwargs):
@@ -132,18 +109,61 @@ class BaseModelTests(_test_base._BaseTest):
                            'B': 'b'}
 
                 self.update_properties(options)
-                for i in kwargs.keys():
-                    assert i in options.keys(), '{} is not a keyword argument for Reports'.format(i)
-                options.update(kwargs)
-                self.kwargs = options
+                #options.update(self.__dict__)
                 self.list_of_output = []
-                self.list_of_output.append( self.A )
+                self.list_of_output.append(self.A )
                 self.list_of_output.append(self.B )
-                self.list_of_output.append(self.kwargs['A'] )
-                self.list_of_output.append(self.kwargs['B'] )
+                self.list_of_output.append(self.__dict__['A'] )
+                self.list_of_output.append(self.__dict__['B'] )
         new_class = New(self.copasi_file, A='a')
-        expected_output = ['a','b','a','b']
+        expected_output = ['a', 'b', 'a', 'b']
         self.assertListEqual(new_class.list_of_output, expected_output)
+
+    def test_convert_bool_to_numeric(self):
+        """
+
+        :return:
+        """
+        class New(PyCoTools._base._ModelBase):
+            def __init__(self, model, **kwargs):
+                super(New, self).__init__(model, **kwargs)
+
+                options = {'append': True,
+                           'confirm_overwrite': False,
+                           'output_event': False,
+                           'scheduled': True,
+                           'plot': True}
+
+                options = self.convert_bool_to_numeric(options)
+                self.update_properties(options)
+
+        new_class = New(self.copasi_file, random_option=True)
+        lst = [new_class.append, new_class.confirm_overwrite,
+               new_class.plot]
+        self.assertListEqual(lst, ['1', '0', True])
+
+
+    def test_check_integrity(self):
+        """
+
+        :return:
+        """
+        class New(PyCoTools._base._ModelBase):
+            def __init__(self, model, **kwargs):
+                super(New, self).__init__(model, **kwargs)
+
+                options = {'append': True,
+                           'confirm_overwrite': False,
+                           'output_event': False,
+                           'scheduled': True,
+                           'plot': True}
+
+                options = self.convert_bool_to_numeric(options)
+                self.update_properties(options)
+                self.check_integrity(options.keys(), kwargs.keys())
+        with self.assertRaises(PyCoTools.Errors.InputError) as context:
+            New(self.copasi_file, wrong_option=True)
+        self.assertTrue(isinstance(context.exception, PyCoTools.Errors.InputError))
 
 
     # def test_save(self):

@@ -61,18 +61,6 @@ class _BaseTest(unittest.TestCase):
             
         for i in glob.glob(os.path.join(dire, '*.pickle') ):
             os.remove(i)
-            
-            
-class _TimeCourseBase(_BaseTest):
-    
-    def setUp(self):
-        super(_TimeCourseBase, self).setUp()
-        
-        self.TC = PyCoTools.pycopi.TimeCourse(self.copasi_file, end=1000, step_size=1, 
-                                              intervals=1000)
-        
-    def tearDown(self):
-        super(_TimeCourseBase, self).tearDown()
         
 class _ParameterEstimationBase(_BaseTest):
     """
@@ -86,30 +74,30 @@ class _ParameterEstimationBase(_BaseTest):
                  'global_quantities':self.GMQ.get_global_quantities().keys(),
                  'append': True, 
                  'confirm_overwrite': True,
-                 'overwrite_config_file':True,
-                 'update_model':True,
-                 'randomize_start_values':True,
-                 'create_parameter_sets':True,
-                 'calculate_statistics':True,
-                 'method':'GeneticAlgorithm',
-                 'number_of_generations':10,
-                 'population_size':10,
-                 'random_number_generator':4,
-                 'seed':0,
-                 'pf':0.675,
-                 'iteration_limit':1140,
-                 'tolerance':0.1,
-                 'rho':0.2,
-                 'scale':100,
-                 'swarm_size':500,
-                 'std_deviation':0.0000004641,
-                 'number_of_iterations':1516400000,
-                 'start_temperature':100,
-                 'cooling_factor':0.85498,
-                 'scheduled':True,
+                 'overwrite_config_file': True,
+                 'update_model': True,
+                 'randomize_start_values': True,
+                 'create_parameter_sets': True,
+                 'calculate_statistics': True,
+                 'method': 'GeneticAlgorithm',
+                 'number_of_generations': 10,
+                 'population_size': 10,
+                 'random_number_generator': 4,
+                 'seed': 0,
+                 'pf': 0.675,
+                 'iteration_limit': 1140,
+                 'tolerance': 0.1,
+                 'rho': 0.2,
+                 'scale': 100,
+                 'swarm_size': 500,
+                 'std_deviation': 0.0000004641,
+                 'number_of_iterations': 1516400000,
+                 'start_temperature': 100,
+                 'cooling_factor': 0.85498,
+                 'scheduled': True,
                  'plot':True,
-                 'savefig':True
-                 }
+                 'savefig': True,
+                 'run': False}
         
         
         

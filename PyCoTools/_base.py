@@ -28,6 +28,7 @@ import os
 import pandas
 from lxml import etree
 import Errors
+from contextlib import contextmanager
 # from model import Model
 
 
@@ -158,7 +159,10 @@ class _Base(object):
                'scheduled',
                'automatic_step_size',
                'start_in_steady_state',
-
+               'output_event',
+               'start_in_steady_state',
+               'integrate_reduced_model',
+               'use_random_seed',
                ]
         for k, v in dct.items():
             if k in lst:
@@ -197,15 +201,46 @@ class _ModelBase(_Base):
             return self.model
 
     @staticmethod
-    def save(copasi_filename, copasiML):
+    def save_static(copasi_filename, xml):
         """
         Save copasiML to copasi_filename. Static.
+        User needs to specify which xml to save
         :param copasi_filename:
-        :param copasiML:
+        :param xml:
         :return:
         """
         if os.path.isfile(copasi_filename):
             os.remove(copasi_filename)
-        # first convert the copasiML to a root element tree
-        root = etree.ElementTree(copasiML)
+        ## first convert the copasiML to a root element tree
+        root = etree.ElementTree(xml)
         root.write(copasi_filename)
+
+
+    def save(self,copasi_filename=None):
+        """
+        Save copasiML to copasi_filename. This
+        version is not static and already
+        knows which copasiML you want to save
+
+        :param copasi_filename:
+        :return:
+        """
+        if copasi_filename == None:
+            copasi_filename = os.path.join(os.getcwd(), 'Model.cps')
+        if os.path.isfile(copasi_filename):
+            os.remove(copasi_filename)
+        # first convert the copasiML to a root element tree
+        root = etree.ElementTree(self.model)
+        root.write(copasi_filename)
+
+    def open(self, copasi_filename=None):
+        """
+        Open model with the gui
+        :return:
+        """
+        if copasi_filename == None:
+            copasi_filename = os.path.join(os.getcwd(), 'Model.cps')
+        self.save(copasi_filename)
+        os.system('CopasiUI {}'.format(copasi_filename))
+        os.remove(copasi_filename)
+
