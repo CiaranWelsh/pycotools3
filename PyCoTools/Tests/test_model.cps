@@ -304,26 +304,7 @@ Reaction scheme where the products are created from the reactants and the change
         <Parameter name="Maximum duration for backward integration" type="unsignedFloat" value="1000000"/>
       </Method>
     </Task>
-    <Task key="Task_15" name="Time-Course" type="timeCourse" scheduled="false" updateModel="false">
-      <Problem>
-        <Parameter name="AutomaticStepSize" type="bool" value="0"/>
-        <Parameter name="StepNumber" type="unsignedInteger" value="100"/>
-        <Parameter name="StepSize" type="float" value="0.01"/>
-        <Parameter name="Duration" type="float" value="1"/>
-        <Parameter name="TimeSeriesRequested" type="bool" value="1"/>
-        <Parameter name="OutputStartTime" type="float" value="0"/>
-        <Parameter name="Output Event" type="bool" value="0"/>
-        <Parameter name="Start in Steady State" type="bool" value="0"/>
-      </Problem>
-      <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
-        <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
-        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-006"/>
-        <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-012"/>
-        <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
-        <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
-      </Method>
-    </Task>
-    <Task key="Task_16" name="Scan" type="scan" scheduled="false" updateModel="false">
+    <Task key="Task_15" name="Time-Course" scheduled="true" type="timeCourse" update_model="false"><Report append="0" confirmOverwrite="0" reference="Report_30" target="C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\TimeCourseData.txt"/><Problem><Parameter name="AutomaticStepSize" type="bool" value="0"/><Parameter name="StepNumber" type="unsignedInteger" value="10"/><Parameter name="StepSize" type="float" value="100"/><Parameter name="Duration" type="float" value="1000"/><Parameter name="TimeSeriesRequested" type="float" value="1"/><Parameter name="OutputStartTime" type="float" value="0"/><Parameter name="Output Event" type="bool" value="0"/><Parameter name="Start in Steady State" type="bool" value="0"/></Problem><Method name="Deterministic (LSODA)" type="Deterministic(LSODA)"><Parameter name="Integrate Reduced Model" type="bool" value="0"/><Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/><Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/><Parameter name="Max Internal Steps" type="unsignedInteger" value="50000"/><Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/></Method></Task><Task key="Task_16" name="Scan" type="scan" scheduled="false" updateModel="false">
       <Problem>
         <Parameter name="Subtask" type="unsignedInteger" value="1"/>
         <ParameterGroup name="ScanItems">
@@ -626,7 +607,7 @@ Reaction scheme where the products are created from the reactants and the change
         <Object cn="CN=Root,Vector=TaskList[Linear Noise Approximation],Object=Result"/>
       </Footer>
     </Report>
-  <Report taskType="parameterFitting" separator="&#9;" precision="6" key="Report_32" name="parameter_estimation"><Comment/><Footer><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"/><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/></Footer></Report><Report taskType="Time-Course" separator="&#9;" precision="6" key="Report_30" name="Time-Course"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=New Model,Reference=Time"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Values[ThisIsAssignment],Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Values[B2C],Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Values[A2B],Reference=Value"/></Table></Report></ListOfReports>
+  <Report taskType="Time-Course" separator="&#9;" precision="6" key="Report_30" name="Time-Course"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=New Model,Reference=Time"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Values[ThisIsAssignment],Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Values[B2C],Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Values[A2B],Reference=Value"/></Table></Report></ListOfReports>
   <GUI>
   </GUI>
   <ListOfUnitDefinitions>

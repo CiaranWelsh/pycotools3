@@ -94,6 +94,7 @@ class CopasiMLParser():
         root.write(copasi_filename)
         LOG.debug('model written to {}'.format(copasi_filename))
 
+
 class Run(_base._ModelBase):
     """
 
@@ -120,14 +121,13 @@ class Run(_base._ModelBase):
         self.do_checks()
 
         if self.copasi_file == None:
-            self.copasi_file = os.path.join(os.getcwd(), 'Model.cps')
-            LOG.warning('No copasi_file specified to Run class.\n Defaulting to {}'.format(self.copasi_file))
+            self.copasi_file = self.model.copasi_file
 
         if self.sge_job_filename == None:
             self.SGE_job_filename = os.path.join(os.getcwd(), 'SGEJobFile.sh')
 
         self.model = self.set_task()
-        self.save_static(self.copasi_file, self.model.xml)
+        self.model.save()
         if self.mode == True:
             try:
                 self.run()
@@ -215,6 +215,7 @@ class Run(_base._ModelBase):
                  'linear_noise_approximation']
         if self.task not in tasks:
             raise Errors.InputError('{} not in list of tasks. List of tasks are: {}'.format(self.task, tasks))
+
 
 
 class Reports(_base._ModelBase):
@@ -591,6 +592,7 @@ class Reports(_base._ModelBase):
                     j.attrib['target']=''
         return self.model
 
+
 class Bool2Str():
     """
     copasiML expects strings and we pythoners want to use python booleans not strings
@@ -628,6 +630,7 @@ class Bool2Str():
 #
         return self.dct
 
+
 class TimeCourse(_base._ModelBase):
     """
 
@@ -641,7 +644,7 @@ class TimeCourse(_base._ModelBase):
     def __init__(self, model, **kwargs):
         super(TimeCourse, self).__init__(model, **kwargs)
 
-        default_report_name = os.path.join(os.getcwd(), 'TimeCourse.txt')
+        default_report_name = os.path.join(os.path.dirname(self.model.copasi_file), 'TimeCourseData.txt')
 
         self.default_properties = {'intervals': 100,
                                    'step_size': 0.01,
@@ -704,11 +707,16 @@ class TimeCourse(_base._ModelBase):
         if self.method not in method_list:
             raise Errors.InputError('{} is not a valid method. These are valid methods {}'.format(self.method, method_list))
 
+        if os.path.isabs(self.report_name)!=True:
+            self.report_name = os.path.join(os.path.dirname(self.model.copasi_file), 'TimeCourseData.csv')
+
+
     def __str__(self):
         return "TimeCourse({})".format(self.as_string())
 
     def run_task(self):
         R = Run(self.model, task='time_course')
+        return R.model
 
     def create_task(self):
         """
@@ -825,7 +833,6 @@ class TimeCourse(_base._ModelBase):
         self.model.xml.find(list_of_tasks).insert(1, timecourse)
         LOG.debug('Timecourse task element is:\n\n{}'.format(etree.tostring(timecourse, pretty_print=True) ))
         return self.model
-
 
     def deterministic(self):
         """
@@ -1234,6 +1241,7 @@ class TimeCourse(_base._ModelBase):
     #     R = Run(self.copasi_file, task='time_course')
     #     LOG.debug('Time course ran')
     #     return R
+
 
 class ExperimentMapper():
     '''
@@ -1654,7 +1662,8 @@ class ExperimentMapper():
             self.copasiML=self.add_experiment_set(Experiment)
             self.save()
         return self.copasiML
-        
+
+
 class PhaseSpace(TimeCourse):
     '''
     Inherits from TimeCourse
@@ -1763,6 +1772,7 @@ class PhaseSpace(TimeCourse):
         for i in self.combinations:
             self.plot1phase(i[0],i[1])
 
+
 class FormatPEData():
     def __init__(self,copasi_file,report_name, report_type='parameter_estimation'):
         self.copasi_file = copasi_file
@@ -1852,7 +1862,8 @@ class FormatPEData():
         """
         for i in glob.glob(os.path.join(folder, '*.txt')):
             FormatPEData(copasi_file, i, report_type=report_type)
-            
+
+
 class ParameterEstimation():
     '''
     Set up and run a parameter estimation in copasi. Since each parameter estimation
@@ -2864,6 +2875,7 @@ class ParameterEstimation():
         self.PL=PEAnalysis.PlotPEData(self.copasi_file,self.experiment_files,self.kwargs.get('report_name'),
                         **self.PlotPEDataKwargs)
 
+
 class Scan():
     '''
     Positional Args:
@@ -3251,6 +3263,7 @@ class Scan():
     def run(self):
         R = Run(self.copasi_file, task='scan', mode=self.kwargs.get('run'))
 
+
 class RunMultiplePEs():
     '''
     
@@ -3580,6 +3593,7 @@ class RunMultiplePEs():
             dct[i]=new_file
         return dct
 
+
 class MultiModelFit():
     '''
     Coordinate a systematic multi model fitting parameter estimation and 
@@ -3889,6 +3903,7 @@ class MultiModelFit():
         """
         for RMPE in self.RMPE_dct:
             self.RMPE_dct[RMPE].format_results()
+
 
 class InsertParameters():
     '''
@@ -4257,6 +4272,7 @@ Please check the headers of your PE data are consistent with your model paramete
         self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
         return self.copasiML
 
+
 class HighThroughputFit():
     """
     The aim of this class is to build a way
@@ -4273,6 +4289,7 @@ class HighThroughputFit():
 
     def __init__(self,abstract_model_file):
         self.abstract_model_file = abstract_model_file
+
 
 if __name__=='__main__':
     pass

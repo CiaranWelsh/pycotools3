@@ -42,8 +42,8 @@ class DeterministicTimeCourseTests(_test_base._BaseTest):
         super(DeterministicTimeCourseTests, self).setUp()
         self.TC = PyCoTools.pycopi.TimeCourse(self.model, end=1000,
                                               step_size=100, intervals=10,
-                                              max_internal_steps=25)
-        self.timecourse = self.TC.set_timecourse()
+                                              max_internal_steps=50000)
+        self.timecourse = self.TC.model#self.TC.set_timecourse()
         self.timecourse.save()
         self.new_model = PyCoTools.pycopi.CopasiMLParser(self.copasi_file).copasiML
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
@@ -60,8 +60,7 @@ class DeterministicTimeCourseTests(_test_base._BaseTest):
         """
         for i in self.new_model.find(self.list_of_tasks):
             if i.attrib['name'] == 'Time-Course':
-                self.assertTrue(i[1].attrib['name'] == 'Deterministic (LSODA)' )
-        return 0
+                self.assertTrue(i[2].attrib['name'] == 'Deterministic (LSODA)' )
 
     def test_deterministic_options2(self):
         """
@@ -83,6 +82,13 @@ class DeterministicTimeCourseTests(_test_base._BaseTest):
                     if j.attrib['name'] == 'Max Internal Steps':
                         self.assertTrue(j.attrib['value'] == str(self.TC.max_internal_steps))
 
+
+    def test_deterministic_writes_data(self):
+        """
+        Check that the data containing data is actually produced
+        :return:
+        """
+        self.assertTrue(os.path.isfile(self.TC.report_name )  )
 
 if __name__=='__main__':
     unittest.main()
