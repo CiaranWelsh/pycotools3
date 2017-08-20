@@ -44,7 +44,7 @@ class DeterministicTimeCourseTests(_test_base._BaseTest):
                                               step_size=100, intervals=10,
                                               max_internal_steps=25)
         self.timecourse = self.TC.set_timecourse()
-        self.timecourse.save(self.copasi_file)
+        self.timecourse.save()
         self.new_model = PyCoTools.pycopi.CopasiMLParser(self.copasi_file).copasiML
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
         self.list_of_reports = '{http://www.copasi.org/static/schema}ListOfReports'
