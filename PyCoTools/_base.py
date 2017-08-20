@@ -30,7 +30,6 @@ from lxml import etree
 import Errors
 import logging
 # from model import Model
-
 from contextlib import contextmanager
 # from model import Model
 
@@ -191,10 +190,26 @@ class _Base(object):
             if key not in allowed:
                 raise Errors.InputError('{} not in {}'.format(key, allowed))
 
+
+
+
 class _ModelBase(_Base):
     def __init__(self, mod, **kwargs):
+        """
+        A base class which defines some methods that
+        will be useful in multiple subclasses.
+
+        Major task is to read the model into python.
+        :param mod: either model.Model or str
+        :param kwargs:
+        """
         super(_ModelBase, self).__init__(**kwargs)
         self.model = mod
+        import model
+        if isinstance(self.model, (model.Model,
+                                   str)) != True:
+            raise Errors.InputError('First argument should be either PyCoTools.model.Model object or path (str) pointing to a copasi file. Got {} instead.'.format(type(self.model)))
+
         self.model = self.read_xml()
 
     def read_xml(self):
@@ -204,7 +219,8 @@ class _ModelBase(_Base):
         :return:
         """
         if isinstance(self.model, str):
-            return pycopi.CopasiMLParser(self.model).copasiML
+            from model import Model
+            return Model(self.model)
         else:
             ## should be model.Model or etree._Element
             return self.model
