@@ -671,7 +671,8 @@ class TimeCourse(_base._ModelBase):
                                    'upper_limit': 1000,
                                    'partitioning_interval': 1,
                                    'runge_kutta_step_size': 0.001,
-                                   'run': True}
+                                   'run': True,
+                                   'plot': False}
 
 
         self.convert_bool_to_numeric(self.default_properties)
@@ -683,7 +684,7 @@ class TimeCourse(_base._ModelBase):
         self.set_timecourse()
         self.set_report()
 
-        self.run()
+        self.run_task()
 
     def do_checks(self):
         """
@@ -704,7 +705,7 @@ class TimeCourse(_base._ModelBase):
     def __str__(self):
         return "TimeCourse({})".format(self.as_string())
 
-    def run(self):
+    def run_task(self):
         R = Run(self.model, task='time_course')
 
     def create_task(self):
