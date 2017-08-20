@@ -101,108 +101,106 @@ class Run(_base._ModelBase):
     def __init__(self, model, **kwargs):
         """
 
-        :param model: either pre-parsed xml or copasi_file
+        :param model: instance of model.Model
         :param kwargs:
         """
         super(Run, self).__init__(model, **kwargs)
-        print self.model
 
+        self.default_properties = {'task': 'time_course',
+                                   'save': 'overwrite',
+                                   'mode': True,
+                                   'max_time': None,
+                                   'copasi_file': None,
+                                   'sge_job_filename': None}
 
-        # self.default_properties = {'task': 'time_course',
-        #                            'save': 'overwrite',
-        #                            'mode': True,
-        #                            'max_time': None}
-        #
-        # self.convert_bool_to_numeric(self.default_properties)
-        # self.update_kwargs(self.default_properties)
-        # self.update_properties(self.default_properties)
-        # self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
-        # self.do_checks()
+        self.convert_bool_to_numeric(self.default_properties)
+        self.update_kwargs(self.default_properties)
+        self.update_properties(self.default_properties)
+        self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
+        self.do_checks()
+
+        if self.copasi_file == None:
+            self.copasi_file = os.path.join(os.getcwd(), 'Model.cps')
+            LOG.warning('No copasi_file specified to Run class.\n Defaulting to {}'.format(self.copasi_file))
+
+        if self.sge_job_filename == None:
+            self.SGE_job_filename = os.path.join(os.getcwd(), 'SGEJobFile.sh')
+
+        self.model = self.set_task()
+        self.save_static(self.copasi_file, self.model.xml)
+        if self.mode == True:
+            try:
+                self.run()
+            except Errors.CopasiError:
+                self.run_linux()
+        elif self.mode == 'SGE':
+            self.submit_copasi_job_SGE()
+        elif self.mode == 'multiprocess':
+            self.multi_run()
 
 
     def __str__(self):
         return 'Run({})'.format(self.as_string())
 
+    def multi_run(self):
+        def run(x):
+            if os.path.isfile(x) != True:
+                raise Errors.FileDoesNotExistError('{} is not a file'.format(self.copasi_file))
+            subprocess.Popen(['CopasiSE', self.copasi_file])
+        Process(run(self.copasi_file))
 
-    #     self.copasiML = self.set_task()
-    #     self.save()
-    #     if self.kwargs.get('mode') == True:
-    #         try:
-    #             self.run()
-    #         except Errors.CopasiError:
-    #             self.run_linux()
-    #     elif self.kwargs.get('mode') == 'SGE':
-    #         self.submit_copasi_job_SGE()
-    #     elif self.kwargs.get('mode') == 'multiprocess':
-    #         self.multi_run()
-    #
-    # def multi_run(self):
-    #     def run(x):
-    #         if os.path.isfile(x) != True:
-    #             raise Errors.FileDoesNotExistError('{} is not a file'.format(self.copasi_file))
-    #         subprocess.Popen(['CopasiSE', self.copasi_file])
-    #
-    #     Process(run(self.copasi_file))
-    #
-    # def set_task(self):
-    #     """
-    #
-    #     :return:
-    #     """
-    #     print self.model
-        # for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfTasks'):
-        #     i.attrib['scheduled'] = "false"  # set all to false
-        #     if self.task == i.attrib['type'].lower():
-        #         i.attrib['scheduled'] = "true"
-        # return self.model
-    #
-    # def run(self):
-    #     '''
-    #     Process the copasi file using CopasiSE
-    #     Must be Copasi version 16
-    #
-    #     '''
-    #     args = ['CopasiSE', "{}".format(self.copasi_file)]
-    #     p = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-    #     output, err = p.communicate()
-    #     d = {}
-    #     d['output'] = output
-    #     d['error'] = err
-    #     if err != '':
-    #         try:
-    #             self.run_linux()
-    #         except:
-    #             raise Errors.CopasiError('Failed with Copasi error: \n\n' + d['error'])
-    #     return d['output']
-    #
-    # def run_linux(self):
-    #     os.system('CopasiSE "{}"'.format(self.copasi_file))
-    #
-    # def submit_copasi_job_SGE(self):
-    #     '''
-    #     Submit copasi file as job to SGE based job scheduler.
-    #     '''
-    #     with open(self.SGE_job_file, 'w') as f:
-    #         f.write('#!/bin/bash\n#$ -V -cwd\nmodule add apps/COPASI/4.16.104-Linux-64bit\nCopasiSE {}'.format(
-    #             self.copasi_file))
-    #     ## -N option for job name
-    #     os.system('qsub {} -N {} '.format(self.SGE_job_file, self.SGE_job_file))
-    #     ## remove .sh file after used.
-    #
-    # #        os.remove(self.SGE_job_file)
-    #
-    # def save(self):
-    #     self.CParser.write_copasi_file(self.copasi_file, self.copasiML)
-    #     return self.copasiML
-    #
-    # def save_dep(self):
-    #     if self.kwargs.get('save') == 'duplicate':
-    #         self.CParser.write_copasi_file(self.kwargs.get('OutputML'), self.copasiML)
-    #     elif self.kwargs.get('save') == 'overwrite':
-    #         self.CParser.write_copasi_file(self.copasi_file, self.copasiML)
-    #     return self.copasiML
-    #
+    def set_task(self):
+        """
 
+        :return:
+        """
+        # print self.model
+        task = self.task.replace('_', '')
+        for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfTasks'):
+            i.attrib['scheduled'] = "false"  # set all to false
+            if task == i.attrib['type'].lower():
+                i.attrib['scheduled'] = "true"
+        return self.model
+
+    def run(self):
+        '''
+        Process the copasi file using CopasiSE
+        '''
+        args = ['CopasiSE', "{}".format(self.copasi_file)]
+        p = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        output, err = p.communicate()
+        d = {}
+        d['output'] = output
+        d['error'] = err
+        if err != '':
+            try:
+                self.run_linux()
+            except:
+                raise Errors.CopasiError('Failed with Copasi error: \n\n' + d['error'])
+        return d['output']
+
+    def run_linux(self):
+        """
+        Linux systems do not respond to the run function
+        in the same way as windows. This ffunction
+        uses basic os.system instead, which linux systems
+        do respond to. This solution is less than elegant.
+        Look into it further.
+        :return:
+        """
+        os.system('CopasiSE "{}"'.format(self.copasi_file))
+
+    def submit_copasi_job_SGE(self):
+        '''
+        Submit copasi file as job to SGE based job scheduler.
+        '''
+        with open(self.SGE_job_file, 'w') as f:
+            f.write('#!/bin/bash\n#$ -V -cwd\nmodule add apps/COPASI/4.16.104-Linux-64bit\nCopasiSE {}'.format(
+                self.copasi_file))
+        ## -N option for job name
+        os.system('qsub {} -N {} '.format(self.SGE_job_file, self.SGE_job_file))
+        ## remove .sh file after used.
+        os.remove(self.SGE_job_file)
 
     def do_checks(self):
         """
@@ -673,7 +671,7 @@ class TimeCourse(_base._ModelBase):
                                    'upper_limit': 1000,
                                    'partitioning_interval': 1,
                                    'runge_kutta_step_size': 0.001,
-                                   'run': False}
+                                   'run': True}
 
 
         self.convert_bool_to_numeric(self.default_properties)
@@ -685,6 +683,7 @@ class TimeCourse(_base._ModelBase):
         self.set_timecourse()
         self.set_report()
 
+        self.run()
 
     def do_checks(self):
         """
@@ -704,6 +703,9 @@ class TimeCourse(_base._ModelBase):
 
     def __str__(self):
         return "TimeCourse({})".format(self.as_string())
+
+    def run(self):
+        R = Run(self.model, task='time_course')
 
     def create_task(self):
         """
