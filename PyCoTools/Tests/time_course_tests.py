@@ -83,12 +83,22 @@ class DeterministicTimeCourseTests(_test_base._BaseTest):
                         self.assertTrue(j.attrib['value'] == str(self.TC.max_internal_steps))
 
 
-    def test_deterministic_writes_data(self):
+    def test_deterministic_write_data(self):
         """
         Check that the data containing data is actually produced
         :return:
         """
-        self.assertTrue(os.path.isfile(self.TC.report_name )  )
+        self.assertTrue(os.path.isfile(self.TC.report_name))
+
+    def test_deterministic_read_output(self):
+        """
+        Ensure that pandas can read the output from TimeCourse
+        and that it looks like what we expect
+        :return:
+        """
+        df = pandas.read_csv(self.TC.report_name, sep='\t', index_col=0)
+        self.assertEqual(df.shape, (11, 6) )
+
 
 if __name__=='__main__':
     unittest.main()
