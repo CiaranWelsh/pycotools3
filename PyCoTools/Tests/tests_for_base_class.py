@@ -74,32 +74,6 @@ class TestBase(_test_base._BaseTest):
         keys = ['a', 'b', 'MadeUpKey1']
         self.assertListEqual(keys, self._base.as_dict().values() )
 
-
-class BaseModelTests(_test_base._BaseTest):
-    def setUp(self):
-        super(BaseModelTests, self).setUp()
-        self._model_base_from_string = PyCoTools._base._ModelBase(self.copasi_file, A='a')
-        self._model_base_from_element = PyCoTools._base._ModelBase(self._model_base_from_string.model, B='b')
-
-
-    def test_from_path(self):
-        """
-        Test _ModelBase can get model from string to model
-        path
-        :return:
-        """
-        self.assertTrue(isinstance(self._model_base_from_string.model, etree._Element) )
-
-    def test_from_etree(self):
-        element_model = self._model_base_from_string.model
-        self.assertTrue(isinstance(self._model_base_from_element.model, etree._Element))
-
-    def test_kwargs(self):
-        self.assertEqual(self._model_base_from_string.A, 'a')
-
-    def test_as_string(self):
-        self.assertTrue(isinstance(self._model_base_from_string.as_string(), str))
-
     def test_update_properties(self):
         class New(PyCoTools._base._ModelBase):
             def __init__(self, model, **kwargs):
@@ -164,6 +138,33 @@ class BaseModelTests(_test_base._BaseTest):
         with self.assertRaises(PyCoTools.Errors.InputError) as context:
             New(self.copasi_file, wrong_option=True)
         self.assertTrue(isinstance(context.exception, PyCoTools.Errors.InputError))
+
+
+
+class BaseModelTests(_test_base._BaseTest):
+    def setUp(self):
+        super(BaseModelTests, self).setUp()
+        self._model_base_from_string = PyCoTools._base._ModelBase(self.copasi_file, A='a')
+        self._model_base_from_element = PyCoTools._base._ModelBase(self._model_base_from_string.model, B='b')
+
+
+    def test_from_path(self):
+        """
+        Test _ModelBase can get model from string to model
+        path
+        :return:
+        """
+        self.assertTrue(isinstance(self._model_base_from_string.model, etree._Element) )
+
+    def test_from_etree(self):
+        element_model = self._model_base_from_string.model
+        self.assertTrue(isinstance(self._model_base_from_element.model, etree._Element))
+
+    def test_kwargs(self):
+        self.assertEqual(self._model_base_from_string.A, 'a')
+
+    def test_as_string(self):
+        self.assertTrue(isinstance(self._model_base_from_string.as_string(), str))
 
 
     # def test_save(self):

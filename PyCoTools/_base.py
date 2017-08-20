@@ -28,11 +28,13 @@ import os
 import pandas
 from lxml import etree
 import Errors
+import logging
 # from model import Model
 
 from contextlib import contextmanager
 # from model import Model
 
+LOG = logging.getLogger(__name__)
 
 class _Base(object):
     """
@@ -202,7 +204,6 @@ class _ModelBase(_Base):
         :return:
         """
         if isinstance(self.model, str):
-
             return pycopi.CopasiMLParser(self.model).copasiML
         else:
             ## should be model.Model or etree._Element
@@ -233,10 +234,16 @@ class _ModelBase(_Base):
         :param copasi_filename:
         :return:
         """
+        ## if copasi_filename does not exist
+        ##create a default name
         if copasi_filename == None:
             copasi_filename = os.path.join(os.getcwd(), 'Model.cps')
+
+        ## If copasi_filename exists already,
+        ## remove the file before saving again.
         if os.path.isfile(copasi_filename):
             os.remove(copasi_filename)
+            LOG.warning('{} already exists. Overwriting'.format(copasi_filename))
         # first convert the copasiML to a root element tree
         root = etree.ElementTree(self.model)
         root.write(copasi_filename)
