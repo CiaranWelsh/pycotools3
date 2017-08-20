@@ -333,7 +333,6 @@ class Model(_base._Base):
 
         if os.path.isfile(copasi_file):
             os.remove(copasi_file)
-            LOG.warning('{} already exists. Overwriting'.format(copasi_file))
         # first convert the copasiML to a root element tree
         root = etree.ElementTree(self.xml)
         root.write(copasi_file)
@@ -467,7 +466,7 @@ class Metabolite(_base._Base):
             raise Errors.InputError('Must specify either concentration or particle numbers')
 
     @property
-    def reference_initial(self):
+    def initial_reference(self):
         """
         The copasi object reference for
         transient metabolite
@@ -477,13 +476,33 @@ class Metabolite(_base._Base):
 
 
     @property
-    def reference_transient(self):
+    def transient_reference(self):
         """
         The copasi object reference for
         transient metabolite
         :return:
         """
         return 'Vector=Metabolites[{}],Reference=Concentration'.format(self.name)
+
+    @property
+    def initial_particle_reference(self):
+        """
+        The copasi object reference for
+        initial  metabolite particle numbers
+        :return:
+        """
+        return 'Vector=Metabolites[{}],Reference=InitialParticleNumber'.format(self.name)
+
+
+    @property
+    def transient_particle_reference(self):
+        """
+        The copasi object reference for
+        transient metabolite particle numbers
+        :return:
+        """
+        return 'Vector=Metabolites[{}],Reference=ParticleNumber'.format(self.name)
+
 
     @staticmethod
     def convert_particles_to_molar(particles, mol_unit, compartment_volume):#,vol_unit):
@@ -632,7 +651,7 @@ class GlobalQuantity(_base._Base):
         return self.__str__()
 
     @property
-    def reference_transient(self):
+    def transient_reference(self):
         """
         compose the transient reference for the global quantity.
             i.e. not initial concentration
@@ -641,7 +660,7 @@ class GlobalQuantity(_base._Base):
         return "Vector=Values[{}],Reference=Value".format(self.name)
 
     @property
-    def reference_initial(self):
+    def initial_reference(self):
         """
         compose the transient reference for the global quantity.
             i.e. not initial concentration

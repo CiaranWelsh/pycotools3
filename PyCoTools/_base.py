@@ -166,6 +166,11 @@ class _Base(object):
                'start_in_steady_state',
                'integrate_reduced_model',
                'use_random_seed',
+               'output_in_subtask',
+               'adjust_initial_conditions',
+               'update_model',
+               'output_in_subtask',
+               'adjust_initial_conditions',
                ]
         for k, v in dct.items():
             if k in lst:
@@ -203,6 +208,7 @@ class _ModelBase(_Base):
         """
         super(_ModelBase, self).__init__(**kwargs)
         self.model = mod
+
         ##import here because of namespace conflict.
         ## Bad practice but functional. Change when you id conflict
         import model
@@ -223,54 +229,3 @@ class _ModelBase(_Base):
         else:
             ## should be model.Model or etree._Element
             return self.model
-
-    # @staticmethod
-    # def save_static(copasi_filename, xml):
-    #     """
-    #     Save copasiML to copasi_filename. Static.
-    #     User needs to specify which xml to save
-    #     :param copasi_filename:
-    #     :param xml:
-    #     :return:
-    #     """
-    #     if os.path.isfile(copasi_filename):
-    #         os.remove(copasi_filename)
-    #     ## first convert the copasiML to a root element tree
-    #     root = etree.ElementTree(xml)
-    #     root.write(copasi_filename)
-    #
-    #
-    # def save(self,copasi_filename=None):
-    #     """
-    #     Save copasiML to copasi_filename. This
-    #     version is not static and already
-    #     knows which copasiML you want to save
-    #
-    #     :param copasi_filename:
-    #     :return:
-    #     """
-    #     ## if copasi_filename does not exist
-    #     ##create a default name
-    #     if copasi_filename == None:
-    #         copasi_filename = os.path.join(os.getcwd(), 'Model.cps')
-    #
-    #     ## If copasi_filename exists already,
-    #     ## remove the file before saving again.
-    #     if os.path.isfile(copasi_filename):
-    #         os.remove(copasi_filename)
-    #         LOG.warning('{} already exists. Overwriting'.format(copasi_filename))
-    #     # first convert the copasiML to a root element tree
-    #     root = etree.ElementTree(self.model)
-    #     root.write(copasi_filename)
-    #
-    # def open(self, copasi_filename=None):
-    #     """
-    #     Open model with the gui
-    #     :return:
-    #     """
-    #     if copasi_filename == None:
-    #         copasi_filename = os.path.join(os.getcwd(), 'Model.cps')
-    #     self.save(copasi_filename)
-    #     os.system('CopasiUI {}'.format(copasi_filename))
-    #     os.remove(copasi_filename)
-
