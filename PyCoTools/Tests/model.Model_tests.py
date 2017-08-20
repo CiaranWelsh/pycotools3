@@ -46,7 +46,6 @@ class ModelTests(_test_base._BaseTest):
     def test_model_name(self):
         self.assertEqual(self.Model.name, 'New Model')
 
-
     def test_volume(self):
         self.assertEqual(self.Model.volume_unit, 'ml')
 

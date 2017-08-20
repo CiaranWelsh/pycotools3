@@ -144,8 +144,8 @@ class TestBase(_test_base._BaseTest):
 class BaseModelTests(_test_base._BaseTest):
     def setUp(self):
         super(BaseModelTests, self).setUp()
-        self._model_base_from_string = PyCoTools._base._ModelBase(self.copasi_file, A='a')
-        self._model_base_from_element = PyCoTools._base._ModelBase(self._model_base_from_string.model, B='b')
+        # self._model_base_from_string = PyCoTools._base._ModelBase(self.copasi_file, A='a')
+        # self._model_base_from_element = PyCoTools._base._ModelBase(self._model_base_from_string.model, B='b')
 
 
     def test_from_path(self):
@@ -154,17 +154,17 @@ class BaseModelTests(_test_base._BaseTest):
         path
         :return:
         """
-        self.assertTrue(isinstance(self._model_base_from_string.model, etree._Element) )
+        M = PyCoTools._base._ModelBase(self.copasi_file)
+        self.assertTrue(isinstance(M.model, PyCoTools.model.Model) )
 
-    def test_from_etree(self):
-        element_model = self._model_base_from_string.model
-        self.assertTrue(isinstance(self._model_base_from_element.model, etree._Element))
 
     def test_kwargs(self):
-        self.assertEqual(self._model_base_from_string.A, 'a')
+        M = PyCoTools._base._ModelBase(self.copasi_file, A='a')
+        self.assertEqual(M.A, 'a')
 
     def test_as_string(self):
-        self.assertTrue(isinstance(self._model_base_from_string.as_string(), str))
+        M = PyCoTools._base._ModelBase(self.copasi_file)
+        self.assertTrue(isinstance(M.as_string(), str))
 
 
     # def test_save(self):

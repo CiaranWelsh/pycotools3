@@ -51,7 +51,7 @@ class RunTests(_test_base._BaseTest):
         TC = PyCoTools.pycopi.TimeCourse(self.model, end=1000, intervals=1000,
                                          step_size=1, run=False)
         model = R.set_task()
-        model.save(self.copasi_file)
+        model.save()
         new_model = PyCoTools.pycopi.CopasiMLParser(self.copasi_file).copasiML
         # os.system('CopasiUI {}'.format(self.copasi_file))
         for i in new_model.find('{http://www.copasi.org/static/schema}ListOfTasks'):
