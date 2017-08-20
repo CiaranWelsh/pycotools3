@@ -81,14 +81,11 @@ class ReportsTests(_test_base._BaseTest):
         self.assertTrue('Vector=Values[B2C]' in lst[5])
 
 
-    '''
-    I should also runn a time course and test for the data contents
-    Will do this after the time course task is ready
-    '''
-
-
-
-
+        '''
+        TODO
+        I should also runn a time course and test for the data contents
+        Will do this after the time course task is ready
+        '''
     def test_profile_likelihood_exists(self):
         R = PyCoTools.pycopi.Reports(self.model, quantity_type='concentration')
         self.model = R.profile_likelihood()
@@ -103,9 +100,10 @@ class ReportsTests(_test_base._BaseTest):
 
 
     def test_parameter_estimation_exists(self):
-        R = PyCoTools.pycopi.Reports(self.model, quantity_type='concentration')
-        self.model = R.parameter_estimation()
-        self.model.save(self.copasi_file)
+        R = PyCoTools.pycopi.Reports(self.model, quantity_type='concentration',
+                                     report_type='parameter_estimation')
+        self.model = R.model
+        self.model.save()
         model_for_test = PyCoTools.pycopi.CopasiMLParser(self.copasi_file).copasiML
 
         ListOfReports = model_for_test.find('{http://www.copasi.org/static/schema}ListOfReports')

@@ -216,6 +216,7 @@ class Run(_base._ModelBase):
         if self.task not in tasks:
             raise Errors.InputError('{} not in list of tasks. List of tasks are: {}'.format(self.task, tasks))
 
+
 class Reports(_base._ModelBase):
     '''
     Creates reports in copasi output specification section.
@@ -271,15 +272,15 @@ class Reports(_base._ModelBase):
             When report_type is profilelikelihood, theta is the parameter of interest
 
     '''
-    def __init__(self,model,**kwargs):
+    def __init__(self, model, **kwargs):
         super(Reports, self).__init__(model, **kwargs)
-        self.model=model
+        self.model = model
 
         self.allowed_properties={'metabolites': self.model.metabolites,
                                  'global_quantities': self.model.global_quantities,
-                                 'local_parameters':self.model.local_parameters,
-                                 'quantity_type':'concentration',
-                                 'report_name':None,
+                                 'local_parameters': self.model.local_parameters,
+                                 'quantity_type': 'concentration',
+                                 'report_name': None,
                                  'append': False,
                                  'confirm_overwrite': False,
                                  'separator': '\t',
@@ -485,6 +486,7 @@ class Reports(_base._ModelBase):
                            'key': new_key,
                            'taskType': 'parameterFitting'}
 
+        # print self.model, type(self.model)
         ListOfReports=self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports')
         report=etree.SubElement(ListOfReports,'Report')
         report.attrib.update(report_attributes)
