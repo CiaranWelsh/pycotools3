@@ -75,6 +75,7 @@ class CopasiMLParser():
             raise Errors.FileDoesNotExistError('{} is not a copasi file'.format(self.copasi_file))
         self.copasiMLTree=self._parse_copasiML()
         self.copasiML=self.copasiMLTree.getroot()
+        self.xml = self.copasiMLTree.getroot()
 
         os.chdir(os.path.dirname(self.copasi_file))
             
@@ -679,7 +680,6 @@ class TimeCourse(_base._ModelBase):
                                    'run': True,
                                    'plot': False}
 
-
         self.convert_bool_to_numeric(self.default_properties)
         self.update_kwargs(self.default_properties)
         self.update_properties(self.default_properties)
@@ -698,7 +698,7 @@ class TimeCourse(_base._ModelBase):
         """
         method_list = ['deterministic',
                        'direct',
-                       'gibson_bruck,'
+                       'gibson_bruck',
                        'tau_leap',
                        'adaptive_tau_leap',
                        'hybrid_runge_kutta',
@@ -1241,6 +1241,300 @@ class TimeCourse(_base._ModelBase):
     #     R = Run(self.copasi_file, task='time_course')
     #     LOG.debug('Time course ran')
     #     return R
+
+
+class Scan(_base._ModelBase):
+    """
+    Interface to COPASI scan task
+    """
+    def __init__(self, model, **kwargs):
+        super(Scan, self).__init__(model, **kwargs)
+
+        default_report_name = os.path.split(self.model.copasi_file)[1][:-4] + '_PE_results.txt'
+        options = {'metabolites': self.model.metabolites,
+                   'global_quantities': self.model.global_quantities,
+                   'variable': self.local_parameters[0],
+                   'quantity_type': 'concentration',
+                   'report_name': default_report_name,
+                   'append': False,
+                   'confirm_overwrite': False,
+                   'update_model': False,
+                   'subtask': 'parameter_estimation',
+                   'report_type': 'profilelikelihood',
+                   'output_in_subtask': False,
+                   'adjust_initial_conditions': False,
+                   'number_of_steps': 10,
+                   'maximum': 100,
+                   'minimum': 0.01,
+                   'log10': False,
+                   'distribution_type': 'normal',
+                   'scan_type': 'scan',
+                   # scan object specific (for scan and random_sampling scan_types)
+                   'scheduled': True,
+                   'save': 'overwrite',
+                   'clear_scans': True,  # if true, will remove all scans present then add new scan
+                   'run': False}
+
+        self.convert_bool_to_numeric(self.default_properties)
+        self.update_kwargs(self.default_properties)
+        self.update_properties(self.default_properties)
+        self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
+        self.do_checks()
+
+        # # correct output_in_subtask and AsjestInitialConditions
+        # assert self.kwargs.get('output_in_subtask') in [False, True, 'false', 'true']
+        # assert self.kwargs.get('adjust_initial_conditions') in [False, True, 'false', 'true']
+        # assert self.kwargs.get('log10') in [False, True, 'false',
+        #                                     'true'], '{} is not either \'false\' or \'true\''.format(
+        #     self.kwargs.get('log10'))
+        #
+        # if self.kwargs.get('output_in_subtask') == False:
+        #     self.kwargs['output_in_subtask'] = str(0)
+        # else:
+        #     self.kwargs['output_in_subtask'] = str(1)
+        #
+        # if self.kwargs.get('adjust_initial_conditions') == False:
+        #     self.kwargs['adjust_initial_conditions'] = str(0)
+        # else:
+        #     self.kwargs['adjust_initial_conditions'] = str(1)
+        #
+        # if self.kwargs.get('log10') == False:
+        #     self.kwargs['log10'] = str(0)
+        # else:
+        #     self.kwargs['log10'] = str(1)
+        #
+        # self.kwargs = Bool2Str(self.kwargs).convert_dct()
+
+        subtasks = ['steady_state', 'time_course',
+                    'metabolic_control_anlysis',
+                    'lyapunov_exponents',
+                    'optimiztion', 'parameter_estimation',
+                    'sensitivities', 'linear_noise_approximation',
+                    'cross_section', 'time_scale_separation_analysis']
+
+        report_types = [None, 'profilelikelihood', 'time_course', 'parameter_estimation',
+                        'multi_parameter_estimation', 'profilelikelihood2']
+        dist_types = ['normal', 'uniform', 'poisson', 'gamma']
+        scan_types = ['scan', 'repeat', 'random_sampling']
+        quantity_type_list = ['particle_number', 'concentration']
+
+        assert self.kwargs.get('subtask') in subtasks
+        assert self.kwargs.get('report_type') in report_types, '{} is not in {}'.format(self['report_type'],
+                                                                                        report_types)
+        assert self.kwargs.get('distribution_type') in dist_types
+        assert self.kwargs.get('scan_type') in scan_types
+        assert self.kwargs.get('quantity_type') in quantity_type_list
+        assert self.kwargs.get('scheduled') in [True, False, 'true', 'false']
+        assert self.kwargs.get('clear_scans') in [True, False, 'true', 'false']
+        assert self.kwargs.get('run') in [True, False, 'true', 'false', 'SGE']
+
+        # numericify the some keyword arguments
+        subtask_numbers = [0, 1, 6, 7, 4, 5, 9, 12, 11, 8]
+        for i in zip(subtasks, subtask_numbers):
+            if i[0] == self.kwargs['subtask']:
+                self.kwargs['subtask'] = str(i[1])
+
+        # numericidy type keywork arguments
+        scan_type_numbers = [1, 0, 2]
+        LOG.debug('kwargs[scan_type is: {}'.format(self.kwargs['scan_type']))
+        for i in zip(scan_types, scan_type_numbers):
+            LOG.debug('scan type to number tuple: {}'.format(i))
+            if i[0] == self.kwargs['scan_type']:
+                self.kwargs['scan_type'] = str(i[1])
+
+        dist_types_numbers = [0, 1, 2, 3]
+        for i in zip(dist_types, dist_types_numbers):
+            if i[0] == self.kwargs['distribution_type']:
+                self.kwargs['distribution_type'] = str(i[1])
+
+        assert self.kwargs.get(
+            'variable') in self.GMQ.get_IC_cns().keys() or self.GMQ.get_global_quantities_cns().keys() or self.GMQ.get_local_kinetic_parameters_cns()
+
+        # convert what needs to be a string to a string
+        self.kwargs['output_in_subtask'] = str(self.kwargs['output_in_subtask'])
+        self.kwargs['adjust_initial_conditions'] = str(self.kwargs['adjust_initial_conditions'])
+        self.kwargs['number_of_steps'] = str(self.kwargs['number_of_steps'])
+        self.kwargs['maximum'] = str(self.kwargs['maximum'])
+        self.kwargs['minimum'] = str(self.kwargs['minimum'])
+        self.kwargs['log10'] = str(self.kwargs['log10'])
+
+        assert isinstance(self.kwargs.get('number_of_steps'), (float, int, str))
+        assert isinstance(self.kwargs.get('maximum'), (float, int, str))
+        assert isinstance(self.kwargs.get('minimum'), (float, int, str))
+
+        if isinstance(self.kwargs.get('number_of_steps'), (float, int)):
+            self.kwargs['number_of_steps'] = str(self.kwargs.get('number_of_steps'))
+
+        if isinstance(self.kwargs.get('maximum'), (float, int)):
+            self.kwargs['maximum'] = str(self.kwargs.get('maximum'))
+
+        if isinstance(self.kwargs.get('minimum'), (float, int)):
+            self.kwargs['minimum'] = str(self.kwargs.get('minimum'))
+
+        # if self.kwargs.get('report_type')=='time_course':
+        #            self.kwargs['report_type']='time-course'
+        write_to_file_list = ['duplicate', 'overwrite', False]
+        assert self.kwargs.get('save') in write_to_file_list, '{} not in {}'.format(self.kwargs.get('save'),
+                                                                                    write_to_file_list)
+
+        if self.kwargs.get('clear_scans') == True:
+            self.copasiML = self.remove_scans()
+            self.copasiML = self.save()  ##extra save - is this needed. Yes, I've checked - do not remove!
+        self.copasiML = self.define_report()
+        self.copasiML = self.create_scan()
+        self.copasiML = self.set_scan_options()
+        self.copasiML = self.save()
+        self.run()
+
+    def __getitem__(self, key):
+        if key not in self.kwargs.keys():
+            raise TypeError('{} not in {}'.format(key, self.kwargs.keys()))
+        return self.kwargs[key]
+
+    def __setitem__(self, key, value):
+        self.kwargs[key] = value
+
+    def save(self):
+        self.CParser.write_copasi_file(self.copasi_file, self.copasiML)
+        return self.copasiML
+
+    def define_report(self):
+        '''
+
+        '''
+        logging.debug('defining report')
+        self.report_dict = {}
+        self.report_dict['metabolites'] = self.kwargs.get('metabolites')
+        self.report_dict['global_quantities'] = self.kwargs.get('global_quantities')
+        self.report_dict['quantity_type'] = self.kwargs.get('quantity_type')
+        self.report_dict['report_name'] = self.kwargs.get('report_name')
+        self.report_dict['append'] = self.kwargs.get('append')
+        self.report_dict['confirm_overwrite'] = self.kwargs.get('confirm_overwrite')
+        self.report_dict['save'] = self.kwargs.get('save')
+        self.report_dict['variable'] = self.kwargs.get('variable')
+        self.report_dict['report_type'] = self.kwargs.get('report_type')
+        R = Reports(self.copasi_file, **self.report_dict)
+
+        return R.copasiML
+
+    def get_report_key(self):
+        '''
+
+        '''
+        # ammend the time course option
+        if self.kwargs.get('report_type').lower() == 'time_course':
+            self.kwargs['report_type'] = 'time-course'
+        key = None
+        for i in self.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports'):
+            if i.attrib['name'].lower() == self.kwargs.get('report_type').lower():
+                key = i.attrib['key']
+        if key == None:
+            raise Errors.ReportDoesNotExistError(
+                'Report doesn\'t exist. Check to see if you have either defined the report manually or used the pycopi.Reports class')
+        return key
+
+    def create_scan(self):
+        '''
+        need to find a report key which corresponds to the report we want to use
+        '''
+        # get cn value
+        if self.kwargs.get('variable') in self.GMQ.get_IC_cns().keys():
+            if self.kwargs.get('quantity_type') == 'concentration':
+                cn = self.GMQ.get_IC_cns()[self.kwargs.get('variable')]['cn'] + ',Reference=InitialConcentration'
+            elif self.kwargs.get('quantity_type') == 'particle_number':
+                cn = self.GMQ.get_IC_cns()[self.kwargs.get('variable')]['cn'] + ',Reference=InitialParticleNumber'
+        elif self.kwargs.get('variable') in self.GMQ.get_global_quantities_cns().keys():
+            cn = self.GMQ.get_global_quantities_cns()[self.kwargs.get('variable')]['cn'] + ',Reference=InitialValue'
+        elif self.kwargs.get('variable') in self.GMQ.get_local_kinetic_parameters_cns().keys():
+            cn = self.GMQ.get_local_kinetic_parameters_cns()[self.kwargs.get('variable')]['cn'] + ',Reference=Value'
+
+        number_of_steps_attrib = {'type': 'unsignedInteger', 'name': 'Number of steps',
+                                  'value': self.kwargs['number_of_steps']}
+        scan_item_attrib = {'type': 'cn', 'name': 'Object', 'value': cn}
+        type_attrib = {'type': 'unsignedInteger', 'name': 'Type', 'value': self.kwargs['scan_type']}
+        maximum_attrib = {'type': 'float', 'name': 'Maximum', 'value': self.kwargs['maximum']}
+        minimum_attrib = {'type': 'float', 'name': 'Minimum', 'value': self.kwargs['minimum']}
+        log_attrib = {'type': 'bool', 'name': 'log', 'value': self.kwargs['log10']}
+        dist_type_attrib = {'type': 'unsignedInteger', 'name': 'Distribution type',
+                            'value': self.kwargs['distribution_type']}
+        scanItem_element = etree.Element('ParameterGroup', attrib={'name': 'ScanItem'})
+
+        ## regular scan
+        if self.kwargs['scan_type'] == '1':
+            etree.SubElement(scanItem_element, 'Parameter', attrib=number_of_steps_attrib)
+            etree.SubElement(scanItem_element, 'Parameter', attrib=scan_item_attrib)
+            etree.SubElement(scanItem_element, 'Parameter', attrib=type_attrib)
+            etree.SubElement(scanItem_element, 'Parameter', attrib=maximum_attrib)
+            etree.SubElement(scanItem_element, 'Parameter', attrib=minimum_attrib)
+            etree.SubElement(scanItem_element, 'Parameter', attrib=log_attrib)
+        ## repeat scan
+        elif self.kwargs['scan_type'] == '0':
+            etree.SubElement(scanItem_element, 'Parameter', attrib=number_of_steps_attrib)
+            etree.SubElement(scanItem_element, 'Parameter', attrib=type_attrib)
+            etree.SubElement(scanItem_element, 'Parameter', attrib=scan_item_attrib)
+        ## distribution scan
+        elif self.kwargs['scan_type'] == '2':
+            etree.SubElement(scanItem_element, 'Parameter', attrib=number_of_steps_attrib)
+            etree.SubElement(scanItem_element, 'Parameter', attrib=type_attrib)
+            etree.SubElement(scanItem_element, 'Parameter', attrib=scan_item_attrib)
+            etree.SubElement(scanItem_element, 'Parameter', attrib=minimum_attrib)
+            etree.SubElement(scanItem_element, 'Parameter', attrib=maximum_attrib)
+            etree.SubElement(scanItem_element, 'Parameter', attrib=log_attrib)
+            etree.SubElement(scanItem_element, 'Parameter', attrib=dist_type_attrib)
+        query = '//*[@name="ScanItems"]'
+        for i in self.copasiML.xpath(query):
+            i.append(scanItem_element)
+        return self.copasiML
+
+    def set_scan_options(self):
+        report_attrib = {'append': self.kwargs.get('append'),
+                         'target': self.kwargs.get('report_name'),
+                         'reference': self.get_report_key(),
+                         'confirmOverwrite': self.kwargs.get('confirm_overwrite')}
+
+        LOG.debug('output during subtask value is: {}'.format(self.kwargs['output_in_subtask']))
+        #        LOG.debug()
+        subtask_attrib = {'type': 'unsignedInteger', 'name': 'Subtask', 'value': self.kwargs.get('subtask')}
+        output_in_subtask_attrib = {'type': 'bool', 'name': 'Output in subtask',
+                                    'value': self.kwargs['output_in_subtask']}
+        adjust_initial_conditions_attrib = {'type': 'bool', 'name': 'Adjust initial conditions',
+                                            'value': self.kwargs.get('adjust_initial_conditions')}
+        scheduled_attrib = {'scheduled': self.kwargs.get('scheduled'), 'updateModel': self.kwargs.get('update_model')}
+
+        R = etree.Element('Report', attrib=report_attrib)
+        query = '//*[@name="Scan"]'
+        '''
+        If scan task already has a report element defined, modify it, 
+        otherwise create a new report element directly under the ScanTask 
+        element
+        '''
+        scan_task = self.copasiML.xpath(query)[0]
+        if scan_task[0].tag == '{http://www.copasi.org/static/schema}Problem':
+            scan_task.insert(0, R)
+        elif scan_task[0].tag == '{http://www.copasi.org/static/schema}Report':
+            scan_task[0].attrib.update(report_attrib)
+        for i in self.copasiML.xpath(query):
+            i.attrib.update(scheduled_attrib)
+            for j in list(i):
+                for k in list(j):
+                    if k.attrib['name'] == 'Subtask':
+                        k.attrib.update(subtask_attrib)
+                    if k.attrib['name'] == 'Output in subtask':
+                        k.attrib.update(output_in_subtask_attrib)
+                    if k.attrib['name'] == 'Adjust initial conditions':
+                        k.attrib.update(adjust_initial_conditions_attrib)
+        return self.copasiML
+
+    def remove_scans(self):
+        query = '//*[@name="ScanItems"]'
+        for i in self.copasiML.xpath(query):
+            for j in list(i):
+                i.remove(j)
+                #            i.getparent().remove(i)
+        return self.copasiML
+
+    def run(self):
+        R = Run(self.copasi_file, task='scan', mode=self.kwargs.get('run'))
 
 
 class ExperimentMapper():
@@ -2876,392 +3170,6 @@ class ParameterEstimation():
                         **self.PlotPEDataKwargs)
 
 
-class Scan():
-    '''
-    Positional Args:
-        copasi_file:
-            the copasi file you want to scan
-
-    **kwargs:
-        scan_type:
-            Which type of scan do you want to set up. 
-            Options are ['scan','repeat','random_sampling']
-
-        metabolites:
-            metabolites to pass to report 
-        
-        global_quantities:
-            global wuantities to pass to report
-            
-        quantity_type:
-            either 'concentration' or 'particle_number'
-        
-        report_name:
-            Name the output report
-            
-        append:
-            Check the append button in copasi scan task.
-            Options are [True or False], default=False
-            
-        confirm_overwrite:
-            Check the confirm overwrite button in copasi scan.
-            Options are [True or False], default=False
-            
-        update_model:
-            Check the update model button in copasi scan task
-            Options are [True or False], default=False
-        
-        subtask:
-            A valid scan subtask. Options are:
-            ['steady_state','time_course','metabolic_control_nalysis',
-            'lyapunov_exponents','optimiztion','parameter_estimation',
-            'sensitivities','linear_noise_approximation','cross_section',
-            'time_scale_separation_analysis']
-                   
-        report_type:
-            Which type of report to use. Options are ['none',
-            'profilelikelihood','time_course','parameter_estimation']
-            
-        output_in_subtask:
-            Check the output_in_subtask button in copasi scan task
-            Options are [True or False], default=False
-
-        adjust_initial_conditions:
-            Check the adjust_initial_conditions button in copasi scan task
-            Options are [True or False], default=False
-            
-        number_of_steps:
-            Corresponds to the intervals box in Copasi GUI or number
-            of repeats in case your using the task='repeat' option. Default=10.
-            
-        maximum: 
-            Corresponds to the maximum box in Copasi GUI. Default=100. 
-
-        minimum: 
-            Corresponds to the minimum box in Copasi GUI. Default=0.01. 
-
-        log10: 
-            Corresponds to the log10 box in Copasi GUI.
-            Options are [True or False], default=False.  
-            
-        distribution_type:
-            When scan_type set to 'random_sampling', can be any of
-            ['normal','uniform','poisson','gamma']. Default='normal'
-            
-        variable:
-            The target of the Scan. Must be a valid model entity. 
-            Defaults to the first key in the GMQ.get_IC_cns() method
-
-        scheduled: 
-            Corresponds to the scheduled box in Copasi GUI. Default=True.
-            
-        save:
-            Can be one of ['duplicate',False,'overwrite']. Duplicate
-            will copy copasi file to different file name. Default='overwrite'
-            
-        clear_scans:
-            True or False. If True will remove all scans present before
-            adding scans. If false, will add another scan in addition to any
-            scans alredy present.Default=True
-            
-        run:
-            run Scan task or not. True or False or 'SGE'. Default=False
-            
-    '''
-    def __init__(self,copasi_file,**kwargs):
-        self.copasi_file=copasi_file
-        self.CParser=CopasiMLParser(self.copasi_file)
-        self.copasiML=self.CParser.copasiML
-        self.GMQ=GetModelQuantities(self.copasi_file)
-
-        default_report_name=os.path.split(self.copasi_file)[1][:-4]+'_PE_results.txt'
-        #default_outputML=os.path.split(self.copasi_file)[1][:-4]+'_Duplicate.cps'
-        options={#report variables
-            'metabolites':self.GMQ.get_IC_cns().keys(),
-            'global_quantities':self.GMQ.get_global_quantities().keys(),
-            'quantity_type':'concentration',
-            'report_name':default_report_name,
-            'append': False,
-            'confirm_overwrite': False,
-            'update_model':False,
-            'subtask':'parameter_estimation',
-            'report_type':'profilelikelihood',
-            'output_in_subtask':False,
-            'adjust_initial_conditions':False,
-            'number_of_steps':10,
-            'maximum':100,
-            'minimum':0.01,
-            'log10':False,
-            'distribution_type':'normal',
-            'scan_type':'scan',
-            #scan object specific (for scan and random_sampling scan_types)
-            'variable':self.GMQ.get_IC_cns().keys()[0],
-            'scheduled':True,
-            'save':'overwrite',
-            'clear_scans':True,#if true, will remove all scans present then add new scan
-            'run':False}
-
-
-
-        #values need to be lower case for copasiML
-        for i in kwargs.keys():
-            assert i in options.keys(),'{} is not a keyword argument for Scan'.format(i)
-        options.update( kwargs)
-        self.kwargs=options
-
-
-        #correct output_in_subtask and AsjestInitialConditions
-        assert self.kwargs.get('output_in_subtask') in [False,True,'false','true']
-        assert self.kwargs.get('adjust_initial_conditions') in [False,True,'false','true']
-        assert self.kwargs.get('log10') in [False,True,'false','true'],'{} is not either \'false\' or \'true\''.format(self.kwargs.get('log10'))
-
-        if self.kwargs.get('output_in_subtask')==False:
-            self.kwargs['output_in_subtask']=str(0)
-        else:
-            self.kwargs['output_in_subtask']=str(1)
-
-        if self.kwargs.get('adjust_initial_conditions')==False:
-            self.kwargs['adjust_initial_conditions']=str(0)
-        else:
-            self.kwargs['adjust_initial_conditions']=str(1)
-
-        if self.kwargs.get('log10')==False:
-            self.kwargs['log10']=str(0)
-        else:
-            self.kwargs['log10']=str(1)
-
-
-        self.kwargs = Bool2Str(self.kwargs).convert_dct()
-
-        subtasks=['steady_state','time_course',
-                  'metabolic_control_nalysis',
-                  'lyapunov_exponents',
-                  'optimiztion','parameter_estimation',
-                  'sensitivities','linear_noise_approximation',
-                  'cross_section','time_scale_separation_analysis']
-
-        report_types=[None,'profilelikelihood','time_course','parameter_estimation',
-                      'multi_parameter_estimation', 'profilelikelihood2']
-        dist_types=['normal','uniform','poisson','gamma']
-        scan_types=['scan','repeat','random_sampling']
-        quantity_type_list=['particle_number','concentration']
-
-
-        assert self.kwargs.get('subtask') in subtasks
-        assert self.kwargs.get('report_type') in report_types,'{} is not in {}'.format(self['report_type'],report_types)
-        assert self.kwargs.get('distribution_type') in dist_types
-        assert self.kwargs.get('scan_type') in scan_types
-        assert self.kwargs.get('quantity_type') in quantity_type_list
-        assert self.kwargs.get('scheduled') in [True,False,'true','false']
-        assert self.kwargs.get('clear_scans') in [True,False,'true','false']
-        assert self.kwargs.get('run') in [True,False,'true','false','SGE']
-
-
-        #numericify the some keyword arguments
-        subtask_numbers=[0,1,6,7,4,5,9,12,11,8]
-        for i in zip(subtasks,subtask_numbers):
-            if i[0]==self.kwargs['subtask']:
-                self.kwargs['subtask']=str(i[1])
-
-        #numericidy type keywork arguments 
-        scan_type_numbers=[1,0,2]
-        LOG.debug('kwargs[scan_type is: {}'.format(self.kwargs['scan_type']))
-        for i in zip(scan_types,scan_type_numbers):
-            LOG.debug('scan type to number tuple: {}'.format(i))
-            if i[0]==self.kwargs['scan_type']:
-                self.kwargs['scan_type']=str(i[1])
-
-        dist_types_numbers=[0,1,2,3]
-        for i in zip(dist_types,dist_types_numbers):
-            if i[0]==self.kwargs['distribution_type']:
-                self.kwargs['distribution_type']=str(i[1])
-
-        assert self.kwargs.get('variable') in self.GMQ.get_IC_cns().keys() or self.GMQ.get_global_quantities_cns().keys() or self.GMQ.get_local_kinetic_parameters_cns()
-
-        #convert what needs to be a string to a string
-        self.kwargs['output_in_subtask']=str(self.kwargs['output_in_subtask'])
-        self.kwargs['adjust_initial_conditions']=str(self.kwargs['adjust_initial_conditions'])
-        self.kwargs['number_of_steps']=str(self.kwargs['number_of_steps'])
-        self.kwargs['maximum']=str(self.kwargs['maximum'])
-        self.kwargs['minimum']=str(self.kwargs['minimum'])
-        self.kwargs['log10']=str(self.kwargs['log10'])
-
-        assert isinstance(self.kwargs.get('number_of_steps'),(float,int,str))
-        assert isinstance(self.kwargs.get('maximum'),(float,int,str))
-        assert isinstance(self.kwargs.get('minimum'),(float,int,str))
-
-        if isinstance(self.kwargs.get('number_of_steps'),(float,int)):
-            self.kwargs['number_of_steps']=str(self.kwargs.get('number_of_steps'))
-
-        if isinstance(self.kwargs.get('maximum'),(float,int)):
-            self.kwargs['maximum']=str(self.kwargs.get('maximum'))
-
-        if isinstance(self.kwargs.get('minimum'),(float,int)):
-            self.kwargs['minimum']=str(self.kwargs.get('minimum'))
-
-        #        if self.kwargs.get('report_type')=='time_course':
-        #            self.kwargs['report_type']='time-course'
-        write_to_file_list=['duplicate','overwrite',False]
-        assert self.kwargs.get('save') in write_to_file_list,'{} not in {}'.format(self.kwargs.get('save'),write_to_file_list)
-
-        if self.kwargs.get('clear_scans')==True:
-            self.copasiML=self.remove_scans()
-            self.copasiML=self.save()    ##extra save - is this needed. Yes, I've checked - do not remove!
-        self.copasiML=self.define_report()
-        self.copasiML=self.create_scan()
-        self.copasiML=self.set_scan_options()
-        self.copasiML=self.save()
-        self.run()
-
-    def __getitem__(self,key):
-        if key not in self.kwargs.keys():
-            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
-        return self.kwargs[key]
-
-    def __setitem__(self,key,value):
-        self.kwargs[key] = value
-
-    def save(self):
-        self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
-        return self.copasiML
-
-
-    def define_report(self):
-        '''
-        
-        '''
-        logging.debug('defining report')
-        self.report_dict={}
-        self.report_dict['metabolites']=self.kwargs.get('metabolites')
-        self.report_dict['global_quantities']=self.kwargs.get('global_quantities')
-        self.report_dict['quantity_type']=self.kwargs.get('quantity_type')
-        self.report_dict['report_name']=self.kwargs.get('report_name')
-        self.report_dict['append']=self.kwargs.get('append')
-        self.report_dict['confirm_overwrite']=self.kwargs.get('confirm_overwrite')
-        self.report_dict['save']=self.kwargs.get('save')
-        self.report_dict['variable']=self.kwargs.get('variable')
-        self.report_dict['report_type']=self.kwargs.get('report_type')
-        R= Reports(self.copasi_file,**self.report_dict)
-
-        return R.copasiML
-
-
-    def get_report_key(self):
-        '''
-        
-        '''
-        #ammend the time course option
-        if self.kwargs.get('report_type').lower()=='time_course':
-            self.kwargs['report_type']='time-course'
-        key=None
-        for i in self.copasiML.find('{http://www.copasi.org/static/schema}ListOfReports'):
-            if i.attrib['name'].lower()==self.kwargs.get('report_type').lower():
-                key=i.attrib['key']
-        if key==None:
-            raise Errors.ReportDoesNotExistError('Report doesn\'t exist. Check to see if you have either defined the report manually or used the pycopi.Reports class')
-        return key
-
-    def create_scan(self):
-        '''
-        need to find a report key which corresponds to the report we want to use
-        '''
-        #get cn value
-        if self.kwargs.get('variable') in self.GMQ.get_IC_cns().keys():
-            if self.kwargs.get('quantity_type')=='concentration':
-                cn= self.GMQ.get_IC_cns()[self.kwargs.get('variable')]['cn']+',Reference=InitialConcentration'
-            elif self.kwargs.get('quantity_type')=='particle_number':
-                cn= self.GMQ.get_IC_cns()[self.kwargs.get('variable')]['cn']+',Reference=InitialParticleNumber'
-        elif self.kwargs.get('variable') in self.GMQ.get_global_quantities_cns().keys():
-            cn= self.GMQ.get_global_quantities_cns()[self.kwargs.get('variable')]['cn']+',Reference=InitialValue'
-        elif self.kwargs.get('variable') in self.GMQ.get_local_kinetic_parameters_cns().keys():
-            cn =self.GMQ.get_local_kinetic_parameters_cns()[self.kwargs.get('variable')]['cn']+',Reference=Value'
-
-
-        number_of_steps_attrib={'type': 'unsignedInteger', 'name': 'Number of steps', 'value': self.kwargs['number_of_steps']}
-        scan_item_attrib={'type': 'cn', 'name': 'Object', 'value': cn}
-        type_attrib={'type': 'unsignedInteger', 'name': 'Type', 'value': self.kwargs['scan_type']}
-        maximum_attrib={'type': 'float', 'name': 'Maximum', 'value': self.kwargs['maximum']}
-        minimum_attrib={'type': 'float', 'name': 'Minimum', 'value': self.kwargs['minimum']}
-        log_attrib={'type': 'bool', 'name': 'log', 'value': self.kwargs['log10']}
-        dist_type_attrib={'type': 'unsignedInteger', 'name': 'Distribution type', 'value': self.kwargs['distribution_type']}
-        scanItem_element=etree.Element('ParameterGroup',attrib={'name':'ScanItem'})
-
-        ## regular scan
-        if self.kwargs['scan_type']=='1':
-            etree.SubElement(scanItem_element,'Parameter',attrib=number_of_steps_attrib)
-            etree.SubElement(scanItem_element,'Parameter',attrib=scan_item_attrib)
-            etree.SubElement(scanItem_element,'Parameter',attrib=type_attrib)
-            etree.SubElement(scanItem_element,'Parameter',attrib=maximum_attrib)
-            etree.SubElement(scanItem_element,'Parameter',attrib=minimum_attrib)
-            etree.SubElement(scanItem_element,'Parameter',attrib=log_attrib)
-        ## repeat scan 
-        elif self.kwargs['scan_type']=='0':
-            etree.SubElement(scanItem_element,'Parameter',attrib=number_of_steps_attrib)
-            etree.SubElement(scanItem_element,'Parameter',attrib=type_attrib)
-            etree.SubElement(scanItem_element,'Parameter',attrib=scan_item_attrib)
-        ## distribution scan
-        elif self.kwargs['scan_type']=='2':
-            etree.SubElement(scanItem_element,'Parameter',attrib=number_of_steps_attrib)
-            etree.SubElement(scanItem_element,'Parameter',attrib=type_attrib)
-            etree.SubElement(scanItem_element,'Parameter',attrib=scan_item_attrib)
-            etree.SubElement(scanItem_element,'Parameter',attrib=minimum_attrib)
-            etree.SubElement(scanItem_element,'Parameter',attrib=maximum_attrib)
-            etree.SubElement(scanItem_element,'Parameter',attrib=log_attrib)
-            etree.SubElement(scanItem_element,'Parameter',attrib=dist_type_attrib)
-        query='//*[@name="ScanItems"]'
-        for i in self.copasiML.xpath(query):
-            i.append(scanItem_element)
-        return self.copasiML
-
-
-
-    def set_scan_options(self):
-        report_attrib={'append': self.kwargs.get('append'),
-                       'target': self.kwargs.get('report_name'),
-                       'reference': self.get_report_key(),
-                       'confirmOverwrite': self.kwargs.get('confirm_overwrite')}
-
-        LOG.debug('output during subtask value is: {}'.format(self.kwargs['output_in_subtask']))
-        #        LOG.debug()
-        subtask_attrib={'type': 'unsignedInteger', 'name': 'Subtask', 'value': self.kwargs.get('subtask')}
-        output_in_subtask_attrib={'type': 'bool', 'name': 'Output in subtask', 'value': self.kwargs['output_in_subtask']}
-        adjust_initial_conditions_attrib={'type': 'bool', 'name': 'Adjust initial conditions', 'value': self.kwargs.get('adjust_initial_conditions')}
-        scheduled_attrib={'scheduled': self.kwargs.get('scheduled'), 'updateModel': self.kwargs.get('update_model')}
-
-        R=etree.Element('Report',attrib=report_attrib)
-        query='//*[@name="Scan"]'
-        '''
-        If scan task already has a report element defined, modify it, 
-        otherwise create a new report element directly under the ScanTask 
-        element
-        '''
-        scan_task= self.copasiML.xpath(query)[0]
-        if scan_task[0].tag=='{http://www.copasi.org/static/schema}Problem':
-            scan_task.insert(0,R)
-        elif scan_task[0].tag=='{http://www.copasi.org/static/schema}Report':
-            scan_task[0].attrib.update(report_attrib)
-        for i in self.copasiML.xpath(query):
-            i.attrib.update(scheduled_attrib)
-            for j in list(i):
-                for k in list(j):
-                    if k.attrib['name']=='Subtask':
-                        k.attrib.update(subtask_attrib)
-                    if k.attrib['name']=='Output in subtask':
-                        k.attrib.update(output_in_subtask_attrib)
-                    if k.attrib['name']=='Adjust initial conditions':
-                        k.attrib.update(adjust_initial_conditions_attrib)
-        return self.copasiML
-
-    def remove_scans(self):
-        query='//*[@name="ScanItems"]'
-        for i in self.copasiML.xpath(query):
-            for j in list(i):
-                i.remove(j)
-                #            i.getparent().remove(i)
-        return self.copasiML
-
-    def run(self):
-        R = Run(self.copasi_file, task='scan', mode=self.kwargs.get('run'))
 
 
 class RunMultiplePEs():

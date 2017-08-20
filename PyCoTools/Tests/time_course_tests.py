@@ -100,5 +100,70 @@ class DeterministicTimeCourseTests(_test_base._BaseTest):
         self.assertEqual(df.shape, (11, 6) )
 
 
+class GibsonBruckTimeCourseTests(_test_base._BaseTest):
+    def setUp(self):
+        super(GibsonBruckTimeCourseTests, self).setUp()
+        self.TC = PyCoTools.pycopi.TimeCourse(self.model, end=1000,
+                                              step_size=100, intervals=10,
+                                              max_internal_steps=50000,
+                                              method='gibson_bruck')
+        self.timecourse = self.TC.model#self.TC.set_timecourse()
+        self.timecourse.save()
+        self.new_model = PyCoTools.pycopi.CopasiMLParser(self.copasi_file).xml
+        self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
+        self.list_of_reports = '{http://www.copasi.org/static/schema}ListOfReports'
+
+        #TODO test stochastic algorithms
+
+        def test_report_definition(self):
+            for i in self.new_model.find(self.list_of_reports):
+                if i.attrib['name'] == 'Time-Course':
+                    self.assertTrue(i.attrib['name'] == 'Time-Course')
+
+        def test_gibson_bruck1(self):
+            """
+
+            """
+            for i in self.new_model.find(self.list_of_tasks):
+                if i.attrib['name'] == 'Time-Course':
+                    self.assertTrue(i[2].attrib['name'] == 'Stochastic (Gibson + Bruck)' )
+
+        def test_gibson_bruck2(self):
+            """
+
+            """
+            for i in self.new_model.find(self.list_of_tasks):
+                if i.attrib['name'] == 'Time-Course':
+                    for j in list(i[1]):
+                        if j.attrib['name'] == 'Max Internal Steps':
+                            self.assertTrue(j.attrib['value'] == str(self.TC.max_internal_steps ))
+
+        def test_gibson_bruck3(self):
+            """
+
+            """
+            for i in self.new_model.find(self.list_of_tasks):
+                if i.attrib['name'] == 'Time-Course':
+                    for j in list(i[1]):
+                        if j.attrib['name'] == 'Subtype':
+                            self.assertTrue(j.attrib['value'] == str(self.TC.subtype))
+
+        def test_gibson_bruck5(self):
+            """
+            Check that the data containing data is actually produced
+            :return:
+            """
+            self.assertTrue(os.path.isfile(self.TC.report_name))
+
+        def test_gibson_bruck_read_output(self):
+            """
+            Ensure that pandas can read the output from TimeCourse
+            and that it looks like what we expect
+            :return:
+            """
+            df = pandas.read_csv(self.TC.report_name, sep='\t', index_col=0)
+            self.assertEqual(df.shape, (11, 6) )
+
+
 if __name__=='__main__':
     unittest.main()
