@@ -23,8 +23,8 @@ Date:
     19-08-2017
  '''
 import site
-# site.addsitedir('/home/b3053674/Documents/PyCoTools')
-site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
+site.addsitedir('/home/b3053674/Documents/PyCoTools')
+# site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
 
 import PyCoTools
 from PyCoTools.PyCoToolsTutorial import test_models
@@ -42,17 +42,27 @@ class DeterministicTimeCourseTests(_test_base._BaseTest):
         super(DeterministicTimeCourseTests, self).setUp()
         self.TC = PyCoTools.pycopi.TimeCourse(self.model, end=1000,
                                               step_size=100, intervals=10,
-                                              max_internal_steps=50000)
+                                              max_internal_steps=50000,
+                                              report_name='test_time_course.csv')
         self.timecourse = self.TC.model#self.TC.set_timecourse()
         self.timecourse.save()
         self.new_model = PyCoTools.pycopi.CopasiMLParser(self.copasi_file).copasiML
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
         self.list_of_reports = '{http://www.copasi.org/static/schema}ListOfReports'
 
+
+
     def test_report_definition(self):
         for i in self.new_model.find(self.list_of_reports):
             if i.attrib['name'] == 'Time-Course':
                 self.assertTrue(i.attrib['name'] == 'Time-Course')
+
+    def test_report_definition2(self):
+        for i in self.new_model.find(self.list_of_tasks):
+            if i.attrib['name'] == 'Time-Course':
+                for j in i:
+                    if 'target' in j.attrib.keys():
+                        self.assertEqual(j.attrib['target'], self.TC.report_name)
 
     def test_deterministic_options1(self):
         """

@@ -47,17 +47,17 @@ class _BaseTest(unittest.TestCase):
 
     def tearDown(self):
         dire = os.path.dirname(self.copasi_file)
-        for i in glob.glob(os.path.join(dire,'*.xlsx') ):
-            os.remove(i)
+        # for i in glob.glob(os.path.join(dire, '*.xlsx') ):
+        #     os.remove(i)
 
         # for i in glob.glob(os.path.join(dire, '*.cps') ):
         #     os.remove(i)
 
-        for i in glob.glob(os.path.join(dire, '*.txt') ):
-            os.remove(i)
-
-        for i in glob.glob(os.path.join(dire, '*.csv') ):
-            os.remove(i)
+        # for i in glob.glob(os.path.join(dire, '*.txt') ):
+        #     os.remove(i)
+        #
+        # for i in glob.glob(os.path.join(dire, '*.csv') ):
+        #     os.remove(i)
 
         for i in glob.glob(os.path.join(dire, '*.pickle') ):
             os.remove(i)
@@ -102,9 +102,9 @@ class _ParameterEstimationBase(_BaseTest):
 
 
 
-        self.TC1 = PyCoTools.pycopi.TimeCourse(self.copasi_file, end=1000, step_size=100,
+        self.TC1 = PyCoTools.pycopi.TimeCourse(self.model, end=1000, step_size=100,
                                               intervals=10, report_name='report1.txt')
-        self.TC2 = PyCoTools.pycopi.TimeCourse(self.copasi_file, end=1000, step_size=100,
+        self.TC2 = PyCoTools.pycopi.TimeCourse(self.model, end=1000, step_size=100,
                                               intervals=10, report_name='report2.txt')
 
         data1 = PyCoTools.Misc.add_noise(self.TC1['report_name'])
@@ -116,8 +116,10 @@ class _ParameterEstimationBase(_BaseTest):
         data1.to_csv(self.TC1['report_name'], sep='\t')
         data2.to_csv(self.TC2['report_name'], sep='\t')
 
-        self.PE = PyCoTools.pycopi.ParameterEstimation(self.copasi_file,[self.TC1['report_name'],self.TC2['report_name'] ],
-                                                        **self.parameter_estimation_options)
+        self.PE = PyCoTools.pycopi.ParameterEstimation(self.copasi_file,
+                                                       [self.TC1['report_name'],
+                                                        self.TC2['report_name']],
+                                                       **self.parameter_estimation_options)
 
     def tearDown(self):
         super(_ParameterEstimationBase, self).tearDown()

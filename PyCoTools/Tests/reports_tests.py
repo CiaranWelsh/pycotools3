@@ -29,7 +29,9 @@ import pickle
 import site
 
 # site.addsitedir('/home/b3053674/Documents/PyCoTools')
-site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
+# site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
+site.addsitedir('/home/b3053674/Documents/PyCoTools')
+
 import PyCoTools
 from PyCoTools.PyCoToolsTutorial import test_models
 import unittest

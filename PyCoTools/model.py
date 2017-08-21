@@ -143,6 +143,18 @@ class Model(_base._Base):
         return lst
 
     @property
+    def all_variable_names(self):
+        """
+        The names of all metabolites, global quantities
+        and local parameters in the model.
+        :return: list of str
+        """
+        m = [i.name for i in self.metabolites]
+        g = [i.name for i in self.global_quantities]
+        l = [i.name for i in self.local_parameters]
+        return m + g + l
+
+    @property
     def metabolites(self):
         """
         List of model metabolites as type metabolite
@@ -318,6 +330,7 @@ class Model(_base._Base):
                                    rate_law=function_list)
                     reactions_dct[r.name] = r
         return reactions_dct
+
 
     def save(self, copasi_file=None):
         """
