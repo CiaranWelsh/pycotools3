@@ -79,25 +79,109 @@ class ExperimentMapperTests(_test_base._BaseTest):
         self.model.save()
         self.new_xml = PyCoTools.pycopi.CopasiMLParser(self.model.copasi_file).xml
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
-        self.model.open()
 
     def test_experiment(self):
         """
         Test that four  experiments have been set up
         :return:
         """
-
-        list_of_tasks = self.new_xml.find(self.list_of_tasks)
-        parameter_estimation = list_of_tasks[5]
-        assert parameter_estimation.attrib['name'] == 'Parameter Estimation'
-        problem = parameter_estimation[1]
-        # print problem[3].attrib
-        experiment_set = problem[8]
-        assert experiment_set.attrib['name'] == 'Experiment Set'
         count = 0
-        for i in experiment_set:
-            count += 1
+        query = '//*[@name="Experiment Set"]'
+        for i in self.new_xml.xpath(query):
+            for j in i:
+                count += 1
         self.assertEqual(count, 4)
+
+    def test_experiment2(self):
+        """
+        First row of experiment_0==1
+        :return:
+        """
+
+        query = '//*[@name="Experiment Set"]'
+        for i in self.new_xml.xpath(query):
+            for j in i:
+                if j.attrib['name'] == 'Experiment_0':
+                    for k in j:
+                        if k.attrib['name'] =='First Row':
+                            self.assertEqual(k.attrib['value'], '1')
+
+    def test_experiment3(self):
+        """
+        First row of experiment_0==1
+        :return:
+        """
+
+        query = '//*[@name="Experiment Set"]'
+        for i in self.new_xml.xpath(query):
+            for j in i:
+                if j.attrib['name'] == 'Experiment_3':
+                    for k in j:
+                        if k.attrib['name'] =='Weight Method':
+                            self.assertEqual(k.attrib['value'], '2')
+
+    def test_experiment4(self):
+        """
+        First row of experiment_0==1
+        :return:
+        """
+
+        query = '//*[@name="Experiment Set"]'
+        for i in self.new_xml.xpath(query):
+            for j in i:
+                if j.attrib['name'] == 'Experiment_0':
+                    for k in j:
+                        if k.attrib['name'] =='Object Map':
+                            for l in k:
+                                if l.attrib['name'] == '1':
+                                    self.assertEqual('CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=Concentration',
+                                                     l[0].attrib['value'])
+
+    def test_experiment5(self):
+        """
+        First row of experiment_0==1
+        :return:
+        """
+
+        query = '//*[@name="Experiment Set"]'
+        for i in self.new_xml.xpath(query):
+            for j in i:
+                if j.attrib['name'] == 'Experiment_3':
+                    for k in j:
+                        if k.attrib['name'] =='Object Map':
+                            for l in k:
+                                if l.attrib['name'] == '1':
+                                    self.assertEqual('CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=InitialConcentration',
+                                                     l[0].attrib['value'])
+
+    def test_experiment6(self):
+        """
+        First row of experiment_0==1
+        :return:
+        """
+
+        query = '//*[@name="Experiment Set"]'
+        for i in self.new_xml.xpath(query):
+            for j in i:
+                if j.attrib['name'] == 'Experiment_3':
+                    for k in j:
+                        if k.attrib['name'] == 'Experiment Type':
+                            ## code for steady state is '0'
+                            self.assertEqual(k.attrib['value'], str('0'))
+
+                def test_experiment7(self):
+                    """
+                    First row of experiment_0==1
+                    :return:
+                    """
+                    query = '//*[@name="Experiment Set"]'
+                    for i in self.new_xml.xpath(query):
+                        for j in i:
+                            if j.attrib['name'] == 'Experiment_0':
+                                for k in j:
+                                    if k.attrib['name'] == 'Experiment Type':
+                                        ## code for steady state is '0'
+                                        self.assertEqual(k.attrib['value'], str(1))
 
 
 if __name__=='__main__':
