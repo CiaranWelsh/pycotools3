@@ -655,7 +655,7 @@ class TimeCourse(_base._ModelBase):
                                    'metabolites': self.model.metabolites,
                                    'global_quantities': self.model.global_quantities,
                                    'quantity_type': 'concentration',
-                                   'report_name': None,
+                                   'report_name': default_report_name,
                                    'append': False,
                                    'confirm_overwrite': False,
                                    'method': 'deterministic',
@@ -677,7 +677,8 @@ class TimeCourse(_base._ModelBase):
                                    'partitioning_interval': 1,
                                    'runge_kutta_step_size': 0.001,
                                    'run': True,
-                                   'plot': False}
+                                   'plot': False,
+                                   'correct_headers':  True}
 
         self.convert_bool_to_numeric(self.default_properties)
         self.update_properties(self.default_properties)
@@ -689,6 +690,20 @@ class TimeCourse(_base._ModelBase):
         self.set_report()
 
         self.run_task()
+        self.correct_output_headers()
+
+    def correct_output_headers(self):
+        """
+        Copasi writes time courses with variables
+        surrounded in square brackets (i.e. [A]).
+        This method removes the square brackets
+        :return:
+        """
+        if self.correct_headers:
+            df = pandas.read_csv(self.report_name, sep='\t', index_col=0)
+            df.columns = [re.findall('\[(.*)\]', i)[0] for i in df.keys()]
+            os.remove(self.report_name)
+            df.to_csv(self.report_name, sep='\t')
 
     def do_checks(self):
         """
@@ -1579,7 +1594,8 @@ class ExperimentMapper(_base._ModelBase):
             self.experiment_files = [self.experiment_files]
 
 
-        self.default_properties={'row_orientation': [True]*len(self.experiment_files),
+        self.default_properties={'type': 'estimation', #or 'validation_data
+                                 'row_orientation': [True]*len(self.experiment_files),
                                  'experiment_type': ['timecourse']*len(self.experiment_files),
                                  'first_row': [1]*len(self.experiment_files),
                                  'normalize_weights_per_experiment': [True]*len(self.experiment_files),
@@ -1605,6 +1621,10 @@ class ExperimentMapper(_base._ModelBase):
         """
 
         """
+        data_types = ['estimation', 'validation']
+        if self.type not in data_types:
+            raise Errors.InputError('{} not in {}'.format(self.type, data_types))
+
         for i in range(len(self.experiment_files)):
             if os.path.isabs(self.experiment_files[i])!=True:
                 self.experiment_files[i] = os.path.abspath(self.experiment_files[i])
@@ -1616,7 +1636,7 @@ class ExperimentMapper(_base._ModelBase):
 
 
         experiment_type_string = ['steadystate','timecourse']
-        experiment_type_numbers = [str(i) for i in [0,1] ]
+        experiment_type_numbers = [str(i) for i in [0, 1]]
         experiment_type_dict = dict(zip(experiment_type_string, experiment_type_numbers))
         self.experiment_type = [experiment_type_dict[i] for i in self.experiment_type]
 
@@ -1677,24 +1697,6 @@ class ExperimentMapper(_base._ModelBase):
                 existing_experiment_list.append(j)
         return existing_experiment_list
 
-
-    def remove_experiment(self,experiment_name):
-        '''
-        name attribute of experiment. usually Experiment_1 or something
-        '''
-        query = '//*[@name="Experiment Set"]'
-        for i in self.model.xml.xpath(query):
-            for j in list(i):
-                if j.attrib['name'] == experiment_name:
-                    j.getparent().remove(j)
-        return self.model
-
-    def remove_all_experiments(self):
-        for i in self.experiments:
-            experiment_name = i.attrib['name']
-            self.remove_experiment(experiment_name)
-        return self.model
-
     def create_experiment(self, index):
         '''
         Adds a single experiment set to the parameter estimation task
@@ -1704,17 +1706,12 @@ class ExperimentMapper(_base._ModelBase):
 
         i is the exeriment_file index
         '''
-        assert isinstance(index,int)
-        data=pandas.read_csv(self.experiment_files[index],sep=self.separator[index])
+        assert isinstance(index, int)
+        data=pandas.read_csv(self.experiment_files[index], sep=self.separator[index])
         #get observables from data. Must be exact match
-        obs=list(data.columns)
-
-        #prune any observables that are contained within square brackets (like the outout from copasu)
-        for j in range(len(obs)):
-            if re.findall('\[(.*)\]',obs[j])!=[]:
-                obs[j]=re.findall('\[(.*)\]',obs[j])[0]
+        obs = list(data.columns)
         num_rows = str(data.shape[0])
-        num_columns=str(data.shape[1]) #plus 1 to account for 0 indexed
+        num_columns = str(data.shape[1]) #plus 1 to account for 0 indexed
 
         #if exp_file is in the same directory as copasi_file only use relative path
         if os.path.dirname(
@@ -1724,10 +1721,9 @@ class ExperimentMapper(_base._ModelBase):
         else:
             exp = self.experiment_files[index]
 
-
         self.key='Experiment_{}'.format(index)
 
-        #necessary xML attributes
+        #necessary XML attributes
         Exp=etree.Element('ParameterGroup', attrib={'name': self.key})
         # Exp = etree.Element('ParameterGroup', attrib={'name': self.experiment_files[index]})
 
@@ -1740,16 +1736,16 @@ class ExperimentMapper(_base._ModelBase):
                          'value': self.experiment_type[index]}
 
         ExpFile = {'type': 'file',
-                 'name': 'File Name',
-                 'value': exp}
+                   'name': 'File Name',
+                   'value': exp}
 
         first_row = {'type': 'unsignedInteger',
                      'name': 'First Row',
                      'value': str(self.first_row[index])}
 
         Key = {'type': 'key',
-             'name': 'Key',
-             'value': self.key}
+               'name': 'Key',
+               'value': self.key}
 
         LastRow = {'type': 'unsignedInteger',
                    'name': 'Last Row',
@@ -1791,10 +1787,6 @@ class ExperimentMapper(_base._ModelBase):
         etree.SubElement(Exp, 'Parameter', attrib=separator)
         etree.SubElement(Exp, 'Parameter', attrib=weight_method)
 
-
-
-
-
         #define object role attributes
         time_role = {'type': 'unsignedInteger',
                     'name': 'Role',
@@ -1813,22 +1805,23 @@ class ExperimentMapper(_base._ModelBase):
                                'value': '0'}
 
         for i in range(int(num_columns)):
-            map_group=etree.SubElement(Map, 'ParameterGroup',attrib={'name': (str(i))})
+            map_group=etree.SubElement(Map, 'ParameterGroup', attrib={'name': (str(i))})
             if self.experiment_type[index]==str(1): #when Experiment type is set to time course it should be 1
                 ## first column is time
                 if i == 0:
                     etree.SubElement(map_group, 'Parameter', attrib=time_role)
                 else:
+                    # LOG.warning(obs[i][:-6])
                     ## map independent variables
                     if obs[i][-6:] == '_indep':
-                        if obs[i][:-6] in [i.name for i in self.model.metabolites]:
-                            metab = [j for j in self.model.metabolites if j.name == obs[i]][0]
+                        if obs[i][:-6] in [j.name for j in self.model.metabolites]:
+                            metab = [j for j in self.model.metabolites if j.name == obs[i][:-6]][0]
                             cn = '{},{},{}'.format(self.model.reference,
                                                    metab.compartment.reference,
                                                    metab.initial_reference)
                             independent_ICs = {'type': 'cn',
-                                             'name': 'Object CN',
-                                             'value': cn}
+                                               'name': 'Object CN',
+                                               'value': cn}
                             etree.SubElement(map_group, 'Parameter', attrib=independent_ICs)
 
                         elif obs[i][:-6] in [j.name for j in self.model.global_quantities]:
@@ -1837,19 +1830,19 @@ class ExperimentMapper(_base._ModelBase):
                                                 glob.initial_reference)
 
                             independent_globs = {'type': 'cn',
-                                               'name': 'Object CN',
-                                               'value': cn}
+                                                 'name': 'Object CN',
+                                                 'value': cn}
 
                             etree.SubElement(map_group,
                                              'Parameter',
                                              attrib=independent_globs)
                         else:
-                            raise Errors.ExperimentMappingError('{} not in ICs, global vars or local variables'.format(obs[i]))
-
+                            etree.SubElement(map_group, 'Parameter', attrib=ignored_role)
+                            LOG.warning('{} not found. Set to ignore'.format(obs[i]))
                         etree.SubElement(map_group, 'Parameter', attrib=independent_variable_role)
 
                     ## now do dependent variables
-                    elif obs[i][:-6]!='indep':
+                    elif obs[i][:-6] != '_indep':
                         ## metabolites
                         if obs[i] in [j.name for j in self.model.metabolites]:
                             metab = [j for j in self.model.metabolites if j.name == obs[i]][0]
@@ -1876,25 +1869,29 @@ class ExperimentMapper(_base._ModelBase):
                                              attrib=dependent_globs)
                         ## remember that local parameters are not mapped to experimental
                         ## data
-                        elif obs[i] not in self.model.all_variable_names:
-                            LOG.warning('{} is not in your model and has not been mapped. Please check spelling and try again'.format(obs[i]))
+                        else:
+                            etree.SubElement(map_group, 'Parameter', attrib=ignored_role)
+                            LOG.warning('{} not found. Set to ignore'.format(obs[i]))
                         ## map for time course dependent variable
                         etree.SubElement(map_group, 'Parameter', attrib=dependent_variable_role)
 
             ## and now for steady state data
             else:
+
                 ## do independent variables first
                 if obs[i][-6:]=='_indep':
+
                     ## for metabolites
-                    if obs[i][:-6] in [i.name for i in self.model.metabolites]:
-                        metab = [j for j in self.model.metabolites if j.name == obs[i]][0]
+                    if obs[i][:-6] in [j.name for j in self.model.metabolites]:
+                        metab = [j for j in self.model.metabolites if j.name == obs[i][:-6]][0]
                         cn = '{},{},{}'.format(self.model.reference,
                                                metab.compartment.reference,
                                                metab.initial_reference)
+
                         independent_ICs = {'type': 'cn',
                                            'name': 'Object CN',
                                            'value': cn}
-                        etree.SubElement(map_group, 'Parameter', attrib=independent_ICs)
+                        x = etree.SubElement(map_group, 'Parameter', attrib=independent_ICs)
 
                     ## now for global quantities
                     elif obs[i][:-6] in [j.name for j in self.model.global_quantities]:
@@ -1911,11 +1908,14 @@ class ExperimentMapper(_base._ModelBase):
                                          attrib=independent_globs)
                     ## local parameters are never mapped
                     else:
-                        raise Errors.ExperimentMappingError(
-                            '{} not in ICs, global vars or local variables'.format(obs[i]))
+                        etree.SubElement(map_group, 'Parameter', attrib=ignored_role)
+                        LOG.warning('{} not found. Set to ignore'.format(obs[i]))
+                    etree.SubElement(map_group, 'Parameter', attrib=independent_variable_role)
+
+
                 elif obs[i][-6:] != '_indep':
                     ## for metabolites
-                    if obs[i][:-6] in [i.name for i in self.model.metabolites]:
+                    if obs[i] in [j.name for j in self.model.metabolites]:
                         metab = [j for j in self.model.metabolites if j.name == obs[i]][0]
                         cn = '{},{},{}'.format(self.model.reference,
                                                metab.compartment.reference,
@@ -1926,7 +1926,7 @@ class ExperimentMapper(_base._ModelBase):
                         etree.SubElement(map_group, 'Parameter', attrib=independent_ICs)
 
                     ## now for global quantities
-                    elif obs[i][:-6] in [j.name for j in self.model.global_quantities]:
+                    elif obs[i] in [j.name for j in self.model.global_quantities]:
                         glob = [j for j in self.model.global_quantities if j.name == obs[i]][0]
                         cn = '{},{}'.format(self.model.reference,
                                             glob.transient_reference)
@@ -1940,10 +1940,31 @@ class ExperimentMapper(_base._ModelBase):
                                          attrib=independent_globs)
                     ## local parameters are never mapped
                     else:
-                        raise Errors.ExperimentMappingError(
-                            '{} not in ICs, global vars or local variables'.format(obs[i]))
+                        etree.SubElement(map_group, 'Parameter', attrib=ignored_role)
+                        LOG.warning('{} not found. Set to ignore'.format(obs[i]))
+                    etree.SubElement(map_group, 'Parameter', attrib=dependent_variable_role)
         return Exp
 
+    def remove_experiment(self,experiment_name):
+        '''
+        name attribute of experiment. usually Experiment_1 or something
+        '''
+        if self.type == 'experiment':
+            query = '//*[@name="Experiment Set"]'
+        elif self.type == 'validation':
+            query = '//*[@name="Validation Set"]'
+        for i in self.model.xml.xpath(query):
+            for j in list(i):
+                if j.attrib['name'] == experiment_name:
+                    j.getparent().remove(j)
+        return self.model
+
+    def remove_all_experiments(self):
+
+        for i in self.experiments:
+            experiment_name = i.attrib['name']
+            self.remove_experiment(experiment_name)
+        return self.model
 
     def add_experiment_set(self,experiment_element):
         """
@@ -1951,10 +1972,15 @@ class ExperimentMapper(_base._ModelBase):
         :param experiment_element:
         :return:
         """
-        query='//*[@name="Experiment Set"]'
+        if self.type == 'experiment':
+            query = '//*[@name="Experiment Set"]'
+        elif self.type == 'validation':
+            query = '//*[@name="Validation Set"]'
+
         for j in self.model.xml.xpath(query):
             j.insert(0, experiment_element)
         return self.model
+
 
     def map_experiments(self):
         """

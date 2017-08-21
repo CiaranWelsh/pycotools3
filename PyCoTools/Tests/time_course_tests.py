@@ -23,8 +23,8 @@ Date:
     19-08-2017
  '''
 import site
-site.addsitedir('/home/b3053674/Documents/PyCoTools')
-# site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
+# site.addsitedir('/home/b3053674/Documents/PyCoTools')
+site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
 
 import PyCoTools
 from PyCoTools.PyCoToolsTutorial import test_models
@@ -108,6 +108,20 @@ class DeterministicTimeCourseTests(_test_base._BaseTest):
         """
         df = pandas.read_csv(self.TC.report_name, sep='\t', index_col=0)
         self.assertEqual(df.shape, (11, 6) )
+
+    def test_correct_output(self):
+        """
+
+        :return:
+        """
+        self.TC.correct_output_headers()
+        df = pandas.read_csv(self.TC.report_name, sep='\t')
+        check = True
+        for i in df.keys():
+            if '[' in i:
+                check = False
+        self.assertTrue(check)
+
 
 
 class GibsonBruckTimeCourseTests(_test_base._BaseTest):

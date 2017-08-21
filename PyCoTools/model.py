@@ -151,7 +151,7 @@ class Model(_base._Base):
         """
         m = [i.name for i in self.metabolites]
         g = [i.name for i in self.global_quantities]
-        l = [i.name for i in self.local_parameters]
+        l = [i.name for i in self.local_parameters.values()]
         return m + g + l
 
     @property
@@ -239,7 +239,7 @@ class Model(_base._Base):
     def local_parameters(self):
         """
         return local parameters used in your model
-        :return:list of Parameters
+        :return: dict[local_str] = LocalParameter
         """
         query='//*[@cn="String=Kinetic Parameters"]'
         d={}
