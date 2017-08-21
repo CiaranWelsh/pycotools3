@@ -1594,14 +1594,16 @@ class ExperimentMapper(_base._ModelBase):
             self.experiment_files = [self.experiment_files]
 
 
-        self.default_properties={'type': 'estimation', #or 'validation_data
+        self.default_properties={'type': 'experiment', #or 'validation_data
                                  'row_orientation': [True]*len(self.experiment_files),
                                  'experiment_type': ['timecourse']*len(self.experiment_files),
                                  'first_row': [1]*len(self.experiment_files),
                                  'normalize_weights_per_experiment': [True]*len(self.experiment_files),
                                  'row_containing_names': [1]*len(self.experiment_files),
                                  'separator': ['\t']*len(self.experiment_files),
-                                 'weight_method': ['mean_squared']*len(self.experiment_files)}
+                                 'weight_method': ['mean_squared']*len(self.experiment_files),
+                                 'threshold': [5]*len(self.experiment_files),
+                                 'weight': [1]*len(self.experiment_files) }
 
         self.convert_bool_to_numeric(self.default_properties)
         self.update_kwargs(self.default_properties)
@@ -1621,7 +1623,7 @@ class ExperimentMapper(_base._ModelBase):
         """
 
         """
-        data_types = ['estimation', 'validation']
+        data_types = ['experiment', 'validation']
         if self.type not in data_types:
             raise Errors.InputError('{} not in {}'.format(self.type, data_types))
 
@@ -1641,7 +1643,7 @@ class ExperimentMapper(_base._ModelBase):
         self.experiment_type = [experiment_type_dict[i] for i in self.experiment_type]
 
         l=[]
-        assert isinstance(self.row_orientation,list)
+        assert isinstance(self.row_orientation, list)
         for i in self.row_orientation:
             assert i in [True,False]
             if i == True:
@@ -1678,7 +1680,7 @@ class ExperimentMapper(_base._ModelBase):
         assert isinstance(self.row_containing_names,list)
         for i in self.row_containing_names:
             l.append(str(i))
-        self.row_containing_names=l
+        self.row_containing_names = l
 
 
         assert isinstance(self.separator,list)
@@ -1691,7 +1693,12 @@ class ExperimentMapper(_base._ModelBase):
     @property
     def experiments(self):
         existing_experiment_list=[]
-        query = '//*[@name="Experiment Set"]'
+        if self.type == 'experiment':
+            query = '//*[@name="Experiment Set"]'
+        elif self.type == 'validation':
+            query = '//*[@name="Validation Set"]'
+
+
         for i in self.model.xml.xpath(query):
             for j in list(i):
                 existing_experiment_list.append(j)
@@ -1756,8 +1763,8 @@ class ExperimentMapper(_base._ModelBase):
                                             'value': self.normalize_weights_per_experiment[index]}
 
         NumberOfColumns = {'type': 'unsignedInteger',
-                         'name': 'Number of Columns',
-                         'value': num_columns}
+                           'name': 'Number of Columns',
+                           'value': num_columns}
 
         ObjectMap = {'name': 'Object Map'}
 
@@ -1766,8 +1773,8 @@ class ExperimentMapper(_base._ModelBase):
                                 'value': str(self.row_containing_names[index])}
 
         separator = {'type': 'string',
-                   'name': 'separator',
-                   'value': self.separator[index]}
+                     'name': 'separator',
+                     'value': self.separator[index]}
 
         weight_method = {'type': 'unsignedInteger',
                          'name': 'Weight Method',
@@ -1976,6 +1983,7 @@ class ExperimentMapper(_base._ModelBase):
             query = '//*[@name="Experiment Set"]'
         elif self.type == 'validation':
             query = '//*[@name="Validation Set"]'
+            raise Errors.NotImplementedError('Validation data sets are currently not supported')
 
         for j in self.model.xml.xpath(query):
             j.insert(0, experiment_element)
@@ -1996,434 +2004,8 @@ class ExperimentMapper(_base._ModelBase):
             # self.save() ## Note sure whether this save is needed. Keep commented until you're sure
         return self.model
 
-
-class ExperimentMapper2():
-        '''
-        Class to map variables from a parameter estimation item template which
-        is written using the ParameterEstimation.Write_item_template method, to model
-        variables. variable names must match exactly. You cannot have more than
-        1 species with the same name, regardless of compartment. Generally
-        this class is used within the parameter estimation class so the user doesn't
-        need to bother with it.
-
-        args:
-            copasi_file:
-                Copasi file path
-            experiment_files:
-                list of experiment file paths
-
-        See documentation for ParameterEstimation for
-        details on each keyword argument
-
-        kwargs:
-            row_orientation
-
-            experiment_type
-
-            first_row
-
-            normalize_weights_per_experiment
-
-            row_containing_names
-
-            separator
-
-            weight_method
-
-            save
-
-
-
-        '''
-
-        def __init__(self,copasi_file,experiment_files,**kwargs):
-            self.copasi_file=copasi_file
-            self.experiment_files=experiment_files
-            if isinstance(self.experiment_files,str)==True:
-                self.experiment_files = [self.experiment_files]
-            assert isinstance(self.experiment_files,list)
-            for i in self.experiment_files:
-                assert os.path.isfile(i),'{} is not a real file'.format(i)
-            self.CParser=CopasiMLParser(self.copasi_file)
-            self.copasiML=self.CParser.copasiML
-            self.GMQ=GetModelQuantities(self.copasi_file)
-    #
-    #         options={
-    #                  'row_orientation':[True]*len(self.experiment_files),
-    #                  'experiment_type':['timecourse']*len(self.experiment_files),
-    #                  'first_row':[str(1)]*len(self.experiment_files),
-    #                  'normalize_weights_per_experiment':[True]*len(self.experiment_files),
-    #                  'row_containing_names':[str(1)]*len(self.experiment_files),
-    #                  'separator':['\t']*len(self.experiment_files),
-    #                  'weight_method':['mean_squared']*len(self.experiment_files) ,
-    #                  'save':'overwrite'}
-    #         #values need to be lower case for copasiML
-    #         for i in kwargs.keys():
-    #             assert i in options.keys(),'{} is not a keyword argument for TimeCourse'.format(i)
-    #         options.update( kwargs)
-    #         self.kwargs=options
-    #
-    #         weight_method_string = ['mean','mean_squared','stardard_deviation','value_scaling']
-    #         weight_method_numbers = [str(i) for i in [1,2,3,4] ]
-    #         weight_method_dict = dict(zip(weight_method_string, weight_method_numbers))
-    #         self['weight_method'] = [weight_method_dict[i] for i in self['weight_method']  ]
-    #
-    #
-    #         experiment_type_string = ['steadystate','timecourse']
-    #         experiment_type_numbers = [str(i) for i in [0,1] ]
-    #         experiment_type_dict = dict(zip(experiment_type_string, experiment_type_numbers))
-    #         self['experiment_type'] = [experiment_type_dict[i] for i in self['experiment_type']]
-    #
-    #         l=[]
-    #         assert isinstance(self.row_orientation,list)
-    #         for i in self.row_orientation:
-    #             assert i in [True,False,'true','false']
-    #             if i==True:
-    #                 l.append(str(1))
-    #             else:
-    #                 l.append(str(0))
-    #         self.kwargs['row_orientation']=l
-    #
-    #         assert isinstance(self.first_row, list)
-    #         l=[]
-    #         for i in self.first_row:
-    #             assert i!=0
-    #             assert i!=str(0)
-    #             l.append(str(i))
-    #         self.kwargs['first_row']=l
-    #
-    #         l=[]
-    #         assert isinstance(self.kwargs.get('normalize_weights_per_experiment'),list)
-    #         for i in self.kwargs.get('normalize_weights_per_experiment'):
-    #             assert i in [True,False,'true','false'],'{} should be true or false'.format(i)
-    #             if i==True:
-    #                 l.append(str(1))
-    #             else:
-    #                 l.append(str(0))
-    #         self.kwargs['normalize_weights_per_experiment']=l
-    #
-    #
-    #         l=[]
-    #         assert isinstance(self.kwargs.get('row_orientation,list')
-    #         for i in self.kwargs['row_orientation']:
-    #             l.append(str(i))
-    #         self.kwargs['row_orientation']=l
-    #
-    #         l=[]
-    #         assert isinstance(self.kwargs.get('row_containing_names',list)
-    #         for i in self.kwargs['row_containing_names']:
-    #             l.append(str(i))
-    #         self.kwargs['row_containing_names']=l
-    #
-    #
-    #         assert isinstance(self.kwargs.get('separator',list)
-    #         for i in self.kwargs['separator']:
-    #             assert isinstance(i,str),'separator should be given asa python list'
-    #
-    #         assert self.kwargs.get('save in [False,'duplicate','overwrite']
-    #
-    #         self.kwargs = Bool2Str(self.kwargs).convert_dct()
-    #
-    #
-    #         #run the experiment mapper
-    #         self.map_experiments()
-    #
-    #         #save the copasi file
-    #         if self.kwargs.get('save')!=False:
-    #             self.save()
-    #
-    #     def __getitem__(self, key):
-    #         if key not in self.kwargs:
-    #             raise Errors.InputError('{} not in {}'.format(key, self.kwargs))
-    #         return self.kwargs[key]
-    #
-    #     def __setitem__(self,key, value):
-    #         self.kwargs[key] = value
-    #
-    #     def get_existing_experiments(self):
-    #         existing_experiment_list=[]
-    #         query='//*[@name="Experiment Set"]'
-    #         for i in self.copasiML.xpath(query):
-    #             for j in list(i):
-    #                 existing_experiment_list.append(j)
-    #         return existing_experiment_list
-    #
-    #     def remove_experiment(self,experiment_name):
-    #         '''
-    #         name attribute of experiment. usually Experiment_1 or something
-    #         '''
-    #         query='//*[@name="Experiment Set"]'
-    #         for i in self.copasiML.xpath(query):
-    #             for j in list(i):
-    #                 if j.attrib['name']==experiment_name:
-    #                     j.getparent().remove(j)
-    #         return self.copasiML
-    #
-    #     def remove_all_experiments(self):
-    #         for i in self.get_existing_experiments():
-    #             experiment_name= i.attrib['name']
-    #             self.remove_experiment(experiment_name)
-    #         return self.copasiML
-    #
-    #
-    #     def create_experiment(self,index):
-    #         '''
-    #         Adds a single experiment set to the parameter estimation task
-    #         exp_file is an experiment filename with exactly matching headers (independent variablies need '_indep' appended to the end)
-    #         since this method is intended to be used in a loop in another function to
-    #         deal with all experiment sets, the second argument 'i' is the index for the current experiment
-    #
-    #         i is the exeriment_file index
-    #         '''
-    #         assert isinstance(index,int)
-    #         data=pandas.read_csv(self.experiment_files[index],sep=self.kwargs.get('separator')[index])
-    #         #get observables from data. Must be exact match
-    #         obs=list(data.columns)
-    #
-    #         #prune any observables that are contained within square brackets (like the outout from copasu)
-    #         for j in range(len(obs)):
-    #             if re.findall('\[(.*)\]',obs[j])!=[]:
-    #                 obs[j]=re.findall('\[(.*)\]',obs[j])[0]
-    #         num_rows= str(data.shape[0])
-    #         num_columns=str(data.shape[1]) #plus 1 to account for 0 indexed
-    #
-    #
-    #         #if exp_file is in the same directory as copasi_file only use relative path
-    #         if os.path.dirname(self.copasi_file)==os.path.dirname(self.experiment_files[index]):
-    #             exp= os.path.split(self.experiment_files[index])[1]
-    #         else:
-    #             exp=self.experiment_files[index]
-    #
-    # #        key_value= len(self.get_existing_experiments())+1
-    #         self.key='Experiment_{}'.format(index)
-    #
-    #         #necessary xML attributes
-    #         Exp=etree.Element('ParameterGroup',attrib={'name':self.key})
-    #
-    #         row_orientation={'type': 'bool', 'name': 'Data is Row Oriented', 'value': self.kwargs.get('row_orientation')[index]}
-    #         experiment_type={'type': 'unsignedInteger', 'name': 'Experiment Type', 'value': self.kwargs.get('experiment_type')[index]}
-    #         ExpFile={'type': 'file', 'name': 'File Name', 'value': exp}
-    #         first_row={'type': 'unsignedInteger', 'name': 'First Row', 'value': self.kwargs.get('first_row')[index]}
-    #         Key={'type': 'key', 'name': 'Key', 'value': self.key}
-    #         LastRow={'type': 'unsignedInteger', 'name': 'Last Row', 'value': str(int(num_rows)+1)} #add 1 to account for 0 indexed python
-    #         normalize_weights_per_experiment={'type': 'bool', 'name': 'Normalize Weights per Experiment', 'value': self.kwargs.get('normalize_weights_per_experiment')[index]}
-    #         NumberOfColumns={'type': 'unsignedInteger', 'name': 'Number of Columns', 'value': num_columns}
-    #         ObjectMap={'name': 'Object Map'}
-    #         row_containing_names={'type': 'unsignedInteger', 'name': 'Row containing Names', 'value': self.kwargs.get('row_containing_names')[index]}
-    #         separator={'type': 'string', 'name': 'separator', 'value': self.kwargs.get('separator')[index]}
-    #         weight_method={'type': 'unsignedInteger', 'name': 'Weight Method', 'value': self['weight_method'][index]}
-    #
-    #         etree.SubElement(Exp,'Parameter',attrib=row_orientation)
-    #         etree.SubElement(Exp,'Parameter',attrib=experiment_type)
-    #         etree.SubElement(Exp,'Parameter',attrib=ExpFile)
-    #         etree.SubElement(Exp,'Parameter',attrib=first_row)
-    #         etree.SubElement(Exp,'Parameter',attrib=Key)
-    #         etree.SubElement(Exp,'Parameter',attrib=LastRow)
-    #         etree.SubElement(Exp,'Parameter',attrib=normalize_weights_per_experiment)
-    #         etree.SubElement(Exp,'Parameter',attrib=NumberOfColumns)
-    #         Map=etree.SubElement(Exp,'ParameterGroup',attrib=ObjectMap)
-    #         etree.SubElement(Exp,'Parameter',attrib=row_containing_names)
-    #         etree.SubElement(Exp,'Parameter',attrib=separator)
-    #         etree.SubElement(Exp,'Parameter',attrib=weight_method)
-    #
-    #         #get handle to the cn's
-    #         ICs= self.GMQ.get_IC_cns()
-    #         glob= self.GMQ.get_global_quantities_cns()
-    #         loc=self.GMQ.get_local_kinetic_parameters_cns()
-    #
-    #         #define object role attributes
-    #         TimeRole={'type': 'unsignedInteger', 'name': 'Role', 'value': '3'}
-    #         DepentantvariableRole={'type': 'unsignedInteger', 'name': 'Role', 'value': '2'}
-    #         IndepentantvariableRole={'type': 'unsignedInteger', 'name': 'Role', 'value': '1'}
-    #         IgnoredvariableRole={'type': 'unsignedInteger', 'name': 'Role', 'value': '0'}
-    #
-    #         for i in range(int(num_columns)):
-    #             map_group=etree.SubElement(Map,'ParameterGroup',attrib={'name':(str(i))})
-    #             if self.kwargs.get('experiment_type')[index]==str(1): #when Experiment type is set to time course it should be 1
-    #                 if i==0:
-    #                     etree.SubElement(map_group,'Parameter',attrib=TimeRole)
-    #                 else:
-    #                     '''
-    #                     Need to duplicate the below block for ease. Could be more sophisticated
-    #                     but this is less effort.
-    #                     '''
-    #                     if obs[i][-6:]=='_indep':
-    #                         if obs[i][:-6] in ICs.keys():
-    #                             cn=ICs[obs[i][:-6]]['cn']+',Reference=InitialConcentration'
-    #                             independent_ICs={'type': 'cn', 'name': 'Object CN', 'value':cn}
-    #                             etree.SubElement(map_group,'Parameter',attrib=independent_ICs)
-    #
-    #                         elif obs[i][:-6] in glob.keys():
-    #                             cn=glob[obs[i][:-6]]['cn']+',Reference=InitialValue'
-    #                             independent_globs={'type': 'cn', 'name': 'Object CN', 'value':cn}
-    #                             etree.SubElement(map_group,'Parameter',attrib=independent_globs)
-    #
-    #                         elif obs[i][:-6] in loc.keys():
-    #                             cn=loc[obs[i][:-6]]['cn']+',Reference=Value'
-    #                             independent_locs={'type': 'cn', 'name': 'Object CN', 'value':cn}
-    #                             etree.SubElement(map_group,'Parameter',attrib=independent_locs)
-    #                         else:
-    #                             raise Errors.ExperimentMappingError('{} not in ICs, global vars or local variables'.format(obs[i]))
-    #                         etree.SubElement(map_group,'Parameter',attrib=IndepentantvariableRole)
-    #
-    #                     elif obs[i][:-6]!='indep':
-    #                         if obs[i] in ICs.keys():
-    #                             cn=ICs[obs[i]]['cn']+',Reference=Concentration'
-    #                             dependent_ICs={'type': 'cn', 'name': 'Object CN', 'value':cn}
-    #                             etree.SubElement(map_group,'Parameter',attrib=dependent_ICs)
-    #
-    #                         elif obs[i] in glob.keys():
-    #                             cn=glob[obs[i]]['cn']+',Reference=Value'
-    #                             dependent_globs={'type': 'cn', 'name': 'Object CN', 'value':cn}
-    #                             etree.SubElement(map_group,'Parameter',attrib=dependent_globs)
-    #                             '''
-    #                             Note that you don't ever map data to reaction parameters therefore the commented
-    #                             out block below is not needed. Don't delete until you are sure of it though..
-    #                             '''
-    #                         elif obs[i] in loc.keys():
-    #                             cn=loc[obs[i]['cn']]+',Reference=Value'
-    #                             dependent_locs={'type': 'cn', 'name': 'Object CN', 'value':cn}
-    #                             etree.SubElement(map_group,'Parameter',attrib=dependent_locs)
-    #
-    #                         elif obs[i] not in loc.keys() + glob.keys() + ICs.keys():
-    #                             LOG.warning('{}not in model and has not been mapped. Please check spelling and try again'.format(obs[i]))
-    #
-    #                         else:
-    #                             raise Errors.ExperimentMappingError('''\'{}\' mapping error. In the copasi GUI its possible to have same name for two species provided they are in different compartments. In this API, having non-unique species identifiers leads to errors in mapping experimental to model variables'''.format(obs[i]))
-    #                         etree.SubElement(map_group,'Parameter',attrib=DepentantvariableRole)
-    #
-    #
-    #                     else:
-    #                         if obs[i] in ICs.keys():
-    #                             cn=ICs[obs[i]]['cn']+',Reference=Concentration'
-    #                             dependent_ICs={'type': 'cn', 'name': 'Object CN', 'value':cn}
-    #                             etree.SubElement(map_group,'Parameter',attrib=dependent_ICs)
-    #
-    #                         elif obs[i] in glob.keys():
-    #                             cn=glob[obs[i]]['cn']+',Reference=Value'
-    #                             dependent_globs={'type': 'cn', 'name': 'Object CN', 'value':cn}
-    #                             etree.SubElement(map_group,'Parameter',attrib=dependent_globs)
-    #                             '''
-    #                             Note that you don't ever map data to reaction parameters therefore the commented
-    #                             out block below is not needed. Don't delete until you are sure of it though..
-    #                             '''
-    #                         elif obs[i] in loc.keys():
-    #                             cn=loc[obs[i]['cn']]+',Reference=Value'
-    #                             dependent_locs={'type': 'cn', 'name': 'Object CN', 'value':cn}
-    #                             etree.SubElement(map_group,'Parameter',attrib=dependent_locs)
-    #
-    #                         elif obs[i] not in loc.keys() + glob.keys() + ICs.keys():
-    #                             LOG.warning('{}not in model and has not been mapped. Please check spelling and try again'.format(obs[i]))
-    #
-    #                         else:
-    #                             raise Errors.ExperimentMappingError('''\'{}\' mapping error. In the copasi GUI its possible to have same name for two species provided they are in different compartments. In this API, having non-unique species identifiers leads to errors in mapping experimental to model variables'''.format(obs[i]))
-    #                         etree.SubElement(map_group,'Parameter',attrib=IgnoredvariableRole)
-    #
-    #
-    #             else:
-    #                 '''
-    #                 Region of duplicated code
-    #                 '''
-    #                 if obs[i][-6:]=='_indep':
-    #                     if obs[i][:-6] in ICs.keys():
-    #                         cn=ICs[obs[i][:-6]]['cn']+',Reference=InitialConcentration'
-    #                         independent_ICs={'type': 'cn', 'name': 'Object CN', 'value':cn}
-    #                         etree.SubElement(map_group,'Parameter',attrib=independent_ICs)
-    #
-    #                     elif obs[i][:-6] in glob.keys():
-    #                         cn=glob[obs[i][:-6]]['cn']+',Reference=InitialValue'
-    #                         independent_globs={'type': 'cn', 'name': 'Object CN', 'value':cn}
-    #                         etree.SubElement(map_group,'Parameter',attrib=independent_globs)
-    #
-    #                     elif obs[i][:-6] in loc.keys():
-    #                         cn=loc[obs[i][:-6]]['cn']+',Reference=Value'
-    #                         independent_locs={'type': 'cn', 'name': 'Object CN', 'value':cn}
-    #                         etree.SubElement(map_group,'Parameter',attrib=independent_locs)
-    #                     else:
-    #                         raise Errors.ExperimentMappingError('{} not in ICs, global vars or local variables'.format(obs[i]))
-    #                     etree.SubElement(map_group,'Parameter',attrib=IndepentantvariableRole)
-    #
-    #                 elif obs[i][-6:]!='_indep':
-    #                     if obs[i] in ICs.keys():
-    #                         cn=ICs[obs[i]]['cn']+',Reference=Concentration'
-    #                         dependent_ICs={'type': 'cn', 'name': 'Object CN', 'value':cn}
-    #                         etree.SubElement(map_group,'Parameter',attrib=dependent_ICs)
-    #
-    #                     elif obs[i] in glob.keys():
-    #                         cn=glob[obs[i]]['cn']+',Reference=Value'
-    #                         dependent_globs={'type': 'cn', 'name': 'Object CN', 'value':cn}
-    #                         etree.SubElement(map_group,'Parameter',attrib=dependent_globs)
-    #                         '''
-    #                         Note that you don't ever map data to reaction parameters therefore the commented
-    #                         out block below is not needed. Don't delete until you are sure of it though..
-    #                         '''
-    #                     elif obs[i] in loc.keys():
-    #                         cn=loc[obs[i]['cn']]+',Reference=Value'
-    #                         dependent_locs={'type': 'cn', 'name': 'Object CN', 'value':cn}
-    #                         etree.SubElement(map_group,'Parameter',attrib=dependent_locs)
-    #                     else:
-    #                         raise Errors.ExperimentMappingError('''\'{}\' mapping error. In the copasi GUI its possible to have same name for two species provided they are in different compartments. In this API, having non-unique species identifiers leads to errors in mapping experimental to model variables'''.format(obs[i]))
-    #                     etree.SubElement(map_group,'Parameter',attrib=IgnoredvariableRole)
-    #                 else:
-    #                     if obs[i] in ICs.keys():
-    #                         cn=ICs[obs[i]]['cn']+',Reference=Concentration'
-    #                         dependent_ICs={'type': 'cn', 'name': 'Object CN', 'value':cn}
-    #                         etree.SubElement(map_group,'Parameter',attrib=dependent_ICs)
-    #
-    #                     elif obs[i] in glob.keys():
-    #                         cn=glob[obs[i]]['cn']+',Reference=Value'
-    #                         dependent_globs={'type': 'cn', 'name': 'Object CN', 'value':cn}
-    #                         etree.SubElement(map_group,'Parameter',attrib=dependent_globs)
-    #                         '''
-    #                         Note that you don't ever map data to reaction parameters therefore the commented
-    #                         out block below is not needed. Don't delete until you are sure of it though..
-    #                         '''
-    #                     elif obs[i] in loc.keys():
-    #                         cn=loc[obs[i]['cn']]+',Reference=Value'
-    #                         dependent_locs={'type': 'cn', 'name': 'Object CN', 'value':cn}
-    #                         etree.SubElement(map_group,'Parameter',attrib=dependent_locs)
-    #                     else:
-    #                         raise Errors.ExperimentMappingError('''\'{}\' mapping error. In the copasi GUI its possible to have same name for two species provided they are in different compartments. In this API, having non-unique species identifiers leads to errors in mapping experimental to model variables'''.format(obs[i]))
-    #                     etree.SubElement(map_group,'Parameter',attrib=DepentantvariableRole)
-    #
-    #
-    #         return Exp
-    #
-    #     def add_experiment_set(self,experiment_element):
-    #         query='//*[@name="Experiment Set"]'
-    #         for j in self.copasiML.xpath(query):
-    #             j.insert(0,experiment_element)
-    #         return self.copasiML
-    #
-    #     def save(self):
-    #         self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
-    #         return self.copasiML
-    #
-    #     def save_deg(self):
-    #         if self.kwargs.get('save')=='duplicate':
-    #             self.CParser.write_copasi_file(self.kwargs.get('OutputML'),self.copasiML)
-    #         elif self.kwargs.get('save')=='overwrite':
-    #             self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
-    #         return self.copasiML
-    #
-    #
-    #     def map_experiments(self):
-    #         self.remove_all_experiments()
-    #         LOG.debug('Removing all pre-existing experiments from copasi mapping interface')
-    #         for i in range(len(self.experiment_files)):
-    #             Experiment=self.create_experiment(i)
-    #             LOG.debug('Mapping experiment {}'.format(self.experiment_files[i]))
-    #             self.copasiML=self.add_experiment_set(Experiment)
-    #             self.save()
-    #         return self.copasiML
-    #
-
-
-    # class Experim
-class PhaseSpace(TimeCourse):
+class PhaseSpaceDep(TimeCourse):
     '''
-    Inherits from TimeCourse
-
     Use TimeCourse to get data and replot all n choose 2 combinations
     of phase space plot
     '''
