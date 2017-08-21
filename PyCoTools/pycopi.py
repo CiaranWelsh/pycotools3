@@ -277,7 +277,7 @@ class Reports(_base._ModelBase):
     def __init__(self, model, **kwargs):
         super(Reports, self).__init__(model, **kwargs)
 
-        self.allowed_properties={'metabolites': self.model.metabolites,
+        self.allowed_properties = {'metabolites': self.model.metabolites,
                                  'global_quantities': self.model.global_quantities,
                                  'local_parameters': self.model.local_parameters,
                                  'quantity_type': 'concentration',
@@ -366,21 +366,21 @@ class Reports(_base._ModelBase):
         new_key='Report_30'
         while new_key  in keys:
             new_key='Report_{}'.format(numpy.random.randint(30,100))
-        report_attributes={'precision': '6',
-                           'separator': '\t',
-                           'name': 'Time-Course',
-                           'key':new_key,
-                           'taskType': 'Time-Course'}
 
         ListOfReports = self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports')
-        report = etree.SubElement(ListOfReports,'Report')
-        report.attrib.update(report_attributes)
-        comment=etree.SubElement(report,'Comment')
+        report = etree.SubElement(ListOfReports,
+                                  'Report',
+                                  attrib={'precision': '6',
+                                          'separator': '\t',
+                                          'name': 'Time-Course',
+                                          'key':new_key,
+                                          'taskType': 'Time-Course'})
+        comment=etree.SubElement(report, 'Comment')
         comment=comment #get rid of annoying squiggly line above
-        table=etree.SubElement(report,'Table')
+        table=etree.SubElement(report, 'Table')
         table.attrib['printTitle']=str(1)
         #Objects for the report to report
-        time=etree.SubElement(table,'Object')
+        time=etree.SubElement(table, 'Object')
         #first element always time.
         time.attrib['cn']='CN=Root,Model={},Reference=Time'.format(self.model.name)
 
@@ -400,7 +400,7 @@ class Reports(_base._ModelBase):
                     # print self.model.reference
                     cn = '{},{},{}'.format(self.model.reference,
                                                i.compartment.reference,
-                                               i.reference_transient)
+                                               i.transient_reference)
                 elif self.quantity_type == 'particle_number':
                     cn = '{},{},{}'.format(self.model.reference,
                                                                      i.compartment.reference,
@@ -418,7 +418,7 @@ class Reports(_base._ModelBase):
                 looks like this:
                     cn="CN=Root,Model=New Model,Vector=Values[B2C],Reference=Value"
                 """
-                cn = '{},{}'.format(self.model.reference, i.reference_transient)
+                cn = '{},{}'.format(self.model.reference, i.transient_reference)
                 Object=etree.SubElement(table,'Object')
                 Object.attrib['cn']=cn
         return self.model
@@ -452,9 +452,9 @@ class Reports(_base._ModelBase):
         table=etree.SubElement(report,'Table')
         table.attrib['printTitle']=str(1)
         if self.variable.name in [i.name for i in self.metabolites]:
-            cn = '{},{}'.format( self.model.reference, self.variable.reference_initial )
+            cn = '{},{}'.format( self.model.reference, self.variable.initial_reference)
         elif self.variable.name in [i.name for i in self.global_quantities]:
-            cn = '{},{}'.format(self.model.reference, self.variable.reference_initial)
+            cn = '{},{}'.format(self.model.reference, self.variable.initial_reference)
         elif self.variable.name in [i.name for i in self.local_parameters]:
             cn = '{},{}'.format(self.model.reference, self.variable.reference)
         etree.SubElement(table,'Object',attrib={'cn': cn})
@@ -655,7 +655,7 @@ class TimeCourse(_base._ModelBase):
                                    'metabolites': self.model.metabolites,
                                    'global_quantities': self.model.global_quantities,
                                    'quantity_type': 'concentration',
-                                   'report_name': default_report_name,
+                                   'report_name': None,
                                    'append': False,
                                    'confirm_overwrite': False,
                                    'method': 'deterministic',
@@ -680,8 +680,8 @@ class TimeCourse(_base._ModelBase):
                                    'plot': False}
 
         self.convert_bool_to_numeric(self.default_properties)
-        self.update_kwargs(self.default_properties)
         self.update_properties(self.default_properties)
+        # self.update_kwargs(self.default_properties)
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
         self.do_checks()
 
@@ -707,8 +707,7 @@ class TimeCourse(_base._ModelBase):
             raise Errors.InputError('{} is not a valid method. These are valid methods {}'.format(self.method, method_list))
 
         if os.path.isabs(self.report_name)!=True:
-            self.report_name = os.path.join(os.path.dirname(self.model.copasi_file), 'TimeCourseData.csv')
-
+            self.report_name = os.path.join(os.path.dirname(self.model.copasi_file), self.report_name)
 
     def __str__(self):
         return "TimeCourse({})".format(self.as_string())
@@ -1386,7 +1385,6 @@ class Scan(_base._ModelBase):
                 cn = '{},{},{}'.format(self.model.reference,
                                        self.variable.compartment.reference,
                                        self.variable.initial_reference)
-                print cn
 
             elif self.quantity_type == 'particle_number':
                 cn = '{},{},{}'.format(self.model.reference,
@@ -1511,73 +1509,518 @@ class Scan(_base._ModelBase):
         R = Run(self.model, task='scan', mode=self.run)
 
 
+class ExperimentMapper(_base._ModelBase):
+    """
+    Class for mapping variables from file to cps
+
+         <Task key="Task_19" name="Parameter Estimation" type="parameterFitting" scheduled="false" updateModel="false">
+          <Report reference="Report_12" target="" append="1" confirmOverwrite="1"/>
+          <Problem>
+            <Parameter name="Maximize" type="bool" value="0"/>
+            <Parameter name="Randomize Start Values" type="bool" value="0"/>
+            <Parameter name="Calculate Statistics" type="bool" value="1"/>
+            <ParameterGroup name="OptimizationItemList">
+            </ParameterGroup>
+            <ParameterGroup name="OptimizationConstraintList">
+            </ParameterGroup>
+            <Parameter name="Steady-State" type="cn" value="CN=Root,Vector=TaskList[Steady-State]"/>
+            <Parameter name="Time-Course" type="cn" value="CN=Root,Vector=TaskList[Time-Course]"/>
+            <Parameter name="Create Parameter Sets" type="bool" value="0"/>
+            <ParameterGroup name="Experiment Set">
+              <ParameterGroup name="Experiment">
+                <Parameter name="Data is Row Oriented" type="bool" value="1"/>
+                <Parameter name="Experiment Type" type="unsignedInteger" value="1"/>
+                <Parameter name="File Name" type="file" value="TimeCourseData.csv"/>
+                <Parameter name="First Row" type="unsignedInteger" value="1"/>
+                <Parameter name="Key" type="key" value="Experiment_1"/>
+                <Parameter name="Last Row" type="unsignedInteger" value="12"/>
+                <Parameter name="Normalize Weights per Experiment" type="bool" value="1"/>
+                <Parameter name="Number of Columns" type="unsignedInteger" value="7"/>
+                <ParameterGroup name="Object Map">
+                  <ParameterGroup name="0">
+                    <Parameter name="Role" type="unsignedInteger" value="3"/>
+                  </ParameterGroup>
+                  <ParameterGroup name="1">
+                    <Parameter name="Object CN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=Concentration"/>
+                    <Parameter name="Role" type="unsignedInteger" value="2"/>
+                  </ParameterGroup>
+                  <ParameterGroup name="2">
+                    <Parameter name="Object CN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=InitialConcentration"/>
+                    <Parameter name="Role" type="unsignedInteger" value="1"/>
+                  </ParameterGroup>
+                  <ParameterGroup name="3">
+                    <Parameter name="Role" type="unsignedInteger" value="0"/>
+                  </ParameterGroup>
+                  <ParameterGroup name="4">
+                    <Parameter name="Role" type="unsignedInteger" value="0"/>
+                  </ParameterGroup>
+                  <ParameterGroup name="5">
+                    <Parameter name="Role" type="unsignedInteger" value="0"/>
+                  </ParameterGroup>
+                  <ParameterGroup name="6">
+                    <Parameter name="Role" type="unsignedInteger" value="0"/>
+                  </ParameterGroup>
+                </ParameterGroup>
+                <Parameter name="Row containing Names" type="unsignedInteger" value="1"/>
+                <Parameter name="Separator" type="string" value="&#x09;"/>
+                <Parameter name="Weight Method" type="unsignedInteger" value="1"/>
+              </ParameterGroup>
+            </ParameterGroup>
+            <ParameterGroup name="Validation Set">
+              <Parameter name="Threshold" type="unsignedInteger" value="5"/>
+              <Parameter name="Weight" type="unsignedFloat" value="1"/>
+            </ParameterGroup>
+          </Problem>
+    """
+    def __init__(self, model, experiment_files, **kwargs):
+        super(ExperimentMapper, self).__init__(model, **kwargs)
+        self.experiment_files = experiment_files
+        if isinstance(self.experiment_files, list) !=True:
+            self.experiment_files = [self.experiment_files]
+
+
+        self.default_properties={'row_orientation': [True]*len(self.experiment_files),
+                                 'experiment_type': ['timecourse']*len(self.experiment_files),
+                                 'first_row': [1]*len(self.experiment_files),
+                                 'normalize_weights_per_experiment': [True]*len(self.experiment_files),
+                                 'row_containing_names': [1]*len(self.experiment_files),
+                                 'separator': ['\t']*len(self.experiment_files),
+                                 'weight_method': ['mean_squared']*len(self.experiment_files)}
+
+        self.convert_bool_to_numeric(self.default_properties)
+        self.update_kwargs(self.default_properties)
+        self.update_properties(self.default_properties)
+        self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
+        self.do_checks()
+
+
+        #run the experiment mapper
+        self.model = self.map_experiments()
+
+        #save the copasi file
+        # if self.kwargs.get('save')!=False:
+        #     self.save()
+
+    def do_checks(self):
+        """
+
+        """
+        for i in range(len(self.experiment_files)):
+            if os.path.isabs(self.experiment_files[i])!=True:
+                self.experiment_files[i] = os.path.abspath(self.experiment_files[i])
+
+        weight_method_string = ['mean','mean_squared','stardard_deviation','value_scaling']
+        weight_method_numbers = [str(i) for i in [1,2,3,4] ]
+        weight_method_dict = dict(zip(weight_method_string, weight_method_numbers))
+        self.weight_method = [weight_method_dict[i] for i in self.weight_method  ]
+
+
+        experiment_type_string = ['steadystate','timecourse']
+        experiment_type_numbers = [str(i) for i in [0,1] ]
+        experiment_type_dict = dict(zip(experiment_type_string, experiment_type_numbers))
+        self.experiment_type = [experiment_type_dict[i] for i in self.experiment_type]
+
+        l=[]
+        assert isinstance(self.row_orientation,list)
+        for i in self.row_orientation:
+            assert i in [True,False]
+            if i == True:
+                l.append(str(1))
+            else:
+                l.append(str(0))
+        self.row_orientation = l
+
+        assert isinstance(self.first_row, list)
+        l=[]
+        for i in self.first_row:
+            assert i!=0
+            assert i!=str(0)
+            l.append(str(i))
+        self.first_row = l
+
+        l=[]
+        assert isinstance(self.normalize_weights_per_experiment, list)
+        for i in self.normalize_weights_per_experiment:
+            assert i in [True,False],'{} should be true or false'.format(i)
+            if i == True:
+                l.append(str(1))
+            else:
+                l.append(str(0))
+        self.normalize_weights_per_experiment = l
+
+        l=[]
+        assert isinstance(self.row_orientation, list)
+        for i in self.row_orientation:
+            l.append(str(i))
+        self.row_orientation=l
+
+        l=[]
+        assert isinstance(self.row_containing_names,list)
+        for i in self.row_containing_names:
+            l.append(str(i))
+        self.row_containing_names=l
+
+
+        assert isinstance(self.separator,list)
+        for i in self.separator:
+            assert isinstance(i,str),'separator should be given asa python list'
+
+    def __str__(self):
+        return 'ExperimentMapper({})'.format(self.as_string())
+
+    @property
+    def experiments(self):
+        existing_experiment_list=[]
+        query = '//*[@name="Experiment Set"]'
+        for i in self.model.xml.xpath(query):
+            for j in list(i):
+                existing_experiment_list.append(j)
+        return existing_experiment_list
+
+
+    def remove_experiment(self,experiment_name):
+        '''
+        name attribute of experiment. usually Experiment_1 or something
+        '''
+        query = '//*[@name="Experiment Set"]'
+        for i in self.model.xml.xpath(query):
+            for j in list(i):
+                if j.attrib['name'] == experiment_name:
+                    j.getparent().remove(j)
+        return self.model
+
+    def remove_all_experiments(self):
+        for i in self.experiments:
+            experiment_name = i.attrib['name']
+            self.remove_experiment(experiment_name)
+        return self.model
+
+    def create_experiment(self, index):
+        '''
+        Adds a single experiment set to the parameter estimation task
+        exp_file is an experiment filename with exactly matching headers (independent variablies need '_indep' appended to the end)
+        since this method is intended to be used in a loop in another function to
+        deal with all experiment sets, the second argument 'i' is the index for the current experiment
+
+        i is the exeriment_file index
+        '''
+        assert isinstance(index,int)
+        data=pandas.read_csv(self.experiment_files[index],sep=self.separator[index])
+        #get observables from data. Must be exact match
+        obs=list(data.columns)
+
+        #prune any observables that are contained within square brackets (like the outout from copasu)
+        for j in range(len(obs)):
+            if re.findall('\[(.*)\]',obs[j])!=[]:
+                obs[j]=re.findall('\[(.*)\]',obs[j])[0]
+        num_rows = str(data.shape[0])
+        num_columns=str(data.shape[1]) #plus 1 to account for 0 indexed
+
+        #if exp_file is in the same directory as copasi_file only use relative path
+        if os.path.dirname(
+                self.model.copasi_file) == os.path.dirname(
+                    self.experiment_files[index]):
+            exp = os.path.split(self.experiment_files[index])[1]
+        else:
+            exp = self.experiment_files[index]
+
+
+        self.key='Experiment_{}'.format(index)
+
+        #necessary xML attributes
+        Exp=etree.Element('ParameterGroup', attrib={'name': self.key})
+        # Exp = etree.Element('ParameterGroup', attrib={'name': self.experiment_files[index]})
+
+        row_orientation = {'type': 'bool',
+                         'name': 'Data is Row Oriented',
+                         'value': self.row_orientation[index]}
+
+        experiment_type = {'type': 'unsignedInteger',
+                         'name': 'Experiment Type',
+                         'value': self.experiment_type[index]}
+
+        ExpFile = {'type': 'file',
+                 'name': 'File Name',
+                 'value': exp}
+
+        first_row = {'type': 'unsignedInteger',
+                     'name': 'First Row',
+                     'value': str(self.first_row[index])}
+
+        Key = {'type': 'key',
+             'name': 'Key',
+             'value': self.key}
+
+        LastRow = {'type': 'unsignedInteger',
+                   'name': 'Last Row',
+                   'value': str(int(num_rows)+1)} #add 1 to account for 0 indexed python
+
+        normalize_weights_per_experiment = {'type': 'bool',
+                                            'name': 'Normalize Weights per Experiment',
+                                            'value': self.normalize_weights_per_experiment[index]}
+
+        NumberOfColumns = {'type': 'unsignedInteger',
+                         'name': 'Number of Columns',
+                         'value': num_columns}
+
+        ObjectMap = {'name': 'Object Map'}
+
+        row_containing_names = {'type': 'unsignedInteger',
+                                'name': 'Row containing Names',
+                                'value': str(self.row_containing_names[index])}
+
+        separator = {'type': 'string',
+                   'name': 'separator',
+                   'value': self.separator[index]}
+
+        weight_method = {'type': 'unsignedInteger',
+                         'name': 'Weight Method',
+                         'value': self.weight_method[index]}
+
+        etree.SubElement(Exp, 'Parameter', attrib=row_orientation)
+        etree.SubElement(Exp, 'Parameter', attrib=experiment_type)
+        etree.SubElement(Exp, 'Parameter', attrib=ExpFile)
+        etree.SubElement(Exp, 'Parameter', attrib=first_row)
+        etree.SubElement(Exp, 'Parameter', attrib=Key)
+        etree.SubElement(Exp, 'Parameter', attrib=LastRow)
+        etree.SubElement(Exp, 'Parameter', attrib=normalize_weights_per_experiment)
+        etree.SubElement(Exp, 'Parameter', attrib=NumberOfColumns)
+        ## Map looks out of place but this order must be maintained
+        Map = etree.SubElement(Exp, 'ParameterGroup', attrib=ObjectMap)
+        etree.SubElement(Exp, 'Parameter', attrib=row_containing_names)
+        etree.SubElement(Exp, 'Parameter', attrib=separator)
+        etree.SubElement(Exp, 'Parameter', attrib=weight_method)
 
 
 
 
 
+        #define object role attributes
+        time_role = {'type': 'unsignedInteger',
+                    'name': 'Role',
+                    'value': '3'}
+
+        dependent_variable_role = {'type': 'unsignedInteger',
+                                 'name': 'Role',
+                                 'value': '2'}
+
+        independent_variable_role = {'type': 'unsignedInteger',
+                                   'name': 'Role',
+                                   'value': '1'}
+
+        ignored_role = {'type': 'unsignedInteger',
+                               'name': 'Role',
+                               'value': '0'}
+
+        for i in range(int(num_columns)):
+            map_group=etree.SubElement(Map, 'ParameterGroup',attrib={'name': (str(i))})
+            if self.experiment_type[index]==str(1): #when Experiment type is set to time course it should be 1
+                ## first column is time
+                if i == 0:
+                    etree.SubElement(map_group, 'Parameter', attrib=time_role)
+                else:
+                    ## map independent variables
+                    if obs[i][-6:] == '_indep':
+                        if obs[i][:-6] in [i.name for i in self.model.metabolites]:
+                            metab = [j for j in self.model.metabolites if j.name == obs[i]][0]
+                            cn = '{},{},{}'.format(self.model.reference,
+                                                   metab.compartment.reference,
+                                                   metab.initial_reference)
+                            independent_ICs = {'type': 'cn',
+                                             'name': 'Object CN',
+                                             'value': cn}
+                            etree.SubElement(map_group, 'Parameter', attrib=independent_ICs)
+
+                        elif obs[i][:-6] in [j.name for j in self.model.global_quantities]:
+                            glob = [j for j in self.model.global_quantities if j.name == obs[i]][0]
+                            cn = '{},{}'.format(self.model.reference,
+                                                glob.initial_reference)
+
+                            independent_globs = {'type': 'cn',
+                                               'name': 'Object CN',
+                                               'value': cn}
+
+                            etree.SubElement(map_group,
+                                             'Parameter',
+                                             attrib=independent_globs)
+                        else:
+                            raise Errors.ExperimentMappingError('{} not in ICs, global vars or local variables'.format(obs[i]))
+
+                        etree.SubElement(map_group, 'Parameter', attrib=independent_variable_role)
+
+                    ## now do dependent variables
+                    elif obs[i][:-6]!='indep':
+                        ## metabolites
+                        if obs[i] in [j.name for j in self.model.metabolites]:
+                            metab = [j for j in self.model.metabolites if j.name == obs[i]][0]
+                            cn = '{},{},{}'.format(self.model.reference,
+                                                   metab.compartment.reference,
+                                                   metab.transient_reference)
+
+                            dependent_ICs = {'type': 'cn',
+                                             'name': 'Object CN',
+                                             'value': cn}
+
+                            etree.SubElement(map_group, 'Parameter', attrib=dependent_ICs)
+
+                        ## global quantities
+                        elif obs[i] in [j.name for j in self.model.global_quantities]:
+                            glob = [j for j in self.model.global_quantities if j.name == obs[i]][0]
+                            cn = '{},{}'.format(self.model.reference,
+                                                glob.transient_reference)
+                            dependent_globs = {'type': 'cn',
+                                               'name': 'Object CN',
+                                               'value': cn}
+                            etree.SubElement(map_group,
+                                             'Parameter',
+                                             attrib=dependent_globs)
+                        ## remember that local parameters are not mapped to experimental
+                        ## data
+                        elif obs[i] not in self.model.all_variable_names:
+                            LOG.warning('{} is not in your model and has not been mapped. Please check spelling and try again'.format(obs[i]))
+                        ## map for time course dependent variable
+                        etree.SubElement(map_group, 'Parameter', attrib=dependent_variable_role)
+
+            ## and now for steady state data
+            else:
+                ## do independent variables first
+                if obs[i][-6:]=='_indep':
+                    ## for metabolites
+                    if obs[i][:-6] in [i.name for i in self.model.metabolites]:
+                        metab = [j for j in self.model.metabolites if j.name == obs[i]][0]
+                        cn = '{},{},{}'.format(self.model.reference,
+                                               metab.compartment.reference,
+                                               metab.initial_reference)
+                        independent_ICs = {'type': 'cn',
+                                           'name': 'Object CN',
+                                           'value': cn}
+                        etree.SubElement(map_group, 'Parameter', attrib=independent_ICs)
+
+                    ## now for global quantities
+                    elif obs[i][:-6] in [j.name for j in self.model.global_quantities]:
+                        glob = [j for j in self.model.global_quantities if j.name == obs[i]][0]
+                        cn = '{},{}'.format(self.model.reference,
+                                            glob.initial_reference)
+
+                        independent_globs = {'type': 'cn',
+                                             'name': 'Object CN',
+                                             'value': cn}
+
+                        etree.SubElement(map_group,
+                                         'Parameter',
+                                         attrib=independent_globs)
+                    ## local parameters are never mapped
+                    else:
+                        raise Errors.ExperimentMappingError(
+                            '{} not in ICs, global vars or local variables'.format(obs[i]))
+                elif obs[i][-6:] != '_indep':
+                    ## for metabolites
+                    if obs[i][:-6] in [i.name for i in self.model.metabolites]:
+                        metab = [j for j in self.model.metabolites if j.name == obs[i]][0]
+                        cn = '{},{},{}'.format(self.model.reference,
+                                               metab.compartment.reference,
+                                               metab.transient_reference)
+                        independent_ICs = {'type': 'cn',
+                                           'name': 'Object CN',
+                                           'value': cn}
+                        etree.SubElement(map_group, 'Parameter', attrib=independent_ICs)
+
+                    ## now for global quantities
+                    elif obs[i][:-6] in [j.name for j in self.model.global_quantities]:
+                        glob = [j for j in self.model.global_quantities if j.name == obs[i]][0]
+                        cn = '{},{}'.format(self.model.reference,
+                                            glob.transient_reference)
+
+                        independent_globs = {'type': 'cn',
+                                             'name': 'Object CN',
+                                             'value': cn}
+
+                        etree.SubElement(map_group,
+                                         'Parameter',
+                                         attrib=independent_globs)
+                    ## local parameters are never mapped
+                    else:
+                        raise Errors.ExperimentMappingError(
+                            '{} not in ICs, global vars or local variables'.format(obs[i]))
+        return Exp
+
+
+    def add_experiment_set(self,experiment_element):
+        """
+        Map a single experiment set
+        :param experiment_element:
+        :return:
+        """
+        query='//*[@name="Experiment Set"]'
+        for j in self.model.xml.xpath(query):
+            j.insert(0, experiment_element)
+        return self.model
+
+    def map_experiments(self):
+        """
+        map all experiment sets
+        :return:
+        """
+        self.remove_all_experiments()
+        LOG.debug('Removing all pre-existing experiments from copasi mapping interface')
+        for i in range(len(self.experiment_files)):
+            Experiment = self.create_experiment(i)
+            LOG.debug('Mapping experiment {}'.format(self.experiment_files[i]))
+            self.model = self.add_experiment_set(Experiment)
+            # self.save() ## Note sure whether this save is needed. Keep commented until you're sure
+        return self.model
+
+
+class ExperimentMapper2():
+        '''
+        Class to map variables from a parameter estimation item template which
+        is written using the ParameterEstimation.Write_item_template method, to model
+        variables. variable names must match exactly. You cannot have more than
+        1 species with the same name, regardless of compartment. Generally
+        this class is used within the parameter estimation class so the user doesn't
+        need to bother with it.
+
+        args:
+            copasi_file:
+                Copasi file path
+            experiment_files:
+                list of experiment file paths
+
+        See documentation for ParameterEstimation for
+        details on each keyword argument
+
+        kwargs:
+            row_orientation
+
+            experiment_type
+
+            first_row
+
+            normalize_weights_per_experiment
+
+            row_containing_names
+
+            separator
+
+            weight_method
+
+            save
 
 
 
+        '''
 
-
-
-
-
-
-
-
-
-# class ExperimentMapper():
-    #     '''
-    #     Class to map variables from a parameter estimation item template which
-    #     is written using the ParameterEstimation.Write_item_template method, to model
-    #     variables. variable names must match exactly. You cannot have more than
-    #     1 species with the same name, regardless of compartment. Generally
-    #     this class is used within the parameter estimation class so the user doesn't
-    #     need to bother with it.
-    #
-    #     args:
-    #         copasi_file:
-    #             Copasi file path
-    #         experiment_files:
-    #             list of experiment file paths
-    #
-    #     See documentation for ParameterEstimation for
-    #     details on each keyword argument
-    #
-    #     kwargs:
-    #         row_orientation
-    #
-    #         experiment_type
-    #
-    #         first_row
-    #
-    #         normalize_weights_per_experiment
-    #
-    #         row_containing_names
-    #
-    #         separator
-    #
-    #         weight_method
-    #
-    #         save
-    #
-    #
-    #
-    #     '''
-    #
-    #     def __init__(self,copasi_file,experiment_files,**kwargs):
-    #         self.copasi_file=copasi_file
-    #         self.experiment_files=experiment_files
-    #         if isinstance(self.experiment_files,str)==True:
-    #             self.experiment_files = [self.experiment_files]
-    #         assert isinstance(self.experiment_files,list)
-    #         for i in self.experiment_files:
-    #             assert os.path.isfile(i),'{} is not a real file'.format(i)
-    #         self.CParser=CopasiMLParser(self.copasi_file)
-    #         self.copasiML=self.CParser.copasiML
-    #         self.GMQ=GetModelQuantities(self.copasi_file)
+        def __init__(self,copasi_file,experiment_files,**kwargs):
+            self.copasi_file=copasi_file
+            self.experiment_files=experiment_files
+            if isinstance(self.experiment_files,str)==True:
+                self.experiment_files = [self.experiment_files]
+            assert isinstance(self.experiment_files,list)
+            for i in self.experiment_files:
+                assert os.path.isfile(i),'{} is not a real file'.format(i)
+            self.CParser=CopasiMLParser(self.copasi_file)
+            self.copasiML=self.CParser.copasiML
+            self.GMQ=GetModelQuantities(self.copasi_file)
     #
     #         options={
     #                  'row_orientation':[True]*len(self.experiment_files),
