@@ -106,38 +106,19 @@ class ParameterEstimationTests(_test_base._BaseTest):
     def test_run(self):
         self.PE.write_config_file()
         self.model = self.PE.setup()
-        self.model.open()
-        '''
-        not wrk:
-        <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=(C2A).k1,Reference=Value"/>
-        <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2,Reference=Value"/>
-        work 
-                    
-        '''
-        # self.model = self.run()
-        # self.assertTrue(os.path.isfile(self.PE.report_name))
+        self.PE.run()
+        self.assertTrue(os.path.isfile(self.PE.report_name))
 
-#     def test_set_PE_options(self):
-#         self.PE.write_config_file()
-#         self.PE.setup()
-# #
-#
-#         # tasks=self.PE.model.xml.find('{http://www.copasi.org/static/schema}ListOfTasks')
-#         # for i in tasks:
-#         #     if i.attrib['name']=='Parameter Estimation':
-#                 # self.assertEqual(i.attrib['scheduled'],'true')
-#
-#         self.model.open()
-#
-#     def test_results_folder(self):
-#         """
-#
-#         """
-#         self.PE.write_config_file()
-#         self.PE.setup()
-#         self.PE.run()
-#         self.assertTrue(os.path.isdir(self.PE['results_directory']) )
-        
+
+    # def test_results_folder(self):
+    #     """
+    #
+    #     """
+    #     self.PE.write_config_file()
+    #     self.PE.setup()
+    #     self.PE.run()
+    #     self.assertTrue(os.path.isdir(self.results_directory) )
+    #
         
 if __name__=='__main__':
     unittest.main()
