@@ -35,7 +35,7 @@ import os
 import subprocess
 import re
 import pickle
-import PEAnalysis,Errors, Misc, _base
+import PEAnalysis,Errors, Misc, _base, model
 import matplotlib
 import matplotlib.pyplot as plt
 from textwrap import wrap
@@ -86,12 +86,12 @@ class CopasiMLParser():
         tree= etree.parse(self.copasi_file)
         return tree
 
-    def write_copasi_file(self,copasi_filename, copasiML):
+    def write_copasi_file(self,copasi_filename, xml):
         '''
         write to file with lxml write function
         '''
         #first convert the copasiML to a root element tree
-        root=etree.ElementTree(copasiML)
+        root=etree.ElementTree(xml)
         root.write(copasi_filename)
         LOG.debug('model written to {}'.format(copasi_filename))
 
@@ -109,7 +109,6 @@ class Run(_base._ModelBase):
         super(Run, self).__init__(model, **kwargs)
 
         self.default_properties = {'task': 'time_course',
-                                   'save': 'overwrite',
                                    'mode': True,
                                    'max_time': None,
                                    'copasi_file': None,
@@ -120,6 +119,8 @@ class Run(_base._ModelBase):
         self.update_properties(self.default_properties)
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
         self.do_checks()
+
+        ##TODO check whether scheduled parameter should be 'true' or '1' format
 
         if self.copasi_file == None:
             self.copasi_file = self.model.copasi_file
@@ -141,7 +142,7 @@ class Run(_base._ModelBase):
 
 
     def __str__(self):
-        return 'Run({})'.format(self.as_string())
+        return 'Run({})'.format(self.to_string())
 
     def multi_run(self):
         def run(x):
@@ -189,6 +190,7 @@ class Run(_base._ModelBase):
         Look into it further.
         :return:
         """
+        ##TODO find better solution for running copasi files on linux
         os.system('CopasiSE "{}"'.format(self.copasi_file))
 
     def submit_copasi_job_SGE(self):
@@ -358,7 +360,7 @@ class Reports(_base._ModelBase):
 
 
     def __str__(self):
-        return 'Report({})'.format(self.as_string())
+        return 'Report({})'.format(self.to_string())
 
     def timecourse(self):
         '''
@@ -738,7 +740,7 @@ class TimeCourse(_base._ModelBase):
             self.report_name = os.path.join(os.path.dirname(self.model.copasi_file), self.report_name)
 
     def __str__(self):
-        return "TimeCourse({})".format(self.as_string())
+        return "TimeCourse({})".format(self.to_string())
 
     def run_task(self):
         R = Run(self.model, task='time_course')
@@ -1704,7 +1706,7 @@ class ExperimentMapper(_base._ModelBase):
             assert isinstance(i,str),'separator should be given asa python list'
 
     def __str__(self):
-        return 'ExperimentMapper({})'.format(self.as_string())
+        return 'ExperimentMapper({})'.format(self.to_string())
 
     @property
     def experiments(self):
@@ -2526,7 +2528,7 @@ class ParameterEstimation(_base._ModelBase):
         self._convert_numeric_arguments_to_string()
 
     def __str__(self):
-        return "ParameterEstimation({})".format(self.as_string())
+        return "ParameterEstimation({})".format(self.to_string())
 
     def do_checks(self):
         """
@@ -2563,13 +2565,13 @@ class ParameterEstimation(_base._ModelBase):
         if isinstance(self.global_quantities, list) != True:
             self.global_quantities = [self.global_quantities]
 
-        ## ensure local_parameters are a list (even if only 1 element)
-        # if isinstance(self.local_parameters, list) != True:
-        #     self.local_parameters = [self.local_parameters]
+        # ensure local_parameters are a list (even if only 1 element)
+        if isinstance(self.local_parameters, list) != True:
+            self.local_parameters = [self.local_parameters]
 
         ## ensure arguments to local parameters exist
-        for i in self.local_parameters.keys():
-            if i not in self.model.local_parameters.keys():
+        for i in [j.name for j in self.local_parameters]:
+            if i not in [j.name for j in self.model.local_parameters]:
                 raise Errors.InputError(
                     '{} not a local parameter. These are your local parameters: {}'.format(
                         i, self.model.local_parameters) )
@@ -2617,6 +2619,8 @@ class ParameterEstimation(_base._ModelBase):
         self.model=self.set_PE_method()
         self.model=self.set_PE_options()
         self.model=self.insert_all_fit_items()
+        assert self.model != None
+        return self.model
         # self.model=self.save()
 
     def _select_method(self):
@@ -2900,18 +2904,18 @@ class ParameterEstimation(_base._ModelBase):
         :return: str. Path to config file
         """
         if (os.path.isfile(self.config_filename) == False) or (self.overwrite_config_file == True):
-            self.item_template().to_excel(self.config_filename)
+            self.item_template().to_csv(self.config_filename)
             LOG.debug(  'writing config template. {} set to {} and {} is {}'.format('overwrite_config_file',self.kwargs.get('overwrite_config_file'),'config_filename',self.kwargs.get('config_filename')))
         return self.config_filename
 
-    def read_item_file(self):
+    def read_config_file(self):
         """
 
         :return:
         """
         if os.path.isfile(self.config_filename) != True:
             raise Errors.InputError('ConfigFile does not exist. run \'write_config_file\' method and modify it how you like then run the setup()  method again.')
-        df = pandas.read_excel(self.config_filename)
+        df = pandas.read_csv(self.config_filename)
         parameter_names = list(df[df.columns[0]])
 
         model_parameters = self.model.all_variable_names
@@ -2923,139 +2927,149 @@ class ParameterEstimation(_base._ModelBase):
     @property
     def item_template(self):
         """
-        Parse the item template
-        :return:
+        Collect information about the model in order to
+        create a config file template.
+        :return: pandas.DataFrame
         """
+        ##TODO check why concentration is beging calculated wrong
+        ##TODO add affected experiments to the config file
 
         local_params= self.model.local_parameters
         global_params = self.model.global_quantities
         metabolites = self.model.metabolites
 
 
-        for key in local_params.keys():
-            if key not in self.local_parameters.keys():
-                del local_params[key]
+        for i,item in enumerate(local_params):
+            if item.name not in [j.name for j in self.local_parameters]:
+                del local_params[i]
 
-        for item in global_params:
-            if item not in [i.name for i in self.global_quantities]:
-                del global_params[item]
+        for i,item in enumerate(global_params):
+            if item.name not in [j.name for j in self.global_quantities]:
+                del global_params[i]
 
 
-        for item in metabolites:
-            if key not in [i.name for i in self.metabolites]:
-                del metabolites[item]
+        for i,item in enumerate(metabolites):
+            if item.name not in [j.name for j in self.metabolites]:
+                del metabolites[i]
 
         df_list_local=[]
         df_list_global=[]
-        df_list_ICs=[]
-        for i in local_params.keys():
-            df= pandas.DataFrame.from_dict(local_params[i].values())
-            df.index=local_params[i].keys()
-            df.columns=[i]
-            df=df.transpose()
-            df_list_local.append(df)
+        df_list_metabolites=[]
+        for item in local_params:
+            df_list_local.append(item.to_df() )
 
+        for item in global_params:
+            df_list_global.append(item.to_df())
 
-        for i in global_params:
-            df= pandas.DataFrame.from_dict(global_params[i].values())
-            df.index=global_params[i].keys()
-            df.columns=[i]
-            df=df.transpose()
-            df_list_global.append(df)
+        for item in metabolites:
+            df_list_metabolites.append(item.to_df())
 
-        for i in metabolites:
-            df= pandas.DataFrame.from_dict(IC_params[i].values())
-            df.index=IC_params[i].keys()
-            df.columns=[i]
-            df=df.transpose()
-            if self.quantity_type == 'concentration':
-                df=df.drop('value',axis=1)
-                df=df.rename(columns={'concentration':'value'})
-            elif self.quantity_type == 'particle_number':
-                df=df.drop('concentration',axis=1)
-            df_list_ICs.append(df)
+        metab = pandas.concat(df_list_metabolites, axis=1).transpose()
+        lo = pandas.concat(df_list_local, axis=1).transpose()
+        gl = pandas.concat(df_list_global, axis=1).transpose()
 
-        l=df_list_local+df_list_global+df_list_ICs
-        assert len(l)!=0,'No ICs, local or global quantities in your model. This is a problem'
-        df= pandas.concat(l)
-        df=df.rename(columns={'value':'start_value'})
+        gl = gl.rename(columns={'value': 'start_value'})
+        lo = lo.rename(columns={'value': 'start_value'})
+        metab.drop('compartment', inplace=True, axis=1)
+        metab = metab.rename(columns={'value': 'start_value'})
+
+        if self.quantity_type == 'concentration':
+            metab.drop('particle_number', axis=1, inplace=True)
+            metab = metab.rename(columns={'concentration': 'start_value'})
+
+        elif self.quantity_type == 'particle_number':
+            metab.drop('concentration', axis=1, inplace=True)
+            metab = metab.rename(columns={'particle_number': 'start_value'})
+
+        gl = gl[['name', 'start_value']]
+        lo = lo[['name', 'start_value']]
+        metab = metab[['name', 'start_value']]
+        df = pandas.concat([gl, lo, metab], axis=0)
+        df = df.set_index('name')
         df['lower_bound']=[self.lower_bound]*df.shape[0]
         df['upper_bound']=[self.upper_bound]*df.shape[0]
-        df.index.name='parameter'
-        order=['start_value','lower_bound','upper_bound','simulationType','type','cn']
-        df=df[order]
+
         return df
 
 
     def add_fit_item(self,item):
         """
         Add fit item to model
-        :param item:
-        :return:
+        :param item: a row from the config template as pandas series
+        :return: PyCoTools.model.Model
         """
+        ##TODO check whether the new version of add_fit_item is doing what it is supposed to be doing
+        ## figure out what type of variable item is and assign to component
+        if item['name'] in [i.name for i in self.metabolites]:
+            component = [i for i in self.metabolites if i.name == item['name']][0]
+
+        elif item['name'] in [i.global_name for i in self.local_parameters]:
+            component = [i for i in self.local_parameters if i.global_name == item['name']][0]
+
+        elif item['name'] in [i.name for i in self.global_quantities]:
+            component = [i for i in self.global_quantities if i.name == item['name']][0]
+        else:
+            raise Errors.SomethingWentHorriblyWrongError('{} not a metabolite, local_parameter or global_quantity'.format(item['name']))
 
         #initialize new element
-        new_element=etree.Element('ParameterGroup',attrib={'name':'FitItem'})
-        all_items= self.read_item_template()
-        assert item in list(all_items.index),'{} is not in your ItemTemplate. You item template contains: {}'.format(item,list(all_items.index))
-        item= all_items.loc[item]
+        new_element=etree.Element('ParameterGroup', attrib={'name': 'FitItem'})
+        all_items= self.read_config_file()
+        # assert item in list(all_items['name']), '{} is not in your ItemTemplate. You item template contains: {}'.format(item, list(all_items.index))
+        # item= all_items.loc[item]
+
+        ##TODO include affected Cross Validation Experiments
+        ##TODO include Affected Experiment options
         subA1={'name': 'Affected Cross Validation Experiments'}
         subA2={'name': 'Affected Experiments'}
-        subA3={'type': 'cn', 'name': 'LowerBound', 'value': str(item['lower_bound'])}
+        subA3={'type': 'cn',  'name': 'LowerBound',  'value': str(item['lower_bound'])}
         if self.use_config_start_values == True:
-            ##todo check that subA5 is corrent
-            subA5={'type': 'float', 'name': 'StartValue', 'value': str(item['start_item'])}
+            subA5={'type': 'float',  'name': 'StartValue',  'value': str(item['start_value'])}
 
-        subA6={'type': 'cn', 'name': 'UpperBound', 'value': str(item['upper_bound'])}
-        etree.SubElement(new_element,'ParameterGroup',attrib=subA1)
-        etree.SubElement(new_element,'ParameterGroup',attrib=subA2)
-        etree.SubElement(new_element,'Parameter',attrib=subA3)
+        subA6={'type': 'cn',  'name': 'UpperBound',  'value': str(item['upper_bound'])}
+        etree.SubElement(new_element, 'ParameterGroup', attrib=subA1)
+        etree.SubElement(new_element, 'ParameterGroup', attrib=subA2)
+        etree.SubElement(new_element, 'Parameter',  attrib=subA3)
+
         if self.use_config_start_values == True:
-            etree.SubElement(new_element,'Parameter',attrib=subA5)
-        etree.SubElement(new_element,'Parameter',attrib=subA6)
+            etree.SubElement(new_element, 'Parameter', attrib=subA5)
+        etree.SubElement(new_element, 'Parameter', attrib=subA6)
 
         #for IC parameters
-        if item['simulationType']=='reactions' and item['type']=='Species':
-            #fill in the attributes
+        if isinstance(component, model.Metabolite):
             if self.quantity_type == 'concentration':
-                subA4={'type': 'cn', 'name': 'ObjectCN', 'value': str(item['cn'])+',Reference=InitialConcentration'}
+                subA4={'type': 'cn',  'name': 'ObjectCN',  'value': '{},{},{}'.format(self.model.reference,
+                                                                                      component.compartment.reference,
+                                                                                      component.initial_reference) }
             else:
-                subA4={'type': 'cn', 'name': 'ObjectCN', 'value': str(item['cn'])+',Reference=InitialParticleNumber'}
+                subA4={'type': 'cn',  'name': 'ObjectCN',  'value': '{},{},{}'.format(self.model.reference,
+                                                                                      component.compartment.reference,
+                                                                                      component.initial_particle_reference)}
 
-        elif item['simulationType']=='ode' and item['type']=='Species':
-            if self.quantity_type == 'concentration':
-                subA4={'type': 'cn', 'name': 'ObjectCN', 'value': str(item['cn'])+',Reference=InitialConcentration'}
-            else:
-                subA4={'type': 'cn', 'name': 'ObjectCN', 'value': str(item['cn'])+',Reference=InitialParticleNumber'}
+        elif isinstance(component, model.LocalParameter):
+            subA4 = {'type': 'cn', 'name': 'ObjectCN', 'value': '{},{}'.format(self.model.reference,
+                                                                               component.reference) }
 
-        elif item['simulationType']=='ode' and item['type']=='ModelValue':
-            if self.quantity_type == 'concentration':
-                subA4={'type': 'cn', 'name': 'ObjectCN', 'value': str(item['cn'])+',Reference=InitialConcentration'}
-            else:
-                subA4={'type': 'cn', 'name': 'ObjectCN', 'value': str(item['cn'])+',Reference=InitialParticleNumber'}
+        elif isinstance(component, model.GlobalQuantity):
+            subA4={'type': 'cn',  'name': 'ObjectCN',  'value': '{},{}'.format(self.model.reference,
+                                                                               component.initial_reference) }
 
-
-        elif item['simulationType']=='fixed' and item['type']=='ReactionParameter':
-            subA4={'type': 'cn', 'name': 'ObjectCN', 'value': str(item['cn'])+',Reference=Value'}
-
-        elif item['simulationType']=='assignment' and item['type']=='ModelValue':
-            return self.model
-
-        elif item['simulationType']=='fixed' and item['type']=='ModelValue':
-            subA4={'type': 'cn', 'name': 'ObjectCN', 'value': str(item['cn'])+',Reference=InitialValue'}
-
-        elif item['simulationType']=='assignment' and item['type']=='Species':
-            return self.model
-
-        elif item['simulationType']=='fixed' and item['type']=='Species':
-            return self.model
         else:
             raise Errors.InputError('{} is not a valid parameter for estimation'.format(list(item)))
-        etree.SubElement(new_element,'Parameter',attrib=subA4)
 
-        query='//*[@name="OptimizationItemList"]'
-        for i in self.model.xml.xpath(query):
-            i.append(new_element)
+        ## add element
+        etree.SubElement(new_element, 'Parameter', attrib=subA4)
+
+        ##insert fit item
+
+        ## TODO change this query to specifically target ParameterEstimation and not other elements
+        list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
+        parameter_est = self.model.xml.find(list_of_tasks)[5]
+        problem = parameter_est[1]
+        ## TODO add support for OptimizationConstraintList --> problem[4]
+        assert problem.tag == '{http://www.copasi.org/static/schema}Problem'
+        optimization_item_list = problem[3]
+        assert optimization_item_list.attrib.values()[0] == 'OptimizationItemList'
+        optimization_item_list.append(new_element)
         return self.model
 
     def insert_all_fit_items(self):
@@ -3064,10 +3078,10 @@ class ParameterEstimation(_base._ModelBase):
         into the model
         :return:
         """
-        parameter_list= list(self.read_item_file().index)
-        for i in parameter_list:
-            assert i!='nan'
-            self.model=self.add_fit_item(i)
+        for row in range(self.read_config_file().shape[0]):
+            assert row != 'nan'
+            ## feed each item from the config file into add_fit_item
+            self.model = self.add_fit_item(self.read_config_file().iloc[row])
         return self.model
 
 
@@ -3234,6 +3248,13 @@ class ParameterEstimation(_base._ModelBase):
                         elif k.attrib['name']=='Create Parameter Sets':
                             k.attrib.update(create_parameter_sets)
         return self.model
+
+    def run(self):
+        """
+        Run the parameter estimation using the Run class
+        :return:
+        """
+        Run(self.model, mode= False, task='parameter_estimation')
 
 
 

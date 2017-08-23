@@ -23,8 +23,11 @@
 """
 
 import site
-site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
+# site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
+site.addsitedir('/home/b3053674/Documents/PyCoTools')
+
 import PyCoTools
+
 from PyCoTools.Tests import _test_base
 import os, glob
 import pandas
@@ -67,10 +70,10 @@ class TestMetabolites(_test_base._BaseTest):
         self.assertEqual(self.A.compartment, self.nucleus)
 
     def test_reference_initial(self):
-        self.assertEqual(self.A.reference_initial, 'Vector=Metabolites[A],Reference=InitialConcentration')
+        self.assertEqual(self.A.initial_reference, 'Vector=Metabolites[A],Reference=InitialConcentration')
 
     def test_reference_transient(self):
-        self.assertEqual(self.A.reference_transient, 'Vector=Metabolites[A],Reference=Concentration')
+        self.assertEqual(self.A.transient_reference, 'Vector=Metabolites[A],Reference=Concentration')
 
     def test_particle_numbers(self):
         A = PyCoTools.model.Metabolite(particle_number=10e23, compartment=self.nucleus)
