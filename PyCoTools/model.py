@@ -94,8 +94,19 @@ class Model(_base._Base):
 
     @property
     def avagadro(self):
+        """
+        Not really needed but good to check
+        consistancy of avagadros number.
+            **since the number was changed
+              between version 16 and 19
+        :return: numeric
+        """
         query = '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
-        return float(self.xml.xpath(query)[0].attrib['avogadroConstant'])
+        avagadro_from_model = float(self.xml.xpath(query)[0].attrib['avogadroConstant'])
+        avagadros_from_version19 = 6.022140857e+23
+        if avagadro_from_model != avagadros_from_version19:
+            raise Errors.AvagadrosError('Avagadro from model {} is not equal to {}. Check to see whether COPASI have updated the value of avagadro\'s number'.format(avagadro_from_model, avagadros_from_version19))
+        return avagadro_from_model
 
     @property
     def key(self):
@@ -127,6 +138,7 @@ class Model(_base._Base):
         state_values = [float(i) for i in state_values]
         return  dict(zip(collection, state_values))
 
+    @property
     def compartments(self):
         """
         Get dict of compartments. dict[compartment_name] = corresponding xml code as nested dict
@@ -137,9 +149,8 @@ class Model(_base._Base):
             if  i.tag == '{http://www.copasi.org/static/schema}ListOfCompartments':
                 df_list = []
                 for j in i:
-                    key, name, type, value = j.attrib.values()
-                    lst.append(Compartment(key=key, name=name, type=type, value=float(value)))
-        # return pandas.concat([i.as_df() for i in lst], axis=1)
+                    key, name, type, dimensionality = j.attrib.values()
+                    lst.append(Compartment(key=key, name=name, type=type, value=float(self.states[key])) )
         return lst
 
     @property
@@ -151,8 +162,61 @@ class Model(_base._Base):
         """
         m = [i.name for i in self.metabolites]
         g = [i.name for i in self.global_quantities]
-        l = [i.name for i in self.local_parameters.values()]
+        l = [i.global_name for i in self.local_parameters]
         return m + g + l
+
+    @staticmethod
+    def convert_particles_to_molar(particles, mol_unit, compartment_volume):#,vol_unit):
+        '''
+        Converts particle numbers to Molarity.
+        particles=number of particles you want to convert
+        mol_unit=one of, 'fmol, pmol, nmol, umol, mmol or mol'
+        '''
+        mol_dct={
+            'fmol':1e-15,
+            'pmol':1e-12,
+            'nmol':1e-9,
+            u'\xb5mol':1e-6,
+            'mmol':1e-3,
+            'mol':float(1),
+            'dimensionless':float(1),
+            '#':float(1)}
+        mol_unit_value=mol_dct[mol_unit]
+        avagadro=6.022140857e+23
+        molarity=float(particles)/(avagadro*mol_unit_value*compartment_volume)
+        if mol_unit=='dimensionless':
+            molarity=float(particles)
+        if mol_unit=='#':
+            molarity=float(particles)
+        return molarity
+
+    @staticmethod
+    def convert_molar_to_particles(moles, mol_unit, compartment_volume):
+        '''
+        Converts particle numbers to Molarity.
+        particles=number of particles you want to convert
+        mol_unit=one of, 'fmol, pmol, nmol, umol, mmol or mol'
+        '''
+        if isinstance(compartment_volume,(float,int))!=True:
+            raise Errors.InputError('compartment_volume is the volume of the compartment for species and must be either a float or a int')
+
+        mol_dct={
+            'fmol':1e-15,
+            'pmol':1e-12,
+            'nmol':1e-9,
+            u'\xb5mol':1e-6,
+            'mmol':1e-3,
+            'mol':float(1),
+            'dimensionless':1,
+            '#':1}
+        mol_unit_value=mol_dct[mol_unit]
+        avagadro=6.022140857e+23
+        particles=float(moles)*avagadro*mol_unit_value*compartment_volume
+        if mol_unit=='dimensionless':# or '#':
+            particles=float(moles)
+        if mol_unit=='#':
+            particles=float(moles)
+        return particles
 
     @property
     def metabolites(self):
@@ -161,21 +225,21 @@ class Model(_base._Base):
         :return: Metabolite
         name, compartment, key, conc, particle
         """
+        ## TODO Fix the bug where metabolites are being assigned to the wrong compartment
         collection = {}
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfMetabolites':
                 for j in i:
                     collection[j.attrib['key']] = dict(j.attrib)
 
-
         for key in collection:
             collection[key]['particle_number'] = self.states[key]
 
-
         keys = [collection[metab]['compartment'] for metab in collection]
+        # print self.compartments
         comp_dct = {}
         for key in keys:
-            comp_dct[key] = [i for i in self.compartments()  if i.key==key][0]
+            comp_dct[key] = [i for i in self.compartments if i.key == key][0]
 
         for key in collection:
             comp_key = collection[key]['compartment']
@@ -184,9 +248,12 @@ class Model(_base._Base):
         lst = []
         for key in collection:
             lst.append(Metabolite(name=collection[key]['name'],
-                            compartment=collection[key]['compartment'],
-                            key=collection[key]['key'],
-                            particle_number=collection[key]['particle_number']) )
+                                  compartment=collection[key]['compartment'],
+                                  key=collection[key]['key'],
+                                  particle_number=collection[key]['particle_number'],
+                                  concentration=self.convert_particles_to_molar(
+                                      collection[key]['particle_number'], self.quantity_unit, collection[key]['compartment'].value),
+                                  simulation_type=collection[key]['simulationType']))
 
         return lst
 
@@ -231,7 +298,7 @@ class Model(_base._Base):
         for key in model_values:
             lst.append(GlobalQuantity(name=model_values[key]['name'],
                                       key=model_values[key]['key'],
-                                      type=model_values[key]['simulationType'],
+                                      simulation_type=model_values[key]['simulationType'],
                                       value=model_values[key]['value']))
         return lst
 
@@ -253,14 +320,12 @@ class Model(_base._Base):
                         assert match !=[]
                         assert len(match)==2
                         match_key='({}).{}'.format(match[0],match[1])
-                        ## copy to new variable just incase
-                        ## this messes with the xml when I
-                        ## write to file
-                        results_dict = deepcopy(k.attrib)
-                        results_dict['reaction_name']=match[0]
-                        results_dict['name'] = match[1]
-                        del results_dict['cn']
-                        d[match_key]=results_dict
+                        attributes = {'reaction_name':match[0],
+                                      'name': match[1],
+                                      'value': k.attrib['value'],
+                                      'simulation_type': k.attrib['simulationType'],
+                                      'parameter_type': k.attrib['type']}
+                        d[match_key]=attributes
 
         lst = []
         for param in d:
@@ -377,7 +442,7 @@ class Compartment(_base._Base):
 
 
     def __str__(self):
-        return 'Compartment({})'.format(self.as_string())
+        return 'Compartment({})'.format(self.to_string())
 
     def __repr__(self):
         return self.__str__()
@@ -411,7 +476,7 @@ class Compartment(_base._Base):
 
 
     def __str__(self):
-        return 'Compartment({})'.format(self.as_string())
+        return 'Compartment({})'.format(self.to_string())
 
     def __repr__(self):
         return self.__str__()
@@ -449,7 +514,8 @@ class Metabolite(_base._Base):
                              'particle_number':None,
                              'concentration':None,
                              'stoiciometry':None,
-                             'reaction_key':None
+                             'reaction_key':None,
+                             'simulation_type':None,
                              }
 
         for key in kwargs:
@@ -460,7 +526,7 @@ class Metabolite(_base._Base):
         self._do_checks()
 
     def __str__(self):
-        return 'Metabolite({})'.format(self.as_string())
+        return 'Metabolite({})'.format(self.to_string())
 
     def __repr__(self):
         return self.__str__()
@@ -516,60 +582,6 @@ class Metabolite(_base._Base):
         """
         return 'Vector=Metabolites[{}],Reference=ParticleNumber'.format(self.name)
 
-
-    @staticmethod
-    def convert_particles_to_molar(particles, mol_unit, compartment_volume):#,vol_unit):
-        '''
-        Converts particle numbers to Molarity.
-        particles=number of particles you want to convert
-        mol_unit=one of, 'fmol, pmol, nmol, umol, mmol or mol'
-        '''
-        mol_dct={
-            'fmol':1e-15,
-            'pmol':1e-12,
-            'nmol':1e-9,
-            u'\xb5mol':1e-6,
-            'mmol':1e-3,
-            'mol':float(1),
-            'dimensionless':float(1),
-            '#':float(1)}
-        mol_unit_value=mol_dct[mol_unit]
-        avagadro=6.02214179e+023
-        molarity=float(particles)/(avagadro*mol_unit_value*compartment_volume)
-        if mol_unit=='dimensionless':
-            molarity=float(particles)
-        if mol_unit=='#':
-            molarity=float(particles)
-        return round(molarity,33)
-
-    @staticmethod
-    def convert_molar_to_particles(moles, mol_unit, compartment_volume):
-        '''
-        Converts particle numbers to Molarity.
-        particles=number of particles you want to convert
-        mol_unit=one of, 'fmol, pmol, nmol, umol, mmol or mol'
-        '''
-        if isinstance(compartment_volume,(float,int))!=True:
-            raise Errors.InputError('compartment_volume is the volume of the compartment for species and must be either a float or a int')
-
-        mol_dct={
-            'fmol':1e-15,
-            'pmol':1e-12,
-            'nmol':1e-9,
-            u'\xb5mol':1e-6,
-            'mmol':1e-3,
-            'mol':float(1),
-            'dimensionless':1,
-            '#':1}
-        mol_unit_value=mol_dct[mol_unit]
-        avagadro=6.02214179e+023
-        particles=float(moles)*avagadro*mol_unit_value*compartment_volume
-        if mol_unit=='dimensionless':# or '#':
-            particles=float(moles)
-        if mol_unit=='#':
-            particles=float(moles)
-        return particles
-
     def to_substrate(self):
         return Substrate(**self.kwargs)
 
@@ -590,7 +602,7 @@ class Substrate(Metabolite):
 
         :return:
         """
-        return 'Substrate({})'.format(self.as_string())
+        return 'Substrate({})'.format(self.to_string())
 
 
     def __repr__(self):
@@ -610,7 +622,7 @@ class Product(Metabolite):
 
         :return:
         """
-        return 'Product({})'.format(self.as_string())
+        return 'Product({})'.format(self.to_string())
 
     def __repr__(self):
         return self.__str__()
@@ -634,11 +646,10 @@ class GlobalQuantity(_base._Base):
     def __init__(self, **kwargs):
         super(GlobalQuantity, self).__init__(**kwargs)
 
-        self.allowed_properties = {'name':None,
-                        'key':None,
-                        'type':None,
-                        'value':None,
-                        }
+        self.allowed_properties = {'name': None,
+                                   'key': None,
+                                   'simulation_type': None,
+                                   'value': None}
 
         for key in kwargs:
             if key not in self.allowed_properties:
@@ -648,17 +659,17 @@ class GlobalQuantity(_base._Base):
         self._do_checks()
 
     def _do_checks(self):
-        if self.type not in ['fixed','assignment']:
+        if self.simulation_type not in ['fixed','assignment']:
             raise Errors.InputError('type should be either fixed or assignment. ODE not supported as Reactions can be used.')
 
-        if self.type == 'assignment':
+        if self.simulation_type == 'assignment':
             Errors.NotImplementedError('Assignments not yet implemented')
 
         if self.name == None:
             raise Errors.InputError('name property cannot be None')
 
     def __str__(self):
-        return 'GlobalQuantity({})'.format(self.as_string())
+        return 'GlobalQuantity({})'.format(self.to_string())
 
     def __repr__(self):
         return self.__str__()
@@ -707,7 +718,7 @@ class Reaction(_base._Base):
         self.update_properties(self.allowed_properties)
 
     def __str__(self):
-        return 'Reaction({})'.format(self.as_string())
+        return 'Reaction({})'.format(self.to_string())
 
     def __repr__(self):
         return self.__str__()
@@ -758,7 +769,7 @@ class Function(_base._Base):
         self.update_properties(self.allowed_properties)
 
     def __str__(self):
-        return 'Function({})'.format(self.as_string())
+        return 'Function({})'.format(self.to_string())
 
     def __repr__(self):
         return self.__str__()
@@ -767,11 +778,11 @@ class LocalParameter(_base._Base):
     def __init__(self, **kwargs):
         super(LocalParameter, self).__init__(**kwargs)
         self.allowed_properties = {'name':None,
-                        'key':None,
-                        'value':None,
-                        'simulationType':None,
-                        'type':None,
-                        'reaction_name': None}
+                                   'key':None,
+                                   'value':None,
+                                   'simulation_type':None,
+                                   'parameter_type':None,
+                                   'reaction_name': None}
 
 
         for key in self.kwargs:
@@ -780,17 +791,18 @@ class LocalParameter(_base._Base):
         self.update_properties(self.allowed_properties)
 
     def __str__(self):
-        return 'LocalParameter({})'.format(self.as_string())
+        return 'LocalParameter({})'.format(self.to_string())
 
     def __repr__(self):
         return self.__str__()
 
     @property
     def reference(self):
-        return ",Vector=Reactions[{}],ParameterGroup=Parameters,Parameter={},Reference=Value".format(self.reaction_name, self.name)
+        return "Vector=Reactions[{}],ParameterGroup=Parameters,Parameter={},Reference=Value".format(self.reaction_name, self.name)
 
-    # def to_element(self):
-    #     pass
+    @property
+    def global_name(self):
+        return '({}).{}'.format(self.reaction_name, self.name)
 
 
 

@@ -50,7 +50,7 @@ class _Base(object):
     def __repr__(self):
         return self.__str__()
 
-    def as_string(self):
+    def to_string(self):
         """
         Produce kwargs as string format for using in __str__ methods
         in subclasses.
@@ -72,7 +72,7 @@ class _Base(object):
         string = ','.join(str_list)
         return string.replace(',', ', ')
 
-    def as_df(self):
+    def to_df(self):
         """
         Convert kwargs to 1D df
         :return: pandas.DataFrame
@@ -82,7 +82,7 @@ class _Base(object):
         # df = df.drop('key', index=1)
         return df
 
-    def as_dict(self):
+    def to_dict(self):
         """
         get kwargs as dictionary
         :return: dict

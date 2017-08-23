@@ -24,8 +24,11 @@
 
 import site
 
-site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
+# site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
+site.addsitedir('/home/b3053674/Documents/PyCoTools')
+
 import PyCoTools
+
 from PyCoTools.model import Compartment
 from PyCoTools.Tests import _test_base
 import os, glob
