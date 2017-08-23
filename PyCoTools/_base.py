@@ -171,6 +171,9 @@ class _Base(object):
                'update_model',
                'output_in_subtask',
                'adjust_initial_conditions',
+               'create_parameter_sets',
+               'calculate_statistics',
+               'randomize_start_values',
                ]
         for k, v in dct.items():
             if k in lst:

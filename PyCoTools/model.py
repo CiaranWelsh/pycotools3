@@ -262,10 +262,10 @@ class Model(_base._Base):
                         del results_dict['cn']
                         d[match_key]=results_dict
 
-        dct = {}
+        lst = []
         for param in d:
-            dct[param] = LocalParameter(**d[param])
-        return dct
+            lst.append(LocalParameter(**d[param]) )
+        return lst
 
     @property
     def functions(self):
