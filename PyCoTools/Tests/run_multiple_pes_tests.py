@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# -*- coding: utf-8 -*-
 '''
  This file is part of PyCoTools.
 
@@ -28,8 +27,8 @@ Date:
 
 import pickle
 import site
-#site.addsitedir('/home/b3053674/Documents/PyCoTools')
-site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
+site.addsitedir('/home/b3053674/Documents/PyCoTools')
+# site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
 import PyCoTools
 from PyCoTools.PyCoToolsTutorial import test_models
 import unittest
@@ -37,97 +36,123 @@ import glob
 import os
 import shutil 
 import pandas
-from PyCoTools.Tests import base_tests
+from PyCoTools.Tests import _test_base
 
 
 
 
 
-class RunMultiplePETests(base_tests._MultiParameterEstimationBase):
+class MultiParameterEstimationTests(_test_base._BaseTest):
     def setUp(self):
-        super(RunMultiplePETests, self).setUp()
-        
+        super(MultiParameterEstimationTests, self).setUp()
 
-    def test_output_directory(self):
+        self.TC1 = PyCoTools.pycopi.TimeCourse(self.model, end=1000, step_size=100,
+                                               intervals=10, report_name='report1.txt')
 
-        self.assertTrue(os.path.isdir(self.RMPE.kwargs['results_directory']))
+        ## add some noise
+        data1 = PyCoTools.Misc.add_noise(self.TC1.report_name)
 
-    def test_report_files(self):
-        self.assertEqual(len(self.RMPE.report_files.items()),self.RMPE.kwargs['copy_number'])
+        ## remove the data
+        os.remove(self.TC1.report_name)
 
-    def test_write_config_file(self):
-        """
-        Test that RMPE produces a config file
-        :return:
-        """
-        self.RMPE.write_config_template()
-        self.assertTrue(os.path.isfile(self.RMPE.kwargs['config_filename']))
+        ## rewrite the data with noise
+        data1.to_csv(self.TC1.report_name, sep='\t')
+
+        self.MPE = PyCoTools.pycopi.MultiParameterEstimation(self.model,
+                                                       self.TC1.report_name,
+                                                       method='genetic_algorithm',
+                                                       population_size=10,
+                                                       number_of_generations=10)
+        self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
+
+    def test(self):
+        print self.MPE.item_template
+
+#     def test_output_directory(self):
+#         self.assertTrue(os.path.isdir(self.MPE.results_directory))
 #
+#     def test_report_files(self):
+#         self.assertEqual(len(self.MPE.report_files.items()),
+#                          self.MPE.copy_number)
+#
+#     def test_write_config_file(self):
+#         """
+#         Test that RMPE produces a config file
+#         :return:
+#         """
+#         self.MPE.write_config_file()
+#         self.assertTrue(os.path.isfile(self.MPE.config_filename))
+# #
     def test_write_config_file2(self):
         """
         test that you can change the name of the config file
         :return:
         """
         new_filename=os.path.join(os.getcwd(),'Newconfig_filename.xlsx')
-        self.options.update({'config_filename':new_filename})
-        self.RMPE = PyCoTools.pycopi.RunMultiplePEs(self.copasi_file,
-                                                    self.RMPE.experiment_files,
-                                                    **self.options)
-        if self.RMPE.kwargs['config_filename'] != new_filename:
+
+        self.MPE = PyCoTools.pycopi.MultiParameterEstimation(self.copasi_file,
+                                                    self.MPE.experiment_files,
+                                                    config_filename=new_filename)
+
+        if self.MPE.config_filename != new_filename:
             raise PyCoTools.Errors.InputError('config_filename argument was not changed')
-        self.RMPE.write_config_template()
-        self.assertTrue(os.path.isfile(self.RMPE.kwargs['config_filename']))
+        self.MPE.write_config_file()
+        self.assertTrue(os.path.isfile(self.MPE.config_filename))
+        self.model = self.MPE.setup()
+        self.model.save()
+    #
 
-    def test_number_of_copasi_files(self):
-        """
-        make sure we have the correct number of files
-        :return:
-        """
-        num = self.RMPE['copy_number']
-        self.assertEqual(len(self.RMPE.sub_copasi_files), num)
 
-    def test_scan(self):
-        """
-        ensure scan item is correctly set up on each of the sub copasi files
-        :return:
-        """
-        first_model = self.RMPE.sub_copasi_files[0]
-        query='//*[@name="ScanItems"]'
-        copasiML = PyCoTools.pycopi.CopasiMLParser(first_model).copasiML
-        for i in copasiML.xpath(query):
-            for j in list(i):
-                for k in list(j):
-                    if k.attrib['name'] == 'Number of steps':
-                        self.assertEqual(int(k.attrib['value']) , self.RMPE['pe_number'])
-        
-    def test_pickle_path(self):
-        """
-        Test that the pickle path is created
-        :return:
-        """
-        self.RMPE.write_config_template()
-        self.RMPE.setup()
-        self.assertTrue(os.path.isfile(self.RMPE.copasi_file_pickle))
+    # def test_number_of_copasi_files(self):
+    #     """
+    #     make sure we have the correct number of files
+    #     :return:
+    #     """
+    #     num = self.MPE.copy_number
+    #     self.assertEqual(len(self.MPE.sub_copasi_files), num)
+    #
+    # def test_scan(self):
+    #     """
+    #     ensure scan item is correctly set up on each of the sub copasi files
+    #     :return:
+    #     """
+    #     first_model = self.MPE.sub_copasi_files[0]
+    #     query='//*[@name="ScanItems"]'
+    #     new_xml = PyCoTools.pycopi.CopasiMLParser(first_model).copasiML
+    #     for i in new_xml.xpath(query):
+    #         for j in list(i):
+    #             for k in list(j):
+    #                 if k.attrib['name'] == 'Number of steps':
+    #                     self.assertEqual(int(k.attrib['value']) , self.MPE.pe_number)
 
-    def test_pickle_contents(self):
-        """
-        Test that the pickle file has the correct number of
-        copasi files as contents
-        :return:
-        """
+    # def test_pickle_path(self):
+    #     """
+    #     Test that the pickle path is created
+    #     :return:
+    #     """
+    #     self.RMPE.write_config_template()
+    #     self.RMPE.setup()
+    #     self.assertTrue(os.path.isfile(self.RMPE.copasi_file_pickle))
 
-        self.RMPE.write_config_template()
-        self.RMPE.setup()
-        with open(self.RMPE.copasi_file_pickle) as f:
-            copasi_dict = pickle.load(f)
-        self.assertEqual(int(self.RMPE.kwargs['copy_number']), len(copasi_dict.items()))
-
-    def test_total_number_of_PE(self):
-        """
-        test that the total number of PEs = copy_number*pe_number
-        :return:
-        """
-        self.assertEqual(self.data.shape[0], self.RMPE['copy_number']*self.RMPE['pe_number'] )
+#     def test_pickle_contents(self):
+#         """
+#         Test that the pickle file has the correct number of
+#         copasi files as contents
+#         :return:
+#         """
+#
+#         self.RMPE.write_config_template()
+#         self.RMPE.setup()
+#         with open(self.RMPE.copasi_file_pickle) as f:
+#             copasi_dict = pickle.load(f)
+#         self.assertEqual(int(self.RMPE.kwargs['copy_number']), len(copasi_dict.items()))
+#
+#     def test_total_number_of_PE(self):
+#         """
+#         test that the total number of PEs = copy_number*pe_number
+#         :return:
+#         """
+#         self.assertEqual(self.data.shape[0], self.RMPE['copy_number']*self.RMPE['pe_number'] )
 
 
 if __name__=='__main__':

@@ -324,7 +324,8 @@ class Model(_base._Base):
                                       'name': match[1],
                                       'value': k.attrib['value'],
                                       'simulation_type': k.attrib['simulationType'],
-                                      'parameter_type': k.attrib['type']}
+                                      'parameter_type': k.attrib['type'],
+                                      'global_name': match_key}
                         d[match_key]=attributes
 
         lst = []
@@ -782,12 +783,15 @@ class LocalParameter(_base._Base):
                                    'value':None,
                                    'simulation_type':None,
                                    'parameter_type':None,
-                                   'reaction_name': None}
+                                   'reaction_name': None,
+                                   'global_name': None}
+                                   # 'global_name': '({}).{}'.format(self.reaction_name,
+                                   #                                 self.name)}
 
 
         for key in self.kwargs:
             if key not in self.allowed_properties:
-                raise Errors.InputError('{} not in {}'.format(key, self.allowed_properties.keys()))
+                raise Errors.InputError('{} not in {}'.format(key, allowed_properties))
         self.update_properties(self.allowed_properties)
 
     def __str__(self):
@@ -799,10 +803,6 @@ class LocalParameter(_base._Base):
     @property
     def reference(self):
         return "Vector=Reactions[{}],ParameterGroup=Parameters,Parameter={},Reference=Value".format(self.reaction_name, self.name)
-
-    @property
-    def global_name(self):
-        return '({}).{}'.format(self.reaction_name, self.name)
 
 
 
