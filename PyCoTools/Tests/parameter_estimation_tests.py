@@ -27,8 +27,8 @@ Date:
 '''
 
 import site
-#site.addsitedir('/home/b3053674/Documents/PyCoTools')
-site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
+site.addsitedir('/home/b3053674/Documents/PyCoTools')
+# site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
 import PyCoTools
 from PyCoTools.PyCoToolsTutorial import test_models
 import unittest
@@ -36,66 +36,81 @@ import glob
 import os
 import shutil 
 import pandas
-from PyCoTools.Tests import base_tests
+from PyCoTools.Tests import _test_base
 
 
 
-class ParameterEstimationTests(base_tests._ParameterEstimationBase):
-
+class ParameterEstimationTests(_test_base._BaseTest):
     def setUp(self):
         super(ParameterEstimationTests, self).setUp()
 
-            
+        self.TC1 = PyCoTools.pycopi.TimeCourse(self.model, end=1000, step_size=100,
+                                              intervals=10, report_name='report1.txt')
 
-    def test_write_config_template(self):
-        '''
-        testthat the item file template is written
-        '''
-        self.PE.write_config_template()
-        self.assertTrue(os.path.isfile(self.PE['config_filename'] )  )
-        
+        ## add some noise
+        data1 = PyCoTools.Misc.add_noise(self.TC1.report_name)
 
-    def test_insert_fit_items(self):
-        '''
-        Tests that there are the same number of rows in the template file 
-        as there are fit items inserted into copasi
-        '''
-        self.PE.write_config_template()
-        self.PE.copasiML=self.PE.remove_all_fit_items()
-        self.PE.copasiML= self.PE.insert_all_fit_items()
-        num_fit_items= self.PE.read_item_template().shape[0]
-        self.assertEqual(num_fit_items, len(self.PE.get_fit_items()))
+        ## remove the data
+        os.remove(self.TC1.report_name)
 
-    def test_set_PE_method(self):
-        '''
-        test to see if method has been properly inserted into the copasi file
-        '''
-        self.PE.write_config_template()
-        self.PE.setup()
-        
-        tasks=self.PE.copasiML.find('{http://www.copasi.org/static/schema}ListOfTasks')
-        for i in tasks:
-            if i.attrib['name']=='Parameter Estimation':
-                self.assertEqual(i[-1].attrib['type'].lower(),self.parameter_estimation_options['method'].lower())
+        ## rewrite the data with noise
+        data1.to_csv(self.TC1.report_name, sep='\t')
+
+        self.PE = PyCoTools.pycopi.ParameterEstimation(self.model,
+                                                       self.TC1.report_name)
+
+    def test(self):
+        print self.PE.write_config_file()
+
+#     def test_write_config_template(self):
+#         '''
+#         testthat the item file template is written
+#         '''
+#         self.PE.write_config_template()
+#         self.assertTrue(os.path.isfile(self.PE['config_filename'] )  )
 #
-    def test_set_PE_options(self):
-        self.PE.write_config_template()
-        self.PE.setup()
-
-
-        tasks=self.PE.copasiML.find('{http://www.copasi.org/static/schema}ListOfTasks')
-        for i in tasks:
-            if i.attrib['name']=='Parameter Estimation':
-                self.assertEqual(i.attrib['scheduled'],'true')
-                
-    def test_results_folder(self):
-        """
-        
-        """
-        self.PE.write_config_template()
-        self.PE.setup()
-        self.PE.run()
-        self.assertTrue(os.path.isdir(self.PE['results_directory']) )
+#
+#     def test_insert_fit_items(self):
+#         '''
+#         Tests that there are the same number of rows in the template file
+#         as there are fit items inserted into copasi
+#         '''
+#         self.PE.write_config_template()
+#         self.PE.copasiML=self.PE.remove_all_fit_items()
+#         self.PE.copasiML= self.PE.insert_all_fit_items()
+#         num_fit_items= self.PE.read_item_template().shape[0]
+#         self.assertEqual(num_fit_items, len(self.PE.get_fit_items()))
+#
+#     def test_set_PE_method(self):
+#         '''
+#         test to see if method has been properly inserted into the copasi file
+#         '''
+#         self.PE.write_config_template()
+#         self.PE.setup()
+#
+#         tasks=self.PE.copasiML.find('{http://www.copasi.org/static/schema}ListOfTasks')
+#         for i in tasks:
+#             if i.attrib['name']=='Parameter Estimation':
+#                 self.assertEqual(i[-1].attrib['type'].lower(),self.parameter_estimation_options['method'].lower())
+# #
+#     def test_set_PE_options(self):
+#         self.PE.write_config_template()
+#         self.PE.setup()
+#
+#
+#         tasks=self.PE.copasiML.find('{http://www.copasi.org/static/schema}ListOfTasks')
+#         for i in tasks:
+#             if i.attrib['name']=='Parameter Estimation':
+#                 self.assertEqual(i.attrib['scheduled'],'true')
+#
+#     def test_results_folder(self):
+#         """
+#
+#         """
+#         self.PE.write_config_template()
+#         self.PE.setup()
+#         self.PE.run()
+#         self.assertTrue(os.path.isdir(self.PE['results_directory']) )
         
         
 if __name__=='__main__':

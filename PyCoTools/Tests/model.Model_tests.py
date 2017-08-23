@@ -24,7 +24,9 @@ Module that tests the operations of the _Base base test
 """
 
 import site
-site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
+# site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
+site.addsitedir('/home/b3053674/Documents/PyCoTools')
+
 import PyCoTools
 from PyCoTools.Tests import _test_base
 import os, glob
@@ -89,7 +91,7 @@ class ModelTests(_test_base._BaseTest):
         [self.assertTrue(isinstance(i, PyCoTools.model.LocalParameter) ) for (j,i) in self.Model.local_parameters.items() ]
 
     def test_local_parameters3(self):
-        keys = self.Model.local_parameters.keys()
+        keys = [i.name for i in self.Model.local_parameters]
         keys_in_local_parameters = sorted(['reaction_name', 'name', 'value', 'simulationType', 'kwargs', 'type',
                                            'allowed_properties', 'key'])
         # self.assertListEqual(sorted(self.Model.local_parameters[keys[0]].__dict__.keys(), keys_in_local_parameters  )  )
