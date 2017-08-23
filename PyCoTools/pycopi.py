@@ -693,7 +693,8 @@ class TimeCourse(_base._ModelBase):
                                    'runge_kutta_step_size': 0.001,
                                    'run': True,
                                    'plot': False,
-                                   'correct_headers':  True}
+                                   'correct_headers':  True,
+                                   'save': False}
 
         self.convert_bool_to_numeric(self.default_properties)
         self.update_properties(self.default_properties)
@@ -706,6 +707,9 @@ class TimeCourse(_base._ModelBase):
 
         self.run_task()
         self.correct_output_headers()
+
+        if self.save:
+            self.model.save()
 
     def correct_output_headers(self):
         """
@@ -1299,13 +1303,13 @@ class Scan(_base._ModelBase):
                                    'scan_type': 'scan',
                                    # scan object specific (for scan and random_sampling scan_types)
                                    'scheduled': True,
-                                   'save': 'overwrite',
+                                   'save': False,
                                    'clear_scans': True,  # if true, will remove all scans present then add new scan
-                                   'run': False}
+                                   'run_mode': False}
 
         self.convert_bool_to_numeric(self.default_properties)
-        self.update_kwargs(self.default_properties)
         self.update_properties(self.default_properties)
+        self.update_kwargs(self.default_properties)
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
         self.do_checks()
 
@@ -1327,8 +1331,11 @@ class Scan(_base._ModelBase):
         self.model = self.define_report()
         self.model = self.create_scan()
         self.model = self.set_scan_options()
-        self.run()
 
+        if self.save:
+            self.model.save()
+
+        self.run()
 
     def do_checks(self):
         """
@@ -1621,7 +1628,8 @@ class ExperimentMapper(_base._ModelBase):
                                  'separator': ['\t']*len(self.experiment_files),
                                  'weight_method': ['mean_squared']*len(self.experiment_files),
                                  'threshold': [5]*len(self.experiment_files),
-                                 'weight': [1]*len(self.experiment_files) }
+                                 'weight': [1]*len(self.experiment_files) ,
+                                 'save': False}
 
         self.convert_bool_to_numeric(self.default_properties)
         self.update_kwargs(self.default_properties)
@@ -1633,9 +1641,9 @@ class ExperimentMapper(_base._ModelBase):
         #run the experiment mapper
         self.model = self.map_experiments()
 
-        #save the copasi file
-        # if self.kwargs.get('save')!=False:
-        #     self.save()
+        if self.save:
+            self.model.save()
+
 
     def do_checks(self):
         """
@@ -2497,26 +2505,8 @@ class ParameterEstimation(_base._ModelBase):
                                    'scheduled': False,
                                    'lower_bound': 0.000001,
                                    'upper_bound': 1000000,
-                                   'start_value': 0.1}
-                                   # 'plot': False,
-                                   # 'results_directory': os.path.join(
-                                   #     os.path.dirname(
-                                   #         self.model.copasi_file),
-                                   #                                   'ParameterEstimationPlots'),
-                                   # 'font_size': 22,
-                                   # 'axis_size': 15,
-                                   # 'extra_title': None,
-                                   # 'line_width': 3,
-                                   # 'show': False,
-                                   # 'savefig': False,
-                                   # 'title_wrap_size': 30,
-                                   # 'ylimit': None,
-                                   # 'xlimit': None,
-                                   # 'dpi': 125,
-                                   # 'xtick_rotation': 35,
-                                   # 'marker_size': 10,
-                                   # 'legend_loc': (1, 0),
-                                   # }
+                                   'start_value': 0.1,
+                                   'save':False}
 
 
         self.convert_bool_to_numeric(self.default_properties)
@@ -2526,6 +2516,9 @@ class ParameterEstimation(_base._ModelBase):
         self.do_checks()
 
         self._convert_numeric_arguments_to_string()
+
+        if self.save:
+            self.model.save()
 
     def __str__(self):
         return "ParameterEstimation({})".format(self.to_string())
@@ -2612,6 +2605,10 @@ class ParameterEstimation(_base._ModelBase):
         return kwargs_experiment
 
     def setup(self):
+        """
+        Setup a parameter estimation
+        :return:
+        """
         EM=ExperimentMapper(self.model, self.experiment_files, **self._experiment_mapper_args)
         self.model = EM.model
         self.model=self.define_report()
@@ -2621,7 +2618,6 @@ class ParameterEstimation(_base._ModelBase):
         self.model=self.insert_all_fit_items()
         assert self.model != None
         return self.model
-        # self.model=self.save()
 
     def _select_method(self):
         """
@@ -2904,7 +2900,7 @@ class ParameterEstimation(_base._ModelBase):
         :return: str. Path to config file
         """
         if (os.path.isfile(self.config_filename) == False) or (self.overwrite_config_file == True):
-            self.item_template().to_csv(self.config_filename)
+            self.item_template.to_csv(self.config_filename)
             LOG.debug(  'writing config template. {} set to {} and {} is {}'.format('overwrite_config_file',self.kwargs.get('overwrite_config_file'),'config_filename',self.kwargs.get('config_filename')))
         return self.config_filename
 
@@ -2938,9 +2934,8 @@ class ParameterEstimation(_base._ModelBase):
         global_params = self.model.global_quantities
         metabolites = self.model.metabolites
 
-
         for i,item in enumerate(local_params):
-            if item.name not in [j.name for j in self.local_parameters]:
+            if item.global_name not in [j.global_name for j in self.local_parameters]:
                 del local_params[i]
 
         for i,item in enumerate(global_params):
@@ -2966,6 +2961,7 @@ class ParameterEstimation(_base._ModelBase):
 
         metab = pandas.concat(df_list_metabolites, axis=1).transpose()
         lo = pandas.concat(df_list_local, axis=1).transpose()
+        print lo
         gl = pandas.concat(df_list_global, axis=1).transpose()
 
         gl = gl.rename(columns={'value': 'start_value'})
@@ -2976,13 +2972,13 @@ class ParameterEstimation(_base._ModelBase):
         if self.quantity_type == 'concentration':
             metab.drop('particle_number', axis=1, inplace=True)
             metab = metab.rename(columns={'concentration': 'start_value'})
-
         elif self.quantity_type == 'particle_number':
             metab.drop('concentration', axis=1, inplace=True)
             metab = metab.rename(columns={'particle_number': 'start_value'})
 
         gl = gl[['name', 'start_value']]
-        lo = lo[['name', 'start_value']]
+        lo = lo[['global_name', 'start_value']]
+        lo = lo.rename(columns={'global_name': 'name'})
         metab = metab[['name', 'start_value']]
         df = pandas.concat([gl, lo, metab], axis=0)
         df = df.set_index('name')
@@ -3266,130 +3262,36 @@ class ParameterEstimation(_base._ModelBase):
 
 
 
-class RunMultiplePEs():
+class MultiParameterEstimation(ParameterEstimation):
     '''
 
     '''
-    def __init__(self,copasi_file,experiment_files,**kwargs):
-        self.copasi_file=copasi_file
-        self.experiment_files=experiment_files
-        self.GMQ=GetModelQuantities(self.copasi_file)
+    ##TODO Merge ParameterEstimation ad Multi into 1.
+    def __init__(self,model,experiment_files,**kwargs):
+        super(MultiParameterEstimation, self).__init__(model, experiment_files, **kwargs)
+        self.copy_number = 1
+        self.pe_number = 1
+        self.run_mode = 'multiprocess'
+        self.results_directory = os.path.join(
+            os.path.dirname(
+                self.model.copasi_file), 'MultipleParameterEstimationResults')
 
-        if os.path.isfile(self.copasi_file)!=True:
-            raise Errors.InputError('{} doesn\'t exist'.format(self.copasi_file))
-        LOG.debug('Performing multi parameter fit for model at:\n{}'.format(self.copasi_file))
+        self.copasi_file_pickle = os.path.join(
+            os.path.dirname(
+                self.model.copasi_file), 'copasi_paths.pickle')
 
-        if isinstance(self.experiment_files, str):
-            self.experiment_files = [self.experiment_files]
-
-
-        ## Pickle file to store directories of sub copasi files
-        self.copasi_file_pickle=os.path.join(os.path.dirname(self.copasi_file),'sub_copasi_file.pickle')
-        default_results_directory = os.path.join(os.path.dirname(self.copasi_file),'MultipleParameterEstimationResults')
-        options={'run':'multiprocess',
-                 'results_directory':default_results_directory,
-                 'copy_number':1,
-                 'pe_number':3,
-                 'report_name':None,
-                 'metabolites':self.GMQ.get_IC_cns().keys(),
-                 'global_quantities':self.GMQ.get_global_quantities().keys(),
-                 'local_parameters': self.GMQ.get_local_kinetic_parameters_cns().keys(),
-                 'quantity_type':'concentration',
-                 'append': False,
-                 'confirm_overwrite': False,
-                 'config_filename':None,
-                 'overwrite_config_file':False,
-                 'prune_headers':True,
-                 'update_model':False,
-                 'randomize_start_values':True,
-                 'create_parameter_sets':False,
-                 'calculate_statistics':False,
-                 'use_config_start_values':False,
-                 #method options
-                 'method':'GeneticAlgorithm',
-                 #'DifferentialEvolution',
-                 'number_of_generations':200,
-                 'population_size':50,
-                 'random_number_generator':1,
-                 'seed':0,
-                 'pf':0.475,
-                 'iteration_limit':50,
-                 'tolerance':0.00001,
-                 'rho':0.2,
-                 'scale':10,
-                 'swarm_size':50,
-                 'std_deviation':0.000001,
-                 'number_of_iterations':100000,
-                 'start_temperature':1,
-                 'cooling_factor':0.85,
-                 #experiment definition options
-                 #need to include options for defining multiple experimental files at once
-                 'row_orientation':[True]*len(self.experiment_files),
-                 'experiment_type':['timecourse']*len(self.experiment_files),
-                 'first_row':[str(1)]*len(self.experiment_files),
-                 'normalize_weights_per_experiment':[True]*len(self.experiment_files),
-                 'row_containing_names':[str(1)]*len(self.experiment_files),
-                 'separator':['\t']*len(self.experiment_files),
-                 'weight_method':['mean_squared']*len(self.experiment_files),
-                 'save':'overwrite',
-                 'scheduled':False,
-                 'lower_bound':0.000001,
-                 'upper_bound':1000000,
-                 'plot':False,
-                 'output_in_subtask':False,
-                 'line_width':4,
-                 #graph features
-                 'font_size':22,
-                 'axis_size':15,
-                 'extra_title':None,
-                 'show':False,
-                 'savefig':False,
-                 'title_wrap_size':30,
-                 'ylimit':None,
-                 'xlimit':None,
-                 'dpi':125,
-                 'xtick_rotation':35,
-                 'marker_size':4,
-                 'legend_loc':'best'}
-
-
-
-
-        for key in kwargs.keys():
-            if key not in options.keys():
-                raise Errors.InputError('{} is not a keyword argument for RunMutliplePEs'.format(key))
-        options.update( kwargs)
-        self.kwargs=options
-#        self.kwargs = Bool2Str(self.kwargs).convert_dct()
-        self._do_checks()
-        self._create_defaults()
         self._create_output_directory()
-
-        ## create copy of kwargs and remove those that we do not wnt to pass to ParameterEstimation
-        self.PE_dct=deepcopy(self.kwargs)
-        del self.PE_dct['results_directory']
-        del self.PE_dct['copy_number']
-        del self.PE_dct['pe_number']
-        del self.PE_dct['run']
-        del self.PE_dct['output_in_subtask']
-
-
         self.report_files=self.enumerate_PE_output()
-        LOG.debug('Create an instance of ParameterEstimation')
-        self.PE=ParameterEstimation(self.copasi_file,self.experiment_files,**self.PE_dct)
+        self.output_in_subtask = True
 
-    def __getitem__(self,key):
-        if key not in self.kwargs.keys():
-            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
-        return self.kwargs[key]
-
-    def __setitem__(self,key,value):
-        self.kwargs[key] = value
+    def __str__(self):
+        return 'MultiParameterEstimation({})'.format(self.to_string())
 
     def format_results(self):
         """
         Copasi output does not have headers. This function
         gives PE data output headers
+        :return: list. Path to report files
         """
         try:
             cps_keys = self.sub_copasi_files.keys()
@@ -3407,43 +3309,45 @@ class RunMultiplePEs():
         return self.report_files
 
     def setup(self):
-        '''
+        """
         Analogous to the set_up method of the ParameterEstimation class but this time
         setup both the PE and Scan tasks
-        '''
+        :return:
+        """
 
-        self.PE.setup()
+        EM = ExperimentMapper(self.model, self.experiment_files, **self._experiment_mapper_args)
+        self.model = EM.model
+        self.model = self.define_report()
+        self.model = self.remove_all_fit_items()
+        self.model = self.set_PE_method()
+        self.model = self.set_PE_options()
+        self.model = self.insert_all_fit_items()
+        assert self.model != None
+        ## need to save before copy
+        self.model.save()
+        ## TODO modify copy copasi to write copasi. Since the change, we can simply write multiple coapsi files rather than copying
         self.sub_copasi_files=self.copy_copasi()
         self._setup_scan()
-
-
-
-    def set_up_dep(self):
-        '''
-        Analogous to the set_up method of the ParameterEstimation class but this time
-        setup both the PE and Scan tasks
-        '''
-        LOG.warning('set_up method is deprecated. Use setup() method instead')
-        self.PE.set_up()
-        self.sub_copasi_files=self.copy_copasi()
-        self._setup_scan()
+        return self.model
 
     def run(self):
-        '''
-        '''
+        """
+
+        :return:
+        """
         ##load cps from pickle in case run not being use straignt after set_up
-        if self.kwargs['run']=='SGE':
+        if self.run == 'SGE':
             try:
                 check_call('qhost')
             except Errors.NotImplementedError:
                 LOG.warning('Attempting to run in SGE mode but SGE specific commands are unavailable. Switching to \'multiprocess\' mode')
-                self.kwargs['run']='multiprocess'
+                self.run = 'multiprocess'
         if os.path.isfile(self.copasi_file_pickle):
             with open(self.copasi_file_pickle) as f:
                 self.sub_copasi_files=pickle.load(f)
         for i in self.sub_copasi_files:
             LOG.info('running model: {}'.format(i))
-            Run(self.sub_copasi_files[i],mode=self.kwargs['run'],task='scan')
+            Run(self.sub_copasi_files[i], mode=self.run_mode ,task='scan')
 
     def copy_copasi(self):
         '''
@@ -3453,29 +3357,19 @@ class RunMultiplePEs():
         returns:
             dict[model_number]=cps_file
         '''
-        LOG.debug('Copying copasi file {} times'.format(self.kwargs['copy_number']))
+        LOG.debug('Copying copasi file {} times'.format(self.copy_number))
         sub_copasi_files_dct={}
-        copasi_path,copasi_filename=os.path.split(self.copasi_file)
-        for i in range(1,self.kwargs['copy_number']):
+        copasi_path,copasi_filename=os.path.split(self.model.copasi_file)
+        for i in range(1,self.copy_number):
             new_cps=os.path.join(copasi_path,copasi_filename[:-4]+'_{}.cps'.format(str(i)))
             shutil.copy(self.copasi_file,new_cps)
             sub_copasi_files_dct[i]= new_cps
-        sub_copasi_files_dct[0]=self.copasi_file
+        sub_copasi_files_dct[0]=self.model.copasi_file
 
         with open(self.copasi_file_pickle,'w')as f:
             pickle.dump(sub_copasi_files_dct,f)
 
         return sub_copasi_files_dct
-
-    def write_config_file(self):
-        '''
-
-        '''
-        LOG.debug('writing PE config template for model: {}'.format(self.copasi_file))
-        LOG.debug('config_filename is {}'.format(self.PE.kwargs['config_filename']))
-        self.PE.write_config_file()
-        return self.PE['config_filename']
-
 
     ##void
     def _setup_scan(self):
@@ -3489,10 +3383,10 @@ class RunMultiplePEs():
         '''
 
         q=Queue.Queue()
-        for num in range(self.kwargs['copy_number']):
+        for num in range(self.copy_number):
             LOG.debug('setting up scan for model : {}'.format(self.sub_copasi_files[num]))
             t=threading.Thread(target=self._setup1scan,
-                               args =  (q,self.sub_copasi_files[num] , self.report_files[num])  )
+                               args =  (q, self.sub_copasi_files[num] , self.report_files[num])  )
             t.daemon=True
             t.start()
             time.sleep(0.1)
@@ -3502,6 +3396,7 @@ class RunMultiplePEs():
         ## we get process clashes. Not sure exactly whats going on
         ## but introducing a small delay seems to fix
         time.sleep(0.1)
+        return 0
 
 
 
@@ -3513,70 +3408,46 @@ class RunMultiplePEs():
 #        LOG.info('setting up scan for model number {}'.format(num))
         start=time.time()
         q.put(Scan(cps,
-             scan_type='repeat', #set up repeat item under scan.
-             number_of_steps=self.kwargs['pe_number'], #run the parameter estimation task 3 times
-             subtask='parameter_estimation', #this is the default, but included here for demonstration anyway
-             report_type='multi_parameter_estimation', ## report automatically set up within copasi.
+             scan_type='repeat',
+             number_of_steps=self.pe_number,
+             subtask='parameter_estimation',
+             report_type='multi_parameter_estimation',
              report_name=report,
-             run=False,#run the scan task automatically in the background
-             append = self.kwargs['append'],
-             confirm_overwrite = self.kwargs['confirm_overwrite'],
-             output_in_subtask = self.kwargs['output_in_subtask']) )
+             run_mode=False,
+             append = self.append,
+             confirm_overwrite = self.confirm_overwrite,
+             output_in_subtask = self.output_in_subtask,
+             save=True) )
         LOG.debug('Setup Took {} seconds'.format(time.time() - start))
-
-    ##void
-    def _create_defaults(self):
-        '''
-
-        '''
-        default_report_name=os.path.join(os.path.dirname(self.copasi_file),'ParameterFit.txt')
-        if self.kwargs['report_name']==None:
-            LOG.debug('Using default report name:\n{}'.format(default_report_name))
-            self.kwargs['report_name']=default_report_name
-
-        results_directory_default=os.path.join(os.path.dirname(self.copasi_file),'MultiplePEResults')
-        if self.kwargs['results_directory']==None:
-            LOG.debug('Using default results_directory:\n{}'.format(results_directory_default))
-            self.kwargs['results_directory']=results_directory_default
-
-        if self.kwargs['config_filename']==None:
-            LOG.debug('config_filename is None. Reassigning config_filename')
-            self.kwargs['config_filename']=os.path.join(os.path.dirname(self.copasi_file),'PEConfigFile.xlsx')
-
-        if self.kwargs['config_filename']!=None:
-            if os.path.isabs(self.kwargs['config_filename'])==False:
-                self.kwargs['config_filename']=os.path.join(os.path.dirname(self.copasi_file),self.kwargs['config_filename'])
-
-
-
-
+#
     ##void
     def _do_checks(self):
         '''
 
         '''
         run_arg_list=['multiprocess','SGE']
-        if self.kwargs['run'] not in run_arg_list:
+        if self.run_mode not in run_arg_list:
             raise Errors.InputError('run needs to be one of {}'.format(run_arg_list))
-        if isinstance(self.kwargs['copy_number'],int)!=True:
+
+        if isinstance(self.copy_number,int)!=True:
             raise Errors.InputError('copy_number argument is of type int')
 
         if isinstance(self.kwargs['pe_number'],int)!=True:
             raise Errors.InputError('pe_number argument is of type int')
 
-        if self.kwargs['results_directory']==None:
-            self.kwargs['results_directory']='MultipleParameterEsimationAnalysis'
-        self.kwargs['results_directory']=os.path.abspath(self.kwargs['results_directory'])
+        if self.results_directory==None:
+            self.results_directory = 'MultipleParameterEsimationAnalysis'
+        self.results_directory = os.path.abspath(self.results_directory)
 
 
     def _create_output_directory(self):
         '''
 
         '''
-        LOG.debug('creating a directory for analysis in : \n\n{}'.format(self.kwargs['results_directory']))
-        if os.path.isdir(self.kwargs['results_directory'])!=True:
-            os.mkdir(self.kwargs['results_directory'])
-
+        LOG.debug('creating a directory for analysis in : \n\n{}'.format(self.results_directory))
+        if os.path.isdir(self.results_directory)!=True:
+            os.mkdir(self.results_directory)
+#
 
 
     def enumerate_PE_output(self):
@@ -3588,9 +3459,9 @@ class RunMultiplePEs():
         '''
         LOG.debug('Enumerating PE report files')
         dct={}
-        dire,fle=os.path.split(self.kwargs['report_name'])
-        for i in range(self.kwargs['copy_number']):
-            new_file=os.path.join(self.kwargs['results_directory'],
+        dire,fle=os.path.split(self.report_name)
+        for i in range(self.copy_number):
+            new_file=os.path.join(self.results_directory,
                                   fle[:-4]+'{}.txt'.format(str(i)))
             dct[i]=new_file
         return dct
@@ -3744,10 +3615,10 @@ class MultiModelFit():
             os.chdir(cps_dir)
             if os.path.isabs(self.kwargs['config_filename']):
                 self.kwargs['config_filename']=os.path.split(self.kwargs['config_filename'])[1]
-            dct[self.sub_cps_dirs[cps_dir]]=RunMultiplePEs(self.sub_cps_dirs[cps_dir],
+            dct[self.sub_cps_dirs[cps_dir]]=MultiParameterEstimation(self.sub_cps_dirs[cps_dir],
                                                            self.exp_files,**self.kwargs)
 
-        LOG.debug('Each instance of RunMultiplePEs is being held in a dct:\n{}'.format(dct))
+        LOG.debug('Each instance of MultiParameterEstimation is being held in a dct:\n{}'.format(dct))
         return dct
 
     def get_output_directories(self):

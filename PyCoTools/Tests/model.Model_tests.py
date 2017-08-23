@@ -29,6 +29,7 @@ site.addsitedir('/home/b3053674/Documents/PyCoTools')
 
 import PyCoTools
 from PyCoTools.Tests import _test_base
+
 import os, glob
 import pandas
 import unittest
@@ -117,6 +118,19 @@ class ModelTests(_test_base._BaseTest):
             except AttributeError:
                 check = False
         self.assertTrue(check)
+
+    def test_local_parameters4(self):
+        """
+
+        :return:
+        """
+
+        L= PyCoTools.model.LocalParameter(name='k1', reaction_name='v1')
+        self.assertEqual(L.global_name, '(v1).k1')
+
+    def test_local_parameters5(self):
+        L= PyCoTools.model.LocalParameter(name='k1', reaction_name='v1')
+        self.assertTrue('global_name' in L.__dict__.keys())
 
     def test_functions(self):
         self.assertTrue(len(self.model.functions), 2)
