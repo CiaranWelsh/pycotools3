@@ -23,7 +23,9 @@
 """
 
 import site
-site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
+# site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
+site.addsitedir('/home/b3053674/Documents/PyCoTools')
+
 import PyCoTools
 from PyCoTools.Tests import _test_base
 import os, glob
@@ -51,14 +53,12 @@ class TestGlobalQuantities(_test_base._BaseTest):
 
     def test_reference_transient(self):
         A = PyCoTools.model.GlobalQuantity(name='A', type='fixed', value=5)
-        self.assertTrue(A.reference_transient, 'Vector=Values[A],Reference=Value')
+        self.assertTrue(A.transient_reference, 'Vector=Values[A],Reference=Value')
 
     def test_reference_initial(self):
         A = PyCoTools.model.GlobalQuantity(name='A', type='fixed', value=5)
-        self.assertTrue(A.reference_initial, 'Vector=Values[A],Reference=InitialValue')
+        self.assertTrue(A.initial_reference, 'Vector=Values[A],Reference=InitialValue')
 
-            # def test_assignment_type(self):
-            #     A = PyCoTools.model.GlobalQuantity(name='A', type='assignment', value='5 + 10 * B')
 
 
 if __name__=='__main__':
