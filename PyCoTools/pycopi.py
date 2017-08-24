@@ -55,7 +55,7 @@ LOG=logging.getLogger(__name__)
 sns.set_context(context='poster',
                 font_scale=3)
 
-
+## TODO change pycopi to tasks
 
 class CopasiMLParser():
 
@@ -115,8 +115,8 @@ class Run(_base._ModelBase):
                                    'sge_job_filename': None}
 
         self.convert_bool_to_numeric(self.default_properties)
-        self.update_kwargs(self.default_properties)
         self.update_properties(self.default_properties)
+        self.update_kwargs(kwargs)
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
         self.do_checks()
 
@@ -294,7 +294,7 @@ class Reports(_base._ModelBase):
                                  }
         self.convert_bool_to_numeric(self.default_properties)
         self.update_properties(self.default_properties)
-        self.update_kwargs(self.default_properties)
+        self.update_kwargs(kwargs)
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
         self._do_checks()
 
@@ -698,7 +698,7 @@ class TimeCourse(_base._ModelBase):
 
         self.convert_bool_to_numeric(self.default_properties)
         self.update_properties(self.default_properties)
-        self.update_kwargs(self.default_properties)
+        self.update_kwargs(kwargs)
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
         self.do_checks()
 
@@ -1309,7 +1309,7 @@ class Scan(_base._ModelBase):
 
         self.convert_bool_to_numeric(self.default_properties)
         self.update_properties(self.default_properties)
-        self.update_kwargs(self.default_properties)
+        self.update_kwargs(kwargs)
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
         self.do_checks()
 
@@ -1632,8 +1632,8 @@ class ExperimentMapper(_base._ModelBase):
                                  'save': False}
 
         self.convert_bool_to_numeric(self.default_properties)
-        self.update_kwargs(self.default_properties)
         self.update_properties(self.default_properties)
+        self.update_kwargs(kwargs)
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
         self.do_checks()
 
@@ -2510,8 +2510,8 @@ class ParameterEstimation(_base._ModelBase):
 
 
         self.convert_bool_to_numeric(self.default_properties)
-        self.update_kwargs(self.default_properties)
         self.update_properties(self.default_properties)
+        self.update_kwargs(kwargs)
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
         self.do_checks()
 
@@ -2927,8 +2927,6 @@ class ParameterEstimation(_base._ModelBase):
         create a config file template.
         :return: pandas.DataFrame
         """
-        ##TODO check why concentration is beging calculated wrong
-        ##TODO add affected experiments to the config file
 
         local_params= self.model.local_parameters
         global_params = self.model.global_quantities
@@ -3057,7 +3055,6 @@ class ParameterEstimation(_base._ModelBase):
 
         ##insert fit item
 
-        ## TODO change this query to specifically target ParameterEstimation and not other elements
         list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
         parameter_est = self.model.xml.find(list_of_tasks)[5]
         problem = parameter_est[1]
@@ -3100,16 +3097,16 @@ class ParameterEstimation(_base._ModelBase):
         #local method parameters
         iteration_limit={'type': 'unsignedInteger', 'name': 'Iteration Limit', 'value': self.iteration_limit}
         tolerance={'type': 'float', 'name': 'Tolerance', 'value': self.tolerance}
-        rho={'type': 'float', 'name': 'Rho', 'value': self.rho}
-        scale={'type': 'unsignedFloat', 'name': 'Scale', 'value': self.scale}
+        rho = {'type': 'float', 'name': 'Rho', 'value': self.rho}
+        scale = {'type': 'unsignedFloat', 'name': 'Scale', 'value': self.scale}
         #Particle Swarm parmeters
-        swarm_size={'type': 'unsignedInteger', 'name': 'Swarm Size', 'value': self.swarm_size}
-        std_deviation={'type': 'unsignedFloat', 'name': 'Std. Deviation', 'value': self.std_deviation}
+        swarm_size = {'type': 'unsignedInteger', 'name': 'Swarm Size', 'value': self.swarm_size}
+        std_deviation = {'type': 'unsignedFloat', 'name': 'Std. Deviation', 'value': self.std_deviation}
         #Random Search parameters
-        number_of_iterations={'type': 'unsignedInteger', 'name': 'Number of Iterations', 'value': self.number_of_iterations}
+        number_of_iterations = {'type': 'unsignedInteger', 'name': 'Number of Iterations', 'value': self.number_of_iterations}
         #Simulated Annealing parameters
-        start_temperature={'type': 'unsignedFloat', 'name': 'Start Temperature', 'value': self.start_temperature}
-        cooling_factor={'type': 'unsignedFloat', 'name': 'Cooling Factor', 'value': self.cooling_factor}
+        start_temperature = {'type': 'unsignedFloat', 'name': 'Start Temperature', 'value': self.start_temperature}
+        cooling_factor = {'type': 'unsignedFloat', 'name': 'Cooling Factor', 'value': self.cooling_factor}
 
 
         #build the appropiate xML, with method at root (for now)
@@ -3117,28 +3114,28 @@ class ParameterEstimation(_base._ModelBase):
             pass #no additional parameter elements required
 
         if self.method=='differential_evolution'.lower():
-            etree.SubElement(method_element,'Parameter',attrib=number_of_generations)
-            etree.SubElement(method_element,'Parameter',attrib=population_size)
-            etree.SubElement(method_element,'Parameter',attrib=random_number_generator)
-            etree.SubElement(method_element,'Parameter',attrib=seed)
+            etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
+            etree.SubElement(method_element, 'Parameter', attrib=population_size)
+            etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
+            etree.SubElement(method_element, 'Parameter', attrib=seed)
 
         if self.method=='evolutionary_strategy_sr'.lower():
-            etree.SubElement(method_element,'Parameter',attrib=number_of_generations)
-            etree.SubElement(method_element,'Parameter',attrib=population_size)
-            etree.SubElement(method_element,'Parameter',attrib=random_number_generator)
-            etree.SubElement(method_element,'Parameter',attrib=seed)
-            etree.SubElement(method_element,'Parameter',attrib=pf)
+            etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
+            etree.SubElement(method_element, 'Parameter', attrib=population_size)
+            etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
+            etree.SubElement(method_element, 'Parameter', attrib=seed)
+            etree.SubElement(method_element, 'Parameter', attrib=pf)
 
         if self.method=='evolutionary_program'.lower():
-            etree.SubElement(method_element,'Parameter',attrib=number_of_generations)
-            etree.SubElement(method_element,'Parameter',attrib=population_size)
-            etree.SubElement(method_element,'Parameter',attrib=random_number_generator)
-            etree.SubElement(method_element,'Parameter',attrib=seed)
+            etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
+            etree.SubElement(method_element, 'Parameter', attrib=population_size)
+            etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
+            etree.SubElement(method_element, 'Parameter', attrib=seed)
 
         if self.method=='hooke_jeeves'.lower():
-            etree.SubElement(method_element,'Parameter',attrib=iteration_limit)
-            etree.SubElement(method_element,'Parameter',attrib=tolerance)
-            etree.SubElement(method_element,'Parameter',attrib=rho)
+            etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
+            etree.SubElement(method_element, 'Parameter', attrib=tolerance)
+            etree.SubElement(method_element, 'Parameter', attrib=rho)
 
         if self.method=='levenberg_marquardt'.lower():
             etree.SubElement(method_element,'Parameter',attrib=iteration_limit)
@@ -3266,26 +3263,39 @@ class MultiParameterEstimation(ParameterEstimation):
     '''
 
     '''
-    ##TODO Merge ParameterEstimation ad Multi into 1.
-    def __init__(self,model,experiment_files,**kwargs):
+    ##TODO Merge ParameterEstimation and Multi into one class.
+    def __init__(self, model, experiment_files,**kwargs):
         super(MultiParameterEstimation, self).__init__(model, experiment_files, **kwargs)
-        self.copy_number = 1
-        self.pe_number = 1
-        self.run_mode = 'multiprocess'
-        self.results_directory = os.path.join(
-            os.path.dirname(
-                self.model.copasi_file), 'MultipleParameterEstimationResults')
 
-        self.copasi_file_pickle = os.path.join(
-            os.path.dirname(
-                self.model.copasi_file), 'copasi_paths.pickle')
+        self.default_properties = {'copy_number': 1,
+                                 'pe_number':1,
+                                 'run_mode': 'multiprocess',
+                                 'results_directory':os.path.join(os.path.dirname(self.model.copasi_file),'MultipleParameterEstimationResults'),
+                                 'copasi_file_pickle': os.path.join(os.path.dirname(self.model.copasi_file), 'copasi_paths.pickle')
+                                 }
+
+        self.update_properties(self.default_properties)
+        self.update_kwargs(kwargs)
+        self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
+        self.do_checks()
+
+
+
 
         self._create_output_directory()
         self.report_files=self.enumerate_PE_output()
         self.output_in_subtask = True
 
+
     def __str__(self):
         return 'MultiParameterEstimation({})'.format(self.to_string())
+
+    def do_checks(self):
+        """
+
+        :return:
+        """
+        pass
 
     def format_results(self):
         """

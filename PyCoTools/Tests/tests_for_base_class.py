@@ -24,9 +24,8 @@ Module that tests the operations of the _Base base test
 """
 
 import site
-# site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
-site.addsitedir(r'/home/b3053674/Documents/PyCoTools')
-
+site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
+# site.addsitedir(r'/home/b3053674/Documents/PyCoTools')
 import PyCoTools
 from PyCoTools.Tests import _test_base
 import os, glob
@@ -59,22 +58,22 @@ class TestBase(_test_base._BaseTest):
 
     def test_str(self):
         kwarg_string = "A='a', B='b', key='MadeUpKey1'"
-        self.assertEqual(kwarg_string,self._base.as_string() )
+        self.assertEqual(kwarg_string,self._base.to_string() )
 
     def test_as_df_index(self):
         index = ['A','B','key']
-        self.assertListEqual(list(self._base.as_df().index ), index)
+        self.assertListEqual(list(self._base.to_df().index ), index)
 
     def test_as_df_values(self):
-        self.assertListEqual(list(self._base.as_df()['Value'] ), ['a','b','MadeUpKey1'])
+        self.assertListEqual(list(self._base.to_df()['Value'] ), ['a','b','MadeUpKey1'])
 #
     def test_as_dict_values(self):
         keys = ['A', 'B', 'key']
-        self.assertListEqual(keys, self._base.as_dict().keys())
+        self.assertListEqual(keys, self._base.to_dict().keys())
 
     def test_as_dict_values(self):
         keys = ['a', 'b', 'MadeUpKey1']
-        self.assertListEqual(keys, self._base.as_dict().values() )
+        self.assertListEqual(keys, self._base.to_dict().values() )
 
     def test_update_properties(self):
         class New(PyCoTools._base._ModelBase):
@@ -164,12 +163,50 @@ class BaseModelTests(_test_base._BaseTest):
         M = PyCoTools._base._ModelBase(self.copasi_file, A='a')
         self.assertEqual(M.A, 'a')
 
-    def test_as_string(self):
+    def test_to_string(self):
         M = PyCoTools._base._ModelBase(self.copasi_file)
-        self.assertTrue(isinstance(M.as_string(), str))
+        self.assertTrue(isinstance(M.to_string(), str))
+
+    def test(self):
+        """
+
+        :return:
+        """
+
+        class A(PyCoTools._base._ModelBase):
+            def __init__(self, model, **kwargs):
+                super(A, self).__init__(model, **kwargs)
+
+                self.default_properties = {'a': 1,
+                                           'b': 2}
+
+                self.update_properties(self.default_properties)
+                self.update_kwargs(self.default_properties)
+
+            def __str__(self):
+                return 'A({})'.format(self.to_string())
+
+        class B(A):
+            def __init__(self, model, **kwargs):
+                super(B, self).__init__(model, **kwargs)
+
+                self.default_properties = {'c': 3,
+                                           'd': 4}
+
+                self.update_properties(self.default_properties)
+                self.update_kwargs(kwargs)
+
+            def __str__(self):
+                return "B({})".format(self.to_string())
 
 
-    # def test_save(self):
+
+        a = A(self.model)
+        b = B(self.model, d=5)
+        self.assertEqual(b.d, 5)
+
+
+            # def test_save(self):
     #     class New(PyCoTools._base._ModelBase):
     #         def __init__(self, model, **kwargs):
     #             super(New, self).__init__(model, **kwargs)

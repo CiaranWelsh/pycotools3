@@ -1,0 +1,2182 @@
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3447:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3460:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3447:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3460:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3447:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3460:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:write_config_file:2904:writing config template. overwrite_config_file set to False and config_filename is C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\config_file.csv
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2025:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2028:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\report1.txt
+DEBUG:PyCoTools.pycopi:pycopi:run:560:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:parameter_estimation:515:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xc2202c8>
+DEBUG:PyCoTools.pycopi:pycopi:copy_copasi:3360:Copying copasi file 1 times
+DEBUG:PyCoTools.pycopi:pycopi:_setup_scan:3387:setting up scan for model : C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1367:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1369:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1369:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1369:scan type to number tuple: ('random_sampling', 2)
+DEBUG:root:pycopi:define_report:1383:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:564:created a 'parameter_estimation' report
+DEBUG:root:pycopi:define_report:1383:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:564:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:_setup1scan:3421:Setup Took 0.947000026703 seconds
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2025:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2028:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\report1.txt
+DEBUG:PyCoTools.pycopi:pycopi:run:560:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:parameter_estimation:515:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xba20dc8>
+DEBUG:PyCoTools.pycopi:pycopi:copy_copasi:3357:Copying copasi file 1 times
+DEBUG:PyCoTools.pycopi:pycopi:_setup_scan:3384:setting up scan for model : C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1367:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1369:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1369:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1369:scan type to number tuple: ('random_sampling', 2)
+DEBUG:root:pycopi:define_report:1383:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:564:created a 'parameter_estimation' report
+DEBUG:root:pycopi:define_report:1383:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:564:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:_setup1scan:3418:Setup Took 0.116000175476 seconds
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2025:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2028:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\report1.txt
+DEBUG:PyCoTools.pycopi:pycopi:run:560:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:parameter_estimation:515:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xbb5ab88>
+DEBUG:PyCoTools.pycopi:pycopi:copy_copasi:3357:Copying copasi file 1 times
+DEBUG:PyCoTools.pycopi:pycopi:_setup_scan:3384:setting up scan for model : C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1367:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1369:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1369:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1369:scan type to number tuple: ('random_sampling', 2)
+DEBUG:root:pycopi:define_report:1383:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:564:created a 'parameter_estimation' report
+DEBUG:root:pycopi:define_report:1383:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:564:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:_setup1scan:3418:Setup Took 0.18700003624 seconds
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:write_config_file:2904:writing config template. overwrite_config_file set to False and config_filename is C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\config_file.csv
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2025:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2028:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\report1.txt
+DEBUG:PyCoTools.pycopi:pycopi:run:560:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:parameter_estimation:515:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xbab0248>
+DEBUG:PyCoTools.pycopi:pycopi:copy_copasi:3357:Copying copasi file 1 times
+DEBUG:PyCoTools.pycopi:pycopi:_setup_scan:3384:setting up scan for model : C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1367:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1369:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1369:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1369:scan type to number tuple: ('random_sampling', 2)
+DEBUG:root:pycopi:define_report:1383:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:564:created a 'parameter_estimation' report
+DEBUG:root:pycopi:define_report:1383:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:564:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:_setup1scan:3418:Setup Took 0.131999969482 seconds
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2025:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2028:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\report1.txt
+DEBUG:PyCoTools.pycopi:pycopi:run:560:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:parameter_estimation:515:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xba4b848>
+DEBUG:PyCoTools.pycopi:pycopi:copy_copasi:3357:Copying copasi file 1 times
+DEBUG:PyCoTools.pycopi:pycopi:_setup_scan:3384:setting up scan for model : C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1367:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1369:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1369:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1369:scan type to number tuple: ('random_sampling', 2)
+DEBUG:root:pycopi:define_report:1383:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:564:created a 'parameter_estimation' report
+DEBUG:root:pycopi:define_report:1383:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:564:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:_setup1scan:3418:Setup Took 0.160000085831 seconds
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2025:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2028:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\report1.txt
+DEBUG:PyCoTools.pycopi:pycopi:run:560:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:parameter_estimation:515:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xba75c08>
+DEBUG:PyCoTools.pycopi:pycopi:copy_copasi:3357:Copying copasi file 1 times
+DEBUG:PyCoTools.pycopi:pycopi:_setup_scan:3384:setting up scan for model : C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1367:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1369:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1369:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1369:scan type to number tuple: ('random_sampling', 2)
+DEBUG:root:pycopi:define_report:1383:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:564:created a 'parameter_estimation' report
+DEBUG:root:pycopi:define_report:1383:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:564:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:_setup1scan:3418:Setup Took 0.128000020981 seconds
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2025:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2028:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\report1.txt
+DEBUG:PyCoTools.pycopi:pycopi:run:560:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:parameter_estimation:515:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xba63588>
+DEBUG:PyCoTools.pycopi:pycopi:copy_copasi:3357:Copying copasi file 1 times
+DEBUG:PyCoTools.pycopi:pycopi:_setup_scan:3384:setting up scan for model : C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1367:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1369:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1369:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1369:scan type to number tuple: ('random_sampling', 2)
+DEBUG:root:pycopi:define_report:1383:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:564:created a 'parameter_estimation' report
+DEBUG:root:pycopi:define_report:1383:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:564:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:_setup1scan:3418:Setup Took 0.883000135422 seconds
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2025:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2028:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\report1.txt
+DEBUG:PyCoTools.pycopi:pycopi:run:560:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:parameter_estimation:515:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xba63708>
+DEBUG:PyCoTools.pycopi:pycopi:copy_copasi:3357:Copying copasi file 1 times
+DEBUG:PyCoTools.pycopi:pycopi:_setup_scan:3384:setting up scan for model : C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1367:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1369:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1369:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1369:scan type to number tuple: ('random_sampling', 2)
+DEBUG:root:pycopi:define_report:1383:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:564:created a 'parameter_estimation' report
+DEBUG:root:pycopi:define_report:1383:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:564:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:_setup1scan:3418:Setup Took 0.230999946594 seconds
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2025:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2028:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\report1.txt
+DEBUG:PyCoTools.pycopi:pycopi:run:560:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:parameter_estimation:515:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xba63b88>
+DEBUG:PyCoTools.pycopi:pycopi:copy_copasi:3357:Copying copasi file 1 times
+DEBUG:PyCoTools.pycopi:pycopi:_setup_scan:3384:setting up scan for model : C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1367:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1369:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1369:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1369:scan type to number tuple: ('random_sampling', 2)
+DEBUG:root:pycopi:define_report:1383:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:564:created a 'parameter_estimation' report
+DEBUG:root:pycopi:define_report:1383:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:564:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:_setup1scan:3418:Setup Took 0.18499994278 seconds
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:_create_output_directory:3444:creating a directory for analysis in : 
+
+C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\MultipleParameterEstimationResults
+DEBUG:PyCoTools.pycopi:pycopi:enumerate_PE_output:3457:Enumerating PE report files
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2025:Removing all pre-existing experiments from copasi mapping interface
+DEBUG:PyCoTools.pycopi:pycopi:map_experiments:2028:Mapping experiment C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\report1.txt
+DEBUG:PyCoTools.pycopi:pycopi:run:560:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:parameter_estimation:515:Reports PE setup copasiML <Element {http://www.copasi.org/static/schema}COPASI at 0xbb9f648>
+DEBUG:PyCoTools.pycopi:pycopi:copy_copasi:3357:Copying copasi file 1 times
+DEBUG:PyCoTools.pycopi:pycopi:_setup_scan:3384:setting up scan for model : C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1367:kwargs[scan_type is: repeat
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1369:scan type to number tuple: ('scan', 1)
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1369:scan type to number tuple: ('repeat', 0)
+DEBUG:PyCoTools.pycopi:pycopi:do_checks:1369:scan type to number tuple: ('random_sampling', 2)
+DEBUG:root:pycopi:define_report:1383:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:564:created a 'parameter_estimation' report
+DEBUG:root:pycopi:define_report:1383:defining report
+DEBUG:PyCoTools.pycopi:pycopi:run:564:created a 'parameter_estimation' report
+DEBUG:PyCoTools.pycopi:pycopi:_setup1scan:3418:Setup Took 0.169000148773 seconds
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+DEBUG:PyCoTools.pycopi:pycopi:set_timecourse:866:Timecourse task element is:
+
+<Task xmlns="http://www.copasi.org/static/schema" key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
+  <Problem>
+    <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+    <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+    <Parameter name="StepSize" type="float" value="100"/>
+    <Parameter name="Duration" type="float" value="1000"/>
+    <Parameter name="TimeSeriesRequested" type="float" value="1"/>
+    <Parameter name="OutputStartTime" type="float" value="0"/>
+    <Parameter name="Output Event" type="bool" value="0"/>
+    <Parameter name="Start in Steady State" type="bool" value="0"/>
+  </Problem>
+  <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+    <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+    <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+    <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
+    <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+    <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+  </Method>
+</Task>
+
+DEBUG:PyCoTools.pycopi:pycopi:run:573:created a 'time_course' type report
+DEBUG:PyCoTools.pycopi:pycopi:get_report_key:1249:getting report key
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
+INFO:root:__init__:<module>:27:Initializing PyCoTools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\logging_config.conf
