@@ -42,10 +42,11 @@ class _Base(object):
     def __init__(self, **kwargs):
         self.kwargs = kwargs
 
-        self.__dict__.update((key, value) for key, value in self.kwargs.items() )
+        self.update_properties(self.kwargs)
+        # self.__dict__.update((key, value) for key, value in self.kwargs.items() )
 
     def __str__(self):
-        return "_Base({})".format(self.as_string())
+        return "_Base({})".format(self.to_string())
 
     def __repr__(self):
         return self.__str__()

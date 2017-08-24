@@ -38,6 +38,8 @@ import logging
 
 LOG = logging.getLogger(__name__)
 
+
+## TODO after running a task, bind the results to the model instance so that they are retrievable
 class Model(_base._Base):
     def __init__(self, copasi_file, **kwargs):
         super(Model, self).__init__(**kwargs)
@@ -225,7 +227,6 @@ class Model(_base._Base):
         :return: Metabolite
         name, compartment, key, conc, particle
         """
-        ## TODO Fix the bug where metabolites are being assigned to the wrong compartment
         collection = {}
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfMetabolites':
