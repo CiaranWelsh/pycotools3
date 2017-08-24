@@ -49,10 +49,10 @@ class _BaseTest(unittest.TestCase):
         dire = os.path.dirname(self.copasi_file)
         # for i in glob.glob(os.path.join(dire, '*.xlsx') ):
         #     os.remove(i)
-
+        #
         # for i in glob.glob(os.path.join(dire, '*.cps') ):
         #     os.remove(i)
-
+        #
         # for i in glob.glob(os.path.join(dire, '*.txt') ):
         #     os.remove(i)
         #

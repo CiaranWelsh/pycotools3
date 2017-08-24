@@ -25,7 +25,6 @@ class IndexOutOfBounds(Exception):
     pass
 
 
-
 class FileDoesNotExistError(Exception):
     pass
 
@@ -41,7 +40,6 @@ class ParameterInputError(Exception):
     pass
 
 
-
 class SomethingWentHorriblyWrongError(Exception):
     pass
 
@@ -50,7 +48,8 @@ class TimeCourseError(Exception):
     pass
 
 
-
+class AvagadrosError(Exception):
+    pass
 
 
 

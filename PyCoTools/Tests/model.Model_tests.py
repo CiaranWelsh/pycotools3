@@ -24,9 +24,12 @@ Module that tests the operations of the _Base base test
 """
 
 import site
-site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
+# site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
+site.addsitedir('/home/b3053674/Documents/PyCoTools')
+
 import PyCoTools
 from PyCoTools.Tests import _test_base
+
 import os, glob
 import pandas
 import unittest
@@ -38,82 +41,150 @@ from lxml import etree
 class ModelTests(_test_base._BaseTest):
     def setUp(self):
         super(ModelTests, self).setUp()
-        self.Model = PyCoTools.model.Model(self.copasi_file)
+        self.model = PyCoTools.model.Model(self.copasi_file)
 
     def test_time_unit(self):
-        self.assertEqual(self.Model.time_unit, 's')
+        self.assertEqual(self.model.time_unit, 's')
 
     def test_model_name(self):
-        self.assertEqual(self.Model.name, 'New Model')
+        self.assertEqual(self.model.name, 'New Model')
 
     def test_volume(self):
-        self.assertEqual(self.Model.volume_unit, 'ml')
+        self.assertEqual(self.model.volume_unit, 'ml')
 
     def test_quantity(self):
-        self.assertEqual(self.Model.area_unit, u'm\xb2')
+        self.assertEqual(self.model.area_unit, u'm\xb2')
 
     def test_length(self):
-        self.assertEqual(self.Model.length_unit, 'm')
+        self.assertEqual(self.model.length_unit, 'm')
 
     def test_avagadro(self):
-        self.assertEqual(self.Model.avagadro, 6.022140857e+23)
+        self.assertEqual(self.model.avagadro, 6.022140857e+23)
 
     def test_model_key(self):
-        self.assertEqual(self.Model.key, 'Model_3')
+        self.assertEqual(self.model.key, 'Model_3')
 
     def test_reference(self):
         self.assertTrue('CN=Root,Model=New Model', self.model.reference)
 
     def test_metabolites(self):
-        self.assertEqual(len(self.Model.metabolites), 3)
+        self.assertEqual(len(self.model.metabolites), 3)
 
-    def test_metabolites(self):
-        for i in self.Model.metabolites:
+    def test_metabolites2(self):
+        for i in self.model.metabolites:
             self.assertTrue(isinstance(i, PyCoTools.model.Metabolite))
 
+    def test_metabolites3(self):
+        check = True
+        for i in self.model.metabolites:
+            try:
+                i.simulation_type
+            except AttributeError:
+                check = False
+        self.assertTrue(check)
+
     def test_compartments(self):
-        self.assertEqual(len(self.Model.compartments() ),2)
+        self.assertEqual(len(self.model.compartments ),2)
 
     def test_global_quantities(self):
-        # print self.Model.global_quantities()
-        self.assertEqual(len(self.Model.global_quantities), 3)
+        # print self.model.global_quantities()
+        self.assertEqual(len(self.model.global_quantities), 3)
+
+    def test_global_quantities2(self):
+        check = True
+        for i in self.model.global_quantities:
+            try:
+                i.simulation_type
+            except AttributeError:
+                check = False
+        self.assertTrue(check)
 
     def test_local_parameters(self):
         '''
         Currently giving the wrong keys
         :return:
         '''
-        self.assertTrue(len(self.Model.local_parameters), 3)
+        self.assertTrue(len(self.model.local_parameters), 3)
     #
     def test_local_parameters2(self):
-        [self.assertTrue(isinstance(i, PyCoTools.model.LocalParameter) ) for (j,i) in self.Model.local_parameters.items() ]
+        for i in self.model.local_parameters:
+            self.assertTrue(isinstance(i, PyCoTools.model.LocalParameter))
 
     def test_local_parameters3(self):
-        keys = self.Model.local_parameters.keys()
-        keys_in_local_parameters = sorted(['reaction_name', 'name', 'value', 'simulationType', 'kwargs', 'type',
-                                           'allowed_properties', 'key'])
-        # self.assertListEqual(sorted(self.Model.local_parameters[keys[0]].__dict__.keys(), keys_in_local_parameters  )  )
-        self.assertListEqual(sorted(self.Model.local_parameters[keys[0]].__dict__.keys()), keys_in_local_parameters)
+        check = True
+        for i in self.model.local_parameters:
+            try:
+                i.simulation_type
+            except AttributeError:
+                check = False
+        self.assertTrue(check)
+
+    def test_local_parameters4(self):
+        """
+
+        :return:
+        """
+
+        L= PyCoTools.model.LocalParameter(name='k1', reaction_name='v1')
+        self.assertEqual(L.global_name, '(v1).k1')
+
+    def test_local_parameters5(self):
+        L= PyCoTools.model.LocalParameter(name='k1', reaction_name='v1')
+        self.assertTrue('global_name' in L.__dict__.keys())
 
     def test_functions(self):
-        self.assertTrue(len(self.Model.functions), 2)
+        self.assertTrue(len(self.model.functions), 2)
 
     def test_functions2(self):
-        [self.assertTrue(isinstance(i, PyCoTools.model.Function) for i in self.Model.functions) ]
+        [self.assertTrue(isinstance(i, PyCoTools.model.Function) for i in self.model.functions) ]
 
     def test_number_of_reactions(self):
-        self.assertEqual(self.Model.number_of_reactions, 4)
+        self.assertEqual(self.model.number_of_reactions, 4)
 
 
     # def test_reactions(self):
-    #     self.assertEqual(len( self.Model.reactions() ), 4)
+    #     self.assertEqual(len( self.model.reactions() ), 4)
 
 
     def test_xml(self):
-        self.assertTrue(isinstance(self.Model.xml, etree._Element))
+        self.assertTrue(isinstance(self.model.xml, etree._Element))
 
 
+    def test_concentration_calculation(self):
+        """
 
+        :return:
+        """
+        print self.model.metabolites
+        # self.model.open()
+
+
+    def test_convert_particles_to_molar(self):
+        """
+        6.022140857e+20 = 1mmol/ml
+        :return:
+        """
+        particles = 6.022140857e+20
+        conc = 1
+        self.assertAlmostEqual(self.model.convert_particles_to_molar(particles, 'mmol', 1), 1)
+
+    def test_convert_to_molar_to_particles(self):
+        """
+        1mmol/ml = 6.022140857e+20
+        :return:
+        """
+        particles = 6.022140857e+20
+        conc = 1
+        self.assertAlmostEqual(self.model.convert_molar_to_particles(conc, 'mmol', 1), particles)
+
+
+    def test_metabolites(self):
+        """
+
+        :return:
+        """
+        print self.model.global_quantities
+        # print self.model.local_parameters
 
 
 
