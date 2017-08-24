@@ -167,7 +167,7 @@ class BaseModelTests(_test_base._BaseTest):
         M = PyCoTools._base._ModelBase(self.copasi_file)
         self.assertTrue(isinstance(M.to_string(), str))
 
-    def test(self):
+    def test_inheritance(self):
         """
 
         :return:
@@ -200,6 +200,47 @@ class BaseModelTests(_test_base._BaseTest):
                 return "B({})".format(self.to_string())
 
 
+
+        a = A(self.model)
+        b = B(self.model, d=5)
+        self.assertEqual(b.d, 5)
+
+    def test_inheritance2(self):
+        """
+
+        :return:
+        """
+
+        class A(PyCoTools._base._ModelBase):
+            def __init__(self, model, **kwargs):
+                super(A, self).__init__(model, **kwargs)
+
+                self.default_properties = {'a': 1,
+                                           'b': 2}
+
+                self.update_properties(self.default_properties)
+                self.update_kwargs(self.default_properties)
+                self.check_integrity(self.default_properties.keys(), kwargs.keys())
+
+            def __str__(self):
+                return 'A({})'.format(self.to_string())
+
+        class B(A):
+            def __init__(self, model, **kwargs):
+                super(B, self).__init__(model, **kwargs)
+                super(B, self).check_integrity()
+
+                self.default_properties = {'c': 3,
+                                           'd': 4}
+
+                self.update_properties(self.default_properties)
+                self.update_kwargs(kwargs)
+
+            def __str__(self):
+                return "B({})".format(self.to_string())
+
+            # def check_integrity(self):
+            #     print self.kwargs
 
         a = A(self.model)
         b = B(self.model, d=5)
