@@ -3267,16 +3267,22 @@ class MultiParameterEstimation(ParameterEstimation):
     def __init__(self, model, experiment_files,**kwargs):
         super(MultiParameterEstimation, self).__init__(model, experiment_files, **kwargs)
 
-        self.default_properties = {'copy_number': 1,
+        self.default_properties.update({'copy_number': 1,
                                  'pe_number':1,
                                  'run_mode': 'multiprocess',
                                  'results_directory':os.path.join(os.path.dirname(self.model.copasi_file),'MultipleParameterEstimationResults'),
                                  'copasi_file_pickle': os.path.join(os.path.dirname(self.model.copasi_file), 'copasi_paths.pickle')
-                                 }
+                                 })
 
+        ## cannot use self.check_integrity as as inherit from
+        ## parameter estimation and add new arguments not in the
+        ## base class.
+        # for property in self.kwargs:
+        #     print property
+            # if property not in self.default_properties.keys()
+        # self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
         self.update_properties(self.default_properties)
         self.update_kwargs(kwargs)
-        self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
         self.do_checks()
 
 
@@ -3286,9 +3292,20 @@ class MultiParameterEstimation(ParameterEstimation):
         self.report_files=self.enumerate_PE_output()
         self.output_in_subtask = True
 
-
     def __str__(self):
         return 'MultiParameterEstimation({})'.format(self.to_string())
+
+    def check_integrity(self, allowed, given):
+        """
+        Method to raise an error when a wrong
+        kwarg is passed to a subclass
+        :param: allowed. List of allowed kwargs
+        :param: given. List of kwargs given by user or default
+        :return: 0
+        """
+        for key in given:
+            if key not in allowed:
+                raise Errors.InputError('{} not in {}'.format(key, allowed))
 
     def do_checks(self):
         """
