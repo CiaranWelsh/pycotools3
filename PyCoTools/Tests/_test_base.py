@@ -58,73 +58,73 @@ class _BaseTest(unittest.TestCase):
         #
         # for i in glob.glob(os.path.join(dire, '*.csv') ):
         #     os.remove(i)
+        #
+        # for i in glob.glob(os.path.join(dire, '*.pickle') ):
+        #     os.remove(i)
 
-        for i in glob.glob(os.path.join(dire, '*.pickle') ):
-            os.remove(i)
-
-class _ParameterEstimationBase(_BaseTest):
-    """
-    Simulate 2 time courses. Add noise then use PE class
-    """
-    def setUp(self):
-        super(_ParameterEstimationBase, self).setUp()
-
-        self.parameter_estimation_options={
-                 'metabolites':self.GMQ.get_IC_cns().keys(),
-                 'global_quantities':self.GMQ.get_global_quantities().keys(),
-                 'append': True,
-                 'confirm_overwrite': True,
-                 'overwrite_config_file': True,
-                 'update_model': True,
-                 'randomize_start_values': True,
-                 'create_parameter_sets': True,
-                 'calculate_statistics': True,
-                 'method': 'GeneticAlgorithm',
-                 'number_of_generations': 10,
-                 'population_size': 10,
-                 'random_number_generator': 4,
-                 'seed': 0,
-                 'pf': 0.675,
-                 'iteration_limit': 1140,
-                 'tolerance': 0.1,
-                 'rho': 0.2,
-                 'scale': 100,
-                 'swarm_size': 500,
-                 'std_deviation': 0.0000004641,
-                 'number_of_iterations': 1516400000,
-                 'start_temperature': 100,
-                 'cooling_factor': 0.85498,
-                 'scheduled': True,
-                 'plot':True,
-                 'savefig': True,
-                 'run': False}
-
-
-
-
-        self.TC1 = PyCoTools.pycopi.TimeCourse(self.model, end=1000, step_size=100,
-                                              intervals=10, report_name='report1.txt')
-        self.TC2 = PyCoTools.pycopi.TimeCourse(self.model, end=1000, step_size=100,
-                                              intervals=10, report_name='report2.txt')
-
-        data1 = PyCoTools.Misc.add_noise(self.TC1['report_name'])
-        data2 = PyCoTools.Misc.add_noise(self.TC2['report_name'])
-
-        os.remove(self.TC1['report_name'])
-        os.remove(self.TC2['report_name'])
-
-        data1.to_csv(self.TC1['report_name'], sep='\t')
-        data2.to_csv(self.TC2['report_name'], sep='\t')
-
-        self.PE = PyCoTools.pycopi.ParameterEstimation(self.copasi_file,
-                                                       [self.TC1['report_name'],
-                                                        self.TC2['report_name']],
-                                                       **self.parameter_estimation_options)
-
-    def tearDown(self):
-        super(_ParameterEstimationBase, self).tearDown()
-        if os.path.isdir(self.PE['results_directory']):
-            shutil.rmtree(self.PE['results_directory'])
+# class _ParameterEstimationBase(_BaseTest):
+#     """
+#     Simulate 2 time courses. Add noise then use PE class
+#     """
+#     def setUp(self):
+#         super(_ParameterEstimationBase, self).setUp()
+#
+#         self.parameter_estimation_options={
+#                  'metabolites':self.GMQ.get_IC_cns().keys(),
+#                  'global_quantities':self.GMQ.get_global_quantities().keys(),
+#                  'append': True,
+#                  'confirm_overwrite': True,
+#                  'overwrite_config_file': True,
+#                  'update_model': True,
+#                  'randomize_start_values': True,
+#                  'create_parameter_sets': True,
+#                  'calculate_statistics': True,
+#                  'method': 'GeneticAlgorithm',
+#                  'number_of_generations': 10,
+#                  'population_size': 10,
+#                  'random_number_generator': 4,
+#                  'seed': 0,
+#                  'pf': 0.675,
+#                  'iteration_limit': 1140,
+#                  'tolerance': 0.1,
+#                  'rho': 0.2,
+#                  'scale': 100,
+#                  'swarm_size': 500,
+#                  'std_deviation': 0.0000004641,
+#                  'number_of_iterations': 1516400000,
+#                  'start_temperature': 100,
+#                  'cooling_factor': 0.85498,
+#                  'scheduled': True,
+#                  'plot':True,
+#                  'savefig': True,
+#                  'run': False}
+#
+#
+#
+#
+#         self.TC1 = PyCoTools.pycopi.TimeCourse(self.model, end=1000, step_size=100,
+#                                               intervals=10, report_name='report1.txt')
+#         self.TC2 = PyCoTools.pycopi.TimeCourse(self.model, end=1000, step_size=100,
+#                                               intervals=10, report_name='report2.txt')
+#
+#         data1 = PyCoTools.Misc.add_noise(self.TC1['report_name'])
+#         data2 = PyCoTools.Misc.add_noise(self.TC2['report_name'])
+#
+#         os.remove(self.TC1['report_name'])
+#         os.remove(self.TC2['report_name'])
+#
+#         data1.to_csv(self.TC1['report_name'], sep='\t')
+#         data2.to_csv(self.TC2['report_name'], sep='\t')
+#
+#         self.PE = PyCoTools.pycopi.ParameterEstimation(self.copasi_file,
+#                                                        [self.TC1['report_name'],
+#                                                         self.TC2['report_name']],
+#                                                        **self.parameter_estimation_options)
+#
+#     def tearDown(self):
+#         super(_ParameterEstimationBase, self).tearDown()
+#         if os.path.isdir(self.PE['results_directory']):
+#             shutil.rmtree(self.PE['results_directory'])
 
 
 # class _MultiParameterEstimationBase(_BaseTest):

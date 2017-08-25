@@ -651,18 +651,20 @@ class GlobalQuantity(_base._Base):
         self.allowed_properties = {'name': None,
                                    'key': None,
                                    'simulation_type': None,
-                                   'value': None}
+                                   'value': None,
+                                   'type': None}
 
         for key in kwargs:
             if key not in self.allowed_properties:
-                raise Errors.InputError('Attribute not allowed. {} not in {}'.format(key, self.allowed_properties.keys()) )
+                raise Errors.InputError('Attribute not allowed. "{}" not in {}'.format(key, self.allowed_properties.keys()) )
         self.update_properties(self.allowed_properties)
 
         self._do_checks()
 
     def _do_checks(self):
-        if self.simulation_type not in ['fixed','assignment']:
-            raise Errors.InputError('type should be either fixed or assignment. ODE not supported as Reactions can be used.')
+        if self.simulation_type != None:
+            if self.simulation_type not in ['fixed','assignment']:
+                raise Errors.InputError('type should be either fixed or assignment. ODE not supported as Reactions can be used.')
 
         if self.simulation_type == 'assignment':
             Errors.NotImplementedError('Assignments not yet implemented')

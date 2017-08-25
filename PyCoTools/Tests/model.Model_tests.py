@@ -125,7 +125,8 @@ class ModelTests(_test_base._BaseTest):
         :return:
         """
 
-        L= PyCoTools.model.LocalParameter(name='k1', reaction_name='v1')
+        L= PyCoTools.model.LocalParameter(name='k1', reaction_name='v1',
+                                          global_name='(v1).k1')
         self.assertEqual(L.global_name, '(v1).k1')
 
     def test_local_parameters5(self):

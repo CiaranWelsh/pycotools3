@@ -24,8 +24,8 @@ Module that tests the operations of the _Base base test
 """
 
 import site
-site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
-# site.addsitedir(r'/home/b3053674/Documents/PyCoTools')
+# site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
+site.addsitedir(r'/home/b3053674/Documents/PyCoTools')
 import PyCoTools
 from PyCoTools.Tests import _test_base
 import os, glob
@@ -205,12 +205,12 @@ class BaseModelTests(_test_base._BaseTest):
         b = B(self.model, d=5)
         self.assertEqual(b.d, 5)
 
-    def test_inheritance2(self):
+
+    def test_number_of_kwargs(self):
         """
 
         :return:
         """
-
         class A(PyCoTools._base._ModelBase):
             def __init__(self, model, **kwargs):
                 super(A, self).__init__(model, **kwargs)
@@ -220,31 +220,12 @@ class BaseModelTests(_test_base._BaseTest):
 
                 self.update_properties(self.default_properties)
                 self.update_kwargs(self.default_properties)
-                self.check_integrity(self.default_properties.keys(), kwargs.keys())
 
             def __str__(self):
                 return 'A({})'.format(self.to_string())
 
-        class B(A):
-            def __init__(self, model, **kwargs):
-                super(B, self).__init__(model, **kwargs)
-                super(B, self).check_integrity()
-
-                self.default_properties = {'c': 3,
-                                           'd': 4}
-
-                self.update_properties(self.default_properties)
-                self.update_kwargs(kwargs)
-
-            def __str__(self):
-                return "B({})".format(self.to_string())
-
-            # def check_integrity(self):
-            #     print self.kwargs
-
-        a = A(self.model)
-        b = B(self.model, d=5)
-        self.assertEqual(b.d, 5)
+        a = A(self.model, a=4)
+        print a
 
 
             # def test_save(self):

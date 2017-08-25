@@ -48,7 +48,7 @@ from copy import deepcopy
 from subprocess import check_call
 from collections import OrderedDict
 
-
+## TODO use generators when iterating over a function with another function. i.e. plotting
 
 
 LOG=logging.getLogger(__name__)
@@ -110,26 +110,24 @@ class Run(_base._ModelBase):
 
         self.default_properties = {'task': 'time_course',
                                    'mode': True,
-                                   'max_time': None,
-                                   'copasi_file': None,
                                    'sge_job_filename': None}
 
         self.convert_bool_to_numeric(self.default_properties)
         self.update_properties(self.default_properties)
         self.update_kwargs(kwargs)
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
-        self.do_checks()
+        self._do_checks()
+
+
 
         ##TODO check whether scheduled parameter should be 'true' or '1' format
-
-        if self.copasi_file == None:
-            self.copasi_file = self.model.copasi_file
 
         if self.sge_job_filename == None:
             self.SGE_job_filename = os.path.join(os.getcwd(), 'SGEJobFile.sh')
 
         self.model = self.set_task()
         self.model.save()
+
         if self.mode == True:
             try:
                 self.run()
@@ -140,7 +138,6 @@ class Run(_base._ModelBase):
         elif self.mode == 'multiprocess':
             self.multi_run()
 
-
     def __str__(self):
         return 'Run({})'.format(self.to_string())
 
@@ -149,7 +146,7 @@ class Run(_base._ModelBase):
             if os.path.isfile(x) != True:
                 raise Errors.FileDoesNotExistError('{} is not a file'.format(self.copasi_file))
             subprocess.Popen(['CopasiSE', self.copasi_file])
-        Process(run(self.copasi_file))
+        Process(run(self.model.copasi_file))
 
     def set_task(self):
         """
@@ -157,10 +154,13 @@ class Run(_base._ModelBase):
         :return:
         """
         # print self.model
-        task = self.task.replace('_', '')
+        # task = self.task.replace('_', '').replace
+        task = self.task.replace(' ', '_').lower()
+
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfTasks'):
             i.attrib['scheduled'] = "false"  # set all to false
-            if task == i.attrib['type'].lower():
+            task_name = i.attrib['name'].lower().replace('-', '_').replace(' ', '_')
+            if task == task_name:
                 i.attrib['scheduled'] = "true"
         return self.model
 
@@ -168,7 +168,7 @@ class Run(_base._ModelBase):
         '''
         Process the copasi file using CopasiSE
         '''
-        args = ['CopasiSE', "{}".format(self.copasi_file)]
+        args = ['CopasiSE', "{}".format(self.model.copasi_file)]
         p = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         output, err = p.communicate()
         d = {}
@@ -191,7 +191,7 @@ class Run(_base._ModelBase):
         :return:
         """
         ##TODO find better solution for running copasi files on linux
-        os.system('CopasiSE "{}"'.format(self.copasi_file))
+        os.system('CopasiSE "{}"'.format(self.model.copasi_file))
 
     def submit_copasi_job_SGE(self):
         '''
@@ -199,13 +199,13 @@ class Run(_base._ModelBase):
         '''
         with open(self.SGE_job_file, 'w') as f:
             f.write('#!/bin/bash\n#$ -V -cwd\nmodule add apps/COPASI/4.16.104-Linux-64bit\nCopasiSE {}'.format(
-                self.copasi_file))
+                self.model.copasi_file))
         ## -N option for job name
         os.system('qsub {} -N {} '.format(self.SGE_job_file, self.SGE_job_file))
         ## remove .sh file after used.
         os.remove(self.SGE_job_file)
 
-    def do_checks(self):
+    def _do_checks(self):
         """
         Varify integrity of user input
         :return:
@@ -296,16 +296,11 @@ class Reports(_base._ModelBase):
         self.update_properties(self.default_properties)
         self.update_kwargs(kwargs)
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
-        self._do_checks()
+        self.__do_checks()
 
-        # for key in self.kwargs:
-        #     if key not in self.allowed_properties:
-        #         raise Errors.InputError('{} not in {}'.format(key, self.allowed_properties.keys()))
-        # self.update_properties(self.allowed_properties)
+        self.model = self.run()
 
-        self.run()
-
-    def _do_checks(self):
+    def __do_checks(self):
         """
         Varify integrity of user input
         :return:
@@ -321,17 +316,6 @@ class Reports(_base._ModelBase):
 
         if self.quantity_type not in ['concentration','particle_number']:
             raise Errors.InputError('{} not concentration or particle_number'.format(self.quantity_type))
-
-        if self.append == True:
-            self.append = str(1)
-        else:
-            self.append = str(0)
-
-        if self.confirm_overwrite==True:
-            self.confirm_overwrite=str(1)
-        else:
-            self.confirm_overwrite=str(0)
-
 
         self.report_types=[None,'profilelikelihood', 'profilelikelihood2',
                            'time_course','parameter_estimation', 'multi_parameter_estimation']
@@ -355,10 +339,6 @@ class Reports(_base._ModelBase):
                 default_report_name = 'multi_parameter_estimation.txt'
             self.report_name = default_report_name
 
-        # self.__dict__ = Bool2Str(self.__dict__).convert_dct()
-
-
-
     def __str__(self):
         return 'Report({})'.format(self.to_string())
 
@@ -376,7 +356,7 @@ class Reports(_base._ModelBase):
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
             keys.append(i.attrib['key'])
             if i.attrib['name']=='Time-Course':
-                self.model=self.remove_report('time_course')
+                self.model = self.remove_report('time_course')
 
         new_key='Report_30'
         while new_key  in keys:
@@ -448,7 +428,7 @@ class Reports(_base._ModelBase):
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
             keys.append(i.attrib['key'])
             if i.attrib['name']=='profilelikelihood':
-                self.remove_report('profilelikelihood')
+                self.model = self.remove_report('profilelikelihood')
 
         new_key='Report_31'
         while new_key in keys:
@@ -491,7 +471,7 @@ class Reports(_base._ModelBase):
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
             keys.append(i.attrib['key'])
             if i.attrib['name']=='parameter_estimation':
-                self.model.xml = self.remove_report('parameter_estimation')
+                self.model = self.remove_report('parameter_estimation')
 
         new_key='Report_32'
         while new_key  in keys:
@@ -529,7 +509,7 @@ class Reports(_base._ModelBase):
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
             keys.append(i.attrib['key'])
             if i.attrib['name']=='multi_parameter_estimation':
-                self.model.xml=self.remove_report('multi_parameter_estimation')
+                self.model = self.remove_report('multi_parameter_estimation')
 
         new_key='Report_32'
         while new_key  in keys:
@@ -559,6 +539,7 @@ class Reports(_base._ModelBase):
         if self.report_type == 'parameter_estimation':
             LOG.debug('created a \'parameter_estimation\' report')
             self.model = self.parameter_estimation()
+
 
         elif self.report_type  == 'multi_parameter_estimation':
             LOG.debug('created a \'parameter_estimation\' report')
@@ -700,7 +681,7 @@ class TimeCourse(_base._ModelBase):
         self.update_properties(self.default_properties)
         self.update_kwargs(kwargs)
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
-        self.do_checks()
+        self._do_checks()
 
         self.set_timecourse()
         self.set_report()
@@ -724,7 +705,7 @@ class TimeCourse(_base._ModelBase):
             os.remove(self.report_name)
             df.to_csv(self.report_name, sep='\t')
 
-    def do_checks(self):
+    def _do_checks(self):
         """
         method for checking user input
         :return: void
@@ -1311,7 +1292,7 @@ class Scan(_base._ModelBase):
         self.update_properties(self.default_properties)
         self.update_kwargs(kwargs)
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
-        self.do_checks()
+        self._do_checks()
 
         ## conflicts with other classes in base
         ## class so just convert the scan log10 argument
@@ -1337,7 +1318,7 @@ class Scan(_base._ModelBase):
 
         self.run()
 
-    def do_checks(self):
+    def _do_checks(self):
         """
         Varify integrity of user input
         :return:
@@ -1501,7 +1482,7 @@ class Scan(_base._ModelBase):
 
         subtask_attrib = {'type': 'unsignedInteger', 'name': 'Subtask', 'value': self.subtask}
         output_in_subtask_attrib = {'type': 'bool', 'name': 'Output in subtask',
-                                    'value': self.kwargs['output_in_subtask']}
+                                    'value': self.output_in_subtask}
         adjust_initial_conditions_attrib = {'type': 'bool', 'name': 'Adjust initial conditions',
                                             'value': self.adjust_initial_conditions}
         scheduled_attrib = {'scheduled': self.scheduled, 'updateModel': self.update_model}
@@ -1635,7 +1616,7 @@ class ExperimentMapper(_base._ModelBase):
         self.update_properties(self.default_properties)
         self.update_kwargs(kwargs)
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
-        self.do_checks()
+        self._do_checks()
 
 
         #run the experiment mapper
@@ -1645,7 +1626,7 @@ class ExperimentMapper(_base._ModelBase):
             self.model.save()
 
 
-    def do_checks(self):
+    def _do_checks(self):
         """
 
         """
@@ -2235,7 +2216,7 @@ class ParameterEstimation(_base._ModelBase):
     Instead the user should initialize an instance of the ParameterEstimation
     class with all the relevant keyword arguments. Subsequently use the
     write_item_template() method and modify the resulting xlsx in your copasi file
-    directory. save the file then close and run the setup()() method to define your
+    directory. save the file then close and run the setup() method to define your
     optimization problem. When run is set to True, the parameter estimation will
     automatically run in CopasiSE. If plot is also set to True, a plot comparing
     experimental and simulated profiles are produced. Profiles are saved
@@ -2512,22 +2493,43 @@ class ParameterEstimation(_base._ModelBase):
         self.convert_bool_to_numeric(self.default_properties)
         self.update_properties(self.default_properties)
         self.update_kwargs(kwargs)
+        self._remove_multiparameter_estimation_arg()
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
-        self.do_checks()
+        self._do_checks()
 
         self._convert_numeric_arguments_to_string()
 
         if self.save:
             self.model.save()
 
+        ##TODO remove headers from report. Not needed as they are only replaced later.
+
     def __str__(self):
         return "ParameterEstimation({})".format(self.to_string())
 
-    def do_checks(self):
+    def _remove_multiparameter_estimation_arg(self):
+        """
+        MultiParameterEstimation inherits from ParameterEstimation
+        and passes new arguments to the ParameterEstimation class
+        which get fed into self.check_integrity causing Exception.
+        This method removes those arguments
+        :return:
+        """
+        lst = ['copy_number',
+               'pe_number']
+        for i in lst:
+            if i in self.kwargs.keys():
+                del self.kwargs[i]
+
+    def _do_checks(self):
         """
         Validate integrity of user input
         :return:
         """
+        if os.path.isabs(self.report_name)!=True:
+            self.report_name = os.path.join(os.path.dirname(self.model.copasi_file),
+                                            self.report_name)
+
         ## ensure experiment files exist
         for fle in self.experiment_files:
             if os.path.isfile(fle)!=True:
@@ -2545,7 +2547,7 @@ class ParameterEstimation(_base._ModelBase):
                 '{} not a valid method. These are valid methods: {}'.format(self.method, self.method_list))
 
         ## Do not randomize start values if using current solution statistics
-        if self.kwargs['method'] == 'current_solution_statistics':
+        if self.method == 'current_solution_statistics':
             if self.randomize_start_values == True:
                 raise Errors.InputError(
                     'Cannot run current solution statistics with \'randomize_start_values\' set to \'true\'.')
@@ -2617,6 +2619,7 @@ class ParameterEstimation(_base._ModelBase):
         self.model=self.set_PE_options()
         self.model=self.insert_all_fit_items()
         assert self.model != None
+        assert isinstance(self.model, model.Model)
         return self.model
 
     def _select_method(self):
@@ -2777,22 +2780,6 @@ class ParameterEstimation(_base._ModelBase):
         # self.PlotPEDataKwargs['separator']=self.kwargs.get('separator')
         # self.PlotPEDataKwargs['results_directory']=self.kwargs.get('results_directory')
 
-
-
-    # def run(self):
-    #     if self.plot==False:
-    #         LOG.debug('running ParameterEstimation. Data reported to file: {}'.format(self.report_name))
-    #         self.model = Run(self.model, task='parameter_estimation')
-    #         self.format_results()
-    #         return self.model
-    #     else:
-    #         ##Run with 'mode' set to false just unchecks the executable boxes.
-    #         self.model = Run(self.model,task='parameter_estimation',mode=False)
-    #         ## Now run with check_call
-    #         os.system('CopasiSE "{}"'.format(self.model.copasi_file))
-    #         self.format_results()
-    #         self.plot()
-    #         return self.model
 
     def format_results(self):
         """
@@ -2959,7 +2946,6 @@ class ParameterEstimation(_base._ModelBase):
 
         metab = pandas.concat(df_list_metabolites, axis=1).transpose()
         lo = pandas.concat(df_list_local, axis=1).transpose()
-        print lo
         gl = pandas.concat(df_list_global, axis=1).transpose()
 
         gl = gl.rename(columns={'value': 'start_value'})
@@ -3247,7 +3233,7 @@ class ParameterEstimation(_base._ModelBase):
         Run the parameter estimation using the Run class
         :return:
         """
-        Run(self.model, mode= False, task='parameter_estimation')
+        Run(self.model, mode=True, task='parameter_estimation')
 
 
 
@@ -3267,188 +3253,36 @@ class MultiParameterEstimation(ParameterEstimation):
     def __init__(self, model, experiment_files,**kwargs):
         super(MultiParameterEstimation, self).__init__(model, experiment_files, **kwargs)
 
+        ## add to ParameterEstimation defaults
         self.default_properties.update({'copy_number': 1,
-                                 'pe_number':1,
-                                 'run_mode': 'multiprocess',
-                                 'results_directory':os.path.join(os.path.dirname(self.model.copasi_file),'MultipleParameterEstimationResults'),
-                                 'copasi_file_pickle': os.path.join(os.path.dirname(self.model.copasi_file), 'copasi_paths.pickle')
-                                 })
+                                         'pe_number':1,
+                                         'run_mode': 'multiprocess',
+                                         'results_directory':os.path.join(os.path.dirname(self.model.copasi_file),'MultipleParameterEstimationResults'),
+                                         'copasi_file_pickle': os.path.join(os.path.dirname(self.model.copasi_file), 'copasi_paths.pickle'),
+                                         'output_in_subtask': True})
 
-        ## cannot use self.check_integrity as as inherit from
-        ## parameter estimation and add new arguments not in the
-        ## base class.
-        # for property in self.kwargs:
-        #     print property
-            # if property not in self.default_properties.keys()
-        # self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
+        ##convert some boolean arguments to str(1) or str(0)
+        self.convert_bool_to_numeric(self.default_properties)
+
+        ##varify correct user input
+        self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
+
+        ## add properties to __dict__
         self.update_properties(self.default_properties)
+
+        ##update kwargs argument. (might not be needed)
         self.update_kwargs(kwargs)
-        self.do_checks()
-
-
-
+        self._do_checks()
 
         self._create_output_directory()
         self.report_files=self.enumerate_PE_output()
-        self.output_in_subtask = True
+
 
     def __str__(self):
         return 'MultiParameterEstimation({})'.format(self.to_string())
 
-    def check_integrity(self, allowed, given):
-        """
-        Method to raise an error when a wrong
-        kwarg is passed to a subclass
-        :param: allowed. List of allowed kwargs
-        :param: given. List of kwargs given by user or default
-        :return: 0
-        """
-        for key in given:
-            if key not in allowed:
-                raise Errors.InputError('{} not in {}'.format(key, allowed))
-
-    def do_checks(self):
-        """
-
-        :return:
-        """
-        pass
-
-    def format_results(self):
-        """
-        Copasi output does not have headers. This function
-        gives PE data output headers
-        :return: list. Path to report files
-        """
-        try:
-            cps_keys = self.sub_copasi_files.keys()
-        except AttributeError:
-            self.setup()
-            cps_keys = self.sub_copasi_files.keys()
-        report_keys = self.report_files.keys()
-        for i in range(len(self.report_files)):
-            try:
-                FormatPEData(self.sub_copasi_files[cps_keys[i]], self.report_files[report_keys[i]],
-                         report_type='multi_parameter_estimation')
-            except Errors.InputError:
-                LOG.warning('{} is empty. Cannot parse. Skipping this file'.format(self.report_files[report_keys[i]]))
-                continue
-        return self.report_files
-
-    def setup(self):
-        """
-        Analogous to the set_up method of the ParameterEstimation class but this time
-        setup both the PE and Scan tasks
-        :return:
-        """
-
-        EM = ExperimentMapper(self.model, self.experiment_files, **self._experiment_mapper_args)
-        self.model = EM.model
-        self.model = self.define_report()
-        self.model = self.remove_all_fit_items()
-        self.model = self.set_PE_method()
-        self.model = self.set_PE_options()
-        self.model = self.insert_all_fit_items()
-        assert self.model != None
-        ## need to save before copy
-        self.model.save()
-        ## TODO modify copy copasi to write copasi. Since the change, we can simply write multiple coapsi files rather than copying
-        self.sub_copasi_files=self.copy_copasi()
-        self._setup_scan()
-        return self.model
-
-    def run(self):
-        """
-
-        :return:
-        """
-        ##load cps from pickle in case run not being use straignt after set_up
-        if self.run == 'SGE':
-            try:
-                check_call('qhost')
-            except Errors.NotImplementedError:
-                LOG.warning('Attempting to run in SGE mode but SGE specific commands are unavailable. Switching to \'multiprocess\' mode')
-                self.run = 'multiprocess'
-        if os.path.isfile(self.copasi_file_pickle):
-            with open(self.copasi_file_pickle) as f:
-                self.sub_copasi_files=pickle.load(f)
-        for i in self.sub_copasi_files:
-            LOG.info('running model: {}'.format(i))
-            Run(self.sub_copasi_files[i], mode=self.run_mode ,task='scan')
-
-    def copy_copasi(self):
-        '''
-        Copy copasi files m times to run separetly on a single
-        computer
-
-        returns:
-            dict[model_number]=cps_file
-        '''
-        LOG.debug('Copying copasi file {} times'.format(self.copy_number))
-        sub_copasi_files_dct={}
-        copasi_path,copasi_filename=os.path.split(self.model.copasi_file)
-        for i in range(1,self.copy_number):
-            new_cps=os.path.join(copasi_path,copasi_filename[:-4]+'_{}.cps'.format(str(i)))
-            shutil.copy(self.copasi_file,new_cps)
-            sub_copasi_files_dct[i]= new_cps
-        sub_copasi_files_dct[0]=self.model.copasi_file
-
-        with open(self.copasi_file_pickle,'w')as f:
-            pickle.dump(sub_copasi_files_dct,f)
-
-        return sub_copasi_files_dct
-
     ##void
-    def _setup_scan(self):
-        '''
-        Set up n repeat items with number_of_steps repeats of parameter estimation
-        Set run to false as we want to use the multiprocess mode of the run class
-        to process all m files at once in CopasiSE
-
-        Remember scan needs iterating over because each file needs an unique report
-        name
-        '''
-
-        q=Queue.Queue()
-        for num in range(self.copy_number):
-            LOG.debug('setting up scan for model : {}'.format(self.sub_copasi_files[num]))
-            t=threading.Thread(target=self._setup1scan,
-                               args =  (q, self.sub_copasi_files[num] , self.report_files[num])  )
-            t.daemon=True
-            t.start()
-            time.sleep(0.1)
-
-        s=q.get()
-        ## Since this is being executed in parallel sometimes
-        ## we get process clashes. Not sure exactly whats going on
-        ## but introducing a small delay seems to fix
-        time.sleep(0.1)
-        return 0
-
-
-
-    ## void
-    def _setup1scan(self,q,cps,report):
-        '''
-
-        '''
-#        LOG.info('setting up scan for model number {}'.format(num))
-        start=time.time()
-        q.put(Scan(cps,
-             scan_type='repeat',
-             number_of_steps=self.pe_number,
-             subtask='parameter_estimation',
-             report_type='multi_parameter_estimation',
-             report_name=report,
-             run_mode=False,
-             append = self.append,
-             confirm_overwrite = self.confirm_overwrite,
-             output_in_subtask = self.output_in_subtask,
-             save=True) )
-        LOG.debug('Setup Took {} seconds'.format(time.time() - start))
-#
-    ##void
-    def _do_checks(self):
+    def __do_checks(self):
         '''
 
         '''
@@ -3468,30 +3302,197 @@ class MultiParameterEstimation(ParameterEstimation):
 
 
     def _create_output_directory(self):
-        '''
-
-        '''
+        """
+        Create directory for estimation results
+        :return:
+        """
         LOG.debug('creating a directory for analysis in : \n\n{}'.format(self.results_directory))
         if os.path.isdir(self.results_directory)!=True:
             os.mkdir(self.results_directory)
-#
-
 
     def enumerate_PE_output(self):
-        '''
-        Create a filename for each file to collect PE results
+            '''
+            Create a filename for each file to collect PE results
 
-        Returns:
-            dct['model_copy_number]=enumerated_report_name
+            Returns:
+                dct['model_copy_number]=enumerated_report_name
+            '''
+            LOG.debug('Enumerating PE report files')
+            dct={}
+            dire,fle=os.path.split(self.report_name)
+            for i in range(self.copy_number):
+                new_file=os.path.join(self.results_directory,
+                                      fle[:-4]+'{}.txt'.format(str(i)))
+                dct[i]=new_file
+            return dct
+
+    ##TODO work out whether parameter_estimation report shuold be multi_parameter_estimation
+
+
+    # def define_report(self):
+    #     """
+    #     Create a multi parameter estimation report
+    #
+    #     First use the current report and see if ti works
+    #     :return:
+    #     """
+    #     pass
+
+    def copy_copasi_dep(self):
         '''
-        LOG.debug('Enumerating PE report files')
-        dct={}
-        dire,fle=os.path.split(self.report_name)
+        Copy copasi files m times to run separetly on a single
+        computer
+
+        returns:
+            dict[model_number]=cps_file
+        '''
+        LOG.debug('Copying copasi file {} times'.format(self.copy_number))
+        sub_copasi_files_dct={}
+        copasi_path,copasi_filename=os.path.split(self.model.copasi_file)
+        for i in range(1,self.copy_number):
+            new_cps=os.path.join(copasi_path,copasi_filename[:-4]+'_{}.cps'.format(str(i)))
+            shutil.copy(self.model.copasi_file,new_cps)
+            sub_copasi_files_dct[i]= new_cps
+        sub_copasi_files_dct[0]=self.model.copasi_file
+
+        with open(self.copasi_file_pickle,'w')as f:
+            pickle.dump(sub_copasi_files_dct,f)
+
+        return sub_copasi_files_dct
+
+    def copy_model(self):
+        """
+        Copy the model n times
+        Uses deep copy to ensure separate models
+        :return: dict[index] = model copy
+        """
+        dct = {}
         for i in range(self.copy_number):
-            new_file=os.path.join(self.results_directory,
-                                  fle[:-4]+'{}.txt'.format(str(i)))
-            dct[i]=new_file
+            dct[i] = deepcopy(self.model)
         return dct
+
+    def _setup1scan(self, q, cps, report):
+        '''
+
+        '''
+        #        LOG.info('setting up scan for model number {}'.format(num))
+        start = time.time()
+        q.put(Scan(cps,
+                   scan_type='repeat',
+                   number_of_steps=self.pe_number,
+                   subtask='parameter_estimation',
+                   report_type='multi_parameter_estimation',
+                   report_name=report,
+                   run_mode=False,
+                   append=self.append,
+                   confirm_overwrite=self.confirm_overwrite,
+                   output_in_subtask=self.output_in_subtask,
+                   save=True))
+        LOG.debug('Setup Took {} seconds'.format(time.time() - start))
+
+
+    def _setup_scan(self):
+        '''
+        Set up n repeat items with number_of_steps repeats of parameter estimation
+        Set run to false as we want to use the multiprocess mode of the run class
+        to process all m files at once in CopasiSE
+
+        Remember scan needs iterating over because each file needs an unique report
+        name
+        '''
+
+        q = Queue.Queue()
+        for num in range(self.copy_number):
+            LOG.debug('setting up scan for model : {}'.format(self.sub_copasi_files[num]))
+            t = threading.Thread(target=self._setup1scan,
+                                 args=(q, self.sub_copasi_files[num], self.report_files[num]))
+            t.daemon = True
+            t.start()
+            time.sleep(0.1)
+
+        s = q.get()
+        ## Since this is being executed in parallel sometimes
+        ## we get process clashes. Not sure exactly whats going on
+        ## but introducing a small delay seems to fix
+        time.sleep(0.1)
+        return 0
+
+    def setup(self):
+        """
+        Analogous to the set_up method of the ParameterEstimation class but this time
+        setup both the PE and Scan tasks
+
+        :return:
+        """
+
+        EM = ExperimentMapper(self.model, self.experiment_files, **self._experiment_mapper_args)
+        self.model = EM.model
+        self.model = self.define_report()
+        self.model = self.remove_all_fit_items()
+        self.model = self.set_PE_method()
+        self.model = self.set_PE_options()
+        self.model = self.insert_all_fit_items()
+        assert self.model != None
+        assert isinstance(self.model, model.Model)
+        print self.copy_model()
+        # need to save before copy
+        # self.model.save()
+        # self.model.open()
+        # ## TODO modify copy copasi to write copasi. Since the change, we can simply write multiple coapsi files rather than copying
+        # self.sub_copasi_files = self.copy_copasi()
+        # self._setup_scan()
+        # return self.model
+
+#     def format_results(self):
+#         """
+#         Copasi output does not have headers. This function
+#         gives PE data output headers
+#         :return: list. Path to report files
+#         """
+#         try:
+#             cps_keys = self.sub_copasi_files.keys()
+#         except AttributeError:
+#             self.setup()
+#             cps_keys = self.sub_copasi_files.keys()
+#         report_keys = self.report_files.keys()
+#         for i in range(len(self.report_files)):
+#             try:
+#                 FormatPEData(self.sub_copasi_files[cps_keys[i]], self.report_files[report_keys[i]],
+#                          report_type='multi_parameter_estimation')
+#             except Errors.InputError:
+#                 LOG.warning('{} is empty. Cannot parse. Skipping this file'.format(self.report_files[report_keys[i]]))
+#                 continue
+#         return self.report_files
+
+    #
+#
+#     def run(self):
+#         """
+#
+#         :return:
+#         """
+#         ##load cps from pickle in case run not being use straignt after set_up
+#         if self.run == 'SGE':
+#             try:
+#                 check_call('qhost')
+#             except Errors.NotImplementedError:
+#                 LOG.warning('Attempting to run in SGE mode but SGE specific commands are unavailable. Switching to \'multiprocess\' mode')
+#                 self.run = 'multiprocess'
+#         if os.path.isfile(self.copasi_file_pickle):
+#             with open(self.copasi_file_pickle) as f:
+#                 self.sub_copasi_files=pickle.load(f)
+#         for i in self.sub_copasi_files:
+#             LOG.info('running model: {}'.format(i))
+#             Run(self.sub_copasi_files[i], mode=self.run_mode, task='scan')
+#
+#     ##void
+
+#
+#     ## void
+
+#
+#
+
 
 
 class MultiModelFit():
@@ -3535,7 +3536,7 @@ class MultiModelFit():
             modify the last columns which contain xml code for that variable.
         4):
             Once each model folder has a config file specific for that model
-            use the setup()() method. Then open one of the child copasi files
+            use the setup() method. Then open one of the child copasi files
             in order to check that things are configured how you'd like them before
             using the run() method.
 
@@ -3553,7 +3554,7 @@ class MultiModelFit():
     def __init__(self,project_config,**kwargs):
         self.project_dir=project_config
 #        self.config_filename=config_filename
-        self.do_checks()
+        self._do_checks()
         self.cps_files,self.exp_files=self.read_fit_config()
 
 #        if self.config_filename==None:
@@ -3708,7 +3709,7 @@ class MultiModelFit():
             self.RMPE_dct[RMPE].run()
 
 
-    def do_checks(self):
+    def _do_checks(self):
         '''
         Function to check the integrity of the input given by user
         '''
