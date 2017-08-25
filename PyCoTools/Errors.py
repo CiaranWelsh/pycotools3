@@ -52,5 +52,6 @@ class AvagadrosError(Exception):
     pass
 
 
-
+class IncorrectUsageError(Exception):
+    pass
 
