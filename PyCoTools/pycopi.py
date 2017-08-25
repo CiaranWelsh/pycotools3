@@ -41,7 +41,7 @@ import matplotlib.pyplot as plt
 from textwrap import wrap
 import string
 import itertools
-from  multiprocessing import Process
+from  multiprocessing import Process, cpu_count
 import glob
 import seaborn as sns
 from copy import deepcopy
@@ -69,8 +69,8 @@ class CopasiMLParser():
 
 
     """
-    def __init__(self,copasi_file):
-        self.copasi_file=copasi_file
+    def __init__(self, copasi_file):
+        self.copasi_file = copasi_file
         if os.path.isfile(self.copasi_file)!=True:
             raise Errors.FileDoesNotExistError('{} is not a copasi file'.format(self.copasi_file))
         self.copasiMLTree=self._parse_copasiML()
@@ -98,7 +98,7 @@ class CopasiMLParser():
 
 class Run(_base._ModelBase):
     """
-
+    ## TODO apply a Queue.Queue system to multirun as in MultiParameterEstimation._setup_scan
     """
     def __init__(self, model, **kwargs):
         """
@@ -142,11 +142,14 @@ class Run(_base._ModelBase):
         return 'Run({})'.format(self.to_string())
 
     def multi_run(self):
+        ##TODO build Queue.Queue system for multi running. 
         def run(x):
             if os.path.isfile(x) != True:
                 raise Errors.FileDoesNotExistError('{} is not a file'.format(self.copasi_file))
-            subprocess.Popen(['CopasiSE', self.copasi_file])
+            subprocess.Popen(['CopasiSE', self.model.copasi_file])
         Process(run(self.model.copasi_file))
+
+
 
     def set_task(self):
         """
@@ -3258,7 +3261,6 @@ class MultiParameterEstimation(ParameterEstimation):
                                          'pe_number':1,
                                          'run_mode': 'multiprocess',
                                          'results_directory':os.path.join(os.path.dirname(self.model.copasi_file),'MultipleParameterEstimationResults'),
-                                         'copasi_file_pickle': os.path.join(os.path.dirname(self.model.copasi_file), 'copasi_paths.pickle'),
                                          'output_in_subtask': True})
 
         ##convert some boolean arguments to str(1) or str(0)
@@ -3275,7 +3277,6 @@ class MultiParameterEstimation(ParameterEstimation):
         self._do_checks()
 
         self._create_output_directory()
-        self.report_files=self.enumerate_PE_output()
 
 
     def __str__(self):
@@ -3368,16 +3369,24 @@ class MultiParameterEstimation(ParameterEstimation):
         """
         dct = {}
         for i in range(self.copy_number):
-            dct[i] = deepcopy(self.model)
+            dire, fle = os.path.split(self.model.copasi_file)
+            new_cps = os.path.join(dire, fle[:-4]+'_{}.cps'.format(i))
+            model = deepcopy(self.model)
+            model.copasi_file = new_cps
+            model.save()
+            dct[i] = model
         return dct
 
-    def _setup1scan(self, q, cps, report):
-        '''
-
-        '''
-        #        LOG.info('setting up scan for model number {}'.format(num))
+    def _setup1scan(self, q, model, report):
+        """
+        Setup a single scan.
+        :param q: queue from multiprocessing
+        :param model: PyCoTools.model.Model
+        :param report: str.
+        :return:
+        """
         start = time.time()
-        q.put(Scan(cps,
+        models = q.put(Scan(model,
                    scan_type='repeat',
                    number_of_steps=self.pe_number,
                    subtask='parameter_estimation',
@@ -3391,57 +3400,100 @@ class MultiParameterEstimation(ParameterEstimation):
         LOG.debug('Setup Took {} seconds'.format(time.time() - start))
 
 
-    def _setup_scan(self):
-        '''
-        Set up n repeat items with number_of_steps repeats of parameter estimation
-        Set run to false as we want to use the multiprocess mode of the run class
-        to process all m files at once in CopasiSE
 
-        Remember scan needs iterating over because each file needs an unique report
-        name
-        '''
-
-        q = Queue.Queue()
-        for num in range(self.copy_number):
-            LOG.debug('setting up scan for model : {}'.format(self.sub_copasi_files[num]))
+    def _setup_scan(self, models):
+        """
+        Set up `copy_number` repeat items with `pe_number`
+        repeats of parameter estimation. Set run to false
+        as we want to use the multiprocess mode of the run class
+        to process all files at once in CopasiSE
+        :return:
+        """
+        number_of_cpu = cpu_count()
+        q = Queue.Queue(maxsize=number_of_cpu)
+        report_files = self.enumerate_PE_output()
+        res = {}
+        for copy_number, model in models.items():
+            LOG.debug('setting up scan for model : {}'.format(copy_number))
             t = threading.Thread(target=self._setup1scan,
-                                 args=(q, self.sub_copasi_files[num], self.report_files[num]))
+                                 args=(q, model, report_files[copy_number]))
             t.daemon = True
             t.start()
             time.sleep(0.1)
 
-        s = q.get()
+            res[copy_number] = q.get().model
         ## Since this is being executed in parallel sometimes
         ## we get process clashes. Not sure exactly whats going on
         ## but introducing a small delay seems to fix
         time.sleep(0.1)
-        return 0
+        return res
+
+
+    def run(self):
+        """
+
+        :return:
+        :param models: dict of models. Output from setup()
+        """
+        ##load cps from pickle in case run not being use straignt after set_up
+        try:
+            self.models
+        except AttributeError:
+            raise Errors.IncorrectUsageError('You must use the setup method before the run method')
+
+        if self.run == 'SGE':
+            try:
+                check_call('qhost')
+            except Errors.NotImplementedError:
+                LOG.warning('Attempting to run in SGE mode but SGE specific commands are unavailable. Switching to \'multiprocess\' mode')
+                self.run = 'multiprocess'
+        # if os.path.isfile(self.copasi_file_pickle):
+        #     with open(self.copasi_file_pickle) as f:
+        #         self.sub_copasi_files=pickle.load(f)
+        for copy_number, model in self.models.items():
+            LOG.info('running model: {}'.format(copy_number))
+            Run(model, mode=self.run_mode, task='scan')
 
     def setup(self):
         """
-        Analogous to the set_up method of the ParameterEstimation class but this time
-        setup both the PE and Scan tasks
+        Over-ride the setup method from parameter estimation.
+        Basically do the same thing but add a few methods.
 
         :return:
         """
-
+        ## map experiments
         EM = ExperimentMapper(self.model, self.experiment_files, **self._experiment_mapper_args)
+
+        ## get model from ExperimentMapper
         self.model = EM.model
+
+        ## create a report for PE results collection
         self.model = self.define_report()
+
+        ## get rid of existing parameter estimation definition
         self.model = self.remove_all_fit_items()
+
+        ## create new parameter estimation
         self.model = self.set_PE_method()
         self.model = self.set_PE_options()
         self.model = self.insert_all_fit_items()
+
+        ## ensure we have model
         assert self.model != None
         assert isinstance(self.model, model.Model)
-        print self.copy_model()
-        # need to save before copy
-        # self.model.save()
-        # self.model.open()
-        # ## TODO modify copy copasi to write copasi. Since the change, we can simply write multiple coapsi files rather than copying
-        # self.sub_copasi_files = self.copy_copasi()
-        # self._setup_scan()
-        # return self.model
+
+        ##copy the number `copy_number` times
+        models = self.copy_model()
+
+        ## ensure we have dict of models
+        assert isinstance(models, dict)
+        assert len(models) == self.copy_number
+
+        ##create a scan per model (again models is dict of model.Model's
+        self.models = self._setup_scan(models)
+        assert isinstance(models[0], model.Model)
+        return models
+
 
 #     def format_results(self):
 #         """
@@ -3465,27 +3517,10 @@ class MultiParameterEstimation(ParameterEstimation):
 #         return self.report_files
 
     #
-#
-#     def run(self):
-#         """
-#
-#         :return:
-#         """
-#         ##load cps from pickle in case run not being use straignt after set_up
-#         if self.run == 'SGE':
-#             try:
-#                 check_call('qhost')
-#             except Errors.NotImplementedError:
-#                 LOG.warning('Attempting to run in SGE mode but SGE specific commands are unavailable. Switching to \'multiprocess\' mode')
-#                 self.run = 'multiprocess'
-#         if os.path.isfile(self.copasi_file_pickle):
-#             with open(self.copasi_file_pickle) as f:
-#                 self.sub_copasi_files=pickle.load(f)
-#         for i in self.sub_copasi_files:
-#             LOG.info('running model: {}'.format(i))
-#             Run(self.sub_copasi_files[i], mode=self.run_mode, task='scan')
-#
-#     ##void
+
+
+
+    ##void
 
 #
 #     ## void
