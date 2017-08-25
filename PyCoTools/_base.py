@@ -31,6 +31,7 @@ import Errors
 import logging
 # from model import Model
 from contextlib import contextmanager
+from copy import deepcopy
 # from model import Model
 
 LOG = logging.getLogger(__name__)
@@ -63,12 +64,16 @@ class _Base(object):
 
         :return: str
         """
+        prop = deepcopy(self.__dict__)
+        del prop['kwargs']
+        if 'default_properties' in prop:
+            del prop['default_properties']
         str_list = []
-        for attr in sorted(self.kwargs):
-            if isinstance(self.kwargs[attr], str)==False:
-                str_list.append('{}={}'.format(attr, self.kwargs[attr] ))
+        for attr in sorted(prop):
+            if isinstance(prop[attr], str)==False:
+                str_list.append('{}={}'.format(attr, prop[attr] ))
             else:
-                str_list.append('{}=\'{}\''.format(attr, self.kwargs[attr]))
+                str_list.append('{}=\'{}\''.format(attr, prop[attr]))
 
         string = ','.join(str_list)
         return string.replace(',', ', ')
@@ -182,8 +187,12 @@ class _Base(object):
                     dct[k] = '1'
                 elif v == False:
                     dct[k] = '0'
+                elif v == '1':
+                    pass
+                elif v == '0':
+                    pass
                 else:
-                    raise Exception
+                    raise Exception('{} is not True or False'.format(v))
         return dct
 
     @staticmethod

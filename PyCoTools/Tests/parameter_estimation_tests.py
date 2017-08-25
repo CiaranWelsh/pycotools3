@@ -61,8 +61,15 @@ class ParameterEstimationTests(_test_base._BaseTest):
                                                        self.TC1.report_name,
                                                        method='genetic_algorithm',
                                                        population_size=10,
-                                                       number_of_generations=10)
+                                                       number_of_generations=10,
+                                                       report_name='PE_report_name.csv')
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
+
+    def test_report_name(self):
+        self.assertTrue(self.PE.report_name == os.path.join(os.path.dirname(self.model.copasi_file), self.PE.report_name))
+
+
+
 
     def test_config_file(self):
         """

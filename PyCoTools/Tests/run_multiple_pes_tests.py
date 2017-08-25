@@ -27,8 +27,8 @@ Date:
 
 import pickle
 import site
-# site.addsitedir('/home/b3053674/Documents/PyCoTools')
-site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
+site.addsitedir('/home/b3053674/Documents/PyCoTools')
+# site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
 import PyCoTools
 from PyCoTools.PyCoToolsTutorial import test_models
 import unittest
@@ -66,96 +66,97 @@ class MultiParameterEstimationTests(_test_base._BaseTest):
                                                        population_size=10,
                                                        number_of_generations=10)
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
+
+
+    def _wait_for_PEs(self):
+        number_of_expected_PEs = 4
+        x = 0
+
+        while x != number_of_expected_PEs:
+            df_dct = {}
+            for f in os.listdir(self.RMPE['results_directory']):
+                f = os.path.join(self.RMPE['results_directory'], f)
+                try:
+                    df_dct[f] = pandas.read_csv(f, sep='\t', skiprows=1, header=None)
+                except IOError:
+                    continue
+                except pandas.io.common.EmptyDataError:
+                    continue
+            try:
+                df = pandas.concat(df_dct)
+
+            except ValueError:
+                continue
+            x = df.shape[0]
+        return df
+
+    # def test_output_directory(self):
+    #     self.assertTrue(os.path.isdir(self.MPE.results_directory))
+    #
+    # def test_report_files(self):
+    #     self.assertEqual(len(self.MPE.report_files.items()),
+    #                      self.MPE.copy_number)
+
+    def test(self):
         self.MPE.setup()
-
-    # def test(self):
-    #     print self.MPE.item_template
-
-    def test_output_directory(self):
-        self.assertTrue(os.path.isdir(self.MPE.results_directory))
-
-    def test_report_files(self):
-        self.assertEqual(len(self.MPE.report_files.items()),
-                         self.MPE.copy_number)
+#     def test_write_config_file(self):
+#         """
+#         Test that RMPE produces a config file
+#         :return:
+#         """
+#         self.MPE.write_config_file()
+#         self.assertTrue(os.path.isfile(self.MPE.config_filename))
 #
-    def test_write_config_file(self):
-        """
-        Test that RMPE produces a config file
-        :return:
-        """
-        self.MPE.write_config_file()
-        self.assertTrue(os.path.isfile(self.MPE.config_filename))
-# #
-#     def test_write_config_file2(self):
-        # """
-        # test that you can change the name of the config file
-        # :return:
-        # """
-        # new_filename = os.path.join(os.getcwd(),'Newconfig_filename.xlsx')
-        #
-        # self.MPE = PyCoTools.pycopi.MultiParameterEstimation(self.copasi_file,
-        #                                             self.MPE.experiment_files,
-        #                                             config_filename=new_filename)
-        #
-        # if self.MPE.config_filename != new_filename:
-        #     raise PyCoTools.Errors.InputError('config_filename argument was not changed')
-        # self.MPE.write_config_file()
-        # self.model = self.MPE.setup()
-        # self.model.save()
+#     def test_number_of_copasi_files(self):
+#         """
+#         make sure we have the correct number of files
+#         :return:
+#         """
+#         num = self.MPE.copy_number
+#         self.assertEqual(len(self.MPE.sub_copasi_files), num)
+#
+#     def test_scan(self):
+#         """
+#         ensure scan item is correctly set up on each of the sub copasi files
+#         :return:
+#         """
+#         first_model = self.MPE.sub_copasi_files[0]
+#         query='//*[@name="ScanItems"]'
+#         new_xml = PyCoTools.pycopi.CopasiMLParser(first_model).copasiML
+#         for i in new_xml.xpath(query):
+#             for j in list(i):
+#                 for k in list(j):
+#                     if k.attrib['name'] == 'Number of steps':
+#                         self.assertEqual(int(k.attrib['value']), self.MPE.pe_number)
+#
+#     def test_pickle_path(self):
+#         """
+#         Test that the pickle path is created
+#         :return:
+#         """
+#         self.assertTrue(os.path.isfile(self.MPE.copasi_file_pickle))
+#
+#     def test_pickle_contents(self):
+#         """
+#         Test that the pickle file has the correct number of
+#         copasi files as contents
+#         :return:
+#         """
+#
+#         with open(self.MPE.copasi_file_pickle) as f:
+#             copasi_dict = pickle.load(f)
+#         self.assertEqual(int(self.MPE.kwargs['copy_number']), len(copasi_dict.items()))
 
+    # def test_total_number_of_PE(self):
+    #     """
+    #     test that the total number of PEs = copy_number*pe_number
+    #     :return:
+    #     """
+    #     self.run()
+    #     data = self._wait_for_PEs()
+    #     self.assertEqual(data.shape[0],
+    #                       self.MPE['copy_number']*self.MPE['pe_number'] )
 
-
-    def test_number_of_copasi_files(self):
-        """
-        make sure we have the correct number of files
-        :return:
-        """
-        num = self.MPE.copy_number
-        self.assertEqual(len(self.MPE.sub_copasi_files), num)
-
-    def test_scan(self):
-        """
-        ensure scan item is correctly set up on each of the sub copasi files
-        :return:
-        """
-        first_model = self.MPE.sub_copasi_files[0]
-        query='//*[@name="ScanItems"]'
-        new_xml = PyCoTools.pycopi.CopasiMLParser(first_model).copasiML
-        for i in new_xml.xpath(query):
-            for j in list(i):
-                for k in list(j):
-                    if k.attrib['name'] == 'Number of steps':
-                        self.assertEqual(int(k.attrib['value']) , self.MPE.pe_number)
-
-    def test_pickle_path(self):
-        """
-        Test that the pickle path is created
-        :return:
-        """
-        # self.RMPE.write_config_template()
-        # self.RMPE.setup()
-        self.assertTrue(os.path.isfile(self.MPE.copasi_file_pickle))
-
-    def test_pickle_contents(self):
-        """
-        Test that the pickle file has the correct number of
-        copasi files as contents
-        :return:
-        """
-
-        # self.MPE.write_config_template()
-        # self.MPE.setup()
-        with open(self.MPE.copasi_file_pickle) as f:
-            copasi_dict = pickle.load(f)
-        self.assertEqual(int(self.MPE.kwargs['copy_number']), len(copasi_dict.items()))
-
-    def test_total_number_of_PE(self):
-        """
-        test that the total number of PEs = copy_number*pe_number
-        :return:
-        """
-        self.assertEqual(self.data.shape[0],
-                         self.MPE['copy_number']*self.MPE['pe_number'] )
 
 
 if __name__=='__main__':
