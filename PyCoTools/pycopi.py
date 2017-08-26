@@ -324,22 +324,26 @@ class Reports(_base._ModelBase):
                            'time_course','parameter_estimation', 'multi_parameter_estimation']
         assert self.report_type in self.report_types,'valid report types include {}'.format(self.report_types)
 
-        quantity_types=['particle_numbers','concentration']
+        quantity_types = ['particle_numbers', 'concentration']
         assert self.quantity_type in quantity_types
 
 
         if self.report_name == None:
             if self.report_type == 'profilelikelihood':
                 default_report_name='profilelikelihood.txt'
-            elif self.kwargs.get('report_type')=='profilelikelihood2':
+
+            elif self.report_type=='profilelikelihood2':
                 default_report_name='profilelikelihood2.txt'
 
             elif self.report_type == 'time_course':
                 default_report_name='time_course.txt'
+
             elif self.report_type =='parameter_estimation':
                 default_report_name = 'parameter_estimation.txt'
+
             elif self.report_type == 'multi_parameter_estimation':
                 default_report_name = 'multi_parameter_estimation.txt'
+
             self.report_name = default_report_name
 
     def __str__(self):
@@ -3257,11 +3261,11 @@ class MultiParameterEstimation(ParameterEstimation):
         super(MultiParameterEstimation, self).__init__(model, experiment_files, **kwargs)
 
         ## add to ParameterEstimation defaults
-        self.default_properties.update({'copy_number': 1,
-                                         'pe_number':1,
+        self.default_properties.update({'copy_number': 2,
+                                         'pe_number':2,
                                          'run_mode': 'multiprocess',
                                          'results_directory':os.path.join(os.path.dirname(self.model.copasi_file),'MultipleParameterEstimationResults'),
-                                         'output_in_subtask': True})
+                                         'output_in_subtask': False})
 
         ##convert some boolean arguments to str(1) or str(0)
         self.convert_bool_to_numeric(self.default_properties)
@@ -3287,6 +3291,8 @@ class MultiParameterEstimation(ParameterEstimation):
         '''
 
         '''
+        if self.output_in_subtask:
+            LOG.warning('output_in_subtask has been turned on. This means that you\'ll get function evaluations with the best parameter set that the algorithm finds')
         run_arg_list=['multiprocess','SGE']
         if self.run_mode not in run_arg_list:
             raise Errors.InputError('run needs to be one of {}'.format(run_arg_list))
@@ -3311,55 +3317,31 @@ class MultiParameterEstimation(ParameterEstimation):
         if os.path.isdir(self.results_directory)!=True:
             os.mkdir(self.results_directory)
 
-    def enumerate_PE_output(self):
-            '''
-            Create a filename for each file to collect PE results
+    def define_report(self):
+        """
+        create parameter estimation report
+        for result collection
+        :return: PyCoTools.model.Model
+        """
+        self._report_arguments['report_type'] = 'multi_parameter_estimation'
+        return Reports(self.model, **self._report_arguments).model
 
-            Returns:
-                dct['model_copy_number]=enumerated_report_name
-            '''
+    def enumerate_PE_output(self):
+            """
+            Create a filename for each file to collect PE results
+            :return: dict['model_copy_number]=enumerated_report_name
+            """
+
             LOG.debug('Enumerating PE report files')
-            dct={}
-            dire,fle=os.path.split(self.report_name)
+            dct = {}
+            dire, fle = os.path.split(self.report_name)
             for i in range(self.copy_number):
-                new_file=os.path.join(self.results_directory,
+                new_file = os.path.join(self.results_directory,
                                       fle[:-4]+'{}.txt'.format(str(i)))
-                dct[i]=new_file
+                dct[i] = new_file
             return dct
 
     ##TODO work out whether parameter_estimation report shuold be multi_parameter_estimation
-
-
-    # def define_report(self):
-    #     """
-    #     Create a multi parameter estimation report
-    #
-    #     First use the current report and see if ti works
-    #     :return:
-    #     """
-    #     pass
-
-    def copy_copasi_dep(self):
-        '''
-        Copy copasi files m times to run separetly on a single
-        computer
-
-        returns:
-            dict[model_number]=cps_file
-        '''
-        LOG.debug('Copying copasi file {} times'.format(self.copy_number))
-        sub_copasi_files_dct={}
-        copasi_path,copasi_filename=os.path.split(self.model.copasi_file)
-        for i in range(1,self.copy_number):
-            new_cps=os.path.join(copasi_path,copasi_filename[:-4]+'_{}.cps'.format(str(i)))
-            shutil.copy(self.model.copasi_file,new_cps)
-            sub_copasi_files_dct[i]= new_cps
-        sub_copasi_files_dct[0]=self.model.copasi_file
-
-        with open(self.copasi_file_pickle,'w')as f:
-            pickle.dump(sub_copasi_files_dct,f)
-
-        return sub_copasi_files_dct
 
     def copy_model(self):
         """

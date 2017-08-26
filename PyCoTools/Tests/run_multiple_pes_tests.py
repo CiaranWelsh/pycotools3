@@ -27,8 +27,8 @@ Date:
 
 import pickle
 import site
-site.addsitedir('/home/b3053674/Documents/PyCoTools')
-# site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
+# site.addsitedir('/home/b3053674/Documents/PyCoTools')
+site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
 import PyCoTools
 from PyCoTools.PyCoToolsTutorial import test_models
 import unittest
@@ -37,7 +37,7 @@ import os
 import shutil 
 import pandas
 from PyCoTools.Tests import _test_base
-
+from retrying import retry
 
 
 
@@ -61,42 +61,13 @@ class MultiParameterEstimationTests(_test_base._BaseTest):
         self.MPE = PyCoTools.pycopi.MultiParameterEstimation(self.model,
                                                        self.TC1.report_name,
                                                        copy_number=2,
-                                                       pe_number=2,
+                                                       pe_number=8,
                                                        method='genetic_algorithm',
                                                        population_size=10,
                                                        number_of_generations=10)
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
 
         self.MPE.setup()
-
-    def _wait_for_PEs(self):
-        """
-        function for getting python to wait until copasi
-        has outputted the results to folder
-        :return:
-        """
-        number_of_expected_PEs = 4
-        x = 0
-
-        while x <= number_of_expected_PEs:
-            df_dct = {}
-            for f in os.listdir(self.MPE.results_directory):
-                f = os.path.join(self.MPE.results_directory, f)
-                try:
-                    df_dct[f] = pandas.read_csv(f, sep='\t', skiprows=1, header=None)
-                except IOError:
-                    continue
-                except pandas.io.common.EmptyDataError:
-                    continue
-            try:
-                df = pandas.concat(df_dct)
-
-            except ValueError:
-                continue
-            x = df.shape[0]
-            if x > number_of_expected_PEs:
-                raise Errors.InputError('Starting with more than {} paramete sets. Delete your results folder'.format(number_of_expected_PEs))
-        return df
 
     def test_output_directory(self):
         self.assertTrue(os.path.isdir(self.MPE.results_directory))
@@ -132,17 +103,20 @@ class MultiParameterEstimationTests(_test_base._BaseTest):
                     if k.attrib['name'] == 'Number of steps':
                         self.assertEqual(int(k.attrib['value']), self.MPE.pe_number)
 
-
+    @retry(wait_exponential_multiplier=1000, wait_exponential_max=10000)
     def test_total_number_of_PE(self):
         """
         test that the total number of PEs = copy_number*pe_number
         :return:
         """
-        # self.MPE.models[0].open()
-        self.run()
-        # data = self._wait_for_PEs()
-        # self.assertEqual(data.shape[0],
-        #                   self.MPE.copy_number*self.MPE.pe_number )
+        x=self.MPE.copy_number*self.MPE.pe_number
+        self.MPE.run()
+        df_dct = {}
+        for f in os.listdir(self.MPE.results_directory):
+            f = os.path.join(self.MPE.results_directory, f)
+            df_dct[f] = pandas.read_csv(f, sep='\t', skiprows=1, header=None)
+        df = pandas.concat(df_dct)
+        self.assertTrue(df.shape[0] == x)
 
 
 

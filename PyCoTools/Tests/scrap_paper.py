@@ -26,8 +26,8 @@ Date:
 
 
 import site
-# site.addsitedir(r'C:\Users\Ciaran\Documents\PyCoTools')
-site.addsitedir(r'/home/b3053674/Documents/PyCoTools')
+site.addsitedir(r'C:\Users\Ciaran\Documents\PyCoTools')
+# site.addsitedir(r'/home/b3053674/Documents/PyCoTools')
 
 import PyCoTools
 from PyCoTools.PyCoToolsTutorial import test_models
@@ -42,9 +42,9 @@ from lxml import etree
 from mixin import Mixin, mixin
 
 #
-# test_model = r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps'
-test_model = '/home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps'
-test_report_name = os.path.join(os.path.dirname(test_model), 'testing_report.txt')
+test_model = r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps'
+# test_model = '/home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps'
+# test_report_name = os.path.join(os.path.dirname(test_model), 'testing_report.txt')
 
 model = PyCoTools.model.Model(test_model)
 
@@ -52,14 +52,11 @@ TC = PyCoTools.pycopi.TimeCourse(model, end=1000, intervals=10,
                                  step_size=100)
 
 
-PE = PyCoTools.pycopi.ParameterEstimation(model, TC.report_name,
-                                          report_name='asdfa.csv')
+PE = PyCoTools.pycopi.MultiParameterEstimation(model, TC.report_name)
 print PE.report_name
 PE.write_config_file()
 model = PE.setup()
-model.save()
 PE.run()
-model.open()
 
 # PE.run()
 
