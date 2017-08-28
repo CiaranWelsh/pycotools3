@@ -312,7 +312,37 @@ class ModelTests(_test_base._BaseTest):
 
 
     def test_reactions(self):
-        print self.model.reactions()
+        self.assertEqual(len(self.model.reactions), 4)
 
+
+    def test_add_functions(self):
+        self.model = self.model.add_function(name='new_funct',
+                                expression='K*M*S',
+                                role={'K': 'parameter',
+                                      'M': 'modifier',
+                                      'S': 'substrate'})
+        fun = self.model.get('function', 'new_funct', by='name')
+        self.assertNotEqual(fun, [])
+
+    def test_remove_functions(self):
+        self.model = self.model.add_function(name='new_funct',
+                                             expression='K*M*S',
+                                             role={'K': 'parameter',
+                                                   'M': 'modifier',
+                                                   'S': 'substrate'})
+        self.model = self.model.remove_function('new_funct', by='name')
+        fun = self.model.get('function', 'new_funct', by='name')
+        self.assertEqual(fun, [])
+
+    # def test_add_reaction(self):
+    #     """
+    #
+    #     :return:
+    #     """
+    #     print self.model.add_reaction('2*J + X -> F + V; B P', rate_law='k*A*B')
+
+    def test_translater(self):
+        reaction = '2*J + X + X -> F + V; B P'
+        PyCoTools.model.Translator(reaction)
 if __name__ == '__main__':
     unittest.main()
