@@ -35,7 +35,7 @@ import re
 from lxml import etree
 from copy import deepcopy
 import logging
-from collections import OrderedDict
+from collections import OrderedDict, Counter
 
 LOG = logging.getLogger(__name__)
 
@@ -497,9 +497,6 @@ class Model(_base._Base):
             lst.append(LocalParameter(**d[param]) )
         return lst
 
-    def get_local_parameters(self):
-        print
-
     @property
     def functions(self):
         """
@@ -512,6 +509,109 @@ class Model(_base._Base):
                 for child in list(element):
                     lst.append( Function(**child.attrib) )
         return lst
+
+    def add_function(self, name, expression, role, type='user_defined',
+                     key=None, reversible=False):
+        """
+
+        :param name:
+        :param expression:
+        :param type:
+        :param key:
+        :param reversible:
+        :return:
+        """
+
+        if key == None:
+            key = KeyFactory(self, type='function').generate()
+
+        if type == 'user_defined':
+            type = 'UserDefined'
+
+        if reversible == True:
+            reversible = 'true'
+        else:
+            reversible = 'false'
+
+        if not isinstance(role, dict):
+            raise Errors.InputError('role should be a python dictionary')
+
+        roles = ['parameter', 'modifier', 'substrate', 'product']
+        for n, r in role.items():
+            if r not in roles:
+                raise Errors.InputError('{} is not one of {}'.format(r, roles))
+            if r == 'parameter':
+                role[n] = 'constant'
+
+        ## create the function element
+        function = etree.Element('Function', attrib={'key': key,
+                                                     'name': name,
+                                                     'type': type})
+
+        ##add the expression as text
+        exp = etree.SubElement(function, 'Expression')
+        exp.text = expression+'\n'
+        etree.SubElement(function, 'ListOfParameterDescriptions')
+
+        # ## list of available operators according the copasi website
+        # operator_list = ['+', '-', '*', '%',
+        #                  '%', '^', 'abs', 'floor',
+        #                  'ceil', 'factorial', 'log',
+        #                  'log10', 'exp', 'sin'
+        #                  'cos', 'tan', 'sec',
+        #                  'csc', 'cot', 'tanh',
+        #                  'sech', 'csch', 'coth',
+        #                  'asin', 'acos', 'atan',
+        #                  'arcsec', 'arccsc', 'arcccot',
+        #                  'arcsinh', 'arccosh', 'arctanh',
+        #                  'arcsech', 'arccsch', 'arccoth',
+        #                  'uniform', 'normal', 'le',
+        #                  'lt', 'ge', 'gt', 'ne', 'eq',
+        #                  'and', 'or', 'xor', 'not', 'if']
+        #
+        # ## replace operators with comma so we can subsequently split the string at comma
+        # for i in operator_list:
+        #     expression = expression.replace(i, ',')
+        #
+        # ##get list of elements by split
+        # expression = expression.split(',')
+        expression = Expression(expression).to_list()
+
+        ## make sure there are enough elements in the role dict
+        if len(expression) != len(role.items()):
+            raise Errors.InputError('Every item of your expression must have a role')
+
+        ## create role elements
+        for i, name in enumerate(expression):
+            key = "FunctionParameter_{}".format(100000+i)
+            etree.SubElement(function,
+                             'ParameterDescription',
+                             attrib={'key': key,
+                                     'name': name,
+                                     'order': str(i),
+                                     'role': role[name]})
+
+        ## add the function to list of functions
+        for i in self.xml.iter():
+            if i.tag == '{http://www.copasi.org/static/schema}ListOfFunctions':
+                i.append(function)
+
+        return self
+
+    def remove_function(self, value, by='name'):
+        """
+        remove a function with attribute specified with by and
+        value with value
+        :param value: string to match atttribute (i.e the functions name)
+        :param by: attribute of function. default='name'
+        :return: model.Model
+        """
+        for i in self.xml.iter():
+            if i.tag == '{http://www.copasi.org/static/schema}ListOfFunctions':
+                for j in i:
+                    if j.attrib[by] == value:
+                        j.getparent().remove(j)
+        return self
 
     @property
     def number_of_reactions(self):
@@ -570,6 +670,62 @@ class Model(_base._Base):
                                  rate_law=function_list)
                     list_of_reactions.append(r)
         return list_of_reactions
+
+    def add_reaction(self, reaction, rate_law='mass_action', key=None,
+                     name=None, reversible=False):
+        """
+
+        :param reaction: reaction as you would type into copasi
+        :param rate_law: mathematical expression or mass_action (default)
+        :return:
+        """
+        ## convert to expression object
+        rate_law = Expression(rate_law)
+
+        ## automatic key assignment
+        if key == None:
+            key = KeyFactory(self, type='reaction').generate()
+
+        ## automatic name assignment
+        if name == None:
+            name = key
+
+        if not isinstance(reversible, bool):
+            raise Errors.InputError('reversible argument should be a boolean')
+
+        ## convert bool types to string booleans
+        if reversible:
+            reversible = 'true'
+        else:
+            reversible = 'false'
+
+        reaction_element = etree.Element('Reaction', attrib={'key': key,
+                                                     'name': name,
+                                                     'reversible': reversible})
+
+
+
+        ListOfSubstrates = etree.SubElement(reaction_element, 'ListOfSubstrates')
+        for substrate_name in set(list_of_substrates):
+
+            ## look for substrate in metabolites
+            if [metab.name for metab in self.metabolites if metab.name == substrate_name] == []:
+
+                ## if not exists add metabolite
+                self.add_metabolite(substrate_name, particle_number=1,
+                                    compartment=self.compartments[0],
+                                    simulation_type='reactions')
+
+            ## now get the substrate
+            substrate = self.get('metabolite', substrate_name, by='name')
+            etree.SubElement(ListOfSubstrates, 'Substrate' )
+
+
+
+
+
+
+
 
 
     def save(self, copasi_file=None):
@@ -696,7 +852,8 @@ class Model(_base._Base):
         list_of_accepted_components = ['metabolite',
                                        'compartment',
                                        'local_parameter',
-                                       'global_quantity']
+                                       'global_quantity',
+                                       'function']
         if component not in list_of_accepted_components:
             raise Errors.InputError('{} not in list of components'.format(component))
 
@@ -711,6 +868,9 @@ class Model(_base._Base):
 
         elif component == 'global_quantity':
             res = [i for i in self.global_quantities if getattr(i, by) == value]
+
+        elif component == 'function':
+            res = [i for i in self.functions if getattr(i, by) == value]
 
         if len(res) == 1:
             res = res[0]
@@ -1129,7 +1289,8 @@ class KeyFactory(_base._ModelBase):
                      'reaction',
                      'parameter_set',
                      'parameter',
-                     'report']
+                     'report',
+                     'function']
         if self.type not in type_list:
             raise Errors.InputError('{} not a valid type. {}'.format(self.type, type_list))
 
@@ -1148,13 +1309,16 @@ class KeyFactory(_base._ModelBase):
             return self.create_key(self.model.global_quantities).next()
 
         elif self.type == 'reaction':
-            return self.create_key(self.model.reactions()).next()
+            return self.create_key(self.model.reactions).next()
 
         elif self.type == 'parameter_set':
             raise NotImplementedError#self.create_key(self.model.metabolites).next()
 
         elif self.type == 'parameter':
             return self.create_key(self.model.local_parameters).next()
+
+        elif self.type == 'function':
+            return self.create_key(self.model.functions).next()
 
         elif self.type == 'report':
             raise NotImplementedError
@@ -1185,6 +1349,124 @@ class KeyFactory(_base._ModelBase):
             if key not in [i.key for i in model_component]:
                 yield key
             count += 1
+
+class Expression(_base._Base):
+    def __init__(self, expression, **kwargs):
+        super(Expression, self).__init__(**kwargs)
+        self.expression = expression
+        self.default_properties = {}
+
+        ## list of available operators according the copasi website
+        self.operator_list = ['+', '-', '*', '%',
+                         '%', '^', 'abs', 'floor',
+                         'ceil', 'factorial', 'log',
+                         'log10', 'exp', 'sin'
+                                         'cos', 'tan', 'sec',
+                         'csc', 'cot', 'tanh',
+                         'sech', 'csch', 'coth',
+                         'asin', 'acos', 'atan',
+                         'arcsec', 'arccsc', 'arcccot',
+                         'arcsinh', 'arccosh', 'arctanh',
+                         'arcsech', 'arccsch', 'arccoth',
+                         'uniform', 'normal', 'le',
+                         'lt', 'ge', 'gt', 'ne', 'eq',
+                         'and', 'or', 'xor', 'not', 'if']
+
+
+    def to_list(self):
+        """
+        convert a mathematical expression into a list of elements
+        in the equation
+        :return:
+        """
+        ## replace operators with comma so we can subsequently split the string at comma
+        for i in self.operator_list:
+            self.expression = self.expression.replace(i, ',')
+
+        ##get list of elements by split
+        return self.expression.split(',')
+
+    def __str__(self):
+        return "Expression({})".format(self.expression)
+
+
+
+
+class Translator(_base._Base):
+    def __init__(self, reaction, **kwargs):
+        super(Translator, self).__init__(**kwargs)
+        self.reaction = reaction
+        self.substrates, self.products, self.modifiers = self.split_reaction()
+
+        self.substrates = self.split_reaction_components(self.substrates, type='substrate')
+        self.products = self.split_reaction_components(self.products, type='product')
+        self.modifiers = self.split_reaction_components(self.modifiers, type='modifier')
+
+        self.substrates = self.determine_stoiciometry(self.substrates)
+        self.products = self.determine_stoiciometry(self.products)
+
+        print self.products
+    def __str__(self):
+        """
+
+        :return:
+        """
+        return "Translator({})".format(self.to_string())
+
+    def split_reaction(self):
+        """
+        split the reaction into reactants, products
+        and modifiers
+        :return:
+        """
+        list_of_substrates = []
+        list_of_products = []
+        list_of_modifiers = []
+        if ';' in self.reaction:
+            list_of_substrates, reaction = self.reaction.split('->')
+            list_of_products, list_of_modifiers = reaction.split(';')
+        else:
+            list_of_substrates, list_of_products = self.reaction.split('->')
+
+        return list_of_substrates, list_of_products, list_of_modifiers
+
+    def split_reaction_components(self, component, type='substrate'):
+        """
+        split a reaction or product component by + operator and
+        modifier by empty spaces
+        :param component: one of substrate, product or modifier
+        :return:
+        """
+        component_options = ['substrate', 'product', 'modifier']
+        if type not in component_options:
+            raise Errors.InputError('{} not in {}'.format(component, component_options))
+
+        if type == 'substrate':
+            return [i.strip() for i in self.substrates.split('+')]
+
+        elif type == 'product':
+            return [i.strip() for i in self.products.split('+')]
+
+        elif type == 'modifier':
+            return [i.strip() for i in self.modifiers.split(' ') if i != '']
+
+
+    def determine_stoiciometry(self, component):
+        """
+        determine the reaction stoiciometry for a reaction component.
+        Converts syntax such as 'X + X -> Y + Y' into 2*X for substrates
+        and 2*Y for products.
+        :param component: either substrate or product side of the ->. Modifiers are 1
+        :return: list
+        """
+
+        count = Counter(component)
+        for i in count:
+            if count[i] > 1:
+                count['{}*{}'.format(count[i], i)] = 1
+                del count[i]
+        return count.keys()
+
 
 
 
