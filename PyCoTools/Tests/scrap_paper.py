@@ -42,21 +42,41 @@ from lxml import etree
 from mixin import Mixin, mixin
 
 #
-test_model = r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps'
+test_model = r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model - Copy.cps'
 # test_model = '/home/b3053674/Documents/PyCoTools/PyCoTools/Tests/test_model.cps'
 # test_report_name = os.path.join(os.path.dirname(test_model), 'testing_report.txt')
 
 model = PyCoTools.model.Model(test_model)
 
-TC = PyCoTools.pycopi.TimeCourse(model, end=1000, intervals=10,
-                                 step_size=100)
+
+# I = PyCoTools.pycopi.InsertParameters(model, parameter_dict={'(B2C).k2': 7})
+# model = I.insert_locals()
+
+comp = PyCoTools.model.Compartment(name='Nuc',
+                                   key=1,
+                                   value=1,
+                                   type='fixed')
+a= PyCoTools.model.Metabolite(name='A',
+                              compartment=comp,
+                              key=1,
+                              particle_number=10,
+                              simulation_type='reactions')
 
 
-PE = PyCoTools.pycopi.MultiParameterEstimation(model, TC.report_name)
-print PE.report_name
-PE.write_config_file()
-model = PE.setup()
-PE.run()
+
+
+
+
+
+# TC = PyCoTools.pycopi.TimeCourse(model, end=1000, intervals=10,
+#                                  step_size=100)
+#
+#
+# PE = PyCoTools.pycopi.MultiParameterEstimation(model, TC.report_name)
+# print PE.report_name
+# PE.write_config_file()
+# model = PE.setup()
+# PE.run()
 
 # PE.run()
 
