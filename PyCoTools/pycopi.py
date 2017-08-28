@@ -3512,7 +3512,7 @@ class MultiParameterEstimation(ParameterEstimation):
 
 
 
-class MultiModelFit():
+class MultiModelFit(object):
     '''
     Coordinate a systematic multi model fitting parameter estimation and
     compare results using AIC/BIC.
@@ -3568,98 +3568,88 @@ class MultiModelFit():
 
             All other kwargs are described in runMultiplePEs or ParameterEstimation
     '''
-    def __init__(self,project_config,**kwargs):
-        self.project_dir=project_config
+    def __init__(self, project_config, **kwargs):
+        self.project_dir = project_config
 #        self.config_filename=config_filename
         self._do_checks()
-        self.cps_files,self.exp_files=self.read_fit_config()
+        self.cps_files, self.exp_files = self.read_fit_config()
 
-#        if self.config_filename==None:
-#            self.config_filename=os.path.join(self.project_dir,'PEConfigFile.xlsx')
+        default_properties = {'run': 'multiprocess',
+                   'copy_number': 1,
+                   'pe_number': 3,
+                   'report_name': None,
+                   'results_directory': None,
+                   ##default parameters for ParameterEstimation
+                   'method': 'GeneticAlgorithm',
+                   'plot': False,
+                   'quantity_type': 'concentration',
+                   'append': False,
+                   'confirm_overwrite': False,
+                   'config_filename': 'PEConfigFile.xlsx',
+                   'overwrite_config_file': False,
+                   'prune_headers': True,
+                   'update_model': False,
+                   'randomize_start_values': True,
+                   'create_parameter_sets': False,
+                   'calculate_statistics': False,
+                   'use_config_start_values': False,
+                   #method options
+                   #'DifferentialEvolution',
+                   'number_of_generations': 200,
+                   'population_size': 50,
+                   'random_number_generator': 1,
+                   'seed': 0,
+                   'pf': 0.475,
+                   'iteration_limit': 50,
+                   'tolerance': 0.0001,
+                   'rho': 0.2,
+                   'scale': 10,
+                   'swarm_size': 50,
+                   'std_deviation': 0.000001,
+                   'number_of_iterations': 100000,
+                   'start_temperature': 1,
+                   'cooling_factor': 0.85,
+                   #experiment definition options
+                   #need to include options for defining multiple experimental files at once
+                   'row_orientation': [True]*len(self.exp_files),
+                   'experiment_type': ['timecourse']*len(self.exp_files),
+                   'first_row': [str(1)]*len(self.exp_files),
+                   'normalize_weights_per_experiment': [True]*len(self.exp_files),
+                   'row_containing_names': [str(1)]*len(self.exp_files),
+                   'separator': ['\t']*len(self.exp_files),
+                   'weight_method': ['mean_squared']*len(self.exp_files),
+                   'save': 'overwrite',
+                   'scheduled': False,
+                   'lower_bound': 0.000001,
+                   'upper_bound': 1000000}
 
-        options={'run':'multiprocess',
-                 'copy_number':1,
-                 'pe_number':3,
-                 'report_name':None,
-                 'results_directory':None,
-                 ##default parameters for ParameterEstimation
-                 'method':'GeneticAlgorithm',
-                 'plot':False,
-                 'quantity_type':'concentration',
-                 'append': False,
-                 'confirm_overwrite': False,
-                 'config_filename':'PEConfigFile.xlsx',
-                 'overwrite_config_file':False,
-                 'prune_headers':True,
-                 'update_model':False,
-                 'randomize_start_values':True,
-                 'create_parameter_sets':False,
-                 'calculate_statistics':False,
-                 'use_config_start_values':False,
-                 #method options
-                 #'DifferentialEvolution',
-                 'number_of_generations':200,
-                 'population_size':50,
-                 'random_number_generator':1,
-                 'seed':0,
-                 'pf':0.475,
-                 'iteration_limit':50,
-                 'tolerance':0.0001,
-                 'rho':0.2,
-                 'scale':10,
-                 'swarm_size':50,
-                 'std_deviation':0.000001,
-                 'number_of_iterations':100000,
-                 'start_temperature':1,
-                 'cooling_factor':0.85,
-                 #experiment definition options
-                 #need to include options for defining multiple experimental files at once
-                 'row_orientation':[True]*len(self.exp_files),
-                 'experiment_type':['timecourse']*len(self.exp_files),
-                 'first_row':[str(1)]*len(self.exp_files),
-                 'normalize_weights_per_experiment':[True]*len(self.exp_files),
-                 'row_containing_names':[str(1)]*len(self.exp_files),
-                 'separator':['\t']*len(self.exp_files),
-                 'weight_method':['mean_squared']*len(self.exp_files),
-                 'save':'overwrite',
-                 'scheduled':False,
-                 'lower_bound':0.000001,
-                 'upper_bound':1000000}
-
-        for key in kwargs.keys():
-            if key not in options.keys():
-                raise Errors.InputError('{} is not a keyword argument for MultiModelFit'.format(key))
-        options.update( kwargs)
-        self.kwargs=options
-
+        self.convert_bool_to_numeric(self.default_properties)
+        self.update_properties(self.default_properties)
+        self.update_kwargs(kwargs)
+        self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
+        self._do_checks()
 
         self.sub_cps_dirs=self.create_workspace()
         self.RMPE_dct=self.instantiate_run_multi_PEs_class()
         self.results_folder_dct=self.get_output_directories()
 
-    def __getitem__(self,key):
-        if key not in self.kwargs.keys():
-            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
-        return self.kwargs[key]
-
-    def __setitem__(self,key,value):
-        self.kwargs[key] = value
+    def _do_checks(self):
+        pass
 
     def instantiate_run_multi_PEs_class(self):
-        '''
+        """
         pass correct arguments to the runMultiplePEs class in order
         to instantiate a runMultiplePEs instance for each model.
 
-        Reutrns:
-            dict[model_filename]=runMultiplePEs_instance
-        '''
+        :Returns: dict[model_filename]=runMultiplePEs_instance
+        """
         LOG.debug('instantiating an instance of runMultiplePEs for each model')
         dct={}
 
         for cps_dir in self.sub_cps_dirs:
             os.chdir(cps_dir)
-            if os.path.isabs(self.kwargs['config_filename']):
-                self.kwargs['config_filename']=os.path.split(self.kwargs['config_filename'])[1]
+            if os.path.isabs(self.config_filename):
+                self.config_filename = os.path.split(self.config_filename)[1]
             dct[self.sub_cps_dirs[cps_dir]]=MultiParameterEstimation(self.sub_cps_dirs[cps_dir],
                                                            self.exp_files,**self.kwargs)
 
@@ -3667,74 +3657,53 @@ class MultiModelFit():
         return dct
 
     def get_output_directories(self):
-        '''
-        Returns the location of the parameter estimation output files
-        produced from the analysis.
-        '''
+        """
+        :returns:Dict. Location of parameter estimation output files
+        """
         LOG.debug('getting output directories')
         output_dct={}
-        for RMPE in self.RMPE_dct:
-            LOG.debug('output directory for model \n{}:'.format(RMPE))
-            LOG.debug('\t\t'+self.RMPE_dct[RMPE].kwargs['results_directory'])
-            output_dct[RMPE]=self.RMPE_dct[RMPE].kwargs['results_directory']
+        for MPE in self.MPE_dct:
+            LOG.debug('output directory for model \n{}:'.format(MPE))
+            LOG.debug('\t\t'+self.MPE_dct[MPE].results_directory)
+            output_dct[MPE]=self.MPE_dct[MPE].results_directory
         return output_dct
 
     #void
     def write_config_file(self):
-        '''
+        """
         A class to write a config file template for each
         model in the analysis. Calls the corresponding
         write_config_file from the runMultiplePEs class
-        ===returns===
-        list of config files
-        '''
+        :returns: list. config file paths
+        """
         conf_list=[]
-        for RMPE in self.RMPE_dct:
-            f = self.RMPE_dct[RMPE].write_config_file()
+        for MPE in self.MPE_dct:
+            f = self.MPE_dct[MPE].write_config_file()
             conf_list.append(f)
         return conf_list
 
     def setup(self):
-        '''
+        """
         A user interface class which calls the corresponding
         method (setup) from the runMultiplePEs class per model.
         Perform the ParameterEstimation.setup() method on each model.
-
-        '''
-        for RMPE in self.RMPE_dct:
-            self.RMPE_dct[RMPE].setup()
-
-    def set_up_dep(self):
-        '''
-        A user interface class which calls the corresponding
-        method (set_up) from the runMultiplePEs class per model.
-        Perform the ParameterEstimation.set_up() method on each model.
-
-        '''
-        LOG.warning('The set_up method is deprecated. Use setup() method instead')
-        for RMPE in self.RMPE_dct:
-            self.RMPE_dct[RMPE].set_up()
-
+        """
+        for MPE in self.MPE_dct:
+            self.MPE_dct[MPE].setup()
 
     def run(self):
-        '''
+        """
         A user interface class which calls the corresponding
         method (run) from the runMultiplePEs class per model.
         Perform the ParameterEstimation.run() method on each model.
-        '''
-        for RMPE in self.RMPE_dct:
-            self.RMPE_dct[RMPE].run()
-
-
-    def _do_checks(self):
-        '''
-        Function to check the integrity of the input given by user
-        '''
-        pass
+        :return:
+        """
+        for MPE in self.MPE_dct:
+            self.MPE_dct[MPE].run()
 
 
     def create_workspace(self):
-        '''
+        """
         Creates a workspace from cps and experiment files in self.project_dir
 
         i.e.
@@ -3746,14 +3715,12 @@ class MultiModelFit():
             ------model2.cps
             ------exp_data.txt
 
-        returns:
-            Dictionary[cps_filename]=DirectoryForCpsAnalysis
-        '''
+        :returns: Dictionary[cps_filename]= Directory for model fit
+        """
         LOG.info('Creating workspace from project_dir')
         LOG.debug('Creating Workspace from files in: \n{}'.format(self.project_dir))
         ## Create entire working directory for analysis
-        self.wd=self.project_dir
-
+        self.wd = self.project_dir
         LOG.debug('New Working directory is:\n{}'.format(self.wd))
         if os.path.isdir(self.wd)!=True:
             LOG.debug('{} doesn\' already exist. Creating {}'.format(self.wd,self.wd))
@@ -3761,9 +3728,7 @@ class MultiModelFit():
         os.chdir(self.project_dir)
         LOG.debug('changing directory to project_dir: \n({}) to read relevent .cps and exp files'.format(self.wd))
         LOG.debug('Creating a directory in working directory for each of the model files')
-
         cps_dirs={}
-
         for cps in self.cps_files:
             cps_abs=os.path.abspath(cps)
             cps_filename=os.path.split(cps_abs)[1]
@@ -3773,11 +3738,10 @@ class MultiModelFit():
             sub_cps_abs=os.path.join(sub_cps_dir,cps_filename)
             shutil.copy(cps_abs,sub_cps_abs)
             if os.path.isfile(sub_cps_abs)!=True:
-                raise Exception ('Error in copying copasi file to sub directories')
+                raise Exception('Error in copying copasi file to sub directories')
             cps_dirs[sub_cps_dir]=sub_cps_abs
         LOG.info('Workspace created')
         return cps_dirs
-#
 
     def read_fit_config(self):
         '''
@@ -3819,11 +3783,11 @@ class MultiModelFit():
         """
         Method for giving appropiate headers to parameter estimation data
         """
-        for RMPE in self.RMPE_dct:
-            self.RMPE_dct[RMPE].format_results()
+        for MPE in self.MPE_dct:
+            self.MPE_dct[MPE].format_results()
 
 
-class InsertParameters():
+class InsertParameters(_base._ModelBase):
     '''
     Insert parameters from a file, dictionary or a pandas dataframe into a copasi
     file.
@@ -3865,330 +3829,347 @@ class InsertParameters():
             '.csv') or a folder containing parameter estimation files.
 
     '''
-    def __init__(self,copasi_file,**kwargs):
-        '''
-        coapsi_file = file you want to insert
-        kwargs:
-            index: If not specified default to -1
-                    can be int or list of ints
-        '''
-        self.copasi_file=copasi_file
-        self.CParser=CopasiMLParser(self.copasi_file)
-        self.copasiML=self.CParser.copasiML
-        self.GMQ=GetModelQuantities(self.copasi_file)
-
-        default_report_name=os.path.split(self.copasi_file)[1][:-4]+'_PE_results.txt'
-        options={#report variables
-                 'metabolites':self.GMQ.get_IC_cns().keys(),
-                 'global_quantities':self.GMQ.get_global_quantities().keys(),
+    def __init__(self, model, **kwargs):
+        super(InsertParameters, self).__init__(model, **kwargs)
+        self.default_properties={#report variables
+                 # 'metabolites':self.model.metabolites,
+                 # 'global_quantities':self.GMQ.get_global_quantities().keys(),
                  'quantity_type':'concentration',
-                 'report_name':default_report_name,
-                 'save':'overwrite',
-                 'index':0,
+                 'index': 0,
                  'parameter_dict':None,
-                 'df':None,
+                 'df': None,
                  'parameter_path':None,
                  }
 
-        for i in kwargs.keys():
-            assert i in options.keys(),'{} is not a keyword argument for InsertParameters'.format(i)
-        options.update( kwargs)
-        self.kwargs=options
-        self.kwargs = Bool2Str(self.kwargs).convert_dct()
+        self.convert_bool_to_numeric(self.default_properties)
+        self.update_properties(self.default_properties)
+        self.update_kwargs(kwargs)
+        self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
+        self._do_checks()
 
-        LOG.debug('These are kwargs {}'.format(self.kwargs))
+        self.parameters = self.get_parameters()
+        # self.parameters= self.replace_gl_and_lt()
+        #        self.insert_locals()
+        #         self.insert_all()
+        # change
 
-#        assert os.path.exists(self.parameter_path),'{} doesn\'t exist'.format(self.parameter_path)
-        assert self.kwargs.get('quantity_type') in ['concentration','particle_numbers']
-        if self.kwargs.get('parameter_dict') != None:
-            if isinstance(self.kwargs.get('parameter_dict'),dict)!=True:
+    def __str__(self):
+        return "InsertParameters({})".format(self.to_string())
+
+    def _do_checks(self):
+        """
+        Verity user input
+        :return:
+        """
+        assert self.quantity_type in ['concentration', 'particle_numbers']
+        if self.parameter_dict != None:
+            if isinstance(self.parameter_dict, dict)!=True:
                 raise Errors.InputError('Argument to \'parameter_dict\' keyword needs to be of type dict')
-            for i in self.kwargs.get('parameter_dict').keys():
-                if i not in self.GMQ.get_all_model_variables().keys():
+            for i in self.parameter_dict.keys():
+                if i not in self.model.all_variable_names:
                     raise Errors.InputError('Parameter \'{}\' is not in your model. \n\nThese are in your model:\n{}'.format(i,sorted(self.GMQ.get_all_model_variables().keys())))
 
-        if self.kwargs.get('parameter_dict')==None and self.kwargs.get('parameter_path')==None and self.kwargs.get('df') is None:
+        if (self.parameter_dict == None) and (self.parameter_path==None) and (self.df is None):
             raise Errors.InputError('You need to give at least one of parameter_dict,parameter_path or df keyword arguments')
 
-        assert isinstance(self.kwargs.get('index'),int)
-
+        assert isinstance(self.index, int)
 
         #make sure user gives the right number of arguments
         num=0
-        if self.kwargs.get('parameter_dict')!=None:
+        if self.parameter_dict != None:
             num+=1
-        if self.kwargs.get('df') is not None:
+
+        if self.df is not None:
             num+=1
-        if self.kwargs.get('parameter_path')!=None:
+
+        if self.parameter_path != None:
             num+=1
+
         if num!=1:
             raise Errors.InputError('You need to supply exactly one of parameter_dict,parameter_path or df keyord argument. You cannot give two or three.')
 
-        self.parameters=self.get_parameters()
-        self.parameters= self.replace_gl_and_lt()
-#        self.insert_locals()
-        self.insert_all()
-        #change
 
-    def check_parameter_consistancy(self,df):
-        '''
-        raise an error if no parameters in the PE header match
-        parameters in model
 
-        args:
-            df:
-                containing parameters to compare with parameters
-                in the model
-        '''
-        model_parameter_names= set(self.GMQ.get_all_model_variables().keys())
-        input_parameter_names= set(list(df.keys()))
-        intersection=list( model_parameter_names.intersection(input_parameter_names))
-        if intersection==[]:
-            raise Errors.ParameterInputError('''The parameters in your parameter estimation data are not in your model.\
-Please check the headers of your PE data are consistent with your model parameter names.''' )
+#     def check_parameter_consistancy(self,df):
+#         '''
+#         raise an error if no parameters in the PE header match
+#         parameters in model
+#
+#         args:
+#             df:
+#                 containing parameters to compare with parameters
+#                 in the model
+#         '''
+#         model_parameter_names= set(self.model.all_variable_names)
+#         input_parameter_names= set(list(df.keys()))
+#         intersection=list( model_parameter_names.intersection(input_parameter_names))
+#         if intersection == []:
+#             raise Errors.ParameterInputError('''The parameters in your parameter estimation data are not in your model.\
+# Please check the headers of your PE data are consistent with your model parameter names.''' )
 
     def get_parameters(self):
-        '''
+        """
         Get parameters depending on the type of input.
         Converge on a pandas dataframe.
         Columns = parameters, rows = parameter sets
 
         Use check parameter consistency to see
         whether headers have been pruned or not. If not try pruning them
-        '''
-        if self.kwargs.get('parameter_dict')!=None:
-            assert isinstance(self.kwargs.get('parameter_dict'),dict),'The parameter_dict argument takes a Python dictionary'
-            for i in self.kwargs.get('parameter_dict'):
-                assert i in self.GMQ.get_all_model_variables().keys(),'{} is not a parameter. These are your parameters:{}'.format(i,self.GMQ.get_all_model_variables().keys())
-            return pandas.DataFrame(self.kwargs.get('parameter_dict'),index=[0])
 
-        if self.kwargs.get('parameter_path')!=None:
-            PED=PEAnalysis.ParsePEData(self.kwargs.get('parameter_path'))
-            if isinstance(self.kwargs.get('index'),int):
-                return pandas.DataFrame(PED.data.iloc[self.kwargs.get('index')]).transpose()
+        """
+        if self.parameter_dict != None:
+            assert isinstance(self.parameter_dict, dict),'The parameter_dict argument takes a Python dictionary'
+            for i in self.parameter_dict:
+                assert i in self.model.all_variable_names,'{} is not a parameter. These are your parameters:{}'.format(i,self.GMQ.get_all_model_variables().keys())
+            return pandas.DataFrame(self.parameter_dict, index=[0])
+
+        if self.parameter_path != None:
+            PED=PEAnalysis.ParsePEData(self.parameter_path)
+            if isinstance(self.index,int):
+                return pandas.DataFrame(PED.data.iloc[self.index]).transpose()
             else:
-                return PED.data.iloc[self.kwargs.get('index')]
-        if self.kwargs.get('df') is not None:
-            df= pandas.DataFrame(self.kwargs.get('df').iloc[self.kwargs.get('index')]).transpose()
-            self.check_parameter_consistancy(df)
+                return PED.data.iloc[self.index]
+        if self.df is not None:
+            df= pandas.DataFrame(self.df.iloc[self.index]).transpose()
+            # self.check_parameter_consistancy(df)
         # except Errors.ParameterInputError:
         #     df=PruneCopasiHeaders(df).prune()
         #     self.check_parameter_consistancy(df)
         return df
 
     def insert_locals(self):
-        '''
+        """
 
-        '''
+        :return:
+        """
+        # print self.parameters
+        locals = [i for i in self.model.local_parameters if i.global_name in self.parameters.keys()]
+        for loc in locals:
+            for element_tags in self.model.xml.iter():
+                if  element_tags.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
+                    for reaction in element_tags:
+                        if reaction.attrib['name'] == loc.reaction_name:
+                            for reaction_xml in reaction:
+                                if reaction_xml.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
+                                    for constant_xml in reaction_xml:
+                                        if constant_xml.attrib['name'] == loc.name:
+                                            constant_xml.attrib['value'] = str(float(self.parameters[loc.global_name]))
+        return self.model
+
+        # def insert_locals(self):
+    #     '''
+    #
+    #     '''
         ## get local parameters
-        local=sorted(self.GMQ.get_local_kinetic_parameters_cns().keys())
-        ## remove local parameters from complete list depending on whether
+        # local=sorted([i.global_name for i in self.model.local_parameters])
+        # remove local parameters from complete list depending on whether
         ## user wants to insert anything for that parameter or not
-        local= [i for i in self.parameters if i in local]
-        LOG.debug('Local parameters being inserted into model: {}'.format(local))
+        # local= [i for i in self.parameters if i in [j.global_name for j in self.model.local_parameters] ]
+        # print type(local[0])
+        # LOG.debug('Local parameters being inserted into model: {}'.format(local))
         ## create a dict[parameter]=reactiontype dict to help
         ## navidate the xml
-        local_dct={}
-        for full_param in local:
-            local_dct[full_param]={}
-            k,v = re.findall(  '\((.*)\)\.(.*)', full_param ) [0]
-            local_dct[full_param][k] = v
+        # local_dct={}
+        # for full_param in local:
+        #     local_dct[full_param]={}
+        #     k,v = re.findall(  '\((.*)\)\.(.*)', full_param ) [0]
+        #     local_dct[full_param][k] = v
+        # print local_dct
+        # LOG.debug('Constructing a dict of reaction:parameter for local parameters: {}'.format(local_dct))
+        #
+        # ## Iterate over all local parameters that we want to insert
+        # ## Identify the list of reactions ,match for the current reaction
+        # ## bore into that reaction to locate the locally defined rate constant
+        # ## match with the parameter then insert the str(float(*.)) representation
+        # ## of the parameter value into the value attribute for the constant
+        # ## element
+        # for key in local_dct:
+        #     for reaction_name, parameter_name in local_dct[key].items():
 
-        LOG.debug('Constructing a dict of reaction:parameter for local parameters: {}'.format(local_dct))
+        #         for element_tags in self.model.xml.iter():
+        #             if  element_tags.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
+        #                 for reaction in element_tags:
+        #                     if reaction.attrib['name'] == reaction_name:
+        #                         for reaction_element in reaction:
+        #                             if reaction_element.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
+        #                                 for constant_xml in reaction_element:
+        #                                     if constant_xml.attrib['name'] == parameter_name:
+        #                                         constant_xml.attrib['value'] = str(float(self.parameters['({}).{}'.format(reaction_name,parameter_name)]))
+        # return self.model
 
-        ## Iterate over all local parameters that we want to insert
-        ## Identify the list of reactions ,match for the current reaction
-        ## bore into that reaction to locate the locally defined rate constant
-        ## match with the parameter then insert the str(float(*.)) representation
-        ## of the parameter value into the value attribute for the constant
-        ## element
-        for key in local_dct:
-            for reaction_name, parameter_name in local_dct[key].items():
-                for element_tags in self.copasiML.iter():
-                    if  element_tags.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
-                        for reaction in element_tags:
-                            if reaction.attrib['name'] == reaction_name:
-                                for reaction_element in reaction:
-                                    if reaction_element.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
-                                        for constant_xml in reaction_element:
-                                            if constant_xml.attrib['name'] == parameter_name:
-                                                constant_xml.attrib['value'] = str(float(self.parameters['({}).{}'.format(reaction_name,parameter_name)]))
-        return self.copasiML
-
-    def assemble_state_values(self):
-        """
-
-        """
-        LOG.debug('States:\t {}'.format( self.GMQ.get_state_template()))
-        state_values = []
-        count = 0
-        for state in self.GMQ.get_state_template():
-            #LOG.debug('assembling parameter {} out of {}'.format(count,len(self.GMQ.get_state_template())))
-            count+=1
-            model = re.findall('(Model)_',state)
-            metab = re.findall('Metabolite',state)
-            mod_value = re.findall('ModelValue',state)
-            compartment = re.findall('Compartment',state)
-            if model !=[]:
-                LOG.debug('State {} is model'.format(state))
-                assert metab == []
-                assert mod_value == []
-                assert compartment ==[]
-                state_values.append(str(0))
-                LOG.debug('Added 0 for first parameter in sequence')
-            elif metab !=[]:
-                LOG.debug('State {} is metab'.format(state))
-                assert model == []
-                assert mod_value == []
-                assert compartment == []
-                metab_name= self.GMQ.get_metabolites_object_reference()[state]
-#                    print self.parameters[metab_name]
-                metab =  self.GMQ.get_IC_cns()[metab_name]
-                comp_vol = self.GMQ.get_IC_cns()[metab_name]['compartment_volume']
-
-                metab_val = self.GMQ.get_IC_cns()[metab_name]['value']
-                #LOG.debug('Metab dict for {}, \n\n{}'.format(state,self.GMQ.get_IC_cns()[metab_name]))
-
-                if metab_name in self.parameters:
-                    metab_val =  self.GMQ.convert_molar_to_particles(float(self.parameters[metab_name]),
-                                                          self.GMQ.get_quantity_units(),
-                                                          float(comp_vol))
-                state_values.append(str(float(metab_val)))
-
-            elif mod_value !=[]:
-                LOG.debug('State {} is Global variable'.format(state))
-
-                assert model == []
-                assert metab == []
-                assert compartment == []
-                mod_value_name = self.GMQ.get_global_object_reference()[state]
-                mod_value_value = self.GMQ.get_global_quantities()[mod_value_name]
-                if mod_value_name in self.parameters.keys():
-                    mod_value_value=str(float(self.parameters[mod_value_name]))
-                state_values.append(mod_value_value)
-
-            elif compartment != []:
-                '''
-                Warning: A potential bug may exist where if some metabolites are
-                calculated before the compartment is changed then other after, 
-                we'll get metabolites with inconsident volumes. This will be 
-                rare as I don't generally estimate the compartment volumes 
-                but if you are then this could be a problem. 
-                '''
-                assert model ==[]
-                assert metab == []
-                assert mod_value == []
-                compartment_name = self.GMQ.get_compartment_object_reference()[state]
-                compartment_value = self.GMQ.get_compartments()[compartment_name]['value']
-                if compartment_name in self.parameters.keys():
-                    compartment_value = str(float(self.parameters[compartment_name]))
-                state_values.append(compartment_value)
-
-#        if len(state_values)!=len(self.GMQ.get_state_template()):
-#            raise Exception('For some reason the number of state values does not equal the number of global + IC parameters in yoru model')
-        return state_values
-
-    def insert_ICs(self):
-        IC=self.GMQ.get_IC_cns()
-        for i in IC:
-            query='//*[@cn="{}"]'.format( self.GMQ.get_IC_cns()[i]['cn'])
-            for j in self.copasiML.xpath(query):
-                if i in self.parameters.keys() and j.attrib['simulationType']=='reactions':
-                    if self.kwargs.get('quantity_type')=='concentration':
-                        particles=self.GMQ.convert_molar_to_particles(float(self.parameters[i]),self.GMQ.get_quantity_units(),float(IC[i]['compartment_volume']))#,self.GMQ.get_volume_unit())
-##                        particles=self.parameters[i]
-                    elif self.kwargs.get('quantity_type')=='particle_numbers':
-                        particles=self.parameters[i]
-                    j.attrib['value']=str(float(particles))
-        return self.copasiML
-    
-    def insert_global_and_ICs(self):
-        """
-        
-        """
-        def reduce_str(y,z):
-            return '{} {}'.format(y,z)
-        values=reduce(reduce_str,self.assemble_state_values())
-        query = '//*[@type="initialState"]'
-        for i in self.copasiML.xpath(query):
-            i.text = values
-        return self.copasiML
-                    
-    def insert_global(self):
-        glob= self.GMQ.get_global_quantities_cns().keys()
-        for i in glob:
-            query='//*[@cn="{}"]'.format( self.GMQ.get_global_quantities_cns()[i]['cn'])
-            for j in self.copasiML.xpath(query):
-                if i in self.parameters.keys() and j.attrib['SimulationType']!='assignment':
-                    j.attrib['value']=str(float(self.parameters[i]))
-        return self.copasiML
-
-
-
-
-    def insert_fit_items(self):
-        '''
-        insert parameters into fit items
-        '''
-        copasiML=self.copasiML
-        query="//*[@name='OptimizationItemList']"
-        ICs_and_global=None
-        reaction=None
-        parameter=None
-        for i in copasiML.xpath(query):
-            for j in list(i):
-                for k in list(j):
-                    if k.attrib['name']=='ObjectCN':
-                        pattern1='Vector=(?!Reactions).*\[(.*)\]'#match global and IC parameters but not local
-                        search1= re.findall(pattern1,k.attrib['value'])
-                        
-                        if search1 !=[]:
-                            ICs_and_global=search1[0]
-                    if k.attrib['name']=='StartValue':
-                        if ICs_and_global !=None:
-                            if ICs_and_global in self.parameters.keys():
-                                k.attrib['value']=str(float(self.parameters[ICs_and_global]))
-                    #now again for local parameters
-                    if k.attrib['name']=='ObjectCN':
-                        pattern2='Vector=Reactions\[(.*)\].*Parameter=(.*),'
-                        search2= re.findall(pattern2,k.attrib['value'])
-
-                        if search2!=[]:
-                            reaction,parameter= search2[0]
-                            local= '({}).{}'.format(reaction,parameter)
-                    if k.attrib['name']=='StartValue':
-                        if reaction != None and parameter !=None:
-                            if local in self.parameters.keys():
-                                k.attrib['value']=str(float(self.parameters[local]))
-                            else:
-                                continue
-        return self.copasiML
-
-        
-
-
-    def replace_gl_and_lt(self):
-        '''
-        replace greater than and less than symbols for xML purposes
-        '''
-        l=[]
-        for i in self.parameters.keys():
-            i= i.replace('<','\<')
-            i=i.replace('>','\>')
-            l.append(i)
-        self.parameters.columns=pandas.Index(l)
-        return self.parameters
-            
-        
-    def insert_all(self):
-        self.copasiML=self.insert_locals()
-        self.copasiML = self.insert_global_and_ICs()
-        self.copasiML=self.insert_fit_items()
-        self.save()
-        
-    def save(self):
-        self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
-        return self.copasiML
+#     def assemble_state_values(self):
+#         """
+#
+#         """
+#         LOG.debug('States:\t {}'.format( self.model.states))
+#         state_values = []
+#         count = 0
+#         for state in self.model.states:
+#             #LOG.debug('assembling parameter {} out of {}'.format(count,len(self.GMQ.get_state_template())))
+#             count+=1
+#             model = re.findall('(Model)_',state)
+#             metab = re.findall('Metabolite',state)
+#             mod_value = re.findall('ModelValue',state)
+#             compartment = re.findall('Compartment',state)
+#             if model !=[]:
+#                 LOG.debug('State {} is model'.format(state))
+#                 assert metab == []
+#                 assert mod_value == []
+#                 assert compartment ==[]
+#                 state_values.append(str(0))
+#                 LOG.debug('Added 0 for first parameter in sequence')
+#             elif metab !=[]:
+#                 LOG.debug('State {} is metab'.format(state))
+#                 assert model == []
+#                 assert mod_value == []
+#                 assert compartment == []
+#                 metab_name= [i.name for i in self.model.metabolites if i.name == state]
+#                 metab =  self.GMQ.get_IC_cns()[metab_name]
+#                 comp_vol = self.GMQ.get_IC_cns()[metab_name]['compartment_volume']
+#
+#                 metab_val = self.GMQ.get_IC_cns()[metab_name]['value']
+#                 #LOG.debug('Metab dict for {}, \n\n{}'.format(state,self.GMQ.get_IC_cns()[metab_name]))
+#
+#                 if metab_name in self.parameters:
+#                     metab_val =  self.GMQ.convert_molar_to_particles(float(self.parameters[metab_name]),
+#                                                           self.GMQ.get_quantity_units(),
+#                                                           float(comp_vol))
+#                 state_values.append(str(float(metab_val)))
+#
+#             elif mod_value !=[]:
+#                 LOG.debug('State {} is Global variable'.format(state))
+#
+#                 assert model == []
+#                 assert metab == []
+#                 assert compartment == []
+#                 mod_value_name = self.GMQ.get_global_object_reference()[state]
+#                 mod_value_value = self.GMQ.get_global_quantities()[mod_value_name]
+#                 if mod_value_name in self.parameters.keys():
+#                     mod_value_value=str(float(self.parameters[mod_value_name]))
+#                 state_values.append(mod_value_value)
+#
+#             elif compartment != []:
+#                 '''
+#                 Warning: A potential bug may exist where if some metabolites are
+#                 calculated before the compartment is changed then other after,
+#                 we'll get metabolites with inconsident volumes. This will be
+#                 rare as I don't generally estimate the compartment volumes
+#                 but if you are then this could be a problem.
+#                 '''
+#                 assert model ==[]
+#                 assert metab == []
+#                 assert mod_value == []
+#                 compartment_name = self.GMQ.get_compartment_object_reference()[state]
+#                 compartment_value = self.GMQ.get_compartments()[compartment_name]['value']
+#                 if compartment_name in self.parameters.keys():
+#                     compartment_value = str(float(self.parameters[compartment_name]))
+#                 state_values.append(compartment_value)
+#
+# #        if len(state_values)!=len(self.GMQ.get_state_template()):
+# #            raise Exception('For some reason the number of state values does not equal the number of global + IC parameters in yoru model')
+#         return state_values
+#
+#     def insert_ICs(self):
+#         IC=self.GMQ.get_IC_cns()
+#         for i in IC:
+#             query='//*[@cn="{}"]'.format( self.GMQ.get_IC_cns()[i]['cn'])
+#             for j in self.copasiML.xpath(query):
+#                 if i in self.parameters.keys() and j.attrib['simulationType']=='reactions':
+#                     if self.kwargs.get('quantity_type')=='concentration':
+#                         particles=self.GMQ.convert_molar_to_particles(float(self.parameters[i]),self.GMQ.get_quantity_units(),float(IC[i]['compartment_volume']))#,self.GMQ.get_volume_unit())
+# ##                        particles=self.parameters[i]
+#                     elif self.kwargs.get('quantity_type')=='particle_numbers':
+#                         particles=self.parameters[i]
+#                     j.attrib['value']=str(float(particles))
+#         return self.copasiML
+#
+#     def insert_global_and_ICs(self):
+#         """
+#
+#         """
+#         def reduce_str(y,z):
+#             return '{} {}'.format(y,z)
+#         values=reduce(reduce_str,self.assemble_state_values())
+#         query = '//*[@type="initialState"]'
+#         for i in self.copasiML.xpath(query):
+#             i.text = values
+#         return self.copasiML
+#
+#     def insert_global(self):
+#         glob= self.GMQ.get_global_quantities_cns().keys()
+#         for i in glob:
+#             query='//*[@cn="{}"]'.format( self.GMQ.get_global_quantities_cns()[i]['cn'])
+#             for j in self.copasiML.xpath(query):
+#                 if i in self.parameters.keys() and j.attrib['SimulationType']!='assignment':
+#                     j.attrib['value']=str(float(self.parameters[i]))
+#         return self.copasiML
+#
+#
+#
+#
+#     def insert_fit_items(self):
+#         '''
+#         insert parameters into fit items
+#         '''
+#         copasiML=self.copasiML
+#         query="//*[@name='OptimizationItemList']"
+#         ICs_and_global=None
+#         reaction=None
+#         parameter=None
+#         for i in copasiML.xpath(query):
+#             for j in list(i):
+#                 for k in list(j):
+#                     if k.attrib['name']=='ObjectCN':
+#                         pattern1='Vector=(?!Reactions).*\[(.*)\]'#match global and IC parameters but not local
+#                         search1= re.findall(pattern1,k.attrib['value'])
+#
+#                         if search1 !=[]:
+#                             ICs_and_global=search1[0]
+#                     if k.attrib['name']=='StartValue':
+#                         if ICs_and_global !=None:
+#                             if ICs_and_global in self.parameters.keys():
+#                                 k.attrib['value']=str(float(self.parameters[ICs_and_global]))
+#                     #now again for local parameters
+#                     if k.attrib['name']=='ObjectCN':
+#                         pattern2='Vector=Reactions\[(.*)\].*Parameter=(.*),'
+#                         search2= re.findall(pattern2,k.attrib['value'])
+#
+#                         if search2!=[]:
+#                             reaction,parameter= search2[0]
+#                             local= '({}).{}'.format(reaction,parameter)
+#                     if k.attrib['name']=='StartValue':
+#                         if reaction != None and parameter !=None:
+#                             if local in self.parameters.keys():
+#                                 k.attrib['value']=str(float(self.parameters[local]))
+#                             else:
+#                                 continue
+#         return self.copasiML
+#
+#
+#
+#
+#     def replace_gl_and_lt(self):
+#         '''
+#         replace greater than and less than symbols for xML purposes
+#         '''
+#         l=[]
+#         for i in self.parameters.keys():
+#             i= i.replace('<','\<')
+#             i=i.replace('>','\>')
+#             l.append(i)
+#         self.parameters.columns=pandas.Index(l)
+#         return self.parameters
+#
+#
+#     def insert_all(self):
+#         self.copasiML=self.insert_locals()
+#         self.copasiML = self.insert_global_and_ICs()
+#         self.copasiML=self.insert_fit_items()
+#         self.save()
+#
+#     def save(self):
+#         self.CParser.write_copasi_file(self.copasi_file,self.copasiML)
+#         return self.copasiML
 
 
 class HighThroughputFit():

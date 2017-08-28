@@ -55,3 +55,5 @@ class AvagadrosError(Exception):
 class IncorrectUsageError(Exception):
     pass
 
+class ComponentDoesNotExistError(Exception):
+    pass

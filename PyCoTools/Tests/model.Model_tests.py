@@ -24,8 +24,8 @@ Module that tests the operations of the _Base base test
 """
 
 import site
-# site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
-site.addsitedir('/home/b3053674/Documents/PyCoTools')
+site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
+# site.addsitedir('/home/b3053674/Documents/PyCoTools')
 
 import PyCoTools
 from PyCoTools.Tests import _test_base
@@ -34,7 +34,7 @@ import os, glob
 import pandas
 import unittest
 from lxml import etree
-
+from collections import OrderedDict
 
 
 
@@ -151,13 +151,13 @@ class ModelTests(_test_base._BaseTest):
         self.assertTrue(isinstance(self.model.xml, etree._Element))
 
 
-    def test_concentration_calculation(self):
-        """
-
-        :return:
-        """
-        print self.model.metabolites
-        # self.model.open()
+    # def test_concentration_calculation(self):
+    #     """
+    #
+    #     :return:
+    #     """
+    #     print self.model.metabolites
+    #     # self.model.open()
 
 
     def test_convert_particles_to_molar(self):
@@ -178,43 +178,141 @@ class ModelTests(_test_base._BaseTest):
         conc = 1
         self.assertAlmostEqual(self.model.convert_molar_to_particles(conc, 'mmol', 1), particles)
 
-
-    def test_metabolites(self):
+    def test_set_name(self):
         """
 
         :return:
         """
-        print self.model.global_quantities
-        # print self.model.local_parameters
+        self.model.name = 'new_name'
+        self.assertEqual(self.model.name, 'new_name')
+    # def test_metabolites(self):
+    #     """
+    #
+    #     :return:
+    #     """
+    #     print self.model.global_quantities
+    #     # print self.model.local_parameters
+
+    def test_create_metabolite(self):
+        """
+
+        :return:
+        """
+        args = {'name': 'F'}
+        self.model = self.model.add_metabolite(**args)
+        check = False
+        for i in self.model.metabolites:
+            if i.name == 'F':
+                check = True
+        self.assertTrue(check)
+
+    def test_change_states(self):
+        """
+
+        :return:
+        """
+        state_numbers = [0.0, 1, 2, 3, 3, 4, 5, 6, 7]
+        self.model.states = state_numbers
+        self.assertListEqual([float(i) for i in state_numbers],
+                             [float(i) for i in self.model.states.values()])
+
+    def test_get_metabolite_by_key(self):
+        """
+
+        :return:
+        """
+        metab = self.model.get('metabolite', 'Metabolite_1', by='key')
+        self.assertEqual(metab.name, 'A')
 
 
+    def test_get_metbolite_by_name(self):
+        """
+
+        :return:
+        """
+        metab = self.model.get('metabolite', 'A', by='name')
+        self.assertEqual(metab.name, 'A')
+
+    def test_get_compartment_by_name(self):
+        res = self.model.get('compartment', 'nuc', by='name')
+        self.assertEqual(res.name, 'nuc')
+
+    def get_local_parameter_by_name(self):
+        res = self.model.get('local_parameter', '(B2C).k1', by='name')
+        self.assertEqual(res.name, '(B2C).k1')
+
+    # def test_remove_metabolite(self):
+    #     """
+    #
+    #     :return:
+    #     """
+    #     ##first add a metabolite to model
+    #     self.model = self.model.add_metabolite(name='F')
+    #     self.model.remove_metabolite('F', by='name')
 
 
+    def test_remove_state(self):
+        """
+
+        :return:
+        """
+        ##TODO fix concentration attribute in set_metabolites
+        self.model = self.model.add_metabolite(name='F', particle_number=25)
+        F = self.model.get('metabolite', 'F', by='name')
+        self.model = self.model.remove_metabolite('F', by='name')
+        new_F = self.model.get('metabolite', 'F', by='name')
+        self.assertEqual(new_F, [])
+
+    def test_add_compartment(self):
+        """
+
+        :return:
+        """
+        compartment_model = self.model.add_compartment('Medium', initial_value=4)
+        comp_filename = os.path.join(os.path.dirname(self.model.copasi_file), 'comp_model.cps')
+        compartment_model.save(comp_filename)
 
 
+    def test_remove_compartment(self):
+        """
+
+        :return:
+        """
+        self.model = self.model.add_compartment('Medium', initial_value=6)
+        comp = self.model.get('compartment', 'Medium', 'name')
+        assert comp != []
+        self.model = self.model.remove_compartment(comp.name, by='name')
+        comp = self.model.get('compartment', 'Medium', 'name')
+        self.assertEqual(comp, [])
+
+    def test_add_global_quantity(self):
+        """
+
+        :return:
+        """
+        # print self.model.global_quantities
+        new_model = self.model.add_global_quantity('NewGlobal', initial_value=5)
+
+        new_global = new_model.get('global_quantity', 'NewGlobal',
+                             by='name')
+        self.assertEqual(new_global.name, 'NewGlobal')
 
 
+    def test_remove_global_quantities(self):
+        """
+
+        :return:
+        """
+        new_model = self.model.add_global_quantity('NewGlobal', initial_value=5)
+        new_global = new_model.get('global_quantity', 'NewGlobal')
+        assert new_global != []
+        new_model = new_model.remove_global_quantity('NewGlobal', by='name')
+        new_global = new_model.get('global_quantity', 'NewGlobal')
+        self.assertEqual(new_global, [])
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    def test_reactions(self):
+        print self.model.reactions()
 
 if __name__ == '__main__':
     unittest.main()

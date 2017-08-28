@@ -124,6 +124,13 @@ class _Base(object):
             except AttributeError:
                 setattr(self, k, kwargs[k])
 
+    def _do_checks(self):
+        """
+
+        :return:
+        """
+        pass
+
     def update_kwargs(self, new_kwargs):
         """
         Method for updating options
@@ -234,7 +241,7 @@ class _ModelBase(_Base):
         """
         if self.model is str (path to copasi file)
         return the xml. If already a model, do nothing.
-        :return:
+        :return: model.Model
         """
         if isinstance(self.model, str):
             from model import Model
@@ -242,3 +249,4 @@ class _ModelBase(_Base):
         else:
             ## should be model.Model or etree._Element
             return self.model
+

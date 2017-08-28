@@ -36,54 +36,34 @@ import glob
 import os
 import shutil 
 import pandas
-from PyCoTools.Tests import base_tests
+from PyCoTools.Tests import _test_base
 from random import shuffle, random
 from PyCoTools.pycopi import InsertParameters
 
 
 
-class InsertParametersTests(base_tests._MultiParameterEstimationBase):
+class InsertParametersTests(_test_base._BaseTest):
     def setUp(self):
         super(InsertParametersTests, self).setUp()
-        self.metabolites = self.GMQ.get_IC_cns()
-        self.local_parameters = self.GMQ.get_local_parameters()
-        self.global_quantities = self.GMQ.get_global_kinetic_parameters_cns()
+        self.param_dct = {'A': 5,
+                     'B2C': 6,
+                     '(B2C).k2': 7}
+        self.I = PyCoTools.pycopi.InsertParameters(self.model,
+                                                   parameter_dict=self.param_dct)
 
-#    def test_local_from_dct(self):
-#        """
-#        test currently fails. Still a useful test but first go through
-#        and ensure parameters get inserted properly on an individual basis
-#        """
-#        keys = self.local_parameters.keys()
-#        shuffle(keys)
-#        new_dct = dict(zip(keys, range(len(keys))))
-#        I = PyCoTools.pycopi.InsertParameters(self.copasi_file, 
-#                                              parameter_dict=new_dct)
-#        GMQ = PyCoTools.pycopi.GetModelQuantities(self.copasi_file)
-#        local_parameters = GMQ.get_local_parameters()
-#        for parameter in sorted(local_parameters):
-#            print self.local_parameters[parameter], local_parameters[parameter]
-#            
-#        os.system('CopasiUI {}'.format(self.copasi_file))
-        
-    def test_local_k1s(self):
-        k1s = [i for i in self.local_parameters if 'k1' in i]
-        shuffle(k1s)
-        old = dict(zip(k1s, [self.local_parameters[i] for i in k1s]))
-        new= dict(zip(k1s, [i*random() for i in range(1,len(k1s)+1)]))
-        print new
-        InsertParameters(self.copasi_file, parameter_dict=new)
-        
-#        os.system('CopasiUI {}'.format(self.copasi_file))
-        
-        
-        
-        
-    def tearDown(self):
-        pass
-    
-    
-    
+    def test_insert_dct_local(self):
+        self.model = self.I.insert_locals()
+        self.model.save()
+        self.model.open()
+        # new_model =  PyCoTools.model.Model(self.model.copasi_file)
+        # print pandas.concat([i.to_dict() for i in new_model.local_parameters])
+        # df= pandas.concat([i.to_df() for i in new_model.local_parameters], axis=1)
+        # print new_model.open()
+        # print df
+        # print new_model.local_parameters[0].__dict__
+
+
+
     
     
     
