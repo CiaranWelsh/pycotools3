@@ -24,8 +24,8 @@ Module that tests the operations of the _Base base test
 """
 
 import site
-site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
-# site.addsitedir('/home/b3053674/Documents/PyCoTools')
+# site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
+site.addsitedir('/home/b3053674/Documents/PyCoTools')
 
 import PyCoTools
 from PyCoTools.Tests import _test_base
@@ -133,8 +133,8 @@ class ModelTests(_test_base._BaseTest):
         L= PyCoTools.model.LocalParameter(name='k1', reaction_name='v1')
         self.assertTrue('global_name' in L.__dict__.keys())
 
-    def test_functions(self):
-        self.assertTrue(len(self.model.functions), 2)
+    # def test_functions(self):
+    #     self.assertTrue(len(self.model.functions), 2)
 
     def test_functions2(self):
         [self.assertTrue(isinstance(i, PyCoTools.model.Function) for i in self.model.functions) ]
@@ -198,8 +198,9 @@ class ModelTests(_test_base._BaseTest):
 
         :return:
         """
-        args = {'name': 'F'}
-        self.model = self.model.add_metabolite(**args)
+        metab = PyCoTools.model.Metabolite(name='F', particle_number=25,
+                                           compartment=self.model.compartments[0])
+        self.model = self.model.add_metabolite(metab)
         check = False
         for i in self.model.metabolites:
             if i.name == 'F':
@@ -257,7 +258,9 @@ class ModelTests(_test_base._BaseTest):
         :return:
         """
         ##TODO fix concentration attribute in set_metabolites
-        self.model = self.model.add_metabolite(name='F', particle_number=25)
+        metab = PyCoTools.model.Metabolite(name='F', particle_number=25,
+                                           compartment=self.model.compartments[0])
+        self.model = self.model.add_metabolite(metab)
         F = self.model.get('metabolite', 'F', by='name')
         self.model = self.model.remove_metabolite('F', by='name')
         new_F = self.model.get('metabolite', 'F', by='name')
@@ -268,7 +271,8 @@ class ModelTests(_test_base._BaseTest):
 
         :return:
         """
-        compartment_model = self.model.add_compartment('Medium', initial_value=4)
+        comp = PyCoTools.model.Compartment(name='Medium', initial_value=6)
+        compartment_model = self.model.add_compartment(comp)
         comp_filename = os.path.join(os.path.dirname(self.model.copasi_file), 'comp_model.cps')
         compartment_model.save(comp_filename)
 
@@ -278,7 +282,8 @@ class ModelTests(_test_base._BaseTest):
 
         :return:
         """
-        self.model = self.model.add_compartment('Medium', initial_value=6)
+        comp = PyCoTools.model.Compartment(name='Medium', initial_value=6)
+        self.model = self.model.add_compartment(comp)
         comp = self.model.get('compartment', 'Medium', 'name')
         assert comp != []
         self.model = self.model.remove_compartment(comp.name, by='name')
@@ -290,11 +295,12 @@ class ModelTests(_test_base._BaseTest):
 
         :return:
         """
-        # print self.model.global_quantities
-        new_model = self.model.add_global_quantity('NewGlobal', initial_value=5)
+        global_quantity = PyCoTools.model.GlobalQuantity(name='NewGlobal',
+                                                         initial_value=5)
+        new_model = self.model.add_global_quantity(global_quantity)
 
         new_global = new_model.get('global_quantity', 'NewGlobal',
-                             by='name')
+                                   by='name')
         self.assertEqual(new_global.name, 'NewGlobal')
 
 
@@ -303,7 +309,9 @@ class ModelTests(_test_base._BaseTest):
 
         :return:
         """
-        new_model = self.model.add_global_quantity('NewGlobal', initial_value=5)
+        global_quantity = PyCoTools.model.GlobalQuantity(name='NewGlobal',
+                                                         initial_value=5)
+        new_model = self.model.add_global_quantity(global_quantity)
         new_global = new_model.get('global_quantity', 'NewGlobal')
         assert new_global != []
         new_model = new_model.remove_global_quantity('NewGlobal', by='name')
@@ -314,25 +322,28 @@ class ModelTests(_test_base._BaseTest):
     def test_reactions(self):
         self.assertEqual(len(self.model.reactions), 4)
 
+    def test_get_list_of_call_parameters(self):
+        for i in self.model.parameter_descriptions:
+            self.assertTrue(isinstance(i, PyCoTools.model.ParameterDescription))
 
-    def test_add_functions(self):
-        self.model = self.model.add_function(name='new_funct',
-                                expression='K*M*S',
-                                role={'K': 'parameter',
-                                      'M': 'modifier',
-                                      'S': 'substrate'})
-        fun = self.model.get('function', 'new_funct', by='name')
-        self.assertNotEqual(fun, [])
+    # def test_add_functions(self):
+    #     self.model = self.model.add_function(name='new_funct',
+    #                             expression='K*M*S',
+    #                             role={'K': 'parameter',
+    #                                   'M': 'modifier',
+    #                                   'S': 'substrate'})
+    #     fun = self.model.get('function', 'new_funct', by='name')
+    #     self.assertNotEqual(fun, [])
 
-    def test_remove_functions(self):
-        self.model = self.model.add_function(name='new_funct',
-                                             expression='K*M*S',
-                                             role={'K': 'parameter',
-                                                   'M': 'modifier',
-                                                   'S': 'substrate'})
-        self.model = self.model.remove_function('new_funct', by='name')
-        fun = self.model.get('function', 'new_funct', by='name')
-        self.assertEqual(fun, [])
+    # def test_remove_functions(self):
+    #     self.model = self.model.add_function(name='new_funct',
+    #                                          expression='K*M*S',
+    #                                          role={'K': 'parameter',
+    #                                                'M': 'modifier',
+    #                                                'S': 'substrate'})
+    #     self.model = self.model.remove_function('new_funct', by='name')
+    #     fun = self.model.get('function', 'new_funct', by='name')
+    #     self.assertEqual(fun, [])
 
     # def test_add_reaction(self):
     #     """
@@ -341,8 +352,53 @@ class ModelTests(_test_base._BaseTest):
     #     """
     #     print self.model.add_reaction('2*J + X -> F + V; B P', rate_law='k*A*B')
 
-    def test_translater(self):
-        reaction = '2*J + X + X -> F + V; B P'
-        PyCoTools.model.Translator(reaction)
+
+
+    def test_function_mass_action(self):
+        ma = PyCoTools.model.Function(name='mass_action_irreversible')
+        self.assertEqual(ma.expression, 'k1*PRODUCT&lt;substrate_i>')
+
+    def test_add_mass_action(self):
+        ma = PyCoTools.model.Function(name='mass_action_irreversible')
+        self.model.add_function(ma)
+
+
+    # def test_translater(self):
+        reaction = '2*X + A + A -> F + V; B'
+        f = PyCoTools.model.Function(name='k*X*A*B', expression='k*X*A*B',
+                                     key=PyCoTools.model.KeyFactory(self.model, type='function').generate(),
+                                     reversible=False, roles={'k': 'parameter',
+                                                              'X': 'substrate',
+                                                              'A': 'substrate',
+                                                              'B': 'modifier'})
+        PyCoTools.model.Translator(self.model, reaction, rate_law=f)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 if __name__ == '__main__':
     unittest.main()

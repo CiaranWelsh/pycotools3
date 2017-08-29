@@ -48,7 +48,7 @@ class Model(_base._Base):
         self.xml = pycopi.CopasiMLParser(copasi_file).copasiML
         ## fill this dict after class is finished
         self.default_properties = {}
-        self.update_properties(self.default_properties)
+        self.update_kwargs(kwargs)
 
     def __str__(self):
         return 'Model(name={}, time_unit={}, volume_unit={}, quantity_unit={})'.format(self.name, self.time_unit,self.volume_unit, self.quantity_unit)
@@ -126,6 +126,8 @@ class Model(_base._Base):
         """
         query = '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
         return self.xml.xpath(query)[0].attrib['key']
+
+
 
     @property
     def states(self):
@@ -232,12 +234,13 @@ class Model(_base._Base):
                 for j in i:
                     lst.append(Compartment(key=j.attrib['key'],
                                            name=j.attrib['name'],
-                                           type=j.attrib['simulationType'],
-                                           value=float(self.states[j.attrib['key']])) )
+                                           simulation_type=j.attrib['simulationType'],
+                                           initial_value=float(self.states[j.attrib['key']])) )
         return lst
 
-    def add_compartment(self, name, key=None, simulation_type='fixed',
-                        initial_value=1):
+    # def add_compartment(self, name, key=None, simulation_type='fixed',
+    #                     initial_value=1):
+    def add_compartment(self, compartment):
         """
         Add compartment to model
         :param name: name of compartment
@@ -245,28 +248,25 @@ class Model(_base._Base):
         :param simulation_type: fixed, reactions, ode or assignment
         :return: model.Model
         """
-        if key == None:
-            key = KeyFactory(self, type='compartment').generate()
+        if compartment.key == None:
+            compartment.key = KeyFactory(self, type='compartment').generate()
 
         simulation_types = ['reactions', 'ode', 'fixed', 'assignment']
-        if simulation_type not in simulation_types:
+        if compartment.simulation_type not in simulation_types:
             raise Errors.InputError('{} not in {}'.format(simulation_type, simulation_types))
 
-
-        compartment = etree.Element('Compartment', attrib={'key':key,
-                                                           'name': name,
-                                                           'simulationType': simulation_type,
-                                                           'dimensionality': '3'})
+        compartment_element = etree.Element('Compartment', attrib={'key': compartment.key,
+                                                                   'name': compartment.name,
+                                                                   'simulationType': compartment.simulation_type,
+                                                                   'dimensionality': '3'})
 
         ## add compartment to the list of compartments
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfCompartments':
-                # for j in i:
-                #     print j.tag
-                i.append(compartment)
+                i.append(compartment_element)
 
         ## add compartment to state template
-        self.add_state(key, initial_value)
+        self.add_state(compartment.key, compartment.initial_value)
 
         return self
 
@@ -383,11 +383,91 @@ class Model(_base._Base):
                                   key=metabs[key]['key'],
                                   particle_number=metabs[key]['particle_number'],
                                   concentration=self.convert_particles_to_molar(
-                                      metabs[key]['particle_number'], self.quantity_unit, comp.value),
+                                      metabs[key]['particle_number'], self.quantity_unit, comp.initial_value),
                                   simulation_type=metabs[key]['simulationType']))
 
         return lst
 
+    # def add_metabolite(self, name=None, key=None, concentration=None,
+    #                    particle_number=None, compartment=None,
+    #                    simulation_type=None):
+    def add_metabolite(self, metab):
+        """
+        Add a metabolite to the model xml
+        :param metabolite_args: Dict. Arguments to pass to Metabolite
+        :return:
+        """
+
+        if metab.name in [i.name for i in self.metabolites]:
+            raise Errors.InputError('Already a specie with the name "{}" in your model'.format(metabolite_args['name']))
+
+        if metab.key == None:
+            metab.key = KeyFactory(self,type='metabolite').generate()
+
+        if metab.name == None:
+            metab.name = key
+
+        if (metab.concentration == None) or (metab.particle_number == None):
+            metab.concentration= str(0)
+
+        if metab.concentration != None:
+            if isinstance(metab.concentration, (float, int)):
+                metab.concentration = str(metab.concentration)
+
+        if metab.compartment == None:
+            metab.compartment = self.compartments[0]
+
+        if not isinstance(metab.compartment, Compartment):
+            raise Errors.InputError('compartment should be of type model.Compartment')
+
+        if metab.simulation_type == None:
+            metab.simulation_type = 'reactions'
+
+        if metab.particle_number == None:
+            metab.particle_number = self.convert_molar_to_particles(metab.concentration,
+                                                                    self.quantity_unit,
+                                                                    metab.compartment.initial_value)
+
+
+        if isinstance(metab.particle_number, (float, int)):
+            metab.particle_number = str(metab.particle_number)
+
+
+        ##TODO fix metabolite converion finctions to fully support copasi
+        ##TODO work out whether I need to actively add metabolite to metabolite list or whether I can make it update itself from the xml
+        metabolite_element = etree.Element('Metabolite', attrib={'key': metab.key,
+                                                    'name': metab.name,
+                                                    'simulationType': metab.simulation_type,
+                                                    'compartment': metab.compartment.key})
+
+        ## add the metabolute to list of metabolites
+        list_of_metabolites = '{http://www.copasi.org/static/schema}ListOfMetabolites'
+        for i in self.xml.iter():
+            if i.tag == list_of_metabolites:
+                i.append(metabolite_element)
+
+        ## add metabolite to state_template and initial state fields
+        self.add_state(metab.key, metab.particle_number)
+
+        return self
+
+
+    def remove_metabolite(self, value, by='name'):
+        """
+        Remove metabolite from model.
+        :param value: value of the by argument (i.e. A)
+        :param by: attribute to match (i.e. name)
+        :return:
+        """
+        list_of_metabolites = '{http://www.copasi.org/static/schema}ListOfMetabolites'
+        metab = self.get('metabolite', value, by=by)
+        for i in self.xml.iter():
+            if i.tag == list_of_metabolites:
+                for j in i:
+                    if j.attrib[by] == value:
+                        j.getparent().remove(j)
+        self.remove_state(metab.key)
+        return self
 
     @property
     def global_quantities(self):
@@ -410,14 +490,15 @@ class Model(_base._Base):
             lst.append(GlobalQuantity(name=model_values[key]['name'],
                                       key=model_values[key]['key'],
                                       simulation_type=model_values[key]['simulationType'],
-                                      value=model_values[key]['initial_value']))
+                                      initial_value=model_values[key]['initial_value']))
         return lst
 
 
 
 
-    def add_global_quantity(self, name, key=None, initial_value=None,
-                            simulation_type='fixed'):
+    # def add_global_quantity(self, name, key=None, initial_value=None,
+    #                         simulation_type='fixed'):
+    def add_global_quantity(self, global_quantity):
         """
 
         :param name: name of global quantity to be added
@@ -426,21 +507,24 @@ class Model(_base._Base):
         :param simulation_type: fixed, ode assignment or reactions
         :return: model.Model
         """
-        if key == None:
-            key = KeyFactory(self, type='global_quantity').generate()
+        if global_quantity.key == None:
+            global_quantity.key = KeyFactory(self, type='global_quantity').generate()
 
-        if simulation_type not in ['assignment', 'fixed', 'ode', 'reactions']:
+        if global_quantity.simulation_type == None:
+            global_quantity.simulation_type = 'fixed'
+
+        if global_quantity.simulation_type not in ['assignment', 'fixed', 'ode', 'reactions']:
             raise TypeError('wrong simulation type')
 
-        model_value = etree.Element('ModelValue', attrib={'key': key,
-                                                          'name': name,
-                                                          'simulationType': simulation_type})
+        model_value = etree.Element('ModelValue', attrib={'key': global_quantity.key,
+                                                          'name': global_quantity.name,
+                                                          'simulationType': global_quantity.simulation_type})
 
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfModelValues':
                 i.append(model_value)
 
-        self.add_state(key, initial_value)
+        self.add_state(global_quantity.key, global_quantity.initial_value)
 
         return self
 
@@ -507,11 +591,50 @@ class Model(_base._Base):
         for element in self.xml.iter():
             if element.tag == '{http://www.copasi.org/static/schema}ListOfFunctions':
                 for child in list(element):
-                    lst.append( Function(**child.attrib) )
+                    # print child.attrib
+                    name = child.attrib['name']
+                    key = child.attrib['key']
+                    type = child.attrib['type']
+                    reversible = child.attrib['reversible']
+                    list_of_parameter_descriptions = []
+                    for grandchild in child:
+                        if grandchild.tag == '{http://www.copasi.org/static/schema}Expression':
+                            expression = grandchild.text.replace('\n', '').strip()
+
+                        if grandchild.tag == '{http://www.copasi.org/static/schema}ListOfParameterDescriptions':
+                            for greatgrandchild in grandchild:
+                                list_of_parameter_descriptions.append(ParameterDescription(name=greatgrandchild.attrib['name'],
+                                                       key=greatgrandchild.attrib['key'],
+                                                       order=greatgrandchild.attrib['order'],
+                                                       role=greatgrandchild.attrib['role']) )
+                    lst.append(Function(name=name,
+                                        key=key,
+                                        type=type,
+                                        expression=expression,
+                                        reversible=reversible,
+                                        list_of_parameter_descriptions=list_of_parameter_descriptions))
         return lst
 
-    def add_function(self, name, expression, role, type='user_defined',
-                     key=None, reversible=False):
+    # def add_function(self, name, expression, role, type='user_defined',
+    #                  key=None, reversible=False):
+
+    @property
+    def parameter_descriptions(self):
+        """
+
+        :return:
+        """
+        lst = []
+        for i in self.xml.iter():
+            if  i.tag == '{http://www.copasi.org/static/schema}ParameterDescription':
+                lst.append(ParameterDescription(name=i.attrib['name'],
+                                                key=i.attrib['key'],
+                                                order=i.attrib['order'],
+                                                role=i.attrib['role'] ) )
+        return lst
+
+
+    def add_function(self, function):
         """
 
         :param name:
@@ -521,80 +644,61 @@ class Model(_base._Base):
         :param reversible:
         :return:
         """
+        if function.key == None:
+            function.key = KeyFactory(self, type='function').generate()
 
-        if key == None:
-            key = KeyFactory(self, type='function').generate()
+        if function.type == 'user_defined':
+            function.type = 'UserDefined'
 
-        if type == 'user_defined':
-            type = 'UserDefined'
-
-        if reversible == True:
-            reversible = 'true'
+        if function.reversible == True:
+            function.reversible = 'true'
         else:
-            reversible = 'false'
+            function.reversible = 'false'
 
-        if not isinstance(role, dict):
-            raise Errors.InputError('role should be a python dictionary')
 
-        roles = ['parameter', 'modifier', 'substrate', 'product']
-        for n, r in role.items():
-            if r not in roles:
-                raise Errors.InputError('{} is not one of {}'.format(r, roles))
-            if r == 'parameter':
-                role[n] = 'constant'
 
         ## create the function element
-        function = etree.Element('Function', attrib={'key': key,
-                                                     'name': name,
-                                                     'type': type})
+        function_element = etree.Element('Function', attrib={'key': function.key,
+                                                             'name': function.name,
+                                                             'type': function.type,
+                                                             'reversible':function.reversible})
 
         ##add the expression as text
-        exp = etree.SubElement(function, 'Expression')
-        exp.text = expression+'\n'
-        etree.SubElement(function, 'ListOfParameterDescriptions')
+        exp = etree.SubElement(function_element, 'Expression')
+        exp.text = function.expression+'\n'
+        list_of_parameter_descriptions = etree.SubElement(function_element,
+                                                          'ListOfParameterDescriptions')
 
-        # ## list of available operators according the copasi website
-        # operator_list = ['+', '-', '*', '%',
-        #                  '%', '^', 'abs', 'floor',
-        #                  'ceil', 'factorial', 'log',
-        #                  'log10', 'exp', 'sin'
-        #                  'cos', 'tan', 'sec',
-        #                  'csc', 'cot', 'tanh',
-        #                  'sech', 'csch', 'coth',
-        #                  'asin', 'acos', 'atan',
-        #                  'arcsec', 'arccsc', 'arcccot',
-        #                  'arcsinh', 'arccosh', 'arctanh',
-        #                  'arcsech', 'arccsch', 'arccoth',
-        #                  'uniform', 'normal', 'le',
-        #                  'lt', 'ge', 'gt', 'ne', 'eq',
-        #                  'and', 'or', 'xor', 'not', 'if']
-        #
-        # ## replace operators with comma so we can subsequently split the string at comma
-        # for i in operator_list:
-        #     expression = expression.replace(i, ',')
-        #
-        # ##get list of elements by split
-        # expression = expression.split(',')
-        expression = Expression(expression).to_list()
 
-        ## make sure there are enough elements in the role dict
-        if len(expression) != len(role.items()):
-            raise Errors.InputError('Every item of your expression must have a role')
 
-        ## create role elements
-        for i, name in enumerate(expression):
-            key = "FunctionParameter_{}".format(100000+i)
-            etree.SubElement(function,
-                             'ParameterDescription',
-                             attrib={'key': key,
-                                     'name': name,
-                                     'order': str(i),
-                                     'role': role[name]})
+        ## create mass action elements
+        if (function.name == 'mass_action_irreversible') or (function.name == 'mass_action_reversible'):
+            for i in function.list_of_parameter_descriptions:
+                etree.SubElement(list_of_parameter_descriptions, 'ParameterDescription',
+                             attrib={'name': i.name,
+                                     'key': i.key,
+                                     'order': i.order,
+                                     'role': i.role})
+        #print etree.tostring(function_element, pretty_print=True)
+
+        else:
+            expression = Expression(function.expression).to_list()
+
+            for i, name in enumerate(expression):
+                ## TODO change this keygeneration to use KeyFactory
+                key = "FunctionParameter_{}".format(100000+i)
+
+                etree.SubElement(list_of_parameter_descriptions,
+                                 'ParameterDescription',
+                                 attrib={'key': key,
+                                         'name': name,
+                                         'order': str(i),
+                                         'role': function.roles[name]})
 
         ## add the function to list of functions
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfFunctions':
-                i.append(function)
+                i.append(function_element)
 
         return self
 
@@ -760,86 +864,6 @@ class Model(_base._Base):
         os.system('CopasiUI {}'.format(copasi_file))
         os.remove(copasi_file)
 
-    def add_metabolite(self, name=None, key=None, concentration=None,
-                       particle_number=None, compartment=None,
-                       simulation_type=None):
-        """
-        Add a metabolite to the model xml
-        :param metabolite_args: Dict. Arguments to pass to Metabolite
-        :return:
-        """
-
-        if name in [i.name for i in self.metabolites]:
-            raise Errors.InputError('Already a specie with the name "{}" in your model'.format(metabolite_args['name']))
-
-        if key == None:
-            key = KeyFactory(self,type='metabolite').generate()
-
-        if name == None:
-            name = key
-
-        if (concentration == None) or (particle_number == None):
-            concentration= str(0)
-
-        if concentration != None:
-            if isinstance(concentration, (float, int)):
-                concentration = str(concentration)
-
-        if compartment == None:
-            compartment = self.compartments[0]
-
-        if not isinstance(compartment, Compartment):
-            raise Errors.InputError('compartment should be of type model.Compartment')
-
-        if simulation_type == None:
-            simulation_type = 'reactions'
-
-        if particle_number == None:
-            particle_number = self.convert_molar_to_particles(concentration,
-                                                              self.quantity_unit,
-                                                              compartment.value)
-
-
-        if isinstance(particle_number, (float, int)):
-            particle_number = str(particle_number)
-
-
-        ##TODO fix metabolite converion finctions to fully support copasi
-        ##TODO work out whether I need to actively add metabolite to metabolite list or whether I can make it update itself from the xml
-        metab = etree.Element('Metabolite', attrib={'key': key,
-                                                    'name': name,
-                                                    'simulationType': simulation_type,
-                                                    'compartment': compartment.key})
-
-        ## add the metabolute to list of metabolites
-        list_of_metabolites = '{http://www.copasi.org/static/schema}ListOfMetabolites'
-        for i in self.xml.iter():
-            if i.tag == list_of_metabolites:
-                i.append(metab)
-
-        ## add metabolite to state_template and initial state fields
-        self.add_state(key, particle_number)
-
-        return self
-
-
-    def remove_metabolite(self, value, by='name'):
-        """
-        Remove metabolite from model.
-        :param value: value of the by argument (i.e. A)
-        :param by: attribute to match (i.e. name)
-        :return:
-        """
-        list_of_metabolites = '{http://www.copasi.org/static/schema}ListOfMetabolites'
-        metab = self.get('metabolite', value, by=by)
-        for i in self.xml.iter():
-            if i.tag == list_of_metabolites:
-                for j in i:
-                    if j.attrib[by] == value:
-                        j.getparent().remove(j)
-        self.remove_state(metab.key)
-        return self
-
     def get(self, component, value, by='name'):
         """
         Factory method
@@ -877,20 +901,56 @@ class Model(_base._Base):
         return res
 
 
-
+# class Compartment(_base._Base):
+#     def __init__(self, **kwargs):
+#         super(Compartment, self).__init__(**kwargs)
+#         self.default_properties = {'name':None,
+#                                    'key':None,
+#                                    'value':None,
+#                                    'type':None}
+#
+#         for key in self.kwargs:
+#             if key not in self.default_properties:
+#                 raise Errors.InputError('Attribute not allowed. {} not in {}'.format(key, self.default_properties))
+#
+#         self._do_checks()
+#
+#
+#     def __str__(self):
+#         return 'Compartment({})'.format(self.to_string())
+#
+#     def __repr__(self):
+#         return self.__str__()
+#
+#     def _do_checks(self):
+#         """
+#         Make sure none of the arguments are empty
+#         :return: void
+#         """
+#         for attr in self.default_properties:
+#             if attr not in sorted(self.__dict__.keys() ):
+#                 raise Errors.InputError('Required attribute not specified: {}'.format(attr))
+#
+#     @property
+#     def reference(self):
+#         return 'Vector=Compartments[{}]'.format(self.name)
 
 class Compartment(_base._Base):
     def __init__(self, **kwargs):
         super(Compartment, self).__init__(**kwargs)
-        self.default_properties = {'name':None,
-                             'key':None,
-                             'value':None,
-                             'type':None}
+        default_properties = {'name':None,
+                              'key': None,
+                              'initial_value':None,
+                              'simulation_type': 'fixed'}
 
-        for key in self.kwargs:
-            if key not in self.default_properties:
-                raise Errors.InputError('Attribute not allowed. {} not in {}'.format(key, self.default_properties))
+        # for key in self.kwargs:
+        #     if key not in self.default_properties:
+        #         raise Errors.InputError('Attribute not allowed. {} not in {}'.format(key, self.default_properties))
 
+        self.update_properties(default_properties)
+        self.update_kwargs(kwargs)
+        self.check_integrity(default_properties.keys(),
+                             kwargs.keys())
         self._do_checks()
 
 
@@ -905,43 +965,8 @@ class Compartment(_base._Base):
         Make sure none of the arguments are empty
         :return: void
         """
-        for attr in self.default_properties:
-            if attr not in sorted(self.__dict__.keys() ):
-                raise Errors.InputError('Required attribute not specified: {}'.format(attr))
+        pass
 
-    @property
-    def reference(self):
-        return 'Vector=Compartments[{}]'.format(self.name)
-
-class Compartment(_base._Base):
-    def __init__(self, **kwargs):
-        super(Compartment, self).__init__(**kwargs)
-        self.default_properties = {'name':None,
-                             'key':None,
-                             'value':None,
-                             'type':None}
-
-        for key in self.kwargs:
-            if key not in self.default_properties:
-                raise Errors.InputError('Attribute not allowed. {} not in {}'.format(key, self.default_properties))
-
-        self._do_checks()
-
-
-    def __str__(self):
-        return 'Compartment({})'.format(self.to_string())
-
-    def __repr__(self):
-        return self.__str__()
-
-    def _do_checks(self):
-        """
-        Make sure none of the arguments are empty
-        :return: void
-        """
-        for attr in self.default_properties:
-            if attr not in sorted(self.__dict__.keys() ):
-                raise Errors.InputError('Required attribute not specified: {}'.format(attr))
 
     @property
     def reference(self):
@@ -966,8 +991,6 @@ class Metabolite(_base._Base):
                              'name':None,
                              'particle_number':None,
                              'concentration':None,
-                             'stoiciometry':None,
-                             # 'reaction_key':None,
                              'simulation_type':None,
                              }
 
@@ -989,12 +1012,18 @@ class Metabolite(_base._Base):
 
         :return:
         """
+        if self.compartment == None:
+            raise Errors.InputError('compartment must be specified')
 
-        if isinstance(self.compartment, Compartment)!=True:
-            raise Errors.InputError('compartment argument should be of type PyCoTools.pycopi.Compartment')
+        if self.compartment != None:
+            if isinstance(self.compartment, Compartment)!=True:
+                raise Errors.InputError('compartment argument should be of type PyCoTools.pycopi.Compartment')
 
         if ('particle_number' not in self.__dict__.keys()) and  ('concentration' not in self.__dict__.keys() ):
             raise Errors.InputError('Must specify either concentration or particle numbers')
+
+        if self.simulation_type == None:
+            self.simulation_type = 'reactions'
 
     @property
     def initial_reference(self):
@@ -1004,7 +1033,6 @@ class Metabolite(_base._Base):
         :return:
         """
         return 'Vector=Metabolites[{}],Reference=InitialConcentration'.format(self.name)
-
 
     @property
     def transient_reference(self):
@@ -1024,7 +1052,6 @@ class Metabolite(_base._Base):
         """
         return 'Vector=Metabolites[{}],Reference=InitialParticleNumber'.format(self.name)
 
-
     @property
     def transient_particle_reference(self):
         """
@@ -1039,6 +1066,10 @@ class Metabolite(_base._Base):
 
     def to_product(self):
         return Product(**self.kwargs)
+
+    def to_modifier(self):
+        return Modifier(**self.kwargs)
+
 
 class Substrate(Metabolite):
     def __init__(self, **kwargs):
@@ -1055,7 +1086,6 @@ class Substrate(Metabolite):
         :return:
         """
         return 'Substrate({})'.format(self.to_string())
-
 
     def __repr__(self):
         return self.__str__()
@@ -1075,6 +1105,25 @@ class Product(Metabolite):
         :return:
         """
         return 'Product({})'.format(self.to_string())
+
+    def __repr__(self):
+        return self.__str__()
+
+
+class Modifier(Metabolite):
+    def __init__(self, **kwargs):
+        super(Modifier, self).__init__(**kwargs)
+
+        for key in self.kwargs:
+            if key not in self.default_properties:
+                raise Errors.InputError('{} not in {}'.format(key, self.default_properties))
+
+    def __str__(self):
+        """
+
+        :return:
+        """
+        return 'Modifier({})'.format(self.to_string())
 
     def __repr__(self):
         return self.__str__()
@@ -1101,7 +1150,7 @@ class GlobalQuantity(_base._Base):
         self.default_properties = {'name': None,
                                    'key': None,
                                    'simulation_type': None,
-                                   'value': None,
+                                   'initial_value': None,
                                    'type': None}
 
         for key in kwargs:
@@ -1212,21 +1261,109 @@ class Function(_base._Base):
 
     def __init__(self, **kwargs):
         super(Function, self).__init__(**kwargs)
-        self.default_properties = {'name':None,
-                        'key':None,
-                        'type':None,
-                        'reversible':None}
+        default_properties = {'name': None,
+                              'key': None,
+                              'type': None,
+                              'reversible': None,
+                              'expression': None,
+                              'list_of_parameter_descriptions': None,
+                              'roles': None}
 
         for key in self.kwargs:
-            if key not in self.default_properties:
+            if key not in default_properties:
                 raise Errors.InputError('{} not in {}'.format(key, default_properties))
-        self.update_properties(self.default_properties)
+        self.update_properties(default_properties)
+        self._do_checks()
+
+        self.create_mass_action()
 
     def __str__(self):
         return 'Function({})'.format(self.to_string())
 
     def __repr__(self):
         return self.__str__()
+
+    def _do_checks(self):
+        # if not isinstance(self.expression, Expression):
+        #     self.expression = Expression(self.expression)
+
+        if self.reversible == None:
+            self.reversible = 'false'
+
+        if self.reversible:
+            self.reversible = 'true'
+        else:
+            self.reversible = 'false'
+
+        if self.type == None:
+            self.type = 'user_defined'
+
+
+    def create_mass_action(self):
+        """
+        if name == mass_action, create the mass action function
+        :return:
+        """
+        if self.name == 'mass_action_irreversible':
+            self.key = KeyFactory(self.model, 'function').generate()
+            self.type = 'mass_action'
+            key_gen = KeyFactory(self.model, 'parameter_description')
+            substrate = ParameterDescription(key=keygen.generate(), name='substrate', order='1', role='substrate')
+            parameter = ParameterDescription(key=keygen.generate(), name='k1', order='0', role='constant')
+            self.reversible = 'false'
+            self.list_of_parameter_descriptions = [substrate, parameter]
+            self.expression = 'k1*PRODUCT&lt;substrate_i>'
+
+        elif self.name == 'mass_action_reversible':
+            self.key = 'Function_14'
+            self.type = 'mass_action'
+            self.reversible = 'true'
+            self.expression = 'k1*PRODUCT&lt;substrate_i>-k2*PRODUCT&lt;product_j>'
+
+            k1 = ParameterDescription(key= keygen.generate(), name='k1', order='0', role='constant')
+            s = ParameterDescription(key= keygen.generate(), name='substrate', order='1', role='substrate')
+            k2 = ParameterDescription(key=keygen.generate(), name='k2', order='2', role='constant')
+            p = ParameterDescription(key=keygen.generate(), name='product', order='3', role='product')
+
+            self.list_of_parameter_descriptions = [k1, s, k2, p]
+
+
+
+
+
+class ParameterDescription(_base._Base):
+    def __init__(self, **kwargs):
+        super(ParameterDescription, self).__init__(**kwargs)
+        default_properties = {'key': None,
+                                   'name': None,
+                                   'order' : 0,
+                                   'role': 'substrate'}
+
+        self.update_properties(default_properties)
+        self.update_kwargs(self.kwargs)
+        self.check_integrity(default_properties.keys(),
+                             kwargs.keys())
+        self._do_checks()
+
+    def __str__(self):
+        return "ParameterDescription({})".format(self.to_string())
+
+    def _do_checks(self):
+        """
+        verify integrity of user input
+        :return:
+        """
+        if self.role == 'parameter':
+            self.role = 'constant'
+        elif self.role == None:
+            self.role = 'constant'
+
+        roles = ['constant', 'modifier', 'substrate', 'product']
+        if self.role not in roles:
+            raise Errors.InputError('{} is not one of {}'.format(self.role, roles))
+
+
+
 
 class LocalParameter(_base._Base):
     def __init__(self, **kwargs):
@@ -1290,7 +1427,8 @@ class KeyFactory(_base._ModelBase):
                      'parameter_set',
                      'parameter',
                      'report',
-                     'function']
+                     'function',
+                     'parameter_description']
         if self.type not in type_list:
             raise Errors.InputError('{} not a valid type. {}'.format(self.type, type_list))
 
@@ -1392,20 +1530,41 @@ class Expression(_base._Base):
 
 
 
-class Translator(_base._Base):
-    def __init__(self, reaction, **kwargs):
-        super(Translator, self).__init__(**kwargs)
+class Translator(_base._ModelBase):
+    def __init__(self, model, reaction, **kwargs):
+        super(Translator, self).__init__(model, **kwargs)
         self.reaction = reaction
+        self.default_properties = {'rate_law': 'mass_action',
+                                   'reversible': False}
+
+
+        self.update_properties(self.default_properties)
+        self.update_kwargs(kwargs)
+        self.check_integrity(self.default_properties.keys(),
+                             kwargs.keys())
+
+        ## split reaction by -> or == and ;. determine reversibility
         self.substrates, self.products, self.modifiers = self.split_reaction()
 
+        ## split substrates and products by + and modifiers by empty spaces
         self.substrates = self.split_reaction_components(self.substrates, type='substrate')
         self.products = self.split_reaction_components(self.products, type='product')
         self.modifiers = self.split_reaction_components(self.modifiers, type='modifier')
 
+        ## lump together like metabolites (i.e. convert A + A into 2*A)
         self.substrates = self.determine_stoiciometry(self.substrates)
         self.products = self.determine_stoiciometry(self.products)
 
-        print self.products
+        ## get lists of substrates, products and modifiers, creating if component doesn't exist
+        self.substrates = self.get_components('substrate')
+        self.products = self.get_components('product')
+        self.modifiers = self.get_components('modifier')
+
+        self.all_components = self.substrates + self.products + self.modifiers
+
+        self.add_rate_law()
+
+
     def __str__(self):
         """
 
@@ -1422,11 +1581,30 @@ class Translator(_base._Base):
         list_of_substrates = []
         list_of_products = []
         list_of_modifiers = []
+
+        ## handle case where modifiers included in reaction
         if ';' in self.reaction:
-            list_of_substrates, reaction = self.reaction.split('->')
+            ## for irreversible reactions
+            if '->' in self.reaction:
+                list_of_substrates, reaction = self.reaction.split('->')
+
+            ## for reversible reactions
+            elif '=' in self.reaction:
+                list_of_substrates, reaction = self.reaction.split('=')
+                self.reversible = True
+
             list_of_products, list_of_modifiers = reaction.split(';')
+
+        ##for reactions without modifiers
         else:
-            list_of_substrates, list_of_products = self.reaction.split('->')
+            ## irreversible reactions
+            if '->' in self.reaction:
+                list_of_substrates, list_of_products = self.reaction.split('->')
+
+            ## for reversible reactions
+            elif '=' in self.reaction:
+                list_of_substrates, list_of_products = self.reaction.split('=')
+                self.reversible = True
 
         return list_of_substrates, list_of_products, list_of_modifiers
 
@@ -1466,6 +1644,85 @@ class Translator(_base._Base):
                 count['{}*{}'.format(count[i], i)] = 1
                 del count[i]
         return count.keys()
+
+
+    def get_components(self, component='substrate'):
+        """
+        create or get substrates, products or modifiers
+        :return: list
+        """
+
+        if component == 'substrate':
+            component_list = self.substrates
+
+        elif component == 'product':
+            component_list = self.products
+
+        elif component == 'modifier':
+            component_list = self.modifiers
+
+        lst = []
+        for comp in component_list:
+            stoic = 1
+            ## check for non 1 stoiciometry
+            if '*' in comp:
+                stoic, comp = comp.split('*')
+
+            ## if metab doesn't exist, create and add it to the model
+            metab = self.model.get('metabolite', comp, by='name')
+            if metab == []:
+                metab = Metabolite(name=comp,
+                                   concentration=1,
+                                   compartment=self.model.compartments[0],
+                                   key=KeyFactory(self.model,
+                                                  type='metabolite').generate() )
+
+                self.model = self.model.add_metabolite(metab)
+
+            ## now get the metabolite.
+            ## Note we do this again anyway beause adding the metabolite
+            ## calculates particle numbers from concentration.
+            metab = self.model.get('metabolite', comp, by='name')
+            ## convert to respective classes
+            if component == 'substrate':
+                metab = metab.to_substrate()
+
+            elif component == 'product':
+                metab = metab.to_product()
+
+            elif component == 'modifier':
+                metab = metab.to_modifier()
+
+            ##add stoiciometry
+            metab.stoiciometry = int(stoic)
+            lst.append(metab)
+
+        return lst
+
+
+    def add_rate_law(self):
+
+        if self.rate_law == 'mass_action':
+            if not self.reversible:
+                # print self.substrates
+
+                funct= Function(name='mass_action_irreversible')
+            else:
+                funct = Function(name='mass_action_reversible')
+            self.model = self.model.add_function(funct)
+        else:
+            self.model = self.model.add_function(self.rate_law)
+
+            scaling_compartment_reference = '{},{}'.format(self.model.reference, self.substrates[0].compartment.reference)
+            rate_law_element = etree.Element('KineticLaw', attrib={'function': self.rate_law.key,
+                                                                   'unitType': 'default',
+                                                                   'scalingCompartment': scaling_compartment_reference} )
+            list_of_call_parameters = etree.SubElement(rate_law_element, 'ListOfCallParameters')
+            print self.model.open()
+
+
+
+
 
 
 
