@@ -1298,6 +1298,13 @@ class Function(_base._Base):
         if self.type == None:
             self.type = 'user_defined'
 
+        if self.list_of_parameter_descriptions == None:
+            if self.roles == None:
+                raise Errors.InputError('please specify either roles or list_of_parameter_descriptions')
+            for key, value = self.roles.items():
+                ## Here I'm trying to convert self.roles into list of paramter descriptions.
+                print ParameterDescription(key=key, name=key, )
+
 
     def to_xml(self):
         """
