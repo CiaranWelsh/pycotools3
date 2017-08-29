@@ -24,8 +24,8 @@ Module that tests the operations of the _Base base test
 """
 
 import site
-# site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
-site.addsitedir('/home/b3053674/Documents/PyCoTools')
+site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
+# site.addsitedir('/home/b3053674/Documents/PyCoTools')
 
 import PyCoTools
 from PyCoTools.Tests import _test_base
@@ -326,14 +326,27 @@ class ModelTests(_test_base._BaseTest):
         for i in self.model.parameter_descriptions:
             self.assertTrue(isinstance(i, PyCoTools.model.ParameterDescription))
 
-    # def test_add_functions(self):
-    #     self.model = self.model.add_function(name='new_funct',
-    #                             expression='K*M*S',
-    #                             role={'K': 'parameter',
-    #                                   'M': 'modifier',
-    #                                   'S': 'substrate'})
-    #     fun = self.model.get('function', 'new_funct', by='name')
-    #     self.assertNotEqual(fun, [])
+
+    def test_mass_action_class(self):
+        ma = PyCoTools.model.MassAction(self.model, reversible=True)
+        self.assertEqual(ma.expression, 'k1*PRODUCT&lt;substrate_i>-k2*PRODUCT&lt;product_j>')
+
+
+    def test_add_mass_action(self):
+        ma = PyCoTools.model.MassAction(self.model, reversible=False)
+        self.model = self.model.add_function(ma)
+        ##todo find better test condition
+
+
+    def test_add_function(self):
+        fun = PyCoTools.model.Function(name='new_funct',
+                                       expression='K*M*S',
+                                       roles={'K': 'parameter',
+                                              'M': 'modifier',
+                                              'S': 'substrate'})
+        self.model = self.model.add_function(fun)
+        fun = self.model.get('function', 'new_funct', by='name')
+        self.assertNotEqual(fun, [])
 
     # def test_remove_functions(self):
     #     self.model = self.model.add_function(name='new_funct',
@@ -352,26 +365,28 @@ class ModelTests(_test_base._BaseTest):
     #     """
     #     print self.model.add_reaction('2*J + X -> F + V; B P', rate_law='k*A*B')
 
-
-
-    def test_function_mass_action(self):
-        ma = PyCoTools.model.Function(name='mass_action_irreversible')
-        self.assertEqual(ma.expression, 'k1*PRODUCT&lt;substrate_i>')
-
-    def test_add_mass_action(self):
-        ma = PyCoTools.model.Function(name='mass_action_irreversible')
-        self.model.add_function(ma)
-
-
-    # def test_translater(self):
-        reaction = '2*X + A + A -> F + V; B'
-        f = PyCoTools.model.Function(name='k*X*A*B', expression='k*X*A*B',
-                                     key=PyCoTools.model.KeyFactory(self.model, type='function').generate(),
-                                     reversible=False, roles={'k': 'parameter',
-                                                              'X': 'substrate',
-                                                              'A': 'substrate',
-                                                              'B': 'modifier'})
-        PyCoTools.model.Translator(self.model, reaction, rate_law=f)
+    # def test_function(self):
+    #     ma = PyCoTools.model.Function(name='mass_action_irreversible')
+    #     self.assertTrue(ma
+    #
+    # def test_function_mass_action(self):
+    #     ma = PyCoTools.model.Function(name='mass_action_irreversible')
+    #     self.assertEqual(ma.expression, 'k1*PRODUCT&lt;substrate_i>')
+    #
+    # def test_add_mass_action(self):
+    #     ma = PyCoTools.model.Function(name='mass_action_irreversible')
+    #     self.model.add_function(ma)
+    #
+    #
+    # # def test_translater(self):
+    #     reaction = '2*X + A + A -> F + V; B'
+    #     f = PyCoTools.model.Function(name='k*X*A*B', expression='k*X*A*B',
+    #                                  key=PyCoTools.model.KeyFactory(self.model, type='function').generate(),
+    #                                  reversible=False, roles={'k': 'parameter',
+    #                                                           'X': 'substrate',
+    #                                                           'A': 'substrate',
+    #                                                           'B': 'modifier'})
+    #     PyCoTools.model.Translator(self.model, reaction, rate_law=f)
 
 
 

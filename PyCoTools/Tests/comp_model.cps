@@ -69,7 +69,7 @@ Reaction scheme where the products are created from the reactants and the change
       </Compartment>
       <Compartment key="Compartment_3" name="cyt" simulationType="fixed" dimensionality="3">
       </Compartment>
-    <Compartment dimensionality="3" key="Compartment_0" name="Medium" simulationType="fixed"/></ListOfCompartments>
+    <Compartment dimensionality="3" key="Compartment_10000" name="Medium" simulationType="fixed"/></ListOfCompartments>
     <ListOfMetabolites>
       <Metabolite key="Metabolite_1" name="A" simulationType="reactions" compartment="Compartment_1">
       </Metabolite>
@@ -280,12 +280,8 @@ Reaction scheme where the products are created from the reactants and the change
       <StateTemplateVariable objectReference="Compartment_3"/>
       <StateTemplateVariable objectReference="ModelValue_0"/>
       <StateTemplateVariable objectReference="ModelValue_1"/>
-    <StateTemplateVariable objectReference="Compartment_0"/></StateTemplate>
-<<<<<<< HEAD
-    <InitialState type="initialState">0 6.022140856999986e+020 6.022140856999986e+020 6.022140856999986e+020 13 1 3 4 9 4 
-=======
+    <StateTemplateVariable objectReference="Compartment_10000"/></StateTemplate>
     <InitialState type="initialState">0 6.022140856999986e+020 6.022140856999986e+020 6.022140856999986e+020 13 1 3 4 9 6 
->>>>>>> ed76751db430c0154699c8210cbc608138f516ef
 </InitialState>
   </Model>
   <ListOfTasks>
