@@ -687,7 +687,7 @@ class TimeCourse(_base._ModelBase):
         self.convert_bool_to_numeric(self.default_properties)
         self.update_properties(self.default_properties)
         self.update_kwargs(kwargs)
-        self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
+        self.check_integrity(self.default_properties.keys(), kwargs.keys())
         self._do_checks()
 
         self.set_timecourse()
