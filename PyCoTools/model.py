@@ -253,7 +253,7 @@ class Model(_base._Base):
 
         simulation_types = ['reactions', 'ode', 'fixed', 'assignment']
         if compartment.simulation_type not in simulation_types:
-            raise Errors.InputError('{} not in {}'.format(simulation_type, simulation_types))
+            raise Errors.InputError('{} not in {}'.format(compartment.simulation_type, simulation_types))
 
         compartment_element = etree.Element('Compartment', attrib={'key': compartment.key,
                                                                    'name': compartment.name,
@@ -657,48 +657,48 @@ class Model(_base._Base):
 
 
 
-        ## create the function element
-        function_element = etree.Element('Function', attrib={'key': function.key,
-                                                             'name': function.name,
-                                                             'type': function.type,
-                                                             'reversible':function.reversible})
-
-        ##add the expression as text
-        exp = etree.SubElement(function_element, 'Expression')
-        exp.text = function.expression+'\n'
-        list_of_parameter_descriptions = etree.SubElement(function_element,
-                                                          'ListOfParameterDescriptions')
-
-
-
-        ## create mass action elements
-        if (function.name == 'mass_action_irreversible') or (function.name == 'mass_action_reversible'):
-            for i in function.list_of_parameter_descriptions:
-                etree.SubElement(list_of_parameter_descriptions, 'ParameterDescription',
-                             attrib={'name': i.name,
-                                     'key': i.key,
-                                     'order': i.order,
-                                     'role': i.role})
-        #print etree.tostring(function_element, pretty_print=True)
-
-        else:
-            expression = Expression(function.expression).to_list()
-
-            for i, name in enumerate(expression):
-                ## TODO change this keygeneration to use KeyFactory
-                key = "FunctionParameter_{}".format(100000+i)
-
-                etree.SubElement(list_of_parameter_descriptions,
-                                 'ParameterDescription',
-                                 attrib={'key': key,
-                                         'name': name,
-                                         'order': str(i),
-                                         'role': function.roles[name]})
+        # ## create the function element
+        # function_element = etree.Element('Function', attrib={'key': function.key,
+        #                                                      'name': function.name,
+        #                                                      'type': function.type,
+        #                                                      'reversible':function.reversible})
+        #
+        # ##add the expression as text
+        # exp = etree.SubElement(function_element, 'Expression')
+        # exp.text = function.expression+'\n'
+        # list_of_parameter_descriptions = etree.SubElement(function_element,
+        #                                                   'ListOfParameterDescriptions')
+        #
+        #
+        #
+        # ## create mass action elements
+        # if (function.name == 'mass_action_irreversible') or (function.name == 'mass_action_reversible'):
+        #     for i in function.list_of_parameter_descriptions:
+        #         etree.SubElement(list_of_parameter_descriptions, 'ParameterDescription',
+        #                      attrib={'name': i.name,
+        #                              'key': i.key,
+        #                              'order': i.order,
+        #                              'role': i.role})
+        # #print etree.tostring(function_element, pretty_print=True)
+        #
+        # else:
+        #     expression = Expression(function.expression).to_list()
+        #
+        #     for i, name in enumerate(expression):
+        #         ## TODO change this keygeneration to use KeyFactory
+        #         key = "FunctionParameter_{}".format(100000+i)
+        #
+        #         etree.SubElement(list_of_parameter_descriptions,
+        #                          'ParameterDescription',
+        #                          attrib={'key': key,
+        #                                  'name': name,
+        #                                  'order': str(i),
+        #                                  'role': function.roles[name]})
 
         ## add the function to list of functions
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfFunctions':
-                i.append(function_element)
+                i.append(function.to_xml())
 
         return self
 
@@ -1275,7 +1275,7 @@ class Function(_base._Base):
         self.update_properties(default_properties)
         self._do_checks()
 
-        self.create_mass_action()
+        # self.create_mass_action()
 
     def __str__(self):
         return 'Function({})'.format(self.to_string())
@@ -1299,36 +1299,28 @@ class Function(_base._Base):
             self.type = 'user_defined'
 
 
-    def create_mass_action(self):
+    def to_xml(self):
         """
-        if name == mass_action, create the mass action function
+        write mass action function as xml element
         :return:
         """
-        if self.name == 'mass_action_irreversible':
-            self.key = KeyFactory(self.model, 'function').generate()
-            self.type = 'mass_action'
-            key_gen = KeyFactory(self.model, 'parameter_description')
-            substrate = ParameterDescription(key=keygen.generate(), name='substrate', order='1', role='substrate')
-            parameter = ParameterDescription(key=keygen.generate(), name='k1', order='0', role='constant')
-            self.reversible = 'false'
-            self.list_of_parameter_descriptions = [substrate, parameter]
-            self.expression = 'k1*PRODUCT&lt;substrate_i>'
+        func = etree.Element('Function', attrib=OrderedDict({'key': self.key,
+                                                                    'name': self.name,
+                                                                    'type': 'UserDefined',
+                                                                    'reversible': self.reversible}) )
 
-        elif self.name == 'mass_action_reversible':
-            self.key = 'Function_14'
-            self.type = 'mass_action'
-            self.reversible = 'true'
-            self.expression = 'k1*PRODUCT&lt;substrate_i>-k2*PRODUCT&lt;product_j>'
+        expression = etree.SubElement(func, 'Expression')
+        expression.text = self.expression
 
-            k1 = ParameterDescription(key= keygen.generate(), name='k1', order='0', role='constant')
-            s = ParameterDescription(key= keygen.generate(), name='substrate', order='1', role='substrate')
-            k2 = ParameterDescription(key=keygen.generate(), name='k2', order='2', role='constant')
-            p = ParameterDescription(key=keygen.generate(), name='product', order='3', role='product')
+        list_of_p_desc = etree.SubElement(func, 'ListOfParameterDescriptions')
 
-            self.list_of_parameter_descriptions = [k1, s, k2, p]
+        for i in self.list_of_parameter_descriptions:
+            etree.SubElement(list_of_p_desc, 'ParameterDescription', attrib={'key': i.key,
+                                                                             'name': i.name,
+                                                                             'order': i.order,
+                                                                             'role': i.role})
 
-
-
+        return func
 
 
 class ParameterDescription(_base._Base):
@@ -1428,11 +1420,11 @@ class KeyFactory(_base._ModelBase):
                      'parameter',
                      'report',
                      'function',
-                     'parameter_description']
+                     'function_parameter']
         if self.type not in type_list:
             raise Errors.InputError('{} not a valid type. {}'.format(self.type, type_list))
 
-    def generate(self):
+    def generate(self, n=1):
         """
 
         :return:
@@ -1462,12 +1454,16 @@ class KeyFactory(_base._ModelBase):
             raise NotImplementedError
             # return self.create_key(self.model.metabolites).next()
 
+        elif self.type == 'function_parameter':
+            return self.create_key(self.model.parameter_descriptions).next()
+
 
     def create_key(self, model_component):
         """
 
         :return:
         """
+        ##TODO fix bug where create key only works for generating single key at a time.
         ##be consistent with the rest of copasi
         if self.type == 'global_quantity':
             self.type = 'model_value'
@@ -1481,16 +1477,22 @@ class KeyFactory(_base._ModelBase):
         word = reduce(lambda x, y: x + y, word_list)
 
         bool = True
-        count = 0
+        count = 10000
+        ## list for remembering already generated keys
+        key_list = []
         while bool:
             key = '{}_{}'.format(word, count)
-            if key not in [i.key for i in model_component]:
+            new_list = [i.key for i in model_component] + key_list
+            if key not in new_list:
+                key_list.append(key)
                 yield key
             count += 1
 
-class Expression(_base._Base):
+
+
+class Expression(object):
     def __init__(self, expression, **kwargs):
-        super(Expression, self).__init__(**kwargs)
+        # super(Expression, self).__init__(**kwargs)
         self.expression = expression
         self.default_properties = {}
 
@@ -1531,11 +1533,15 @@ class Expression(_base._Base):
 
 
 class Translator(_base._ModelBase):
+    """
+    Translate a copasi style reaction into
+    lists of substrates, products and modifiers.
+
+    """
     def __init__(self, model, reaction, **kwargs):
         super(Translator, self).__init__(model, **kwargs)
         self.reaction = reaction
-        self.default_properties = {'rate_law': 'mass_action',
-                                   'reversible': False}
+        self.default_properties = {'reversible': False}
 
 
         self.update_properties(self.default_properties)
@@ -1562,7 +1568,6 @@ class Translator(_base._ModelBase):
 
         self.all_components = self.substrates + self.products + self.modifiers
 
-        self.add_rate_law()
 
 
     def __str__(self):
@@ -1700,28 +1705,91 @@ class Translator(_base._ModelBase):
         return lst
 
 
-    def add_rate_law(self):
+class MassAction(Function):
+    def __init__(self, model, **kwargs):
+        super(MassAction, self).__init__(**kwargs)
+        self.model = model
 
-        if self.rate_law == 'mass_action':
-            if not self.reversible:
-                # print self.substrates
+        self.create_mass_action()
 
-                funct= Function(name='mass_action_irreversible')
-            else:
-                funct = Function(name='mass_action_reversible')
-            self.model = self.model.add_function(funct)
-        else:
-            self.model = self.model.add_function(self.rate_law)
+    def __str__(self):
+        """
 
-            scaling_compartment_reference = '{},{}'.format(self.model.reference, self.substrates[0].compartment.reference)
-            rate_law_element = etree.Element('KineticLaw', attrib={'function': self.rate_law.key,
-                                                                   'unitType': 'default',
-                                                                   'scalingCompartment': scaling_compartment_reference} )
-            list_of_call_parameters = etree.SubElement(rate_law_element, 'ListOfCallParameters')
-            print self.model.open()
+        :return:
+        """
+        return "MassAction({})".format(self.to_string())
 
+    def get_mass_action(self):
+        """
 
+        :return:
+        """
+        if self.reversible == 'false':
+            ma = [i for i in self.model.functions if i.name == 'Mass action (reversible)']
+        elif self.reversible == 'true':
+            ma = [i for i in self.model.functions if i.name == 'Mass action (reversible']
+        if ma == []:
+            raise Exception
+        return ma
 
+    def create_mass_action(self):
+        """
+        if name == mass_action, create the mass action function
+        :return:
+        """
+
+        self.key = KeyFactory(self.model, type='function').generate()
+
+        if self.reversible == 'false':
+            self.name = 'Mass action (irreversible)'
+            self.type = 'MassAction'
+            substrate = ParameterDescription(key='FunctionParameter_1000', name='substrate', order='1', role='substrate')
+            parameter = ParameterDescription(key='FunctionParameter_1001', name='k1', order='0', role='constant')
+            self.list_of_parameter_descriptions = [substrate, parameter]
+            self.reversible = 'false'
+            self.expression = 'k1*PRODUCT&lt;substrate_i>'
+
+        elif self.reversible == 'true':
+            self.name = 'Mass action (reversible)'
+            self.key = self.key
+            self.type = 'MassAction'
+            self.reversible = 'true'
+            self.expression = 'k1*PRODUCT&lt;substrate_i>-k2*PRODUCT&lt;product_j>'
+
+            k1 = ParameterDescription(key='FunctionParameter_1002', name='k1', order='0', role='constant')
+            s = ParameterDescription(key='FunctionParameter_1003', name='substrate', order='1', role='substrate')
+            k2 = ParameterDescription(key='FunctionParameter_1004', name='k2', order='2', role='constant')
+            p = ParameterDescription(key='FunctionParameter_1005', name='product', order='3', role='product')
+            self.list_of_parameter_descriptions = [k1, s, k2, p]
+        return self
+
+    def to_xml(self):
+        """
+        write mass action function as xml element
+        :return:
+        """
+        print self.key, self.name, self.reversible
+        mass_action = etree.Element('Function', attrib=OrderedDict({'key': self.key,
+                                                                    'name': self.name,
+                                                                    'type': 'MassAction',
+                                                                    'reversible': self.reversible}) )
+
+        expression = etree.SubElement(mass_action, 'Expression')
+        if self.reversible == 'false':
+            expression.text = 'k1*PRODUCT&lt;substrate_i>'
+
+        elif self.reversible == 'true':
+            expression.text = 'k1*PRODUCT&lt;substrate_i>-k2*PRODUCT&lt;product_j>'
+
+        list_of_p_desc = etree.SubElement(mass_action, 'ListOfParameterDescriptions')
+
+        for i in self.list_of_parameter_descriptions:
+            etree.SubElement(list_of_p_desc, 'ParameterDescription', attrib={'key': i.key,
+                                                                             'name': i.name,
+                                                                             'order': i.order,
+                                                                             'role': i.role})
+
+        return mass_action
 
 
 
