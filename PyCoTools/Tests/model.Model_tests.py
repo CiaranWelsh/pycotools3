@@ -24,8 +24,8 @@ Module that tests the operations of the _Base base test
 """
 
 import site
-site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
-# site.addsitedir('/home/b3053674/Documents/PyCoTools')
+# site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
+site.addsitedir('/home/b3053674/Documents/PyCoTools')
 
 import PyCoTools
 from PyCoTools.Tests import _test_base
@@ -125,12 +125,13 @@ class ModelTests(_test_base._BaseTest):
         :return:
         """
 
-        L= PyCoTools.model.LocalParameter(name='k1', reaction_name='v1',
+        L= PyCoTools.model.LocalParameter(self.model,
+                                          name='k1', reaction_name='v1',
                                           global_name='(v1).k1')
         self.assertEqual(L.global_name, '(v1).k1')
 
     def test_local_parameters5(self):
-        L= PyCoTools.model.LocalParameter(name='k1', reaction_name='v1')
+        L= PyCoTools.model.LocalParameter(self.model, name='k1', reaction_name='v1')
         self.assertTrue('global_name' in L.__dict__.keys())
 
     # def test_functions(self):
@@ -198,7 +199,7 @@ class ModelTests(_test_base._BaseTest):
 
         :return:
         """
-        metab = PyCoTools.model.Metabolite(name='F', particle_number=25,
+        metab = PyCoTools.model.Metabolite(self.model, name='F', particle_number=25,
                                            compartment=self.model.compartments[0])
         self.model = self.model.add_metabolite(metab)
         check = False
@@ -258,7 +259,7 @@ class ModelTests(_test_base._BaseTest):
         :return:
         """
         ##TODO fix concentration attribute in set_metabolites
-        metab = PyCoTools.model.Metabolite(name='F', particle_number=25,
+        metab = PyCoTools.model.Metabolite(self.model, name='F', particle_number=25,
                                            compartment=self.model.compartments[0])
         self.model = self.model.add_metabolite(metab)
         F = self.model.get('metabolite', 'F', by='name')
@@ -295,7 +296,7 @@ class ModelTests(_test_base._BaseTest):
 
         :return:
         """
-        global_quantity = PyCoTools.model.GlobalQuantity(name='NewGlobal',
+        global_quantity = PyCoTools.model.GlobalQuantity(self.model, name='NewGlobal',
                                                          initial_value=5)
         new_model = self.model.add_global_quantity(global_quantity)
 
@@ -309,7 +310,7 @@ class ModelTests(_test_base._BaseTest):
 
         :return:
         """
-        global_quantity = PyCoTools.model.GlobalQuantity(name='NewGlobal',
+        global_quantity = PyCoTools.model.GlobalQuantity(self.model, name='NewGlobal',
                                                          initial_value=5)
         new_model = self.model.add_global_quantity(global_quantity)
         new_global = new_model.get('global_quantity', 'NewGlobal')
@@ -319,9 +320,6 @@ class ModelTests(_test_base._BaseTest):
         self.assertEqual(new_global, [])
 
 
-    def test_reactions(self):
-        self.assertEqual(len(self.model.reactions), 4)
-
     def test_get_list_of_call_parameters(self):
         for i in self.model.parameter_descriptions:
             self.assertTrue(isinstance(i, PyCoTools.model.ParameterDescription))
@@ -330,7 +328,7 @@ class ModelTests(_test_base._BaseTest):
     def test_mass_action_class(self):
         ma = PyCoTools.model.MassAction(self.model, reversible=True)
         self.assertEqual(ma.expression, 'k1*PRODUCT&lt;substrate_i>-k2*PRODUCT&lt;product_j>')
-
+    #
 
     def test_add_mass_action(self):
         ma = PyCoTools.model.MassAction(self.model, reversible=False)
@@ -338,32 +336,110 @@ class ModelTests(_test_base._BaseTest):
         ##todo find better test condition
 
 
-    def test_add_function(self):
-        fun = PyCoTools.model.Function(name='new_funct',
+    def test_create_parameter_description_key(self):
+        KF = PyCoTools.model.KeyFactory(self.model, type='function_parameter')
+        self.assertEqual(len(KF.create_function_parameter_key(n=4)), 4)
+
+    def test_function_user_defined1(self):
+        """
+        make sure that roles are converted into parameter descriptions
+        (function parameters)
+        :return:
+        """
+        fun = PyCoTools.model.Function(self.model, name='new_funct',
                                        expression='K*M*S',
                                        roles={'K': 'parameter',
                                               'M': 'modifier',
                                               'S': 'substrate'})
-        self.model = self.model.add_function(fun)
-        # fun = self.model.get('function', 'new_funct', by='name')
-        # self.assertNotEqual(fun, [])
 
-    # def test_remove_functions(self):
-    #     self.model = self.model.add_function(name='new_funct',
-    #                                          expression='K*M*S',
-    #                                          role={'K': 'parameter',
-    #                                                'M': 'modifier',
-    #                                                'S': 'substrate'})
-    #     self.model = self.model.remove_function('new_funct', by='name')
-    #     fun = self.model.get('function', 'new_funct', by='name')
-    #     self.assertEqual(fun, [])
+        for i in fun.list_of_parameter_descriptions:
+            self.assertTrue(isinstance(i, PyCoTools.model.ParameterDescription))
 
-    # def test_add_reaction(self):
-    #     """
-    #
-    #     :return:
-    #     """
-    #     print self.model.add_reaction('2*J + X -> F + V; B P', rate_law='k*A*B')
+    def test_add_function(self):
+        """
+
+        :return:
+        """
+        fun = PyCoTools.model.Function(self.model, name='new_funct',
+                                       expression='K*M*S',
+                                       roles={'K': 'parameter',
+                                              'M': 'modifier',
+                                              'S': 'substrate'})
+        self.model =  self.model.add_function(fun)
+        self.model.save()
+        for i in self.model.xml.iter():
+            if i.tag == '{http://www.copasi.org/static/schema}ListOfFunctions':
+                for j in i:
+                    if j.attrib['name'] == fun.name:
+                        self.assertEqual(j.attrib['name'], fun.name)
+
+
+
+    def test_remove_functions(self):
+        fun = PyCoTools.model.Function(self.model, name='new_funct',
+                                       expression='K*M*S',
+                                       roles={'K': 'parameter',
+                                              'M': 'modifier',
+                                              'S': 'substrate'})
+        self.model =  self.model.add_function(fun)
+        self.model.save()
+        self.model = self.model.remove_function('new_funct', by='name')
+        for i in self.model.xml.iter():
+            if i.tag == '{http://www.copasi.org/static/schema}ListOfFunctions':
+                for j in i:
+                    self.assertNotEqual(j.attrib['name'], fun.name)
+
+    def test_translator(self):
+        trans = PyCoTools.model.Translator(self.model, '-> B')
+        self.assertTrue(isinstance(trans.all_components, list))
+
+    def test_translator2(self):
+        trans = PyCoTools.model.Translator(self.model, 'A -> B')
+        self.assertTrue(isinstance(trans.all_components, list))
+
+    def test_translator3(self):
+        trans = PyCoTools.model.Translator(self.model, 'A + A + B -> B; C D')
+        self.assertTrue(isinstance(trans.all_components, list))
+
+    def test_translator4(self):
+        trans = PyCoTools.model.Translator(self.model, 'B ->')
+        self.assertTrue(isinstance(trans.all_components, list))
+
+
+    def test_local_parameters(self):
+        self.assertEqual(len(self.model.constants), 5)
+
+    def test_key_factory_constant(self):
+        """
+
+        :return:
+        """
+        p =PyCoTools.model.KeyFactory(self.model, type='constant').generate(2)
+        self.assertEqual(len(p), 2)
+
+
+    def test_add_reaction(self):
+        """
+
+        :return:
+        """
+        r = PyCoTools.model.Reaction(self.model,
+                                     expression='A + B -> C + D',
+                                     rate_law='k*A*B')
+        print r.to_xml()
+
+
+
+        # print self.model.add_reaction('A + B -> F + V; B P', rate_law='k*A*B')
+
+    # def test_key_factory(self):
+    #     print self.model.reactions
+        # kf =  PyCoTools.model.KeyFactory(self.model, type='reaction')
+        # print kf.generate()
+        # print self.model.reactions
+
+    # def test_reactions(self):
+    #     self.assertEqual(len(self.model.reactions), 4)
 
     # def test_function(self):
     #     ma = PyCoTools.model.Function(name='mass_action_irreversible')
