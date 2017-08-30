@@ -24,8 +24,8 @@ Module that tests the operations of the _Base base test
 """
 
 import site
-# site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
-site.addsitedir('/home/b3053674/Documents/PyCoTools')
+site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
+# site.addsitedir('/home/b3053674/Documents/PyCoTools')
 
 import PyCoTools
 from PyCoTools.Tests import _test_base
@@ -426,7 +426,10 @@ class ModelTests(_test_base._BaseTest):
         r = PyCoTools.model.Reaction(self.model,
                                      expression='A + B -> C + D',
                                      rate_law='k*A*B')
-        print r.to_xml()
+        print etree.tostring(r.to_xml(), pretty_print=True)
+        print etree.tostring(r.rate_law.to_xml(), pretty_print=True)
+        # self.model = self.model.add_reaction(r)
+        # print self.model.open()
 
 
 

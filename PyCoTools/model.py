@@ -755,40 +755,53 @@ class Model(_base._Base):
 
         return res
 
-
-
-
     @property
     def reactions(self):
-        """
-        :return: list of current model reactions
-        """
         list_of_reactions = []
+        reaction_count = 0
+        reactions_dict = {}
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
                 for j in list(i):
+                    reaction_count += 1
+                    reactions_dict[reaction_count] = {}
+
+                    ##defaults
+                    reactions_dict[reaction_count]['reversible'] = 'false'
+                    reactions_dict[reaction_count]['substrates'] = []
+                    reactions_dict[reaction_count]['products'] = []
+                    reactions_dict[reaction_count]['modifiers'] = []
+                    reactions_dict[reaction_count]['constants'] = []
+                    reactions_dict[reaction_count]['function'] = []
                     for k in list(j):
-                        list_of_substrates = []
-                        list_of_products = []
-                        list_of_constants = []
-                        function_list = []
+                        reactions_dict[reaction_count]['reversible'] = j.attrib['reversible']
+                        reactions_dict[reaction_count]['name'] = j.attrib['name']
+                        reactions_dict[reaction_count]['key'] = j.attrib['key']
+                        # print etree.tostring(k, pretty_print=True)
                         if k.tag == '{http://www.copasi.org/static/schema}ListOfSubstrates':
                             for l in list(k):
-                                ## get a list of metabolites used as substrate
                                 list_of_substrates = [m for m in self.metabolites if m.key in l.attrib['metabolite']]
 
                                 ## convert list to substrates
                                 list_of_substrates = [m.to_substrate() for m in list_of_substrates]
-
+                                reactions_dict[reaction_count]['substrates']= list_of_substrates
                         elif k.tag == '{http://www.copasi.org/static/schema}ListOfProducts':
                             for l in list(k):
                                 ## get list of metabolites and convert them to Product class
-                                list_of_products = [m for m in self.metabolites if
-                                                    m.key in l.attrib['metabolite']]
+                                list_of_products = [m for m in self.metabolites if m.key in l.attrib['metabolite']]
                                 list_of_products = [m.to_product() for m in list_of_products]
+                                #
+                                reactions_dict[reaction_count]['products'] = list_of_products
+
+                        elif k.tag == '{http://www.copasi.org/static/schema}ListOfModifiers':
+                            for l in list(k):
+                                ## get list of metabolites and convert them to Moifier class
+                                list_of_modifiers = [m for m in self.metabolites if m.key in l.attrib['metabolite']]
+                                list_of_modifiers = [m.to_modifier() for m in list_of_modifiers]
+                                reactions_dict[reaction_count]['modifiers'] = list_of_modifiers
 
                         elif k.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
-                            loc = []
+                            list_of_constants = []
                             for l in list(k):
                                 list_of_constants.append(
                                     LocalParameter(self,
@@ -796,19 +809,58 @@ class Model(_base._Base):
                                                    name=l.attrib['name'],
                                                    value=l.attrib['value'],
                                                    reaction_name=j.attrib['name'],
-                                                   global_name="({}).{}".format(j.attrib['name'], l.attrib['name']))  )
+                                                   global_name="({}).{}".format(j.attrib['name'], l.attrib['name'])))
+                                reactions_dict[reaction_count]['constants'] = list_of_constants
+
 
                         elif k.tag == '{http://www.copasi.org/static/schema}KineticLaw':
                             function_list = [m for m in self.functions if m.key in k.attrib['function']]
+                            assert len(function_list) == 1
+                            reactions_dict[reaction_count]['function'] = function_list[0]
 
-                    r = Reaction(self, name=j.attrib['name'],
-                                 key=j.attrib['key'],
-                                 substrates=list_of_substrates,
-                                 products = list_of_products,
-                                 parameters = list_of_constants,
-                                 rate_law =function_list[0].expression)
-                    list_of_reactions.append(r)
-        return list_of_reactions
+        for i, dct in reactions_dict.items():
+            substrates = [j.name for j in reactions_dict[i]['substrates']]
+            if substrates != []:
+                sub_expression = reduce(lambda x, y: "{} + {}".format(x, y), substrates)
+            else:
+                sub_expression = ''
+
+            products = [j.name for j in reactions_dict[i]['products']]
+            if products != []:
+                prod_expression = reduce(lambda x, y: "{} + {}".format(x, y), products)
+            else:
+                prod_expression = ''
+
+            modifiers = [j.name for j in reactions_dict[i]['modifiers']]
+            if modifiers != []:
+                modifier_expression = reduce(lambda x, y: "{} + {}".format(x, y), modifiers)
+            else:
+                modifier_expression = ''
+
+            if reactions_dict[i]['reversible'] == 'true':
+                operator = '='
+            elif reactions_dict[i]['reversible'] == 'false':
+                operator = '->'
+            else:
+                raise Errors.SomethingWentHorriblyWrongError
+
+            if modifier_expression == '':
+                expression = "{} {} {}".format(sub_expression, operator,
+                                        prod_expression)
+            else:
+                expression = '{} {} {}; {}'.format(sub_expression, operator,
+                                                   prod_expression, modifier_expression)
+            reactions_dict[i]['expression'] = expression
+
+        lst=[]
+        for i, dct in reactions_dict.items():
+            lst.append(Reaction(self,
+                           name=dct['name'],
+                           key=dct['key'],
+                           expression=dct['expression'],
+                           rate_law=dct['function']) )
+
+        return lst
 
     def add_reaction(self, reaction):
         """
@@ -817,47 +869,14 @@ class Model(_base._Base):
         :param rate_law: mathematical expression or mass_action (default)
         :return:
         """
-        ## convert to expression object
-        rate_law = Expression(rate_law)
+        existing_functions = [i.name for i in self.functions]
+        if reaction.rate_law.name not in existing_functions:
+            self.add_function(reaction.rate_law)
 
-        ## automatic key assignment
-        if key == None:
-            key = KeyFactory(self, type='reaction').generate()
-
-        ## automatic name assignment
-        if name == None:
-            name = key
-
-        if not isinstance(reversible, bool):
-            raise Errors.InputError('reversible argument should be a boolean')
-
-        ## convert bool types to string booleans
-        if reversible:
-            reversible = 'true'
-        else:
-            reversible = 'false'
-
-        reaction_element = etree.Element('Reaction', attrib={'key': key,
-                                                     'name': name,
-                                                     'reversible': reversible})
-
-
-
-        ListOfSubstrates = etree.SubElement(reaction_element, 'ListOfSubstrates')
-        for substrate_name in set(list_of_substrates):
-
-            ## look for substrate in metabolites
-            if [metab.name for metab in self.metabolites if metab.name == substrate_name] == []:
-
-                ## if not exists add metabolite
-                self.add_metabolite(substrate_name, particle_number=1,
-                                    compartment=self.compartments[0],
-                                    simulation_type='reactions')
-
-            ## now get the substrate
-            substrate = self.get('metabolite', substrate_name, by='name')
-            etree.SubElement(ListOfSubstrates, 'Substrate' )
-
+        for i in self.xml.iter():
+            if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
+                i.append(reaction.to_xml())
+        return self
 
     def save(self, copasi_file=None):
         """
@@ -1219,11 +1238,7 @@ class Reaction(_base._ModelBase):
         self.update_properties(self.default_properties)
 
         self._do_checks()
-        self.rate_law = self.read_rate_law()
-        if self.expression != None:
-            self.read_reaction()
-        #
-        # ##checks should happen after read_reaction() as it sets some parameters
+        self.create()
 
 
 
@@ -1243,17 +1258,11 @@ class Reaction(_base._ModelBase):
             raise Errors.InputError('fast argument is boolean')
 
 
-    def create_expression(self):
+    def translate_reaction(self):
         """
-        reverse engineer the expression
-        :return:
-        """
-        pass
-
-
-    def read_reaction(self):
-        """
-
+        convert the reaction string (self.expression)
+        into lists of substrate, product, modifiers, constants.
+        Assign reversible.
         :return:
         """
         trans = Translator(self.model, self.expression)
@@ -1262,7 +1271,11 @@ class Reaction(_base._ModelBase):
         self.modifiers = trans.modifiers
         self.reversible = trans.reversible
         reaction_components = [i.name for i in trans.all_components]
-        expression_components = Expression(self.rate_law.expression).to_list()
+        if isinstance(self.rate_law, str):
+            expression_components = Expression(self.rate_law).to_list()
+        elif isinstance(self.rate_law, Function):
+            expression_components = Expression(self.rate_law.expression).to_list()
+
 
         parameter_list = []
         for i in expression_components:
@@ -1272,27 +1285,70 @@ class Reaction(_base._ModelBase):
 
         local_keys = KeyFactory(self.model, type='constant').generate(len(parameter_list))
         for i in range(len(parameter_list)):
-            p= LocalParameter(self.model, name=parameter_list[i],
+            p = LocalParameter(self.model, name=parameter_list[i],
                                  key=local_keys[i],
                                  value=0.1,
                                  reaction_name=self.name,
                                  global_name='({}).{}'.format(self.name, parameter_list[i]))
             self.parameters.append(p)
 
+    def create_rate_law_function(self):
+        """
+        interpret the exression given for rate law
+        and produce a pycotools function object
+        :return:
+        """
+        if isinstance(self.rate_law, str):
+            exp = Expression(self.rate_law).to_list()
+        elif isinstance(self.rate_law, Function):
+            exp = Expression(self.rate_law.expression).to_list()
+        role_dct = {}
 
-    def read_rate_law(self):
+        if self.substrates + self.products == []:
+            raise Errors.SomethingWentHorriblyWrongError('Both substrates and products are empty')
+
+        for i in exp:
+            if i in [j.name for j in self.substrates]:
+                role_dct[i] = 'substrate'
+            elif i in [j.name for j in self.products]:
+                role_dct[i] = 'product'
+            elif i in [j.name for j in self.modifiers]:
+                role_dct[i] = 'modifier'
+            else:
+                role_dct[i] = 'parameter'
+
+        function = Function(self.model, name=self.rate_law,
+                            expression=self.rate_law,
+                            roles=role_dct)
+
+
+        return function
+
+    def create(self):
         """
 
         :return:
         """
+        ## get lists of substrate, products, modifiers and constants
+        self.translate_reaction()
 
-        function = Function(self.model, name=self.rate_law,
-                            expression=self.rate_law)
-
-        self.model.add_function(function)
-        return function
+        ## interpret rate law
+        self.rate_law = self.create_rate_law_function()
 
 
+        '''
+        Note that I should add the rate law function
+        only when I'm also adding the rest of the 
+        reaction to the model. Makes more sense to do
+        it together
+        '''
+
+        # ## look at existing rate laws and only add new rate law if it does not already exist
+        # existing_expressions = [i.name for i in self.model.functions]
+        # if self.rate_law.name not in existing_expressions:
+        #     LOG.('creating rate law')
+        #     self.model.add_function(function)
+        # print self.rate_law
 
     def to_xml(self):
         """
@@ -1310,7 +1366,7 @@ class Reaction(_base._ModelBase):
         else:
             self.reversible = 'false'
 
-        if self.key == None:
+        if self.key is None:
             self.key = KeyFactory(self.model, type='reaction').generate()
 
         if self.name == None:
@@ -1339,9 +1395,9 @@ class Reaction(_base._ModelBase):
                                                                   'stoichiometry': str(i.stoichiometry)})
 
 
-        list_of_products = etree.SubElement(reaction, 'ListOfProducts')
-        for i in self.products:
-            etree.SubElement(list_of_products, 'Product', attrib={'metabolites': i.key,
+        list_of_modifiers= etree.SubElement(reaction, 'ListOfModifiers')
+        for i in self.modifiers:
+            etree.SubElement(list_of_products, 'Modifier', attrib={'metabolites': i.key,
                                                                   'stoichiometry': str(i.stoichiometry)})
 
         list_of_constants = etree.SubElement(reaction, 'ListOfConstants')
@@ -1357,22 +1413,11 @@ class Reaction(_base._ModelBase):
                                                'scalingCompartment': "{},{}".format(
                                                    self.model.reference,
                                                    self.substrates[0].compartment.reference)})
+        call_parameters = etree.SubElement(kinetic_law, 'ListOfCallParameters')
+        for i in self.rate_law.list_of_parameter_descriptions:
+            etree.SubElement(call_parameters, 'CallParameter', attrib={'functionParameter': i.key})
 
-        """
-        
-        Now I need to add the list of call parameters to the xml and I'm done
-                  <ListOfCallParameters>
-            <CallParameter functionParameter="FunctionParameter_81">
-              <SourceParameter reference="ModelValue_0"/>
-            </CallParameter>
-            <CallParameter functionParameter="FunctionParameter_79">
-              <SourceParameter reference="Metabolite_1"/>
-            </CallParameter>
-          </ListOfCallParameters>
-          """
-
-        print etree.tostring(reaction, pretty_print=True)
-
+        return reaction
 
 
 class Function(_base._ModelBase):
