@@ -53,6 +53,14 @@ Reaction scheme where the products are created from the reactants and the change
         <ParameterDescription key="FunctionParameter_71" name="product" order="3" role="product"/>
       </ListOfParameterDescriptions>
     </Function>
+  <Function reversible="true" type="UserDefined" name="k*A*B" key="Function_10000">
+  <Expression>k*A*B</Expression>
+  <ListOfParameterDescriptions>
+    <ParameterDescription key="Function_Parameter_88475257" name="A" order="0" role="substrate"/>
+    <ParameterDescription key="Function_Parameter_96980002" name="k" order="1" role="constant"/>
+    <ParameterDescription key="Function_Parameter_95955167" name="B" order="2" role="substrate"/>
+  </ListOfParameterDescriptions>
+</Function>
   </ListOfFunctions>
   <Model key="Model_3" name="New Model" simulationType="time" timeUnit="s" volumeUnit="ml" areaUnit="m²" lengthUnit="m" quantityUnit="mmol" type="deterministic" avogadroConstant="6.022140857e+023">
     <MiriamAnnotation>
