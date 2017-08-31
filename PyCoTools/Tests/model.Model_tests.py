@@ -533,10 +533,6 @@ class ModelTests(_test_base._BaseTest):
                             if k.tag == '{http://www.copasi.org/static/schema}ListOfSubstrates':
                                 self.assertTrue(len(k) == 3)
 
-    def test_keygen_reactions(self):
-        keygen = PyCoTools.model.KeyFactory(self.model, type='reaction')
-        # print keygen.generate()
-
     def test_add_reaction6(self):
         """
         Test different reaction
@@ -557,6 +553,13 @@ class ModelTests(_test_base._BaseTest):
                         for k in j:
                             if k.tag == '{http://www.copasi.org/static/schema}ListOfProducts':
                                 self.assertTrue(len(k) == 0)
+
+
+    def test_context_manager(self):
+        with self.model.globals() as glob:
+            print 'during'
+            print glob
+
 
 
 
