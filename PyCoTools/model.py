@@ -1235,12 +1235,16 @@ class Reaction(_base._ModelBase):
         Assign reversible.
         :return:
         """
+
         trans = Translator(self.model, self.expression)
         self.substrates = trans.substrates
         self.products = trans.products
         self.modifiers = trans.modifiers
         self.reversible = trans.reversible
+
+
         reaction_components = [i.name for i in trans.all_components]
+
         if isinstance(self.rate_law, str):
             expression_components = Expression(self.rate_law).to_list()
         elif isinstance(self.rate_law, Function):
@@ -1402,29 +1406,6 @@ class Reaction(_base._ModelBase):
 
 
             etree.SubElement(call_parameter, 'SourceParameter', attrib={'reference': source_parameter})
-
-            # for j in self.rate_law.list_of_parameter_descriptions:
-            #     LOG.debug('parameter description -- {}'.format(i))
-            #     if i.key == self.rate_law.key:
-            #         LOG.debug('i.role -->  {}'.format(i.role))
-            #         if i.role == 'constant':
-            #
-            #             ## look for matching global variable name
-            #             glob = self.model.get('global_quantity', i.name, by='name')
-            #             if glob != []:
-            #                 source_parameter == glob.key
-            #             else:
-            #                 source_parameter = self.parameters_dict[i.name]
-            #
-            #         elif (i.role == 'substrate') or (i.role == 'product') or (i.role == 'modifier'):
-            #             source_parameter = self.model.get('metabolite', i.name, by='name')
-            #             LOG.debug('substrate source parameter -- {}'.format(source_parameter))
-
-
-
-
-
-
 
         return reaction
 
@@ -1885,17 +1866,26 @@ class Translator(_base._ModelBase):
                 self.reversible = True
 
             list_of_products, list_of_modifiers = reaction.split(';')
-
-        ##for reactions without modifiers
+        ##for reactions without modifi
+        # ers
         else:
             ## irreversible reactions
             if '->' in self.reaction:
                 list_of_substrates, list_of_products = self.reaction.split('->')
-
             ## for reversible reactions
             elif '=' in self.reaction:
                 list_of_substrates, list_of_products = self.reaction.split('=')
                 self.reversible = True
+        ## convert back to list if the above produced an empty string
+        ##for the cases such as "A + B -> "
+        if (list_of_products == ' ') or (list_of_products == ''):
+            list_of_products = []
+
+        if (list_of_substrates == ' ') or (list_of_substrates == ''):
+            list_of_substrates = []
+
+        if (list_of_modifiers == ' ') or (list_of_modifiers == ''):
+            list_of_modifiers = []
 
         return list_of_substrates, list_of_products, list_of_modifiers
 
