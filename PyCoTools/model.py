@@ -1313,20 +1313,6 @@ class Reaction(_base._ModelBase):
         self.rate_law = self.create_rate_law_function()
 
 
-        '''
-        Note that I should add the rate law function
-        only when I'm also adding the rest of the 
-        reaction to the model. Makes more sense to do
-        it together
-        '''
-
-        # ## look at existing rate laws and only add new rate law if it does not already exist
-        # existing_expressions = [i.name for i in self.model.functions]
-        # if self.rate_law.name not in existing_expressions:
-        #     LOG.('creating rate law')
-        #     self.model.add_function(function)
-        # print self.rate_law
-
     def to_xml(self):
         """
 
@@ -1374,7 +1360,7 @@ class Reaction(_base._ModelBase):
 
         list_of_modifiers= etree.SubElement(reaction, 'ListOfModifiers')
         for i in self.modifiers:
-            etree.SubElement(list_of_products, 'Modifier', attrib={'metabolite': i.key,
+            etree.SubElement(list_of_modifiers, 'Modifier', attrib={'metabolite': i.key,
                                                                    'stoichiometry': str(i.stoichiometry)})
 
         list_of_constants = etree.SubElement(reaction, 'ListOfConstants')

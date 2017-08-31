@@ -533,27 +533,30 @@ class ModelTests(_test_base._BaseTest):
                             if k.tag == '{http://www.copasi.org/static/schema}ListOfSubstrates':
                                 self.assertTrue(len(k) == 3)
 
-    # def test_add_reaction6(self):
-    #     """
-    #     Test different reaction
-    #     :return:
-    #     """
-    #     r = PyCoTools.model.Reaction(self.model,
-    #                                  name='fake_reaction2',
-    #                                  expression='A + F + irs -> ; G',
-    #                                  rate_law='k*A*B*C/D')
-    #     self.model.add_reaction(r)
-    #     self.model.save()
-    #     xml = PyCoTools.pycopi.CopasiMLParser(self.model.copasi_file).xml
-    #
-    #     boolean = False
-    #     for i in xml.iter():
-    #         if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
-    #             for j in i:
-    #                 if j.attrib['name'] == 'fake_reaction2':
-    #                     for k in j:
-    #                         if k.tag == '{http://www.copasi.org/static/schema}ListOfProducts':
-    #                             self.assertTrue(len(k) == 0)
+    def test_keygen_reactions(self):
+        keygen = PyCoTools.model.KeyFactory(self.model, type='reaction')
+        # print keygen.generate()
+
+    def test_add_reaction6(self):
+        """
+        Test different reaction
+        :return:
+        """
+        r = PyCoTools.model.Reaction(self.model,
+                                     name='fake_reaction2',
+                                     expression='A + F + irs -> ; G',
+                                     rate_law='k*A*F/irs+G')
+        self.model = self.model.add_reaction(r)
+        self.model.save()
+        xml = PyCoTools.pycopi.CopasiMLParser(self.model.copasi_file).xml
+        boolean = False
+        for i in xml.iter():
+            if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
+                for j in i:
+                    if j.attrib['name'] == 'fake_reaction2':
+                        for k in j:
+                            if k.tag == '{http://www.copasi.org/static/schema}ListOfProducts':
+                                self.assertTrue(len(k) == 0)
 
 
 
