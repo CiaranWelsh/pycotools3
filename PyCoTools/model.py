@@ -37,7 +37,10 @@ from copy import deepcopy
 import logging
 from collections import OrderedDict, Counter
 from random import randint
+from contextlib import contextmanager
+
 LOG = logging.getLogger(__name__)
+
 
 ## TODO add list of reports property to model
 ## TODO after running a task, bind the results to the model instance so that they are retrievable
@@ -469,35 +472,6 @@ class Model(_base._Base):
         self.remove_state(metab.key)
         return self
 
-    @property
-    def global_quantities(self):
-        """
-
-        :return:
-        """
-        model_values = {}
-        for i in self.xml.iter():
-            if i.tag == '{http://www.copasi.org/static/schema}ListOfModelValues':
-                for j in i:
-                    model_values[j.attrib['key']] = j.attrib
-
-        for key, value in self.states.items():
-            if key in model_values.keys():
-                model_values[key]['initial_value'] = str(value)
-
-        lst = []
-        for key in model_values:
-            lst.append(GlobalQuantity(self, name=model_values[key]['name'],
-                                      key=model_values[key]['key'],
-                                      simulation_type=model_values[key]['simulationType'],
-                                      initial_value=model_values[key]['initial_value']))
-        return lst
-
-
-
-
-    # def add_global_quantity(self, name, key=None, initial_value=None,
-    #                         simulation_type='fixed'):
     def add_global_quantity(self, global_quantity):
         """
 
@@ -527,6 +501,38 @@ class Model(_base._Base):
         self.add_state(global_quantity.key, global_quantity.initial_value)
 
         return self
+
+
+    @contextmanager
+    def globals(self):
+        doing_sums = 10+15
+        print 'before'
+        yield doing_sums
+        print 'after'
+
+    @property
+    def global_quantities(self):
+        """
+
+        :return:
+        """
+        model_values = {}
+        for i in self.xml.iter():
+            if i.tag == '{http://www.copasi.org/static/schema}ListOfModelValues':
+                for j in i:
+                    model_values[j.attrib['key']] = j.attrib
+
+        for key, value in self.states.items():
+            if key in model_values.keys():
+                model_values[key]['initial_value'] = str(value)
+
+        lst = []
+        for key in model_values:
+            lst.append(GlobalQuantity(self, name=model_values[key]['name'],
+                                      key=model_values[key]['key'],
+                                      simulation_type=model_values[key]['simulationType'],
+                                      initial_value=model_values[key]['initial_value']))
+        return lst
 
     def remove_global_quantity(self, value, by='name'):
         """
