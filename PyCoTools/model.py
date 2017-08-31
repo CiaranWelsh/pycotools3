@@ -549,38 +549,7 @@ class Model(_base._Base):
         return self
 
 
-    @property
-    def local_parameters(self):
-        """
-        return local parameters used in your model
-        :return: list
-        """
-        query='//*[@cn="String=Kinetic Parameters"]'
-        d={}
-        for i in self.xml.xpath(query):
-            for j in list(i):
-                for k in list(j):
-                    if k.attrib['simulationType']=='fixed':
-                        match=re.findall('Reactions\[(.*)\].*Parameter=(.*)', k.attrib['cn'])[0]
-                        assert isinstance(match,tuple),'get species regex hasn\'t been found. Do you have species in your model?'
-                        assert match !=None
-                        assert match !=[]
-                        assert len(match)==2
-                        match_key='({}).{}'.format(match[0],match[1])
-                        attributes = {'reaction_name':match[0],
-                                      'name': match[1],
-                                      # 'key': k.attrib['key'],
-                                      'value': k.attrib['value'],
-                                      'simulation_type': k.attrib['simulationType'],
-                                      'parameter_type': k.attrib['type'],
-                                      'global_name': match_key}
-                        d[match_key]=attributes
-
-        lst = []
-        for param in d:
-            lst.append(LocalParameter(self, **d[param]) )
-        return lst
-
+    # @property
     @property
     def functions(self):
         """
@@ -934,7 +903,7 @@ class Model(_base._Base):
             res = [i for i in self.compartments if getattr(i, by) == value]
 
         elif component == 'local_parameter':
-            res = [i for i in self.local_parameters if getattr(i, by) == value]
+            res = [i for i in self.constants if getattr(i, by) == value]
 
         elif component == 'global_quantity':
             res = [i for i in self.global_quantities if getattr(i, by) == value]
@@ -1231,6 +1200,7 @@ class Reaction(_base._ModelBase):
                                    'reversible': False,
                                    ##TODO delete parameters as we have rate law instead
                                    'parameters': [],
+                                   'parameters_dict': {},
                                    'fast': False}
         for key in self.kwargs:
             if key not in self.default_properties:
@@ -1284,13 +1254,18 @@ class Reaction(_base._ModelBase):
 
 
         local_keys = KeyFactory(self.model, type='constant').generate(len(parameter_list))
+        if isinstance(local_keys, str):
+            local_keys = [local_keys]
+
         for i in range(len(parameter_list)):
-            p = LocalParameter(self.model, name=parameter_list[i],
-                                 key=local_keys[i],
-                                 value=0.1,
-                                 reaction_name=self.name,
-                                 global_name='({}).{}'.format(self.name, parameter_list[i]))
+            p = LocalParameter(self.model,
+                               name=parameter_list[i],
+                               key=local_keys[i],
+                               value=0.1,
+                               reaction_name=self.name,
+                               global_name='({}).{}'.format(self.name, parameter_list[i]))
             self.parameters.append(p)
+            self.parameters_dict[parameter_list[i]] = p
 
     def create_rate_law_function(self):
         """
@@ -1320,8 +1295,6 @@ class Reaction(_base._ModelBase):
         function = Function(self.model, name=self.rate_law,
                             expression=self.rate_law,
                             roles=role_dct)
-
-
         return function
 
     def create(self):
@@ -1391,18 +1364,19 @@ class Reaction(_base._ModelBase):
 
         list_of_products = etree.SubElement(reaction, 'ListOfProducts')
         for i in self.products:
-            etree.SubElement(list_of_products, 'Product', attrib={'metabolites': i.key,
+            etree.SubElement(list_of_products, 'Product', attrib={'metabolite': i.key,
                                                                   'stoichiometry': str(i.stoichiometry)})
 
 
         list_of_modifiers= etree.SubElement(reaction, 'ListOfModifiers')
         for i in self.modifiers:
-            etree.SubElement(list_of_products, 'Modifier', attrib={'metabolites': i.key,
-                                                                  'stoichiometry': str(i.stoichiometry)})
+            etree.SubElement(list_of_products, 'Modifier', attrib={'metabolite': i.key,
+                                                                   'stoichiometry': str(i.stoichiometry)})
 
         list_of_constants = etree.SubElement(reaction, 'ListOfConstants')
+
         for i in self.parameters:
-            etree.SubElement(list_of_constants, 'Constant', attrib={'key' : i.key,
+            etree.SubElement(list_of_constants, 'Constant', attrib={'key': i.key,
                                                                     'name': i.name,
                                                                     'value': str(i.value)})
 
@@ -1415,7 +1389,42 @@ class Reaction(_base._ModelBase):
                                                    self.substrates[0].compartment.reference)})
         call_parameters = etree.SubElement(kinetic_law, 'ListOfCallParameters')
         for i in self.rate_law.list_of_parameter_descriptions:
-            etree.SubElement(call_parameters, 'CallParameter', attrib={'functionParameter': i.key})
+            call_parameter = etree.SubElement(call_parameters,
+                                              'CallParameter',
+                                              attrib={'functionParameter': i.key})
+
+            if i.role == 'constant':
+                ##TODO implement global quantities here
+                source_parameter = self.parameters_dict[i.name].key
+
+            elif (i.role == 'substrate') or (i.role == 'product') or (i.role == 'modifier'):
+                source_parameter = self.model.get('metabolite', i.name, by='name').key
+
+
+            etree.SubElement(call_parameter, 'SourceParameter', attrib={'reference': source_parameter})
+
+            # for j in self.rate_law.list_of_parameter_descriptions:
+            #     LOG.debug('parameter description -- {}'.format(i))
+            #     if i.key == self.rate_law.key:
+            #         LOG.debug('i.role -->  {}'.format(i.role))
+            #         if i.role == 'constant':
+            #
+            #             ## look for matching global variable name
+            #             glob = self.model.get('global_quantity', i.name, by='name')
+            #             if glob != []:
+            #                 source_parameter == glob.key
+            #             else:
+            #                 source_parameter = self.parameters_dict[i.name]
+            #
+            #         elif (i.role == 'substrate') or (i.role == 'product') or (i.role == 'modifier'):
+            #             source_parameter = self.model.get('metabolite', i.name, by='name')
+            #             LOG.debug('substrate source parameter -- {}'.format(source_parameter))
+
+
+
+
+
+
 
         return reaction
 
@@ -1585,6 +1594,13 @@ class LocalParameter(_base._ModelBase):
                 raise Errors.InputError('{} not in {}'.format(key, self.default_properties))
         self.update_properties(self.default_properties)
 
+        if self.name is None:
+            raise Errors.InputError('Name is "{}"'.format(self.name))
+
+        if self.key is None:
+            raise Errors.InputError('Key is "{}"'.format(self.key))
+
+
     def __str__(self):
         return 'LocalParameter({})'.format(self.to_string())
 
@@ -1752,7 +1768,7 @@ class KeyFactory(_base._ModelBase):
                 keys.append(random_number)
                 count += 1
         keys = ['{}_{}'.format('Parameter',i) for i in  keys]
-        if len(keys)==1:
+        if (len(keys)==1) and (isinstance(keys, list)):
             return keys[0]
         else:
             return keys
@@ -1765,7 +1781,7 @@ class Expression(object):
         self.default_properties = {}
 
         ## list of available operators according the copasi website
-        self.operator_list = ['+', '-', '*', '%',
+        self.operator_list = ['+', '-', '*', r'/', '%',
                          '%', '^', 'abs', 'floor',
                          'ceil', 'factorial', 'log',
                          'log10', 'exp', 'sin'
@@ -1944,6 +1960,8 @@ class Translator(_base._ModelBase):
                 stoic, comp = comp.split('*')
 
             ## if metab doesn't exist, create and add it to the model
+            # if comp == '':
+            #     continue
             metab = self.model.get('metabolite', comp, by='name')
             if metab == []:
                 metab = Metabolite(self.model, name=comp,
