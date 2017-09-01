@@ -235,38 +235,22 @@ class Model(_base._Base):
             if  i.tag == '{http://www.copasi.org/static/schema}ListOfCompartments':
                 df_list = []
                 for j in i:
-                    lst.append(Compartment(key=j.attrib['key'],
+                    lst.append(Compartment(self,
+                                           key=j.attrib['key'],
                                            name=j.attrib['name'],
                                            simulation_type=j.attrib['simulationType'],
                                            initial_value=float(self.states[j.attrib['key']])) )
         return lst
 
-    # def add_compartment(self, name, key=None, simulation_type='fixed',
-    #                     initial_value=1):
     def add_compartment(self, compartment):
         """
         Add compartment to model
-        :param name: name of compartment
-        :param key: key of compartment. If None, key automatically generated
-        :param simulation_type: fixed, reactions, ode or assignment
+        :param compartment: Compartment
         :return: model.Model
         """
-        if compartment.key == None:
-            compartment.key = KeyFactory(self, type='compartment').generate()
-
-        simulation_types = ['reactions', 'ode', 'fixed', 'assignment']
-        if compartment.simulation_type not in simulation_types:
-            raise Errors.InputError('{} not in {}'.format(compartment.simulation_type, simulation_types))
-
-        compartment_element = etree.Element('Compartment', attrib={'key': compartment.key,
-                                                                   'name': compartment.name,
-                                                                   'simulationType': compartment.simulation_type,
-                                                                   'dimensionality': '3'})
-
-        ## add compartment to the list of compartments
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfCompartments':
-                i.append(compartment_element)
+                i.append(compartment.to_xml())
 
         ## add compartment to state template
         self.add_state(compartment.key, compartment.initial_value)
@@ -401,48 +385,49 @@ class Model(_base._Base):
         :return:
         """
 
-        if metab.name in [i.name for i in self.metabolites]:
-            raise Errors.InputError('Already a specie with the name "{}" in your model'.format(metabolite_args['name']))
+        # if metab.name in [i.name for i in self.metabolites]:
+        #     raise Errors.InputError('Already a specie with the name "{}" in your model'.format(metabolite_args['name']))
+        #
+        # if metab.key == None:
+        #     metab.key = KeyFactory(self,type='metabolite').generate()
+        #
+        # if metab.name == None:
+        #     metab.name = key
+        #
+        # if (metab.concentration == None) or (metab.particle_number == None):
+        #     metab.concentration= str(0)
+        #
+        # if metab.concentration != None:
+        #     if isinstance(metab.concentration, (float, int)):
+        #         metab.concentration = str(metab.concentration)
+        #
+        # if metab.compartment == None:
+        #     metab.compartment = self.compartments[0]
+        #
+        # if not isinstance(metab.compartment, Compartment):
+        #     raise Errors.InputError('compartment should be of type model.Compartment')
+        #
+        # if metab.simulation_type == None:
+        #     metab.simulation_type = 'reactions'
+        #
+        # if metab.particle_number == None:
+        #     metab.particle_number = self.convert_molar_to_particles(metab.concentration,
+        #                                                             self.quantity_unit,
+        #                                                             metab.compartment.initial_value)
+        #
+        #
+        # if isinstance(metab.particle_number, (float, int)):
+        #     metab.particle_number = str(metab.particle_number)
+        #
+        #
+        # ##TODO fix metabolite converion finctions to fully support copasi
+        # ##TODO work out whether I need to actively add metabolite to metabolite list or whether I can make it update itself from the xml
+        # metabolite_element = etree.Element('Metabolite', attrib={'key': metab.key,
+        #                                             'name': metab.name,
+        #                                             'simulationType': metab.simulation_type,
+        #                                             'compartment': metab.compartment.key})
 
-        if metab.key == None:
-            metab.key = KeyFactory(self,type='metabolite').generate()
-
-        if metab.name == None:
-            metab.name = key
-
-        if (metab.concentration == None) or (metab.particle_number == None):
-            metab.concentration= str(0)
-
-        if metab.concentration != None:
-            if isinstance(metab.concentration, (float, int)):
-                metab.concentration = str(metab.concentration)
-
-        if metab.compartment == None:
-            metab.compartment = self.compartments[0]
-
-        if not isinstance(metab.compartment, Compartment):
-            raise Errors.InputError('compartment should be of type model.Compartment')
-
-        if metab.simulation_type == None:
-            metab.simulation_type = 'reactions'
-
-        if metab.particle_number == None:
-            metab.particle_number = self.convert_molar_to_particles(metab.concentration,
-                                                                    self.quantity_unit,
-                                                                    metab.compartment.initial_value)
-
-
-        if isinstance(metab.particle_number, (float, int)):
-            metab.particle_number = str(metab.particle_number)
-
-
-        ##TODO fix metabolite converion finctions to fully support copasi
-        ##TODO work out whether I need to actively add metabolite to metabolite list or whether I can make it update itself from the xml
-        metabolite_element = etree.Element('Metabolite', attrib={'key': metab.key,
-                                                    'name': metab.name,
-                                                    'simulationType': metab.simulation_type,
-                                                    'compartment': metab.compartment.key})
-
+        metabolite_element = metab.to_xml()
         ## add the metabolute to list of metabolites
         list_of_metabolites = '{http://www.copasi.org/static/schema}ListOfMetabolites'
         for i in self.xml.iter():
@@ -481,19 +466,10 @@ class Model(_base._Base):
         :param simulation_type: fixed, ode assignment or reactions
         :return: model.Model
         """
-        if global_quantity.key == None:
-            global_quantity.key = KeyFactory(self, type='global_quantity').generate()
+        if not isinstance(global_quantity, GlobalQuantity):
+            raise Errors.InputError('Input must be a GlobalQuantity')
 
-        if global_quantity.simulation_type == None:
-            global_quantity.simulation_type = 'fixed'
-
-        if global_quantity.simulation_type not in ['assignment', 'fixed', 'ode', 'reactions']:
-            raise TypeError('wrong simulation type')
-
-        model_value = etree.Element('ModelValue', attrib={'key': global_quantity.key,
-                                                          'name': global_quantity.name,
-                                                          'simulationType': global_quantity.simulation_type})
-
+        model_value = global_quantity.to_xml()
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfModelValues':
                 i.append(model_value)
@@ -503,12 +479,6 @@ class Model(_base._Base):
         return self
 
 
-    @contextmanager
-    def globals(self):
-        doing_sums = 10+15
-        print 'before'
-        yield doing_sums
-        print 'after'
 
     @property
     def global_quantities(self):
@@ -633,46 +603,6 @@ class Model(_base._Base):
         else:
             function.reversible = 'false'
 
-
-
-        # ## create the function element
-        # function_element = etree.Element('Function', attrib={'key': function.key,
-        #                                                      'name': function.name,
-        #                                                      'type': function.type,
-        #                                                      'reversible':function.reversible})
-        #
-        # ##add the expression as text
-        # exp = etree.SubElement(function_element, 'Expression')
-        # exp.text = function.expression+'\n'
-        # list_of_parameter_descriptions = etree.SubElement(function_element,
-        #                                                   'ListOfParameterDescriptions')
-        #
-        #
-        #
-        # ## create mass action elements
-        # if (function.name == 'mass_action_irreversible') or (function.name == 'mass_action_reversible'):
-        #     for i in function.list_of_parameter_descriptions:
-        #         etree.SubElement(list_of_parameter_descriptions, 'ParameterDescription',
-        #                      attrib={'name': i.name,
-        #                              'key': i.key,
-        #                              'order': i.order,
-        #                              'role': i.role})
-        # #print etree.tostring(function_element, pretty_print=True)
-        #
-        # else:
-        #     expression = Expression(function.expression).to_list()
-        #
-        #     for i, name in enumerate(expression):
-        #         ## TODO change this keygeneration to use KeyFactory
-        #         key = "FunctionParameter_{}".format(100000+i)
-        #
-        #         etree.SubElement(list_of_parameter_descriptions,
-        #                          'ParameterDescription',
-        #                          attrib={'key': key,
-        #                                  'name': name,
-        #                                  'order': str(i),
-        #                                  'role': function.roles[name]})
-
         ## add the function to list of functions
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfFunctions':
@@ -755,6 +685,7 @@ class Model(_base._Base):
                         # print etree.tostring(k, pretty_print=True)
                         if k.tag == '{http://www.copasi.org/static/schema}ListOfSubstrates':
                             for l in list(k):
+                                # LOG.debug('substrates --> {}'.format(l.attrib))
                                 list_of_substrates = [m for m in self.metabolites if m.key in l.attrib['metabolite']]
 
                                 ## convert list to substrates
@@ -763,6 +694,17 @@ class Model(_base._Base):
                         elif k.tag == '{http://www.copasi.org/static/schema}ListOfProducts':
                             for l in list(k):
                                 ## get list of metabolites and convert them to Product class
+
+                                '''
+                                I think these lists are empty with my new reaction 
+                                because we've created new substrates which are not in self.metabolites. 
+                                
+                                Fix this then I fixx the bug
+                                
+                                Need to dynamically link the states of compartments, reactions, 
+                                globals metabolites and reactions, etc with the state of the xml. 
+                                '''
+                                LOG.debug('self.metabolites --> {}'.format(self.metabolites))
                                 list_of_products = [m for m in self.metabolites if m.key in l.attrib['metabolite']]
                                 list_of_products = [m.to_product() for m in list_of_products]
                                 #
@@ -793,12 +735,23 @@ class Model(_base._Base):
                             assert len(function_list) == 1
                             reactions_dict[reaction_count]['function'] = function_list[0]
 
+        skipped = []
         for i, dct in reactions_dict.items():
+            LOG.debug('{}, {}'.format(i, dct))
+            # if (dct['substrates'] == []) and (dct['products'] == []):
+            #     LOG.warning('Reaction {} skipped as substrates and products vectors are empty'.format(i))
+            #     skipped.append(i)
+            #     continue
+
+            if dct['function'] == []:
+                dct['function'] = "k*{}".format(reduce(lambda x, y: '{}*{}'.format(x, y), substrates))
+
             substrates = [j.name for j in reactions_dict[i]['substrates']]
             if substrates != []:
                 sub_expression = reduce(lambda x, y: "{} + {}".format(x, y), substrates)
             else:
                 sub_expression = ''
+                LOG.debug('sub_expression --> {}'.format(sub_expression))
 
             products = [j.name for j in reactions_dict[i]['products']]
             if products != []:
@@ -820,20 +773,24 @@ class Model(_base._Base):
                 raise Errors.SomethingWentHorriblyWrongError
 
             if modifier_expression == '':
-                expression = "{} {} {}".format(sub_expression, operator,
-                                        prod_expression)
+                expression = "{} {} {}".format(sub_expression,
+                                               operator,
+                                               prod_expression)
             else:
                 expression = '{} {} {}; {}'.format(sub_expression, operator,
                                                    prod_expression, modifier_expression)
             reactions_dict[i]['expression'] = expression
 
         lst=[]
+
         for i, dct in reactions_dict.items():
-            lst.append(Reaction(self,
-                           name=dct['name'],
-                           key=dct['key'],
-                           expression=dct['expression'],
-                           rate_law=dct['function']) )
+            ## skip the skipped reactions
+            if i not in skipped:
+                lst.append(Reaction(self,
+                                name=dct['name'],
+                                key=dct['key'],
+                                expression=dct['expression'],
+                                rate_law=dct['function']))
 
         return lst
 
@@ -851,6 +808,29 @@ class Model(_base._Base):
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
                 i.append(reaction.to_xml())
+        return self
+
+    def remove_reaction(self, value, by='name'):
+        """
+        Remove reaction matched by value
+        :param value: value to match reaction by
+        :param by: attribute of reaction to match default='name
+        :return:
+        """
+
+        ##Now because of what I've done with
+        ##the reactions property (bypass reactions with empty substrates and
+        ## products, it seems that I cannot find the reaction
+        ## here which is why it is not being removed.
+
+        ##Why does the new reaction give empty lists of substrates
+        ## and products?
+        reaction = self.get('reaction', value, by)
+        for i in self.xml:
+            if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
+                for j in i:
+                    if j.attrib[by] == value:
+                        j.getparent().remove(j)
         return self
 
     def save(self, copasi_file=None):
@@ -883,7 +863,17 @@ class Model(_base._Base):
             copasi_file = self.copasi_file
         self.save(copasi_file)
         os.system('CopasiUI {}'.format(copasi_file))
-        os.remove(copasi_file)
+        # os.remove(copasi_file)
+
+    def _model_components(self):
+        """
+        list of model components that
+        are changable
+        :return:
+        """
+        return ['metabolite','compartment', 'reaction',
+                'local_parameter','global_quantity',
+                'function']
 
     def get(self, component, value, by='name'):
         """
@@ -894,13 +884,8 @@ class Model(_base._Base):
         :param by: which attribute to search by. i.e. name or key or value
         :return: component
         """
-        list_of_accepted_components = ['metabolite',
-                                       'compartment',
-                                       'local_parameter',
-                                       'global_quantity',
-                                       'function']
-        if component not in list_of_accepted_components:
-            raise Errors.InputError('{} not in list of components'.format(component))
+        if component not in self._model_components():
+            raise Errors.InputError('{} not in list of components: {}'.format(component, self._model_components()))
 
         if component == 'metabolite':
             res = [i for i in self.metabolites if getattr(i, by) == value]
@@ -917,22 +902,73 @@ class Model(_base._Base):
         elif component == 'function':
             res = [i for i in self.functions if getattr(i, by) == value]
 
+        elif component == 'reaction':
+            res = [i for i in self.functions if getattr(i, by) == value]
+
         if len(res) == 1:
             res = res[0]
         return res
 
+    def set(self, component, name, value):
+        """
 
-class Compartment(_base._Base):
-    def __init__(self, **kwargs):
-        super(Compartment, self).__init__(**kwargs)
+        :param component:
+        :param name:
+        :param value:
+        :return:
+        """
+        if component not in self._model_components():
+            raise Errors.InputError('{} not in list of components'.format(component))
+
+        if component == 'global_quantity':
+            comp = self.get(component, name, by='name')
+            comp.initial_value = value
+            self.remove_global_quantity(name, by='name')
+            self.add_global_quantity(comp)
+            return self
+
+        elif component == 'metabolite':
+            comp = self.get(component, name, by='name')
+
+
+    def remove(self, component, name):
+        """
+
+        :param component:
+        :param name:
+        :param value:
+        :return:
+        """
+        if component in self._model_components() == False:
+            raise Errors.InputError('{} not in list of components'.format(component))
+
+        if component == 'compartment':
+            return self.remove_compartment(name, by='name')
+
+        elif component == 'global_quantity':
+            return self.remove_global_quantity(name, by='name')
+
+        elif component == 'reaction':
+            return self.remove_reaction(name, by='name')
+
+        elif component == 'function':
+            return self.remove_function(name, by='name')
+
+        elif component == 'metabolite':
+            return self.remove_metabolite(name, by='name')
+
+        else:
+            raise Errors.InputError('{} is not an accepted type. Choose from: {}'.format(self._model_components()))
+
+
+
+class Compartment(_base._ModelBase):
+    def __init__(self, model, **kwargs):
+        super(Compartment, self).__init__(model, **kwargs)
         default_properties = {'name':None,
                               'key': None,
                               'initial_value':None,
                               'simulation_type': 'fixed'}
-
-        # for key in self.kwargs:
-        #     if key not in self.default_properties:
-        #         raise Errors.InputError('Attribute not allowed. {} not in {}'.format(key, self.default_properties))
 
         self.update_properties(default_properties)
         self.update_kwargs(kwargs)
@@ -952,12 +988,45 @@ class Compartment(_base._Base):
         Make sure none of the arguments are empty
         :return: void
         """
-        pass
+        if self.key is None:
+            self.key = KeyFactory(self.model, type='compartment').generate()
+
+        if self.name is None:
+            LOG.warning('name attribute for compartment not set. Defaulting to key --> {}'.format(self.key))
+            self.name == self.key
+
+        if self.simulation_type is None:
+            self.simulation_type = 'fixed'
+
+        if self.initial_value is None:
+            self.initial_value = 1
+
+
 
 
     @property
     def reference(self):
         return 'Vector=Compartments[{}]'.format(self.name)
+
+    def to_xml(self):
+        """
+
+        :return:
+        """
+        if self.key == None:
+            self.key = KeyFactory(self.model, type='compartment').generate()
+
+        simulation_types = ['reactions', 'ode', 'fixed', 'assignment']
+        if self.simulation_type not in simulation_types:
+            raise Errors.InputError('{} not in {}'.format(self.simulation_type, simulation_types))
+
+        compartment_element = etree.Element('Compartment', attrib={'key': self.key,
+                                                                   'name': self.name,
+                                                                   'simulationType': self.simulation_type,
+                                                                   'dimensionality': '3'})
+        return compartment_element
+
+
 
 class Metabolite(_base._ModelBase):
     """
@@ -1057,6 +1126,52 @@ class Metabolite(_base._ModelBase):
     def to_modifier(self):
         return Modifier(self.model, **self.kwargs)
 
+    def to_xml(self):
+        """
+
+        :return:
+        """
+
+        if self.name in [i.name for i in self.model.metabolites]:
+            raise Errors.InputError('Already a specie with the name "{}" in your model'.format(metabolite_args['name']))
+
+        if self.key == None:
+            self.key = KeyFactory(self.model, type='metabolite').generate()
+
+        if self.name == None:
+            self.name = key
+
+        if (self.concentration == None) or (self.particle_number == None):
+            self.concentration = str(0)
+
+        if self.concentration != None:
+            if isinstance(self.concentration, (float, int)):
+                self.concentration = str(self.concentration)
+
+        if self.compartment == None:
+            self.compartment = self.model.compartments[0]
+
+        if not isinstance(self.compartment, Compartment):
+            raise Errors.InputError('compartment should be of type model.Compartment')
+
+        if self.simulation_type == None:
+            self.simulation_type = 'reactions'
+
+        if self.particle_number == None:
+            self.particle_number = self.model.convert_molar_to_particles(self.concentration,
+                                                                   self.model.quantity_unit,
+                                                                   self.compartment.initial_value)
+
+        if isinstance(self.particle_number, (float, int)):
+            self.particle_number = str(self.particle_number)
+
+        metabolite_element = etree.Element('Metabolite', attrib={'key': self.key,
+                                                                 'name': self.name,
+                                                                 'simulationType': self.simulation_type,
+                                                                 'compartment': self.compartment.key})
+
+        return metabolite_element
+
 
 class Substrate(Metabolite):
     def __init__(self, model, **kwargs):
@@ -1138,7 +1253,7 @@ class GlobalQuantity(_base._ModelBase):
                                    'key': None,
                                    'simulation_type': None,
                                    'initial_value': None,
-                                   'type': None}
+                                   }
 
         for key in kwargs:
             if key not in self.default_properties:
@@ -1157,6 +1272,15 @@ class GlobalQuantity(_base._ModelBase):
 
         if self.name == None:
             raise Errors.InputError('name property cannot be None')
+
+        if self.key == None:
+            self.key = KeyFactory(self.model, type='global_quantity').generate()
+
+        if self.initial_value is None:
+            self.initial_value = 1
+
+        if self.simulation_type is None:
+            self.simulation_type = 'fixed'
 
     def __str__(self):
         return 'GlobalQuantity({})'.format(self.to_string())
@@ -1181,6 +1305,25 @@ class GlobalQuantity(_base._ModelBase):
         :return: string
         """
         return "Vector=Values[{}],Reference=InitialValue".format(self.name)
+
+    def to_xml(self):
+        """
+
+        :return:
+        """
+        if self.key == None:
+            self.key = KeyFactory(self.model, type='global_quantity').generate()
+
+        if self.simulation_type == None:
+            self.simulation_type = 'fixed'
+
+        if self.simulation_type not in ['assignment', 'fixed', 'ode', 'reactions']:
+            raise TypeError('wrong simulation type')
+
+        model_value = etree.Element('ModelValue', attrib={'key': self.key,
+                                                          'name': self.name,
+                                                          'simulationType': self.simulation_type})
+        return model_value
 
 
 class Reaction(_base._ModelBase):
@@ -1207,7 +1350,8 @@ class Reaction(_base._ModelBase):
                                    ##TODO delete parameters as we have rate law instead
                                    'parameters': [],
                                    'parameters_dict': {},
-                                   'fast': False}
+                                   'fast': False,
+                                   'simulation_type': 'reactions'}
         for key in self.kwargs:
             if key not in self.default_properties:
                 raise Errors.InputError('{} not valid key. Valid keys are: {}'.format(key, self.default_properties))
@@ -1233,6 +1377,27 @@ class Reaction(_base._ModelBase):
         if not isinstance(self.fast, bool):
             raise Errors.InputError('fast argument is boolean')
 
+        if self.simulation_type is not None:
+            if self.simulation_type not in ['fixed',
+                                            'assignment',
+                                            'reactions',
+                                            'ode']:
+                raise Errors.InputError('type should be either fixed or assignment. ODE not supported as Reactions can be used.')
+
+        if self.key is None:
+            self.key = KeyFactory(self.model, type='reaction').generate()
+
+        if self.name is None:
+            raise Errors.InputError('name property cannot be None')
+
+        if self.simulation_type is None:
+            self.simulation_type = 'fixed'
+
+        if self.expression is None:
+            raise Errors.InputError('expression is a required argument')
+
+        if self.rate_law is None:
+            raise Errors.InputError('rate_law is a required argument')
 
     def translate_reaction(self):
         """
@@ -1250,6 +1415,10 @@ class Reaction(_base._ModelBase):
 
 
         reaction_components = [i.name for i in trans.all_components]
+
+
+        if (self.rate_law is None) or (self.rate_law is []):
+            raise Errors.InputError('rate_law is {}'.format(self.rate_law))
 
         if isinstance(self.rate_law, str):
             expression_components = Expression(self.rate_law).to_list()
