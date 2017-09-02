@@ -638,16 +638,15 @@ class ModelTests(_test_base._BaseTest):
         """
         r = PyCoTools.model.Reaction(self.model,
                                      name='fake_reaction2',
-                                     expression='A + F + irs -> ; G',
-                                     rate_law='k*A*B*C/D')
+                                     expression='A + B -> C',
+                                     rate_law='k*A*B')
         self.model = self.model.add_reaction(r)
-        self.model = self.model.remove_reaction('fake_reaction2', by='name')
-        # self.model = self.model.remove('reaction', 'fake_reaction2')
-        # self.model.save()
-        # self.model.open()
+        # self.model = self.model.remove_reaction('fake_reaction2', by='name')
+        # # self.model = self.model.remove('reaction', 'fake_reaction2')
+        self.model.save()
+        #self.model.open()
 
-        for i in self.model.reactions:
-            print i
+        self.model.reactions
         # new_model = PyCoTools.pycopi.CopasiMLParser(self.model.copasi_file).xml
         # boolean = True
         # for i in new_model.iter():

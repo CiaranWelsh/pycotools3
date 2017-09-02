@@ -662,12 +662,15 @@ class Model(_base._Base):
 
     @property
     def reactions(self):
+        self.save()
         list_of_reactions = []
         reaction_count = 0
         reactions_dict = {}
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
                 for j in list(i):
+                    LOG.debug('j.attrib -- > {}'.format(j.attrib))
+                    LOG.debug('j pretty\n -- > {}'.format(etree.tostring(j, pretty_print=True)))
                     reaction_count += 1
                     reactions_dict[reaction_count] = {}
 
@@ -735,7 +738,7 @@ class Model(_base._Base):
                             assert len(function_list) == 1
                             reactions_dict[reaction_count]['function'] = function_list[0]
 
-        skipped = []
+        # skipped = []
         for i, dct in reactions_dict.items():
             LOG.debug('{}, {}'.format(i, dct))
             # if (dct['substrates'] == []) and (dct['products'] == []):
@@ -785,12 +788,12 @@ class Model(_base._Base):
 
         for i, dct in reactions_dict.items():
             ## skip the skipped reactions
-            if i not in skipped:
-                lst.append(Reaction(self,
-                                name=dct['name'],
-                                key=dct['key'],
-                                expression=dct['expression'],
-                                rate_law=dct['function']))
+            # if i not in skipped:
+            lst.append(Reaction(self,
+                            name=dct['name'],
+                            key=dct['key'],
+                            expression=dct['expression'],
+                            rate_law=dct['function']))
 
         return lst
 
