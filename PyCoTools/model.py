@@ -569,7 +569,6 @@ class Model(_base._Base):
             return self
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfFunctions':
-                LOG.debug('function is type {}'.format(type(function)))
                 i.append(function.to_xml())
 
         return self
@@ -752,9 +751,9 @@ class Model(_base._Base):
         if reaction.name in [i.name for i in self.reactions]:
             raise Errors.ReactionAlreadyExists('Your model already contains a reaction with the name: {}'.format(reaction.name))
 
-        existing_functions = [i.name for i in self.functions]
-        # if reaction.rate_law.name not in existing_functions:
-        self.add_function(reaction.rate_law)
+        existing_functions = [i.expression for i in self.functions]
+        if reaction.rate_law.expression not in existing_functions:
+            self.add_function(reaction.rate_law)
 
 
         # print reaction.to_xml()
@@ -992,12 +991,46 @@ class Model(_base._Base):
         else:
             raise Errors.InputError('{} is not an accepted type. Choose from: {}'.format(self._model_components()))
 
+    @property
+    def active_parameter_set(self):
+        """
+
+        :return: get active parameter set
+        """
+        for i in self.xml.iter():
+            if i.tag=='{http://www.copasi.org/static/schema}ListOfModelParameterSets':
+                return i.attrib['active_set']
+
+    @active_parameter_set.setter
+    def active_parameter_set(self, parameter_set):
+        """
+        set the active parameter set
+        :return:
+        """
+        if parameter_set not in self.active_parameter_set:
+            raise Errors.InputError('{} not in available parameter sets'.format(parameter_set))
+
+        for i in self.xml.iter():
+            if i.tag=='{http://www.copasi.org/static/schema}ListOfModelParameterSets':
+                i.attrib['active_set'] = parameter_set
+        return self
+
+    @property
+    def parameter_sets(self):
+        """
+
+        :return:
+        """
+        for i in self.xml.iter():
+            if i.tag=='{http://www.copasi.org/static/schema}ListOfModelParameterSets':
+                for j in i:
+                    print j
 
 
 class Compartment(_base._ModelBase):
     def __init__(self, model, **kwargs):
         super(Compartment, self).__init__(model, **kwargs)
-        default_properties = {'name':None,
+        default_properties = {'name': None,
                               'key': None,
                               'initial_value':None,
                               'simulation_type': 'fixed'}
@@ -1409,12 +1442,14 @@ class Reaction(_base._ModelBase):
 
         self._do_checks()
         self.create()
+        # print self.to_df()
+
 
 
 
     def __str__(self):
-        return 'Reaction(name="{}", expression="{}", rate_law="{}", parameters="{}", reversible="{}")'.format(
-            self.name, self.expression, self.rate_law.expression.name,
+        return 'Reaction(name="{}", expression="{}", rate_law="{}", parameters={}, reversible={})'.format(
+            self.name, self.expression, self.rate_law,
             {i.name: i.value for i in self.parameters},
             self.reversible
         )
@@ -1453,6 +1488,13 @@ class Reaction(_base._ModelBase):
         if self.rate_law is None:
             raise Errors.InputError('rate_law is a required argument')
 
+
+        if self.key is None:
+            self.key = KeyFactory(self.model, type='reaction').generate()
+
+        if self.name == None:
+            self.name = self.key
+
     def translate_reaction(self):
         """
         convert the reaction string (self.expression)
@@ -1476,8 +1518,27 @@ class Reaction(_base._ModelBase):
 
         if isinstance(self.rate_law, str):
             expression_components = Expression(self.rate_law).to_list()
+
+        ## for handling existing functions
         elif isinstance(self.rate_law, Function):
-            expression_components = Expression(self.rate_law.expression).to_list()
+            if 'mass action' in self.rate_law.name.lower():
+                ##TODO add reversible here
+                forward = reduce(
+                    lambda x, y: '{}*{}'.format(
+                        x, y), [i.name for i in self.substrates]
+                )
+                self.rate_law = 'k1*{}'.format(forward)
+                if self.reversible in ['true', True]:
+                    backward = reduce(
+                        lambda x, y: '{}*{}'.format(
+                            x, y), [i.name for i in self.products]
+                        )
+                    self.rate_law = 'k1*{}-k2*{}'.format(forward, backward)
+
+                expression_components = Expression(self.rate_law).to_list()
+
+            else:
+                expression_components = Expression(self.rate_law.expression).to_list()
 
 
         parameter_list = []
@@ -1491,7 +1552,7 @@ class Reaction(_base._ModelBase):
             local_keys = [local_keys]
 
         ##for excluding elements of built in rate laws
-        exclusion_list = ['PRODUCT<substrate_i>', 'PRODUCT<product_j>']
+        exclusion_list = []#['PRODUCT<substrate_i>', 'PRODUCT<product_j>']
         for i in range(len(parameter_list)):
             if parameter_list[i] not in exclusion_list:
                 p = LocalParameter(self.model,
@@ -1512,12 +1573,17 @@ class Reaction(_base._ModelBase):
 
         ##todo check if ratelaw exists
         if isinstance(self.rate_law, str):
-            exp = Expression(self.rate_law).to_list()
+            if self.rate_law == 'mass_action':
+                ma = MassAction(self.model, reversible=self.reversible)
+                return ma
+            else:
+                exp = Expression(self.rate_law).to_list()
         elif isinstance(self.rate_law, Function):
+            # return self.rate_law
             exp = Expression(self.rate_law.expression).to_list()
         role_dct = {}
 
-        ##TODO uncomment this
+
         # if self.substrates + self.products == []:
         #     raise Errors.SomethingWentHorriblyWrongError('Both substrates and products are empty')
 
@@ -1543,6 +1609,7 @@ class Reaction(_base._ModelBase):
         :return:
         """
         ## get lists of substrate, products, modifiers and constants
+
         self.translate_reaction()
 
         ## interpret rate law
@@ -1554,7 +1621,6 @@ class Reaction(_base._ModelBase):
 
         :return:
         """
-
         if self.fast:
             self.fast = 'true'
         else:
@@ -1565,13 +1631,6 @@ class Reaction(_base._ModelBase):
         else:
             self.reversible = 'false'
 
-        if self.key is None:
-            self.key = KeyFactory(self.model, type='reaction').generate()
-
-        if self.name == None:
-            self.name = self.key
-
-        reaction_key = KeyFactory(self.model, type='reaction').generate()
 
         if isinstance(self.name, bool):
             raise Exception
@@ -1579,7 +1638,7 @@ class Reaction(_base._ModelBase):
         if isinstance(self.fast, bool):
             raise Exception
 
-        reaction = etree.Element('Reaction', attrib={'key': reaction_key,
+        reaction = etree.Element('Reaction', attrib={'key': self.key,
                                                      'name': self.name,
                                                      'reversible': self.reversible,
                                                      'fast': self.fast})
@@ -1606,28 +1665,32 @@ class Reaction(_base._ModelBase):
                                                                     'name': i.name,
                                                                     'value': str(i.value)})
 
-        kinetic_law = etree.SubElement(reaction,
+        if self.rate_law.name == 'mass_action':
+            kinetic_law = self.rate_law.to_xml()
+
+        else:
+            kinetic_law = etree.SubElement(reaction,
                                        'KineticLaw',
                                        attrib={'function': self.rate_law.key,
                                                'unitType': 'Default',
                                                'scalingCompartment': "{},{}".format(
                                                    self.model.reference,
                                                    self.substrates[0].compartment.reference)})
-        call_parameters = etree.SubElement(kinetic_law, 'ListOfCallParameters')
-        for i in self.rate_law.list_of_parameter_descriptions:
-            call_parameter = etree.SubElement(call_parameters,
-                                              'CallParameter',
-                                              attrib={'functionParameter': i.key})
+            call_parameters = etree.SubElement(kinetic_law, 'ListOfCallParameters')
+            for i in self.rate_law.list_of_parameter_descriptions:
+                call_parameter = etree.SubElement(call_parameters,
+                                                  'CallParameter',
+                                                  attrib={'functionParameter': i.key})
 
-            if i.role == 'constant':
-                ##TODO implement global quantities here
-                source_parameter = self.parameters_dict[i.name].key
+                if i.role == 'constant':
+                    ##TODO implement global quantities here
+                    source_parameter = self.parameters_dict[i.name].key
 
-            elif (i.role == 'substrate') or (i.role == 'product') or (i.role == 'modifier'):
-                source_parameter = self.model.get('metabolite', i.name, by='name').key
+                elif (i.role == 'substrate') or (i.role == 'product') or (i.role == 'modifier'):
+                    source_parameter = self.model.get('metabolite', i.name, by='name').key
 
 
-            etree.SubElement(call_parameter, 'SourceParameter', attrib={'reference': source_parameter})
+                etree.SubElement(call_parameter, 'SourceParameter', attrib={'reference': source_parameter})
 
         return reaction
 
@@ -1734,16 +1797,15 @@ class Function(_base._ModelBase):
                                                              'reversible': self.reversible}) )
 
         expression = etree.SubElement(func, 'Expression')
-        LOG.debug('expression is --> {}'.format(self.expression))
-        # if isinstance(self.expression, str):
-        #     expression.text = self.expression
-        # elif isinstance(self.expression, Function):
-        #     expression.text = self.expression.expression
-        # else:
-        #     raise TypeError(
-        #         'self.expression is of type {} but expected str or function'.format(type(self.expression))
-        #     )
-        expression.text = self.expression
+        if isinstance(self.expression, str):
+            expression.text = self.expression
+        elif isinstance(self.expression, Function):
+            expression.text = self.expression.expression
+        else:
+            raise TypeError(
+                'self.expression is of type {} but expected str or function'.format(type(self.expression))
+            )
+        # expression.text = self.expression
         list_of_p_desc = etree.SubElement(func, 'ListOfParameterDescriptions')
 
         for i in self.list_of_parameter_descriptions:
@@ -1770,9 +1832,8 @@ class ParameterDescription(_base._ModelBase):
         self._do_checks()
 
     def __str__(self):
-        return 'ParameterDescription(name="{}", key="{}", order="{}", role="{}")'.format(
-            self.name, self.key,
-            self.order, self.role
+        return 'ParameterDescription(name="{}", role="{}")'.format(
+            self.name, self.role
         )
 
     def _do_checks(self):
@@ -2237,7 +2298,7 @@ class MassAction(Function):
 
         :return:
         """
-        return "MassAction({})".format(self.to_string())
+        return "MassAction(reversible={})".format(self.reversible)
 
     def get_mass_action(self):
         """
@@ -2309,6 +2370,151 @@ class MassAction(Function):
                                                                              'role': i.role})
 
         return mass_action
+
+
+
+
+
+##TODO work out why both rate law and expression are function in reaction
+
+class ParameterSet(_base._ModelBase):
+    def __init__(self, model, **kwargs):
+        super(ParameterSet, self).__init__(model, **kwargs)
+
+
+        self.default_properties = {'key': None,
+                                   'name': 'Initial State',
+                                   'initial_time': 0,
+                                   'compartments': None,
+                                   'metabolites': None,
+                                   'global_quantities': None,
+                                   'kinetic_parameters': None,
+                                   'state_template': None,
+                                   'initial_state': None}
+
+        self.update_properties(self.default_properties)
+        self.update_kwargs(kwargs)
+        self.check_integrity(self.default_properties.keys(), kwargs.keys())
+        self._do_checks()
+
+    def _do_checks(self):
+        """
+
+        :return:
+        """
+        if self.key is None:
+            self.key = KeyFactory(self.model, type='parameter_set').generate()
+
+
+
+    def to_xml(self):
+
+        ## top element
+        parameter_set = etree.Element('ModelParameterSet', attrib={'key': self.key,
+                                                         'name': self.name})
+
+        ## time element
+        model_parameter_group = etree.SubElement(
+            parameter_set,'ModelParameterGroup',
+            attrib={'cn': 'String=Initial Time',
+                    'type': 'Group'})
+
+        ## time sub element
+        etree.SubElement(model_parameter_group, 'ModelParameter',
+                         attrib={'cn': self.model.reference,
+                                 'value': self.initial_time,
+                                 'type': 'Model',
+                                 'simulationType': 'time'})
+
+        ##compartment element
+        model_parameter_group = etree.SubElement(
+            parameter_set, 'ModelParameterGroup',
+            attrib={'cn': 'String=Initial Compartment Sizes',
+                    'type': 'Group'}
+        )
+
+        ##compartment subelement
+        for compartment in self.model.compartments:
+            etree.SubElement(model_parameter_group, 'ModelParameter',
+                         attrib={'cn': '{},{}'.format(self.model.reference, compartment.reference),
+                                 'value': compartment.initial_value,
+                                 'type': 'Compartment',
+                                 'simulationType': compartment.simulation_type})
+
+
+        ##metabolites element
+        model_parameter_group = etree.SubElement(
+            parameter_set, 'ModelParameterGroup',
+            attrib={'cn': 'String=Initial Species Values',
+                    'type': 'Group'}
+        )
+
+        ##metabolite subelement
+        for metab in self.model.metabolites:
+            etree.SubElement(model_parameter_group, 'ModelParameter',
+                         attrib={'cn': '{},{},{}'.format(
+                             self.model.reference, metab.compartment.reference,metab.reference),
+                                 'value': matab.particle_number,
+                                 'type': 'Species',
+                                 'simulationType': metab.simulation_type})
+
+        ##global quantities element
+        model_parameter_group = etree.SubElement(
+            parameter_set, 'ModelParameterGroup',
+        attrib = {'cn': 'String=Initial Global Quantities',
+                  'type': 'Group'}
+        )
+
+        ##global quantity subelement
+        for global_q  in self.model.global_quantities:
+            etree.SubElement(model_parameter_group, 'ModelParameter',
+                             attrib={'cn': '{},{}'.format(
+                                 self.model.reference, global_q.reference),
+                                 'value': global_q.initial_value,
+                                 'type': 'ModelValue',
+                                 'simulationType': global_q.simulation_type})
+
+        ##kinetic parameters
+        model_parameter_group = etree.SubElement(
+            parameter_set, 'ModelParameterGroup',
+        attrib = {'cn': 'String=Kinetic Parameters',
+                  'type': 'Group'}
+        )
+
+        ##global quantity subelement
+        for global_q  in self.model.reactions:
+            # etree.SubElement(model_parameter_group, 'ModelParameter',
+            #                  attrib={'cn': '{},{}'.format(
+            #                      self.model.reference, global_q.reference),
+            #                      'value': global_q.initial_value,
+            #                      'type': 'ModelValue',
+            #                      'simulationType': global_q.simulation_type})
+#
+#
+#
+
+
+    ##TODO reactions, metabs, globs and comp
+    ## all need additional reference without the reference part.
+    ##either string manit or write a new function to produce
+    ##in each class
+
+    ## implement means ofadding initial expresion
+    ## to each ompontnt
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
