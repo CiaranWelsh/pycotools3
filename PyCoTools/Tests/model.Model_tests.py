@@ -838,36 +838,20 @@ class ModelTests(_test_base._BaseTest):
 
         :return:
         """
-        print self.model.reactions[0]
-        self.model = self.model.set(
-            'reaction', 'A2B', 'ChangedName',
-            match_field='name', change_field='name'
-        )
-        # print self.model.reactions[0]
+        ## get reaction
+        reaction = self.model.get('reaction', 'B2C')
+        self.model = self.model.set('reaction', 'B2C', 'changed_name',
+                                    'name', 'name')
+        self.model.save()
+        changed =  self.model.get('reaction', 'changed_name')
+        self.assertEqual(changed.name, 'changed_name')
 
+    def test_model_parameter_sets_property(self):
+        """
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        :return:
+        """
+        print self.model.parameter_sets
 
 if __name__ == '__main__':
     unittest.main()
