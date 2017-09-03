@@ -22,22 +22,19 @@
 
 """
 
-import site
+import logging
+import os
+from collections import OrderedDict, Counter
+from random import randint
+
+from lxml import etree
 
 # site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
 # import PyCoTools
-import pycopi, Errors, _base
-from PyCoTools.Tests import _test_base
-import os, glob
+import Errors
+import _base
+import pycopi
 import pandas
-import unittest
-import re
-from lxml import etree
-from copy import deepcopy
-import logging
-from collections import OrderedDict, Counter
-from random import randint
-from contextlib import contextmanager
 
 LOG = logging.getLogger(__name__)
 
@@ -58,6 +55,14 @@ class Model(_base._Base):
 
     def __repr__(self):
         return self.__str__()
+
+    def refresh(self):
+        """
+
+        :return:
+        """
+        self.xml = pycopi.CopasiMLParser(self.copasi_file).copasiML
+        return self
 
     @property
     def reference(self):
@@ -152,12 +157,12 @@ class Model(_base._Base):
         state_values = state_values.split(' ')
         state_values = [i for i in state_values if i not in ['',' ', '\n']]
         state_values = [float(i) for i in state_values]
+
         return OrderedDict(zip(collection, state_values))
 
     @states.setter
     def states(self, states):
         """
-        Change the current value of the InitialState field to states
         :param states: list of number of len(self.states)
         :return:
         """
@@ -215,10 +220,8 @@ class Model(_base._Base):
 
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}InitialState':
-                states = i.text.split(' ')
-                del states[-1] ##remove trailing newline
+                states = i.text.strip().split(' ')
                 del states[count]  ## get component of interest
-        #
         #reassign the states list to the InitialState
         states = [float(i) for i in states]
         self.states = states
@@ -375,57 +378,15 @@ class Model(_base._Base):
 
         return lst
 
-    # def add_metabolite(self, name=None, key=None, concentration=None,
-    #                    particle_number=None, compartment=None,
-    #                    simulation_type=None):
     def add_metabolite(self, metab):
         """
         Add a metabolite to the model xml
-        :param metabolite_args: Dict. Arguments to pass to Metabolite
+        :param metab:
         :return:
         """
 
-        # if metab.name in [i.name for i in self.metabolites]:
-        #     raise Errors.InputError('Already a specie with the name "{}" in your model'.format(metabolite_args['name']))
-        #
-        # if metab.key == None:
-        #     metab.key = KeyFactory(self,type='metabolite').generate()
-        #
-        # if metab.name == None:
-        #     metab.name = key
-        #
-        # if (metab.concentration == None) or (metab.particle_number == None):
-        #     metab.concentration= str(0)
-        #
-        # if metab.concentration != None:
-        #     if isinstance(metab.concentration, (float, int)):
-        #         metab.concentration = str(metab.concentration)
-        #
-        # if metab.compartment == None:
-        #     metab.compartment = self.compartments[0]
-        #
-        # if not isinstance(metab.compartment, Compartment):
-        #     raise Errors.InputError('compartment should be of type model.Compartment')
-        #
-        # if metab.simulation_type == None:
-        #     metab.simulation_type = 'reactions'
-        #
-        # if metab.particle_number == None:
-        #     metab.particle_number = self.convert_molar_to_particles(metab.concentration,
-        #                                                             self.quantity_unit,
-        #                                                             metab.compartment.initial_value)
-        #
-        #
-        # if isinstance(metab.particle_number, (float, int)):
-        #     metab.particle_number = str(metab.particle_number)
-        #
-        #
-        # ##TODO fix metabolite converion finctions to fully support copasi
-        # ##TODO work out whether I need to actively add metabolite to metabolite list or whether I can make it update itself from the xml
-        # metabolite_element = etree.Element('Metabolite', attrib={'key': metab.key,
-        #                                             'name': metab.name,
-        #                                             'simulationType': metab.simulation_type,
-        #                                             'compartment': metab.compartment.key})
+        if not isinstance(metab, Metabolite):
+            raise Errors.InputError('Input must be Metabolite class')
 
         metabolite_element = metab.to_xml()
         ## add the metabolute to list of metabolites
@@ -604,8 +565,11 @@ class Model(_base._Base):
             function.reversible = 'false'
 
         ## add the function to list of functions
+        if function.key in [i.key for i in self.functions]:
+            return self
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfFunctions':
+                LOG.debug('function is type {}'.format(type(function)))
                 i.append(function.to_xml())
 
         return self
@@ -662,33 +626,30 @@ class Model(_base._Base):
 
     @property
     def reactions(self):
-        self.save()
+        # self.refresh()
+        # self.open()
         list_of_reactions = []
         reaction_count = 0
         reactions_dict = {}
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
                 for j in list(i):
-                    LOG.debug('j.attrib -- > {}'.format(j.attrib))
-                    LOG.debug('j pretty\n -- > {}'.format(etree.tostring(j, pretty_print=True)))
                     reaction_count += 1
                     reactions_dict[reaction_count] = {}
-
                     ##defaults
                     reactions_dict[reaction_count]['reversible'] = 'false'
+                    ## sometimes these are not being updated
                     reactions_dict[reaction_count]['substrates'] = []
                     reactions_dict[reaction_count]['products'] = []
                     reactions_dict[reaction_count]['modifiers'] = []
                     reactions_dict[reaction_count]['constants'] = []
-                    reactions_dict[reaction_count]['function'] = []
+                    reactions_dict[reaction_count]['function'] = []#ListOfSubstrates
                     for k in list(j):
                         reactions_dict[reaction_count]['reversible'] = j.attrib['reversible']
                         reactions_dict[reaction_count]['name'] = j.attrib['name']
                         reactions_dict[reaction_count]['key'] = j.attrib['key']
-                        # print etree.tostring(k, pretty_print=True)
                         if k.tag == '{http://www.copasi.org/static/schema}ListOfSubstrates':
                             for l in list(k):
-                                # LOG.debug('substrates --> {}'.format(l.attrib))
                                 list_of_substrates = [m for m in self.metabolites if m.key in l.attrib['metabolite']]
 
                                 ## convert list to substrates
@@ -697,17 +658,6 @@ class Model(_base._Base):
                         elif k.tag == '{http://www.copasi.org/static/schema}ListOfProducts':
                             for l in list(k):
                                 ## get list of metabolites and convert them to Product class
-
-                                '''
-                                I think these lists are empty with my new reaction 
-                                because we've created new substrates which are not in self.metabolites. 
-                                
-                                Fix this then I fixx the bug
-                                
-                                Need to dynamically link the states of compartments, reactions, 
-                                globals metabolites and reactions, etc with the state of the xml. 
-                                '''
-                                LOG.debug('self.metabolites --> {}'.format(self.metabolites))
                                 list_of_products = [m for m in self.metabolites if m.key in l.attrib['metabolite']]
                                 list_of_products = [m.to_product() for m in list_of_products]
                                 #
@@ -734,18 +684,11 @@ class Model(_base._Base):
 
 
                         elif k.tag == '{http://www.copasi.org/static/schema}KineticLaw':
-                            function_list = [m for m in self.functions if m.key in k.attrib['function']]
+                            function_list = [m for m in self.functions if m.key == k.attrib['function']]
                             assert len(function_list) == 1
                             reactions_dict[reaction_count]['function'] = function_list[0]
 
-        # skipped = []
         for i, dct in reactions_dict.items():
-            LOG.debug('{}, {}'.format(i, dct))
-            # if (dct['substrates'] == []) and (dct['products'] == []):
-            #     LOG.warning('Reaction {} skipped as substrates and products vectors are empty'.format(i))
-            #     skipped.append(i)
-            #     continue
-
             if dct['function'] == []:
                 dct['function'] = "k*{}".format(reduce(lambda x, y: '{}*{}'.format(x, y), substrates))
 
@@ -754,7 +697,6 @@ class Model(_base._Base):
                 sub_expression = reduce(lambda x, y: "{} + {}".format(x, y), substrates)
             else:
                 sub_expression = ''
-                LOG.debug('sub_expression --> {}'.format(sub_expression))
 
             products = [j.name for j in reactions_dict[i]['products']]
             if products != []:
@@ -804,10 +746,18 @@ class Model(_base._Base):
         :param rate_law: mathematical expression or mass_action (default)
         :return:
         """
-        existing_functions = [i.name for i in self.functions]
-        if reaction.rate_law.name not in existing_functions:
-            self.add_function(reaction.rate_law)
+        if reaction.key in [i.key for i in self.reactions]:
+            raise Errors.ReactionAlreadyExists('Your model already contains a reaction with the key: {}'.format(reaction.key))
 
+        if reaction.name in [i.name for i in self.reactions]:
+            raise Errors.ReactionAlreadyExists('Your model already contains a reaction with the name: {}'.format(reaction.name))
+
+        existing_functions = [i.name for i in self.functions]
+        # if reaction.rate_law.name not in existing_functions:
+        self.add_function(reaction.rate_law)
+
+
+        # print reaction.to_xml()
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
                 i.append(reaction.to_xml())
@@ -829,7 +779,7 @@ class Model(_base._Base):
         ##Why does the new reaction give empty lists of substrates
         ## and products?
         reaction = self.get('reaction', value, by)
-        for i in self.xml:
+        for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
                 for j in i:
                     if j.attrib[by] == value:
@@ -849,12 +799,16 @@ class Model(_base._Base):
             copasi_file = self.copasi_file
 
         # first convert the copasiML to a root element tree
-        root = etree.ElementTree(self.xml)
+        # root = etree.ElementTree(self.xml)
 
         ## Then remove existing copasi file for ovewrite
         if os.path.isfile(copasi_file):
             os.remove(copasi_file)
-        root.write(copasi_file)
+
+        with open(copasi_file, 'w') as f:
+            f.write(etree.tostring(self.xml, pretty_print=True))
+        # self.xml.getroot().write(copasi_file)
+        self.refresh()
         return self
 
     def open(self, copasi_file=None):
@@ -906,33 +860,108 @@ class Model(_base._Base):
             res = [i for i in self.functions if getattr(i, by) == value]
 
         elif component == 'reaction':
-            res = [i for i in self.functions if getattr(i, by) == value]
+            res = [i for i in self.reactions if getattr(i, by) == value]
 
         if len(res) == 1:
             res = res[0]
         return res
 
-    def set(self, component, name, value):
+    def set(self, component, match_value, new_value,
+            match_field='name', change_field='initial_value'):
         """
 
-        :param component:
-        :param name:
-        :param value:
+        :param component: metabolite, compartment, global_quantity, constant, reaction
+        :param name: name of the attribute to change (i.e. species 'X', if attribute='name)
+        :param value: new value for component attibute
+        :param attribute: attribute of component to change (i.e. name or value)
         :return:
         """
         if component not in self._model_components():
             raise Errors.InputError('{} not in list of components'.format(component))
 
-        if component == 'global_quantity':
-            comp = self.get(component, name, by='name')
-            comp.initial_value = value
-            self.remove_global_quantity(name, by='name')
-            self.add_global_quantity(comp)
-            return self
+        ##get the component of interest
+        comp = self.get(component, match_value, by=match_field)
 
-        elif component == 'metabolite':
-            comp = self.get(component, name, by='name')
+        if isinstance(comp, list):
+            raise Errors.SomethingWentHorriblyWrongError(
+                'model.get has returned a list --> {}'.format(comp)
+            )
 
+        ##cater for special case when changing concentration.
+        ## --> Only change metabolite particle number
+        if component == 'metabolite':
+            if change_field == 'concentration':
+                new_value = self.convert_molar_to_particles(
+                    new_value,
+                    self.quantity_unit,
+                    comp.compartment.initial_value
+                )
+                ##now change the field of interest to particle number
+                change_field = 'particle_number'
+        ## set the attribute
+        setattr(comp, change_field, new_value)
+
+        ##remove component of interest from model
+        self.remove(component, match_value)
+
+        ##add back to model with new attribute
+        return self.add(component, comp)
+
+    def set_metabolite(self, name, value, attribute='concentration'):
+        """
+
+        :return:
+        """
+        if name not in [i.name for i in self.metabolites]:
+            raise Errors.InputError('metabolite "{}" does not exist'.format(name))
+
+        metab= self.get('metabolite', 'X', by='name')
+
+        ##If we want to set the concentration
+        ##first convert to particle numbers
+        if attribute == 'concentration':
+            value = self.convert_molar_to_particles(value,
+                                                    self.quantity_unit,
+                                                    metab.compartment.initial_value)
+            attribute = 'particle_number'
+
+        ## set the attribute
+
+        setattr(metab, attribute, value)
+        ##remove component of interest from model
+        self.remove('metabolite', name)
+
+        ##add back to model with new attribute
+        model = self.add('metabolite', metab)
+        return model
+
+    def add(self, component_name, component):
+        """
+        add a model component to the model
+        :param component_name: i.e. 'reaction', 'function', 'metabolite
+        :param component: the component class to add i.e. Metabolite
+        :return:
+        """
+        if component_name not in self._model_components():
+            raise Errors.InputError('"{}" not valid. These are valid: {}'.format(component_name, self._model_components()))
+
+        if component_name == 'metabolite':
+            #TODO work out whether this below bit is needed
+            # if component_name in [i.name for i in self.metabolites]:
+            #     self.remove('metabolite', component_name)
+            return self.add_metabolite(component)
+
+        elif component_name == 'function':
+            return self.add_function(component)
+
+        elif component_name == 'reaction':
+            return self.add_reaction(component)
+
+        elif component_name == 'global_quantity':
+            return self.add_global_quantity(component)
+
+        elif component_name == 'compartment':
+            return self.add_compartment(component)
 
     def remove(self, component, name):
         """
@@ -981,7 +1010,9 @@ class Compartment(_base._ModelBase):
 
 
     def __str__(self):
-        return 'Compartment({})'.format(self.to_string())
+        return 'Compartment(name={}, key={}, initial_value={})'.format(
+            self.name, self.key, self.initial_value
+        )
 
     def __repr__(self):
         return self.__str__()
@@ -1061,7 +1092,9 @@ class Metabolite(_base._ModelBase):
         self._do_checks()
 
     def __str__(self):
-        return 'Metabolite({})'.format(self.to_string())
+        return 'Metabolite(name="{}", key="{}", compartment="{}", concentration="{}", particle_number="{}", simulation_type="{}")'.format(
+            self.name, self.key, self.compartment.name, self.concentration, self.particle_number,
+            self.simulation_type)
 
     def __repr__(self):
         return self.__str__()
@@ -1072,7 +1105,10 @@ class Metabolite(_base._ModelBase):
         :return:
         """
         if self.compartment == None:
-            raise Errors.InputError('compartment must be specified')
+            try:
+                self.compartment = self.model.compartments[0]
+            except IndexError:
+                raise Errors.InputError('No compartments in your model')
 
         if self.compartment != None:
             if isinstance(self.compartment, Compartment)!=True:
@@ -1083,6 +1119,37 @@ class Metabolite(_base._ModelBase):
 
         if self.simulation_type == None:
             self.simulation_type = 'reactions'
+
+        if (self.concentration is None) and (self.particle_number is None):
+            self.concentration = str(1)
+
+        if (self.particle_number is None) and (self.concentration is not None):
+            self.particle_number = self.model.convert_molar_to_particles(
+                self.concentration,
+                self.model.quantity_unit,
+                self.compartment.initial_value
+            )
+
+        if (self.concentration is None) and (self.particle_number is not None):
+            self.concentration = self.model.convert_particles_to_molar(
+                self.particle_number,
+                self.model.quantity_unit,
+                self.compartment.initial_value
+            )
+
+        if self.key is None:
+            self.key = KeyFactory(self.model, type='metabolite').generate()
+
+        if not isinstance(self.particle_number, (float, int, str)):
+            raise Errors.InputError('particle number should be float or int or string of numbers')
+
+
+        if isinstance(self.particle_number, (float, int)):
+            self.particle_number = str(self.particle_number)
+
+
+
+
 
     @property
     def initial_reference(self):
@@ -1134,39 +1201,6 @@ class Metabolite(_base._ModelBase):
 
         :return:
         """
-
-        if self.name in [i.name for i in self.model.metabolites]:
-            raise Errors.InputError('Already a specie with the name "{}" in your model'.format(metabolite_args['name']))
-
-        if self.key == None:
-            self.key = KeyFactory(self.model, type='metabolite').generate()
-
-        if self.name == None:
-            self.name = key
-
-        if (self.concentration == None) or (self.particle_number == None):
-            self.concentration = str(0)
-
-        if self.concentration != None:
-            if isinstance(self.concentration, (float, int)):
-                self.concentration = str(self.concentration)
-
-        if self.compartment == None:
-            self.compartment = self.model.compartments[0]
-
-        if not isinstance(self.compartment, Compartment):
-            raise Errors.InputError('compartment should be of type model.Compartment')
-
-        if self.simulation_type == None:
-            self.simulation_type = 'reactions'
-
-        if self.particle_number == None:
-            self.particle_number = self.model.convert_molar_to_particles(self.concentration,
-                                                                   self.model.quantity_unit,
-                                                                   self.compartment.initial_value)
-
-        if isinstance(self.particle_number, (float, int)):
-            self.particle_number = str(self.particle_number)
 
         metabolite_element = etree.Element('Metabolite', attrib={'key': self.key,
                                                                  'name': self.name,
@@ -1286,7 +1320,12 @@ class GlobalQuantity(_base._ModelBase):
             self.simulation_type = 'fixed'
 
     def __str__(self):
-        return 'GlobalQuantity({})'.format(self.to_string())
+        return "GlobalQuantity(name='{}', key='{}', initial_value='{}', simulation_type='{}')".format(
+            self.name,
+            self.key,
+            self.initial_value,
+            self.simulation_type,
+        )
 
     def __repr__(self):
         return self.__str__()
@@ -1329,6 +1368,14 @@ class GlobalQuantity(_base._ModelBase):
         return model_value
 
 
+    def insert_parameters(self):
+        """
+        class to insert parameters from dict, file, folder of files
+        or pandas dataframe
+        :return:
+        """
+        pass
+
 class Reaction(_base._ModelBase):
     """
     Reactions have rectants, products, rate laws and parameters
@@ -1366,7 +1413,11 @@ class Reaction(_base._ModelBase):
 
 
     def __str__(self):
-        return 'Reaction({})'.format(self.to_string())
+        return 'Reaction(name="{}", expression="{}", rate_law="{}", parameters="{}", reversible="{}")'.format(
+            self.name, self.expression, self.rate_law.expression.name,
+            {i.name: i.value for i in self.parameters},
+            self.reversible
+        )
 
     def __repr__(self):
         return self.__str__()
@@ -1439,15 +1490,18 @@ class Reaction(_base._ModelBase):
         if isinstance(local_keys, str):
             local_keys = [local_keys]
 
+        ##for excluding elements of built in rate laws
+        exclusion_list = ['PRODUCT<substrate_i>', 'PRODUCT<product_j>']
         for i in range(len(parameter_list)):
-            p = LocalParameter(self.model,
-                               name=parameter_list[i],
-                               key=local_keys[i],
-                               value=0.1,
-                               reaction_name=self.name,
-                               global_name='({}).{}'.format(self.name, parameter_list[i]))
-            self.parameters.append(p)
-            self.parameters_dict[parameter_list[i]] = p
+            if parameter_list[i] not in exclusion_list:
+                p = LocalParameter(self.model,
+                                   name=parameter_list[i],
+                                   key=local_keys[i],
+                                   value=0.1,
+                                   reaction_name=self.name,
+                                   global_name='({}).{}'.format(self.name, parameter_list[i]))
+                self.parameters.append(p)
+                self.parameters_dict[parameter_list[i]] = p
 
     def create_rate_law_function(self):
         """
@@ -1455,14 +1509,17 @@ class Reaction(_base._ModelBase):
         and produce a pycotools function object
         :return:
         """
+
+        ##todo check if ratelaw exists
         if isinstance(self.rate_law, str):
             exp = Expression(self.rate_law).to_list()
         elif isinstance(self.rate_law, Function):
             exp = Expression(self.rate_law.expression).to_list()
         role_dct = {}
 
-        if self.substrates + self.products == []:
-            raise Errors.SomethingWentHorriblyWrongError('Both substrates and products are empty')
+        ##TODO uncomment this
+        # if self.substrates + self.products == []:
+        #     raise Errors.SomethingWentHorriblyWrongError('Both substrates and products are empty')
 
         for i in exp:
             if i in [j.name for j in self.substrates]:
@@ -1474,7 +1531,8 @@ class Reaction(_base._ModelBase):
             else:
                 role_dct[i] = 'parameter'
 
-        function = Function(self.model, name=self.rate_law,
+
+        function = Function(self.model, name=self.name,
                             expression=self.rate_law,
                             roles=role_dct)
         return function
@@ -1599,7 +1657,11 @@ class Function(_base._ModelBase):
         # self.create_mass_action()
 
     def __str__(self):
-        return 'Function({})'.format(self.to_string())
+        return 'Function(name="{}", key="{}", expression="{}", roles={})'.format(
+            self.name, self.key, self.expression,
+            self.roles,
+        )
+
 
     def __repr__(self):
         return self.__str__()
@@ -1672,8 +1734,16 @@ class Function(_base._ModelBase):
                                                              'reversible': self.reversible}) )
 
         expression = etree.SubElement(func, 'Expression')
+        LOG.debug('expression is --> {}'.format(self.expression))
+        # if isinstance(self.expression, str):
+        #     expression.text = self.expression
+        # elif isinstance(self.expression, Function):
+        #     expression.text = self.expression.expression
+        # else:
+        #     raise TypeError(
+        #         'self.expression is of type {} but expected str or function'.format(type(self.expression))
+        #     )
         expression.text = self.expression
-
         list_of_p_desc = etree.SubElement(func, 'ListOfParameterDescriptions')
 
         for i in self.list_of_parameter_descriptions:
@@ -1700,7 +1770,10 @@ class ParameterDescription(_base._ModelBase):
         self._do_checks()
 
     def __str__(self):
-        return "ParameterDescription({})".format(self.to_string())
+        return 'ParameterDescription(name="{}", key="{}", order="{}", role="{}")'.format(
+            self.name, self.key,
+            self.order, self.role
+        )
 
     def _do_checks(self):
         """
@@ -1747,7 +1820,9 @@ class LocalParameter(_base._ModelBase):
 
 
     def __str__(self):
-        return 'LocalParameter({})'.format(self.to_string())
+        return 'LocalParameter(name="{}", key="{}", reaction_name="{}, value={}")'.format(
+            self.name, self.key, self.reaction_name, self.value
+        )
 
     def __repr__(self):
         return self.__str__()
@@ -1810,7 +1885,8 @@ class KeyFactory(_base._ModelBase):
             return self.create_key(self.model.global_quantities).next()
 
         elif self.type == 'reaction':
-            return self.create_key(self.model.reactions).next()
+            key = self.create_key(self.model.reactions).next()
+            return key
 
         elif self.type == 'parameter_set':
             raise NotImplementedError#self.create_key(self.model.metabolites).next()
@@ -1872,6 +1948,8 @@ class KeyFactory(_base._ModelBase):
         ## get keys
         existing = [i.key for i in self.model.parameter_descriptions]
 
+        for i in existing:
+            assert '_' in i
         existing = [i.split('_')[1] for i in existing]
         existing = [int(i) for i in existing]
 
@@ -1884,7 +1962,7 @@ class KeyFactory(_base._ModelBase):
                 existing.append(random_number)
                 keys.append(random_number)
                 count += 1
-        keys = ['{}_{}'.format('Function_Parameter',i) for i in  keys]
+        keys = ['{}_{}'.format('FunctionParameter',i) for i in  keys]
         if len(keys)==1:
             return keys[0]
         else:
@@ -1978,7 +2056,7 @@ class Translator(_base._ModelBase):
         self.check_integrity(self.default_properties.keys(),
                              kwargs.keys())
 
-        ## split reaction by -> or == and ;. determine reversibility
+        ## split reaction by -> or = and ;. determine reversibility
         self.substrates, self.products, self.modifiers = self.split_reaction()
 
         ## split substrates and products by + and modifiers by empty spaces
