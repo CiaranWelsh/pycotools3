@@ -26,8 +26,8 @@ Date:
 
 
 import site
-# site.addsitedir(r'C:\Users\Ciaran\Documents\PyCoTools')
-site.addsitedir(r'/home/b3053674/Documents/PyCoTools')
+site.addsitedir(r'C:\Users\Ciaran\Documents\PyCoTools')
+# site.addsitedir(r'/home/b3053674/Documents/PyCoTools')
 
 import PyCoTools
 from PyCoTools.PyCoToolsTutorial import test_models
@@ -44,26 +44,21 @@ from mixin import Mixin, mixin
 import contextlib
 
 
-@contextlib.contextmanager
-def read():
-    print 'r'
-    yield
-    print 's'
-
-with read():
-    """
-    @reaction1
-    A + B -> C | k*A*B
-    """
+f = r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model.cps'
+f2 = r'C:\Users\Ciaran\Documents\PyCoTools\PyCoTools\Tests\test_model2.cps'
 
 
+model = PyCoTools.model.Model(f)
+metab = PyCoTools.model.Metabolite(model, name='X',
+                                   concentration=1000)
 
+model = model.add('metabolite', metab)
 
+model = model.set_metabolite('X', 1234, attribute='concentration')
 
-
-
-
-
+for i in model.metabolites:
+    print i
+# model.open()
 
 
 
