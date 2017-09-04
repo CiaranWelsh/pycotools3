@@ -24,8 +24,8 @@ Module that tests the operations of the _Base base test
 """
 
 import site
-site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
-# site.addsitedir('/home/b3053674/Documents/PyCoTools')
+# site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
+site.addsitedir('/home/b3053674/Documents/PyCoTools')
 
 import PyCoTools
 from PyCoTools.Tests import _test_base
@@ -558,17 +558,9 @@ class ModelTests(_test_base._BaseTest):
                                 self.assertTrue(len(k) == 0)
 
 
-<<<<<<< HEAD
-    def test_context_manager(self):
-        with self.model.globals() as glob:
-            print glob
-            # print global_quantities
-            # print glob
-=======
     def test_translater_again(self):
         trans = PyCoTools.model.Translator(self.model, 'A + F + irs -> ;G')
         self.assertEqual(trans.products, [])
->>>>>>> f474973be5266fb389c00d9a685fe49eda4c4f03
 
     def test_translater_again2(self):
         trans = PyCoTools.model.Translator(self.model, 'A ->')
@@ -853,13 +845,42 @@ class ModelTests(_test_base._BaseTest):
         self.model.save()
         changed =  self.model.get('reaction', 'changed_name')
         self.assertEqual(changed.name, 'changed_name')
+    #
 
-    def test_model_parameter_sets_property(self):
+    def test_insert_parameters_metabolite(self):
         """
 
         :return:
         """
-        print self.model.parameter_sets
+        I= PyCoTools.model.InsertParameters(self.model, parameter_dict={'nuc': 85,
+                                                                        'B': 35,
+                                                                        '(B2C).k2': 45,
+                                                                        'A2B':55})
+        self.model = I.insert()
+
+        conc = [i.concentration for i in self.model.metabolites if i.name == 'B']
+        self.assertAlmostEqual(float(conc[0]), float(35))
+
+
+    def test_insert_parameters_metabolite(self):
+        """
+
+        :return:
+        """
+        I= PyCoTools.model.InsertParameters(
+            self.model,
+            parameter_dict={
+                # 'nuc': 85,
+                'B': 35,
+                '(B2C).k2': 45,
+                'A2B':55
+            }, quantity_type='particle_number')
+        self.model = I.insert()
+        part = [i.particle_number for i in self.model.metabolites if i.name == 'B']
+        self.assertAlmostEqual(float(part[0]), float(35))
+
+
+
 
 if __name__ == '__main__':
     unittest.main()
