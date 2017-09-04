@@ -57,3 +57,6 @@ class IncorrectUsageError(Exception):
 
 class ComponentDoesNotExistError(Exception):
     pass
+
+class ReactionAlreadyExists(Exception):
+    pass
