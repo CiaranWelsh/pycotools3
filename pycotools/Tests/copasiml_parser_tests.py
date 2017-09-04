@@ -47,40 +47,6 @@ class CopasiMLParserTests(_test_base._BaseTest):
         super(CopasiMLParserTests, self).setUp()
         
 
-    def test_file_was_written(self):
-        """
-        Test that the model string can be correctly written to file
-        :return:
-        """
-        self.assertTrue(os.path.isfile(self.copasi_file))
-
-    def test_CoapsiSE_is_set_up(self):
-        """
-        A test that the command 'CoapsiSE' does indeed point
-        to the Copasi simulation engine
-        :return:
-        """
-        worked = False
-        try:
-            subprocess.call('CopasiSE', shell = True)
-            worked = True
-        except:
-            Exception('The command \'CopasiSE\' did not work. Ensure your PATH environment variable includes the copasi bin directory')
-        self.assertTrue(worked)
-
-    def test_file_is_executable(self):
-        """
-        Test that the can be run using CopasiSEfile
-        :return:
-        """
-        worked = False
-        try:
-            subprocess.call('CopasiSE {}'.format(self.copasi_file), shell=True)
-            worked = True
-        except:
-            Exception('Test model did not run with CopasiSE')
-        self.assertTrue(worked)
-
 
 #
 if __name__ == '__main__':
