@@ -35,7 +35,7 @@ import Errors
 import _base
 import pycopi
 import pandas
-
+import sys, inspect
 LOG = logging.getLogger(__name__)
 
 
@@ -210,18 +210,23 @@ class Model(_base._Base):
         :param state: key of state to remove (i.e. Metabolite_1)
         :return: Model
         """
+        ##count the number of states
+        count = -1 #0 indexed python
+
+        stop_count = 0
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}StateTemplate':
-                count = -1 #0 indexed python
                 for j in i:
-                    count += 1
+                    count = count + 1
                     if j.attrib['objectReference'] == state:
                         j.getparent().remove(j)
+                        ##collect the number where we hit our desired state
+                        stop_count = count
+                        LOG.debug('stop_count --> {}'.format(stop_count))
 
-        for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}InitialState':
                 states = i.text.strip().split(' ')
-                del states[count]  ## get component of interest
+                del states[stop_count]  ## get component of interest
         #reassign the states list to the InitialState
         states = [float(i) for i in states]
         self.states = states
@@ -293,8 +298,9 @@ class Model(_base._Base):
         """
         m = [i.name for i in self.metabolites]
         g = [i.name for i in self.global_quantities]
-        l = [i.global_name for i in self.local_parameters]
-        return m + g + l
+        l = [j.global_name for i in self.reactions for j in i.parameters]
+        c = [i.name for i in self.compartments]
+        return m + g + l + c
 
     @staticmethod
     def convert_particles_to_molar(particles, mol_unit, compartment_volume):#,vol_unit):
@@ -396,8 +402,8 @@ class Model(_base._Base):
                 i.append(metabolite_element)
 
         ## add metabolite to state_template and initial state fields
+        LOG.debug('particle_number from add metabolites --> {}'.format(metab.particle_number))
         self.add_state(metab.key, metab.particle_number)
-
         return self
 
 
@@ -438,18 +444,6 @@ class Model(_base._Base):
         self.add_state(global_quantity.key, global_quantity.initial_value)
 
         return self
-
-
-<<<<<<< HEAD
-    @contextmanager
-    def globals(self):
-        doing_sums = 10+15
-        print 'before'
-        global_quantities = self.global_quantities
-        yield global_quantities
-        print 'after'
-=======
->>>>>>> f474973be5266fb389c00d9a685fe49eda4c4f03
 
     @property
     def global_quantities(self):
@@ -888,13 +882,21 @@ class Model(_base._Base):
         if component not in self._model_components():
             raise Errors.InputError('{} not in list of components'.format(component))
 
+
+
         ##get the component of interest
         comp = self.get(component, match_value, by=match_field)
+
 
         if isinstance(comp, list):
             raise Errors.SomethingWentHorriblyWrongError(
                 'model.get has returned a list --> {}'.format(comp)
             )
+
+        if change_field not in comp.__dict__.keys():
+            raise Errors.InputError('"{}" not valid for component type "{}"'.format(
+                change_field, component
+            ))
 
         ##cater for special case when changing concentration.
         ## --> Only change metabolite particle number
@@ -907,8 +909,13 @@ class Model(_base._Base):
                 )
                 ##now change the field of interest to particle number
                 change_field = 'particle_number'
+
         ## set the attribute
+        LOG.debug('field to change --> {}'.format(change_field))
+        LOG.debug('value to change to  --> {}'.format(new_value))
+        LOG.debug('in set. component before --> {}'.format(comp))
         setattr(comp, change_field, new_value)
+        LOG.debug('in set. component after --> {}'.format(comp))
 
         ##remove component of interest from model
         self.remove(component, match_value)
@@ -955,9 +962,6 @@ class Model(_base._Base):
             raise Errors.InputError('"{}" not valid. These are valid: {}'.format(component_name, self._model_components()))
 
         if component_name == 'metabolite':
-            #TODO work out whether this below bit is needed
-            # if component_name in [i.name for i in self.metabolites]:
-            #     self.remove('metabolite', component_name)
             return self.add_metabolite(component)
 
         elif component_name == 'function':
@@ -1230,6 +1234,15 @@ class Metabolite(_base._ModelBase):
         """
         return 'Vector=Metabolites[{}],Reference=ParticleNumber'.format(self.name)
 
+    @property
+    def reference(self):
+        """
+        The copasi object reference for
+        transient metabolite particle numbers
+        :return:
+        """
+        return 'Vector=Metabolites[{}]'.format(self.name)
+
     def to_substrate(self):
         return Substrate(self.model, **self.kwargs)
 
@@ -1391,6 +1404,15 @@ class GlobalQuantity(_base._ModelBase):
         """
         return "Vector=Values[{}],Reference=InitialValue".format(self.name)
 
+    @property
+    def reference(self):
+        """
+        compose the transient reference for the global quantity.
+            i.e. not initial concentration
+        :return: string
+        """
+        return "Vector=Values[{}]".format(self.name)
+
     def to_xml(self):
         """
 
@@ -1466,6 +1488,14 @@ class Reaction(_base._ModelBase):
 
     def __repr__(self):
         return self.__str__()
+
+    @property
+    def reference(self):
+        """
+
+        :return:
+        """
+        return "Vector=Reactions[{}]".format(self.name)
 
     def _do_checks(self):
         """
@@ -1900,8 +1930,12 @@ class LocalParameter(_base._ModelBase):
 
     @property
     def reference(self):
-        return "Vector=Reactions[{}],ParameterGroup=Parameters,Parameter={},Reference=Value".format(self.reaction_name, self.name)
+        LOG.warning('Youve changed local parameter reference. This may cause a bug')
+        return "ParameterGroup=Parameters,Parameter={}".format(self.reaction_name, self.name)
 
+    @property
+    def value_reference(self):
+        return "ParameterGroup=Parameters,Parameter={},Reference=Value".format(self.reaction_name, self.name)
 
 class LocalParameterList(list):
     def __init__(self):
@@ -1960,7 +1994,7 @@ class KeyFactory(_base._ModelBase):
             return key
 
         elif self.type == 'parameter_set':
-            raise NotImplementedError#self.create_key(self.model.metabolites).next()
+            return self.create_key(self.model.parameter_sets).next()
 
         elif self.type == 'parameter':
             return self.create_key(self.model.local_parameters).next()
@@ -2384,28 +2418,37 @@ class MassAction(Function):
 
 
 
-
 ##TODO work out why both rate law and expression are function in reaction
 
 class ParameterSet(_base._ModelBase):
+    """
+    This class is taking time that I don't have.
+    Just implement the InsertParameters class for now.
+    """
     def __init__(self, model, **kwargs):
         super(ParameterSet, self).__init__(model, **kwargs)
 
 
-        self.default_properties = {'key': None,
+        self.default_properties = {'key': 'ModelParameterSet_1',
                                    'name': 'Initial State',
                                    'initial_time': 0,
-                                   'compartments': None,
-                                   'metabolites': None,
-                                   'global_quantities': None,
-                                   'kinetic_parameters': None,
-                                   'state_template': None,
-                                   'initial_state': None}
+                                   'compartments': [],
+                                   'metabolites': [],
+                                   'global_quantities': [],
+                                   'kinetic_parameters': [],
+                                   # 'state_template': None,
+                                   # 'initial_state': None}
+                                   }
 
+
+        for key in kwargs:
+            if key not in self.default_properties:
+                raise Errors.InputError('Attribute not allowed. {} not in {}'.format(key, self.default_properties) )
         self.update_properties(self.default_properties)
-        self.update_kwargs(kwargs)
-        self.check_integrity(self.default_properties.keys(), kwargs.keys())
+        ##update all keys to none
         self._do_checks()
+
+
 
     def _do_checks(self):
         """
@@ -2413,9 +2456,39 @@ class ParameterSet(_base._ModelBase):
         :return:
         """
         if self.key is None:
-            self.key = KeyFactory(self.model, type='parameter_set').generate()
+            pass
+            # self.key = KeyFactory(self.model, type='parameter_set').generate()
 
 
+    # def read_parameter_set_from_xml(self):
+    #     """
+    #     :return: the parameter set defined as self.key (defaults to ModelParameterSet1)
+    #     """
+    #     # print self.model.xml
+    #     for i in self.model.xml.iter():
+    #         if i.tag == '{http://www.copasi.org/static/schema}ListOfModelParameterSets':
+    #             for j in i:
+    #                 if j.attrib['key'] == self.key:
+    #                     for k in j:
+    #                         if k.attrib['cn'] == 'String=Initial Time':
+    #                             for l in k:
+    #                                 self.initial_time = l.attrib['value']
+    #
+    #                         elif k.attrib['cn'] == 'String=Initial Compartment Sizes':
+    #                             for l in k:
+    #                                 compartment_references = [m for m in self.model.compartments if "{},{}".format(
+    #                                     self.model.reference, m.reference == l.attrib['cn'])]
+    #                                 self.compartments.append(compartments)
+    #
+    #                         elif k.attrib['cn'] == 'String=Initial Species Values':
+    #
+    #
+    #                         elif k.attrib['cn'] == 'String=Initial Global Quantities':
+    #                             pass
+    #
+    #
+    #                         elif k.attrib['cn'] == 'String=Kinetic Parameters':
+    #                             pass
 
     def to_xml(self):
 
@@ -2432,7 +2505,7 @@ class ParameterSet(_base._ModelBase):
         ## time sub element
         etree.SubElement(model_parameter_group, 'ModelParameter',
                          attrib={'cn': self.model.reference,
-                                 'value': self.initial_time,
+                                 'value': str(self.initial_time),
                                  'type': 'Model',
                                  'simulationType': 'time'})
 
@@ -2443,11 +2516,12 @@ class ParameterSet(_base._ModelBase):
                     'type': 'Group'}
         )
 
+        #
         ##compartment subelement
         for compartment in self.model.compartments:
             etree.SubElement(model_parameter_group, 'ModelParameter',
                          attrib={'cn': '{},{}'.format(self.model.reference, compartment.reference),
-                                 'value': compartment.initial_value,
+                                 'value': str(compartment.initial_value),
                                  'type': 'Compartment',
                                  'simulationType': compartment.simulation_type})
 
@@ -2459,15 +2533,22 @@ class ParameterSet(_base._ModelBase):
                     'type': 'Group'}
         )
 
-        ##metabolite subelement
-        for metab in self.model.metabolites:
-            etree.SubElement(model_parameter_group, 'ModelParameter',
-                         attrib={'cn': '{},{},{}'.format(
-                             self.model.reference, metab.compartment.reference,metab.reference),
-                                 'value': matab.particle_number,
-                                 'type': 'Species',
-                                 'simulationType': metab.simulation_type})
 
+
+
+        ##metabolite subelement
+        for i in self.model.metabolites:
+            etree.SubElement(model_parameter_group,
+                             'ModelParameter',
+                             attrib={
+                                 'cn': '{},{},{}'.format(
+                                     self.model.reference,
+                                     i.compartment.reference,
+                                     i.reference),
+                                 'value': i.particle_number,
+                                 'type': 'Species',
+                                 'simulationType': i.simulation_type})
+        #
         ##global quantities element
         model_parameter_group = etree.SubElement(
             parameter_set, 'ModelParameterGroup',
@@ -2484,22 +2565,38 @@ class ParameterSet(_base._ModelBase):
                                  'type': 'ModelValue',
                                  'simulationType': global_q.simulation_type})
 
+
+
         ##kinetic parameters
         model_parameter_group = etree.SubElement(
             parameter_set, 'ModelParameterGroup',
         attrib = {'cn': 'String=Kinetic Parameters',
                   'type': 'Group'}
         )
+        print etree.tostring(parameter_set, pretty_print=True)
 
-        ##global quantity subelement
-        for global_q  in self.model.reactions:
-            # etree.SubElement(model_parameter_group, 'ModelParameter',
-            #                  attrib={'cn': '{},{}'.format(
-            #                      self.model.reference, global_q.reference),
-            #                      'value': global_q.initial_value,
-            #                      'type': 'ModelValue',
-            #                      'simulationType': global_q.simulation_type})
-#
+        ##kinetic parameters  subelement
+        for r in self.model.reactions:
+            reaction = etree.SubElement(model_parameter_group,
+                                        'ModelParameterGroup',
+                                        attrib={
+                                            'cn': "{},{}".format(self.model.reference,
+                                                                 r.reference),
+                                            'type': 'Reaction',
+                                        })
+            for k in r.parameters:
+                print LOG.debug('parameters --> {}'.format(k))
+                etree.SubElement(model_parameter_group, 'ModelParameter',
+                                 attrib={
+                                     'cn': '{},{},{}'.format(
+                                         self.model.reference,
+                                         r.reference,
+                                         k.reference),
+                                     'value': k.value,
+                                     'type': 'ReactionParameter',
+                                     'simulationType': k.simulation_type})
+
+        print etree.tostring(parameter_set, pretty_print=True)
 #
 #
 
@@ -2514,14 +2611,220 @@ class ParameterSet(_base._ModelBase):
 
 
 
+class InsertParameters(_base._ModelBase):
+    '''
+    Insert parameters from a file, dictionary or a pandas dataframe into a copasi
+    file.
+
+    Positional Arguments:
+
+        copasi_file:
+            The copasi file you want to enter parameters into
+
+    **Kwargs
+        index:
+            index of parameter estimation run to input into the copasi file.
+            The index is ordered by rank of best fit, with 0 being the best.
+            Default=0
+
+        quantity_type:
+            Either 'particle_number' or 'concentration'. Default='concentration'
+
+        report_name;
+            Unused. Delete?
+
+        save:
+            either False,'overwrite' or 'duplicate',default=overwrite
+
+        parameter_dict:
+            A python dictionary with keys correponding to parameters in the model
+            and values the parameters (dict[parameter_name]=parameter value).
+            Default=None
+
+        df:
+            A pandas dataframe with parameters being column names matching
+            parameters in your model and RSS values and rows being individual
+            parameter estimationruns. In this case, ensure you have set the
+            index parameter to the index you want to use. Dataframes are
+            automatically sorted by the RSS column.
+
+        parameter_path:
+            Full path to a parameter estimation file ('.txt','.xls','.xlsx' or
+            '.csv') or a folder containing parameter estimation files.
+
+    '''
+    def __init__(self, model, **kwargs):
+        super(InsertParameters, self).__init__(model, **kwargs)
+        self.default_properties={
+            'quantity_type': 'concentration',
+            'index': 0,
+            'parameter_dict':None,
+            'df': None,
+            'parameter_path':None,
+            'inplace': False,
+        }
+
+        self.convert_bool_to_numeric(self.default_properties)
+        self.update_properties(self.default_properties)
+        self.update_kwargs(kwargs)
+        self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
+        self._do_checks()
+
+        if self.inplace:
+            self.model = self.insert()
+
+        # self.parameters= self.replace_gl_and_lt()
+        #        self.insert_locals()
+        #         self.insert_all()
+        # change
+
+    def __str__(self):
+        return "InsertParameters({})".format(self.to_string())
+
+    def _do_checks(self):
+        """
+        Verity user input
+        :return:
+        """
+        assert self.quantity_type in ['concentration', 'particle_number']
+        if self.parameter_dict != None:
+            if isinstance(self.parameter_dict, dict)!=True:
+                raise Errors.InputError('Argument to \'parameter_dict\' keyword needs to be of type dict')
+            for i in self.parameter_dict.keys():
+                if i not in self.model.all_variable_names:
+                    raise Errors.InputError(
+                        'Parameter \'{}\' is not in your model. \n\nThese are in your model:\n{}'.format(
+                            i,sorted(self.model.all_variable_names)
+                        )
+                    )
+
+        if (self.parameter_dict == None) and (self.parameter_path==None) and (self.df is None):
+            raise Errors.InputError('You need to give at least one of parameter_dict,parameter_path or df keyword arguments')
+
+        assert isinstance(self.index, int)
+
+        #make sure user gives the right number of arguments
+        num=0
+        if self.parameter_dict != None:
+            num+=1
+
+        if self.df is not None:
+            num+=1
+
+        if self.parameter_path != None:
+            num+=1
+
+        if num!=1:
+            raise Errors.InputError('You need to supply exactly one of parameter_dict,parameter_path or df keyord argument. You cannot give two or three.')
 
 
+    def to_dict(self):
+        """
+        return parameters as dict
+        :return:
+        """
+        if isinstance(self.parameters, dict):
+            return self.parameters
+
+        elif isinstance(self.parameters, pandas.core.frame.DataFrame):
+            return self.parameters.to_dict()
+
+    @property
+    def parameters(self):
+        """
+        Get parameters depending on the type of input.
+        Converge on a pandas dataframe.
+        Columns = parameters, rows = parameter sets
+
+        Use check parameter consistency to see
+        whether headers have been pruned or not. If not try pruning them
+
+        """
+        if self.parameter_dict != None:
+            assert isinstance(self.parameter_dict, dict),'The parameter_dict argument takes a Python dictionary'
+            for i in self.parameter_dict:
+                assert i in self.model.all_variable_names,'{} is not a parameter. These are your parameters:{}'.format(i,self.GMQ.get_all_model_variables().keys())
+            return pandas.DataFrame(self.parameter_dict, index=[0])
+
+        if self.parameter_path != None:
+            PED=PEAnalysis.ParsePEData(self.parameter_path)
+            if isinstance(self.index,int):
+                return pandas.DataFrame(PED.data.iloc[self.index]).transpose()
+            else:
+                return PED.data.iloc[self.index]
+
+        if self.df is not None:
+            df= pandas.DataFrame(self.df.iloc[self.index]).transpose()
+        return df
+
+    def insert_locals(self):
+        """
+
+        :return:
+        """
+        # print self.parameters
+        locals = [j for i in self.model.reactions for j in i.parameters if j.global_name in self.parameters.keys()]
+        for loc in locals:
+            for element_tags in self.model.xml.iter():
+                if  element_tags.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
+                    for reaction in element_tags:
+                        if reaction.attrib['name'] == loc.reaction_name:
+                            for reaction_xml in reaction:
+                                if reaction_xml.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
+                                    for constant_xml in reaction_xml:
+                                        if constant_xml.attrib['name'] == loc.name:
+                                            constant_xml.attrib['value'] = str(float(self.parameters[loc.global_name]))
+        return self.model
+
+    def insert_compartments(self):
+        """
+        insert new parameters into compartment
+        :return:
+        """
+        compartments = [i for i in self.model.compartments if i.name in self.parameters]
+        for i in compartments:
+            self.model = self.model.set('compartment', i.name, str(self.parameters[i.name][self.index]),
+                                 match_field='name', change_field='initial_value')
+        return self.model
+
+    def insert_metabolites(self):
+        """
+        insert new parameters into compartment
+        :return:
+        """
+        metabolites = [i for i in self.model.metabolites if i.name in self.parameters]
+        for i in metabolites:
+            self.model = self.model.set('metabolite',
+                                        i.name,
+                                        str(self.parameters[i.name][self.index]),
+                                        match_field='name', change_field=self.quantity_type)
+        return self.model
+
+    def insert_global_quantities(self):
+        """
+        insert new parameters into compartment
+        :return:
+        """
+        global_quantities = [i for i in self.model.global_quantities if i.name in self.parameters]
+        for i in global_quantities:
+            self.model = self.model.set('global_quantity',
+                                        i.name,
+                                        str(self.parameters[i.name][self.index]),
+                                        match_field='name', change_field='initial_value')
+        return self.model
 
 
-
-
-
-
+    def insert(self):
+        """
+        User other methods defined in this class to insert parameters
+        into the model
+        :return:
+        """
+        self.model = self.insert_locals()
+        self.model = self.insert_compartments()
+        self.model = self.insert_global_quantities()
+        self.model = self.insert_metabolites()
+        return self.model
 
 
 
