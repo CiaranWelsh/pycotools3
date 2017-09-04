@@ -24,8 +24,8 @@ Module that tests the operations of the _Base base test
 """
 
 import site
-# site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
-site.addsitedir('/home/b3053674/Documents/PyCoTools')
+site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
+# site.addsitedir('/home/b3053674/Documents/PyCoTools')
 
 import PyCoTools
 from PyCoTools.Tests import _test_base
@@ -277,7 +277,8 @@ class ModelTests(_test_base._BaseTest):
 
         :return:
         """
-        comp = PyCoTools.model.Compartment(name='Medium', initial_value=6)
+        comp = PyCoTools.model.Compartment(self.model,
+                                           name='Medium', initial_value=6)
         compartment_model = self.model.add_compartment(comp)
         comp_filename = os.path.join(os.path.dirname(self.model.copasi_file), 'comp_model.cps')
         compartment_model.save(comp_filename)
@@ -288,7 +289,8 @@ class ModelTests(_test_base._BaseTest):
 
         :return:
         """
-        comp = PyCoTools.model.Compartment(name='Medium', initial_value=6)
+        comp = PyCoTools.model.Compartment(self.model,
+                                           name='Medium', initial_value=6)
         self.model = self.model.add_compartment(comp)
         comp = self.model.get('compartment', 'Medium', 'name')
         assert comp != []
@@ -432,7 +434,8 @@ class ModelTests(_test_base._BaseTest):
                                      name='fake_reaction',
                                      expression='A + B + C + D -> E + F',
                                      rate_law='k*A*B*C/D')
-        self.model.add_reaction(r)
+
+        self.model = self.model.add_reaction(r)
         self.model.save()
         xml = PyCoTools.pycopi.CopasiMLParser(self.model.copasi_file).xml
 
@@ -555,57 +558,17 @@ class ModelTests(_test_base._BaseTest):
                                 self.assertTrue(len(k) == 0)
 
 
+<<<<<<< HEAD
     def test_context_manager(self):
         with self.model.globals() as glob:
             print glob
             # print global_quantities
             # print glob
-
-
-
-
-    #
-    # def test_add_reaction6(self):
-    #     """
-    #     Test different reaction
-    #     :return:
-    #     """
-    #     # exp1='A + F + irs -> ;G'
-    #     # exp1='A + B -> C + D'
-    #     r = PyCoTools.model.Reaction(self.model,
-    #                                  name='fake_reaction2',
-    #                                  expression='A-> C;B',
-    #                                  rate_law='k*A*B')
-    #     self.model.add_reaction(r)
-
-
-
-        # self.model.open()
-    #     # self.model.save()
-    #     # xml = PyCoTools.pycopi.CopasiMLParser(self.model.copasi_file).xml
-    #
-        # print etree.tostring(r.to_xml(), pretty_print=True)
-        # self.model.open()
-
-        # print trans.products
-        # self.assertEqual(trans.products, [])
-
-        # print etree.tostring(r.to_xml(), pretty_print=True)
-
-        # boolean = False
-        # for i in xml.iter():
-        #     if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
-        #         for j in i:
-        #             if j.attrib['name'] == 'fake_reaction2':
-        #                 for k in j:
-        #                     if k.tag == '{http://www.copasi.org/static/schema}ListOfModifiers':
-        #                         for l in k:
-        #                             print l.attrib
-        #                         # self.assertTrue(len(k) == 1)
-
+=======
     def test_translater_again(self):
         trans = PyCoTools.model.Translator(self.model, 'A + F + irs -> ;G')
         self.assertEqual(trans.products, [])
+>>>>>>> f474973be5266fb389c00d9a685fe49eda4c4f03
 
     def test_translater_again2(self):
         trans = PyCoTools.model.Translator(self.model, 'A ->')
@@ -617,21 +580,286 @@ class ModelTests(_test_base._BaseTest):
         # self.assertEqual(trans.products, [])
 
 
+    # def test_set_global_quantity(self):
+    #     """
+    #
+    #     :return:
+    #     """
+    #     ## add new global
+    #     glob = PyCoTools.model.GlobalQuantity(self.model,
+    #                                           name='X')
+    #
+    #     self.model = self.model.add_global_quantity(glob)
+    #     self.model = self.model.set('global_quantity', 'X', 55)
+    #     x = self.model.get('global_quantity', 'X')
+    #     self.assertEqual(float(x.initial_value), 55.0)
+
+
+    def test_remove_method_global(self):
+        """
+
+        :return:
+        """
+        glob = PyCoTools.model.GlobalQuantity(self.model, name='X')
+        self.model = self.model.add_global_quantity(glob)
+        assert 'X' in [i.name for i in self.model.global_quantities]
+        self.model = self.model.remove('global_quantity', 'X')
+        boolean = True
+        for i in self.model.global_quantities:
+            if i.name == 'X':
+                boolean = False
+        self.assertTrue(boolean)
+
+    def test_add_compartment(self):
+        """
+
+        :return:
+        """
+        comp = PyCoTools.model.Compartment(self.model, name='X')
+        self.model = self.model.add('compartment', comp)
+        boolean = False
+
+        for i in self.model.compartments:
+            if i.name == 'X':
+                boolean = True
+        self.assertTrue(boolean)
+
+    def test_remove_method_compartment(self):
+        """
+
+        :return:
+        """
+        comp = PyCoTools.model.Compartment(self.model, name='Cell')
+        self.model = self.model.add_compartment(comp)
+        assert 'Cell' in [i.name for i in self.model.compartments]
+        self.model = self.model.remove('compartment', 'Cell')
+        boolean = True
+        for i in self.model.compartments:
+            if i.name == 'X':
+                boolean = False
+        self.assertTrue(boolean)
+
+
+    def test_remove_raction(self):
+        """
+        Test different reaction
+        :return:
+        """
+        r = PyCoTools.model.Reaction(self.model,
+                                     name='fake_reaction2',
+                                     expression='A + B -> C',
+                                     rate_law='k*A*B')
+        self.model = self.model.add_reaction(r)
+        self.model = self.model.remove_reaction('fake_reaction2', by='name')
+        # self.model = self.model.remove('reaction', 'fake_reaction2')
+        self.model.save()
+        new_model = PyCoTools.pycopi.CopasiMLParser(self.model.copasi_file).xml
+        boolean = True
+        for i in new_model.iter():
+            if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
+                for j in i:
+                    if j.attrib['name'] == 'fake_reaction2':
+                        boolean = False
+        self.assertTrue(boolean)
+
+
+    # def test_set_global_initial_value(self):
+    #     """
+    #
+    #     :return:
+    #     """
+    #     glob = PyCoTools.model.GlobalQuantity(self.model, name='X', initial_value=1)
+    #     self.model = self.model.add_global_quantity(glob)
+    #     self.model.save()
+    #     assert glob.name in [i.name for i in self.model.global_quantities]
+    #     self.model = self.model.set('global_quantity', 'X', 100)
+    #     self.assertEqual(100.0,
+    #                      float([i.initial_value for i in self.model.global_quantities if i.name == 'X'][0]))
+
+
+    def test_metabolite_concentration(self):
+        """
+
+        :return:
+        """
+        metab =  PyCoTools.model.Metabolite(self.model,
+                                            name='X')
+        self.assertEqual(str(metab.concentration), str(1))
+
+    def test_metabolite_concentration2(self):
+        """
+
+        :return:
+        """
+        metab = PyCoTools.model.Metabolite(self.model,
+                                           name='X',
+                                           concentration=123445)
+        self.assertEqual(str(metab.concentration), str(123445))
+
+    def test_metabolite_concentration2(self):
+        """
+
+        :return:
+        """
+        metab = PyCoTools.model.Metabolite(self.model,
+                                           name='X',
+                                           concentration=55)
+        self.assertEqual(str(metab.particle_number), str(3.31217747135e+22))
+
+
+    # def test_set_metabolite_initial_value(self):
+    #     """
+    #
+    #     :return:
+    #     """
+    #     metab = PyCoTools.model.Metabolite(self.model,
+    #                                        name='X', concentration=15)
+    #     self.model = self.model.add('metabolite', metab)
+    #     self.model.save()
+    #     assert metab.name in [i.name for i in self.model.metabolites]
+    #     self.model = self.model.set_metabolite('X', 100, 'concentration')
+    #
+    #     self.model.open()
+        # for i in self.model.metabolites:
+        #     print i.name, i.concentration
+        # self.assertEqual(100.0,
+        #                  float([i.concentration for i in self.model.metabolites if i.name == 'X'][0]))
 
 
 
+    def test_change_metab_particle_numer(self):
+        """
+
+        :return:
+        """
+        metab = PyCoTools.model.Metabolite(self.model, name='X',
+                                           particle_number=1000)
+        model = self.model.add('metabolite', metab)
+        model = self.model.set_metabolite('X', 1234, attribute='particle_number')
+        metab = self.model.get('metabolite', 'X', by='name')
+        self.assertEqual(metab.particle_number, str(1234.0))
+
+
+    def test_change_metab_concentration(self):
+        """
+
+        :return:
+        """
+        metab = PyCoTools.model.Metabolite(self.model, name='X',
+                                           concentration=1000)
+        model = self.model.add('metabolite', metab)
+        model = self.model.set_metabolite('X', 1234, attribute='concentration')
+        metab = self.model.get('metabolite', 'X', by='name')
+        self.assertAlmostEqual(float(metab.concentration), float(1234.0))
 
 
 
+    def test_change_metab_particle_numer_using_set(self):
+        """
+
+        :return:
+        """
+        metab = PyCoTools.model.Metabolite(self.model, name='X',
+                                           particle_number=1000)
+        model = self.model.add('metabolite', metab)
+        model = self.model.set('metabolite',
+                               match_value='X',
+                               new_value=1234,
+                               match_field='name',
+                               change_field='particle_number')
+
+        metab = self.model.get('metabolite', 'X', by='name')
+        self.assertEqual(metab.particle_number, str(1234.0))
+
+    def test_change_metab_concentration_using_set(self):
+        """
+
+        :return:
+        """
+        metab = PyCoTools.model.Metabolite(self.model, name='X',
+                                           concentration=1000)
+        model = self.model.add('metabolite', metab)
+        model = self.model.set('metabolite',
+                               match_value='X',
+                               new_value=1234,
+                               match_field='name',
+                               change_field='concentration')
+
+        metab = self.model.get('metabolite', 'X', by='name')
+        self.assertAlmostEqual(float(metab.concentration), float(1234.0))
 
 
+    def test_set_compartment_value(self):
+        """
 
+        :return:
+        """
+        compartment = self.model.compartments[0]
+        self.model = self.model.set('compartment', 'nuc', 55,
+                                    match_field='name',
+                                    change_field='initial_value')
+        comp = self.model.get('compartment', 'nuc')
+        self.assertEqual(str(comp.initial_value), str(55.0))
 
+    def test_set_compartment_name(self):
+        """
 
+        :return:
+        """
+        compartment = self.model.compartments[0]
+        self.model = self.model.set('compartment',
+                                    'nuc',
+                                    'nucleus',
+                                    match_field='name',
+                                    change_field='name')
+        comp = self.model.get('compartment', 'nucleus', by='name')
+        self.assertEqual(comp.name, 'nucleus')
 
+    def test_set_metabolite_name(self):
+        """
 
+        :return:
+        """
+        self.model = self.model.set('metabolite',
+                                    'B',
+                                    'Bees',
+                                    match_field='name',
+                                    change_field='name')
+        metab = self.model.get('metabolite', 'Bees')
+        self.assertEqual(metab.name, 'Bees')
 
+    def test_change_global_value(self):
+        """
 
+        :return:
+        """
+        self.model = self.model.set('global_quantity',
+                                    'A2B',
+                                    'IveBeenChanged',
+                                    match_field='name',
+                                    change_field='name')
+        glob = self.model.get('global_quantity', 'IveBeenChanged')
+        self.assertEqual(glob.name, 'IveBeenChanged')
+
+    def test_change_reaction_name(self):
+        """
+
+        :return:
+        """
+        ## get reaction
+        reaction = self.model.get('reaction', 'B2C')
+        self.model = self.model.set('reaction', 'B2C', 'changed_name',
+                                    'name', 'name')
+        self.model.save()
+        changed =  self.model.get('reaction', 'changed_name')
+        self.assertEqual(changed.name, 'changed_name')
+
+    def test_model_parameter_sets_property(self):
+        """
+
+        :return:
+        """
+        print self.model.parameter_sets
 
 if __name__ == '__main__':
     unittest.main()
