@@ -222,7 +222,6 @@ class Model(_base._Base):
                         j.getparent().remove(j)
                         ##collect the number where we hit our desired state
                         stop_count = count
-                        LOG.debug('stop_count --> {}'.format(stop_count))
 
             if i.tag == '{http://www.copasi.org/static/schema}InitialState':
                 states = i.text.strip().split(' ')
@@ -402,7 +401,6 @@ class Model(_base._Base):
                 i.append(metabolite_element)
 
         ## add metabolite to state_template and initial state fields
-        LOG.debug('particle_number from add metabolites --> {}'.format(metab.particle_number))
         self.add_state(metab.key, metab.particle_number)
         return self
 
@@ -911,11 +909,7 @@ class Model(_base._Base):
                 change_field = 'particle_number'
 
         ## set the attribute
-        LOG.debug('field to change --> {}'.format(change_field))
-        LOG.debug('value to change to  --> {}'.format(new_value))
-        LOG.debug('in set. component before --> {}'.format(comp))
         setattr(comp, change_field, new_value)
-        LOG.debug('in set. component after --> {}'.format(comp))
 
         ##remove component of interest from model
         self.remove(component, match_value)
@@ -2585,7 +2579,6 @@ class ParameterSet(_base._ModelBase):
                                             'type': 'Reaction',
                                         })
             for k in r.parameters:
-                print LOG.debug('parameters --> {}'.format(k))
                 etree.SubElement(model_parameter_group, 'ModelParameter',
                                  attrib={
                                      'cn': '{},{},{}'.format(
@@ -2764,16 +2757,19 @@ class InsertParameters(_base._ModelBase):
         """
         # print self.parameters
         locals = [j for i in self.model.reactions for j in i.parameters if j.global_name in self.parameters.keys()]
-        for loc in locals:
-            for element_tags in self.model.xml.iter():
-                if  element_tags.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
-                    for reaction in element_tags:
-                        if reaction.attrib['name'] == loc.reaction_name:
-                            for reaction_xml in reaction:
-                                if reaction_xml.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
-                                    for constant_xml in reaction_xml:
-                                        if constant_xml.attrib['name'] == loc.name:
-                                            constant_xml.attrib['value'] = str(float(self.parameters[loc.global_name]))
+        if locals == []:
+            return self.model
+        else:
+            for loc in locals:
+                for element_tags in self.model.xml.iter():
+                    if element_tags.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
+                        for reaction in element_tags:
+                            if reaction.attrib['name'] == loc.reaction_name:
+                                for reaction_xml in reaction:
+                                    if reaction_xml.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
+                                        for constant_xml in reaction_xml:
+                                            if constant_xml.attrib['name'] == loc.name:
+                                                constant_xml.attrib['value'] = str(float(self.parameters[loc.global_name]))
         return self.model
 
     def insert_compartments(self):
@@ -2782,10 +2778,15 @@ class InsertParameters(_base._ModelBase):
         :return:
         """
         compartments = [i for i in self.model.compartments if i.name in self.parameters]
-        for i in compartments:
-            self.model = self.model.set('compartment', i.name, str(self.parameters[i.name][self.index]),
-                                 match_field='name', change_field='initial_value')
-        return self.model
+        if compartments == []:
+            return self.model
+        else:
+
+            LOG.critical('Changing a compartment volume has consequences for the rest of the metabolites assigned to that compartment')
+            for i in compartments:
+                self.model = self.model.set('compartment', i.name, str(self.parameters[i.name][self.index]),
+                                     match_field='name', change_field='initial_value')
+            return self.model
 
     def insert_metabolites(self):
         """
@@ -2793,12 +2794,15 @@ class InsertParameters(_base._ModelBase):
         :return:
         """
         metabolites = [i for i in self.model.metabolites if i.name in self.parameters]
-        for i in metabolites:
-            self.model = self.model.set('metabolite',
-                                        i.name,
-                                        str(self.parameters[i.name][self.index]),
-                                        match_field='name', change_field=self.quantity_type)
-        return self.model
+        if metabolites == []:
+            return self.model
+        else:
+            for i in metabolites:
+                self.model = self.model.set('metabolite',
+                                            i.name,
+                                            str(self.parameters[i.name][self.index]),
+                                            match_field='name', change_field=self.quantity_type)
+            return self.model
 
     def insert_global_quantities(self):
         """
@@ -2806,12 +2810,15 @@ class InsertParameters(_base._ModelBase):
         :return:
         """
         global_quantities = [i for i in self.model.global_quantities if i.name in self.parameters]
-        for i in global_quantities:
-            self.model = self.model.set('global_quantity',
-                                        i.name,
-                                        str(self.parameters[i.name][self.index]),
-                                        match_field='name', change_field='initial_value')
-        return self.model
+        if global_quantities == []:
+            return self.model
+        else:
+            for i in global_quantities:
+                self.model = self.model.set('global_quantity',
+                                            i.name,
+                                            str(self.parameters[i.name][self.index]),
+                                            match_field='name', change_field='initial_value')
+            return self.model
 
 
     def insert(self):

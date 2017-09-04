@@ -852,8 +852,7 @@ class ModelTests(_test_base._BaseTest):
 
         :return:
         """
-        I= PyCoTools.model.InsertParameters(self.model, parameter_dict={'nuc': 85,
-                                                                        'B': 35,
+        I= PyCoTools.model.InsertParameters(self.model, parameter_dict={'B': 35,
                                                                         '(B2C).k2': 45,
                                                                         'A2B':55})
         self.model = I.insert()
@@ -862,7 +861,24 @@ class ModelTests(_test_base._BaseTest):
         self.assertAlmostEqual(float(conc[0]), float(35))
 
 
-    def test_insert_parameters_metabolite(self):
+    def test_insert_parameters_metabolite_particles(self):
+        """
+
+        :return:
+        """
+        I= PyCoTools.model.InsertParameters(
+            self.model,
+            parameter_dict={
+                # 'nuc': 85,
+                'B': 78,
+                '(B2C).k2': 96,
+                'A2B':55
+            }, quantity_type='particle_number')
+        self.model = I.insert()
+        part = [i.particle_number for i in self.model.metabolites if i.name == 'B']
+        self.assertAlmostEqual(float(part[0]), float(78))
+
+    def test_insert_parameters_globals(self):
         """
 
         :return:
@@ -873,11 +889,92 @@ class ModelTests(_test_base._BaseTest):
                 # 'nuc': 85,
                 'B': 35,
                 '(B2C).k2': 45,
-                'A2B':55
-            }, quantity_type='particle_number')
+                'A2B':32
+            })
         self.model = I.insert()
-        part = [i.particle_number for i in self.model.metabolites if i.name == 'B']
-        self.assertAlmostEqual(float(part[0]), float(35))
+        val = [i.initial_value for i in self.model.global_quantities if i.name == 'A2B']
+        self.assertAlmostEqual(float(val[0]), float(32))
+
+    def test_insert_parameters_locals(self):
+        """
+
+        :return:
+        """
+        I= PyCoTools.model.InsertParameters(
+            self.model,
+            parameter_dict={
+                # 'nuc': 85,
+                'B': 35,
+                '(B2C).k2': 64,
+                'A2B': 597,
+            }, inplace=True).model
+        val = [i.initial_value for i in self.model.global_quantities if i.name == 'A2B']
+        self.assertAlmostEqual(float(val[0]), float(597))
+
+    def test_insert_parameters_global_df(self):
+        """
+
+        :return:
+        """
+        parameter_dict = {'B': 35,
+                          '(B2C).k2': 64,
+                          'A2B': 597}
+
+        df = pandas.DataFrame(parameter_dict, index=[0])
+        I= PyCoTools.model.InsertParameters(
+            self.model, df=df, inplace=True).model
+        val = [i.initial_value for i in self.model.global_quantities if i.name == 'A2B']
+        self.assertAlmostEqual(float(val[0]), float(597))
+
+    def test_insert_parameters_metabolite_df(self):
+        """
+
+        :return:
+        """
+        parameter_dict = {'B': 35,
+                          '(B2C).k2': 64,
+                          'A2B': 597}
+
+        df = pandas.DataFrame(parameter_dict, index=[0])
+        self.model = PyCoTools.model.InsertParameters(self.model, df=df, inplace=True).model
+        conc = [i.concentration for i in self.model.metabolites if i.name == 'B']
+        self.assertAlmostEqual(float(conc[0]), float(35))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
