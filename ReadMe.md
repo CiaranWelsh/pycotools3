@@ -1,6 +1,6 @@
 # PyCoTools
 
-Package was developed by ciaran welsh (c.welsh2@newcastle.ac.uk) from Newcastle University, UK. 
+Package was developed by ciaran welsh (c.welsh2@newcastle.ac.uk) from Newcastle University, UK.
 
 ## Installation 
 Use:
