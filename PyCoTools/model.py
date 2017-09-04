@@ -507,7 +507,8 @@ class Model(_base._Base):
     def globals(self):
         doing_sums = 10+15
         print 'before'
-        yield doing_sums
+        global_quantities = self.global_quantities
+        yield global_quantities
         print 'after'
 
     @property

@@ -557,8 +557,9 @@ class ModelTests(_test_base._BaseTest):
 
     def test_context_manager(self):
         with self.model.globals() as glob:
-            print 'during'
             print glob
+            # print global_quantities
+            # print glob
 
 
 
