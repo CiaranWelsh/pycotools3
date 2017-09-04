@@ -93,7 +93,6 @@ class CopasiMLParser(object):
         #first convert the copasiML to a root element tree
         root=etree.ElementTree(xml)
         root.write(copasi_filename)
-        LOG.debug('model written to {}'.format(copasi_filename))
 
 
 class Run(_base._ModelBase):
@@ -499,7 +498,6 @@ class Reports(_base._ModelBase):
         Object.attrib['cn']="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"
         Object=etree.SubElement(footer,'Object')
         Object.attrib['cn']="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"
-        LOG.debug('Reports PE setup copasiML {}'.format(self.model.xml))
         return self.model
 
     def multi_parameter_estimation(self):
@@ -544,25 +542,20 @@ class Reports(_base._ModelBase):
         Execute code that builds the report defined by the kwargs
         '''
         if self.report_type == 'parameter_estimation':
-            LOG.debug('created a \'parameter_estimation\' report')
             self.model = self.parameter_estimation()
 
 
         elif self.report_type  == 'multi_parameter_estimation':
-            LOG.debug('created a \'parameter_estimation\' report')
             self.model =self.multi_parameter_estimation()
 
         elif self.report_type == 'profilelikelihood':
             self.model = self.profile_likelihood()
-            LOG.debug('created a \'profile_likelihod\' type report')
 
         elif self.report_type == 'time_course':
             self.model = self.timecourse()
-            LOG.debug('created a \'time_course\' type report')
 
         elif self.report_type == None:
             self.model = self.model
-            LOG.debug('created a \'none\' type report')
 
         return self.model
 
@@ -708,7 +701,6 @@ class TimeCourse(_base._ModelBase):
         """
         if self.correct_headers:
             df = pandas.read_csv(self.report_name, sep='\t', index_col=0)
-            LOG.warning('df is --> {}'.format(df))
             df.columns = [re.findall('\[(.*)\]', i)[0] for i in df.keys()]
             os.remove(self.report_name)
             df.to_csv(self.report_name, sep='\t')
@@ -852,7 +844,6 @@ class TimeCourse(_base._ModelBase):
                 task.getparent().remove(task)
         ## insert new time course
         self.model.xml.find(list_of_tasks).insert(1, timecourse)
-        LOG.debug('Timecourse task element is:\n\n{}'.format(etree.tostring(timecourse, pretty_print=True) ))
         return self.model
 
     def deterministic(self):
@@ -1235,7 +1226,6 @@ class TimeCourse(_base._ModelBase):
         cros reference the timecourse task with the newly created
         time course reort to get the key
         '''
-        LOG.debug('getting report key')
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
             if i.attrib['name'] == 'Time-Course':
                 key = i.attrib['key']
@@ -1252,7 +1242,6 @@ class TimeCourse(_base._ModelBase):
     #         self.copasiML = self.report_definition()
     #         self.copasiML = self.set_report()
     #         self.copasiML = self.set_deterministic()
-    #         LOG.debug('setting up deterministic time course')
     #     elif self.kwargs.get('simulation_type') == 'stochastic':
     #         raise Errors.NotImplementedError(
     #             'There is space in this class to write code to Run a stochastic simulation but it is not yet written')
@@ -1260,7 +1249,6 @@ class TimeCourse(_base._ModelBase):
     #     #            # save to duplicate copasi file
     #     self.save()
     #     R = Run(self.copasi_file, task='time_course')
-    #     LOG.debug('Time course ran')
     #     return R
 
 
@@ -1353,9 +1341,7 @@ class Scan(_base._ModelBase):
                 self.subtask = j
 
         scan_type_numbers = [1, 0, 2]
-        LOG.debug('kwargs[scan_type is: {}'.format(self.scan_type))
         for i in zip(scan_types, scan_type_numbers):
-            LOG.debug('scan type to number tuple: {}'.format(i))
             if i[0] == self.scan_type:
                 self.scan_type = str(i[1])
 
@@ -1369,7 +1355,6 @@ class Scan(_base._ModelBase):
         Use Report class to create report
         :return:
         """
-        logging.debug('defining report')
         self.report_dict = {}
         self.report_dict['metabolites'] = self.metabolites
         self.report_dict['global_quantities'] = self.global_quantities
@@ -1833,7 +1818,6 @@ class ExperimentMapper(_base._ModelBase):
                 if i == 0:
                     etree.SubElement(map_group, 'Parameter', attrib=time_role)
                 else:
-                    # LOG.warning(obs[i][:-6])
                     ## map independent variables
                     if obs[i][-6:] == '_indep':
                         if obs[i][:-6] in [j.name for j in self.model.metabolites]:
@@ -2011,10 +1995,8 @@ class ExperimentMapper(_base._ModelBase):
         :return:
         """
         self.remove_all_experiments()
-        LOG.debug('Removing all pre-existing experiments from copasi mapping interface')
         for i in range(len(self.experiment_files)):
             Experiment = self.create_experiment(i)
-            LOG.debug('Mapping experiment {}'.format(self.experiment_files[i]))
             self.model = self.add_experiment_set(Experiment)
             # self.save() ## Note sure whether this save is needed. Keep commented until you're sure
         return self.model
@@ -2026,7 +2008,6 @@ class PhaseSpaceDep(TimeCourse):
     '''
     def __init__(self,copasi_file,**kwargs):
         super(PhaseSpace,self).__init__(copasi_file,**kwargs)
-        LOG.debug('plotting all combinations of phase space plot')
         self.new_options={'plot':False}
         self.kwargs.update(self.new_options)
         self.species_data=self.isolate_species()
@@ -2165,7 +2146,6 @@ class FormatPEData():
         """
         data = pandas.read_csv(self.report_name, sep='\t', header=None)
         data = data.drop(data.columns[0], axis=1)
-        LOG.debug('Shape of estimated parameters: {}'.format(data.shape))
         width = data.shape[1]
         ## remove the extra bracket
         data[width] = data[width].str[1:]
@@ -2194,7 +2174,6 @@ class FormatPEData():
         else:
             data = data.drop(data.columns[[0,-2]], axis=1)
             data.columns = range(data.shape[1])
-            LOG.debug('Shape of estimated parameters: {}'.format(data.shape))
             ### parameter of interest has been removed.
             names = self.GMQ.get_fit_item_order()+['RSS']
             if self.GMQ.get_fit_item_order() == []:
@@ -2573,6 +2552,7 @@ class ParameterEstimation(_base._ModelBase):
             self.local_parameters = [self.local_parameters]
 
         ## ensure arguments to local parameters exist
+        LOG.debug('self.local parameters --> {}'.format(self.local_parameters))
         for i in [j.name for j in self.local_parameters]:
             if i not in [j.name for j in self.model.local_parameters]:
                 raise Errors.InputError(
@@ -2896,7 +2876,6 @@ class ParameterEstimation(_base._ModelBase):
         """
         if (os.path.isfile(self.config_filename) == False) or (self.overwrite_config_file == True):
             self.item_template.to_csv(self.config_filename)
-            LOG.debug(  'writing config template. {} set to {} and {} is {}'.format('overwrite_config_file',self.kwargs.get('overwrite_config_file'),'config_filename',self.kwargs.get('config_filename')))
         return self.config_filename
 
     def read_config_file(self):
@@ -2986,7 +2965,6 @@ class ParameterEstimation(_base._ModelBase):
         :param item: a row from the config template as pandas series
         :return: pycotools.model.Model
         """
-        ##TODO check whether the new version of add_fit_item is doing what it is supposed to be doing
         ## figure out what type of variable item is and assign to component
         if item['name'] in [i.name for i in self.metabolites]:
             component = [i for i in self.metabolites if i.name == item['name']][0]
@@ -3029,13 +3007,19 @@ class ParameterEstimation(_base._ModelBase):
                                                                                       component.compartment.reference,
                                                                                       component.initial_reference) }
             else:
-                subA4={'type': 'cn',  'name': 'ObjectCN',  'value': '{},{},{}'.format(self.model.reference,
-                                                                                      component.compartment.reference,
-                                                                                      component.initial_particle_reference)}
+                subA4={'type': 'cn',  'name': 'ObjectCN',  'value': '{},{},{}'.format(
+                    self.model.reference,
+                    component.compartment.reference,
+                    component.initial_particle_reference
+                )}
 
         elif isinstance(component, model.LocalParameter):
-            subA4 = {'type': 'cn', 'name': 'ObjectCN', 'value': '{},{}'.format(self.model.reference,
-                                                                               component.reference) }
+            LOG.debug('component --> {}'.format(component))
+            subA4 = {'type': 'cn', 'name': 'ObjectCN', 'value': '{},{},{}'.format(
+                self.model.reference,
+                self.model.get('reaction', component.reaction_name, by='name').reference,
+                component.value_reference) }
+            LOG.debug('subA4 --> {}'.format(subA4))
 
         elif isinstance(component, model.GlobalQuantity):
             subA4={'type': 'cn',  'name': 'ObjectCN',  'value': '{},{}'.format(self.model.reference,
@@ -3314,7 +3298,6 @@ class MultiParameterEstimation(ParameterEstimation):
         Create directory for estimation results
         :return:
         """
-        LOG.debug('creating a directory for analysis in : \n\n{}'.format(self.results_directory))
         if os.path.isdir(self.results_directory)!=True:
             os.mkdir(self.results_directory)
 
@@ -3333,7 +3316,6 @@ class MultiParameterEstimation(ParameterEstimation):
             :return: dict['model_copy_number]=enumerated_report_name
             """
 
-            LOG.debug('Enumerating PE report files')
             dct = {}
             dire, fle = os.path.split(self.report_name)
             for i in range(self.copy_number):
@@ -3380,7 +3362,6 @@ class MultiParameterEstimation(ParameterEstimation):
                    confirm_overwrite=self.confirm_overwrite,
                    output_in_subtask=self.output_in_subtask,
                    save=True))
-        LOG.debug('Setup Took {} seconds'.format(time.time() - start))
 
 
 
@@ -3397,7 +3378,6 @@ class MultiParameterEstimation(ParameterEstimation):
         report_files = self.enumerate_PE_output()
         res = {}
         for copy_number, model in models.items():
-            LOG.debug('setting up scan for model : {}'.format(copy_number))
             t = threading.Thread(target=self._setup1scan,
                                  args=(q, model, report_files[copy_number]))
             t.daemon = True
@@ -3644,7 +3624,6 @@ class MultiModelFit(object):
 
         :Returns: dict[model_filename]=runMultiplePEs_instance
         """
-        LOG.debug('instantiating an instance of runMultiplePEs for each model')
         dct={}
 
         for cps_dir in self.sub_cps_dirs:
@@ -3654,18 +3633,14 @@ class MultiModelFit(object):
             dct[self.sub_cps_dirs[cps_dir]]=MultiParameterEstimation(self.sub_cps_dirs[cps_dir],
                                                            self.exp_files,**self.kwargs)
 
-        LOG.debug('Each instance of MultiParameterEstimation is being held in a dct:\n{}'.format(dct))
         return dct
 
     def get_output_directories(self):
         """
         :returns:Dict. Location of parameter estimation output files
         """
-        LOG.debug('getting output directories')
         output_dct={}
         for MPE in self.MPE_dct:
-            LOG.debug('output directory for model \n{}:'.format(MPE))
-            LOG.debug('\t\t'+self.MPE_dct[MPE].results_directory)
             output_dct[MPE]=self.MPE_dct[MPE].results_directory
         return output_dct
 
@@ -3719,16 +3694,11 @@ class MultiModelFit(object):
         :returns: Dictionary[cps_filename]= Directory for model fit
         """
         LOG.info('Creating workspace from project_dir')
-        LOG.debug('Creating Workspace from files in: \n{}'.format(self.project_dir))
         ## Create entire working directory for analysis
         self.wd = self.project_dir
-        LOG.debug('New Working directory is:\n{}'.format(self.wd))
         if os.path.isdir(self.wd)!=True:
-            LOG.debug('{} doesn\' already exist. Creating {}'.format(self.wd,self.wd))
             os.mkdir(self.wd)
         os.chdir(self.project_dir)
-        LOG.debug('changing directory to project_dir: \n({}) to read relevent .cps and exp files'.format(self.wd))
-        LOG.debug('Creating a directory in working directory for each of the model files')
         cps_dirs={}
         for cps in self.cps_files:
             cps_abs=os.path.abspath(cps)
@@ -3754,23 +3724,18 @@ class MultiModelFit(object):
                 Any independent variables should have the '_indep' suffix
         This function will read this multifit config and produce a directory tree for subsequent analysis
         '''
-        LOG.debug('Reading fit configuration')
         if self.project_dir==None:
             raise Errors.InputError('Cannot read multifit confuration as no Project kwarg is provided')
         ##make sure we're in the right directory
         os.chdir(self.project_dir)
         cps_list=[]
-        LOG.debug('These are the cps files in your fit config:')
         for cps_file in glob.glob('*.cps'):
-            LOG.debug('''{}'''.format(cps_file))
             cps_list.append(cps_file)
 
-        LOG.debug('These are the experiment files in your fit config:')
         exp_list=[]
         exp_file_types=('*.csv','*.txt')
         for typ in exp_file_types:
             for exp_file in glob.glob(typ):
-                LOG.debug('''{}'''.format(exp_file))
                 exp_list.append(os.path.abspath(exp_file))
 
         if cps_list==[]:

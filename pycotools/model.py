@@ -307,7 +307,7 @@ class Model(_base._Base):
         get local parameters from reactions
         :return:
         """
-        return [i.parameters for i in self.reactions]
+        return reduce(lambda x, y: x+y, [i.parameters for i in self.reactions])
 
     @staticmethod
     def convert_particles_to_molar(particles, mol_unit, compartment_volume):#,vol_unit):
@@ -1937,14 +1937,7 @@ class LocalParameter(_base._ModelBase):
 
     @property
     def value_reference(self):
-        return "ParameterGroup=Parameters,Parameter={},Reference=Value".format(self.reaction_name, self.name)
-
-class LocalParameterList(list):
-    def __init__(self):
-        pass
-## TODO create a LocalParameterList class which is like a normal list but with to_dict() and to_df() methods
-
-
+        return "ParameterGroup=Parameters,Parameter={},Reference=Value".format(self.name)
 
 class KeyFactory(_base._ModelBase):
     def __init__(self, model, **kwargs):
