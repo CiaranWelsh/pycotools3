@@ -1,0 +1,2 @@
+B	A_indep	C	ThisIsAssignment	B2C	A2B
+1.0	1.0	1.0	13.0	9.0	4.0

@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 '''
- This file is part of PyCoTools.
+ This file is part of pycotools.
 
- PyCoTools is free software: you can redistribute it and/or modify
+ pycotools is free software: you can redistribute it and/or modify
  it under the terms of the GNU Lesser General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
 
- PyCoTools is distributed in the hope that it will be useful,
+ pycotools is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU Lesser General Public License for more details.
 
  You should have received a copy of the GNU Lesser General Public License
- along with PyCoTools.  If not, see <http://www.gnu.org/licenses/>.
+ along with pycotools.  If not, see <http://www.gnu.org/licenses/>.
 
 
  $Author: Ciaran Welsh
@@ -35,7 +35,7 @@ import os
 import subprocess
 import re
 import pickle
-import PEAnalysis,Errors, Misc, _base, model
+import viz,Errors, Misc, _base, model
 import matplotlib
 import matplotlib.pyplot as plt
 from textwrap import wrap
@@ -57,7 +57,7 @@ sns.set_context(context='poster',
 
 ## TODO change pycopi to tasks
 
-class CopasiMLParser():
+class CopasiMLParser(object):
 
     """
     Parse a copasi file into xml.etree.
@@ -571,7 +571,7 @@ class Reports(_base._ModelBase):
 
         remove report called report_name
         :param report_name:
-        :return: PyCoTools.model.Model
+        :return: pycotools.model.Model
         """
         assert report_name in self.report_types,'{} not a valid report type. These are valid report types: {}'.format(report_name,self.report_types)
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
@@ -708,6 +708,7 @@ class TimeCourse(_base._ModelBase):
         """
         if self.correct_headers:
             df = pandas.read_csv(self.report_name, sep='\t', index_col=0)
+            LOG.warning('df is --> {}'.format(df))
             df.columns = [re.findall('\[(.*)\]', i)[0] for i in df.keys()]
             os.remove(self.report_name)
             df.to_csv(self.report_name, sep='\t')
@@ -1196,7 +1197,7 @@ class TimeCourse(_base._ModelBase):
         ser a time course report containing time
         and all species or global quantities defined by the user.
 
-        :return: PyCoTools.model.Model
+        :return: pycotools.model.Model
         """
         report_options = {'metabolites': self.metabolites,
                           'global_quantities': self.global_quantities,
@@ -2047,7 +2048,7 @@ class PhaseSpaceDep(TimeCourse):
         metabs= self.GMQ.get_IC_cns().keys()
         for i in metabs:
             if i not in self.data.keys():
-                raise Errors.IncompatibleStringError(' {} is an incompatible string that is not supported by PyCoTools. Please modify the string and rerun')
+                raise Errors.IncompatibleStringError(' {} is an incompatible string that is not supported by pycotools. Please modify the string and rerun')
         return self.data[metabs]
 
     def get_combinations(self):
@@ -2746,7 +2747,7 @@ class ParameterEstimation(_base._ModelBase):
         """
         create parameter estimation report
         for result collection
-        :return: PyCoTools.model.Model
+        :return: pycotools.model.Model
         """
         return Reports(self.model, **self._report_arguments).model
 
@@ -2831,7 +2832,7 @@ class ParameterEstimation(_base._ModelBase):
         """
         Remove item from parameter estimation
         :param item:
-        :return: PyCoTools.model.Model
+        :return: pycotools.model.Model
         """
         all_items= self._fit_items.keys()
         query='//*[@name="FitItem"]'
@@ -2880,7 +2881,7 @@ class ParameterEstimation(_base._ModelBase):
         """
         Iterate over all fit items and remove them
         from the parameter estimation task
-        :return: PyCoTools.model.Model
+        :return: pycotools.model.Model
         """
         for i in self._fit_items:
             self.model = self.remove_fit_item(i)
@@ -2983,7 +2984,7 @@ class ParameterEstimation(_base._ModelBase):
         """
         Add fit item to model
         :param item: a row from the config template as pandas series
-        :return: PyCoTools.model.Model
+        :return: pycotools.model.Model
         """
         ##TODO check whether the new version of add_fit_item is doing what it is supposed to be doing
         ## figure out what type of variable item is and assign to component
@@ -3198,7 +3199,7 @@ class ParameterEstimation(_base._ModelBase):
     def set_PE_options(self):
         """
         Set parameter estimation sepcific arguments
-        :return: PyCoTools.model.Model
+        :return: pycotools.model.Model
         """
 
 
@@ -3246,7 +3247,7 @@ class ParameterEstimation(_base._ModelBase):
 
 
     # def plot(self):
-    #     self.PL=PEAnalysis.PlotPEData(self.copasi_file,self.experiment_files,self.kwargs.get('report_name'),
+    #     self.PL=viz.PlotPEData(self.copasi_file,self.experiment_files,self.kwargs.get('report_name'),
     #                     **self.PlotPEDataKwargs)
 
 
@@ -3321,7 +3322,7 @@ class MultiParameterEstimation(ParameterEstimation):
         """
         create parameter estimation report
         for result collection
-        :return: PyCoTools.model.Model
+        :return: pycotools.model.Model
         """
         self._report_arguments['report_type'] = 'multi_parameter_estimation'
         return Reports(self.model, **self._report_arguments).model
@@ -3363,7 +3364,7 @@ class MultiParameterEstimation(ParameterEstimation):
         """
         Setup a single scan.
         :param q: queue from multiprocessing
-        :param model: PyCoTools.model.Model
+        :param model: pycotools.model.Model
         :param report: str.
         :return:
         """
@@ -3809,5 +3810,5 @@ class HighThroughputFit():
 
 if __name__=='__main__':
     pass
-#    execfile('/home/b3053674/Documents/Models/2017/08_Aug/PyCoToolsTests/RunPEs.py')
-        #    execfile('/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/testing_kholodenko_manually.py')
+#    execfile('/home/b3053674/Documents/Models/2017/08_Aug/pycotoolsTests/RunPEs.py')
+        #    execfile('/home/b3053674/Documents/pycotools/pycotools/pycotoolsTutorial/Test/testing_kholodenko_manually.py')

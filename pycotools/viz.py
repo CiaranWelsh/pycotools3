@@ -1,18 +1,18 @@
 '''
- This file is part of PyCoTools.
+ This file is part of pycotools.
 
- PyCoTools is free software: you can redistribute it and/or modify
+ pycotools is free software: you can redistribute it and/or modify
  it under the terms of the GNU Lesser General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
 
- PyCoTools is distributed in the hope that it will be useful,
+ pycotools is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU Lesser General Public License for more details.
 
  You should have received a copy of the GNU Lesser General Public License
- along with PyCoTools.  If not, see <http://www.gnu.org/licenses/>.
+ along with pycotools.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
@@ -50,7 +50,7 @@ import scipy
 import os
 import matplotlib
 import itertools
-import pycopi,Errors, Misc
+import tasks,Errors, Misc
 import seaborn 
 import logging
 from subprocess import check_call,Popen
@@ -780,7 +780,7 @@ class LinearRegression():
 #        self.write_to_xlsx()
 #        
 #    def prune_headers(self):
-#        return pycopi.PruneCopasiHeaders(self.data).df
+#        return tasks.PruneCopasiHeaders(self.data).df
 #    
 #    def write_to_xlsx(self):
 #        if self.kwargs.get('log10')==True:
@@ -993,9 +993,9 @@ class EnsembleTimeCourse():
         d={}
         for i in range(self.param_data.shape[0]):
             LOG.info('inserting parameter set {}'.format(i))
-            I=pycopi.InsertParameters(self.copasi_file, df=self.param_data, index=i)
+            I=tasks.InsertParameters(self.copasi_file, df=self.param_data, index=i)
             LOG.info(I.parameters.transpose().sort_index())
-            TC = pycopi.TimeCourse(self.copasi_file, end = max(end_times), 
+            TC = tasks.TimeCourse(self.copasi_file, end = max(end_times), 
                                              step_size = self['step_size'], 
                                              intervals = intervals, 
                                              plot=False)
@@ -1098,9 +1098,9 @@ class PlotPEData(object):
         
         
         
-        self.CParser=pycopi.CopasiMLParser(self.copasi_file)
+        self.CParser=tasks.CopasiMLParser(self.copasi_file)
         self.copasiML=self.CParser.copasiML 
-        self.GMQ=pycopi.GetModelQuantities(self.copasi_file)
+        self.GMQ=tasks.GetModelQuantities(self.copasi_file)
 
         default_report_name=os.path.join(os.path.dirname(self.copasi_file),
                                          os.path.split(self.copasi_file)[1][:-4]+'_PE_results.txt')
@@ -1256,14 +1256,14 @@ class PlotPEData(object):
         
     def parse_parameters(self):
         if self.kwargs.get('prune_headers')==True:
-            pycopi.PruneCopasiHeaders(self.PE_result_file,replace=True)
+            tasks.PruneCopasiHeaders(self.PE_result_file,replace=True)
         df= pandas.read_csv( self.PE_result_file,sep='\t')
         df=ParsePEData(self.PE_result_file)
         df= df.data
         return pandas.DataFrame(df.iloc[-1]).transpose()
     
     def insert_parameters(self):
-        pycopi.InsertParameters(self.copasi_file,df=self.parameters)
+        tasks.InsertParameters(self.copasi_file,df=self.parameters)
         return self.copasi_file
         
         
@@ -1276,7 +1276,7 @@ class PlotPEData(object):
             '''
             need to subtract 1 from the intervals
             '''
-            TC=pycopi.TimeCourse(self.copasi_file,start=0,
+            TC=tasks.TimeCourse(self.copasi_file,start=0,
                           end=self.exp_times[i]['end'],
                           intervals=self.exp_times[i]['end'],
                           step_size=1,
@@ -1292,11 +1292,11 @@ class PlotPEData(object):
 #            '''
 #            need to subtract 1 from the intervals
 #            '''
-#            TC=pycopi.TimeCourse(self.copasi_file,Start=self.exp_times[i]['Start'],
+#            TC=tasks.TimeCourse(self.copasi_file,Start=self.exp_times[i]['Start'],
 #                          End=self.exp_times[i]['End'],
 #                          Intervals=self.exp_times[i]['End'],
 #                          StepSize=1,plot=False)
-#            P=pycopi.PruneCopasiHeaders(TC.data,replace=True)
+#            P=tasks.PruneCopasiHeaders(TC.data,replace=True)
 #            data_dct[i]=P.df
 #        return data_dct
         
@@ -1481,7 +1481,7 @@ class ModelSelection():
         for model in self.multi_model_fit.sub_cps_dirs:
             LOG.debug('Key:\t{}'.format(model))
             LOG.debug('Value \t{}'.format(self.multi_model_fit.sub_cps_dirs[model]))
-            GMQ_dct[self.multi_model_fit.sub_cps_dirs[model]]=pycopi.GetModelQuantities(self.multi_model_fit.sub_cps_dirs[model])
+            GMQ_dct[self.multi_model_fit.sub_cps_dirs[model]]=tasks.GetModelQuantities(self.multi_model_fit.sub_cps_dirs[model])
         LOG.debug('GetModelQuantities Instantiated')
         return GMQ_dct
     
@@ -1681,8 +1681,8 @@ class ModelSelection():
         
         for cps, res in self.multi_model_fit.results_folder_dct.items():
             LOG.debug('running current solution statistics PE with:\t {}'.format(cps))
-            pycopi.InsertParameters(cps,parameter_path=res, index=0)
-            PE=pycopi.ParameterEstimation(cps,self.multi_model_fit.exp_files,
+            tasks.InsertParameters(cps,parameter_path=res, index=0)
+            PE=tasks.ParameterEstimation(cps,self.multi_model_fit.exp_files,
                                        randomize_start_values=False,
                                        method='CurrentSolutionStatistics',
                                        plot=True,savefig=True,
@@ -1731,7 +1731,7 @@ class ModelSelection():
         
 if __name__=='__main__':
     pass
-#    execfile('/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Test/testing_kholodenko_manually.py')
+#    execfile('/home/b3053674/Documents/pycotools/pycotools/pycotoolsTutorial/Test/testing_kholodenko_manually.py')
 
     
     
