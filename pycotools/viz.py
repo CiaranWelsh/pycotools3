@@ -112,8 +112,7 @@ class DataFrame(pandas.DataFrame):
         return the dataframe with a log10 transformation
         :return: pycotools.DataFrame
         """
-        self.islog10=True
-        return numpy.log10(self)
+        return DataFrame(numpy.log10(self), islog10=True)
 
     def to_linear(self):
         """
@@ -121,8 +120,7 @@ class DataFrame(pandas.DataFrame):
         linear
         :return:
         """
-        self.islog10=False
-        return 10**self
+        return DataFrame(numpy.power(10, self), islog10=False)
 
 
 

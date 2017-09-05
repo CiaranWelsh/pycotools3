@@ -1,0 +1,1833 @@
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:_do_checks:2555:self.local parameters --> [LocalParameter(name="k1", key="Parameter_65004530", reaction_name="A2B, value=0.1"), LocalParameter(name="k1", key="Parameter_38972201", reaction_name="B2C, value=0.1"), LocalParameter(name="k2", key="Parameter_26541453", reaction_name="B2C, value=0.1"), LocalParameter(name="k1", key="Parameter_40360664", reaction_name="C2A, value=0.1"), LocalParameter(name="k1", key="Parameter_66838545", reaction_name="ADeg, value=0.1")]
+DEBUG:pycotools.tasks:tasks:_do_checks:2555:self.local parameters --> [LocalParameter(name="k1", key="Parameter_65004530", reaction_name="A2B, value=0.1"), LocalParameter(name="k1", key="Parameter_38972201", reaction_name="B2C, value=0.1"), LocalParameter(name="k2", key="Parameter_26541453", reaction_name="B2C, value=0.1"), LocalParameter(name="k1", key="Parameter_40360664", reaction_name="C2A, value=0.1"), LocalParameter(name="k1", key="Parameter_66838545", reaction_name="ADeg, value=0.1")]
+DEBUG:pycotools.tasks:tasks:add_fit_item:3017:component --> LocalParameter(name="k1", key="Parameter_66838545", reaction_name="ADeg, value=0.1")
+DEBUG:pycotools.tasks:tasks:add_fit_item:3022:subA4 --> {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}
+DEBUG:pycotools.tasks:tasks:add_fit_item:3017:component --> LocalParameter(name="k2", key="Parameter_26541453", reaction_name="B2C, value=0.1")
+DEBUG:pycotools.tasks:tasks:add_fit_item:3022:subA4 --> {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2,Reference=Value'}
+DEBUG:pycotools.tasks:tasks:add_fit_item:3017:component --> LocalParameter(name="k1", key="Parameter_40360664", reaction_name="C2A, value=0.1")
+DEBUG:pycotools.tasks:tasks:add_fit_item:3022:subA4 --> {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}
+DEBUG:pycotools.tasks:tasks:_do_checks:2555:self.local parameters --> [LocalParameter(name="k1", key="Parameter_86847775", reaction_name="A2B, value=0.1"), LocalParameter(name="k1", key="Parameter_23412588", reaction_name="B2C, value=0.1"), LocalParameter(name="k2", key="Parameter_84582379", reaction_name="B2C, value=0.1"), LocalParameter(name="k1", key="Parameter_52014171", reaction_name="C2A, value=0.1"), LocalParameter(name="k1", key="Parameter_30281009", reaction_name="ADeg, value=0.1")]
+DEBUG:pycotools.tasks:tasks:_do_checks:2555:self.local parameters --> [LocalParameter(name="k1", key="Parameter_86847775", reaction_name="A2B, value=0.1"), LocalParameter(name="k1", key="Parameter_23412588", reaction_name="B2C, value=0.1"), LocalParameter(name="k2", key="Parameter_84582379", reaction_name="B2C, value=0.1"), LocalParameter(name="k1", key="Parameter_52014171", reaction_name="C2A, value=0.1"), LocalParameter(name="k1", key="Parameter_30281009", reaction_name="ADeg, value=0.1")]
+DEBUG:pycotools.tasks:tasks:add_fit_item:3017:component --> LocalParameter(name="k1", key="Parameter_30281009", reaction_name="ADeg, value=0.1")
+DEBUG:pycotools.tasks:tasks:add_fit_item:3022:subA4 --> {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}
+DEBUG:pycotools.tasks:tasks:add_fit_item:3017:component --> LocalParameter(name="k2", key="Parameter_84582379", reaction_name="B2C, value=0.1")
+DEBUG:pycotools.tasks:tasks:add_fit_item:3022:subA4 --> {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2,Reference=Value'}
+DEBUG:pycotools.tasks:tasks:add_fit_item:3017:component --> LocalParameter(name="k1", key="Parameter_52014171", reaction_name="C2A, value=0.1")
+DEBUG:pycotools.tasks:tasks:add_fit_item:3022:subA4 --> {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}
+DEBUG:pycotools.tasks:tasks:_do_checks:2555:self.local parameters --> [LocalParameter(name="k1", key="Parameter_8183859", reaction_name="A2B, value=0.1"), LocalParameter(name="k1", key="Parameter_74296520", reaction_name="B2C, value=0.1"), LocalParameter(name="k2", key="Parameter_36199122", reaction_name="B2C, value=0.1"), LocalParameter(name="k1", key="Parameter_16671029", reaction_name="C2A, value=0.1"), LocalParameter(name="k1", key="Parameter_31533820", reaction_name="ADeg, value=0.1")]
+DEBUG:pycotools.tasks:tasks:_do_checks:2555:self.local parameters --> [LocalParameter(name="k1", key="Parameter_8183859", reaction_name="A2B, value=0.1"), LocalParameter(name="k1", key="Parameter_74296520", reaction_name="B2C, value=0.1"), LocalParameter(name="k2", key="Parameter_36199122", reaction_name="B2C, value=0.1"), LocalParameter(name="k1", key="Parameter_16671029", reaction_name="C2A, value=0.1"), LocalParameter(name="k1", key="Parameter_31533820", reaction_name="ADeg, value=0.1")]
+DEBUG:pycotools.tasks:tasks:add_fit_item:3017:component --> LocalParameter(name="k1", key="Parameter_31533820", reaction_name="ADeg, value=0.1")
+DEBUG:pycotools.tasks:tasks:add_fit_item:3022:subA4 --> {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}
+DEBUG:pycotools.tasks:tasks:add_fit_item:3017:component --> LocalParameter(name="k2", key="Parameter_36199122", reaction_name="B2C, value=0.1")
+DEBUG:pycotools.tasks:tasks:add_fit_item:3022:subA4 --> {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2,Reference=Value'}
+DEBUG:pycotools.tasks:tasks:add_fit_item:3017:component --> LocalParameter(name="k1", key="Parameter_16671029", reaction_name="C2A, value=0.1")
+DEBUG:pycotools.tasks:tasks:add_fit_item:3022:subA4 --> {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}
+DEBUG:pycotools.tasks:tasks:_do_checks:2555:self.local parameters --> [LocalParameter(name="k1", key="Parameter_2030881", reaction_name="A2B, value=0.1"), LocalParameter(name="k1", key="Parameter_63179660", reaction_name="B2C, value=0.1"), LocalParameter(name="k2", key="Parameter_73650093", reaction_name="B2C, value=0.1"), LocalParameter(name="k1", key="Parameter_58656809", reaction_name="C2A, value=0.1"), LocalParameter(name="k1", key="Parameter_89020193", reaction_name="ADeg, value=0.1")]
+DEBUG:pycotools.tasks:tasks:_do_checks:2555:self.local parameters --> [LocalParameter(name="k1", key="Parameter_2030881", reaction_name="A2B, value=0.1"), LocalParameter(name="k1", key="Parameter_63179660", reaction_name="B2C, value=0.1"), LocalParameter(name="k2", key="Parameter_73650093", reaction_name="B2C, value=0.1"), LocalParameter(name="k1", key="Parameter_58656809", reaction_name="C2A, value=0.1"), LocalParameter(name="k1", key="Parameter_89020193", reaction_name="ADeg, value=0.1")]
+DEBUG:pycotools.tasks:tasks:add_fit_item:3017:component --> LocalParameter(name="k1", key="Parameter_89020193", reaction_name="ADeg, value=0.1")
+DEBUG:pycotools.tasks:tasks:add_fit_item:3022:subA4 --> {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}
+DEBUG:pycotools.tasks:tasks:add_fit_item:3017:component --> LocalParameter(name="k2", key="Parameter_73650093", reaction_name="B2C, value=0.1")
+DEBUG:pycotools.tasks:tasks:add_fit_item:3022:subA4 --> {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2,Reference=Value'}
+DEBUG:pycotools.tasks:tasks:add_fit_item:3017:component --> LocalParameter(name="k1", key="Parameter_58656809", reaction_name="C2A, value=0.1")
+DEBUG:pycotools.tasks:tasks:add_fit_item:3022:subA4 --> {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}
+INFO:pycotools.tasks:tasks:run:3417:running model: 0
+INFO:pycotools.tasks:tasks:run:3417:running model: 1
+INFO:pycotools.tasks:tasks:run:3417:running model: 0
+INFO:pycotools.tasks:tasks:run:3417:running model: 1
+DEBUG:pycotools.tasks:tasks:_do_checks:2555:self.local parameters --> [LocalParameter(name="k1", key="Parameter_37723012", reaction_name="A2B, value=0.1"), LocalParameter(name="k1", key="Parameter_77413092", reaction_name="B2C, value=0.1"), LocalParameter(name="k2", key="Parameter_62075247", reaction_name="B2C, value=0.1"), LocalParameter(name="k1", key="Parameter_76214914", reaction_name="C2A, value=0.1"), LocalParameter(name="k1", key="Parameter_2595942", reaction_name="ADeg, value=0.1")]
+DEBUG:pycotools.tasks:tasks:_do_checks:2555:self.local parameters --> [LocalParameter(name="k1", key="Parameter_37723012", reaction_name="A2B, value=0.1"), LocalParameter(name="k1", key="Parameter_77413092", reaction_name="B2C, value=0.1"), LocalParameter(name="k2", key="Parameter_62075247", reaction_name="B2C, value=0.1"), LocalParameter(name="k1", key="Parameter_76214914", reaction_name="C2A, value=0.1"), LocalParameter(name="k1", key="Parameter_2595942", reaction_name="ADeg, value=0.1")]
+DEBUG:pycotools.tasks:tasks:add_fit_item:3017:component --> LocalParameter(name="k1", key="Parameter_2595942", reaction_name="ADeg, value=0.1")
+DEBUG:pycotools.tasks:tasks:add_fit_item:3022:subA4 --> {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}
+DEBUG:pycotools.tasks:tasks:add_fit_item:3017:component --> LocalParameter(name="k2", key="Parameter_62075247", reaction_name="B2C, value=0.1")
+DEBUG:pycotools.tasks:tasks:add_fit_item:3022:subA4 --> {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2,Reference=Value'}
+DEBUG:pycotools.tasks:tasks:add_fit_item:3017:component --> LocalParameter(name="k1", key="Parameter_76214914", reaction_name="C2A, value=0.1")
+DEBUG:pycotools.tasks:tasks:add_fit_item:3022:subA4 --> {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:_do_checks:2555:self.local parameters --> [LocalParameter(name="k1", key="Parameter_30150403", reaction_name="A2B, value=0.1"), LocalParameter(name="k1", key="Parameter_80557938", reaction_name="B2C, value=0.1"), LocalParameter(name="k2", key="Parameter_65324370", reaction_name="B2C, value=0.1"), LocalParameter(name="k1", key="Parameter_1704917", reaction_name="C2A, value=0.1"), LocalParameter(name="k1", key="Parameter_29963034", reaction_name="ADeg, value=0.1")]
+DEBUG:pycotools.tasks:tasks:_do_checks:2555:self.local parameters --> [LocalParameter(name="k1", key="Parameter_30150403", reaction_name="A2B, value=0.1"), LocalParameter(name="k1", key="Parameter_80557938", reaction_name="B2C, value=0.1"), LocalParameter(name="k2", key="Parameter_65324370", reaction_name="B2C, value=0.1"), LocalParameter(name="k1", key="Parameter_1704917", reaction_name="C2A, value=0.1"), LocalParameter(name="k1", key="Parameter_29963034", reaction_name="ADeg, value=0.1")]
+DEBUG:pycotools.tasks:tasks:add_fit_item:3017:component --> LocalParameter(name="k1", key="Parameter_29963034", reaction_name="ADeg, value=0.1")
+DEBUG:pycotools.tasks:tasks:add_fit_item:3022:subA4 --> {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}
+DEBUG:pycotools.tasks:tasks:add_fit_item:3017:component --> LocalParameter(name="k2", key="Parameter_65324370", reaction_name="B2C, value=0.1")
+DEBUG:pycotools.tasks:tasks:add_fit_item:3022:subA4 --> {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2,Reference=Value'}
+DEBUG:pycotools.tasks:tasks:add_fit_item:3017:component --> LocalParameter(name="k1", key="Parameter_1704917", reaction_name="C2A, value=0.1")
+DEBUG:pycotools.tasks:tasks:add_fit_item:3022:subA4 --> {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}
+DEBUG:pycotools.tasks:tasks:_do_checks:2555:self.local parameters --> [LocalParameter(name="k1", key="Parameter_37143404", reaction_name="A2B, value=0.1"), LocalParameter(name="k1", key="Parameter_22986624", reaction_name="B2C, value=0.1"), LocalParameter(name="k2", key="Parameter_21421477", reaction_name="B2C, value=0.1"), LocalParameter(name="k1", key="Parameter_59014051", reaction_name="C2A, value=0.1"), LocalParameter(name="k1", key="Parameter_5349773", reaction_name="ADeg, value=0.1")]
+DEBUG:pycotools.tasks:tasks:_do_checks:2555:self.local parameters --> [LocalParameter(name="k1", key="Parameter_37143404", reaction_name="A2B, value=0.1"), LocalParameter(name="k1", key="Parameter_22986624", reaction_name="B2C, value=0.1"), LocalParameter(name="k2", key="Parameter_21421477", reaction_name="B2C, value=0.1"), LocalParameter(name="k1", key="Parameter_59014051", reaction_name="C2A, value=0.1"), LocalParameter(name="k1", key="Parameter_5349773", reaction_name="ADeg, value=0.1")]
+DEBUG:pycotools.tasks:tasks:add_fit_item:3017:component --> LocalParameter(name="k1", key="Parameter_5349773", reaction_name="ADeg, value=0.1")
+DEBUG:pycotools.tasks:tasks:add_fit_item:3022:subA4 --> {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}
+DEBUG:pycotools.tasks:tasks:add_fit_item:3017:component --> LocalParameter(name="k2", key="Parameter_21421477", reaction_name="B2C, value=0.1")
+DEBUG:pycotools.tasks:tasks:add_fit_item:3022:subA4 --> {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2,Reference=Value'}
+DEBUG:pycotools.tasks:tasks:add_fit_item:3017:component --> LocalParameter(name="k1", key="Parameter_59014051", reaction_name="C2A, value=0.1")
+DEBUG:pycotools.tasks:tasks:add_fit_item:3022:subA4 --> {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}
+DEBUG:pycotools.tasks:tasks:_do_checks:2555:self.local parameters --> [LocalParameter(name="k1", key="Parameter_72488701", reaction_name="A2B, value=0.1"), LocalParameter(name="k1", key="Parameter_25071707", reaction_name="B2C, value=0.1"), LocalParameter(name="k2", key="Parameter_10921313", reaction_name="B2C, value=0.1"), LocalParameter(name="k1", key="Parameter_81227163", reaction_name="C2A, value=0.1"), LocalParameter(name="k1", key="Parameter_97454119", reaction_name="ADeg, value=0.1")]
+DEBUG:pycotools.tasks:tasks:_do_checks:2555:self.local parameters --> [LocalParameter(name="k1", key="Parameter_72488701", reaction_name="A2B, value=0.1"), LocalParameter(name="k1", key="Parameter_25071707", reaction_name="B2C, value=0.1"), LocalParameter(name="k2", key="Parameter_10921313", reaction_name="B2C, value=0.1"), LocalParameter(name="k1", key="Parameter_81227163", reaction_name="C2A, value=0.1"), LocalParameter(name="k1", key="Parameter_97454119", reaction_name="ADeg, value=0.1")]
+DEBUG:pycotools.tasks:tasks:add_fit_item:3017:component --> LocalParameter(name="k1", key="Parameter_97454119", reaction_name="ADeg, value=0.1")
+DEBUG:pycotools.tasks:tasks:add_fit_item:3022:subA4 --> {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}
+DEBUG:pycotools.tasks:tasks:add_fit_item:3017:component --> LocalParameter(name="k2", key="Parameter_10921313", reaction_name="B2C, value=0.1")
+DEBUG:pycotools.tasks:tasks:add_fit_item:3022:subA4 --> {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2,Reference=Value'}
+DEBUG:pycotools.tasks:tasks:add_fit_item:3017:component --> LocalParameter(name="k1", key="Parameter_81227163", reaction_name="C2A, value=0.1")
+DEBUG:pycotools.tasks:tasks:add_fit_item:3022:subA4 --> {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}
+DEBUG:pycotools.tasks:tasks:_do_checks:2555:self.local parameters --> [LocalParameter(name="k1", key="Parameter_34438688", reaction_name="A2B, value=0.1"), LocalParameter(name="k1", key="Parameter_5847643", reaction_name="B2C, value=0.1"), LocalParameter(name="k2", key="Parameter_78725306", reaction_name="B2C, value=0.1"), LocalParameter(name="k1", key="Parameter_5023465", reaction_name="C2A, value=0.1"), LocalParameter(name="k1", key="Parameter_22607828", reaction_name="ADeg, value=0.1")]
+DEBUG:pycotools.tasks:tasks:_do_checks:2555:self.local parameters --> [LocalParameter(name="k1", key="Parameter_34438688", reaction_name="A2B, value=0.1"), LocalParameter(name="k1", key="Parameter_5847643", reaction_name="B2C, value=0.1"), LocalParameter(name="k2", key="Parameter_78725306", reaction_name="B2C, value=0.1"), LocalParameter(name="k1", key="Parameter_5023465", reaction_name="C2A, value=0.1"), LocalParameter(name="k1", key="Parameter_22607828", reaction_name="ADeg, value=0.1")]
+DEBUG:pycotools.tasks:tasks:add_fit_item:3017:component --> LocalParameter(name="k1", key="Parameter_22607828", reaction_name="ADeg, value=0.1")
+DEBUG:pycotools.tasks:tasks:add_fit_item:3022:subA4 --> {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}
+DEBUG:pycotools.tasks:tasks:add_fit_item:3017:component --> LocalParameter(name="k2", key="Parameter_78725306", reaction_name="B2C, value=0.1")
+DEBUG:pycotools.tasks:tasks:add_fit_item:3022:subA4 --> {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2,Reference=Value'}
+DEBUG:pycotools.tasks:tasks:add_fit_item:3017:component --> LocalParameter(name="k1", key="Parameter_5023465", reaction_name="C2A, value=0.1")
+DEBUG:pycotools.tasks:tasks:add_fit_item:3022:subA4 --> {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}
+INFO:pycotools.tasks:tasks:run:3417:running model: 0
+INFO:pycotools.tasks:tasks:run:3417:running model: 1
+DEBUG:pycotools.tasks:tasks:_do_checks:2555:self.local parameters --> [LocalParameter(name="k1", key="Parameter_40941385", reaction_name="A2B, value=0.1"), LocalParameter(name="k1", key="Parameter_34400669", reaction_name="B2C, value=0.1"), LocalParameter(name="k2", key="Parameter_77264155", reaction_name="B2C, value=0.1"), LocalParameter(name="k1", key="Parameter_69001838", reaction_name="C2A, value=0.1"), LocalParameter(name="k1", key="Parameter_65600770", reaction_name="ADeg, value=0.1")]
+DEBUG:pycotools.tasks:tasks:_do_checks:2555:self.local parameters --> [LocalParameter(name="k1", key="Parameter_40941385", reaction_name="A2B, value=0.1"), LocalParameter(name="k1", key="Parameter_34400669", reaction_name="B2C, value=0.1"), LocalParameter(name="k2", key="Parameter_77264155", reaction_name="B2C, value=0.1"), LocalParameter(name="k1", key="Parameter_69001838", reaction_name="C2A, value=0.1"), LocalParameter(name="k1", key="Parameter_65600770", reaction_name="ADeg, value=0.1")]
+DEBUG:pycotools.tasks:tasks:add_fit_item:3017:component --> LocalParameter(name="k1", key="Parameter_65600770", reaction_name="ADeg, value=0.1")
+DEBUG:pycotools.tasks:tasks:add_fit_item:3022:subA4 --> {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}
+DEBUG:pycotools.tasks:tasks:add_fit_item:3017:component --> LocalParameter(name="k2", key="Parameter_77264155", reaction_name="B2C, value=0.1")
+DEBUG:pycotools.tasks:tasks:add_fit_item:3022:subA4 --> {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2,Reference=Value'}
+DEBUG:pycotools.tasks:tasks:add_fit_item:3017:component --> LocalParameter(name="k1", key="Parameter_69001838", reaction_name="C2A, value=0.1")
+DEBUG:pycotools.tasks:tasks:add_fit_item:3022:subA4 --> {'type': 'cn', 'name': 'ObjectCN', 'value': 'CN=Root,Model=New Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1,Reference=Value'}
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3414:running model: 0
+INFO:pycotools.tasks:tasks:run:3414:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3414:running model: 0
+INFO:pycotools.tasks:tasks:run:3414:running model: 1
+INFO:pycotools.tasks:tasks:run:3414:running model: 2
+INFO:pycotools.tasks:tasks:run:3414:running model: 3
+INFO:pycotools.tasks:tasks:run:3414:running model: 4
+INFO:pycotools.tasks:tasks:run:3414:running model: 5
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3414:running model: 0
+INFO:pycotools.tasks:tasks:run:3414:running model: 1
+INFO:pycotools.tasks:tasks:run:3414:running model: 2
+INFO:pycotools.tasks:tasks:run:3414:running model: 3
+INFO:pycotools.tasks:tasks:run:3414:running model: 4
+INFO:pycotools.tasks:tasks:run:3414:running model: 5
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3414:running model: 0
+INFO:pycotools.tasks:tasks:run:3414:running model: 1
+INFO:pycotools.tasks:tasks:run:3414:running model: 2
+INFO:pycotools.tasks:tasks:run:3414:running model: 3
+INFO:pycotools.tasks:tasks:run:3414:running model: 4
+INFO:pycotools.tasks:tasks:run:3414:running model: 5
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3414:running model: 0
+INFO:pycotools.tasks:tasks:run:3414:running model: 1
+INFO:pycotools.tasks:tasks:run:3414:running model: 2
+INFO:pycotools.tasks:tasks:run:3414:running model: 3
+INFO:pycotools.tasks:tasks:run:3414:running model: 4
+INFO:pycotools.tasks:tasks:run:3414:running model: 5
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.viz:viz:read_PE_data_file:128:Cannot parse data from /home/b3053674/Documents/pycotools/pycotools/Tests/MultipleParameterEstimationResults/PEData5.txt
+WARNING:pycotools.viz:viz:read_PE_data_file:128:Cannot parse data from /home/b3053674/Documents/pycotools/pycotools/Tests/MultipleParameterEstimationResults/PEData3.txt
+WARNING:pycotools.viz:viz:read_PE_data_file:128:Cannot parse data from /home/b3053674/Documents/pycotools/pycotools/Tests/MultipleParameterEstimationResults/PEData2.txt
+WARNING:pycotools.viz:viz:read_PE_data_file:128:Cannot parse data from /home/b3053674/Documents/pycotools/pycotools/Tests/MultipleParameterEstimationResults/PEData1.txt
+WARNING:pycotools.viz:viz:read_PE_data_file:128:Cannot parse data from /home/b3053674/Documents/pycotools/pycotools/Tests/MultipleParameterEstimationResults/PEData4.txt
+WARNING:pycotools.viz:viz:read_PE_data_file:128:Cannot parse data from /home/b3053674/Documents/pycotools/pycotools/Tests/MultipleParameterEstimationResults/PEData0.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:__init__:94:type cls instance --> <class 'pycotools.tasks.Scan'>
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:__init__:95:type cls instance --> <class 'pycotools.tasks.Scan'>
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:__init__:95:type cls instance --> <class 'pycotools.tasks.Scan'>
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:__init__:95:type cls instance --> <class 'pycotools.tasks.Scan'>
+DEBUG:pycotools.viz:viz:__init__:96:type cls instance. scan type--> 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:__init__:95:type cls instance --> <class 'pycotools.tasks.Scan'>
+DEBUG:pycotools.viz:viz:__init__:96:type cls instance. scan type--> 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:__init__:95:type cls instance --> <class 'pycotools.tasks.Scan'>
+DEBUG:pycotools.viz:viz:__init__:96:type cls instance. scan type--> 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:__init__:95:type cls instance --> <class 'pycotools.tasks.Scan'>
+DEBUG:pycotools.viz:viz:__init__:96:type cls instance. scan type--> 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:__init__:95:type cls instance --> <class 'pycotools.tasks.Scan'>
+DEBUG:pycotools.viz:viz:__init__:96:type cls instance. scan type--> 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:__init__:95:type cls instance --> <class 'pycotools.tasks.Scan'>
+DEBUG:pycotools.viz:viz:__init__:96:type cls instance. scan type--> 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:__init__:95:type cls instance --> <class 'pycotools.tasks.Scan'>
+DEBUG:pycotools.viz:viz:__init__:96:type cls instance. scan type--> 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+DEBUG:pycotools.viz:viz:__init__:95:type cls instance --> <class 'pycotools.tasks.Scan'>
+DEBUG:pycotools.viz:viz:__init__:96:type cls instance. scan type--> 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+DEBUG:pycotools.viz:viz:__init__:95:type cls instance --> <class 'pycotools.tasks.Scan'>
+DEBUG:pycotools.viz:viz:__init__:96:type cls instance. scan type--> 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+DEBUG:pycotools.viz:viz:__init__:95:type cls instance --> <class 'pycotools.tasks.Scan'>
+DEBUG:pycotools.viz:viz:__init__:96:type cls instance. scan type--> 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+DEBUG:pycotools.viz:viz:__init__:95:type cls instance --> <class 'pycotools.tasks.Scan'>
+DEBUG:pycotools.viz:viz:__init__:96:type cls instance. scan type--> 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+DEBUG:pycotools.viz:viz:__init__:95:type cls instance --> <class 'pycotools.tasks.Scan'>
+DEBUG:pycotools.viz:viz:__init__:96:type cls instance. scan type--> 1
+DEBUG:pycotools.viz:viz:parse_scan:142:type df
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+DEBUG:pycotools.viz:viz:__init__:95:type cls instance --> <class 'pycotools.tasks.Scan'>
+DEBUG:pycotools.viz:viz:__init__:96:type cls instance. scan type--> 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+DEBUG:pycotools.viz:viz:__init__:95:type cls instance --> <class 'pycotools.tasks.Scan'>
+DEBUG:pycotools.viz:viz:__init__:96:type cls instance. scan type--> 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+DEBUG:pycotools.viz:viz:__init__:95:type cls instance --> <class 'pycotools.tasks.Scan'>
+DEBUG:pycotools.viz:viz:__init__:96:type cls instance. scan type--> 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+DEBUG:pycotools.viz:viz:__init__:95:type cls instance --> <class 'pycotools.tasks.Scan'>
+DEBUG:pycotools.viz:viz:__init__:96:type cls instance. scan type--> 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+DEBUG:pycotools.viz:viz:__init__:95:type cls instance --> <class 'pycotools.tasks.Scan'>
+DEBUG:pycotools.viz:viz:__init__:96:type cls instance. scan type--> 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+DEBUG:pycotools.viz:viz:__init__:95:type cls instance --> <class 'pycotools.tasks.Scan'>
+DEBUG:pycotools.viz:viz:__init__:96:type cls instance. scan type--> 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1325:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+DEBUG:pycotools.viz:viz:__init__:95:type cls instance --> <class 'pycotools.tasks.Scan'>
+DEBUG:pycotools.viz:viz:__init__:96:type cls instance. scan type--> 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:create_experiment:2002:[B] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:[A] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:[C] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:Values[ThisIsAssignment] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:Values[B2C] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:Values[A2B] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:[B] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:[A] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:[C] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:Values[ThisIsAssignment] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:Values[B2C] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:Values[A2B] not found. Set to ignore
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:create_experiment:2002:Time not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:Time not found. Set to ignore
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:create_experiment:2002:Time not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:Time not found. Set to ignore
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:create_experiment:2002:Time not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:Time not found. Set to ignore
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:create_experiment:2002:Time not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:Time not found. Set to ignore
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:create_experiment:2002:Time not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:Time not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:Time not found. Set to ignore
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:create_experiment:2002:[B] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:[A] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:[C] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:Values[ThisIsAssignment] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:Values[B2C] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:Values[A2B] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:[B] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:[A] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:[C] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:Values[ThisIsAssignment] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:Values[B2C] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:Values[A2B] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:[B] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:[A] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:[C] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:Values[ThisIsAssignment] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:Values[B2C] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:Values[A2B] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:[B] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:[A] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:[C] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:Values[ThisIsAssignment] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:Values[B2C] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2002:Values[A2B] not found. Set to ignore
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+WARNING:pycotools.viz:viz:parse_multi_parameter_estimation:181:No Columns to parse from file. /home/b3053674/Documents/pycotools/pycotools/Tests/PEData.txt is empty. Returned None
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3539:running model: 0
+INFO:pycotools.tasks:tasks:run:3539:running model: 1
+INFO:pycotools.tasks:tasks:run:3539:running model: 0
+INFO:pycotools.tasks:tasks:run:3539:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+WARNING:pycotools.viz:viz:parse_multi_parameter_estimation:181:No Columns to parse from file. /home/b3053674/Documents/pycotools/pycotools/Tests/PEData.txt is empty. Returned None
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+WARNING:pycotools.viz:viz:parse_multi_parameter_estimation:181:No Columns to parse from file. /home/b3053674/Documents/pycotools/pycotools/Tests/PEData.txt is empty. Returned None
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+WARNING:pycotools.viz:viz:parse_multi_parameter_estimation:181:No Columns to parse from file. /home/b3053674/Documents/pycotools/pycotools/Tests/PEData.txt is empty. Returned None
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.viz:viz:parse_multi_parameter_estimation:181:No Columns to parse from file. /home/b3053674/Documents/pycotools/pycotools/Tests/PEData.txt is empty. Returned None
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.viz:viz:parse_multi_parameter_estimation:181:No Columns to parse from file. /home/b3053674/Documents/pycotools/pycotools/Tests/PEData.txt is empty. Returned None
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+WARNING:pycotools.viz:viz:parse_multi_parameter_estimation:181:No Columns to parse from file. /home/b3053674/Documents/pycotools/pycotools/Tests/PEData.txt is empty. Returned None
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:pycotools.tasks:tasks:run:3536:running model: 0
+INFO:pycotools.tasks:tasks:run:3536:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.viz:viz:parse_multi_parameter_estimation:181:No Columns to parse from file. /home/b3053674/Documents/pycotools/pycotools/Tests/PEData.txt is empty. Returned None
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.viz:viz:parse_multi_parameter_estimation:184:No Columns to parse from file. /home/b3053674/Documents/pycotools/pycotools/Tests/PEData.txt is empty. Returned None
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.viz:viz:parse_multi_parameter_estimation:184:No Columns to parse from file. PEData1.txt is empty. Returned None
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:178:report_name is --PEData1.txt
+WARNING:pycotools.viz:viz:parse_multi_parameter_estimation:185:No Columns to parse from file. PEData1.txt is empty. Returned None
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:179:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/PEData1.txt
+WARNING:pycotools.viz:viz:parse_multi_parameter_estimation:186:No Columns to parse from file. /home/b3053674/Documents/pycotools/pycotools/Tests/PEData1.txt is empty. Returned None
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:179:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/PEData.txt/PEData1.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:179:report_name is --test_mpe/PEData1.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:179:report_name is --test_mpe/PEData1.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:179:report_name is --test_mpe/test_mpe/
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:179:report_name is --test_mpe/test_mpe/PEData1.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:179:report_name is --test_mpe/test_mpe/PEData1.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:179:report_name is --test_mpe/PEData1.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData1.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 2
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData1.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 2
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData2.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:196:flow
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData2.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:196:flow
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData1.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:196:flow
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData0.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:196:flow
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData2.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData2.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData2.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData2.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData2.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData2.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData1.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData0.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData2.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData1.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData0.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData2.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData1.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData0.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData2.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData1.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData0.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData2.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData1.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData0.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData2.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData1.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData0.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData2.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData1.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData0.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe2/PEData1.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe2/PEData0.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData1.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData0.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData1.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:180:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData0.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:187:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData1.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:187:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData0.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:192:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData1.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:192:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData1.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:192:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData0.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:192:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/multi_pe_test_folder/PEData5.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 2
+INFO:pycotools.tasks:tasks:run:3540:running model: 3
+INFO:pycotools.tasks:tasks:run:3540:running model: 4
+INFO:pycotools.tasks:tasks:run:3540:running model: 5
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 2
+INFO:pycotools.tasks:tasks:run:3540:running model: 3
+INFO:pycotools.tasks:tasks:run:3540:running model: 4
+INFO:pycotools.tasks:tasks:run:3540:running model: 5
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:192:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/multi_pe_test_folder/PEData5.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:192:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData1.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:192:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData0.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 2
+INFO:pycotools.tasks:tasks:run:3540:running model: 3
+INFO:pycotools.tasks:tasks:run:3540:running model: 4
+INFO:pycotools.tasks:tasks:run:3540:running model: 5
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:192:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData5.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:192:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData5.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:192:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData3.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:192:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData2.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:192:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData1.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:192:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData4.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:192:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData0.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3540:running model: 0
+INFO:pycotools.tasks:tasks:run:3540:running model: 1
+INFO:pycotools.tasks:tasks:run:3540:running model: 2
+INFO:pycotools.tasks:tasks:run:3540:running model: 3
+INFO:pycotools.tasks:tasks:run:3540:running model: 4
+INFO:pycotools.tasks:tasks:run:3540:running model: 5
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:192:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData5.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:192:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData3.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:192:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData2.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:192:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData1.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:192:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData4.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:192:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData0.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:192:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData5.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:192:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData3.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:192:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData2.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:192:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData1.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:192:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData4.txt
+DEBUG:pycotools.viz:viz:parse_multi_parameter_estimation:192:report_name is --/home/b3053674/Documents/pycotools/pycotools/Tests/test_mpe/PEData0.txt
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:28:Initializing pycotools
+INFO:root:__init__:<module>:29:Initializing logging System
+INFO:root:__init__:<module>:30:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
