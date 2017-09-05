@@ -84,6 +84,49 @@ seaborn.set_context(context=SEABORN_OPTIONS['context'], font_scale=SEABORN_OPTIO
 #                     raise errors.InputError('data is of type {}. The path of your analysis cannot be inferred and therefore you much specify an argument to the results_directory keyword')
 #         return results_directory
 
+class DataFrame(pandas.DataFrame):
+    """
+    Like a normal dataframe but with a
+    flag indicating whether the data is
+    in log10 scale or not
+    """
+    def __init__(self, df, islog10):
+        super(DataFrame, self).__init__(df)
+        # self.df = df
+        self.islog10 = islog10
+        self._do_checks()
+
+    def _do_checks(self):
+        """
+        validate integrity of data
+        :return:
+        """
+        if not isinstance(self, pandas.core.frame.DataFrame):
+            raise errors.InputError('df argument shold be pandas.DataFrame. Got {}'.format(type(self.df)))
+
+        if not isinstance(self.islog10, bool):
+            raise errors.InputError('log10 should be boolean. Got'.format(type(self.log10)))
+
+    def to_log10(self):
+        """
+        return the dataframe with a log10 transformation
+        :return: pycotools.DataFrame
+        """
+        self.islog10=True
+        return numpy.log10(self)
+
+    def to_linear(self):
+        """
+        convert df in log10 scale back to
+        linear
+        :return:
+        """
+        self.islog10=False
+        return 10**self
+
+
+
+
 
 @mixin(_base.UpdatePropertiesMixin)
 class TruncateData(object):
@@ -153,10 +196,22 @@ class TruncateDataMixin(Mixin):
         mixin method interface to truncate data
         """
         return TruncateData(data,
-                            mode=truncate_mode,
+                            mode=mode,
                             x=x,
                             log10=log10).data
 
+class CreateResultsDirectoryMixin(Mixin):
+    @staticmethod
+    def create_results_directory(results_directory):
+        """
+        create directory for results and switch to it
+        :param results_directory:
+        :return:
+        """
+        if not os.path.isdir(results_directory):
+            os.makedirs(results_directory)
+        os.chdir(results_directory)
+        return results_directory
 
 
 class Parse(object):
@@ -308,7 +363,9 @@ class Parse(object):
         return df.reset_index(drop=True)
 
 class ReadDataMixin(Mixin):
-    def read_data(self):
+
+    @staticmethod
+    def read_data(data, ):
         """
         Both a pandas.DataFrame or a file or list of files can be passed
         as the data argument.
@@ -442,7 +499,7 @@ class SaveFigMixin(Mixin):
 #         return pandas.concat(df_list).sort_values(by='RSS').reset_index(drop=True)
 #
 #
-# @mixin(DefaultResultsDirectoryMixin)
+@mixin(CreateResultsDirectoryMixin)
 @mixin(ReadDataMixin)
 @mixin(TruncateDataMixin)
 @mixin(_base.UpdatePropertiesMixin)
@@ -451,17 +508,17 @@ class Boxplot(object):
     def __init__(self, data, **kwargs):
         self.data = data
         
-        options={'sep':'\t',
-                 'log10':False,
-                 'truncate_mode':'percent',
-                 'x':100,
-                 'num_per_plot':6,
-                 'xtick_rotation':'vertical',
-                 'ylabel':'Estimated Parameter\n Value(Log10)',
-                 'title':'Parameter Distributions',
-                 'savefig':False,
-                 'results_directory':None,
-                 'dpi':300}
+        options={'sep': '\t',
+                 'log10': False,
+                 'truncate_mode': 'percent',
+                 'x': 100,
+                 'num_per_plot': 6,
+                 'xtick_rotation': 'vertical',
+                 'ylabel': 'Estimated Parameter\n Value(Log10)',
+                 'title': 'Parameter Distributions',
+                 'savefig': False,
+                 'results_directory': None,
+                 'dpi': 300}
         
         for i in kwargs.keys():
             assert i in options.keys(),'{} is not a keyword argument for Boxplot'.format(i)
@@ -470,39 +527,22 @@ class Boxplot(object):
 
         self.update_properties(self.kwargs)
 
-        # ## set default results_directory
-        # self.default_directory()
-        # if self.savefig:
-        #     if self.results_directory == None:
-        #         if isinstance(data, str):
-        #             self.results_directory = os.path.join(os.path.dirname(self.data))
-        #         if isinstance(data, pandas.core.frame.DataFrame):
-        #             raise errors.InputError('data is of type {}. The path of your analysis cannot be inferred and therefore you much specify an argument to the results_directory keyword')
- 
+        if self.results_directory is None:
+            raise errors.InputError('')
 
-        
-        self.data = self.read_data()
+        self.create_results_directory(self.results_directory)
+        self.data = self.read_data(log10=True)
         self.data = self.truncate(self.data, mode=self.truncate_mode, x=self.x, log10=self.log10)
         self.plot()
 
-    def __getitem__(self,key):
+    def __getitem__(self, key):
         if key not in self.kwargs.keys():
             raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
         return self.kwargs[key]
     
-    def __setitem__(self,key,value):
+    def __setitem__(self, key, value):
         self.kwargs[key] = value
 
-    # def read_data(self):
-    #     """
-    #     Both a pandas.DataFrame or a file or list of files can be passed
-    #     as the data argument.
-    #     """
-    #     if isinstance(self.data, pandas.core.frame.DataFrame)!=True:
-    #         return ParsePEData(self.data, sep=self.sep, log10=self.log10).data
-    #     else:
-    #         return self.data
-    
     def plot(self):
         """
         

@@ -56,16 +56,42 @@ class VizTests(_test_base._BaseTest):
 
         assert isinstance(self.data, pandas.core.frame.DataFrame)
 
-    def test_boxplot(self):
+
+    def test_pycotools_dataframe(self):
         """
 
         :return:
         """
-        pycotools.viz.Boxplot(self.data, savefig=True,
-                              results_directory=os.path.join(os.path.dirname(
-                                  self.model.copasi_file), 'Boxplots'
-                                )
-                              )
+        df = pandas.DataFrame([01,2,3])
+        df = pycotools.viz.DataFrame(df, islog10=False)
+        self.assertFalse(df.islog10)
+
+    def test_pycotools_dataframe2(self):
+        """
+
+        :return:
+        """
+        df = pandas.DataFrame([1,2,3])
+        df = pycotools.viz.DataFrame(df, islog10=False)
+        l = [0.0, 0.3010299956639812, 0.47712125471966244]
+        self.assertListEqual(
+            list(df.to_log10()[0]),l
+        )
+
+
+    # def test_boxplot(self):
+    #     """
+    #
+    #     :return:
+    #     """
+    #     df = pandas.DataFrame([01,2,3])
+    #     print pycotools.viz.DataFrame(df, islog10=False)
+
+        # pycotools.viz.Boxplot(self.data, savefig=True,
+        #                       results_directory=os.path.join(os.path.dirname(
+        #                           self.model.copasi_file), 'Boxplots'
+        #                         )
+        #                       )
 
         # pycotools.viz.Boxplot(self.data, savefig=True)
 
