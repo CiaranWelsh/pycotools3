@@ -121,24 +121,15 @@ class MultiParameterEstimationTests(_test_base._BaseTest):
         df = pandas.concat(df_dct)
         self.assertTrue(df.shape[0] == x)
 
-    # @retry(wait_exponential_multiplier=1000, wait_exponential_max=10000)
-    # def test_viz_parser(self):
-    #     """
-    #
-    #     :return:
-    #     """
-    #     # import time
-    #     # time.sleep(5)
-    #     # x=self.MPE.copy_number*self.MPE.pe_number
-    #     # self.MPE.run()
-    #     # df_dct = {}
-    #     # for f in os.listdir(self.MPE.results_directory):
-    #     #     f = os.path.join(self.MPE.results_directory, f)
-    #     #     df_dct[f] = pandas.read_csv(f, sep='\t', skiprows=1, header=None)
-    #     # df = pandas.concat(df_dct)
-    #     # assert df.shape[0] == x
-    #     P = pycotools.viz.Parse(self.MPE)
-    #     print P.parse_multi_parameter_estimation()
+    def test_viz_parser(self):
+        """
+
+        :return:
+        """
+        self.MPE.run()
+        P = pycotools.viz.Parse(self.MPE)
+        self.assertTrue(isinstance(P.parse_multi_parameter_estimation(),
+                                   pandas.core.frame.DataFrame))
 
 if __name__=='__main__':
     unittest.main()
