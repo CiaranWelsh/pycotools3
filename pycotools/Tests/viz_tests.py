@@ -24,7 +24,7 @@ Module that tests the operations of the _Base base test
 """
 
 import site
-# site.addsitedir('C:\Users\Ciaran\Documents\pycotools')
+site.addsitedir('C:\Users\Ciaran\Documents\pycotools')
 site.addsitedir('/home/b3053674/Documents/pycotools')
 import pandas
 import pycotools
@@ -62,7 +62,7 @@ class VizTests(_test_base._BaseTest):
 
         :return:
         """
-        df = pandas.DataFrame([01,2,3])
+        df = pandas.DataFrame([10, 100, 1000])
         df = pycotools.viz.DataFrame(df, islog10=False)
         self.assertFalse(df.islog10)
 
@@ -71,13 +71,24 @@ class VizTests(_test_base._BaseTest):
 
         :return:
         """
-        df = pandas.DataFrame([1,2,3])
+        df = pandas.DataFrame([10, 100, 1000])
         df = pycotools.viz.DataFrame(df, islog10=False)
-        l = [0.0, 0.3010299956639812, 0.47712125471966244]
+        l = [1, 2, 3]
         self.assertListEqual(
             list(df.to_log10()[0]),l
         )
 
+    def test_pycotools_dataframe3(self):
+        """
+
+        :return:
+        """
+        df = pandas.DataFrame([1,2, 3])
+        df = pycotools.viz.DataFrame(df, islog10=True)
+        l = [1, 2, 3]
+        self.assertListEqual(
+            list(df.to_log10()[0]),l
+        )
 
     # def test_boxplot(self):
     #     """
