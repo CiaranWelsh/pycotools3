@@ -120,7 +120,11 @@ class DataFrame(pandas.DataFrame):
         linear
         :return:
         """
+<<<<<<< HEAD
         return DataFrame(10**self, islog10=False)
+=======
+        return DataFrame(numpy.power(10, self), islog10=False)
+>>>>>>> 46ee243ed1b7b203c9113f9e6195fd3d292b613f
 
 
 
