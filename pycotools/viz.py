@@ -120,11 +120,7 @@ class DataFrame(pandas.DataFrame):
         linear
         :return:
         """
-<<<<<<< HEAD
-        return DataFrame(10**self, islog10=False)
-=======
         return DataFrame(numpy.power(10, self), islog10=False)
->>>>>>> 46ee243ed1b7b203c9113f9e6195fd3d292b613f
 
 
 
@@ -159,7 +155,7 @@ class TruncateData(object):
         self.mode = mode
         self.x = x
         self.log10 = log10
-        assert isinstance(self.data, pandas.core.frame.DataFrame)
+        assert isinstance(self.data, DataFrame)
         assert self.mode in ['below_x', 'percent', 'ranks']
 
         self.data = self.truncate()
@@ -197,10 +193,11 @@ class TruncateDataMixin(Mixin):
         """
         mixin method interface to truncate data
         """
-        return TruncateData(data,
+        df = TruncateData(data,
                             mode=mode,
                             x=x,
                             log10=log10).data
+        return data
 
 class CreateResultsDirectoryMixin(Mixin):
     @staticmethod
@@ -259,6 +256,9 @@ class Parse(object):
         elif isinstance(self.cls_instance,
                         tasks.MultiParameterEstimation):
             data = self.parse_multi_parameter_estimation(self.cls_instance)
+
+        ## create a pycotools.DataFrame object to keep track of log10 status
+        data = DataFrame(data, log10=False)
 
     def parse_timecourse(self):
         """
@@ -367,16 +367,24 @@ class Parse(object):
 class ReadDataMixin(Mixin):
 
     @staticmethod
-    def read_data(data, ):
+    def read_data(data, sep='\t', log10=True):
         """
         Both a pandas.DataFrame or a file or list of files can be passed
         as the data argument.
         """
-        if isinstance(self.data, pandas.core.frame.DataFrame)!=True:
-            return Parse(self.data, sep=self.sep,
-                         log10=self.log10).data
+        if isinstance(data, DataFrame)!=True:
+            df =Parse(data, sep=sep).data
+            if log10:
+                return df.to_log10()
+            else:
+                return df
+        elif isinstance(data, pandas.core.frame.DataFrame):
+            if log10:
+                return DataFrame(data, islog10=True)
+            else:
+                return DataFrame(data, islog10=False)
         else:
-            return self.data
+            return data
 
 class SaveFigMixin(Mixin):
     """
@@ -533,9 +541,9 @@ class Boxplot(object):
             raise errors.InputError('')
 
         self.create_results_directory(self.results_directory)
-        self.data = self.read_data(log10=True)
+        self.data = self.read_data(self.data, log10=self.log10)
         self.data = self.truncate(self.data, mode=self.truncate_mode, x=self.x, log10=self.log10)
-        self.plot()
+        # self.plot()
 
     def __getitem__(self, key):
         if key not in self.kwargs.keys():
