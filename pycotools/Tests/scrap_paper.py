@@ -26,7 +26,7 @@ Date:
 
 
 import site
-# site.addsitedir(r'C:\Users\Ciaran\Documents\pycotools')
+site.addsitedir(r'C:\Users\Ciaran\Documents\pycotools')
 site.addsitedir(r'/home/b3053674/Documents/pycotools')
 
 import pycotools
@@ -44,7 +44,10 @@ from mixin import Mixin, mixin
 import contextlib
 
 
-f = r'/home/b3053674/Documents/pycotools/pycotools/Tests/test_model.cps'
+dire = r'/home/b3053674/Documents/pycotools/pycotools/Tests/'
+dire = r'C:\Users\Ciaran\Documents\pycotools\pycotools\Tests'
+
+f = os.path.join(dire, 'test_model.cps')
 
 
 model = pycotools.model.Model(f)
@@ -62,7 +65,7 @@ os.remove(TC1.report_name)
 ## rewrite the data with noise
 data1.to_csv(TC1.report_name, sep='\t')
 
-MPE = pycotools.tasks.MultiParameterEstimation(
+MPE = pycotools.tasks.ParameterEstimation(
     model,
     TC1.report_name,
     copy_number=3,
@@ -74,11 +77,10 @@ MPE = pycotools.tasks.MultiParameterEstimation(
 
 MPE.write_config_file()
 MPE.setup()
-# MPE.run()
+MPE.run()
 
-
-p = pycotools.viz.Parse(MPE)
-print p.parse_multi_parameter_estimation()
+# p = pycotools.viz.Parse(MPE)
+# print p.parse_multi_parameter_estimation()
 
 
 

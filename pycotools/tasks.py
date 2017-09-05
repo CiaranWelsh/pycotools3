@@ -3057,7 +3057,7 @@ class ParameterEstimation(_base._ModelBase):
         lo = pandas.concat(df_list_local, axis=1).transpose()
         gl = pandas.concat(df_list_global, axis=1).transpose()
 
-        gl = gl.rename(columns={'value': 'start_value'})
+        gl = gl.rename(columns={'initial_value': 'start_value'})
         lo = lo.rename(columns={'value': 'start_value'})
         metab.drop('compartment', inplace=True, axis=1)
         metab = metab.rename(columns={'value': 'start_value'})
