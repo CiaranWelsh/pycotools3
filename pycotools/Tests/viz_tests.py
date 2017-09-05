@@ -71,9 +71,15 @@ class VizTests(_test_base._BaseTest):
 
         :return:
         """
+<<<<<<< HEAD
         df = pandas.DataFrame([10, 100, 1000])
         df = pycotools.viz.DataFrame(df, islog10=False)
         l = [1, 2, 3]
+=======
+        df = pandas.DataFrame([1, 10, 100])
+        df = pycotools.viz.DataFrame(df, islog10=False)
+        l = [0, 1, 2]
+>>>>>>> 46ee243ed1b7b203c9113f9e6195fd3d292b613f
         self.assertListEqual(
             list(df.to_log10()[0]),l
         )
@@ -83,12 +89,29 @@ class VizTests(_test_base._BaseTest):
 
         :return:
         """
+<<<<<<< HEAD
         df = pandas.DataFrame([1,2, 3])
         df = pycotools.viz.DataFrame(df, islog10=True)
         l = [1, 2, 3]
         self.assertListEqual(
             list(df.to_log10()[0]),l
         )
+=======
+        df = pandas.DataFrame([1, 10, 100])
+        df = pycotools.viz.DataFrame(df, islog10=False)
+        df = df.to_log10()
+        self.assertTrue(df.islog10)
+
+    def test_pycotools_dataframe3(self):
+        """
+
+        :return:
+        """
+        df = pandas.DataFrame([1, 2, 3])
+        df = pycotools.viz.DataFrame(df, islog10=True)
+        df = df.to_linear()
+        self.assertFalse(df.islog10)
+>>>>>>> 46ee243ed1b7b203c9113f9e6195fd3d292b613f
 
     # def test_boxplot(self):
     #     """
