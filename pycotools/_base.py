@@ -33,7 +33,7 @@ import logging
 from contextlib import contextmanager
 from copy import deepcopy
 # from model import Model
-
+from mixin import Mixin, mixin
 LOG = logging.getLogger(__name__)
 
 class _Base(object):
@@ -250,3 +250,16 @@ class _ModelBase(_Base):
             ## should be model.Model or etree._Element
             return self.model
 
+
+class UpdatePropertiesMixin(Mixin):
+    def update_properties(self, kwargs):
+        """
+
+        :param kwargs:
+        :return:
+        """
+        for k in kwargs:
+            try:
+                getattr(self, k)
+            except AttributeError:
+                setattr(self, k, kwargs[k])

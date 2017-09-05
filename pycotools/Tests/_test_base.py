@@ -16,7 +16,7 @@ site.addsitedir('/home/b3053674/Documents/pycotools')
 # site.addsitedir('C:\Users\Ciaran\Documents\pycotools')
 
 import pycotools
-import test_models
+import test_models, test_data
 import unittest
 import glob
 import os
@@ -47,6 +47,12 @@ class _BaseTest(unittest.TestCase):
 
     def tearDown(self):
         dire = os.path.dirname(self.copasi_file)
+
+
+        # parameter_estimation_data_folder = os.path.join(dire, 'test_mpe')
+        # if os.path.isdir(parameter_estimation_data_folder):
+        #     shutil.rmtree(parameter_estimation_data_folder)
+
         # for i in glob.glob(os.path.join(dire, '*.xlsx') ):
         #     os.remove(i)
         #

@@ -26,12 +26,13 @@ Module that tests the operations of the _Base base test
 import site
 # site.addsitedir('C:\Users\Ciaran\Documents\pycotools')
 site.addsitedir('/home/b3053674/Documents/pycotools')
-
+import pandas
 import pycotools
 from pycotools.Tests import _test_base
 import unittest
 import os
 import pickle
+import test_data
 
 
 
@@ -43,35 +44,30 @@ class VizTests(_test_base._BaseTest):
 
         '''
         instead of generating data on the fly like
-        I should do, I've pre-ran the parameter estimations
+        I should do (for good testing practivce), I've pre-ran the parameter estimations
         and saved the data to pickle under the extra_data_for_tests
         file. Now I can read this pickle and not have to run the 
-        parameter estimations each time I run a test. 
+        parameter estimations each time I run a test. I've also 
+        parsed the data into a pandas dataframe using viz.parse for ease
         '''
-        extra_data_folder = os.path.join(os.path.dirname(__file__), 'extra_data_for_tests')
-        multi_data_pickle = os.path.join(extra_data_folder, 'multi_PE_data.pickle')
-        ## load the data
-        with open(multi_data_pickle) as f:
-            self.pe_data_dict = pickle.load(f)
 
-        assert isinstance(self.pe_data_dict, dict)
+        self.data = pandas.read_pickle(
+            pycotools.Tests.test_data.Paths().pe_results_pickle)
 
-        ##recreate the results folder
-        self.fake_results_folder = os.path.join(os.path.dirname(__file__), 'multi_pe_test_folder')
+        assert isinstance(self.data, pandas.core.frame.DataFrame)
 
-        if os.path.isdir(self.fake_results_folder) !=True:
-            os.mkdir(self.fake_results_folder)
-
-        for i in self.pe_data_dict:
-            f = os.path.join(self.fake_results_folder, i)
-            self.pe_data_dict[i].to_csv(f)
-
-    def test_viz_parser(self):
+    def test_boxplot(self):
         """
 
         :return:
         """
-        print# self.pe_data_dict
+        pycotools.viz.Boxplot(self.data, savefig=True,
+                              results_directory=os.path.join(os.path.dirname(
+                                  self.model.copasi_file), 'Boxplots'
+                                )
+                              )
+
+        # pycotools.viz.Boxplot(self.data, savefig=True)
 
 
 

@@ -65,7 +65,7 @@ data1.to_csv(TC1.report_name, sep='\t')
 MPE = pycotools.tasks.MultiParameterEstimation(
     model,
     TC1.report_name,
-    copy_number=2,
+    copy_number=3,
     pe_number=8,
     method='genetic_algorithm',
     population_size=10,
@@ -77,7 +77,8 @@ MPE.setup()
 # MPE.run()
 
 
-p = viz.Parse(MPE)
+p = pycotools.viz.Parse(MPE)
+print p.parse_multi_parameter_estimation()
 
 
 
