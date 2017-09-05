@@ -28,7 +28,7 @@ import numpy
 import numpy as np
 import scipy
 import scipy.stats
-import tasks, Errors, viz, Misc
+import tasks, errors, viz, misc
 import glob
 import math
 import matplotlib.pyplot as plt
@@ -144,12 +144,12 @@ class ProfileLikelihood():
                 try:
                     assert i<=self.PE_data.shape[0],'PE data contains {} parameter estimations. You have indicated that you want to use run {}'.format(self.PE_data.shape[0],i)
                 except AttributeError:
-                    raise Errors.Errors.InputError('No data')
+                    raise errors.errors.InputError('No data')
         elif isinstance(self.kwargs.get('index'),list):
             assert self.kwargs.get('index')<=self.PE_data.shape[0],'PE data contains {} parameter estimations. You have indicated that you want to use run {}'.format(self.PE_data.shape[0],self.kwargs.get('index'))
 #
         if self.GMQ.get_fit_items()=={}:
-            raise Errors.InputError('Your copasi file doesnt have a parameter estimation defined')
+            raise errors.InputError('Your copasi file doesnt have a parameter estimation defined')
         #convert some numeric input variables to string
         self.kwargs['upper_bound_multiplier']=str(self.kwargs['upper_bound_multiplier'])
         self.kwargs['lower_bound_multiplier']=str(self.kwargs['lower_bound_multiplier'])
@@ -159,7 +159,7 @@ class ProfileLikelihood():
         self.kwargs['rho']=str(self.kwargs['rho'])
         
         if self.kwargs.get('run') not in [False,'slow','multiprocess','SGE']:
-            raise Errors.InputError('\'run\' keyword must be one of \'slow\', \'false\',\'multiprocess\', or \'SGE\'')
+            raise errors.InputError('\'run\' keyword must be one of \'slow\', \'false\',\'multiprocess\', or \'SGE\'')
 
         assert self.kwargs.get('quantity_type') in ['concentration','particle_number']
 
@@ -231,7 +231,7 @@ class ProfileLikelihood():
                 os.mkdir(IA_dir)
             os.chdir(IA_dir)
             for i in estimated_parameters:
-                st=Misc.RemoveNonAscii(i).filter
+                st=misc.RemoveNonAscii(i).filter
                 filename=os.path.join(IA_dir,'{}.cps'.format(st))
                 cps_dct[-1][i]=filename
                 if os.path.isfile(filename)==True:
@@ -252,7 +252,7 @@ class ProfileLikelihood():
                 os.mkdir(IA_dir)
             os.chdir(IA_dir)
             for i in estimated_parameters:
-                st=Misc.RemoveNonAscii(i).filter
+                st=misc.RemoveNonAscii(i).filter
                 filename=os.path.join(IA_dir,'{}.cps'.format(st))
                 cps_dct[self.kwargs.get('index')][i]=filename
                 if os.path.isfile(filename)==True:
@@ -274,7 +274,7 @@ class ProfileLikelihood():
                     os.mkdir(IA_dir2)
                 os.chdir(IA_dir2)
                 for j in estimated_parameters:
-                    st=Misc.RemoveNonAscii(j).filter
+                    st=misc.RemoveNonAscii(j).filter
 
                     filename=os.path.join(IA_dir2,'{}.cps'.format(st))
                     cps_dct[i][j]=filename
@@ -377,7 +377,7 @@ class ProfileLikelihood():
     def setup_report(self):
         for i in self.cps_dct:
             for j in self.cps_dct[i]:
-                st=Misc.RemoveNonAscii(j).filter
+                st=misc.RemoveNonAscii(j).filter
                 tasks.Reports(self.cps_dct[i][j],report_type='parameter_estimation',
                                report_name=st+'.txt',save='overwrite')
         return self.cps_dct
@@ -398,7 +398,7 @@ class ProfileLikelihood():
                 
                 tasks.Scan(self.cps_dct[i][j],
                                      variable=j,
-                                     report_name=os.path.join(os.path.dirname(self.cps_dct[i][j]), Misc.RemoveNonAscii(j).filter+'.txt' ),
+                                     report_name=os.path.join(os.path.dirname(self.cps_dct[i][j]), misc.RemoveNonAscii(j).filter+'.txt' ),
                                      report_type='profilelikelihood2',
                                      subtask='parameter_estimation',
                                      scan_type='scan',
@@ -475,12 +475,12 @@ class FormatPLData():
         self.GMQ = tasks.GetModelQuantities(self.copasi_file)
         self.report_name = report_name
         if os.path.isfile(self.report_name)!=True:
-            raise Errors.InputError('file {} does not exist'.format(self.report_name))
+            raise errors.InputError('file {} does not exist'.format(self.report_name))
             
         try:
             self.format = self.format_results()
         except IOError:
-            raise Errors.FileIsEmptyError('{} is empty and therefore cannot be read by pandas. Make sure you have waited until there is data in the parameter estimation file before formatting parameter estimation output')
+            raise errors.FileIsEmptyError('{} is empty and therefore cannot be read by pandas. Make sure you have waited until there is data in the parameter estimation file before formatting parameter estimation output')
         
         
     def format_results(self):
@@ -492,9 +492,9 @@ class FormatPLData():
         try:
             data = pandas.read_csv(self.report_name, sep='\t', header=None, skiprows=[0])
         except pandas.parser.CParserError as e:
-            raise Errors.InputError('Report {} caused Error --> {}'.format(self.report_name, e.message))
+            raise errors.InputError('Report {} caused Error --> {}'.format(self.report_name, e.message))
 #        except:
-#            raise Errors.InputError('File is empty. Check {}'.format(self.report_name))
+#            raise errors.InputError('File is empty. Check {}'.format(self.report_name))
         bracket_columns = data[data.columns[[1,-2]]]
         if bracket_columns.iloc[0].iloc[0] != '(':
             data = pandas.read_csv(self.report_name, sep='\t')
@@ -701,20 +701,20 @@ class Plot2():
             self.kwargs['experiment_files']=self.get_experiment_files_in_use()
     
         if self.kwargs.get('log10') not in [True,False]:
-            raise Errors.InputError('log10 argument should be \'true\' or \'false\' not {}'.format(self.kwargs.get('log10')))
+            raise errors.InputError('log10 argument should be \'true\' or \'false\' not {}'.format(self.kwargs.get('log10')))
 
         if self.kwargs.get('use_pickle') not in [True,False]:
-            raise Errors.InputError('use_pickle argument should be \'true\' or \'false\' not {}'.format(self.kwargs.get('log10')))
+            raise errors.InputError('use_pickle argument should be \'true\' or \'false\' not {}'.format(self.kwargs.get('log10')))
 
 
         if self.kwargs.get('overwrite_pickle') not in [True,False]:
-            raise Errors.InputError('overwrite_pickle argument should be \'true\' or \'false\' not {}'.format(self.kwargs.get('log10')))
+            raise errors.InputError('overwrite_pickle argument should be \'true\' or \'false\' not {}'.format(self.kwargs.get('log10')))
 
             
         #if index is -1 i.e. current parameters, user needs to give rss
         if self.kwargs.get('index')==-1:
             if self.kwargs.get('rss')==None:
-                raise Errors.InputError('when calculating PL around current parameter sets must specify the current rss as keyword argument to plot')
+                raise errors.InputError('when calculating PL around current parameter sets must specify the current rss as keyword argument to plot')
         
         #otherwise the rss is ascertained automatically from the parameter_path
         if self.kwargs.get('index')!=-1:
@@ -801,7 +801,7 @@ class Plot2():
         if self.kwargs.get('dof')==None:
             self.kwargs['dof']=self.degrees_of_freedom()
         if self.kwargs['dof']==None:
-            raise Errors.InputError('Please specify argument to dof keyword')
+            raise errors.InputError('Please specify argument to dof keyword')
             
         
         #defult n is number of data points in your data set. 
@@ -812,21 +812,21 @@ class Plot2():
         assert self.kwargs.get('n')!=None        
 
         if self.kwargs.get('mode') not in ['all','one',None]:
-            raise Errors.InputError('{} is not a valid mode. mode should be either all or one'.format(self.kwargs.get('mode')))
+            raise errors.InputError('{} is not a valid mode. mode should be either all or one'.format(self.kwargs.get('mode')))
             
             
 
         if self.kwargs.get('mode')=='one':
             if self['plot_parameter'] not in self.list_parameters():
-                raise Errors.InputError('{} is not a valid Parameter. Your parameters are: {}'.format(self.kwargs.get('plot_parameter'),self.list_parameters()))
+                raise errors.InputError('{} is not a valid Parameter. Your parameters are: {}'.format(self.kwargs.get('plot_parameter'),self.list_parameters()))
 
             if isinstance(self.kwargs.get('index'),int):
                 if self.kwargs.get('plot_index') != self.kwargs.get('index'):
-                    raise Errors.InputError('{} is not an index in your Indices: {}'.format(self.kwargs.get('plot_index'),self.kwargs.get('index')))
+                    raise errors.InputError('{} is not an index in your Indices: {}'.format(self.kwargs.get('plot_index'),self.kwargs.get('index')))
             
             elif isinstance(self.kwargs.get('index'),list):
                 if self.kwargs.get('plot_index') not in self.kwargs.get('index'):
-                    raise Errors.InputError('{} is not an index in your Indices: {}'.format(self.kwargs.get('plot_index'),self.kwargs.get('index')))
+                    raise errors.InputError('{} is not an index in your Indices: {}'.format(self.kwargs.get('plot_index'),self.kwargs.get('index')))
 
 
 #        self.interpolate_data()
@@ -876,7 +876,7 @@ class Plot2():
                 cps = self.result_paths[i][j][:-4]+'.cps'
                 try:
                     res[i][j] = FormatPLData(cps, self.result_paths[i][j]).format
-                except Errors.FileDoesNotExistError:
+                except errors.FileDoesNotExistError:
                     pass
         return res
             
@@ -938,7 +938,7 @@ class Plot2():
         for i in self.copasiML.xpath(query):
             f=os.path.abspath(i.attrib['value'])
             if os.path.isfile(f)!=True:
-                raise Errors.InputError('Experimental files in use cannot be automatically determined. Please give a list of experiment file paths to the experiment_files keyword'.format())
+                raise errors.InputError('Experimental files in use cannot be automatically determined. Please give a list of experiment file paths to the experiment_files keyword'.format())
             l.append(os.path.abspath(i.attrib['value']))
         
         return l
@@ -1022,7 +1022,7 @@ class Plot2():
             l.append( i.shape[0]*(i.shape[1]-1))
         s= sum(l)
         if s==0:
-            raise Errors.InputError('Number of data points cannot be 0. This is wrong')
+            raise errors.InputError('Number of data points cannot be 0. This is wrong')
         return s
 
     def get_RSS(self):
@@ -1194,7 +1194,7 @@ class Plot2():
         plt.plot(parameter_val,[CI]*len(parameter_val),'g--')#,linewidth=self.kwargs.get('line_width'))
 #        print self.GMQ.get_all_model_variables()
 #        print parameter
-        st=Misc.RemoveNonAscii(parameter).filter
+        st=misc.RemoveNonAscii(parameter).filter
 #        print st
         
         print LOG.warning(best_parameter_value)
@@ -1301,7 +1301,7 @@ class Plot2():
                     LOG.debug('Plot index: {}, plot parameter: {}'.format(-1,i))
                     self.plot1(self.kwargs['index'],i)
             except KeyError:
-                raise Errors.InputError('index out of bounds, i.e. index>number PE runs')
+                raise errors.InputError('index out of bounds, i.e. index>number PE runs')
                 
         if isinstance(self.kwargs.get('index'),int) and self.kwargs.get('index')!=-1:
             for i in self.data[self.kwargs.get('index')]:
@@ -1406,33 +1406,33 @@ class Plot():
         self.kwargs=options  
         
         if isinstance(self.data, pandas.core.frame.DataFrame)!=True:
-            raise Errors.InputError('{} should be a dataframe. Parse data with ParsePEData first.'.format(self.data))
+            raise errors.InputError('{} should be a dataframe. Parse data with ParsePEData first.'.format(self.data))
         
         self.parameter_list = sorted(list(self.data.columns))
         
         if self['x'] == None:
-            raise Errors.InputError('x cannot be None')
+            raise errors.InputError('x cannot be None')
             
         if self['y'] == None:
             self['y'] = self.parameter_list
             
         if self['y'] == None:
-            raise Errors.InputError('y cannot be None')
+            raise errors.InputError('y cannot be None')
             
         if self['x'] not in self.parameter_list:
-            raise Errors.InputError('{} not in {}'.format(self['x'], self.parameter_list))
+            raise errors.InputError('{} not in {}'.format(self['x'], self.parameter_list))
             
         if isinstance(self['y'],str):
             if self['y'] not in self.parameter_list:
-                raise Errors.InputError('{} not in {}'.format(self['y'], self.parameter_list))
+                raise errors.InputError('{} not in {}'.format(self['y'], self.parameter_list))
         if isinstance(self['y'], list):
             for y_param  in self['y']:
                 if y_param not in self.parameter_list:
-                    raise Errors.InputError('{} not in {}'.format(y_param, self.parameter_list))
+                    raise errors.InputError('{} not in {}'.format(y_param, self.parameter_list))
                 
         if self['savefig']:
             if self['results_directory']==None:
-                raise Errors.InputError('Please specify argument to results_directory')
+                raise errors.InputError('Please specify argument to results_directory')
         
         n = list(set(self.data.index.get_level_values(0)))
         if self['title'] == None:
@@ -1447,7 +1447,7 @@ class Plot():
 
     def __getitem__(self,key):
         if key not in self.kwargs:
-            raise Errors.InputError('{} not in {}'.format(key, self.kwargs.keys()))
+            raise errors.InputError('{} not in {}'.format(key, self.kwargs.keys()))
         return self.kwargs[key]
     
     def __setitem__(self,key, value):
@@ -1459,7 +1459,7 @@ class Plot():
         
         """
         if self['y'] == self['x']:
-            LOG.warning( Errors.InputError('x parameter {} cannot equal y parameter {}. Plot function returned None'.format(self['x'],self['y']))  )
+            LOG.warning( errors.InputError('x parameter {} cannot equal y parameter {}. Plot function returned None'.format(self['x'],self['y']))  )
             return None
         
         for label, df in self.data.groupby(level=[2]):
@@ -1568,15 +1568,15 @@ class ParsePLData():
         
         if self['parameter_path']==None:
             if self['rss']==None:
-                raise Errors.InputError('If parameter_path equals None then rss must not equal None')
+                raise errors.InputError('If parameter_path equals None then rss must not equal None')
         if self['parameter_path']!=None:
             if self['index']==-1:
-                raise Errors.InputError('An argument is given to parameter_path but index is -1 (for PL around current parameter set). Change the index parameter')
+                raise errors.InputError('An argument is given to parameter_path but index is -1 (for PL around current parameter set). Change the index parameter')
 
         
         if self['index']!=-1:
             if self['parameter_path']==None:
-                raise Errors.InputError('If index is not -1 (i.e. current parameter set in model) then an argument to parameter_path needs to be specified')
+                raise errors.InputError('If index is not -1 (i.e. current parameter set in model) then an argument to parameter_path needs to be specified')
              
         if self['experiment_files'] == None:
             self['experiment_files'] = self.get_experiment_files_in_use()
@@ -1603,7 +1603,7 @@ class ParsePLData():
 
     def __getitem__(self,key):
         if key not in self.kwargs:
-            raise Errors.InputError('{} not in {}'.format(key, self.kwargs.keys()))
+            raise errors.InputError('{} not in {}'.format(key, self.kwargs.keys()))
         return self.kwargs[key]
     
     def __setitem__(self,key, value):
@@ -1627,7 +1627,7 @@ class ParsePLData():
                     LOG.warning('{} is not a number and therefore does not contain a profile likleihood analysis. It will be ignored')
                     continue
                 if os.path.isdir(i)!=True:
-                    raise Errors.FolderDoesNotExistError(i)
+                    raise errors.FolderDoesNotExistError(i)
         return l
     
     
@@ -1641,13 +1641,13 @@ class ParsePLData():
             try:
                 int(i)
             except ValueError:
-                raise Errors.InputError('Cannot convert {} to int. Check there are no extra files in your profile likelihood directory'.format(i) )
+                raise errors.InputError('Cannot convert {} to int. Check there are no extra files in your profile likelihood directory'.format(i) )
             res[int(i)] = {}
             for f in glob.glob(os.path.join(index_dir,'*.txt')):
                 dire, fle = os.path.split(f)
                 res[int(i)][fle] = f
         if res == {}:
-            raise Errors.InputError('Can\'t find PL data files. Have you given the correct path to profile likelihood directory?')
+            raise errors.InputError('Can\'t find PL data files. Have you given the correct path to profile likelihood directory?')
             
         return res
             
@@ -1662,7 +1662,7 @@ class ParsePLData():
                 cps = self.pl_data_files[i][j][:-4]+'.cps'
                 try:
                     res[i][j] = FormatPLData(cps, self.pl_data_files[i][j]).format
-                except Errors.FileDoesNotExistError:
+                except errors.FileDoesNotExistError:
                     pass
         return res
         
@@ -1711,7 +1711,7 @@ class ParsePLData():
         for i in self.copasiML.xpath(query):
             f=os.path.abspath(i.attrib['value'])
             if os.path.isfile(f)!=True:
-                raise Errors.InputError('Experimental files in use cannot be automatically determined. Please give a list of experiment file paths to the experiment_files keyword'.format())
+                raise errors.InputError('Experimental files in use cannot be automatically determined. Please give a list of experiment file paths to the experiment_files keyword'.format())
             l.append(os.path.abspath(i.attrib['value']))
         
         return l
@@ -1735,7 +1735,7 @@ class ParsePLData():
             l.append( i.shape[0]*(i.shape[1]-1))
         s= sum(l)
         if s==0:
-            raise Errors.InputError('''Number of data points cannot be 0.
+            raise errors.InputError('''Number of data points cannot be 0.
 Experimental data is inferred from the parameter estimation task definition. 
 It might be that copasi_file refers to a 'fresh' copy of the model.
 Try redefining the same parameter estimation problem that you used in the profile likelihood, 

@@ -1,5 +1,5 @@
-Time	B	A	C	ThisIsAssignment	B2C	A2B
-0	1.0	1.0	1.0	13	9	4
+Time	[B]	[A]	[C]	Values[ThisIsAssignment]	Values[B2C]	Values[A2B]
+0	1	1	1	13	9	4
 100	0.0495095	0.0550122	2.25422	13	9	4
 200	0.0392102	0.0435681	1.78528	13	9	4
 300	0.0310534	0.0345048	1.41389	13	9	4

@@ -27,7 +27,7 @@ site.addsitedir('/home/b3053674/Documents/pycotools')
 # site.addsitedir('C:\Users\Ciaran\Documents\pycotools')
 
 import pycotools
-from pycotools.Tutorial import test_models
+import test_models
 import unittest
 import glob
 import os
@@ -109,19 +109,42 @@ class DeterministicTimeCourseTests(_test_base._BaseTest):
         df = pandas.read_csv(self.TC.report_name, sep='\t', index_col=0)
         self.assertEqual(df.shape, (11, 6) )
 
-    def test_correct_output(self):
+    # def test_correct_output(self):
+    #     """
+    #
+    #     :return:
+    #     """
+    #     self.TC.correct_output_headers()
+    #     df = pandas.read_csv(self.TC.report_name, sep='\t')
+    #     check = True
+    #     for i in df.keys():
+    #         if '[' in i:
+    #             check = False
+    #     self.assertTrue(check)
+
+    def test_parser_in_viz(self):
         """
 
         :return:
         """
-        self.TC.correct_output_headers()
-        df = pandas.read_csv(self.TC.report_name, sep='\t')
-        check = True
-        for i in df.keys():
-            if '[' in i:
-                check = False
-        self.assertTrue(check)
+        p = pycotools.viz.Parse(self.TC)
+        df = p.parse_timecourse()
+        self.assertTrue(isinstance(df, pandas.core.frame.DataFrame))
 
+
+    def test_parser_in_viz2(self):
+        """
+
+        :return:
+        """
+        p = pycotools.viz.Parse(self.TC)
+        df = p.parse_timecourse()
+        boolean = True
+        ## set boolean to false if square brackets still in timecourse
+        for i in list(df.columns):
+            if '[' in i:
+                boolean = False
+        self.assertTrue(boolean)
 
 
 class GibsonBruckTimeCourseTests(_test_base._BaseTest):

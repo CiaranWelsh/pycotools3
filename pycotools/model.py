@@ -31,10 +31,11 @@ from lxml import etree
 
 # site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
 # import PyCoTools
-import Errors
+import errors
 import _base
 import tasks
 import pandas
+import re
 import sys, inspect
 LOG = logging.getLogger(__name__)
 
@@ -124,7 +125,7 @@ class Model(_base._Base):
         avagadro_from_model = float(self.xml.xpath(query)[0].attrib['avogadroConstant'])
         avagadros_from_version19 = 6.022140857e+23
         if avagadro_from_model != avagadros_from_version19:
-            raise Errors.AvagadrosError('Avagadro from model {} is not equal to {}. Check to see whether COPASI have updated the value of avagadro\'s number'.format(avagadro_from_model, avagadros_from_version19))
+            raise errors.AvagadrosError('Avagadro from model {} is not equal to {}. Check to see whether COPASI have updated the value of avagadro\'s number'.format(avagadro_from_model, avagadros_from_version19))
         return avagadro_from_model
 
     @property
@@ -176,13 +177,41 @@ class Model(_base._Base):
 
         ##check we have correct number of model states
         if len(states) != number_of_model_states:
-            raise Errors.InputError('Not entered the currect number of states. Expected {} and got {}'.format(number_of_model_states, len(states)))
+            raise errors.InputError('Not entered the currect number of states. Expected {} and got {}'.format(number_of_model_states, len(states)))
 
         ## enter states into model
         query = '//*[@type="initialState"]'
         for i in self.xml.xpath(query):
             i.text = state_string
         return self
+
+    @property
+    def fit_item_order(self):
+        """
+        get names of parameters being fitted in the
+        order they appear
+        :return:
+        """
+        lst = []
+        query = '//*[@name="FitItem"]'
+        for i in self.xml.xpath(query):
+            for j in list(i):
+                if j.attrib['name'] == 'ObjectCN':
+                    match = re.findall('Reference=(.*)', j.attrib['value'])[0]
+
+                    if match == 'Value':
+                        match2 = re.findall('Reactions\[(.*)\].*Parameter=(.*),', j.attrib['value'])[0]
+                        match2 = '({}).{}'.format(match2[0], match2[1])
+                        lst.append(match2)
+
+                    elif match == 'InitialValue':
+                        match2 = re.findall('Values\[(.*)\]', j.attrib['value'])[0]
+                        lst.append(match2)
+
+                    elif match == 'InitialConcentration':
+                        match2 = re.findall('Metabolites\[(.*)\]', j.attrib['value'])[0]
+                        lst.append(match2)
+        return lst
 
     def add_state(self, state, value):
         """
@@ -275,7 +304,7 @@ class Model(_base._Base):
         ## get the compartment
         comp = self.get('compartment', value, by=by)
         if comp == []:
-            raise Errors.ComponentDoesNotExistError('Component with {}={} does not exist'.format(by, value))
+            raise errors.ComponentDoesNotExistError('Component with {}={} does not exist'.format(by, value))
 
         ## first remove compartment from list of compartments
         for i in self.xml.iter():
@@ -342,7 +371,7 @@ class Model(_base._Base):
         mol_unit=one of, 'fmol, pmol, nmol, umol, mmol or mol'
         '''
         if isinstance(compartment_volume,(float,int))!=True:
-            raise Errors.InputError('compartment_volume is the volume of the compartment for species and must be either a float or a int')
+            raise errors.InputError('compartment_volume is the volume of the compartment for species and must be either a float or a int')
 
         mol_dct={
             'fmol':1e-15,
@@ -399,7 +428,7 @@ class Model(_base._Base):
         """
 
         if not isinstance(metab, Metabolite):
-            raise Errors.InputError('Input must be Metabolite class')
+            raise errors.InputError('Input must be Metabolite class')
 
         metabolite_element = metab.to_xml()
         ## add the metabolute to list of metabolites
@@ -440,7 +469,7 @@ class Model(_base._Base):
         :return: model.Model
         """
         if not isinstance(global_quantity, GlobalQuantity):
-            raise Errors.InputError('Input must be a GlobalQuantity')
+            raise errors.InputError('Input must be a GlobalQuantity')
 
         model_value = global_quantity.to_xml()
         for i in self.xml.iter():
@@ -724,7 +753,7 @@ class Model(_base._Base):
             elif reactions_dict[i]['reversible'] == 'false':
                 operator = '->'
             else:
-                raise Errors.SomethingWentHorriblyWrongError
+                raise errors.SomethingWentHorriblyWrongError
 
             if modifier_expression == '':
                 expression = "{} {} {}".format(sub_expression,
@@ -756,10 +785,10 @@ class Model(_base._Base):
         :return:
         """
         if reaction.key in [i.key for i in self.reactions]:
-            raise Errors.ReactionAlreadyExists('Your model already contains a reaction with the key: {}'.format(reaction.key))
+            raise errors.ReactionAlreadyExists('Your model already contains a reaction with the key: {}'.format(reaction.key))
 
         if reaction.name in [i.name for i in self.reactions]:
-            raise Errors.ReactionAlreadyExists('Your model already contains a reaction with the name: {}'.format(reaction.name))
+            raise errors.ReactionAlreadyExists('Your model already contains a reaction with the name: {}'.format(reaction.name))
 
         existing_functions = [i.expression for i in self.functions]
         if reaction.rate_law.expression not in existing_functions:
@@ -851,7 +880,7 @@ class Model(_base._Base):
         :return: component
         """
         if component not in self._model_components():
-            raise Errors.InputError('{} not in list of components: {}'.format(component, self._model_components()))
+            raise errors.InputError('{} not in list of components: {}'.format(component, self._model_components()))
 
         if component == 'metabolite':
             res = [i for i in self.metabolites if getattr(i, by) == value]
@@ -886,7 +915,7 @@ class Model(_base._Base):
         :return:
         """
         if component not in self._model_components():
-            raise Errors.InputError('{} not in list of components'.format(component))
+            raise errors.InputError('{} not in list of components'.format(component))
 
 
 
@@ -895,12 +924,12 @@ class Model(_base._Base):
 
 
         if isinstance(comp, list):
-            raise Errors.SomethingWentHorriblyWrongError(
+            raise errors.SomethingWentHorriblyWrongError(
                 'model.get has returned a list --> {}'.format(comp)
             )
 
         if change_field not in comp.__dict__.keys():
-            raise Errors.InputError('"{}" not valid for component type "{}"'.format(
+            raise errors.InputError('"{}" not valid for component type "{}"'.format(
                 change_field, component
             ))
 
@@ -931,7 +960,7 @@ class Model(_base._Base):
         :return:
         """
         if name not in [i.name for i in self.metabolites]:
-            raise Errors.InputError('metabolite "{}" does not exist'.format(name))
+            raise errors.InputError('metabolite "{}" does not exist'.format(name))
 
         metab= self.get('metabolite', 'X', by='name')
 
@@ -961,7 +990,7 @@ class Model(_base._Base):
         :return:
         """
         if component_name not in self._model_components():
-            raise Errors.InputError('"{}" not valid. These are valid: {}'.format(component_name, self._model_components()))
+            raise errors.InputError('"{}" not valid. These are valid: {}'.format(component_name, self._model_components()))
 
         if component_name == 'metabolite':
             return self.add_metabolite(component)
@@ -987,7 +1016,7 @@ class Model(_base._Base):
         :return:
         """
         if component in self._model_components() == False:
-            raise Errors.InputError('{} not in list of components'.format(component))
+            raise errors.InputError('{} not in list of components'.format(component))
 
         if component == 'compartment':
             return self.remove_compartment(name, by='name')
@@ -1005,7 +1034,7 @@ class Model(_base._Base):
             return self.remove_metabolite(name, by='name')
 
         else:
-            raise Errors.InputError('{} is not an accepted type. Choose from: {}'.format(self._model_components()))
+            raise errors.InputError('{} is not an accepted type. Choose from: {}'.format(self._model_components()))
 
     @property
     def active_parameter_set(self):
@@ -1024,7 +1053,7 @@ class Model(_base._Base):
         :return:
         """
         if parameter_set not in self.active_parameter_set:
-            raise Errors.InputError('{} not in available parameter sets'.format(parameter_set))
+            raise errors.InputError('{} not in available parameter sets'.format(parameter_set))
 
         for i in self.xml.iter():
             if i.tag=='{http://www.copasi.org/static/schema}ListOfModelParameterSets':
@@ -1101,7 +1130,7 @@ class Compartment(_base._ModelBase):
 
         simulation_types = ['reactions', 'ode', 'fixed', 'assignment']
         if self.simulation_type not in simulation_types:
-            raise Errors.InputError('{} not in {}'.format(self.simulation_type, simulation_types))
+            raise errors.InputError('{} not in {}'.format(self.simulation_type, simulation_types))
 
         compartment_element = etree.Element('Compartment', attrib={'key': self.key,
                                                                    'name': self.name,
@@ -1135,7 +1164,7 @@ class Metabolite(_base._ModelBase):
 
         for key in kwargs:
             if key not in self.default_properties:
-                raise Errors.InputError('Attribute not allowed. {} not in {}'.format(key, self.default_properties) )
+                raise errors.InputError('Attribute not allowed. {} not in {}'.format(key, self.default_properties) )
         self.update_properties(self.default_properties)
         ##update all keys to none
         self._do_checks()
@@ -1157,14 +1186,14 @@ class Metabolite(_base._ModelBase):
             try:
                 self.compartment = self.model.compartments[0]
             except IndexError:
-                raise Errors.InputError('No compartments in your model')
+                raise errors.InputError('No compartments in your model')
 
         if self.compartment != None:
             if isinstance(self.compartment, Compartment)!=True:
-                raise Errors.InputError('compartment argument should be of type PyCoTools.tasks.Compartment')
+                raise errors.InputError('compartment argument should be of type PyCoTools.tasks.Compartment')
 
         if ('particle_number' not in self.__dict__.keys()) and  ('concentration' not in self.__dict__.keys() ):
-            raise Errors.InputError('Must specify either concentration or particle numbers')
+            raise errors.InputError('Must specify either concentration or particle numbers')
 
         if self.simulation_type == None:
             self.simulation_type = 'reactions'
@@ -1190,7 +1219,7 @@ class Metabolite(_base._ModelBase):
             self.key = KeyFactory(self.model, type='metabolite').generate()
 
         if not isinstance(self.particle_number, (float, int, str)):
-            raise Errors.InputError('particle number should be float or int or string of numbers')
+            raise errors.InputError('particle number should be float or int or string of numbers')
 
 
         if isinstance(self.particle_number, (float, int)):
@@ -1274,7 +1303,7 @@ class Substrate(Metabolite):
 
         for key in self.kwargs:
             if key not in self.default_properties:
-                raise Errors.InputError('{} not in {}'.format(key, self.default_properties))
+                raise errors.InputError('{} not in {}'.format(key, self.default_properties))
         self.update_properties(self.default_properties)
 
     def __str__(self):
@@ -1294,7 +1323,7 @@ class Product(Metabolite):
 
         for key in self.kwargs:
             if key not in self.default_properties:
-                raise Errors.InputError('{} not in {}'.format(key, self.default_properties))
+                raise errors.InputError('{} not in {}'.format(key, self.default_properties))
 
     def __str__(self):
         """
@@ -1313,7 +1342,7 @@ class Modifier(Metabolite):
 
         for key in self.kwargs:
             if key not in self.default_properties:
-                raise Errors.InputError('{} not in {}'.format(key, self.default_properties))
+                raise errors.InputError('{} not in {}'.format(key, self.default_properties))
 
     def __str__(self):
         """
@@ -1352,7 +1381,7 @@ class GlobalQuantity(_base._ModelBase):
 
         for key in kwargs:
             if key not in self.default_properties:
-                raise Errors.InputError('Attribute not allowed. "{}" not in {}'.format(key, self.default_properties.keys()) )
+                raise errors.InputError('Attribute not allowed. "{}" not in {}'.format(key, self.default_properties.keys()) )
         self.update_properties(self.default_properties)
 
         self._do_checks()
@@ -1360,13 +1389,13 @@ class GlobalQuantity(_base._ModelBase):
     def _do_checks(self):
         if self.simulation_type != None:
             if self.simulation_type not in ['fixed','assignment']:
-                raise Errors.InputError('type should be either fixed or assignment. ODE not supported as Reactions can be used.')
+                raise errors.InputError('type should be either fixed or assignment. ODE not supported as Reactions can be used.')
 
         if self.simulation_type == 'assignment':
-            Errors.NotImplementedError('Assignments not yet implemented')
+            errors.NotImplementedError('Assignments not yet implemented')
 
         if self.name == None:
-            raise Errors.InputError('name property cannot be None')
+            raise errors.InputError('name property cannot be None')
 
         if self.key == None:
             self.key = KeyFactory(self.model, type='global_quantity').generate()
@@ -1471,7 +1500,7 @@ class Reaction(_base._ModelBase):
                                    'simulation_type': 'reactions'}
         for key in self.kwargs:
             if key not in self.default_properties:
-                raise Errors.InputError('{} not valid key. Valid keys are: {}'.format(key, self.default_properties))
+                raise errors.InputError('{} not valid key. Valid keys are: {}'.format(key, self.default_properties))
         self.update_properties(self.default_properties)
 
         self._do_checks()
@@ -1506,29 +1535,29 @@ class Reaction(_base._ModelBase):
         :return:
         """
         if not isinstance(self.fast, bool):
-            raise Errors.InputError('fast argument is boolean')
+            raise errors.InputError('fast argument is boolean')
 
         if self.simulation_type is not None:
             if self.simulation_type not in ['fixed',
                                             'assignment',
                                             'reactions',
                                             'ode']:
-                raise Errors.InputError('type should be either fixed or assignment. ODE not supported as Reactions can be used.')
+                raise errors.InputError('type should be either fixed or assignment. ODE not supported as Reactions can be used.')
 
         if self.key is None:
             self.key = KeyFactory(self.model, type='reaction').generate()
 
         if self.name is None:
-            raise Errors.InputError('name property cannot be None')
+            raise errors.InputError('name property cannot be None')
 
         if self.simulation_type is None:
             self.simulation_type = 'fixed'
 
         if self.expression is None:
-            raise Errors.InputError('expression is a required argument')
+            raise errors.InputError('expression is a required argument')
 
         if self.rate_law is None:
-            raise Errors.InputError('rate_law is a required argument')
+            raise errors.InputError('rate_law is a required argument')
 
 
         if self.key is None:
@@ -1556,7 +1585,7 @@ class Reaction(_base._ModelBase):
 
 
         if (self.rate_law is None) or (self.rate_law is []):
-            raise Errors.InputError('rate_law is {}'.format(self.rate_law))
+            raise errors.InputError('rate_law is {}'.format(self.rate_law))
 
         if isinstance(self.rate_law, str):
             expression_components = Expression(self.rate_law).to_list()
@@ -1627,7 +1656,7 @@ class Reaction(_base._ModelBase):
 
 
         # if self.substrates + self.products == []:
-        #     raise Errors.SomethingWentHorriblyWrongError('Both substrates and products are empty')
+        #     raise errors.SomethingWentHorriblyWrongError('Both substrates and products are empty')
 
         for i in exp:
             if i in [j.name for j in self.substrates]:
@@ -1754,7 +1783,7 @@ class Function(_base._ModelBase):
 
         for key in self.kwargs:
             if key not in default_properties:
-                raise Errors.InputError('{} not in {}'.format(key, default_properties))
+                raise errors.InputError('{} not in {}'.format(key, default_properties))
         self.update_properties(default_properties)
         self._do_checks()
         self.list_of_parameter_descriptions = self.create_parameter_descriptions_from_roles()
@@ -1801,7 +1830,7 @@ class Function(_base._ModelBase):
         else:
             if not self.list_of_parameter_descriptions:
                 # if self.roles == None:
-                #     raise Errors.InputError('please specify either roles or list_of_parameter_descriptions')
+                #     raise errors.InputError('please specify either roles or list_of_parameter_descriptions')
 
                 function_parameter_keys = KeyFactory(self.model, type='function_parameter').generate(len(self.roles))
 
@@ -1822,16 +1851,16 @@ class Function(_base._ModelBase):
         :return:
         """
         if self.reversible == None:
-            raise Errors.SomethingWentHorriblyWrongError('reversible argument is None')
+            raise errors.SomethingWentHorriblyWrongError('reversible argument is None')
 
         if self.key == None:
-            raise Errors.SomethingWentHorriblyWrongError('key argument is None')
+            raise errors.SomethingWentHorriblyWrongError('key argument is None')
 
         if self.name == None:
             self.name = self.expression
 
         if self.name == None:
-            raise Errors.SomethingWentHorriblyWrongError('name argument is None')
+            raise errors.SomethingWentHorriblyWrongError('name argument is None')
 
         func = etree.Element('Function', attrib=OrderedDict({'key': self.key,
                                                              'name': self.name,
@@ -1890,7 +1919,7 @@ class ParameterDescription(_base._ModelBase):
 
         roles = ['constant', 'modifier', 'substrate', 'product']
         if self.role not in roles:
-            raise Errors.InputError('{} is not one of {}'.format(self.role, roles))
+            raise errors.InputError('{} is not one of {}'.format(self.role, roles))
 
 
 
@@ -1912,14 +1941,14 @@ class LocalParameter(_base._ModelBase):
 
         for key in self.kwargs:
             if key not in self.default_properties:
-                raise Errors.InputError('{} not in {}'.format(key, self.default_properties))
+                raise errors.InputError('{} not in {}'.format(key, self.default_properties))
         self.update_properties(self.default_properties)
 
         if self.name is None:
-            raise Errors.InputError('Name is "{}"'.format(self.name))
+            raise errors.InputError('Name is "{}"'.format(self.name))
 
         if self.key is None:
-            raise Errors.InputError('Key is "{}"'.format(self.key))
+            raise errors.InputError('Key is "{}"'.format(self.key))
 
 
     def __str__(self):
@@ -1968,7 +1997,7 @@ class KeyFactory(_base._ModelBase):
                      'function',
                      'function_parameter']
         if self.type not in type_list:
-            raise Errors.InputError('{} not a valid type. {}'.format(self.type, type_list))
+            raise errors.InputError('{} not a valid type. {}'.format(self.type, type_list))
 
     def generate(self, n=1):
         """
@@ -2240,7 +2269,7 @@ class Translator(_base._ModelBase):
         """
         component_options = ['substrate', 'product', 'modifier']
         if type not in component_options:
-            raise Errors.InputError('{} not in {}'.format(component, component_options))
+            raise errors.InputError('{} not in {}'.format(component, component_options))
 
         if type == 'substrate':
             return [i.strip() for i in self.substrates.split('+')]
@@ -2438,7 +2467,7 @@ class ParameterSet(_base._ModelBase):
 
         for key in kwargs:
             if key not in self.default_properties:
-                raise Errors.InputError('Attribute not allowed. {} not in {}'.format(key, self.default_properties) )
+                raise errors.InputError('Attribute not allowed. {} not in {}'.format(key, self.default_properties) )
         self.update_properties(self.default_properties)
         ##update all keys to none
         self._do_checks()
@@ -2683,17 +2712,17 @@ class InsertParameters(_base._ModelBase):
         assert self.quantity_type in ['concentration', 'particle_number']
         if self.parameter_dict != None:
             if isinstance(self.parameter_dict, dict)!=True:
-                raise Errors.InputError('Argument to \'parameter_dict\' keyword needs to be of type dict')
+                raise errors.InputError('Argument to \'parameter_dict\' keyword needs to be of type dict')
             for i in self.parameter_dict.keys():
                 if i not in self.model.all_variable_names:
-                    raise Errors.InputError(
+                    raise errors.InputError(
                         'Parameter \'{}\' is not in your model. \n\nThese are in your model:\n{}'.format(
                             i,sorted(self.model.all_variable_names)
                         )
                     )
 
         if (self.parameter_dict == None) and (self.parameter_path==None) and (self.df is None):
-            raise Errors.InputError('You need to give at least one of parameter_dict,parameter_path or df keyword arguments')
+            raise errors.InputError('You need to give at least one of parameter_dict,parameter_path or df keyword arguments')
 
         assert isinstance(self.index, int)
 
@@ -2709,7 +2738,7 @@ class InsertParameters(_base._ModelBase):
             num+=1
 
         if num!=1:
-            raise Errors.InputError('You need to supply exactly one of parameter_dict,parameter_path or df keyord argument. You cannot give two or three.')
+            raise errors.InputError('You need to supply exactly one of parameter_dict,parameter_path or df keyord argument. You cannot give two or three.')
 
 
     def to_dict(self):

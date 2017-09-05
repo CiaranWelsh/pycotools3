@@ -46,8 +46,7 @@ class ScanTests(_test_base._BaseTest):
         self.scan = pycotools.tasks.Scan(self.model,
                                           report_type='parameter_estimation',
                                           subtask='time_course',
-                                          number_of_steps=17,
-                                          )
+                                          number_of_steps=17)
 
     def test_report_definition(self):
         """
@@ -99,6 +98,67 @@ class ScanTests(_test_base._BaseTest):
                     for k in j:
                         if k.attrib['name'] == 'Type':
                             self.assertEqual(self.scan.scan_type, k.attrib['value'])
+
+class ScanVizTests(_test_base._BaseTest):
+    def setUp(self):
+        super(ScanVizTests, self).setUp()
+        ## setup time course. Don't run
+        self.model = pycotools.tasks.TimeCourse(
+            self.model, end=1000, step_size=100, intervals=10,
+            run=False
+        ).model
+
+        ##setup scan for time course
+        self.scan = pycotools.tasks.Scan(self.model,
+                                         report_type='time_course',
+                                         variable='A',
+                                         subtask='time_course',
+                                         number_of_steps=10,
+                                         run_mode=True,
+                                         report_name=os.path.join(
+                                             os.path.dirname(
+                                                 self.model.copasi_file),
+                                             'scan_time_course.csv')
+                                         )
+        '''
+        not yet implemented plotting scan features. 
+        TODO finish
+        '''
+    #
+    # def test_parser_in_viz(self):
+    #     """
+    #
+    #     :return:
+    #     """
+    #     if not os.path.isfile(self.scan.report_name):
+    #         raise Exception
+    #     p = pycotools.viz.Parse(self.scan)
+    #
+    #     print self.scan.number_of_steps
+        # print p.parse_scan()
+        # self.model.open()
+        # import pandas
+        # import numpy
+        # names = ['a', 'b', 'c']
+        # df = pandas.DataFrame([1,2,3,numpy.nan, 4,5,6,numpy.nan, 7, 8,9])
+        # print df
+
+
+
+            # def test_parser_in_viz2(self):
+            #     """
+            #
+            #     :return:
+            #     """
+            #     p = pycotools.viz.Parse(self.TC)
+            #     df = p.parse_timecourse()
+            #     boolean = True
+            #     ## set boolean to false if square brackets still in timecourse
+            #     for i in list(df.columns):
+            #         if '[' in i:
+            #             boolean = False
+            #     self.assertTrue(boolean)
+
 
 class RepeatScanTests(_test_base._BaseTest):
     def setUp(self):

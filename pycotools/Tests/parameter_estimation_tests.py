@@ -30,7 +30,7 @@ import site
 site.addsitedir('/home/b3053674/Documents/pycotools')
 # site.addsitedir('C:\Users\Ciaran\Documents\pycotools')
 import pycotools
-from pycotools.Tutorial import test_models
+from pycotools.Tests import test_models
 import unittest
 import glob
 import os
@@ -41,6 +41,23 @@ from pycotools.Tests import _test_base
 
 ##TODO Test that local_parameters, metabolites and global quantity argument work
 
+
+def parse_timecourse(self):
+    """
+    read time course data into pandas dataframe. Remove
+    copasi generated square brackets around the variables
+    :return: pandas.DataFrame
+    """
+
+    df = pandas.read_csv(self.cls_instance.report_name, sep='\t')
+    headers = [re.findall('(Time)|\[(.*)\]', i)[0] for i in list(df.columns)]
+    time = headers[0][0]
+    headers = [i[1] for i in headers]
+    headers[0] = time
+    df.columns = headers
+    return df
+
+
 class ParameterEstimationTests(_test_base._BaseTest):
     def setUp(self):
         super(ParameterEstimationTests, self).setUp()
@@ -49,13 +66,17 @@ class ParameterEstimationTests(_test_base._BaseTest):
                                                intervals=10, report_name='report1.txt')
 
         ## add some noise
-        data1 = pycotools.Misc.add_noise(self.TC1.report_name)
+        data1 = pycotools.misc.add_noise(self.TC1.report_name)
 
         ## remove the data
         os.remove(self.TC1.report_name)
 
         ## rewrite the data with noise
         data1.to_csv(self.TC1.report_name, sep='\t')
+
+        pycotools.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
+
+
 
         self.PE = pycotools.tasks.ParameterEstimation(self.model,
                                                        self.TC1.report_name,
@@ -67,9 +88,6 @@ class ParameterEstimationTests(_test_base._BaseTest):
 
     def test_report_name(self):
         self.assertTrue(self.PE.report_name == os.path.join(os.path.dirname(self.model.copasi_file), self.PE.report_name))
-
-
-
 
     def test_config_file(self):
         """
@@ -117,20 +135,34 @@ class ParameterEstimationTests(_test_base._BaseTest):
         self.assertTrue(os.path.isfile(self.PE.report_name))
 
 
-    # def test_results_folder(self):
-    #     """
-    #
-    #     """
-    #     self.PE.write_config_file()
-    #     self.PE.setup()
-    #     self.PE.run()
-    #     self.assertTrue(os.path.isdir(self.results_directory) )
-    #
-
-    def test(self):
+    def test_viz_param_est_parser(self):
+        """
+        test that viz.Parser correctly formats the
+        parameter estimation data
+        :return:
+        """
         self.PE.write_config_file()
         self.model = self.PE.setup()
-        self.model.open()
+        self.PE.run()
+        p = pycotools.viz.Parse(self.PE)
+        order = ['ThisIsAssignment','B2C','A2B',
+                 '(ADeg).k1','(B2C).k2','(C2A).k1',
+                 'B','A','C', 'RSS']
+        df = p.parse_parameter_estmation()
+        self.assertListEqual(order, list(df.columns))
+
+    def test_viz_param_est_parser_len(self):
+        """
+        outputs only one row for parameter estimation
+        results
+        :return:
+        """
+        self.PE.write_config_file()
+        self.model = self.PE.setup()
+        self.PE.run()
+        p = pycotools.viz.Parse(self.PE)
+        df = p.parse_parameter_estmation()
+        self.assertEqual(df.shape[0], 1)
 
 if __name__=='__main__':
     unittest.main()

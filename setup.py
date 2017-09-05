@@ -50,7 +50,7 @@ setup(
   author = 'Ciaran Welsh',
   requires=['lxml','argparse','pandas','numpy','scipy',
             'matplotlib','scipy','seaborn','sklearn',
-            'openpyxl','xlrd'],
+            'openpyxl','xlrd', 'retrying'],
   package_data={'PyCoTools':['*.py','Documentation/*.pdf',
                              'logging_config.conf',
                              'Documentation/*.html','Licence.txt',

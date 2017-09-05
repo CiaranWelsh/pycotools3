@@ -26,11 +26,11 @@ Date:
 
 
 import site
-site.addsitedir(r'C:\Users\Ciaran\Documents\pycotools')
-# site.addsitedir(r'/home/b3053674/Documents/pycotools')
+# site.addsitedir(r'C:\Users\Ciaran\Documents\pycotools')
+site.addsitedir(r'/home/b3053674/Documents/pycotools')
 
 import pycotools
-from pycotools.pycotoolsTutorial import test_models
+from pycotools.Tests import test_models
 import unittest
 import glob
 import os
@@ -44,25 +44,40 @@ from mixin import Mixin, mixin
 import contextlib
 
 
-f = r'C:\Users\Ciaran\Documents\pycotools\pycotools\Tests\test_model.cps'
-f2 = r'C:\Users\Ciaran\Documents\pycotools\pycotools\Tests\test_model2.cps'
+f = r'/home/b3053674/Documents/pycotools/pycotools/Tests/test_model.cps'
 
 
 model = pycotools.model.Model(f)
-metab = pycotools.model.Metabolite(model, name='X',
-                                   concentration=1000)
 
-model = model.add('metabolite', metab)
+TC1 = pycotools.tasks.TimeCourse(model, end=1000, step_size=100,
+                                      intervals=10, report_name='report1.txt')
 
-model = model.set_metabolite('X', 1234, attribute='concentration')
+pycotools.misc.correct_copasi_timecourse_headers(TC1.report_name)
+## add some noise
+data1 = pycotools.misc.add_noise(TC1.report_name)
 
-for i in model.metabolites:
-    print i
-# model.open()
+## remove the data
+os.remove(TC1.report_name)
+
+## rewrite the data with noise
+data1.to_csv(TC1.report_name, sep='\t')
+
+MPE = pycotools.tasks.MultiParameterEstimation(
+    model,
+    TC1.report_name,
+    copy_number=2,
+    pe_number=8,
+    method='genetic_algorithm',
+    population_size=10,
+    number_of_generations=10,
+    results_directory='test_mpe')
+
+MPE.write_config_file()
+MPE.setup()
+# MPE.run()
 
 
-
-
+p = viz.Parse(MPE)
 
 
 
