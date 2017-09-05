@@ -27,7 +27,7 @@ import tasks
 import os
 import pandas
 from lxml import etree
-import Errors
+import errors
 import logging
 # from model import Model
 from contextlib import contextmanager
@@ -213,7 +213,7 @@ class _Base(object):
         """
         for key in given:
             if key not in allowed:
-                raise Errors.InputError('{} not in {}'.format(key, allowed))
+                raise errors.InputError('{} not in {}'.format(key, allowed))
 
 
 class _ModelBase(_Base):
@@ -234,7 +234,7 @@ class _ModelBase(_Base):
         import model
         if isinstance(self.model, (model.Model,
                                    str)) != True:
-            raise Errors.InputError('First argument should be either pycotools.model.Model object or path (str) pointing to a copasi file. Got {} instead.'.format(type(self.model)))
+            raise errors.InputError('First argument should be either pycotools.model.Model object or path (str) pointing to a copasi file. Got {} instead.'.format(type(self.model)))
         self.model = self.read_xml()
 
     def read_xml(self):

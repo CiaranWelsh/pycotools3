@@ -290,7 +290,23 @@ def xml2cps(paths):
 
 
 
+def correct_copasi_timecourse_headers(report_name):
+    """
+    read time course data into pandas dataframe. Remove
+    copasi generated square brackets around the variables
+    and write to file again.
+    :return: pandas.DataFrame
+    """
 
+    df = pandas.read_csv(report_name, sep='\t')
+    headers = [re.findall('(Time)|\[(.*)\]', i)[0] for i in list(df.columns)]
+    time = headers[0][0]
+    headers = [i[1] for i in headers]
+    headers[0] = time
+    df.columns = headers
+    os.remove(report_name)
+    df.to_csv(report_name, sep='\t', index=False)
+    return df
 
 
 

@@ -35,7 +35,7 @@ import os
 import subprocess
 import re
 import pickle
-import viz,Errors, Misc, _base, model
+import viz,errors, misc, _base, model
 import matplotlib
 import matplotlib.pyplot as plt
 from textwrap import wrap
@@ -47,6 +47,7 @@ import seaborn as sns
 from copy import deepcopy
 from subprocess import check_call
 from collections import OrderedDict
+from mixin import Mixin, mixin
 
 ## TODO use generators when iterating over a function with another function. i.e. plotting
 
@@ -72,7 +73,7 @@ class CopasiMLParser(object):
     def __init__(self, copasi_file):
         self.copasi_file = copasi_file
         if os.path.isfile(self.copasi_file)!=True:
-            raise Errors.FileDoesNotExistError('{} is not a copasi file'.format(self.copasi_file))
+            raise errors.FileDoesNotExistError('{} is not a copasi file'.format(self.copasi_file))
         self.copasiMLTree=self._parse_copasiML()
         self.copasiML=self.copasiMLTree.getroot()
         self.xml = self.copasiMLTree.getroot()
@@ -117,10 +118,6 @@ class Run(_base._ModelBase):
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
         self._do_checks()
 
-
-
-        ##TODO check whether scheduled parameter should be 'true' or '1' format
-
         if self.sge_job_filename == None:
             self.SGE_job_filename = os.path.join(os.getcwd(), 'SGEJobFile.sh')
 
@@ -130,12 +127,30 @@ class Run(_base._ModelBase):
         if self.mode == True:
             try:
                 self.run()
-            except Errors.CopasiError:
+            except errors.CopasiError:
                 self.run_linux()
         elif self.mode == 'SGE':
             self.submit_copasi_job_SGE()
         elif self.mode == 'multiprocess':
             self.multi_run()
+
+    def _do_checks(self):
+        """
+        Varify integrity of user input
+        :return:
+        """
+        tasks = ['steady_state', 'time_course',
+                 'scan', 'flux_mode', 'optimization',
+                 'parameter_estimation', 'metabolic_control_analysis',
+                 'lyapunov_exponents', 'time_scale_separation_analysis',
+                 'sensitivities', 'moieties', 'cross_section',
+                 'linear_noise_approximation']
+        if self.task not in tasks:
+            raise errors.InputError('{} not in list of tasks. List of tasks are: {}'.format(self.task, tasks))
+
+        modes = [True, False, 'multiprocess']
+        if self.mode not in modes:
+            raise errors.InputError('{} not in {}'.format(self.mode, modes))
 
     def __str__(self):
         return 'Run({})'.format(self.to_string())
@@ -144,7 +159,7 @@ class Run(_base._ModelBase):
         ##TODO build Queue.Queue system for multi running. 
         def run(x):
             if os.path.isfile(x) != True:
-                raise Errors.FileDoesNotExistError('{} is not a file'.format(self.copasi_file))
+                raise errors.FileDoesNotExistError('{} is not a file'.format(self.copasi_file))
             subprocess.Popen(['CopasiSE', self.model.copasi_file])
         Process(run(self.model.copasi_file))
 
@@ -180,7 +195,7 @@ class Run(_base._ModelBase):
             try:
                 self.run_linux()
             except:
-                raise Errors.CopasiError('Failed with Copasi error: \n\n' + d['error'])
+                raise errors.CopasiError('Failed with Copasi error: \n\n' + d['error'])
         return d['output']
 
     def run_linux(self):
@@ -207,22 +222,33 @@ class Run(_base._ModelBase):
         ## remove .sh file after used.
         os.remove(self.SGE_job_file)
 
-    def _do_checks(self):
-        """
-        Varify integrity of user input
-        :return:
-        """
-        tasks = ['steady_state', 'time_course',
-                 'scan', 'flux_mode', 'optimization',
-                 'parameter_estimation', 'metabolic_control_analysis',
-                 'lyapunov_exponents', 'time_scale_separation_analysis',
-                 'sensitivities', 'moieties', 'cross_section',
-                 'linear_noise_approximation']
-        if self.task not in tasks:
-            raise Errors.InputError('{} not in list of tasks. List of tasks are: {}'.format(self.task, tasks))
+
+class ParseStrVariableMixin(Mixin):
+    """
+    Mixin class for taking a string
+    and returning the corresponding
+    model quantity
+    """
+    ## allow a user to input a string not pycotools.model class
+    @staticmethod
+    def conversion(model, variable):
+
+        if isinstance(variable, str):
+            if variable in [i.name for i in model.metabolites]:
+                variable = model.get('metabolite', variable,
+                                               by='name')
+
+            elif variable in [i.name for i in model.global_quantities]:
+                variable = model.get('global_quantity', variable, by='name')
+
+            elif self.variable in [i.name for i in self.model.local_parameters]:
+                variable = model.get('constant', variable, by='name')
+        else:
+            raise errors.SomethingWentHorriblyWrongError('{} is not in your model'.format(variable))
+        return variable
 
 
-
+@mixin(ParseStrVariableMixin)
 class Reports(_base._ModelBase):
     '''
     Creates reports in copasi output specification section.
@@ -317,7 +343,7 @@ class Reports(_base._ModelBase):
             self.local_parameters = [self.local_parameters]
 
         if self.quantity_type not in ['concentration','particle_number']:
-            raise Errors.InputError('{} not concentration or particle_number'.format(self.quantity_type))
+            raise errors.InputError('{} not concentration or particle_number'.format(self.quantity_type))
 
         self.report_types=[None,'profilelikelihood', 'profilelikelihood2',
                            'time_course','parameter_estimation', 'multi_parameter_estimation']
@@ -389,6 +415,82 @@ class Reports(_base._ModelBase):
         generate more SubElements dynamically
         '''
         #for metabolites
+        if self.metabolites != None:
+            for i in self.metabolites:
+                if self.quantity_type == 'concentration':
+                    '''
+                    A coapsi 'reference' for metabolite in report
+                    looks like this:
+                        "CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration"
+                    '''
+                    # cn= self.model.metabolites[i].reference
+                    # print self.model.reference
+                    cn = '{},{},{}'.format(self.model.reference,
+                                               i.compartment.reference,
+                                               i.transient_reference)
+                elif self.quantity_type == 'particle_number':
+                    cn = '{},{},{}'.format(self.model.reference,
+                                                                     i.compartment.reference,
+                                                                     i.reference)
+
+            #add to xml
+                Object=etree.SubElement(table,'Object')
+                Object.attrib['cn']=cn
+
+        #for global quantities
+        if self.global_quantities != None:
+            for i in self.global_quantities:
+                """
+                A Copasi 'reference' for global_quantities in report
+                looks like this:
+                    cn="CN=Root,Model=New Model,Vector=Values[B2C],Reference=Value"
+                """
+                cn = '{},{}'.format(self.model.reference, i.transient_reference)
+                Object=etree.SubElement(table,'Object')
+                Object.attrib['cn']=cn
+        return self.model
+
+
+    def scan(self):
+        '''
+        creates a report to collect scan time course results.
+
+        By default all species and all global quantities are used with
+        Time on the left most column. This behavior can be overwritten by passing
+        lists of metabolites to the metabolites keyword or global quantities to the
+        global quantities keyword
+        '''
+        #get existing report keys
+
+        ##TODO implement self.variable as column in scan
+        keys=[]
+        for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
+            keys.append(i.attrib['key'])
+            if i.attrib['name']=='Time-Course':
+                self.model = self.remove_report('time_course')
+
+        new_key='Report_30'
+        while new_key  in keys:
+            new_key='Report_{}'.format(numpy.random.randint(30,100))
+
+        ListOfReports = self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports')
+        report = etree.SubElement(ListOfReports,
+                                  'Report',
+                                  attrib={'precision': '6',
+                                          'separator': '\t',
+                                          'name': 'Time-Course',
+                                          'key':new_key,
+                                          'taskType': 'Time-Course'})
+        comment=etree.SubElement(report, 'Comment')
+        comment=comment #get rid of annoying squiggly line above
+        table=etree.SubElement(report, 'Table')
+        table.attrib['printTitle']=str(1)
+        #Objects for the report to report
+        time=etree.SubElement(table, 'Object')
+        #first element always time.
+        time.attrib['cn']='CN=Root,Model={},Reference=Time'.format(self.model.name)
+
+
         if self.metabolites != None:
             for i in self.metabolites:
                 if self.quantity_type == 'concentration':
@@ -597,7 +699,7 @@ class Bool2Str():
     def __init__(self,dct):
         self.dct = dct
         if isinstance(self.dct,dict)!=True:
-            raise Errors.InputError('Input must be dict')
+            raise errors.InputError('Input must be dict')
 
         self.acceptable_kwargs = ['append','confirm_overwrite','update_model',
                                   'output_in_subtask','adjust_initial_conditions',
@@ -609,7 +711,7 @@ class Bool2Str():
         elif boolean == False:
             return "false"
         else:
-            raise Errors.InputError('Input should be boolean not {}'.format(isinstance(boolean)))
+            raise errors.InputError('Input should be boolean not {}'.format(isinstance(boolean)))
 
     def convert_dct(self):
         """
@@ -687,23 +789,23 @@ class TimeCourse(_base._ModelBase):
         self.set_report()
 
         self.run_task()
-        self.correct_output_headers()
+        # self.correct_output_headers()
 
         if self.save:
             self.model.save()
 
-    def correct_output_headers(self):
-        """
-        Copasi writes time courses with variables
-        surrounded in square brackets (i.e. [A]).
-        This method removes the square brackets
-        :return:
-        """
-        if self.correct_headers:
-            df = pandas.read_csv(self.report_name, sep='\t', index_col=0)
-            df.columns = [re.findall('\[(.*)\]', i)[0] for i in df.keys()]
-            os.remove(self.report_name)
-            df.to_csv(self.report_name, sep='\t')
+    # def correct_output_headers(self):
+    #     """
+    #     Copasi writes time courses with variables
+    #     surrounded in square brackets (i.e. [A]).
+    #     This method removes the square brackets
+    #     :return:
+    #     """
+    #     if self.correct_headers:
+    #         df = pandas.read_csv(self.report_name, sep='\t', index_col=0)
+    #         df.columns = [re.findall('\[(.*)\]', i)[0] for i in df.keys()]
+    #         os.remove(self.report_name)
+    #         df.to_csv(self.report_name, sep='\t')
 
     def _do_checks(self):
         """
@@ -719,7 +821,7 @@ class TimeCourse(_base._ModelBase):
                        'hybrid_lsoda',
                        'hybrid_rk45']
         if self.method not in method_list:
-            raise Errors.InputError('{} is not a valid method. These are valid methods {}'.format(self.method, method_list))
+            raise errors.InputError('{} is not a valid method. These are valid methods {}'.format(self.method, method_list))
 
         if os.path.isabs(self.report_name)!=True:
             self.report_name = os.path.join(os.path.dirname(self.model.copasi_file), self.report_name)
@@ -1181,7 +1283,7 @@ class TimeCourse(_base._ModelBase):
 
         :return:
         """
-        raise Errors.NotImplementedError('The hybrid-RK-45 method is not yet implemented')
+        raise errors.NotImplementedError('The hybrid-RK-45 method is not yet implemented')
 
     def set_report(self):
         """
@@ -1243,7 +1345,7 @@ class TimeCourse(_base._ModelBase):
     #         self.copasiML = self.set_report()
     #         self.copasiML = self.set_deterministic()
     #     elif self.kwargs.get('simulation_type') == 'stochastic':
-    #         raise Errors.NotImplementedError(
+    #         raise errors.NotImplementedError(
     #             'There is space in this class to write code to Run a stochastic simulation but it is not yet written')
     #     ##
     #     #            # save to duplicate copasi file
@@ -1319,6 +1421,11 @@ class Scan(_base._ModelBase):
         Varify integrity of user input
         :return:
         """
+        if self.scan_type == 'scan':
+            if self.output_in_subtask !=True:
+                LOG.warning('output_in_subtask is False. Setting to True in order to have data from all scans output to file')
+                self.output_in_subtask = 'true'  ##string format needed for copasi
+
         subtasks = ['steady_state', 'time_course',
                     'metabolic_control_anlysis',
                     'lyapunov_exponents',
@@ -1350,6 +1457,21 @@ class Scan(_base._ModelBase):
             if i[0] == self.distribution_type:
                 self.distribution_type = str(i[1])
 
+
+        ## allow a user to input a string not pycotools.model class
+        if isinstance(self.variable, str):
+            if self.variable in [i.name for i in self.model.metabolites]:
+                self.variable = self.model.get('metabolite', self.variable,
+                                               by='name')
+
+            elif self.variable in [i.name for i in self.model.global_quantities]:
+                self.variable = self.model.get('global_quantity', self.variable, by='name')
+
+            elif self.variable in [i.name for i in self.model.local_parameters]:
+                self.variable = self.model.get('constant', self.variable, by='name')
+
+
+
     def define_report(self):
         """
         Use Report class to create report
@@ -1379,7 +1501,7 @@ class Scan(_base._ModelBase):
             if i.attrib['name'].lower() == self.report_type.lower():
                 key = i.attrib['key']
         if key == None:
-            raise Errors.ReportDoesNotExistError('Report doesn\'t exist. Check to see if you have either defined the report manually or used the pycopi.Reports class')
+            raise errors.ReportDoesNotExistError('Report doesn\'t exist. Check to see if you have either defined the report manually or used the pycopi.Reports class')
         return key
 
     def create_scan(self):
@@ -1517,7 +1639,7 @@ class Scan(_base._ModelBase):
         return self.model
 
     def run(self):
-        R = Run(self.model, task='scan', mode=self.run)
+        R = Run(self.model, task='scan', mode=self.run_mode)
 
 
 class ExperimentMapper(_base._ModelBase):
@@ -1625,7 +1747,7 @@ class ExperimentMapper(_base._ModelBase):
         """
         data_types = ['experiment', 'validation']
         if self.type not in data_types:
-            raise Errors.InputError('{} not in {}'.format(self.type, data_types))
+            raise errors.InputError('{} not in {}'.format(self.type, data_types))
 
         for i in range(len(self.experiment_files)):
             if os.path.isabs(self.experiment_files[i])!=True:
@@ -1982,7 +2104,7 @@ class ExperimentMapper(_base._ModelBase):
             query = '//*[@name="Experiment Set"]'
         elif self.type == 'validation':
             query = '//*[@name="Validation Set"]'
-            raise Errors.NotImplementedError('Validation data sets are currently not supported')
+            raise errors.NotImplementedError('Validation data sets are currently not supported')
 
         for j in self.model.xml.xpath(query):
             j.insert(0, experiment_element)
@@ -2029,7 +2151,7 @@ class PhaseSpaceDep(TimeCourse):
         metabs= self.GMQ.get_IC_cns().keys()
         for i in metabs:
             if i not in self.data.keys():
-                raise Errors.IncompatibleStringError(' {} is an incompatible string that is not supported by pycotools. Please modify the string and rerun')
+                raise errors.IncompatibleStringError(' {} is an incompatible string that is not supported by pycotools. Please modify the string and rerun')
         return self.data[metabs]
 
     def get_combinations(self):
@@ -2044,10 +2166,10 @@ class PhaseSpaceDep(TimeCourse):
 
     def plot1phase(self,x,y):
         if x  not in self.species_data.keys():
-            raise Errors.InputError('{} is not in your model species: {}'.format(x,self.species_data.keys()))
+            raise errors.InputError('{} is not in your model species: {}'.format(x,self.species_data.keys()))
 
         if y  not in self.species_data.keys():
-            raise Errors.InputError('{} is not in your model species: {}'.format(y,self.species_data.keys()))
+            raise errors.InputError('{} is not in your model species: {}'.format(y,self.species_data.keys()))
 
         x_data=self.species_data[x]
         y_data=self.species_data[y]
@@ -2116,26 +2238,26 @@ class FormatPEData():
 
         available_report_types = ['parameter_estimation','multi_parameter_estimation']
         if self.report_type not in available_report_types:
-            raise Errors.InputError('{} not in {}'.format(self.report_type,available_report_types))
+            raise errors.InputError('{} not in {}'.format(self.report_type,available_report_types))
 
 #        if os.path.isdir(self.report_name):
 #            for i in os.listdir(self.report_name):
 
 #        if os.path.isfile(self.report_name)!=True:
-#            raise Errors.InputError('file {} does not exist'.format(self.report_name))
+#            raise errors.InputError('file {} does not exist'.format(self.report_name))
 
         if self.report_type=='parameter_estimation':
             try:
                 self.format = self.format_results()
             except IOError:
-                raise Errors.FileIsEmptyError('{} is empty and therefore cannot be read by pandas. Make sure you have waited until there is data in the parameter estimation file before formatting parameter estimation output')
+                raise errors.FileIsEmptyError('{} is empty and therefore cannot be read by pandas. Make sure you have waited until there is data in the parameter estimation file before formatting parameter estimation output')
             except pandas.parser.CParserError:
-                raise Errors.InputError('Pandas cannot read data file. Ensure you are using report_type=\'multi_parameter_estimation\' for multiple parameter estimation classes')
+                raise errors.InputError('Pandas cannot read data file. Ensure you are using report_type=\'multi_parameter_estimation\' for multiple parameter estimation classes')
         elif self.report_type=='multi_parameter_estimation':
             try:
                 self.format = self.format_multi_results()
             except IOError:
-                raise Errors.FileIsEmptyError('{} is empty and therefore cannot be read by pandas. Make sure you have waited until there is data in the parameter estimation file before formatting parameter estimation output')
+                raise errors.FileIsEmptyError('{} is empty and therefore cannot be read by pandas. Make sure you have waited until there is data in the parameter estimation file before formatting parameter estimation output')
 
 
     def format_results(self):
@@ -2153,7 +2275,7 @@ class FormatPEData():
         names = self.GMQ.get_fit_item_order()+['RSS']
         data.columns = names
         os.remove(self.report_name)
-        data.to_csv(self.report_name,sep='\t',index=False)
+        data.to_csv(self.report_name, sep='\t', index=False)
         return data
 
     def format_multi_results(self):
@@ -2177,9 +2299,9 @@ class FormatPEData():
             ### parameter of interest has been removed.
             names = self.GMQ.get_fit_item_order()+['RSS']
             if self.GMQ.get_fit_item_order() == []:
-                raise Errors.SomethingWentHorriblyWrongError('Parameter Estimation task is empty')
+                raise errors.SomethingWentHorriblyWrongError('Parameter Estimation task is empty')
             if len(names) != data.shape[1]:
-                raise Errors.SomethingWentHorriblyWrongError('length of parameter estimation data does not equal number of parameters estimated')
+                raise errors.SomethingWentHorriblyWrongError('length of parameter estimation data does not equal number of parameters estimated')
 
             if os.path.isfile(self.report_name):
                 os.remove(self.report_name)
@@ -2503,7 +2625,8 @@ class ParameterEstimation(_base._ModelBase):
         :return:
         """
         lst = ['copy_number',
-               'pe_number']
+               'pe_number',
+               'results_directory']
         for i in lst:
             if i in self.kwargs.keys():
                 del self.kwargs[i]
@@ -2520,7 +2643,7 @@ class ParameterEstimation(_base._ModelBase):
         ## ensure experiment files exist
         for fle in self.experiment_files:
             if os.path.isfile(fle)!=True:
-                raise Errors.InputError('{} does not exist'.format(fle))
+                raise errors.InputError('{} does not exist'.format(fle))
 
         ## ensure method exists
         self.method_list = ['current_solution_statistics', 'differential_evolution',
@@ -2530,13 +2653,13 @@ class ParameterEstimation(_base._ModelBase):
                             'simulated_annealing', 'steepest_descent', 'truncated_newton',
                             'genetic_algorithm', 'genetic_algorithm_sr']
         if self.method not in self.method_list:
-            raise Errors.InputError(
+            raise errors.InputError(
                 '{} not a valid method. These are valid methods: {}'.format(self.method, self.method_list))
 
         ## Do not randomize start values if using current solution statistics
         if self.method == 'current_solution_statistics':
             if self.randomize_start_values == True:
-                raise Errors.InputError(
+                raise errors.InputError(
                     'Cannot run current solution statistics with \'randomize_start_values\' set to \'true\'.')
 
         ## ensure metabolties are a list (even if only 1 element)
@@ -2552,29 +2675,28 @@ class ParameterEstimation(_base._ModelBase):
             self.local_parameters = [self.local_parameters]
 
         ## ensure arguments to local parameters exist
-        LOG.debug('self.local parameters --> {}'.format(self.local_parameters))
         for i in [j.name for j in self.local_parameters]:
             if i not in [j.name for j in self.model.local_parameters]:
-                raise Errors.InputError(
+                raise errors.InputError(
                     '{} not a local parameter. These are your local parameters: {}'.format(
                         i, self.model.local_parameters) )
 
         ## ensure arguments to metabolites exist
         for i in [j.name for j in self.metabolites]:
             if i not in [j.name for j in self.model.metabolites]:
-                raise Errors.InputError(
+                raise errors.InputError(
                     '{} not a local parameter. These are your local parameters: {}'.format(
                         i,self.model.metabolites) )
 
         ## ensure arguments to global_quantities exist
         for i in [j.name for j in self.global_quantities]:
             if i not in [j.name for j in self.model.global_quantities]:
-                raise Errors.InputError(
+                raise errors.InputError(
                     '{} not a local parameter. These are your local parameters: {}'.format(
                         i,self.model.global_quantities) )
 
         if self.use_config_start_values not in [True, False]:
-            raise Errors.InputError(
+            raise errors.InputError(
                 ''' Argument to the use_config_start_values must be \'True\' or \'False\' not {}'''.format(
                     self.use_config_start_values))
 
@@ -2884,14 +3006,14 @@ class ParameterEstimation(_base._ModelBase):
         :return:
         """
         if os.path.isfile(self.config_filename) != True:
-            raise Errors.InputError('ConfigFile does not exist. run \'write_config_file\' method and modify it how you like then run the setup()  method again.')
+            raise errors.InputError('ConfigFile does not exist. run \'write_config_file\' method and modify it how you like then run the setup()  method again.')
         df = pandas.read_csv(self.config_filename)
         parameter_names = list(df[df.columns[0]])
 
         model_parameters = self.model.all_variable_names
         for parameter in parameter_names:
             if parameter not in model_parameters:
-                raise Errors.InputError('{} not in {}\n\n Ensure you are using the correct PE config file!'.format(parameter, model_parameters))
+                raise errors.InputError('{} not in {}\n\n Ensure you are using the correct PE config file!'.format(parameter, model_parameters))
         return df
 
     @property
@@ -2975,7 +3097,7 @@ class ParameterEstimation(_base._ModelBase):
         elif item['name'] in [i.name for i in self.global_quantities]:
             component = [i for i in self.global_quantities if i.name == item['name']][0]
         else:
-            raise Errors.SomethingWentHorriblyWrongError('{} not a metabolite, local_parameter or global_quantity'.format(item['name']))
+            raise errors.SomethingWentHorriblyWrongError('{} not a metabolite, local_parameter or global_quantity'.format(item['name']))
 
         #initialize new element
         new_element=etree.Element('ParameterGroup', attrib={'name': 'FitItem'})
@@ -3014,19 +3136,17 @@ class ParameterEstimation(_base._ModelBase):
                 )}
 
         elif isinstance(component, model.LocalParameter):
-            LOG.debug('component --> {}'.format(component))
             subA4 = {'type': 'cn', 'name': 'ObjectCN', 'value': '{},{},{}'.format(
                 self.model.reference,
                 self.model.get('reaction', component.reaction_name, by='name').reference,
                 component.value_reference) }
-            LOG.debug('subA4 --> {}'.format(subA4))
 
         elif isinstance(component, model.GlobalQuantity):
             subA4={'type': 'cn',  'name': 'ObjectCN',  'value': '{},{}'.format(self.model.reference,
                                                                                component.initial_reference) }
 
         else:
-            raise Errors.InputError('{} is not a valid parameter for estimation'.format(list(item)))
+            raise errors.InputError('{} is not a valid parameter for estimation'.format(list(item)))
 
         ## add element
         etree.SubElement(new_element, 'Parameter', attrib=subA4)
@@ -3246,11 +3366,14 @@ class MultiParameterEstimation(ParameterEstimation):
         super(MultiParameterEstimation, self).__init__(model, experiment_files, **kwargs)
 
         ## add to ParameterEstimation defaults
-        self.default_properties.update({'copy_number': 2,
-                                         'pe_number':2,
-                                         'run_mode': 'multiprocess',
-                                         'results_directory':os.path.join(os.path.dirname(self.model.copasi_file),'MultipleParameterEstimationResults'),
-                                         'output_in_subtask': False})
+        ## do not remove the update !!
+        self.default_properties.update({
+            'copy_number': 2,
+            'pe_number':2,
+            'run_mode': 'multiprocess',
+            'results_directory':os.path.join(os.path.dirname(self.model.copasi_file),'MultipleParameterEstimationResults'),
+            'output_in_subtask': False
+        })
 
         ##convert some boolean arguments to str(1) or str(0)
         self.convert_bool_to_numeric(self.default_properties)
@@ -3280,13 +3403,13 @@ class MultiParameterEstimation(ParameterEstimation):
             LOG.warning('output_in_subtask has been turned on. This means that you\'ll get function evaluations with the best parameter set that the algorithm finds')
         run_arg_list=['multiprocess','SGE']
         if self.run_mode not in run_arg_list:
-            raise Errors.InputError('run needs to be one of {}'.format(run_arg_list))
+            raise errors.InputError('run needs to be one of {}'.format(run_arg_list))
 
         if isinstance(self.copy_number,int)!=True:
-            raise Errors.InputError('copy_number argument is of type int')
+            raise errors.InputError('copy_number argument is of type int')
 
         if isinstance(self.kwargs['pe_number'],int)!=True:
-            raise Errors.InputError('pe_number argument is of type int')
+            raise errors.InputError('pe_number argument is of type int')
 
         if self.results_directory==None:
             self.results_directory = 'MultipleParameterEsimationAnalysis'
@@ -3402,12 +3525,12 @@ class MultiParameterEstimation(ParameterEstimation):
         try:
             self.models
         except AttributeError:
-            raise Errors.IncorrectUsageError('You must use the setup method before the run method')
+            raise errors.IncorrectUsageError('You must use the setup method before the run method')
 
         if self.run == 'SGE':
             try:
                 check_call('qhost')
-            except Errors.NotImplementedError:
+            except errors.NotImplementedError:
                 LOG.warning('Attempting to run in SGE mode but SGE specific commands are unavailable. Switching to \'multiprocess\' mode')
                 self.run = 'multiprocess'
         # if os.path.isfile(self.copasi_file_pickle):
@@ -3458,28 +3581,28 @@ class MultiParameterEstimation(ParameterEstimation):
         return models
 
 
-#     def format_results(self):
-#         """
-#         Copasi output does not have headers. This function
-#         gives PE data output headers
-#         :return: list. Path to report files
-#         """
-#         try:
-#             cps_keys = self.sub_copasi_files.keys()
-#         except AttributeError:
-#             self.setup()
-#             cps_keys = self.sub_copasi_files.keys()
-#         report_keys = self.report_files.keys()
-#         for i in range(len(self.report_files)):
-#             try:
-#                 FormatPEData(self.sub_copasi_files[cps_keys[i]], self.report_files[report_keys[i]],
-#                          report_type='multi_parameter_estimation')
-#             except Errors.InputError:
-#                 LOG.warning('{} is empty. Cannot parse. Skipping this file'.format(self.report_files[report_keys[i]]))
-#                 continue
-#         return self.report_files
+    # def format_results(self):
+    #     """
+    #     Copasi output does not have headers. This function
+    #     gives PE data output headers
+    #     :return: list. Path to report files
+    #     """
+    #     try:
+    #         cps_keys = self.sub_copasi_files.keys()
+    #     except AttributeError:
+    #         self.setup()
+    #         cps_keys = self.sub_copasi_files.keys()
+    #     report_keys = self.report_files.keys()
+    #     for i in range(len(self.report_files)):
+    #         try:
+    #             FormatPEData(self.sub_copasi_files[cps_keys[i]], self.report_files[report_keys[i]],
+    #                      report_type='multi_parameter_estimation')
+    #         except errors.InputError:
+    #             LOG.warning('{} is empty. Cannot parse. Skipping this file'.format(self.report_files[report_keys[i]]))
+    #             continue
+    #     return self.report_files
 
-    #
+
 
 
 
@@ -3725,7 +3848,7 @@ class MultiModelFit(object):
         This function will read this multifit config and produce a directory tree for subsequent analysis
         '''
         if self.project_dir==None:
-            raise Errors.InputError('Cannot read multifit confuration as no Project kwarg is provided')
+            raise errors.InputError('Cannot read multifit confuration as no Project kwarg is provided')
         ##make sure we're in the right directory
         os.chdir(self.project_dir)
         cps_list=[]
@@ -3739,9 +3862,9 @@ class MultiModelFit(object):
                 exp_list.append(os.path.abspath(exp_file))
 
         if cps_list==[]:
-            raise Errors.InputError('No cps files in your project')
+            raise errors.InputError('No cps files in your project')
         if exp_list==[]:
-            raise Errors.InputError('No experiment files in your project')
+            raise errors.InputError('No experiment files in your project')
         return cps_list,exp_list
 
 

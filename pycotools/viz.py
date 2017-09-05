@@ -50,12 +50,13 @@ import scipy
 import os
 import matplotlib
 import itertools
-import tasks,Errors, Misc
+import tasks,errors, misc
 import seaborn 
 import logging
 from subprocess import check_call,Popen
 import glob
-import numpy 
+import re
+import numpy
 from textwrap import wrap
 from sklearn.decomposition import PCA
 from sklearn import linear_model
@@ -74,10 +75,136 @@ def make_default_results_directory(data, savefig, results_directory):
             if isinstance(data, str):
                 results_directory = os.path.join(os.path.dirname(data))
             if isinstance(data, pandas.core.frame.DataFrame):
-                raise Errors.InputError('data is of type {}. The path of your analysis cannot be inferred and therefore you much specify an argument to the results_directory keyword')
-    return results_directory 
+                raise errors.InputError('data is of type {}. The path of your analysis cannot be inferred and therefore you much specify an argument to the results_directory keyword')
+    return results_directory
 
-class ParsePEData():
+class Parse(object):
+    def __init__(self, cls_instance):
+        self.cls_instance = cls_instance
+
+        accepted_types = [tasks.TimeCourse,
+                          tasks.Scan,
+                          tasks.ParameterEstimation,
+                          tasks.MultiParameterEstimation]
+
+        if type(self.cls_instance) not in accepted_types:
+            raise errors.InputError('{} not in {}'.format(
+                self.cls_instance,
+                accepted_types)
+            )
+
+        if isinstance(self.cls_instance, tasks.Scan):
+            LOG.debug('type cls instance --> {}'.format(type(self.cls_instance)))
+            LOG.debug('type cls instance. scan type--> {}'.format(self.cls_instance.scan_type))
+
+            ## '1' is copasi code name for a scan
+            if self.cls_instance.scan_type != '1':
+                raise errors.InputError(
+                    'plotting functions are only available for scans (not repeat or random distributions)'
+                )
+
+
+    def parse(self):
+        """
+        determine class type of self.cls_instance
+        and call the appropirate method for
+        parsing the data type
+        :return:
+        """
+
+        if isinstance(self.cls_instance, tasks.TimeCourse):
+            data = self.parse_timecourse()
+
+    def parse_timecourse(self):
+        """
+        read time course data into pandas dataframe. Remove
+        copasi generated square brackets around the variables
+        :return: pandas.DataFrame
+        """
+
+        df = pandas.read_csv(self.cls_instance.report_name, sep='\t')
+        headers = [re.findall('(Time)|\[(.*)\]', i)[0] for i in list(df.columns)]
+        time = headers[0][0]
+        headers = [i[1] for i in headers]
+        headers[0] = time
+        df.columns = headers
+        return df
+
+    def parse_scan(self):
+        """
+        read scan data into pandas Dataframe.
+        :return: pandas.DataFrame
+        """
+        df = pandas.read_csv(
+            self.cls_instance.report_name,
+            sep='\t',
+            skip_blank_lines=False,
+        )
+        # names = []
+        # d = {names[i]: x.dropna() for i, x in df.groupby(df[0].isnull().cumsum())}
+        return NotImplementedError('scan plotting features are not yet implemented')
+
+
+    def parse_parameter_estmation(self):
+        """
+
+        :return:
+        """
+        df = pandas.read_csv(
+            self.cls_instance.report_name,
+            sep='\t', header=None
+        )
+        data = df.drop(df.columns[0], axis=1)
+        width = data.shape[1]
+        ## remove the extra bracket
+        data[width] = data[width].str[1:]
+#        num = data.shape[0]
+        names = self.cls_instance.model.fit_item_order+['RSS']
+        data.columns = names
+        os.remove(self.cls_instance.report_name)
+        data.to_csv(self.cls_instance.report_name,
+                    sep='\t',
+                    index=False)
+        return data
+
+    def parse_multi_parameter_estimation(self):
+        """
+        Results come without headers - parse the results
+        give them the proper headers then overwrite the file again
+        :return:
+        """
+        try:
+            data = pandas.read_csv(self.cls_instance.results_directory,
+                               sep='\t', header=None, skiprows=[0])
+        except:
+            LOG.warning('No Columns to parse from file. {} is empty. Returned None'.format(
+                self.cls_instance.report_name))
+            return None
+        bracket_columns = data[data.columns[[0,-2]]]
+        if bracket_columns.iloc[0].iloc[0] != '(':
+            data = pandas.read_csv(self.cls_instance.report_name, sep='\t')
+            return data
+        else:
+            data = data.drop(data.columns[[0,-2]], axis=1)
+            data.columns = range(data.shape[1])
+            ### parameter of interest has been removed.
+            names = self.cls_instance.model.fit_item_order+['RSS']
+            if self.cls_instance.model.fit_item_order == []:
+                raise errors.SomethingWentHorriblyWrongError('Parameter Estimation task is empty')
+            if len(names) != data.shape[1]:
+                raise errors.SomethingWentHorriblyWrongError('length of parameter estimation data does not equal number of parameters estimated')
+
+            if os.path.isfile(self.cls_instance.report_name):
+                os.remove(self.cls_instance.report_name)
+            data.columns = names
+            data.to_csv(self.cls_instance.report_name, sep='\t', index=False)
+            return data
+
+
+
+
+
+class Parse2():
     '''
     parse parameter estimation data from file
     
@@ -91,20 +218,59 @@ class ParsePEData():
             Allow one to overwrite the pickle file automatically
             produced for speed. Default=False
     '''
-    def __init__(self,results_path, sep='\t', log10=False):
+    def __init__(self,results_path, sep='\t', log10=False, type='multi_parameter_estimation'):
         self.results_path = results_path
         self.log10 = log10
         self.sep = sep
+        self.type = type
 
-        if self.log10:
-            self.data = numpy.log10(self._read_data())
-        else:
-            self.data = self._read_data()
-            
-        self.data = self.data.sort_values(by='RSS', ascending=True)
-        
-        
-        
+        valid_types = ['multi_parameter_estimation',
+                       'parameter_estimation',
+                       'timecourse',
+                       'scan']
+        # if self.type not in valid_types:
+        #     raise errors.InputError('{} not a valid type --> {}'.format(self.type, valid_types))
+        #
+        # if self.type == 'multi_parameter_estimation':
+        #     pass
+
+
+        # if self.log10:
+        #     self.data = numpy.log10(self._read_data())
+        # else:
+        #     self.data = self._read_data()
+        #
+        # self.data = self.data.sort_values(by='RSS', ascending=True)
+
+
+    def read_time_course_data(self):
+        pass
+
+    def format_multi_pe_data(self, model):
+        """
+        Copasi output does not have headers. This function
+        gives PE data output headers based on the parameter
+        estimation configuration
+        :return: list. Path to report files
+        """
+        print model
+        # try:
+        #     cps_keys = self.sub_copasi_files.keys()
+        # except AttributeError:
+        #     self.setup()
+        #     cps_keys = self.sub_copasi_files.keys()
+        # report_keys = self.report_files.keys()
+        # for i in range(len(self.report_files)):
+        #     try:
+        #         FormatPEData(self.sub_copasi_files[cps_keys[i]], self.report_files[report_keys[i]],
+        #                  report_type='multi_parameter_estimation')
+        #     except errors.InputError:
+        #         LOG.warning('{} is empty. Cannot parse. Skipping this file'.format(self.report_files[report_keys[i]]))
+        #         continue
+        # return self.report_files
+
+
+
     def _read_data(self):
         """
         
@@ -114,7 +280,7 @@ class ParsePEData():
         elif os.path.isdir(self.results_path):
             return self.read_PE_data_folder()
         else:
-            raise Errors.InputError('results_path argument should be a PE data file or folder of identically formed PE data files')
+            raise errors.InputError('results_path argument should be a PE data file or folder of identically formed PE data files')
 
     
     def read_PE_data_file(self, path):
@@ -134,7 +300,7 @@ class ParsePEData():
                     return None
         for i in data.iloc[0]:
             if i=='(':
-                raise Errors.InputError('Brackets are still in your data file. Ensure you\'ve properly formatted PE data using the format_results() method')
+                raise errors.InputError('Brackets are still in your data file. Ensure you\'ve properly formatted PE data using the format_results() method')
         return pandas.read_csv(path, sep=self.sep).sort_values(by='RSS').reset_index(drop=True)
 
     def read_PE_data_folder(self):
@@ -178,7 +344,7 @@ class Boxplot():
                 if isinstance(data, str):
                     self['results_directory'] = os.path.join(os.path.dirname(self.data))
                 if isinstance(data, pandas.core.frame.DataFrame):
-                    raise Errors.InputError('data is of type {}. The path of your analysis cannot be inferred and therefore you much specify an argument to the results_directory keyword')
+                    raise errors.InputError('data is of type {}. The path of your analysis cannot be inferred and therefore you much specify an argument to the results_directory keyword')
  
 
         
@@ -352,7 +518,7 @@ class Pca():
         self.kwargs=options
         
         if self['by'] not in ['parameters','iterations']:
-            raise Errors.InputError('{} not in {}'.format(self['by'], ['parameters','iterations']))
+            raise errors.InputError('{} not in {}'.format(self['by'], ['parameters','iterations']))
         self['results_directory'] = make_default_results_directory(self.data, self['savefig'], self['results_directory'])
         self.data = self.read_data()
         self.data = self.truncate_data()
@@ -363,7 +529,7 @@ class Pca():
             elif self['log10']==True:
                 self['ylabel'] = 'PC2(Log10)'
             else:
-                raise Errors.SomethingWentHorriblyWrongError('{} not in {}'.format(self['ylabel'], [True, False]))
+                raise errors.SomethingWentHorriblyWrongError('{} not in {}'.format(self['ylabel'], [True, False]))
         
         if self['xlabel']==None:
             if self['log10']==False:
@@ -371,7 +537,7 @@ class Pca():
             elif self['log10']==True:
                 self['xlabel'] = 'PC1(Log10)'
             else:
-                raise Errors.SomethingWentHorriblyWrongError('{} not in {}'.format(self['ylabel'], [True, False]))
+                raise errors.SomethingWentHorriblyWrongError('{} not in {}'.format(self['ylabel'], [True, False]))
  
         
         LOG.info('plotting PCA {}'.format(self['by']))
@@ -379,7 +545,7 @@ class Pca():
         if self['by'] == 'parameters':
             self['annotate']=True
             if self['legend_position']==None:
-                raise Errors.InputError('When data reduction is by \'parameters\' you should specify an argument to legend_position. i.e. legend_position=(10,10,1.5) for horizontal, vertical and linespacing')
+                raise errors.InputError('When data reduction is by \'parameters\' you should specify an argument to legend_position. i.e. legend_position=(10,10,1.5) for horizontal, vertical and linespacing')
         self.pca()
         
         
@@ -511,7 +677,7 @@ class Histograms():
                 if os.path.isdir(save_dir)!=True:
                     os.mkdir(save_dir)
                 os.chdir(save_dir)
-                fname = os.path.join(save_dir, Misc.RemoveNonAscii(parameter).filter+'.jpeg')
+                fname = os.path.join(save_dir, misc.RemoveNonAscii(parameter).filter+'.jpeg')
                 plt.savefig(fname, dpi=self['dpi'], bbox_inches='tight')
             
     def truncate_data(self):
@@ -832,7 +998,7 @@ class TruncateData():
         Defulat= 100 = all data
         '''
         if self.x>100 or self.x<1:
-            raise Errors.InputError('{} should be between 0 and 100')
+            raise errors.InputError('{} should be between 0 and 100')
         x_quantile= int(numpy.round(self.data.shape[0]*(float(self.x)/100.0)))
         return self.data.iloc[:x_quantile]
     
@@ -909,7 +1075,7 @@ class EnsembleTimeCourse():
             
         for param in self['y_parameter']:
             if param not in self.ensemble_data.keys():
-                raise Errors.InputError('{} not in your data set. {}'.format(param, self.ensemble_data.keys()))
+                raise errors.InputError('{} not in your data set. {}'.format(param, self.ensemble_data.keys()))
         
         if self['results_directory'] == None:
             self['results_directory'] = os.path.join(os.path.dirname(self.copasi_file), 'EnsembleTimeCourses' )
@@ -1031,7 +1197,7 @@ class EnsembleTimeCourse():
                     if os.path.isdir(self['results_directory'])!=True:
                         os.makedirs(self['results_directory'])
                     os.chdir(self['results_directory'])
-                    fname = os.path.join(self['results_directory'], '{}.jpeg'.format(Misc.RemoveNonAscii(parameter).filter))
+                    fname = os.path.join(self['results_directory'], '{}.jpeg'.format(misc.RemoveNonAscii(parameter).filter))
                     plt.savefig(fname, dpi=self['dpi'], bbox_inches='tight')
         
     
@@ -1138,7 +1304,7 @@ class PlotPEData(object):
         
         
         if self.kwargs.get('plot') not in [False,True]:
-            raise Errors.InputError('The plot kwarg takes only \'false\' or \'true\'')
+            raise errors.InputError('The plot kwarg takes only \'false\' or \'true\'')
         #limit parameters
         if self.kwargs.get('ylimit')!=None:
             assert isinstance(self.kwargs.get('ylimit'),list),'ylimit is a list of coordinates for y axis,i.e. [0,10]'
@@ -1180,21 +1346,21 @@ class PlotPEData(object):
         self.kwargs=options
         
         if os.path.isfile(self.copasi_file)==False:
-            raise Errors.InputError('Your copasi file {}doesn\' exist'.format(self.copasi_file))
+            raise errors.InputError('Your copasi file {}doesn\' exist'.format(self.copasi_file))
             
         if isinstance(self.experiment_files,str):
             if os.path.isfile(self.experiment_files)==False:
-                raise Errors.InputError('Your experiment file {} doesn\'t exist'.format(self.experiment_files))
+                raise errors.InputError('Your experiment file {} doesn\'t exist'.format(self.experiment_files))
             #make a 1 element list to iterate over later
             self.experiment_files=[self.experiment_files]
             
         if isinstance(self.experiment_files,list):
             for i in self.experiment_files:
                 if os.path.isfile(i)==False:
-                    raise Errors.InputError('{} doesn\'t exist'.format(i))
+                    raise errors.InputError('{} doesn\'t exist'.format(i))
         
         if os.path.isfile(self.PE_result_file)==False:
-            raise Errors.InputError('Your PE data file {} doesn\'t exist'.format(self.PE_result_file))
+            raise errors.InputError('Your PE data file {} doesn\'t exist'.format(self.PE_result_file))
         
         if isinstance(self.kwargs['separator'],str):
             self.kwargs['separator']=[self.kwargs['separator']]
@@ -1309,9 +1475,9 @@ class PlotPEData(object):
         '''
         seaborn.set_context(context='poster',font_scale=2)
         if fle not in self.experiment_files:
-            raise Errors.InputError('{} not in {}'.format(fle,self.exp_times))
+            raise errors.InputError('{} not in {}'.format(fle,self.exp_times))
         if parameter not in self.sim_data[fle].keys() and parameter not in self.experiment_data[fle].keys():
-            raise Errors.InputError('{} not in {} or {}'.format(parameter,self.sim_data[fle.keys()],self.experiment_data[fle].keys()))
+            raise errors.InputError('{} not in {} or {}'.format(parameter,self.sim_data[fle.keys()],self.experiment_data[fle].keys()))
         sim= self.sim_data[fle][parameter]
         exp= self.experiment_data[fle][parameter]
         time_exp= self.experiment_data[fle]['Time']
