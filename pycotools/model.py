@@ -336,7 +336,9 @@ class Model(_base._Base):
         get local parameters from reactions
         :return:
         """
-        return reduce(lambda x, y: x+y, [i.parameters for i in self.reactions])
+        loc = reduce(lambda x, y: x+y, [i.parameters for i in self.reactions])
+
+        return loc
 
     @staticmethod
     def convert_particles_to_molar(particles, mol_unit, compartment_volume):#,vol_unit):
@@ -664,9 +666,10 @@ class Model(_base._Base):
 
     @property
     def reactions(self):
-        # self.refresh()
-        # self.open()
-        list_of_reactions = []
+        """
+        assemble a list of reactions
+        :return: dict
+        """
         reaction_count = 0
         reactions_dict = {}
         for i in self.xml.iter():
@@ -710,14 +713,33 @@ class Model(_base._Base):
 
                         elif k.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
                             list_of_constants = []
+
+                            ##assertain the parameters simulation type
                             for l in list(k):
-                                list_of_constants.append(
-                                    LocalParameter(self,
+                                global_name = "({}).{}".format(j.attrib['name'], l.attrib['name'])
+                                query = '//*[@cn="String=Kinetic Parameters"]'
+                                simulation_types = {}
+                                for element in self.xml.xpath(query):
+                                    for element2 in element:
+                                        for element3 in element2:
+                                            match = re.findall(
+                                                '.*Reactions\[(.*)\].*Parameter=(.*)', element3.attrib['cn']
+                                            )[0]
+
+                                            match = "({}).{}".format(match[0], match[1])
+                                            if global_name == match:
+                                                simulation_types[global_name] = element3.attrib['simulationType']
+
+
+                                _local = LocalParameter(self,
                                                    key=l.attrib['key'],
                                                    name=l.attrib['name'],
                                                    value=l.attrib['value'],
                                                    reaction_name=j.attrib['name'],
-                                                   global_name="({}).{}".format(j.attrib['name'], l.attrib['name'])))
+                                                   global_name=global_name,
+                                                   simulation_type=simulation_types[global_name])
+                                list_of_constants.append(_local)
+
                                 reactions_dict[reaction_count]['constants'] = list_of_constants
 
 
@@ -726,6 +748,8 @@ class Model(_base._Base):
                             assert len(function_list) == 1
                             reactions_dict[reaction_count]['function'] = function_list[0]
 
+
+        ## assemble the expression for the reaction
         for i, dct in reactions_dict.items():
             if dct['function'] == []:
                 dct['function'] = "k*{}".format(reduce(lambda x, y: '{}*{}'.format(x, y), substrates))
@@ -770,11 +794,17 @@ class Model(_base._Base):
             ## skip the skipped reactions
             # if i not in skipped:
             lst.append(Reaction(self,
-                            name=dct['name'],
-                            key=dct['key'],
-                            expression=dct['expression'],
-                            rate_law=dct['function']))
-
+                                name=dct['name'],
+                                key=dct['key'],
+                                expression=dct['expression'],
+                                rate_law=dct['function'],
+                                reversible=dct['reversible'],
+                                substrates=dct['substrates'],
+                                products=dct['products'],
+                                parameters=dct['constants'],
+                                parameters_dict={j.name: j for j in dct['constants']},
+                                )
+                       )
         return lst
 
     def add_reaction(self, reaction):
@@ -1119,6 +1149,13 @@ class Compartment(_base._ModelBase):
     @property
     def reference(self):
         return 'Vector=Compartments[{}]'.format(self.name)
+
+    def initial_volume_reference(self):
+        """
+
+        :return:
+        """
+        return "Vector=Compartments[{}],Reference=InitialVolume".format(self.name)
 
     def to_xml(self):
         """
@@ -1508,13 +1545,11 @@ class Reaction(_base._ModelBase):
         # print self.to_df()
 
 
-
-
     def __str__(self):
-        return 'Reaction(name="{}", expression="{}", rate_law="{}", parameters={}, reversible={})'.format(
-            self.name, self.expression, self.rate_law,
+        return 'Reaction(name="{}", expression="{}", rate_law="{}", parameters={}, reversible={}, simulation_type="{}")'.format(
+            self.name, self.expression, self.rate_law.expression,
             {i.name: i.value for i in self.parameters},
-            self.reversible
+            self.reversible, self.simulation_type
         )
 
     def __repr__(self):
@@ -1622,16 +1657,32 @@ class Reaction(_base._ModelBase):
         if isinstance(local_keys, str):
             local_keys = [local_keys]
 
-        ##for excluding elements of built in rate laws
-        exclusion_list = []#['PRODUCT<substrate_i>', 'PRODUCT<product_j>']
+        # LOG.warning('You do not know the consequences of commenting out this block')
+        '''
+        Local parameters have been duplicated because of the below code
+        which is why I have commented it out. However I suspect that
+        when we create a new reaction this means that that reaction just
+        wont have a local parameter. Therefore I need to distinguigh between
+        reactions that are already in the model and new reactions. 
+        
+        Only the reactions that are new in the model get a local 
+        parameter assigned here. 
+        
+        However keep the code commented out until you locate the bugs 
+        error. 
+        '''
         for i in range(len(parameter_list)):
-            if parameter_list[i] not in exclusion_list:
+            if parameter_list[i] not in [j.name for j in self.parameters]:
+                ## do not re-add a parameter if it already exists
+                LOG.info('adding parameter called --> {}'.format(parameter_list[i]))
                 p = LocalParameter(self.model,
                                    name=parameter_list[i],
                                    key=local_keys[i],
                                    value=0.1,
                                    reaction_name=self.name,
-                                   global_name='({}).{}'.format(self.name, parameter_list[i]))
+                                   global_name='({}).{}'.format(self.name, parameter_list[i]),
+                                   )
+                LOG.warning('deleted simulation_type from local parameter definition. May cause bugs')
                 self.parameters.append(p)
                 self.parameters_dict[parameter_list[i]] = p
 
@@ -1755,6 +1806,7 @@ class Reaction(_base._ModelBase):
 
                 if i.role == 'constant':
                     ##TODO implement global quantities here
+
                     source_parameter = self.parameters_dict[i.name].key
 
                 elif (i.role == 'substrate') or (i.role == 'product') or (i.role == 'modifier'):
@@ -1952,8 +2004,8 @@ class LocalParameter(_base._ModelBase):
 
 
     def __str__(self):
-        return 'LocalParameter(name="{}", key="{}", reaction_name="{}, value={}")'.format(
-            self.name, self.key, self.reaction_name, self.value
+        return 'LocalParameter(name="{}", key="{}", reaction_name="{}, value="{}", simulation_type="{}")'.format(
+            self.name, self.key, self.reaction_name, self.value, self.simulation_type
         )
 
     def __repr__(self):

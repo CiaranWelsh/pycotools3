@@ -43,6 +43,7 @@ Features to include:
 
 
 '''
+import contextlib
 import string
 import pandas 
 import matplotlib.pyplot as plt
@@ -84,43 +85,43 @@ seaborn.set_context(context=SEABORN_OPTIONS['context'], font_scale=SEABORN_OPTIO
 #                     raise errors.InputError('data is of type {}. The path of your analysis cannot be inferred and therefore you much specify an argument to the results_directory keyword')
 #         return results_directory
 
-class DataFrame(pandas.DataFrame):
-    """
-    Like a normal dataframe but with a
-    flag indicating whether the data is
-    in log10 scale or not
-    """
-    def __init__(self, df, islog10):
-        super(DataFrame, self).__init__(df)
-        # self.df = df
-        self.islog10 = islog10
-        self._do_checks()
-
-    def _do_checks(self):
-        """
-        validate integrity of data
-        :return:
-        """
-        if not isinstance(self, pandas.core.frame.DataFrame):
-            raise errors.InputError('df argument shold be pandas.DataFrame. Got {}'.format(type(self.df)))
-
-        if not isinstance(self.islog10, bool):
-            raise errors.InputError('log10 should be boolean. Got'.format(type(self.log10)))
-
-    def to_log10(self):
-        """
-        return the dataframe with a log10 transformation
-        :return: pycotools.DataFrame
-        """
-        return DataFrame(numpy.log10(self), islog10=True)
-
-    def to_linear(self):
-        """
-        convert df in log10 scale back to
-        linear
-        :return:
-        """
-        return DataFrame(numpy.power(10, self), islog10=False)
+# class DataFrame(pandas.DataFrame):
+#     """
+#     Like a normal dataframe but with a
+#     flag indicating whether the data is
+#     in log10 scale or not
+#     """
+#     def __init__(self, df, islog10):
+#         super(DataFrame, self).__init__(df)
+#         # self.df = df
+#         self.islog10 = islog10
+#         self._do_checks()
+#
+#     def _do_checks(self):
+#         """
+#         validate integrity of data
+#         :return:
+#         """
+#         if not isinstance(self, pandas.core.frame.DataFrame):
+#             raise errors.InputError('df argument shold be pandas.DataFrame. Got {}'.format(type(self.df)))
+#
+#         if not isinstance(self.islog10, bool):
+#             raise errors.InputError('log10 should be boolean. Got'.format(type(self.log10)))
+#
+#     def to_log10(self):
+#         """
+#         return the dataframe with a log10 transformation
+#         :return: pycotools.DataFrame
+#         """
+#         return DataFrame(numpy.log10(self), islog10=True)
+#
+#     def to_linear(self):
+#         """
+#         convert df in log10 scale back to
+#         linear
+#         :return:
+#         """
+#         return DataFrame(numpy.power(10, self), islog10=False)
 
 
 
@@ -155,7 +156,6 @@ class TruncateData(object):
         self.mode = mode
         self.x = x
         self.log10 = log10
-        assert isinstance(self.data, DataFrame)
         assert self.mode in ['below_x', 'percent', 'ranks']
 
         self.data = self.truncate()
@@ -189,15 +189,14 @@ class TruncateData(object):
 class TruncateDataMixin(Mixin):
 
     @staticmethod
-    def truncate(data, mode, x, log10=False):
+    def truncate(data, mode, x):
         """
         mixin method interface to truncate data
         """
         df = TruncateData(data,
                             mode=mode,
-                            x=x,
-                            log10=log10).data
-        return data
+                            x=x).data
+        return df
 
 class CreateResultsDirectoryMixin(Mixin):
     @staticmethod
@@ -214,7 +213,7 @@ class CreateResultsDirectoryMixin(Mixin):
 
 
 class Parse(object):
-    def __init__(self, cls_instance):
+    def __init__(self, cls_instance, log10=False):
         self.cls_instance = cls_instance
 
         accepted_types = [tasks.TimeCourse,
@@ -238,6 +237,8 @@ class Parse(object):
                     'plotting functions are only available for scans (not repeat or random distributions)'
                 )
 
+        self.data = self.parse()
+
 
     def parse(self):
         """
@@ -257,8 +258,10 @@ class Parse(object):
                         tasks.MultiParameterEstimation):
             data = self.parse_multi_parameter_estimation(self.cls_instance)
 
-        ## create a pycotools.DataFrame object to keep track of log10 status
-        data = DataFrame(data, log10=False)
+        if self.log10:
+            return numpy.log10(data)
+        else:
+            return data
 
     def parse_timecourse(self):
         """
@@ -364,27 +367,24 @@ class Parse(object):
 
         return df.reset_index(drop=True)
 
-class ReadDataMixin(Mixin):
-
-    @staticmethod
-    def read_data(data, sep='\t', log10=True):
-        """
-        Both a pandas.DataFrame or a file or list of files can be passed
-        as the data argument.
-        """
-        if isinstance(data, DataFrame)!=True:
-            df =Parse(data, sep=sep).data
-            if log10:
-                return df.to_log10()
-            else:
-                return df
-        elif isinstance(data, pandas.core.frame.DataFrame):
-            if log10:
-                return DataFrame(data, islog10=True)
-            else:
-                return DataFrame(data, islog10=False)
-        else:
-            return data
+# class ReadDataMixin(Mixin):
+#
+#     @staticmethod
+#     def read_data(cls_instance, sep='\t', log10=False):
+#         """
+#         Both a pandas.DataFrame or a file or list of files can be passed
+#         as the data argument.
+#         """
+#         LOG.debug('type data --> {}'.format(type(data)))
+#         if isinstance(data, pandas.core.frame.DataFrame):
+#             if log10:
+#                 return numpy.log10(data)
+#             else:
+#                 return data
+#         elif isinstance(data, str):
+#             data = Parse()
+#         else:
+#             raise errors.InputError('data should be pandas.DataFrame, viz.DataFrame or string pointing to file of list of files containing parameter esitmation data')
 
 class SaveFigMixin(Mixin):
     """
@@ -395,8 +395,8 @@ class SaveFigMixin(Mixin):
     def save_figure(directory, filename, dpi=300):
         if not os.path.isdir(directory):
             os.mkdir(directory)
-        os.chdir(directory)
         plt.savefig(filename, dpi=dpi, bbox_inches='tight')
+
 
 # class Parse2():
 #     '''
@@ -510,7 +510,7 @@ class SaveFigMixin(Mixin):
 #
 #
 @mixin(CreateResultsDirectoryMixin)
-@mixin(ReadDataMixin)
+
 @mixin(TruncateDataMixin)
 @mixin(_base.UpdatePropertiesMixin)
 @mixin(SaveFigMixin)
@@ -541,9 +541,9 @@ class Boxplot(object):
             raise errors.InputError('')
 
         self.create_results_directory(self.results_directory)
-        self.data = self.read_data(self.data, log10=self.log10)
-        self.data = self.truncate(self.data, mode=self.truncate_mode, x=self.x, log10=self.log10)
-        # self.plot()
+        self.data = self.truncate(self.data, mode=self.truncate_mode, x=self.x)
+        self.plot()
+
 
     def __getitem__(self, key):
         if key not in self.kwargs.keys():
@@ -567,11 +567,10 @@ class Boxplot(object):
             plt.title(self.title+'(n={})'.format(data.shape[0]))
             plt.ylabel(self.ylabel)
             if self.savefig:
-                if os.path.isdir(self.results_directory)!=True:
-                    os.mkdir(self.results_directory)
-                os.chdir(self.results_directory)
-                plt.savefig(os.path.join(self.results_directory, 'Boxplot{}.jpeg'.format(label_set)), dpi=self['dpi'], bbox_inches='tight')
-        
+                self.save_figure(self.results_directory,
+                                 'Boxplot{}.jpeg'.format(label_set),
+                                 dpi=self.dpi)
+
     def divide_data(self):
         """
         split data into multi plot
@@ -589,9 +588,10 @@ class Boxplot(object):
         return [list(i) for i in l]
 
 
-@mixin(ReadDataMixin)
 @mixin(TruncateDataMixin)
 @mixin(_base.UpdatePropertiesMixin)
+@mixin(CreateResultsDirectoryMixin)
+@mixin(SaveFigMixin)
 class RssVsIterations(object):
     def __init__(self, data, **kwargs):
         self.data = data
@@ -609,16 +609,11 @@ class RssVsIterations(object):
         
         for i in kwargs.keys():
             assert i in options.keys(),'{} is not a keyword argument for RssVsIteration'.format(i)
-        options.update( kwargs)  
-        self.kwargs=options
+        options.update(kwargs)
+        self.kwargs = options
         self.update_properties(self.kwargs)
-
-        self.results_directory = make_default_results_directory(self.data, self.savefig,
-                                                                self.results_directory)
-        
-        self.data = self.read_data()
-        self.data = self.truncate_data()
-        
+        self.results_directory = self.create_results_directory(self.results_directory)
+        self.data = self.truncate(self.data, mode=self.truncate_mode, x=self.x)
         self.title = self.title+'(n={})'.format(self.data.shape[0])
 
         LOG.info('plotting RSS Vs Iterations')
@@ -631,17 +626,7 @@ class RssVsIterations(object):
     
     def __setitem__(self,key,value):
         self.kwargs[key] = value
-        
-    # def read_data(self):
-        # """
-        # Both a pandas.DataFrame or a file or list of files can be passed
-        # as the data argument.
-        # """
-        # if isinstance(self.data, pandas.core.frame.DataFrame)!=True:
-        #     return ParsePEData(self.data, sep=self.sep, log10=self.log10).data
-        # else:
-        #     return self.data
-    
+
     def plot(self):
         """
         
@@ -654,27 +639,13 @@ class RssVsIterations(object):
         plt.ylabel(self.ylabel)
         plt.xlabel('Rank of Best Fit')
         if self.savefig:
-            # save_dir = os.path.join(self.results_directory, 'RssVsIteration')
-            if os.path.isdir(self.results_directory)!=True:
-                os.mkdir(self.results_directory)
-            os.chdir(self.results_directory)
-            plt.savefig(os.path.join(self.results_directory, 'RssVsIteration.jpeg'),
-                        dpi=self.dpi, bbox_inches='tight')
-        
-    def truncate_data(self):
-        """
-        
-        """
-        return TruncateData(self.data, mode=self.truncate_mode,
-                            x=self.x,
-                            log10=self.log10).data
+            self.save_figure(self.results_directory,
+                             'RssVsIteration.jpeg',
+                             dpi=self.dpi)
 
 
-
- 
-    
 # @mixin(DefaultResultsDirectoryMixin)
-@mixin(ReadDataMixin)
+
 @mixin(TruncateDataMixin)
 @mixin(_base.UpdatePropertiesMixin)
 class Pca(object):
@@ -752,26 +723,7 @@ class Pca(object):
     
     def __setitem__(self,key,value):
         self.kwargs[key] = value
-        
-        
-    def truncate_data(self):
-        """
-        
-        """
-        return TruncateData(self.data,mode=self.truncate_mode,
-                            x=self.x,
-                            log10=self.log10).data
 
-    # def read_data(self):
-    #     """
-    #     Both a pandas.DataFrame or a file or list of files can be passed
-    #     as the data argument.
-    #     """
-    #     if isinstance(self.data, pandas.core.frame.DataFrame)!=True:
-    #         return ParsePEData(self.data, sep=self.sep,
-    #                            log10=self.log10).data
-    #     else:
-    #         return self.data
         
         
     def pca(self):
@@ -813,17 +765,13 @@ class Pca(object):
                         self.legend_position[1]-i*self.legend_position[2],
                     '{}: {}'.format(i,txt),fontsize=self.legend_fontsize)
         if self.savefig:
-            if os.path.isdir(self.results_directory)!=True:
-                os.mkdir(self.results_directory)
-            os.chdir(self.results_directory)
-            plt.savefig(os.path.join(self.results_directory,
-                                     'PCA_{}.jpeg'.format(
-                                         self.by)),
-                        dpi=self.dpi, bbox_inches='tight')
+            self.save_figure(self.results_directory,
+                             'Pca{}.jpeg'.format(self.by),
+                             dpi=self.dpi)
 
 
 # @mixin(DefaultResultsDirectoryMixin)
-@mixin(ReadDataMixin)
+
 @mixin(TruncateDataMixin)
 @mixin(_base.UpdatePropertiesMixin)
 class Histograms(object):
@@ -898,7 +846,7 @@ class Histograms(object):
     
 
 # @mixin(DefaultResultsDirectoryMixin)
-@mixin(ReadDataMixin)
+
 @mixin(TruncateDataMixin)
 @mixin(_base.UpdatePropertiesMixin)
 class Scatters(object):
@@ -970,7 +918,7 @@ class Scatters(object):
 #         return TruncateData(self.data, mode=self['truncate_mode'], x=self['x'], log10=self['log10']).data
 
 # @mixin(DefaultResultsDirectoryMixin)
-@mixin(ReadDataMixin)
+
 @mixin(TruncateDataMixin)
 @mixin(_base.UpdatePropertiesMixin)
 class LinearRegression(object):
@@ -1172,7 +1120,7 @@ class LinearRegression(object):
 #            self.data.to_excel(self.data_file)
     
 # @mixin(DefaultResultsDirectoryMixin)
-@mixin(ReadDataMixin)
+
 @mixin(TruncateDataMixin)
 @mixin(_base.UpdatePropertiesMixin)
 class EnsembleTimeCourse(object):
@@ -1354,7 +1302,7 @@ class EnsembleTimeCourse(object):
         
     
 # # @mixin(DefaultResultsDirectoryMixin)
-# @mixin(ReadDataMixin)
+# 
 # @mixin(TruncateDataMixin)
 # @mixin(_base.UpdatePropertiesMixin)
 # class PlotPEData(object):
@@ -1710,7 +1658,7 @@ class EnsembleTimeCourse(object):
 
     
 # @mixin(DefaultResultsDirectoryMixin)
-@mixin(ReadDataMixin)
+
 @mixin(TruncateDataMixin)
 @mixin(_base.UpdatePropertiesMixin)
 class ModelSelection(object):
