@@ -556,16 +556,23 @@ class PlotParameterEstimation(PlotKwargs):
             'filename': None,
             'dpi': 300,
         }
-
-        self.default_properties.update(self.plot_kwargs)
         for i in kwargs.keys():
-            assert i in self.default_properties.keys(), '{} is not a keyword argument for Boxplot'.format(i)
-        # self.default_properties.update(self.default_properties)
+            assert i in self.default_properties.keys(),'{} is not a keyword argument for Boxplot'.format(i)
+        self.kwargs = self.default_properties
+        self.default_properties.update(kwargs)
+        self.default_properties.update(self.plot_kwargs)
         self.update_properties(self.default_properties)
-        self._do_checks()
-
-        self.data = self.parse(self.cls, self.log10)
-        self.cls.model = self.update_parameters()
+        # self._do_checks()
+        # self.default_properties.update(self.plot_kwargs)
+        # LOG.debug('self.def --> {}'.format(self.default_properties))
+        # for i in kwargs.keys():
+        #     assert i in self.default_properties.keys(), '{} is not a keyword argument for Boxplot'.format(i)
+        # self.default_properties.update(self.kwargs)
+        # self.update_properties(self.default_properties)
+        # self._do_checks()
+        #
+        # self.data = self.parse(self.cls, self.log10)
+        # self.cls.model = self.update_parameters()
 
 
     def __str__(self):

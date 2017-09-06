@@ -71,9 +71,9 @@ Reaction scheme where the products are created from the reactants and the change
       </Compartment>
     </ListOfCompartments>
     <ListOfMetabolites>
-      <Metabolite compartment="Compartment_1" key="Metabolite_3" name="B" simulationType="reactions" particle_number="3.48255588048e+17"/><Metabolite compartment="Compartment_1" key="Metabolite_1" name="A" simulationType="reactions" particle_number="2.90194923617e+15"/><Metabolite compartment="Compartment_1" key="Metabolite_5" name="C" simulationType="reactions" particle_number="2.71603370363e+19"/></ListOfMetabolites>
+      <Metabolite compartment="Compartment_1" key="Metabolite_3" name="B" simulationType="reactions" particle_number="2.52592073892e+20"/><Metabolite compartment="Compartment_1" key="Metabolite_1" name="A" simulationType="reactions" particle_number="2.57390515727e+19"/><Metabolite compartment="Compartment_1" key="Metabolite_5" name="C" simulationType="reactions" particle_number="3.44559800204e+25"/></ListOfMetabolites>
     <ListOfModelValues>
-      <ModelValue key="ModelValue_2" name="ThisIsAssignment" simulationType="assignment" initial_value="88602.2"/><ModelValue key="ModelValue_1" name="B2C" simulationType="fixed" initial_value="192.737"/><ModelValue key="ModelValue_0" name="A2B" simulationType="fixed" initial_value="7.16825"/></ListOfModelValues>
+      <ModelValue key="ModelValue_2" name="ThisIsAssignment" simulationType="assignment" initial_value="75.5339"/><ModelValue key="ModelValue_1" name="B2C" simulationType="fixed" initial_value="55.5607"/><ModelValue key="ModelValue_0" name="A2B" simulationType="fixed" initial_value="7.41027"/></ListOfModelValues>
     <ListOfReactions>
       <Reaction key="Reaction_0" name="A2B" reversible="false" fast="false">
         <MiriamAnnotation>
@@ -128,7 +128,7 @@ Reaction scheme where the products are created from the reactants and the change
         </ListOfProducts>
         <ListOfConstants>
           <Constant key="Parameter_4393" name="k1" value="9"/>
-          <Constant key="Parameter_4392" name="k2" value="2.21049e-05"/>
+          <Constant key="Parameter_4392" name="k2" value="0.000304298"/>
         </ListOfConstants>
         <KineticLaw function="Function_14" unitType="Default" scalingCompartment="CN=Root,Model=New Model,Vector=Compartments[nuc]">
           <ListOfCallParameters>
@@ -155,7 +155,7 @@ Reaction scheme where the products are created from the reactants and the change
           <Product metabolite="Metabolite_1" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4391" name="k1" value="0.00264558"/>
+          <Constant key="Parameter_4391" name="k1" value="23.6471"/>
         </ListOfConstants>
         <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=New Model,Vector=Compartments[nuc]">
           <ListOfCallParameters>
@@ -185,7 +185,7 @@ Reaction scheme where the products are created from the reactants and the change
           <Substrate metabolite="Metabolite_1" stoichiometry="1"/>
         </ListOfSubstrates>
         <ListOfConstants>
-          <Constant key="Parameter_4390" name="k1" value="43.1647"/>
+          <Constant key="Parameter_4390" name="k1" value="22.9383"/>
         </ListOfConstants>
         <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=New Model,Vector=Compartments[nuc]">
           <ListOfCallParameters>
@@ -248,7 +248,7 @@ Reaction scheme where the products are created from the reactants and the change
       <StateTemplateVariable objectReference="Compartment_1"/>
       <StateTemplateVariable objectReference="Compartment_3"/>
       <StateTemplateVariable objectReference="ModelValue_2"/><StateTemplateVariable objectReference="ModelValue_1"/><StateTemplateVariable objectReference="ModelValue_0"/><StateTemplateVariable objectReference="Metabolite_3"/><StateTemplateVariable objectReference="Metabolite_1"/><StateTemplateVariable objectReference="Metabolite_5"/></StateTemplate>
-    <InitialState type="initialState">0.0 1.0 3.0 88602.2 192.737 7.16825 3.48255588048e+17 2.90194923617e+15 2.71603370363e+19 
+    <InitialState type="initialState">0.0 1.0 3.0 75.5339 55.5607 7.41027 2.52592073892e+20 2.57390515727e+19 3.44559800204e+25 
 </InitialState>
   </Model>
   <ListOfTasks>
@@ -270,7 +270,7 @@ Reaction scheme where the products are created from the reactants and the change
         <Parameter name="Maximum duration for backward integration" type="unsignedFloat" value="1000000"/>
       </Method>
     </Task>
-    <Task key="Task_15" name="Time-Course" scheduled="true" type="timeCourse" update_model="false"><Report append="0" confirmOverwrite="0" reference="Report_84" target="C:\Users\Ciaran\Documents\pycotools\pycotools\Tests\TimeCourseData.txt"/><Problem><Parameter name="AutomaticStepSize" type="bool" value="0"/><Parameter name="StepNumber" type="unsignedInteger" value="50"/><Parameter name="StepSize" type="float" value="1"/><Parameter name="Duration" type="float" value="50"/><Parameter name="TimeSeriesRequested" type="float" value="1"/><Parameter name="OutputStartTime" type="float" value="0"/><Parameter name="Output Event" type="bool" value="0"/><Parameter name="Start in Steady State" type="bool" value="0"/></Problem><Method name="Deterministic (LSODA)" type="Deterministic(LSODA)"><Parameter name="Integrate Reduced Model" type="bool" value="0"/><Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/><Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/><Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/><Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/></Method></Task><Task key="Task_16" name="Scan" type="scan" scheduled="false" updateModel="false">
+    <Task key="Task_15" name="Time-Course" scheduled="true" type="timeCourse" update_model="false"><Report append="0" confirmOverwrite="0" reference="Report_46" target="C:\Users\Ciaran\Documents\pycotools\pycotools\Tests\report1.txt"/><Problem><Parameter name="AutomaticStepSize" type="bool" value="0"/><Parameter name="StepNumber" type="unsignedInteger" value="5"/><Parameter name="StepSize" type="float" value="10"/><Parameter name="Duration" type="float" value="50"/><Parameter name="TimeSeriesRequested" type="float" value="1"/><Parameter name="OutputStartTime" type="float" value="0"/><Parameter name="Output Event" type="bool" value="0"/><Parameter name="Start in Steady State" type="bool" value="0"/></Problem><Method name="Deterministic (LSODA)" type="Deterministic(LSODA)"><Parameter name="Integrate Reduced Model" type="bool" value="0"/><Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/><Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/><Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/><Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/></Method></Task><Task key="Task_16" name="Scan" type="scan" scheduled="false" updateModel="false">
       <Problem>
         <Parameter name="Subtask" type="unsignedInteger" value="1"/>
         <ParameterGroup name="ScanItems">
@@ -310,7 +310,7 @@ Reaction scheme where the products are created from the reactants and the change
       </Method>
     </Task>
     <Task key="Task_19" name="Parameter Estimation" type="parameterFitting" scheduled="false" updateModel="0">
-      <Report reference="Report_32" target="C:\Users\Ciaran\Documents\pycotools\pycotools\Tests\PEData.txt" append="0" confirmOverwrite="0"/>
+      <Report reference="Report_39" target="C:\Users\Ciaran\Documents\pycotools\pycotools\Tests\PEData.txt" append="0" confirmOverwrite="0"/>
       <Problem>
         <Parameter name="Maximize" type="bool" value="0"/>
         <Parameter name="Randomize Start Values" type="bool" value="1"/>
@@ -567,7 +567,7 @@ Reaction scheme where the products are created from the reactants and the change
         <Object cn="CN=Root,Vector=TaskList[Linear Noise Approximation],Object=Result"/>
       </Footer>
     </Report>
-  <Report taskType="parameterFitting" separator="&#9;" precision="6" key="Report_32" name="parameter_estimation"><Comment/><Footer><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"/><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/></Footer></Report><Report key="Report_84" name="Time-Course" precision="6" separator="&#9;" taskType="Time-Course"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=New Model,Reference=Time"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Values[ThisIsAssignment],Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Values[B2C],Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Values[A2B],Reference=Value"/></Table></Report></ListOfReports>
+  <Report taskType="parameterFitting" separator="&#9;" precision="6" key="Report_39" name="parameter_estimation"><Comment/><Footer><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"/><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/></Footer></Report><Report key="Report_46" name="Time-Course" precision="6" separator="&#9;" taskType="Time-Course"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=New Model,Reference=Time"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Values[ThisIsAssignment],Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Values[B2C],Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Values[A2B],Reference=Value"/></Table></Report></ListOfReports>
   <GUI>
   </GUI>
   <ListOfUnitDefinitions>
