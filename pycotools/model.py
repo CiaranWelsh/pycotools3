@@ -66,6 +66,14 @@ class Model(_base._Base):
         return self
 
     @property
+    def root(self):
+        """
+        Root directory for model. The directory
+        where copasi_file is saved
+        :return:
+        """
+        return os.path.dirname(self.copasi_file)
+    @property
     def reference(self):
         return "CN=Root,Model={}".format(self.name)
 
@@ -338,6 +346,10 @@ class Model(_base._Base):
         """
         loc = reduce(lambda x, y: x+y, [i.parameters for i in self.reactions])
 
+        ## We don't want to consider parameters tahat have already been assigned
+        ## to a global parameter in any downstream operation.
+        ##therefore we remove locals with assignments
+        loc = [i for i in loc if i.simulation_type!='assignment']
         return loc
 
     @staticmethod
@@ -2745,8 +2757,9 @@ class InsertParameters(_base._ModelBase):
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
         self._do_checks()
 
+        self.model= self.insert()
         if self.inplace:
-            self.model = self.insert()
+            self.model.save()
 
         # self.parameters= self.replace_gl_and_lt()
         #        self.insert_locals()

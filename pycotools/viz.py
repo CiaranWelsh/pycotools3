@@ -51,7 +51,7 @@ import scipy
 import os
 import matplotlib
 import itertools
-import tasks,errors, misc
+import tasks,errors, misc, model
 import seaborn 
 import logging
 from subprocess import check_call,Popen
@@ -70,61 +70,28 @@ SEABORN_OPTIONS = {'context':'poster',
                    'font_scale':2}
 
 seaborn.set_context(context=SEABORN_OPTIONS['context'], font_scale=SEABORN_OPTIONS['font_scale'])
-    
-
-# class DefaultResultsDirectoryMixin(Mixin):
-#     @staticmethod
-#     def make_default(results_directory):
-#
-#
-#         if savefig:
-#             if results_directory == None:
-#                 if isinstance(data, str):
-#                     results_directory = os.path.join(os.path.dirname(data))
-#                 if isinstance(data, pandas.core.frame.DataFrame):
-#                     raise errors.InputError('data is of type {}. The path of your analysis cannot be inferred and therefore you much specify an argument to the results_directory keyword')
-#         return results_directory
-
-# class DataFrame(pandas.DataFrame):
-#     """
-#     Like a normal dataframe but with a
-#     flag indicating whether the data is
-#     in log10 scale or not
-#     """
-#     def __init__(self, df, islog10):
-#         super(DataFrame, self).__init__(df)
-#         # self.df = df
-#         self.islog10 = islog10
-#         self._do_checks()
-#
-#     def _do_checks(self):
-#         """
-#         validate integrity of data
-#         :return:
-#         """
-#         if not isinstance(self, pandas.core.frame.DataFrame):
-#             raise errors.InputError('df argument shold be pandas.DataFrame. Got {}'.format(type(self.df)))
-#
-#         if not isinstance(self.islog10, bool):
-#             raise errors.InputError('log10 should be boolean. Got'.format(type(self.log10)))
-#
-#     def to_log10(self):
-#         """
-#         return the dataframe with a log10 transformation
-#         :return: pycotools.DataFrame
-#         """
-#         return DataFrame(numpy.log10(self), islog10=True)
-#
-#     def to_linear(self):
-#         """
-#         convert df in log10 scale back to
-#         linear
-#         :return:
-#         """
-#         return DataFrame(numpy.power(10, self), islog10=False)
 
 
+class PlotKwargs(object):
+    def plot_kwargs(self):
+        plot_kwargs = {
+            'linestyle': '-',
+            'marker': 'o',
+            'linewidth': 5,
+            'markersize': 12,
+        }
+        return plot_kwargs
 
+class SaveFigMixin(Mixin):
+    """
+    save figure to a directory and filename.
+    create teh directory if it doesn't exist.
+    """
+    @staticmethod
+    def save_figure(directory, filename, dpi=300):
+        if not os.path.isdir(directory):
+            os.mkdir(directory)
+        plt.savefig(filename, dpi=dpi, bbox_inches='tight')
 
 
 @mixin(_base.UpdatePropertiesMixin)
@@ -185,6 +152,15 @@ class TruncateData(object):
         elif self.mode == 'ranks':
             return self.ranks()
 
+class ParseMixin(Mixin):
+    @staticmethod
+    def parse(cls, log10):
+        """
+        Use parse class to get the data
+        :return:
+        """
+        return Parse(cls, log10=log10).data
+
 
 class TruncateDataMixin(Mixin):
 
@@ -215,7 +191,7 @@ class CreateResultsDirectoryMixin(Mixin):
 class Parse(object):
     def __init__(self, cls_instance, log10=False):
         self.cls_instance = cls_instance
-
+        self.log10 = log10
         accepted_types = [tasks.TimeCourse,
                           tasks.Scan,
                           tasks.ParameterEstimation,
@@ -259,9 +235,10 @@ class Parse(object):
             data = self.parse_multi_parameter_estimation(self.cls_instance)
 
         if self.log10:
-            return numpy.log10(data)
-        else:
+            data = numpy.log10(data)
             return data
+        else:
+            return data\
 
     def parse_timecourse(self):
         """
@@ -367,35 +344,360 @@ class Parse(object):
 
         return df.reset_index(drop=True)
 
-# class ReadDataMixin(Mixin):
-#
-#     @staticmethod
-#     def read_data(cls_instance, sep='\t', log10=False):
-#         """
-#         Both a pandas.DataFrame or a file or list of files can be passed
-#         as the data argument.
-#         """
-#         LOG.debug('type data --> {}'.format(type(data)))
-#         if isinstance(data, pandas.core.frame.DataFrame):
-#             if log10:
-#                 return numpy.log10(data)
-#             else:
-#                 return data
-#         elif isinstance(data, str):
-#             data = Parse()
-#         else:
-#             raise errors.InputError('data should be pandas.DataFrame, viz.DataFrame or string pointing to file of list of files containing parameter esitmation data')
 
-class SaveFigMixin(Mixin):
+@mixin(_base.UpdatePropertiesMixin)
+@mixin(SaveFigMixin)
+@mixin(ParseMixin)
+@mixin(CreateResultsDirectoryMixin)
+class PlotTimeCourse(PlotKwargs):
+    def __init__(self, cls, **kwargs):
+        super(PlotTimeCourse, self).__init__()
+        self.cls = cls
+        self.kwargs = kwargs
+
+        self.default_properties = {
+            'x': 'time',
+            'y': [i.name for i in self.cls.model.metabolites],
+            'log10': False,
+            'separate': False,
+            'savefig': False,
+            'results_directory': None,
+            'title': 'TimeCourse',
+            'xlabel': None,
+            'ylabel': None,
+            'show': False,
+            'filename': None,
+            'dpi': 300,
+        }
+        self.plot_kwargs
+
+        for i in kwargs.keys():
+            assert i in self.default_properties.keys(),'{} is not a keyword argument for Boxplot'.format(i)
+        self.kwargs = self.default_properties
+        self.default_properties.update(kwargs)
+        self.update_properties(self.default_properties)
+        self._do_checks()
+
+        self.data = self.parse(self.cls, self.log10)
+
+    def __str__(self):
+        """
+
+        :return:
+        """
+        return "PlotTimeCourse(x='{}', y={}, log10={}, separate={}, savefig={}, results_directory='{}'".format(
+            self.x, self.y, self.log10,
+            self.separate, self.savefig,
+            self.results_directory
+        )
+
+    def _do_checks(self):
+        """
+
+        :return:
+        """
+        if not isinstance(self.cls, tasks.TimeCourse):
+            raise errors.InputError(
+                'PlotTimeCourse class expects an instance of'
+                ' tasks.TimeCourse as first argument. '
+                'Got {} instead'.format(type(self.cls)))
+
+        if self.y == None:
+            self.y == self.data.keys()
+
+        if not isinstance(self.x, str):
+            raise errors.InputError('x should be a string. Got {}'.format(type(self.x)))
+
+        if not isinstance(self.y, (str, list)):
+            raise errors.InputError('y should be a string or list of strings. Got {}'.format(type(self.y)))
+
+        bool_list = [self.separate,
+                     self.savefig]
+        for i in bool_list:
+            if not isinstance(i, bool):
+                raise errors.InputError('{} argument should be boolean. Got {}'.format(i, type(i)))
+
+        if self.results_directory is None:
+            self.results_directory = os.path.join(
+                self.cls.model.root, 'TimeCourseGraphs'
+            )
+
+        if self.x.lower() == 'time':
+            self.xlabel = "Time ({})".format(self.cls.model.time_unit)
+
+        if self.xlabel is None:
+            self.xlabel = self.x
+
+        if self.ylabel is None:
+            self.ylabel = 'Concentration ({})'.format(self.cls.model.quantity_unit)
+
+        if self.savefig and (self.separate is False) and (self.filename is None):
+            self.filename = 'TimeCourse.jpeg'
+            LOG.warning('filename is None. Setting default filename to {}'.format(self.filename))
+
+    def plot(self):
+        """
+
+        :return:
+        """
+        if isinstance(self.y, str):
+            self.y = [self.y]
+
+        for i in self.y:
+            if i not in self.data.keys():
+                raise errors.InputError('{} not in {}'.format(i, self.data.keys()))
+
+        if self.x == 'time':
+            self.x = 'Time'
+        if self.x not in self.data.keys():
+            raise errors.InputError('{} not in {}'.format(self.x, self.data.keys()))
+
+        figures = []
+        if not self.separate:
+            fig = plt.figure()
+            figures.append(fig)
+
+        self.create_results_directory(self.results_directory)
+
+        for y_var in self.y:
+            if self.separate:
+                fig = plt.figure()
+                figures.append(fig)
+            y = self.data[y_var]
+            x = self.data[self.x]
+            plt.plot(x, y, label=y_var)
+            plt.legend()
+            plt.title(self.title)
+            plt.xlabel(self.xlabel)
+            plt.ylabel(self.ylabel)
+            if self.savefig:
+                if self.separate:
+                    fle = os.path.join(self.results_directory, '{}.jpeg'.format(y_var))
+                    fig.savefig(fle, dpi=self.dpi, bbox_inches='tight')
+                else:
+                    fle = os.path.join(self.results_directory, self.filename)
+                    fig.savefig(fle, dpi=self.dpi, bbox_inches='tight')
+
+        if self.show:
+            plt.show()
+        return figures
+
+@mixin(_base.UpdatePropertiesMixin)
+@mixin(SaveFigMixin)
+@mixin(ParseMixin)
+@mixin(CreateResultsDirectoryMixin)
+class PlotScan(object):
+    def __init__(self, cls, **kwargs):
+        self.cls = cls
+        self.kwargs = kwargs
+
+        self.default_properties = {
+            'x': 'time',
+            'y': [i.name for i in self.cls.model.metabolites],
+            'log10': False,
+            'separate': False,
+            'savefig': False,
+            'results_directory': None,
+            'title': 'TimeCourse',
+            'xlabel': None,
+            'ylabel': None,
+            'show': False,
+            'filename': None,
+            'dpi': 300,
+        }
+
+        for i in kwargs.keys():
+            assert i in self.default_properties.keys(), '{} is not a keyword argument for Boxplot'.format(i)
+        self.kwargs = self.default_properties
+        self.default_properties.update(kwargs)
+        self.update_properties(self.default_properties)
+        self._do_checks()
+
+        raise NotImplementedError
+
+        self.data = self.parse(self.cls, self.log10)
+
+    def __str__(self):
+        """
+
+        :return:
+        """
+        return "PlotScan(x='{}', y={}, log10={}, separate={}, savefig={}, results_directory='{}'".format(
+            self.x, self.y, self.log10,
+            self.separate, self.savefig,
+            self.results_directory
+        )
+
+@mixin(_base.UpdatePropertiesMixin)
+@mixin(SaveFigMixin)
+@mixin(ParseMixin)
+@mixin(CreateResultsDirectoryMixin)
+class PlotParameterEstimation(PlotKwargs):
     """
-    save figure to a directory and filename.
-    create teh directory if it doesn't exist.
+    Create new folder for each experiment
+    defined under the sub directory of results_directory
     """
-    @staticmethod
-    def save_figure(directory, filename, dpi=300):
-        if not os.path.isdir(directory):
-            os.mkdir(directory)
-        plt.savefig(filename, dpi=dpi, bbox_inches='tight')
+    def __init__(self, cls, **kwargs):
+        self.cls = cls
+        self.kwargs = kwargs
+        self.plot_kwargs = self.plot_kwargs()
+
+
+        self.default_properties = {
+            'x': None,
+            'y': [i.name for i in self.cls.model.metabolites],
+            'log10': False,
+            'savefig': False,
+            'results_directory': None,
+            'title': 'TimeCourse',
+            'xlabel': None,
+            'ylabel': None,
+            'show': False,
+            'filename': None,
+            'dpi': 300,
+        }
+
+        self.default_properties.update(self.plot_kwargs)
+        for i in kwargs.keys():
+            assert i in self.default_properties.keys(), '{} is not a keyword argument for Boxplot'.format(i)
+        # self.default_properties.update(self.default_properties)
+        self.update_properties(self.default_properties)
+        self._do_checks()
+
+        self.data = self.parse(self.cls, self.log10)
+        self.cls.model = self.update_parameters()
+
+
+    def __str__(self):
+        """
+
+        :return:
+        """
+        return "PlotParameterEstimation(x='{}', y={}, savefig={}, results_directory='{}'".format(
+            self.x, self.y, self.savefig,
+            self.results_directory
+        )
+
+    def _do_checks(self):
+
+
+        if not isinstance(self.cls, tasks.ParameterEstimation):
+            raise errors.InputError('first argument should be ParameterEstimation calss. Got {}'.format(type(self.cls)))
+
+        if self.results_directory == None:
+            self.results_directory = os.path.join(self.cls.model.root,
+                                                  'ParameterEstimationPlots')
+
+
+    def update_parameters(self):
+        """
+        Use the InsertParameters class to insert estimated
+        parameters into the model
+        :return: Model
+        """
+        I = model.InsertParameters(self.cls.model, df=self.data)
+        return I.model
+
+    def create_directories(self):
+        """
+        create a directory in project root called result_directory
+        create subfolders with name of experiments
+        :return: dict
+        """
+        directories = {}
+        for fle in self.cls.experiment_files:
+            _, fle = os.path.split(fle)
+            directories[fle] = os.path.join(self.results_directory, fle[:-4])
+            if not os.path.isdir(directories[fle]):
+                os.makedirs(directories[fle])
+        return directories
+
+    def read_experimental_data(self):
+        """
+        read the experimental data in order to figure
+        out how long a time course we need to simulate
+        with the new parameters
+        :return:
+        """
+        dct = {}
+        for i in self.cls.experiment_files:
+            dct[i] = pandas.read_csv(i, sep='\t')
+        return dct
+
+    def get_time(self):
+        """
+        get dict of experiments and max time
+        :return:
+        """
+        dct = {}
+        data_dct = self.read_experimental_data()
+        for i in data_dct:
+            dct[i] = data_dct[i]['Time'].max()
+        return dct
+
+    def simulate_time_course(self):
+        """
+        simulate a timecourse for each experiment
+        which may have different simulation lengths
+        :return:
+        """
+        time_dct = self.get_time()
+        d = {}
+        step_size=1
+        for i in time_dct:
+            TC = tasks.TimeCourse(self.cls.model, end=time_dct[i],
+                             step_size=step_size, intervals=time_dct[i]/step_size)
+            d[i] = self.parse(TC, log10=False)
+        return d
+
+    def plot(self):
+        """
+        plot experimental data versus best parameter sets
+        :return:
+        """
+        keys = self.read_experimental_data().values()[0].keys()
+        keys = [i for i in keys if i!='Time']
+        exp_data = self.read_experimental_data()
+        sim_data = self.simulate_time_course()
+
+        LOG.debug('marker --> {}'.format(self.marker))
+        for exp in exp_data:
+            for sim in sim_data:
+                for key in keys:
+                    plt.figure()
+                    plt.plot(
+                        exp_data[exp]['Time'], exp_data[exp][key],
+                        label='exp', linestyle=self.linestyle,
+                        marker=self.marker, linewidth=self.linewidth,
+                        markersize=self.markersize
+                    )
+                    plt.plot(
+                        sim_data[sim]['Time'], sim_data[sim][key],
+                        label='sim', linestyle=self.linestyle,
+                        marker=self.marker, linewidth=self.linewidth,
+                        markersize=self.markersize)
+                    plt.legend(loc=(1, 1))
+                    LOG.debug('savefig -- > {}'.format(self.savefig))
+                    if self.savefig:
+                        dirs = self.create_directories()
+                        print dirs
+        plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # class Parse2():
