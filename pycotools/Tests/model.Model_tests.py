@@ -833,20 +833,6 @@ class ModelTests(_test_base._BaseTest):
         glob = self.model.get('global_quantity', 'IveBeenChanged')
         self.assertEqual(glob.name, 'IveBeenChanged')
 
-    def test_change_reaction_name(self):
-        """
-
-        :return:
-        """
-        ## get reaction
-        reaction = self.model.get('reaction', 'B2C')
-        self.model = self.model.set('reaction', 'B2C', 'changed_name',
-                                    'name', 'name')
-        self.model.save()
-        changed =  self.model.get('reaction', 'changed_name')
-        self.assertEqual(changed.name, 'changed_name')
-    #
-
     def test_insert_parameters_metabolite(self):
         """
 
@@ -939,15 +925,40 @@ class ModelTests(_test_base._BaseTest):
         self.model = pycotools.model.InsertParameters(self.model, df=df, inplace=True).model
         conc = [i.concentration for i in self.model.metabolites if i.name == 'B']
         self.assertAlmostEqual(float(conc[0]), float(35))
+    #
 
+    def test_number_of_local_parameters(self):
+        """
 
+        :return:
+        """
+        r = self.model.get('reaction', 'B2C')
 
+        self.assertEqual(len(r.parameters_dict), 2)
 
+    def test_names_of_local_paramers(self):
+        """
 
+        :return:
+        """
+        r = self.model.get('reaction', 'B2C')
+        names = ['k1', 'k2']
+        self.assertListEqual(names, [i.name for i in r.parameters])
 
-
-
-
+    def test_change_reaction_name(self):
+        """
+        At present this test fails.
+        Not high enough priority to fix now.
+        :return:
+        """
+        ## get reaction
+        reaction = self.model.get('reaction', 'B2C')
+        self.model = self.model.set('reaction', 'B2C', 'changed_name',
+                                    'name', 'name')
+        self.model.save()
+        changed =  self.model.get('reaction', 'changed_name')
+        self.assertEqual(changed.name, 'changed_name')
+    #
 
 
 

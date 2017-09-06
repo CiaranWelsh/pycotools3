@@ -164,5 +164,12 @@ class ParameterEstimationTests(_test_base._BaseTest):
         df = p.parse_parameter_estmation()
         self.assertEqual(df.shape[0], 1)
 
+    def test_(self):
+        if os.path.isfile(self.PE.config_filename):
+            os.remove(self.PE.config_filename)
+        self.PE.write_config_file()
+        self.model = self.PE.setup()
+        # self.model.open()
+
 if __name__=='__main__':
     unittest.main()

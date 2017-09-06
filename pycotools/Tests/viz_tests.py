@@ -33,72 +33,66 @@ import unittest
 import os
 import pickle
 import test_data
-
-
+import numpy
+import shutil
 
 class VizTests(_test_base._BaseTest):
     def setUp(self):
-        super(VizTests, self).setUp()
-        self.model = pycotools.model.Model(self.copasi_file)
-
-
-        '''
+        """
         instead of generating data on the fly like
         I should do (for good testing practivce), I've pre-ran the parameter estimations
         and saved the data to pickle under the extra_data_for_tests
-        file. Now I can read this pickle and not have to run the 
-        parameter estimations each time I run a test. I've also 
+        file. Now I can read this pickle and not have to run the
+        parameter estimations each time I run a test. I've also
         parsed the data into a pandas dataframe using viz.parse for ease
-        '''
+
+        Data can be transformed into log10 scale with a keyword argument
+        to any of the plotting functions. This cannot be tested here since
+        i've simulated the data prior to running the tests
+        :return:
+        """
+        super(VizTests, self).setUp()
+        self.model = pycotools.model.Model(self.copasi_file)
+
+        self.boxplot_dir = os.path.join(os.path.dirname(
+                                  self.model.copasi_file), 'Boxplots')
+
+        self.histogram_dir = os.path.join(os.path.dirname(
+                                  self.model.copasi_file), 'Histograms')
+
+        self.scatter_dir = os.path.join(os.path.dirname(
+                                  self.model.copasi_file), 'scatter_dirs')
+
+        self.linregress_dir = os.path.join(os.path.dirname(
+                                  self.model.copasi_file), 'LinearRegression')
+
+        self.pca_dir = os.path.join(os.path.dirname(
+                                  self.model.copasi_file), 'PCA')
+
+        self.model_selection_dir = os.path.join(os.path.dirname(
+                                  self.model.copasi_file), 'ModelSelection')
+
+        self.ensemble_tc_dir = os.path.join(os.path.dirname(
+                                  self.model.copasi_file), 'EnsembleTimeCourse')
+
+        self.rss_vs_iteration = os.path.join(os.path.dirname(
+            self.model.copasi_file), 'RssVsIteration')
 
         self.data = pandas.read_pickle(
             pycotools.Tests.test_data.Paths().pe_results_pickle)
 
-        assert isinstance(self.data, pandas.core.frame.DataFrame)
-        self.data = pycotools.viz.DataFrame(self.data, islog10=False)
-        assert isinstance(self.data, pycotools.viz.DataFrame)
-
-    def test_pycotools_dataframe(self):
-        """
-
-        :return:
-        """
-        df = pandas.DataFrame([10, 100, 1000])
-        df = pycotools.viz.DataFrame(df, islog10=False)
-        self.assertFalse(df.islog10)
-
-    def test_pycotools_dataframe2(self):
-        """
-
-        :return:
-        """
-        df = pandas.DataFrame([10, 100, 1000])
-        df = pycotools.viz.DataFrame(df, islog10=False)
-        l = [1, 2, 3]
-        self.assertListEqual(
-            list(df.to_log10()[0]),l
-        )
-
-    def test_pycotools_dataframe3(self):
-        """
-
-        :return:
-        """
-        df = pandas.DataFrame([1, 10, 100])
-        df = pycotools.viz.DataFrame(df, islog10=False)
-        df = df.to_log10()
-        self.assertTrue(df.islog10)
-
-    def test_pycotools_dataframe3(self):
-        """
-
-        :return:
-        """
-        df = pandas.DataFrame([1, 2, 3])
-        df = pycotools.viz.DataFrame(df, islog10=True)
-        df = df.to_linear()
-        self.assertFalse(df.islog10)
-
+    def tearDown(self):
+        dirs_to_delete = [self.boxplot_dir,
+                          self.histogram_dir,
+                          self.scatter_dir,
+                          self.linregress_dir,
+                          self.pca_dir,
+                          self.model_selection_dir,
+                          self.ensemble_tc_dir]
+        for i in dirs_to_delete:
+            if os.path.isdir(i):
+                pass
+                # shutil.rmtree(i)
 
     def test_boxplot(self):
         """
@@ -107,67 +101,77 @@ class VizTests(_test_base._BaseTest):
         """
 
         b= pycotools.viz.Boxplot(self.data, savefig=True,
-                              results_directory=os.path.join(os.path.dirname(
-                                  self.model.copasi_file), 'Boxplots'),
+                              results_directory=self.boxplot_dir,
                               num_per_plot=10, log10=True,
                               )
-        self.assertTrue(isinstance(b.data, pycotools.viz.DataFrame))
+        self.assertTrue(isinstance(b.data, pandas.DataFrame))
 
-    def test_boxplot(self):
+    def test_truncate_data_mixin(self):
         """
 
         :return:
         """
+        original_shape = self.data.shape
+        new = pycotools.viz.TruncateDataMixin.truncate(self.data,
+                                                       'percent',
+                                                       x=50)
+        self.assertEqual(new.shape[0], 30)
 
-        b = pycotools.viz.Boxplot(self.data, savefig=True,
-                                  results_directory=os.path.join(os.path.dirname(
-                                      self.model.copasi_file), 'Boxplots'),
-                                  num_per_plot=10, log10=True,
-                                      )
-
-
-# class TestVizReadData(_test_base._BaseTest)
-#     def setUp(self):
-#         super(TestVizReadData, self).setUp()
-#
-#
-#
-#
-#     def test_(self):
-#         """
-#
-#         :return:
-#         """
-
-
-
-        # import time
-        # time.sleep(5)
-        # x=self.MPE.copy_number*self.MPE.pe_number
-        # self.MPE.run()
-        # df_dct = {}
-        # for f in os.listdir(self.MPE.results_directory):
-        #     f = os.path.join(self.MPE.results_directory, f)
-        #     df_dct[f] = pandas.read_csv(f, sep='\t', skiprows=1, header=None)
-        # df = pandas.concat(df_dct)
-        # assert df.shape[0] == x
-        # P = pycotools.viz.Parse(self.MPE)
-        # print P.parse_multi_parameter_estimation()
-
-
-            # def test_run_(self):
-    #     # pass
-    #     self.MPE.write_config_file()
-    #     self.MPE.setup()
-    #     self.MPE.run()
-
-    # def test(self):
-        ##format the data first
-        # self.MPE.format_results()
-        # print viz.ParsePEData(self.MPE.result_directory)
+    def test_truncate_data_mixin2(self):
         """
-        try incorporating the format data stuff in the vis class for mpe
+
+        :return:
         """
+        original_shape = self.data.shape
+        new = pycotools.viz.TruncateDataMixin.truncate(self.data,
+                                                       'below_x',
+                                                       x=0.5)
+        self.assertEqual(new.shape[0], 22)
+
+    def test_rss_vs_iteration(self):
+
+        b = pycotools.viz.RssVsIterations(
+            self.data, savefig=True,
+            results_directory=self.rss_vs_iteration)
+        self.assertTrue(os.path.isdir(self.rss_vs_iteration))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 if __name__ == '__main__':

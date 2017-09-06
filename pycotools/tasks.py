@@ -3024,6 +3024,7 @@ class ParameterEstimation(_base._ModelBase):
         :return: pandas.DataFrame
         """
 
+
         local_params= self.model.local_parameters
         global_params = self.model.global_quantities
         metabolites = self.model.metabolites
@@ -3031,6 +3032,8 @@ class ParameterEstimation(_base._ModelBase):
         for i,item in enumerate(local_params):
             if item.global_name not in [j.global_name for j in self.local_parameters]:
                 del local_params[i]
+            ass = item.simulation_type
+            LOG.debug('assignments --> {}'.format(ass))
 
         for i,item in enumerate(global_params):
             if item.name not in [j.name for j in self.global_quantities]:
@@ -3078,6 +3081,11 @@ class ParameterEstimation(_base._ModelBase):
         df['lower_bound']=[self.lower_bound]*df.shape[0]
         df['upper_bound']=[self.upper_bound]*df.shape[0]
 
+        for i in df.index:
+            LOG.debug(df.loc[i].name)
+            # print [i.global_name for i in self.model.local_parameters]# if i.global_name == df.loc[i].name]
+            # const = self.model.get('local_parameter', df.loc[i].name)
+            # LOG.debug('constants --> {}'.format(const))
         return df
 
 
@@ -3144,6 +3152,12 @@ class ParameterEstimation(_base._ModelBase):
         elif isinstance(component, model.GlobalQuantity):
             subA4={'type': 'cn',  'name': 'ObjectCN',  'value': '{},{}'.format(self.model.reference,
                                                                                component.initial_reference) }
+
+        elif isinstance(component, model.Compartment):
+            subA4 = {'type': 'cn',
+                     'name': 'ObjectCN',
+                     'value': '{},{}'.format(self.model.reference,
+                                             component.initial_value_reference)}
 
         else:
             raise errors.InputError('{} is not a valid parameter for estimation'.format(list(item)))
