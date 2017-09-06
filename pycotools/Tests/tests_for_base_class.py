@@ -24,7 +24,7 @@ Module that tests the operations of the _Base base test
 """
 
 import site
-# site.addsitedir('C:\Users\Ciaran\Documents\pycotools')
+site.addsitedir('C:\Users\Ciaran\Documents\pycotools')
 site.addsitedir(r'/home/b3053674/Documents/pycotools')
 import pycotools
 from pycotools.Tests import _test_base
@@ -136,9 +136,9 @@ class TestBase(_test_base._BaseTest):
                 options = self.convert_bool_to_numeric(options)
                 self.update_properties(options)
                 self.check_integrity(options.keys(), kwargs.keys())
-        with self.assertRaises(pycotools.Errors.InputError) as context:
+        with self.assertRaises(pycotools.errors.InputError) as context:
             New(self.copasi_file, wrong_option=True)
-        self.assertTrue(isinstance(context.exception, pycotools.Errors.InputError))
+        self.assertTrue(isinstance(context.exception, pycotools.errors.InputError))
 
 
 

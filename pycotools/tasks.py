@@ -250,7 +250,7 @@ class ParseStrVariableMixin(Mixin):
 
 @mixin(ParseStrVariableMixin)
 class Reports(_base._ModelBase):
-    '''
+    """
     Creates reports in copasi output specification section.
     Use:
         -the report_type kwarg to specify which type of report you want to make
@@ -303,7 +303,7 @@ class Reports(_base._ModelBase):
         variable:
             When report_type is profilelikelihood, theta is the parameter of interest
 
-    '''
+    """
     def __init__(self, model, **kwargs):
         super(Reports, self).__init__(model, **kwargs)
 
@@ -793,19 +793,6 @@ class TimeCourse(_base._ModelBase):
 
         if self.save:
             self.model.save()
-
-    # def correct_output_headers(self):
-    #     """
-    #     Copasi writes time courses with variables
-    #     surrounded in square brackets (i.e. [A]).
-    #     This method removes the square brackets
-    #     :return:
-    #     """
-    #     if self.correct_headers:
-    #         df = pandas.read_csv(self.report_name, sep='\t', index_col=0)
-    #         df.columns = [re.findall('\[(.*)\]', i)[0] for i in df.keys()]
-    #         os.remove(self.report_name)
-    #         df.to_csv(self.report_name, sep='\t')
 
     def _do_checks(self):
         """
@@ -1384,7 +1371,7 @@ class Scan(_base._ModelBase):
                                    'scheduled': True,
                                    'save': False,
                                    'clear_scans': True,  # if true, will remove all scans present then add new scan
-                                   'run_mode': False}
+                                   'run': False}
 
         self.convert_bool_to_numeric(self.default_properties)
         self.update_properties(self.default_properties)
@@ -1414,7 +1401,7 @@ class Scan(_base._ModelBase):
         if self.save:
             self.model.save()
 
-        self.run()
+        self.execute()
 
     def _do_checks(self):
         """
@@ -1638,8 +1625,8 @@ class Scan(_base._ModelBase):
                 i.remove(j)
         return self.model
 
-    def run(self):
-        R = Run(self.model, task='scan', mode=self.run_mode)
+    def execute(self):
+        R = Run(self.model, task='scan', mode=self.run)
 
 
 class ExperimentMapper(_base._ModelBase):
@@ -3032,8 +3019,12 @@ class ParameterEstimation(_base._ModelBase):
         for i,item in enumerate(local_params):
             if item.global_name not in [j.global_name for j in self.local_parameters]:
                 del local_params[i]
-            ass = item.simulation_type
-            LOG.debug('assignments --> {}'.format(ass))
+
+            # ass = item.simulation_type
+            # if item.simulation_type == 'assignment':
+            #     LOG.debug('deleting {}'.format(item.global_name))
+                # del local_params[i]
+            # LOG.debug('assignments --> {},{}'.format(item.global_name, ass))
 
         for i,item in enumerate(global_params):
             if item.name not in [j.name for j in self.global_quantities]:
@@ -3081,11 +3072,6 @@ class ParameterEstimation(_base._ModelBase):
         df['lower_bound']=[self.lower_bound]*df.shape[0]
         df['upper_bound']=[self.upper_bound]*df.shape[0]
 
-        for i in df.index:
-            LOG.debug(df.loc[i].name)
-            # print [i.global_name for i in self.model.local_parameters]# if i.global_name == df.loc[i].name]
-            # const = self.model.get('local_parameter', df.loc[i].name)
-            # LOG.debug('constants --> {}'.format(const))
         return df
 
 

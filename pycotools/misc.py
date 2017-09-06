@@ -39,70 +39,6 @@ import logging
 
 LOG=logging.getLogger(__name__)
 
-def convert_particles_to_molar(particles,mol_unit,compartment_volume):#,vol_unit):
-    '''
-    Converts particle numbers to Molarity. 
-    particles=number of particles you want to convert
-    mol_unit=one of, 'fmol, pmol, nmol, umol, mmol or mol'
-    '''
-    mol_dct={
-        'fmol':1e-15,
-        'pmol':1e-12,
-        'nmol':1e-9,
-        u'\xb5mol':1e-6,
-        'mmol':1e-3,
-        'mol':float(1),
-        'dimensionless':float(1),
-        '#':float(1)}
-    mol_unit_value=mol_dct[mol_unit]
-    avagadro=6.02214179e+023
-    molarity=float(particles)/(avagadro*mol_unit_value*compartment_volume)
-    if mol_unit=='dimensionless':
-        molarity=float(particles)
-    if mol_unit=='#':
-        molarity=float(particles)
-    return round(molarity,33)
-
-def convert_molar_to_particles(moles,mol_unit,compartment_volume):
-    '''
-    Converts particle numbers to Molarity. 
-    particles=number of particles you want to convert
-    mol_unit=one of, 'fmol, pmol, nmol, umol, mmol or mol'
-    '''
-    if isinstance(compartment_volume,(float,int))!=True:
-        raise Errors.InputError('compartment_volume is the volume of the compartment for species and must be either a float or a int')
-
-    mol_dct={
-        'fmol':1e-15,
-        'pmol':1e-12,
-        'nmol':1e-9,
-        u'\xb5mol':1e-6,
-        'mmol':1e-3,
-        'mol':float(1),
-        'dimensionless':1,
-        '#':1}
-    mol_unit_value=mol_dct[mol_unit]
-    avagadro=6.02214179e+023
-    particles=float(moles)*avagadro*mol_unit_value*compartment_volume
-    if mol_unit=='dimensionless':# or '#':
-        particles=float(moles)
-    if mol_unit=='#':
-        particles=float(moles)
-    return particles        
-
-def setup_logger_deprecated(logger_name, log_file, level=logging.DEBUG):
-    l = logging.getLogger(logger_name)
-    formatter = logging.Formatter('%(asctime)s : %(levelname)s : %(funcName)s : %(message)s')
-    fileHandler = logging.FileHandler(log_file, mode='w')
-    fileHandler.setFormatter(formatter)
-    streamHandler = logging.StreamHandler()
-    streamHandler.setFormatter(formatter)
-
-    l.setLevel(level)
-    l.addHandler(fileHandler)
-    l.addHandler(streamHandler)
-    
-    
 def run_parallel(commands):
     length = len(commands)
     x = 0
@@ -123,8 +59,6 @@ class RemoveNonAscii():
             if i not in string.ascii_letters+string.digits+r'[]-_().\:/':
                 self.non_ascii_str=self.non_ascii_str.replace(i,'_')
         return self.non_ascii_str
-                
-
 
 
 def add_noise(f, noise_factor=0.05):
@@ -260,12 +194,6 @@ def download_models(directory,percent=100,SKIP_ALREADY_DOWNLOADED=True):
     df.to_pickle(pickle_file)    
     return df
 
-
-
-
-
-    
-        
 def xml2cps(paths):
     '''
     use CopasiSE to convert the xml into copasi files
@@ -287,7 +215,6 @@ def xml2cps(paths):
         p.join()
 #        subprocess.check_call('CopasiSE -i "{}"'.format(paths['successful'][i]))
     return 'program took {}s'.format(time.time()-start)
-
 
 
 def correct_copasi_timecourse_headers(report_name):
