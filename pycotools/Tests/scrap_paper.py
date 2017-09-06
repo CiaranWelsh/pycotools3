@@ -100,11 +100,10 @@ if PARAMETER_ESTIMATION:
     PE.write_config_file()
     PE.setup()
     # print model.local_parameters
-    PE.run()
+    # PE.run()
     # PE.model.open()
     pl = pycotools.viz.PlotParameterEstimation(PE, savefig=True)
-    print pl.plot()
-
+    print pl.savefig
 
 # pycotools.misc.correct_copasi_timecourse_headers(TC1.report_name)
 # ## add some noise
