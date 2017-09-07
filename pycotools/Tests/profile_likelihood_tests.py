@@ -73,7 +73,10 @@ class ParameterEstimationTests(_test_base._BaseTest):
     def test(self):
         # pass
         df = pycotools.viz.Parse(self.MPE).data
-        pl = pycotools.tasks.ProfileLikelihood(self.model, df=df, index=[0,1])
+        mod = pycotools.model.Model(self.model.copasi_file[:-4]+'_1.cps')
+        print 'model :',mod
+        pl = pycotools.tasks.ProfileLikelihood(mod, df=df, index=[0,1])
+        pl.setup_scan()
         for model in pl.model_dct:
             for param in pl.model_dct[model]:
                 pass
