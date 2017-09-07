@@ -38,11 +38,39 @@ import seaborn
 import pickle
 import difflib
 from shutil import copyfile
+from mixin import Mixin, mixin
+
 LOG=logging.getLogger(__name__)
 
 
+@mixin(_base.UpdateProperties)
+class ProfileLikelihood(object):
+    def __init__(self, model):
+        self.model = model
 
-class ProfileLikelihood():
+        self.default_properties = {
+            'df': None,
+            'index': 'current_parameters',
+            'parameter_path': None,
+            'quantity_type': 'concentration',
+            'upper_bound_multiplier': 1000,
+            'lower_bound_multiplier': 1000,
+            'number_of_steps': 10,
+            'log10': True,
+            'iteration_limit': 50,
+            'tolerance': 1e-5,
+            'rho': 0.2,
+            'run': False,
+            'results_directory': default_results_directory,
+            'pickle_path': default_pickle_path,
+            'method': 'genetic_algorithm'
+        }
+
+
+
+
+
+class ProfileLikelihood2():
     """
     This class uses the profile likelihood method of identifiability analysis
     to assess whether parameters can be uniquely determined with the defined
@@ -90,7 +118,7 @@ class ProfileLikelihood():
             copasi file in serial. 'SGE' mode can be used specifically
             on a SunGridEngine managed cluster. Deault=False
     """
-    def __init__(self,copasi_file,**kwargs):
+    def __init__(self,model, **kwargs):
         self.copasi_file=copasi_file
         self.CParser=tasks.CopasiMLParser(self.copasi_file)
         self.copasiML=self.CParser.copasiML
