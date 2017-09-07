@@ -52,8 +52,8 @@ f = os.path.join(dire, 'test_model.cps')
 
 model = pycotools.model.Model(f)
 TIMECOURSE = False
-PARAMETER_ESTIMATION = True
-MULTI_PARAMETER_ESTIMATION = False
+PARAMETER_ESTIMATION = False
+MULTI_PARAMETER_ESTIMATION = True
 SCAN = False
 
 if TIMECOURSE:
@@ -111,6 +111,51 @@ if PARAMETER_ESTIMATION:
     # # PE.model.open()
     pl = pycotools.viz.PlotParameterEstimation(PE, savefig=True)
     print pl.savefig
+
+
+if MULTI_PARAMETER_ESTIMATION:
+    TC1 = pycotools.tasks.TimeCourse(model, end=50, step_size=10,
+                                          intervals=5, report_name='report1.txt')
+    pycotools.misc.add_noise(TC1.report_name)
+    TC2 = pycotools.tasks.TimeCourse(model, end=100, step_size=20,
+                                     intervals=5, report_name='report2.txt')
+
+    pycotools.misc.correct_copasi_timecourse_headers(TC1.report_name)
+    pycotools.misc.correct_copasi_timecourse_headers(TC2.report_name)
+
+
+
+    MPE = pycotools.tasks.MultiParameterEstimation(model,
+                                                   [TC1.report_name,
+                                                    TC2.report_name],
+                                                   copy_number=6,
+                                                   pe_number=20,
+                                                   method='genetic_algorithm',
+                                                   population_size=1,
+                                                   number_of_generations=1)
+    # # PE = pycotools.tasks.ParameterEstimation(model,
+    # #                                          TC1.report_name,
+    # #                                          method='particle_swarm',
+    # #                                          swarm_size=50,
+    # #                                          iteration_limit=1000)
+    MPE.write_config_file()
+    MPE.setup()
+    # # print model.local_parameters
+    # MPE.run()
+    # pycotools.viz.Parse(MPE)
+    # pycotools.viz.Boxplot(MPE, savefig=True, show=True)
+    # pycotools.viz.RssVsIterations(MPE, savefig=True, show=True)
+    # pycotools.viz.Pca(MPE, savefig=True, show=True, by='iterations')
+    # pycotools.viz.Histograms(MPE, savefig=True, show=True)
+    # pycotools.viz.Scatters(MPE, savefig=True, show=False,
+    #                        x=['RSS', 'A'], linestyle='o')
+    # pycotools.viz.LinearRegression(MPE, savefig=True, show=True)
+    pycotools.viz.EnsembleTimeCourse(MPE, savefig=True, show=True,
+                                     theta=5, check_as_you_plot=False)
+
+    # # PE.model.open()
+    # pl = pycotools.viz.PlotParameterEstimation(MPE, savefig=True)
+    # print pl.savefig
 
 # pycotools.misc.correct_copasi_timecourse_headers(TC1.report_name)
 # ## add some noise

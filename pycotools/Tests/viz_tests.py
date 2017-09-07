@@ -187,25 +187,69 @@ class VizTests(_test_base._BaseTest):
 #             self.assertEqual(len(glob.glob(pl.create_directories()[i]+'/*')), 2)
 
 
-class PlotTimeCourseTests(_test_base._BaseTest):
+# class PlotTimeCourseTests(_test_base._BaseTest):
+#
+#     def setUp(self):
+#         super(PlotTimeCourseTests, self).setUp()
+#         self.model = pycotools.model.Model(self.copasi_file)
+#         self.original_parameters = self.model.parameters
+#
+#         self.TC1 = pycotools.tasks.TimeCourse(self.model, end=10, step_size=0.1,
+#                                          intervals=50, report_name='report1.txt')
+#
+#
+#     def test_plot_tc(self):
+#         T = pycotools.viz.PlotTimeCourse(self.TC1, savefig=True)
+#         self.assertEqual(len(glob.glob(T.results_directory+'/*')), 7)
+#
+#     def test_plot_tc(self):
+#         T = pycotools.viz.PlotTimeCourse(self.TC1, savefig=True, y=['A', 'B'], x='A', show=True)
+#         self.assertEqual(len(glob.glob(T.results_directory+'/*')), 2)
 
+
+class BoxPlotTests(_test_base._BaseTest):
     def setUp(self):
-        super(PlotTimeCourseTests, self).setUp()
-        self.model = pycotools.model.Model(self.copasi_file)
-        self.original_parameters = self.model.parameters
-
-        self.TC1 = pycotools.tasks.TimeCourse(self.model, end=10, step_size=0.1,
-                                         intervals=50, report_name='report1.txt')
+        super(BoxPlotTests, self).setUp()
 
 
-    def test_plot_tc(self):
-        T = pycotools.viz.PlotTimeCourse(self.TC1, savefig=True)
-        self.assertEqual(len(glob.glob(T.results_directory+'/*')), 7)
+        self.TC1 = pycotools.tasks.TimeCourse(self.model, end=50, step_size=10,
+                                              intervals=5, report_name='report1.txt')
+        pycotools.misc.add_noise(self.TC1.report_name)
+        self.TC2 = pycotools.tasks.TimeCourse(self.model, end=100, step_size=20,
+                                              intervals=5, report_name='report2.txt')
 
-    def test_plot_tc(self):
-        T = pycotools.viz.PlotTimeCourse(self.TC1, savefig=True, y=['A', 'B'], x='A', show=True)
-        self.assertEqual(len(glob.glob(T.results_directory+'/*')), 2)
+        pycotools.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
+        pycotools.misc.correct_copasi_timecourse_headers(self.TC2.report_name)
 
+        self.MPE = pycotools.tasks.MultiParameterEstimation(self.model,
+                                                       [self.TC1.report_name,
+                                                        self.TC2.report_name],
+                                                       copy_number=2,
+                                                       pe_number=2,
+                                                       method='genetic_algorithm',
+                                                       population_size=1,
+                                                       number_of_generations=1)
+        # if os.path.isfile(self.MPE.config_filename):
+        #     os.remove(self.MPE.config_filename)
+        self.MPE.write_config_file()
+        self.MPE.setup()
+        self.MPE.run()
+
+    def test_boxplot_is_saved(self):
+        """
+
+        :return:
+        """
+        b = pycotools.viz.Boxplot(self.MPE, savefig=True, num_per_plot=3)
+        self.assertEqual(len(glob.glob(b.results_directory+'/*')), 3)
+
+    def test_amount_of_data(self):
+        """
+
+        :return:
+        """
+        b = pycotools.viz.Boxplot(self.MPE, savefig=True, num_per_plot=3)
+        self.assertEqual(b.data.shape[0], 4)
 
 
 

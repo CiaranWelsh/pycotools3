@@ -46,31 +46,37 @@ class _BaseTest(unittest.TestCase):
         self.model = pycotools.model.Model(self.copasi_file)
 
     def tearDown(self):
+        tear_down = False
         delete_dirs = True
-        dire = os.path.dirname(self.copasi_file)
-        subdirs = ['Boxplots', 'TimeCourseGraphs',
-                   'ParameterEstimationPlots', 'test_mpe']
-        if delete_dirs:
-            for i in subdirs:
-                d = os.path.join(dire, i)
-                if os.path.isdir(d):
-                    shutil.rmtree(d)
+
+        if tear_down:
+            dire = os.path.dirname(self.copasi_file)
+            subdirs = ['Boxplots', 'TimeCourseGraphs',
+                       'ParameterEstimationPlots', 'test_mpe',
+                       'EnsembleTimeCourse', 'Histograms',
+                       'LinearRegression', 'MultipleParameterEstimationResults',
+                       'PCA', 'Scatters']
+            if delete_dirs:
+                for i in subdirs:
+                    d = os.path.join(dire, i)
+                    if os.path.isdir(d):
+                        shutil.rmtree(d)
 
 
-        for i in glob.glob(os.path.join(dire, '*.xlsx') ):
-            os.remove(i)
+            for i in glob.glob(os.path.join(dire, '*.xlsx') ):
+                os.remove(i)
 
-        for i in glob.glob(os.path.join(dire, '*.cps') ):
-            os.remove(i)
+            for i in glob.glob(os.path.join(dire, '*.cps') ):
+                os.remove(i)
 
-        for i in glob.glob(os.path.join(dire, '*.txt') ):
-            os.remove(i)
+            for i in glob.glob(os.path.join(dire, '*.txt') ):
+                os.remove(i)
 
-        for i in glob.glob(os.path.join(dire, '*.csv') ):
-            os.remove(i)
+            for i in glob.glob(os.path.join(dire, '*.csv') ):
+                os.remove(i)
 
-        for i in glob.glob(os.path.join(dire, '*.pickle') ):
-            os.remove(i)
+            for i in glob.glob(os.path.join(dire, '*.pickle') ):
+                os.remove(i)
 
 # class _ParameterEstimationBase(_BaseTest):
 #     """
