@@ -897,16 +897,19 @@ class Model(_base._Base):
         self.refresh()
         return self
 
-    def open(self, copasi_file=None):
+    def open(self, copasi_file=None, as_temp=False):
         """
         Open model with the gui
         :return:
         """
         if copasi_file == None:
             copasi_file = self.copasi_file
+        if as_temp:
+            copasi_temp = os.path.join(self.root, os.path.split(self.copasi_file)[1][:-4]+'_1.cps')
         self.save(copasi_file)
         os.system('CopasiUI {}'.format(copasi_file))
-        # os.remove(copasi_file)
+        if as_temp:
+            os.remove(copasi_temp)
 
     def _model_components(self):
         """

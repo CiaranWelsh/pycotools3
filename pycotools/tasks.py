@@ -3886,7 +3886,7 @@ class ProfileLikelihood(_base._ModelBase):
         self.kwargs = kwargs
 
         self.default_properties = {
-            'x': self.model.all_variable_names,
+            'x': self.model.fit_item_order,
             'df': None,
             'index': 'current_parameters',
             'parameter_path': None,
@@ -3930,6 +3930,7 @@ class ProfileLikelihood(_base._ModelBase):
         self.model_dct = self.copy_model()
         self.model_dct = self.setup_report()
         self.model_dct = self.setup_parameter_estimation()
+        # self.model_dct[0]['A'].open()
         self.to_file()
 
         # print self.setup_parameter_estimation()
@@ -4175,7 +4176,7 @@ class ProfileLikelihood(_base._ModelBase):
             dct['current_parameters'] = self.model.parameters
         else:
             for i in self.index:
-                dct[i] = model.InsertParameters(self.model, df=self.df, index=i).model
+                dct[i] = deepcopy(model.InsertParameters(self.model, df=self.df, index=i).model)
         return dct
 
     def copy_model(self):
@@ -4187,7 +4188,7 @@ class ProfileLikelihood(_base._ModelBase):
         for model in self.index_dct:
             dct[model] = {}
             for param in self.x:
-                dct[model][param] = self.index_dct[model]
+                dct[model][param] = deepcopy(self.index_dct[model])
         return dct
 
     def setup_parameter_estimation(self):
@@ -4214,18 +4215,19 @@ class ProfileLikelihood(_base._ModelBase):
                             LOG.debug('lo --> {}'.format(local_parameters))
                             LOG.debug('met --> {}'.format(metabolites))
                             if local_parameters != []:
+
                                 local_parameters = "({}).{}".format(local_parameters[0][0], local_parameters[0][1])
-                                if j.attrib['value'] == param:
-                                    j.getparent().remove(j)
+                                if local_parameters == param:
+                                    LOG.debug('xml --> {}'.format(etree.tostring(j.getparent(), pretty_print=True)))
+                                    j.getparent().getparent().remove(j.getparent())
 
                             elif metabolites != []:
-                                if j.attrib['value'] == param:
-                                    j.getparent().remove()
+                                if metabolites[0] == param:
+                                    j.getparent().getparent().remove(j.getparent())
 
                             elif global_quantities != []:
-                                if j.attrib['value'] == param:
-                                    j.getparent().remove(j)
-
+                                if global_quantities[0] == param:
+                                    j.getparent().getparent().remove(j.getparent())
 
         if count == 0:
             raise errors.NoFitItemsError('Model does not contain any fit items. Please setup a parameter estimation and try again')
@@ -4261,6 +4263,15 @@ class ProfileLikelihood(_base._ModelBase):
                 self.model_dct[model][param].save(fle)
 
         return dct
+
+    def setup_scan(self):
+        """
+
+        :return:
+        """
+        for model in self.model_dct:
+            for param in self.model_dct[model]:
+                print self.model_dct, self.model_dct[model]
 
 
 if __name__=='__main__':
