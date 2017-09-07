@@ -55,8 +55,14 @@ class AvagadrosError(Exception):
 class IncorrectUsageError(Exception):
     pass
 
+
 class ComponentDoesNotExistError(Exception):
     pass
 
+
 class ReactionAlreadyExists(Exception):
+    pass
+
+
+class NoFitItemsError(Exception):
     pass

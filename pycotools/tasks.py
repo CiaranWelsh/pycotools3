@@ -2547,7 +2547,6 @@ class ParameterEstimation(_base._ModelBase):
                                    'confirm_overwrite': False,
                                    'config_filename': config_file,
                                    'overwrite_config_file': False,
-                                   'prune_headers': True,
                                    'update_model': False,
                                    'randomize_start_values': True,
                                    'create_parameter_sets': False,
@@ -2602,6 +2601,9 @@ class ParameterEstimation(_base._ModelBase):
 
     def __str__(self):
         return "ParameterEstimation({})".format(self.to_string())
+
+    def get_default_properties(self):
+        return self.default_properties
 
     def _remove_multiparameter_estimation_arg(self):
         """
@@ -3876,24 +3878,389 @@ class MultiModelFit(object):
             self.MPE_dct[MPE].format_results()
 
 
+# @mixin(_base.UpdatePropertiesMixin)
+class ProfileLikelihood(_base._ModelBase):
+    def __init__(self, model, **kwargs):
+        super(ProfileLikelihood, self).__init__(model, **kwargs)
+        self.model = model
+        self.kwargs = kwargs
+
+        self.default_properties = {
+            'x': self.model.all_variable_names,
+            'df': None,
+            'index': 'current_parameters',
+            'parameter_path': None,
+            'quantity_type': 'concentration',
+            'upper_bound_multiplier': 1000,
+            'lower_bound_multiplier': 1000,
+            'number_of_steps': 10,
+            'log10': True,
+            'iteration_limit': 50,
+            'tolerance': 1e-5,
+            'rho': 0.2,
+            'run': False,
+            'results_directory': os.path.join(self.model.root,
+                                              'ProfileLikelihoods'),
+            'method': 'genetic_algorithm',
+            'number_of_generations': 200,
+            'population_size': 50,
+            'random_number_generator': 1,
+            'seed': 0,
+            'pf': 0.475,
+            'iteration_limit': 50,
+            'tolerance': 0.00001,
+            'rho': 0.2,
+            'scale': 10,
+            'swarm_size': 50,
+            'std_deviation': 0.000001,
+            'number_of_iterations': 100000,
+            'start_temperature': 1,
+            'cooling_factor': 0.85,
+        }
+        # self.convert_bool_to_numeric(self.default_properties)
+        self.update_properties(self.default_properties)
+        self.update_kwargs(kwargs)
+        self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
+        self._do_checks()
+        self._convert_numeric_arguments_to_string()
+
+        ##configures parameter estimation method parameters
+        self.model = self.set_PE_method()
+        self.index_dct = self.insert_parameters()
+        self.model_dct = self.copy_model()
+        self.model_dct = self.setup_report()
+        self.model_dct = self.setup_parameter_estimation()
+        self.to_file()
+
+        # print self.setup_parameter_estimation()
+
+    def _do_checks(self):
+        """
+
+        :return:
+        """
+        if isinstance(self.index, int):
+            self.index = [self.index]
+        if self.df is None:
+            if self.index == 'current_parameters':
+                LOG.warning('Parameter estimation data has been specified without an index so will be ignored. Specify argument to index kwarg')
+
+    def _convert_numeric_arguments_to_string(self):
+        """
+        xml requires all numbers to be strings.
+        This method makes this conversion
+        :return: void
+        """
+        self.number_of_generations=str(self.number_of_generations)
+        self.population_size=str(self.population_size)
+        self.random_number_generator=str(self.random_number_generator)
+        self.seed=str(self.seed)
+        self.pf=str(self.pf)
+        self.iteration_limit=str(self.iteration_limit)
+        self.tolerance=str(self.tolerance)
+        self.rho=str(self.rho)
+        self.scale=str(self.scale)
+        self.swarm_size =str(self.swarm_size)
+        self.std_deviation =str(self.std_deviation)
+        self.number_of_iterations =str(self.number_of_iterations)
+        self.start_temperature =str(self.start_temperature)
+        self.cooling_factor =str(self.cooling_factor)
 
 
-class HighThroughputFit():
-    """
-    The aim of this class is to build a way
-    of fitting high throughput data sets to
-    a single abstract model.
+    def _select_method(self):
+        """
+        copied from Parameter estimation class
+        :return:
+        """
+        if self.method == 'current_solution_statistics'.lower():
+            method_name='Current Solution Statistics'
+            method_type='CurrentSolutionStatistics'
 
-    The reason this class is being built is
-    to model microarray data with an abstract
-    model of transcription. In principle this
-    idea can be extended to other models and data
-    
-    Just an idea t the moment. not implemented
-    """
+        if self.method == 'differential_evolution'.lower():
+            method_name='Differential Evolution'
+            method_type='DifferentialEvolution'
 
-    def __init__(self,abstract_model_file):
-        self.abstract_model_file = abstract_model_file
+        if self.method == 'evolutionary_strategy_sr'.lower():
+            method_name='Evolution Strategy (SRES)'
+            method_type='EvolutionaryStrategySR'
+
+        if self.method == 'evolutionary_program'.lower():
+            method_name='Evolutionary Programming'
+            method_type='EvolutionaryProgram'
+
+        if self.method == 'hooke_jeeves'.lower():
+            method_name='Hooke &amp; Jeeves'
+            method_type='HookeJeeves'
+
+        if self.method == 'levenberg_marquardt'.lower():
+            method_name='Levenberg - Marquardt'
+            method_type='LevenbergMarquardt'
+
+        if self.method == 'nelder_mead'.lower():
+            method_name='Nelder - Mead'
+            method_type='NelderMead'
+
+        if self.method == 'particle_swarm'.lower():
+            method_name='Particle Swarm'
+            method_type='ParticleSwarm'
+
+        if self.method == 'praxis'.lower():
+            method_name='Praxis'
+            method_type='Praxis'
+
+        if self.method == 'random_search'.lower():
+            method_name='Random Search'
+            method_type='RandomSearch'
+
+        if self.method == 'simulated_nnealing'.lower():
+            method_name='Simulated Annealing'
+            method_type='SimulatedAnnealing'
+
+        if self.method == 'steepest_descent'.lower():
+            method_name='Steepest Descent'
+            method_type='SteepestDescent'
+
+        if self.method == 'truncated_newton'.lower():
+            method_name='Truncated Newton'
+            method_type='TruncatedNewton'
+
+        if self.method == 'scatter_search'.lower():
+            method_name='Scatter Search'
+            method_type='ScatterSearch'
+
+        if self.method == 'genetic_algorithm'.lower():
+            method_name='Genetic Algorithm'
+            method_type='GeneticAlgorithm'
+
+        if self.method == 'genetic_algorithm_sr'.lower():
+            method_name='Genetic Algorithm SR'
+            method_type='GeneticAlgorithmSR'
+
+        return method_name, method_type
+
+    def set_PE_method(self):
+        """
+        This method is copied from the parameter estimation
+        class.
+        :return: model
+        """
+
+        #Build xml for method.
+        method_name, method_type = self._select_method()
+        method_params={'name':method_name, 'type':method_type}
+        method_element=etree.Element('Method',attrib=method_params)
+
+        #list of attribute dictionaries
+        #Evolutionary strategy parametery
+        number_of_generations={'type': 'unsignedInteger', 'name': 'Number of Generations', 'value': self.number_of_generations}
+        population_size={'type': 'unsignedInteger', 'name': 'Population Size', 'value': self.population_size}
+        random_number_generator={'type': 'unsignedInteger', 'name': 'Random Number Generator', 'value': self.random_number_generator}
+        seed={'type': 'unsignedInteger', 'name': 'Seed', 'value': self.seed}
+        pf={'type': 'float', 'name': 'Pf', 'value': self.pf}
+        #local method parameters
+        iteration_limit={'type': 'unsignedInteger', 'name': 'Iteration Limit', 'value': self.iteration_limit}
+        tolerance={'type': 'float', 'name': 'Tolerance', 'value': self.tolerance}
+        rho = {'type': 'float', 'name': 'Rho', 'value': self.rho}
+        scale = {'type': 'unsignedFloat', 'name': 'Scale', 'value': self.scale}
+        #Particle Swarm parmeters
+        swarm_size = {'type': 'unsignedInteger', 'name': 'Swarm Size', 'value': self.swarm_size}
+        std_deviation = {'type': 'unsignedFloat', 'name': 'Std. Deviation', 'value': self.std_deviation}
+        #Random Search parameters
+        number_of_iterations = {'type': 'unsignedInteger', 'name': 'Number of Iterations', 'value': self.number_of_iterations}
+        #Simulated Annealing parameters
+        start_temperature = {'type': 'unsignedFloat', 'name': 'Start Temperature', 'value': self.start_temperature}
+        cooling_factor = {'type': 'unsignedFloat', 'name': 'Cooling Factor', 'value': self.cooling_factor}
+
+
+        #build the appropiate xML, with method at root (for now)
+        if self.method == 'current_solution_statistics':
+            pass #no additional parameter elements required
+
+        if self.method=='differential_evolution'.lower():
+            etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
+            etree.SubElement(method_element, 'Parameter', attrib=population_size)
+            etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
+            etree.SubElement(method_element, 'Parameter', attrib=seed)
+
+        if self.method=='evolutionary_strategy_sr'.lower():
+            etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
+            etree.SubElement(method_element, 'Parameter', attrib=population_size)
+            etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
+            etree.SubElement(method_element, 'Parameter', attrib=seed)
+            etree.SubElement(method_element, 'Parameter', attrib=pf)
+
+        if self.method=='evolutionary_program'.lower():
+            etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
+            etree.SubElement(method_element, 'Parameter', attrib=population_size)
+            etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
+            etree.SubElement(method_element, 'Parameter', attrib=seed)
+
+        if self.method=='hooke_jeeves'.lower():
+            etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
+            etree.SubElement(method_element, 'Parameter', attrib=tolerance)
+            etree.SubElement(method_element, 'Parameter', attrib=rho)
+
+        if self.method=='levenberg_marquardt'.lower():
+            etree.SubElement(method_element,'Parameter',attrib=iteration_limit)
+            etree.SubElement(method_element,'Parameter',attrib=tolerance)
+#
+        if self.method=='nelder_mead'.lower():
+            etree.SubElement(method_element,'Parameter',attrib=iteration_limit)
+            etree.SubElement(method_element,'Parameter',attrib=tolerance)
+            etree.SubElement(method_element,'Parameter',attrib=scale)
+
+        if self.method=='particle_swarm'.lower():
+            etree.SubElement(method_element,'Parameter',attrib=iteration_limit)
+            etree.SubElement(method_element,'Parameter',attrib=swarm_size)
+            etree.SubElement(method_element,'Parameter',attrib=std_deviation)
+            etree.SubElement(method_element,'Parameter',attrib=random_number_generator)
+            etree.SubElement(method_element,'Parameter',attrib=seed)
+
+        if self.method=='praxis'.lower():
+            etree.SubElement(method_element,'Parameter',attrib=tolerance)
+
+        if self.method=='random_search'.lower():
+            etree.SubElement(method_element,'Parameter',attrib=number_of_iterations)
+            etree.SubElement(method_element,'Parameter',attrib=random_number_generator)
+            etree.SubElement(method_element,'Parameter',attrib=seed)
+
+        if self.method=='simulated_annealing'.lower():
+            etree.SubElement(method_element,'Parameter',attrib=start_temperature)
+            etree.SubElement(method_element,'Parameter',attrib=cooling_factor)
+            etree.SubElement(method_element,'Parameter',attrib=tolerance)
+            etree.SubElement(method_element,'Parameter',attrib=random_number_generator)
+            etree.SubElement(method_element,'Parameter',attrib=seed)
+#
+        if self.method=='steepest_descent'.lower():
+            etree.SubElement(method_element,'Parameter',attrib=iteration_limit)
+            etree.SubElement(method_element,'Parameter',attrib=tolerance)
+#
+        if self.method=='truncated_newton'.lower():
+            #required no additonal paraemters
+            pass
+#
+        if self.method=='scatter_search'.lower():
+            etree.SubElement(method_element,'Parameter',attrib=number_of_iterations)
+
+
+        if self.method=='genetic_algorithm'.lower():
+            etree.SubElement(method_element,'Parameter',attrib=number_of_generations)
+            etree.SubElement(method_element,'Parameter',attrib=population_size)
+            etree.SubElement(method_element,'Parameter',attrib=random_number_generator)
+            etree.SubElement(method_element,'Parameter',attrib=seed)
+
+        if self.method=='genetic_algorithm_sr'.lower():
+            etree.SubElement(method_element,'Parameter',attrib=number_of_generations)
+            etree.SubElement(method_element,'Parameter',attrib=population_size)
+            etree.SubElement(method_element,'Parameter',attrib=random_number_generator)
+            etree.SubElement(method_element,'Parameter',attrib=seed)
+            etree.SubElement(method_element,'Parameter',attrib=pf)
+
+
+        tasks=self.model.xml.find('{http://www.copasi.org/static/schema}ListOfTasks')
+
+        method= tasks[5][-1]
+        parent=method.getparent()
+        parent.remove(method)
+        parent.insert(2,method_element)
+        return self.model
+
+    def insert_parameters(self):
+        """
+
+        :return:
+        """
+        dct = {}
+        if self.index == 'current_parameters':
+            dct['current_parameters'] = self.model.parameters
+        else:
+            for i in self.index:
+                dct[i] = model.InsertParameters(self.model, df=self.df, index=i).model
+        return dct
+
+    def copy_model(self):
+        """
+        copy for each member of x
+        :return:
+        """
+        dct = {}
+        for model in self.index_dct:
+            dct[model] = {}
+            for param in self.x:
+                dct[model][param] = self.index_dct[model]
+        return dct
+
+    def setup_parameter_estimation(self):
+        """
+        for each model, remove the x parameter from
+        the parameter estimation task
+        :return:
+        """
+        query = "//*[@name='FitItem']" #query="//*[@name='FitItem']"
+        for model in self.model_dct:
+            count = 0
+            for param in self.model_dct[model]:
+                ##ascertain which parameter this is
+                LOG.debug('current param --> {}'.format(param))
+                for i in self.model_dct[model][param].xml.xpath(query):
+                    count += 1
+                    for j in i:
+                        if j.attrib['name'] == 'ObjectCN':
+                            ## for globals
+                            global_quantities = re.findall('.*Values\[(.*)\]', j.attrib['value'])
+                            local_parameters = re.findall('.*Reactions\[(.*)\].*Parameter=(.*),', j.attrib['value'])
+                            metabolites = re.findall('.*Metabolites\[(.*)\],', j.attrib['value'])
+                            LOG.debug('glo --> {}'.format(global_quantities))
+                            LOG.debug('lo --> {}'.format(local_parameters))
+                            LOG.debug('met --> {}'.format(metabolites))
+                            if local_parameters != []:
+                                local_parameters = "({}).{}".format(local_parameters[0][0], local_parameters[0][1])
+                                if j.attrib['value'] == param:
+                                    j.getparent().remove(j)
+
+                            elif metabolites != []:
+                                if j.attrib['value'] == param:
+                                    j.getparent().remove()
+
+                            elif global_quantities != []:
+                                if j.attrib['value'] == param:
+                                    j.getparent().remove(j)
+
+
+        if count == 0:
+            raise errors.NoFitItemsError('Model does not contain any fit items. Please setup a parameter estimation and try again')
+        return self.model_dct
+
+
+    def setup_report(self):
+        for model in self.model_dct:
+            for param in self.model_dct[model]:
+                st = misc.RemoveNonAscii(param).filter
+                self.model_dct[model][param] = Reports(
+                    self.model_dct[model][param],
+                    report_type='parameter_estimation',
+                    report_name=st + '.txt'
+                ).model
+        return self.model_dct
+
+    def to_file(self):
+        """
+        create and write our profile likelihood
+        analysis to file
+        :return:
+        """
+        dct = {}
+        for model in self.model_dct:
+            dct[model] = {}
+            for param in self.model_dct[model]:
+                index_dir = os.path.join(self.results_directory, str(model))
+                if not os.path.isdir(index_dir):
+                    os.makedirs(index_dir)
+                fle = os.path.join(index_dir, misc.RemoveNonAscii(param).filter+'.cps')
+                dct[model][param] = fle
+                self.model_dct[model][param].save(fle)
+
+        return dct
 
 
 if __name__=='__main__':
