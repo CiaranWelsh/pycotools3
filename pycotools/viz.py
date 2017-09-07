@@ -307,7 +307,6 @@ class Parse(object):
         d = {}
         for report_name in glob.glob(folder+r'/*'):
             report_name = os.path.abspath(report_name)
-            LOG.debug('report_name is --{}'.format(report_name))
             if os.path.isfile(report_name) !=True:
                 raise errors.FileDoesNotExistError('"{}" does not exist'.format(report_name))
 
@@ -357,9 +356,9 @@ class PlotTimeCourse(PlotKwargs):
 
         self.default_properties = {
             'x': 'time',
-            'y': [i.name for i in self.cls.model.metabolites],
+            'y': [i.name for i in self.cls.model.metabolites] + [i.name for i in self.cls.model.global_quantities],
             'log10': False,
-            'separate': False,
+            'separate': True,
             'savefig': False,
             'results_directory': None,
             'title': 'TimeCourse',
@@ -369,16 +368,17 @@ class PlotTimeCourse(PlotKwargs):
             'filename': None,
             'dpi': 300,
         }
-        self.plot_kwargs
-
+        self.default_properties.update(self.plot_kwargs())
         for i in kwargs.keys():
             assert i in self.default_properties.keys(),'{} is not a keyword argument for Boxplot'.format(i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
+        self.default_properties.update(self.plot_kwargs())
         self.update_properties(self.default_properties)
         self._do_checks()
 
         self.data = self.parse(self.cls, self.log10)
+        self.plot()
 
     def __str__(self):
         """
@@ -402,14 +402,12 @@ class PlotTimeCourse(PlotKwargs):
                 ' tasks.TimeCourse as first argument. '
                 'Got {} instead'.format(type(self.cls)))
 
-        if self.y == None:
-            self.y == self.data.keys()
-
         if not isinstance(self.x, str):
             raise errors.InputError('x should be a string. Got {}'.format(type(self.x)))
 
-        if not isinstance(self.y, (str, list)):
-            raise errors.InputError('y should be a string or list of strings. Got {}'.format(type(self.y)))
+        if self.y is not None:
+            if not isinstance(self.y, (str, list)):
+                raise errors.InputError('y should be a string or list of strings. Got {}'.format(type(self.y)))
 
         bool_list = [self.separate,
                      self.savefig]
@@ -440,8 +438,13 @@ class PlotTimeCourse(PlotKwargs):
 
         :return:
         """
+        LOG.debug('y -- > {}'.format(self.y))
+        if self.y == None:
+            self.y == self.data.keys()
+
         if isinstance(self.y, str):
             self.y = [self.y]
+
 
         for i in self.y:
             if i not in self.data.keys():
@@ -543,9 +546,10 @@ class PlotParameterEstimation(PlotKwargs):
         self.plot_kwargs = self.plot_kwargs()
 
 
+        default_y = [i.name for i in self.cls.model.metabolites] + [i.name for i in self.cls.model.global_quantities]
         self.default_properties = {
             'x': None,
-            'y': [i.name for i in self.cls.model.metabolites],
+            'y': None,
             'log10': False,
             'savefig': False,
             'results_directory': None,
@@ -556,23 +560,17 @@ class PlotParameterEstimation(PlotKwargs):
             'filename': None,
             'dpi': 300,
         }
+        self.default_properties.update(self.plot_kwargs)
         for i in kwargs.keys():
             assert i in self.default_properties.keys(),'{} is not a keyword argument for Boxplot'.format(i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
         self.default_properties.update(self.plot_kwargs)
         self.update_properties(self.default_properties)
-        # self._do_checks()
-        # self.default_properties.update(self.plot_kwargs)
-        # LOG.debug('self.def --> {}'.format(self.default_properties))
-        # for i in kwargs.keys():
-        #     assert i in self.default_properties.keys(), '{} is not a keyword argument for Boxplot'.format(i)
-        # self.default_properties.update(self.kwargs)
-        # self.update_properties(self.default_properties)
-        # self._do_checks()
-        #
-        # self.data = self.parse(self.cls, self.log10)
-        # self.cls.model = self.update_parameters()
+        self._do_checks()
+
+        self.data = self.parse(self.cls, self.log10)
+        self.cls.model = self.update_parameters()
 
 
     def __str__(self):
@@ -650,7 +648,7 @@ class PlotParameterEstimation(PlotKwargs):
         """
         time_dct = self.get_time()
         d = {}
-        step_size=1
+        step_size = 1
         for i in time_dct:
             TC = tasks.TimeCourse(self.cls.model, end=time_dct[i],
                              step_size=step_size, intervals=time_dct[i]/step_size)
@@ -662,33 +660,37 @@ class PlotParameterEstimation(PlotKwargs):
         plot experimental data versus best parameter sets
         :return:
         """
-        keys = self.read_experimental_data().values()[0].keys()
-        keys = [i for i in keys if i!='Time']
+        if self.y == None:
+            self.y = self.read_experimental_data().values()[0].keys()
+            self.y = [i for i in self.y if i != 'Time']
         exp_data = self.read_experimental_data()
         sim_data = self.simulate_time_course()
 
-        LOG.debug('marker --> {}'.format(self.marker))
+
         for exp in exp_data:
             for sim in sim_data:
-                for key in keys:
-                    plt.figure()
-                    plt.plot(
-                        exp_data[exp]['Time'], exp_data[exp][key],
-                        label='exp', linestyle=self.linestyle,
-                        marker=self.marker, linewidth=self.linewidth,
-                        markersize=self.markersize
-                    )
-                    plt.plot(
-                        sim_data[sim]['Time'], sim_data[sim][key],
-                        label='sim', linestyle=self.linestyle,
-                        marker=self.marker, linewidth=self.linewidth,
-                        markersize=self.markersize)
-                    plt.legend(loc=(1, 1))
-                    LOG.debug('savefig -- > {}'.format(self.savefig))
-                    if self.savefig:
-                        dirs = self.create_directories()
-                        print dirs
-        plt.show()
+                if exp == sim:
+                    for key in self.y:
+                        plt.figure()
+                        plt.plot(
+                            exp_data[exp]['Time'], exp_data[exp][key],
+                            label='Exp', linestyle=self.linestyle,
+                            marker=self.marker, linewidth=self.linewidth,
+                            markersize=self.markersize
+                        )
+                        plt.plot(
+                            sim_data[sim]['Time'], sim_data[sim][key],
+                            label='Sim', linestyle=self.linestyle,
+                            marker=self.marker, linewidth=self.linewidth,
+                            markersize=self.markersize)
+                        plt.legend(loc='best')
+                        if self.savefig:
+                            dirs = self.create_directories()
+                            exp_key = os.path.split(exp)[1]
+                            fle = os.path.join(dirs[exp_key], '{}.jpeg'.format(key))
+                            plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
+        if self.show:
+            plt.show()
 
 
 

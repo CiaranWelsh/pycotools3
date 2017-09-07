@@ -44,8 +44,8 @@ from mixin import Mixin, mixin
 import contextlib
 
 
-dire = r'/home/b3053674/Documents/pycotools/pycotools/Tests/'
 dire = r'C:\Users\Ciaran\Documents\pycotools\pycotools\Tests'
+dire = r'/home/b3053674/Documents/pycotools/pycotools/Tests/'
 
 f = os.path.join(dire, 'test_model.cps')
 
@@ -82,26 +82,33 @@ if PARAMETER_ESTIMATION:
     TC1 = pycotools.tasks.TimeCourse(model, end=50, step_size=10,
                                           intervals=5, report_name='report1.txt')
     pycotools.misc.add_noise(TC1.report_name)
+    TC2 = pycotools.tasks.TimeCourse(model, end=100, step_size=20,
+                                     intervals=5, report_name='report2.txt')
+    pycotools.misc.add_noise(TC1.report_name)
+    pycotools.misc.add_noise(TC2.report_name)
+
     pycotools.misc.correct_copasi_timecourse_headers(TC1.report_name)
+    pycotools.misc.correct_copasi_timecourse_headers(TC2.report_name)
+
+
 
     PE = pycotools.tasks.ParameterEstimation(model,
-                                             TC1.report_name,
-
+                                             [TC1.report_name],
                                              method='genetic_algorithm',
                                              population_size=1,
                                              number_of_generations=1)
-    # PE = pycotools.tasks.ParameterEstimation(model,
-    #                                          TC1.report_name,
-    #                                          method='particle_swarm',
-    #                                          swarm_size=50,
-    #                                          iteration_limit=1000)
+    # # PE = pycotools.tasks.ParameterEstimation(model,
+    # #                                          TC1.report_name,
+    # #                                          method='particle_swarm',
+    # #                                          swarm_size=50,
+    # #                                          iteration_limit=1000)
     if os.path.isfile(PE.config_filename):
         os.remove(PE.config_filename)
     PE.write_config_file()
     PE.setup()
-    # print model.local_parameters
-    # PE.run()
-    # PE.model.open()
+    # # print model.local_parameters
+    PE.run()
+    # # PE.model.open()
     pl = pycotools.viz.PlotParameterEstimation(PE, savefig=True)
     print pl.savefig
 
