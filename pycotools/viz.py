@@ -43,6 +43,10 @@ Features to include:
 
 
 '''
+
+
+##TODO Fix plot_kwargs
+##TODO fix parameter estimation ensembles
 import contextlib
 import string
 import pandas 
@@ -118,37 +122,37 @@ class TruncateData(object):
             Either xth percentive,  value to truncate data below or list specifying an index of best fit
     '''
 
-    def __init__(self, data, mode='percent', x=100, log10=False):
+    def __init__(self, data, mode='percent', theta=100, log10=False):
         self.data = data
         self.mode = mode
-        self.x = x
+        self.theta = theta
         self.log10 = log10
-        assert self.mode in ['below_x', 'percent', 'ranks']
+        assert self.mode in ['below_theta', 'percent', 'ranks']
 
         self.data = self.truncate()
 
-    def below_x(self):
-        assert self.data.shape[0] != 0, 'There are no data with RSS below {}. Choose a higher number'.format(self.x)
-        return self.data[self.data['RSS'] < self.x]
+    def below_theta(self):
+        assert self.data.shape[0] != 0, 'There are no data with RSS below {}. Choose a higher number'.format(self.theta)
+        return self.data[self.data['RSS'] < self.theta]
 
-    def top_x_percent(self):
+    def top_theta_percent(self):
         '''
-        get top x percent data.
+        get top theta percent data.
         Defulat= 100 = all data
         '''
-        if self.x > 100 or self.x < 1:
+        if self.theta > 100 or self.theta < 1:
             raise errors.InputError('{} should be between 0 and 100')
-        x_quantile = int(numpy.round(self.data.shape[0] * (float(self.x) / 100.0)))
-        return self.data.iloc[:x_quantile]
+        theta_quantile = int(numpy.round(self.data.shape[0] * (float(self.theta) / 100.0)))
+        return self.data.iloc[:theta_quantile]
 
     def ranks(self):
-        return self.data.iloc[self.x]
+        return self.data.iloc[self.theta]
 
     def truncate(self):
-        if self.mode == 'below_x':
-            return self.below_x()  # self.data
+        if self.mode == 'below_theta':
+            return self.below_theta()  # self.data
         elif self.mode == 'percent':
-            return self.top_x_percent()
+            return self.top_theta_percent()
         elif self.mode == 'ranks':
             return self.ranks()
 
@@ -165,18 +169,18 @@ class ParseMixin(Mixin):
 class TruncateDataMixin(Mixin):
 
     @staticmethod
-    def truncate(data, mode, x):
+    def truncate(data, mode, theta):
         """
         mixin method interface to truncate data
         """
         df = TruncateData(data,
                             mode=mode,
-                            x=x).data
+                            theta=theta).data
         return df
 
 class CreateResultsDirectoryMixin(Mixin):
     @staticmethod
-    def create_results_directory(results_directory):
+    def create_directory(results_directory):
         """
         create directory for results and switch to it
         :param results_directory:
@@ -227,11 +231,10 @@ class Parse(object):
         if isinstance(self.cls_instance, tasks.TimeCourse):
             data = self.parse_timecourse()
 
-        elif isinstance(self.cls_instance, tasks.ParameterEstimation):
+        elif type(self.cls_instance) == tasks.ParameterEstimation:
             data = self.parse_parameter_estmation()
 
-        elif isinstance(self.cls_instance,
-                        tasks.MultiParameterEstimation):
+        elif type(self.cls_instance) == tasks.MultiParameterEstimation:
             data = self.parse_multi_parameter_estimation(self.cls_instance)
 
         if self.log10:
@@ -438,7 +441,6 @@ class PlotTimeCourse(PlotKwargs):
 
         :return:
         """
-        LOG.debug('y -- > {}'.format(self.y))
         if self.y == None:
             self.y == self.data.keys()
 
@@ -820,184 +822,243 @@ class PlotParameterEstimation(PlotKwargs):
 #         return pandas.concat(df_list).sort_values(by='RSS').reset_index(drop=True)
 #
 #
-@mixin(CreateResultsDirectoryMixin)
 
-@mixin(TruncateDataMixin)
+
+
 @mixin(_base.UpdatePropertiesMixin)
 @mixin(SaveFigMixin)
-class Boxplot(object):
-    def __init__(self, data, **kwargs):
-        self.data = data
-        
-        options={'sep': '\t',
-                 'log10': False,
-                 'truncate_mode': 'percent',
-                 'x': 100,
-                 'num_per_plot': 6,
-                 'xtick_rotation': 'vertical',
-                 'ylabel': 'Estimated Parameter\n Value(Log10)',
-                 'title': 'Parameter Distributions',
-                 'savefig': False,
-                 'results_directory': None,
-                 'dpi': 300}
-        
+@mixin(ParseMixin)
+@mixin(CreateResultsDirectoryMixin)
+@mixin(TruncateDataMixin)
+class Boxplot(PlotKwargs):
+    """
+    Create new folder for each experiment
+    defined under the sub directory of results_directory
+    """
+    def __init__(self, cls, **kwargs):
+        self.cls = cls
+        self.kwargs = kwargs
+        self.plot_kwargs = self.plot_kwargs()
+
+
+        self.default_properties = {'sep': '\t',
+                                   'log10': False,
+                                   'truncate_mode': 'percent',
+                                   'theta': 100,
+                                   'num_per_plot': 6,
+                                   'xtick_rotation': 'vertical',
+                                   'ylabel': 'Estimated Parameter\n Value(Log10)',
+                                   'title': 'Parameter Distributions',
+                                   'savefig': False,
+                                   'results_directory': None,
+                                   'dpi': 300,
+                                   'show': False}
+        self.default_properties.update(self.plot_kwargs)
         for i in kwargs.keys():
-            assert i in options.keys(),'{} is not a keyword argument for Boxplot'.format(i)
-        options.update( kwargs)  
-        self.kwargs=options
+            assert i in self.default_properties.keys(),'{} is not a keyword argument for Boxplot'.format(i)
+        self.kwargs = self.default_properties
+        self.default_properties.update(kwargs)
+        self.default_properties.update(self.plot_kwargs)
+        self.update_properties(self.default_properties)
+        self._do_checks()
 
-        self.update_properties(self.kwargs)
-
-        if self.results_directory is None:
-            raise errors.InputError('')
-
-        self.create_results_directory(self.results_directory)
-        self.data = self.truncate(self.data, mode=self.truncate_mode, x=self.x)
+        self.data = self.parse(self.cls, log10=self.log10)
+        self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
         self.plot()
 
 
-    def __getitem__(self, key):
-        if key not in self.kwargs.keys():
-            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
-        return self.kwargs[key]
-    
-    def __setitem__(self, key, value):
-        self.kwargs[key] = value
+    def _do_checks(self):
+        pass
+
+    def create_directory(self):
+        """
+
+        :return:
+        """
+        if self.results_directory is None:
+            self.results_directory = os.path.join(self.cls.model.root, 'Boxplots')
+            if os.path.isdir(self.results_directory) != True:
+                os.makedirs(self.results_directory)
+        return self.results_directory
 
     def plot(self):
         """
-        
+        Plot multiple parameter estimation data as boxplot
+        :return:
         """
-            
-        labels=self.divide_data()
-        for label_set in range(len(labels)):
-            plt.figure()#        
+
+        labels = self.divide_data()
+        for label_set in range(1, len(labels)):
+            plt.figure()#
             data = self.data[labels[label_set]]
-            seaborn.boxplot(data = data )
+            seaborn.boxplot(data=data )
             plt.xticks(rotation=self.xtick_rotation)
             plt.title(self.title+'(n={})'.format(data.shape[0]))
             plt.ylabel(self.ylabel)
             if self.savefig:
-                self.save_figure(self.results_directory,
-                                 'Boxplot{}.jpeg'.format(label_set),
-                                 dpi=self.dpi)
+                self.results_directory = self.create_directory()
+                fle = os.path.join(self.results_directory,
+                                   'Boxplot{}.jpeg'.format(label_set))
+                plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
 
     def divide_data(self):
         """
         split data into multi plot
         :return:
         """
-        n_vars=len(self.data.keys())
-        n_per_plot= self.num_per_plot
+        n_vars = len(self.data.keys())
+        n_per_plot = self.num_per_plot
 #        assert n_per_plot<n_vars,'number of variables per plot must be smaller than the number of variables'
-        int_division= n_vars//n_per_plot
-        remainder=n_vars-(n_per_plot*int_division)
-        l=[]
+        int_division = n_vars//n_per_plot
+        remainder = n_vars-(n_per_plot*int_division)
+        l = []
         for i in range(int_division):
             l.append(self.data.keys()[i*n_per_plot:(i+1)*n_per_plot])
         l.append(self.data.keys()[-remainder:])
         return [list(i) for i in l]
 
 
-@mixin(TruncateDataMixin)
 @mixin(_base.UpdatePropertiesMixin)
-@mixin(CreateResultsDirectoryMixin)
-@mixin(SaveFigMixin)
-class RssVsIterations(object):
-    def __init__(self, data, **kwargs):
-        self.data = data
-        
-        options={'sep': '\t',
-                 'log10': True,
-                 'truncate_mode': 'percent',
-                 'x': 100,
-                 'xtick_rotation': 'horizontal',
-                 'ylabel': 'RSS (Log10)',
-                 'title': 'RSS Versus Iteration',
-                 'savefig': False,
-                 'results_directory': None,
-                 'dpi': 300}
-        
-        for i in kwargs.keys():
-            assert i in options.keys(),'{} is not a keyword argument for RssVsIteration'.format(i)
-        options.update(kwargs)
-        self.kwargs = options
-        self.update_properties(self.kwargs)
-        self.results_directory = self.create_results_directory(self.results_directory)
-        self.data = self.truncate(self.data, mode=self.truncate_mode, x=self.x)
-        self.title = self.title+'(n={})'.format(self.data.shape[0])
+@mixin(ParseMixin)
+@mixin(TruncateDataMixin)
+class RssVsIterations(PlotKwargs):
+    """
+    Create new folder for each experiment
+    defined under the sub directory of results_directory
+    """
 
-        LOG.info('plotting RSS Vs Iterations')
+    def __init__(self, cls, **kwargs):
+        self.cls = cls
+        self.kwargs = kwargs
+        self.plot_kwargs = self.plot_kwargs()
+
+
+        self.default_properties = {'sep': '\t',
+                                   'log10': False,
+                                   'truncate_mode': 'percent',
+                                   'theta': 100,
+                                   'num_per_plot': 6,
+                                   'xtick_rotation': 'vertical',
+                                   'ylabel': 'Estimated Parameter\n Value(Log10)',
+                                   'title': 'Parameter Distributions',
+                                   'savefig': False,
+                                   'results_directory': None,
+                                   'dpi': 300,
+                                   'show': False}
+
+        self.default_properties.update(self.plot_kwargs)
+        for i in kwargs.keys():
+            assert i in self.default_properties.keys(), '{} is not a keyword argument for Boxplot'.format(i)
+        self.kwargs = self.default_properties
+        self.default_properties.update(kwargs)
+        self.default_properties.update(self.plot_kwargs)
+        self.update_properties(self.default_properties)
+        self._do_checks()
+
+        self.data = self.parse(self.cls, log10=self.log10)
         self.plot()
 
-    def __getitem__(self,key):
-        if key not in self.kwargs.keys():
-            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
-        return self.kwargs[key]
-    
-    def __setitem__(self,key,value):
-        self.kwargs[key] = value
+    def _do_checks(self):
+        """
+
+        :return:
+        """
+        pass
+
+
+    def create_directory(self):
+        """
+        create a directory for the results
+        :return:
+        """
+        if self.results_directory is None:
+            self.results_directory = os.path.join(self.cls.model.root,
+                                                  'RssVsIterations')
+        if not os.path.isdir(self.results_directory):
+            os.makedirs(self.results_directory)
+        return self.results_directory
 
     def plot(self):
         """
         
         """
             
-        plt.figure()#        
+        plt.figure()
         plt.plot(range(self.data['RSS'].shape[0]), self.data['RSS'].sort_values(ascending=True))
         plt.xticks(rotation=self.xtick_rotation)
         plt.title(self.title)
         plt.ylabel(self.ylabel)
         plt.xlabel('Rank of Best Fit')
         if self.savefig:
-            self.save_figure(self.results_directory,
-                             'RssVsIteration.jpeg',
-                             dpi=self.dpi)
+            self.results_directory = self.create_directory()
+            fle = os.path.join(self.results_directory, 'RssVsIterations.jpeg')
+            plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
 
 
-# @mixin(DefaultResultsDirectoryMixin)
-
-@mixin(TruncateDataMixin)
 @mixin(_base.UpdatePropertiesMixin)
-class Pca(object):
-    def __init__(self, data, **kwargs):
-        self.data = data
-        
-        options={'sep': '\t',
-                 'truncate_mode': 'percent',
-                 'x': 100,
-                 'log10': False,
-                 'ylabel': None,
-                 'xlabel': None,
-                 'title': None,
-                 'savefig': False,
-                 'results_directory': None,
-                 'dpi': 300,
-                 'n_components': 2,
-                 'by': 'parameters', ##iterations or parameters
-                 'legend_position': None, ##Horizontal, verticle, line spacing
-                 'legend_fontsize': 25,
-                 'cmap': 'viridis',
-                 'annotate': False,
-                 'annotation_fontsize': 25,
-                 }
-        
+@mixin(ParseMixin)
+@mixin(TruncateDataMixin)
+@mixin(CreateResultsDirectoryMixin)
+class Pca(PlotKwargs):
+    """
+    Create new folder for each experiment
+    defined under the sub directory of results_directory
+    """
+
+    def __init__(self, cls, **kwargs):
+        self.cls = cls
+        self.kwargs = kwargs
+        self.plot_kwargs = self.plot_kwargs()
+
+        self.default_properties={'sep': '\t',
+                                 'truncate_mode': 'percent',
+                                 'theta': 100,
+                                 'log10': False,
+                                 'ylabel': None,
+                                 'xlabel': None,
+                                 'title': None,
+                                 'savefig': False,
+                                 'results_directory': None,
+                                 'dpi': 300,
+                                 'n_components': 2,
+                                 'by': 'parameters', ##iterations or parameters
+                                 'legend_position': None, ##Horizontal, verticle, line spacing
+                                 'legend_fontsize': 25,
+                                 'cmap': 'viridis',
+                                 'annotate': False,
+                                 'annotation_fontsize': 25,
+                                 'show': False,
+                                 }
+
+
+        self.default_properties.update(self.plot_kwargs)
         for i in kwargs.keys():
-            assert i in options.keys(),'{} is not a keyword argument for Pca'.format(i)
-        options.update( kwargs)  
-        self.kwargs=options
-        self.update_properties(self.kwargs)
+            assert i in self.default_properties.keys(), '{} is not a keyword argument for Pca'.format(i)
+        self.kwargs = self.default_properties
+        self.default_properties.update(kwargs)
+        self.default_properties.update(self.plot_kwargs)
+        self.update_properties(self.default_properties)
+        self._do_checks()
+
+        self.data = self.parse(self.cls, log10=self.log10)
+        self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
+        self.pca()
+
+
+    def _do_checks(self):
+        """
+        varify integrity of user input
+        :return:
+        """
+
 
         if self.by not in ['parameters','iterations']:
             raise errors.InputError('{} not in {}'.format(
                 self.by, ['parameters','iterations']))
-        self.results_directory = make_default_results_directory(
-            self.data,
-            self.savefig,
-            self.results_directory)
-        self.data = self.read_data()
-        self.data = self.truncate_data()
-        
+
+        if self.results_directory is None:
+            self.results_directory = os.path.join(self.cls.model.root, 'PCA')
+
         if self.ylabel==None:
             if self.log10==False:
                 self.ylabel = 'PC2'
@@ -1022,21 +1083,13 @@ class Pca(object):
         if self.by == 'parameters':
             self.annotate=True
             if self.legend_position==None:
-                raise errors.InputError(
+                LOG.critical(
                     'When data reduction is by \'parameters\' you should specify an argument to legend_position. i.e. legend_position=(10,10,1.5) for horizontal, vertical and linespacing')
-        self.pca()
-        
-        
-    def __getitem__(self,key):
-        if key not in self.kwargs.keys():
-            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
-        return self.kwargs[key]
-    
-    def __setitem__(self,key,value):
-        self.kwargs[key] = value
 
-        
-        
+
+        if self.legend_position is None:
+            self.legend_position = (1, 1, 0.5) ##horizontal, verticle, linespacing
+
     def pca(self):
         pca = PCA(n_components=self.n_components)
         rss = self.data.RSS
@@ -1076,61 +1129,60 @@ class Pca(object):
                         self.legend_position[1]-i*self.legend_position[2],
                     '{}: {}'.format(i,txt),fontsize=self.legend_fontsize)
         if self.savefig:
-            self.save_figure(self.results_directory,
-                             'Pca{}.jpeg'.format(self.by),
-                             dpi=self.dpi)
+            self.create_directory(self.results_directory)
+            fle = os.path.join(self.results_directory, 'Pca_by_{}'.format(self.by))
+            plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
 
-
-# @mixin(DefaultResultsDirectoryMixin)
-
-@mixin(TruncateDataMixin)
 @mixin(_base.UpdatePropertiesMixin)
-class Histograms(object):
-    def __init__(self, data, **kwargs):
-        self.data = data
-        
-        options={'sep': '\t',
-                 'log10': False,
-                 'truncate_mode': 'percent',
-                 'x': 100,
-                 'xtick_rotation': 'horizontal',
-                 'ylabel': 'Frequency',
-                 'savefig': False,
-                 'results_directory': None,
-                 'dpi': 300,
-                 'title_fontsize': 35}
-        
+@mixin(ParseMixin)
+@mixin(TruncateDataMixin)
+@mixin(CreateResultsDirectoryMixin)
+class Histograms(PlotKwargs):
+    """
+    Create new folder for each experiment
+    defined under the sub directory of results_directory
+    """
+
+    def __init__(self, cls, **kwargs):
+        self.cls = cls
+        self.kwargs = kwargs
+        self.plot_kwargs = self.plot_kwargs()
+
+        self.default_properties = {'sep': '\t',
+                                   'log10': False,
+                                   'truncate_mode': 'percent',
+                                   'theta': 100,
+                                   'xtick_rotation': 'horizontal',
+                                   'ylabel': 'Frequency',
+                                   'savefig': False,
+                                   'results_directory': None,
+                                   'dpi': 300,
+                                   'title_fontsize': 35,
+                                   'show': False}
+
+        self.default_properties.update(self.plot_kwargs)
         for i in kwargs.keys():
-            assert i in options.keys(),'{} is not a keyword argument for RssVsIteration'.format(i)
-        options.update( kwargs)  
-        self.kwargs=options
-        self.results_directory = self.make_default_results_directory(self.data,
-                                                                self.savefig,
-                                                                self.results_directory)
-        LOG.warning('save {}'.format(self.results_directory))
-        self.data = self.read_data()
-        self.data = self.truncate_data()
+            assert i in self.default_properties.keys(), '{} is not a keyword argument for Histograms'.format(i)
+        self.kwargs = self.default_properties
+        self.default_properties.update(kwargs)
+        self.default_properties.update(self.plot_kwargs)
+        self.update_properties(self.default_properties)
+        self._do_checks()
+
+        self.data = self.parse(self.cls, log10=self.log10)
+        self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
         LOG.info('plotting histograms')
         self.plot()
 
-    def __getitem__(self,key):
-        if key not in self.kwargs.keys():
-            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
-        return self.kwargs[key]
-    
-    def __setitem__(self,key,value):
-        self.kwargs[key] = value
-        
-    # def read_data(self):
-    #     """
-    #     Both a pandas.DataFrame or a file or list of files can be passed
-    #     as the data argument.
-    #     """
-    #     if isinstance(self.data, pandas.core.frame.DataFrame)!=True:
-    #         return ParsePEData(self.data, sep=self.sep, log10=self.log10).data
-    #     else:
-    #         return self.data
-    
+    def _do_checks(self):
+        """
+
+        :return:
+        """
+        if self.results_directory is None:
+            self.results_directory = os.path.join(self.cls.model.root, 'Histograms')
+
+
     def plot(self):
         """
         
@@ -1142,125 +1194,140 @@ class Histograms(object):
             plt.title('{},n={}'.format(parameter, self.data[parameter].shape[0]),
                       fontsize=self.title_fontsize)
             if self.savefig:
-                save_dir = os.path.join(self.results_directory, 'Histograms')
-                if os.path.isdir(save_dir)!=True:
-                    os.mkdir(save_dir)
-                os.chdir(save_dir)
-                fname = os.path.join(save_dir, misc.RemoveNonAscii(parameter).filter+'.jpeg')
+                self.create_directory(self.results_directory)
+                fname = os.path.join(self.results_directory,
+                                     misc.RemoveNonAscii(parameter).filter+'.jpeg')
                 plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
-            
-    def truncate_data(self):
-        """
-        
-        """
-        return TruncateData(self.data, mode=self.truncate_mode, x=self.x, log10=self.log10).data
-    
 
-# @mixin(DefaultResultsDirectoryMixin)
 
-@mixin(TruncateDataMixin)
 @mixin(_base.UpdatePropertiesMixin)
-class Scatters(object):
-    def __init__(self, data, **kwargs):
-        self.data = data
-        
-        options={'sep':'\t',
-                 'log10':False,
-                 'truncate_mode':'percent',
-                 'x':100,
-                 'xtick_rotation':'horizontal',
-                 'ylabel':'Frequency',
-                 'savefig':False,
-                 'results_directory':None,
-                 'dpi':300}
-        
+@mixin(ParseMixin)
+@mixin(TruncateDataMixin)
+@mixin(CreateResultsDirectoryMixin)
+class Scatters(PlotKwargs):
+    """
+    Create new folder for each experiment
+    defined under the sub directory of results_directory
+    """
+
+    def __init__(self, cls, **kwargs):
+        self.cls = cls
+        self.kwargs = kwargs
+        self.plot_kwargs = self.plot_kwargs()
+
+        self.default_properties = {
+            'x':'RSS',
+            'y': None,
+            'sep': '\t',
+            'log10': False,
+            'cmap': 'jet_r',
+            'truncate_mode': 'percent',
+            'theta': 100,
+            'xtick_rotation': 'horizontal',
+            'ylabel': 'Frequency',
+            'savefig': False,
+            'results_directory': None,
+            'dpi': 300,
+            'title_fontsize': 35,
+            'show': False}
+
+        self.default_properties.update(self.plot_kwargs)
         for i in kwargs.keys():
-            assert i in options.keys(),'{} is not a keyword argument for Scatters'.format(i)
-        options.update( kwargs)  
-        self.kwargs=options
-        self.results_directory = make_default_results_directory(self.data, self.savefig, self.results_directory)
-        self.data = self.read_data()
-        self.data = self.truncate_data()
-        self.title = self.title+'(n={})'.format(self.data.shape[0])
+            assert i in self.default_properties.keys(), '{} is not a keyword argument for Scatters'.format(i)
+        self.kwargs = self.default_properties
+        self.default_properties.update(kwargs)
+        self.default_properties.update(self.plot_kwargs)
+        self.update_properties(self.default_properties)
+        self._do_checks()
+
+        self.data = self.parse(self.cls, log10=self.log10)
+        self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
         self.plot()
 
-#     def __getitem__(self,key):
-#         if key not in self.kwargs.keys():
-#             raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
-#         return self.kwargs[key]
-#
-#     def __setitem__(self,key,value):
-#         self.kwargs[key] = value
-#
-#     def read_data(self):
-#         """
-#         Both a pandas.DataFrame or a file or list of files can be passed
-#         as the data argument.
-#         """
-#         if isinstance(self.data, pandas.core.frame.DataFrame)!=True:
-#             return ParsePEData(self.data, sep=self['sep'], log10=self['log10']).data
-#         else:
-#             return self.data
-#
-#     def plot(self):
-#         """
-#
-#         """
-# #        for parameter in self.data.keys():
-#         plt.figure()
-#         plt.ioff()
-# #        seaborn.pairplot(self.data,hue='RSS',size=5 )
-#
-# #        plt.ylabel(self['ylabel'])
-# #        plt.title('Parameter Distribution, n={}'.format(self.data[parameter].shape[0]))
-#         if self['savefig']:
-#             save_dir = os.path.join(self['results_directory'], 'ScatterMatrix')
-#             if os.path.isdir(save_dir)!=True:
-#                 os.mkdir(save_dir)
-#             os.chdir(save_dir)
-#             fname = os.path.join(save_dir, 'ScatterMatrix.jpeg')
-#             plt.savefig(fname, dpi=self['dpi'], bbox_inches='tight')
-#         plt.ion()
-#
-#     def truncate_data(self):
-#         """
-#
-#         """
-#         return TruncateData(self.data, mode=self['truncate_mode'], x=self['x'], log10=self['log10']).data
+    def _do_checks(self):
+        """
 
-# @mixin(DefaultResultsDirectoryMixin)
+        :return:
+        """
+        if isinstance(self.x, str):
+            self.x = [self.x]
 
-@mixin(TruncateDataMixin)
+        if self.results_directory is None:
+            self.results_directory = os.path.join(self.cls.model.root, 'Scatters')
+
+    def plot(self):
+        """
+
+        :return:
+        """
+        if self.y is None:
+            self.y = self.data.keys()
+
+        for x_var in self.x:
+            for y_var in self.y:
+                plt.figure()
+                plt.scatter(
+                    self.data[x_var], self.data[y_var],
+                    cmap=self.cmap, c=self.data['RSS'],
+                )
+                cb = plt.colorbar()
+                cb.set_label('RSS')
+                plt.xlabel(x_var)
+                plt.ylabel(y_var)
+                plt.title('Scatter graph of\n {} Vs {}'.format(x_var, y_var))
+                if self.savefig:
+                    x_dir = os.path.join(self.results_directory, x_var)
+                    self.create_directory(x_dir)
+                    fle = os.path.join(x_dir, '{}.jpeg'.format(y_var))
+                    plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
+
+        if self.show:
+            plt.show()
+
 @mixin(_base.UpdatePropertiesMixin)
-class LinearRegression(object):
-    def __init__(self, data, **kwargs):
-        self.data = data
-        
-        options={'lin_model': linear_model.LassoCV,
-                 'sep': '\t',
-                 'log10': False,
-                 'truncate_mode': 'percent',
-                 'x': 100,
-                 'xtick_rotation': 'horizontal',
-                 'ylabel': 'Frequency',
-                 'savefig': False,
-                 'results_directory': None,
-                 'n_alphas': 100,
-                 'max_iter': 20000,
-                 'dpi': 300,
-                 'y': 'RSS',
-                 'title_fontsize': 35}
-        
+@mixin(ParseMixin)
+@mixin(TruncateDataMixin)
+@mixin(CreateResultsDirectoryMixin)
+class LinearRegression(PlotKwargs):
+    """
+    Create new folder for each experiment
+    defined under the sub directory of results_directory
+    """
+
+    def __init__(self, cls, **kwargs):
+        self.cls = cls
+        self.kwargs = kwargs
+        self.plot_kwargs = self.plot_kwargs()
+
+        self.default_properties = {
+            'lin_model': linear_model.LassoCV,
+            'log10': False,
+            'truncate_mode': 'percent',
+            'theta': 100,
+            'xtick_rotation': 'horizontal',
+            'ylabel': 'Frequency',
+            'savefig': False,
+            'results_directory': None,
+            'dpi': 300,
+            'title_fontsize': 35,
+            'show': False,
+            'n_alphas': 100,
+            'max_iter': 20000
+        }
+
+        self.default_properties.update(self.plot_kwargs)
         for i in kwargs.keys():
-            assert i in options.keys(),'{} is not a keyword argument for Scatters'.format(i)
-        options.update( kwargs)  
-        self.kwargs=options
-        self.results_directory = self.make_default_results_directory(self.data,
-                                                                     self.savefig,
-                                                                     self.results_directory)
-        self.data = self.read_data()
-        self.data = self.truncate_data()
-        self.title = self.title+'(n={})'.format(self.data.shape[0])
+            assert i in self.default_properties.keys(), '{} is not a keyword argument for LinearRegression'.format(i)
+        self.kwargs = self.default_properties
+        self.default_properties.update(kwargs)
+        self.default_properties.update(self.plot_kwargs)
+        self.update_properties(self.default_properties)
+        self._do_checks()
+
+        self.data = self.parse(self.cls, log10=self.log10)
+        self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
+        
+
 
         self.scores, self.coef = self.compute_coefficients()
         self.coef = self.coef.fillna(value=0)
@@ -1269,24 +1336,15 @@ class LinearRegression(object):
         self.plot_scores()
         self.plot_coef()
 
-    def __getitem__(self,key):
-        if key not in self.kwargs.keys():
-            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
-        return self.kwargs[key]
-    
-    def __setitem__(self,key,value):
-        self.kwargs[key] = value
-        
-    # def read_data(self):
-    #     """
-    #     Both a pandas.DataFrame or a file or list of files can be passed
-    #     as the data argument.
-    #     """
-    #     if isinstance(self.data, pandas.core.frame.DataFrame)!=True:
-    #         return ParsePEData(self.data, sep=self['sep'], log10=self['log10']).data
-    #     else:
-    #         return self.data
-    
+    def _do_checks(self):
+        """
+
+        :return:
+        """
+        if self.results_directory is None:
+            self.results_directory = os.path.join(self.cls.model.root, 'LinearRegression')
+
+
     def compute1coef(self, parameter):
         """
         Compute coefficients for a single parameter
@@ -1298,15 +1356,15 @@ class LinearRegression(object):
         X_train, X_test, y_train, y_test = model_selection.train_test_split(X, y)
         
         lin_model = self.lin_model(fit_intercept=True, n_alphas=self.n_alphas,
-                    max_iter=selfmax_iter)
+                    max_iter=self.max_iter)
         
-        model.fit(X_train,y_train)
-        df = pandas.DataFrame(model.coef_, index=X.columns, columns=[parameter])#.sort_values(by='Coefficients')
-        df.abs_values = numpy.absolute(df[parameter])
+        lin_model.fit(X_train,y_train)
+        df = pandas.DataFrame(lin_model.coef_, index=X.columns, columns=[parameter])#.sort_values(by='Coefficients')
+        df['abs_values'] = numpy.absolute(df[parameter])
         df = df.sort_values(by='abs_values', ascending=False)
         df = df.drop('abs_values', axis=1)
-        scores = [model.score(X_train, y_train), model.score(X_test, y_test)]
-        scores = pandas.DataFrame(scores, index=['TrainScore','TestScore'])
+        scores = [lin_model.score(X_train, y_train), lin_model.score(X_test, y_test)]
+        scores = pandas.DataFrame(scores, index=['TrainScore', 'TestScore'])
         return scores, df
     
     def compute_coefficients(self):
@@ -1328,35 +1386,29 @@ class LinearRegression(object):
         plt.figure()
         seaborn.heatmap(self.scores)
         plt.title('Model Fitting Test and Train Scores'+'(n={})'.format(self.data.shape[0]),
-                  fontsize=self['title_fontsize'])
+                  fontsize=self.title_fontsize)
         if self.savefig:
             save_dir = os.path.join(self.results_directory, 'LinearRegression')
-            if os.path.isdir(save_dir)!=True:
-                os.mkdir(save_dir)
-            os.chdir(save_dir)
-            fname = os.path.join(save_dir, 'linregress_scores.jpeg')
+            self.create_directory(self.results_directory)
+            fname = os.path.join(self.results_directory, 'linregress_scores.jpeg')
             plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
         
         
     def plot_rss(self):
         plt.figure()
         seaborn.heatmap(self.coef.RSS.sort_values(by='RSS', ascending=False))
-        plt.title('Lasso Regression. Y=RSS, X=all other Parameters'+'(n={})'.format(data.shape[0]), fontsize=self.title_fontsize)
+        plt.title('Lasso Regression. Y=RSS, X=all other Parameters'+'(n={})'.format(self.data.shape[0]), fontsize=self.title_fontsize)
         if self.savefig:
-            save_dir = os.path.join(self.results_directory, 'LinearRegression')
-            if os.path.isdir(save_dir)!=True:
-                os.mkdir(save_dir)
-            os.chdir(save_dir)
-            fname = os.path.join(save_dir, 'linregress_RSS.jpeg')
+            self.create_directory(self.results_directory)
+            fname = os.path.join(self.results_directory, 'linregress_RSS.jpeg')
             plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
                 
         
     def plot_coef(self):
         """
-        
+
+        :return:
         """
-        
-        
         self.coef = self.coef.drop('RSS', axis=1)
         self.coef = self.coef.drop('RSS', axis=0)
 #        print self.coef
@@ -1365,75 +1417,15 @@ class LinearRegression(object):
         plt.title('Coefficient Heatmap. Parameters Vs Parameters',fontsize=self.title_fontsize)
         plt.xlabel('')
         if self.savefig:
-            save_dir = os.path.join(self.results_directory, 'LinearRegression')
-            if os.path.isdir(save_dir)!=True:
-                os.mkdir(save_dir)
-            os.chdir(save_dir)
-            fname = os.path.join(save_dir, 'linregress_parameters.jpeg')
+            self.create_directory(self.results_directory)
+            fname = os.path.join(self.results_directory, 'linregress_parameters.jpeg')
             plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
-        
-
-        
-        
-        
-    # def truncate_data(self):
-    #     """
-    #
-    #     """
-    #     return TruncateData(self.data, mode=self['truncate_mode'], x=self['x'], log10=self['log10']).data
-    
 
 
-#class WritePEData():
-#    '''
-#    Write the sorted parameter estimation data as a flat xlsx file
-#    Args
-#        results_path:
-#            The path to the results file or folder of files with parameter
-#            estimation data in
-#    **kwargs 
-#        log10:
-#    '''
-#    def __init__(self,results_path,**kwargs):
-#        self.results_path=results_path
-#        self.PED=ParsePEData(self.results_path)
-#        
-#        
-#        options={'log10':False,
-#                 
-#                     }
-#        for i in kwargs.keys():
-#            assert i in options.keys(),'{} is not a keyword argument for TruncateData'.format(i)
-#        options.update( kwargs)  
-#        self.kwargs=options
-#        
-#        if self.kwargs.get('log10')==True:
-#            self.data=numpy.log10(self.PED.data)
-#            self.data_file=os.path.join(os.path.dirname(self.results_path),'pe_data_log.xlsx')
-#
-#        else:
-#            self.data=self.PED.data
-#            self.data_file=os.path.join(os.path.dirname(self.results_path),'PE_Data.xlsx')
-#            
-#        if os.path.isfile(self.data_file):
-#            os.remove(self.data_file)
-#        
-#        self.data= self.prune_headers()
-#        self.write_to_xlsx()
-#        
-#    def prune_headers(self):
-#        return tasks.PruneCopasiHeaders(self.data).df
-#    
-#    def write_to_xlsx(self):
-#        if self.kwargs.get('log10')==True:
-#            self.data.to_excel(self.data_file)
-#        else:
-#            self.data.to_excel(self.data_file)
-    
-# @mixin(DefaultResultsDirectoryMixin)
-
-@mixin(TruncateDataMixin)
 @mixin(_base.UpdatePropertiesMixin)
+@mixin(ParseMixin)
+@mixin(TruncateDataMixin)
+@mixin(CreateResultsDirectoryMixin)
 class EnsembleTimeCourse(object):
     """
     
@@ -1442,111 +1434,73 @@ class EnsembleTimeCourse(object):
         - Build option for including experimental data on the plots 
     """
     
-    def __init__(self, copasi_file, experiment_files, param_data, **kwargs):
-        self.copasi_file = copasi_file
-        self.param_data = param_data
-        self.experiment_files = experiment_files
-        
-        if isinstance(self.experiment_files, str):
-            self.experiment_files = [self.experiment_files]
-        
-        options={'sep':'\t',
-                 'y_parameter':None,
-                 'truncate_mode':'index',
-                 'x':100,
-                 'xtick_rotation':'horizontal',
-                 'ylabel':'Frequency',
-                 'savefig':False,
-                 'results_directory':None,
-                 'dpi':300,
-                 'step_size':1,
-                 'check_as_you_plot':False,
-                 'estimator':numpy.mean,
-                 'n_boot':10000,
-                 'ci':95,
-                 'color':'deep'} ##resolution: intervals in time course
+    def __init__(self, cls, **kwargs):
+        self.cls = cls
+        options = {'sep': '\t',
+                   'y' : None,
+                   'x': 'time',
+                   'truncate_mode': 'percent',
+                   'theta': 5,
+                   'xtick_rotation': 'horizontal',
+                   'ylabel': 'Frequency',
+                   'savefig': False,
+                   'results_directory': None,
+                   'dpi': 300,
+                   'step_size': 1,
+                   'check_as_you_plot': False,
+                   'estimator': numpy.mean,
+                   'n_boot': 10000,
+                   'ci': 95,
+                   'color': 'deep',
+                   'show': False} ##resolution: intervals in time course
         
         for i in kwargs.keys():
             assert i in options.keys(),'{} is not a keyword argument for ParameterEnsemble'.format(i)
         options.update( kwargs)  
-        self.kwargs=options
+        self.kwargs = options
         self.update_properties(self.kwargs)
+        self._do_checks()
 
-        self.param_data = self.read_param_data()
-        self.param_data = self.truncate_param_data()
-        self.experiment_data = self.parse_experimental_files()
+        self.data = self.parse(self.cls, log10=False)
+        self.data = self.truncate(self.data,
+                                  mode=self.truncate_mode,
+                                  theta=self.theta)
+
+
+
+        self.experimental_data = self.parse_experimental_files()
         self.exp_times = self.get_experiment_times()
-        self.ensemble_data =  self.simulate_ensemble()
+        self.ensemble_data = self.simulate_ensemble()
         self.ensemble_data.index = self.ensemble_data.index.rename(['Index','Time'])
-        
-        if self.y_parameter == None:
-            self.y_parameter=list(self.ensemble_data.keys() )
-        
-        if isinstance(self['y_parameter'], list)!=True:
-            self.y_parameter = [self.y_parameter]
-            
-            
-        for param in self.y_parameter:
-            if param not in self.ensemble_data.keys():
-                raise errors.InputError('{} not in your data set. {}'.format(param, self.ensemble_data.keys()))
-        
-        if self.results_directory == None:
-            self.results_directory = os.path.join(os.path.dirname(self.copasi_file), 'EnsembleTimeCourses' )
-            
-        if os.path.abspath(self.results_directory)!=True:
-            self.results_directory = os.path.join(os.path.dirname(self.copasi_file), self.results_directory)
-
         self.plot()
 
-    def __getitem__(self,key):
-        if key not in self.kwargs.keys():
-            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
-        return self.kwargs[key]
-
-    def __setitem__(self,key,value):
-        self.kwargs[key] = value    
-    
-    # def read_param_data(self):
-    #     """
-    #     Both a pandas.DataFrame or a file or list of files can be passed
-    #     as the data argument.
-    #     """
-    #     if isinstance(self.param_data, pandas.core.frame.DataFrame)!=True:
-    #         return ParsePEData(self.param_data, sep=self['sep'], log10=False).data
-    #     else:
-    #         return self.param_data
-    
+    def _do_checks(self):
+        
+        if self.results_directory == None:
+            self.results_directory = os.path.join(self.cls.model.root, 'EnsembleTimeCourses' )
             
-    # def truncate_param_data(self):
-    #     """
-    #
-    #     """
-    #     return TruncateData(self.param_data,
-    #                         mode=self['truncate_mode'],x=self['x'],
-    #                         log10=False).data
-    #
-
     def parse_experimental_files(self):
         df_dct={}
-        for i in range(len(self.experiment_files)):
-            df=pandas.read_csv(self.experiment_files[i],sep=self.sep[i])
-            df_dct[self.experiment_files[i]]=df
+        for i in range(len(self.cls.experiment_files)):
+            df=pandas.read_csv(self.cls.experiment_files[i],
+                               sep='\t')
+            df_dct[self.cls.experiment_files[i]] = df
         return df_dct
 
     def get_experiment_times(self):
         d={}
-        for i in self.experiment_data:
+        for i in self.experimental_data:
             d[i]={}
-            for j in self.experiment_data[i].keys():
-                if j.lower()=='time':
-                    d[i]= self.experiment_data[i][j]
+            for j in self.experimental_data[i].keys():
+                if j.lower() == 'time':
+                    d[i]= self.experimental_data[i][j]
                     
         times={}
         for i in d:
             times[i]={}
-            times[i]['start']=d[i].iloc[0]
-            times[i]['end']=d[i].iloc[-1]
-            times[i]['step_size']=d[i].iloc[1]-d[i].iloc[0]
+            times[i]['start'] = d[i].iloc[0]
+            times[i]['end'] = d[i].iloc[-1]
+            times[i]['step_size'] = d[i].iloc[1]-d[i].iloc[0]
             '''
             subtract 1 from intervals to account for header
             '''
@@ -1557,39 +1511,50 @@ class EnsembleTimeCourse(object):
         """
         
         """
-#        d = {}
-        
+
+
         ## collect end times for each experiment
         ##in order to find the biggest
         end_times = []
         for i in self.exp_times:
             ## start creating a results dict while were at it
-#            d[i] = {}
             end_times.append(self.exp_times[i]['end'])
         intervals =  max(end_times)/self.step_size
         
         d={}
-        for i in range(self.param_data.shape[0]):
+        for i in range(self.data.shape[0]):
             LOG.info('inserting parameter set {}'.format(i))
-            I=tasks.InsertParameters(self.copasi_file, df=self.param_data, index=i)
+            I=model.InsertParameters(self.cls.model, df=self.data, index=i)
             LOG.info(I.parameters.transpose().sort_index())
-            TC = tasks.TimeCourse(self.copasi_file, end = max(end_times), 
-                                             step_size = self.step_size,
-                                             intervals = intervals, 
-                                             plot=False)
+            TC = tasks.TimeCourse(self.cls.model.copasi_file,
+                                  end=max(end_times),
+                                  step_size=self.step_size,
+                                  intervals=intervals,
+                                  plot=False)
             if self.check_as_you_plot:
-                os.system('CopasiUI {}'.format(self.copasi_file))
-            d[i] = pandas.read_csv(TC.report_name, sep='\t')
+                self.cls.model.open()
+            d[i] = self.parse(TC, log10=False)
         return pandas.concat(d)
 
     def plot(self):
         """
         
         """
+        if self.y == None:
+            LOG.debug('ensemble data keys --> {}'.format(self.ensemble_data.keys()))
+            self.y = list(self.ensemble_data.keys())
+
+        if isinstance(self.y, list) != True:
+            self.y = [self.y]
+
+        for param in self.y:
+            if param not in self.ensemble_data.keys():
+                raise errors.InputError('{} not in your data set. {}'.format(param, self.ensemble_data.keys()))
+
         data = self.ensemble_data.reset_index(level=1, drop=True)
         data.index.name = 'ParameterFitIndex'
         data = data.reset_index()
-        for parameter in self.y_parameter:
+        for parameter in self.y:
             if parameter not in ['ParameterFitIndex','Time']:
                 plt.figure()
                 ax = seaborn.tsplot(data, time='Time', value=parameter,
@@ -1598,376 +1563,18 @@ class EnsembleTimeCourse(object):
                                  n_boot=self.n_boot,
                                  ci=self.ci,
                                  color=self.color)
-                
-                plt.plot(self.experiment_data[self.experiment_data.keys()[0]]['Time'],
-                                              self.experiment_data[self.experiment_data.keys()[0]][parameter],
-                                              'ro')
-                plt.title('Ensemble Time Course\n for {} (n={})'.format(parameter, self.param_data.shape[0]))
+                LOG.debug('experiemntal data --> {}'.format(self.experimental_data))
+                LOG.debug('parameter --> {}'.format(parameter))
+                plt.plot(self.experimental_data[self.experimental_data.keys()[0]]['Time'],
+                                              self.experimental_data[self.experimental_data.keys()[0]][parameter],
+                                              'ro', label='Exp')
+                plt.title('Ensemble Time Course\n for {} (n={})'.format(parameter, self.data.shape[0]))
                 if self.savefig:
-#                    save_dir = os.path.join(self['results_directory'], 'EnsemblePlots')
-                    if os.path.isdir(self.results_directory)!=True:
-                        os.makedirs(self.results_directory)
-                    os.chdir(self.results_directory)
+                    self.create_directory(self.results_directory)
                     fname = os.path.join(self.results_directory, '{}.jpeg'.format(misc.RemoveNonAscii(parameter).filter))
                     plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
         
-    
-# # @mixin(DefaultResultsDirectoryMixin)
-# 
-# @mixin(TruncateDataMixin)
-# @mixin(_base.UpdatePropertiesMixin)
-# class PlotPEData(object):
-#     '''
-#     plot a parameter estimation run against experimental data.
-#     Suport currently only exists for time course experiments. In future versions
-#     a SteadyState Task will be introduced and then we can build a plotting feature
-#     for fitting steady state experiments
-#
-#     Positional Arguments:
-#
-#         copasi_file:
-#             The copasi file you want to enter parameters into
-#
-#         experiment_files
-#
-#         PE_result_files
-#
-#     **Kwargs
-#         index:
-#             index of parameter estimation run to input into the copasi file.
-#             The index is ordered by rank of best fit, with 0 being the best.
-#             Default=0
-#
-#         prune_headers:
-#             Prune copasi variable names of Copasi references. True or False
-#
-#         quantity_type:
-#             Either 'particle_number' or 'concentration'. Default='concentration'
-#
-#         OutputML:
-#             If savefig set to 'duplicate', this is the duplicate filename.
-#
-#         savefig:
-#             either False,'overwrite' or 'duplicate'
-#
-#         parameter_dict:
-#             A python dictionary with keys correponding to parameters in the model
-#             and values the parameters (dict[parameter_name]=parameter value).
-#             Default=None
-#
-#         df:
-#             A pandas dataframe with parameters being column names matching
-#             parameters in your model and RSS values and rows being individual
-#             parameter estimationruns. In this case, ensure you have set the
-#             index parameter to the index you want to use. Dataframes are
-#             automatically sorted by the RSS column.
-#
-#         parameter_path:
-#             Full path to a parameter estimation file ('.txt','.xls','.xlsx' or
-#             '.csv') or a folder containing parameter estimation files.
-#
-#         results_directory:
-#             Name of an output directory.
-#
-#     '''
-#     def __init__(self,model,experiment_files,PE_result_file,**kwargs):
-#
-#         self.model=model
-#         self.experiment_files=experiment_files
-#         self.PE_result_file=PE_result_file
-#
-#
-#
-#         # self.CParser=tasks.CopasiMLParser(self.copasi_file)
-#         # self.copasiML=self.CParser.copasiML
-#         # self.GMQ=tasks.GetModelQuantities(self.copasi_file)
-#
-#         default_report_name=os.path.join(os.path.dirname(self.model.copasi_file),
-#                                          os.path.split(self.model.copasi_file)[1][:-4]+'_PE_results.txt')
-#         options={#report variables
-#                  'report_name':default_report_name,
-#                  'savefig':False,
-#                  'index':0,
-#                  'line_width':4,
-#                  'prune_headers':True,
-#
-#                  #graph features
-#                  'font_size':22,
-#                  'axis_size':15,
-#                  'extra_title':None,
-#                  'show':False,
-#                  'multiplot':False,
-#                  'savefig':False,
-#                  'title_wrap_size':30,
-#                  'ylimit':None,
-#                  'xlimit':None,
-#                  'dpi':125,
-#                  'xtick_rotation':35,
-#                  'marker_size':10,
-#                  'legend_loc':(1,0),
-#                  'results_directory':os.path.join(os.path.dirname(self.model.copasi_file),'ParameterEstimationplots'),
-#                  'plot':True,
-#                  'separator':['\t']*len(self.experiment_files),
-#
-#                  }
-#
-#         for i in kwargs.keys():
-#             assert i in options.keys(),'{} is not a keyword argument for plot'.format(i)
-#         options.update( kwargs)
-#         self.kwargs=options
-#
-#         self.update_properties(self.kwargs)
-#
-#         if self.plot not in [False,True]:
-#             raise errors.InputError('The plot kwarg takes only \'false\' or \'true\'')
-#         #limit parameters
-#         if self.ylimit!=None:
-#             assert isinstance(self.ylimit,list),'ylimit is a list of coordinates for y axis,i.e. [0,10]'
-#             assert len(self.ylimit)==2,'length of the ylimit list must be 2'
-#
-#         if self.xlimit!=None:
-#             assert isinstance(self.xlimit,list),'xlimit is a list of coordinates for x axis,i.e. [0,10]'
-#             assert len(self.kwargs.get('xlimit'))==2,'length of the xlimit list must be 2'
-#
-#         assert isinstance(self.kwargs.get('xtick_rotation'),int),'xtick_rotation parameter should be a Python integer'
-#
-#
-#         if self.kwargs.get('extra_title')!=None:
-#             assert isinstance(self.extra_title,str)
-#         assert isinstance(self.font_size,int)
-#         assert isinstance(self.axis_size,int)
-#         assert isinstance(self.line_width,int)
-#
-#         assert isinstance(self.title_wrap_size,int)
-#
-#         if self.ylimit!=None:
-#             assert isinstance(self.ylimit,str)
-#
-#         if self.xlimit!=None:
-#             assert isinstance(self.xlimit,str)
-#
-#         assert isinstance(self.dpi,int)
-#         assert isinstance(self.xtick_rotation,int)
-#
-#         assert self.show in [False,True]
-#         assert self.savefig in [False,True]
-#         assert self.multiplotin [False,True]
-#
-#         for i in kwargs.keys():
-#             assert i in options.keys(),'{} is not a keyword argument for PlotPEData'.format(i)
-#         options.update( kwargs)
-#         self.kwargs=options
-#
-#         # if os.path.isfile(self.copasi_file)==False:
-#         #     raise errors.InputError('Your copasi file {}doesn\' exist'.format(self.copasi_file))
-#
-#         if isinstance(self.experiment_files,str):
-#             if os.path.isfile(self.experiment_files)==False:
-#                 raise errors.InputError('Your experiment file {} doesn\'t exist'.format(self.experiment_files))
-#             #make a 1 element list to iterate over later
-#             self.experiment_files=[self.experiment_files]
-#
-#         if isinstance(self.experiment_files,list):
-#             for i in self.experiment_files:
-#                 if os.path.isfile(i)==False:
-#                     raise errors.InputError('{} doesn\'t exist'.format(i))
-#
-#         if os.path.isfile(self.PE_result_file)==False:
-#             raise errors.InputError('Your PE data file {} doesn\'t exist'.format(self.PE_result_file))
-#
-#         if isinstance(self.separator,str):
-#             self.separator=[self.separator]
-#
-#         matplotlib.rcParams.update({'font.size':self.axis_size})
-#
-#         self.experiment_data=self.parse_experimental_files()
-#         self.exp_times=self.get_experiment_times()
-#         self.parameters=self.parse_parameters()
-#         self.insert_parameters()
-#         self.sim_data=self.simulate_time_course()
-#
-# ##        '''
-# ##        Only change directory before doing the actual plotting.
-# ##        You want to be in the model directory for all the while your collecting
-# ##        data then move on over to the results directory when plotting.
-# ##        '''
-#         if self.plot==True:
-#             self.change_directory()
-#             self.plot()
-#         os.chdir(os.path.dirname(self.model.copasi_file))
-#
-#
-#     def change_directory(self):
-#         dire=os.path.join(os.path.dirname(self.model.copasi_file),'ParameterEstimationPlots')
-#         if os.path.isdir(dire)==False:
-#             os.mkdir(dire)
-#         os.chdir(dire)
-#         return dire
-#
-#     def parse_experimental_files(self):
-#         df_dct={}
-#         for i in range(len(self.experiment_files)):
-#             df=pandas.read_csv(self.experiment_files[i],sep=self.separator[i])
-#             df_dct[self.experiment_files[i]]=df
-#         return df_dct
-#
-#     def get_experiment_times(self):
-#         d={}
-#         for i in self.experiment_data:
-#             d[i]={}
-#             for j in self.experiment_data[i].keys():
-#                 if j.lower()=='time':
-#                     d[i]= self.experiment_data[i][j]
-#
-#         times={}
-#         for i in d:
-#             times[i]={}
-#             times[i]['start']=d[i].iloc[0]
-#             times[i]['end']=d[i].iloc[-1]
-#             times[i]['step_size']=d[i].iloc[1]-d[i].iloc[0]
-#             '''
-#             subtract 1 from intervals to account for header
-#             '''
-#             times[i]['intervals']=int(d[i].shape[0])-1
-#         return times
-#
-#     def parse_parameters(self):
-#         df= pandas.read_csv(self.PE_result_file,sep='\t')
-#         df=ParsePEData(self.PE_result_file)
-#         df= df.data
-#         return pandas.DataFrame(df.iloc[-1]).transpose()
-#
-#     def insert_parameters(self):
-#         tasks.InsertParameters(self.copasi_file,df=self.parameters)
-#         return self.copasi_file
-#
-#
-#     def simulate_time_course(self):
-#         '''
-#         This function does not work with irregular time courses
-#         '''
-#         data_dct={}
-#         for i in self.exp_times:
-#             '''
-#             need to subtract 1 from the intervals
-#             '''
-#             TC=tasks.TimeCourse(self.copasi_file,start=0,
-#                           end=self.exp_times[i]['end'],
-#                           intervals=self.exp_times[i]['end'],
-#                           step_size=1,
-#                           plot=False)
-#             df = pandas.read_csv(TC.kwargs['report_name'], sep='\t')
-#             data_dct[i]=df
-#         return data_dct
-#
-#
-# #    def simulate_time_course(self):
-# #        data_dct={}
-# #        for i in self.exp_times:
-# #            '''
-# #            need to subtract 1 from the intervals
-# #            '''
-# #            TC=tasks.TimeCourse(self.copasi_file,Start=self.exp_times[i]['Start'],
-# #                          End=self.exp_times[i]['End'],
-# #                          Intervals=self.exp_times[i]['End'],
-# #                          StepSize=1,plot=False)
-# #            P=tasks.PruneCopasiHeaders(TC.data,replace=True)
-# #            data_dct[i]=P.df
-# #        return data_dct
-#
-#
-#
-#     def plot1(self,fle,parameter):
-#         '''
-#         plot one parameter of one experiment. for iterating over in
-#         other functions
-#         '''
-#         seaborn.set_context(context='poster',font_scale=2)
-#         if fle not in self.experiment_files:
-#             raise errors.InputError('{} not in {}'.format(fle,self.exp_times))
-#         if parameter not in self.sim_data[fle].keys() and parameter not in self.experiment_data[fle].keys():
-#             raise errors.InputError('{} not in {} or {}'.format(parameter,self.sim_data[fle.keys()],self.experiment_data[fle].keys()))
-#         sim= self.sim_data[fle][parameter]
-#         exp= self.experiment_data[fle][parameter]
-#         time_exp= self.experiment_data[fle]['Time']
-#         time_sim=self.sim_data[fle]['Time']
-#         plt.figure()
-#         ax = plt.subplot(111)
-#         plt.plot(time_sim,sim,'k-',label='simulated',linewidth=self.kwargs.get('line_width'))
-#         plt.plot(time_exp,exp,'ro',label='experimental',markersize=self.kwargs.get('marker_size'))
-#         plt.legend(loc=self.kwargs.get('legend_loc'))
-#
-#
-#
-#         ax.spines['right'].set_color('none')
-#         ax.spines['top'].set_color('none')
-#         ax.xaxis.set_ticks_position('bottom')
-#         ax.yaxis.set_ticks_position('left')
-#         ax.spines['left'].set_smart_bounds(True)
-#         ax.spines['bottom'].set_smart_bounds(True)
-#
-#         #xtick rotation
-#         plt.xticks(rotation=self.kwargs.get('xtick_rotation'))
-#
-#         #options for changing the plot axis
-#         if self.kwargs.get('ylimit')!=None:
-#             ax.set_ylim(self.kwargs.get('ylimit'))
-#         if self.kwargs.get('xlimit')!=None:
-#             ax.set_xlim(self.kwargs.get('xlimit'))
-#
-#         plt.title('\n'.join(wrap('{}'.format(parameter),self.kwargs.get('title_wrap_size'))),fontsize=self.kwargs.get('font_size'))
-#         try:
-#             plt.ylabel('Quantity Unit ({})'.format(self.GMQ.get_quantity_units().encode('ascii')),fontsize=self.kwargs.get('font_size'))
-#         except UnicodeEncodeError:
-#             plt.ylabel('Quantity Unit (micromol)',fontsize=self.kwargs.get('font_size'))
-#
-#         plt.xlabel('Time ({})'.format(self.GMQ.get_time_unit()),fontsize=self.kwargs.get('font_size'))
-#
-#
-#         for j in parameter:
-#             if j not in string.ascii_letters+string.digits+'_-[]':
-#                 parameter=parameter.replace(j,'_')
-#
-# #        parameter=re.sub(p,'_',parameter)
-#
-#
-#
-#         if self.kwargs.get('savefig')==True:
-#             if self.kwargs.get('extra_title')!=None:
-#                 assert isinstance(self.kwargs.get('extra_title'),str),'extra title should be a string'
-#                 fle=os.path.join(self.kwargs.get('results_directory'),'{}_{}.png'.format(parameter,self.kwargs.get('extra_title')))
-#             else:
-#                 fle=os.path.join(self.kwargs.get('results_directory'),'{}.png'.format(parameter))
-#             plt.savefig(fle,dpi=self.kwargs.get('dpi'),bbox_inches='tight')
-#
-#         if self.kwargs.get('show')==True:
-#             plt.show()
-#
-#
-#     def plot1file(self,fle):
-#         '''
-#         plot only parameters from a single experiment file
-#         (for the event that the user has multiple time course
-#         experiments)
-#         '''
-#         for parameter in  self.experiment_data[fle]:
-#             if parameter !='Time':
-#                 if parameter[-6:]=='_indep':
-#                     pass
-#                 else:
-#                     self.plot1(fle,parameter)
-#
-#     def plot(self):
-#         '''
-#         plot all parameters
-#         '''
-# #        LOG.warning('the plotting function is temporarily disabled')
-#         for f in self.experiment_files:
-#             dire,p= os.path.split(f)
-#             fle=os.path.splitext(p)[0]
-#             self.plot1file(f)
 
-    
 # @mixin(DefaultResultsDirectoryMixin)
 
 @mixin(TruncateDataMixin)
@@ -1977,7 +1584,6 @@ class ModelSelection(object):
     ## could give
     '''
     def __init__(self,multi_model_fit, **kwargs):
-        LOG.debug('Instantiate ModelSelection class')
         self.multi_model_fit=multi_model_fit
         self.number_models=self.get_num_models()
         
@@ -1991,6 +1597,7 @@ class ModelSelection(object):
         options.update( kwargs) 
         self.kwargs=options
         self.update_properties(self.kwargs)
+        raise NotImplementedError
         
         
 #        if self.model_selection_filename==None:

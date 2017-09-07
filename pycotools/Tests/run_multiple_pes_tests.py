@@ -70,12 +70,11 @@ class MultiParameterEstimationTests(_test_base._BaseTest):
             results_directory='test_mpe')
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
 
+        self.MPE.write_config_file()
         self.MPE.setup()
 
     def test_output_directory(self):
         self.assertTrue(os.path.isdir(self.MPE.results_directory))
-
-
 
     def test_write_config_file(self):
         """

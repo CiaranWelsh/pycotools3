@@ -3403,7 +3403,7 @@ class MultiParameterEstimation(ParameterEstimation):
             LOG.warning('output_in_subtask has been turned on. This means that you\'ll get function evaluations with the best parameter set that the algorithm finds')
         run_arg_list=['multiprocess','SGE']
         if self.run_mode not in run_arg_list:
-            raise errors.InputError('run needs to be one of {}'.format(run_arg_list))
+            raise errors.InputError('run_mode needs to be one of {}'.format(run_arg_list))
 
         if isinstance(self.copy_number,int)!=True:
             raise errors.InputError('copy_number argument is of type int')
@@ -3480,7 +3480,7 @@ class MultiParameterEstimation(ParameterEstimation):
                    subtask='parameter_estimation',
                    report_type='multi_parameter_estimation',
                    report_name=report,
-                   run_mode=False,
+                   run=False,
                    append=self.append,
                    confirm_overwrite=self.confirm_overwrite,
                    output_in_subtask=self.output_in_subtask,
@@ -3491,8 +3491,8 @@ class MultiParameterEstimation(ParameterEstimation):
     def _setup_scan(self, models):
         """
         Set up `copy_number` repeat items with `pe_number`
-        repeats of parameter estimation. Set run to false
-        as we want to use the multiprocess mode of the run class
+        repeats of parameter estimation. Set run_mode to false
+        as we want to use the multiprocess mode of the run_mode class
         to process all files at once in CopasiSE
         :return:
         """
@@ -3527,12 +3527,12 @@ class MultiParameterEstimation(ParameterEstimation):
         except AttributeError:
             raise errors.IncorrectUsageError('You must use the setup method before the run method')
 
-        if self.run == 'SGE':
+        if self.run_mode == 'SGE':
             try:
                 check_call('qhost')
             except errors.NotImplementedError:
                 LOG.warning('Attempting to run in SGE mode but SGE specific commands are unavailable. Switching to \'multiprocess\' mode')
-                self.run = 'multiprocess'
+                self.run_mode = 'multiprocess'
         # if os.path.isfile(self.copasi_file_pickle):
         #     with open(self.copasi_file_pickle) as f:
         #         self.sub_copasi_files=pickle.load(f)
@@ -3659,7 +3659,7 @@ class MultiModelFit(object):
             Once each model folder has a config file specific for that model
             use the setup() method. Then open one of the child copasi files
             in order to check that things are configured how you'd like them before
-            using the run() method.
+            using the run_mode() method.
 
 
         **kwargs:
@@ -3678,7 +3678,7 @@ class MultiModelFit(object):
         self._do_checks()
         self.cps_files, self.exp_files = self.read_fit_config()
 
-        default_properties = {'run': 'multiprocess',
+        default_properties = {'run_mode': 'multiprocess',
                    'copy_number': 1,
                    'pe_number': 3,
                    'report_name': None,
