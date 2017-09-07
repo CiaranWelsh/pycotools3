@@ -50,6 +50,12 @@ class Model(_base._Base):
         ## fill this dict after class is finished
         self.default_properties = {}
         self.update_kwargs(kwargs)
+        self.quantity_type = 'concentration'
+
+        if self.quantity_type not in ['concentration',
+                                      'particle_numbers']:
+            raise errors.InputError('quantity_type argument should be concentration or particle_numbers')
+
 
     def __str__(self):
         return 'Model(name={}, time_unit={}, volume_unit={}, quantity_unit={})'.format(self.name, self.time_unit,self.volume_unit, self.quantity_unit)
@@ -1108,11 +1114,31 @@ class Model(_base._Base):
 
         :return:
         """
-        for i in self.xml.iter():
-            if i.tag=='{http://www.copasi.org/static/schema}ListOfModelParameterSets':
-                for j in i:
-                    print j
+        return NotImplementedError
+        # for i in self.xml.iter():
+        #     if i.tag=='{http://www.copasi.org/static/schema}ListOfModelParameterSets':
+        #         for j in i:
+        #             print j
 
+    @property
+    def parameters(self):
+        """
+        get model parameters as pandas dataframe
+        :return: pandas.DataFrame
+        """
+        if self.quantity_type == 'concentration':
+            metabs = {i.name: i.concentration for i in self.metabolites}
+        elif self.quantity_type == 'particle_numbers':
+            metabs = {i.name: i.particle_number for i in self.metabolites}
+
+        locals = {i.global_name: i.value for i in self.local_parameters}
+        globals_q = {i.name: i.initial_value for i in self.global_quantities}
+        d = {}
+        d.update(metabs)
+        d.update(locals)
+        d.update(globals_q)
+        d = pandas.DataFrame(d, index=[0])
+        return d
 
 class Compartment(_base._ModelBase):
     def __init__(self, model, **kwargs):

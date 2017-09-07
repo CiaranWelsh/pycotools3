@@ -46,27 +46,31 @@ class _BaseTest(unittest.TestCase):
         self.model = pycotools.model.Model(self.copasi_file)
 
     def tearDown(self):
+        delete_dirs = True
         dire = os.path.dirname(self.copasi_file)
+        subdirs = ['Boxplots', 'TimeCourseGraphs',
+                   'ParameterEstimationPlots', 'test_mpe']
+        if delete_dirs:
+            for i in subdirs:
+                d = os.path.join(dire, i)
+                if os.path.isdir(d):
+                    shutil.rmtree(d)
 
 
-        # parameter_estimation_data_folder = os.path.join(dire, 'test_mpe')
-        # if os.path.isdir(parameter_estimation_data_folder):
-        #     shutil.rmtree(parameter_estimation_data_folder)
+        for i in glob.glob(os.path.join(dire, '*.xlsx') ):
+            os.remove(i)
 
-        # for i in glob.glob(os.path.join(dire, '*.xlsx') ):
-        #     os.remove(i)
-        #
-        # for i in glob.glob(os.path.join(dire, '*.cps') ):
-        #     os.remove(i)
-        #
-        # for i in glob.glob(os.path.join(dire, '*.txt') ):
-        #     os.remove(i)
-        #
-        # for i in glob.glob(os.path.join(dire, '*.csv') ):
-        #     os.remove(i)
-        #
-        # for i in glob.glob(os.path.join(dire, '*.pickle') ):
-        #     os.remove(i)
+        for i in glob.glob(os.path.join(dire, '*.cps') ):
+            os.remove(i)
+
+        for i in glob.glob(os.path.join(dire, '*.txt') ):
+            os.remove(i)
+
+        for i in glob.glob(os.path.join(dire, '*.csv') ):
+            os.remove(i)
+
+        for i in glob.glob(os.path.join(dire, '*.pickle') ):
+            os.remove(i)
 
 # class _ParameterEstimationBase(_BaseTest):
 #     """

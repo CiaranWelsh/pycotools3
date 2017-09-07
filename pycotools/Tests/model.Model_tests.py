@@ -960,6 +960,13 @@ class ModelTests(_test_base._BaseTest):
         self.assertEqual(changed.name, 'changed_name')
     #
 
+    def test_get_parameters(self):
+        """
+
+        :return:
+        """
+        self.assertEqual(self.model.parameters.shape[1], 9)
+
 
 
 
