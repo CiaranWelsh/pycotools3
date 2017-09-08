@@ -148,9 +148,11 @@ class Run(_base._ModelBase):
         if self.task not in tasks:
             raise errors.InputError('{} not in list of tasks. List of tasks are: {}'.format(self.task, tasks))
 
-        modes = [True, False, 'multiprocess']
+        modes = [True, False, 'multiprocess','parallel']
         if self.mode not in modes:
             raise errors.InputError('{} not in {}'.format(self.mode, modes))
+
+
 
     def __str__(self):
         return 'Run({})'.format(self.to_string())
@@ -221,6 +223,68 @@ class Run(_base._ModelBase):
         os.system('qsub {} -N {} '.format(self.SGE_job_file, self.SGE_job_file))
         ## remove .sh file after used.
         os.remove(self.SGE_job_file)
+
+    def run1(self, q, model):
+        """
+        Setup a single scan.
+        :param q: queue from multiprocessing
+        :param model: pycotools.model.Model
+        :param report: str.
+        :return:
+        """
+        start = time.time()
+        models = q.put(Scan(
+            model,
+            scan_type='scan',
+            variable=parameter,
+            number_of_steps=self.intervals,
+            subtask='parameter_estimation',
+            report_type='parameter_estimation',
+            report_name=report,
+            run=False,
+            append=self.append,
+            clear_scans=True,
+            output_in_subtask=self.output_in_subtask,#self.output_in_subtask,
+            )
+        )
+
+
+
+    def run_parallel(self):
+        """
+        :return:
+        """
+        number_of_cpu = cpu_count()
+        q = Queue.Queue(maxsize=number_of_cpu)
+        # report_files = self.enumerate_PE_output()
+        res = {}
+        res = {}
+        # for model in self.model_dct:
+        #     res[model] = {}
+        #     for param in self.model_dct[model]:
+        #
+        #         report_name = os.path.join(
+        #             self.model_dct[model][param].root,
+        #             os.path.splitext(
+        #                 self.model_dct[model][param].copasi_file
+        #             )[0]+'.csv'
+        #         )
+        #         t = threading.Thread(
+        #             target=self.setup1scan,
+        #             args=(
+        #                 q, self.model_dct[model][param].copasi_file,
+        #                 report_name, param
+        #             )
+        #         )
+        #         t.daemon = True
+        #         t.start()
+        #         # Since this is being executed in parallel sometimes
+        #         # we get process clashes. Not sure exactly whats going on
+        #         # but introducing a small delay seems to fix
+        #         # time.sleep(0.1)
+        #         res[model][param] = q.get().model
+        # return res
+
 
 
 class ParseStrVariableMixin(Mixin):
@@ -551,7 +615,7 @@ class Reports(_base._ModelBase):
         report=etree.SubElement(ListOfReports,'Report')
         report.attrib.update(report_attributes)
 
-        comment=etree.SubElement(report,'Comment')
+        comment=etree.SubElement(report, 'Comment')
         table=etree.SubElement(report,'Table')
         table.attrib['printTitle']=str(1)
         if self.variable.name in [i.name for i in self.metabolites]:
@@ -1340,7 +1404,7 @@ class TimeCourse(_base._ModelBase):
     #     R = Run(self.copasi_file, task='time_course')
     #     return R
 
-
+@mixin(_base.GetModelVariableFromStringMixin)
 class Scan(_base._ModelBase):
     """
     Interface to COPASI scan task
@@ -1389,12 +1453,6 @@ class Scan(_base._ModelBase):
 
 
         self.model = self.define_report()
-
-
-        if self.clear_scans == True:
-            self.model = self.remove_scans()
-
-        self.model = self.define_report()
         self.model = self.create_scan()
         self.model = self.set_scan_options()
 
@@ -1408,6 +1466,32 @@ class Scan(_base._ModelBase):
         Varify integrity of user input
         :return:
         """
+        if isinstance(self.variable, str):
+            self.variable = self.get_variable_from_string(self.model, self.variable)
+
+        if self.variable != []:
+            try:
+                if self.variable.name not in self.model.all_variable_names:
+                    raise errors.InputError(
+                        '"{}" not in model. These are in your model: {}'.format(
+                            self.variable.name,
+                            self.model.all_variable_names
+                        )
+                    )
+            ##catch for local variables which requires match by global name
+            except errors.InputError:
+                if self.variable.global_name not in self.model.all_variable_names:
+                    raise errors.InputError(
+                        '"{}" not in model. These are in your model: {}'.format(
+                            self.variable.name,
+                            self.model.all_variable_names
+                        )
+                    )
+
+
+        if self.clear_scans == True:
+            self.model = self.remove_scans()
+
         if self.scan_type == 'scan':
             if self.output_in_subtask !=True:
                 LOG.warning('output_in_subtask is False. Setting to True in order to have data from all scans output to file')
@@ -1455,7 +1539,7 @@ class Scan(_base._ModelBase):
                 self.variable = self.model.get('global_quantity', self.variable, by='name')
 
             elif self.variable in [i.name for i in self.model.local_parameters]:
-                self.variable = self.model.get('constant', self.variable, by='name')
+                self.variable = self.model.get('local_parameter', self.variable, by='global_name')
 
 
 
@@ -1498,6 +1582,39 @@ class Scan(_base._ModelBase):
 
         :return:
         """
+        ## get model entity if variable is a string
+        if isinstance(self.variable, str):
+            metab = self.model.get('metabolite', self.variable, by='name')
+            glob  = self.model.get('global_quantity', self.variable, by='name')
+            loca  = self.model.get('local_parameter', self.variable, by='global_name')
+
+            ##small bit of extra code to check that
+            ## we only have one self.variable
+            metab_for_checking = []
+            glob_for_checking = []
+            loca_for_checking = []
+            if not isinstance(metab, list):
+                metab_for_checking = [metab]
+
+            if not isinstance(glob, list):
+                glob_for_checking = [glob]
+
+            if not isinstance(loca, list):
+                loca_for_checking = [loca]
+
+            all = metab_for_checking + glob_for_checking + loca_for_checking
+            if len(all) > 1:
+                raise errors.SomethingWentHorriblyWrongError('Getting variable from model but matched more than one entity')
+
+            if metab != []:
+                self.variable = metab
+
+            if glob != []:
+                self.variable = glob
+
+            if loca != []:
+                self.variable = loca
+
         # get cn value
         ## if variable is a metabolite
         if self.variable.name in [i.name for i in self.model.metabolites]:
@@ -1515,7 +1632,7 @@ class Scan(_base._ModelBase):
             cn = '{},{}'.format(self.model.reference, self.variable.initial_reference)
 
         elif self.variable.name in [i.name for i in self.model.local_parameters]:
-            cn = '{},{}'.format(self.model.reference, self.variable.initial_reference)
+            cn = '{},{}'.format(self.model.reference, self.variable.value_reference)
 
         number_of_steps_attrib = {'type': 'unsignedInteger',
                                   'name': 'Number of steps',
@@ -1621,8 +1738,9 @@ class Scan(_base._ModelBase):
         """
         query = '//*[@name="ScanItems"]'
         for i in self.model.xml.xpath(query):
-            for j in list(i):
-                i.remove(j)
+            for j in i:
+                j.getparent().remove(j)
+        self.model.save()
         return self.model
 
     def execute(self):
@@ -3878,7 +3996,7 @@ class MultiModelFit(object):
             self.MPE_dct[MPE].format_results()
 
 
-# @mixin(_base.UpdatePropertiesMixin)
+@mixin(_base.GetModelVariableFromStringMixin)
 class ProfileLikelihood(_base._ModelBase):
     def __init__(self, model, **kwargs):
         super(ProfileLikelihood, self).__init__(model, **kwargs)
@@ -3893,8 +4011,10 @@ class ProfileLikelihood(_base._ModelBase):
             'quantity_type': 'concentration',
             'upper_bound_multiplier': 1000,
             'lower_bound_multiplier': 1000,
-            'number_of_steps': 10,
+            'intervals': 10,
             'log10': True,
+            'append': False,
+            'output_in_subtask': True,
             'iteration_limit': 50,
             'tolerance': 1e-5,
             'rho': 0.2,
@@ -3917,7 +4037,7 @@ class ProfileLikelihood(_base._ModelBase):
             'start_temperature': 1,
             'cooling_factor': 0.85,
         }
-        # self.convert_bool_to_numeric(self.default_properties)
+        self.convert_bool_to_numeric(self.default_properties)
         self.update_properties(self.default_properties)
         self.update_kwargs(kwargs)
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
@@ -3925,13 +4045,17 @@ class ProfileLikelihood(_base._ModelBase):
         self._convert_numeric_arguments_to_string()
 
         ##configures parameter estimation method parameters
+        self.model = self.undefine_other_reports()
+        self.model = self.make_experiment_files_absolute()
         self.model = self.set_PE_method()
         self.index_dct = self.insert_parameters()
         self.model_dct = self.copy_model()
         self.model_dct = self.setup_report()
+        # self.model.open()
         self.model_dct = self.setup_parameter_estimation()
-        # self.model_dct[0]['A'].open()
-        self.to_file()
+        self.model_dct = self.setup_scan()
+        self.model_dct[0]['A'].open()
+        # self.to_file()
 
         # print self.setup_parameter_estimation()
 
@@ -3945,6 +4069,10 @@ class ProfileLikelihood(_base._ModelBase):
         if self.df is None:
             if self.index == 'current_parameters':
                 LOG.warning('Parameter estimation data has been specified without an index so will be ignored. Specify argument to index kwarg')
+
+        if isinstance(self.x, str):
+            self.x = self.get_variable_from_string(self.model, self.x)
+
 
     def _convert_numeric_arguments_to_string(self):
         """
@@ -4166,6 +4294,8 @@ class ProfileLikelihood(_base._ModelBase):
         parent.insert(2,method_element)
         return self.model
 
+
+
     def insert_parameters(self):
         """
 
@@ -4173,10 +4303,11 @@ class ProfileLikelihood(_base._ModelBase):
         """
         dct = {}
         if self.index == 'current_parameters':
-            dct['current_parameters'] = self.model.parameters
+            dct['current_parameters'] = self.model
         else:
             for i in self.index:
-                dct[i] = deepcopy(model.InsertParameters(self.model, df=self.df, index=i).model)
+                new_model = model.InsertParameters(self.model, df=self.df, index=i).model
+                dct[i] = new_model
         return dct
 
     def copy_model(self):
@@ -4188,8 +4319,35 @@ class ProfileLikelihood(_base._ModelBase):
         for model in self.index_dct:
             dct[model] = {}
             for param in self.x:
-                dct[model][param] = deepcopy(self.index_dct[model])
+                new_dir = os.path.join(self.results_directory, str(model))
+                new_copasi_filename = os.path.join(new_dir, misc.RemoveNonAscii(param).filter+'.cps')
+                dct[model][param] = self.index_dct[model].copy(new_copasi_filename)
+                dct[model][param].save()
         return dct
+
+    def make_experiment_files_absolute(self):
+        """
+        copy data files that are mapped to model
+        variables into the profile likelihood directories
+        :return:
+        """
+        query = '//*[@name="File Name"]'
+        for i in self.model.xml.xpath(query):
+            fle = os.path.abspath(i.attrib['value'])
+            i.attrib['value'] = fle
+        return self.model
+
+
+    def undefine_other_reports(self):
+        """
+        remove reports defined elsewhere, i.e. the parameter estimation task
+        :return:
+        """
+        query = '//*[@target]'
+        for i in self.model.xml.xpath(query):
+            if i.attrib['target'] != '':
+                i.attrib['target'] = ''
+        return self.model
 
     def setup_parameter_estimation(self):
         """
@@ -4202,7 +4360,6 @@ class ProfileLikelihood(_base._ModelBase):
             count = 0
             for param in self.model_dct[model]:
                 ##ascertain which parameter this is
-                LOG.debug('current param --> {}'.format(param))
                 for i in self.model_dct[model][param].xml.xpath(query):
                     count += 1
                     for j in i:
@@ -4211,14 +4368,10 @@ class ProfileLikelihood(_base._ModelBase):
                             global_quantities = re.findall('.*Values\[(.*)\]', j.attrib['value'])
                             local_parameters = re.findall('.*Reactions\[(.*)\].*Parameter=(.*),', j.attrib['value'])
                             metabolites = re.findall('.*Metabolites\[(.*)\],', j.attrib['value'])
-                            LOG.debug('glo --> {}'.format(global_quantities))
-                            LOG.debug('lo --> {}'.format(local_parameters))
-                            LOG.debug('met --> {}'.format(metabolites))
                             if local_parameters != []:
 
                                 local_parameters = "({}).{}".format(local_parameters[0][0], local_parameters[0][1])
                                 if local_parameters == param:
-                                    LOG.debug('xml --> {}'.format(etree.tostring(j.getparent(), pretty_print=True)))
                                     j.getparent().getparent().remove(j.getparent())
 
                             elif metabolites != []:
@@ -4232,7 +4385,6 @@ class ProfileLikelihood(_base._ModelBase):
         if count == 0:
             raise errors.NoFitItemsError('Model does not contain any fit items. Please setup a parameter estimation and try again')
         return self.model_dct
-
 
     def setup_report(self):
         for model in self.model_dct:
@@ -4255,23 +4407,102 @@ class ProfileLikelihood(_base._ModelBase):
         for model in self.model_dct:
             dct[model] = {}
             for param in self.model_dct[model]:
-                index_dir = os.path.join(self.results_directory, str(model))
-                if not os.path.isdir(index_dir):
-                    os.makedirs(index_dir)
-                fle = os.path.join(index_dir, misc.RemoveNonAscii(param).filter+'.cps')
-                dct[model][param] = fle
-                self.model_dct[model][param].save(fle)
-
+                ##already given new filename in copy_copasi
+                self.model_dct[model][param].save()
         return dct
+
+    # def setup_scan(self):
+    #     """
+    #
+    #     :return:
+    #     """
+    #     for model in self.model_dct:
+    #         for param in self.model_dct[model]:
+    #             # print self.model_dct, self.model_dct[model]
+    #             s = Scan()
+
+    def setup1scan(self, q, model, report, parameter):
+        """
+        Setup a single scan.
+        :param q: queue from multiprocessing
+        :param model: pycotools.model.Model
+        :param report: str.
+        :return:
+        """
+        start = time.time()
+        models = q.put(Scan(
+            model,
+            scan_type='scan',
+            variable=parameter,
+            number_of_steps=self.intervals,
+            subtask='parameter_estimation',
+            report_type='parameter_estimation',
+            report_name=report,
+            run=False,
+            append=self.append,
+            clear_scans=True,
+            output_in_subtask=self.output_in_subtask,#self.output_in_subtask,
+            )
+        )
+
+
 
     def setup_scan(self):
         """
-
+        Set up `copy_number` repeat items with `pe_number`
+        repeats of parameter estimation. Set run_mode to false
+        as we want to use the multiprocess mode of the run_mode class
+        to process all files at once in CopasiSE
         :return:
         """
+        number_of_cpu = cpu_count()
+        q = Queue.Queue(maxsize=number_of_cpu)
+        # report_files = self.enumerate_PE_output()
+        res = {}
+        res = {}
         for model in self.model_dct:
+            res[model] = {}
             for param in self.model_dct[model]:
-                print self.model_dct, self.model_dct[model]
+
+                report_name = os.path.join(
+                    self.model_dct[model][param].root,
+                    os.path.splitext(
+                        self.model_dct[model][param].copasi_file
+                    )[0]+'.csv'
+                )
+                t = threading.Thread(
+                    target=self.setup1scan,
+                    args=(
+                        q, self.model_dct[model][param].copasi_file,
+                        report_name, param
+                    )
+                )
+                t.daemon = True
+                t.start()
+                # Since this is being executed in parallel sometimes
+                # we get process clashes. Not sure exactly whats going on
+                # but introducing a small delay seems to fix
+                # time.sleep(0.1)
+                res[model][param] = q.get().model
+        return res
+
+    # def setup_scan(self):
+    #     print self.model_dct[0]['A'].copasi_file
+    #     # print self.model_dct[0]['A'].open()
+    #     m = Scan(
+    #         self.model_dct[0]['A'],
+    #         scan_type='scan',
+    #         variable='A',
+    #         number_of_steps=self.intervals,
+    #         subtask='parameter_estimation',
+    #         report_type='parameter_estimation',
+    #         report_name='report_name.csv',
+    #         run=False,
+    #         append=self.append,
+    #         clear_scans=True,
+    #         output_in_subtask=self.output_in_subtask,#self.output_in_subtask,
+    #         ).model
+    #     m.open()
 
 
 if __name__=='__main__':

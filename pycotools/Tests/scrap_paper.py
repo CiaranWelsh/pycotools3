@@ -53,8 +53,10 @@ f = os.path.join(dire, 'test_model.cps')
 model = pycotools.model.Model(f)
 TIMECOURSE = False
 PARAMETER_ESTIMATION = False
-MULTI_PARAMETER_ESTIMATION = True
+MULTI_PARAMETER_ESTIMATION = False
 SCAN = False
+PROFILE_LIKELIHOOD = True
+
 
 if TIMECOURSE:
     TC1 = pycotools.tasks.TimeCourse(model, end=1000, step_size=100,
@@ -65,17 +67,17 @@ if TIMECOURSE:
 
 if SCAN:
     ##configure time course
-    model = pycotools.tasks.TimeCourse(
-        model,
-        end=1000,
-        intervals=1000,
-        step_size=1
-    ).model
+    # model = pycotools.tasks.TimeCourse(
+    #     model,
+    #     end=1000,
+    #     intervals=1000,
+    #     step_size=1
+    # ).model
 
-    ##configure and run scan
+    # ##configure and run scan
     S = pycotools.tasks.Scan(model, scan_type='scan',
                              subtask='time_course', run=True)
-    print S.report_name
+    print S.model.open()
 
 
 if PARAMETER_ESTIMATION:
@@ -187,6 +189,11 @@ if MULTI_PARAMETER_ESTIMATION:
 
 
 
+if PROFILE_LIKELIHOOD:
+    f = '/home/b3053674/Documents/pycotools/pycotools/Tests/ProfileLikelihoods/0/A.cps'
+    model = pycotools.model.Model(f)
+    s = pycotools.tasks.Scan(model, scan_type='scan', variable='A')
+    s.model.open()
 
 
 

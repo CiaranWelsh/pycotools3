@@ -99,6 +99,24 @@ class ScanTests(_test_base._BaseTest):
                         if k.attrib['name'] == 'Type':
                             self.assertEqual(self.scan.scan_type, k.attrib['value'])
 
+
+    def test_clear_all_scans(self):
+        """
+
+        :return:
+        """
+        self.scan = pycotools.tasks.Scan(self.model,
+                                          report_type='parameter_estimation',
+                                          subtask='time_course',
+                                          number_of_steps=18, clear_scans=False)
+        self.scan.model = self.scan.remove_scans()
+        # print model
+        query = '//*[@name="ScanItem"]'
+        scans = []
+        self.assertListEqual(self.scan.model.xml.xpath(query), [])
+
+
+
 class ScanVizTests(_test_base._BaseTest):
     def setUp(self):
         super(ScanVizTests, self).setUp()
