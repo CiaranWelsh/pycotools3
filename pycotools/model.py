@@ -37,15 +37,15 @@ import tasks
 import pandas
 import re
 import sys, inspect
+from copy import deepcopy
 LOG = logging.getLogger(__name__)
 
-print
 ## TODO add list of reports property to model
 ## TODO after running a task, bind the results to the model instance so that they are retrievable
 class Model(_base._Base):
     def __init__(self, copasi_file, **kwargs):
         super(Model, self).__init__(**kwargs)
-        self.copasi_file = copasi_file
+        self._copasi_file = copasi_file
         self.xml = tasks.CopasiMLParser(copasi_file).copasiML
         ## fill this dict after class is finished
         self.default_properties = {}
@@ -63,6 +63,35 @@ class Model(_base._Base):
     def __repr__(self):
         return self.__str__()
 
+    @property
+    def copasi_file(self):
+        """
+
+        :return:
+        """
+        return self._copasi_file
+
+    @copasi_file.setter
+    def copasi_file(self, filename):
+        """
+
+        :param filename:
+        :return:
+        """
+        fle, ext = os.path.splitext(filename)
+        if ext != '.cps':
+            raise errors.InputError('expected a .cps file. Got {} instead'.format(ext))
+        self._copasi_file = filename
+
+    def copy(self, filename):
+        """
+
+        :return:
+        """
+        model = deepcopy(self)
+        model.copasi_file = filename
+        return model
+
     def refresh(self):
         """
 
@@ -75,10 +104,13 @@ class Model(_base._Base):
     def root(self):
         """
         Root directory for model. The directory
-        where copasi_file is saved
+        where copasi_file is saved.
+        Do not need a setter since root is derived from
+        copasi_file property
         :return:
         """
         return os.path.dirname(self.copasi_file)
+
     @property
     def reference(self):
         return "CN=Root,Model={}".format(self.name)
@@ -884,8 +916,9 @@ class Model(_base._Base):
         if copasi_file == None:
             copasi_file = self.copasi_file
 
-        # first convert the copasiML to a root element tree
-        # root = etree.ElementTree(self.xml)
+        ##
+        if not os.path.isdir(self.root):
+            os.makedirs(self.root)
 
         ## Then remove existing copasi file for ovewrite
         if os.path.isfile(copasi_file):
@@ -1142,6 +1175,22 @@ class Model(_base._Base):
         d.update(globals_q)
         d = pandas.DataFrame(d, index=[0])
         return d
+
+
+    def to_sbml(self, sbml_file=None):
+        """
+        convert model to sbml
+        :param sbml_file: defaults to same as copasi filename
+        :return: 
+        """
+        if sbml_file is None:
+            sbml_file = os.path.join(self.root, self.copasi_file[:-4]+'.sbml')
+
+        os.system('CopasiSE {} -e {}'.format(self.copasi_file, sbml_file))
+        return sbml_file
+
+
+
 
 class Compartment(_base._ModelBase):
     def __init__(self, model, **kwargs):

@@ -263,3 +263,45 @@ class UpdatePropertiesMixin(Mixin):
                 getattr(self, k)
             except AttributeError:
                 setattr(self, k, kwargs[k])
+
+
+
+class GetModelVariableFromStringMixin(Mixin):
+    @staticmethod
+    def get_variable_from_string(model, variable):
+        """
+        Use model entity name to get the
+        pycotools variable
+        :return:
+        """
+        ## allow a user to input a string not pycotools.model class
+        if isinstance(variable, str):
+            if variable in [i.name for i in model.metabolites]:
+                variable = model.get('metabolite', variable,
+                                               by='name')
+
+            elif variable in [i.name for i in model.global_quantities]:
+                variable = model.get('global_quantity', variable, by='name')
+
+            elif variable in [i.global_name for i in model.local_parameters]:
+                variable = model.get('local_parameter', variable, by='global_name')
+        else:
+            raise errors.InputError('variable_name should be a string')
+        return variable
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

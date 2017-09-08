@@ -39,9 +39,9 @@ import glob
 
 
 
-class ParameterEstimationTests(_test_base._BaseTest):
+class ProfileLikelihoodTests(_test_base._BaseTest):
     def setUp(self):
-        super(ParameterEstimationTests, self).setUp()
+        super(ProfileLikelihoodTests, self).setUp()
         self.TC1 = pycotools.tasks.TimeCourse(self.model, end=1000, step_size=100,
                                                intervals=10, report_name='report1.txt')
 
@@ -70,23 +70,22 @@ class ParameterEstimationTests(_test_base._BaseTest):
         self.MPE.setup()
         # self.MPE.run()
 
+    def test_data_files_are_absolute(self):
+        """
+
+        :return:
+        """
+        pass
+
     def test(self):
-        # pass
         df = pycotools.viz.Parse(self.MPE).data
         mod = pycotools.model.Model(self.model.copasi_file[:-4]+'_1.cps')
-        print 'model :',mod
-        pl = pycotools.tasks.ProfileLikelihood(mod, df=df, index=[0,1])
-        pl.setup_scan()
-        for model in pl.model_dct:
-            for param in pl.model_dct[model]:
-                pass
-                # print pl.model_dct[model][param].save()
-                # print pl.model_dct[model][param].fit_item_order
-                # pl.model_dct[model][param]
-        # pl.model_dct[0]['A'].open()
-        # pl.insert_parameters()
-        # df = pandas.DataFrame({'A':100, 'B':200}, index=[0])
-        # print pycotools.model.InsertParameters(self.model, df=df)
+        pl = pycotools.tasks.ProfileLikelihood(
+            mod, df=df, index=[0,1],
+            run='parallel'
+        )
+        # pl.setup_scan()
+        # print pl.index_dct
 
 
 
