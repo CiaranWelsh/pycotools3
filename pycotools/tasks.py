@@ -129,10 +129,16 @@ class Run(_base._ModelBase):
                 self.run()
             except errors.CopasiError:
                 self.run_linux()
+
         elif self.mode == 'SGE':
             self.submit_copasi_job_SGE()
+
         elif self.mode == 'multiprocess':
             self.multi_run()
+
+        # elif self.mode == 'parallel':
+        #     self.run_parallel()
+
 
     def _do_checks(self):
         """
@@ -148,11 +154,9 @@ class Run(_base._ModelBase):
         if self.task not in tasks:
             raise errors.InputError('{} not in list of tasks. List of tasks are: {}'.format(self.task, tasks))
 
-        modes = [True, False, 'multiprocess','parallel']
+        modes = [True, False, 'multiprocess', 'parallel']
         if self.mode not in modes:
             raise errors.InputError('{} not in {}'.format(self.mode, modes))
-
-
 
     def __str__(self):
         return 'Run({})'.format(self.to_string())
@@ -224,29 +228,190 @@ class Run(_base._ModelBase):
         ## remove .sh file after used.
         os.remove(self.SGE_job_file)
 
-    def run1(self, q, model):
+    # def run1(self, q, model):
+    #     """
+    #     Setup a single scan.
+    #     :param q: queue from multiprocessing
+    #     :param model: pycotools.model.Model
+    #     :param report: str.
+    #     :return:
+    #     """
+    #     start = time.time()
+    #     models = q.put(Scan(
+    #         model,
+    #         scan_type='scan',
+    #         variable=parameter,
+    #         number_of_steps=self.intervals,
+    #         subtask='parameter_estimation',
+    #         report_type='parameter_estimation',
+    #         report_name=report,
+    #         run=False,
+    #         append=self.append,
+    #         clear_scans=True,
+    #         output_in_subtask=self.output_in_subtask,#self.output_in_subtask,
+    #         )
+    #     )
+
+
+        # output, err = p.communicate()
+        # d = {}
+        # d['output'] = output
+        # d['error'] = err
+        # if err != '':
+        #     try:
+        #         self.run_linux()
+        #     except:
+        #         raise errors.CopasiError('Failed with Copasi error: \n\n' + d['error'])
+        # return d['output']
+
+
+
+
+
+
+@mixin(_base.UpdatePropertiesMixin)
+class RunParallel(_base._Base):
+    def __init__(self, models, **kwargs):
+        self.models = models
+        self.kwargs = kwargs
+
+        self.default_properties = {
+            'processes': 1,
+            'shell': True,
+        }
+        self.default_properties.update(kwargs)
+        self.update_properties(self.default_properties)
+        self.update_kwargs(kwargs)
+        self.check_integrity(self.default_properties.keys(), kwargs.keys())
+        # self._do_checks()
+
+        LOG.info('running with {} processes'.format(self.processes))
+        self.q = Queue.Queue(maxsize=self.processes)
+        self.results = self.run_parallel()
+
+
+    def _do_checks(self):
         """
-        Setup a single scan.
-        :param q: queue from multiprocessing
-        :param model: pycotools.model.Model
-        :param report: str.
+
         :return:
         """
-        start = time.time()
-        models = q.put(Scan(
-            model,
-            scan_type='scan',
-            variable=parameter,
-            number_of_steps=self.intervals,
-            subtask='parameter_estimation',
-            report_type='parameter_estimation',
-            report_name=report,
-            run=False,
-            append=self.append,
-            clear_scans=True,
-            output_in_subtask=self.output_in_subtask,#self.output_in_subtask,
-            )
+        if self.processes > cpu_count():
+            raise errors.InputError('number of processes should be less than the number of CPUs')
+
+        if not isinstance(self.models, list):
+            raise errors.InputError('input should be a list of models to run')
+
+        for i in self.models:
+            if not isinstance(i, model.Model):
+                raise errors.InputError('Input should be a list of models to run')
+
+
+    def run1(self, model):
+        '''
+        Process the copasi file using CopasiSE
+        '''
+
+        args = ['CopasiSE', "{}".format(model.copasi_file)]
+        proc = subprocess.Popen(
+            args,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            shell=False
         )
+        self.q.put(proc, block=True)
+        LOG.debug('q size --> {}'.format(self.q.qsize()))
+        LOG.info('running "{}"'.format(model.copasi_file))
+        # self.q.join() ##blocks until all tasks are done
+        LOG.debug('proc --> {}'.format(proc))
+        LOG.debug('prod id --> {}'.format(proc.pid))
+        proc.wait()
+        return self.q
+
+    def run_parallel(self):
+        """
+        :return:
+        """
+        res = {}
+        for mod in self.models:
+            t = threading.Thread(target=self.run1, args=(mod,))
+            t.daemon = True
+            t.start()
+            self.q.join()
+            # res[model] = self.q.get()#.model
+        # return res
+
+    def get_result(self):
+        """
+
+        :return:
+        """
+        output_dct = {}
+        for proc in self.results:
+            process = self.results[proc]
+            output, error = process.communicate()
+
+            if error != '':
+                raise errors.CopasiError('Failed with a Copasi Error:\n\n{}'.format(error))
+            output_dct[proc] = output
+        return output_dct
+
+
+
+
+@mixin(_base.UpdatePropertiesMixin)
+class iPythonParallel(_base._Base):
+    def __init__(self, models, **kwargs):
+        self.models = models
+        self.kwargs = kwargs
+
+        self.default_properties = {
+            'processes': 1,
+            'shell': True,
+        }
+        self.default_properties.update(kwargs)
+        self.update_properties(self.default_properties)
+        self.update_kwargs(kwargs)
+        self.check_integrity(self.default_properties.keys(), kwargs.keys())
+        # self._do_checks()
+
+        # LOG.info('running with {} processes'.format(self.processes))
+        # self.q = Queue.Queue(maxsize=self.processes)
+        # self.results = self.run_parallel()
+
+
+    def _do_checks(self):
+        """
+
+        :return:
+        """
+        if self.processes > cpu_count():
+            raise errors.InputError('number of processes should be less than the number of CPUs')
+
+        if not isinstance(self.models, list):
+            raise errors.InputError('input should be a list of models to run')
+
+        for i in self.models:
+            if not isinstance(i, model.Model):
+                raise errors.InputError('Input should be a list of models to run')
+
+
+    def x(self):
+        """
+
+        :return:
+        """
+        import thread
+        thread.start_new_thread(os.system, ('ipcluster start -n 4',))
+        import ipyparallel as ipp
+        c = ipp.Client()
+        print c.ids
+
+
+    def run1(self, model):
+        '''
+        Process the copasi file using CopasiSE
+        '''
 
 
 
@@ -254,36 +419,14 @@ class Run(_base._ModelBase):
         """
         :return:
         """
-        number_of_cpu = cpu_count()
-        q = Queue.Queue(maxsize=number_of_cpu)
-        # report_files = self.enumerate_PE_output()
-        res = {}
-        res = {}
-        # for model in self.model_dct:
-        #     res[model] = {}
-        #     for param in self.model_dct[model]:
-        #
-        #         report_name = os.path.join(
-        #             self.model_dct[model][param].root,
-        #             os.path.splitext(
-        #                 self.model_dct[model][param].copasi_file
-        #             )[0]+'.csv'
-        #         )
-        #         t = threading.Thread(
-        #             target=self.setup1scan,
-        #             args=(
-        #                 q, self.model_dct[model][param].copasi_file,
-        #                 report_name, param
-        #             )
-        #         )
-        #         t.daemon = True
-        #         t.start()
-        #         # Since this is being executed in parallel sometimes
-        #         # we get process clashes. Not sure exactly whats going on
-        #         # but introducing a small delay seems to fix
-        #         # time.sleep(0.1)
-        #         res[model][param] = q.get().model
-        # return res
+
+
+    def get_result(self):
+        """
+
+        :return:
+        """
+
 
 
 
@@ -1632,7 +1775,10 @@ class Scan(_base._ModelBase):
             cn = '{},{}'.format(self.model.reference, self.variable.initial_reference)
 
         elif self.variable.name in [i.name for i in self.model.local_parameters]:
-            cn = '{},{}'.format(self.model.reference, self.variable.value_reference)
+            reaction = self.model.get('reaction', self.variable.reaction_name, by='name')
+            cn = '{},{},{}'.format(self.model.reference,
+                                   reaction.reference,
+                                   self.variable.value_reference)
 
         number_of_steps_attrib = {'type': 'unsignedInteger',
                                   'name': 'Number of steps',
@@ -1698,6 +1844,12 @@ class Scan(_base._ModelBase):
                          'target': self.report_name,
                          'reference': self.get_report_key(),
                          'confirmOverwrite': self.confirm_overwrite}
+
+        ##TODO fix output in subtask temp fix
+        if self.output_in_subtask == True:
+            self.output_in_subtask = 'true'
+        elif self.output_in_subtask == False:
+            self.output_in_subtask = 'false'
 
         subtask_attrib = {'type': 'unsignedInteger', 'name': 'Subtask', 'value': self.subtask}
         output_in_subtask_attrib = {'type': 'bool', 'name': 'Output in subtask',
@@ -4019,6 +4171,7 @@ class ProfileLikelihood(_base._ModelBase):
             'tolerance': 1e-5,
             'rho': 0.2,
             'run': False,
+            'processes': 1,
             'results_directory': os.path.join(self.model.root,
                                               'ProfileLikelihoods'),
             'method': 'genetic_algorithm',
@@ -4054,8 +4207,11 @@ class ProfileLikelihood(_base._ModelBase):
         # self.model.open()
         self.model_dct = self.setup_parameter_estimation()
         self.model_dct = self.setup_scan()
-        self.model_dct[0]['A'].open()
-        # self.to_file()
+        # self.model_dct['current_parameters'][r'(ADeg).k1'].open()
+        self.to_file()
+
+        if self.run == 'parallel':
+            self.run_parallel()
 
         # print self.setup_parameter_estimation()
 
@@ -4072,6 +4228,10 @@ class ProfileLikelihood(_base._ModelBase):
 
         if isinstance(self.x, str):
             self.x = self.get_variable_from_string(self.model, self.x)
+
+        if (self.df is None ) and (self.index != 'current_parameters'):
+            LOG.warning('Got index argument without df argument. Setting index to "current_parameters"')
+            self.index = 'current_parameters'
 
 
     def _convert_numeric_arguments_to_string(self):
@@ -4392,7 +4552,7 @@ class ProfileLikelihood(_base._ModelBase):
                 st = misc.RemoveNonAscii(param).filter
                 self.model_dct[model][param] = Reports(
                     self.model_dct[model][param],
-                    report_type='parameter_estimation',
+                    report_type='multi_parameter_estimation',
                     report_name=st + '.txt'
                 ).model
         return self.model_dct
@@ -4411,15 +4571,6 @@ class ProfileLikelihood(_base._ModelBase):
                 self.model_dct[model][param].save()
         return dct
 
-    # def setup_scan(self):
-    #     """
-    #
-    #     :return:
-    #     """
-    #     for model in self.model_dct:
-    #         for param in self.model_dct[model]:
-    #             # print self.model_dct, self.model_dct[model]
-    #             s = Scan()
 
     def setup1scan(self, q, model, report, parameter):
         """
@@ -4441,11 +4592,9 @@ class ProfileLikelihood(_base._ModelBase):
             run=False,
             append=self.append,
             clear_scans=True,
-            output_in_subtask=self.output_in_subtask,#self.output_in_subtask,
+            output_in_subtask='true',#self.output_in_subtask,
             )
         )
-
-
 
     def setup_scan(self):
         """
@@ -4486,23 +4635,16 @@ class ProfileLikelihood(_base._ModelBase):
                 res[model][param] = q.get().model
         return res
 
-    # def setup_scan(self):
-    #     print self.model_dct[0]['A'].copasi_file
-    #     # print self.model_dct[0]['A'].open()
-    #     m = Scan(
-    #         self.model_dct[0]['A'],
-    #         scan_type='scan',
-    #         variable='A',
-    #         number_of_steps=self.intervals,
-    #         subtask='parameter_estimation',
-    #         report_type='parameter_estimation',
-    #         report_name='report_name.csv',
-    #         run=False,
-    #         append=self.append,
-    #         clear_scans=True,
-    #         output_in_subtask=self.output_in_subtask,#self.output_in_subtask,
-    #         ).model
-    #     m.open()
+    def run_parallel(self):
+        """
+
+        :return:
+        """
+        list_of_models = []
+        for model in self.model_dct:
+            for param in self.model_dct[model]:
+                list_of_models.append(self.model_dct[model][param])
+        R = RunParallel(list_of_models, processes=self.processes)
 
 
 if __name__=='__main__':

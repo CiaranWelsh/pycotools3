@@ -232,9 +232,9 @@ class _ModelBase(_Base):
         ##import here because of namespace conflict.
         ## Bad practice but functional. Change when you id conflict
         import model
-        if isinstance(self.model, (model.Model,
-                                   str)) != True:
-            raise errors.InputError('First argument should be either pycotools.model.Model object or path (str) pointing to a copasi file. Got {} instead.'.format(type(self.model)))
+        if isinstance(self.model,(model.Model, str, list)) != True:
+                raise errors.InputError('First argument should be either pycotools.model.Model object or path (str) pointing to a copasi file. Got {} instead.'.format(type(self.model)))
+
         self.model = self.read_xml()
 
     def read_xml(self):

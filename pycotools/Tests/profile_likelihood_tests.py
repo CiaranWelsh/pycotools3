@@ -42,6 +42,7 @@ import glob
 class ProfileLikelihoodTests(_test_base._BaseTest):
     def setUp(self):
         super(ProfileLikelihoodTests, self).setUp()
+        self.root = self.model.root
         self.TC1 = pycotools.tasks.TimeCourse(self.model, end=1000, step_size=100,
                                                intervals=10, report_name='report1.txt')
 
@@ -68,6 +69,7 @@ class ProfileLikelihoodTests(_test_base._BaseTest):
 
         self.MPE.write_config_file()
         self.MPE.setup()
+        os.chdir(self.root)
         # self.MPE.run()
 
     def test_data_files_are_absolute(self):
@@ -81,9 +83,41 @@ class ProfileLikelihoodTests(_test_base._BaseTest):
         df = pycotools.viz.Parse(self.MPE).data
         mod = pycotools.model.Model(self.model.copasi_file[:-4]+'_1.cps')
         pl = pycotools.tasks.ProfileLikelihood(
-            mod, df=df, index=[0,1],
-            run='parallel'
+            mod, index=[0, 1], run='parallel',
+            processes=4,
         )
+
+
+
+
+
+
+
+        # f=r'/home/b3053674/Documents/pycotools/pycotools/Tests/ProfileLikelihoods/0/A2B.cps'
+        # f2=r'/home/b3053674/Documents/pycotools/pycotools/Tests/ProfileLikelihoods/0/B2C.cps'
+        # dire = r'/home/b3053674/Documents/pycotools/pycotools/Tests/ProfileLikelihoods/0'
+        # import glob
+        # files = glob.glob(dire+'/*.cps')
+        # models = [pycotools.model.Model(i) for i in files]
+        # R = pycotools.tasks.RunParallel(models, processes=2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+        # print R.get_result()
+        # import Queue
+        # q = Queue.Queue(maxsize=3)
+        # print R.run_parallel(q)
+
         # pl.setup_scan()
         # print pl.index_dct
 
