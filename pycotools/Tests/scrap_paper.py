@@ -190,10 +190,26 @@ if MULTI_PARAMETER_ESTIMATION:
 
 
 if PROFILE_LIKELIHOOD:
-    f = '/home/b3053674/Documents/pycotools/pycotools/Tests/ProfileLikelihoods/0/A.cps'
-    model = pycotools.model.Model(f)
-    s = pycotools.tasks.Scan(model, scan_type='scan', variable='A')
-    s.model.open()
+
+
+
+    # df = pycotools.viz.Parse(self.MPE).data
+    f=r'/home/b3053674/Documents/pycotools/pycotools/Tests/test_model_1.cps'
+    dire = '/home/b3053674/Documents/pycotools/pycotools/Tests/ProfileLikelihoods/0'
+    files = glob.glob(dire+'/*.cps')
+    models = [pycotools.model.Model(i) for i in files]
+    ip = pycotools.tasks.RunParallel(models)
+    print ip.run_parallel()
+    # mod = pycotools.model.Model(f)
+    # pl = pycotools.tasks.ProfileLikelihood(
+    #     mod, index=[0, 1], run='parallel',
+    #     processes=4,
+    # )
+
+    # f = '/home/b3053674/Documents/pycotools/pycotools/Tests/ProfileLikelihoods/0/A.cps'
+    # model = pycotools.model.Model(f)
+    # s = pycotools.tasks.Scan(model, scan_type='scan', variable='A')
+    # s.model.open()
 
 
 
