@@ -319,27 +319,125 @@ class RunParallel(_base._Base):
             stderr=subprocess.PIPE,
             shell=False
         )
-        self.q.put(proc, block=True)
+        # self.q.put(proc, block=True)
         LOG.debug('q size --> {}'.format(self.q.qsize()))
-        LOG.info('running "{}"'.format(model.copasi_file))
+        LOG.info('running from run1 "{}"'.format(model.copasi_file))
         # self.q.join() ##blocks until all tasks are done
-        LOG.debug('proc --> {}'.format(proc))
         LOG.debug('prod id --> {}'.format(proc.pid))
-        proc.wait()
-        return self.q
+        LOG.debug('prod name --> {}'.format(proc.poll()))
+        import time
+        import psutil
 
-    def run_parallel(self):
+        LOG.debug('psutil --> {}'.format(psutil.Process(proc.pid)))
+
+        while proc.poll() != 0:
+            LOG.debug('time --> {}'.format(time.time()))
+            LOG.debug('running --> {}'.format(proc.pid))
+
+            time.sleep(1)
+
+
+
+    def run_parallel2(self):
+        """
+        This one works for just a single coapsi file
+        at a time
+        :return:
+        """
+        res = {}
+        import multiprocessing
+        # q = Queue.Queue()
+        q = multiprocessing.Queue(3)
+
+        for mod in self.models:
+            t = threading.Thread(target=self.run1, args=(mod,),
+                                 name=mod.copasi_file)
+            LOG.debug('current process --> {}'.format(multiprocessing.current_process().name))
+            # t.daemon = True
+            t.start()
+            t.join()
+            # res[model] = self.q.get()#.model
+        # return res
+
+    def run_parallel2(self):
         """
         :return:
         """
         res = {}
+        import multiprocessing
+        # q = Queue.Queue()
+        q = multiprocessing.Queue(3)
+        threads = []
         for mod in self.models:
-            t = threading.Thread(target=self.run1, args=(mod,))
+            t = threading.Thread(target=self.run1, args=(mod,),
+                                 name=mod.copasi_file)
+            LOG.debug('current process --> {}'.format(multiprocessing.current_process().name))
             t.daemon = True
-            t.start()
-            self.q.join()
+            threads.append(t)
+        for i in range(len(threads)):
+            threads[i].start()
+                # i.start()
+            #.join()
             # res[model] = self.q.get()#.model
-        # return res
+            # return res
+
+    def submit(self, model):
+        process = subprocess.Popen(['CopasiSE',model])
+
+
+    def run1(self, q, model):
+        self.submit(model)
+
+    def do_stuff(self, q, model):
+        while True:
+            LOG.debug('do stuff copasi file --> {}'.format(model.copasi_file))
+            q.put(subprocess.Popen(['CopasiSE', '{}'.format(model.copasi_file)]))
+            proc = q.get()
+            if proc.wait() == 0:
+                q.task_done()
+
+    def run_parallel(self):
+        q = Queue.Queue()
+        num_threads = 1
+        num_models = len(self.models)
+        LOG.debug(num_models)
+        batch_size = 1
+
+        while num_models > 0:
+            for i in range(num_threads):
+                try:
+                    num_models = num_models - 1
+                    if num_models == 0:
+                        break
+
+                    LOG.debug('i is {}'.format(i))
+                    LOG.debug('num_models {}'.format(num_models ))
+                    LOG.debug('model id {}'.format(self.models[num_models].copasi_file))
+
+                    worker = threading.Thread(target=self.do_stuff,
+                                          args=(q, self.models[num_models]))
+                    worker.daemon = True
+                    worker.start()
+                except IndexError:
+                    break
+            q.join()
+
+
+        # for i in range(num_threads):
+        #     for j in range(batch_size):
+        #         try:
+        #             LOG.debug('i*j+j --> {}'.format(i*j+j))
+        #             LOG.debug('i, j--> {}, {}'.format(i,j ))
+        #             model = self.models[i*j+j]
+        #             LOG.debug('running model (from run_parallel) --> {}'.format(
+        #                 self.models[j].copasi_file))
+        #             worker = threading.Thread(target=self.do_stuff,
+        #                                       args=(q,self.models[j]))
+        #             worker.daemon = True
+        #             worker.start()
+        #         except IndexError:
+        #             break
+        #     q.join()
 
     def get_result(self):
         """
@@ -4592,7 +4690,7 @@ class ProfileLikelihood(_base._ModelBase):
             run=False,
             append=self.append,
             clear_scans=True,
-            output_in_subtask='true',#self.output_in_subtask,
+            output_in_subtask=True,#self.output_in_subtask,
             )
         )
 
@@ -4643,6 +4741,7 @@ class ProfileLikelihood(_base._ModelBase):
         list_of_models = []
         for model in self.model_dct:
             for param in self.model_dct[model]:
+                LOG.debug('running {}'.format(self.model_dct[model][param].copasi_file))
                 list_of_models.append(self.model_dct[model][param])
         R = RunParallel(list_of_models, processes=self.processes)
 

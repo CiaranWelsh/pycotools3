@@ -83,7 +83,7 @@ class ProfileLikelihoodTests(_test_base._BaseTest):
         df = pycotools.viz.Parse(self.MPE).data
         mod = pycotools.model.Model(self.model.copasi_file[:-4]+'_1.cps')
         pl = pycotools.tasks.ProfileLikelihood(
-            mod, index=[0, 1], run='parallel',
+            mod, df=df, index=[5], run='parallel',
             processes=4,
         )
 
