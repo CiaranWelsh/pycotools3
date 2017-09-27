@@ -27,17 +27,6 @@ zi_copy = zi_copy.add_reaction(r)
 zi_copy.save()
 print zi_copy.reactions
 # zi.open()
-'''
-
-< ModelParameterGroup
-cn = "CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[smad7_prod]"
-type = "Reaction" >
-< ModelParameter
-cn = "CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[smad7_prod],ParameterGroup=Parameters,Parameter=k1"
-value = "0.1"
-type = "ReactionParameter"
-
-'''
 
 
 

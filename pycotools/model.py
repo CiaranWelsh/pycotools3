@@ -398,6 +398,8 @@ class Model(_base._Base):
         :return: model
         """
         # print local_parameter.to_xml()
+        if local_parameter.global_name in [i.global_name for i in self.local_parameters]:
+            return self
         query = '//*[@cn="String=Kinetic Parameters"]'
         for i in self.xml.xpath(query):
             i.append(local_parameter.to_xml())
@@ -787,19 +789,14 @@ class Model(_base._Base):
                                 for element in self.xml.xpath(query):
                                     for element2 in element:
                                         for element3 in element2:
-                                            LOG.debug('element3.attrib[cn] --> {}'.format(element3.attrib['cn']))
                                             match = re.findall('.*Reactions\[(.*)\].*Parameter=(.*)',
                                                                element3.attrib['cn'])[0]
-                                            # LOG.debug('match --> {}'.format(match))
 
                                             match = "({}).{}".format(match[0], match[1])
-                                            LOG.debug('match == global_name--> {} == {} --> {}'.format(
                                                 match, global_name, match == global_name))
                                             if global_name == match:
                                                 simulation_types[global_name] = element3.attrib['simulationType']
 
-                                LOG.debug('simulation_types --> {}'.format(simulation_types))
-                                LOG.debug('global_name --> {}'.format(global_name))
                                 _local = LocalParameter(self,
                                                    key=l.attrib['key'],
                                                    name=l.attrib['name'],
@@ -892,11 +889,6 @@ class Model(_base._Base):
         existing_functions = [i.expression for i in self.functions]
         if reaction.rate_law.expression not in existing_functions:
             self.add_function(reaction.rate_law)
-
-        LOG.debug('reaction.rate_law --> {}'.format(reaction.rate_law))
-        LOG.debug('type reaction.rate_law --> {}'.format(type(reaction.rate_law)))
-
-
 
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
@@ -2167,7 +2159,6 @@ class LocalParameter(_base._ModelBase):
             reaction.reference,
             self.reference
         )
-        LOG.debug('model_parameters_ref --> {}'.format(model_parameters_ref))
         model_parameters = etree.SubElement(
             model_parameter_group,
             'ModelParameter',
