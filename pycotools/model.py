@@ -390,6 +390,21 @@ class Model(_base._Base):
         loc = [i for i in loc if i.simulation_type!='assignment']
         return loc
 
+    def add_local_parameter(self, local_parameter):
+        """
+        Add a local parameter to the model, specifically into
+        the String='kinetic Parameters' section of parameter sets
+        :param local_parameter: A LocalParameter instance
+        :return: model
+        """
+        # print local_parameter.to_xml()
+        query = '//*[@cn="String=Kinetic Parameters"]'
+        for i in self.xml.xpath(query):
+            i.append(local_parameter.to_xml())
+        return self
+            # if i.tag == '{http://www.copasi.org/static/schema}'
+
+
     @staticmethod
     def convert_particles_to_molar(particles, mol_unit, compartment_volume):#,vol_unit):
         '''
@@ -772,15 +787,19 @@ class Model(_base._Base):
                                 for element in self.xml.xpath(query):
                                     for element2 in element:
                                         for element3 in element2:
-                                            match = re.findall(
-                                                '.*Reactions\[(.*)\].*Parameter=(.*)', element3.attrib['cn']
-                                            )[0]
+                                            LOG.debug('element3.attrib[cn] --> {}'.format(element3.attrib['cn']))
+                                            match = re.findall('.*Reactions\[(.*)\].*Parameter=(.*)',
+                                                               element3.attrib['cn'])[0]
+                                            # LOG.debug('match --> {}'.format(match))
 
                                             match = "({}).{}".format(match[0], match[1])
+                                            LOG.debug('match == global_name--> {} == {} --> {}'.format(
+                                                match, global_name, match == global_name))
                                             if global_name == match:
                                                 simulation_types[global_name] = element3.attrib['simulationType']
 
-
+                                LOG.debug('simulation_types --> {}'.format(simulation_types))
+                                LOG.debug('global_name --> {}'.format(global_name))
                                 _local = LocalParameter(self,
                                                    key=l.attrib['key'],
                                                    name=l.attrib['name'],
@@ -874,11 +893,20 @@ class Model(_base._Base):
         if reaction.rate_law.expression not in existing_functions:
             self.add_function(reaction.rate_law)
 
+        LOG.debug('reaction.rate_law --> {}'.format(reaction.rate_law))
+        LOG.debug('type reaction.rate_law --> {}'.format(type(reaction.rate_law)))
 
-        # print reaction.to_xml()
+
+
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
                 i.append(reaction.to_xml())
+
+        ## needed?
+        # self.save()
+        for local_parameter in reaction.parameters:
+            self.add_local_parameter(local_parameter)
+
         return self
 
     def remove_reaction(self, value, by='name'):
@@ -1764,7 +1792,7 @@ class Reaction(_base._ModelBase):
         for i in range(len(parameter_list)):
             if parameter_list[i] not in [j.name for j in self.parameters]:
                 ## do not re-add a parameter if it already exists
-                LOG.info('adding parameter called --> {}'.format(parameter_list[i]))
+                # LOG.info('adding parameter called --> {}'.format(parameter_list[i]))
                 p = LocalParameter(self.model,
                                    name=parameter_list[i],
                                    key=local_keys[i],
@@ -1772,7 +1800,7 @@ class Reaction(_base._ModelBase):
                                    reaction_name=self.name,
                                    global_name='({}).{}'.format(self.name, parameter_list[i]),
                                    )
-                LOG.warning('deleted simulation_type from local parameter definition. May cause bugs')
+                # LOG.warning('deleted simulation_type from local parameter definition. May cause bugs')
                 self.parameters.append(p)
                 self.parameters_dict[parameter_list[i]] = p
 
@@ -1794,6 +1822,7 @@ class Reaction(_base._ModelBase):
             # return self.rate_law
             exp = Expression(self.rate_law.expression).to_list()
         role_dct = {}
+
 
 
         # if self.substrates + self.products == []:
@@ -1984,7 +2013,7 @@ class Function(_base._ModelBase):
                                              key=function_parameter_keys[i],
                                              name=keys[i],
                                              role=values[i],
-                                             order=i) )
+                                             order=i))
                 return self.list_of_parameter_descriptions
 
     def to_xml(self):
@@ -2105,11 +2134,52 @@ class LocalParameter(_base._ModelBase):
     @property
     def reference(self):
         LOG.warning('Youve changed local parameter reference. This may cause a bug')
-        return "ParameterGroup=Parameters,Parameter={}".format(self.reaction_name, self.name)
+        return "ParameterGroup=Parameters,Parameter={}".format(self.name)
 
     @property
     def value_reference(self):
         return "ParameterGroup=Parameters,Parameter={},Reference=Value".format(self.name)
+
+    def to_xml(self):
+        """
+        Create xml to go in the string=kinetic parameters
+        section of parameter set
+        :return: xml element
+        """
+        reaction = self.model.get('reaction', self.reaction_name, 'name')
+        if reaction == []:
+            raise errors.SomethingWentHorriblyWrongError('Reaction not in model')
+        # print reaction
+        cn = "{},{}".format(self.model.reference, reaction.reference)
+        model_parameter_group = etree.Element('ModelParameterGroup',
+                                              attrib={
+                                                  'cn': cn,
+                                                  'type': 'reaction'
+                                              })
+        #TODO implement assignments for kinetic parameters.
+        '''
+        This requires the below section of xml be modified to include
+        the InitialExpression component. I'm going to get everything 
+        else to work first then come back to this. 
+        '''
+        model_parameters_ref = "{},{},{}".format(
+            self.model.reference,
+            reaction.reference,
+            self.reference
+        )
+        LOG.debug('model_parameters_ref --> {}'.format(model_parameters_ref))
+        model_parameters = etree.SubElement(
+            model_parameter_group,
+            'ModelParameter',
+            attrib={
+                'cn': model_parameters_ref,
+                'value': str(0.1) if self.value is None else str(self.value),
+                'type': 'ReactionParameter',
+                'simulationType': 'fixed'
+                }
+        )
+        return model_parameter_group
+
 
 class KeyFactory(_base._ModelBase):
     def __init__(self, model, **kwargs):
@@ -2276,20 +2346,20 @@ class Expression(object):
         self.default_properties = {}
 
         ## list of available operators according the copasi website
-        self.operator_list = ['+', '-', '*', r'/', '%',
-                         '%', '^', 'abs', 'floor',
-                         'ceil', 'factorial', 'log',
-                         'log10', 'exp', 'sin'
-                                         'cos', 'tan', 'sec',
-                         'csc', 'cot', 'tanh',
-                         'sech', 'csch', 'coth',
-                         'asin', 'acos', 'atan',
-                         'arcsec', 'arccsc', 'arcccot',
-                         'arcsinh', 'arccosh', 'arctanh',
-                         'arcsech', 'arccsch', 'arccoth',
-                         'uniform', 'normal', 'le',
-                         'lt', 'ge', 'gt', 'ne', 'eq',
-                         'and', 'or', 'xor', 'not', 'if']
+        self.operator_list = ['+', '-', '*', r'/', '%', '^']
+        self.letter_operators = ['abs', 'floor',
+                                 'ceil', 'factorial', 'log',
+                                 'log10', 'exp', 'sin'
+                                                 'cos', 'tan', 'sec',
+                                 'csc', 'cot', 'tanh',
+                                 'sech', 'csch', 'coth',
+                                 'asin', 'acos', 'atan',
+                                 'arcsec', 'arccsc', 'arcccot',
+                                 'arcsinh', 'arccosh', 'arctanh',
+                                 'arcsech', 'arccsch', 'arccoth',
+                                 'uniform', 'normal', 'le',
+                                 'lt', 'ge', 'gt', 'ne', 'eq',
+                                 'and', 'or', 'xor', 'not', 'if']
 
 
     def to_list(self):
@@ -2298,17 +2368,16 @@ class Expression(object):
         in the equation
         :return:
         """
-        ## replace operators with comma so we can subsequently split the string at comma
-        for i in self.operator_list:
-            self.expression = self.expression.replace(i, ',')
+        for i in ['<{}>'.format(op) for op in self.letter_operators] + self.operator_list:
+            if i in self.expression:
+                self.expression = self.expression.replace(i, ',')
 
-        ##get list of elements by split
-        return self.expression.split(',')
+        ## get list of elements by split
+        split = self.expression.split(',')
+        return split
 
     def __str__(self):
         return "Expression({})".format(self.expression)
-
-
 
 
 class Translator(_base._ModelBase):

@@ -50,7 +50,7 @@ Reaction scheme where the products are created from the reactants and the change
         <ParameterDescription key="FunctionParameter_71" name="product" order="3" role="product"/>
       </ListOfParameterDescriptions>
     </Function>
-  </ListOfFunctions>
+  <Function reversible="false" type="UserDefined" name="smad7_prod" key="Function_10000"><Expression>k1*Smads_Complex_c</Expression><ListOfParameterDescriptions><ParameterDescription key="FunctionParameter_6044692" name="k1" order="0" role="constant"/><ParameterDescription key="FunctionParameter_17906145" name="Smads_Complex_c" order="1" role="substrate"/></ListOfParameterDescriptions></Function></ListOfFunctions>
   <Model key="Model_3" name="New Model" simulationType="time" timeUnit="s" volumeUnit="ml" areaUnit="m&#178;" lengthUnit="m" quantityUnit="mmol" type="deterministic" avogadroConstant="6.022140857e+023">
     <MiriamAnnotation>
 <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
@@ -77,13 +77,13 @@ Reaction scheme where the products are created from the reactants and the change
       </Metabolite>
       <Metabolite key="Metabolite_5" name="C" simulationType="reactions" compartment="Compartment_1" particle_number="6.022140857e+20">
       </Metabolite>
-    </ListOfMetabolites>
+    <Metabolite compartment="Compartment_1" key="Metabolite_10000" name="Smads_Complex_c" simulationType="reactions" particle_number="6.022140857e+20"/><Metabolite compartment="Compartment_1" key="Metabolite_10001" name="Smad7" simulationType="reactions" particle_number="6.022140857e+20"/></ListOfMetabolites>
     <ListOfModelValues>
-      <ModelValue key="ModelValue_0" name="A2B" simulationType="fixed" initial_value="4.0">
+      <ModelValue key="ModelValue_0" name="A2B" simulationType="fixed">
       </ModelValue>
-      <ModelValue key="ModelValue_1" name="B2C" simulationType="fixed" initial_value="9.0">
+      <ModelValue key="ModelValue_1" name="B2C" simulationType="fixed">
       </ModelValue>
-      <ModelValue key="ModelValue_2" name="ThisIsAssignment" simulationType="assignment" initial_value="13.0">
+      <ModelValue key="ModelValue_2" name="ThisIsAssignment" simulationType="assignment">
         <MiriamAnnotation>
 <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#ModelValue_2">
@@ -225,7 +225,7 @@ Reaction scheme where the products are created from the reactants and the change
           </ListOfCallParameters>
         </KineticLaw>
       </Reaction>
-    </ListOfReactions>
+    <Reaction fast="false" key="Reaction_10000" name="smad7_prod" reversible="false"><ListOfSubstrates><Substrate metabolite="Metabolite_10000" stoichiometry="1"/></ListOfSubstrates><ListOfProducts><Product metabolite="Metabolite_10001" stoichiometry="1"/><Product metabolite="Metabolite_10000" stoichiometry="1"/></ListOfProducts><ListOfModifiers/><ListOfConstants><Constant key="Parameter_65030179" name="k1" value="0.1"/></ListOfConstants><KineticLaw function="Function_10000" scalingCompartment="CN=Root,Model=New Model,Vector=Compartments[nuc]" unitType="Default"><ListOfCallParameters><CallParameter functionParameter="FunctionParameter_6044692"><SourceParameter reference="Parameter_65030179"/></CallParameter><CallParameter functionParameter="FunctionParameter_17906145"><SourceParameter reference="Metabolite_10000"/></CallParameter></ListOfCallParameters></KineticLaw></Reaction></ListOfReactions>
     <ListOfModelParameterSets activeSet="ModelParameterSet_1">
       <ModelParameterSet key="ModelParameterSet_1" name="Initial State">
         <ModelParameterGroup cn="String=Initial Time" type="Group">
@@ -280,10 +280,9 @@ Reaction scheme where the products are created from the reactants and the change
       <StateTemplateVariable objectReference="Compartment_3"/>
       <StateTemplateVariable objectReference="ModelValue_0"/>
       <StateTemplateVariable objectReference="ModelValue_1"/>
-    </StateTemplate>
-    <InitialState type="initialState">
-      0 6.022140856999986e+020 6.022140856999986e+020 6.022140856999986e+020 13 1 3 4 9 
-    </InitialState>
+    <StateTemplateVariable objectReference="Metabolite_10000"/><StateTemplateVariable objectReference="Metabolite_10001"/></StateTemplate>
+    <InitialState type="initialState">0 6.022140856999986e+020 6.022140856999986e+020 6.022140856999986e+020 13 1 3 4 9 6.022140857e+20 6.022140857e+20 
+</InitialState>
   </Model>
   <ListOfTasks>
     <Task key="Task_14" name="Steady-State" type="steadyState" scheduled="false" updateModel="false">
@@ -304,7 +303,26 @@ Reaction scheme where the products are created from the reactants and the change
         <Parameter name="Maximum duration for backward integration" type="unsignedFloat" value="1000000"/>
       </Method>
     </Task>
-    <Task key="Task_15" name="Time-Course" scheduled="true" type="timeCourse" update_model="false"><Report append="0" confirmOverwrite="0" reference="Report_30" target="C:\Users\Ciaran\Documents\pycotools\pycotools\Tests\report1.txt"/><Problem><Parameter name="AutomaticStepSize" type="bool" value="0"/><Parameter name="StepNumber" type="unsignedInteger" value="10"/><Parameter name="StepSize" type="float" value="100"/><Parameter name="Duration" type="float" value="1000"/><Parameter name="TimeSeriesRequested" type="float" value="1"/><Parameter name="OutputStartTime" type="float" value="0"/><Parameter name="Output Event" type="bool" value="0"/><Parameter name="Start in Steady State" type="bool" value="0"/></Problem><Method name="Deterministic (LSODA)" type="Deterministic(LSODA)"><Parameter name="Integrate Reduced Model" type="bool" value="0"/><Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/><Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/><Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/><Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/></Method></Task><Task key="Task_16" name="Scan" type="scan" scheduled="false" updateModel="false">
+    <Task key="Task_15" name="Time-Course" type="timeCourse" scheduled="false" updateModel="false">
+      <Problem>
+        <Parameter name="AutomaticStepSize" type="bool" value="0"/>
+        <Parameter name="StepNumber" type="unsignedInteger" value="100"/>
+        <Parameter name="StepSize" type="float" value="0.01"/>
+        <Parameter name="Duration" type="float" value="1"/>
+        <Parameter name="TimeSeriesRequested" type="bool" value="1"/>
+        <Parameter name="OutputStartTime" type="float" value="0"/>
+        <Parameter name="Output Event" type="bool" value="0"/>
+        <Parameter name="Start in Steady State" type="bool" value="0"/>
+      </Problem>
+      <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
+        <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
+        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-006"/>
+        <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-012"/>
+        <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
+        <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
+      </Method>
+    </Task>
+    <Task key="Task_16" name="Scan" type="scan" scheduled="false" updateModel="false">
       <Problem>
         <Parameter name="Subtask" type="unsignedInteger" value="1"/>
         <ParameterGroup name="ScanItems">
@@ -607,7 +625,7 @@ Reaction scheme where the products are created from the reactants and the change
         <Object cn="CN=Root,Vector=TaskList[Linear Noise Approximation],Object=Result"/>
       </Footer>
     </Report>
-  <Report key="Report_30" name="Time-Course" precision="6" separator="&#9;" taskType="Time-Course"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=New Model,Reference=Time"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=Concentration"/><Object cn="CN=Root,Model=New Model,Vector=Values[ThisIsAssignment],Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Values[B2C],Reference=Value"/><Object cn="CN=Root,Model=New Model,Vector=Values[A2B],Reference=Value"/></Table></Report></ListOfReports>
+  </ListOfReports>
   <GUI>
   </GUI>
   <ListOfUnitDefinitions>
