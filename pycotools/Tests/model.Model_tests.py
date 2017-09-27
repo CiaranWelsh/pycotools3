@@ -433,7 +433,7 @@ class ModelTests(_test_base._BaseTest):
     #     r = pycotools.model.Reaction(self.model,
     #                                  name='fake_reaction',
     #                                  expression='A + B + C + D -> E + F',
-    #                                  rate_law='k*A*B*C/D')
+    #                                  rate_law='k * A * B * C / D')
     #
     #     self.model = self.model.add_reaction(r)
     #     self.model.save()
@@ -456,7 +456,7 @@ class ModelTests(_test_base._BaseTest):
     #     r = pycotools.model.Reaction(self.model,
     #                                  name='fake_reaction',
     #                                  expression='A + B + C + D -> E + F',
-    #                                  rate_law='k*A*B*C/D')
+    #                                  rate_law='k * A * B * C / D')
     #     self.model.add_reaction(r)
     #     self.model.save()
     #     xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
@@ -478,7 +478,7 @@ class ModelTests(_test_base._BaseTest):
     #     r = pycotools.model.Reaction(self.model,
     #                                  name='fake_reaction',
     #                                  expression='A + B + C + D -> E + F',
-    #                                  rate_law='k*A*B*C/D')
+    #                                  rate_law='k * A * B * C / D')
     #     self.model.add_reaction(r)
     #     self.model.save()
     #     xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
@@ -500,7 +500,7 @@ class ModelTests(_test_base._BaseTest):
     #     r = pycotools.model.Reaction(self.model,
     #                                  name='fake_reaction',
     #                                  expression='A + B + C + D -> E + F',
-    #                                  rate_law='k*A*B*C/D')
+    #                                  rate_law='k * A * B * C / D')
     #     self.model.add_reaction(r)
     #     self.model.save()
     #     xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
@@ -522,7 +522,7 @@ class ModelTests(_test_base._BaseTest):
     #     r = pycotools.model.Reaction(self.model,
     #                                  name='fake_reaction2',
     #                                  expression='A + F + irs -> ; G',
-    #                                  rate_law='k*A*B*C/D')
+    #                                  rate_law='k * A * B * C / D')
     #     self.model.add_reaction(r)
     #     self.model.save()
     #     xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
@@ -544,7 +544,7 @@ class ModelTests(_test_base._BaseTest):
     #     r = pycotools.model.Reaction(self.model,
     #                                  name='fake_reaction2',
     #                                  expression='A + F + irs -> ; G',
-    #                                  rate_law='k*A*F/irs+G')
+    #                                  rate_law='k * A * F / irs + G')
     #     self.model = self.model.add_reaction(r)
     #     self.model.save()
     #     xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
@@ -640,7 +640,7 @@ class ModelTests(_test_base._BaseTest):
     #     r = pycotools.model.Reaction(self.model,
     #                                  name='fake_reaction2',
     #                                  expression='A + B -> C',
-    #                                  rate_law='k*A*B')
+    #                                  rate_law='k * A * B')
     #     self.model = self.model.add_reaction(r)
     #     self.model = self.model.remove_reaction('fake_reaction2', by='name')
     #     # self.model = self.model.remove('reaction', 'fake_reaction2')
@@ -976,37 +976,54 @@ class ModelTests(_test_base._BaseTest):
     #     """
     #     sbml_file = self.model.to_sbml()
     #     self.assertTrue(os.path.isfile(sbml_file))
+    #
+    # def test_copasi_file_setter(self):
+    #     """
+    #
+    #     :return:
+    #     """
+    #     new_filename = os.path.join(self.model.root+'/test', 'CopasiModel2.cps')
+    #     self.model.copasi_file = new_filename
+    #     self.assertEqual(new_filename, self.model.copasi_file)
+    #
+    # def test_copasi_file_root(self):
+    #     """
+    #
+    #     :return:
+    #     """
+    #     new_root = self.model.root+'/test'
+    #     new_file_name = os.path.join(new_root, 'CopasiModel2.cps')
+    #     self.model.copasi_file = new_file_name
+    #     self.assertEqual(new_root, self.model.root)
+    #
+    # def test_copy_model(self):
+    #     """
+    #
+    #     :return:
+    #     """
+    #     new_filename = os.path.join(self.model.root, 'CopasiModel2.cps')
+    #     new_model = self.model.copy(new_filename)
+    #     new_model.save()
+    #     self.assertTrue(os.path.isfile(new_filename))
 
-    def test_copasi_file_setter(self):
+    def test_func(self):
         """
 
         :return:
         """
-        new_filename = os.path.join(self.model.root+'/test', 'CopasiModel2.cps')
-        self.model.copasi_file = new_filename
-        self.assertEqual(new_filename, self.model.copasi_file)
+        # print self.model.reactions
+        r = pycotools.model.Reaction(self.model,
+                           name='smad7_prod', expression='Smads_Complex_c -> Smads_Complex_c + Smad7',
+                           rate_law='k1*Smads_Complex_c')
 
-    def test_copasi_file_root(self):
-        """
+        # f = pycotools.model.Function(self.model, name='f1', expression='A*B*k1', roles={'A': 'substrate'})
 
-        :return:
-        """
-        new_root = self.model.root+'/test'
-        new_file_name = os.path.join(new_root, 'CopasiModel2.cps')
-        self.model.copasi_file = new_file_name
-        self.assertEqual(new_root, self.model.root)
-
-    def test_copy_model(self):
-        """
-
-        :return:
-        """
-        new_filename = os.path.join(self.model.root, 'CopasiModel2.cps')
-        new_model = self.model.copy(new_filename)
-        new_model.save()
-        self.assertTrue(os.path.isfile(new_filename))
+        # model = self.model.add_function(f)
 
 
+        model = self.model.add_reaction(r)
+        print model.open()
+        # print r.rate_law
 
 
 
