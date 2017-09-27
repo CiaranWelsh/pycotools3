@@ -36,6 +36,7 @@ import subprocess
 import threading
 import pickle
 import logging
+from bioservices.biomodels import BioModels
 
 LOG=logging.getLogger(__name__)
 
@@ -107,22 +108,16 @@ def add_noise(f, noise_factor=0.05):
 
 
 def download_models(directory,percent=100,SKIP_ALREADY_DOWNLOADED=True):
-    '''
+    """
     download curated models from biomodels curated section
-    
-    args:
-        directory:
-            Name of directory to download models too
-    
-    ===============================================================
-    Returns:
-        df:
-            containing models
-        pickle:
-            save to file and contains models
-        
-    '''
-    if percent>100 or percent <0 :
+
+    :param directory: Name of directory to download models too
+    :param percent:
+    :param SKIP_ALREADY_DOWNLOADED:
+    :return: df and pickle
+    """
+
+    if percent>100 or percent < 0:
         raise TypeError('percent should be between 0 and 100')
     try:
         import bioservices
@@ -141,7 +136,7 @@ def download_models(directory,percent=100,SKIP_ALREADY_DOWNLOADED=True):
     ## change to directory
     os.chdir(directory)
     ## get Biomodels service 
-    bio=bioservices.Biomodels()
+    bio=BioModels()
     print 'The number of models in biomodels right now is {}'.format(len(bio))
     model=bio.getAllCuratedmodelsId()
     print 'The number of curated models in biomodels is: {}'.format(len(model))

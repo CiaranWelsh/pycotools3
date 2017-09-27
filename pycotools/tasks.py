@@ -471,11 +471,7 @@ class iPythonParallel(_base._Base):
         self.update_properties(self.default_properties)
         self.update_kwargs(kwargs)
         self.check_integrity(self.default_properties.keys(), kwargs.keys())
-        # self._do_checks()
-
-        # LOG.info('running with {} processes'.format(self.processes))
-        # self.q = Queue.Queue(maxsize=self.processes)
-        # self.results = self.run_parallel()
+        raise NotImplementedError
 
 
     def _do_checks(self):

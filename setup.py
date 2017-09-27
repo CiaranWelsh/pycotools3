@@ -40,31 +40,30 @@ MINOR = 0
 MICRO = 1
 
 
+##test version
+MAJOR = 0
+MINOR = 0
+MICRO = 3
+
+
+
+
 __version__ = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
 setup(
-  name = 'PyCoTools',
-  packages = ['PyCoTools'], # this must be the same as the name above
+  name = 'pycotools',
+  packages = ['pycotools'], # this must be the same as the name above
   version = __version__,
   description = 'A python toolbox for COPASI',
   author = 'Ciaran Welsh',
   requires=['lxml','argparse','pandas','numpy','scipy',
             'matplotlib','scipy','seaborn','sklearn',
             'openpyxl','xlrd', 'retrying'],
-  package_data={'PyCoTools':['*.py','Documentation/*.pdf',
+  package_data={'pycotools':['*.py','Documentation/*.pdf',
                              'logging_config.conf',
                              'Documentation/*.html','Licence.txt',
                              'ReadMe.md',
-                             'Examples/KholodenkoExample/*',
-                             'Examples/BioModelsWorkflowVersion1/*',
-                             'Scripts/*.py',
-                             'Tests/*.py',
-                             'Tests/*.cps',
-                             'PyCoToolsTutorial/*.pickle',
-                             'PyCoToolsTutorial/*.py',
-                             'PyCoToolsTutorial/*.ipynb',
-                             'PyCoToolsTutorial/*.html',
-                             'PyCoToolsTutorial/*.cps']},
+                             'Tests/*.py']},
   author_email = 'c.welsh2@newcastle.ac.uk',
   url = 'https://github.com/CiaranWelsh/PyCoTools', # use the URL to the github repo
 

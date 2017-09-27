@@ -2059,7 +2059,8 @@ class ParameterDescription(_base._ModelBase):
         elif self.role == None:
             self.role = 'constant'
 
-        roles = ['constant', 'modifier', 'substrate', 'product']
+        roles = ['constant', 'modifier', 'substrate',
+                 'product','volume']
         if self.role not in roles:
             raise errors.InputError('{} is not one of {}'.format(self.role, roles))
 

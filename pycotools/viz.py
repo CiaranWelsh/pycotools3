@@ -462,7 +462,7 @@ class PlotTimeCourse(PlotKwargs):
             fig = plt.figure()
             figures.append(fig)
 
-        self.create_results_directory(self.results_directory)
+        # self.create_results_directory(self.results_directory)
 
         for y_var in self.y:
             if self.separate:

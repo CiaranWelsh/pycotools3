@@ -1,0 +1,60 @@
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.model:model:translate_reaction:1767:adding parameter called --> V_cyt
+WARNING:pycotools.model:model:translate_reaction:1775:deleted simulation_type from local parameter definition. May cause bugs
+INFO:pycotools.model:model:translate_reaction:1767:adding parameter called --> Smad2c
+WARNING:pycotools.model:model:translate_reaction:1775:deleted simulation_type from local parameter definition. May cause bugs
+INFO:pycotools.model:model:translate_reaction:1767:adding parameter called --> V_nuc
+WARNING:pycotools.model:model:translate_reaction:1775:deleted simulation_type from local parameter definition. May cause bugs
+INFO:pycotools.model:model:translate_reaction:1767:adding parameter called --> K
+WARNING:pycotools.model:model:translate_reaction:1775:deleted simulation_type from local parameter definition. May cause bugs
+INFO:pycotools.model:model:translate_reaction:1767:adding parameter called --> _Smad2n
+WARNING:pycotools.model:model:translate_reaction:1775:deleted simulation_type from local parameter definition. May cause bugs
+INFO:pycotools.model:model:translate_reaction:1767:adding parameter called --> Smad2n
+WARNING:pycotools.model:model:translate_reaction:1775:deleted simulation_type from local parameter definition. May cause bugs
+INFO:pycotools.model:model:translate_reaction:1767:adding parameter called --> V_cyt
+WARNING:pycotools.model:model:translate_reaction:1775:deleted simulation_type from local parameter definition. May cause bugs
+INFO:pycotools.model:model:translate_reaction:1767:adding parameter called --> V_nuc
+WARNING:pycotools.model:model:translate_reaction:1775:deleted simulation_type from local parameter definition. May cause bugs
+INFO:pycotools.model:model:translate_reaction:1767:adding parameter called --> K
+WARNING:pycotools.model:model:translate_reaction:1775:deleted simulation_type from local parameter definition. May cause bugs
+INFO:pycotools.model:model:translate_reaction:1767:adding parameter called --> _Smad4n
+WARNING:pycotools.model:model:translate_reaction:1775:deleted simulation_type from local parameter definition. May cause bugs
+INFO:pycotools.model:model:translate_reaction:1767:adding parameter called --> V_cyt
+WARNING:pycotools.model:model:translate_reaction:1775:deleted simulation_type from local parameter definition. May cause bugs
+INFO:pycotools.model:model:translate_reaction:1767:adding parameter called --> V_cyt
+WARNING:pycotools.model:model:translate_reaction:1775:deleted simulation_type from local parameter definition. May cause bugs
+INFO:pycotools.model:model:translate_reaction:1767:adding parameter called --> TGF_beta
+WARNING:pycotools.model:model:translate_reaction:1775:deleted simulation_type from local parameter definition. May cause bugs
+INFO:pycotools.model:model:translate_reaction:1767:adding parameter called --> T2R_Surf
+WARNING:pycotools.model:model:translate_reaction:1775:deleted simulation_type from local parameter definition. May cause bugs
+INFO:pycotools.model:model:translate_reaction:1767:adding parameter called --> V_cyt
+WARNING:pycotools.model:model:translate_reaction:1775:deleted simulation_type from local parameter definition. May cause bugs
+INFO:pycotools.model:model:translate_reaction:1767:adding parameter called --> V_cyt
+WARNING:pycotools.model:model:translate_reaction:1775:deleted simulation_type from local parameter definition. May cause bugs
+INFO:pycotools.model:model:translate_reaction:1767:adding parameter called --> k_Smads_Comp
+WARNING:pycotools.model:model:translate_reaction:1775:deleted simulation_type from local parameter definition. May cause bugs
+INFO:pycotools.model:model:translate_reaction:1767:adding parameter called --> x_c
+WARNING:pycotools.model:model:translate_reaction:1775:deleted simulation_type from local parameter definition. May cause bugs
+INFO:pycotools.model:model:translate_reaction:1767:adding parameter called --> Smad2c
+WARNING:pycotools.model:model:translate_reaction:1775:deleted simulation_type from local parameter definition. May cause bugs
+INFO:pycotools.model:model:translate_reaction:1767:adding parameter called --> V_cyt
+WARNING:pycotools.model:model:translate_reaction:1775:deleted simulation_type from local parameter definition. May cause bugs
+INFO:pycotools.model:model:translate_reaction:1767:adding parameter called --> Kimp_Smads_Comp
+WARNING:pycotools.model:model:translate_reaction:1775:deleted simulation_type from local parameter definition. May cause bugs
+INFO:pycotools.model:model:translate_reaction:1767:adding parameter called --> x_c
+WARNING:pycotools.model:model:translate_reaction:1775:deleted simulation_type from local parameter definition. May cause bugs
+INFO:pycotools.model:model:translate_reaction:1767:adding parameter called --> Smads_Comp
+WARNING:pycotools.model:model:translate_reaction:1775:deleted simulation_type from local parameter definition. May cause bugs
+INFO:pycotools.model:model:translate_reaction:1767:adding parameter called --> Smads_Comp
+WARNING:pycotools.model:model:translate_reaction:1775:deleted simulation_type from local parameter definition. May cause bugs
+INFO:pycotools.model:model:translate_reaction:1767:adding parameter called --> x_n
+WARNING:pycotools.model:model:translate_reaction:1775:deleted simulation_type from local parameter definition. May cause bugs
+INFO:pycotools.model:model:translate_reaction:1767:adding parameter called --> Smads_Comp
+WARNING:pycotools.model:model:translate_reaction:1775:deleted simulation_type from local parameter definition. May cause bugs
+INFO:pycotools.model:model:translate_reaction:1767:adding parameter called --> x_n
+WARNING:pycotools.model:model:translate_reaction:1775:deleted simulation_type from local parameter definition. May cause bugs

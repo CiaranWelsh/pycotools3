@@ -1693,8 +1693,7 @@ class ParsePLData():
                 except errors.FileDoesNotExistError:
                     pass
         return res
-        
-    
+
     def parse_data(self):
         """
         
