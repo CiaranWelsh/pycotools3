@@ -1,6 +1,10 @@
 # PyCoTools
 
+<<<<<<< HEAD
 Package was developed by Ciaran Welsh (c.welsh2@newcastle.ac.uk) at Newcastle University, UK. 
+=======
+Package was developed by ciaran welsh (c.welsh2@newcastle.ac.uk) from Newcastle University, UK.
+>>>>>>> CopasiVersion19Develop
 
 ## Installation 
 Use:
