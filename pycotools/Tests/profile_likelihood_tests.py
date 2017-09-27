@@ -24,8 +24,6 @@ Module that tests the operations of the _Base base test
 """
 
 import site
-site.addsitedir('C:\Users\Ciaran\Documents\pycotools')
-site.addsitedir('/home/b3053674/Documents/pycotools')
 import pandas
 import pycotools
 from pycotools.Tests import _test_base
