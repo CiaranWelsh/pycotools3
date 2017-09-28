@@ -26,8 +26,12 @@ zi = model.Model(cps_file)
 
 # print zi.metabolites[0]
 
-
-print model.Product(zi, 'smad')
+metab = model.Metabolite(zi, 'x')
+zi = zi.add_metabolite(metab)
+zi = zi.set('metabolite', 'x', 1234, 'name', 'concentration')
+print zi.get('metabolite', 'x')
+# print zi.set('metabolite', 'x', 'y')
+# print model.Product(zi, 'smad')
 # print zi.get('metabolite', 'Smad3n', by='name')
 # print model.Reaction(zi, 'reaction1', expression='A -> B',
 #                      rate_law='k*A')
