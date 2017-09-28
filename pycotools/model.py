@@ -38,10 +38,34 @@ import pandas
 import re
 import sys, inspect
 from copy import deepcopy
+from mixin import mixin, Mixin
+from functools import wraps
+from cached_property import cached_property_with_ttl
 LOG = logging.getLogger(__name__)
 
 ## TODO add list of reports property to model
 ## TODO after running a task, bind the results to the model instance so that they are retrievable
+
+class GetModelComponentFromStringMixin(Mixin):
+
+    @staticmethod
+    def get_component(model, component, string):
+        """
+        Get component called string from model
+        :param model: a pytocools model
+        :param component: a pycotools.model component
+        :param string: name of model component
+        :return: model component
+        """
+        if isinstance(component, LocalParameter):
+            return model.get(component, string, by='global_name')
+        else:
+            return model.get(component, string, by=name)
+
+
+
+
+
 class Model(_base._Base):
     def __init__(self, copasi_file, **kwargs):
         super(Model, self).__init__(**kwargs)
@@ -460,7 +484,7 @@ class Model(_base._Base):
             particles=float(moles)
         return particles
 
-
+    # @cached_property_with_ttl(ttl=5)
     @property
     def metabolites(self):
         metabs = {}
@@ -793,7 +817,6 @@ class Model(_base._Base):
                                                                element3.attrib['cn'])[0]
 
                                             match = "({}).{}".format(match[0], match[1])
-                                                match, global_name, match == global_name))
                                             if global_name == match:
                                                 simulation_types[global_name] = element3.attrib['simulationType']
 
@@ -1210,6 +1233,23 @@ class Model(_base._Base):
         return sbml_file
 
 
+class ReadModelMixin(Mixin):
+    """
+    if self.model is str (path to copasi file)
+    return the xml. If already a model, do nothing.
+    :return: model.Model
+    """
+    @staticmethod
+    def read_model(m):
+        if isinstance(m, str):
+            ## import here due to namespace conflict. Do not change
+            # from model import Model
+            return Model(m)
+        else:
+            ## should be model.Model or etree._Element
+            return m
+
+
 
 
 class Compartment(_base._ModelBase):
@@ -1286,8 +1326,8 @@ class Compartment(_base._ModelBase):
         return compartment_element
 
 
-
-class Metabolite(_base._ModelBase):
+@mixin(ReadModelMixin)
+class Metabolite(object):
     """
     Metabolite class to hole attributes
     associated with a Metabolite.
@@ -1299,20 +1339,18 @@ class Metabolite(_base._ModelBase):
     need to know about the Model
 
     """
-    def __init__(self, model, **kwargs):
-        super(Metabolite, self).__init__(model, **kwargs)
-        self.default_properties = {'compartment':None,
-                             'key':None,
-                             'name':None,
-                             'particle_number':None,
-                             'concentration':None,
-                             'simulation_type':None,
-                             }
+    def __init__(self, model, name='new_metabolite', particle_number=None,
+                 concentration=None, compartment=None, simulation_type=None,
+                 key=None):
+        # super(Metabolite, self).__init__(model)
+        self.model = self.read_model(model)
+        self.name = name
+        self.particle_number = particle_number
+        self.concentration = concentration
+        self.simulation_type = None
+        self.compartment = compartment
+        self.key = key
 
-        for key in kwargs:
-            if key not in self.default_properties:
-                raise errors.InputError('Attribute not allowed. {} not in {}'.format(key, self.default_properties) )
-        self.update_properties(self.default_properties)
         ##update all keys to none
         self._do_checks()
 
@@ -1336,8 +1374,16 @@ class Metabolite(_base._ModelBase):
                 raise errors.InputError('No compartments in your model')
 
         if self.compartment != None:
-            if isinstance(self.compartment, Compartment)!=True:
-                raise errors.InputError('compartment argument should be of type PyCoTools.tasks.Compartment')
+            if isinstance(self.compartment, str):
+                self.compartment = self.model.get('compartment', self.compartment, by='name')
+
+                if self.compartment == []:
+                    raise errors.InputError('No compartment with name "{}"'.format(self.compartment))
+                # assert len(self.compartment) == 1
+                # self.compartment = self.compartment[0]
+            else:
+                if isinstance(self.compartment, Compartment) != True:
+                    raise errors.InputError('compartment argument should be of type PyCoTools.tasks.Compartment')
 
         if ('particle_number' not in self.__dict__.keys()) and  ('concentration' not in self.__dict__.keys() ):
             raise errors.InputError('Must specify either concentration or particle numbers')
@@ -1371,9 +1417,6 @@ class Metabolite(_base._ModelBase):
 
         if isinstance(self.particle_number, (float, int)):
             self.particle_number = str(self.particle_number)
-
-
-
 
 
     @property
@@ -1422,14 +1465,33 @@ class Metabolite(_base._ModelBase):
         return 'Vector=Metabolites[{}]'.format(self.name)
 
     def to_substrate(self):
-        return Substrate(self.model, **self.kwargs)
+        return Substrate(
+            self.model, name=self.name,
+            particle_number=self.particle_number,
+            concentration=self.concentration,
+            compartment=self.compartment,
+            simulation_type=self.simulation_type,
+            key=self.key
+        )
 
     def to_product(self):
-        return Product(self.model, **self.kwargs)
-
+        return Product(
+            self.model, name=self.name,
+            particle_number=self.particle_number,
+            concentration=self.concentration,
+            compartment=self.compartment,
+            simulation_type=self.simulation_type,
+            key=self.key
+        )
     def to_modifier(self):
-        return Modifier(self.model, **self.kwargs)
-
+        return Modifier(
+            self.model, name=self.name,
+            particle_number=self.particle_number,
+            concentration=self.concentration,
+            compartment=self.compartment,
+            simulation_type=self.simulation_type,
+            key=self.key
+        )
     def to_xml(self):
         """
 
@@ -1445,63 +1507,90 @@ class Metabolite(_base._ModelBase):
 
 
 class Substrate(Metabolite):
-    def __init__(self, model, **kwargs):
-        super(Substrate, self).__init__(model, **kwargs)
-
-        for key in self.kwargs:
-            if key not in self.default_properties:
-                raise errors.InputError('{} not in {}'.format(key, self.default_properties))
-        self.update_properties(self.default_properties)
+    def __init__(self, model,name='new_metabolite', particle_number=None,
+                 concentration=None, compartment=None, simulation_type=None,
+                 key=None):
+        self.name = name
+        self.particle_number = particle_number
+        self.concentration = concentration
+        self.compartment = compartment
+        self.simulation_type = simulation_type
+        self.key = key
+        super(Substrate, self).__init__(
+            model, name=self.name,
+            particle_number=self.particle_number,
+            concentration=self.concentration,
+            compartment=self.compartment,
+            simulation_type=self.simulation_type,
+            key=self.key
+        )
 
     def __str__(self):
-        """
-
-        :return:
-        """
-        return 'Substrate({})'.format(self.to_string())
+        return 'Substrate(name="{}", key="{}", compartment="{}", concentration="{}", particle_number="{}", simulation_type="{}")'.format(
+            self.name, self.key, self.compartment.name, self.concentration, self.particle_number,
+            self.simulation_type)
 
     def __repr__(self):
         return self.__str__()
 
 
 class Product(Metabolite):
-    def __init__(self, model, **kwargs):
-        super(Product, self).__init__(model, **kwargs)
-
-        for key in self.kwargs:
-            if key not in self.default_properties:
-                raise errors.InputError('{} not in {}'.format(key, self.default_properties))
+    def __init__(self, model,name='new_metabolite', particle_number=None,
+                 concentration=None, compartment=None, simulation_type=None,
+                 key=None):
+        self.name = name
+        self.particle_number = particle_number
+        self.concentration = concentration
+        self.compartment = compartment
+        self.simulation_type = simulation_type
+        self.key = key
+        super(Product, self).__init__(
+            model, name=self.name,
+            particle_number=self.particle_number,
+            concentration=self.concentration,
+            compartment=self.compartment,
+            simulation_type=self.simulation_type,
+            key=self.key
+        )
 
     def __str__(self):
-        """
-
-        :return:
-        """
-        return 'Product({})'.format(self.to_string())
+        return 'Product(name="{}", key="{}", compartment="{}", concentration="{}", particle_number="{}", simulation_type="{}")'.format(
+            self.name, self.key, self.compartment.name, self.concentration, self.particle_number,
+            self.simulation_type)
 
     def __repr__(self):
         return self.__str__()
 
 
 class Modifier(Metabolite):
-    def __init__(self, model, **kwargs):
-        super(Modifier, self).__init__(model, **kwargs)
-
-        for key in self.kwargs:
-            if key not in self.default_properties:
-                raise errors.InputError('{} not in {}'.format(key, self.default_properties))
+    def __init__(self, model, name='new_metabolite', particle_number=None,
+                 concentration=None, compartment=None, simulation_type=None,
+                 key=None):
+        self.name = name
+        self.particle_number = particle_number
+        self.concentration = concentration
+        self.compartment = compartment
+        self.simulation_type = simulation_type
+        self.key = key
+        super(Modifier, self).__init__(
+            model, name=self.name,
+            particle_number=self.particle_number,
+            concentration=self.concentration,
+            compartment=self.compartment,
+            simulation_type=self.simulation_type,
+            key=self.key
+        )
 
     def __str__(self):
-        """
-
-        :return:
-        """
-        return 'Modifier({})'.format(self.to_string())
+        return 'Modifier(name="{}", key="{}", compartment="{}", concentration="{}", particle_number="{}", simulation_type="{}")'.format(
+            self.name, self.key, self.compartment.name, self.concentration, self.particle_number,
+            self.simulation_type)
 
     def __repr__(self):
         return self.__str__()
 
-class GlobalQuantity(_base._ModelBase):
+@mixin(ReadModelMixin)
+class GlobalQuantity(object):
     """
     Global quantities have names and are associated with a vlue.
     This value can be constant or an assignment
@@ -1517,19 +1606,13 @@ class GlobalQuantity(_base._ModelBase):
         is of lower priority.
 
     """
-    def __init__(self, model, **kwargs):
-        super(GlobalQuantity, self).__init__(model, **kwargs)
-
-        self.default_properties = {'name': None,
-                                   'key': None,
-                                   'simulation_type': None,
-                                   'initial_value': None,
-                                   }
-
-        for key in kwargs:
-            if key not in self.default_properties:
-                raise errors.InputError('Attribute not allowed. "{}" not in {}'.format(key, self.default_properties.keys()) )
-        self.update_properties(self.default_properties)
+    def __init__(self, model, name='global_quantity', initial_value=None,
+                 key=None, simulation_type = None):
+        self.model = self.read_model(model)
+        self.name = name
+        self.initial_value = initial_value
+        self.key = key
+        self.simulation_type = simulation_type
 
         self._do_checks()
 
@@ -1619,7 +1702,8 @@ class GlobalQuantity(_base._ModelBase):
         """
         pass
 
-class Reaction(_base._ModelBase):
+@mixin(ReadModelMixin)
+class Reaction(object):
     """
     Reactions have rectants, products, rate laws and parameters
     Not sure if this is a priority just yet
@@ -1630,27 +1714,24 @@ class Reaction(_base._ModelBase):
     whether its a model parameter or specific to a individual
     reaction.
     """
-    def __init__(self, model, **kwargs):
-        super(Reaction, self).__init__(model, **kwargs)
-        self.default_properties = {'name': None,
-                                   'expression': None,
-                                   'rate_law': None,
-                                   'key': None,
-                                   'substrates': [],
-                                   'products': [],
-                                   'modifiers': [],
-                                   'reversible': False,
-                                   ##TODO delete parameters as we have rate law instead
-                                   'parameters': [],
-                                   'parameters_dict': {},
-                                   'fast': False,
-                                   'simulation_type': 'reactions'}
-        for key in self.kwargs:
-            if key not in self.default_properties:
-                raise errors.InputError('{} not valid key. Valid keys are: {}'.format(key, self.default_properties))
-        self.update_properties(self.default_properties)
+    def __init__(self, model, name='reaction_1', expression=None,
+                 rate_law=None, reversible=False, simulation_type=None,
+                 parameters=[], parameters_dict={}, substrates=[],
+                 products=[], modifiers=[], key=None):
+        self.model = self.read_model(model)
+        self.name = name
+        self.expression = expression
+        self.rate_law = rate_law
+        self.reversible = reversible
+        self.simulation_type = simulation_type
+        self.substrates = substrates
+        self.products = products
+        self.modifiers = modifiers
+        self.parameters = parameters
+        self.parameters_dict = parameters_dict
+        self.fast = False
+        self.key = key
 
-        self._do_checks()
         self.create()
         # print self.to_df()
 
@@ -1928,26 +2009,25 @@ class Reaction(_base._ModelBase):
 
         return reaction
 
-
-class Function(_base._ModelBase):
+@mixin(ReadModelMixin)
+class Function(object):
     """
     Class to hold copasi function definitions for rate laws
     """
 
-    def __init__(self, model, **kwargs):
-        super(Function, self).__init__(model, **kwargs)
-        default_properties = {'name': None,
-                              'key': None,
-                              'type': None,
-                              'reversible': None,
-                              'expression': None,
-                              'list_of_parameter_descriptions': [],
-                              'roles': {}}
+    def __init__(self, model, name='function_1', expression=None,
+                 type=None, key=None, reversible=None,
+                 list_of_parameter_descriptions=[],
+                 roles={}):
+        self.model = self.read_model(model)
+        self.name = name
+        self.expression = expression
+        self.type = type
+        self.key=key
+        self.reversible = reversible
+        self.list_of_parameter_descriptions = list_of_parameter_descriptions
+        self.roles = roles
 
-        for key in self.kwargs:
-            if key not in default_properties:
-                raise errors.InputError('{} not in {}'.format(key, default_properties))
-        self.update_properties(default_properties)
         self._do_checks()
         self.list_of_parameter_descriptions = self.create_parameter_descriptions_from_roles()
 
@@ -1992,8 +2072,6 @@ class Function(_base._ModelBase):
             return self.list_of_parameter_descriptions
         else:
             if not self.list_of_parameter_descriptions:
-                # if self.roles == None:
-                #     raise errors.InputError('please specify either roles or list_of_parameter_descriptions')
 
                 function_parameter_keys = KeyFactory(self.model, type='function_parameter').generate(len(self.roles))
 
@@ -2006,7 +2084,7 @@ class Function(_base._ModelBase):
                                              name=keys[i],
                                              role=values[i],
                                              order=i))
-                return self.list_of_parameter_descriptions
+            return self.list_of_parameter_descriptions
 
     def to_xml(self):
         """
@@ -2050,19 +2128,16 @@ class Function(_base._ModelBase):
 
         return func
 
+@mixin(ReadModelMixin)
+class ParameterDescription(object):
+    def __init__(self, model, name='parameter_description',
+                 role='substrate', order=0, key=None):
+        self.model = self.read_model(model)
+        self.name = name
+        self.role = role
+        self.order = order
+        self.key = key
 
-class ParameterDescription(_base._ModelBase):
-    def __init__(self, model, **kwargs):
-        super(ParameterDescription, self).__init__(model, **kwargs)
-        default_properties = {'key': None,
-                                   'name': None,
-                                   'order' : 0,
-                                   'role': 'substrate'}
-
-        self.update_properties(default_properties)
-        self.update_kwargs(self.kwargs)
-        self.check_integrity(default_properties.keys(),
-                             kwargs.keys())
         self._do_checks()
 
     def __str__(self):
@@ -2086,38 +2161,33 @@ class ParameterDescription(_base._ModelBase):
             raise errors.InputError('{} is not one of {}'.format(self.role, roles))
 
 
+@mixin(ReadModelMixin)
+class LocalParameter(object):
+    def __init__(self, model, name='local_parameter', value=None,
+                 parameter_type=None, reaction_name=None,
+                 global_name=None, key=None, simulation_type='fixed'):
+        self.model = self.read_model(model)
+        self.name = name
+        self.value = value
+        self.parameter_type = parameter_type
+        self.simulation_type = simulation_type
+        self.reaction_name = reaction_name
+        self.global_name = global_name
+        self.key = key
 
-
-
-class LocalParameter(_base._ModelBase):
-    def __init__(self, model, **kwargs):
-        super(LocalParameter, self).__init__(model, **kwargs)
-        self.default_properties = {'name':None,
-                                   'key':None,
-                                   'value':None,
-                                   'simulation_type':None,
-                                   'parameter_type':None,
-                                   'reaction_name': None,
-                                   'global_name': None}
-                                   # 'global_name': '({}).{}'.format(self.reaction_name,
-                                   #                                 self.name)}
-
-
-        for key in self.kwargs:
-            if key not in self.default_properties:
-                raise errors.InputError('{} not in {}'.format(key, self.default_properties))
-        self.update_properties(self.default_properties)
 
         if self.name is None:
             raise errors.InputError('Name is "{}"'.format(self.name))
 
         if self.key is None:
-            raise errors.InputError('Key is "{}"'.format(self.key))
+            self.key = KeyFactory(self.model, type='parameter')
+            if self.key is None:
+                raise errors.InputError('Key is "{}"'.format(self.key))
 
 
     def __str__(self):
-        return 'LocalParameter(name="{}", key="{}", reaction_name="{}, value="{}", simulation_type="{}")'.format(
-            self.name, self.key, self.reaction_name, self.value, self.simulation_type
+        return 'LocalParameter(name="{}", reaction_name="{}, value="{}", simulation_type="{}")'.format(
+            self.name, self.reaction_name, self.value, self.simulation_type
         )
 
     def __repr__(self):
@@ -2172,15 +2242,13 @@ class LocalParameter(_base._ModelBase):
         return model_parameter_group
 
 
-class KeyFactory(_base._ModelBase):
-    def __init__(self, model, **kwargs):
-        super(KeyFactory, self).__init__(model, **kwargs)
-        self.default_properties = {'type': 'metabolite'}
+@mixin(ReadModelMixin)
+class KeyFactory(object):
+    def __init__(self, model, type='metabolite'):
+        self.model = self.read_model(model)
+        self.type = type
 
-        self.update_properties(self.default_properties)
-        self.update_kwargs(kwargs)
-        self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
-        self._do_checks()
+        # self._do_checks()
 
     def __str__(self):
         return "KeyFactory({})".format(self.to_string())
@@ -2331,10 +2399,8 @@ class KeyFactory(_base._ModelBase):
 
 
 class Expression(object):
-    def __init__(self, expression, **kwargs):
-        # super(Expression, self).__init__(**kwargs)
+    def __init__(self, expression):
         self.expression = expression
-        self.default_properties = {}
 
         ## list of available operators according the copasi website
         self.operator_list = ['+', '-', '*', r'/', '%', '^']
@@ -2370,23 +2436,17 @@ class Expression(object):
     def __str__(self):
         return "Expression({})".format(self.expression)
 
-
-class Translator(_base._ModelBase):
+@mixin(ReadModelMixin)
+class Translator(object):
     """
     Translate a copasi style reaction into
     lists of substrates, products and modifiers.
 
     """
-    def __init__(self, model, reaction, **kwargs):
-        super(Translator, self).__init__(model, **kwargs)
+    def __init__(self, model, reaction, reversible=False):
+        self.model = self.read_model(model)
         self.reaction = reaction
-        self.default_properties = {'reversible': False}
-
-
-        self.update_properties(self.default_properties)
-        self.update_kwargs(kwargs)
-        self.check_integrity(self.default_properties.keys(),
-                             kwargs.keys())
+        self.reversible = reversible
 
         ## split reaction by -> or = and ;. determine reversibility
         self.substrates, self.products, self.modifiers = self.split_reaction()
@@ -2402,6 +2462,8 @@ class Translator(_base._ModelBase):
         ## lump together like metabolites (i.e. convert A + A into 2*A)
         self.substrates = self.determine_stoichiometry(self.substrates)
         self.products = self.determine_stoichiometry(self.products)
+
+
 
         ## get lists of substrates, products and modifiers, creating if component doesn't exist
         self.substrates = self.get_components('substrate')
@@ -2516,6 +2578,7 @@ class Translator(_base._ModelBase):
         elif component == 'modifier':
             component_list = self.modifiers
 
+
         lst = []
         for comp in component_list:
             stoic = 1
@@ -2543,10 +2606,8 @@ class Translator(_base._ModelBase):
             ## convert to respective classes
             if component == 'substrate':
                 metab = metab.to_substrate()
-
             elif component == 'product':
                 metab = metab.to_product()
-
             elif component == 'modifier':
                 metab = metab.to_modifier()
 
@@ -2646,32 +2707,24 @@ class MassAction(Function):
 
 
 ##TODO work out why both rate law and expression are function in reaction
-
-class ParameterSet(_base._ModelBase):
+@mixin(ReadModelMixin)
+class ParameterSet(object):
     """
     This class is taking time that I don't have.
     Just implement the InsertParameters class for now.
     """
-    def __init__(self, model, **kwargs):
-        super(ParameterSet, self).__init__(model, **kwargs)
+    def __init__(self, model, name='Initial State', initial_time=0,
+                 compartments=[], metabolites=[], global_quantities=[],
+                 kinetic_parameters=[], key=None):
+        self.model = self.read_model(model)
+        self.name = name
+        self.initial_time = initial_time
+        self.compartments = compartments
+        self.metabolites = metabolites
+        self.global_quantities = global_quantities
+        self.kinetic_parameters = kinetic_parameters
+        self.key = key
 
-
-        self.default_properties = {'key': 'ModelParameterSet_1',
-                                   'name': 'Initial State',
-                                   'initial_time': 0,
-                                   'compartments': [],
-                                   'metabolites': [],
-                                   'global_quantities': [],
-                                   'kinetic_parameters': [],
-                                   # 'state_template': None,
-                                   # 'initial_state': None}
-                                   }
-
-
-        for key in kwargs:
-            if key not in self.default_properties:
-                raise errors.InputError('Attribute not allowed. {} not in {}'.format(key, self.default_properties) )
-        self.update_properties(self.default_properties)
         ##update all keys to none
         self._do_checks()
 
@@ -2836,8 +2889,8 @@ class ParameterSet(_base._ModelBase):
     ## to each ompontnt
 
 
-
-class InsertParameters(_base._ModelBase):
+@mixin(ReadModelMixin)
+class InsertParameters(object):
     '''
     Insert parameters from a file, dictionary or a pandas dataframe into a copasi
     file.
@@ -2879,38 +2932,25 @@ class InsertParameters(_base._ModelBase):
             '.csv') or a folder containing parameter estimation files.
 
     '''
-    def __init__(self, model, **kwargs):
-        super(InsertParameters, self).__init__(model, **kwargs)
-        self.default_properties={
-            'quantity_type': 'concentration',
-            'index': 0,
-            'parameter_dict':None,
-            'df': None,
-            'parameter_path':None,
-            'inplace': False,
-        }
+    def __init__(self, model, parameter_dict=None, df=None,
+                 parameter_path=None, index=0, quantity_type='concentration',
+                 inplace=False):
+        self.model = self.read_model(model)
+        self.parameter_dict = parameter_dict
+        self.df = df
+        self.parameter_path=None
+        self.index = index
+        self.quantity_type = quantity_type
+        self.inplace = inplace
 
 
-        self.convert_bool_to_numeric(self.default_properties)
-        self.update_properties(self.default_properties)
-        self.update_kwargs(kwargs)
-        self.check_integrity(self.default_properties.keys(), kwargs.keys())
         self._do_checks()
 
-
-        # self.update_properties(self.default_properties)
-        # self.update_kwargs(kwargs)
-        # self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
-        # self._do_checks()
 
         self.model= self.insert()
         if self.inplace:
             self.model.save()
 
-        # self.parameters= self.replace_gl_and_lt()
-        #        self.insert_locals()
-        #         self.insert_all()
-        # change
 
     def __str__(self):
         return "InsertParameters({})".format(self.to_string())
