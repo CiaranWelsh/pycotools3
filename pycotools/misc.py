@@ -36,7 +36,6 @@ import subprocess
 import threading
 import pickle
 import logging
-from bioservices.biomodels import BioModels
 
 LOG=logging.getLogger(__name__)
 

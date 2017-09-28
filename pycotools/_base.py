@@ -244,6 +244,7 @@ class _ModelBase(_Base):
         :return: model.Model
         """
         if isinstance(self.model, str):
+            ## import here due to namespace conflict. Do not change
             from model import Model
             return Model(self.model)
         else:

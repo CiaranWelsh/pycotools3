@@ -5,29 +5,44 @@ from  pycotools import *
 
 
 
-cps_file = r'/home/b3053674/Documents/pycotools/ZiModel/Zi2012.cps'
-cps_file2 = r'/home/b3053674/Documents/pycotools/ZiModel/Zi2012_2.cps'
+cps_file = r'/home/b3053674/Documents/pycotools/ZiModel/zi2012.cps'
 
 
-from copy import deepcopy
 zi = model.Model(cps_file)
 
-zi_copy = deepcopy(zi)
+
+# # print [i.name for i in zi.metabolites]
+# r = model.Reaction(zi_copy, name='smad7_prod', expression='Smads_Complex_c -> Smads_Complex_c + Smad7', rate_law='k1*Smads_Complex_c')
+#
+# #zi.add_local_parameter(r.parameters[0])
+#
+#
+# zi_copy = zi_copy.add_reaction(r)
+# # zi.open()
+# # #
+# zi_copy.save()
+# print zi_copy.reactions
+# # zi.open()
+
+# print zi.metabolites[0]
 
 
-# print [i.name for i in zi.metabolites]
-r = model.Reaction(zi_copy, name='smad7_prod', expression='Smads_Complex_c -> Smads_Complex_c + Smad7', rate_law='k1*Smads_Complex_c')
+print model.Product(zi, 'smad')
+# print zi.get('metabolite', 'Smad3n', by='name')
+# print model.Reaction(zi, 'reaction1', expression='A -> B',
+#                      rate_law='k*A')
 
-#zi.add_local_parameter(r.parameters[0])
 
-
-zi_copy = zi_copy.add_reaction(r)
-# zi.open()
-# #
-zi_copy.save()
-print zi_copy.reactions
-# zi.open()
-
+# from beaker.cache import CacheManager
+# from beaker.util import parse_cache_config_options
+#
+# cache_opts = {
+#     'cache.type': 'file',
+#     'cache.data_dir': '/home/b3053674/Documents/pycotools/ZiModel/data',
+#     'cache.lock_dir': '/home/b3053674/Documents/pycotools/ZiModel/lock'
+# }
+# cache = CacheManager(**parse_cache_config_options(cache_opts))
+# print cache
 
 
 
