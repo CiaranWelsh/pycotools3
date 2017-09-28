@@ -40,7 +40,7 @@ import sys, inspect
 from copy import deepcopy
 from mixin import mixin, Mixin
 from functools import wraps
-from cached_property import cached_property_with_ttl
+from cached_property import cached_property_with_ttl, cached_property
 LOG = logging.getLogger(__name__)
 
 ## TODO add list of reports property to model
@@ -86,6 +86,20 @@ class Model(_base._Base):
 
     def __repr__(self):
         return self.__str__()
+
+    def reset_cache(self, prop):
+        """
+        delete property from cache then
+        reset it
+        :param prop: property to reset
+        :return: self
+        """
+        if prop not in self.__dict__:
+            raise errors.InputError('Property "{}" does not '
+                                    'exist from model.Model class'.format(prop))
+        del self.__dict__[prop]
+        getattr(self, prop)
+        return self
 
     @property
     def copasi_file(self):
@@ -330,7 +344,8 @@ class Model(_base._Base):
         self.states = states
         return self
 
-    @property
+    # @property
+    @cached_property
     def compartments(self):
         """
         Get dict of compartments. dict[compartment_name] = corresponding xml code as nested dict
@@ -338,7 +353,7 @@ class Model(_base._Base):
         collection= {}
         lst = []
         for i in self.xml.iter():
-            if  i.tag == '{http://www.copasi.org/static/schema}ListOfCompartments':
+            if i.tag == '{http://www.copasi.org/static/schema}ListOfCompartments':
                 df_list = []
                 for j in i:
                     lst.append(Compartment(self,
@@ -346,6 +361,9 @@ class Model(_base._Base):
                                            name=j.attrib['name'],
                                            simulation_type=j.attrib['simulationType'],
                                            initial_value=float(self.states[j.attrib['key']])) )
+        if 'compartments' in self.__dict__:
+            del self.__dict__['compartments']
+
         return lst
 
     def add_compartment(self, compartment):
@@ -354,6 +372,9 @@ class Model(_base._Base):
         :param compartment: Compartment
         :return: model.Model
         """
+        if 'compartments' in self.__dict__:
+            del self.__dict__['compartments']
+
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfCompartments':
                 i.append(compartment.to_xml())
@@ -373,6 +394,8 @@ class Model(_base._Base):
         """
         ## get the compartment
         comp = self.get('compartment', value, by=by)
+
+
         if comp == []:
             raise errors.ComponentDoesNotExistError('Component with {}={} does not exist'.format(by, value))
 
@@ -385,6 +408,8 @@ class Model(_base._Base):
 
         ## then remove from state template and initial state
         self.remove_state(comp.key)
+        if 'compartments' in self.__dict__:
+            del self.__dict__['compartments']
         return self
 
     @property
@@ -400,7 +425,7 @@ class Model(_base._Base):
         c = [i.name for i in self.compartments]
         return m + g + l + c
 
-    @property
+    @cached_property
     def local_parameters(self):
         """
         get local parameters from reactions
@@ -421,6 +446,8 @@ class Model(_base._Base):
         :param local_parameter: A LocalParameter instance
         :return: model
         """
+        if 'local_parameters' in self.__dict__:
+            del self.__dict__['local_parameters']
         # print local_parameter.to_xml()
         if local_parameter.global_name in [i.global_name for i in self.local_parameters]:
             return self
@@ -430,6 +457,7 @@ class Model(_base._Base):
         return self
             # if i.tag == '{http://www.copasi.org/static/schema}'
 
+    #TODO create delete_local_parameter function
 
     @staticmethod
     def convert_particles_to_molar(particles, mol_unit, compartment_volume):#,vol_unit):
@@ -484,8 +512,7 @@ class Model(_base._Base):
             particles=float(moles)
         return particles
 
-    # @cached_property_with_ttl(ttl=5)
-    @property
+    @cached_property
     def metabolites(self):
         metabs = {}
         for i in self.xml.iter():
@@ -519,6 +546,8 @@ class Model(_base._Base):
         :param metab:
         :return:
         """
+        if 'metabolites' in self.__dict__:
+            del self.__dict__['metabolites']
 
         if not isinstance(metab, Metabolite):
             raise errors.InputError('Input must be Metabolite class')
@@ -532,6 +561,11 @@ class Model(_base._Base):
 
         ## add metabolite to state_template and initial state fields
         self.add_state(metab.key, metab.particle_number)
+
+        ## call the metabolites property again
+        ## to reset the cache
+        self.metabolites
+
         return self
 
 
@@ -543,13 +577,20 @@ class Model(_base._Base):
         :return:
         """
         list_of_metabolites = '{http://www.copasi.org/static/schema}ListOfMetabolites'
+
         metab = self.get('metabolite', value, by=by)
+        if metab == []:
+            raise TypeError('No metab with "{}" attribute == "{}" exists'.format(by, value))
         for i in self.xml.iter():
             if i.tag == list_of_metabolites:
                 for j in i:
                     if j.attrib[by] == value:
                         j.getparent().remove(j)
         self.remove_state(metab.key)
+
+        ## remove cached
+        if 'metabolites' in self.__dict__:
+            del self.__dict__['metabolites']
         return self
 
     def add_global_quantity(self, global_quantity):
@@ -564,6 +605,9 @@ class Model(_base._Base):
         if not isinstance(global_quantity, GlobalQuantity):
             raise errors.InputError('Input must be a GlobalQuantity')
 
+        if 'global_quantities' in self.__dict__:
+            del self.__dict__['global_quantities']
+
         model_value = global_quantity.to_xml()
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfModelValues':
@@ -571,9 +615,10 @@ class Model(_base._Base):
 
         self.add_state(global_quantity.key, global_quantity.initial_value)
 
+        self.global_quantities
         return self
 
-    @property
+    @cached_property
     def global_quantities(self):
         """
 
@@ -608,6 +653,10 @@ class Model(_base._Base):
         global_value = self.get('global_quantity',
                                 value,
                                 by)
+
+        ##remove cached
+        del self.__dict__['global_quantities']
+
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfModelValues':
                 for j in i:
@@ -617,9 +666,7 @@ class Model(_base._Base):
         self.remove_state(global_value.key)
         return self
 
-
-    # @property
-    @property
+    @cached_property
     def functions(self):
         """
         get model functions
@@ -702,7 +749,7 @@ class Model(_base._Base):
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfFunctions':
                 i.append(function.to_xml())
-
+        del self.__dict__['functions']
         return self
 
     def remove_function(self, value, by='name'):
@@ -729,7 +776,7 @@ class Model(_base._Base):
                     count = count + 1
         return count
 
-    @property
+    @cached_property
     def constants(self):
         """
 
@@ -755,7 +802,7 @@ class Model(_base._Base):
 
         return res
 
-    @property
+    @cached_property
     def reactions(self):
         """
         assemble a list of reactions
@@ -909,6 +956,9 @@ class Model(_base._Base):
         if reaction.name in [i.name for i in self.reactions]:
             raise errors.ReactionAlreadyExists('Your model already contains a reaction with the name: {}'.format(reaction.name))
 
+        if 'reactions' in self.__dict__:
+            del self.__dict__['reactions']
+
         existing_functions = [i.expression for i in self.functions]
         if reaction.rate_law.expression not in existing_functions:
             self.add_function(reaction.rate_law)
@@ -945,6 +995,9 @@ class Model(_base._Base):
                 for j in i:
                     if j.attrib[by] == value:
                         j.getparent().remove(j)
+
+        if 'reactions' in self.__dict__:
+            del self.__dict__['reactions']
         return self
 
     def save(self, copasi_file=None):
@@ -1032,19 +1085,21 @@ class Model(_base._Base):
         return res
 
     def set(self, component, match_value, new_value,
-            match_field='name', change_field='initial_value'):
+            match_field='name', change_field='name'):
         """
+        usage:
+            ## change metabolite called name_x to name_y
+            model.set('metabolite', 'name_x', 'name_y', 'name', 'name')
 
-        :param component: metabolite, compartment, global_quantity, constant, reaction
-        :param name: name of the attribute to change (i.e. species 'X', if attribute='name)
-        :param value: new value for component attibute
-        :param attribute: attribute of component to change (i.e. name or value)
+        :param component: type of component to change (i.e. metbaolite)
+        :param match_value: which component of type `type` to change
+        :param new_value: new value for component attribute
+        :param match_field: the attribute field to match by
+        :param change_field: which attribute of the component matched do you want to change?
         :return:
         """
         if component not in self._model_components():
             raise errors.InputError('{} not in list of components'.format(component))
-
-
 
         ##get the component of interest
         comp = self.get(component, match_value, by=match_field)
@@ -1072,42 +1127,15 @@ class Model(_base._Base):
                 ##now change the field of interest to particle number
                 change_field = 'particle_number'
 
-        ## set the attribute
-        setattr(comp, change_field, new_value)
 
         ##remove component of interest from model
         self.remove(component, match_value)
 
+        ## set the attribute
+        setattr(comp, change_field, new_value)
+
         ##add back to model with new attribute
         return self.add(component, comp)
-
-    def set_metabolite(self, name, value, attribute='concentration'):
-        """
-
-        :return:
-        """
-        if name not in [i.name for i in self.metabolites]:
-            raise errors.InputError('metabolite "{}" does not exist'.format(name))
-
-        metab= self.get('metabolite', 'X', by='name')
-
-        ##If we want to set the concentration
-        ##first convert to particle numbers
-        if attribute == 'concentration':
-            value = self.convert_molar_to_particles(value,
-                                                    self.quantity_unit,
-                                                    metab.compartment.initial_value)
-            attribute = 'particle_number'
-
-        ## set the attribute
-
-        setattr(metab, attribute, value)
-        ##remove component of interest from model
-        self.remove('metabolite', name)
-
-        ##add back to model with new attribute
-        model = self.add('metabolite', metab)
-        return model
 
     def add(self, component_name, component):
         """

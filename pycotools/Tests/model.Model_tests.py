@@ -198,7 +198,7 @@ class ModelTests(_test_base._BaseTest):
     #     """
     #     print self.model.global_quantities
     #     # print self.model.local_parameters
-
+    #
     def test_create_metabolite(self):
         """
 
@@ -248,16 +248,16 @@ class ModelTests(_test_base._BaseTest):
         res = self.model.get('local_parameter', '(B2C).k1', by='name')
         self.assertEqual(res.name, '(B2C).k1')
 
-    # def test_remove_metabolite(self):
-    #     """
+    # # def test_remove_metabolite(self):
+    # #     """
+    # #
+    # #     :return:
+    # #     """
+    # #     ##first add a metabolite to model
+    # #     self.model = self.model.add_metabolite(name='F')
+    # #     self.model.remove_metabolite('F', by='name')
     #
-    #     :return:
-    #     """
-    #     ##first add a metabolite to model
-    #     self.model = self.model.add_metabolite(name='F')
-    #     self.model.remove_metabolite('F', by='name')
-
-
+    #
     def test_remove_state(self):
         """
 
@@ -425,167 +425,167 @@ class ModelTests(_test_base._BaseTest):
         self.assertEqual(len(p), 2)
 
 
-    # def test_add_reaction1(self):
-    #     """
-    #     Test the reaction name is correct
-    #     :return:
-    #     """
-    #     r = pycotools.model.Reaction(self.model,
-    #                                  name='fake_reaction',
-    #                                  expression='A + B + C + D -> E + F',
-    #                                  rate_law='k * A * B * C / D')
-    #
-    #     self.model = self.model.add_reaction(r)
-    #     self.model.save()
-    #     xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
-    #
-    #     boolean = False
-    #     for i in xml.iter():
-    #         if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
-    #             for j in i:
-    #                 if j.attrib['name'] == 'fake_reaction':
-    #                     boolean = True
-    #
-    #     self.assertTrue(boolean)
-    #
-    # def test_add_reaction2(self):
-    #     """
-    #     Test correct number of substrates
-    #     :return:
-    #     """
-    #     r = pycotools.model.Reaction(self.model,
-    #                                  name='fake_reaction',
-    #                                  expression='A + B + C + D -> E + F',
-    #                                  rate_law='k * A * B * C / D')
-    #     self.model.add_reaction(r)
-    #     self.model.save()
-    #     xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
-    #
-    #     boolean = False
-    #     for i in xml.iter():
-    #         if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
-    #             for j in i:
-    #                 if j.attrib['name'] == 'fake_reaction':
-    #                     for k in j:
-    #                         if k.tag == '{http://www.copasi.org/static/schema}ListOfSubstrates':
-    #                             self.assertTrue(len(k)==4)
-    #
-    # def test_add_reaction3(self):
-    #     """
-    #     Test correct number of products
-    #     :return:
-    #     """
-    #     r = pycotools.model.Reaction(self.model,
-    #                                  name='fake_reaction',
-    #                                  expression='A + B + C + D -> E + F',
-    #                                  rate_law='k * A * B * C / D')
-    #     self.model.add_reaction(r)
-    #     self.model.save()
-    #     xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
-    #
-    #     boolean = False
-    #     for i in xml.iter():
-    #         if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
-    #             for j in i:
-    #                 if j.attrib['name'] == 'fake_reaction':
-    #                     for k in j:
-    #                         if k.tag == '{http://www.copasi.org/static/schema}ListOfProducts':
-    #                             self.assertTrue(len(k)==2)
-    #
-    # def test_add_reaction4(self):
-    #     """
-    #     Test correct number of products
-    #     :return:
-    #     """
-    #     r = pycotools.model.Reaction(self.model,
-    #                                  name='fake_reaction',
-    #                                  expression='A + B + C + D -> E + F',
-    #                                  rate_law='k * A * B * C / D')
-    #     self.model.add_reaction(r)
-    #     self.model.save()
-    #     xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
-    #
-    #     boolean = False
-    #     for i in xml.iter():
-    #         if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
-    #             for j in i:
-    #                 if j.attrib['name'] == 'fake_reaction':
-    #                     for k in j:
-    #                         if k.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
-    #                             self.assertTrue(len(k) == 1)
-    #
-    # def test_add_reaction5(self):
-    #     """
-    #     Test different reaction
-    #     :return:
-    #     """
-    #     r = pycotools.model.Reaction(self.model,
-    #                                  name='fake_reaction2',
-    #                                  expression='A + F + irs -> ; G',
-    #                                  rate_law='k * A * B * C / D')
-    #     self.model.add_reaction(r)
-    #     self.model.save()
-    #     xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
-    #
-    #     boolean = False
-    #     for i in xml.iter():
-    #         if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
-    #             for j in i:
-    #                 if j.attrib['name'] == 'fake_reaction2':
-    #                     for k in j:
-    #                         if k.tag == '{http://www.copasi.org/static/schema}ListOfSubstrates':
-    #                             self.assertTrue(len(k) == 3)
-    #
-    # def test_add_reaction6(self):
-    #     """
-    #     Test different reaction
-    #     :return:
-    #     """
-    #     r = pycotools.model.Reaction(self.model,
-    #                                  name='fake_reaction2',
-    #                                  expression='A + F + irs -> ; G',
-    #                                  rate_law='k * A * F / irs + G')
-    #     self.model = self.model.add_reaction(r)
-    #     self.model.save()
-    #     xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
-    #     boolean = False
-    #     for i in xml.iter():
-    #         if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
-    #             for j in i:
-    #                 if j.attrib['name'] == 'fake_reaction2':
-    #                     for k in j:
-    #                         if k.tag == '{http://www.copasi.org/static/schema}ListOfProducts':
-    #                             self.assertTrue(len(k) == 0)
-    #
-    #
-    def test_translater_again(self):
-        trans = pycotools.model.Translator(self.model, 'A + F + irs -> ;G')
-        self.assertEqual(trans.products, [])
+    def test_add_reaction1(self):
+        """
+        Test the reaction name is correct
+        :return:
+        """
+        r = pycotools.model.Reaction(self.model,
+                                     name='fake_reaction',
+                                     expression='A + B + C + D -> E + F',
+                                     rate_law='k * A * B * C / D')
 
-    def test_translater_again2(self):
-        trans = pycotools.model.Translator(self.model, 'A ->')
-        self.assertEqual(trans.products, [])
+        self.model = self.model.add_reaction(r)
+        self.model.save()
+        xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
 
-    def test_translater_again3(self):
-        trans = pycotools.model.Translator(self.model, 'A -> B; C ')
-        self.assertEqual(trans.modifiers[0].name, 'C')
-    #
-    #
-    # # def test_set_global_quantity(self):
+        boolean = False
+        for i in xml.iter():
+            if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
+                for j in i:
+                    if j.attrib['name'] == 'fake_reaction':
+                        boolean = True
+
+        self.assertTrue(boolean)
+
+    # # def test_add_reaction2(self):
     # #     """
-    # #
+    # #     Test correct number of substrates
     # #     :return:
     # #     """
-    # #     ## add new global
-    # #     glob = pycotools.model.GlobalQuantity(self.model,
-    # #                                           name='X')
+    # #     r = pycotools.model.Reaction(self.model,
+    # #                                  name='fake_reaction',
+    # #                                  expression='A + B + C + D -> E + F',
+    # #                                  rate_law='k * A * B * C / D')
+    # #     self.model.add_reaction(r)
+    # #     self.model.save()
+    # #     xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
     # #
-    # #     self.model = self.model.add_global_quantity(glob)
-    # #     self.model = self.model.set('global_quantity', 'X', 55)
-    # #     x = self.model.get('global_quantity', 'X')
-    # #     self.assertEqual(float(x.initial_value), 55.0)
+    # #     boolean = False
+    # #     for i in xml.iter():
+    # #         if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
+    # #             for j in i:
+    # #                 if j.attrib['name'] == 'fake_reaction':
+    # #                     for k in j:
+    # #                         if k.tag == '{http://www.copasi.org/static/schema}ListOfSubstrates':
+    # #                             self.assertTrue(len(k)==4)
+    # #
+    # # def test_add_reaction3(self):
+    # #     """
+    # #     Test correct number of products
+    # #     :return:
+    # #     """
+    # #     r = pycotools.model.Reaction(self.model,
+    # #                                  name='fake_reaction',
+    # #                                  expression='A + B + C + D -> E + F',
+    # #                                  rate_law='k * A * B * C / D')
+    # #     self.model.add_reaction(r)
+    # #     self.model.save()
+    # #     xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
+    # #
+    # #     boolean = False
+    # #     for i in xml.iter():
+    # #         if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
+    # #             for j in i:
+    # #                 if j.attrib['name'] == 'fake_reaction':
+    # #                     for k in j:
+    # #                         if k.tag == '{http://www.copasi.org/static/schema}ListOfProducts':
+    # #                             self.assertTrue(len(k)==2)
+    # #
+    # # def test_add_reaction4(self):
+    # #     """
+    # #     Test correct number of products
+    # #     :return:
+    # #     """
+    # #     r = pycotools.model.Reaction(self.model,
+    # #                                  name='fake_reaction',
+    # #                                  expression='A + B + C + D -> E + F',
+    # #                                  rate_law='k * A * B * C / D')
+    # #     self.model.add_reaction(r)
+    # #     self.model.save()
+    # #     xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
+    # #
+    # #     boolean = False
+    # #     for i in xml.iter():
+    # #         if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
+    # #             for j in i:
+    # #                 if j.attrib['name'] == 'fake_reaction':
+    # #                     for k in j:
+    # #                         if k.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
+    # #                             self.assertTrue(len(k) == 1)
+    # #
+    # # def test_add_reaction5(self):
+    # #     """
+    # #     Test different reaction
+    # #     :return:
+    # #     """
+    # #     r = pycotools.model.Reaction(self.model,
+    # #                                  name='fake_reaction2',
+    # #                                  expression='A + F + irs -> ; G',
+    # #                                  rate_law='k * A * B * C / D')
+    # #     self.model.add_reaction(r)
+    # #     self.model.save()
+    # #     xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
+    # #
+    # #     boolean = False
+    # #     for i in xml.iter():
+    # #         if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
+    # #             for j in i:
+    # #                 if j.attrib['name'] == 'fake_reaction2':
+    # #                     for k in j:
+    # #                         if k.tag == '{http://www.copasi.org/static/schema}ListOfSubstrates':
+    # #                             self.assertTrue(len(k) == 3)
+    # #
+    # # def test_add_reaction6(self):
+    # #     """
+    # #     Test different reaction
+    # #     :return:
+    # #     """
+    # #     r = pycotools.model.Reaction(self.model,
+    # #                                  name='fake_reaction2',
+    # #                                  expression='A + F + irs -> ; G',
+    # #                                  rate_law='k * A * F / irs + G')
+    # #     self.model = self.model.add_reaction(r)
+    # #     self.model.save()
+    # #     xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
+    # #     boolean = False
+    # #     for i in xml.iter():
+    # #         if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
+    # #             for j in i:
+    # #                 if j.attrib['name'] == 'fake_reaction2':
+    # #                     for k in j:
+    # #                         if k.tag == '{http://www.copasi.org/static/schema}ListOfProducts':
+    # #                             self.assertTrue(len(k) == 0)
+    # #
+    # #
+    # def test_translater_again(self):
+    #     trans = pycotools.model.Translator(self.model, 'A + F + irs -> ;G')
+    #     self.assertEqual(trans.products, [])
     #
+    # def test_translater_again2(self):
+    #     trans = pycotools.model.Translator(self.model, 'A ->')
+    #     self.assertEqual(trans.products, [])
     #
+    # def test_translater_again3(self):
+    #     trans = pycotools.model.Translator(self.model, 'A -> B; C ')
+    #     self.assertEqual(trans.modifiers[0].name, 'C')
+    # #
+    # #
+    # # # def test_set_global_quantity(self):
+    # # #     """
+    # # #
+    # # #     :return:
+    # # #     """
+    # # #     ## add new global
+    # # #     glob = pycotools.model.GlobalQuantity(self.model,
+    # # #                                           name='X')
+    # # #
+    # # #     self.model = self.model.add_global_quantity(glob)
+    # # #     self.model = self.model.set('global_quantity', 'X', 55)
+    # # #     x = self.model.get('global_quantity', 'X')
+    # # #     self.assertEqual(float(x.initial_value), 55.0)
+    # #
+    # #
     def test_remove_method_global(self):
         """
 
@@ -663,7 +663,7 @@ class ModelTests(_test_base._BaseTest):
         self.model = self.model.add_global_quantity(glob)
         self.model.save()
         assert glob.name in [i.name for i in self.model.global_quantities]
-        self.model = self.model.set('global_quantity', 'X', 100)
+        self.model = self.model.set('global_quantity', 'X', 100, 'name', 'initial_value')
         self.assertEqual(100.0,
                          float([i.initial_value for i in self.model.global_quantities if i.name == 'X'][0]))
 
@@ -697,25 +697,25 @@ class ModelTests(_test_base._BaseTest):
                                            concentration=55)
         self.assertEqual(str(metab.particle_number), str(3.31217747135e+22))
 
-
-    # def test_set_metabolite_initial_value(self):
-    #     """
     #
-    #     :return:
-    #     """
-    #     metab = pycotools.model.Metabolite(self.model,
-    #                                        name='X', concentration=15)
-    #     self.model = self.model.add('metabolite', metab)
-    #     self.model.save()
-    #     assert metab.name in [i.name for i in self.model.metabolites]
-    #     self.model = self.model.set_metabolite('X', 100, 'concentration')
+    # # def test_set_metabolite_initial_value(self):
+    # #     """
+    # #
+    # #     :return:
+    # #     """
+    # #     metab = pycotools.model.Metabolite(self.model,
+    # #                                        name='X', concentration=15)
+    # #     self.model = self.model.add('metabolite', metab)
+    # #     self.model.save()
+    # #     assert metab.name in [i.name for i in self.model.metabolites]
+    # #     self.model = self.model.set_metabolite('X', 100, 'concentration')
+    # #
+    # #     self.model.open()
+    # #     for i in self.model.metabolites:
+    # #         print i.name, i.concentration
+    # #     self.assertEqual(100.0,
+    # #                      float([i.concentration for i in self.model.metabolites if i.name == 'X'][0]))
     #
-    #     self.model.open()
-    #     for i in self.model.metabolites:
-    #         print i.name, i.concentration
-    #     self.assertEqual(100.0,
-    #                      float([i.concentration for i in self.model.metabolites if i.name == 'X'][0]))
-
 
 
     def test_change_metab_particle_numer(self):
@@ -726,7 +726,7 @@ class ModelTests(_test_base._BaseTest):
         metab = pycotools.model.Metabolite(self.model, name='X',
                                            particle_number=1000)
         model = self.model.add('metabolite', metab)
-        model = self.model.set_metabolite('X', 1234, attribute='particle_number')
+        model = self.model.set('metabolite', 'X', 1234, 'name', 'particle_number')
         metab = self.model.get('metabolite', 'X', by='name')
         self.assertEqual(metab.particle_number, str(1234.0))
 
@@ -739,7 +739,7 @@ class ModelTests(_test_base._BaseTest):
         metab = pycotools.model.Metabolite(self.model, name='X',
                                            concentration=1000)
         model = self.model.add('metabolite', metab)
-        model = self.model.set_metabolite('X', 1234, attribute='concentration')
+        model = self.model.set('metabolite', 'X', str(1234), 'name', 'concentration')
         metab = self.model.get('metabolite', 'X', by='name')
         self.assertAlmostEqual(float(metab.concentration), float(1234.0))
 
@@ -818,7 +818,7 @@ class ModelTests(_test_base._BaseTest):
                                     change_field='name')
         metab = self.model.get('metabolite', 'Bees')
         self.assertEqual(metab.name, 'Bees')
-
+    #
     def test_change_global_value(self):
         """
 
@@ -845,104 +845,104 @@ class ModelTests(_test_base._BaseTest):
         conc = [i.concentration for i in self.model.metabolites if i.name == 'B']
         self.assertAlmostEqual(float(conc[0]), float(35))
 
-    #
-    # def test_insert_parameters_metabolite_particles(self):
-    #     """
-    #
-    #     :return:
-    #     """
-    #     I= pycotools.model.InsertParameters(
-    #         self.model,
-    #         parameter_dict={
-    #             # 'nuc': 85,
-    #             'B': 78,
-    #             '(B2C).k2': 96,
-    #             'A2B':55
-    #         }, quantity_type='particle_number')
-    #     self.model = I.insert()
-    #     part = [i.particle_number for i in self.model.metabolites if i.name == 'B']
-    #     self.assertAlmostEqual(float(part[0]), float(78))
-    #
-    # def test_insert_parameters_globals(self):
-    #     """
-    #
-    #     :return:
-    #     """
-    #     I= pycotools.model.InsertParameters(
-    #         self.model,
-    #         parameter_dict={
-    #             # 'nuc': 85,
-    #             'B': 35,
-    #             '(B2C).k2': 45,
-    #             'A2B':32
-    #         })
-    #     self.model = I.insert()
-    #     val = [i.initial_value for i in self.model.global_quantities if i.name == 'A2B']
-    #     self.assertAlmostEqual(float(val[0]), float(32))
 
-    # def test_insert_parameters_locals(self):
-    #     """
+    def test_insert_parameters_metabolite_particles(self):
+        """
+
+        :return:
+        """
+        I= pycotools.model.InsertParameters(
+            self.model,
+            parameter_dict={
+                # 'nuc': 85,
+                'B': 78,
+                '(B2C).k2': 96,
+                'A2B':55
+            }, quantity_type='particle_number')
+        self.model = I.insert()
+        part = [i.particle_number for i in self.model.metabolites if i.name == 'B']
+        self.assertAlmostEqual(float(part[0]), float(78))
+
+    def test_insert_parameters_globals(self):
+        """
+
+        :return:
+        """
+        I= pycotools.model.InsertParameters(
+            self.model,
+            parameter_dict={
+                # 'nuc': 85,
+                'B': 35,
+                '(B2C).k2': 45,
+                'A2B':32
+            })
+        self.model = I.insert()
+        val = [i.initial_value for i in self.model.global_quantities if i.name == 'A2B']
+        self.assertAlmostEqual(float(val[0]), float(32))
+
+    def test_insert_parameters_locals(self):
+        """
+
+        :return:
+        """
+        I= pycotools.model.InsertParameters(
+            self.model,
+            parameter_dict={
+                # 'nuc': 85,
+                'B': 35,
+                '(B2C).k2': 64,
+                'A2B': 597,
+            }, inplace=True).model
+        val = [i.initial_value for i in self.model.global_quantities if i.name == 'A2B']
+        self.assertAlmostEqual(float(val[0]), float(597))
+
+    def test_insert_parameters_global_df(self):
+        """
+
+        :return:
+        """
+        parameter_dict = {'B': 35,
+                          '(B2C).k2': 64,
+                          'A2B': 597}
+
+        df = pandas.DataFrame(parameter_dict, index=[0])
+        I= pycotools.model.InsertParameters(
+            self.model, df=df, inplace=True).model
+        val = [i.initial_value for i in self.model.global_quantities if i.name == 'A2B']
+        self.assertAlmostEqual(float(val[0]), float(597))
+
+    def test_insert_parameters_metabolite_df(self):
+        """
+
+        :return:
+        """
+        parameter_dict = {'B': 35,
+                          '(B2C).k2': 64,
+                          'A2B': 597}
+
+        df = pandas.DataFrame(parameter_dict, index=[0])
+        self.model = pycotools.model.InsertParameters(self.model, df=df, inplace=True).model
+        conc = [i.concentration for i in self.model.metabolites if i.name == 'B']
+        self.assertAlmostEqual(float(conc[0]), float(35))
     #
-    #     :return:
-    #     """
-    #     I= pycotools.model.InsertParameters(
-    #         self.model,
-    #         parameter_dict={
-    #             # 'nuc': 85,
-    #             'B': 35,
-    #             '(B2C).k2': 64,
-    #             'A2B': 597,
-    #         }, inplace=True).model
-    #     val = [i.initial_value for i in self.model.global_quantities if i.name == 'A2B']
-    #     self.assertAlmostEqual(float(val[0]), float(597))
-    #
-    # def test_insert_parameters_global_df(self):
-    #     """
-    #
-    #     :return:
-    #     """
-    #     parameter_dict = {'B': 35,
-    #                       '(B2C).k2': 64,
-    #                       'A2B': 597}
-    #
-    #     df = pandas.DataFrame(parameter_dict, index=[0])
-    #     I= pycotools.model.InsertParameters(
-    #         self.model, df=df, inplace=True).model
-    #     val = [i.initial_value for i in self.model.global_quantities if i.name == 'A2B']
-    #     self.assertAlmostEqual(float(val[0]), float(597))
-    #
-    # def test_insert_parameters_metabolite_df(self):
-    #     """
-    #
-    #     :return:
-    #     """
-    #     parameter_dict = {'B': 35,
-    #                       '(B2C).k2': 64,
-    #                       'A2B': 597}
-    #
-    #     df = pandas.DataFrame(parameter_dict, index=[0])
-    #     self.model = pycotools.model.InsertParameters(self.model, df=df, inplace=True).model
-    #     conc = [i.concentration for i in self.model.metabolites if i.name == 'B']
-    #     self.assertAlmostEqual(float(conc[0]), float(35))
-    # #
-    #
-    # def test_number_of_local_parameters(self):
-    #     """
-    #
-    #     :return:
-    #     """
-    #     r = self.model.get('reaction', 'B2C')
-    #
-    #     self.assertEqual(len(r.parameters_dict), 2)
-    #
-    # def test_names_of_local_paramers(self):
-    #     """
-    #
-    #     :return:
-    #     """
-    #     r = self.model.get('reaction', 'B2C')
-    #     names = ['k1', 'k2']
-    #     self.assertListEqual(names, [i.name for i in r.parameters])
+
+    def test_number_of_local_parameters(self):
+        """
+
+        :return:
+        """
+        r = self.model.get('reaction', 'B2C')
+
+        self.assertEqual(len(r.parameters_dict), 2)
+
+    def test_names_of_local_paramers(self):
+        """
+
+        :return:
+        """
+        r = self.model.get('reaction', 'B2C')
+        names = ['k1', 'k2']
+        self.assertListEqual(names, [i.name for i in r.parameters])
 
     # def test_change_reaction_name(self):
     #     """
@@ -957,54 +957,54 @@ class ModelTests(_test_base._BaseTest):
     #     self.model.save()
     #     changed =  self.model.get('reaction', 'changed_name')
     #     self.assertEqual(changed.name, 'changed_name')
-    # #
     #
-    # def test_get_parameters(self):
-    #     """
-    #
-    #     :return:
-    #     """
-    #     self.assertEqual(self.model.parameters.shape[1], 9)
+
+    def test_get_parameters(self):
+        """
+
+        :return:
+        """
+        self.assertEqual(self.model.parameters.shape[1], 9)
 
 
-    #
-    # def test_export_sbml(self):
-    #     """
-    #
-    #     :return:
-    #     """
-    #     sbml_file = self.model.to_sbml()
-    #     self.assertTrue(os.path.isfile(sbml_file))
-    #
-    # def test_copasi_file_setter(self):
-    #     """
-    #
-    #     :return:
-    #     """
-    #     new_filename = os.path.join(self.model.root+'/test', 'CopasiModel2.cps')
-    #     self.model.copasi_file = new_filename
-    #     self.assertEqual(new_filename, self.model.copasi_file)
-    #
-    # def test_copasi_file_root(self):
-    #     """
-    #
-    #     :return:
-    #     """
-    #     new_root = self.model.root+'/test'
-    #     new_file_name = os.path.join(new_root, 'CopasiModel2.cps')
-    #     self.model.copasi_file = new_file_name
-    #     self.assertEqual(new_root, self.model.root)
-    #
-    # def test_copy_model(self):
-    #     """
-    #
-    #     :return:
-    #     """
-    #     new_filename = os.path.join(self.model.root, 'CopasiModel2.cps')
-    #     new_model = self.model.copy(new_filename)
-    #     new_model.save()
-    #     self.assertTrue(os.path.isfile(new_filename))
-    #
+
+    def test_export_sbml(self):
+        """
+
+        :return:
+        """
+        sbml_file = self.model.to_sbml()
+        self.assertTrue(os.path.isfile(sbml_file))
+
+    def test_copasi_file_setter(self):
+        """
+
+        :return:
+        """
+        new_filename = os.path.join(self.model.root+'/test', 'CopasiModel2.cps')
+        self.model.copasi_file = new_filename
+        self.assertEqual(new_filename, self.model.copasi_file)
+
+    def test_copasi_file_root(self):
+        """
+
+        :return:
+        """
+        new_root = self.model.root+'/test'
+        new_file_name = os.path.join(new_root, 'CopasiModel2.cps')
+        self.model.copasi_file = new_file_name
+        self.assertEqual(new_root, self.model.root)
+
+    def test_copy_model(self):
+        """
+
+        :return:
+        """
+        new_filename = os.path.join(self.model.root, 'CopasiModel2.cps')
+        new_model = self.model.copy(new_filename)
+        new_model.save()
+        self.assertTrue(os.path.isfile(new_filename))
+
     # def test_func(self):
     #     """
     #

@@ -1,10 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generated with COPASI 4.19 (Build 140) (http://www.copasi.org) at 2017-08-06 11:58:31 UTC -->
+<?oxygen RNGSchema="http://www.copasi.org/static/schema/CopasiML.rng" type="xml"?>
 <COPASI xmlns="http://www.copasi.org/static/schema" versionMajor="4" versionMinor="19" versionDevel="140" copasiSourcesModified="0">
   <ListOfFunctions>
     <Function key="Function_13" name="Mass action (irreversible)" type="MassAction" reversible="false">
       <MiriamAnnotation>
 <rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <rdf:Description rdf:about="#Function_13">
-   <CopasiMT:is rdf:resource="urn:miriam:obo.sbo:SBO:0000041"/>
+   <CopasiMT:is rdf:resource="urn:miriam:obo.sbo:SBO:0000041" />
    </rdf:Description>
    </rdf:RDF>
       </MiriamAnnotation>
@@ -17,7 +20,7 @@ Reaction scheme where the products are created from the reactants and the change
 </body>
       </Comment>
       <Expression>
-        k1*PRODUCT&lt;substrate_i&gt;
+        k1*PRODUCT&lt;substrate_i>
       </Expression>
       <ListOfParameterDescriptions>
         <ParameterDescription key="FunctionParameter_81" name="k1" order="0" role="constant"/>
@@ -28,7 +31,7 @@ Reaction scheme where the products are created from the reactants and the change
       <MiriamAnnotation>
 <rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <rdf:Description rdf:about="#Function_14">
-   <CopasiMT:is rdf:resource="urn:miriam:obo.sbo:SBO:0000042"/>
+   <CopasiMT:is rdf:resource="urn:miriam:obo.sbo:SBO:0000042" />
    </rdf:Description>
    </rdf:RDF>
       </MiriamAnnotation>
@@ -41,7 +44,7 @@ Reaction scheme where the products are created from the reactants and the change
 </body>
       </Comment>
       <Expression>
-        k1*PRODUCT&lt;substrate_i&gt;-k2*PRODUCT&lt;product_j&gt;
+        k1*PRODUCT&lt;substrate_i>-k2*PRODUCT&lt;product_j>
       </Expression>
       <ListOfParameterDescriptions>
         <ParameterDescription key="FunctionParameter_62" name="k1" order="0" role="constant"/>
@@ -50,10 +53,12 @@ Reaction scheme where the products are created from the reactants and the change
         <ParameterDescription key="FunctionParameter_71" name="product" order="3" role="product"/>
       </ListOfParameterDescriptions>
     </Function>
-  <Function reversible="false" type="UserDefined" name="smad7_prod" key="Function_10000"><Expression>k1*Smads_Complex_c</Expression><ListOfParameterDescriptions><ParameterDescription key="FunctionParameter_6044692" name="k1" order="0" role="constant"/><ParameterDescription key="FunctionParameter_17906145" name="Smads_Complex_c" order="1" role="substrate"/></ListOfParameterDescriptions></Function></ListOfFunctions>
-  <Model key="Model_3" name="New Model" simulationType="time" timeUnit="s" volumeUnit="ml" areaUnit="m&#178;" lengthUnit="m" quantityUnit="mmol" type="deterministic" avogadroConstant="6.022140857e+023">
+  </ListOfFunctions>
+  <Model key="Model_3" name="New Model" simulationType="time" timeUnit="s" volumeUnit="ml" areaUnit="m²" lengthUnit="m" quantityUnit="mmol" type="deterministic" avogadroConstant="6.022140857e+023">
     <MiriamAnnotation>
-<rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:RDF
+   xmlns:dcterms="http://purl.org/dc/terms/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Model_3">
     <dcterms:created>
       <rdf:Description>
@@ -71,13 +76,13 @@ Reaction scheme where the products are created from the reactants and the change
       </Compartment>
     </ListOfCompartments>
     <ListOfMetabolites>
-      <Metabolite key="Metabolite_1" name="A" simulationType="reactions" compartment="Compartment_1" particle_number="6.022140857e+20">
+      <Metabolite key="Metabolite_1" name="A" simulationType="reactions" compartment="Compartment_1">
       </Metabolite>
-      <Metabolite key="Metabolite_3" name="B" simulationType="reactions" compartment="Compartment_1" particle_number="6.022140857e+20">
+      <Metabolite key="Metabolite_3" name="B" simulationType="reactions" compartment="Compartment_1">
       </Metabolite>
-      <Metabolite key="Metabolite_5" name="C" simulationType="reactions" compartment="Compartment_1" particle_number="6.022140857e+20">
+      <Metabolite key="Metabolite_5" name="C" simulationType="reactions" compartment="Compartment_1">
       </Metabolite>
-    <Metabolite compartment="Compartment_1" key="Metabolite_10000" name="Smads_Complex_c" simulationType="reactions" particle_number="6.022140857e+20"/><Metabolite compartment="Compartment_1" key="Metabolite_10001" name="Smad7" simulationType="reactions" particle_number="6.022140857e+20"/></ListOfMetabolites>
+    </ListOfMetabolites>
     <ListOfModelValues>
       <ModelValue key="ModelValue_0" name="A2B" simulationType="fixed">
       </ModelValue>
@@ -85,7 +90,9 @@ Reaction scheme where the products are created from the reactants and the change
       </ModelValue>
       <ModelValue key="ModelValue_2" name="ThisIsAssignment" simulationType="assignment">
         <MiriamAnnotation>
-<rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:RDF
+   xmlns:dcterms="http://purl.org/dc/terms/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#ModelValue_2">
     <dcterms:created>
       <rdf:Description>
@@ -97,14 +104,16 @@ Reaction scheme where the products are created from the reactants and the change
 
         </MiriamAnnotation>
         <Expression>
-          &lt;CN=Root,Model=New Model,Vector=Values[A2B],Reference=Value&gt;+&lt;CN=Root,Model=New Model,Vector=Values[B2C],Reference=Value&gt;
+          &lt;CN=Root,Model=New Model,Vector=Values[A2B],Reference=Value>+&lt;CN=Root,Model=New Model,Vector=Values[B2C],Reference=Value>
         </Expression>
       </ModelValue>
     </ListOfModelValues>
     <ListOfReactions>
       <Reaction key="Reaction_0" name="A2B" reversible="false" fast="false">
         <MiriamAnnotation>
-<rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:RDF
+   xmlns:dcterms="http://purl.org/dc/terms/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Reaction_0">
     <dcterms:created>
       <rdf:Description>
@@ -197,7 +206,9 @@ Reaction scheme where the products are created from the reactants and the change
       </Reaction>
       <Reaction key="Reaction_3" name="ADeg" reversible="false" fast="false">
         <MiriamAnnotation>
-<rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:RDF
+   xmlns:dcterms="http://purl.org/dc/terms/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Reaction_3">
     <dcterms:created>
       <rdf:Description>
@@ -225,7 +236,7 @@ Reaction scheme where the products are created from the reactants and the change
           </ListOfCallParameters>
         </KineticLaw>
       </Reaction>
-    <Reaction fast="false" key="Reaction_10000" name="smad7_prod" reversible="false"><ListOfSubstrates><Substrate metabolite="Metabolite_10000" stoichiometry="1"/></ListOfSubstrates><ListOfProducts><Product metabolite="Metabolite_10001" stoichiometry="1"/><Product metabolite="Metabolite_10000" stoichiometry="1"/></ListOfProducts><ListOfModifiers/><ListOfConstants><Constant key="Parameter_65030179" name="k1" value="0.1"/></ListOfConstants><KineticLaw function="Function_10000" scalingCompartment="CN=Root,Model=New Model,Vector=Compartments[nuc]" unitType="Default"><ListOfCallParameters><CallParameter functionParameter="FunctionParameter_6044692"><SourceParameter reference="Parameter_65030179"/></CallParameter><CallParameter functionParameter="FunctionParameter_17906145"><SourceParameter reference="Metabolite_10000"/></CallParameter></ListOfCallParameters></KineticLaw></Reaction></ListOfReactions>
+    </ListOfReactions>
     <ListOfModelParameterSets activeSet="ModelParameterSet_1">
       <ModelParameterSet key="ModelParameterSet_1" name="Initial State">
         <ModelParameterGroup cn="String=Initial Time" type="Group">
@@ -249,14 +260,14 @@ Reaction scheme where the products are created from the reactants and the change
           <ModelParameterGroup cn="CN=Root,Model=New Model,Vector=Reactions[A2B]" type="Reaction">
             <ModelParameter cn="CN=Root,Model=New Model,Vector=Reactions[A2B],ParameterGroup=Parameters,Parameter=k1" value="4" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
-                &lt;CN=Root,Model=New Model,Vector=Values[A2B],Reference=InitialValue&gt;
+                &lt;CN=Root,Model=New Model,Vector=Values[A2B],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=New Model,Vector=Reactions[B2C]" type="Reaction">
             <ModelParameter cn="CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k1" value="9" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
-                &lt;CN=Root,Model=New Model,Vector=Values[B2C],Reference=InitialValue&gt;
+                &lt;CN=Root,Model=New Model,Vector=Values[B2C],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
             <ModelParameter cn="CN=Root,Model=New Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2" value="0.1" type="ReactionParameter" simulationType="fixed"/>
@@ -280,9 +291,10 @@ Reaction scheme where the products are created from the reactants and the change
       <StateTemplateVariable objectReference="Compartment_3"/>
       <StateTemplateVariable objectReference="ModelValue_0"/>
       <StateTemplateVariable objectReference="ModelValue_1"/>
-    <StateTemplateVariable objectReference="Metabolite_10000"/><StateTemplateVariable objectReference="Metabolite_10001"/></StateTemplate>
-    <InitialState type="initialState">0 6.022140856999986e+020 6.022140856999986e+020 6.022140856999986e+020 13 1 3 4 9 6.022140857e+20 6.022140857e+20 
-</InitialState>
+    </StateTemplate>
+    <InitialState type="initialState">
+      0 6.022140856999986e+020 6.022140856999986e+020 6.022140856999986e+020 13 1 3 4 9 
+    </InitialState>
   </Model>
   <ListOfTasks>
     <Task key="Task_14" name="Steady-State" type="steadyState" scheduled="false" updateModel="false">
@@ -501,7 +513,7 @@ Reaction scheme where the products are created from the reactants and the change
     </Task>
   </ListOfTasks>
   <ListOfReports>
-    <Report key="Report_9" name="Steady-State" taskType="steadyState" separator="&#9;" precision="6">
+    <Report key="Report_9" name="Steady-State" taskType="steadyState" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -509,7 +521,7 @@ Reaction scheme where the products are created from the reactants and the change
         <Object cn="CN=Root,Vector=TaskList[Steady-State]"/>
       </Footer>
     </Report>
-    <Report key="Report_10" name="Elementary Flux Modes" taskType="fluxMode" separator="&#9;" precision="6">
+    <Report key="Report_10" name="Elementary Flux Modes" taskType="fluxMode" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -517,55 +529,55 @@ Reaction scheme where the products are created from the reactants and the change
         <Object cn="CN=Root,Vector=TaskList[Elementary Flux Modes],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_11" name="Optimization" taskType="optimization" separator="&#9;" precision="6">
+    <Report key="Report_11" name="Optimization" taskType="optimization" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
       <Header>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Object=Description"/>
         <Object cn="String=\[Function Evaluations\]"/>
-        <Object cn="Separator=&#9;"/>
+        <Object cn="Separator=&#x09;"/>
         <Object cn="String=\[Best Value\]"/>
-        <Object cn="Separator=&#9;"/>
+        <Object cn="Separator=&#x09;"/>
         <Object cn="String=\[Best Parameters\]"/>
       </Header>
       <Body>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Problem=Optimization,Reference=Function Evaluations"/>
-        <Object cn="Separator=&#9;"/>
+        <Object cn="Separator=&#x09;"/>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Problem=Optimization,Reference=Best Value"/>
-        <Object cn="Separator=&#9;"/>
+        <Object cn="Separator=&#x09;"/>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Problem=Optimization,Reference=Best Parameters"/>
       </Body>
       <Footer>
-        <Object cn="String=&#10;"/>
+        <Object cn="String=&#x0a;"/>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_12" name="Parameter Estimation" taskType="parameterFitting" separator="&#9;" precision="6">
+    <Report key="Report_12" name="Parameter Estimation" taskType="parameterFitting" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
       <Header>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Object=Description"/>
         <Object cn="String=\[Function Evaluations\]"/>
-        <Object cn="Separator=&#9;"/>
+        <Object cn="Separator=&#x09;"/>
         <Object cn="String=\[Best Value\]"/>
-        <Object cn="Separator=&#9;"/>
+        <Object cn="Separator=&#x09;"/>
         <Object cn="String=\[Best Parameters\]"/>
       </Header>
       <Body>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Function Evaluations"/>
-        <Object cn="Separator=&#9;"/>
+        <Object cn="Separator=&#x09;"/>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/>
-        <Object cn="Separator=&#9;"/>
+        <Object cn="Separator=&#x09;"/>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"/>
       </Body>
       <Footer>
-        <Object cn="String=&#10;"/>
+        <Object cn="String=&#x0a;"/>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_13" name="Metabolic Control Analysis" taskType="metabolicControlAnalysis" separator="&#9;" precision="6">
+    <Report key="Report_13" name="Metabolic Control Analysis" taskType="metabolicControlAnalysis" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -573,11 +585,11 @@ Reaction scheme where the products are created from the reactants and the change
         <Object cn="CN=Root,Vector=TaskList[Metabolic Control Analysis],Object=Description"/>
       </Header>
       <Footer>
-        <Object cn="String=&#10;"/>
+        <Object cn="String=&#x0a;"/>
         <Object cn="CN=Root,Vector=TaskList[Metabolic Control Analysis],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_14" name="Lyapunov Exponents" taskType="lyapunovExponents" separator="&#9;" precision="6">
+    <Report key="Report_14" name="Lyapunov Exponents" taskType="lyapunovExponents" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -585,11 +597,11 @@ Reaction scheme where the products are created from the reactants and the change
         <Object cn="CN=Root,Vector=TaskList[Lyapunov Exponents],Object=Description"/>
       </Header>
       <Footer>
-        <Object cn="String=&#10;"/>
+        <Object cn="String=&#x0a;"/>
         <Object cn="CN=Root,Vector=TaskList[Lyapunov Exponents],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_15" name="Time Scale Separation Analysis" taskType="timeScaleSeparationAnalysis" separator="&#9;" precision="6">
+    <Report key="Report_15" name="Time Scale Separation Analysis" taskType="timeScaleSeparationAnalysis" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -597,11 +609,11 @@ Reaction scheme where the products are created from the reactants and the change
         <Object cn="CN=Root,Vector=TaskList[Time Scale Separation Analysis],Object=Description"/>
       </Header>
       <Footer>
-        <Object cn="String=&#10;"/>
+        <Object cn="String=&#x0a;"/>
         <Object cn="CN=Root,Vector=TaskList[Time Scale Separation Analysis],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_16" name="Sensitivities" taskType="sensitivities" separator="&#9;" precision="6">
+    <Report key="Report_16" name="Sensitivities" taskType="sensitivities" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -609,11 +621,11 @@ Reaction scheme where the products are created from the reactants and the change
         <Object cn="CN=Root,Vector=TaskList[Sensitivities],Object=Description"/>
       </Header>
       <Footer>
-        <Object cn="String=&#10;"/>
+        <Object cn="String=&#x0a;"/>
         <Object cn="CN=Root,Vector=TaskList[Sensitivities],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_17" name="Linear Noise Approximation" taskType="linearNoiseApproximation" separator="&#9;" precision="6">
+    <Report key="Report_17" name="Linear Noise Approximation" taskType="linearNoiseApproximation" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -621,7 +633,7 @@ Reaction scheme where the products are created from the reactants and the change
         <Object cn="CN=Root,Vector=TaskList[Linear Noise Approximation],Object=Description"/>
       </Header>
       <Footer>
-        <Object cn="String=&#10;"/>
+        <Object cn="String=&#x0a;"/>
         <Object cn="CN=Root,Vector=TaskList[Linear Noise Approximation],Object=Result"/>
       </Footer>
     </Report>
