@@ -863,19 +863,19 @@ class AddTests(_test_base._BaseTest):
                         for k in j:
                             if k.tag == '{http://www.copasi.org/static/schema}ListOfProducts':
                                 self.assertTrue(len(k) == 0)
-
-    def test_add_reaction_from_string(self):
-        """
-        Test different reaction
-        :return:
-        """
-        name = 'New_reaction',
-        expression = 'A + Fd + adf -> d ; l e',
-        rate_law = '(k*A*Fd-d)/(km+A)^h'
-        # print (name, expression, rate_law)
-        self.model = self.model.add('reaction', [name, expression, rate_law])
-        # self.model.open()
-        # self.model.save()
+    #
+    # def test_add_reaction_from_string(self):
+    #     """
+    #     Test different reaction
+    #     :return:
+    #     """
+    #     name = 'New_reaction',
+    #     expression = 'A + Fd + adf -> d',
+    #     rate_law = '(k*A*Fd-d)/(km+A)^h'
+    #     # print (name, expression, rate_law)
+    #     self.model = self.model.add('reaction', [name, expression, rate_law])
+    #     self.model.open()
+    #     # self.model.save()
         # xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
         # boolean = False
         # for i in xml.iter():
