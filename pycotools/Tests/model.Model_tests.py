@@ -505,6 +505,8 @@ class ModelTests(_test_base._BaseTest):
         self.model.save()
         xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
 
+        self.model.open()
+
         boolean = False
         for i in xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
@@ -974,8 +976,6 @@ class ModelTests(_test_base._BaseTest):
         :return:
         """
         self.assertEqual(self.model.parameters.shape[1], 9)
-
-
 
     def test_export_sbml(self):
         """

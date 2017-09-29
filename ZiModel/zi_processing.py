@@ -16,8 +16,8 @@ zi = model.Model(cps_file2)
 r = model.Reaction(zi, 'r5', 'A -> B', 'k*A')
 
 
-
-zi.add('reaction', r)
+#
+# zi.add('reaction', r)
 
 zi.open(cps_file2)
 
