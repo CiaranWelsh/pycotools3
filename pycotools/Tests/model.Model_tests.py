@@ -851,8 +851,25 @@ class AddTests(_test_base._BaseTest):
                         for k in j:
                             if k.tag == '{http://www.copasi.org/static/schema}ListOfProducts':
                                 self.assertTrue(len(k) == 0)
-    # #
 
+    def test_add_metabolite(self):
+        metab = pycotools.model.Metabolite(
+            self.model, 'metab'
+        )
+        self.model.add('metabolite', metab)
+
+        m = self.model.get('metabolite', 'metab')
+        self.assertEqual(m.name, metab.name)
+
+    def test_add_metabolite_by_string(self):
+        """
+        Use string instead of Metabolite
+        :return:
+        """
+        self.model.add('metabolite', 'metab')
+
+        m = self.model.get('metabolite', 'metab')
+        self.assertEqual(m.name, metab.name)
 
 
 class TranslatorTests(_test_base._BaseTest):
@@ -914,7 +931,7 @@ class TranslatorTests(_test_base._BaseTest):
         """
         metab =  pycotools.model.Metabolite(self.model,
                                             name='X')
-        self.assertEqual(str(metab.concentration), str(1))
+        self.assertEqual(str(metab.concentration), str(float(1)))
 
 
 
