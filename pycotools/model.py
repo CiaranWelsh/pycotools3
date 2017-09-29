@@ -575,8 +575,19 @@ class Model(_base._Base):
         :param metab:
         :return:
         """
+
+        ## If metab is str convert to Metabolite
+        ## with default parameters
+        ## This must occur before deleting
+        ## the metabolites cache
+        if isinstance(metab, str):
+            metab = Metabolite(self, metab)
+
+        # LOG.debug('metab is --> {}'.format(metab))
+
         if 'metabolites' in self.__dict__:
             del self.__dict__['metabolites']
+
 
         if not isinstance(metab, Metabolite):
             raise errors.InputError('Input must be Metabolite class')

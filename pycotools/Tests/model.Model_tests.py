@@ -866,10 +866,9 @@ class AddTests(_test_base._BaseTest):
         Use string instead of Metabolite
         :return:
         """
-        self.model.add('metabolite', 'metab')
-
-        m = self.model.get('metabolite', 'metab')
-        self.assertEqual(m.name, metab.name)
+        self.model.add('metabolite', 'p')
+        m = self.model.get('metabolite', 'p', by='name')
+        self.assertNotEqual(m, [])
 
 
 class TranslatorTests(_test_base._BaseTest):
