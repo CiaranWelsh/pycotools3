@@ -810,7 +810,7 @@ class Model(_base._Base):
         :return:
         """
 
-        
+
         if function.key == None:
             function.key = KeyFactory(self, type='function').generate()
 
@@ -1018,13 +1018,13 @@ class Model(_base._Base):
         :return:
         """
 
-        if isinstance(reaction, (list, tuple)):
-            LOG.debug('got tuple --> {}'.format(reaction[0]))
-            if len(reaction) != 3:
-                raise errors.InputError('Expecting 3 '
-                                        'arguments (name, expression, rate_law)'
-                                        'but got {} instead'.format(len(reaction)))
-            reaction = Reaction(self, reaction[0][0], reaction[1][0], reaction[2][0])
+        # if isinstance(reaction, (list, tuple)):
+        #     LOG.debug('got tuple --> {}'.format(reaction[0]))
+        #     if len(reaction) != 3:
+        #         raise errors.InputError('Expecting 3 '
+        #                                 'arguments (name, expression, rate_law)'
+        #                                 'but got {} instead'.format(len(reaction)))
+        #     reaction = Reaction(self, reaction[0][0], reaction[1][0], reaction[2][0])
 
         if not isinstance(reaction, Reaction):
             raise errors.InputError(
