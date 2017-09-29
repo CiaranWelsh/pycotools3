@@ -5,77 +5,49 @@ from  pycotools import *
 
 
 
-cps_file1 = r'/home/b3053674/Documents/pycotools/ZiModel/zi2012.cps'
-cps_file2 = r'/home/b3053674/Documents/pycotools/ZiModel/zi20122.cps'
-cps_file3 = r'/home/b3053674/Documents/pycotools/ZiModel/zi20123.cps'
-
-def reset(cps1, cps2):
-    '''
-    resplace m1 with m2
-    :param cps1:
-    :param cps2:
-    :return:
-    '''
-    m = model.Model(cps1)
-    m.save(cps2)
+cps_file = r'/home/b3053674/Documents/pycotools/ZiModel/zi2012.cps'
 
 
-zi = model.Model(cps_file2)
-# # print zi.save(cps_file2)
-# print len(zi.reactions)
-# for i in zi.functions:
-#     for j in i.list_of_parameter_descriptions:
-#         print j, j.key
+zi = model.Model(cps_file)
+
+
+# # print [i.name for i in zi.metabolites]
+# r = model.Reaction(zi_copy, name='smad7_prod', expression='Smads_Complex_c -> Smads_Complex_c + Smad7', rate_law='k1*Smads_Complex_c')
 #
-# '''
-# ParameterDescription(name="A", role="substrate") FunctionParameter_37652982
-# ParameterDescription(name="k", role="constant") FunctionParameter_58009604
-# '''
-# r = model.Reaction(zi, 'A2B2', expression='A -> B',
+# #zi.add_local_parameter(r.parameters[0])
+#
+#
+# zi_copy = zi_copy.add_reaction(r)
+# # zi.open()
+# # #
+# zi_copy.save()
+# print zi_copy.reactions
+# # zi.open()
+
+# print zi.metabolites[0]
+
+metab = model.Metabolite(zi, 'x')
+zi = zi.add_metabolite(metab)
+zi = zi.set('metabolite', 'x', 1234, 'name', 'concentration')
+print zi.get('metabolite', 'x')
+# print zi.set('metabolite', 'x', 'y')
+# print model.Product(zi, 'smad')
+# print zi.get('metabolite', 'Smad3n', by='name')
+# print model.Reaction(zi, 'reaction1', expression='A -> B',
 #                      rate_law='k*A')
-# zi = zi.add('reaction', r)
+
+
+# from beaker.cache import CacheManager
+# from beaker.util import parse_cache_config_options
 #
-# # r = model.Reaction(zi, 'A2B3', expression='A -> B',
-# #                      rate_law='k*A')
-# # zi = zi.add('reaction', r)
-#
-# # print len(zi.reactions)
-#
-# zi.open(cps_file2)
-#
-#
-# zi.open()
-# from lxml import etree
-# print etree.tostring(r.to_xml(), pretty_print=True)
+# cache_opts = {
+#     'cache.type': 'file',
+#     'cache.data_dir': '/home/b3053674/Documents/pycotools/ZiModel/data',
+#     'cache.lock_dir': '/home/b3053674/Documents/pycotools/ZiModel/lock'
+# }
+# cache = CacheManager(**parse_cache_config_options(cache_opts))
+# print cache
 
-# zi.open()
-# for i in r.rate_law.list_of_parameter_descriptions:
-#     print i
-
-# print zi.reactions
-# print zi.functions
-
-#
-
-# def __init__(self, model, name='function_1', expression=None,
-#              type=None, key=None, reversible=None,
-#              list_of_parameter_descriptions=[],
-#              roles={}):
-
-
-# f = model.Function(zi, name='funct', expression='k*A', roles={'k': 'parameter',
-#                                                               'A': 'substrate'})
-# for i in f.list_of_parameter_descriptions:
-#     print i
-
-
-# print r.rate_law
-# print model.Expression(r.rate_law).to_list()
-
-# print zi.reactions
-
-# print r.to_xml()
-# zi.add('reaction', r)
 
 
 
