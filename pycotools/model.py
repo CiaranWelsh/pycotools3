@@ -822,31 +822,39 @@ class Model(_base._Base):
                     reactions_dict[reaction_count]['products'] = []
                     reactions_dict[reaction_count]['modifiers'] = []
                     reactions_dict[reaction_count]['constants'] = []
-                    reactions_dict[reaction_count]['function'] = []#ListOfSubstrates
+                    reactions_dict[reaction_count]['function'] = []
                     for k in list(j):
                         reactions_dict[reaction_count]['reversible'] = j.attrib['reversible']
                         reactions_dict[reaction_count]['name'] = j.attrib['name']
                         reactions_dict[reaction_count]['key'] = j.attrib['key']
                         if k.tag == '{http://www.copasi.org/static/schema}ListOfSubstrates':
+                            list_of_substrates = []
                             for l in list(k):
-                                list_of_substrates = [m for m in self.metabolites if m.key in l.attrib['metabolite']]
+                                substrate = self.get('metabolite', l.attrib['metabolite'], by='key')
+                                if isinstance(substrate, list):
+                                    raise errors.SomethingWentHorriblyWrongError('substrate matched >1 substrate')
+                                ##convert to substrate
+                                substrate = substrate.to_substrate()
+                                list_of_substrates.append(substrate)
+                            reactions_dict[reaction_count]['substrates'] = list_of_substrates
 
-                                ## convert list to substrates
-                                list_of_substrates = [m.to_substrate() for m in list_of_substrates]
-                                reactions_dict[reaction_count]['substrates']= list_of_substrates
+
                         elif k.tag == '{http://www.copasi.org/static/schema}ListOfProducts':
+                            list_of_products = []
                             for l in list(k):
                                 ## get list of metabolites and convert them to Product class
-                                list_of_products = [m for m in self.metabolites if m.key in l.attrib['metabolite']]
-                                list_of_products = [m.to_product() for m in list_of_products]
-                                #
+                                product = self.get('metabolite', l.attrib['metabolite'], by='key')
+                                product = product.to_product()
+                                list_of_products.append(product)
                                 reactions_dict[reaction_count]['products'] = list_of_products
 
                         elif k.tag == '{http://www.copasi.org/static/schema}ListOfModifiers':
+                            list_of_modifiers = []
                             for l in list(k):
                                 ## get list of metabolites and convert them to Moifier class
-                                list_of_modifiers = [m for m in self.metabolites if m.key in l.attrib['metabolite']]
-                                list_of_modifiers = [m.to_modifier() for m in list_of_modifiers]
+                                modifier = self.get('metabolite', l.attrib['metabolite'], by='key')
+                                modifier = modifier.to_product()
+                                list_of_modifiers.append(modifier)
                                 reactions_dict[reaction_count]['modifiers'] = list_of_modifiers
 
                         elif k.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
@@ -855,37 +863,16 @@ class Model(_base._Base):
                             ##assertain the parameters simulation type
                             for l in list(k):
                                 global_name = "({}).{}".format(j.attrib['name'], l.attrib['name'])
-                                query = '//*[@cn="String=Kinetic Parameters"]'
-                                simulation_types = {}
-                                for element in self.xml.xpath(query):
-                                    for element2 in element:
-                                        for element3 in element2:
-                                            match = re.findall('.*Reactions\[(.*)\].*Parameter=(.*)',
-                                                               element3.attrib['cn'])[0]
-
-                                            match = "({}).{}".format(match[0], match[1])
-                                            if global_name == match:
-                                                simulation_types[global_name] = element3.attrib['simulationType']
-
-                                _local = LocalParameter(self,
-                                                   key=l.attrib['key'],
-                                                   name=l.attrib['name'],
-                                                   value=l.attrib['value'],
-                                                   reaction_name=j.attrib['name'],
-                                                   global_name=global_name,
-                                                   simulation_type=simulation_types[global_name])
-                                list_of_constants.append(_local)
-
-                                reactions_dict[reaction_count]['constants'] = list_of_constants
-
+                                #LOG.warning('Experimental section of reactions function')
+                                constant = self.get('local_parameter', global_name, by='global_name')
+                                list_of_constants.append(constant)
 
                         elif k.tag == '{http://www.copasi.org/static/schema}KineticLaw':
-                            function_list = [m for m in self.functions if m.key == k.attrib['function']]
-                            assert len(function_list) == 1
-                            reactions_dict[reaction_count]['function'] = function_list[0]
-
+                            function = self.get('function', k.attrib['function'], by='key')
+                            reactions_dict[reaction_count]['function'] = function
 
         ## assemble the expression for the reaction
+        #LOG.warning('move below code to separate function for clean code')
         for i, dct in reactions_dict.items():
             if dct['function'] == []:
                 dct['function'] = "k*{}".format(reduce(lambda x, y: '{}*{}'.format(x, y), substrates))
@@ -923,9 +910,9 @@ class Model(_base._Base):
                 expression = '{} {} {}; {}'.format(sub_expression, operator,
                                                    prod_expression, modifier_expression)
             reactions_dict[i]['expression'] = expression
-
+        # for i in reactions_dict:
+        #     LOG.debug('reactions --> {}: {}'.format(i, reactions_dict[i]))
         lst=[]
-
         for i, dct in reactions_dict.items():
             ## skip the skipped reactions
             # if i not in skipped:
@@ -941,6 +928,7 @@ class Model(_base._Base):
                                 parameters_dict={j.name: j for j in dct['constants']},
                                 )
                        )
+        # self.reset_cache('reactions')
         return lst
 
     def add_reaction(self, reaction):
@@ -959,9 +947,22 @@ class Model(_base._Base):
         if 'reactions' in self.__dict__:
             del self.__dict__['reactions']
 
-        existing_functions = [i.expression for i in self.functions]
-        if reaction.rate_law.expression not in existing_functions:
+        # existing_functions = [i.expression for i in self.functions]
+        # if reaction.rate_law.expression not in existing_functions:
+        #     self.add_function(reaction.rate_law)
+
+        existing_function = self.get('function', reaction.rate_law.expression, by='expression')
+
+        if (existing_function == []):
             self.add_function(reaction.rate_law)
+        else:
+            LOG.warning('Bug might occur here'
+                        'if an existing finction '
+                        'exists but has different'
+                        'roles. then its not the same function'
+                        'and should be added separetly')
+            reaction.rate_law = existing_function
+
 
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
@@ -1730,20 +1731,20 @@ class GlobalQuantity(object):
         """
         pass
 
+
 @mixin(ReadModelMixin)
 class Reaction(object):
     """
     Reactions have rectants, products, rate laws and parameters
     Not sure if this is a priority just yet
-
-
     Here's an idea. Would it be a good idea to have just
     a Parmeter class which a scope property which defines
     whether its a model parameter or specific to a individual
     reaction.
     """
+
     def __init__(self, model, name='reaction_1', expression=None,
-                 rate_law=None, reversible=False, simulation_type=None,
+                 rate_law=None, reversible=False, simulation_type='reactions',
                  parameters=[], parameters_dict={}, substrates=[],
                  products=[], modifiers=[], key=None):
         self.model = self.read_model(model)
@@ -1760,9 +1761,9 @@ class Reaction(object):
         self.fast = False
         self.key = key
 
+        self._do_checks()
         self.create()
         # print self.to_df()
-
 
     def __str__(self):
         return 'Reaction(name="{}", expression="{}", rate_law="{}", parameters={}, reversible={}, simulation_type="{}")'.format(
@@ -1777,15 +1778,12 @@ class Reaction(object):
     @property
     def reference(self):
         """
-
         :return:
         """
         return "Vector=Reactions[{}]".format(self.name)
 
     def _do_checks(self):
         """
-
-
         :return:
         """
         if not isinstance(self.fast, bool):
@@ -1796,7 +1794,8 @@ class Reaction(object):
                                             'assignment',
                                             'reactions',
                                             'ode']:
-                raise errors.InputError('type should be either fixed or assignment. ODE not supported as Reactions can be used.')
+                raise errors.InputError(
+                    'type should be either fixed or assignment. ODE not supported as Reactions can be used.')
 
         if self.key is None:
             self.key = KeyFactory(self.model, type='reaction').generate()
@@ -1812,7 +1811,6 @@ class Reaction(object):
 
         if self.rate_law is None:
             raise errors.InputError('rate_law is a required argument')
-
 
         if self.key is None:
             self.key = KeyFactory(self.model, type='reaction').generate()
@@ -1834,9 +1832,7 @@ class Reaction(object):
         self.modifiers = trans.modifiers
         self.reversible = trans.reversible
 
-
         reaction_components = [i.name for i in trans.all_components]
-
 
         if (self.rate_law is None) or (self.rate_law is []):
             raise errors.InputError('rate_law is {}'.format(self.rate_law))
@@ -1857,7 +1853,7 @@ class Reaction(object):
                     backward = reduce(
                         lambda x, y: '{}*{}'.format(
                             x, y), [i.name for i in self.products]
-                        )
+                    )
                     self.rate_law = 'k1*{}-k2*{}'.format(forward, backward)
 
                 expression_components = Expression(self.rate_law).to_list()
@@ -1865,12 +1861,10 @@ class Reaction(object):
             else:
                 expression_components = Expression(self.rate_law.expression).to_list()
 
-
         parameter_list = []
         for i in expression_components:
             if i not in reaction_components:
                 parameter_list.append(i)
-
 
         local_keys = KeyFactory(self.model, type='constant').generate(len(parameter_list))
         if isinstance(local_keys, str):
@@ -1883,10 +1877,10 @@ class Reaction(object):
         when we create a new reaction this means that that reaction just
         wont have a local parameter. Therefore I need to distinguigh between
         reactions that are already in the model and new reactions. 
-        
+
         Only the reactions that are new in the model get a local 
         parameter assigned here. 
-        
+
         However keep the code commented out until you locate the bugs 
         error. 
         '''
@@ -1913,6 +1907,7 @@ class Reaction(object):
         """
 
         ##todo check if ratelaw exists
+
         if isinstance(self.rate_law, str):
             if self.rate_law == 'mass_action':
                 ma = MassAction(self.model, reversible=self.reversible)
@@ -1922,9 +1917,8 @@ class Reaction(object):
         elif isinstance(self.rate_law, Function):
             # return self.rate_law
             exp = Expression(self.rate_law.expression).to_list()
+
         role_dct = {}
-
-
 
         # if self.substrates + self.products == []:
         #     raise errors.SomethingWentHorriblyWrongError('Both substrates and products are empty')
@@ -1937,30 +1931,39 @@ class Reaction(object):
             elif i in [j.name for j in self.modifiers]:
                 role_dct[i] = 'modifier'
             else:
-                role_dct[i] = 'parameter'
+                role_dct[i] = 'constant'
+
+        existing = self.model.get('function', self.rate_law, 'expression')
+        # LOG.debug('existing function --> {}'.format(existing))
+        # if (existing != []):# and (existing.roles == role_dct):
+        #     LOG.debug('existing roles == role dct --> {}=={},{}'.format(
+        #         existing.roles, role_dct, existing.roles == role_dct))
+        #     LOG.debug('function is existing so returning that instead --> {}'.format(existing))
+        #     return existing
 
 
-        function = Function(self.model, name=self.name,
-                            expression=self.rate_law,
-                            roles=role_dct)
+        function = Function(
+            self.model,
+            name="({}).{}".format(
+                self.name,
+                self.rate_law),
+            expression=self.rate_law,
+            roles=role_dct
+        )
         return function
 
     def create(self):
         """
-
         :return:
         """
         ## get lists of substrate, products, modifiers and constants
-
         self.translate_reaction()
 
         ## interpret rate law
         self.rate_law = self.create_rate_law_function()
 
-
     def to_xml(self):
         """
-
         :return:
         """
         if self.fast:
@@ -1972,7 +1975,6 @@ class Reaction(object):
             self.reversible = 'true'
         else:
             self.reversible = 'false'
-
 
         if isinstance(self.name, bool):
             raise Exception
@@ -1987,18 +1989,17 @@ class Reaction(object):
         list_of_substrates = etree.SubElement(reaction, 'ListOfSubstrates')
         for i in self.substrates:
             etree.SubElement(list_of_substrates, 'Substrate', attrib={'metabolite': i.key,
-                                                                      'stoichiometry': str(i.stoichiometry)} )
+                                                                      'stoichiometry': str(i.stoichiometry)})
 
         list_of_products = etree.SubElement(reaction, 'ListOfProducts')
         for i in self.products:
             etree.SubElement(list_of_products, 'Product', attrib={'metabolite': i.key,
                                                                   'stoichiometry': str(i.stoichiometry)})
 
-
-        list_of_modifiers= etree.SubElement(reaction, 'ListOfModifiers')
+        list_of_modifiers = etree.SubElement(reaction, 'ListOfModifiers')
         for i in self.modifiers:
             etree.SubElement(list_of_modifiers, 'Modifier', attrib={'metabolite': i.key,
-                                                                   'stoichiometry': str(i.stoichiometry)})
+                                                                    'stoichiometry': str(i.stoichiometry)})
 
         list_of_constants = etree.SubElement(reaction, 'ListOfConstants')
 
@@ -2006,18 +2007,16 @@ class Reaction(object):
             etree.SubElement(list_of_constants, 'Constant', attrib={'key': i.key,
                                                                     'name': i.name,
                                                                     'value': str(i.value)})
-
-        if self.rate_law.name == 'mass_action':
+        if 'mass_action' in self.rate_law.name.lower().replace(' ', '_'):
             kinetic_law = self.rate_law.to_xml()
-
         else:
             kinetic_law = etree.SubElement(reaction,
-                                       'KineticLaw',
-                                       attrib={'function': self.rate_law.key,
-                                               'unitType': 'Default',
-                                               'scalingCompartment': "{},{}".format(
-                                                   self.model.reference,
-                                                   self.substrates[0].compartment.reference)})
+                                           'KineticLaw',
+                                           attrib={'function': self.rate_law.key,
+                                                   'unitType': 'Default',
+                                                   'scalingCompartment': "{},{}".format(
+                                                       self.model.reference,
+                                                       self.substrates[0].compartment.reference)})
             call_parameters = etree.SubElement(kinetic_law, 'ListOfCallParameters')
             for i in self.rate_law.list_of_parameter_descriptions:
                 call_parameter = etree.SubElement(call_parameters,
@@ -2027,15 +2026,16 @@ class Reaction(object):
                 if i.role == 'constant':
                     ##TODO implement global quantities here
 
+
                     source_parameter = self.parameters_dict[i.name].key
 
                 elif (i.role == 'substrate') or (i.role == 'product') or (i.role == 'modifier'):
                     source_parameter = self.model.get('metabolite', i.name, by='name').key
 
-
                 etree.SubElement(call_parameter, 'SourceParameter', attrib={'reference': source_parameter})
 
         return reaction
+
 
 @mixin(ReadModelMixin)
 class Function(object):
@@ -2089,29 +2089,34 @@ class Function(object):
         if self.name == None:
             self.name = self.key
 
-
-
     def create_parameter_descriptions_from_roles(self):
         """
         Use roles dict to create parameter descriptions
         :return:
         """
-        if self.roles == None:
+        ## If list of parameter descriptions already
+        ## contains content keep it.
+        if self.list_of_parameter_descriptions != []:
             return self.list_of_parameter_descriptions
+
+        ## else reverse engineer new parameter descriptions
+        ## from the info that we have
         else:
-            if not self.list_of_parameter_descriptions:
+            function_parameter_keys = KeyFactory(
+                self.model, type='function_parameter'
+            ).generate(len(self.roles))
 
-                function_parameter_keys = KeyFactory(self.model, type='function_parameter').generate(len(self.roles))
-
-                keys = self.roles.keys()
-                values = self.roles.values()
-                for i in range(len(self.roles)):
-                    self.list_of_parameter_descriptions.append(
-                        ParameterDescription(self.model,
-                                             key=function_parameter_keys[i],
-                                             name=keys[i],
-                                             role=values[i],
-                                             order=i))
+            # LOG.warning('line 2127 is experimental')
+            self.list_of_parameter_descriptions = []
+            keys = self.roles.keys()
+            values = self.roles.values()
+            for i in range(len(self.roles)):
+                self.list_of_parameter_descriptions.append(
+                    ParameterDescription(self.model,
+                                         key=function_parameter_keys[i],
+                                         name=keys[i],
+                                         role=values[i],
+                                         order=i))
             return self.list_of_parameter_descriptions
 
     def to_xml(self):
@@ -2223,7 +2228,6 @@ class LocalParameter(object):
 
     @property
     def reference(self):
-        LOG.warning('Youve changed local parameter reference. This may cause a bug')
         return "ParameterGroup=Parameters,Parameter={}".format(self.name)
 
     @property
