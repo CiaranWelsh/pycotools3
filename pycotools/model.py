@@ -2463,7 +2463,7 @@ class Expression(object):
 
         ## get list of elements by split
         split = self.expression.split(',')
-        return split
+        return [i.strip() for i in split]
 
     def __str__(self):
         return "Expression({})".format(self.expression)
