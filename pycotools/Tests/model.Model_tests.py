@@ -448,114 +448,123 @@ class ModelTests(_test_base._BaseTest):
 
         self.assertTrue(boolean)
 
-    # # def test_add_reaction2(self):
-    # #     """
-    # #     Test correct number of substrates
-    # #     :return:
-    # #     """
-    # #     r = pycotools.model.Reaction(self.model,
-    # #                                  name='fake_reaction',
-    # #                                  expression='A + B + C + D -> E + F',
-    # #                                  rate_law='k * A * B * C / D')
-    # #     self.model.add_reaction(r)
-    # #     self.model.save()
-    # #     xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
-    # #
-    # #     boolean = False
-    # #     for i in xml.iter():
-    # #         if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
-    # #             for j in i:
-    # #                 if j.attrib['name'] == 'fake_reaction':
-    # #                     for k in j:
-    # #                         if k.tag == '{http://www.copasi.org/static/schema}ListOfSubstrates':
-    # #                             self.assertTrue(len(k)==4)
-    # #
-    # # def test_add_reaction3(self):
-    # #     """
-    # #     Test correct number of products
-    # #     :return:
-    # #     """
-    # #     r = pycotools.model.Reaction(self.model,
-    # #                                  name='fake_reaction',
-    # #                                  expression='A + B + C + D -> E + F',
-    # #                                  rate_law='k * A * B * C / D')
-    # #     self.model.add_reaction(r)
-    # #     self.model.save()
-    # #     xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
-    # #
-    # #     boolean = False
-    # #     for i in xml.iter():
-    # #         if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
-    # #             for j in i:
-    # #                 if j.attrib['name'] == 'fake_reaction':
-    # #                     for k in j:
-    # #                         if k.tag == '{http://www.copasi.org/static/schema}ListOfProducts':
-    # #                             self.assertTrue(len(k)==2)
-    # #
-    # # def test_add_reaction4(self):
-    # #     """
-    # #     Test correct number of products
-    # #     :return:
-    # #     """
-    # #     r = pycotools.model.Reaction(self.model,
-    # #                                  name='fake_reaction',
-    # #                                  expression='A + B + C + D -> E + F',
-    # #                                  rate_law='k * A * B * C / D')
-    # #     self.model.add_reaction(r)
-    # #     self.model.save()
-    # #     xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
-    # #
-    # #     boolean = False
-    # #     for i in xml.iter():
-    # #         if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
-    # #             for j in i:
-    # #                 if j.attrib['name'] == 'fake_reaction':
-    # #                     for k in j:
-    # #                         if k.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
-    # #                             self.assertTrue(len(k) == 1)
-    # #
-    # # def test_add_reaction5(self):
-    # #     """
-    # #     Test different reaction
-    # #     :return:
-    # #     """
-    # #     r = pycotools.model.Reaction(self.model,
-    # #                                  name='fake_reaction2',
-    # #                                  expression='A + F + irs -> ; G',
-    # #                                  rate_law='k * A * B * C / D')
-    # #     self.model.add_reaction(r)
-    # #     self.model.save()
-    # #     xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
-    # #
-    # #     boolean = False
-    # #     for i in xml.iter():
-    # #         if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
-    # #             for j in i:
-    # #                 if j.attrib['name'] == 'fake_reaction2':
-    # #                     for k in j:
-    # #                         if k.tag == '{http://www.copasi.org/static/schema}ListOfSubstrates':
-    # #                             self.assertTrue(len(k) == 3)
-    # #
-    # # def test_add_reaction6(self):
-    # #     """
-    # #     Test different reaction
-    # #     :return:
-    # #     """
-    # #     r = pycotools.model.Reaction(self.model,
-    # #                                  name='fake_reaction2',
-    # #                                  expression='A + F + irs -> ; G',
-    # #                                  rate_law='k * A * F / irs + G')
-    # #     self.model = self.model.add_reaction(r)
-    # #     self.model.save()
-    # #     xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
-    # #     boolean = False
-    # #     for i in xml.iter():
-    # #         if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
-    # #             for j in i:
-    # #                 if j.attrib['name'] == 'fake_reaction2':
-    # #                     for k in j:
-    # #                         if k.tag == '{http://www.copasi.org/static/schema}ListOfProducts':
-    # #                             self.assertTrue(len(k) == 0)
+    def test_add_reaction2(self):
+        """
+        Test correct number of substrates
+        :return:
+        """
+        r = pycotools.model.Reaction(self.model,
+                                     name='fake_reaction',
+                                     expression='A + B + C + D -> E + F',
+                                     rate_law='k * A * B * C / D')
+        self.model.add_reaction(r)
+        self.model.save()
+        xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
+
+        boolean = False
+        for i in xml.iter():
+            if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
+                for j in i:
+                    if j.attrib['name'] == 'fake_reaction':
+                        for k in j:
+                            if k.tag == '{http://www.copasi.org/static/schema}ListOfSubstrates':
+                                self.assertTrue(len(k)==4)
+
+    def test_add_reaction3(self):
+        """
+        Test correct number of products
+        :return:
+        """
+        r = pycotools.model.Reaction(self.model,
+                                     name='fake_reaction',
+                                     expression='A + B + C + D -> E + F',
+                                     rate_law='k * A * B * C / D')
+        self.model.add_reaction(r)
+        self.model.save()
+        xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
+
+        boolean = False
+        for i in xml.iter():
+            if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
+                for j in i:
+                    if j.attrib['name'] == 'fake_reaction':
+                        for k in j:
+                            if k.tag == '{http://www.copasi.org/static/schema}ListOfProducts':
+                                self.assertEqual(len(k), 2)
+
+    def test_add_reaction4(self):
+        """
+        Test correct number of constants
+        :return:
+        """
+        r = pycotools.model.Reaction(self.model,
+                                     name='fake_reaction',
+                                     expression='A + B + C + D -> E + F',
+                                     rate_law='k * A * B * C / D')
+        self.model.add_reaction(r)
+        self.model.save()
+        xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
+
+        boolean = False
+        for i in xml.iter():
+            if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
+                for j in i:
+                    if j.attrib['name'] == 'fake_reaction':
+                        for k in j:
+                            if k.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
+                                print k
+                                print k.tag
+                                print k.attrib
+                                print len(k)
+                                for m in k:
+                                    print m
+                                    print m.tag
+                                    print len(m)
+                                    print m.attrib
+                                self.assertEqual(len(k), 1)
+
+    # def test_add_reaction5(self):
+    #     """
+    #     Test different reaction
+    #     :return:
+    #     """
+    #     r = pycotools.model.Reaction(self.model,
+    #                                  name='fake_reaction2',
+    #                                  expression='A + F + irs -> ; G',
+    #                                  rate_law='k * A * B * C / D')
+    #     self.model.add_reaction(r)
+    #     self.model.save()
+    #     xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
+    #
+    #     boolean = False
+    #     for i in xml.iter():
+    #         if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
+    #             for j in i:
+    #                 if j.attrib['name'] == 'fake_reaction2':
+    #                     for k in j:
+    #                         if k.tag == '{http://www.copasi.org/static/schema}ListOfSubstrates':
+    #                             self.assertTrue(len(k) == 3)
+    #
+    # def test_add_reaction6(self):
+    #     """
+    #     Test different reaction
+    #     :return:
+    #     """
+    #     r = pycotools.model.Reaction(self.model,
+    #                                  name='fake_reaction2',
+    #                                  expression='A + F + irs -> ; G',
+    #                                  rate_law='k * A * F / irs + G')
+    #     self.model = self.model.add_reaction(r)
+    #     self.model.save()
+    #     xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
+    #     boolean = False
+    #     for i in xml.iter():
+    #         if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
+    #             for j in i:
+    #                 if j.attrib['name'] == 'fake_reaction2':
+    #                     for k in j:
+    #                         if k.tag == '{http://www.copasi.org/static/schema}ListOfProducts':
+    #                             self.assertTrue(len(k) == 0)
     # #
     # #
     # def test_translater_again(self):
