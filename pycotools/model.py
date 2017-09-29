@@ -62,6 +62,35 @@ class GetModelComponentFromStringMixin(Mixin):
         else:
             return model.get(component, string, by=name)
 
+class ComparisonMethodsMixin(Mixin):
+    """
+    This set of methods over ride the
+    magic methods __eq__, __ne__ and __hash__.
+    This code comes from Stack overflow for
+    enabling use of == and != for comparisons.
+
+    This is implemented as a Mixin since its general
+    code which can be used for multiple classes
+
+    Source: https://stackoverflow.com/questions/390250/elegant-ways-to-support-equivalence-equality-in-python-classes
+
+    """
+
+    def __eq__(self, other):
+        """Override the default Equals behavior"""
+        if isinstance(other, self.__class__):
+            return self.__dict__ == other.__dict__
+        return NotImplemented
+
+    def __ne__(self, other):
+        """Define a non-equality test"""
+        if isinstance(other, self.__class__):
+            return not self.__eq__(other)
+        return NotImplemented
+
+    def __hash__(self):
+        """Override the default hash behavior (that returns the id or the object)"""
+        return hash(tuple(sorted(self.__dict__.items())))
 
 
 
@@ -1279,20 +1308,17 @@ class ReadModelMixin(Mixin):
             return m
 
 
+@mixin(ReadModelMixin)
+@mixin(ComparisonMethodsMixin)
+class Compartment(object):
+    def __init__(self, model, name=None, initial_value=None,
+                 key=None, simulation_type='fixed'):
+        self.model = self.read_model(model)
+        self.name = name
+        self.initial_value = initial_value
+        self.key = key
+        self.simulation_type = simulation_type
 
-
-class Compartment(_base._ModelBase):
-    def __init__(self, model, **kwargs):
-        super(Compartment, self).__init__(model, **kwargs)
-        default_properties = {'name': None,
-                              'key': None,
-                              'initial_value':None,
-                              'simulation_type': 'fixed'}
-
-        self.update_properties(default_properties)
-        self.update_kwargs(kwargs)
-        self.check_integrity(default_properties.keys(),
-                             kwargs.keys())
         self._do_checks()
 
 
@@ -1356,6 +1382,7 @@ class Compartment(_base._ModelBase):
 
 
 @mixin(ReadModelMixin)
+@mixin(ComparisonMethodsMixin)
 class Metabolite(object):
     """
     Metabolite class to hole attributes
@@ -1391,6 +1418,7 @@ class Metabolite(object):
     def __repr__(self):
         return self.__str__()
 
+
     def _do_checks(self):
         """
 
@@ -1421,7 +1449,7 @@ class Metabolite(object):
             self.simulation_type = 'reactions'
 
         if (self.concentration is None) and (self.particle_number is None):
-            self.concentration = str(1)
+            self.concentration = str(float(1))
 
         if (self.particle_number is None) and (self.concentration is not None):
             self.particle_number = self.model.convert_molar_to_particles(
@@ -1618,6 +1646,7 @@ class Modifier(Metabolite):
     def __repr__(self):
         return self.__str__()
 
+@mixin(ComparisonMethodsMixin)
 @mixin(ReadModelMixin)
 class GlobalQuantity(object):
     """
@@ -1733,6 +1762,7 @@ class GlobalQuantity(object):
 
 
 @mixin(ReadModelMixin)
+@mixin(ComparisonMethodsMixin)
 class Reaction(object):
     """
     Reactions have rectants, products, rate laws and parameters
@@ -2038,6 +2068,7 @@ class Reaction(object):
 
 
 @mixin(ReadModelMixin)
+@mixin(ComparisonMethodsMixin)
 class Function(object):
     """
     Class to hold copasi function definitions for rate laws
@@ -2162,6 +2193,7 @@ class Function(object):
         return func
 
 @mixin(ReadModelMixin)
+@mixin(ComparisonMethodsMixin)
 class ParameterDescription(object):
     def __init__(self, model, name='parameter_description',
                  role='substrate', order=0, key=None):
@@ -2195,6 +2227,7 @@ class ParameterDescription(object):
 
 
 @mixin(ReadModelMixin)
+@mixin(ComparisonMethodsMixin)
 class LocalParameter(object):
     def __init__(self, model, name='local_parameter', value=None,
                  parameter_type=None, reaction_name=None,
@@ -2429,7 +2462,7 @@ class KeyFactory(object):
         else:
             return keys
 
-
+@mixin(ComparisonMethodsMixin)
 class Expression(object):
     def __init__(self, expression):
         self.expression = expression
@@ -2740,6 +2773,7 @@ class MassAction(Function):
 
 ##TODO work out why both rate law and expression are function in reaction
 @mixin(ReadModelMixin)
+@mixin(ComparisonMethodsMixin)
 class ParameterSet(object):
     """
     This class is taking time that I don't have.
