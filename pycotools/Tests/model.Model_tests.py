@@ -434,7 +434,7 @@ class ModelTests(_test_base._BaseTest):
                                      name='fake_reaction',
                                      expression='A + B + C + D -> E + F',
                                      rate_law='k * A * B * C / D')
-
+        print 'reaction', r
         self.model = self.model.add_reaction(r)
         self.model.save()
         xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml

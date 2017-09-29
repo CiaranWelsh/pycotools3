@@ -682,24 +682,37 @@ class Model(_base._Base):
                     reversible = child.attrib['reversible']
                     list_of_parameter_descriptions = []
                     for grandchild in child:
+                        roles_dct = {}
                         if grandchild.tag == '{http://www.copasi.org/static/schema}Expression':
                             expression = grandchild.text.replace('\n', '').strip()
 
                         if grandchild.tag == '{http://www.copasi.org/static/schema}ListOfParameterDescriptions':
                             for greatgrandchild in grandchild:
+                                LOG.debug('param desc key --> {}'.format(greatgrandchild.attrib['key']))
+
                                 list_of_parameter_descriptions.append(
                                     ParameterDescription(self,
                                                          name=greatgrandchild.attrib['name'],
                                                          key=greatgrandchild.attrib['key'],
                                                          order=greatgrandchild.attrib['order'],
-                                                         role=greatgrandchild.attrib['role']) )
-                    lst.append(Function(self,
+                                                         role=greatgrandchild.attrib['role']))
+                                LOG.debug('param desc from paramDesc --> {}'.format(
+                                    [i.key for i in list_of_parameter_descriptions]
+                                ))
+                                roles_dct[greatgrandchild.attrib['name']] = greatgrandchild.attrib['role']
+                    func = Function(self,
                                         name=name,
                                         key=key,
                                         type=type,
                                         expression=expression,
                                         reversible=reversible,
-                                        list_of_parameter_descriptions=list_of_parameter_descriptions))
+                                        list_of_parameter_descriptions=list_of_parameter_descriptions,
+                                        roles=roles_dct)
+                    LOG.debug('from func --> {}'.format(
+                        [i.key for i in func.list_of_parameter_descriptions]
+                    ))
+                    lst.append(func)
+
         return lst
 
     # def add_function(self, name, expression, role, type='user_defined',
@@ -802,7 +815,8 @@ class Model(_base._Base):
 
         return res
 
-    @cached_property
+
+    @property
     def reactions(self):
         """
         assemble a list of reactions
@@ -822,31 +836,39 @@ class Model(_base._Base):
                     reactions_dict[reaction_count]['products'] = []
                     reactions_dict[reaction_count]['modifiers'] = []
                     reactions_dict[reaction_count]['constants'] = []
-                    reactions_dict[reaction_count]['function'] = []#ListOfSubstrates
+                    reactions_dict[reaction_count]['function'] = []
                     for k in list(j):
                         reactions_dict[reaction_count]['reversible'] = j.attrib['reversible']
                         reactions_dict[reaction_count]['name'] = j.attrib['name']
                         reactions_dict[reaction_count]['key'] = j.attrib['key']
                         if k.tag == '{http://www.copasi.org/static/schema}ListOfSubstrates':
+                            list_of_substrates = []
                             for l in list(k):
-                                list_of_substrates = [m for m in self.metabolites if m.key in l.attrib['metabolite']]
+                                substrate = self.get('metabolite', l.attrib['metabolite'], by='key')
+                                if isinstance(substrate, list):
+                                    raise errors.SomethingWentHorriblyWrongError('substrate matched >1 substrate')
+                                ##convert to substrate
+                                substrate = substrate.to_substrate()
+                                list_of_substrates.append(substrate)
+                            reactions_dict[reaction_count]['substrates'] = list_of_substrates
 
-                                ## convert list to substrates
-                                list_of_substrates = [m.to_substrate() for m in list_of_substrates]
-                                reactions_dict[reaction_count]['substrates']= list_of_substrates
+
                         elif k.tag == '{http://www.copasi.org/static/schema}ListOfProducts':
+                            list_of_products = []
                             for l in list(k):
                                 ## get list of metabolites and convert them to Product class
-                                list_of_products = [m for m in self.metabolites if m.key in l.attrib['metabolite']]
-                                list_of_products = [m.to_product() for m in list_of_products]
-                                #
+                                product = self.get('metabolite', l.attrib['metabolite'], by='key')
+                                product = product.to_product()
+                                list_of_products.append(product)
                                 reactions_dict[reaction_count]['products'] = list_of_products
 
                         elif k.tag == '{http://www.copasi.org/static/schema}ListOfModifiers':
+                            list_of_modifiers = []
                             for l in list(k):
                                 ## get list of metabolites and convert them to Moifier class
-                                list_of_modifiers = [m for m in self.metabolites if m.key in l.attrib['metabolite']]
-                                list_of_modifiers = [m.to_modifier() for m in list_of_modifiers]
+                                modifier = self.get('metabolite', l.attrib['metabolite'], by='key')
+                                modifier = modifier.to_product()
+                                list_of_modifiers.append(modifier)
                                 reactions_dict[reaction_count]['modifiers'] = list_of_modifiers
 
                         elif k.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
@@ -855,37 +877,16 @@ class Model(_base._Base):
                             ##assertain the parameters simulation type
                             for l in list(k):
                                 global_name = "({}).{}".format(j.attrib['name'], l.attrib['name'])
-                                query = '//*[@cn="String=Kinetic Parameters"]'
-                                simulation_types = {}
-                                for element in self.xml.xpath(query):
-                                    for element2 in element:
-                                        for element3 in element2:
-                                            match = re.findall('.*Reactions\[(.*)\].*Parameter=(.*)',
-                                                               element3.attrib['cn'])[0]
-
-                                            match = "({}).{}".format(match[0], match[1])
-                                            if global_name == match:
-                                                simulation_types[global_name] = element3.attrib['simulationType']
-
-                                _local = LocalParameter(self,
-                                                   key=l.attrib['key'],
-                                                   name=l.attrib['name'],
-                                                   value=l.attrib['value'],
-                                                   reaction_name=j.attrib['name'],
-                                                   global_name=global_name,
-                                                   simulation_type=simulation_types[global_name])
-                                list_of_constants.append(_local)
-
-                                reactions_dict[reaction_count]['constants'] = list_of_constants
-
+                                #LOG.warning('Experimental section of reactions function')
+                                constant = self.get('local_parameter', global_name, by='global_name')
+                                list_of_constants.append(constant)
 
                         elif k.tag == '{http://www.copasi.org/static/schema}KineticLaw':
-                            function_list = [m for m in self.functions if m.key == k.attrib['function']]
-                            assert len(function_list) == 1
-                            reactions_dict[reaction_count]['function'] = function_list[0]
-
+                            function = self.get('function', k.attrib['function'], by='key')
+                            reactions_dict[reaction_count]['function'] = function
 
         ## assemble the expression for the reaction
+        #LOG.warning('move below code to separate function for clean code')
         for i, dct in reactions_dict.items():
             if dct['function'] == []:
                 dct['function'] = "k*{}".format(reduce(lambda x, y: '{}*{}'.format(x, y), substrates))
@@ -923,9 +924,9 @@ class Model(_base._Base):
                 expression = '{} {} {}; {}'.format(sub_expression, operator,
                                                    prod_expression, modifier_expression)
             reactions_dict[i]['expression'] = expression
-
+        # for i in reactions_dict:
+        #     LOG.debug('reactions --> {}: {}'.format(i, reactions_dict[i]))
         lst=[]
-
         for i, dct in reactions_dict.items():
             ## skip the skipped reactions
             # if i not in skipped:
@@ -941,6 +942,7 @@ class Model(_base._Base):
                                 parameters_dict={j.name: j for j in dct['constants']},
                                 )
                        )
+        # self.reset_cache('reactions')
         return lst
 
     def add_reaction(self, reaction):
@@ -950,28 +952,36 @@ class Model(_base._Base):
         :param rate_law: mathematical expression or mass_action (default)
         :return:
         """
-        if reaction.key in [i.key for i in self.reactions]:
+        if self.get('reaction', reaction.key, by='key') != []:
             raise errors.ReactionAlreadyExists('Your model already contains a reaction with the key: {}'.format(reaction.key))
 
-        if reaction.name in [i.name for i in self.reactions]:
+        if self.get('reaction', reaction.name, by='name') != []:
             raise errors.ReactionAlreadyExists('Your model already contains a reaction with the name: {}'.format(reaction.name))
 
-        if 'reactions' in self.__dict__:
-            del self.__dict__['reactions']
 
-        existing_functions = [i.expression for i in self.functions]
-        if reaction.rate_law.expression not in existing_functions:
+        '''
+        Here I add a function if it doesn't already exist but
+        above I create a new function key instead of finding the existing. 
+        '''
+        LOG.debug('reaction.ratelaw--> {}'.format(reaction.rate_law))
+        existing_function = self.get('function', reaction.rate_law.expression, by='expression')
+
+        if (existing_function == []):
             self.add_function(reaction.rate_law)
+        else:
+            LOG.debug('existing_func --> {}'.format(existing_function))
+            LOG.debug('existing function param key --> {}'.format([i.key for i in existing_function.list_of_parameter_descriptions]))
+            reaction.rate_law = existing_function
 
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
                 i.append(reaction.to_xml())
 
-        ## needed?
-        # self.save()
         for local_parameter in reaction.parameters:
             self.add_local_parameter(local_parameter)
 
+        if 'reactions' in self.__dict__:
+            del self.__dict__['reactions']
         return self
 
     def remove_reaction(self, value, by='name'):
@@ -1743,7 +1753,7 @@ class Reaction(object):
     reaction.
     """
     def __init__(self, model, name='reaction_1', expression=None,
-                 rate_law=None, reversible=False, simulation_type=None,
+                 rate_law=None, reversible=False, simulation_type='reactions',
                  parameters=[], parameters_dict={}, substrates=[],
                  products=[], modifiers=[], key=None):
         self.model = self.read_model(model)
@@ -1760,6 +1770,7 @@ class Reaction(object):
         self.fast = False
         self.key = key
 
+        self._do_checks()
         self.create()
         # print self.to_df()
 
@@ -1913,6 +1924,7 @@ class Reaction(object):
         """
 
         ##todo check if ratelaw exists
+
         if isinstance(self.rate_law, str):
             if self.rate_law == 'mass_action':
                 ma = MassAction(self.model, reversible=self.reversible)
@@ -1922,8 +1934,10 @@ class Reaction(object):
         elif isinstance(self.rate_law, Function):
             # return self.rate_law
             exp = Expression(self.rate_law.expression).to_list()
-        role_dct = {}
 
+
+
+        role_dct = {}
 
 
         # if self.substrates + self.products == []:
@@ -1937,12 +1951,26 @@ class Reaction(object):
             elif i in [j.name for j in self.modifiers]:
                 role_dct[i] = 'modifier'
             else:
-                role_dct[i] = 'parameter'
+                role_dct[i] = 'constant'
 
 
-        function = Function(self.model, name=self.name,
-                            expression=self.rate_law,
-                            roles=role_dct)
+        existing = self.model.get('function', self.rate_law, 'expression')
+        # LOG.debug('existing function --> {}'.format(existing))
+        # if (existing != []):# and (existing.roles == role_dct):
+        #     LOG.debug('existing roles == role dct --> {}=={},{}'.format(
+        #         existing.roles, role_dct, existing.roles == role_dct))
+        #     LOG.debug('function is existing so returning that instead --> {}'.format(existing))
+        #     return existing
+
+
+        function = Function(
+            self.model,
+            name="({}).{}".format(
+                self.name,
+                self.rate_law),
+            expression=self.rate_law,
+            roles=role_dct
+        )
         return function
 
     def create(self):
@@ -1951,7 +1979,6 @@ class Reaction(object):
         :return:
         """
         ## get lists of substrate, products, modifiers and constants
-
         self.translate_reaction()
 
         ## interpret rate law
@@ -1987,7 +2014,7 @@ class Reaction(object):
         list_of_substrates = etree.SubElement(reaction, 'ListOfSubstrates')
         for i in self.substrates:
             etree.SubElement(list_of_substrates, 'Substrate', attrib={'metabolite': i.key,
-                                                                      'stoichiometry': str(i.stoichiometry)} )
+                                                                      'stoichiometry': str(i.stoichiometry)})
 
         list_of_products = etree.SubElement(reaction, 'ListOfProducts')
         for i in self.products:
@@ -2006,18 +2033,16 @@ class Reaction(object):
             etree.SubElement(list_of_constants, 'Constant', attrib={'key': i.key,
                                                                     'name': i.name,
                                                                     'value': str(i.value)})
-
-        if self.rate_law.name == 'mass_action':
+        if 'mass_action' in self.rate_law.name.lower().replace(' ', '_'):
             kinetic_law = self.rate_law.to_xml()
-
         else:
             kinetic_law = etree.SubElement(reaction,
-                                       'KineticLaw',
-                                       attrib={'function': self.rate_law.key,
-                                               'unitType': 'Default',
-                                               'scalingCompartment': "{},{}".format(
-                                                   self.model.reference,
-                                                   self.substrates[0].compartment.reference)})
+                                           'KineticLaw',
+                                           attrib={'function': self.rate_law.key,
+                                                   'unitType': 'Default',
+                                                   'scalingCompartment': "{},{}".format(
+                                                       self.model.reference,
+                                                       self.substrates[0].compartment.reference)})
             call_parameters = etree.SubElement(kinetic_law, 'ListOfCallParameters')
             for i in self.rate_law.list_of_parameter_descriptions:
                 call_parameter = etree.SubElement(call_parameters,
@@ -2026,6 +2051,7 @@ class Reaction(object):
 
                 if i.role == 'constant':
                     ##TODO implement global quantities here
+
 
                     source_parameter = self.parameters_dict[i.name].key
 
@@ -2096,22 +2122,38 @@ class Function(object):
         Use roles dict to create parameter descriptions
         :return:
         """
-        if self.roles == None:
+        # if self.roles == None:
+        #     LOG.debug('self.roles is none and parameter des is '.format(
+        #         self.list_of_parameter_descriptions
+        #     ))
+        #     return self.list_of_parameter_descriptions
+        # else:
+        # if not self.list_of_parameter_descriptions:
+
+        ## if the list of parameter descriptions already has content
+        ## return it.
+        if self.list_of_parameter_descriptions != []:
             return self.list_of_parameter_descriptions
+
+        ## else reverse engineer new parameter descriptions
+        ## from the info that we have
         else:
-            if not self.list_of_parameter_descriptions:
+            function_parameter_keys = KeyFactory(
+                self.model, type='function_parameter'
+            ).generate(len(self.roles))
+            LOG.debug('creating new random function parameter keys --> {}'.format(function_parameter_keys))
 
-                function_parameter_keys = KeyFactory(self.model, type='function_parameter').generate(len(self.roles))
-
-                keys = self.roles.keys()
-                values = self.roles.values()
-                for i in range(len(self.roles)):
-                    self.list_of_parameter_descriptions.append(
-                        ParameterDescription(self.model,
-                                             key=function_parameter_keys[i],
-                                             name=keys[i],
-                                             role=values[i],
-                                             order=i))
+            #LOG.warning('line 2127 is experimental')
+            self.list_of_parameter_descriptions = []
+            keys = self.roles.keys()
+            values = self.roles.values()
+            for i in range(len(self.roles)):
+                self.list_of_parameter_descriptions.append(
+                    ParameterDescription(self.model,
+                                         key=function_parameter_keys[i],
+                                         name=keys[i],
+                                         role=values[i],
+                                         order=i))
             return self.list_of_parameter_descriptions
 
     def to_xml(self):
@@ -2429,6 +2471,9 @@ class KeyFactory(object):
 class Expression(object):
     def __init__(self, expression):
         self.expression = expression
+
+        if not isinstance(self.expression, str):
+            raise errors.InputError('Expected string but got "{}"'.format(type(self.expression)))
 
         ## list of available operators according the copasi website
         self.operator_list = ['+', '-', '*', r'/', '%', '^']
@@ -2881,7 +2926,7 @@ class ParameterSet(object):
         attrib = {'cn': 'String=Kinetic Parameters',
                   'type': 'Group'}
         )
-        print etree.tostring(parameter_set, pretty_print=True)
+        # print etree.tostring(parameter_set, pretty_print=True)
 
         ##kinetic parameters  subelement
         for r in self.model.reactions:
