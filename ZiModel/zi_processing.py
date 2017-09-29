@@ -31,9 +31,9 @@ zi = model.Model(cps_file2)
 # ParameterDescription(name="A", role="substrate") FunctionParameter_37652982
 # ParameterDescription(name="k", role="constant") FunctionParameter_58009604
 # '''
-r = model.Reaction(zi, 'A2B2', expression='A -> B',
-                     rate_law='k*A')
-zi = zi.add('reaction', r)
+# r = model.Reaction(zi, 'A2B2', expression='A -> B',
+#                      rate_law='k*A')
+# zi = zi.add('reaction', r)
 #
 # # r = model.Reaction(zi, 'A2B3', expression='A -> B',
 # #                      rate_law='k*A')
@@ -41,7 +41,7 @@ zi = zi.add('reaction', r)
 #
 # # print len(zi.reactions)
 #
-zi.open(cps_file2)
+# zi.open(cps_file2)
 #
 #
 # zi.open()
