@@ -401,6 +401,31 @@ class Model(_base._Base):
         :param compartment: Compartment
         :return: model.Model
         """
+        if isinstance(compartment, str):
+            compartment = Compartment(self, compartment)
+
+        if not isinstance(compartment, Compartment):
+            raise errors.InputError(
+                'Expecting "{}" but '
+                'got "{}" instead'.format('Compartment', type(compartment))
+            )
+
+        ## ensure we don't add compartment with existing name
+        existing = self.get('compartment', compartment.name, by='name')
+        if existing != []:
+            raise errors.AlreadyExistsError(
+                'Model already contains compartment '
+                'with name: "{}"'.format(compartment.name)
+            )
+
+        ## ensure we don't add compartment with existing key
+        existing = self.get('compartment', compartment.key, by='key')
+        if existing != []:
+            raise errors.AlreadyExistsError(
+                'Model already contains compartment '
+                'with key: "{}"'.format(compartment.key)
+            )
+
         if 'compartments' in self.__dict__:
             del self.__dict__['compartments']
 
@@ -642,8 +667,20 @@ class Model(_base._Base):
         :param simulation_type: fixed, ode assignment or reactions
         :return: model.Model
         """
+        ## accept str arguments
+        if isinstance(global_quantity, str):
+            global_quantity = GlobalQuantity(self, global_quantity)
+
         if not isinstance(global_quantity, GlobalQuantity):
             raise errors.InputError('Input must be a GlobalQuantity')
+
+        ## try and get existing
+        existing = self.get('global_quantity', global_quantity.name, by='name')
+        if existing != []:
+            raise errors.AlreadyExistsError(
+                'Model already contains global_quantity '
+                'with name: "{}"'.format(global_quantity.name)
+            )
 
         if 'global_quantities' in self.__dict__:
             del self.__dict__['global_quantities']
@@ -772,6 +809,8 @@ class Model(_base._Base):
         :param reversible:
         :return:
         """
+
+        
         if function.key == None:
             function.key = KeyFactory(self, type='function').generate()
 
@@ -978,6 +1017,28 @@ class Model(_base._Base):
         :param rate_law: mathematical expression or mass_action (default)
         :return:
         """
+
+        if isinstance(reaction, (list, tuple)):
+            LOG.debug('got tuple --> {}'.format(reaction[0]))
+            if len(reaction) != 3:
+                raise errors.InputError('Expecting 3 '
+                                        'arguments (name, expression, rate_law)'
+                                        'but got {} instead'.format(len(reaction)))
+            reaction = Reaction(self, reaction[0][0], reaction[1][0], reaction[2][0])
+
+        if not isinstance(reaction, Reaction):
+            raise errors.InputError(
+                'Expecting Reaction but '
+                'got "{}" instead'.format(type(reaction))
+            )
+        ## try and get existing
+        existing = self.get('reaction', reaction.name, by='name')
+        if existing != []:
+            raise errors.AlreadyExistsError(
+                'Model already contains reaction '
+                'with name: "{}"'.format(reaction.name)
+            )
+
         if reaction.key in [i.key for i in self.reactions]:
             raise errors.ReactionAlreadyExists('Your model already contains a reaction with the key: {}'.format(reaction.key))
 

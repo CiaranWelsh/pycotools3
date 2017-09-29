@@ -639,6 +639,18 @@ class AddTests(_test_base._BaseTest):
                 boolean = True
         self.assertTrue(boolean)
 
+    def test_add_compartment_from_string(self):
+        """
+
+        :return:
+        """
+        self.model = self.model.add('compartment', 'comp')
+        boolean = False
+        for i in self.model.compartments:
+            if i.name == 'comp':
+                boolean = True
+        self.assertTrue(boolean)
+
     def test_add_global_quantity(self):
         """
 
@@ -852,6 +864,28 @@ class AddTests(_test_base._BaseTest):
                             if k.tag == '{http://www.copasi.org/static/schema}ListOfProducts':
                                 self.assertTrue(len(k) == 0)
 
+    def test_add_reaction_from_string(self):
+        """
+        Test different reaction
+        :return:
+        """
+        name = 'New_reaction',
+        expression = 'A + Fd + adf -> d ; l e',
+        rate_law = '(k*A*Fd-d)/(km+A)^h'
+        # print (name, expression, rate_law)
+        self.model = self.model.add('reaction', [name, expression, rate_law])
+        # self.model.open()
+        # self.model.save()
+        # xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
+        # boolean = False
+        # for i in xml.iter():
+        #     if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
+        #         for j in i:
+        #             if j.attrib['name'] == name:
+        #                 for k in j:
+        #                     if k.tag == '{http://www.copasi.org/static/schema}ListOfProducts':
+        #                         self.assertTrue(len(k) == 0)
+
     def test_add_metabolite(self):
         metab = pycotools.model.Metabolite(
             self.model, 'metab'
@@ -869,6 +903,23 @@ class AddTests(_test_base._BaseTest):
         self.model.add('metabolite', 'p')
         m = self.model.get('metabolite', 'p', by='name')
         self.assertNotEqual(m, [])
+
+    def test_add_global_quantity(self):
+        """
+
+        :return:
+        """
+        glo = pycotools.model.GlobalQuantity(self.model, 'X')
+        self.model.add('global_quantity', glo)
+        self.assertEqual(self.model.get('global_quantity', 'X', by='name').name, 'X')
+
+    def test_add_global_quantity_from_string(self):
+        """
+
+        :return:
+        """
+        self.model.add('global_quantity', 'X')
+        self.assertEqual(self.model.get('global_quantity', 'X', by='name').name, 'X')
 
 
 class TranslatorTests(_test_base._BaseTest):
