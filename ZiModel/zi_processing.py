@@ -1,6 +1,6 @@
 import site
 site.addsitedir('/home/b3053674/Documents/pycotools')
-
+import pandas
 from  pycotools import *
 
 
@@ -11,37 +11,20 @@ cps_file3 = r'/home/b3053674/Documents/pycotools/ZiModel/zi2012_3.cps'
 
 zi = model.Model(cps_file2)
 
+
+report= 'parameter_estimation_synthetic_data.txt'
 TC=tasks.TimeCourse(
-    zi,
-    report_name='kholodenko_timecourse_report.txt',
-    end=1000,
-    intervals=50,
-    step_size=20,
-    metabolites=['Smad3c','Smad3n'],
-    global_quantities = [],
-    save=True
+    zi, start=0, end=1000, intervals=1000, step_size=1, report_name=report
 )
 
-# print tasks.Scan(zi, scan_type='scan',
-#            variable='Smad3c', subtask='time_course')
+## validate that its worked
+pandas.read_csv(TC.report_name,sep='\t').head()
 
-# x = model.Metabolite(zi, 'x')
-#
-# y = x
-#
-# print y == x
-#
-#
-# r = model.Reaction(zi, 'r5', 'A -> B', 'k*A')
-#
-#
-# #
-# # zi.add('reaction', r)
-#
-# zi.open(cps_file2)
-#
-#
-#
+data1 = TC.report_name
+## Set getetic algorithm parameters to low for speed of demonstration
+PE=tasks.ParameterEstimation(zi, data1, method='genetic_algorithm',
+                             population_size=15, number_of_generations=10)
+PE.write_config_file()
 
 
 

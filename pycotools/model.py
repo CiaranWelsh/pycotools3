@@ -46,6 +46,16 @@ LOG = logging.getLogger(__name__)
 ## TODO add list of reports property to model
 ## TODO after running a task, bind the results to the model instance so that they are retrievable
 
+class Properties2DFMixin(mixin):
+    def to_df(self):
+        """
+        Convert kwargs to 1D df
+        :return: pandas.DataFrame
+        """
+        df = pandas.DataFrame(self.kwargs, index=['Value']).transpose()
+        df.index.name = 'Property'
+        return df
+
 class GetModelComponentFromStringMixin(Mixin):
 
     @staticmethod
@@ -2266,6 +2276,7 @@ class Function(object):
 
 @mixin(ReadModelMixin)
 @mixin(ComparisonMethodsMixin)
+@mixin(Properties2DFMixin)
 class ParameterDescription(object):
     def __init__(self, model, name='parameter_description',
                  role='substrate', order=0, key=None):
