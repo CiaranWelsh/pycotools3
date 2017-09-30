@@ -1,0 +1,240 @@
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:_do_checks:1734:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:_do_checks:1734:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:_do_checks:1734:variable before is --> Smad
+DEBUG:pycotools.tasks:tasks:_do_checks:1738:variable after is --> Smad
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:_do_checks:1736:variable before is --> Smad
+DEBUG:pycotools.tasks:tasks:_do_checks:1740:variable after is --> Smad
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:_do_checks:1736:variable before is --> Smad
+DEBUG:pycotools.tasks:tasks:_do_checks:1737:variable before is --> <type 'str'>
+DEBUG:pycotools.tasks:tasks:_do_checks:1741:variable after is --> Smad
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:_do_checks:1736:variable before is --> Smad
+DEBUG:pycotools.tasks:tasks:_do_checks:1737:variable before is --> <type 'str'>
+DEBUG:pycotools.tasks:tasks:_do_checks:1739:var from str --.> Smad
+DEBUG:pycotools.tasks:tasks:_do_checks:1742:variable after is --> Smad
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:_do_checks:1736:variable before is --> Smad
+DEBUG:pycotools.tasks:tasks:_do_checks:1737:variable before is --> <type 'str'>
+DEBUG:pycotools.tasks:tasks:_do_checks:1739:akjdfnaidjdsjfn
+DEBUG:pycotools.tasks:tasks:_do_checks:1743:variable after is --> Smad
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:_do_checks:1737:variable before is --> Smad
+DEBUG:pycotools.tasks:tasks:_do_checks:1738:variable before is --> <type 'str'>
+DEBUG:pycotools.tasks:tasks:_do_checks:1740:akjdfnaidjdsjfn
+DEBUG:pycotools.tasks:tasks:get_variable_from_string:70:mixin being alled
+DEBUG:pycotools.tasks:tasks:_do_checks:1744:variable after is --> Smad
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:_do_checks:1738:variable before is --> Smad
+DEBUG:pycotools.tasks:tasks:_do_checks:1739:variable before is --> <type 'str'>
+DEBUG:pycotools.tasks:tasks:_do_checks:1741:akjdfnaidjdsjfn
+DEBUG:pycotools.tasks:tasks:get_variable_from_string:70:mixin being alled
+DEBUG:pycotools.tasks:tasks:get_variable_from_string:73:var is str
+DEBUG:pycotools.tasks:tasks:_do_checks:1745:variable after is --> Smad
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:_do_checks:1738:variable before is --> Smad
+DEBUG:pycotools.tasks:tasks:_do_checks:1739:variable before is --> <type 'str'>
+DEBUG:pycotools.tasks:tasks:_do_checks:1741:akjdfnaidjdsjfn
+DEBUG:pycotools.tasks:tasks:get_variable_from_string:70:mixin being alled
+DEBUG:pycotools.tasks:tasks:_do_checks:1745:variable after is --> Smad
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:_do_checks:1739:variable before is --> Smad
+DEBUG:pycotools.tasks:tasks:_do_checks:1740:variable before is --> <type 'str'>
+DEBUG:pycotools.tasks:tasks:_do_checks:1742:akjdfnaidjdsjfn
+DEBUG:pycotools.tasks:tasks:get_variable_from_string:72:mixin being alled
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:_do_checks:1741:variable before is --> Smad
+DEBUG:pycotools.tasks:tasks:_do_checks:1742:variable before is --> <type 'str'>
+DEBUG:pycotools.tasks:tasks:_do_checks:1744:akjdfnaidjdsjfn
+DEBUG:pycotools.tasks:tasks:get_variable_from_string:72:mixin being alled
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:_do_checks:1741:variable before is --> Smad
+DEBUG:pycotools.tasks:tasks:_do_checks:1742:variable before is --> <type 'str'>
+DEBUG:pycotools.tasks:tasks:_do_checks:1744:akjdfnaidjdsjfn
+DEBUG:pycotools.tasks:tasks:get_variable_from_string:72:mixin being alled
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:_do_checks:1741:variable before is --> Smad3c
+DEBUG:pycotools.tasks:tasks:_do_checks:1742:variable before is --> <type 'str'>
+DEBUG:pycotools.tasks:tasks:_do_checks:1744:akjdfnaidjdsjfn
+DEBUG:pycotools.tasks:tasks:get_variable_from_string:72:mixin being alled
+DEBUG:pycotools.tasks:tasks:get_variable_from_string:76:var is metab
+DEBUG:pycotools.tasks:tasks:_do_checks:1748:variable after is --> None
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:_do_checks:1741:variable before is --> Smad3
+DEBUG:pycotools.tasks:tasks:_do_checks:1742:variable before is --> <type 'str'>
+DEBUG:pycotools.tasks:tasks:_do_checks:1744:akjdfnaidjdsjfn
+DEBUG:pycotools.tasks:tasks:get_variable_from_string:72:mixin being alled
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:_do_checks:1741:variable before is --> Smad3c
+DEBUG:pycotools.tasks:tasks:_do_checks:1742:variable before is --> <type 'str'>
+DEBUG:pycotools.tasks:tasks:_do_checks:1744:akjdfnaidjdsjfn
+DEBUG:pycotools.tasks:tasks:get_variable_from_string:72:mixin being alled
+DEBUG:pycotools.tasks:tasks:get_variable_from_string:76:var is metab
+DEBUG:pycotools.tasks:tasks:_do_checks:1748:variable after is --> None
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:_do_checks:1742:variable before is --> Smad3c
+DEBUG:pycotools.tasks:tasks:_do_checks:1743:variable before is --> <type 'str'>
+DEBUG:pycotools.tasks:tasks:_do_checks:1745:akjdfnaidjdsjfn
+DEBUG:pycotools.tasks:tasks:get_variable_from_string:72:mixin being alled
+DEBUG:pycotools.tasks:tasks:get_variable_from_string:76:var is metab
+DEBUG:pycotools.tasks:tasks:_do_checks:1749:variable after is --> Metabolite(name="Smad3c", key="Metabolite_1", compartment="Cytoplasm", concentration="492.610000001", particle_number="3.11489514795e+14", simulation_type="reactions")
+WARNING:pycotools.tasks:tasks:_do_checks:1775:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:_do_checks:1749:variable before is --> Smad3c
+DEBUG:pycotools.tasks:tasks:_do_checks:1750:variable before is --> <type 'str'>
+DEBUG:pycotools.tasks:tasks:_do_checks:1752:akjdfnaidjdsjfn
+DEBUG:pycotools.tasks:tasks:get_variable_from_string:72:mixin being alled
+DEBUG:pycotools.tasks:tasks:get_variable_from_string:76:var is metab
+DEBUG:pycotools.tasks:tasks:_do_checks:1756:variable after is --> Metabolite(name="Smad3c", key="Metabolite_1", compartment="Cytoplasm", concentration="492.610000001", particle_number="3.11489514795e+14", simulation_type="reactions")
+WARNING:pycotools.tasks:tasks:_do_checks:1782:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:_do_checks:1749:variable before is --> Smad3c
+DEBUG:pycotools.tasks:tasks:_do_checks:1750:variable before is --> <type 'str'>
+DEBUG:pycotools.tasks:tasks:_do_checks:1752:akjdfnaidjdsjfn
+DEBUG:pycotools.tasks:tasks:get_variable_from_string:72:mixin being alled
+DEBUG:pycotools.tasks:tasks:get_variable_from_string:76:var is metab
+DEBUG:pycotools.tasks:tasks:_do_checks:1756:variable after is --> Metabolite(name="Smad3c", key="Metabolite_1", compartment="Cytoplasm", concentration="492.610000001", particle_number="3.11489514795e+14", simulation_type="reactions")
+WARNING:pycotools.tasks:tasks:_do_checks:1782:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+DEBUG:pycotools.tasks:tasks:_do_checks:1806:{'parameter_estimation': '5', 'lyapunov_exponents': '7', 'time_course': '1', 'steady_state': '0', 'metabolic_control_anlysis': '6', 'linear_noise_approximation': '12', 'cross_section': '11', 'time_scale_separation_analysis': '8', 'sensitivities': '9', 'optimiztion': '4'}
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:_do_checks:1772:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:_do_checks:1772:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:_do_checks:1774:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+DEBUG:pycotools.tasks:tasks:__str__:1733:{'1': 'scan', '0': 'repeat', '2': 'random_sampling'}
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:_do_checks:1774:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+DEBUG:pycotools.tasks:tasks:__str__:1733:{'1': 'scan', '0': 'repeat', '2': 'random_sampling'}
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:_do_checks:1775:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+DEBUG:pycotools.tasks:tasks:__str__:1734:{'1': 'scan', '0': 'repeat', '2': 'random_sampling'}
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:_do_checks:1775:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+DEBUG:pycotools.tasks:tasks:__str__:1734:{'1': 'scan', '0': 'repeat', '2': 'random_sampling'}
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:_do_checks:1775:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+DEBUG:pycotools.tasks:tasks:__str__:1734:{'1': 'scan', '0': 'repeat', '2': 'random_sampling'}
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:_do_checks:1149:im a string
+DEBUG:pycotools.tasks:tasks:_do_checks:1149:im a string
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:_do_checks:1149:im a string
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:_do_checks:1149:im a string
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:_do_checks:1149:im a string
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:_do_checks:1153:im a string
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:_do_checks:1155:im a string
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:_do_checks:1155:im a string
+DEBUG:pycotools.tasks:tasks:_do_checks:1159:metab is --> 0
+DEBUG:pycotools.tasks:tasks:_do_checks:1155:im a string
+DEBUG:pycotools.tasks:tasks:_do_checks:1159:metab is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:_do_checks:1158:metab is --> Metabolite(name="Smad3c", key="Metabolite_1", compartment="Cytoplasm", concentration="492.610000001", particle_number="3.11489514795e+14", simulation_type="reactions")
+DEBUG:pycotools.tasks:tasks:_do_checks:1158:metab is --> Metabolite(name="Smad3n", key="Metabolite_3", compartment="Nucleus", concentration="236.45", particle_number="4.98377321973e+13", simulation_type="reactions")
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
