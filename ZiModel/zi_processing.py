@@ -11,11 +11,15 @@ cps_file3 = r'/home/b3053674/Documents/pycotools/ZiModel/zi2012_3.cps'
 
 zi = model.Model(cps_file2)
 
-x = model.Metabolite(zi, 'x')
 
-y = x
+tasks.Scan(zi, scan_type='scan',
+           variable='Smad', subtask='time_course')
 
-print y == x
+# x = model.Metabolite(zi, 'x')
+#
+# y = x
+#
+# print y == x
 #
 #
 # r = model.Reaction(zi, 'r5', 'A -> B', 'k*A')
