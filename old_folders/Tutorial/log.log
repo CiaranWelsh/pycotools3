@@ -15885,3 +15885,60 @@ DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (dephosphorylation of M
 DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(dephosphorylation_of_MAPKK-P).V6.cps
 DEBUG:PyCoTools.pydentify:pydentify:run_slow:424:running (MAPKKK activation).n
 DEBUG:PyCoTools.pycopi:pycopi:write_copasi_file:115:model written to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/ProfileLikelihood/2/(MAPKKK_activation).n.cps
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: //home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:_do_checks:1734:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: //home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:_do_checks:1742:variable before is --> Smad3c
+DEBUG:pycotools.tasks:tasks:_do_checks:1743:variable before is --> <type 'str'>
+DEBUG:pycotools.tasks:tasks:_do_checks:1745:akjdfnaidjdsjfn
+DEBUG:pycotools.tasks:tasks:get_variable_from_string:72:mixin being alled
+DEBUG:pycotools.tasks:tasks:get_variable_from_string:76:var is metab
+DEBUG:pycotools.tasks:tasks:_do_checks:1749:variable after is --> Metabolite(name="Smad3c", key="Metabolite_1", compartment="Cytoplasm", concentration="492.610000001", particle_number="3.11489514795e+14", simulation_type="reactions")
+WARNING:pycotools.tasks:tasks:_do_checks:1775:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+DEBUG:pycotools.tasks:tasks:_do_checks:1742:variable before is --> Smad3c
+DEBUG:pycotools.tasks:tasks:_do_checks:1743:variable before is --> <type 'str'>
+DEBUG:pycotools.tasks:tasks:_do_checks:1745:akjdfnaidjdsjfn
+DEBUG:pycotools.tasks:tasks:get_variable_from_string:72:mixin being alled
+DEBUG:pycotools.tasks:tasks:get_variable_from_string:76:var is metab
+DEBUG:pycotools.tasks:tasks:_do_checks:1749:variable after is --> Metabolite(name="Smad3c", key="Metabolite_1", compartment="Cytoplasm", concentration="492.610000001", particle_number="3.11489514795e+14", simulation_type="reactions")
+WARNING:pycotools.tasks:tasks:_do_checks:1775:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: //home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:_do_checks:1749:variable before is --> Smad3c
+DEBUG:pycotools.tasks:tasks:_do_checks:1750:variable before is --> <type 'str'>
+DEBUG:pycotools.tasks:tasks:_do_checks:1752:akjdfnaidjdsjfn
+DEBUG:pycotools.tasks:tasks:get_variable_from_string:72:mixin being alled
+DEBUG:pycotools.tasks:tasks:get_variable_from_string:76:var is metab
+DEBUG:pycotools.tasks:tasks:_do_checks:1756:variable after is --> Metabolite(name="Smad3c", key="Metabolite_1", compartment="Cytoplasm", concentration="492.610000001", particle_number="3.11489514795e+14", simulation_type="reactions")
+WARNING:pycotools.tasks:tasks:_do_checks:1782:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: //home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:_do_checks:1749:variable before is --> Smad3c
+DEBUG:pycotools.tasks:tasks:_do_checks:1750:variable before is --> <type 'str'>
+DEBUG:pycotools.tasks:tasks:_do_checks:1752:akjdfnaidjdsjfn
+DEBUG:pycotools.tasks:tasks:get_variable_from_string:72:mixin being alled
+DEBUG:pycotools.tasks:tasks:get_variable_from_string:76:var is metab
+DEBUG:pycotools.tasks:tasks:_do_checks:1756:variable after is --> Metabolite(name="Smad3c", key="Metabolite_1", compartment="Cytoplasm", concentration="492.610000001", particle_number="3.11489514795e+14", simulation_type="reactions")
+WARNING:pycotools.tasks:tasks:_do_checks:1782:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: //home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:_do_checks:1775:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+DEBUG:pycotools.tasks:tasks:__str__:1734:{'1': 'scan', '0': 'repeat', '2': 'random_sampling'}
+WARNING:pycotools.tasks:tasks:_do_checks:1775:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1775:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1775:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1775:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1775:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1775:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1775:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1775:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1775:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1775:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+DEBUG:pycotools.tasks:tasks:__str__:1734:{'1': 'scan', '0': 'repeat', '2': 'random_sampling'}
