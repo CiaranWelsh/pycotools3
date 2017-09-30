@@ -58,6 +58,39 @@ sns.set_context(context='poster',
 
 ## TODO change pycopi to tasks
 
+
+class GetModelVariableFromStringMixin(Mixin):
+    @staticmethod
+    def get_variable_from_string(model, variable):
+        """
+        Use model entity name to get the
+        pycotools variable
+        :return:
+        """
+        if not isinstance(variable, str):
+            raise errors.InputError('variable_name should be a string')
+        LOG.debug('mixin being alled')
+        ## allow a user to input a string not pycotools.model class
+        if isinstance(variable, str):
+            if variable in [i.name for i in model.metabolites]:
+                LOG.debug('var is metab')
+                variable = model.get('metabolite', variable, by='name')
+
+            elif variable in [i.name for i in model.compartments]:
+                variable = model.get('compartments', variable, by='name')
+                LOG.debug('var is comp')
+            elif variable in [i.name for i in model.global_quantities]:
+                variable = model.get('global_quantity', variable, by='name')
+                LOG.debug('var is glob')
+            elif variable in [i.global_name for i in model.local_parameters]:
+                variable = model.get('local_parameter', variable, by='global_name')
+                LOG.debug('var is loc')
+            else:
+                raise errors.InputError('Variable {} is not in model'.format(variable))
+
+
+
+
 class CopasiMLParser(object):
 
     """
@@ -1641,7 +1674,7 @@ class TimeCourse(_base._ModelBase):
     #     R = Run(self.copasi_file, task='time_course')
     #     return R
 
-@mixin(_base.GetModelVariableFromStringMixin)
+@mixin(GetModelVariableFromStringMixin)
 class Scan(_base._ModelBase):
     """
     Interface to COPASI scan task
@@ -1703,9 +1736,14 @@ class Scan(_base._ModelBase):
         Varify integrity of user input
         :return:
         """
+        LOG.debug('variable before is --> {}'.format(self.variable))
+        LOG.debug('variable before is --> {}'.format(type(self.variable)))
         if isinstance(self.variable, str):
+            LOG.debug('akjdfnaidjdsjfn')
+            # LOG.debug('var from str --.> {}'.format(self.get_variable_from_string(self.model, self.variable)))
             self.variable = self.get_variable_from_string(self.model, self.variable)
 
+        LOG.debug('variable after is --> {}'.format(self.variable))
         if self.variable != []:
             try:
                 if self.variable.name not in self.model.all_variable_names:
@@ -4242,7 +4280,7 @@ class MultiModelFit(object):
             self.MPE_dct[MPE].format_results()
 
 
-@mixin(_base.GetModelVariableFromStringMixin)
+@mixin(GetModelVariableFromStringMixin)
 class ProfileLikelihood(_base._ModelBase):
     def __init__(self, model, **kwargs):
         super(ProfileLikelihood, self).__init__(model, **kwargs)
