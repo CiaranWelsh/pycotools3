@@ -46,15 +46,15 @@ LOG = logging.getLogger(__name__)
 ## TODO add list of reports property to model
 ## TODO after running a task, bind the results to the model instance so that they are retrievable
 
-class Properties2DFMixin(mixin):
-    def to_df(self):
-        """
-        Convert kwargs to 1D df
-        :return: pandas.DataFrame
-        """
-        df = pandas.DataFrame(self.kwargs, index=['Value']).transpose()
-        df.index.name = 'Property'
-        return df
+# class Properties2DFMixin(mixin):
+#     def to_df(self):
+#         """
+#         Convert kwargs to 1D df
+#         :return: pandas.DataFrame
+#         """
+#         df = pandas.DataFrame(self.kwargs, index=['Value']).transpose()
+#         df.index.name = 'Property'
+#         return df
 
 class GetModelComponentFromStringMixin(Mixin):
 
@@ -1500,6 +1500,22 @@ class Metabolite(object):
     def __repr__(self):
         return self.__str__()
 
+    def to_df(self):
+        """
+
+        :return:
+        """
+        dict_of_properties = {
+            'name': self.name,
+            'particle_number': self.particle_number,
+            'concentration': self.concentration,
+            'simulation_type': self.simulation_type,
+            'compartment': self.compartment,
+            'key': self.key
+        }
+        df = pandas.DataFrame(dict_of_properties, index=['Value']).transpose()
+        df.index.name = 'Property'
+        return df
 
     def _do_checks(self):
         """
@@ -1786,6 +1802,21 @@ class GlobalQuantity(object):
 
     def __repr__(self):
         return self.__str__()
+
+    def to_df(self):
+        """
+
+        :return:
+        """
+        dict_of_properties = {
+        'name': self.name,
+        'initial_value': self.initial_value,
+        'key': self.key,
+        'simulation_type': self.simulation_type,
+        }
+        df = pandas.DataFrame(dict_of_properties, index=['Value']).transpose()
+        df.index.name = 'Property'
+        return df
 
     @property
     def transient_reference(self):
@@ -2276,7 +2307,6 @@ class Function(object):
 
 @mixin(ReadModelMixin)
 @mixin(ComparisonMethodsMixin)
-@mixin(Properties2DFMixin)
 class ParameterDescription(object):
     def __init__(self, model, name='parameter_description',
                  role='substrate', order=0, key=None):
@@ -2341,6 +2371,24 @@ class LocalParameter(object):
 
     def __repr__(self):
         return self.__str__()
+
+    def to_df(self):
+        """
+
+        :return:
+        """
+        dict_of_properties = {
+            'name': self.name,
+            'value': self.value,
+            'parameter_type': self.parameter_type,
+            'simulation_type': self.simulation_type,
+            'reaction_name': self.reaction_name,
+            'global_name': self.global_name,
+            'key': self.key
+        }
+        df = pandas.DataFrame(dict_of_properties, index=['Value']).transpose()
+        df.index.name = 'Property'
+        return df
 
     @property
     def reference(self):
