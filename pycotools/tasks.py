@@ -61,33 +61,37 @@ sns.set_context(context='poster',
 
 class GetModelVariableFromStringMixin(Mixin):
     @staticmethod
-    def get_variable_from_string(model, variable):
+    def get_variable_from_string(m, v):
         """
         Use model entity name to get the
         pycotools variable
-        :return:
+        :param m: model
+        :param v: str. variable in model
+        :return: variable as a model component
         """
-        if not isinstance(variable, str):
+        if not isinstance(m, model.Model):
+            raise errors.InputError('expected model.Model but got "{}" instance'.format(
+                type(m)
+            ))
+        if not isinstance(v, str):
             raise errors.InputError('variable_name should be a string')
-        LOG.debug('mixin being alled')
         ## allow a user to input a string not pycotools.model class
-        if isinstance(variable, str):
-            if variable in [i.name for i in model.metabolites]:
-                LOG.debug('var is metab')
-                variable = model.get('metabolite', variable, by='name')
+        if isinstance(v, str):
+            if v in [i.name for i in m.metabolites]:
+                v = m.get('metabolite', v, by='name')
 
-            elif variable in [i.name for i in model.compartments]:
-                variable = model.get('compartments', variable, by='name')
-                LOG.debug('var is comp')
-            elif variable in [i.name for i in model.global_quantities]:
-                variable = model.get('global_quantity', variable, by='name')
-                LOG.debug('var is glob')
-            elif variable in [i.global_name for i in model.local_parameters]:
-                variable = model.get('local_parameter', variable, by='global_name')
-                LOG.debug('var is loc')
+            elif v in [i.name for i in m.compartments]:
+                v = m.get('compartments', v, by='name')
+            elif v in [i.name for i in m.global_quantities]:
+                v = m.get('global_quantity', v, by='name')
+            elif v in [i.global_name for i in m.local_parameters]:
+                v = m.get('local_parameter', v, by='global_name')
             else:
-                raise errors.InputError('Variable {} is not in model'.format(variable))
-
+                raise errors.InputError('Variable {} is not in model. '
+                                        'These are your model variables: '
+                                        '{}'.format(v, m.all_variable_names))
+        assert isinstance(v, str) != True
+        return v
 
 
 
@@ -353,7 +357,6 @@ class RunParallel(_base._Base):
             shell=False
         )
         # self.q.put(proc, block=True)
-        LOG.debug('q size --> {}'.format(self.q.qsize()))
         LOG.info('running from run1 "{}"'.format(model.copasi_file))
         # self.q.join() ##blocks until all tasks are done
         LOG.debug('prod id --> {}'.format(proc.pid))
@@ -1062,7 +1065,7 @@ class Bool2Str():
 #
         return self.dct
 
-
+@mixin(GetModelVariableFromStringMixin)
 class TimeCourse(_base._ModelBase):
     """
 
@@ -1146,6 +1149,18 @@ class TimeCourse(_base._ModelBase):
 
         if os.path.isabs(self.report_name)!=True:
             self.report_name = os.path.join(os.path.dirname(self.model.copasi_file), self.report_name)
+
+        for metab in range(len(self.metabolites)):
+            if isinstance(self.metabolites[metab], str):
+                self.metabolites[metab] = self.get_variable_from_string(
+                    self.model, self.metabolites[metab]
+                )
+
+        for glo in range(len(self.global_quantities)):
+            if isinstance(self.global_quantities[glo], str):
+                self.global_quantities[glo] = self.get_variable_from_string(
+                    self.model, self.global_quantities[glo]
+                )
 
     def __str__(self):
         return "TimeCourse({})".format(self.to_string())
@@ -1245,18 +1260,25 @@ class TimeCourse(_base._ModelBase):
         """
         if self.method == 'deterministic':
             timecourse = self.deterministic()
+
         elif self.method == 'gibson_bruck':
             timecourse = self.gibson_bruck()
+
         elif self.method == 'direct':
             timecourse = self.direct()
+
         elif self.method == 'tau_leap':
             timecourse = self.tau_leap()
+
         elif self.method == 'adaptive_tau_leap':
             timecourse = self.adaptive_tau_leap()
+
         elif self.method == 'hybrid_runge_kutta':
             timecourse = self.hybrid_runge_kutta()
+
         elif self.method == 'hybrid_lsoda':
             timecourse = self.hybrid_lsoda()
+
         elif self.method == 'hybrid_rk45':
             timecourse = self.hybrid_rk45()
 
@@ -1265,6 +1287,7 @@ class TimeCourse(_base._ModelBase):
             if task.attrib['name'] == 'Time-Course':
                 ##remove old time course
                 task.getparent().remove(task)
+
         ## insert new time course
         self.model.xml.find(list_of_tasks).insert(1, timecourse)
         return self.model
@@ -1731,19 +1754,24 @@ class Scan(_base._ModelBase):
 
         self.execute()
 
+    def __str__(self):
+        types = {v: k for (k, v) in self.scan_type_numbers.items()}
+        subtasks = {v: k for (k, v) in self.subtask_numbers.items()}
+        return "Scan(scan_type='{}', subtask='{}', variable='{}', report_type='{}', " \
+               "report_name='{}', number_of_steps='{}', minimum={}, maximum={})".format(
+            types[self.scan_type], subtasks[self.subtask], self.variable.name, self.report_type,
+            self.report_name, self.number_of_steps, self.minimum, self.maximum
+        )
+
     def _do_checks(self):
         """
         Varify integrity of user input
         :return:
         """
-        LOG.debug('variable before is --> {}'.format(self.variable))
-        LOG.debug('variable before is --> {}'.format(type(self.variable)))
         if isinstance(self.variable, str):
-            LOG.debug('akjdfnaidjdsjfn')
             # LOG.debug('var from str --.> {}'.format(self.get_variable_from_string(self.model, self.variable)))
             self.variable = self.get_variable_from_string(self.model, self.variable)
 
-        LOG.debug('variable after is --> {}'.format(self.variable))
         if self.variable != []:
             try:
                 if self.variable.name not in self.model.all_variable_names:
@@ -1794,14 +1822,24 @@ class Scan(_base._ModelBase):
                 self.subtask = j
 
         scan_type_numbers = [1, 0, 2]
+        self.scan_type_numbers = dict(zip(scan_types, [str(i) for i in scan_type_numbers]))
+        for i, j in self.scan_type_numbers.items():
+            if i == self.scan_type:
+                self.scan_type = j
+
         for i in zip(scan_types, scan_type_numbers):
             if i[0] == self.scan_type:
                 self.scan_type = str(i[1])
 
         dist_types_numbers = [0, 1, 2, 3]
-        for i in zip(dist_types, dist_types_numbers):
-            if i[0] == self.distribution_type:
-                self.distribution_type = str(i[1])
+        self.dist_type_numbers = dict(zip(dist_types, [str(i) for i in dist_types_numbers]))
+        for i, j in self.dist_type_numbers.items():
+            if i == self.distribution_type:
+                self.distribution_type = j
+
+        # for i in zip(dist_types, dist_types_numbers):
+        #     if i[0] == self.distribution_type:
+        #         self.distribution_type = str(i[1])
 
 
         ## allow a user to input a string not pycotools.model class

@@ -11,9 +11,19 @@ cps_file3 = r'/home/b3053674/Documents/pycotools/ZiModel/zi2012_3.cps'
 
 zi = model.Model(cps_file2)
 
+TC=tasks.TimeCourse(
+    zi,
+    report_name='kholodenko_timecourse_report.txt',
+    end=1000,
+    intervals=50,
+    step_size=20,
+    metabolites=['Smad3c','Smad3n'],
+    global_quantities = [],
+    save=True
+)
 
-tasks.Scan(zi, scan_type='scan',
-           variable='Smad', subtask='time_course')
+# print tasks.Scan(zi, scan_type='scan',
+#            variable='Smad3c', subtask='time_course')
 
 # x = model.Metabolite(zi, 'x')
 #

@@ -373,7 +373,8 @@ class PlotTimeCourse(PlotKwargs):
         }
         self.default_properties.update(self.plot_kwargs())
         for i in kwargs.keys():
-            assert i in self.default_properties.keys(),'{} is not a keyword argument for Boxplot'.format(i)
+            assert i in self.default_properties.keys(),'{} is not a keyword ' \
+                                                       'argument for PlotTimeCourse'.format(i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
         self.default_properties.update(self.plot_kwargs())
