@@ -22,3 +22,42 @@ INFO:root:__init__:<module>:29:logging config file at: //home/b3053674/Documents
 INFO:root:__init__:<module>:27:Initializing pycotools
 INFO:root:__init__:<module>:28:Initializing logging System
 INFO:root:__init__:<module>:29:logging config file at: //home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: //home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[Smad3n] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[Smad3c] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[Smad4n] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[Smad4c] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[T1R_Surf] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[T2R_Cave] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[T2R_Surf] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[Smads_Complex_n] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[T1R_EE] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[T1R_Cave] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[TGF_beta] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[LRC_Cave] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[LRC_Surf] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[Smads_Complex_c] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[T2R_EE] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[LRC_EE] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[Kexp_Smad2n] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[Kdeg_T1R_EE] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[Klid] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[Total_Smad2c] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[Total_Smad2n] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[kr_EE] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[ki_EE] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[v_T2R] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[v_T1R] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[k_LRC] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[Kcd] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[kr_Cave] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[ki_Cave] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[Kexp_Smad4n] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[Kdiss_Smads_Complex_n] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[Kimp_Smad2c] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[Kimp_Smads_Complex_c] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[Kimp_Smad4c] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[Kdeg_T2R_EE] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[k_Smads_Complex_c] not found. Set to ignore
