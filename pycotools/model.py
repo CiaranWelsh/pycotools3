@@ -872,23 +872,42 @@ class Model(_base._Base):
         :return:
         """
         res = []
+        query = '//*[@cn="String=Kinetic Parameters"]'
+        dct = {}
+        for i in self.xml.xpath(query):
+            for j in i:
+                for k in j:
+                    reaction_name, parameter_name = re.findall('.*Reactions\[(.*)\].*Parameter=(.*)', k.attrib['cn'])[0]
+                    global_name = "({}).{}".format(reaction_name, parameter_name)
+                    value = k.attrib['value']
+                    simulation_type = k.attrib['simulationType']
+                    dct[global_name] = {}
+                    dct[global_name]['reaction_name'] = reaction_name
+                    dct[global_name]['parameter_name'] = parameter_name
+                    dct[global_name]['value'] = value
+                    dct[global_name]['simulation_type'] = simulation_type
+
+        res = []
         for i in self.xml.iter():
-            if i.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
+            if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
                 for j in i:
-                    name = j.attrib['name']
-                    value = j.attrib['value']
-                    key = j.attrib['key']
-                    reaction_name = i.getparent().attrib['name']
-                    global_name = '({}).{}'.format(reaction_name, name)
+                    reaction_name = j.attrib['name']
+                    for k in j:
+                        for l in k:
+                            if l.tag == '{http://www.copasi.org/static/schema}Constant':
+                                parameter_name = l.attrib['name']
+                                global_name = "({}).{}".format(reaction_name, parameter_name)
+                                parameter_key = l.attrib['key']
 
-                    l = LocalParameter(self,
-                                       name=name,
-                                       value=value,
-                                       key=key,
-                                       reaction_name=reaction_name,
-                                       global_name=global_name)
-                    res.append(l)
-
+                                loc = LocalParameter(self,
+                                                     name=dct[global_name]['parameter_name'],
+                                                     value=dct[global_name]['value'],
+                                                     key=parameter_key,
+                                                     reaction_name=dct[global_name]['reaction_name'],
+                                                     global_name=global_name,
+                                                     simulation_type = dct[global_name]['simulation_type']
+                                                     )
+                                res.append(loc)
         return res
 
     @cached_property

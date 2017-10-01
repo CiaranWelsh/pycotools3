@@ -238,3 +238,688 @@ INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/
 INFO:root:__init__:<module>:27:Initializing pycotools
 INFO:root:__init__:<module>:28:Initializing logging System
 INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[Smad3n] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[Smad3c] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[Smad4n] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[Smad4c] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[T1R_Surf] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[T2R_Cave] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[T2R_Surf] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[Smads_Complex_n] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[T1R_EE] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[T1R_Cave] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[TGF_beta] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[LRC_Cave] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[A] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[LRC_Surf] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[B] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[Smads_Complex_c] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[T2R_EE] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:[LRC_EE] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[Kexp_Smad2n] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[Kdeg_T1R_EE] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[Klid] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[Total_Smad2c] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[Total_Smad2n] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[kr_EE] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[ki_EE] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[v_T2R] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[v_T1R] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[k_LRC] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[Kcd] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[kr_Cave] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[ki_Cave] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[Kexp_Smad4n] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[Kdiss_Smads_Complex_n] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[Kimp_Smad2c] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[Kimp_Smads_Complex_c] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[Kimp_Smad4c] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[Kdeg_T2R_EE] not found. Set to ignore
+WARNING:pycotools.tasks:tasks:create_experiment:2429:Values[k_Smads_Complex_c] not found. Set to ignore
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.model:model:constants:878:{'value': '0.16', 'name': 'Kimp_Smad2c', 'key': 'Parameter_4385'}
+DEBUG:pycotools.model:model:constants:878:{'value': '1', 'name': 'Kexp_Smad2n', 'key': 'Parameter_4384'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.08', 'name': 'Kimp_Smad4c', 'key': 'Parameter_4383'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.5', 'name': 'Kexp_Smad4n', 'key': 'Parameter_4382'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.0103', 'name': 'v', 'key': 'Parameter_4381'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.33', 'name': 'k1', 'key': 'Parameter_4380'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.03742', 'name': 'k1', 'key': 'Parameter_4379'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.33', 'name': 'k1', 'key': 'Parameter_4378'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.033', 'name': 'k1', 'key': 'Parameter_4377'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.005', 'name': 'k1', 'key': 'Parameter_4376'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.02869', 'name': 'v', 'key': 'Parameter_4375'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.33', 'name': 'k1', 'key': 'Parameter_4374'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.03742', 'name': 'k1', 'key': 'Parameter_4373'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.33', 'name': 'k1', 'key': 'Parameter_4372'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.033', 'name': 'kr_EE', 'key': 'Parameter_4371'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.025', 'name': 'k1', 'key': 'Parameter_4370'}
+DEBUG:pycotools.model:model:constants:878:{'value': '2197', 'name': 'k_LRC', 'key': 'Parameter_4369'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.33', 'name': 'k1', 'key': 'Parameter_4368'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.03742', 'name': 'kr_Cave', 'key': 'Parameter_4367'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.33', 'name': 'k1', 'key': 'Parameter_4366'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.033', 'name': 'kr_EE', 'key': 'Parameter_4365'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.005', 'name': 'k1', 'key': 'Parameter_4364'}
+DEBUG:pycotools.model:model:constants:878:{'value': '6.85e-05', 'name': 'k_Smads_Complex_c', 'key': 'Parameter_4363'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.16', 'name': 'Kimp_Smads_Complex_c', 'key': 'Parameter_4362'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.1174', 'name': 'k1', 'key': 'Parameter_4361'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.02609', 'name': 'Klid', 'key': 'Parameter_4360'}
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.model:model:constants:878:{'value': '0.16', 'name': 'Kimp_Smad2c', 'key': 'Parameter_4385'}
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.model:model:constants:878:{'value': '0.16', 'name': 'Kimp_Smad2c', 'key': 'Parameter_4385'}
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.model:model:constants:878:{'value': '0.16', 'name': 'Kimp_Smad2c', 'key': 'Parameter_4385'}
+DEBUG:pycotools.model:model:constants:878:{'value': '1', 'name': 'Kexp_Smad2n', 'key': 'Parameter_4384'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.08', 'name': 'Kimp_Smad4c', 'key': 'Parameter_4383'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.5', 'name': 'Kexp_Smad4n', 'key': 'Parameter_4382'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.0103', 'name': 'v', 'key': 'Parameter_4381'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.33', 'name': 'k1', 'key': 'Parameter_4380'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.03742', 'name': 'k1', 'key': 'Parameter_4379'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.33', 'name': 'k1', 'key': 'Parameter_4378'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.033', 'name': 'k1', 'key': 'Parameter_4377'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.005', 'name': 'k1', 'key': 'Parameter_4376'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.02869', 'name': 'v', 'key': 'Parameter_4375'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.33', 'name': 'k1', 'key': 'Parameter_4374'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.03742', 'name': 'k1', 'key': 'Parameter_4373'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.33', 'name': 'k1', 'key': 'Parameter_4372'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.033', 'name': 'kr_EE', 'key': 'Parameter_4371'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.025', 'name': 'k1', 'key': 'Parameter_4370'}
+DEBUG:pycotools.model:model:constants:878:{'value': '2197', 'name': 'k_LRC', 'key': 'Parameter_4369'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.33', 'name': 'k1', 'key': 'Parameter_4368'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.03742', 'name': 'kr_Cave', 'key': 'Parameter_4367'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.33', 'name': 'k1', 'key': 'Parameter_4366'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.033', 'name': 'kr_EE', 'key': 'Parameter_4365'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.005', 'name': 'k1', 'key': 'Parameter_4364'}
+DEBUG:pycotools.model:model:constants:878:{'value': '6.85e-05', 'name': 'k_Smads_Complex_c', 'key': 'Parameter_4363'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.16', 'name': 'Kimp_Smads_Complex_c', 'key': 'Parameter_4362'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.1174', 'name': 'k1', 'key': 'Parameter_4361'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.02609', 'name': 'Klid', 'key': 'Parameter_4360'}
+CRITICAL:pycotools.model:model:constants:893:Need to get model constant simulation types. Use string=kinetic parameters instead of list of constants
+DEBUG:pycotools.model:model:constants2:907:{http://www.copasi.org/static/schema}ListOfConstants
+DEBUG:pycotools.model:model:constants2:907:{http://www.copasi.org/static/schema}ListOfConstants
+DEBUG:pycotools.model:model:constants2:907:{http://www.copasi.org/static/schema}ListOfConstants
+DEBUG:pycotools.model:model:constants2:907:{http://www.copasi.org/static/schema}ListOfConstants
+DEBUG:pycotools.model:model:constants2:907:{http://www.copasi.org/static/schema}ListOfConstants
+DEBUG:pycotools.model:model:constants2:907:{http://www.copasi.org/static/schema}ListOfConstants
+DEBUG:pycotools.model:model:constants2:907:{http://www.copasi.org/static/schema}ListOfConstants
+DEBUG:pycotools.model:model:constants2:907:{http://www.copasi.org/static/schema}ListOfConstants
+DEBUG:pycotools.model:model:constants2:907:{http://www.copasi.org/static/schema}ListOfConstants
+DEBUG:pycotools.model:model:constants2:907:{http://www.copasi.org/static/schema}ListOfConstants
+DEBUG:pycotools.model:model:constants2:907:{http://www.copasi.org/static/schema}ListOfConstants
+DEBUG:pycotools.model:model:constants2:907:{http://www.copasi.org/static/schema}ListOfConstants
+DEBUG:pycotools.model:model:constants2:907:{http://www.copasi.org/static/schema}ListOfConstants
+DEBUG:pycotools.model:model:constants2:907:{http://www.copasi.org/static/schema}ListOfConstants
+DEBUG:pycotools.model:model:constants2:907:{http://www.copasi.org/static/schema}ListOfConstants
+DEBUG:pycotools.model:model:constants2:907:{http://www.copasi.org/static/schema}ListOfConstants
+DEBUG:pycotools.model:model:constants2:907:{http://www.copasi.org/static/schema}ListOfConstants
+DEBUG:pycotools.model:model:constants2:907:{http://www.copasi.org/static/schema}ListOfConstants
+DEBUG:pycotools.model:model:constants2:907:{http://www.copasi.org/static/schema}ListOfConstants
+DEBUG:pycotools.model:model:constants2:907:{http://www.copasi.org/static/schema}ListOfConstants
+DEBUG:pycotools.model:model:constants2:907:{http://www.copasi.org/static/schema}ListOfConstants
+DEBUG:pycotools.model:model:constants2:907:{http://www.copasi.org/static/schema}ListOfConstants
+DEBUG:pycotools.model:model:constants2:907:{http://www.copasi.org/static/schema}ListOfConstants
+DEBUG:pycotools.model:model:constants2:907:{http://www.copasi.org/static/schema}ListOfConstants
+DEBUG:pycotools.model:model:constants2:907:{http://www.copasi.org/static/schema}ListOfConstants
+DEBUG:pycotools.model:model:constants2:907:{http://www.copasi.org/static/schema}ListOfConstants
+CRITICAL:pycotools.model:model:constants2:922:Need to get model constant simulation types. Use string=kinetic parameters instead of list of constants
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.model:model:constants:878:{'value': '0.16', 'name': 'Kimp_Smad2c', 'key': 'Parameter_4385'}
+DEBUG:pycotools.model:model:constants:878:{'value': '1', 'name': 'Kexp_Smad2n', 'key': 'Parameter_4384'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.08', 'name': 'Kimp_Smad4c', 'key': 'Parameter_4383'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.5', 'name': 'Kexp_Smad4n', 'key': 'Parameter_4382'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.0103', 'name': 'v', 'key': 'Parameter_4381'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.33', 'name': 'k1', 'key': 'Parameter_4380'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.03742', 'name': 'k1', 'key': 'Parameter_4379'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.33', 'name': 'k1', 'key': 'Parameter_4378'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.033', 'name': 'k1', 'key': 'Parameter_4377'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.005', 'name': 'k1', 'key': 'Parameter_4376'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.02869', 'name': 'v', 'key': 'Parameter_4375'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.33', 'name': 'k1', 'key': 'Parameter_4374'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.03742', 'name': 'k1', 'key': 'Parameter_4373'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.33', 'name': 'k1', 'key': 'Parameter_4372'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.033', 'name': 'kr_EE', 'key': 'Parameter_4371'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.025', 'name': 'k1', 'key': 'Parameter_4370'}
+DEBUG:pycotools.model:model:constants:878:{'value': '2197', 'name': 'k_LRC', 'key': 'Parameter_4369'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.33', 'name': 'k1', 'key': 'Parameter_4368'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.03742', 'name': 'kr_Cave', 'key': 'Parameter_4367'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.33', 'name': 'k1', 'key': 'Parameter_4366'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.033', 'name': 'kr_EE', 'key': 'Parameter_4365'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.005', 'name': 'k1', 'key': 'Parameter_4364'}
+DEBUG:pycotools.model:model:constants:878:{'value': '6.85e-05', 'name': 'k_Smads_Complex_c', 'key': 'Parameter_4363'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.16', 'name': 'Kimp_Smads_Complex_c', 'key': 'Parameter_4362'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.1174', 'name': 'k1', 'key': 'Parameter_4361'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.02609', 'name': 'Klid', 'key': 'Parameter_4360'}
+CRITICAL:pycotools.model:model:constants:893:Need to get model constant simulation types. Use string=kinetic parameters instead of list of constants
+DEBUG:pycotools.model:model:constants2:911:{http://www.copasi.org/static/schema}ModelParameterGroup
+DEBUG:pycotools.model:model:constants2:911:{http://www.copasi.org/static/schema}ModelParameterGroup
+DEBUG:pycotools.model:model:constants2:911:{http://www.copasi.org/static/schema}ModelParameterGroup
+DEBUG:pycotools.model:model:constants2:911:{http://www.copasi.org/static/schema}ModelParameterGroup
+DEBUG:pycotools.model:model:constants2:911:{http://www.copasi.org/static/schema}ModelParameterGroup
+DEBUG:pycotools.model:model:constants2:911:{http://www.copasi.org/static/schema}ModelParameterGroup
+DEBUG:pycotools.model:model:constants2:911:{http://www.copasi.org/static/schema}ModelParameterGroup
+DEBUG:pycotools.model:model:constants2:911:{http://www.copasi.org/static/schema}ModelParameterGroup
+DEBUG:pycotools.model:model:constants2:911:{http://www.copasi.org/static/schema}ModelParameterGroup
+DEBUG:pycotools.model:model:constants2:911:{http://www.copasi.org/static/schema}ModelParameterGroup
+DEBUG:pycotools.model:model:constants2:911:{http://www.copasi.org/static/schema}ModelParameterGroup
+DEBUG:pycotools.model:model:constants2:911:{http://www.copasi.org/static/schema}ModelParameterGroup
+DEBUG:pycotools.model:model:constants2:911:{http://www.copasi.org/static/schema}ModelParameterGroup
+DEBUG:pycotools.model:model:constants2:911:{http://www.copasi.org/static/schema}ModelParameterGroup
+DEBUG:pycotools.model:model:constants2:911:{http://www.copasi.org/static/schema}ModelParameterGroup
+DEBUG:pycotools.model:model:constants2:911:{http://www.copasi.org/static/schema}ModelParameterGroup
+DEBUG:pycotools.model:model:constants2:911:{http://www.copasi.org/static/schema}ModelParameterGroup
+DEBUG:pycotools.model:model:constants2:911:{http://www.copasi.org/static/schema}ModelParameterGroup
+DEBUG:pycotools.model:model:constants2:911:{http://www.copasi.org/static/schema}ModelParameterGroup
+DEBUG:pycotools.model:model:constants2:911:{http://www.copasi.org/static/schema}ModelParameterGroup
+DEBUG:pycotools.model:model:constants2:911:{http://www.copasi.org/static/schema}ModelParameterGroup
+DEBUG:pycotools.model:model:constants2:911:{http://www.copasi.org/static/schema}ModelParameterGroup
+DEBUG:pycotools.model:model:constants2:911:{http://www.copasi.org/static/schema}ModelParameterGroup
+DEBUG:pycotools.model:model:constants2:911:{http://www.copasi.org/static/schema}ModelParameterGroup
+DEBUG:pycotools.model:model:constants2:911:{http://www.copasi.org/static/schema}ModelParameterGroup
+DEBUG:pycotools.model:model:constants2:911:{http://www.copasi.org/static/schema}ModelParameterGroup
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.model:model:constants:878:{'value': '0.16', 'name': 'Kimp_Smad2c', 'key': 'Parameter_4385'}
+DEBUG:pycotools.model:model:constants:878:{'value': '1', 'name': 'Kexp_Smad2n', 'key': 'Parameter_4384'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.08', 'name': 'Kimp_Smad4c', 'key': 'Parameter_4383'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.5', 'name': 'Kexp_Smad4n', 'key': 'Parameter_4382'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.0103', 'name': 'v', 'key': 'Parameter_4381'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.33', 'name': 'k1', 'key': 'Parameter_4380'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.03742', 'name': 'k1', 'key': 'Parameter_4379'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.33', 'name': 'k1', 'key': 'Parameter_4378'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.033', 'name': 'k1', 'key': 'Parameter_4377'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.005', 'name': 'k1', 'key': 'Parameter_4376'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.02869', 'name': 'v', 'key': 'Parameter_4375'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.33', 'name': 'k1', 'key': 'Parameter_4374'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.03742', 'name': 'k1', 'key': 'Parameter_4373'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.33', 'name': 'k1', 'key': 'Parameter_4372'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.033', 'name': 'kr_EE', 'key': 'Parameter_4371'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.025', 'name': 'k1', 'key': 'Parameter_4370'}
+DEBUG:pycotools.model:model:constants:878:{'value': '2197', 'name': 'k_LRC', 'key': 'Parameter_4369'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.33', 'name': 'k1', 'key': 'Parameter_4368'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.03742', 'name': 'kr_Cave', 'key': 'Parameter_4367'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.33', 'name': 'k1', 'key': 'Parameter_4366'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.033', 'name': 'kr_EE', 'key': 'Parameter_4365'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.005', 'name': 'k1', 'key': 'Parameter_4364'}
+DEBUG:pycotools.model:model:constants:878:{'value': '6.85e-05', 'name': 'k_Smads_Complex_c', 'key': 'Parameter_4363'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.16', 'name': 'Kimp_Smads_Complex_c', 'key': 'Parameter_4362'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.1174', 'name': 'k1', 'key': 'Parameter_4361'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.02609', 'name': 'Klid', 'key': 'Parameter_4360'}
+CRITICAL:pycotools.model:model:constants:893:Need to get model constant simulation types. Use string=kinetic parameters instead of list of constants
+DEBUG:pycotools.model:model:constants2:911:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R1_Smad2_import]'}
+DEBUG:pycotools.model:model:constants2:911:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R2_Smad2_export]'}
+DEBUG:pycotools.model:model:constants2:911:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R3_Smad4_import]'}
+DEBUG:pycotools.model:model:constants2:911:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R4_Smad4_export]'}
+DEBUG:pycotools.model:model:constants2:911:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R5_T1R_production]'}
+DEBUG:pycotools.model:model:constants2:911:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R6_T1R_Cave_formation]'}
+DEBUG:pycotools.model:model:constants2:911:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R7_T1R_Cave_recycling]'}
+DEBUG:pycotools.model:model:constants2:911:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R8_T1R_EE_formation]'}
+DEBUG:pycotools.model:model:constants2:911:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R9_T1R_EE_recycling]'}
+DEBUG:pycotools.model:model:constants2:911:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R10_T1R_EE_degradation]'}
+DEBUG:pycotools.model:model:constants2:911:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R11_T2R_production]'}
+DEBUG:pycotools.model:model:constants2:911:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R12_T2R_Cave_formation]'}
+DEBUG:pycotools.model:model:constants2:911:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R13_T2R_Cave_recycling]'}
+DEBUG:pycotools.model:model:constants2:911:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R14_T2R_EE_formation]'}
+DEBUG:pycotools.model:model:constants2:911:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R15_T2R_EE_recycling]'}
+DEBUG:pycotools.model:model:constants2:911:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R16_T2R_EE_degradation]'}
+DEBUG:pycotools.model:model:constants2:911:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R17_LRC_formation]'}
+DEBUG:pycotools.model:model:constants2:911:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R18_LRC_Cave_formation]'}
+DEBUG:pycotools.model:model:constants2:911:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R19_LRC_Cave_recycling]'}
+DEBUG:pycotools.model:model:constants2:911:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R20_LRC_EE_formation]'}
+DEBUG:pycotools.model:model:constants2:911:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R21_LRC_EE_recycling]'}
+DEBUG:pycotools.model:model:constants2:911:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R22_LRC_EE_degradation]'}
+DEBUG:pycotools.model:model:constants2:911:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R23_Smads_Complex_formation]'}
+DEBUG:pycotools.model:model:constants2:911:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R24_Smads_Complex_import]'}
+DEBUG:pycotools.model:model:constants2:911:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R25_Smads_Complex_Dissociation]'}
+DEBUG:pycotools.model:model:constants2:911:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R26_LRC_Cave_degradation]'}
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.model:model:constants:878:{'value': '0.16', 'name': 'Kimp_Smad2c', 'key': 'Parameter_4385'}
+DEBUG:pycotools.model:model:constants:878:{'value': '1', 'name': 'Kexp_Smad2n', 'key': 'Parameter_4384'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.08', 'name': 'Kimp_Smad4c', 'key': 'Parameter_4383'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.5', 'name': 'Kexp_Smad4n', 'key': 'Parameter_4382'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.0103', 'name': 'v', 'key': 'Parameter_4381'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.33', 'name': 'k1', 'key': 'Parameter_4380'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.03742', 'name': 'k1', 'key': 'Parameter_4379'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.33', 'name': 'k1', 'key': 'Parameter_4378'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.033', 'name': 'k1', 'key': 'Parameter_4377'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.005', 'name': 'k1', 'key': 'Parameter_4376'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.02869', 'name': 'v', 'key': 'Parameter_4375'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.33', 'name': 'k1', 'key': 'Parameter_4374'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.03742', 'name': 'k1', 'key': 'Parameter_4373'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.33', 'name': 'k1', 'key': 'Parameter_4372'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.033', 'name': 'kr_EE', 'key': 'Parameter_4371'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.025', 'name': 'k1', 'key': 'Parameter_4370'}
+DEBUG:pycotools.model:model:constants:878:{'value': '2197', 'name': 'k_LRC', 'key': 'Parameter_4369'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.33', 'name': 'k1', 'key': 'Parameter_4368'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.03742', 'name': 'kr_Cave', 'key': 'Parameter_4367'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.33', 'name': 'k1', 'key': 'Parameter_4366'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.033', 'name': 'kr_EE', 'key': 'Parameter_4365'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.005', 'name': 'k1', 'key': 'Parameter_4364'}
+DEBUG:pycotools.model:model:constants:878:{'value': '6.85e-05', 'name': 'k_Smads_Complex_c', 'key': 'Parameter_4363'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.16', 'name': 'Kimp_Smads_Complex_c', 'key': 'Parameter_4362'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.1174', 'name': 'k1', 'key': 'Parameter_4361'}
+DEBUG:pycotools.model:model:constants:878:{'value': '0.02609', 'name': 'Klid', 'key': 'Parameter_4360'}
+CRITICAL:pycotools.model:model:constants:893:Need to get model constant simulation types. Use string=kinetic parameters instead of list of constants
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.model:model:constants2:904:{'type': 'Group', 'cn': 'String=Kinetic Parameters'}
+DEBUG:pycotools.model:model:constants2:909:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R1_Smad2_import]'}
+DEBUG:pycotools.model:model:constants2:909:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R2_Smad2_export]'}
+DEBUG:pycotools.model:model:constants2:909:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R3_Smad4_import]'}
+DEBUG:pycotools.model:model:constants2:909:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R4_Smad4_export]'}
+DEBUG:pycotools.model:model:constants2:909:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R5_T1R_production]'}
+DEBUG:pycotools.model:model:constants2:909:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R6_T1R_Cave_formation]'}
+DEBUG:pycotools.model:model:constants2:909:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R7_T1R_Cave_recycling]'}
+DEBUG:pycotools.model:model:constants2:909:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R8_T1R_EE_formation]'}
+DEBUG:pycotools.model:model:constants2:909:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R9_T1R_EE_recycling]'}
+DEBUG:pycotools.model:model:constants2:909:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R10_T1R_EE_degradation]'}
+DEBUG:pycotools.model:model:constants2:909:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R11_T2R_production]'}
+DEBUG:pycotools.model:model:constants2:909:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R12_T2R_Cave_formation]'}
+DEBUG:pycotools.model:model:constants2:909:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R13_T2R_Cave_recycling]'}
+DEBUG:pycotools.model:model:constants2:909:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R14_T2R_EE_formation]'}
+DEBUG:pycotools.model:model:constants2:909:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R15_T2R_EE_recycling]'}
+DEBUG:pycotools.model:model:constants2:909:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R16_T2R_EE_degradation]'}
+DEBUG:pycotools.model:model:constants2:909:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R17_LRC_formation]'}
+DEBUG:pycotools.model:model:constants2:909:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R18_LRC_Cave_formation]'}
+DEBUG:pycotools.model:model:constants2:909:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R19_LRC_Cave_recycling]'}
+DEBUG:pycotools.model:model:constants2:909:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R20_LRC_EE_formation]'}
+DEBUG:pycotools.model:model:constants2:909:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R21_LRC_EE_recycling]'}
+DEBUG:pycotools.model:model:constants2:909:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R22_LRC_EE_degradation]'}
+DEBUG:pycotools.model:model:constants2:909:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R23_Smads_Complex_formation]'}
+DEBUG:pycotools.model:model:constants2:909:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R24_Smads_Complex_import]'}
+DEBUG:pycotools.model:model:constants2:909:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R25_Smads_Complex_Dissociation]'}
+DEBUG:pycotools.model:model:constants2:909:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R26_LRC_Cave_degradation]'}
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.model:model:constants2:906:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R1_Smad2_import]'}
+DEBUG:pycotools.model:model:constants2:906:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R2_Smad2_export]'}
+DEBUG:pycotools.model:model:constants2:906:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R3_Smad4_import]'}
+DEBUG:pycotools.model:model:constants2:906:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R4_Smad4_export]'}
+DEBUG:pycotools.model:model:constants2:906:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R5_T1R_production]'}
+DEBUG:pycotools.model:model:constants2:906:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R6_T1R_Cave_formation]'}
+DEBUG:pycotools.model:model:constants2:906:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R7_T1R_Cave_recycling]'}
+DEBUG:pycotools.model:model:constants2:906:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R8_T1R_EE_formation]'}
+DEBUG:pycotools.model:model:constants2:906:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R9_T1R_EE_recycling]'}
+DEBUG:pycotools.model:model:constants2:906:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R10_T1R_EE_degradation]'}
+DEBUG:pycotools.model:model:constants2:906:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R11_T2R_production]'}
+DEBUG:pycotools.model:model:constants2:906:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R12_T2R_Cave_formation]'}
+DEBUG:pycotools.model:model:constants2:906:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R13_T2R_Cave_recycling]'}
+DEBUG:pycotools.model:model:constants2:906:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R14_T2R_EE_formation]'}
+DEBUG:pycotools.model:model:constants2:906:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R15_T2R_EE_recycling]'}
+DEBUG:pycotools.model:model:constants2:906:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R16_T2R_EE_degradation]'}
+DEBUG:pycotools.model:model:constants2:906:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R17_LRC_formation]'}
+DEBUG:pycotools.model:model:constants2:906:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R18_LRC_Cave_formation]'}
+DEBUG:pycotools.model:model:constants2:906:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R19_LRC_Cave_recycling]'}
+DEBUG:pycotools.model:model:constants2:906:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R20_LRC_EE_formation]'}
+DEBUG:pycotools.model:model:constants2:906:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R21_LRC_EE_recycling]'}
+DEBUG:pycotools.model:model:constants2:906:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R22_LRC_EE_degradation]'}
+DEBUG:pycotools.model:model:constants2:906:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R23_Smads_Complex_formation]'}
+DEBUG:pycotools.model:model:constants2:906:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R24_Smads_Complex_import]'}
+DEBUG:pycotools.model:model:constants2:906:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R25_Smads_Complex_Dissociation]'}
+DEBUG:pycotools.model:model:constants2:906:{'type': 'Reaction', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R26_LRC_Cave_degradation]'}
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R1_Smad2_import],ParameterGroup=Parameters,Parameter=Kimp_Smad2c', 'value': '0.16'}
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R2_Smad2_export],ParameterGroup=Parameters,Parameter=Kexp_Smad2n', 'value': '1'}
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R3_Smad4_import],ParameterGroup=Parameters,Parameter=Kimp_Smad4c', 'value': '0.08'}
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R4_Smad4_export],ParameterGroup=Parameters,Parameter=Kexp_Smad4n', 'value': '0.5'}
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R5_T1R_production],ParameterGroup=Parameters,Parameter=v', 'value': '0.0103'}
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R6_T1R_Cave_formation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.33'}
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R7_T1R_Cave_recycling],ParameterGroup=Parameters,Parameter=k1', 'value': '0.03742'}
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R8_T1R_EE_formation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.33'}
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R9_T1R_EE_recycling],ParameterGroup=Parameters,Parameter=k1', 'value': '0.033'}
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R10_T1R_EE_degradation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.005'}
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R11_T2R_production],ParameterGroup=Parameters,Parameter=v', 'value': '0.02869'}
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R12_T2R_Cave_formation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.33'}
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R13_T2R_Cave_recycling],ParameterGroup=Parameters,Parameter=k1', 'value': '0.03742'}
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R14_T2R_EE_formation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.33'}
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R15_T2R_EE_recycling],ParameterGroup=Parameters,Parameter=kr_EE', 'value': '0.033'}
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R16_T2R_EE_degradation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.025'}
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R17_LRC_formation],ParameterGroup=Parameters,Parameter=k_LRC', 'value': '2197'}
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R18_LRC_Cave_formation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.33'}
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R19_LRC_Cave_recycling],ParameterGroup=Parameters,Parameter=kr_Cave', 'value': '0.03742'}
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R20_LRC_EE_formation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.33'}
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R21_LRC_EE_recycling],ParameterGroup=Parameters,Parameter=kr_EE', 'value': '0.033'}
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R22_LRC_EE_degradation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.005'}
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R23_Smads_Complex_formation],ParameterGroup=Parameters,Parameter=k_Smads_Complex_c', 'value': '6.85e-05'}
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R24_Smads_Complex_import],ParameterGroup=Parameters,Parameter=Kimp_Smads_Complex_c', 'value': '0.16'}
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R25_Smads_Complex_Dissociation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1174'}
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R26_LRC_Cave_degradation],ParameterGroup=Parameters,Parameter=Klid', 'value': '0.02609'}
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R1_Smad2_import],ParameterGroup=Parameters,Parameter=Kimp_Smad2c', 'value': '0.16'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R2_Smad2_export],ParameterGroup=Parameters,Parameter=Kexp_Smad2n', 'value': '1'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R3_Smad4_import],ParameterGroup=Parameters,Parameter=Kimp_Smad4c', 'value': '0.08'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R4_Smad4_export],ParameterGroup=Parameters,Parameter=Kexp_Smad4n', 'value': '0.5'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R5_T1R_production],ParameterGroup=Parameters,Parameter=v', 'value': '0.0103'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R6_T1R_Cave_formation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.33'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R7_T1R_Cave_recycling],ParameterGroup=Parameters,Parameter=k1', 'value': '0.03742'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R8_T1R_EE_formation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.33'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R9_T1R_EE_recycling],ParameterGroup=Parameters,Parameter=k1', 'value': '0.033'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R10_T1R_EE_degradation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.005'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R11_T2R_production],ParameterGroup=Parameters,Parameter=v', 'value': '0.02869'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R12_T2R_Cave_formation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.33'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R13_T2R_Cave_recycling],ParameterGroup=Parameters,Parameter=k1', 'value': '0.03742'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R14_T2R_EE_formation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.33'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R15_T2R_EE_recycling],ParameterGroup=Parameters,Parameter=kr_EE', 'value': '0.033'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R16_T2R_EE_degradation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.025'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R17_LRC_formation],ParameterGroup=Parameters,Parameter=k_LRC', 'value': '2197'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R18_LRC_Cave_formation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.33'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R19_LRC_Cave_recycling],ParameterGroup=Parameters,Parameter=kr_Cave', 'value': '0.03742'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R20_LRC_EE_formation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.33'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R21_LRC_EE_recycling],ParameterGroup=Parameters,Parameter=kr_EE', 'value': '0.033'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R22_LRC_EE_degradation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.005'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R23_Smads_Complex_formation],ParameterGroup=Parameters,Parameter=k_Smads_Complex_c', 'value': '6.85e-05'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R24_Smads_Complex_import],ParameterGroup=Parameters,Parameter=Kimp_Smads_Complex_c', 'value': '0.16'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R25_Smads_Complex_Dissociation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1174'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R26_LRC_Cave_degradation],ParameterGroup=Parameters,Parameter=Klid', 'value': '0.02609'}
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R1_Smad2_import],ParameterGroup=Parameters,Parameter=Kimp_Smad2c', 'value': '0.16'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R2_Smad2_export],ParameterGroup=Parameters,Parameter=Kexp_Smad2n', 'value': '1'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R3_Smad4_import],ParameterGroup=Parameters,Parameter=Kimp_Smad4c', 'value': '0.08'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R4_Smad4_export],ParameterGroup=Parameters,Parameter=Kexp_Smad4n', 'value': '0.5'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R5_T1R_production],ParameterGroup=Parameters,Parameter=v', 'value': '0.0103'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R6_T1R_Cave_formation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.33'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R7_T1R_Cave_recycling],ParameterGroup=Parameters,Parameter=k1', 'value': '0.03742'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R8_T1R_EE_formation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.33'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R9_T1R_EE_recycling],ParameterGroup=Parameters,Parameter=k1', 'value': '0.033'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R10_T1R_EE_degradation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.005'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R11_T2R_production],ParameterGroup=Parameters,Parameter=v', 'value': '0.02869'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R12_T2R_Cave_formation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.33'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R13_T2R_Cave_recycling],ParameterGroup=Parameters,Parameter=k1', 'value': '0.03742'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R14_T2R_EE_formation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.33'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R15_T2R_EE_recycling],ParameterGroup=Parameters,Parameter=kr_EE', 'value': '0.033'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R16_T2R_EE_degradation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.025'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R17_LRC_formation],ParameterGroup=Parameters,Parameter=k_LRC', 'value': '2197'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R18_LRC_Cave_formation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.33'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R19_LRC_Cave_recycling],ParameterGroup=Parameters,Parameter=kr_Cave', 'value': '0.03742'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R20_LRC_EE_formation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.33'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R21_LRC_EE_recycling],ParameterGroup=Parameters,Parameter=kr_EE', 'value': '0.033'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R22_LRC_EE_degradation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.005'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R23_Smads_Complex_formation],ParameterGroup=Parameters,Parameter=k_Smads_Complex_c', 'value': '6.85e-05'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R24_Smads_Complex_import],ParameterGroup=Parameters,Parameter=Kimp_Smads_Complex_c', 'value': '0.16'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R25_Smads_Complex_Dissociation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1174'}
+DEBUG:pycotools.model:model:constants2:910:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R26_LRC_Cave_degradation],ParameterGroup=Parameters,Parameter=Klid', 'value': '0.02609'}
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.model:model:constants2:908:Kimp_Smad2c
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R1_Smad2_import],ParameterGroup=Parameters,Parameter=Kimp_Smad2c', 'value': '0.16'}
+DEBUG:pycotools.model:model:constants2:908:Kexp_Smad2n
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R2_Smad2_export],ParameterGroup=Parameters,Parameter=Kexp_Smad2n', 'value': '1'}
+DEBUG:pycotools.model:model:constants2:908:Kimp_Smad4c
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R3_Smad4_import],ParameterGroup=Parameters,Parameter=Kimp_Smad4c', 'value': '0.08'}
+DEBUG:pycotools.model:model:constants2:908:Kexp_Smad4n
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R4_Smad4_export],ParameterGroup=Parameters,Parameter=Kexp_Smad4n', 'value': '0.5'}
+DEBUG:pycotools.model:model:constants2:908:v
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R5_T1R_production],ParameterGroup=Parameters,Parameter=v', 'value': '0.0103'}
+DEBUG:pycotools.model:model:constants2:908:k1
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R6_T1R_Cave_formation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.33'}
+DEBUG:pycotools.model:model:constants2:908:k1
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R7_T1R_Cave_recycling],ParameterGroup=Parameters,Parameter=k1', 'value': '0.03742'}
+DEBUG:pycotools.model:model:constants2:908:k1
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R8_T1R_EE_formation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.33'}
+DEBUG:pycotools.model:model:constants2:908:k1
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R9_T1R_EE_recycling],ParameterGroup=Parameters,Parameter=k1', 'value': '0.033'}
+DEBUG:pycotools.model:model:constants2:908:k1
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R10_T1R_EE_degradation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.005'}
+DEBUG:pycotools.model:model:constants2:908:v
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R11_T2R_production],ParameterGroup=Parameters,Parameter=v', 'value': '0.02869'}
+DEBUG:pycotools.model:model:constants2:908:k1
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R12_T2R_Cave_formation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.33'}
+DEBUG:pycotools.model:model:constants2:908:k1
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R13_T2R_Cave_recycling],ParameterGroup=Parameters,Parameter=k1', 'value': '0.03742'}
+DEBUG:pycotools.model:model:constants2:908:k1
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R14_T2R_EE_formation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.33'}
+DEBUG:pycotools.model:model:constants2:908:kr_EE
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R15_T2R_EE_recycling],ParameterGroup=Parameters,Parameter=kr_EE', 'value': '0.033'}
+DEBUG:pycotools.model:model:constants2:908:k1
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R16_T2R_EE_degradation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.025'}
+DEBUG:pycotools.model:model:constants2:908:k_LRC
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R17_LRC_formation],ParameterGroup=Parameters,Parameter=k_LRC', 'value': '2197'}
+DEBUG:pycotools.model:model:constants2:908:k1
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R18_LRC_Cave_formation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.33'}
+DEBUG:pycotools.model:model:constants2:908:kr_Cave
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R19_LRC_Cave_recycling],ParameterGroup=Parameters,Parameter=kr_Cave', 'value': '0.03742'}
+DEBUG:pycotools.model:model:constants2:908:k1
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R20_LRC_EE_formation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.33'}
+DEBUG:pycotools.model:model:constants2:908:kr_EE
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R21_LRC_EE_recycling],ParameterGroup=Parameters,Parameter=kr_EE', 'value': '0.033'}
+DEBUG:pycotools.model:model:constants2:908:k1
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R22_LRC_EE_degradation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.005'}
+DEBUG:pycotools.model:model:constants2:908:k_Smads_Complex_c
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R23_Smads_Complex_formation],ParameterGroup=Parameters,Parameter=k_Smads_Complex_c', 'value': '6.85e-05'}
+DEBUG:pycotools.model:model:constants2:908:Kimp_Smads_Complex_c
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R24_Smads_Complex_import],ParameterGroup=Parameters,Parameter=Kimp_Smads_Complex_c', 'value': '0.16'}
+DEBUG:pycotools.model:model:constants2:908:k1
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R25_Smads_Complex_Dissociation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1174'}
+DEBUG:pycotools.model:model:constants2:908:Klid
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R26_LRC_Cave_degradation],ParameterGroup=Parameters,Parameter=Klid', 'value': '0.02609'}
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.model:model:constants2:907:R1_Smad2_import
+DEBUG:pycotools.model:model:constants2:908:Kimp_Smad2c
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R1_Smad2_import],ParameterGroup=Parameters,Parameter=Kimp_Smad2c', 'value': '0.16'}
+DEBUG:pycotools.model:model:constants2:907:R2_Smad2_export
+DEBUG:pycotools.model:model:constants2:908:Kexp_Smad2n
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R2_Smad2_export],ParameterGroup=Parameters,Parameter=Kexp_Smad2n', 'value': '1'}
+DEBUG:pycotools.model:model:constants2:907:R3_Smad4_import
+DEBUG:pycotools.model:model:constants2:908:Kimp_Smad4c
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R3_Smad4_import],ParameterGroup=Parameters,Parameter=Kimp_Smad4c', 'value': '0.08'}
+DEBUG:pycotools.model:model:constants2:907:R4_Smad4_export
+DEBUG:pycotools.model:model:constants2:908:Kexp_Smad4n
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R4_Smad4_export],ParameterGroup=Parameters,Parameter=Kexp_Smad4n', 'value': '0.5'}
+DEBUG:pycotools.model:model:constants2:907:R5_T1R_production
+DEBUG:pycotools.model:model:constants2:908:v
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R5_T1R_production],ParameterGroup=Parameters,Parameter=v', 'value': '0.0103'}
+DEBUG:pycotools.model:model:constants2:907:R6_T1R_Cave_formation
+DEBUG:pycotools.model:model:constants2:908:k1
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R6_T1R_Cave_formation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.33'}
+DEBUG:pycotools.model:model:constants2:907:R7_T1R_Cave_recycling
+DEBUG:pycotools.model:model:constants2:908:k1
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R7_T1R_Cave_recycling],ParameterGroup=Parameters,Parameter=k1', 'value': '0.03742'}
+DEBUG:pycotools.model:model:constants2:907:R8_T1R_EE_formation
+DEBUG:pycotools.model:model:constants2:908:k1
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R8_T1R_EE_formation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.33'}
+DEBUG:pycotools.model:model:constants2:907:R9_T1R_EE_recycling
+DEBUG:pycotools.model:model:constants2:908:k1
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R9_T1R_EE_recycling],ParameterGroup=Parameters,Parameter=k1', 'value': '0.033'}
+DEBUG:pycotools.model:model:constants2:907:R10_T1R_EE_degradation
+DEBUG:pycotools.model:model:constants2:908:k1
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R10_T1R_EE_degradation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.005'}
+DEBUG:pycotools.model:model:constants2:907:R11_T2R_production
+DEBUG:pycotools.model:model:constants2:908:v
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R11_T2R_production],ParameterGroup=Parameters,Parameter=v', 'value': '0.02869'}
+DEBUG:pycotools.model:model:constants2:907:R12_T2R_Cave_formation
+DEBUG:pycotools.model:model:constants2:908:k1
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R12_T2R_Cave_formation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.33'}
+DEBUG:pycotools.model:model:constants2:907:R13_T2R_Cave_recycling
+DEBUG:pycotools.model:model:constants2:908:k1
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R13_T2R_Cave_recycling],ParameterGroup=Parameters,Parameter=k1', 'value': '0.03742'}
+DEBUG:pycotools.model:model:constants2:907:R14_T2R_EE_formation
+DEBUG:pycotools.model:model:constants2:908:k1
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R14_T2R_EE_formation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.33'}
+DEBUG:pycotools.model:model:constants2:907:R15_T2R_EE_recycling
+DEBUG:pycotools.model:model:constants2:908:kr_EE
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R15_T2R_EE_recycling],ParameterGroup=Parameters,Parameter=kr_EE', 'value': '0.033'}
+DEBUG:pycotools.model:model:constants2:907:R16_T2R_EE_degradation
+DEBUG:pycotools.model:model:constants2:908:k1
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R16_T2R_EE_degradation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.025'}
+DEBUG:pycotools.model:model:constants2:907:R17_LRC_formation
+DEBUG:pycotools.model:model:constants2:908:k_LRC
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R17_LRC_formation],ParameterGroup=Parameters,Parameter=k_LRC', 'value': '2197'}
+DEBUG:pycotools.model:model:constants2:907:R18_LRC_Cave_formation
+DEBUG:pycotools.model:model:constants2:908:k1
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R18_LRC_Cave_formation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.33'}
+DEBUG:pycotools.model:model:constants2:907:R19_LRC_Cave_recycling
+DEBUG:pycotools.model:model:constants2:908:kr_Cave
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R19_LRC_Cave_recycling],ParameterGroup=Parameters,Parameter=kr_Cave', 'value': '0.03742'}
+DEBUG:pycotools.model:model:constants2:907:R20_LRC_EE_formation
+DEBUG:pycotools.model:model:constants2:908:k1
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R20_LRC_EE_formation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.33'}
+DEBUG:pycotools.model:model:constants2:907:R21_LRC_EE_recycling
+DEBUG:pycotools.model:model:constants2:908:kr_EE
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R21_LRC_EE_recycling],ParameterGroup=Parameters,Parameter=kr_EE', 'value': '0.033'}
+DEBUG:pycotools.model:model:constants2:907:R22_LRC_EE_degradation
+DEBUG:pycotools.model:model:constants2:908:k1
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R22_LRC_EE_degradation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.005'}
+DEBUG:pycotools.model:model:constants2:907:R23_Smads_Complex_formation
+DEBUG:pycotools.model:model:constants2:908:k_Smads_Complex_c
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R23_Smads_Complex_formation],ParameterGroup=Parameters,Parameter=k_Smads_Complex_c', 'value': '6.85e-05'}
+DEBUG:pycotools.model:model:constants2:907:R24_Smads_Complex_import
+DEBUG:pycotools.model:model:constants2:908:Kimp_Smads_Complex_c
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R24_Smads_Complex_import],ParameterGroup=Parameters,Parameter=Kimp_Smads_Complex_c', 'value': '0.16'}
+DEBUG:pycotools.model:model:constants2:907:R25_Smads_Complex_Dissociation
+DEBUG:pycotools.model:model:constants2:908:k1
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R25_Smads_Complex_Dissociation],ParameterGroup=Parameters,Parameter=k1', 'value': '0.1174'}
+DEBUG:pycotools.model:model:constants2:907:R26_LRC_Cave_degradation
+DEBUG:pycotools.model:model:constants2:908:Klid
+DEBUG:pycotools.model:model:constants2:909:{'simulationType': 'assignment', 'type': 'ReactionParameter', 'cn': 'CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R26_LRC_Cave_degradation],ParameterGroup=Parameters,Parameter=Klid', 'value': '0.02609'}
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
