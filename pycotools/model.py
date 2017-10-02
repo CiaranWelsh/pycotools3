@@ -492,15 +492,19 @@ class Model(_base._Base):
     @cached_property
     def local_parameters(self):
         """
-        get local parameters from reactions
+        get local parameters in model. local_parameters are
+        those which are actively used in reactions and do not have
+        a global variable assigned to them. The constant property
+        returns all local parameters regardless of simulation type
+        (fixed or assignment)
         :return:
         """
-        loc = reduce(lambda x, y: x+y, [i.parameters for i in self.reactions])
+        loc = self.constants#reduce(lambda x, y: x+y, [i.parameters for i in self.reactions])
 
         ## We don't want to consider parameters tahat have already been assigned
         ## to a global parameter in any downstream operation.
         ##therefore we remove locals with assignments
-        loc = [i for i in loc if i.simulation_type!='assignment']
+        loc = [i for i in loc if i.simulation_type != 'assignment']
         return loc
 
     def add_local_parameter(self, local_parameter):
@@ -617,8 +621,6 @@ class Model(_base._Base):
         ## the metabolites cache
         if isinstance(metab, str):
             metab = Metabolite(self, metab)
-
-        # LOG.debug('metab is --> {}'.format(metab))
 
         if 'metabolites' in self.__dict__:
             del self.__dict__['metabolites']
@@ -1018,8 +1020,6 @@ class Model(_base._Base):
                 expression = '{} {} {}; {}'.format(sub_expression, operator,
                                                    prod_expression, modifier_expression)
             reactions_dict[i]['expression'] = expression
-        # for i in reactions_dict:
-        #     LOG.debug('reactions --> {}: {}'.format(i, reactions_dict[i]))
         lst=[]
         for i, dct in reactions_dict.items():
             ## skip the skipped reactions
@@ -1046,15 +1046,6 @@ class Model(_base._Base):
         :param rate_law: mathematical expression or mass_action (default)
         :return:
         """
-
-        # if isinstance(reaction, (list, tuple)):
-        #     LOG.debug('got tuple --> {}'.format(reaction[0]))
-        #     if len(reaction) != 3:
-        #         raise errors.InputError('Expecting 3 '
-        #                                 'arguments (name, expression, rate_law)'
-        #                                 'but got {} instead'.format(len(reaction)))
-        #     reaction = Reaction(self, reaction[0][0], reaction[1][0], reaction[2][0])
-
         if not isinstance(reaction, Reaction):
             raise errors.InputError(
                 'Expecting Reaction but '

@@ -82,14 +82,23 @@ class GetModelVariableFromStringMixin(Mixin):
 
             elif v in [i.name for i in m.compartments]:
                 v = m.get('compartments', v, by='name')
+
             elif v in [i.name for i in m.global_quantities]:
                 v = m.get('global_quantity', v, by='name')
+
             elif v in [i.global_name for i in m.local_parameters]:
                 v = m.get('local_parameter', v, by='global_name')
+
             else:
+                assignments = m.get(
+                    'local_parameter', 'assignment', by='simulation_type'
+                )
                 raise errors.InputError('Variable {} is not in model. '
                                         'These are your model variables: '
-                                        '{}'.format(v, m.all_variable_names))
+                                        '{} and these are local_parameters '
+                                        'with global_quantities assigned '
+                                        'to them: {}'.format(v, m.all_variable_names,
+                                                             [i.global_name for i in assignments]))
         assert isinstance(v, str) != True
         return v
 
@@ -359,16 +368,11 @@ class RunParallel(_base._Base):
         # self.q.put(proc, block=True)
         LOG.info('running from run1 "{}"'.format(model.copasi_file))
         # self.q.join() ##blocks until all tasks are done
-        LOG.debug('prod id --> {}'.format(proc.pid))
-        LOG.debug('prod name --> {}'.format(proc.poll()))
         import time
         import psutil
 
-        LOG.debug('psutil --> {}'.format(psutil.Process(proc.pid)))
 
         while proc.poll() != 0:
-            LOG.debug('time --> {}'.format(time.time()))
-            LOG.debug('running --> {}'.format(proc.pid))
 
             time.sleep(1)
 
@@ -388,7 +392,7 @@ class RunParallel(_base._Base):
         for mod in self.models:
             t = threading.Thread(target=self.run1, args=(mod,),
                                  name=mod.copasi_file)
-            LOG.debug('current process --> {}'.format(multiprocessing.current_process().name))
+            LOG.info('current process --> {}'.format(multiprocessing.current_process().name))
             # t.daemon = True
             t.start()
             t.join()
@@ -407,7 +411,6 @@ class RunParallel(_base._Base):
         for mod in self.models:
             t = threading.Thread(target=self.run1, args=(mod,),
                                  name=mod.copasi_file)
-            LOG.debug('current process --> {}'.format(multiprocessing.current_process().name))
             t.daemon = True
             threads.append(t)
         for i in range(len(threads)):
@@ -426,7 +429,6 @@ class RunParallel(_base._Base):
 
     def do_stuff(self, q, model):
         while True:
-            LOG.debug('do stuff copasi file --> {}'.format(model.copasi_file))
             q.put(subprocess.Popen(['CopasiSE', '{}'.format(model.copasi_file)]))
             proc = q.get()
             if proc.wait() == 0:
@@ -436,7 +438,6 @@ class RunParallel(_base._Base):
         q = Queue.Queue()
         num_threads = 1
         num_models = len(self.models)
-        LOG.debug(num_models)
         batch_size = 1
 
         while num_models > 0:
@@ -446,9 +447,6 @@ class RunParallel(_base._Base):
                     if num_models == 0:
                         break
 
-                    LOG.debug('i is {}'.format(i))
-                    LOG.debug('num_models {}'.format(num_models ))
-                    LOG.debug('model id {}'.format(self.models[num_models].copasi_file))
 
                     worker = threading.Thread(target=self.do_stuff,
                                           args=(q, self.models[num_models]))
@@ -462,10 +460,7 @@ class RunParallel(_base._Base):
         # for i in range(num_threads):
         #     for j in range(batch_size):
         #         try:
-        #             LOG.debug('i*j+j --> {}'.format(i*j+j))
-        #             LOG.debug('i, j--> {}, {}'.format(i,j ))
         #             model = self.models[i*j+j]
-        #             LOG.debug('running model (from run_parallel) --> {}'.format(
         #                 self.models[j].copasi_file))
         #             worker = threading.Thread(target=self.do_stuff,
         #                                       args=(q,self.models[j]))
@@ -1769,7 +1764,6 @@ class Scan(_base._ModelBase):
         :return:
         """
         if isinstance(self.variable, str):
-            # LOG.debug('var from str --.> {}'.format(self.get_variable_from_string(self.model, self.variable)))
             self.variable = self.get_variable_from_string(self.model, self.variable)
 
         if self.variable != []:
@@ -2656,95 +2650,95 @@ class PhaseSpaceDep(TimeCourse):
             self.plot1phase(i[0],i[1])
 
 
-class FormatPEData():
-    def __init__(self,copasi_file,report_name, report_type='parameter_estimation'):
-        self.copasi_file = copasi_file
-        self.report_type = report_type
-        self.GMQ = GetModelQuantities(self.copasi_file)
-        self.report_name = report_name
+# class FormatPEData():
+#     def __init__(self,copasi_file,report_name, report_type='parameter_estimation'):
+#         self.copasi_file = copasi_file
+#         self.report_type = report_type
+#         self.GMQ = GetModelQuantities(self.copasi_file)
+#         self.report_name = report_name
+#
+#         available_report_types = ['parameter_estimation','multi_parameter_estimation']
+#         if self.report_type not in available_report_types:
+#             raise errors.InputError('{} not in {}'.format(self.report_type,available_report_types))
+#
+# #        if os.path.isdir(self.report_name):
+# #            for i in os.listdir(self.report_name):
+#
+# #        if os.path.isfile(self.report_name)!=True:
+# #            raise errors.InputError('file {} does not exist'.format(self.report_name))
+#
+#         if self.report_type=='parameter_estimation':
+#             try:
+#                 self.format = self.format_results()
+#             except IOError:
+#                 raise errors.FileIsEmptyError('{} is empty and therefore cannot be read by pandas. Make sure you have waited until there is data in the parameter estimation file before formatting parameter estimation output')
+#             except pandas.parser.CParserError:
+#                 raise errors.InputError('Pandas cannot read data file. Ensure you are using report_type=\'multi_parameter_estimation\' for multiple parameter estimation classes')
+#         elif self.report_type=='multi_parameter_estimation':
+#             try:
+#                 self.format = self.format_multi_results()
+#             except IOError:
+#                 raise errors.FileIsEmptyError('{} is empty and therefore cannot be read by pandas. Make sure you have waited until there is data in the parameter estimation file before formatting parameter estimation output')
+#
+#
+#     def format_results(self):
+#         """
+#         Results come without headers - parse the results
+#         give them the proper headers then overwrite the file again
+#         :return:
+#         """
+#         data = pandas.read_csv(self.report_name, sep='\t', header=None)
+#         data = data.drop(data.columns[0], axis=1)
+#         width = data.shape[1]
+#         ## remove the extra bracket
+#         data[width] = data[width].str[1:]
+# #        num = data.shape[0]
+#         names = self.GMQ.get_fit_item_order()+['RSS']
+#         data.columns = names
+#         os.remove(self.report_name)
+#         data.to_csv(self.report_name, sep='\t', index=False)
+#         return data
+#
+#     def format_multi_results(self):
+#         """
+#         Results come without headers - parse the results
+#         give them the proper headers then overwrite the file again
+#         :return:
+#         """
+#         try:
+#             data = pandas.read_csv(self.report_name, sep='\t', header=None, skiprows=[0])
+#         except:
+#             LOG.warning('No Columns to parse from file. {} is empty. Returned None'.format(self.report_name))
+#             return None
+#         bracket_columns = data[data.columns[[0,-2]]]
+#         if bracket_columns.iloc[0].iloc[0] != '(':
+#             data = pandas.read_csv(self.report_name, sep='\t')
+#             return data
+#         else:
+#             data = data.drop(data.columns[[0,-2]], axis=1)
+#             data.columns = range(data.shape[1])
+#             ### parameter of interest has been removed.
+#             names = self.GMQ.get_fit_item_order()+['RSS']
+#             if self.GMQ.get_fit_item_order() == []:
+#                 raise errors.SomethingWentHorriblyWrongError('Parameter Estimation task is empty')
+#             if len(names) != data.shape[1]:
+#                 raise errors.SomethingWentHorriblyWrongError('length of parameter estimation data does not equal number of parameters estimated')
+#
+#             if os.path.isfile(self.report_name):
+#                 os.remove(self.report_name)
+#             data.columns = names
+#             data.to_csv(self.report_name, sep='\t', index=False)
+#             return self.report_name
+#
+#     @staticmethod
+#     def format_folder(copasi_file, folder, report_type='multi_parameter_estimation'):
+#         """
+#         Format entire folder of similar PE data files
+#         """
+#         for i in glob.glob(os.path.join(folder, '*.txt')):
+#             FormatPEData(copasi_file, i, report_type=report_type)
 
-        available_report_types = ['parameter_estimation','multi_parameter_estimation']
-        if self.report_type not in available_report_types:
-            raise errors.InputError('{} not in {}'.format(self.report_type,available_report_types))
-
-#        if os.path.isdir(self.report_name):
-#            for i in os.listdir(self.report_name):
-
-#        if os.path.isfile(self.report_name)!=True:
-#            raise errors.InputError('file {} does not exist'.format(self.report_name))
-
-        if self.report_type=='parameter_estimation':
-            try:
-                self.format = self.format_results()
-            except IOError:
-                raise errors.FileIsEmptyError('{} is empty and therefore cannot be read by pandas. Make sure you have waited until there is data in the parameter estimation file before formatting parameter estimation output')
-            except pandas.parser.CParserError:
-                raise errors.InputError('Pandas cannot read data file. Ensure you are using report_type=\'multi_parameter_estimation\' for multiple parameter estimation classes')
-        elif self.report_type=='multi_parameter_estimation':
-            try:
-                self.format = self.format_multi_results()
-            except IOError:
-                raise errors.FileIsEmptyError('{} is empty and therefore cannot be read by pandas. Make sure you have waited until there is data in the parameter estimation file before formatting parameter estimation output')
-
-
-    def format_results(self):
-        """
-        Results come without headers - parse the results
-        give them the proper headers then overwrite the file again
-        :return:
-        """
-        data = pandas.read_csv(self.report_name, sep='\t', header=None)
-        data = data.drop(data.columns[0], axis=1)
-        width = data.shape[1]
-        ## remove the extra bracket
-        data[width] = data[width].str[1:]
-#        num = data.shape[0]
-        names = self.GMQ.get_fit_item_order()+['RSS']
-        data.columns = names
-        os.remove(self.report_name)
-        data.to_csv(self.report_name, sep='\t', index=False)
-        return data
-
-    def format_multi_results(self):
-        """
-        Results come without headers - parse the results
-        give them the proper headers then overwrite the file again
-        :return:
-        """
-        try:
-            data = pandas.read_csv(self.report_name, sep='\t', header=None, skiprows=[0])
-        except:
-            LOG.warning('No Columns to parse from file. {} is empty. Returned None'.format(self.report_name))
-            return None
-        bracket_columns = data[data.columns[[0,-2]]]
-        if bracket_columns.iloc[0].iloc[0] != '(':
-            data = pandas.read_csv(self.report_name, sep='\t')
-            return data
-        else:
-            data = data.drop(data.columns[[0,-2]], axis=1)
-            data.columns = range(data.shape[1])
-            ### parameter of interest has been removed.
-            names = self.GMQ.get_fit_item_order()+['RSS']
-            if self.GMQ.get_fit_item_order() == []:
-                raise errors.SomethingWentHorriblyWrongError('Parameter Estimation task is empty')
-            if len(names) != data.shape[1]:
-                raise errors.SomethingWentHorriblyWrongError('length of parameter estimation data does not equal number of parameters estimated')
-
-            if os.path.isfile(self.report_name):
-                os.remove(self.report_name)
-            data.columns = names
-            data.to_csv(self.report_name, sep='\t', index=False)
-            return self.report_name
-
-    @staticmethod
-    def format_folder(copasi_file, folder, report_type='multi_parameter_estimation'):
-        """
-        Format entire folder of similar PE data files
-        """
-        for i in glob.glob(os.path.join(folder, '*.txt')):
-            FormatPEData(copasi_file, i, report_type=report_type)
-
-
+@mixin(GetModelVariableFromStringMixin)
 class ParameterEstimation(_base._ModelBase):
     '''
     Set up and run a parameter estimation in copasi. Since each parameter estimation
@@ -3030,6 +3024,7 @@ class ParameterEstimation(_base._ModelBase):
         self.update_kwargs(kwargs)
         self._remove_multiparameter_estimation_arg()
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
+
         self._do_checks()
 
         self._convert_numeric_arguments_to_string()
@@ -3065,6 +3060,16 @@ class ParameterEstimation(_base._ModelBase):
         Validate integrity of user input
         :return:
         """
+        ## Allow acceptance of strings as arguments to metabolites, local_parameters
+        ## and global_quantities
+        for attr in ['metabolites', 'local_parameters', 'global_quantities']:
+            getattribute = getattr(self, attr)
+            new_attr = []
+            for i in range(len(getattribute)):
+                if isinstance(getattribute[i], str):
+                    new_attr.append(self.get_variable_from_string(self.model, getattribute[i]))
+                    setattr(self, attr, new_attr)
+
         if os.path.isabs(self.report_name)!=True:
             self.report_name = os.path.join(os.path.dirname(self.model.copasi_file),
                                             self.report_name)
@@ -3107,27 +3112,28 @@ class ParameterEstimation(_base._ModelBase):
         for i in [j.name for j in self.local_parameters]:
             if i not in [j.name for j in self.model.local_parameters]:
                 raise errors.InputError(
-                    '{} not a local parameter. These are your local parameters: {}'.format(
+                    '"{}" not a local_parameter. These are your local parameters: {}'.format(
                         i, self.model.local_parameters) )
 
         ## ensure arguments to metabolites exist
         for i in [j.name for j in self.metabolites]:
             if i not in [j.name for j in self.model.metabolites]:
                 raise errors.InputError(
-                    '{} not a local parameter. These are your local parameters: {}'.format(
+                    '"{}" not a metabolite. These are your local parameters: {}'.format(
                         i,self.model.metabolites) )
 
         ## ensure arguments to global_quantities exist
         for i in [j.name for j in self.global_quantities]:
             if i not in [j.name for j in self.model.global_quantities]:
                 raise errors.InputError(
-                    '{} not a local parameter. These are your local parameters: {}'.format(
+                    '"{}" not a global_quantity. These are your local parameters: {}'.format(
                         i,self.model.global_quantities) )
 
         if self.use_config_start_values not in [True, False]:
             raise errors.InputError(
                 ''' Argument to the use_config_start_values must be \'True\' or \'False\' not {}'''.format(
                     self.use_config_start_values))
+
 
     @property
     def _experiment_mapper_args(self):
@@ -3152,11 +3158,11 @@ class ParameterEstimation(_base._ModelBase):
         """
         EM=ExperimentMapper(self.model, self.experiment_files, **self._experiment_mapper_args)
         self.model = EM.model
-        self.model=self.define_report()
-        self.model=self.remove_all_fit_items()
-        self.model=self.set_PE_method()
-        self.model=self.set_PE_options()
-        self.model=self.insert_all_fit_items()
+        self.model = self.define_report()
+        self.model = self.remove_all_fit_items()
+        self.model = self.set_PE_method()
+        self.model = self.set_PE_options()
+        self.model = self.insert_all_fit_items()
         assert self.model != None
         assert isinstance(self.model, model.Model)
         return self.model
@@ -3453,66 +3459,80 @@ class ParameterEstimation(_base._ModelBase):
         :return: pandas.DataFrame
         """
 
+        keep_metabs = []
+        keep_globs = []
+        keep_locs = []
+        for model_metab in self.model.metabolites:
+            for PE_metab in self.metabolites:
+                if PE_metab.name == model_metab.name:
+                    keep_metabs.append(PE_metab)
 
-        local_params= self.model.local_parameters
-        global_params = self.model.global_quantities
-        metabolites = self.model.metabolites
-
-        for i,item in enumerate(local_params):
-            if item.global_name not in [j.global_name for j in self.local_parameters]:
-                del local_params[i]
-
-            # ass = item.simulation_type
-            # if item.simulation_type == 'assignment':
-            #     LOG.debug('deleting {}'.format(item.global_name))
-                # del local_params[i]
-            # LOG.debug('assignments --> {},{}'.format(item.global_name, ass))
-
-        for i,item in enumerate(global_params):
-            if item.name not in [j.name for j in self.global_quantities]:
-                del global_params[i]
+        for model_glob in self.model.global_quantities:
+            for PE_glob in self.global_quantities:
+                if PE_glob.name == model_glob.name:
+                    keep_globs.append(PE_glob)
 
 
-        for i,item in enumerate(metabolites):
-            if item.name not in [j.name for j in self.metabolites]:
-                del metabolites[i]
+        for model_loc in self.model.local_parameters:
+            for PE_loc in self.local_parameters:
+                if PE_loc.global_name == model_loc.global_name:
+                    keep_locs.append(PE_loc)
 
-        df_list_local=[]
-        df_list_global=[]
-        df_list_metabolites=[]
-        for item in local_params:
-            df_list_local.append(item.to_df() )
 
-        for item in global_params:
-            df_list_global.append(item.to_df())
+        keep_metabs = [i.to_df() for i in keep_metabs]
+        keep_globs = [i.to_df() for i in keep_globs]
+        keep_locs = [i.to_df() for i in keep_locs]
 
-        for item in metabolites:
-            df_list_metabolites.append(item.to_df())
+        metabs = pandas.DataFrame()
+        if keep_metabs != []:
+            metab = pandas.concat(keep_metabs, axis=1).transpose()
+            metab.drop('compartment', inplace=True, axis=1)
+            metab.drop('key', inplace=True, axis=1)
+            metab.drop('simulation_type', inplace=True, axis=1)
+            metab = metab.rename(columns={'value': 'start_value'})
 
-        metab = pandas.concat(df_list_metabolites, axis=1).transpose()
-        lo = pandas.concat(df_list_local, axis=1).transpose()
-        gl = pandas.concat(df_list_global, axis=1).transpose()
+            if self.quantity_type == 'concentration':
+                metab.drop('particle_number', axis=1, inplace=True)
+                metab = metab.rename(columns={'concentration': 'start_value'})
 
-        gl = gl.rename(columns={'initial_value': 'start_value'})
-        lo = lo.rename(columns={'value': 'start_value'})
-        metab.drop('compartment', inplace=True, axis=1)
-        metab = metab.rename(columns={'value': 'start_value'})
+            elif self.quantity_type == 'particle_number':
+                metab.drop('concentration', axis=1, inplace=True)
+                metab = metab.rename(columns={'particle_number': 'start_value'})
+                metab = metab[['name', 'start_value']]
+            metabs = metabs.append(metab)
 
-        if self.quantity_type == 'concentration':
-            metab.drop('particle_number', axis=1, inplace=True)
-            metab = metab.rename(columns={'concentration': 'start_value'})
-        elif self.quantity_type == 'particle_number':
-            metab.drop('concentration', axis=1, inplace=True)
-            metab = metab.rename(columns={'particle_number': 'start_value'})
+        if not metabs.empty:
+            metabs = metabs.sort_values(by='name')
 
-        gl = gl[['name', 'start_value']]
-        lo = lo[['global_name', 'start_value']]
-        lo = lo.rename(columns={'global_name': 'name'})
-        metab = metab[['name', 'start_value']]
-        df = pandas.concat([gl, lo, metab], axis=0)
+
+        los = pandas.DataFrame()
+        if keep_locs != []:
+            lo = pandas.concat(keep_locs, axis=1).transpose()
+            lo = lo.rename(columns={'value': 'start_value'})
+            lo = lo[['global_name', 'start_value']]
+            lo = lo.rename(columns={'global_name': 'name'})
+            los = los.append(lo)
+
+        if not los.empty:
+            los = los.sort_values(by='name')
+
+
+        gls = pandas.DataFrame()
+        if keep_globs != []:
+            gl = pandas.concat(keep_globs, axis=1).transpose()
+            gl = gl.rename(columns={'initial_value': 'start_value'})
+            gl = gl[['name', 'start_value']]
+            gls = gls.append(gl)
+
+        if not gls.empty:
+            gls = gls.sort_values(by='name')
+
+        df = pandas.concat([metabs, gls, los], axis=0)
+
+        df['lower_bound'] = [self.lower_bound]*df.shape[0]
+        df['upper_bound'] = [self.upper_bound]*df.shape[0]
+
         df = df.set_index('name')
-        df['lower_bound']=[self.lower_bound]*df.shape[0]
-        df['upper_bound']=[self.upper_bound]*df.shape[0]
 
         return df
 
@@ -4813,7 +4833,7 @@ class ProfileLikelihood(_base._ModelBase):
         list_of_models = []
         for model in self.model_dct:
             for param in self.model_dct[model]:
-                LOG.debug('running {}'.format(self.model_dct[model][param].copasi_file))
+                LOG.info('running {}'.format(self.model_dct[model][param].copasi_file))
                 list_of_models.append(self.model_dct[model][param])
         R = RunParallel(list_of_models, processes=self.processes)
 

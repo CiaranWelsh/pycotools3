@@ -66,3 +66,6 @@ class ReactionAlreadyExists(Exception):
 
 class NoFitItemsError(Exception):
     pass
+
+class NonFormattedPEFileError(Exception):
+    pass
