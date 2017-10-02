@@ -195,6 +195,22 @@ Reaction scheme where the products are created from the reactants and the change
       <rdf:Bag>
         <rdf:li>
           <rdf:Description>
+            <vCard:EMAIL>hdharuri@cds.caltech.edu</vCard:EMAIL>
+            <vCard:N>
+              <rdf:Description>
+                <vCard:Family>Dharuri</vCard:Family>
+                <vCard:Given>Harish</vCard:Given>
+              </rdf:Description>
+            </vCard:N>
+            <vCard:ORG>
+              <rdf:Description>
+                <vCard:Orgname>California Institute of Technology</vCard:Orgname>
+              </rdf:Description>
+            </vCard:ORG>
+          </rdf:Description>
+        </rdf:li>
+        <rdf:li>
+          <rdf:Description>
             <vCard:N>
               <rdf:Description>
                 <vCard:Family>Yang</vCard:Family>
@@ -220,22 +236,6 @@ Reaction scheme where the products are created from the reactants and the change
             <vCard:ORG>
               <rdf:Description>
                 <vCard:Orgname>Max Planck Institute for molecular genetics</vCard:Orgname>
-              </rdf:Description>
-            </vCard:ORG>
-          </rdf:Description>
-        </rdf:li>
-        <rdf:li>
-          <rdf:Description>
-            <vCard:EMAIL>hdharuri@cds.caltech.edu</vCard:EMAIL>
-            <vCard:N>
-              <rdf:Description>
-                <vCard:Family>Dharuri</vCard:Family>
-                <vCard:Given>Harish</vCard:Given>
-              </rdf:Description>
-            </vCard:N>
-            <vCard:ORG>
-              <rdf:Description>
-                <vCard:Orgname>California Institute of Technology</vCard:Orgname>
               </rdf:Description>
             </vCard:ORG>
           </rdf:Description>
@@ -1800,13 +1800,21 @@ Reaction scheme where the products are created from the reactants and the change
         <Parameter name="Maximum duration for backward integration" type="unsignedFloat" value="1000000"/>
       </Method>
     </Task>
-    <Task key="Task_15" name="Time-Course" scheduled="true" type="timeCourse" update_model="false"><Report append="0" confirmOverwrite="0" reference="Report_30" target="/home/b3053674/Documents/pycotools/ZiModel/parameter_estimation_synthetic_data.txt"/><Problem><Parameter name="AutomaticStepSize" type="bool" value="0"/><Parameter name="StepNumber" type="unsignedInteger" value="1000"/><Parameter name="StepSize" type="float" value="1"/><Parameter name="Duration" type="float" value="1000"/><Parameter name="TimeSeriesRequested" type="float" value="1"/><Parameter name="OutputStartTime" type="float" value="0"/><Parameter name="Output Event" type="bool" value="0"/><Parameter name="Start in Steady State" type="bool" value="0"/></Problem><Method name="Deterministic (LSODA)" type="Deterministic(LSODA)"><Parameter name="Integrate Reduced Model" type="bool" value="0"/><Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/><Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/><Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/><Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/></Method></Task><Task key="Task_16" name="Scan" type="scan" scheduled="false" updateModel="0">
-      <Report reference="Report_31" target="zi2012_2_PE_results.txt" append="0" confirmOverwrite="0"/>
+    <Task key="Task_15" name="Time-Course" scheduled="true" type="timeCourse" update_model="false"><Report append="0" confirmOverwrite="0" reference="Report_38" target="/home/b3053674/Documents/pycotools/ZiModel/parameter_estimation_synthetic_data.txt"/><Problem><Parameter name="AutomaticStepSize" type="bool" value="0"/><Parameter name="StepNumber" type="unsignedInteger" value="1000"/><Parameter name="StepSize" type="float" value="1"/><Parameter name="Duration" type="float" value="1000"/><Parameter name="TimeSeriesRequested" type="float" value="1"/><Parameter name="OutputStartTime" type="float" value="0"/><Parameter name="Output Event" type="bool" value="0"/><Parameter name="Start in Steady State" type="bool" value="0"/></Problem><Method name="Deterministic (LSODA)" type="Deterministic(LSODA)"><Parameter name="Integrate Reduced Model" type="bool" value="0"/><Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/><Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/><Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/><Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/></Method></Task><Task key="Task_16" name="Scan" type="scan" scheduled="false" updateModel="false">
+      <Report reference="Report_18" target="zi2012_2_PE_results.txt" append="0" confirmOverwrite="0"/>
       <Problem>
         <Parameter name="Subtask" type="unsignedInteger" value="1"/>
         <ParameterGroup name="ScanItems">
-          <ParameterGroup name="ScanItem"><Parameter name="Number of steps" type="unsignedInteger" value="10"/><Parameter name="Object" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[Smad3c],Reference=InitialConcentration"/><Parameter name="Type" type="unsignedInteger" value="1"/><Parameter name="Maximum" type="float" value="100"/><Parameter name="Minimum" type="float" value="0.01"/><Parameter name="log" type="bool" value="0"/></ParameterGroup></ParameterGroup>
-        <Parameter name="Output in subtask" type="bool" value="true"/>
+          <ParameterGroup name="ScanItem">
+            <Parameter name="Maximum" type="float" value="100"/>
+            <Parameter name="Minimum" type="float" value="0.01"/>
+            <Parameter name="Number of steps" type="unsignedInteger" value="10"/>
+            <Parameter name="Object" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[Smad3c],Reference=InitialConcentration"/>
+            <Parameter name="Type" type="unsignedInteger" value="1"/>
+            <Parameter name="log" type="bool" value="0"/>
+          </ParameterGroup>
+        </ParameterGroup>
+        <Parameter name="Output in subtask" type="bool" value="1"/>
         <Parameter name="Adjust initial conditions" type="bool" value="0"/>
       </Problem>
       <Method name="Scan Framework" type="ScanFramework">
@@ -1841,12 +1849,752 @@ Reaction scheme where the products are created from the reactants and the change
       </Method>
     </Task>
     <Task key="Task_19" name="Parameter Estimation" type="parameterFitting" scheduled="false" updateModel="false">
-      <Report reference="Report_12" target="" append="1" confirmOverwrite="1"/>
+      <Report reference="Report_20" target="PEData.txt" append="0" confirmOverwrite="0"/>
       <Problem>
         <Parameter name="Maximize" type="bool" value="0"/>
-        <Parameter name="Randomize Start Values" type="bool" value="0"/>
-        <Parameter name="Calculate Statistics" type="bool" value="1"/>
+        <Parameter name="Randomize Start Values" type="bool" value="1"/>
+        <Parameter name="Calculate Statistics" type="bool" value="0"/>
         <ParameterGroup name="OptimizationItemList">
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kexp_Smad2n],Reference=InitialValue"/>
+            <Parameter name="StartValue" type="float" value="1"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kdeg_T1R_EE],Reference=InitialValue"/>
+            <Parameter name="StartValue" type="float" value="0.005"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Klid],Reference=InitialValue"/>
+            <Parameter name="StartValue" type="float" value="0.02609"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Total_Smad2c],Reference=InitialValue"/>
+            <Parameter name="StartValue" type="float" value="492.6099999999997"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Total_Smad2n],Reference=InitialValue"/>
+            <Parameter name="StartValue" type="float" value="236.45"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[kr_EE],Reference=InitialValue"/>
+            <Parameter name="StartValue" type="float" value="0.033"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[ki_EE],Reference=InitialValue"/>
+            <Parameter name="StartValue" type="float" value="0.33"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[v_T2R],Reference=InitialValue"/>
+            <Parameter name="StartValue" type="float" value="0.02869"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[v_T1R],Reference=InitialValue"/>
+            <Parameter name="StartValue" type="float" value="0.0103"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[k_LRC],Reference=InitialValue"/>
+            <Parameter name="StartValue" type="float" value="2197"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kcd],Reference=InitialValue"/>
+            <Parameter name="StartValue" type="float" value="0.005"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[kr_Cave],Reference=InitialValue"/>
+            <Parameter name="StartValue" type="float" value="0.03742"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[ki_Cave],Reference=InitialValue"/>
+            <Parameter name="StartValue" type="float" value="0.33"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kexp_Smad4n],Reference=InitialValue"/>
+            <Parameter name="StartValue" type="float" value="0.5"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kdiss_Smads_Complex_n],Reference=InitialValue"/>
+            <Parameter name="StartValue" type="float" value="0.1174"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kimp_Smad2c],Reference=InitialValue"/>
+            <Parameter name="StartValue" type="float" value="0.16"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kimp_Smads_Complex_c],Reference=InitialValue"/>
+            <Parameter name="StartValue" type="float" value="0.16"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kimp_Smad4c],Reference=InitialValue"/>
+            <Parameter name="StartValue" type="float" value="0.08"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kdeg_T2R_EE],Reference=InitialValue"/>
+            <Parameter name="StartValue" type="float" value="0.025"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[k_Smads_Complex_c],Reference=InitialValue"/>
+            <Parameter name="StartValue" type="float" value="6.85e-05"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R1_Smad2_import],ParameterGroup=Parameters,Parameter=V_cyt,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R1_Smad2_import],ParameterGroup=Parameters,Parameter=Kimp_Smad2c,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R1_Smad2_import],ParameterGroup=Parameters,Parameter=Smad2c,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R2_Smad2_export],ParameterGroup=Parameters,Parameter=V_nuc,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R2_Smad2_export],ParameterGroup=Parameters,Parameter=Kexp_Smad2n,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R2_Smad2_export],ParameterGroup=Parameters,Parameter=Smad2n,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R3_Smad4_import],ParameterGroup=Parameters,Parameter=V_cyt,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R3_Smad4_import],ParameterGroup=Parameters,Parameter=Kimp_Smad4c,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R4_Smad4_export],ParameterGroup=Parameters,Parameter=V_nuc,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R4_Smad4_export],ParameterGroup=Parameters,Parameter=Kexp_Smad4n,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R5_T1R_production],ParameterGroup=Parameters,Parameter=v,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R6_T1R_Cave_formation],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R7_T1R_Cave_recycling],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R8_T1R_EE_formation],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R9_T1R_EE_recycling],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R10_T1R_EE_degradation],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R11_T2R_production],ParameterGroup=Parameters,Parameter=v,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R12_T2R_Cave_formation],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R13_T2R_Cave_recycling],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R14_T2R_EE_formation],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R15_T2R_EE_recycling],ParameterGroup=Parameters,Parameter=V_cyt,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R15_T2R_EE_recycling],ParameterGroup=Parameters,Parameter=kr_EE,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R16_T2R_EE_degradation],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R17_LRC_formation],ParameterGroup=Parameters,Parameter=V_cyt,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R17_LRC_formation],ParameterGroup=Parameters,Parameter=k_LRC,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R18_LRC_Cave_formation],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R19_LRC_Cave_recycling],ParameterGroup=Parameters,Parameter=V_cyt,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R19_LRC_Cave_recycling],ParameterGroup=Parameters,Parameter=kr_Cave,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R20_LRC_EE_formation],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R21_LRC_EE_recycling],ParameterGroup=Parameters,Parameter=V_cyt,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R21_LRC_EE_recycling],ParameterGroup=Parameters,Parameter=kr_EE,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R22_LRC_EE_degradation],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R23_Smads_Complex_formation],ParameterGroup=Parameters,Parameter=k_Smads_Complex_c,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R23_Smads_Complex_formation],ParameterGroup=Parameters,Parameter=Smad2c,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R24_Smads_Complex_import],ParameterGroup=Parameters,Parameter=V_cyt,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R24_Smads_Complex_import],ParameterGroup=Parameters,Parameter=Kimp_Smads_Complex_c,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R25_Smads_Complex_Dissociation],ParameterGroup=Parameters,Parameter=k1,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Reactions[R26_LRC_Cave_degradation],ParameterGroup=Parameters,Parameter=Klid,Reference=Value"/>
+            <Parameter name="StartValue" type="float" value="NaN"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Nucleus],Vector=Metabolites[Smad3n],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="236.45"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[Smad3c],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="492.6099999999997"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Nucleus],Vector=Metabolites[Smad4n],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="551.72"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[Smad4c],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="1149.4"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T1R_Surf],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="0.2369999999999998"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T2R_Cave],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="1.777999999999998"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T2R_Surf],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="0.2019999999999998"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Nucleus],Vector=Metabolites[Smads_Complex_n],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="0"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T1R_EE],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="2.059999999999998"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T1R_Cave],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="2.091999999999997"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Medium],Vector=Metabolites[TGF_beta],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="0.07999999999999995"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[LRC_Cave],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="0"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[LRC_Surf],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="0"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[Smads_Complex_c],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="0"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T2R_EE],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="1.147999999999999"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Cross Validation Experiments">
+            </ParameterGroup>
+            <ParameterGroup name="Affected Experiments">
+            </ParameterGroup>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[LRC_EE],Reference=InitialConcentration"/>
+            <Parameter name="StartValue" type="float" value="0"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+          </ParameterGroup>
         </ParameterGroup>
         <ParameterGroup name="OptimizationConstraintList">
         </ParameterGroup>
@@ -1854,15 +2602,186 @@ Reaction scheme where the products are created from the reactants and the change
         <Parameter name="Time-Course" type="cn" value="CN=Root,Vector=TaskList[Time-Course]"/>
         <Parameter name="Create Parameter Sets" type="bool" value="0"/>
         <ParameterGroup name="Experiment Set">
+          <ParameterGroup name="Experiment_0">
+            <Parameter name="Data is Row Oriented" type="bool" value="1"/>
+            <Parameter name="Experiment Type" type="unsignedInteger" value="1"/>
+            <Parameter name="File Name" type="file" value="parameter_estimation_synthetic_data.txt"/>
+            <Parameter name="First Row" type="unsignedInteger" value="1"/>
+            <Parameter name="Key" type="key" value="Experiment_0"/>
+            <Parameter name="Last Row" type="unsignedInteger" value="1002"/>
+            <Parameter name="Normalize Weights per Experiment" type="bool" value="1"/>
+            <Parameter name="Number of Columns" type="unsignedInteger" value="39"/>
+            <ParameterGroup name="Object Map">
+              <ParameterGroup name="0">
+                <Parameter name="Role" type="unsignedInteger" value="3"/>
+              </ParameterGroup>
+              <ParameterGroup name="1">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Nucleus],Vector=Metabolites[Smad3n],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="10">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T1R_Cave],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="11">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Medium],Vector=Metabolites[TGF_beta],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="12">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[LRC_Cave],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="13">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Medium],Vector=Metabolites[A],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="14">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[LRC_Surf],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="15">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Medium],Vector=Metabolites[B],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="16">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[Smads_Complex_c],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="17">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T2R_EE],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="18">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[LRC_EE],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="19">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kexp_Smad2n],Reference=Value"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="2">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[Smad3c],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="20">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kdeg_T1R_EE],Reference=Value"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="21">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Klid],Reference=Value"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="22">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Total_Smad2c],Reference=Value"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="23">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Total_Smad2n],Reference=Value"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="24">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[kr_EE],Reference=Value"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="25">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[ki_EE],Reference=Value"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="26">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[v_T2R],Reference=Value"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="27">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[v_T1R],Reference=Value"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="28">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[k_LRC],Reference=Value"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="29">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kcd],Reference=Value"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="3">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Nucleus],Vector=Metabolites[Smad4n],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="30">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[kr_Cave],Reference=Value"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="31">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[ki_Cave],Reference=Value"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="32">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kexp_Smad4n],Reference=Value"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="33">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kdiss_Smads_Complex_n],Reference=Value"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="34">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kimp_Smad2c],Reference=Value"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="35">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kimp_Smads_Complex_c],Reference=Value"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="36">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kimp_Smad4c],Reference=Value"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="37">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kdeg_T2R_EE],Reference=Value"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="38">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[k_Smads_Complex_c],Reference=Value"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="4">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[Smad4c],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="5">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T1R_Surf],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="6">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T2R_Cave],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="7">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T2R_Surf],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="8">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Nucleus],Vector=Metabolites[Smads_Complex_n],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="9">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T1R_EE],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+            </ParameterGroup>
+            <Parameter name="Row containing Names" type="unsignedInteger" value="1"/>
+            <Parameter name="Separator" type="string" value="&#9;"/>
+            <Parameter name="Weight Method" type="unsignedInteger" value="2"/>
+            <Parameter name="separator" type="string" value="&#9;"/>
+          </ParameterGroup>
         </ParameterGroup>
         <ParameterGroup name="Validation Set">
           <Parameter name="Threshold" type="unsignedInteger" value="5"/>
           <Parameter name="Weight" type="unsignedFloat" value="1"/>
         </ParameterGroup>
       </Problem>
-      <Method name="Evolutionary Programming" type="EvolutionaryProgram">
-        <Parameter name="Number of Generations" type="unsignedInteger" value="200"/>
-        <Parameter name="Population Size" type="unsignedInteger" value="20"/>
+      <Method name="Genetic Algorithm" type="GeneticAlgorithm">
+        <Parameter name="Number of Generations" type="unsignedInteger" value="10"/>
+        <Parameter name="Population Size" type="unsignedInteger" value="15"/>
         <Parameter name="Random Number Generator" type="unsignedInteger" value="1"/>
         <Parameter name="Seed" type="unsignedInteger" value="0"/>
       </Method>
@@ -2104,7 +3023,23 @@ Reaction scheme where the products are created from the reactants and the change
         <Object cn="CN=Root,Vector=TaskList[Linear Noise Approximation],Object=Result"/>
       </Footer>
     </Report>
-    <Report taskType="Scan" separator="&#9;" precision="6" key="Report_31" name="profilelikelihood"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Metabolites[Smad3c],Reference=InitialConcentration"/><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/></Table></Report><Report key="Report_30" name="Time-Course" precision="6" separator="&#9;" taskType="Time-Course"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Reference=Time"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Nucleus],Vector=Metabolites[Smad3n],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[Smad3c],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Nucleus],Vector=Metabolites[Smad4n],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[Smad4c],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T1R_Surf],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T2R_Cave],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T2R_Surf],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Nucleus],Vector=Metabolites[Smads_Complex_n],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T1R_EE],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T1R_Cave],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Medium],Vector=Metabolites[TGF_beta],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[LRC_Cave],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Medium],Vector=Metabolites[A],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[LRC_Surf],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Medium],Vector=Metabolites[B],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[Smads_Complex_c],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T2R_EE],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[LRC_EE],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kexp_Smad2n],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kdeg_T1R_EE],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Klid],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Total_Smad2c],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Total_Smad2n],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[kr_EE],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[ki_EE],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[v_T2R],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[v_T1R],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[k_LRC],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kcd],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[kr_Cave],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[ki_Cave],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kexp_Smad4n],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kdiss_Smads_Complex_n],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kimp_Smad2c],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kimp_Smads_Complex_c],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kimp_Smad4c],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kdeg_T2R_EE],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[k_Smads_Complex_c],Reference=Value"/></Table></Report></ListOfReports>
+    <Report key="Report_18" name="profilelikelihood" taskType="unset" separator="&#9;" precision="6">
+      <Comment>
+      </Comment>
+      <Table printTitle="1">
+        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Metabolites[Smad3c],Reference=InitialConcentration"/>
+        <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/>
+      </Table>
+    </Report>
+    <Report key="Report_20" name="parameter_estimation" taskType="parameterFitting" separator="&#9;" precision="6">
+      <Comment>
+      </Comment>
+      <Footer>
+        <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"/>
+        <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/>
+      </Footer>
+    </Report>
+  <Report key="Report_38" name="Time-Course" precision="6" separator="&#9;" taskType="Time-Course"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Reference=Time"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Nucleus],Vector=Metabolites[Smad3n],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[Smad3c],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Nucleus],Vector=Metabolites[Smad4n],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[Smad4c],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T1R_Surf],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T2R_Cave],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T2R_Surf],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Nucleus],Vector=Metabolites[Smads_Complex_n],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T1R_EE],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T1R_Cave],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Medium],Vector=Metabolites[TGF_beta],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[LRC_Cave],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Medium],Vector=Metabolites[A],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[LRC_Surf],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Medium],Vector=Metabolites[B],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[Smads_Complex_c],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T2R_EE],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[LRC_EE],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kexp_Smad2n],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kdeg_T1R_EE],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Klid],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Total_Smad2c],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Total_Smad2n],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[kr_EE],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[ki_EE],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[v_T2R],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[v_T1R],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[k_LRC],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kcd],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[kr_Cave],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[ki_Cave],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kexp_Smad4n],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kdiss_Smads_Complex_n],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kimp_Smad2c],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kimp_Smads_Complex_c],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kimp_Smad4c],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kdeg_T2R_EE],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[k_Smads_Complex_c],Reference=Value"/></Table></Report></ListOfReports>
   <ListOfPlots>
     <PlotSpecification name="Concentrations, Volumes, and Global Quantity Values" type="Plot2D" active="1">
       <Parameter name="log X" type="bool" value="0"/>

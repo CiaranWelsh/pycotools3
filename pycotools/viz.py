@@ -67,11 +67,13 @@ from textwrap import wrap
 from sklearn.decomposition import PCA
 from sklearn import linear_model
 from sklearn import model_selection
-LOG=logging.getLogger(__name__)
 import _base
+from cached_property import cached_property
 
-SEABORN_OPTIONS = {'context':'poster',
-                   'font_scale':2}
+LOG=logging.getLogger(__name__)
+
+SEABORN_OPTIONS = {'context': 'talk',
+                   'font_scale': 2}
 
 seaborn.set_context(context=SEABORN_OPTIONS['context'], font_scale=SEABORN_OPTIONS['font_scale'])
 
@@ -81,8 +83,9 @@ class PlotKwargs(object):
         plot_kwargs = {
             'linestyle': '-',
             'marker': 'o',
-            'linewidth': 5,
-            'markersize': 12,
+            'linewidth': 3,
+            'markersize': 8,
+            'alpha': 0.5
         }
         return plot_kwargs
 
@@ -232,7 +235,7 @@ class Parse(object):
             data = self.parse_timecourse()
 
         elif type(self.cls_instance) == tasks.ParameterEstimation:
-            data = self.parse_parameter_estmation()
+            data = self.parse_parameter_estmation
 
         elif type(self.cls_instance) == tasks.MultiParameterEstimation:
             data = self.parse_multi_parameter_estimation(self.cls_instance)
@@ -241,7 +244,7 @@ class Parse(object):
             data = numpy.log10(data)
             return data
         else:
-            return data\
+            return data
 
     def parse_timecourse(self):
         """
@@ -272,28 +275,35 @@ class Parse(object):
         # d = {names[i]: x.dropna() for i, x in df.groupby(df[0].isnull().cumsum())}
         return NotImplementedError('scan plotting features are not yet implemented')
 
-
+    @cached_property
     def parse_parameter_estmation(self):
         """
-
+        Parse parameter estimation data. Store the data in
+        a cache.
         :return:
         """
-        df = pandas.read_csv(
-            self.cls_instance.report_name,
-            sep='\t', header=None
-        )
-        data = df.drop(df.columns[0], axis=1)
-        width = data.shape[1]
-        ## remove the extra bracket
-        data[width] = data[width].str[1:]
-#        num = data.shape[0]
-        names = self.cls_instance.model.fit_item_order+['RSS']
-        data.columns = names
-        os.remove(self.cls_instance.report_name)
-        data.to_csv(self.cls_instance.report_name,
-                    sep='\t',
-                    index=False)
-        return data
+        try:
+            df = pandas.read_csv(self.cls_instance.report_name, sep='\t', header=None)
+            if '(' in list(df.iloc[0]):
+                raise errors.NonFormattedPEFileError
+            return df
+
+        except errors.NonFormattedPEFileError:
+            df = pandas.read_csv(
+                self.cls_instance.report_name,
+                sep='\t', header=None,
+            )
+            data = df.drop(df.columns[0], axis=1)
+            width = data.shape[1]
+            # remove the extra bracket
+            data[width] = data[width].str[1:]
+            names = self.cls_instance.model.fit_item_order+['RSS']
+            data.columns = names
+            os.remove(self.cls_instance.report_name)
+            data.to_csv(self.cls_instance.report_name,
+                        sep='\t',
+                        index=False)
+            return data
 
     @staticmethod
     def parse_multi_parameter_estimation(cls_instance, folder=None):
@@ -574,6 +584,7 @@ class PlotParameterEstimation(PlotKwargs):
 
         self.data = self.parse(self.cls, self.log10)
         self.cls.model = self.update_parameters()
+        self.plot()
 
 
     def __str__(self):
@@ -669,7 +680,6 @@ class PlotParameterEstimation(PlotKwargs):
         exp_data = self.read_experimental_data()
         sim_data = self.simulate_time_course()
 
-
         for exp in exp_data:
             for sim in sim_data:
                 if exp == sim:
@@ -679,19 +689,28 @@ class PlotParameterEstimation(PlotKwargs):
                             exp_data[exp]['Time'], exp_data[exp][key],
                             label='Exp', linestyle=self.linestyle,
                             marker=self.marker, linewidth=self.linewidth,
-                            markersize=self.markersize
+                            markersize=self.markersize,
+                            alpha=0.5,
+                            color='#0E00FA',
                         )
                         plt.plot(
                             sim_data[sim]['Time'], sim_data[sim][key],
                             label='Sim', linestyle=self.linestyle,
                             marker=self.marker, linewidth=self.linewidth,
-                            markersize=self.markersize)
-                        plt.legend(loc='best')
+                            markersize=self.markersize,
+                            alpha=0.5,
+                            color='#FC0077'
+                        )
+                        plt.legend(loc=(1, 0.5))
+                        plt.title(key)
+                        plt.xlabel('Time({})'.format(self.cls.model.time_unit))
+                        plt.ylabel('Abundance\n({})'.format(self.cls.model.quantity_unit))
                         if self.savefig:
                             dirs = self.create_directories()
                             exp_key = os.path.split(exp)[1]
-                            fle = os.path.join(dirs[exp_key], '{}.jpeg'.format(key))
+                            fle = os.path.join(dirs[exp_key], '{}.eps'.format(key))
                             plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
+                            LOG.info('figure saved to "{}"'.format(fle))
         if self.show:
             plt.show()
 
