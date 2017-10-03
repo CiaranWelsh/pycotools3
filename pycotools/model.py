@@ -3149,8 +3149,6 @@ class InsertParameters(object):
         self.index = index
         self.quantity_type = quantity_type
         self.inplace = inplace
-
-
         self._do_checks()
 
 
