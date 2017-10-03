@@ -95,161 +95,171 @@ class VizTests(_test_base._BaseTest):
                 pass
                 # shutil.rmtree(i)
 
-class PlotParameterEstimationTests(_test_base._BaseTest):
+# class PlotParameterEstimationTests(_test_base._BaseTest):
+#
+#     def setUp(self):
+#         super(PlotParameterEstimationTests, self).setUp()
+#         self.model = pycotools.model.Model(self.copasi_file)
+#         self.original_parameters = self.model.parameters
+#
+#         self.TC1 = pycotools.tasks.TimeCourse(self.model, end=50, step_size=10,
+#                                          intervals=5, report_name='report1.txt')
+#         pycotools.misc.add_noise(self.TC1.report_name)
+#         self.TC2 = pycotools.tasks.TimeCourse(self.model, end=100, step_size=20,
+#                                          intervals=5, report_name='report2.txt')
+#         pycotools.misc.add_noise(self.TC1.report_name)
+#         pycotools.misc.add_noise(self.TC2.report_name)
+#
+#         pycotools.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
+#         pycotools.misc.correct_copasi_timecourse_headers(self.TC2.report_name)
+#
+#         self.PE = pycotools.tasks.ParameterEstimation(self.model,
+#                                                  [self.TC1.report_name,
+#                                                   self.TC2.report_name],
+#                                                  method='genetic_algorithm',
+#                                                  population_size=1,
+#                                                  number_of_generations=1)
+#         # # PE = pycotools.tasks.ParameterEstimation(model,
+#         # #                                          TC1.report_name,
+#         # #                                          method='particle_swarm',
+#         # #                                          swarm_size=50,
+#         # #                                          iteration_limit=1000)
+#         if os.path.isfile(self.PE.config_filename):
+#             os.remove(self.PE.config_filename)
+#         self.PE.write_config_file()
+#         self.PE.setup()
+#         # # print model.local_parameters
+#         self.PE.run()
+#         # # PE.model.open()
+#
+#
+#
+#     def test_create_directory(self):
+#         """
+#
+#         :return:
+#         """
+#         pl = pycotools.viz.PlotParameterEstimation(self.PE, savefig=False)
+#
+#         dire = pl.create_directories()
+#         for i in dire:
+#             self.assertTrue(os.path.isdir(dire[i]))
+#
+#     def test_update_parameters(self):
+#         """
+#
+#         :return:
+#         """
+#         pl = pycotools.viz.PlotParameterEstimation(self.PE, savefig=False)
+#         model = pl.update_parameters()
+#         lo = '(ADeg).k1'
+#         met = 'A'
+#         gl = 'B2C'
+#         self.assertNotEqual(self.original_parameters[lo].iloc[0], model.parameters[lo].iloc[0])
+#         self.assertNotEqual(self.original_parameters[gl].iloc[0], model.parameters[gl].iloc[0])
+#         self.assertNotEqual(self.original_parameters[met].iloc[0], model.parameters[met].iloc[0])
+#
+#
+#     def test_plot(self):
+#         """
+#         test plots are being generated in correct place
+#         :return:
+#         """
+#         pl = pycotools.viz.PlotParameterEstimation(self.PE,
+#                                                    savefig=True,
+#                                                    show=False)
+#         pl.plot()
+#         for i in pl.create_directories():
+#             self.assertEqual(len(glob.glob(pl.create_directories()[i]+'/*')), 6)
+#
+#
+#     def test_plot2(self):
+#         """
+#         test y argument works
+#         :return:
+#         """
+#         pl = pycotools.viz.PlotParameterEstimation(self.PE,
+#                                                    savefig=True,
+#                                                    show=False,
+#                                                    y=['A', 'B'])
+#         pl.plot()
+#         for i in pl.create_directories():
+#             self.assertEqual(len(glob.glob(pl.create_directories()[i]+'/*')), 2)
+#
+#
+# class PlotTimeCourseTests(_test_base._BaseTest):
+#
+#     def setUp(self):
+#         super(PlotTimeCourseTests, self).setUp()
+#         self.model = pycotools.model.Model(self.copasi_file)
+#         self.original_parameters = self.model.parameters
+#
+#         self.TC1 = pycotools.tasks.TimeCourse(self.model, end=10, step_size=0.1,
+#                                          intervals=50, report_name='report1.txt')
+#
+#
+#     def test_plot_tc(self):
+#         T = pycotools.viz.PlotTimeCourse(self.TC1, savefig=True)
+#         self.assertEqual(len(glob.glob(T.results_directory+'/*')), 7)
+#
+#     def test_plot_tc(self):
+#         T = pycotools.viz.PlotTimeCourse(self.TC1, savefig=True, y=['A', 'B'], x='A', show=False)
+#         self.assertEqual(len(glob.glob(T.results_directory+'/*')), 2)
+#
+#
+# class BoxPlotTests(_test_base._BaseTest):
+#     def setUp(self):
+#         super(BoxPlotTests, self).setUp()
+#
+#
+#         self.TC1 = pycotools.tasks.TimeCourse(self.model, end=50, step_size=10,
+#                                               intervals=5, report_name='report1.txt')
+#         pycotools.misc.add_noise(self.TC1.report_name)
+#         self.TC2 = pycotools.tasks.TimeCourse(self.model, end=100, step_size=20,
+#                                               intervals=5, report_name='report2.txt')
+#
+#         pycotools.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
+#         pycotools.misc.correct_copasi_timecourse_headers(self.TC2.report_name)
+#
+#         self.MPE = pycotools.tasks.MultiParameterEstimation(self.model,
+#                                                        [self.TC1.report_name,
+#                                                         self.TC2.report_name],
+#                                                        copy_number=2,
+#                                                        pe_number=2,
+#                                                        method='genetic_algorithm',
+#                                                        population_size=1,
+#                                                        number_of_generations=1)
+#         # if os.path.isfile(self.MPE.config_filename):
+#         #     os.remove(self.MPE.config_filename)
+#         self.MPE.write_config_file()
+#         self.MPE.setup()
+#         self.MPE.run()
+#
+#     def test_boxplot_is_saved(self):
+#         """
+#
+#         :return:
+#         """
+#         b = pycotools.viz.Boxplot(self.MPE, savefig=True, num_per_plot=3)
+#         self.assertEqual(len(glob.glob(b.results_directory+'/*')), 3)
+#
+#     def test_amount_of_data(self):
+#         """
+#
+#         :return:
+#         """
+#         b = pycotools.viz.Boxplot(self.MPE, savefig=True, num_per_plot=3)
+#         self.assertEqual(b.data.shape[0], 4)
+
+
+
+class EnsembleTimeCourseTests(_test_base._BaseTest):
 
     def setUp(self):
-        super(PlotParameterEstimationTests, self).setUp()
+        super(EnsembleTimeCourseTests, self).setUp()
         self.model = pycotools.model.Model(self.copasi_file)
         self.original_parameters = self.model.parameters
 
-        self.TC1 = pycotools.tasks.TimeCourse(self.model, end=50, step_size=10,
-                                         intervals=5, report_name='report1.txt')
-        pycotools.misc.add_noise(self.TC1.report_name)
-        self.TC2 = pycotools.tasks.TimeCourse(self.model, end=100, step_size=20,
-                                         intervals=5, report_name='report2.txt')
-        pycotools.misc.add_noise(self.TC1.report_name)
-        pycotools.misc.add_noise(self.TC2.report_name)
-
-        pycotools.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
-        pycotools.misc.correct_copasi_timecourse_headers(self.TC2.report_name)
-
-        self.PE = pycotools.tasks.ParameterEstimation(self.model,
-                                                 [self.TC1.report_name,
-                                                  self.TC2.report_name],
-                                                 method='genetic_algorithm',
-                                                 population_size=1,
-                                                 number_of_generations=1)
-        # # PE = pycotools.tasks.ParameterEstimation(model,
-        # #                                          TC1.report_name,
-        # #                                          method='particle_swarm',
-        # #                                          swarm_size=50,
-        # #                                          iteration_limit=1000)
-        if os.path.isfile(self.PE.config_filename):
-            os.remove(self.PE.config_filename)
-        self.PE.write_config_file()
-        self.PE.setup()
-        # # print model.local_parameters
-        self.PE.run()
-        # # PE.model.open()
-
-
-
-    def test_create_directory(self):
-        """
-
-        :return:
-        """
-        pl = pycotools.viz.PlotParameterEstimation(self.PE, savefig=False)
-
-        dire = pl.create_directories()
-        for i in dire:
-            self.assertTrue(os.path.isdir(dire[i]))
-
-    def test_update_parameters(self):
-        """
-
-        :return:
-        """
-        pl = pycotools.viz.PlotParameterEstimation(self.PE, savefig=False)
-        model = pl.update_parameters()
-        lo = '(ADeg).k1'
-        met = 'A'
-        gl = 'B2C'
-        self.assertNotEqual(self.original_parameters[lo].iloc[0], model.parameters[lo].iloc[0])
-        self.assertNotEqual(self.original_parameters[gl].iloc[0], model.parameters[gl].iloc[0])
-        self.assertNotEqual(self.original_parameters[met].iloc[0], model.parameters[met].iloc[0])
-
-
-    def test_plot(self):
-        """
-        test plots are being generated in correct place
-        :return:
-        """
-        pl = pycotools.viz.PlotParameterEstimation(self.PE,
-                                                   savefig=True,
-                                                   show=False)
-        pl.plot()
-        for i in pl.create_directories():
-            self.assertEqual(len(glob.glob(pl.create_directories()[i]+'/*')), 6)
-
-
-    def test_plot2(self):
-        """
-        test y argument works
-        :return:
-        """
-        pl = pycotools.viz.PlotParameterEstimation(self.PE,
-                                                   savefig=True,
-                                                   show=False,
-                                                   y=['A', 'B'])
-        pl.plot()
-        for i in pl.create_directories():
-            self.assertEqual(len(glob.glob(pl.create_directories()[i]+'/*')), 2)
-
-
-class PlotTimeCourseTests(_test_base._BaseTest):
-
-    def setUp(self):
-        super(PlotTimeCourseTests, self).setUp()
-        self.model = pycotools.model.Model(self.copasi_file)
-        self.original_parameters = self.model.parameters
-
-        self.TC1 = pycotools.tasks.TimeCourse(self.model, end=10, step_size=0.1,
-                                         intervals=50, report_name='report1.txt')
-
-
-    def test_plot_tc(self):
-        T = pycotools.viz.PlotTimeCourse(self.TC1, savefig=True)
-        self.assertEqual(len(glob.glob(T.results_directory+'/*')), 7)
-
-    def test_plot_tc(self):
-        T = pycotools.viz.PlotTimeCourse(self.TC1, savefig=True, y=['A', 'B'], x='A', show=True)
-        self.assertEqual(len(glob.glob(T.results_directory+'/*')), 2)
-
-
-class BoxPlotTests(_test_base._BaseTest):
-    def setUp(self):
-        super(BoxPlotTests, self).setUp()
-
-
-        self.TC1 = pycotools.tasks.TimeCourse(self.model, end=50, step_size=10,
-                                              intervals=5, report_name='report1.txt')
-        pycotools.misc.add_noise(self.TC1.report_name)
-        self.TC2 = pycotools.tasks.TimeCourse(self.model, end=100, step_size=20,
-                                              intervals=5, report_name='report2.txt')
-
-        pycotools.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
-        pycotools.misc.correct_copasi_timecourse_headers(self.TC2.report_name)
-
-        self.MPE = pycotools.tasks.MultiParameterEstimation(self.model,
-                                                       [self.TC1.report_name,
-                                                        self.TC2.report_name],
-                                                       copy_number=2,
-                                                       pe_number=2,
-                                                       method='genetic_algorithm',
-                                                       population_size=1,
-                                                       number_of_generations=1)
-        # if os.path.isfile(self.MPE.config_filename):
-        #     os.remove(self.MPE.config_filename)
-        self.MPE.write_config_file()
-        self.MPE.setup()
-        self.MPE.run()
-
-    def test_boxplot_is_saved(self):
-        """
-
-        :return:
-        """
-        b = pycotools.viz.Boxplot(self.MPE, savefig=True, num_per_plot=3)
-        self.assertEqual(len(glob.glob(b.results_directory+'/*')), 3)
-
-    def test_amount_of_data(self):
-        """
-
-        :return:
-        """
-        b = pycotools.viz.Boxplot(self.MPE, savefig=True, num_per_plot=3)
-        self.assertEqual(b.data.shape[0], 4)
 
 
 

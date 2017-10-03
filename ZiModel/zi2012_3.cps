@@ -167,7 +167,7 @@ Reaction scheme where the products are created from the reactants and the change
         <ParameterDescription key="FunctionParameter_297" name="Smads_Complex_n" order="2" role="modifier"/>
       </ListOfParameterDescriptions>
     </Function>
-  <Function reversible="false" type="UserDefined" name="(r4).k*A" key="Function_10000"><Expression>k*A</Expression><ListOfParameterDescriptions><ParameterDescription key="FunctionParameter_45130549" name="A" order="0" role="substrate"/><ParameterDescription key="FunctionParameter_42405793" name="k" order="1" role="constant"/></ListOfParameterDescriptions></Function></ListOfFunctions>
+  </ListOfFunctions>
   <Model key="Model_3" name="Zi2007_TGFbeta_signaling" simulationType="time" timeUnit="min" volumeUnit="l" areaUnit="m&#178;" lengthUnit="m" quantityUnit="nmol" type="deterministic" avogadroConstant="6.022140857e+23">
     <MiriamAnnotation>
 <rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
@@ -541,55 +541,9 @@ Reaction scheme where the products are created from the reactants and the change
 </rdf:RDF>
         </MiriamAnnotation>
       </Metabolite>
-    <Metabolite compartment="Compartment_1" key="Metabolite_10000" name="A" simulationType="reactions" particle_number="6.022140857e+14"/><Metabolite compartment="Compartment_1" key="Metabolite_10001" name="B" simulationType="reactions" particle_number="6.022140857e+14"/></ListOfMetabolites>
+    </ListOfMetabolites>
     <ListOfModelValues>
-      <ModelValue key="ModelValue_0" name="v_T1R" simulationType="fixed">
-      </ModelValue>
-      <ModelValue key="ModelValue_1" name="v_T2R" simulationType="fixed">
-      </ModelValue>
-      <ModelValue key="ModelValue_2" name="ki_EE" simulationType="fixed">
-      </ModelValue>
-      <ModelValue key="ModelValue_3" name="kr_EE" simulationType="fixed">
-      </ModelValue>
-      <ModelValue key="ModelValue_4" name="ki_Cave" simulationType="fixed">
-      </ModelValue>
-      <ModelValue key="ModelValue_5" name="kr_Cave" simulationType="fixed">
-      </ModelValue>
-      <ModelValue key="ModelValue_6" name="Kcd" simulationType="fixed">
-      </ModelValue>
-      <ModelValue key="ModelValue_7" name="k_LRC" simulationType="fixed">
-      </ModelValue>
-      <ModelValue key="ModelValue_8" name="Klid" simulationType="fixed">
-      </ModelValue>
-      <ModelValue key="ModelValue_9" name="Kdeg_T1R_EE" simulationType="fixed">
-      </ModelValue>
-      <ModelValue key="ModelValue_10" name="Kdeg_T2R_EE" simulationType="fixed">
-      </ModelValue>
-      <ModelValue key="ModelValue_11" name="Kimp_Smad2c" simulationType="fixed">
-      </ModelValue>
-      <ModelValue key="ModelValue_12" name="Kexp_Smad2n" simulationType="fixed">
-      </ModelValue>
-      <ModelValue key="ModelValue_13" name="Kimp_Smad4c" simulationType="fixed">
-      </ModelValue>
-      <ModelValue key="ModelValue_14" name="Kexp_Smad4n" simulationType="fixed">
-      </ModelValue>
-      <ModelValue key="ModelValue_15" name="k_Smads_Complex_c" simulationType="fixed">
-      </ModelValue>
-      <ModelValue key="ModelValue_16" name="Kimp_Smads_Complex_c" simulationType="fixed">
-      </ModelValue>
-      <ModelValue key="ModelValue_17" name="Kdiss_Smads_Complex_n" simulationType="fixed">
-      </ModelValue>
-      <ModelValue key="ModelValue_18" name="Total_Smad2n" simulationType="assignment">
-        <Expression>
-          &lt;CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Nucleus],Vector=Metabolites[Smad3n],Reference=Concentration&gt;+&lt;CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Nucleus],Vector=Metabolites[Smads_Complex_n],Reference=Concentration&gt;
-        </Expression>
-      </ModelValue>
-      <ModelValue key="ModelValue_19" name="Total_Smad2c" simulationType="assignment">
-        <Expression>
-          &lt;CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[Smad3c],Reference=Concentration&gt;+&lt;CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[Smads_Complex_c],Reference=Concentration&gt;
-        </Expression>
-      </ModelValue>
-    </ListOfModelValues>
+      <ModelValue key="ModelValue_9" name="Kdeg_T1R_EE" simulationType="fixed" initial_value="5.95867"/><ModelValue key="ModelValue_8" name="Klid" simulationType="fixed" initial_value="4.77269"/><ModelValue key="ModelValue_19" name="Total_Smad2c" simulationType="assignment" initial_value="31.1055"/><ModelValue key="ModelValue_18" name="Total_Smad2n" simulationType="assignment" initial_value="4.96397"/><ModelValue key="ModelValue_3" name="kr_EE" simulationType="fixed" initial_value="17.3426"/><ModelValue key="ModelValue_2" name="ki_EE" simulationType="fixed" initial_value="0.159075"/><ModelValue key="ModelValue_1" name="v_T2R" simulationType="fixed" initial_value="1.42011"/><ModelValue key="ModelValue_0" name="v_T1R" simulationType="fixed" initial_value="0.485412"/><ModelValue key="ModelValue_7" name="k_LRC" simulationType="fixed" initial_value="7.16816"/><ModelValue key="ModelValue_12" name="Kexp_Smad2n" simulationType="fixed" initial_value="0.808361"/><ModelValue key="ModelValue_5" name="kr_Cave" simulationType="fixed" initial_value="0.137703"/><ModelValue key="ModelValue_4" name="ki_Cave" simulationType="fixed" initial_value="7.53682"/><ModelValue key="ModelValue_14" name="Kexp_Smad4n" simulationType="fixed" initial_value="10.6836"/><ModelValue key="ModelValue_6" name="Kcd" simulationType="fixed" initial_value="1.63573"/><ModelValue key="ModelValue_11" name="Kimp_Smad2c" simulationType="fixed" initial_value="0.13305"/><ModelValue key="ModelValue_17" name="Kdiss_Smads_Complex_n" simulationType="fixed" initial_value="0.390352"/><ModelValue key="ModelValue_13" name="Kimp_Smad4c" simulationType="fixed" initial_value="0.401589"/><ModelValue key="ModelValue_16" name="Kimp_Smads_Complex_c" simulationType="fixed" initial_value="0.375313"/><ModelValue key="ModelValue_10" name="Kdeg_T2R_EE" simulationType="fixed" initial_value="0.260925"/><ModelValue key="ModelValue_15" name="k_Smads_Complex_c" simulationType="fixed" initial_value="6.87669"/></ListOfModelValues>
     <ListOfReactions>
       <Reaction key="Reaction_0" name="R1_Smad2_import" reversible="false" fast="false">
         <MiriamAnnotation>
@@ -1490,7 +1444,7 @@ Reaction scheme where the products are created from the reactants and the change
           </ListOfCallParameters>
         </KineticLaw>
       </Reaction>
-    <Reaction fast="false" key="Reaction_10000" name="r4" reversible="false"><ListOfSubstrates><Substrate metabolite="Metabolite_10000" stoichiometry="1"/></ListOfSubstrates><ListOfProducts><Product metabolite="Metabolite_10001" stoichiometry="1"/></ListOfProducts><ListOfModifiers/><ListOfConstants><Constant key="Parameter_68033201" name="k" value="0.1"/></ListOfConstants><KineticLaw function="Function_10000" scalingCompartment="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Medium]" unitType="Default"><ListOfCallParameters><CallParameter functionParameter="FunctionParameter_45130549"><SourceParameter reference="Metabolite_10000"/></CallParameter><CallParameter functionParameter="FunctionParameter_42405793"><SourceParameter reference="Parameter_68033201"/></CallParameter></ListOfCallParameters></KineticLaw></Reaction></ListOfReactions>
+    </ListOfReactions>
     <ListOfModelParameterSets activeSet="ModelParameterSet_1">
       <ModelParameterSet key="ModelParameterSet_1" name="Initial State">
         <ModelParameterGroup cn="String=Initial Time" type="Group">
@@ -1745,31 +1699,11 @@ Reaction scheme where the products are created from the reactants and the change
       <StateTemplateVariable objectReference="Metabolite_17"/>
       <StateTemplateVariable objectReference="Metabolite_3"/>
       <StateTemplateVariable objectReference="Metabolite_5"/>
-      <StateTemplateVariable objectReference="ModelValue_18"/>
-      <StateTemplateVariable objectReference="ModelValue_19"/>
       <StateTemplateVariable objectReference="Compartment_1"/>
       <StateTemplateVariable objectReference="Compartment_3"/>
       <StateTemplateVariable objectReference="Compartment_5"/>
-      <StateTemplateVariable objectReference="ModelValue_0"/>
-      <StateTemplateVariable objectReference="ModelValue_1"/>
-      <StateTemplateVariable objectReference="ModelValue_2"/>
-      <StateTemplateVariable objectReference="ModelValue_3"/>
-      <StateTemplateVariable objectReference="ModelValue_4"/>
-      <StateTemplateVariable objectReference="ModelValue_5"/>
-      <StateTemplateVariable objectReference="ModelValue_6"/>
-      <StateTemplateVariable objectReference="ModelValue_7"/>
-      <StateTemplateVariable objectReference="ModelValue_8"/>
-      <StateTemplateVariable objectReference="ModelValue_9"/>
-      <StateTemplateVariable objectReference="ModelValue_10"/>
-      <StateTemplateVariable objectReference="ModelValue_11"/>
-      <StateTemplateVariable objectReference="ModelValue_12"/>
-      <StateTemplateVariable objectReference="ModelValue_13"/>
-      <StateTemplateVariable objectReference="ModelValue_14"/>
-      <StateTemplateVariable objectReference="ModelValue_15"/>
-      <StateTemplateVariable objectReference="ModelValue_16"/>
-      <StateTemplateVariable objectReference="ModelValue_17"/>
-    <StateTemplateVariable objectReference="Metabolite_10000"/><StateTemplateVariable objectReference="Metabolite_10001"/></StateTemplate>
-    <InitialState type="initialState">0 149860975226.4449 127729607576.9699 116288744376841.4 311489514794510.7 0 1302589067369.099 725908858902.7791 0 0 0 48177126855999.97 0 1322823460648.618 1124273476593.329 49837732197317.75 726794113608758.9 236.45 492.6099999999997 1 0.00035 0.00105 0.0103 0.02869 0.33 0.033 0.33 0.03742 0.005 2197 0.02609 0.005 0.025 0.16 1 0.08 0.5 6.85e-05 0.16 0.1174 6.022140857e+14 6.022140857e+14 
+      <StateTemplateVariable objectReference="ModelValue_9"/><StateTemplateVariable objectReference="ModelValue_8"/><StateTemplateVariable objectReference="ModelValue_19"/><StateTemplateVariable objectReference="ModelValue_18"/><StateTemplateVariable objectReference="ModelValue_3"/><StateTemplateVariable objectReference="ModelValue_2"/><StateTemplateVariable objectReference="ModelValue_1"/><StateTemplateVariable objectReference="ModelValue_0"/><StateTemplateVariable objectReference="ModelValue_7"/><StateTemplateVariable objectReference="ModelValue_12"/><StateTemplateVariable objectReference="ModelValue_5"/><StateTemplateVariable objectReference="ModelValue_4"/><StateTemplateVariable objectReference="ModelValue_14"/><StateTemplateVariable objectReference="ModelValue_6"/><StateTemplateVariable objectReference="ModelValue_11"/><StateTemplateVariable objectReference="ModelValue_17"/><StateTemplateVariable objectReference="ModelValue_13"/><StateTemplateVariable objectReference="ModelValue_16"/><StateTemplateVariable objectReference="ModelValue_10"/><StateTemplateVariable objectReference="ModelValue_15"/></StateTemplate>
+    <InitialState type="initialState">0.0 1.49860975226e+11 1.27729607577e+11 1.16288744377e+14 3.11489514795e+14 0.0 1.30258906737e+12 7.25908858903e+11 0.0 0.0 0.0 4.8177126856e+13 0.0 1.32282346065e+12 1.12427347659e+12 4.98377321973e+13 7.26794113609e+14 1.0 0.00035 0.00105 5.95867 4.77269 31.1055 4.96397 17.3426 0.159075 1.42011 0.485412 7.16816 0.808361 0.137703 7.53682 10.6836 1.63573 0.13305 0.390352 0.401589 0.375313 0.260925 6.87669 
 </InitialState>
   </Model>
   <ListOfTasks>
@@ -1791,37 +1725,12 @@ Reaction scheme where the products are created from the reactants and the change
         <Parameter name="Maximum duration for backward integration" type="unsignedFloat" value="1000000"/>
       </Method>
     </Task>
-    <Task key="Task_15" name="Time-Course" type="timeCourse" scheduled="false" updateModel="false">
-      <Report reference="Report_18" target="../../Models/2017/09_Sept/zi_timecourse_simulation.csv" append="0" confirmOverwrite="0"/>
+    <Task key="Task_15" name="Time-Course" scheduled="false" type="timeCourse" update_model="false"><Report append="0" confirmOverwrite="0" reference="Report_30" target="/home/b3053674/Documents/pycotools/ZiModel/report1.txt"/><Problem><Parameter name="AutomaticStepSize" type="bool" value="0"/><Parameter name="StepNumber" type="unsignedInteger" value="10"/><Parameter name="StepSize" type="float" value="10"/><Parameter name="Duration" type="float" value="100"/><Parameter name="TimeSeriesRequested" type="float" value="1"/><Parameter name="OutputStartTime" type="float" value="0"/><Parameter name="Output Event" type="bool" value="0"/><Parameter name="Start in Steady State" type="bool" value="0"/></Problem><Method name="Deterministic (LSODA)" type="Deterministic(LSODA)"><Parameter name="Integrate Reduced Model" type="bool" value="0"/><Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/><Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/><Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/><Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/></Method></Task><Task key="Task_16" name="Scan" type="scan" scheduled="true" updateModel="0">
+      <Report reference="Report_82" target="FitFake/PEData3.txt" append="0" confirmOverwrite="0"/>
       <Problem>
-        <Parameter name="AutomaticStepSize" type="bool" value="0"/>
-        <Parameter name="StepNumber" type="unsignedInteger" value="1000"/>
-        <Parameter name="StepSize" type="float" value="1"/>
-        <Parameter name="Duration" type="float" value="1000"/>
-        <Parameter name="TimeSeriesRequested" type="float" value="1"/>
-        <Parameter name="OutputStartTime" type="float" value="0"/>
-        <Parameter name="Output Event" type="bool" value="0"/>
-        <Parameter name="Start in Steady State" type="bool" value="0"/>
-      </Problem>
-      <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
-        <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
-        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
-        <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
-        <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
-        <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
-      </Method>
-    </Task>
-    <Task key="Task_16" name="Scan" type="scan" scheduled="true" updateModel="false">
-      <Report reference="Report_19" target="zi_repeat.csv" append="0" confirmOverwrite="0"/>
-      <Problem>
-        <Parameter name="Subtask" type="unsignedInteger" value="1"/>
+        <Parameter name="Subtask" type="unsignedInteger" value="5"/>
         <ParameterGroup name="ScanItems">
-          <ParameterGroup name="ScanItem">
-            <Parameter name="Number of steps" type="unsignedInteger" value="10"/>
-            <Parameter name="Object" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Nucleus],Vector=Metabolites[Smad3n],Reference=InitialConcentration"/>
-            <Parameter name="Type" type="unsignedInteger" value="0"/>
-          </ParameterGroup>
-        </ParameterGroup>
+          <ParameterGroup name="ScanItem"><Parameter name="Number of steps" type="unsignedInteger" value="20"/><Parameter name="Type" type="unsignedInteger" value="0"/><Parameter name="Object" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Nucleus],Vector=Metabolites[Smad3n],Reference=InitialConcentration"/></ParameterGroup></ParameterGroup>
         <Parameter name="Output in subtask" type="bool" value="0"/>
         <Parameter name="Adjust initial conditions" type="bool" value="0"/>
       </Problem>
@@ -1856,33 +1765,27 @@ Reaction scheme where the products are created from the reactants and the change
         <Parameter name="Seed" type="unsignedInteger" value="0"/>
       </Method>
     </Task>
-    <Task key="Task_19" name="Parameter Estimation" type="parameterFitting" scheduled="false" updateModel="false">
-      <Report reference="Report_12" target="" append="1" confirmOverwrite="1"/>
+    <Task key="Task_19" name="Parameter Estimation" type="parameterFitting" scheduled="false" updateModel="0">
+      <Report reference="Report_32" target="/home/b3053674/Documents/pycotools/ZiModel/PEData.txt" append="0" confirmOverwrite="0"/>
       <Problem>
         <Parameter name="Maximize" type="bool" value="0"/>
-        <Parameter name="Randomize Start Values" type="bool" value="0"/>
-        <Parameter name="Calculate Statistics" type="bool" value="1"/>
+        <Parameter name="Randomize Start Values" type="bool" value="1"/>
+        <Parameter name="Calculate Statistics" type="bool" value="0"/>
         <ParameterGroup name="OptimizationItemList">
-        </ParameterGroup>
+        <ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="0.1"/><Parameter name="UpperBound" type="cn" value="100"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kcd],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="0.1"/><Parameter name="UpperBound" type="cn" value="100"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kdeg_T1R_EE],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="0.1"/><Parameter name="UpperBound" type="cn" value="100"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kdeg_T2R_EE],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="0.1"/><Parameter name="UpperBound" type="cn" value="100"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kdiss_Smads_Complex_n],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="0.1"/><Parameter name="UpperBound" type="cn" value="100"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kexp_Smad2n],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="0.1"/><Parameter name="UpperBound" type="cn" value="100"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kexp_Smad4n],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="0.1"/><Parameter name="UpperBound" type="cn" value="100"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kimp_Smad2c],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="0.1"/><Parameter name="UpperBound" type="cn" value="100"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kimp_Smad4c],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="0.1"/><Parameter name="UpperBound" type="cn" value="100"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kimp_Smads_Complex_c],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="0.1"/><Parameter name="UpperBound" type="cn" value="100"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Klid],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="0.1"/><Parameter name="UpperBound" type="cn" value="100"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Total_Smad2c],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="0.1"/><Parameter name="UpperBound" type="cn" value="100"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Total_Smad2n],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="0.1"/><Parameter name="UpperBound" type="cn" value="100"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[k_LRC],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="0.1"/><Parameter name="UpperBound" type="cn" value="100"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[k_Smads_Complex_c],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="0.1"/><Parameter name="UpperBound" type="cn" value="100"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[ki_Cave],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="0.1"/><Parameter name="UpperBound" type="cn" value="100"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[ki_EE],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="0.1"/><Parameter name="UpperBound" type="cn" value="100"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[kr_Cave],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="0.1"/><Parameter name="UpperBound" type="cn" value="100"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[kr_EE],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="0.1"/><Parameter name="UpperBound" type="cn" value="100"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[v_T1R],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Cross Validation Experiments"/><ParameterGroup name="Affected Experiments"/><Parameter name="LowerBound" type="cn" value="0.1"/><Parameter name="UpperBound" type="cn" value="100"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[v_T2R],Reference=InitialValue"/></ParameterGroup></ParameterGroup>
         <ParameterGroup name="OptimizationConstraintList">
         </ParameterGroup>
         <Parameter name="Steady-State" type="cn" value="CN=Root,Vector=TaskList[Steady-State]"/>
         <Parameter name="Time-Course" type="cn" value="CN=Root,Vector=TaskList[Time-Course]"/>
         <Parameter name="Create Parameter Sets" type="bool" value="0"/>
         <ParameterGroup name="Experiment Set">
-        </ParameterGroup>
+        <ParameterGroup name="Experiment_0"><Parameter name="Data is Row Oriented" type="bool" value="1"/><Parameter name="Experiment Type" type="unsignedInteger" value="1"/><Parameter name="File Name" type="file" value="report1.txt"/><Parameter name="First Row" type="unsignedInteger" value="1"/><Parameter name="Key" type="key" value="Experiment_0"/><Parameter name="Last Row" type="unsignedInteger" value="12"/><Parameter name="Normalize Weights per Experiment" type="bool" value="1"/><Parameter name="Number of Columns" type="unsignedInteger" value="37"/><ParameterGroup name="Object Map"><ParameterGroup name="0"><Parameter name="Role" type="unsignedInteger" value="3"/></ParameterGroup><ParameterGroup name="1"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Nucleus],Vector=Metabolites[Smad3n],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="2"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[Smad3c],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="3"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Nucleus],Vector=Metabolites[Smad4n],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="4"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[Smad4c],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="5"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T1R_Surf],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="6"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T2R_Cave],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="7"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T2R_Surf],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="8"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Nucleus],Vector=Metabolites[Smads_Complex_n],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="9"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T1R_EE],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="10"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T1R_Cave],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="11"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Medium],Vector=Metabolites[TGF_beta],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="12"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[LRC_Cave],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="13"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[LRC_Surf],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="14"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[Smads_Complex_c],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="15"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T2R_EE],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="16"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[LRC_EE],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="17"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kdeg_T1R_EE],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="18"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Klid],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="19"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Total_Smad2c],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="20"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Total_Smad2n],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="21"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[kr_EE],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="22"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[ki_EE],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="23"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[v_T2R],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="24"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[v_T1R],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="25"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[k_LRC],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="26"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kexp_Smad2n],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="27"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[kr_Cave],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="28"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[ki_Cave],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="29"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kexp_Smad4n],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="30"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kcd],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="31"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kimp_Smad2c],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="32"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kdiss_Smads_Complex_n],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="33"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kimp_Smad4c],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="34"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kimp_Smads_Complex_c],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="35"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kdeg_T2R_EE],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="36"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[k_Smads_Complex_c],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup></ParameterGroup><Parameter name="Row containing Names" type="unsignedInteger" value="1"/><Parameter name="separator" type="string" value="&#9;"/><Parameter name="Weight Method" type="unsignedInteger" value="2"/></ParameterGroup></ParameterGroup>
         <ParameterGroup name="Validation Set">
           <Parameter name="Threshold" type="unsignedInteger" value="5"/>
           <Parameter name="Weight" type="unsignedFloat" value="1"/>
         </ParameterGroup>
       </Problem>
-      <Method name="Evolutionary Programming" type="EvolutionaryProgram">
-        <Parameter name="Number of Generations" type="unsignedInteger" value="200"/>
-        <Parameter name="Population Size" type="unsignedInteger" value="20"/>
-        <Parameter name="Random Number Generator" type="unsignedInteger" value="1"/>
-        <Parameter name="Seed" type="unsignedInteger" value="0"/>
-      </Method>
-    </Task>
+      <Method name="Genetic Algorithm" type="GeneticAlgorithm"><Parameter name="Number of Generations" type="unsignedInteger" value="400"/><Parameter name="Population Size" type="unsignedInteger" value="350"/><Parameter name="Random Number Generator" type="unsignedInteger" value="1"/><Parameter name="Seed" type="unsignedInteger" value="0"/></Method></Task>
     <Task key="Task_20" name="Metabolic Control Analysis" type="metabolicControlAnalysis" scheduled="false" updateModel="false">
       <Report reference="Report_13" target="" append="1" confirmOverwrite="1"/>
       <Problem>
@@ -2120,49 +2023,6 @@ Reaction scheme where the products are created from the reactants and the change
         <Object cn="CN=Root,Vector=TaskList[Linear Noise Approximation],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_18" name="Time-Course" taskType="unset" separator="&#9;" precision="6">
-      <Comment>
-      </Comment>
-      <Table printTitle="1">
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Reference=Time"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Nucleus],Vector=Metabolites[Smad3n],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[Smad3c],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Nucleus],Vector=Metabolites[Smad4n],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[Smad4c],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T1R_Surf],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T2R_Cave],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T2R_Surf],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Nucleus],Vector=Metabolites[Smads_Complex_n],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T1R_EE],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T1R_Cave],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Medium],Vector=Metabolites[TGF_beta],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[LRC_Cave],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[LRC_Surf],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[Smads_Complex_c],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T2R_EE],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[LRC_EE],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kexp_Smad2n],Reference=Value"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kdeg_T1R_EE],Reference=Value"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Klid],Reference=Value"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Total_Smad2c],Reference=Value"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Total_Smad2n],Reference=Value"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[kr_EE],Reference=Value"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[ki_EE],Reference=Value"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[v_T2R],Reference=Value"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[v_T1R],Reference=Value"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[k_LRC],Reference=Value"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kcd],Reference=Value"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[kr_Cave],Reference=Value"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[ki_Cave],Reference=Value"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kexp_Smad4n],Reference=Value"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kdiss_Smads_Complex_n],Reference=Value"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kimp_Smad2c],Reference=Value"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kimp_Smads_Complex_c],Reference=Value"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kimp_Smad4c],Reference=Value"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kdeg_T2R_EE],Reference=Value"/>
-        <Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[k_Smads_Complex_c],Reference=Value"/>
-      </Table>
-    </Report>
     <Report key="Report_19" name="profilelikelihood" taskType="unset" separator="&#9;" precision="6">
       <Comment>
       </Comment>
@@ -2171,7 +2031,7 @@ Reaction scheme where the products are created from the reactants and the change
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/>
       </Table>
     </Report>
-  </ListOfReports>
+  <Report key="Report_30" name="Time-Course" precision="6" separator="&#9;" taskType="Time-Course"><Comment/><Table printTitle="1"><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Reference=Time"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Nucleus],Vector=Metabolites[Smad3n],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[Smad3c],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Nucleus],Vector=Metabolites[Smad4n],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[Smad4c],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T1R_Surf],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T2R_Cave],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T2R_Surf],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Nucleus],Vector=Metabolites[Smads_Complex_n],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T1R_EE],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T1R_Cave],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Medium],Vector=Metabolites[TGF_beta],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[LRC_Cave],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[LRC_Surf],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[Smads_Complex_c],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[T2R_EE],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Compartments[Cytoplasm],Vector=Metabolites[LRC_EE],Reference=Concentration"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kdeg_T1R_EE],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Klid],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Total_Smad2c],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Total_Smad2n],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[kr_EE],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[ki_EE],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[v_T2R],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[v_T1R],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[k_LRC],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kexp_Smad2n],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[kr_Cave],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[ki_Cave],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kexp_Smad4n],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kcd],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kimp_Smad2c],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kdiss_Smads_Complex_n],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kimp_Smad4c],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kimp_Smads_Complex_c],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[Kdeg_T2R_EE],Reference=Value"/><Object cn="CN=Root,Model=Zi2007_TGFbeta_signaling,Vector=Values[k_Smads_Complex_c],Reference=Value"/></Table></Report><Report taskType="parameterFitting" separator="&#9;" precision="6" key="Report_32" name="parameter_estimation"><Comment/><Footer><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"/><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/></Footer></Report><Report taskType="parameterFitting" separator="&#9;" precision="6" key="Report_82" name="multi_parameter_estimation"><Comment/><Table printTitle="1"><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"/><Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/></Table></Report></ListOfReports>
   <ListOfPlots>
     <PlotSpecification name="Concentrations, Volumes, and Global Quantity Values" type="Plot2D" active="1">
       <Parameter name="log X" type="bool" value="0"/>
