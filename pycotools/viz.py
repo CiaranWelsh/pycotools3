@@ -73,7 +73,7 @@ import matplotlib.patches as mpatches
 
 LOG=logging.getLogger(__name__)
 
-SEABORN_OPTIONS = {'context': 'talk',
+SEABORN_OPTIONS = {'context': 'poster',
                    'font_scale': 2}
 
 seaborn.set_context(context=SEABORN_OPTIONS['context'], font_scale=SEABORN_OPTIONS['font_scale'])
@@ -167,7 +167,10 @@ class ParseMixin(Mixin):
         Use parse class to get the data
         :return:
         """
-        return Parse(cls, log10=log10).data
+        if type(cls) == Parse:
+            return cls.data
+        else:
+            return Parse(cls, log10=log10).data
 
 
 class TruncateDataMixin(Mixin):
@@ -195,15 +198,22 @@ class CreateResultsDirectoryMixin(Mixin):
         os.chdir(results_directory)
         return results_directory
 
-
+##TODO use cached property
 class Parse(object):
-    def __init__(self, cls_instance, log10=False):
+    def __init__(self, cls_instance, log10=False, copasi_file=None):
         self.cls_instance = cls_instance
         self.log10 = log10
+        self.copasi_file = copasi_file
+        self.model = None
+        if self.copasi_file is not None:
+            self.model = model.Model(self.copasi_file)
+
         accepted_types = [tasks.TimeCourse,
                           tasks.Scan,
                           tasks.ParameterEstimation,
-                          tasks.MultiParameterEstimation]
+                          tasks.MultiParameterEstimation,
+                          str,
+                          Parse]
 
         if type(self.cls_instance) not in accepted_types:
             raise errors.InputError('{} not in {}'.format(
@@ -230,13 +240,19 @@ class Parse(object):
         """
 
         if isinstance(self.cls_instance, tasks.TimeCourse):
-            data = self.parse_timecourse()
+            data = self.from_timecourse()
 
         elif type(self.cls_instance) == tasks.ParameterEstimation:
-            data = self.parse_parameter_estmation
+            data = self.from_parameter_estimation
 
         elif type(self.cls_instance) == tasks.MultiParameterEstimation:
-            data = self.parse_multi_parameter_estimation(self.cls_instance)
+            data = self.from_multi_parameter_estimation(self.cls_instance)
+
+        elif type(self.cls_instance == str):
+            data = self.from_folder()
+
+        elif type(self.cls_instance) == viz.Parse:
+            return self.cls_instance.data
 
         if self.log10:
             data = numpy.log10(data)
@@ -244,7 +260,7 @@ class Parse(object):
         else:
             return data
 
-    def parse_timecourse(self):
+    def from_timecourse(self):
         """
         read time course data into pandas dataframe. Remove
         copasi generated square brackets around the variables
@@ -274,7 +290,7 @@ class Parse(object):
         return NotImplementedError('scan plotting features are not yet implemented')
 
     @cached_property
-    def parse_parameter_estmation(self):
+    def from_parameter_estimation(self):
         """
         Parse parameter estimation data. Store the data in
         a cache.
@@ -304,7 +320,7 @@ class Parse(object):
             return data
 
     @staticmethod
-    def parse_multi_parameter_estimation(cls_instance, folder=None):
+    def from_multi_parameter_estimation(cls_instance, folder=None):
         """
         Results come without headers - parse the results
         give them the proper headers then overwrite the file again
@@ -318,7 +334,7 @@ class Parse(object):
         d = {}
         for report_name in glob.glob(folder+r'/*'):
             report_name = os.path.abspath(report_name)
-            if os.path.isfile(report_name) !=True:
+            if os.path.isfile(report_name) != True:
                 raise errors.FileDoesNotExistError('"{}" does not exist'.format(report_name))
 
             try:
@@ -341,6 +357,65 @@ class Parse(object):
                     raise errors.SomethingWentHorriblyWrongError('Parameter Estimation task is empty')
                 if len(names) != data.shape[1]:
                     raise errors.SomethingWentHorriblyWrongError('length of parameter estimation data does not equal number of parameters estimated')
+
+                if os.path.isfile(report_name):
+                    os.remove(report_name)
+                data.columns = names
+                data.to_csv(report_name, sep='\t', index=False)
+                d[report_name] = data
+        df = pandas.concat(d)
+        columns = df.columns
+        ## reindex, drop and sort by RSS
+        df = df.reset_index().drop(['level_0', 'level_1'], axis=1).sort_values(by='RSS')
+
+        return df.reset_index(drop=True)
+
+    def from_folder(self):
+        """
+        
+        :param folder: 
+        :return: 
+        """
+        if self.copasi_file is None:
+            raise errors.InputError('To read data from a folder of'
+                                    'parameter estimation data files '
+                                    'specify argument to copasi_file. This'
+                                    'should be the configured model '
+                                    'that was used to generate the parameter'
+                                    ' estimation data. This is necessary to annotate'
+                                    ' data with model component names')
+        m = model.Model(self.copasi_file)
+        ## check that cps has a parameter estimation configured
+        if m.fit_item_order == []:
+            raise errors.InputError('No fit items exist. Its possible that you have'
+                                    ' not given the copasi file that was used to generate this'
+                                    ' parameter estimation data')
+
+        d = {}
+        for report_name in glob.glob(self.cls_instance + r'/*'):
+            report_name = os.path.abspath(report_name)
+            if os.path.isfile(report_name) != True:
+                raise errors.FileDoesNotExistError('"{}" does not exist'.format(report_name))
+
+            try:
+                data = pandas.read_csv(report_name,
+                                       sep='\t', header=None, skiprows=[0])
+            except:
+                LOG.warning('No Columns to parse from file. {} is empty. Returned None'.format(
+                    report_name))
+                return None
+            bracket_columns = data[data.columns[[0, -2]]]
+            if bracket_columns.iloc[0].iloc[0] != '(':
+                data = pandas.read_csv(report_name, sep='\t')
+                d[report_name] = data
+            else:
+                data = data.drop(data.columns[[0, -2]], axis=1)
+                data.columns = range(data.shape[1])
+                ### parameter of interest has been removed.
+                names = m.fit_item_order + ['RSS']
+                if len(names) != data.shape[1]:
+                    raise errors.SomethingWentHorriblyWrongError(
+                        'length of parameter estimation data does not equal number of parameters estimated')
 
                 if os.path.isfile(report_name):
                     os.remove(report_name)
@@ -442,7 +517,7 @@ class PlotTimeCourse(PlotKwargs):
             self.ylabel = 'Concentration ({})'.format(self.cls.model.quantity_unit)
 
         if self.savefig and (self.separate is False) and (self.filename is None):
-            self.filename = 'TimeCourse.eps'
+            self.filename = 'TimeCourse.png'
             LOG.warning('filename is None. Setting default filename to {}'.format(self.filename))
 
     def plot(self):
@@ -489,7 +564,7 @@ class PlotTimeCourse(PlotKwargs):
                 dirs = self.create_directory(self.results_directory)
 
                 if self.separate:
-                    fle = os.path.join(dirs, '{}.eps'.format(y_var))
+                    fle = os.path.join(dirs, '{}.png'.format(y_var))
                     fig.savefig(fle, dpi=self.dpi, bbox_inches='tight')
                 else:
                     fle = os.path.join(dirs, self.filename)
@@ -713,7 +788,7 @@ class PlotParameterEstimation(PlotKwargs):
                         if self.savefig:
                             dirs = self.create_directories()
                             exp_key = os.path.split(exp)[1]
-                            fle = os.path.join(dirs[exp_key], '{}.eps'.format(key))
+                            fle = os.path.join(dirs[exp_key], '{}.png'.format(key))
                             plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
                             LOG.info('figure saved to "{}"'.format(fle))
         if self.show:
@@ -901,7 +976,11 @@ class Boxplot(PlotKwargs):
         :return:
         """
         if self.results_directory is None:
-            self.results_directory = os.path.join(self.cls.model.root, 'Boxplots')
+            if type(self.cls) == Parse:
+                self.results_directory = os.path.join(os.path.dirname(
+                    self.cls.copasi_file), 'Boxplots')
+            else:
+                self.results_directory = os.path.join(self.cls.model.root, 'Boxplots')
             if os.path.isdir(self.results_directory) != True:
                 os.makedirs(self.results_directory)
         return self.results_directory
@@ -923,8 +1002,10 @@ class Boxplot(PlotKwargs):
             if self.savefig:
                 self.results_directory = self.create_directory()
                 fle = os.path.join(self.results_directory,
-                                   'Boxplot{}.eps'.format(label_set))
+                                   'Boxplot{}.png'.format(label_set))
                 plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
+        if self.show:
+            plt.show()
 
     def divide_data(self):
         """
@@ -946,6 +1027,7 @@ class Boxplot(PlotKwargs):
 @mixin(_base.UpdatePropertiesMixin)
 @mixin(ParseMixin)
 @mixin(TruncateDataMixin)
+@mixin(CreateResultsDirectoryMixin)
 class RssVsIterations(PlotKwargs):
     """
     Create new folder for each experiment
@@ -997,8 +1079,12 @@ class RssVsIterations(PlotKwargs):
         :return:
         """
         if self.results_directory is None:
-            self.results_directory = os.path.join(self.cls.model.root,
+            if type(self.cls) == Parse:
+                self.results_directory = os.path.join(os.path.dirname(self.cls.copasi_file), 'RssVsIterations')
+            else:
+                self.results_directory = os.path.join(self.cls.model.root,
                                                   'RssVsIterations')
+
         if not os.path.isdir(self.results_directory):
             os.makedirs(self.results_directory)
         return self.results_directory
@@ -1009,15 +1095,20 @@ class RssVsIterations(PlotKwargs):
         """
             
         plt.figure()
-        plt.plot(range(self.data['RSS'].shape[0]), self.data['RSS'].sort_values(ascending=True))
+        plt.plot(range(self.data['RSS'].shape[0]),
+                 self.data['RSS'].sort_values(ascending=True),
+                 marker='o')
         plt.xticks(rotation=self.xtick_rotation)
-        plt.title(self.title)
+        plt.title(self.title+'(n={})'.format(self.data.shape[0]))
         plt.ylabel(self.ylabel)
         plt.xlabel('Rank of Best Fit')
         if self.savefig:
             self.results_directory = self.create_directory()
-            fle = os.path.join(self.results_directory, 'RssVsIterations.eps')
+            fle = os.path.join(self.results_directory, 'RssVsIterations.png')
             plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
+
+        if self.show:
+            plt.show()
 
 
 @mixin(_base.UpdatePropertiesMixin)
@@ -1070,6 +1161,23 @@ class Pca(PlotKwargs):
         self.pca()
 
 
+    def create_directory(self):
+        """
+        create a directory for the results
+        :return:
+        """
+        if self.results_directory is None:
+            if type(self.cls) == Parse:
+                self.results_directory = os.path.join(os.path.dirname(self.cls.copasi_file),
+                                                      'PCA')
+            else:
+                self.results_directory = os.path.join(self.cls.model.root,
+                                                  'PCA')
+
+        if not os.path.isdir(self.results_directory):
+            os.makedirs(self.results_directory)
+        return self.results_directory
+
     def _do_checks(self):
         """
         varify integrity of user input
@@ -1081,8 +1189,8 @@ class Pca(PlotKwargs):
             raise errors.InputError('{} not in {}'.format(
                 self.by, ['parameters','iterations']))
 
-        if self.results_directory is None:
-            self.results_directory = os.path.join(self.cls.model.root, 'PCA')
+        # if self.results_directory is None:
+        #     self.results_directory = self.create_directory()
 
         if self.ylabel==None:
             if self.log10==False:
@@ -1154,7 +1262,7 @@ class Pca(PlotKwargs):
                         self.legend_position[1]-i*self.legend_position[2],
                     '{}: {}'.format(i,txt),fontsize=self.legend_fontsize)
         if self.savefig:
-            self.create_directory(self.results_directory)
+            self.create_directory()
             fle = os.path.join(self.results_directory, 'Pca_by_{}'.format(self.by))
             plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
 
@@ -1205,7 +1313,10 @@ class Histograms(PlotKwargs):
         :return:
         """
         if self.results_directory is None:
-            self.results_directory = os.path.join(self.cls.model.root, 'Histograms')
+            if type(self.cls) == Parse:
+                self.results_directory = os.path.join(os.path.dirname(self.cls.copasi_file), 'Histograms')
+            else:
+                self.results_directory = os.path.join(self.cls.model.root, 'Histograms')
 
 
     def plot(self):
@@ -1221,7 +1332,7 @@ class Histograms(PlotKwargs):
             if self.savefig:
                 self.create_directory(self.results_directory)
                 fname = os.path.join(self.results_directory,
-                                     misc.RemoveNonAscii(parameter).filter+'.eps')
+                                     misc.RemoveNonAscii(parameter).filter+'.png')
                 plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
 
 
@@ -1303,7 +1414,7 @@ class Scatters(PlotKwargs):
                 if self.savefig:
                     x_dir = os.path.join(self.results_directory, x_var)
                     self.create_directory(x_dir)
-                    fle = os.path.join(x_dir, '{}.eps'.format(y_var))
+                    fle = os.path.join(x_dir, '{}.png'.format(y_var))
                     plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
 
         if self.show:
@@ -1415,7 +1526,7 @@ class LinearRegression(PlotKwargs):
         if self.savefig:
             save_dir = os.path.join(self.results_directory, 'LinearRegression')
             self.create_directory(self.results_directory)
-            fname = os.path.join(self.results_directory, 'linregress_scores.eps')
+            fname = os.path.join(self.results_directory, 'linregress_scores.png')
             plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
         
         
@@ -1425,7 +1536,7 @@ class LinearRegression(PlotKwargs):
         plt.title('Lasso Regression. Y=RSS, X=all other Parameters'+'(n={})'.format(self.data.shape[0]), fontsize=self.title_fontsize)
         if self.savefig:
             self.create_directory(self.results_directory)
-            fname = os.path.join(self.results_directory, 'linregress_RSS.eps')
+            fname = os.path.join(self.results_directory, 'linregress_RSS.png')
             plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
                 
         
@@ -1443,7 +1554,7 @@ class LinearRegression(PlotKwargs):
         plt.xlabel('')
         if self.savefig:
             self.create_directory(self.results_directory)
-            fname = os.path.join(self.results_directory, 'linregress_parameters.eps')
+            fname = os.path.join(self.results_directory, 'linregress_parameters.png')
             plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
 
 
@@ -1480,7 +1591,8 @@ class EnsembleTimeCourse(object):
                    'show': False,
                    'silent': True,
                    'data_filename': None, #For outputting ensemble data to file
-                   'exp_color': 'red'
+                   'exp_color': 'red',
+                   'experiment_files': None, #For use only when parsing from folder
                    }
         
         for i in kwargs.keys():
@@ -1508,17 +1620,60 @@ class EnsembleTimeCourse(object):
         self.plot()
         # print self.ensemble_data
 
+
+    def create_directory(self):
+        """
+        create a directory for the results
+        :return:
+        """
+        if self.results_directory is None:
+            if type(self.cls) == Parse:
+                self.results_directory = os.path.join(os.path.dirname(self.cls.copasi_file),
+                                                      'EnsembleTimeCourse')
+            else:
+                self.results_directory = os.path.join(self.cls.model.root,
+                                                  'PCA')
+
+        if not os.path.isdir(self.results_directory):
+            os.makedirs(self.results_directory)
+        return self.results_directory
+
+
     def _do_checks(self):
+        """
+
+        :return:
+        """
+        if type(self.cls) == Parse:
+            if self.experiment_files is None:
+                raise errors.InputError('If parsing estimation data from '
+                                        'folder, please specify argument'
+                                        ' to experiment_files')
+        if self.experiment_files is not None:
+            if isinstance(self.experiment_files, str):
+                self.experiment_files = [self.experiment_files]
         
-        if self.results_directory == None:
-            self.results_directory = os.path.join(self.cls.model.root, 'EnsembleTimeCourses' )
+        # if self.results_directory == None:
+        #     self.results_directory = self.create_directory()
+            # self.results_directory = os.path.join(self.cls.model.root, 'EnsembleTimeCourses' )
             
     def parse_experimental_files(self):
+        """
+
+        :return:
+        """
         df_dct={}
-        for i in range(len(self.cls.experiment_files)):
-            df=pandas.read_csv(self.cls.experiment_files[i],
-                               sep='\t')
-            df_dct[self.cls.experiment_files[i]] = df
+
+        if type(self.cls) == Parse:
+            exp_files = self.experiment_files
+
+        else:
+            exp_files = self.cls.experiment_files
+
+        for i in range(len(exp_files)):
+            df = pandas.read_csv(exp_files[i],
+                           sep='\t')
+        df_dct[exp_files[i]] = df
         return df_dct
 
     def get_experiment_times(self):
@@ -1545,6 +1700,8 @@ class EnsembleTimeCourse(object):
         """
         
         """
+
+
         ## collect end times for each experiment
         ##in order to find the biggest
         end_times = []
@@ -1617,7 +1774,7 @@ class EnsembleTimeCourse(object):
                 # plt.legend([ax1, ax2], ['Sim', 'Exp'], loc=(1,0.5))
                 plt.title('Ensemble Time Course\n for {} (n={})'.format(parameter, self.data.shape[0]))
                 if self.savefig:
-                    self.create_directory(self.results_directory)
+                    self.results_directory = self.create_directory()
                     fname = os.path.join(self.results_directory, '{}.png'.format(misc.RemoveNonAscii(parameter).filter))
                     plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
         

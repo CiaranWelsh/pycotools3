@@ -40,10 +40,10 @@ MINOR = 0
 MICRO = 1
 
 
-##test version
-MAJOR = 0
-MINOR = 0
-MICRO = 3
+###test version
+#MAJOR = 0
+#MINOR = 0
+#MICRO = 6
 
 
 
@@ -58,7 +58,7 @@ setup(
   author = 'Ciaran Welsh',
   requires=['lxml','argparse','pandas','numpy','scipy',
             'matplotlib','scipy','seaborn','sklearn',
-            'openpyxl','xlrd', 'retrying'],
+            'retrying'],
   package_data={'pycotools':['*.py','Documentation/*.pdf',
                              'logging_config.conf',
                              'Documentation/*.html','Licence.txt',

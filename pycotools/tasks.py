@@ -4082,7 +4082,7 @@ class MultiParameterEstimation(ParameterEstimation):
 
 
 
-class MultiModelFit(object):
+class MultiModelFit(_base._ModelBase):
     '''
     Coordinate a systematic multi model fitting parameter estimation and
     compare results using AIC/BIC.
@@ -4141,66 +4141,70 @@ class MultiModelFit(object):
     def __init__(self, project_config, **kwargs):
         self.project_dir = project_config
 #        self.config_filename=config_filename
+        self.kwargs = kwargs
         self._do_checks()
         self.cps_files, self.exp_files = self.read_fit_config()
 
-        default_properties = {'run_mode': 'multiprocess',
-                   'copy_number': 1,
-                   'pe_number': 3,
-                   'report_name': None,
-                   'results_directory': None,
-                   ##default parameters for ParameterEstimation
-                   'method': 'GeneticAlgorithm',
-                   'plot': False,
-                   'quantity_type': 'concentration',
-                   'append': False,
-                   'confirm_overwrite': False,
-                   'config_filename': 'PEConfigFile.xlsx',
-                   'overwrite_config_file': False,
-                   'prune_headers': True,
-                   'update_model': False,
-                   'randomize_start_values': True,
-                   'create_parameter_sets': False,
-                   'calculate_statistics': False,
-                   'use_config_start_values': False,
-                   #method options
-                   #'DifferentialEvolution',
-                   'number_of_generations': 200,
-                   'population_size': 50,
-                   'random_number_generator': 1,
-                   'seed': 0,
-                   'pf': 0.475,
-                   'iteration_limit': 50,
-                   'tolerance': 0.0001,
-                   'rho': 0.2,
-                   'scale': 10,
-                   'swarm_size': 50,
-                   'std_deviation': 0.000001,
-                   'number_of_iterations': 100000,
-                   'start_temperature': 1,
-                   'cooling_factor': 0.85,
-                   #experiment definition options
-                   #need to include options for defining multiple experimental files at once
-                   'row_orientation': [True]*len(self.exp_files),
-                   'experiment_type': ['timecourse']*len(self.exp_files),
-                   'first_row': [str(1)]*len(self.exp_files),
-                   'normalize_weights_per_experiment': [True]*len(self.exp_files),
-                   'row_containing_names': [str(1)]*len(self.exp_files),
-                   'separator': ['\t']*len(self.exp_files),
-                   'weight_method': ['mean_squared']*len(self.exp_files),
-                   'save': 'overwrite',
-                   'scheduled': False,
-                   'lower_bound': 0.000001,
-                   'upper_bound': 1000000}
+        self.default_properties = {'run_mode': 'multiprocess',
+                                   'copy_number': 1,
+                                   'pe_number': 3,
+                                   'metabolites': None, 
+                                   'global_quantities': None,
+                                   'local_parameters': None,
+                                   'report_name': None,
+                                   'results_directory': None,
+                                   ##default parameters for ParameterEstimation
+                                   'method': 'genetic_algorithm',
+                                   'plot': False,
+                                   'quantity_type': 'concentration',
+                                   'append': False,
+                                   'confirm_overwrite': False,
+                                   'config_filename': 'PEConfigFile.xlsx',
+                                   'overwrite_config_file': False,
+                                   'prune_headers': True,
+                                   'update_model': False,
+                                   'randomize_start_values': True,
+                                   'create_parameter_sets': False,
+                                   'calculate_statistics': False,
+                                   'use_config_start_values': False,
+                                   #method options
+                                   #'DifferentialEvolution',
+                                   'number_of_generations': 200,
+                                   'population_size': 50,
+                                   'random_number_generator': 1,
+                                   'seed': 0,
+                                   'pf': 0.475,
+                                   'iteration_limit': 50,
+                                   'tolerance': 0.0001,
+                                   'rho': 0.2,
+                                   'scale': 10,
+                                   'swarm_size': 50,
+                                   'std_deviation': 0.000001,
+                                   'number_of_iterations': 100000,
+                                   'start_temperature': 1,
+                                   'cooling_factor': 0.85,
+                                   #experiment definition options
+                                   #need to include options for defining multiple experimental files at once
+                                   'row_orientation': [True]*len(self.exp_files),
+                                   'experiment_type': ['timecourse']*len(self.exp_files),
+                                   'first_row': [str(1)]*len(self.exp_files),
+                                   'normalize_weights_per_experiment': [True]*len(self.exp_files),
+                                   'row_containing_names': [str(1)]*len(self.exp_files),
+                                   'separator': ['\t']*len(self.exp_files),
+                                   'weight_method': ['mean_squared']*len(self.exp_files),
+                                   'save': 'overwrite',
+                                   'scheduled': False,
+                                   'lower_bound': 0.000001,
+                                   'upper_bound': 1000000}
 
         self.convert_bool_to_numeric(self.default_properties)
         self.update_properties(self.default_properties)
-        self.update_kwargs(kwargs)
+        self.update_kwargs(self.kwargs)
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
         self._do_checks()
 
         self.sub_cps_dirs=self.create_workspace()
-        self.RMPE_dct=self.instantiate_run_multi_PEs_class()
+        self.MPE_dct=self.instantiate_run_multi_PEs_class()
         self.results_folder_dct=self.get_output_directories()
 
     def _do_checks(self):
@@ -4219,8 +4223,16 @@ class MultiModelFit(object):
             os.chdir(cps_dir)
             if os.path.isabs(self.config_filename):
                 self.config_filename = os.path.split(self.config_filename)[1]
-            dct[self.sub_cps_dirs[cps_dir]]=MultiParameterEstimation(self.sub_cps_dirs[cps_dir],
-                                                           self.exp_files,**self.kwargs)
+            m = model.Model(self.sub_cps_dirs[cps_dir])
+            # if self.metabolites != []:
+            #     metabs = m.metabolites
+            #
+            # if self.globs == []
+            #     globs = m.global_quantities
+            #     locs = m.local_parameters
+            dct[self.sub_cps_dirs[cps_dir]] = MultiParameterEstimation(
+                self.sub_cps_dirs[cps_dir], self.exp_files,
+                **self.kwargs)
 
         return dct
 
