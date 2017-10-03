@@ -3553,7 +3553,11 @@ class ParameterEstimation(_base._ModelBase):
         elif item['name'] in [i.name for i in self.global_quantities]:
             component = [i for i in self.global_quantities if i.name == item['name']][0]
         else:
-            raise errors.SomethingWentHorriblyWrongError('{} not a metabolite, local_parameter or global_quantity'.format(item['name']))
+            raise errors.SomethingWentHorriblyWrongError('"{}" is not a metabolite,'
+                                                         ' local_parameter or '
+                                                         'global_quantity. These are your'
+                                                         ' model variables: {}'.format(item['name']),
+                                                         str(self.model.all_variable_names))
 
         #initialize new element
         new_element=etree.Element('ParameterGroup', attrib={'name': 'FitItem'})

@@ -69,6 +69,7 @@ from sklearn import linear_model
 from sklearn import model_selection
 import _base
 from cached_property import cached_property
+import matplotlib.patches as mpatches
 
 LOG=logging.getLogger(__name__)
 
@@ -211,9 +212,6 @@ class Parse(object):
             )
 
         if isinstance(self.cls_instance, tasks.Scan):
-            LOG.debug('type cls instance --> {}'.format(type(self.cls_instance)))
-            LOG.debug('type cls instance. scan type--> {}'.format(self.cls_instance.scan_type))
-
             ## '1' is copasi code name for a scan
             if self.cls_instance.scan_type != '1':
                 raise errors.InputError(
@@ -369,7 +367,7 @@ class PlotTimeCourse(PlotKwargs):
 
         self.default_properties = {
             'x': 'time',
-            'y': [i.name for i in self.cls.model.metabolites] + [i.name for i in self.cls.model.global_quantities],
+            'y': None,
             'log10': False,
             'separate': True,
             'savefig': False,
@@ -444,7 +442,7 @@ class PlotTimeCourse(PlotKwargs):
             self.ylabel = 'Concentration ({})'.format(self.cls.model.quantity_unit)
 
         if self.savefig and (self.separate is False) and (self.filename is None):
-            self.filename = 'TimeCourse.jpeg'
+            self.filename = 'TimeCourse.eps'
             LOG.warning('filename is None. Setting default filename to {}'.format(self.filename))
 
     def plot(self):
@@ -453,7 +451,8 @@ class PlotTimeCourse(PlotKwargs):
         :return:
         """
         if self.y == None:
-            self.y == self.data.keys()
+            self.y = self.data.keys()
+            self.y = [i for i in self.y if i.lower() != 'time']
 
         if isinstance(self.y, str):
             self.y = [self.y]
@@ -487,11 +486,13 @@ class PlotTimeCourse(PlotKwargs):
             plt.xlabel(self.xlabel)
             plt.ylabel(self.ylabel)
             if self.savefig:
+                dirs = self.create_directory(self.results_directory)
+
                 if self.separate:
-                    fle = os.path.join(self.results_directory, '{}.jpeg'.format(y_var))
+                    fle = os.path.join(dirs, '{}.eps'.format(y_var))
                     fig.savefig(fle, dpi=self.dpi, bbox_inches='tight')
                 else:
-                    fle = os.path.join(self.results_directory, self.filename)
+                    fle = os.path.join(dirs, self.filename)
                     fig.savefig(fle, dpi=self.dpi, bbox_inches='tight')
 
         if self.show:
@@ -561,7 +562,6 @@ class PlotParameterEstimation(PlotKwargs):
 
         default_y = [i.name for i in self.cls.model.metabolites] + [i.name for i in self.cls.model.global_quantities]
         self.default_properties = {
-            'x': None,
             'y': None,
             'log10': False,
             'savefig': False,
@@ -676,7 +676,12 @@ class PlotParameterEstimation(PlotKwargs):
         """
         if self.y == None:
             self.y = self.read_experimental_data().values()[0].keys()
+
+            ## remove time from default plotting vars
             self.y = [i for i in self.y if i != 'Time']
+
+            ## remove any independent variable from default plotting vars
+            self.y = [i for i in self.y if i[-6:] != '_indep']
         exp_data = self.read_experimental_data()
         sim_data = self.simulate_time_course()
 
@@ -918,7 +923,7 @@ class Boxplot(PlotKwargs):
             if self.savefig:
                 self.results_directory = self.create_directory()
                 fle = os.path.join(self.results_directory,
-                                   'Boxplot{}.jpeg'.format(label_set))
+                                   'Boxplot{}.eps'.format(label_set))
                 plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
 
     def divide_data(self):
@@ -1011,7 +1016,7 @@ class RssVsIterations(PlotKwargs):
         plt.xlabel('Rank of Best Fit')
         if self.savefig:
             self.results_directory = self.create_directory()
-            fle = os.path.join(self.results_directory, 'RssVsIterations.jpeg')
+            fle = os.path.join(self.results_directory, 'RssVsIterations.eps')
             plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
 
 
@@ -1216,7 +1221,7 @@ class Histograms(PlotKwargs):
             if self.savefig:
                 self.create_directory(self.results_directory)
                 fname = os.path.join(self.results_directory,
-                                     misc.RemoveNonAscii(parameter).filter+'.jpeg')
+                                     misc.RemoveNonAscii(parameter).filter+'.eps')
                 plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
 
 
@@ -1298,7 +1303,7 @@ class Scatters(PlotKwargs):
                 if self.savefig:
                     x_dir = os.path.join(self.results_directory, x_var)
                     self.create_directory(x_dir)
-                    fle = os.path.join(x_dir, '{}.jpeg'.format(y_var))
+                    fle = os.path.join(x_dir, '{}.eps'.format(y_var))
                     plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
 
         if self.show:
@@ -1410,7 +1415,7 @@ class LinearRegression(PlotKwargs):
         if self.savefig:
             save_dir = os.path.join(self.results_directory, 'LinearRegression')
             self.create_directory(self.results_directory)
-            fname = os.path.join(self.results_directory, 'linregress_scores.jpeg')
+            fname = os.path.join(self.results_directory, 'linregress_scores.eps')
             plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
         
         
@@ -1420,7 +1425,7 @@ class LinearRegression(PlotKwargs):
         plt.title('Lasso Regression. Y=RSS, X=all other Parameters'+'(n={})'.format(self.data.shape[0]), fontsize=self.title_fontsize)
         if self.savefig:
             self.create_directory(self.results_directory)
-            fname = os.path.join(self.results_directory, 'linregress_RSS.jpeg')
+            fname = os.path.join(self.results_directory, 'linregress_RSS.eps')
             plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
                 
         
@@ -1438,7 +1443,7 @@ class LinearRegression(PlotKwargs):
         plt.xlabel('')
         if self.savefig:
             self.create_directory(self.results_directory)
-            fname = os.path.join(self.results_directory, 'linregress_parameters.jpeg')
+            fname = os.path.join(self.results_directory, 'linregress_parameters.eps')
             plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
 
 
@@ -1457,10 +1462,10 @@ class EnsembleTimeCourse(object):
     def __init__(self, cls, **kwargs):
         self.cls = cls
         options = {'sep': '\t',
-                   'y' : None,
+                   'y': None,
                    'x': 'time',
                    'truncate_mode': 'percent',
-                   'theta': 5,
+                   'theta': 100,
                    'xtick_rotation': 'horizontal',
                    'ylabel': 'Frequency',
                    'savefig': False,
@@ -1471,12 +1476,16 @@ class EnsembleTimeCourse(object):
                    'estimator': numpy.mean,
                    'n_boot': 10000,
                    'ci': 95,
-                   'color': 'deep',
-                   'show': False} ##resolution: intervals in time course
+                   'color': 'blue',
+                   'show': False,
+                   'silent': True,
+                   'data_filename': None, #For outputting ensemble data to file
+                   'exp_color': 'red'
+                   }
         
         for i in kwargs.keys():
             assert i in options.keys(),'{} is not a keyword argument for ParameterEnsemble'.format(i)
-        options.update( kwargs)  
+        options.update(kwargs)
         self.kwargs = options
         self.update_properties(self.kwargs)
         self._do_checks()
@@ -1485,14 +1494,19 @@ class EnsembleTimeCourse(object):
         self.data = self.truncate(self.data,
                                   mode=self.truncate_mode,
                                   theta=self.theta)
-
-
-
+        if self.data.empty:
+            raise errors.InputError('No data. Check arguments to truncate_data and theta '
+                                    'or your parameter estimation configuration '
+                                    'and data files')
         self.experimental_data = self.parse_experimental_files()
         self.exp_times = self.get_experiment_times()
         self.ensemble_data = self.simulate_ensemble()
         self.ensemble_data.index = self.ensemble_data.index.rename(['Index','Time'])
+
+        if self.data_filename != None:
+            self.ensemble_data.to_csv(self.data_filename)
         self.plot()
+        # print self.ensemble_data
 
     def _do_checks(self):
         
@@ -1531,22 +1545,20 @@ class EnsembleTimeCourse(object):
         """
         
         """
-
-
         ## collect end times for each experiment
         ##in order to find the biggest
         end_times = []
         for i in self.exp_times:
             ## start creating a results dict while were at it
             end_times.append(self.exp_times[i]['end'])
-        intervals =  max(end_times)/self.step_size
-        
-        d={}
+        intervals = max(end_times) / self.step_size
+        d = {}
         for i in range(self.data.shape[0]):
-            LOG.info('inserting parameter set {}'.format(i))
-            I=model.InsertParameters(self.cls.model, df=self.data, index=i)
-            LOG.info(I.parameters.transpose().sort_index())
-            TC = tasks.TimeCourse(self.cls.model.copasi_file,
+            if not self.silent:
+                LOG.info('inserting parameter set {}'.format(i))
+                LOG.info(I.parameters.transpose().sort_index())
+            I = model.InsertParameters(self.cls.model, df=self.data, index=i)
+            TC = tasks.TimeCourse(I.model,
                                   end=max(end_times),
                                   step_size=self.step_size,
                                   intervals=intervals,
@@ -1561,7 +1573,6 @@ class EnsembleTimeCourse(object):
         
         """
         if self.y == None:
-            LOG.debug('ensemble data keys --> {}'.format(self.ensemble_data.keys()))
             self.y = list(self.ensemble_data.keys())
 
         if isinstance(self.y, list) != True:
@@ -1574,24 +1585,40 @@ class EnsembleTimeCourse(object):
         data = self.ensemble_data.reset_index(level=1, drop=True)
         data.index.name = 'ParameterFitIndex'
         data = data.reset_index()
+        data.to_csv('file.csv')
+        LOG.debug('df.head is \n\n--> {}'.format(
+            data.sort_values(by=['Time', 'ParameterFitIndex']).head(5)))
+        # seaborn.despine()
         for parameter in self.y:
-            if parameter not in ['ParameterFitIndex','Time']:
+            if parameter not in ['ParameterFitIndex', 'Time']:
                 plt.figure()
-                ax = seaborn.tsplot(data, time='Time', value=parameter,
-                                 unit='ParameterFitIndex',
-                                 estimator=self.estimator,
-                                 n_boot=self.n_boot,
-                                 ci=self.ci,
-                                 color=self.color)
-                LOG.debug('experiemntal data --> {}'.format(self.experimental_data))
-                LOG.debug('parameter --> {}'.format(parameter))
-                plt.plot(self.experimental_data[self.experimental_data.keys()[0]]['Time'],
+                # seaborn.set_palette([self.color])
+                ax1 = seaborn.tsplot(
+                    data=data, time='Time', value=parameter,
+                    unit='ParameterFitIndex',
+                    err_style='ci_band',
+                    estimator=self.estimator,
+                    n_boot=self.n_boot,
+                    ci=self.ci,
+                    color=self.color,
+                )
+
+
+                ax2 = plt.plot(self.experimental_data[self.experimental_data.keys()[0]]['Time'],
                                               self.experimental_data[self.experimental_data.keys()[0]][parameter],
-                                              'ro', label='Exp')
+                                              '--', color=self.exp_color, label='Exp', alpha=0.4, marker='o')
+                sim_patch = mpatches.Patch(color=self.color, label='Sim', alpha=0.4)
+                exp_patch = mpatches.Patch(color=self.exp_color, label='Exp', alpha=0.4)
+                plt.legend(handles=[sim_patch, exp_patch], loc=(1, 0.5))
+
+                # handles, labels = ax1.get_legend_handles_labels()
+                # ax1.legend(handles, labels)
+
+                # plt.legend([ax1, ax2], ['Sim', 'Exp'], loc=(1,0.5))
                 plt.title('Ensemble Time Course\n for {} (n={})'.format(parameter, self.data.shape[0]))
                 if self.savefig:
                     self.create_directory(self.results_directory)
-                    fname = os.path.join(self.results_directory, '{}.jpeg'.format(misc.RemoveNonAscii(parameter).filter))
+                    fname = os.path.join(self.results_directory, '{}.png'.format(misc.RemoveNonAscii(parameter).filter))
                     plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
         
 
@@ -1608,7 +1635,7 @@ class ModelSelection(object):
         self.number_models=self.get_num_models()
         
         options={#report variables
-                 'savefig':False,
+                 'savefig': False,
                  'results_directory':self.multi_model_fit.project_dir,
                  'dpi':300}
                  

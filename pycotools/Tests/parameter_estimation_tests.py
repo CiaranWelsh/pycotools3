@@ -336,6 +336,55 @@ class ParameterEstimationConfigFileTests(_test_base._BaseTest):
                 boolean = True
         self.assertFalse(boolean)
 
+
+class TwoParameterEstimationTests(_test_base._BaseTest):
+    def setUp(self):
+        super(TwoParameterEstimationTests, self).setUp()
+
+        self.TC1 = pycotools.tasks.TimeCourse(self.model, end=1000, step_size=100,
+                                              intervals=10, report_name='report1.txt')
+
+        self.model.set('metabolite', 'A', 150, match_field='name', change_field='concentration')
+
+        self.TC2 = pycotools.tasks.TimeCourse(self.model, end=1000, step_size=100,
+                                              intervals=10, report_name='report2.txt')
+
+        ## add some noise
+        data1 = pycotools.misc.add_noise(self.TC1.report_name)
+        data2 = pycotools.misc.add_noise(self.TC2.report_name)
+
+        ## remove the data
+        os.remove(self.TC1.report_name)
+        os.remove(self.TC2.report_name)
+
+        ## rewrite the data with noise
+        data1.to_csv(self.TC1.report_name, sep='\t')
+        data2.to_csv(self.TC2.report_name, sep='\t')
+
+        pycotools.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
+        pycotools.misc.correct_copasi_timecourse_headers(self.TC2.report_name)
+
+    def test_setup_has_two_data_files(self):
+        PE = pycotools.tasks.ParameterEstimation(
+            self.model, [self.TC1.report_name, self.TC2.report_name], method='genetic_algorithm',
+            population_size=5, number_of_generations=20,
+            metabolites=[], local_parameters=[], lower_bound=0.1,
+            upper_bound=100)
+        if os.path.isfile(PE.config_filename):
+            os.remove(PE.config_filename)
+
+        PE.write_config_file()
+        PE.setup()
+
+        query = '//*[@name="File Name"]'
+        count = 0
+        for i in PE.model.xml.xpath(query):
+            count += 1
+        self.assertEqual(count, 2)
+
+
+
+
 if __name__ == '__main__':
     unittest.main()
 

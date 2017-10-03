@@ -38,7 +38,7 @@ import shutil
 import pandas
 from pycotools.Tests import _test_base
 from random import shuffle, random
-from pycotools.pycopi import InsertParameters
+from pycotools.model import InsertParameters
 
 
 
@@ -46,14 +46,14 @@ class InsertParametersTests(_test_base._BaseTest):
     def setUp(self):
         super(InsertParametersTests, self).setUp()
         self.param_dct = {'A': 5,
-                     'B2C': 6,
-                     '(B2C).k2': 7}
-        self.I = pycotools.pycopi.InsertParameters(self.model,
+                          'B2C': 6,
+                          '(B2C).k2': 7}
+        self.I = pycotools.model.InsertParameters(self.model,
                                                    parameter_dict=self.param_dct)
 
     def test_insert_dct_local(self):
         self.model = self.I.insert_locals()
-        self.model.save()
+        # self.model.save()
         self.model.open()
         # new_model =  pycotools.model.Model(self.model.copasi_file)
         # print pandas.concat([i.to_dict() for i in new_model.local_parameters])
