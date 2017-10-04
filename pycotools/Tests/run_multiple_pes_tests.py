@@ -74,9 +74,9 @@ class MultiParameterEstimationTests(_test_base._BaseTest):
         self.MPE.write_config_file()
         self.MPE.setup()
 
-    def test_output_directory(self):
-        self.assertTrue(os.path.isdir(self.MPE.results_directory))
-
+    # def test_output_directory(self):
+    #     self.assertTrue(os.path.isdir(self.MPE.results_directory))
+    #
     def test_write_config_file(self):
         """
         Test that RMPE produces a config file
@@ -112,7 +112,7 @@ class MultiParameterEstimationTests(_test_base._BaseTest):
         test that the total number of PEs = copy_number*pe_number
         :return:
         """
-        x=self.MPE.copy_number*self.MPE.pe_number
+        x = self.MPE.copy_number*self.MPE.pe_number
         self.MPE.run()
         df_dct = {}
         for f in os.listdir(self.MPE.results_directory):

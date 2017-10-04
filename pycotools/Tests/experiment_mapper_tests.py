@@ -30,7 +30,7 @@ import site
 site.addsitedir(r'/home/b3053674/Documents/pycotools')
 
 import pycotools
-from pycotools.Tutorial import test_models
+from pycotools.Tests import test_models
 import unittest
 import glob
 import os
@@ -54,6 +54,9 @@ class ExperimentMapperTests(_test_base._BaseTest):
                                                step_size=100,
                                                intervals=10,
                                                report_name='report2.txt')
+
+        pycotools.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
+        pycotools.misc.correct_copasi_timecourse_headers(self.TC2.report_name)
 
         df = pandas.read_csv(self.TC2.report_name, sep='\t')
         ## remove square brackets around species
