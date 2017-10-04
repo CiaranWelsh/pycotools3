@@ -109,14 +109,14 @@ class ComparisonMethodsMixin(Mixin):
 
 
 class Model(_base._Base):
-    def __init__(self, copasi_file, **kwargs):
+    def __init__(self, copasi_file, quantity_type='concentration', **kwargs):
         super(Model, self).__init__(**kwargs)
         self._copasi_file = copasi_file
+        self.quantity_type = quantity_type
         self.xml = tasks.CopasiMLParser(copasi_file).copasiML
         ## fill this dict after class is finished
         self.default_properties = {}
-        self.update_kwargs(kwargs)
-        self.quantity_type = 'concentration'
+        self.default_properties.update(kwargs)
 
         if self.quantity_type not in ['concentration',
                                       'particle_numbers']:

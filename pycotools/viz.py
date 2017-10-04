@@ -102,7 +102,7 @@ class SaveFigMixin(Mixin):
         plt.savefig(filename, dpi=dpi, bbox_inches='tight')
 
 
-@mixin(_base.UpdatePropertiesMixin)
+@mixin(tasks.UpdatePropertiesMixin)
 class TruncateData(object):
     '''
     Parameter estimation data in systems biology usually have runs which fall
@@ -430,7 +430,7 @@ class Parse(object):
         return df.reset_index(drop=True)
 
 
-@mixin(_base.UpdatePropertiesMixin)
+@mixin(tasks.UpdatePropertiesMixin)
 @mixin(SaveFigMixin)
 @mixin(ParseMixin)
 @mixin(CreateResultsDirectoryMixin)
@@ -574,7 +574,7 @@ class PlotTimeCourse(PlotKwargs):
             plt.show()
         return figures
 
-@mixin(_base.UpdatePropertiesMixin)
+@mixin(tasks.UpdatePropertiesMixin)
 @mixin(SaveFigMixin)
 @mixin(ParseMixin)
 @mixin(CreateResultsDirectoryMixin)
@@ -620,7 +620,7 @@ class PlotScan(object):
             self.results_directory
         )
 
-@mixin(_base.UpdatePropertiesMixin)
+@mixin(tasks.UpdatePropertiesMixin)
 @mixin(SaveFigMixin)
 @mixin(ParseMixin)
 @mixin(CreateResultsDirectoryMixin)
@@ -798,7 +798,7 @@ class PlotParameterEstimation(PlotKwargs):
             plt.show()
 
 
-@mixin(_base.UpdatePropertiesMixin)
+@mixin(tasks.UpdatePropertiesMixin)
 @mixin(SaveFigMixin)
 @mixin(ParseMixin)
 @mixin(CreateResultsDirectoryMixin)
@@ -897,7 +897,7 @@ class Boxplot(PlotKwargs):
         return [list(i) for i in l]
 
 
-@mixin(_base.UpdatePropertiesMixin)
+@mixin(tasks.UpdatePropertiesMixin)
 @mixin(ParseMixin)
 @mixin(TruncateDataMixin)
 @mixin(CreateResultsDirectoryMixin)
@@ -984,7 +984,7 @@ class RssVsIterations(PlotKwargs):
             plt.show()
 
 
-@mixin(_base.UpdatePropertiesMixin)
+@mixin(tasks.UpdatePropertiesMixin)
 @mixin(ParseMixin)
 @mixin(TruncateDataMixin)
 @mixin(CreateResultsDirectoryMixin)
@@ -1139,7 +1139,7 @@ class Pca(PlotKwargs):
             fle = os.path.join(self.results_directory, 'Pca_by_{}'.format(self.by))
             plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
 
-@mixin(_base.UpdatePropertiesMixin)
+@mixin(tasks.UpdatePropertiesMixin)
 @mixin(ParseMixin)
 @mixin(TruncateDataMixin)
 @mixin(CreateResultsDirectoryMixin)
@@ -1209,7 +1209,7 @@ class Histograms(PlotKwargs):
                 plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
 
 
-@mixin(_base.UpdatePropertiesMixin)
+@mixin(tasks.UpdatePropertiesMixin)
 @mixin(ParseMixin)
 @mixin(TruncateDataMixin)
 @mixin(CreateResultsDirectoryMixin)
@@ -1293,7 +1293,7 @@ class Scatters(PlotKwargs):
         if self.show:
             plt.show()
 
-@mixin(_base.UpdatePropertiesMixin)
+@mixin(tasks.UpdatePropertiesMixin)
 @mixin(ParseMixin)
 @mixin(TruncateDataMixin)
 @mixin(CreateResultsDirectoryMixin)
@@ -1431,7 +1431,7 @@ class LinearRegression(PlotKwargs):
             plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
 
 
-@mixin(_base.UpdatePropertiesMixin)
+@mixin(tasks.UpdatePropertiesMixin)
 @mixin(ParseMixin)
 @mixin(TruncateDataMixin)
 @mixin(CreateResultsDirectoryMixin)
@@ -1655,7 +1655,7 @@ class EnsembleTimeCourse(object):
 # @mixin(DefaultResultsDirectoryMixin)
 
 @mixin(TruncateDataMixin)
-@mixin(_base.UpdatePropertiesMixin)
+@mixin(tasks.UpdatePropertiesMixin)
 class ModelSelection(object):
     '''
     ## could give

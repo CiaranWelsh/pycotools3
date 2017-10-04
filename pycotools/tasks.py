@@ -612,7 +612,7 @@ class RunParallel(object):
 
 
 
-@mixin(_base.UpdatePropertiesMixin)
+@mixin(UpdatePropertiesMixin)
 class iPythonParallel(_base._Base):
     def __init__(self, models, **kwargs):
         self.models = models
@@ -3974,8 +3974,11 @@ class MultiParameterEstimation(ParameterEstimation):
 #
 
 
-
-class MultiModelFit(_base._ModelBase):
+@mixin(UpdatePropertiesMixin)
+@mixin(Bool2Numeric)
+@mixin(model.ReadModelMixin)
+@mixin(CheckIntegrityMixin)
+class MultiModelFit(object):
     '''
     Coordinate a systematic multi model fitting parameter estimation and
     compare results using AIC/BIC.
@@ -4248,10 +4251,14 @@ class MultiModelFit(_base._ModelBase):
 
 
 @mixin(model.GetModelComponentFromStringMixin)
-class ProfileLikelihood(_base._ModelBase):
+@mixin(UpdatePropertiesMixin)
+@mixin(Bool2Numeric)
+@mixin(model.ReadModelMixin)
+@mixin(CheckIntegrityMixin)
+class ProfileLikelihood(object):
     def __init__(self, model, **kwargs):
         super(ProfileLikelihood, self).__init__(model, **kwargs)
-        self.model = model
+        self.model = self.read_model(model)
         self.kwargs = kwargs
 
         self.default_properties = {
