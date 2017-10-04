@@ -44,12 +44,12 @@ class DeterministicTimeCourseTests(_test_base._BaseTest):
                                               step_size=100, intervals=10,
                                               max_internal_steps=50000,
                                               report_name='test_time_course.csv')
+
         self.timecourse = self.TC.model#self.TC.set_timecourse()
         self.timecourse.save()
         self.new_model = pycotools.tasks.CopasiMLParser(self.copasi_file).copasiML
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
         self.list_of_reports = '{http://www.copasi.org/static/schema}ListOfReports'
-
 
 
     def test_report_definition(self):
@@ -128,7 +128,7 @@ class DeterministicTimeCourseTests(_test_base._BaseTest):
         :return:
         """
         p = pycotools.viz.Parse(self.TC)
-        df = p.parse_timecourse()
+        df = p.from_timecourse()
         self.assertTrue(isinstance(df, pandas.core.frame.DataFrame))
 
 
@@ -138,7 +138,7 @@ class DeterministicTimeCourseTests(_test_base._BaseTest):
         :return:
         """
         p = pycotools.viz.Parse(self.TC)
-        df = p.parse_timecourse()
+        df = p.from_timecourse()
         boolean = True
         ## set boolean to false if square brackets still in timecourse
         for i in list(df.columns):

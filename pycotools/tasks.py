@@ -102,7 +102,122 @@ class GetModelVariableFromStringMixin(Mixin):
         assert isinstance(v, str) != True
         return v
 
+class UpdatePropertiesMixin(Mixin):
 
+    def update_properties(self, kwargs):
+        """
+        method for updating properties from kwargs
+
+        :param kwargs: dict of options for subclass
+        :return: void
+        """
+        for k in kwargs:
+            try:
+                getattr(self, k)
+                setattr(self, k, kwargs[k])
+            except AttributeError:
+                setattr(self, k, kwargs[k])
+
+class Bool2Numeric(Mixin):
+    @staticmethod
+    def convert_bool_to_numeric(dct):
+        """
+        CopasiML uses 1's and 0's for True or False in some
+        but not all places. When one of these options
+        is required by the user and is specified as bool,
+        this class converts them into 1's or 0's.
+
+        Use this method in early on in constructor for
+        all subclasses where this applies.
+
+
+        :param: dct. Python dictionary.  __dict__ or kwargs or options
+        :return:
+        """
+        lst = ['append',
+               'confirm_overwrite',
+               'output_event',
+               'scheduled',
+               'automatic_step_size',
+               'start_in_steady_state',
+               'output_event',
+               'start_in_steady_state',
+               'integrate_reduced_model',
+               'use_random_seed',
+               'output_in_subtask',
+               'adjust_initial_conditions',
+               'update_model',
+               'output_in_subtask',
+               'adjust_initial_conditions',
+               'create_parameter_sets',
+               'calculate_statistics',
+               'randomize_start_values',
+               ]
+        for k, v in dct.items():
+            if k in lst:
+                if v == True:
+                    dct[k] = '1'
+                elif v == False:
+                    dct[k] = '0'
+                elif v == '1':
+                    pass
+                elif v == '0':
+                    pass
+                else:
+                    raise Exception('{} is not True or False'.format(v))
+        return dct
+
+class Bool2Str():
+    """
+    copasiML expects strings and we pythoners want to use python booleans not strings
+    This class quickly converts between them
+    """
+    def __init__(self,dct):
+        self.dct = dct
+        if isinstance(self.dct,dict)!=True:
+            raise errors.InputError('Input must be dict')
+
+        self.acceptable_kwargs = ['append','confirm_overwrite','update_model',
+                                  'output_in_subtask','adjust_initial_conditions',
+                                  'randomize_start_values','log10','scheduled','output_event']
+
+    def convert(self,boolean):
+        if boolean == True:
+            return "true"
+        elif boolean == False:
+            return "false"
+        else:
+            raise errors.InputError('Input should be boolean not {}'.format(isinstance(boolean)))
+
+    def convert_dct(self):
+        """
+
+        ----
+        return
+        """
+        for kwarg in self.dct.keys():
+            if kwarg in self.acceptable_kwargs:
+                if self.dct[kwarg]==True:
+                    self.dct.update({kwarg:"true"})
+                else:
+                    self.dct.update({kwarg:"false"})
+#
+        return self.dct
+
+
+class CheckIntegrityMixin(Mixin):
+    @staticmethod
+    def check_integrity(allowed, given):
+        """
+        Method to raise an error when a wrong
+        kwarg is passed to a subclass
+        :param: allowed. List of allowed kwargs
+        :param: given. List of kwargs given by user or default
+        :return: 0
+        """
+        for key in given:
+            if key not in allowed:
+                raise errors.InputError('{} not in {}'.format(key, allowed))
 
 class CopasiMLParser(object):
 
@@ -141,8 +256,11 @@ class CopasiMLParser(object):
         root=etree.ElementTree(xml)
         root.write(copasi_filename)
 
-
-class Run(_base._ModelBase):
+@mixin(UpdatePropertiesMixin)
+@mixin(Bool2Numeric)
+@mixin(model.ReadModelMixin)
+@mixin(CheckIntegrityMixin)
+class Run(object):
     """
     ## TODO apply a Queue.Queue system to multirun as in MultiParameterEstimation._setup_scan
     """
@@ -152,15 +270,16 @@ class Run(_base._ModelBase):
         :param model: instance of model.Model
         :param kwargs:
         """
-        super(Run, self).__init__(model, **kwargs)
+        self.model = self.read_model(model)
+        self.kwargs = kwargs
 
         self.default_properties = {'task': 'time_course',
                                    'mode': True,
                                    'sge_job_filename': None}
 
+        self.default_properties.update(self.kwargs)
         self.convert_bool_to_numeric(self.default_properties)
         self.update_properties(self.default_properties)
-        self.update_kwargs(kwargs)
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
         self._do_checks()
 
@@ -555,33 +674,38 @@ class iPythonParallel(_base._Base):
 
 
 
-class ParseStrVariableMixin(Mixin):
-    """
-    Mixin class for taking a string
-    and returning the corresponding
-    model quantity
-    """
-    ## allow a user to input a string not pycotools.model class
-    @staticmethod
-    def conversion(model, variable):
+# class ParseStrVariableMixin(Mixin):
+#     """
+#     Mixin class for taking a string
+#     and returning the corresponding
+#     model quantity
+#     """
+#     ## allow a user to input a string not pycotools.model class
+#     @staticmethod
+#     def conversion(model, variable):
+#
+#         if isinstance(variable, str):
+#             if variable in [i.name for i in model.metabolites]:
+#                 variable = model.get('metabolite', variable,
+#                                                by='name')
+#
+#             elif variable in [i.name for i in model.global_quantities]:
+#                 variable = model.get('global_quantity', variable, by='name')
+#
+#             elif self.variable in [i.name for i in self.model.local_parameters]:
+#                 variable = model.get('constant', variable, by='name')
+#         else:
+#             raise errors.SomethingWentHorriblyWrongError('{} is not in your model'.format(variable))
+#         return variable
 
-        if isinstance(variable, str):
-            if variable in [i.name for i in model.metabolites]:
-                variable = model.get('metabolite', variable,
-                                               by='name')
 
-            elif variable in [i.name for i in model.global_quantities]:
-                variable = model.get('global_quantity', variable, by='name')
-
-            elif self.variable in [i.name for i in self.model.local_parameters]:
-                variable = model.get('constant', variable, by='name')
-        else:
-            raise errors.SomethingWentHorriblyWrongError('{} is not in your model'.format(variable))
-        return variable
-
-
-@mixin(ParseStrVariableMixin)
-class Reports(_base._ModelBase):
+@mixin(model.GetModelComponentFromStringMixin)
+# @mixin(GetModelVariableFromStringMixin)
+@mixin(UpdatePropertiesMixin)
+@mixin(model.ReadModelMixin)
+@mixin(CheckIntegrityMixin)
+@mixin(Bool2Numeric)
+class Reports(object):
     """
     Creates reports in copasi output specification section.
     Use:
@@ -637,8 +761,9 @@ class Reports(_base._ModelBase):
 
     """
     def __init__(self, model, **kwargs):
-        super(Reports, self).__init__(model, **kwargs)
-
+        # super(Reports, self).__init__(model, **kwargs)
+        self.model = self.read_model(model)
+        self.kwargs = kwargs
         self.default_properties = {'metabolites': self.model.metabolites,
                                  'global_quantities': self.model.global_quantities,
                                  'local_parameters': self.model.local_parameters,
@@ -652,9 +777,10 @@ class Reports(_base._ModelBase):
                                  'variable': self.model.metabolites[0], #only for profile_likelihood
                                  'directory': None,
                                  }
+
+        self.default_properties.update(self.kwargs)
         self.convert_bool_to_numeric(self.default_properties)
         self.update_properties(self.default_properties)
-        self.update_kwargs(kwargs)
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
         self.__do_checks()
 
@@ -1023,45 +1149,13 @@ class Reports(_base._ModelBase):
         return self.model
 
 
-class Bool2Str():
-    """
-    copasiML expects strings and we pythoners want to use python booleans not strings
-    This class quickly converts between them
-    """
-    def __init__(self,dct):
-        self.dct = dct
-        if isinstance(self.dct,dict)!=True:
-            raise errors.InputError('Input must be dict')
 
-        self.acceptable_kwargs = ['append','confirm_overwrite','update_model',
-                                  'output_in_subtask','adjust_initial_conditions',
-                                  'randomize_start_values','log10','scheduled','output_event']
-
-    def convert(self,boolean):
-        if boolean == True:
-            return "true"
-        elif boolean == False:
-            return "false"
-        else:
-            raise errors.InputError('Input should be boolean not {}'.format(isinstance(boolean)))
-
-    def convert_dct(self):
-        """
-
-        ----
-        return
-        """
-        for kwarg in self.dct.keys():
-            if kwarg in self.acceptable_kwargs:
-                if self.dct[kwarg]==True:
-                    self.dct.update({kwarg:"true"})
-                else:
-                    self.dct.update({kwarg:"false"})
-#
-        return self.dct
-
-@mixin(GetModelVariableFromStringMixin)
-class TimeCourse(_base._ModelBase):
+# @mixin(GetModelVariableFromStringMixin)
+@mixin(UpdatePropertiesMixin)
+@mixin(Bool2Numeric)
+@mixin(model.ReadModelMixin)
+@mixin(CheckIntegrityMixin)
+class TimeCourse(object):
     """
 
     Change the plotting functions of time course.
@@ -1072,56 +1166,56 @@ class TimeCourse(_base._ModelBase):
     """
 
     def __init__(self, model, **kwargs):
-        super(TimeCourse, self).__init__(model, **kwargs)
-
+        self.model = self.read_model(model)
         default_report_name = os.path.join(os.path.dirname(self.model.copasi_file), 'TimeCourseData.txt')
 
-        self.default_properties = {'intervals': 100,
-                                   'step_size': 0.01,
-                                   'end': 1,
-                                   'start': 0,
-                                   'update_model': False,
-                                   # report variables
-                                   'metabolites': self.model.metabolites,
-                                   'global_quantities': self.model.global_quantities,
-                                   'quantity_type': 'concentration',
-                                   'report_name': default_report_name,
-                                   'append': False,
-                                   'confirm_overwrite': False,
-                                   'method': 'deterministic',
-                                   'output_event': False,
-                                   'scheduled': True,
-                                   'automatic_step_size': False,
-                                   'start_in_steady_state': False,
-                                   'integrate_reduced_model': False,
-                                   'relative_tolerance': 1e-6,
-                                   'absolute_tolerance': 1e-12,
-                                   'max_internal_steps': 10000,
-                                   'max_internal_step_size': 0,
-                                   'subtype': 2,
-                                   'use_random_seed': True,
-                                   'random_seed': 1,
-                                   'epsilon': 0.001,
-                                   'lower_limit': 800,
-                                   'upper_limit': 1000,
-                                   'partitioning_interval': 1,
-                                   'runge_kutta_step_size': 0.001,
-                                   'run': True,
-                                   'plot': False,
-                                   'correct_headers':  True,
-                                   'save': False}
-
-        self.convert_bool_to_numeric(self.default_properties)
-        self.update_properties(self.default_properties)
-        self.update_kwargs(kwargs)
-        self.check_integrity(self.default_properties.keys(), kwargs.keys())
+        default_properties = {'intervals': 100,
+                               'step_size': 0.01,
+                               'end': 1,
+                               'start': 0,
+                               'update_model': False,
+                               # report variables
+                               'metabolites': self.model.metabolites,
+                               'global_quantities': self.model.global_quantities,
+                               'quantity_type': 'concentration',
+                               'report_name': default_report_name,
+                               'append': False,
+                               'confirm_overwrite': False,
+                               'method': 'deterministic',
+                               'output_event': False,
+                               'scheduled': True,
+                               'automatic_step_size': False,
+                               'start_in_steady_state': False,
+                               'integrate_reduced_model': False,
+                               'relative_tolerance': 1e-6,
+                               'absolute_tolerance': 1e-12,
+                               'max_internal_steps': 10000,
+                               'max_internal_step_size': 0,
+                               'subtype': 2,
+                               'use_random_seed': True,
+                               'random_seed': 1,
+                               'epsilon': 0.001,
+                               'lower_limit': 800,
+                               'upper_limit': 1000,
+                               'partitioning_interval': 1,
+                               'runge_kutta_step_size': 0.001,
+                               'run': True,
+                               'plot': False,
+                               'correct_headers':  True,
+                               'save': False}
+        default_properties.update(kwargs)
+        default_properties = self.convert_bool_to_numeric(default_properties)
+        self.check_integrity(default_properties.keys(), kwargs.keys())
+        self.update_properties(default_properties)
         self._do_checks()
 
         self.set_timecourse()
         self.set_report()
 
         self.run_task()
-        # self.correct_output_headers()
+
+
+        ## self.correct_output_headers()
 
         if self.save:
             self.model.save()
@@ -1299,7 +1393,7 @@ class TimeCourse(_base._ModelBase):
         :return:lxml.etree._Element
         """
         method = etree.Element('Method', attrib={'name': 'Deterministic (LSODA)',
-                                                 'type':'Deterministic(LSODA)'})
+                                                 'type': 'Deterministic(LSODA)'})
 
         dct = {'name': 'Integrate Reduced Model',
                'type': 'bool',
@@ -1667,38 +1761,30 @@ class TimeCourse(_base._ModelBase):
         cros reference the timecourse task with the newly created
         time course reort to get the key
         '''
+        all_reports = []
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
+            all_reports.append(i.attrib['name'])
             if i.attrib['name'] == 'Time-Course':
                 key = i.attrib['key']
-        assert key != None, 'have you ran the report_definition method?'
+        if 'Time-Course' not in all_reports:
+            raise errors.SomethingWentHorriblyWrongError('No report called "Time-Course". '
+                                                             'Have you set one up yet?')
         return key
 
-    # def run(self):
-    #     '''
-    #     run a time course. Use keyword argument:
-    #         simulation_type='deterministic' #default
-    #         SumulationType='stochastic' #still to be written
-    #     '''
-    #     if self.kwargs.get('simulation_type') == 'deterministic':
-    #         self.copasiML = self.report_definition()
-    #         self.copasiML = self.set_report()
-    #         self.copasiML = self.set_deterministic()
-    #     elif self.kwargs.get('simulation_type') == 'stochastic':
-    #         raise errors.NotImplementedError(
-    #             'There is space in this class to write code to Run a stochastic simulation but it is not yet written')
-    #     ##
-    #     #            # save to duplicate copasi file
-    #     self.save()
-    #     R = Run(self.copasi_file, task='time_course')
-    #     return R
 
-@mixin(GetModelVariableFromStringMixin)
-class Scan(_base._ModelBase):
+@mixin(model.GetModelComponentFromStringMixin)
+@mixin(UpdatePropertiesMixin)
+@mixin(Bool2Numeric)
+@mixin(model.ReadModelMixin)
+@mixin(CheckIntegrityMixin)
+class Scan(object):
     """
     Interface to COPASI scan task
     """
     def __init__(self, model, **kwargs):
-        super(Scan, self).__init__(model, **kwargs)
+        # super(Scan, self).__init__(model, **kwargs)
+        self.model = self.read_model(model)
+        self.kwargs = kwargs
 
         default_report_name = os.path.split(self.model.copasi_file)[1][:-4] + '_PE_results.txt'
         self.default_properties = {'metabolites': self.model.metabolites,
@@ -1724,10 +1810,9 @@ class Scan(_base._ModelBase):
                                    'save': False,
                                    'clear_scans': True,  # if true, will remove all scans present then add new scan
                                    'run': False}
-
+        self.default_properties.update(self.kwargs)
         self.convert_bool_to_numeric(self.default_properties)
         self.update_properties(self.default_properties)
-        self.update_kwargs(kwargs)
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
         self._do_checks()
 
@@ -2062,8 +2147,12 @@ class Scan(_base._ModelBase):
     def execute(self):
         R = Run(self.model, task='scan', mode=self.run)
 
-
-class ExperimentMapper(_base._ModelBase):
+@mixin(model.GetModelComponentFromStringMixin)
+@mixin(UpdatePropertiesMixin)
+@mixin(model.ReadModelMixin)
+@mixin(CheckIntegrityMixin)
+@mixin(Bool2Numeric)
+class ExperimentMapper(object):
     """
     Class for mapping variables from file to cps
 
@@ -2130,7 +2219,9 @@ class ExperimentMapper(_base._ModelBase):
           </Problem>
     """
     def __init__(self, model, experiment_files, **kwargs):
-        super(ExperimentMapper, self).__init__(model, **kwargs)
+        self.model = self.read_model(model)
+        self.kwargs = kwargs
+        # super(ExperimentMapper, self).__init__(model, **kwargs)
         self.experiment_files = experiment_files
         if isinstance(self.experiment_files, list) !=True:
             self.experiment_files = [self.experiment_files]
@@ -2147,10 +2238,9 @@ class ExperimentMapper(_base._ModelBase):
                                  'threshold': [5]*len(self.experiment_files),
                                  'weight': [1]*len(self.experiment_files) ,
                                  'save': False}
-
+        self.default_properties.update(self.kwargs)
         self.convert_bool_to_numeric(self.default_properties)
         self.update_properties(self.default_properties)
-        self.update_kwargs(kwargs)
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
         self._do_checks()
 
@@ -2544,202 +2634,13 @@ class ExperimentMapper(_base._ModelBase):
             # self.save() ## Note sure whether this save is needed. Keep commented until you're sure
         return self.model
 
-class PhaseSpaceDep(TimeCourse):
-    '''
-    Use TimeCourse to get data and replot all n choose 2 combinations
-    of phase space plot
-    '''
-    def __init__(self,copasi_file,**kwargs):
-        super(PhaseSpace,self).__init__(copasi_file,**kwargs)
-        self.new_options={'plot':False}
-        self.kwargs.update(self.new_options)
-        self.species_data=self.isolate_species()
-        self.combinations=self.get_combinations()
-
-        if self.kwargs.get('savefig')==True:
-            self.phase_dir=self.make_phase_dir()
-            os.chdir(self.phase_dir)
-
-        self.plot_all_phase()
-
-        os.chdir(os.path.dirname(self.copasi_file))
-
-
-    def isolate_species(self):
-        '''
-        Isolate the species from the time course data
-        '''
-        metabs= self.GMQ.get_IC_cns().keys()
-        for i in metabs:
-            if i not in self.data.keys():
-                raise errors.IncompatibleStringError(' {} is an incompatible string that is not supported by pycotools. Please modify the string and rerun')
-        return self.data[metabs]
-
-    def get_combinations(self):
-        return list(itertools.combinations(self.species_data.keys(),2))
-
-    def make_phase_dir(self):
-        dire=os.path.join(os.path.dirname(self.copasi_file),'Phaseplots')
-        if os.path.isdir(dire)==False:
-            os.mkdir(dire)
-        return dire
-
-
-    def plot1phase(self,x,y):
-        if x  not in self.species_data.keys():
-            raise errors.InputError('{} is not in your model species: {}'.format(x,self.species_data.keys()))
-
-        if y  not in self.species_data.keys():
-            raise errors.InputError('{} is not in your model species: {}'.format(y,self.species_data.keys()))
-
-        x_data=self.species_data[x]
-        y_data=self.species_data[y]
-        plt.figure()
-        ax = plt.subplot(111)
-        plt.plot(x_data,y_data,linewidth=self.kwargs.get('line_width'),
-                    color=self.kwargs.get('line_color'),
-                    linestyle=self.kwargs.get('line_style'),
-                    marker='o',markerfacecolor=self.kwargs.get('marker_color'),
-                    markersize=self.kwargs.get('marker_size'))
-
-        plt.title('\n'.join(wrap('{} Vs {} Phase plot'.format(x,y),self.kwargs.get('title_wrap_size'))),fontsize=self.kwargs.get('font_size'))
-        try:
-            plt.ylabel(y+'({})'.format(self.GMQ.get_quantity_units().encode('ascii')),fontsize=self.kwargs.get('font_size'))
-            plt.xlabel(x+'({})'.format(self.GMQ.get_quantity_units().encode('ascii')),fontsize=self.kwargs.get('font_size'))
-        except UnicodeEncodeError:
-            plt.ylabel(y+'({})'.format('micromol'),fontsize=self.kwargs.get('font_size'))
-            plt.xlabel(x+'({})'.format('micromol'),fontsize=self.kwargs.get('font_size'))
-
-
-        #pretty stuff
-        ax.spines['right'].set_color('none')
-        ax.spines['top'].set_color('none')
-        ax.xaxis.set_ticks_position('bottom')
-        ax.yaxis.set_ticks_position('left')
-        ax.spines['left'].set_smart_bounds(True)
-        ax.spines['bottom'].set_smart_bounds(True)
-
-            #xtick rotation
-        plt.xticks(rotation=self.kwargs.get('xtick_rotation'))
-
-        #options for changing the plot axis
-        if self.kwargs.get('ylimit')!=None:
-            ax.set_ylim(self.kwargs.get('ylimit'))
-        if self.kwargs.get('xlimit')!=None:
-            ax.set_xlim(self.kwargs.get('xlimit'))
-        if self.kwargs.get('show')==True:
-            plt.show()
-
-        def replace_non_ascii(st):
-            for j in st:
-                if j  not in string.ascii_letters+string.digits+'_-[]':
-                    st=re.sub('\{}'.format(j),'__',st)
-            return st
-
-        y_new=replace_non_ascii(y)
-        x_new=replace_non_ascii(x)
-        name='{}_Vs_{}_Phaseplot'.format(x_new,y_new)
-
-        if self.kwargs.get('savefig')==True:
-            if self.kwargs.get('extra_title') !=None:
-                plt.savefig(name+'_'+self.kwargs.get('extra_title')+'.png',bbox_inches='tight',format='png',dpi=self.kwargs.get('dpi'))
-            else:
-                plt.savefig(name+'_'+'.png',format='png',bbox_inches='tight',dpi=self.kwargs.get('dpi'))
-    def plot_all_phase(self):
-        for i in self.combinations:
-            self.plot1phase(i[0],i[1])
-
-
-# class FormatPEData():
-#     def __init__(self,copasi_file,report_name, report_type='parameter_estimation'):
-#         self.copasi_file = copasi_file
-#         self.report_type = report_type
-#         self.GMQ = GetModelQuantities(self.copasi_file)
-#         self.report_name = report_name
-#
-#         available_report_types = ['parameter_estimation','multi_parameter_estimation']
-#         if self.report_type not in available_report_types:
-#             raise errors.InputError('{} not in {}'.format(self.report_type,available_report_types))
-#
-# #        if os.path.isdir(self.report_name):
-# #            for i in os.listdir(self.report_name):
-#
-# #        if os.path.isfile(self.report_name)!=True:
-# #            raise errors.InputError('file {} does not exist'.format(self.report_name))
-#
-#         if self.report_type=='parameter_estimation':
-#             try:
-#                 self.format = self.format_results()
-#             except IOError:
-#                 raise errors.FileIsEmptyError('{} is empty and therefore cannot be read by pandas. Make sure you have waited until there is data in the parameter estimation file before formatting parameter estimation output')
-#             except pandas.parser.CParserError:
-#                 raise errors.InputError('Pandas cannot read data file. Ensure you are using report_type=\'multi_parameter_estimation\' for multiple parameter estimation classes')
-#         elif self.report_type=='multi_parameter_estimation':
-#             try:
-#                 self.format = self.format_multi_results()
-#             except IOError:
-#                 raise errors.FileIsEmptyError('{} is empty and therefore cannot be read by pandas. Make sure you have waited until there is data in the parameter estimation file before formatting parameter estimation output')
-#
-#
-#     def format_results(self):
-#         """
-#         Results come without headers - parse the results
-#         give them the proper headers then overwrite the file again
-#         :return:
-#         """
-#         data = pandas.read_csv(self.report_name, sep='\t', header=None)
-#         data = data.drop(data.columns[0], axis=1)
-#         width = data.shape[1]
-#         ## remove the extra bracket
-#         data[width] = data[width].str[1:]
-# #        num = data.shape[0]
-#         names = self.GMQ.get_fit_item_order()+['RSS']
-#         data.columns = names
-#         os.remove(self.report_name)
-#         data.to_csv(self.report_name, sep='\t', index=False)
-#         return data
-#
-#     def format_multi_results(self):
-#         """
-#         Results come without headers - parse the results
-#         give them the proper headers then overwrite the file again
-#         :return:
-#         """
-#         try:
-#             data = pandas.read_csv(self.report_name, sep='\t', header=None, skiprows=[0])
-#         except:
-#             LOG.warning('No Columns to parse from file. {} is empty. Returned None'.format(self.report_name))
-#             return None
-#         bracket_columns = data[data.columns[[0,-2]]]
-#         if bracket_columns.iloc[0].iloc[0] != '(':
-#             data = pandas.read_csv(self.report_name, sep='\t')
-#             return data
-#         else:
-#             data = data.drop(data.columns[[0,-2]], axis=1)
-#             data.columns = range(data.shape[1])
-#             ### parameter of interest has been removed.
-#             names = self.GMQ.get_fit_item_order()+['RSS']
-#             if self.GMQ.get_fit_item_order() == []:
-#                 raise errors.SomethingWentHorriblyWrongError('Parameter Estimation task is empty')
-#             if len(names) != data.shape[1]:
-#                 raise errors.SomethingWentHorriblyWrongError('length of parameter estimation data does not equal number of parameters estimated')
-#
-#             if os.path.isfile(self.report_name):
-#                 os.remove(self.report_name)
-#             data.columns = names
-#             data.to_csv(self.report_name, sep='\t', index=False)
-#             return self.report_name
-#
-#     @staticmethod
-#     def format_folder(copasi_file, folder, report_type='multi_parameter_estimation'):
-#         """
-#         Format entire folder of similar PE data files
-#         """
-#         for i in glob.glob(os.path.join(folder, '*.txt')):
-#             FormatPEData(copasi_file, i, report_type=report_type)
-
 @mixin(GetModelVariableFromStringMixin)
-class ParameterEstimation(_base._ModelBase):
+@mixin(model.GetModelComponentFromStringMixin)
+@mixin(UpdatePropertiesMixin)
+@mixin(model.ReadModelMixin)
+@mixin(CheckIntegrityMixin)
+@mixin(Bool2Numeric)
+class ParameterEstimation(object):
     '''
     Set up and run a parameter estimation in copasi. Since each parameter estimation
     problem is different, this process cannot be done in a single line of code.
@@ -2964,7 +2865,9 @@ class ParameterEstimation(_base._ModelBase):
     '''
 
     def __init__(self, model, experiment_files, **kwargs):
-        super(ParameterEstimation, self).__init__(model, **kwargs)
+        self.model = self.read_model(model)
+        self.kwargs = kwargs
+        # super(ParameterEstimation, self).__init__(model, **kwargs)
         self.experiment_files = experiment_files
         if isinstance(self.experiment_files, list) !=True:
             self.experiment_files = [self.experiment_files]
@@ -3018,7 +2921,7 @@ class ParameterEstimation(_base._ModelBase):
                                    'start_value': 0.1,
                                    'save': False}
 
-        self.default_properties.update(kwargs)
+        self.default_properties.update(self.kwargs)
         self.default_properties = self.convert_bool_to_numeric(self.default_properties)
         self.update_properties(self.default_properties)
         self._remove_multiparameter_estimation_arg()
@@ -3032,7 +2935,8 @@ class ParameterEstimation(_base._ModelBase):
             self.model.save()
 
     def __str__(self):
-        return "ParameterEstimation({})".format(self.to_string())
+        return "ParameterEstimation(method='{}', config_filename='{}', report_name='{}')".format(
+            self.method, self.config_filename, self.report_name)
 
     def get_default_properties(self):
         return self.default_properties
@@ -3786,7 +3690,6 @@ class ParameterEstimation(_base._ModelBase):
         calculate_stats={'type': 'bool', 'name': 'Calculate Statistics', 'value': self.calculate_statistics}
         create_parameter_sets={'type': 'bool', 'name': 'Create Parameter Sets', 'value': self.create_parameter_sets}
 
-        LOG.debug('randomize start values is --> {}'.format(self.randomize_start_values))
         query='//*[@name="Parameter Estimation"]' and '//*[@type="parameterFitting"]'
         for i in self.model.xml.xpath(query):
             i.attrib.update(scheluled_attrib)
@@ -3826,37 +3729,24 @@ class MultiParameterEstimation(ParameterEstimation):
 
     '''
     ##TODO Merge ParameterEstimation and Multi into one class.
-    def __init__(self, model, experiment_files,**kwargs):
+    def __init__(self, model, experiment_files, copy_number=1, pe_number=3,
+                 run_mode='multiprocess', results_directory=None, output_in_subtask=False, **kwargs):
         super(MultiParameterEstimation, self).__init__(model, experiment_files, **kwargs)
-
         ## add to ParameterEstimation defaults
-        ## do not remove the update !!
-        self.default_properties.update({
-            'copy_number': 2,
-            'pe_number':2,
-            'run_mode': 'multiprocess',
-            'results_directory':os.path.join(os.path.dirname(self.model.copasi_file),'MultipleParameterEstimationResults'),
-            'output_in_subtask': False
-        })
+        self.copy_number = copy_number
+        self.pe_number = pe_number
+        self.run_mode = run_mode
+        self.results_directory = results_directory
+        self.output_in_subtask = output_in_subtask
 
-        ##convert some boolean arguments to str(1) or str(0)
-        self.convert_bool_to_numeric(self.default_properties)
-
-        ##varify correct user input
-        self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
-
-        ## add properties to __dict__
-        self.update_properties(self.default_properties)
-
-        ##update kwargs argument. (might not be needed)
-        self.update_kwargs(kwargs)
-        self._do_checks()
-
-        self._create_output_directory()
+        if self.results_directory is None:
+            self.results_directory = os.path.join(os.path.dirname(self.model.copasi_file), 'MultipleParameterEstimationResults')
 
 
     def __str__(self):
-        return 'MultiParameterEstimation({})'.format(self.to_string())
+        return 'MultiParameterEstimation(copy_number="{}", pe_number="{}", method="{}")'.format(
+            self.copy_number, self.pe_number, self.method
+        )
 
     ##void
     def __do_checks(self):
@@ -4352,7 +4242,7 @@ class MultiModelFit(_base._ModelBase):
             self.MPE_dct[MPE].format_results()
 
 
-@mixin(GetModelVariableFromStringMixin)
+@mixin(model.GetModelComponentFromStringMixin)
 class ProfileLikelihood(_base._ModelBase):
     def __init__(self, model, **kwargs):
         super(ProfileLikelihood, self).__init__(model, **kwargs)

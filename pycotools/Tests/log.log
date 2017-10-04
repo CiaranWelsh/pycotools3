@@ -3266,3 +3266,745 @@ INFO:pycotools.viz:viz:plot:717:figure saved to "/home/b3053674/Documents/pycoto
 INFO:root:__init__:<module>:27:Initializing pycotools
 INFO:root:__init__:<module>:28:Initializing logging System
 INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:get_report_key:1752:<Element {http://www.copasi.org/static/schema}Report at 0x7f5cfed137e8>
+DEBUG:pycotools.tasks:tasks:get_report_key:1752:<Element {http://www.copasi.org/static/schema}Report at 0x7f5cfed13710>
+DEBUG:pycotools.tasks:tasks:get_report_key:1752:<Element {http://www.copasi.org/static/schema}Report at 0x7f5cfed13950>
+DEBUG:pycotools.tasks:tasks:get_report_key:1752:<Element {http://www.copasi.org/static/schema}Report at 0x7f5cfed137e8>
+DEBUG:pycotools.tasks:tasks:get_report_key:1752:<Element {http://www.copasi.org/static/schema}Report at 0x7f5cfed13710>
+DEBUG:pycotools.tasks:tasks:get_report_key:1752:<Element {http://www.copasi.org/static/schema}Report at 0x7f5cfed13950>
+DEBUG:pycotools.tasks:tasks:get_report_key:1752:<Element {http://www.copasi.org/static/schema}Report at 0x7f5cfed137e8>
+DEBUG:pycotools.tasks:tasks:get_report_key:1752:<Element {http://www.copasi.org/static/schema}Report at 0x7f5cfed13710>
+DEBUG:pycotools.tasks:tasks:get_report_key:1752:<Element {http://www.copasi.org/static/schema}Report at 0x7f5cfed13950>
+DEBUG:pycotools.tasks:tasks:get_report_key:1752:<Element Report at 0x7f5cfed137e8>
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:get_report_key:1753:o.tag --> {http://www.copasi.org/static/schema}ListOfReports
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:get_report_key:1754:j.tag --> {'precision': '6', 'separator': '\t', 'name': 'Steady-State', 'key': 'Report_9', 'taskType': 'steadyState'}
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:get_report_key:1754:j.tag --> {'precision': '6', 'separator': '\t', 'name': 'Steady-State', 'key': 'Report_9', 'taskType': 'steadyState'}
+DEBUG:pycotools.tasks:tasks:get_report_key:1754:j.tag --> {'precision': '6', 'separator': '\t', 'name': 'Elementary Flux Modes', 'key': 'Report_10', 'taskType': 'fluxMode'}
+DEBUG:pycotools.tasks:tasks:get_report_key:1754:j.tag --> {'precision': '6', 'separator': '\t', 'name': 'Optimization', 'key': 'Report_11', 'taskType': 'optimization'}
+DEBUG:pycotools.tasks:tasks:get_report_key:1754:j.tag --> {'precision': '6', 'separator': '\t', 'name': 'Parameter Estimation', 'key': 'Report_12', 'taskType': 'parameterFitting'}
+DEBUG:pycotools.tasks:tasks:get_report_key:1754:j.tag --> {'precision': '6', 'separator': '\t', 'name': 'Metabolic Control Analysis', 'key': 'Report_13', 'taskType': 'metabolicControlAnalysis'}
+DEBUG:pycotools.tasks:tasks:get_report_key:1754:j.tag --> {'precision': '6', 'separator': '\t', 'name': 'Lyapunov Exponents', 'key': 'Report_14', 'taskType': 'lyapunovExponents'}
+DEBUG:pycotools.tasks:tasks:get_report_key:1754:j.tag --> {'precision': '6', 'separator': '\t', 'name': 'Time Scale Separation Analysis', 'key': 'Report_15', 'taskType': 'timeScaleSeparationAnalysis'}
+DEBUG:pycotools.tasks:tasks:get_report_key:1754:j.tag --> {'precision': '6', 'separator': '\t', 'name': 'Sensitivities', 'key': 'Report_16', 'taskType': 'sensitivities'}
+DEBUG:pycotools.tasks:tasks:get_report_key:1754:j.tag --> {'precision': '6', 'separator': '\t', 'name': 'Linear Noise Approximation', 'key': 'Report_17', 'taskType': 'linearNoiseApproximation'}
+DEBUG:pycotools.tasks:tasks:get_report_key:1754:j.tag --> {'name': 'parameter_estimation', 'separator': '\t', 'precision': '6', 'key': 'Report_32', 'taskType': 'parameterFitting'}
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:get_report_key:1752:{'precision': '6', 'separator': '\t', 'name': 'Steady-State', 'key': 'Report_9', 'taskType': 'steadyState'}
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:get_report_key:1752:{'precision': '6', 'separator': '\t', 'name': 'Steady-State', 'key': 'Report_9', 'taskType': 'steadyState'}
+DEBUG:pycotools.tasks:tasks:get_report_key:1752:{'precision': '6', 'separator': '\t', 'name': 'Elementary Flux Modes', 'key': 'Report_10', 'taskType': 'fluxMode'}
+DEBUG:pycotools.tasks:tasks:get_report_key:1752:{'precision': '6', 'separator': '\t', 'name': 'Optimization', 'key': 'Report_11', 'taskType': 'optimization'}
+DEBUG:pycotools.tasks:tasks:get_report_key:1752:{'precision': '6', 'separator': '\t', 'name': 'Parameter Estimation', 'key': 'Report_12', 'taskType': 'parameterFitting'}
+DEBUG:pycotools.tasks:tasks:get_report_key:1752:{'precision': '6', 'separator': '\t', 'name': 'Metabolic Control Analysis', 'key': 'Report_13', 'taskType': 'metabolicControlAnalysis'}
+DEBUG:pycotools.tasks:tasks:get_report_key:1752:{'precision': '6', 'separator': '\t', 'name': 'Lyapunov Exponents', 'key': 'Report_14', 'taskType': 'lyapunovExponents'}
+DEBUG:pycotools.tasks:tasks:get_report_key:1752:{'precision': '6', 'separator': '\t', 'name': 'Time Scale Separation Analysis', 'key': 'Report_15', 'taskType': 'timeScaleSeparationAnalysis'}
+DEBUG:pycotools.tasks:tasks:get_report_key:1752:{'precision': '6', 'separator': '\t', 'name': 'Sensitivities', 'key': 'Report_16', 'taskType': 'sensitivities'}
+DEBUG:pycotools.tasks:tasks:get_report_key:1752:{'precision': '6', 'separator': '\t', 'name': 'Linear Noise Approximation', 'key': 'Report_17', 'taskType': 'linearNoiseApproximation'}
+DEBUG:pycotools.tasks:tasks:get_report_key:1752:{'name': 'parameter_estimation', 'separator': '\t', 'precision': '6', 'key': 'Report_32', 'taskType': 'parameterFitting'}
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1715:setting_report
+DEBUG:pycotools.tasks:tasks:get_report_key:1753:{'precision': '6', 'separator': '\t', 'name': 'Steady-State', 'key': 'Report_9', 'taskType': 'steadyState'}
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1715:setting_report
+DEBUG:pycotools.tasks:tasks:get_report_key:1753:{'precision': '6', 'separator': '\t', 'name': 'Steady-State', 'key': 'Report_9', 'taskType': 'steadyState'}
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1715:setting_report
+DEBUG:pycotools.tasks:tasks:get_report_key:1753:{'precision': '6', 'separator': '\t', 'name': 'Steady-State', 'key': 'Report_9', 'taskType': 'steadyState'}
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1715:setting_report
+DEBUG:pycotools.tasks:tasks:get_report_key:1754:{'precision': '6', 'separator': '\t', 'name': 'Steady-State', 'key': 'Report_9', 'taskType': 'steadyState'}
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:get_report_key:1761:{'precision': '6', 'separator': '\t', 'name': 'Steady-State', 'key': 'Report_9', 'taskType': 'steadyState'}
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:get_report_key:1761:{'precision': '6', 'separator': '\t', 'name': 'Steady-State', 'key': 'Report_9', 'taskType': 'steadyState'}
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:get_report_key:1761:{'precision': '6', 'separator': '\t', 'name': 'Steady-State', 'key': 'Report_9', 'taskType': 'steadyState'}
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:get_report_key:1761:{'precision': '6', 'separator': '\t', 'name': 'Steady-State', 'key': 'Report_9', 'taskType': 'steadyState'}
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:get_report_key:1761:{'precision': '6', 'separator': '\t', 'name': 'Steady-State', 'key': 'Report_9', 'taskType': 'steadyState'}
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:get_report_key:1761:{'precision': '6', 'separator': '\t', 'name': 'Steady-State', 'key': 'Report_9', 'taskType': 'steadyState'}
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:get_report_key:1761:{'precision': '6', 'separator': '\t', 'name': 'Steady-State', 'key': 'Report_9', 'taskType': 'steadyState'}
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:get_report_key:1761:{'precision': '6', 'separator': '\t', 'name': 'Steady-State', 'key': 'Report_9', 'taskType': 'steadyState'}
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:get_report_key:1761:{'precision': '6', 'separator': '\t', 'name': 'Steady-State', 'key': 'Report_9', 'taskType': 'steadyState'}
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:get_report_key:1761:{'precision': '6', 'separator': '\t', 'name': 'Steady-State', 'key': 'Report_9', 'taskType': 'steadyState'}
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1722:setting_report
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:_do_checks:1876:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1876:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1876:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1876:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+WARNING:pycotools.tasks:tasks:_do_checks:1877:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1877:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1877:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1877:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+WARNING:pycotools.tasks:tasks:_do_checks:1877:output_in_subtask is False. Setting to True in order to have data from all scans output to file
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3878:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3878:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3878:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3878:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3878:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3878:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3878:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3878:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3878:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3878:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3878:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3878:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3692:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3692:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3692:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3692:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3692:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3692:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3692:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3692:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3692:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3692:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3692:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3692:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3690:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3690:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3690:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3690:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3690:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3690:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3690:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3690:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3690:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3690:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3690:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3690:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3691:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3691:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3691:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3691:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3691:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3691:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3691:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3691:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3691:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3691:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1724:setting_report
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3695:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3695:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3695:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3695:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3695:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3695:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3695:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3695:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3695:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3695:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3695:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3695:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3695:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3695:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3695:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3695:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3695:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3695:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3695:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3695:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3695:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3695:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3695:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3695:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3695:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_report:1728:setting_report
+DEBUG:pycotools.tasks:tasks:set_PE_options:3695:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3894:running model: 0
+INFO:pycotools.tasks:tasks:run:3894:running model: 1
+INFO:pycotools.tasks:tasks:run:3894:running model: 0
+INFO:pycotools.tasks:tasks:run:3894:running model: 1
+INFO:pycotools.tasks:tasks:run:3894:running model: 0
+INFO:pycotools.tasks:tasks:run:3894:running model: 1
+INFO:pycotools.tasks:tasks:run:3894:running model: 0
+INFO:pycotools.tasks:tasks:run:3894:running model: 1
+INFO:pycotools.tasks:tasks:run:3894:running model: 0
+INFO:pycotools.tasks:tasks:run:3894:running model: 1
+INFO:pycotools.tasks:tasks:run:3894:running model: 0
+INFO:pycotools.tasks:tasks:run:3894:running model: 1
+INFO:pycotools.tasks:tasks:run:3894:running model: 0
+INFO:pycotools.tasks:tasks:run:3894:running model: 1
+INFO:pycotools.tasks:tasks:run:3894:running model: 0
+INFO:pycotools.tasks:tasks:run:3894:running model: 1
+INFO:pycotools.tasks:tasks:run:3894:running model: 0
+INFO:pycotools.tasks:tasks:run:3894:running model: 1
+INFO:pycotools.tasks:tasks:run:3894:running model: 0
+INFO:pycotools.tasks:tasks:run:3894:running model: 1
+INFO:pycotools.tasks:tasks:run:3894:running model: 0
+INFO:pycotools.tasks:tasks:run:3894:running model: 1
