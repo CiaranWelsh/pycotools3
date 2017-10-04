@@ -57,21 +57,7 @@ LOG = logging.getLogger(__name__)
 #         return df
 
 
-class UpdatePropertiesMixin(Mixin):
 
-    def update_properties(self, kwargs):
-        """
-        method for updating properties from kwargs
-
-        :param kwargs: dict of options for subclass
-        :return: void
-        """
-        for k in kwargs:
-            try:
-                getattr(self, k)
-                setattr(self, k, kwargs[k])
-            except AttributeError:
-                setattr(self, k, kwargs[k])
 
 class GetModelComponentFromStringMixin(Mixin):
 

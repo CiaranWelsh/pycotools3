@@ -36,6 +36,7 @@ import glob
 import os
 import shutil 
 import pandas
+
 from pycotools.Tests import _test_base
 
 
@@ -134,6 +135,7 @@ class ParameterEstimationTests(_test_base._BaseTest):
         self.PE.write_config_file()
         self.model = self.PE.setup()
         self.PE.run()
+        print self.PE.report_name
         self.assertTrue(os.path.isfile(self.PE.report_name))
 
 
@@ -150,7 +152,7 @@ class ParameterEstimationTests(_test_base._BaseTest):
         order = ['ThisIsAssignment','B2C','A2B',
                  '(ADeg).k1','(B2C).k2','(C2A).k1',
                  'B','A','C', 'RSS']
-        df = p.parse_parameter_estmation
+        df = p.from_parameter_estimation
         self.assertListEqual(sorted(order), sorted(list(df.columns)))
 
     def test_viz_param_est_parser_len(self):
@@ -163,7 +165,7 @@ class ParameterEstimationTests(_test_base._BaseTest):
         self.model = self.PE.setup()
         self.PE.run()
         p = pycotools.viz.Parse(self.PE)
-        df = p.parse_parameter_estmation
+        df = p.from_parameter_estimation
         self.assertEqual(df.shape[0], 1)
     #
     def test_(self):

@@ -132,7 +132,11 @@ cps = r'/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ERK_0.cps
 data_file = r'/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/One_AZD_Timecourse.txt'
 
 erk_model = model.Model(cps)
-PE = tasks.ParameterEstimation(erk_model)
+MPE = tasks.MultiParameterEstimation(erk_model, data_file)
+MPE.setup()
+MPE.run()
+
+# PE = tasks.ParameterEstimation(erk_model)
 
 # p = viz.Parse(f, copasi_file=cps, log10=False)
 # print p.data
