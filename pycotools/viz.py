@@ -727,6 +727,7 @@ class PlotParameterEstimation(PlotKwargs):
         data_dct = self.read_experimental_data()
         for i in data_dct:
             dct[i] = data_dct[i]['Time'].max()
+        LOG.debug('dct time --> {}'.format(dct))
         return dct
 
     def simulate_time_course(self):
@@ -742,6 +743,8 @@ class PlotParameterEstimation(PlotKwargs):
             TC = tasks.TimeCourse(self.cls.model, end=time_dct[i],
                              step_size=step_size, intervals=time_dct[i]/step_size)
             d[i] = self.parse(TC, log10=False)
+            import viz
+            viz.PlotTimeCourse(TC, show=True)
         return d
 
     def plot(self):

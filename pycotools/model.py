@@ -56,6 +56,23 @@ LOG = logging.getLogger(__name__)
 #         df.index.name = 'Property'
 #         return df
 
+
+class UpdatePropertiesMixin(Mixin):
+
+    def update_properties(self, kwargs):
+        """
+        method for updating properties from kwargs
+
+        :param kwargs: dict of options for subclass
+        :return: void
+        """
+        for k in kwargs:
+            try:
+                getattr(self, k)
+                setattr(self, k, kwargs[k])
+            except AttributeError:
+                setattr(self, k, kwargs[k])
+
 class GetModelComponentFromStringMixin(Mixin):
 
     @staticmethod
@@ -3157,8 +3174,8 @@ class InsertParameters(object):
             self.model.save()
 
 
-    def __str__(self):
-        return "InsertParameters({})".format(self.to_string())
+    # def __str__(self):
+    #     return "InsertParameters({})".format(self.to_string())
 
     def _do_checks(self):
         """
