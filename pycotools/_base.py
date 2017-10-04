@@ -43,7 +43,7 @@ class _Base(object):
     def __init__(self, **kwargs):
         self.kwargs = kwargs
 
-        self.update_properties(self.kwargs)
+        # self.update_properties(self.kwargs)
         # self.__dict__.update((key, value) for key, value in self.kwargs.items() )
 
     def __str__(self):
@@ -121,6 +121,7 @@ class _Base(object):
         for k in kwargs:
             try:
                 getattr(self, k)
+                setattr(self, k, kwargs[k])
             except AttributeError:
                 setattr(self, k, kwargs[k])
 

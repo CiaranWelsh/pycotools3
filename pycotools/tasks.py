@@ -3016,12 +3016,11 @@ class ParameterEstimation(_base._ModelBase):
                                    'lower_bound': 0.000001,
                                    'upper_bound': 1000000,
                                    'start_value': 0.1,
-                                   'save':False}
+                                   'save': False}
 
-
-        self.convert_bool_to_numeric(self.default_properties)
+        self.default_properties.update(kwargs)
+        self.default_properties = self.convert_bool_to_numeric(self.default_properties)
         self.update_properties(self.default_properties)
-        self.update_kwargs(kwargs)
         self._remove_multiparameter_estimation_arg()
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
 
@@ -3031,8 +3030,6 @@ class ParameterEstimation(_base._ModelBase):
 
         if self.save:
             self.model.save()
-
-        ##TODO remove headers from report. Not needed as they are only replaced later.
 
     def __str__(self):
         return "ParameterEstimation({})".format(self.to_string())
@@ -3789,6 +3786,7 @@ class ParameterEstimation(_base._ModelBase):
         calculate_stats={'type': 'bool', 'name': 'Calculate Statistics', 'value': self.calculate_statistics}
         create_parameter_sets={'type': 'bool', 'name': 'Create Parameter Sets', 'value': self.create_parameter_sets}
 
+        LOG.debug('randomize start values is --> {}'.format(self.randomize_start_values))
         query='//*[@name="Parameter Estimation"]' and '//*[@type="parameterFitting"]'
         for i in self.model.xml.xpath(query):
             i.attrib.update(scheluled_attrib)

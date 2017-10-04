@@ -10577,3 +10577,731 @@ DEBUG:pycotools.viz:viz:plot:1590:df.head is
 404     0.117217              0.678754     0.238767            6.81784  
 
 [5 rows x 38 columns]
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/anaconda2/envs/pycotools/lib/python2.7/site-packages/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:4006:running model: 0
+INFO:pycotools.tasks:tasks:run:4006:running model: 1
+INFO:pycotools.tasks:tasks:run:4006:running model: 2
+INFO:pycotools.tasks:tasks:run:4006:running model: 3
+INFO:pycotools.tasks:tasks:run:4006:running model: 4
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/anaconda2/envs/pycotools/lib/python2.7/site-packages/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:4006:running model: 0
+INFO:pycotools.tasks:tasks:run:4006:running model: 1
+INFO:pycotools.tasks:tasks:run:4006:running model: 2
+INFO:pycotools.tasks:tasks:run:4006:running model: 3
+INFO:pycotools.tasks:tasks:run:4006:running model: 4
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/anaconda2/envs/pycotools/lib/python2.7/site-packages/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:4006:running model: 0
+INFO:pycotools.tasks:tasks:run:4006:running model: 1
+INFO:pycotools.tasks:tasks:run:4006:running model: 2
+INFO:pycotools.tasks:tasks:run:4006:running model: 3
+INFO:pycotools.tasks:tasks:run:4006:running model: 4
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/anaconda2/envs/pycotools/lib/python2.7/site-packages/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/anaconda2/envs/pycotools/lib/python2.7/site-packages/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/anaconda2/envs/pycotools/lib/python2.7/site-packages/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/anaconda2/envs/pycotools/lib/python2.7/site-packages/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/anaconda2/envs/pycotools/lib/python2.7/site-packages/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:__init__:208:accepted types --> [<class 'pycotools.tasks.TimeCourse'>, <class 'pycotools.tasks.Scan'>, <class 'pycotools.tasks.ParameterEstimation'>, <class 'pycotools.tasks.MultiParameterEstimation'>]
+DEBUG:pycotools.viz:viz:__init__:209:type --> <type 'str'>
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.viz:viz:__init__:1277:plotting histograms
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:create_directory:975:<pycotools.viz.Parse object at 0x7fbd8162af90>
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:create_directory:975:<pycotools.viz.Parse object at 0x7f7bca67bf90>
+DEBUG:pycotools.viz:viz:create_directory:976:<class 'pycotools.viz.Parse'>
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:create_directory:975:<pycotools.viz.Parse object at 0x7fbcbb2b2f90>
+DEBUG:pycotools.viz:viz:create_directory:976:<class 'pycotools.viz.Parse'>
+INFO:pycotools.viz:viz:__init__:1283:plotting histograms
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.viz:viz:__init__:1286:plotting histograms
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.viz:viz:__init__:1286:plotting histograms
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.viz:viz:__init__:1286:plotting histograms
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.viz:viz:_do_checks:1210:plotting PCA parameters
+CRITICAL:pycotools.viz:viz:_do_checks:1216:When data reduction is by 'parameters' you should specify an argument to legend_position. i.e. legend_position=(10,10,1.5) for horizontal, vertical and linespacing
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.viz:viz:_do_checks:1210:plotting PCA parameters
+CRITICAL:pycotools.viz:viz:_do_checks:1216:When data reduction is by 'parameters' you should specify an argument to legend_position. i.e. legend_position=(10,10,1.5) for horizontal, vertical and linespacing
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.viz:viz:_do_checks:1210:plotting PCA parameters
+CRITICAL:pycotools.viz:viz:_do_checks:1216:When data reduction is by 'parameters' you should specify an argument to legend_position. i.e. legend_position=(10,10,1.5) for horizontal, vertical and linespacing
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.viz:viz:_do_checks:1210:plotting PCA parameters
+CRITICAL:pycotools.viz:viz:_do_checks:1216:When data reduction is by 'parameters' you should specify an argument to legend_position. i.e. legend_position=(10,10,1.5) for horizontal, vertical and linespacing
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.viz:viz:_do_checks:1210:plotting PCA parameters
+CRITICAL:pycotools.viz:viz:_do_checks:1216:When data reduction is by 'parameters' you should specify an argument to legend_position. i.e. legend_position=(10,10,1.5) for horizontal, vertical and linespacing
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.viz:viz:_do_checks:1210:plotting PCA parameters
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.viz:viz:_do_checks:1210:plotting PCA iterations
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:plot:1746:df.head is 
+
+-->      ParameterFitIndex  Time  MK2206  AZD  PRAS40_pS183  PRAS40  4EBP1  TSC1  \
+0                    0   0.0       1    1           1.0     1.0    1.0   1.0   
+181                  1   0.0       1    1           1.0     1.0    1.0   1.0   
+184                  2   0.0       1    1           1.0     1.0    1.0   1.0   
+365                  3   0.0       1    1           1.0     1.0    1.0   1.0   
+546                  4   0.0       1    1           1.0     1.0    1.0   1.0   
+
+     p70S6K_act  Smad2_act   ...     TGFbR  AKT_act  AKT  TSC2  PI3K_act  MEK  \
+0      0.890862        1.0   ...       1.5      1.0  1.5   1.0    1.3645  1.5   
+181    0.890862        1.0   ...       1.5      1.0  1.5   1.0    1.3645  1.5   
+184    0.890862        1.0   ...       1.5      1.0  1.5   1.0    1.3645  1.5   
+365    0.890862        1.0   ...       1.5      1.0  1.5   1.0    1.3645  1.5   
+546    0.890862        1.0   ...       1.5      1.0  1.5   1.0    1.3645  1.5   
+
+     MEK_act  mTORC1_act  ERK  ERK_act  
+0        1.0     1.02982  1.5      1.0  
+181      1.0     1.02982  1.5      1.0  
+184      1.0     1.02982  1.5      1.0  
+365      1.0     1.02982  1.5      1.0  
+546      1.0     1.02982  1.5      1.0  
+
+[5 rows x 35 columns]
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3792:randomize start values is --> False
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3792:randomize start values is --> False
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3792:randomize start values is --> True
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3792:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3792:randomize start values is --> True
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3792:randomize start values is --> True
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3792:randomize start values is --> True
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3792:randomize start values is --> True
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3792:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3792:randomize start values is --> 0
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3792:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3792:randomize start values is --> True
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3021:start vals --> True
+DEBUG:pycotools.tasks:tasks:__init__:3023:start vals --> 1
+DEBUG:pycotools.tasks:tasks:set_PE_options:3793:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3021:start vals --> True
+DEBUG:pycotools.tasks:tasks:__init__:3023:start vals --> 1
+DEBUG:pycotools.tasks:tasks:set_PE_options:3793:randomize start values is --> True
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3021:start vals --> True
+DEBUG:pycotools.tasks:tasks:__init__:3023:start vals --> 1
+DEBUG:pycotools.tasks:tasks:set_PE_options:3793:randomize start values is --> False
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3022:start vals --> True
+DEBUG:pycotools.tasks:tasks:__init__:3024:start vals --> 1
+DEBUG:pycotools.tasks:tasks:set_PE_options:3793:randomize start values is --> False
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3023:start vals --> True
+DEBUG:pycotools.tasks:tasks:__init__:3025:start vals --> 1
+DEBUG:pycotools.tasks:tasks:set_PE_options:3793:randomize start values is --> False
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3023:start vals --> False
+DEBUG:pycotools.tasks:tasks:__init__:3025:start vals --> False
+DEBUG:pycotools.tasks:tasks:set_PE_options:3793:randomize start values is --> False
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3023:start vals --> True
+DEBUG:pycotools.tasks:tasks:__init__:3025:start vals --> True
+DEBUG:pycotools.tasks:tasks:set_PE_options:3793:randomize start values is --> True
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3023:start vals --> True
+DEBUG:pycotools.tasks:tasks:__init__:3025:start vals --> True
+DEBUG:pycotools.tasks:tasks:set_PE_options:3793:randomize start values is --> True
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3023:start vals --> True
+DEBUG:pycotools.tasks:tasks:__init__:3026:start vals --> True
+DEBUG:pycotools.tasks:tasks:set_PE_options:3794:randomize start values is --> True
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3023:start vals --> True
+DEBUG:pycotools.tasks:tasks:__init__:3025:start vals --> True
+DEBUG:pycotools.tasks:tasks:set_PE_options:3793:randomize start values is --> True
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3023:start vals --> True
+DEBUG:pycotools.tasks:tasks:__init__:3025:start vals --> True
+DEBUG:pycotools.tasks:tasks:set_PE_options:3793:randomize start values is --> True
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3793:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3793:randomize start values is --> True
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3021:bef --> {'separator': ['\t'], 'create_parameter_sets': False, 'lower_bound': 1e-06, 'start_value': 0.1, 'row_containing_names': ['1'], 'calculate_statistics': False, 'confirm_overwrite': False, 'local_parameters': [LocalParameter(name="k1", reaction_name="IGFR_activation, value="0.19025", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="IGFR_inactivation, value="81770.8", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="IRS1_activation, value="7.1084e-006", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="IRS1_inactivation, value="0.195605", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="PI3K_activation, value="9.30626e-005", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="PI3K_inactivation, value="0.004443480000000001", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="PDK1_activation, value="0.000126415", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="AKT_inactivation, value="1.74478", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="TSCC_formation, value="2.50476", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="TSCC_break, value="24660.7", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="mTORC1_activation, value="156.734", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="mTORC1_inactivation, value="0.00310139", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="p70S6K_activation, value="0.0245832", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="p70S6K_inactivation, value="0.000435827", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="MEK_activation, value="0.00307265", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="MEK_inactivation, value="1.27", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="ERK_activation, value="1209.38", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="ERK_inactivation, value="46.3659", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="TGFbR_activation, value="0.000125856", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="TGFbR_inactivation, value="0.000147944", simulation_type="fixed"), LocalParameter(name="v", reaction_name="TSC2_production, value="10993.9", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="TSC2_degradation, value="8027.32", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="Smad2_inactivation, value="0.00220025", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="Smad2_activation, value="0.00256571", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="PRAS40 inhibition, value="0.18", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="PRAS40 dephosphorylation, value="2.33", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="4EBP1 act, value="0.1", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="4EBP1_pS65 dephos , value="0.1", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="PDK1_inactivation, value="1.74478", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="AKT_activation, value="0.000126415", simulation_type="fixed")], 'randomize_start_values': True, 'config_filename': '/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/config_file.csv', 'rho': 0.2, 'quantity_type': 'concentration', 'first_row': ['1'], 'seed': 0, 'append': False, 'row_orientation': [True], 'update_model': False, 'swarm_size': 50, 'scale': 10, 'overwrite_config_file': False, 'upper_bound': 1000000, 'tolerance': 1e-05, 'normalize_weights_per_experiment': [True], 'number_of_iterations': 100000, 'random_number_generator': 1, 'iteration_limit': 50, 'report_name': '/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/PEData.txt', 'std_deviation': 1e-06, 'metabolites': [Metabolite(name="MK2206", key="Metabolite_53", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="AZD", key="Metabolite_51", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="PRAS40_pS183", key="Metabolite_57", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="PRAS40", key="Metabolite_55", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="4EBP1", key="Metabolite_59", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="TSC1", key="Metabolite_17", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="p70S6K_act", key="Metabolite_29", compartment="Cytoplasm", concentration="0.890861522001", particle_number="5.36489356957e+20", simulation_type="reactions"), Metabolite(name="Smad2_act", key="Metabolite_49", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="mTORC1", key="Metabolite_23", compartment="Cytoplasm", concentration="1.5", particle_number="9.0332112855e+20", simulation_type="reactions"), Metabolite(name="TSCC", key="Metabolite_21", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="TGFbR_act", key="Metabolite_41", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="TGFb", key="Metabolite_43", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="PDK1_act", key="Metabolite_65", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="PDK1", key="Metabolite_63", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="4EBP1_pS65", key="Metabolite_61", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="Everolimus", key="Metabolite_45", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="IGFR_act", key="Metabolite_3", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="IGFR", key="Metabolite_1", compartment="Cytoplasm", concentration="1.5", particle_number="9.0332112855e+20", simulation_type="reactions"), Metabolite(name="Smad2", key="Metabolite_47", compartment="Cytoplasm", concentration="1.5", particle_number="9.0332112855e+20", simulation_type="reactions"), Metabolite(name="IRS1_act", key="Metabolite_7", compartment="Cytoplasm", concentration="1.364499841", particle_number="8.21721024186e+20", simulation_type="reactions"), Metabolite(name="IRS1", key="Metabolite_5", compartment="Cytoplasm", concentration="2.0", particle_number="1.2044281714e+21", simulation_type="reactions"), Metabolite(name="PI3K", key="Metabolite_9", compartment="Cytoplasm", concentration="2.0", particle_number="1.2044281714e+21", simulation_type="reactions"), Metabolite(name="p70S6K", key="Metabolite_27", compartment="Cytoplasm", concentration="1.4", particle_number="8.4309971998e+20", simulation_type="reactions"), Metabolite(name="TGFbR", key="Metabolite_39", compartment="Cytoplasm", concentration="1.5", particle_number="9.0332112855e+20", simulation_type="reactions"), Metabolite(name="AKT_act", key="Metabolite_15", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="AKT", key="Metabolite_13", compartment="Cytoplasm", concentration="1.5", particle_number="9.0332112855e+20", simulation_type="reactions"), Metabolite(name="TSC2", key="Metabolite_19", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="PI3K_act", key="Metabolite_11", compartment="Cytoplasm", concentration="1.364499841", particle_number="8.21721024186e+20", simulation_type="reactions"), Metabolite(name="MEK", key="Metabolite_31", compartment="Cytoplasm", concentration="1.5", particle_number="9.0332112855e+20", simulation_type="reactions"), Metabolite(name="MEK_act", key="Metabolite_33", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="mTORC1_act", key="Metabolite_25", compartment="Cytoplasm", concentration="1.029821673", particle_number="6.2017311724e+20", simulation_type="reactions"), Metabolite(name="ERK", key="Metabolite_35", compartment="Cytoplasm", concentration="1.5", particle_number="9.0332112855e+20", simulation_type="reactions"), Metabolite(name="ERK_act", key="Metabolite_37", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions")], 'use_config_start_values': False, 'population_size': 50, 'start_temperature': 1, 'weight_method': ['mean_squared'], 'experiment_type': ['timecourse'], 'scheduled': False, 'pf': 0.475, 'global_quantities': [], 'save': False, 'number_of_generations': 200, 'method': 'genetic_algorithm', 'cooling_factor': 0.85}
+DEBUG:pycotools.tasks:tasks:__init__:3023:af --> {'separator': ['\t'], 'create_parameter_sets': '0', 'lower_bound': 1e-06, 'start_value': 0.1, 'row_containing_names': ['1'], 'calculate_statistics': '0', 'confirm_overwrite': '0', 'local_parameters': [LocalParameter(name="k1", reaction_name="IGFR_activation, value="0.19025", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="IGFR_inactivation, value="81770.8", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="IRS1_activation, value="7.1084e-006", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="IRS1_inactivation, value="0.195605", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="PI3K_activation, value="9.30626e-005", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="PI3K_inactivation, value="0.004443480000000001", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="PDK1_activation, value="0.000126415", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="AKT_inactivation, value="1.74478", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="TSCC_formation, value="2.50476", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="TSCC_break, value="24660.7", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="mTORC1_activation, value="156.734", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="mTORC1_inactivation, value="0.00310139", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="p70S6K_activation, value="0.0245832", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="p70S6K_inactivation, value="0.000435827", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="MEK_activation, value="0.00307265", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="MEK_inactivation, value="1.27", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="ERK_activation, value="1209.38", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="ERK_inactivation, value="46.3659", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="TGFbR_activation, value="0.000125856", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="TGFbR_inactivation, value="0.000147944", simulation_type="fixed"), LocalParameter(name="v", reaction_name="TSC2_production, value="10993.9", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="TSC2_degradation, value="8027.32", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="Smad2_inactivation, value="0.00220025", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="Smad2_activation, value="0.00256571", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="PRAS40 inhibition, value="0.18", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="PRAS40 dephosphorylation, value="2.33", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="4EBP1 act, value="0.1", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="4EBP1_pS65 dephos , value="0.1", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="PDK1_inactivation, value="1.74478", simulation_type="fixed"), LocalParameter(name="k1", reaction_name="AKT_activation, value="0.000126415", simulation_type="fixed")], 'randomize_start_values': '1', 'config_filename': '/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/config_file.csv', 'rho': 0.2, 'quantity_type': 'concentration', 'first_row': ['1'], 'seed': 0, 'append': '0', 'row_orientation': [True], 'update_model': '0', 'swarm_size': 50, 'scale': 10, 'overwrite_config_file': False, 'upper_bound': 1000000, 'tolerance': 1e-05, 'normalize_weights_per_experiment': [True], 'number_of_iterations': 100000, 'random_number_generator': 1, 'iteration_limit': 50, 'report_name': '/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/PEData.txt', 'std_deviation': 1e-06, 'metabolites': [Metabolite(name="MK2206", key="Metabolite_53", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="AZD", key="Metabolite_51", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="PRAS40_pS183", key="Metabolite_57", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="PRAS40", key="Metabolite_55", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="4EBP1", key="Metabolite_59", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="TSC1", key="Metabolite_17", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="p70S6K_act", key="Metabolite_29", compartment="Cytoplasm", concentration="0.890861522001", particle_number="5.36489356957e+20", simulation_type="reactions"), Metabolite(name="Smad2_act", key="Metabolite_49", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="mTORC1", key="Metabolite_23", compartment="Cytoplasm", concentration="1.5", particle_number="9.0332112855e+20", simulation_type="reactions"), Metabolite(name="TSCC", key="Metabolite_21", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="TGFbR_act", key="Metabolite_41", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="TGFb", key="Metabolite_43", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="PDK1_act", key="Metabolite_65", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="PDK1", key="Metabolite_63", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="4EBP1_pS65", key="Metabolite_61", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="Everolimus", key="Metabolite_45", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="IGFR_act", key="Metabolite_3", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="IGFR", key="Metabolite_1", compartment="Cytoplasm", concentration="1.5", particle_number="9.0332112855e+20", simulation_type="reactions"), Metabolite(name="Smad2", key="Metabolite_47", compartment="Cytoplasm", concentration="1.5", particle_number="9.0332112855e+20", simulation_type="reactions"), Metabolite(name="IRS1_act", key="Metabolite_7", compartment="Cytoplasm", concentration="1.364499841", particle_number="8.21721024186e+20", simulation_type="reactions"), Metabolite(name="IRS1", key="Metabolite_5", compartment="Cytoplasm", concentration="2.0", particle_number="1.2044281714e+21", simulation_type="reactions"), Metabolite(name="PI3K", key="Metabolite_9", compartment="Cytoplasm", concentration="2.0", particle_number="1.2044281714e+21", simulation_type="reactions"), Metabolite(name="p70S6K", key="Metabolite_27", compartment="Cytoplasm", concentration="1.4", particle_number="8.4309971998e+20", simulation_type="reactions"), Metabolite(name="TGFbR", key="Metabolite_39", compartment="Cytoplasm", concentration="1.5", particle_number="9.0332112855e+20", simulation_type="reactions"), Metabolite(name="AKT_act", key="Metabolite_15", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="AKT", key="Metabolite_13", compartment="Cytoplasm", concentration="1.5", particle_number="9.0332112855e+20", simulation_type="reactions"), Metabolite(name="TSC2", key="Metabolite_19", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="PI3K_act", key="Metabolite_11", compartment="Cytoplasm", concentration="1.364499841", particle_number="8.21721024186e+20", simulation_type="reactions"), Metabolite(name="MEK", key="Metabolite_31", compartment="Cytoplasm", concentration="1.5", particle_number="9.0332112855e+20", simulation_type="reactions"), Metabolite(name="MEK_act", key="Metabolite_33", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions"), Metabolite(name="mTORC1_act", key="Metabolite_25", compartment="Cytoplasm", concentration="1.029821673", particle_number="6.2017311724e+20", simulation_type="reactions"), Metabolite(name="ERK", key="Metabolite_35", compartment="Cytoplasm", concentration="1.5", particle_number="9.0332112855e+20", simulation_type="reactions"), Metabolite(name="ERK_act", key="Metabolite_37", compartment="Cytoplasm", concentration="1.0", particle_number="6.022140857e+20", simulation_type="reactions")], 'use_config_start_values': False, 'population_size': 50, 'start_temperature': 1, 'weight_method': ['mean_squared'], 'experiment_type': ['timecourse'], 'scheduled': '0', 'pf': 0.475, 'global_quantities': [], 'save': False, 'number_of_generations': 200, 'method': 'genetic_algorithm', 'cooling_factor': 0.85}
+DEBUG:pycotools.tasks:tasks:set_PE_options:3795:randomize start values is --> True
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3021:bef --> True
+DEBUG:pycotools.tasks:tasks:__init__:3023:af --> 1
+DEBUG:pycotools.tasks:tasks:set_PE_options:3795:randomize start values is --> True
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3021:bef --> True
+DEBUG:pycotools.tasks:tasks:__init__:3023:af --> 1
+DEBUG:pycotools.tasks:tasks:set_PE_options:3795:randomize start values is --> True
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3021:bef --> True
+DEBUG:pycotools.tasks:tasks:__init__:3023:af --> 1
+DEBUG:pycotools.tasks:tasks:set_PE_options:3796:randomize start values is --> True
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3021:bef --> True
+DEBUG:pycotools.tasks:tasks:__init__:3023:af --> 1
+DEBUG:pycotools.tasks:tasks:set_PE_options:3796:randomize start values is --> True
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3021:bef --> True
+DEBUG:pycotools.tasks:tasks:__init__:3023:af --> 1
+DEBUG:pycotools.tasks:tasks:set_PE_options:3797:randomize start values is --> True
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3021:bef --> True
+DEBUG:pycotools.tasks:tasks:__init__:3023:af --> 1
+DEBUG:pycotools.tasks:tasks:set_PE_options:3797:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3021:bef --> True
+DEBUG:pycotools.tasks:tasks:__init__:3023:af --> 1
+DEBUG:pycotools.tasks:tasks:set_PE_options:3797:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3020:bef --> True
+DEBUG:pycotools.tasks:tasks:__init__:3023:af --> 1
+DEBUG:pycotools.tasks:tasks:set_PE_options:3797:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3021:bef --> True
+DEBUG:pycotools.tasks:tasks:__init__:3023:af --> 1
+DEBUG:pycotools.tasks:tasks:set_PE_options:3797:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3788:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3788:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3021:hooke_jeeves
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3026:genetic_algorithm
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3026:genetic_algorithm
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3026:genetic_algorithm
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> True
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3026:genetic_algorithm
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3024:genetic_algorithm
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3023:genetic_algorithm
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3022:genetic_algorithm
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3021:hooke_jeeves
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3021:hooke_jeeves
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3020:hooke_jeeves
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3021:hooke_jeeves
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3022:genetic_algorithm
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3791:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:__init__:3024:hooke_jeeves
+DEBUG:pycotools.tasks:tasks:set_PE_options:3791:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 1
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 1
+INFO:pycotools.viz:viz:plot:793:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/AKT_act.png"
+INFO:pycotools.viz:viz:plot:793:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/Smad2_act.png"
+INFO:pycotools.viz:viz:plot:793:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/MEK_act.png"
+INFO:pycotools.viz:viz:plot:793:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/TSC2.png"
+INFO:pycotools.viz:viz:plot:793:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/PDK1_act.png"
+INFO:pycotools.viz:viz:plot:793:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/PRAS40_pS183.png"
+INFO:pycotools.viz:viz:plot:793:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/4EBP1_pS65.png"
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 1
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 1
+DEBUG:pycotools.viz:viz:get_time:730:dct time --> {'/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/One_AZD_Timecourse.txt': 180}
+INFO:pycotools.viz:viz:plot:794:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/AKT_act.png"
+INFO:pycotools.viz:viz:plot:794:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/Smad2_act.png"
+INFO:pycotools.viz:viz:plot:794:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/MEK_act.png"
+INFO:pycotools.viz:viz:plot:794:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/TSC2.png"
+INFO:pycotools.viz:viz:plot:794:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/PDK1_act.png"
+INFO:pycotools.viz:viz:plot:794:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/PRAS40_pS183.png"
+INFO:pycotools.viz:viz:plot:794:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/4EBP1_pS65.png"
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 1
+DEBUG:pycotools.viz:viz:get_time:730:dct time --> {'/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/One_AZD_Timecourse.txt': 180}
+INFO:pycotools.viz:viz:plot:794:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/AKT_act.png"
+INFO:pycotools.viz:viz:plot:794:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/Smad2_act.png"
+INFO:pycotools.viz:viz:plot:794:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/MEK_act.png"
+INFO:pycotools.viz:viz:plot:794:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/TSC2.png"
+INFO:pycotools.viz:viz:plot:794:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/PDK1_act.png"
+INFO:pycotools.viz:viz:plot:794:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/PRAS40_pS183.png"
+INFO:pycotools.viz:viz:plot:794:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/4EBP1_pS65.png"
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 0
+DEBUG:pycotools.viz:viz:get_time:730:dct time --> {'/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/One_AZD_Timecourse.txt': 180}
+INFO:pycotools.viz:viz:plot:794:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/AKT_act.png"
+INFO:pycotools.viz:viz:plot:794:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/Smad2_act.png"
+INFO:pycotools.viz:viz:plot:794:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/MEK_act.png"
+INFO:pycotools.viz:viz:plot:794:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/TSC2.png"
+INFO:pycotools.viz:viz:plot:794:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/PDK1_act.png"
+INFO:pycotools.viz:viz:plot:794:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/PRAS40_pS183.png"
+INFO:pycotools.viz:viz:plot:794:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/4EBP1_pS65.png"
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 0
+DEBUG:pycotools.viz:viz:get_time:730:dct time --> {'/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/One_AZD_Timecourse.txt': 180}
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 0
+DEBUG:pycotools.viz:viz:get_time:730:dct time --> {'/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/One_AZD_Timecourse.txt': 180}
+INFO:pycotools.viz:viz:plot:796:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/AKT_act.png"
+INFO:pycotools.viz:viz:plot:796:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/Smad2_act.png"
+INFO:pycotools.viz:viz:plot:796:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/MEK_act.png"
+INFO:pycotools.viz:viz:plot:796:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/TSC2.png"
+INFO:pycotools.viz:viz:plot:796:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/PDK1_act.png"
+INFO:pycotools.viz:viz:plot:796:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/PRAS40_pS183.png"
+INFO:pycotools.viz:viz:plot:796:figure saved to "/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ParameterEstimationPlots/One_AZD_Timecourse/4EBP1_pS65.png"
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 0
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 0
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 0
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 0
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 0
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 0
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 0
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 0
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 0
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 0
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 0
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.tasks:tasks:set_PE_options:3789:randomize start values is --> 0
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:create_workspace:4295:Creating workspace from project_dir
+INFO:pycotools.tasks:tasks:create_workspace:4313:Workspace created
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: /home/b3053674/Documents/pycotools/pycotools/logging_config.conf
