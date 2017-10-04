@@ -132,8 +132,11 @@ cps = r'/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/ERK/ERK_0.cps
 data_file = r'/home/b3053674/Documents/Models/2017/10_Oct/PhilStuff3/one/One_AZD_Timecourse.txt'
 
 erk_model = model.Model(cps)
-MPE = tasks.MultiParameterEstimation(erk_model, data_file)
+MPE = tasks.MultiParameterEstimation(erk_model, data_file,
+                                     copy_number=2)
+MPE.write_config_file()
 MPE.setup()
+# print MPE.results_directory
 MPE.run()
 
 # PE = tasks.ParameterEstimation(erk_model)

@@ -467,7 +467,7 @@ class GetTests(_test_base._BaseTest):
 
         :return:
         """
-        self.assertEqual(self.model.parameters.shape[1], 11)
+        self.assertEqual(self.model.parameters.shape[1], 9)
 
 
     def test_number_of_local_parameters(self):

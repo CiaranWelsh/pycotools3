@@ -434,8 +434,13 @@ class Run(object):
 
 
 
-@mixin(_base.UpdatePropertiesMixin)
-class RunParallel(_base._Base):
+@mixin(model.GetModelComponentFromStringMixin)
+# @mixin(GetModelVariableFromStringMixin)
+@mixin(UpdatePropertiesMixin)
+@mixin(model.ReadModelMixin)
+@mixin(CheckIntegrityMixin)
+@mixin(Bool2Numeric)
+class RunParallel(object):
     def __init__(self, models, **kwargs):
         self.models = models
         self.kwargs = kwargs
@@ -448,7 +453,7 @@ class RunParallel(_base._Base):
         self.update_properties(self.default_properties)
         self.update_kwargs(kwargs)
         self.check_integrity(self.default_properties.keys(), kwargs.keys())
-        # self._do_checks()
+        self._do_checks()
 
         LOG.info('running with {} processes'.format(self.processes))
         self.q = Queue.Queue(maxsize=self.processes)
