@@ -3770,11 +3770,6 @@ class MultiParameterEstimation(ParameterEstimation):
         if isinstance(self.kwargs['pe_number'],int)!=True:
             raise errors.InputError('pe_number argument is of type int')
 
-        if self.results_directory==None:
-            self.results_directory = 'MultipleParameterEsimationAnalysis'
-        self.results_directory = os.path.abspath(self.results_directory)
-
-
     def _create_output_directory(self):
         """
         Create directory for estimation results
@@ -3906,6 +3901,9 @@ class MultiParameterEstimation(ParameterEstimation):
 
         :return:
         """
+        ## create output directory
+        self._create_output_directory()
+
         ## map experiments
         EM = ExperimentMapper(self.model, self.experiment_files, **self._experiment_mapper_args)
 
@@ -4034,8 +4032,8 @@ class MultiModelFit(object):
 
             All other kwargs are described in runMultiplePEs or ParameterEstimation
     '''
-    def __init__(self, project_config, **kwargs):
-        self.project_dir = project_config
+    def __init__(self, project_dir, **kwargs):
+        self.project_dir = project_dir
 #        self.config_filename=config_filename
         self.kwargs = kwargs
         self._do_checks()
@@ -4093,9 +4091,9 @@ class MultiModelFit(object):
                                    'lower_bound': 0.000001,
                                    'upper_bound': 1000000}
 
+        self.default_properties.update(self.kwargs)
         self.convert_bool_to_numeric(self.default_properties)
         self.update_properties(self.default_properties)
-        self.update_kwargs(self.kwargs)
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
         self._do_checks()
 
@@ -4120,12 +4118,6 @@ class MultiModelFit(object):
             if os.path.isabs(self.config_filename):
                 self.config_filename = os.path.split(self.config_filename)[1]
             m = model.Model(self.sub_cps_dirs[cps_dir])
-            # if self.metabolites != []:
-            #     metabs = m.metabolites
-            #
-            # if self.globs == []
-            #     globs = m.global_quantities
-            #     locs = m.local_parameters
             dct[self.sub_cps_dirs[cps_dir]] = MultiParameterEstimation(
                 self.sub_cps_dirs[cps_dir], self.exp_files,
                 **self.kwargs)
@@ -4232,9 +4224,10 @@ class MultiModelFit(object):
         exp_list=[]
         exp_file_types=('*.csv','*.txt')
         for typ in exp_file_types:
+
             for exp_file in glob.glob(typ):
                 exp_list.append(os.path.abspath(exp_file))
-
+        LOG.debug('exp_list = --> {}'.format(exp_list))
         if cps_list==[]:
             raise errors.InputError('No cps files in your project')
         if exp_list==[]:

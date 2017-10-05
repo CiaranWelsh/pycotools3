@@ -529,6 +529,15 @@ class PlotTimeCourse(PlotKwargs):
             self.y = self.data.keys()
             self.y = [i for i in self.y if i.lower() != 'time']
 
+        if self.y == 'metabolites':
+            self.y = [i.name for i in self.cls.model.metabolites]
+
+        elif self.y == 'global_quantities':
+            self.y = [i.name for i in self.cls.model.global_quantities]
+
+        elif self.y == 'local_parameter':
+            self.y = [i.global_name for i in self.cls.model.local_parameters]
+
         if isinstance(self.y, str):
             self.y = [self.y]
 
@@ -743,8 +752,6 @@ class PlotParameterEstimation(PlotKwargs):
             TC = tasks.TimeCourse(self.cls.model, end=time_dct[i],
                              step_size=step_size, intervals=time_dct[i]/step_size)
             d[i] = self.parse(TC, log10=False)
-            import viz
-            viz.PlotTimeCourse(TC, show=True)
         return d
 
     def plot(self):
