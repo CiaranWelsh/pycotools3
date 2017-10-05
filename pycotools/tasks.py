@@ -284,7 +284,7 @@ class Run(object):
         self._do_checks()
 
         if self.sge_job_filename == None:
-            self.SGE_job_filename = os.path.join(os.getcwd(), 'SGEJobFile.sh')
+            self.sge_job_filename = os.path.join(os.getcwd(), 'sge_job_file.sh')
 
         self.model = self.set_task()
         self.model.save()
@@ -295,7 +295,7 @@ class Run(object):
             except errors.CopasiError:
                 self.run_linux()
 
-        elif self.mode == 'SGE':
+        elif self.mode == 'sge':
             self.submit_copasi_job_SGE()
 
         elif self.mode == 'multiprocess':
@@ -319,7 +319,7 @@ class Run(object):
         if self.task not in tasks:
             raise errors.InputError('{} not in list of tasks. List of tasks are: {}'.format(self.task, tasks))
 
-        modes = [True, False, 'multiprocess', 'parallel']
+        modes = [True, False, 'multiprocess', 'parallel', 'sge']
         if self.mode not in modes:
             raise errors.InputError('{} not in {}'.format(self.mode, modes))
 
@@ -381,17 +381,21 @@ class Run(object):
         ##TODO find better solution for running copasi files on linux
         os.system('CopasiSE "{}"'.format(self.model.copasi_file))
 
-    def submit_copasi_job_SGE(self):
+    def submit_copasi_job_SGE(self, copasi_location=None):
         '''
         Submit copasi file as job to SGE based job scheduler.
         '''
-        with open(self.SGE_job_file, 'w') as f:
-            f.write('#!/bin/bash\n#$ -V -cwd\nmodule add apps/COPASI/4.16.104-Linux-64bit\nCopasiSE {}'.format(
-                self.model.copasi_file))
+        if copasi_location is None:
+            copasi_location = 'apps/COPASI/4.19.140-Linux-64bit'
+        with open(self.sge_job_filename, 'w') as f:
+            f.write('#!/bin/bash\n#$ -V -cwd\nmodule add {}\nCopasiSE {}'.format(
+                self.model.copasi_file, copasi_location
+            )
+        )
         ## -N option for job name
-        os.system('qsub {} -N {} '.format(self.SGE_job_file, self.SGE_job_file))
+        os.system('qsub {} -N {} '.format(self.sge_job_filename, self.sge_job_filename))
         ## remove .sh file after used.
-        os.remove(self.SGE_job_file)
+        os.remove(self.sge_job_filename)
 
     # def run1(self, q, model):
     #     """
