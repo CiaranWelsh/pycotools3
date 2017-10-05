@@ -3,7 +3,7 @@ import tasks
 import errors
 import os
 import misc
-# import model
+import model
 # import _base
 
 import logging

@@ -31,7 +31,7 @@ from lxml import etree
 
 # site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
 # import PyCoTools
-import errors
+import errors, misc
 import _base
 import tasks
 import pandas
@@ -109,10 +109,14 @@ class ComparisonMethodsMixin(Mixin):
 
 
 class Model(_base._Base):
-    def __init__(self, copasi_file, quantity_type='concentration', **kwargs):
+    def __init__(self, copasi_file, quantity_type='concentration',
+                 new_model=False, **kwargs):
         super(Model, self).__init__(**kwargs)
         self._copasi_file = copasi_file
         self.quantity_type = quantity_type
+        self.new_model = new_model
+        if self.new_model:
+            misc.new_model(copasi_file)
         self.xml = tasks.CopasiMLParser(copasi_file).copasiML
         ## fill this dict after class is finished
         self.default_properties = {}
@@ -441,7 +445,6 @@ class Model(_base._Base):
 
         if 'compartments' in self.__dict__:
             del self.__dict__['compartments']
-
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfCompartments':
                 i.append(compartment.to_xml())
@@ -988,6 +991,7 @@ class Model(_base._Base):
         #LOG.warning('move below code to separate function for clean code')
         for i, dct in reactions_dict.items():
             if dct['function'] == []:
+                LOG.debug('substrates --> {}'.format(substrates))
                 dct['function'] = "k*{}".format(reduce(lambda x, y: '{}*{}'.format(x, y), substrates))
 
             substrates = [j.name for j in reactions_dict[i]['substrates']]
