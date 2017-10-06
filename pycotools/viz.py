@@ -1482,17 +1482,18 @@ class EnsembleTimeCourse(object):
         self._do_checks()
 
         self.data = self.parse(self.cls, log10=False)
-        self.data = self.truncate(self.data,
-                                  mode=self.truncate_mode,
-                                  theta=self.theta)
-        if self.data.empty:
-            raise errors.InputError('No data. Check arguments to truncate_data and theta '
-                                    'or your parameter estimation configuration '
-                                    'and data files')
-        self.experimental_data = self.parse_experimental_files()
-        self.exp_times = self.get_experiment_times()
-        self.ensemble_data = self.simulate_ensemble()
-        self.ensemble_data.index = self.ensemble_data.index.rename(['Index','Time'])
+        print self.data
+        # self.data = self.truncate(self.data,
+        #                           mode=self.truncate_mode,
+        #                           theta=self.theta)
+        # if self.data.empty:
+        #     raise errors.InputError('No data. Check arguments to truncate_data and theta '
+        #                             'or your parameter estimation configuration '
+        #                             'and data files')
+        # self.experimental_data = self.parse_experimental_files()
+        # self.exp_times = self.get_experiment_times()
+        # self.ensemble_data = self.simulate_ensemble()
+        # self.ensemble_data.index = self.ensemble_data.index.rename(['Index','Time'])
 
         if self.data_filename != None:
             self.ensemble_data.to_csv(self.data_filename)
