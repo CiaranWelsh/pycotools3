@@ -389,10 +389,10 @@ class Run(object):
             copasi_location = 'apps/COPASI/4.19.140-Linux-64bit'
         with open(self.sge_job_filename, 'w') as f:
             f.write('#!/bin/bash\n#$ -V -cwd\nmodule add {}\nCopasiSE {}'.format(
-                self.model.copasi_file, copasi_location
+                copasi_location, self.model.copasi_file
             )
         )
-        ## -N option for job name
+        ## -N option for job namexx
         os.system('qsub {} -N {} '.format(self.sge_job_filename, self.sge_job_filename))
         ## remove .sh file after used.
         os.remove(self.sge_job_filename)
@@ -3753,8 +3753,8 @@ class MultiParameterEstimation(ParameterEstimation):
 
 
     def __str__(self):
-        return 'MultiParameterEstimation(copy_number="{}", pe_number="{}", method="{}")'.format(
-            self.copy_number, self.pe_number, self.method
+        return 'MultiParameterEstimation(copy_number="{}", pe_number="{}", method="{}", config_filename="{}")'.format(
+            self.copy_number, self.pe_number, self.method, self.config_filename
         )
 
     ##void
@@ -4040,65 +4040,68 @@ class MultiModelFit(object):
         self.project_dir = project_dir
 #        self.config_filename=config_filename
         self.kwargs = kwargs
-        self._do_checks()
+
+        ## This needs to be before setting default properties
+        ## so we have access to exp_files and cps_files for lengths
         self.cps_files, self.exp_files = self.read_fit_config()
 
-        self.default_properties = {'run_mode': 'multiprocess',
-                                   'copy_number': 1,
-                                   'pe_number': 3,
-                                   'metabolites': None, 
-                                   'global_quantities': None,
-                                   'local_parameters': None,
-                                   'report_name': None,
-                                   'results_directory': None,
-                                   ##default parameters for ParameterEstimation
-                                   'method': 'genetic_algorithm',
-                                   'plot': False,
-                                   'quantity_type': 'concentration',
-                                   'append': False,
-                                   'confirm_overwrite': False,
-                                   'config_filename': 'PEConfigFile.xlsx',
-                                   'overwrite_config_file': False,
-                                   'prune_headers': True,
-                                   'update_model': False,
-                                   'randomize_start_values': True,
-                                   'create_parameter_sets': False,
-                                   'calculate_statistics': False,
-                                   'use_config_start_values': False,
-                                   #method options
-                                   #'DifferentialEvolution',
-                                   'number_of_generations': 200,
-                                   'population_size': 50,
-                                   'random_number_generator': 1,
-                                   'seed': 0,
-                                   'pf': 0.475,
-                                   'iteration_limit': 50,
-                                   'tolerance': 0.0001,
-                                   'rho': 0.2,
-                                   'scale': 10,
-                                   'swarm_size': 50,
-                                   'std_deviation': 0.000001,
-                                   'number_of_iterations': 100000,
-                                   'start_temperature': 1,
-                                   'cooling_factor': 0.85,
-                                   #experiment definition options
-                                   #need to include options for defining multiple experimental files at once
-                                   'row_orientation': [True]*len(self.exp_files),
-                                   'experiment_type': ['timecourse']*len(self.exp_files),
-                                   'first_row': [str(1)]*len(self.exp_files),
-                                   'normalize_weights_per_experiment': [True]*len(self.exp_files),
-                                   'row_containing_names': [str(1)]*len(self.exp_files),
-                                   'separator': ['\t']*len(self.exp_files),
-                                   'weight_method': ['mean_squared']*len(self.exp_files),
-                                   'save': 'overwrite',
-                                   'scheduled': False,
-                                   'lower_bound': 0.000001,
-                                   'upper_bound': 1000000}
-
-        self.default_properties.update(self.kwargs)
-        self.convert_bool_to_numeric(self.default_properties)
-        self.update_properties(self.default_properties)
-        self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
+        # self.default_properties = {'run_mode': 'multiprocess',
+        #                            'copy_number': 1,
+        #                            'pe_number': 3,
+        #                            'metabolites': [],
+        #                            'global_quantities': [],
+        #                            'local_parameters': [],
+        #                            'report_name': 'PE_report.csv',
+        #                            'results_directory': os.path.join(
+        #                                os.path.dirname(self.cps_files[0]), 'MultiModelFit'),
+        #                            ##default parameters for ParameterEstimation
+        #                            'method': 'genetic_algorithm',
+        #                            'plot': False,
+        #                            'quantity_type': 'concentration',
+        #                            'append': False,
+        #                            'confirm_overwrite': False,
+        #                            'config_filename': 'config_file.csv',
+        #                            'overwrite_config_file': False,
+        #                            'prune_headers': True,
+        #                            'update_model': False,
+        #                            'randomize_start_values': True,
+        #                            'create_parameter_sets': False,
+        #                            'calculate_statistics': False,
+        #                            'use_config_start_values': False,
+        #                            #method options
+        #                            #'DifferentialEvolution',
+        #                            'number_of_generations': 200,
+        #                            'population_size': 50,
+        #                            'random_number_generator': 1,
+        #                            'seed': 0,
+        #                            'pf': 0.475,
+        #                            'iteration_limit': 50,
+        #                            'tolerance': 0.0001,
+        #                            'rho': 0.2,
+        #                            'scale': 10,
+        #                            'swarm_size': 50,
+        #                            'std_deviation': 0.000001,
+        #                            'number_of_iterations': 100000,
+        #                            'start_temperature': 1,
+        #                            'cooling_factor': 0.85,
+        #                            #experiment definition options
+        #                            #need to include options for defining multiple experimental files at once
+        #                            'row_orientation': [True]*len(self.exp_files),
+        #                            'experiment_type': ['timecourse']*len(self.exp_files),
+        #                            'first_row': [str(1)]*len(self.exp_files),
+        #                            'normalize_weights_per_experiment': [True]*len(self.exp_files),
+        #                            'row_containing_names': [str(1)]*len(self.exp_files),
+        #                            'separator': ['\t']*len(self.exp_files),
+        #                            'weight_method': ['mean_squared']*len(self.exp_files),
+        #                            'save': 'overwrite',
+        #                            'scheduled': False,
+        #                            'lower_bound': 0.000001,
+        #                            'upper_bound': 1000000}
+        # # print self.exp_files
+        # self.convert_bool_to_numeric(self.default_properties)
+        # self.update_properties(self.default_properties)
+        # self.default_properties.update(self.kwargs)
+        # self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
         self._do_checks()
 
         self.sub_cps_dirs=self.create_workspace()
@@ -4107,6 +4110,28 @@ class MultiModelFit(object):
 
     def _do_checks(self):
         pass
+
+    def __iter__(self):
+        for MPE in self.MPE_dct.values():
+            yield MPE
+
+    def __getitem__(self, item):
+        return self.MPE_dct[item]
+
+    def __setitem__(self, key, value):
+        self.MPE_dct[key] = value
+
+    def __delitem__(self, key):
+        del self.MPE_dct[key]
+
+    def keys(self):
+        return self.MPE_dct.keys()
+
+    def values(self):
+        return self.MPE_dct.values()
+
+    def items(self):
+        return self.MPE_dct.items()
 
     def instantiate_run_multi_PEs_class(self):
         """
@@ -4119,12 +4144,17 @@ class MultiModelFit(object):
 
         for cps_dir in self.sub_cps_dirs:
             os.chdir(cps_dir)
-            if os.path.isabs(self.config_filename):
-                self.config_filename = os.path.split(self.config_filename)[1]
+
+            # if os.path.isabs(self.config_filename):
+            #     self.config_filename = os.path.split(self.config_filename)[1]
+
             m = model.Model(self.sub_cps_dirs[cps_dir])
+
+
             dct[self.sub_cps_dirs[cps_dir]] = MultiParameterEstimation(
                 self.sub_cps_dirs[cps_dir], self.exp_files,
-                **self.kwargs)
+                **self.kwargs
+            )
 
         return dct
 
@@ -4231,12 +4261,11 @@ class MultiModelFit(object):
 
             for exp_file in glob.glob(typ):
                 exp_list.append(os.path.abspath(exp_file))
-        LOG.debug('exp_list = --> {}'.format(exp_list))
         if cps_list==[]:
             raise errors.InputError('No cps files in your project')
         if exp_list==[]:
             raise errors.InputError('No experiment files in your project')
-        return cps_list,exp_list
+        return cps_list, exp_list
 
 
     def format_data(self):

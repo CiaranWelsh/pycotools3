@@ -392,7 +392,7 @@ class Parse(object):
                                     ' parameter estimation data')
 
         d = {}
-        for report_name in glob.glob(self.cls_instance + r'/*'):
+        for report_name in glob.glob(os.path.join(self.cls_instance, '*.txt')):
             report_name = os.path.abspath(report_name)
             if os.path.isfile(report_name) != True:
                 raise errors.FileDoesNotExistError('"{}" does not exist'.format(report_name))
@@ -736,7 +736,6 @@ class PlotParameterEstimation(PlotKwargs):
         data_dct = self.read_experimental_data()
         for i in data_dct:
             dct[i] = data_dct[i]['Time'].max()
-        LOG.debug('dct time --> {}'.format(dct))
         return dct
 
     def simulate_time_course(self):
@@ -1623,8 +1622,7 @@ class EnsembleTimeCourse(object):
         data.index.name = 'ParameterFitIndex'
         data = data.reset_index()
         data.to_csv('file.csv')
-        LOG.debug('df.head is \n\n--> {}'.format(
-            data.sort_values(by=['Time', 'ParameterFitIndex']).head(5)))
+        data.sort_values(by=['Time', 'ParameterFitIndex']).head(5)
         # seaborn.despine()
         for parameter in self.y:
             if parameter not in ['ParameterFitIndex', 'Time']:
@@ -1661,116 +1659,132 @@ class EnsembleTimeCourse(object):
 
 # @mixin(DefaultResultsDirectoryMixin)
 
-@mixin(TruncateDataMixin)
 @mixin(tasks.UpdatePropertiesMixin)
+@mixin(ParseMixin)
+@mixin(TruncateDataMixin)
+@mixin(CreateResultsDirectoryMixin)
 class ModelSelection(object):
     '''
     ## could give
     '''
-    def __init__(self,multi_model_fit, **kwargs):
-        self.multi_model_fit=multi_model_fit
-        self.number_models=self.get_num_models()
-        
-        options={#report variables
-                 'savefig': False,
-                 'results_directory':self.multi_model_fit.project_dir,
-                 'dpi':300}
-                 
-        for i in kwargs.keys():
-            assert i in options.keys(),'{} is not a keyword argument for ModelSelection'.format(i)
-        options.update( kwargs) 
-        self.kwargs=options
-        self.update_properties(self.kwargs)
-        raise NotImplementedError
-        
+    def __init__(self, multi_model_fit, **kwargs):
+        self.multi_model_fit = multi_model_fit
+        self.number_models = self.get_num_models()
+        self.savefig = False
+        self.results_directory = self.multi_model_fit.project_dir
+        self.dpi = 300
+        self.log10= False
+        self.model_selection_filename = None
+        self._do_checks()
+
         
 #        if self.model_selection_filename==None:
 #            self.model_selection_filename=os.path.join(self.multi_model_fit.wd,'ModelSelectionData.xlsx')
-        self.results_folder_dct=self._get_results_directories()
-        self._PED_dct=self._parse_data()
-        self.GMQ_dct=self._get_GMQ_dct()
-        self.number_model_parameters=self._get_number_estimated_model_parameters()
-        self.number_observations=self._get_n()
+        self.results_folder_dct = self._get_results_directories()
+        self.model_dct = self._get_model_dct()
+        self.data_dct = self._parse_data()
+        self.number_model_parameters = self._get_number_estimated_model_parameters()
+        self.number_observations = self._get_n()
         self.model_selection_data=self.calculate_model_selection_criteria()
-        
 
-    def __getitem__(self,key):
-        if key not in self.kwargs.keys():
-            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
-        return self.kwargs[key]
+    def __iter__(self):
+        for MPE in self.multi_model_fit:
+            yield MPE
 
-    def __setitem__(self,key,value):
-        self.kwargs[key] = value
-        
-    def get_num_models(self):
-        return len(self.multi_model_fit.cps_files)
-    ## void
-    def to_excel(self,filename):
-        self.model_selection_data.to_excel(filename)
-        
+    def __getitem__(self, item):
+        return self.multi_model_fit[item]
+
+    def __setitem__(self, key, value):
+        self.multi_model_fit[key] = value
+
+    def __delitem__(self, key):
+        del self.multi_model_fit[key]
+
+    def keys(self):
+        return self.multi_model_fit.keys()
+
+    def values(self):
+        return self.multi_model_fit.values()
+
+    def items(self):
+        return self.multi_model_fit.items()
+
+    def _do_checks(self):
+        """
+
+        :return:
+        """
+        if self.model_selection_filename is None:
+            self.model_selection_filename = os.path.join(self.results_directory, 'ModelSelectionCriteria.csv')
+
     def _get_results_directories(self):
         '''
         Find the results directories embedded within MultimodelFit
-        and RunMutliplePEs. 
+        and RunMutliplePEs.
         '''
-        LOG.debug('Finding location of parameter estimation results:')
-        dct=self.multi_model_fit.results_folder_dct
-        for key in dct:
-            LOG.debug('Key to results folder dict is the cps file: \n{}'.format(key))
-            LOG.debug('Value to results folder dict is the output results folder: \n{}'.format(dct[key]))
-            LOG.debug('Checking that the results folder exists: ... {}'.format(os.path.isdir(dct[key])))
+        return  self.multi_model_fit.results_folder_dct
+
+    def get_num_models(self):
+        return len(self.multi_model_fit.cps_files)
+
+    def to_excel(self, filename=None):
+        if filename is None:
+            filename = self.model_selection_filename[:-4]+'.xlsx'
+        self.model_selection_data.to_excel(filename)
+
+    def to_csv(self, filename=None):
+        if filename is None:
+            filename = self.model_selection_filename
+        LOG.info('model selection data saved to {}'.format(filename))
+        self.model_selection_data.to_csv(filename)
+        
+    def _get_model_dct(self):
+        """
+        Get a model dct. The model must be a configured model
+        (i.e. not the original and with a number after it)
+        :return:
+        """
+        dct={}
+        for MPE in self.multi_model_fit:
+
+            ## get the first cps file configured for eastimation in each MMF obj
+            cps_1 = glob.glob(
+                os.path.join(
+                    os.path.dirname(MPE.results_directory),
+                    '*_1.cps')
+            )[0]
+            dct[MPE.results_directory] = model.Model(cps_1)
         return dct
-    
+
     def _parse_data(self):
         '''
-        
+
         '''
-        
-        PED_dct={}
-        LOG.debug('Here is the results folder:\n{}'.format(self.results_folder_dct))
-        LOG.debug('The results folder vairable is of type {}'.format(type(self.results_folder_dct)))
-#        for i in self._results_folders:
-#            print i,self._results_folder[i]
-#        print type(self._results_folders)
-#        print len(self._results_folders.items())
-        for folder in self.results_folder_dct:
-            LOG.debug('parsing data from folder')
-            LOG.debug('checking results folder exists: {}'.format(os.path.isdir(self.results_folder_dct[folder]),self.results_folder_dct[folder]))
-            PED_dct[folder]=ParsePEData(self.results_folder_dct[folder])
-            
-        LOG.info('data successfully parsed from {} models into Python'.format(len(self.results_folder_dct.items())))
-        return PED_dct
-            
-    def _get_GMQ_dct(self):
-        '''
-        iterate over each model and get the corresponding
-        GetModelQuantities class for each. 
-        '''
-        LOG.debug('Instantiating GetModelQuantities per model')
-        GMQ_dct={}
-        for model in self.multi_model_fit.sub_cps_dirs:
-            LOG.debug('Key:\t{}'.format(model))
-            LOG.debug('Value \t{}'.format(self.multi_model_fit.sub_cps_dirs[model]))
-            GMQ_dct[self.multi_model_fit.sub_cps_dirs[model]]=tasks.GetModelQuantities(self.multi_model_fit.sub_cps_dirs[model])
-        LOG.debug('GetModelQuantities Instantiated')
-        return GMQ_dct
-    
+
+        dct={}
+        for MPE in self.multi_model_fit:
+
+            ## get the first cps file configured for eastimation in each MMF obj
+            cps_1 = glob.glob(
+                os.path.join(
+                    os.path.dirname(MPE.results_directory),
+                    '*_1.cps')
+            )[0]
+            dct[cps_1] = Parse(MPE.results_directory,
+                               copasi_file=cps_1,
+                               log10=self.log10)
+        return dct
+
     def _get_number_estimated_model_parameters(self):
-        '''
-        
-        '''
         k_dct={}
-        for GMQ in self.GMQ_dct:
-            LOG.debug( 'model at {} has {} estimated parameters'.format(GMQ,len(self.GMQ_dct[GMQ].get_fit_items().items())))
-            k_dct[GMQ]=len(self.GMQ_dct[GMQ].get_fit_items().items())
+        for mod in self.model_dct.values():
+            k_dct[mod.copasi_file] = len(mod.fit_item_order)
         return k_dct
             
     def _get_n(self):
         '''
         get number of observed data points for AIC calculation
         '''
-        LOG.info('Counting number of observed data points:...')
-        LOG.debug('Number of Experiment Files: \t{}'.format(len(self.multi_model_fit.exp_files)))
         n={}
         for exp in self.multi_model_fit.exp_files:
             data=pandas.read_csv(exp,sep='\t')
@@ -1778,11 +1792,9 @@ class ModelSelection(object):
             for key in data.keys() :
                 if key.lower()!='time':
                     if key[-6:]!='_indep':
-                        LOG.debug('Dimensions of data at file \n{} is \n{}'.format(exp,data[key].shape))
                         l.append(int(data[key].shape[0]))
             n[exp]=sum(l)
         n=sum(n.values())
-        LOG.debug('Final sum of all data files is {}'.format(n))
         return n
         
         
@@ -1824,51 +1836,32 @@ class ModelSelection(object):
         '''
         
         '''
-        LOG.debug('calculating model selection criteria AIC and BIC')
-        LOG.debug('self.multi_model_fit.sub_cps_dirs is of type {}'.format(type(self.multi_model_fit.sub_cps_dirs)))
         df_dct={}
-        for model_num in range(len(self.multi_model_fit.sub_cps_dirs)):
-            keys=self.multi_model_fit.sub_cps_dirs.keys()
-            LOG.debug( 'Calculating MSC for model \t{}'.format(keys[model_num]))
-            cps_key=self.multi_model_fit.sub_cps_dirs[keys[model_num]]
+        for model_num in range(len(self.model_dct)):
+            keys = self.model_dct.keys()
+            cps_key = self.model_dct[keys[model_num]].copasi_file
             k=self.number_model_parameters[cps_key]
-            LOG.debug('k is {}'.format(k))
-            n=self.number_observations #constant throughout analysis 
-            LOG.debug('n is {}'.format(n))
-            RSS=self._PED_dct[cps_key].data.RSS
-            LOG.debug(RSS.shape)
+            n=self.number_observations #constant throughout analysis
+            RSS=self.data_dct[cps_key].data.RSS
             aic_dct={}
             bic_dct={}
-            LOG.debug('Full RSS Series')
-            LOG.debug(RSS)
             for i in range(len(RSS)):
-                LOG.debug('In RSS vector: {},{}'.format(i,RSS.iloc[i]))
                 aic=self.calculate1AIC(RSS.iloc[i],k,n)
                 bic=self.calculate1BIC(RSS.iloc[i],k,n)
                 aic_dct[i]=aic
                 bic_dct[i]=bic
-                LOG.debug('In idx,RSS,AIC,BIC: {},{},{},{}'.format(i,RSS.iloc[i],aic,bic))
-            LOG.debug('RSS for model:\n{}'.format(RSS.to_dict()))
-            LOG.debug('AICc calculation produced:\n{}'.format(aic_dct))
-            LOG.debug('BIC calculation produced:\n{}'.format(bic_dct))
-            LOG.debug('{},{}'.format(i,RSS[i]))
             aic= pandas.DataFrame.from_dict(aic_dct,orient='index')
             RSS= pandas.DataFrame(RSS)
             bic= pandas.DataFrame.from_dict(bic_dct,orient='index')
-            LOG.debug(aic)
-            LOG.debug(RSS)
-            LOG.debug(bic)
             df=pandas.concat([RSS,aic,bic],axis=1)
             df.columns=['RSS','AICc','BIC']
             df.index.name='RSS Rank'
             df_dct[os.path.split(cps_key)[1]]=df
-            LOG.debug('\n{}'.format(df))
         df=pandas.concat(df_dct,axis=1)
-        LOG.debug(df)
         return df
     
     
-    def plot_boxplot(self):
+    def boxplot(self):
         '''
         
         '''
@@ -1923,26 +1916,25 @@ class ModelSelection(object):
             dct[round(i,3)]=self.chi2_lookup_table(i)
         return dct[0.05]
     
-    def call_fit_analysis_script(self,tolerance=0.001):
-        '''
-        
-        '''
-        LOG.debug('calling fit analysis script')
-        for i in self.multi_model_fit.results_folder_dct:
-            LOG.debug('\tKey :\n{}\nValue:\n{}'.format(i,self.multi_model_fit.results_folder_dct[i]))
-            self.run_fit_analysis(self.multi_model_fit.results_folder_dct[i])
-
-#    @ipyparallel.dview.remote(block=True)
-    def run_fit_analysis(self,results_path,tolerance=0.001):
-        '''
-        
-        '''
-        scripts_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)),'Scripts')
-        fit_analysis_script_name=os.path.join(scripts_folder,'fit_analysis.py')
-        LOG.debug('fit analysis script on your computer is at \t\t{}'.format(fit_analysis_script_name))
-
-        return Popen(['python',fit_analysis_script_name,results_path,'-tol', tolerance])
-#        
+#     def call_fit_analysis_script(self,tolerance=0.001):
+#         '''
+#
+#         '''
+#         for i in self.multi_model_fit.results_folder_dct:
+#             LOG.debug('\tKey :\n{}\nValue:\n{}'.format(i,self.multi_model_fit.results_folder_dct[i]))
+#             self.run_fit_analysis(self.multi_model_fit.results_folder_dct[i])
+#
+# #    @ipyparallel.dview.remote(block=True)
+#     def run_fit_analysis(self,results_path,tolerance=0.001):
+#         '''
+#
+#         '''
+#         scripts_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)),'Scripts')
+#         fit_analysis_script_name=os.path.join(scripts_folder,'fit_analysis.py')
+#         LOG.debug('fit analysis script on your computer is at \t\t{}'.format(fit_analysis_script_name))
+#
+#         return Popen(['python',fit_analysis_script_name,results_path,'-tol', tolerance])
+# #
     def compare_sim_vs_exp(self):
         '''
         
@@ -1950,7 +1942,6 @@ class ModelSelection(object):
         LOG.info('Visually comparing simulated Versus Experiemntal data.')
         
         for cps, res in self.multi_model_fit.results_folder_dct.items():
-            LOG.debug('running current solution statistics PE with:\t {}'.format(cps))
             tasks.InsertParameters(cps,parameter_path=res, index=0)
             PE=tasks.ParameterEstimation(cps,self.multi_model_fit.exp_files,
                                        randomize_start_values=False,
