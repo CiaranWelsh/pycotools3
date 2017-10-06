@@ -129,6 +129,23 @@ class ModelLevelAttributeTests(_test_base._BaseTest):
         new_model.save()
         self.assertTrue(os.path.isfile(new_filename))
 
+    def test_new_model1(self):
+        """
+        Test building of empty new model
+        :return:
+        """
+        new_filename = os.path.join(self.model.root, 'New_model.cps')
+        m = pycotools.model.Model(new_filename, new_model=True)
+        self.assertTrue(os.path.isfile(new_filename))
+
+    def test_new_model2(self):
+        """
+        Test building of empty new model
+        :return:
+        """
+        new_filename = os.path.join(self.model.root, 'New_model.cps')
+        m = pycotools.model.Model(new_filename, new_model=True)
+        self.assertTrue(isinstance(m, pycotools.model.Model))
 
 class ModelComponentAttributeTests(_test_base._BaseTest):
     """

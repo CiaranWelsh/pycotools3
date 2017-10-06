@@ -13223,3 +13223,68 @@ DEBUG:pycotools.viz:viz:plot:1588:experiemntal data --> {'/home/b3053674/Documen
 [101 rows x 37 columns]}
 DEBUG:pycotools.viz:viz:plot:1589:parameter --> k_Smads_Complex_c
 INFO:pycotools.viz:viz:__init__:1198:plotting histograms
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: //home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+DEBUG:pycotools.viz:viz:get_time:739:dct time --> {'/home/b3053674/Documents/pycotools/ZiModel/parameter_estimation_synthetic_data.txt': 1000}
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: //home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3898:running model: 0
+INFO:pycotools.tasks:tasks:run:3898:running model: 1
+INFO:pycotools.tasks:tasks:run:3898:running model: 2
+INFO:pycotools.tasks:tasks:run:3898:running model: 3
+INFO:pycotools.tasks:tasks:run:3898:running model: 4
+INFO:pycotools.tasks:tasks:run:3898:running model: 5
+INFO:pycotools.tasks:tasks:run:3898:running model: 6
+INFO:pycotools.tasks:tasks:run:3898:running model: 7
+DEBUG:pycotools.viz:viz:plot:1627:df.head is 
+
+-->       ParameterFitIndex       Kcd  Kdeg_T1R_EE  Kdeg_T2R_EE  \
+0                     0  0.356595     0.100000     0.105328   
+1001                  1  0.117994     0.100000     0.100000   
+2002                  2  0.104993     0.710916     0.920261   
+3003                  3  0.107988     0.107054     2.941700   
+4004                  4  0.491222     0.100000     5.123800   
+
+      Kdiss_Smads_Complex_n  Kexp_Smad2n  Kexp_Smad4n  Kimp_Smad2c  \
+0                  0.101601     2.915770     0.548621     1.464500   
+1001               0.143322     1.108610     0.440853     0.485979   
+2002               0.186413     0.239829     0.216381     1.185110   
+3003               0.377487     0.157498     0.104829     0.852366   
+4004               0.860381     0.652292     0.363358     2.333320   
+
+      Kimp_Smad4c  Kimp_Smads_Complex_c    ...     Total_Smad2c  Total_Smad2n  \
+0        1.474460              0.848152    ...         6.046330      3.629740   
+1001     0.130324              0.431728    ...         4.444580      2.285720   
+2002     0.525857              0.138410    ...         1.984030      0.329900   
+3003     2.784320              0.127926    ...         0.496404      8.639470   
+4004     1.023400              0.331921    ...       100.000000      0.681836   
+
+      k_LRC  k_Smads_Complex_c   ki_Cave     ki_EE   kr_Cave     kr_EE  \
+0     100.0           1.988210  0.176070  1.490060  0.130176  0.163024   
+1001  100.0           0.610520  1.248830  0.102207  0.332385  0.828326   
+2002  100.0           0.144096  1.339380  0.476526  3.245590  0.414725   
+3003  100.0           2.064320  2.672720  2.150420  1.064570  0.577424   
+4004  100.0           2.081710  0.608148  0.225876  0.187349  3.403280   
+
+         v_T1R     v_T2R  
+0     0.327479  0.140359  
+1001  0.136561  1.102030  
+2002  0.762974  0.116038  
+3003  0.271907  2.463480  
+4004  0.501095  2.278190  
+
+[5 rows x 38 columns]
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: //home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:root:__init__:<module>:27:Initializing pycotools
+INFO:root:__init__:<module>:28:Initializing logging System
+INFO:root:__init__:<module>:29:logging config file at: //home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+INFO:pycotools.tasks:tasks:run:3898:running model: 0
+INFO:pycotools.tasks:tasks:run:3898:running model: 1
+INFO:pycotools.tasks:tasks:run:3898:running model: 2
+INFO:pycotools.tasks:tasks:run:3898:running model: 3
+WARNING:pycotools.viz:viz:from_multi_parameter_estimation:345:No Columns to parse from file. /home/b3053674/Documents/pycotools/ZiModel/Fit1Results/PEData3.txt is empty. Returned None
+WARNING:pycotools.viz:viz:from_multi_parameter_estimation:345:No Columns to parse from file. /home/b3053674/Documents/pycotools/ZiModel/Fit1Results/PEData3.txt is empty. Returned None

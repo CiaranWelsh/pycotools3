@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created by COPASI version 4.19 (Build 140) on 2017-10-04 14:00 with libSBML version 5.13.0. -->
+<!-- Created by COPASI version 4.19 (Build 140) on 2017-10-04 15:36 with libSBML version 5.13.0. -->
 <sbml xmlns="http://www.sbml.org/sbml/level2/version4" level="2" version="4">
   <model metaid="COPASI0" id="New_Model" name="New Model">
     <annotation>
