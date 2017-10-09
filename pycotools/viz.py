@@ -583,6 +583,230 @@ class PlotTimeCourse(PlotKwargs):
             plt.show()
         return figures
 
+
+@mixin(tasks.UpdatePropertiesMixin)
+@mixin(ParseMixin)
+@mixin(TruncateDataMixin)
+@mixin(CreateResultsDirectoryMixin)
+class PlotTimeCourseEnsemble(object):
+    """
+
+
+    To Do:
+        - Build option for including experimental data on the plots
+    """
+
+    def __init__(self, cls, **kwargs):
+        self.cls = cls
+        options = {'sep': '\t',
+                   'y': None,
+                   'x': 'time',
+                   'truncate_mode': 'percent',
+                   'theta': 100,
+                   'xtick_rotation': 'horizontal',
+                   'ylabel': 'Frequency',
+                   'savefig': False,
+                   'results_directory': None,
+                   'dpi': 300,
+                   'step_size': 1,
+                   'check_as_you_plot': False,
+                   'estimator': numpy.mean,
+                   'n_boot': 10000,
+                   'ci': 95,
+                   'color': 'blue',
+                   'show': False,
+                   'silent': True,
+                   'data_filename': None,  # For outputting ensemble data to file
+                   'exp_color': 'red',
+                   'experiment_files': None,  # For use only when parsing from folder
+                   'title': None,
+                   'ylabel': None,
+                   'xlabel': None,
+                   }
+
+        for i in kwargs.keys():
+            assert i in options.keys(), '{} is not a keyword argument for ParameterEnsemble'.format(i)
+        options.update(kwargs)
+        self.kwargs = options
+        self.update_properties(self.kwargs)
+        self._do_checks()
+
+        self.data = self.parse(self.cls, log10=False)
+        self.data = self.truncate(self.data,
+                                  mode=self.truncate_mode,
+                                  theta=self.theta)
+        if self.data.empty:
+            raise errors.InputError('No data. Check arguments to truncate_data and theta '
+                                    'or your parameter estimation configuration '
+                                    'and data files')
+        self.experimental_data = self.parse_experimental_files()
+        self.exp_times = self.get_experiment_times()
+        self.ensemble_data = self.simulate_ensemble()
+        self.ensemble_data.index = self.ensemble_data.index.rename(['Index','Time'])
+
+        if self.data_filename != None:
+            self.ensemble_data.to_csv(self.data_filename)
+        self.plot()
+        # print self.ensemble_data
+
+    def create_directory(self):
+        """
+        create a directory for the results
+        :return:
+        """
+        if self.results_directory is None:
+            if type(self.cls) == Parse:
+                self.results_directory = os.path.join(os.path.dirname(self.cls.copasi_file),
+                                                      'EnsembleTimeCourse')
+            else:
+                self.results_directory = os.path.join(self.cls.model.root,
+                                                      'EnsembleTimeCourse')
+
+        if not os.path.isdir(self.results_directory):
+            os.makedirs(self.results_directory)
+        return self.results_directory
+
+    def _do_checks(self):
+        """
+
+        :return:
+        """
+        if type(self.cls) == Parse:
+            if self.experiment_files is None:
+                raise errors.InputError('If parsing estimation data from '
+                                        'folder, please specify argument'
+                                        ' to experiment_files')
+        if self.experiment_files is not None:
+            if isinstance(self.experiment_files, str):
+                self.experiment_files = [self.experiment_files]
+
+                # if self.results_directory == None:
+                #     self.results_directory = self.create_directory()
+                # self.results_directory = os.path.join(self.cls.model.root, 'EnsembleTimeCourses' )
+
+    def parse_experimental_files(self):
+        """
+
+        :return:
+        """
+        df_dct = {}
+
+        if type(self.cls) == Parse:
+            exp_files = self.experiment_files
+
+        else:
+            exp_files = self.cls.experiment_files
+
+        for i in range(len(exp_files)):
+            df = pandas.read_csv(exp_files[i],
+                                 sep='\t')
+        df_dct[exp_files[i]] = df
+        return df_dct
+
+    def get_experiment_times(self):
+        d = {}
+        for i in self.experimental_data:
+            d[i] = {}
+            for j in self.experimental_data[i].keys():
+                if j.lower() == 'time':
+                    d[i] = self.experimental_data[i][j]
+
+        times = {}
+        for i in d:
+            times[i] = {}
+            times[i]['start'] = d[i].iloc[0]
+            times[i]['end'] = d[i].iloc[-1]
+            times[i]['step_size'] = d[i].iloc[1] - d[i].iloc[0]
+            '''
+            subtract 1 from intervals to account for header
+            '''
+            times[i]['intervals'] = int(d[i].shape[0]) - 1
+        return times
+
+    def simulate_ensemble(self):
+        """
+
+        """
+
+        ## collect end times for each experiment
+        ##in order to find the biggest
+        end_times = []
+        for i in self.exp_times:
+            ## start creating a results dict while were at it
+            end_times.append(self.exp_times[i]['end'])
+        intervals = max(end_times) / self.step_size
+        d = {}
+        for i in range(self.data.shape[0]):
+            if not self.silent:
+                LOG.info('inserting parameter set {}'.format(i))
+                LOG.info(I.parameters.transpose().sort_index())
+            I = model.InsertParameters(self.cls.model, df=self.data, index=i)
+            TC = tasks.TimeCourse(I.model,
+                                  end=max(end_times),
+                                  step_size=self.step_size,
+                                  intervals=intervals,
+                                  plot=False)
+            if self.check_as_you_plot:
+                self.cls.model.open()
+            d[i] = self.parse(TC, log10=False)
+        return pandas.concat(d)
+
+    def plot(self):
+        """
+
+        """
+        if self.y == None:
+            self.y = list(self.ensemble_data.keys())
+
+        if isinstance(self.y, list) != True:
+            self.y = [self.y]
+
+        for param in self.y:
+            if param not in self.ensemble_data.keys():
+                raise errors.InputError('{} not in your data set. {}'.format(param, self.ensemble_data.keys()))
+
+        data = self.ensemble_data.reset_index(level=1, drop=True)
+        data.index.name = 'ParameterFitIndex'
+        data = data.reset_index()
+        data.to_csv('file.csv')
+        data.sort_values(by=['Time', 'ParameterFitIndex']).head(5)
+        # seaborn.despine()
+        for parameter in self.y:
+            if parameter not in ['ParameterFitIndex', 'Time']:
+                plt.figure()
+                # seaborn.set_palette([self.color])
+                ax1 = seaborn.tsplot(
+                    data=data, time='Time', value=parameter,
+                    unit='ParameterFitIndex',
+                    err_style='ci_band',
+                    estimator=self.estimator,
+                    n_boot=self.n_boot,
+                    ci=self.ci,
+                    color=self.color,
+                )
+
+                ax2 = plt.plot(self.experimental_data[self.experimental_data.keys()[0]]['Time'],
+                               self.experimental_data[self.experimental_data.keys()[0]][parameter],
+                               '--', color=self.exp_color, label='Exp', alpha=0.4, marker='o')
+                sim_patch = mpatches.Patch(color=self.color, label='Sim', alpha=0.4)
+                exp_patch = mpatches.Patch(color=self.exp_color, label='Exp', alpha=0.4)
+                plt.legend(handles=[sim_patch, exp_patch], loc=(1, 0.5))
+
+                # handles, labels = ax1.get_legend_handles_labels()
+                # ax1.legend(handles, labels)
+
+                # plt.legend([ax1, ax2], ['Sim', 'Exp'], loc=(1,0.5))
+                if self.title is None:
+                    plt.title('{} (n={})'.format(parameter, self.data.shape[0]))
+                else:
+                    plt.title(self.title)
+                if self.savefig:
+                    self.results_directory = self.create_directory()
+                    fname = os.path.join(self.results_directory, '{}.png'.format(misc.RemoveNonAscii(parameter).filter))
+                    plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
+        if self.show:
+            plt.show()
+
 @mixin(tasks.UpdatePropertiesMixin)
 @mixin(SaveFigMixin)
 @mixin(ParseMixin)
@@ -1436,229 +1660,6 @@ class LinearRegression(PlotKwargs):
             fname = os.path.join(self.results_directory, 'linregress_parameters.png')
             plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
 
-
-@mixin(tasks.UpdatePropertiesMixin)
-@mixin(ParseMixin)
-@mixin(TruncateDataMixin)
-@mixin(CreateResultsDirectoryMixin)
-class EnsembleTimeCourse(object):
-    """
-    
-    
-    To Do:
-        - Build option for including experimental data on the plots 
-    """
-    
-    def __init__(self, cls, **kwargs):
-        self.cls = cls
-        options = {'sep': '\t',
-                   'y': None,
-                   'x': 'time',
-                   'truncate_mode': 'percent',
-                   'theta': 100,
-                   'xtick_rotation': 'horizontal',
-                   'ylabel': 'Frequency',
-                   'savefig': False,
-                   'results_directory': None,
-                   'dpi': 300,
-                   'step_size': 1,
-                   'check_as_you_plot': False,
-                   'estimator': numpy.mean,
-                   'n_boot': 10000,
-                   'ci': 95,
-                   'color': 'blue',
-                   'show': False,
-                   'silent': True,
-                   'data_filename': None, #For outputting ensemble data to file
-                   'exp_color': 'red',
-                   'experiment_files': None, #For use only when parsing from folder
-                   }
-        
-        for i in kwargs.keys():
-            assert i in options.keys(),'{} is not a keyword argument for ParameterEnsemble'.format(i)
-        options.update(kwargs)
-        self.kwargs = options
-        self.update_properties(self.kwargs)
-        self._do_checks()
-
-        self.data = self.parse(self.cls, log10=False)
-        print self.data
-        # self.data = self.truncate(self.data,
-        #                           mode=self.truncate_mode,
-        #                           theta=self.theta)
-        # if self.data.empty:
-        #     raise errors.InputError('No data. Check arguments to truncate_data and theta '
-        #                             'or your parameter estimation configuration '
-        #                             'and data files')
-        # self.experimental_data = self.parse_experimental_files()
-        # self.exp_times = self.get_experiment_times()
-        # self.ensemble_data = self.simulate_ensemble()
-        # self.ensemble_data.index = self.ensemble_data.index.rename(['Index','Time'])
-
-        if self.data_filename != None:
-            self.ensemble_data.to_csv(self.data_filename)
-        self.plot()
-        # print self.ensemble_data
-
-
-    def create_directory(self):
-        """
-        create a directory for the results
-        :return:
-        """
-        if self.results_directory is None:
-            if type(self.cls) == Parse:
-                self.results_directory = os.path.join(os.path.dirname(self.cls.copasi_file),
-                                                      'EnsembleTimeCourse')
-            else:
-                self.results_directory = os.path.join(self.cls.model.root,
-                                                  'PCA')
-
-        if not os.path.isdir(self.results_directory):
-            os.makedirs(self.results_directory)
-        return self.results_directory
-
-
-    def _do_checks(self):
-        """
-
-        :return:
-        """
-        if type(self.cls) == Parse:
-            if self.experiment_files is None:
-                raise errors.InputError('If parsing estimation data from '
-                                        'folder, please specify argument'
-                                        ' to experiment_files')
-        if self.experiment_files is not None:
-            if isinstance(self.experiment_files, str):
-                self.experiment_files = [self.experiment_files]
-        
-        # if self.results_directory == None:
-        #     self.results_directory = self.create_directory()
-            # self.results_directory = os.path.join(self.cls.model.root, 'EnsembleTimeCourses' )
-            
-    def parse_experimental_files(self):
-        """
-
-        :return:
-        """
-        df_dct={}
-
-        if type(self.cls) == Parse:
-            exp_files = self.experiment_files
-
-        else:
-            exp_files = self.cls.experiment_files
-
-        for i in range(len(exp_files)):
-            df = pandas.read_csv(exp_files[i],
-                           sep='\t')
-        df_dct[exp_files[i]] = df
-        return df_dct
-
-    def get_experiment_times(self):
-        d={}
-        for i in self.experimental_data:
-            d[i]={}
-            for j in self.experimental_data[i].keys():
-                if j.lower() == 'time':
-                    d[i]= self.experimental_data[i][j]
-                    
-        times={}
-        for i in d:
-            times[i]={}
-            times[i]['start'] = d[i].iloc[0]
-            times[i]['end'] = d[i].iloc[-1]
-            times[i]['step_size'] = d[i].iloc[1]-d[i].iloc[0]
-            '''
-            subtract 1 from intervals to account for header
-            '''
-            times[i]['intervals']=int(d[i].shape[0])-1
-        return times
-        
-    def simulate_ensemble(self):
-        """
-        
-        """
-
-
-        ## collect end times for each experiment
-        ##in order to find the biggest
-        end_times = []
-        for i in self.exp_times:
-            ## start creating a results dict while were at it
-            end_times.append(self.exp_times[i]['end'])
-        intervals = max(end_times) / self.step_size
-        d = {}
-        for i in range(self.data.shape[0]):
-            if not self.silent:
-                LOG.info('inserting parameter set {}'.format(i))
-                LOG.info(I.parameters.transpose().sort_index())
-            I = model.InsertParameters(self.cls.model, df=self.data, index=i)
-            TC = tasks.TimeCourse(I.model,
-                                  end=max(end_times),
-                                  step_size=self.step_size,
-                                  intervals=intervals,
-                                  plot=False)
-            if self.check_as_you_plot:
-                self.cls.model.open()
-            d[i] = self.parse(TC, log10=False)
-        return pandas.concat(d)
-
-    def plot(self):
-        """
-        
-        """
-        if self.y == None:
-            self.y = list(self.ensemble_data.keys())
-
-        if isinstance(self.y, list) != True:
-            self.y = [self.y]
-
-        for param in self.y:
-            if param not in self.ensemble_data.keys():
-                raise errors.InputError('{} not in your data set. {}'.format(param, self.ensemble_data.keys()))
-
-        data = self.ensemble_data.reset_index(level=1, drop=True)
-        data.index.name = 'ParameterFitIndex'
-        data = data.reset_index()
-        data.to_csv('file.csv')
-        data.sort_values(by=['Time', 'ParameterFitIndex']).head(5)
-        # seaborn.despine()
-        for parameter in self.y:
-            if parameter not in ['ParameterFitIndex', 'Time']:
-                plt.figure()
-                # seaborn.set_palette([self.color])
-                ax1 = seaborn.tsplot(
-                    data=data, time='Time', value=parameter,
-                    unit='ParameterFitIndex',
-                    err_style='ci_band',
-                    estimator=self.estimator,
-                    n_boot=self.n_boot,
-                    ci=self.ci,
-                    color=self.color,
-                )
-
-
-                ax2 = plt.plot(self.experimental_data[self.experimental_data.keys()[0]]['Time'],
-                                              self.experimental_data[self.experimental_data.keys()[0]][parameter],
-                                              '--', color=self.exp_color, label='Exp', alpha=0.4, marker='o')
-                sim_patch = mpatches.Patch(color=self.color, label='Sim', alpha=0.4)
-                exp_patch = mpatches.Patch(color=self.exp_color, label='Exp', alpha=0.4)
-                plt.legend(handles=[sim_patch, exp_patch], loc=(1, 0.5))
-
-                # handles, labels = ax1.get_legend_handles_labels()
-                # ax1.legend(handles, labels)
-
-                # plt.legend([ax1, ax2], ['Sim', 'Exp'], loc=(1,0.5))
-                plt.title('Ensemble Time Course\n for {} (n={})'.format(parameter, self.data.shape[0]))
-                if self.savefig:
-                    self.results_directory = self.create_directory()
-                    fname = os.path.join(self.results_directory, '{}.png'.format(misc.RemoveNonAscii(parameter).filter))
-                    plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
-        
-
-# @mixin(DefaultResultsDirectoryMixin)
 
 @mixin(tasks.UpdatePropertiesMixin)
 @mixin(ParseMixin)
