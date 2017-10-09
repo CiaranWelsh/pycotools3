@@ -12,13 +12,13 @@ import shutil
 
 
 directory = r'/home/b3053674/Documents/Models/2017/10_Oct/Smad7Fit'
+directory = r'/sharedlustre/users/b3053674/2017/10_Oct/Smad7ZiModels'
 fit_dir = os.path.join(directory, 'Fit1Dir')
 
 
-CONFIGURE = False
-RUN = False
-PLOT = True
-
+CONFIGURE = True
+RUN = True
+PLOT = False
 
 def get_models(directory):
     """
@@ -211,7 +211,7 @@ PE = tasks.MultiModelFit(
     metabolites=['Ski'], global_quantities=['Smad7SF', 'SkiSF'],
     overwrite_config_file=True,
     method='genetic_algorithm', population_size=150, number_of_generations=300,
-    upper_bound=1e4, run_mode='sge', copy_number=100, pe_number=1,
+    upper_bound=1e4, run_mode='sge', copy_number=2, pe_number=1,
 )
 PE.write_config_file()
 PE.setup()
@@ -224,7 +224,7 @@ if PLOT:
         TCM = viz.PlotTimeCourseEnsemble(m, y=['Smad7', 'Smad7Obs', 'Ski',
                                                'Smad7_mRNA', 'Ski_mRNA',
                                                'SkiObs', 'Smad7mRNAObs'],
-                                     savefig=True)
+                                         savefig=True, run_mode='sge')
 
 
 
