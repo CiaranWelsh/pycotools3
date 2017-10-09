@@ -70,6 +70,7 @@ from sklearn import model_selection
 import _base
 from cached_property import cached_property
 import matplotlib.patches as mpatches
+from multiprocessing import Process, Queue
 
 LOG=logging.getLogger(__name__)
 
@@ -344,12 +345,12 @@ class Parse(object):
                 LOG.warning('No Columns to parse from file. {} is empty. Returned None'.format(
                     report_name))
                 return None
-            bracket_columns = data[data.columns[[0,-2]]]
+            bracket_columns = data[data.columns[[0, -2]]]
             if bracket_columns.iloc[0].iloc[0] != '(':
                 data = pandas.read_csv(report_name, sep='\t')
                 d[report_name] = data
             else:
-                data = data.drop(data.columns[[0,-2]], axis=1)
+                data = data.drop(data.columns[[0, -2]], axis=1)
                 data.columns = range(data.shape[1])
                 ### parameter of interest has been removed.
                 names = cls_instance.model.fit_item_order+['RSS']
@@ -611,7 +612,7 @@ class PlotTimeCourseEnsemble(object):
                    'step_size': 1,
                    'check_as_you_plot': False,
                    'estimator': numpy.mean,
-                   'n_boot': 10000,
+                   'n_boot': 5000,
                    'ci': 95,
                    'color': 'blue',
                    'show': False,
@@ -622,6 +623,7 @@ class PlotTimeCourseEnsemble(object):
                    'title': None,
                    'ylabel': None,
                    'xlabel': None,
+                   'run_mode': 'multiprocess',
                    }
 
         for i in kwargs.keys():
@@ -639,15 +641,19 @@ class PlotTimeCourseEnsemble(object):
             raise errors.InputError('No data. Check arguments to truncate_data and theta '
                                     'or your parameter estimation configuration '
                                     'and data files')
-        self.experimental_data = self.parse_experimental_files()
-        self.exp_times = self.get_experiment_times()
-        self.ensemble_data = self.simulate_ensemble()
+        self.experimental_data = self.parse_experimental_files
+        self.exp_times = self.get_experiment_times
+        if self.parallel:
+            self.ensemble_data = self.simulate_ensemble_parallel
+
+        else:
+            self.ensemble_data = self.simulate_ensemble
         self.ensemble_data.index = self.ensemble_data.index.rename(['Index','Time'])
 
         if self.data_filename != None:
             self.ensemble_data.to_csv(self.data_filename)
+            LOG.info('Data written to {}'.format(self.data_filename))
         self.plot()
-        # print self.ensemble_data
 
     def create_directory(self):
         """
@@ -684,6 +690,7 @@ class PlotTimeCourseEnsemble(object):
                 #     self.results_directory = self.create_directory()
                 # self.results_directory = os.path.join(self.cls.model.root, 'EnsembleTimeCourses' )
 
+    @property
     def parse_experimental_files(self):
         """
 
@@ -693,16 +700,16 @@ class PlotTimeCourseEnsemble(object):
 
         if type(self.cls) == Parse:
             exp_files = self.experiment_files
-
         else:
             exp_files = self.cls.experiment_files
 
         for i in range(len(exp_files)):
             df = pandas.read_csv(exp_files[i],
                                  sep='\t')
-        df_dct[exp_files[i]] = df
+            df_dct[exp_files[i]] = df
         return df_dct
 
+    @property
     def get_experiment_times(self):
         d = {}
         for i in self.experimental_data:
@@ -723,6 +730,7 @@ class PlotTimeCourseEnsemble(object):
             times[i]['intervals'] = int(d[i].shape[0]) - 1
         return times
 
+    @cached_property
     def simulate_ensemble(self):
         """
 
@@ -737,19 +745,33 @@ class PlotTimeCourseEnsemble(object):
         intervals = max(end_times) / self.step_size
         d = {}
         for i in range(self.data.shape[0]):
+            I = model.InsertParameters(self.cls.model, df=self.data, index=i, inplace=True)
             if not self.silent:
                 LOG.info('inserting parameter set {}'.format(i))
                 LOG.info(I.parameters.transpose().sort_index())
-            I = model.InsertParameters(self.cls.model, df=self.data, index=i)
             TC = tasks.TimeCourse(I.model,
                                   end=max(end_times),
                                   step_size=self.step_size,
                                   intervals=intervals,
-                                  plot=False)
+                                  plot=False,
+                                  run=self.run_mode)
             if self.check_as_you_plot:
                 self.cls.model.open()
             d[i] = self.parse(TC, log10=False)
         return pandas.concat(d)
+
+
+    @property
+    def observables(self):
+        """
+        return list of observables
+        :return:
+        """
+        obs = []
+        for i in self.experimental_data:
+            obs += list(self.experimental_data[i].keys())
+        return list(set([i for i in obs if str(i).lower() != 'time']))
+
 
     def plot(self):
         """
@@ -763,12 +785,11 @@ class PlotTimeCourseEnsemble(object):
 
         for param in self.y:
             if param not in self.ensemble_data.keys():
-                raise errors.InputError('{} not in your data set. {}'.format(param, self.ensemble_data.keys()))
+                raise errors.InputError('{} not in your data set. {}'.format(param, sorted(self.ensemble_data.keys())))
 
         data = self.ensemble_data.reset_index(level=1, drop=True)
         data.index.name = 'ParameterFitIndex'
         data = data.reset_index()
-        data.to_csv('file.csv')
         data.sort_values(by=['Time', 'ParameterFitIndex']).head(5)
         # seaborn.despine()
         for parameter in self.y:
@@ -785,21 +806,37 @@ class PlotTimeCourseEnsemble(object):
                     color=self.color,
                 )
 
-                ax2 = plt.plot(self.experimental_data[self.experimental_data.keys()[0]]['Time'],
-                               self.experimental_data[self.experimental_data.keys()[0]][parameter],
-                               '--', color=self.exp_color, label='Exp', alpha=0.4, marker='o')
-                sim_patch = mpatches.Patch(color=self.color, label='Sim', alpha=0.4)
-                exp_patch = mpatches.Patch(color=self.exp_color, label='Exp', alpha=0.4)
-                plt.legend(handles=[sim_patch, exp_patch], loc=(1, 0.5))
+                if parameter in self.observables:
+                    for df in self.experimental_data.values():
+                        if parameter in df.keys():
+                            # plt.figure()
+                            ax2 = plt.plot(list(df['Time']), list(df[parameter]), '--', color=self.exp_color,
+                                           label='Exp', alpha=0.4, marker='o')
 
-                # handles, labels = ax1.get_legend_handles_labels()
-                # ax1.legend(handles, labels)
 
-                # plt.legend([ax1, ax2], ['Sim', 'Exp'], loc=(1,0.5))
+                    sim_patch = mpatches.Patch(color=self.color, label='Sim', alpha=0.4)
+                    exp_patch = mpatches.Patch(color=self.exp_color, label='Exp', alpha=0.4)
+                    plt.legend(handles=[sim_patch, exp_patch], loc=(1, 0.5))
+
+
                 if self.title is None:
                     plt.title('{} (n={})'.format(parameter, self.data.shape[0]))
+
                 else:
                     plt.title(self.title)
+
+                if self.ylabel is None:
+                    plt.ylabel('{}'.format(self.cls.model.quantity_unit))
+
+                else:
+                    plt.ylabel(self.ylabel)
+
+                if self.xlabel is None:
+                    plt.xlabel('Time ({})'.format(self.cls.model.time_unit))
+
+                else:
+                    plt.xlabel(self.xlabel)
+
                 if self.savefig:
                     self.results_directory = self.create_directory()
                     fname = os.path.join(self.results_directory, '{}.png'.format(misc.RemoveNonAscii(parameter).filter))
@@ -1918,25 +1955,6 @@ class ModelSelection(object):
             dct[round(i,3)]=self.chi2_lookup_table(i)
         return dct[0.05]
     
-#     def call_fit_analysis_script(self,tolerance=0.001):
-#         '''
-#
-#         '''
-#         for i in self.multi_model_fit.results_folder_dct:
-#             LOG.debug('\tKey :\n{}\nValue:\n{}'.format(i,self.multi_model_fit.results_folder_dct[i]))
-#             self.run_fit_analysis(self.multi_model_fit.results_folder_dct[i])
-#
-# #    @ipyparallel.dview.remote(block=True)
-#     def run_fit_analysis(self,results_path,tolerance=0.001):
-#         '''
-#
-#         '''
-#         scripts_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)),'Scripts')
-#         fit_analysis_script_name=os.path.join(scripts_folder,'fit_analysis.py')
-#         LOG.debug('fit analysis script on your computer is at \t\t{}'.format(fit_analysis_script_name))
-#
-#         return Popen(['python',fit_analysis_script_name,results_path,'-tol', tolerance])
-# #
     def compare_sim_vs_exp(self):
         '''
         

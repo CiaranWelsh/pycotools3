@@ -1264,7 +1264,7 @@ class TimeCourse(object):
         return "TimeCourse({})".format(self.to_string())
 
     def run_task(self):
-        R = Run(self.model, task='time_course')
+        R = Run(self.model, task='time_course', mode=self.run)
         return R.model
 
     def create_task(self):
@@ -4198,6 +4198,7 @@ class MultiModelFit(object):
         :return:
         """
         for MPE in self.MPE_dct:
+            LOG.info('Running models from {}'.format(self.MPE_dct[MPE].results_directory))
             self.MPE_dct[MPE].run()
 
 
