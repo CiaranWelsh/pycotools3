@@ -1,0 +1,449 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Parameter Scan &#8212; pycotools 11 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '11',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #303F9F;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #D84315;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 8ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: #f7f7f7;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.pngmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-bold { font-weight: bold; }
+</style>
+<div class="section" id="Parameter-Scan">
+<h1>Parameter Scan<a class="headerlink" href="#Parameter-Scan" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="Get-Example-model">
+<h2>Get Example model<a class="headerlink" href="#Get-Example-model" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span><span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">site</span>
+<span class="n">site</span><span class="o">.</span><span class="n">addsitedir</span><span class="p">(</span><span class="s1">&#39;/home/b3053674/Documents/PyCoTools&#39;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">PyCoTools</span>
+<span class="kn">from</span> <span class="nn">PyCoTools.PyCoToolsTutorial</span> <span class="kn">import</span> <span class="n">test_models</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pandas</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">format</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%(levelname)s</span><span class="s1">:</span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">LOG</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
+
+<span class="c1">##this can be anywhere you like</span>
+<span class="n">tutorial_directory</span> <span class="o">=</span> <span class="s1">&#39;/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial&#39;</span>
+<span class="c1">## module containing copasi models in string format</span>
+<span class="n">TM</span> <span class="o">=</span> <span class="n">test_models</span><span class="o">.</span><span class="n">TestModels</span><span class="p">()</span>
+<span class="n">kholodenko_model_string</span> <span class="o">=</span> <span class="n">TM</span><span class="o">.</span><span class="n">get_kholodenko_variant1</span><span class="p">()</span> <span class="c1">## published kholodenko model</span>
+<span class="n">kholodenko_model</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tutorial_directory</span><span class="p">,</span> <span class="s1">&#39;kholodenko_model.cps&#39;</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">kholodenko_model</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">kholodenko_model_string</span><span class="p">)</span>
+
+<span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;written kholodenko model to {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kholodenko_model</span><span class="p">))</span>
+<span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Checking that kholodenko file exists: ... {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">kholodenko_model</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+INFO:root:__init__:&lt;module&gt;:26:Initializing PyCoTools
+INFO:root:__init__:&lt;module&gt;:27:Initializing logging System
+INFO:root:__init__:&lt;module&gt;:28:logging config file at: /home/b3053674/Documents/PyCoTools/PyCoTools/logging_config.conf
+INFO:root:&lt;ipython-input-1-f58b6052b3b5&gt;:&lt;module&gt;:23:written kholodenko model to /home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/kholodenko_model.cps
+INFO:root:&lt;ipython-input-1-f58b6052b3b5&gt;:&lt;module&gt;:24:Checking that kholodenko file exists: ... True
+</pre></div></div>
+</div>
+<p>Copasi supports three types of scan:</p>
+</div>
+<div class="section" id="Parameter-Scan">
+<h2>Parameter Scan<a class="headerlink" href="#Parameter-Scan" title="Permalink to this headline">¶</a></h2>
+<p>Set up a scan subtask with a single parameter being systematically
+varied. Run the scan via CopasiSE.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="n">PyCoTools</span><span class="o">.</span><span class="n">pycopi</span><span class="o">.</span><span class="n">Scan</span><span class="p">(</span><span class="n">kholodenko_model</span><span class="p">,</span><span class="n">scan_type</span> <span class="o">=</span> <span class="s1">&#39;scan&#39;</span><span class="p">,</span>
+                     <span class="n">subtask</span> <span class="o">=</span> <span class="s1">&#39;time_course&#39;</span><span class="p">,</span>
+                     <span class="n">report_type</span> <span class="o">=</span> <span class="s1">&#39;time_course&#39;</span><span class="p">,</span>
+                     <span class="n">report_name</span> <span class="o">=</span> <span class="s1">&#39;ParameterScanOfTimeCourse.txt&#39;</span><span class="p">,</span>
+                     <span class="n">variable</span> <span class="o">=</span> <span class="s1">&#39;Mos-P&#39;</span><span class="p">,</span>
+                     <span class="n">minimum</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                     <span class="n">maximum</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+                     <span class="n">number_of_steps</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>
+                     <span class="n">append</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                     <span class="n">run</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                     <span class="p">)</span>
+
+<span class="c1">## Set to True to open GUI to check scan task</span>
+<span class="n">manually_check_model</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="k">if</span> <span class="n">manually_check_model</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;CopasiUI {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kholodenko_model</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="2-Way-Parameter-Scan">
+<h2>2 Way Parameter Scan<a class="headerlink" href="#2-Way-Parameter-Scan" title="Permalink to this headline">¶</a></h2>
+<p>By default, scan tasks are removed before setting up a new scan. To set
+up dual scans, set clear_scans to False in a second call to <code class="docutils literal"><span class="pre">Scan</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">PyCoTools</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pandas</span>
+
+<span class="c1">## setup first parameter scan</span>
+<span class="n">S</span><span class="o">=</span><span class="n">PyCoTools</span><span class="o">.</span><span class="n">pycopi</span><span class="o">.</span><span class="n">Scan</span><span class="p">(</span><span class="n">kholodenko_model</span><span class="p">,</span><span class="n">scan_type</span> <span class="o">=</span> <span class="s1">&#39;scan&#39;</span><span class="p">,</span>
+                     <span class="n">subtask</span> <span class="o">=</span> <span class="s1">&#39;time_course&#39;</span><span class="p">,</span>
+                     <span class="n">report_type</span> <span class="o">=</span> <span class="s1">&#39;time_course&#39;</span><span class="p">,</span>
+                     <span class="n">report_name</span> <span class="o">=</span> <span class="s1">&#39;ParameterScanOfTimeCourse.txt&#39;</span><span class="p">,</span>
+                     <span class="n">variable</span> <span class="o">=</span> <span class="s1">&#39;Mos-P&#39;</span><span class="p">,</span>
+                     <span class="n">minimum</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                     <span class="n">maximum</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+                     <span class="n">number_of_steps</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+                     <span class="p">)</span>
+
+<span class="c1">## setup second parameter scan. Note clear_scans = False.</span>
+<span class="c1">## This tells PyCoTools not to remove all scans before setting up a new scan.</span>
+<span class="n">S2</span><span class="o">=</span><span class="n">PyCoTools</span><span class="o">.</span><span class="n">pycopi</span><span class="o">.</span><span class="n">Scan</span><span class="p">(</span><span class="n">kholodenko_model</span><span class="p">,</span><span class="n">scan_type</span> <span class="o">=</span> <span class="s1">&#39;scan&#39;</span><span class="p">,</span>
+                     <span class="n">subtask</span> <span class="o">=</span> <span class="s1">&#39;time_course&#39;</span><span class="p">,</span>
+                     <span class="n">report_type</span> <span class="o">=</span> <span class="s1">&#39;time_course&#39;</span><span class="p">,</span>
+                     <span class="n">report_name</span> <span class="o">=</span> <span class="s1">&#39;ParameterScanOfTimeCourse.txt&#39;</span><span class="p">,</span>
+                     <span class="n">variable</span> <span class="o">=</span> <span class="s1">&#39;Mek1-P&#39;</span><span class="p">,</span>
+                     <span class="n">minimum</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                     <span class="n">maximum</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+                     <span class="n">number_of_steps</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+                     <span class="n">clear_scans</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                     <span class="n">run</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+
+<span class="c1">## Set to True to open GUI to check scan task</span>
+<span class="n">manually_check_model</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="k">if</span> <span class="n">manually_check_model</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;CopasiUI {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kholodenko_model</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[3]:
+</pre></div>
+</div>
+<div class="output_area highlight-none"><div class="highlight"><pre>
+<span></span>0
+</pre></div>
+</div>
+</div>
+<p>An arbitrary number of scans can be setup this way. Further, its
+possible to chain together scans with repeat or random distribution
+scans, if you so desired.</p>
+</div>
+<div class="section" id="Repeat-Scan-Items">
+<h2>Repeat Scan Items<a class="headerlink" href="#Repeat-Scan-Items" title="Permalink to this headline">¶</a></h2>
+<p>Repeat scans are very useful for running multiple parameter estimations
+and for running stochastic time courses. The latter is not yet supported
+in PyCoTools.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="c1">## Assume Parameter Estimation task already configured</span>
+<span class="n">S</span><span class="o">=</span><span class="n">PyCoTools</span><span class="o">.</span><span class="n">pycopi</span><span class="o">.</span><span class="n">Scan</span><span class="p">(</span><span class="n">kholodenko_model</span><span class="p">,</span><span class="n">scan_type</span> <span class="o">=</span> <span class="s1">&#39;repeat&#39;</span><span class="p">,</span>
+                     <span class="n">subtask</span> <span class="o">=</span> <span class="s1">&#39;parameter_estimation&#39;</span><span class="p">,</span>
+                     <span class="n">report_type</span> <span class="o">=</span> <span class="s1">&#39;parameter_estimation&#39;</span><span class="p">,</span>
+                     <span class="n">report_name</span> <span class="o">=</span> <span class="s1">&#39;estimations.txt&#39;</span><span class="p">,</span>
+                     <span class="n">number_of_steps</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="c1">#10 parameter estimations</span>
+                     <span class="n">run</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                     <span class="p">)</span>
+
+
+<span class="c1">## Set to True to open GUI to check scan task</span>
+<span class="n">manually_check_model</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="k">if</span> <span class="n">manually_check_model</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;CopasiUI {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kholodenko_model</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[4]:
+</pre></div>
+</div>
+<div class="output_area highlight-none"><div class="highlight"><pre>
+<span></span>0
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Parameter Scan</a><ul>
+<li><a class="reference internal" href="#Get-Example-model">Get Example model</a></li>
+<li><a class="reference internal" href="#Parameter-Scan">Parameter Scan</a></li>
+<li><a class="reference internal" href="#2-Way-Parameter-Scan">2 Way Parameter Scan</a></li>
+<li><a class="reference internal" href="#Repeat-Scan-Items">Repeat Scan Items</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/Tutorial3Scan.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Ciaran Welsh.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/Tutorial3Scan.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

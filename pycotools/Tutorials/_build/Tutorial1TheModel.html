@@ -1,0 +1,950 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Tutorial 1: The Model &#8212; pycotools 11 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '11',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #303F9F;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #D84315;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 8ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: #f7f7f7;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.pngmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-bold { font-weight: bold; }
+</style>
+<div class="section" id="Tutorial-1:-The-Model">
+<h1>Tutorial 1: The Model<a class="headerlink" href="#Tutorial-1:-The-Model" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal"><span class="pre">pycotools.model.Model</span></code> class is of central importance in
+pycotools. Copasi models are parsed from the copasi xml into custom
+python classes for storing model components such as metabolites, global
+quantities or reactions.</p>
+<div class="section" id="Imports">
+<h2>Imports<a class="headerlink" href="#Imports" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">site</span>
+<span class="n">site</span><span class="o">.</span><span class="n">addsitedir</span><span class="p">(</span><span class="s1">&#39;//home/b3053674/Documents/pycotools&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">pycotools</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pycotools.Tests</span> <span class="kn">import</span> <span class="n">test_models</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+root:INFO:27:    Initializing pycotools
+root:INFO:28:    Initializing logging System
+root:INFO:29:    logging config file at: //home/b3053674/Documents/pycotools/pycotools/logging_config.conf
+</pre></div></div>
+</div>
+<div class="section" id="Get-Example-Model">
+<h3>Get Example Model<a class="headerlink" href="#Get-Example-Model" title="Permalink to this headline">¶</a></h3>
+<p>The Tests folder of the pycotools distribution is a mini python package
+containing a single importable file called test_models. The
+test_models.py module is simply a container for a collection of copasi
+models in xml format. These models are used throughout the tutorials.</p>
+</div>
+</div>
+<div class="section" id="Test-models">
+<h2>Test models<a class="headerlink" href="#Test-models" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Zi et al 2012</li>
+<li>Kholodenko 2000</li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="c1">## get string model from test_models</span>
+<span class="n">zi_model_string</span> <span class="o">=</span> <span class="n">test_models</span><span class="o">.</span><span class="n">TestModels</span><span class="p">()</span><span class="o">.</span><span class="n">zi_model</span><span class="p">()</span>
+
+<span class="c1">## get a working directory. Change this to change this to wherever you like</span>
+<span class="n">directory</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;/home/b3053674/Documents/pycotools/ZiModel&#39;</span>
+
+<span class="c1">## choose path to zi model</span>
+<span class="n">zi_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="s1">&#39;zi2012.cps&#39;</span><span class="p">)</span>
+
+<span class="c1">##write model to file</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">zi_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">zi_model_string</span><span class="p">)</span>
+
+<span class="c1">## check file exists</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">zi_path</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="ne">Exception</span>
+
+
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Parse-a-Model-into-Pycotools">
+<h1>Parse a Model into Pycotools<a class="headerlink" href="#Parse-a-Model-into-Pycotools" title="Permalink to this headline">¶</a></h1>
+<p>The model.Model class accepts a path to a existing copasi file</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="n">zi</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">zi_path</span><span class="p">)</span>
+<span class="n">zi</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[3]:
+</pre></div>
+</div>
+<div class="output_area highlight-none"><div class="highlight"><pre>
+<span></span>Model(name=Zi2007_TGFbeta_signaling, time_unit=min, volume_unit=l, quantity_unit=nmol)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Open-and-Save">
+<h1>Open and Save<a class="headerlink" href="#Open-and-Save" title="Permalink to this headline">¶</a></h1>
+<p>It is sometimes desirable to <code class="docutils literal"><span class="pre">open</span></code> a copasi model that you’re working
+with to manually perform sanity checks. The Model class has the open
+method for convenience:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="n">zi</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">Model.open()</span></code> method implicitly saves to file before calling
+CopasiUI form the command line. This means that the environment variable
+CopasiUI must be set and pointing to the location of the CopasiUI.exe
+(this is usually done when copasi installs). By default, the model is
+overwritten but this behaviour can be modified by passing a new filename
+to the <code class="docutils literal"><span class="pre">copasi_file</span></code> argument:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="c1">## modify the zi path</span>
+<span class="n">new_path</span> <span class="o">=</span> <span class="n">zi_path</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;2.cps&#39;</span>
+
+<span class="c1">## saves model to new_path then opens</span>
+<span class="n">zi</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">copasi_file</span><span class="o">=</span><span class="n">new_path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">Model.save()</span></code> behaves similarly to <code class="docutils literal"><span class="pre">Model.open</span></code>. By default it
+overwrites but takes an optional <code class="docutils literal"><span class="pre">copasi_file</span></code> as an argument.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="n">zi</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+<span class="c1">##equivalent</span>
+<span class="n">zi</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">copasi_file</span><span class="o">=</span><span class="n">zi_path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[6]:
+</pre></div>
+</div>
+<div class="output_area highlight-none"><div class="highlight"><pre>
+<span></span>Model(name=Zi2007_TGFbeta_signaling, time_unit=min, volume_unit=l, quantity_unit=nmol)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Get-Model-Information">
+<h1>Get Model Information<a class="headerlink" href="#Get-Model-Information" title="Permalink to this headline">¶</a></h1>
+<p>Global model information such as model units or components are available
+as python attributes.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="n">attributes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;time_unit&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;volume_unit&#39;</span><span class="p">,</span> <span class="s1">&#39;quantity_unit&#39;</span><span class="p">,</span> <span class="s1">&#39;area_unit&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;length_unit&#39;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">attributes</span><span class="p">:</span>
+    <span class="k">print</span> <span class="p">(</span><span class="s1">&#39;is {} in zi model attributes? --&gt; {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">attr</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">zi</span><span class="p">)))</span>
+
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+is time_unit in zi model attributes? --&gt; True
+is name in zi model attributes? --&gt; True
+is volume_unit in zi model attributes? --&gt; True
+is quantity_unit in zi model attributes? --&gt; True
+is area_unit in zi model attributes? --&gt; True
+is length_unit in zi model attributes? --&gt; True
+</pre></div></div>
+</div>
+<p>Lists of <code class="docutils literal"><span class="pre">metabolites</span></code>, <code class="docutils literal"><span class="pre">global_quantities</span></code>, <code class="docutils literal"><span class="pre">functions</span></code>,
+<code class="docutils literal"><span class="pre">reactions</span></code>, <code class="docutils literal"><span class="pre">local_parameters</span></code> and <code class="docutils literal"><span class="pre">compartments</span></code> are all
+available as <code class="docutils literal"><span class="pre">model.Model</span></code> attributes. For example</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="c1">## metabolites</span>
+<span class="k">print</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">zi</span><span class="o">.</span><span class="n">metabolites</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">zi</span><span class="o">.</span><span class="n">metabolites</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;type &#39;list&#39;&gt;, 16)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="c1">## reactions</span>
+<span class="k">print</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">zi</span><span class="o">.</span><span class="n">reactions</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">zi</span><span class="o">.</span><span class="n">reactions</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;type &#39;list&#39;&gt;, 26)
+</pre></div></div>
+</div>
+<p>Each element of the list returned from an attribute is a pycotools
+object.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="k">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">zi</span><span class="o">.</span><span class="n">metabolites</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="n">zi</span><span class="o">.</span><span class="n">metabolites</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;class &#39;pycotools.model.Metabolite&#39;&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[10]:
+</pre></div>
+</div>
+<div class="output_area highlight-none"><div class="highlight"><pre>
+<span></span>Metabolite(name=&quot;Smad3n&quot;, key=&quot;Metabolite_3&quot;, compartment=&quot;Nucleus&quot;, concentration=&quot;236.45&quot;, particle_number=&quot;4.98377321973e+13&quot;, simulation_type=&quot;reactions&quot;)
+</pre></div>
+</div>
+</div>
+<p>There are objects for <code class="docutils literal"><span class="pre">GlobalQuantity</span></code>, <code class="docutils literal"><span class="pre">Function</span></code>, <code class="docutils literal"><span class="pre">Reaction</span></code>,
+<code class="docutils literal"><span class="pre">LocalParameter</span></code> and <code class="docutils literal"><span class="pre">Compartment</span></code>. classes. These classes are
+storage classes and relevant information about that class is available
+as a python attribute.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="c1">##get global quantities list</span>
+<span class="n">list_of_global_quantities</span> <span class="o">=</span> <span class="n">zi</span><span class="o">.</span><span class="n">global_quantities</span>
+<span class="k">print</span> <span class="p">(</span><span class="s1">&#39;type list_of_global_quantities --&gt; {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">list_of_global_quantities</span><span class="p">)))</span>
+
+<span class="c1">##get first GlobalQuantity in list</span>
+<span class="n">global_quantity</span> <span class="o">=</span> <span class="n">list_of_global_quantities</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">print</span> <span class="p">(</span><span class="s1">&#39;type global_quantity --&gt; {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">global_quantity</span><span class="p">)))</span>
+
+<span class="c1">## name of first GlobalQuantity</span>
+<span class="k">print</span> <span class="p">(</span><span class="s1">&#39;First global quantity in the list is --&gt; {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">global_quantity</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+
+<span class="c1">## starting value of first GlobalQuantity</span>
+<span class="k">print</span> <span class="p">(</span><span class="s1">&#39;First global quantity in the list has initial value of --&gt; {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">global_quantity</span><span class="o">.</span><span class="n">initial_value</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+type list_of_global_quantities --&gt; &lt;type &#39;list&#39;&gt;
+type global_quantity --&gt; &lt;class &#39;pycotools.model.GlobalQuantity&#39;&gt;
+First global quantity in the list is --&gt; Kexp_Smad2n
+First global quantity in the list has initial value of --&gt; 1.0
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Get,-Set,-Add-and-Remove">
+<h1>Get, Set, Add and Remove<a class="headerlink" href="#Get,-Set,-Add-and-Remove" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal"><span class="pre">Model.get</span></code> method is a high level interface into pycotools model
+components. All types of pycotools component and their attributes are
+supported. Refer to the documentation for which model components contain
+which attributes.</p>
+<p>Here are some examples:</p>
+<div class="section" id="Get-the-Smad3c-metabolite">
+<h2>Get the Smad3c metabolite<a class="headerlink" href="#Get-the-Smad3c-metabolite" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="c1">## get smad3 metabolite by name</span>
+<span class="k">print</span> <span class="p">(</span><span class="n">zi</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;metabolite&#39;</span><span class="p">,</span> <span class="s1">&#39;Smad3c&#39;</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Metabolite(name=&#34;Smad3c&#34;, key=&#34;Metabolite_1&#34;, compartment=&#34;Cytoplasm&#34;, concentration=&#34;492.610000001&#34;, particle_number=&#34;3.11489514795e+14&#34;, simulation_type=&#34;reactions&#34;)
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Get-any-global-quantity-with-a-fixed-simulation_type-attribute">
+<h2>Get any global quantity with a fixed simulation_type attribute<a class="headerlink" href="#Get-any-global-quantity-with-a-fixed-simulation_type-attribute" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="c1">## get qlobal quantities with fixed simulation type</span>
+<span class="k">print</span> <span class="p">(</span><span class="n">zi</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;global_quantity&#39;</span><span class="p">,</span> <span class="s1">&#39;fixed&#39;</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s1">&#39;simulation_type&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[GlobalQuantity(name=&#39;Kexp_Smad2n&#39;, key=&#39;ModelValue_12&#39;, initial_value=&#39;1.0&#39;, simulation_type=&#39;fixed&#39;), GlobalQuantity(name=&#39;Kdeg_T1R_EE&#39;, key=&#39;ModelValue_9&#39;, initial_value=&#39;0.005&#39;, simulation_type=&#39;fixed&#39;), GlobalQuantity(name=&#39;Klid&#39;, key=&#39;ModelValue_8&#39;, initial_value=&#39;0.02609&#39;, simulation_type=&#39;fixed&#39;), GlobalQuantity(name=&#39;kr_EE&#39;, key=&#39;ModelValue_3&#39;, initial_value=&#39;0.033&#39;, simulation_type=&#39;fixed&#39;), GlobalQuantity(name=&#39;ki_EE&#39;, key=&#39;ModelValue_2&#39;, initial_value=&#39;0.33&#39;, simulation_type=&#39;fixed&#39;), GlobalQuantity(name=&#39;v_T2R&#39;, key=&#39;ModelValue_1&#39;, initial_value=&#39;0.02869&#39;, simulation_type=&#39;fixed&#39;), GlobalQuantity(name=&#39;v_T1R&#39;, key=&#39;ModelValue_0&#39;, initial_value=&#39;0.0103&#39;, simulation_type=&#39;fixed&#39;), GlobalQuantity(name=&#39;k_LRC&#39;, key=&#39;ModelValue_7&#39;, initial_value=&#39;2197.0&#39;, simulation_type=&#39;fixed&#39;), GlobalQuantity(name=&#39;Kcd&#39;, key=&#39;ModelValue_6&#39;, initial_value=&#39;0.005&#39;, simulation_type=&#39;fixed&#39;), GlobalQuantity(name=&#39;kr_Cave&#39;, key=&#39;ModelValue_5&#39;, initial_value=&#39;0.03742&#39;, simulation_type=&#39;fixed&#39;), GlobalQuantity(name=&#39;ki_Cave&#39;, key=&#39;ModelValue_4&#39;, initial_value=&#39;0.33&#39;, simulation_type=&#39;fixed&#39;), GlobalQuantity(name=&#39;Kexp_Smad4n&#39;, key=&#39;ModelValue_14&#39;, initial_value=&#39;0.5&#39;, simulation_type=&#39;fixed&#39;), GlobalQuantity(name=&#39;Kdiss_Smads_Complex_n&#39;, key=&#39;ModelValue_17&#39;, initial_value=&#39;0.1174&#39;, simulation_type=&#39;fixed&#39;), GlobalQuantity(name=&#39;Kimp_Smad2c&#39;, key=&#39;ModelValue_11&#39;, initial_value=&#39;0.16&#39;, simulation_type=&#39;fixed&#39;), GlobalQuantity(name=&#39;Kimp_Smads_Complex_c&#39;, key=&#39;ModelValue_16&#39;, initial_value=&#39;0.16&#39;, simulation_type=&#39;fixed&#39;), GlobalQuantity(name=&#39;Kimp_Smad4c&#39;, key=&#39;ModelValue_13&#39;, initial_value=&#39;0.08&#39;, simulation_type=&#39;fixed&#39;), GlobalQuantity(name=&#39;Kdeg_T2R_EE&#39;, key=&#39;ModelValue_10&#39;, initial_value=&#39;0.025&#39;, simulation_type=&#39;fixed&#39;), GlobalQuantity(name=&#39;k_Smads_Complex_c&#39;, key=&#39;ModelValue_15&#39;, initial_value=&#39;6.85e-05&#39;, simulation_type=&#39;fixed&#39;)]
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Get-a-function-by-its-expression">
+<h2>Get a function by its expression<a class="headerlink" href="#Get-a-function-by-its-expression" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="k">print</span> <span class="p">(</span><span class="n">zi</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;function&#39;</span><span class="p">,</span> <span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s1">&#39;expression&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Function(name=&#34;Constant flux (irreversible)&#34;, key=&#34;Function_6&#34;, expression=&#34;v&#34;, roles={})
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Get-all-local-parameters-in-the-R17_LRC_formation-reaction">
+<h2>Get all local parameters in the R17_LRC_formation reaction<a class="headerlink" href="#Get-all-local-parameters-in-the-R17_LRC_formation-reaction" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="k">print</span> <span class="p">(</span><span class="n">zi</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;local_parameter&#39;</span><span class="p">,</span> <span class="s1">&#39;R17_LRC_formation&#39;</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s1">&#39;reaction_name&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+LocalParameter(name=&#34;k_LRC&#34;, reaction_name=&#34;R17_LRC_formation, value=&#34;2197&#34;, simulation_type=&#34;fixed&#34;)
+</pre></div></div>
+</div>
+<div class="section" id="How-to-change-existing-model-attributes">
+<h3>How to change existing model attributes<a class="headerlink" href="#How-to-change-existing-model-attributes" title="Permalink to this headline">¶</a></h3>
+<p>Like <code class="docutils literal"><span class="pre">get</span></code> the <code class="docutils literal"><span class="pre">Model.set</span></code> method is a high level interface that
+takes a model component as first argument. The <code class="docutils literal"><span class="pre">set</span></code> method first
+searches the model for a component using the <code class="docutils literal"><span class="pre">get</span></code> method and then
+changes an attribute of the returned object. Often the attribute you
+want to change is the same as the attribute you’ve used to locate the
+object of interest (i.e. changing the name of a component). This does
+not need to be the case however. Here are some examples:</p>
+</div>
+</div>
+<div class="section" id="Change-the-name-of-a-metabolite">
+<h2>Change the name of a metabolite<a class="headerlink" href="#Change-the-name-of-a-metabolite" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="c1">## before the change</span>
+<span class="k">print</span><span class="p">(</span><span class="n">zi</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;metabolite&#39;</span><span class="p">,</span> <span class="s1">&#39;Smad3c&#39;</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">))</span>
+
+<span class="c1">## Set the name of the metabolite with name &#39;Smad3c to &#39;NewSmad3c</span>
+<span class="n">zi</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;metabolite&#39;</span><span class="p">,</span> <span class="s1">&#39;Smad3c&#39;</span><span class="p">,</span> <span class="s1">&#39;NewSmad3c&#39;</span><span class="p">,</span> <span class="n">match_field</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">change_field</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">)</span>
+
+<span class="c1">## get Smad3c after the change</span>
+<span class="k">print</span><span class="p">(</span> <span class="n">zi</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;metabolite&#39;</span><span class="p">,</span> <span class="s1">&#39;Smad3c&#39;</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">))</span> <span class="c1">## returns [] since it now doesn&#39;t exist</span>
+
+<span class="c1">## get NewSmad3c after the change</span>
+<span class="k">print</span><span class="p">(</span><span class="n">zi</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;metabolite&#39;</span><span class="p">,</span> <span class="s1">&#39;NewSmad3c&#39;</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">))</span> <span class="c1">##default value for by arg is &#39;name&#39;</span>
+
+<span class="c1">## Change the name back</span>
+<span class="n">zi</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;metabolite&#39;</span><span class="p">,</span> <span class="s1">&#39;NewSmad3c&#39;</span><span class="p">,</span> <span class="s1">&#39;Smad3c&#39;</span><span class="p">,</span> <span class="n">match_field</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">change_field</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">)</span>
+<span class="c1">## get Smad3c again after the change back</span>
+<span class="k">print</span><span class="p">(</span><span class="n">zi</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;metabolite&#39;</span><span class="p">,</span> <span class="s1">&#39;Smad3c&#39;</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Metabolite(name=&#34;Smad3c&#34;, key=&#34;Metabolite_1&#34;, compartment=&#34;Cytoplasm&#34;, concentration=&#34;492.610000001&#34;, particle_number=&#34;3.11489514795e+14&#34;, simulation_type=&#34;reactions&#34;)
+[]
+Metabolite(name=&#34;NewSmad3c&#34;, key=&#34;Metabolite_1&#34;, compartment=&#34;Cytoplasm&#34;, concentration=&#34;492.610000001&#34;, particle_number=&#34;3.11489514795e+14&#34;, simulation_type=&#34;reactions&#34;)
+Metabolite(name=&#34;Smad3c&#34;, key=&#34;Metabolite_1&#34;, compartment=&#34;Cytoplasm&#34;, concentration=&#34;492.610000001&#34;, particle_number=&#34;3.11489514795e+14&#34;, simulation_type=&#34;reactions&#34;)
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Change-initial_value-of-a-global_quantity">
+<h2>Change initial_value of a global_quantity<a class="headerlink" href="#Change-initial_value-of-a-global_quantity" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="c1">## get Kexp_Smad2n global before a change</span>
+<span class="n">kexp_smad2n</span> <span class="o">=</span> <span class="n">zi</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;global_quantity&#39;</span><span class="p">,</span> <span class="s1">&#39;Kexp_Smad2n&#39;</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">kexp_smad2n</span><span class="p">)</span>
+
+<span class="c1">## keep the initial value for later</span>
+<span class="n">original_initial_value</span> <span class="o">=</span> <span class="n">kexp_smad2n</span><span class="o">.</span><span class="n">initial_value</span>
+
+<span class="c1">## change initial_value</span>
+<span class="k">print</span> <span class="p">(</span><span class="n">zi</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;global_quantity&#39;</span><span class="p">,</span> <span class="s1">&#39;Kexp_Smad2n&#39;</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="n">match_field</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">change_field</span><span class="o">=</span><span class="s1">&#39;initial_value&#39;</span><span class="p">))</span>
+<span class="n">zi</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
+<span class="c1">## get Kexp_Smad2n after the change</span>
+<span class="k">print</span> <span class="p">(</span><span class="n">zi</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;global_quantity&#39;</span><span class="p">,</span> <span class="s1">&#39;Kexp_Smad2n&#39;</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">))</span>
+
+<span class="c1">## change back to original value</span>
+<span class="n">zi</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;global_quantity&#39;</span><span class="p">,</span> <span class="s1">&#39;Kexp_Smad2n&#39;</span><span class="p">,</span> <span class="n">original_initial_value</span><span class="p">,</span> <span class="n">match_field</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">change_field</span><span class="o">=</span><span class="s1">&#39;initial_value&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+GlobalQuantity(name=&#39;Kexp_Smad2n&#39;, key=&#39;ModelValue_12&#39;, initial_value=&#39;1.0&#39;, simulation_type=&#39;fixed&#39;)
+Model(name=Zi2007_TGFbeta_signaling, time_unit=min, volume_unit=l, quantity_unit=nmol)
+GlobalQuantity(name=&#39;Kexp_Smad2n&#39;, key=&#39;ModelValue_12&#39;, initial_value=&#39;35.0&#39;, simulation_type=&#39;fixed&#39;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[17]:
+</pre></div>
+</div>
+<div class="output_area highlight-none"><div class="highlight"><pre>
+<span></span>Model(name=Zi2007_TGFbeta_signaling, time_unit=min, volume_unit=l, quantity_unit=nmol)
+</pre></div>
+</div>
+</div>
+<div class="section" id="How-to-add-a-model-component">
+<h3>How to add a model component<a class="headerlink" href="#How-to-add-a-model-component" title="Permalink to this headline">¶</a></h3>
+<p>It is possible to add components to a copasi model directly from
+pycotools. However, the best way to add components is still to use the
+copasi GUI (easily accessable using the <code class="docutils literal"><span class="pre">Model.open</span></code> method).</p>
+<p>To add a component to the model directly from python, first create an
+instance of the class for the component you want to add. The
+possibilities are <code class="docutils literal"><span class="pre">model.Compartment</span></code>, <code class="docutils literal"><span class="pre">model.Metabolite</span></code>,
+<code class="docutils literal"><span class="pre">model.GlobalQuantity</span></code>, <code class="docutils literal"><span class="pre">model.Reaction</span></code>, <code class="docutils literal"><span class="pre">model.Function</span></code>.</p>
+<p>Note that support has not been built for assigning global_quantities to
+rate parameters for reactions. This is on the TODO list.</p>
+</div>
+</div>
+<div class="section" id="Add-a-metabolite">
+<h2>Add a metabolite<a class="headerlink" href="#Add-a-metabolite" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="c1">## create a model.Metabolite object with desired attributes</span>
+<span class="n">metab</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Metabolite</span><span class="p">(</span><span class="n">zi</span><span class="p">,</span> <span class="s1">&#39;metab&#39;</span><span class="p">,</span> <span class="n">concentration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">compartment</span><span class="o">=</span><span class="n">zi</span><span class="o">.</span><span class="n">compartments</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="c1">## add metabolite to model</span>
+<span class="n">zi</span> <span class="o">=</span> <span class="n">zi</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;metabolite&#39;</span><span class="p">,</span> <span class="n">metab</span><span class="p">)</span>
+
+<span class="c1">## Check the metabolite exists</span>
+<span class="n">zi</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;metabolite&#39;</span><span class="p">,</span> <span class="s1">&#39;metab&#39;</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[18]:
+</pre></div>
+</div>
+<div class="output_area highlight-none"><div class="highlight"><pre>
+<span></span>Metabolite(name=&quot;metab&quot;, key=&quot;Metabolite_10000&quot;, compartment=&quot;Nucleus&quot;, concentration=&quot;10.0&quot;, particle_number=&quot;2.10774929995e+12&quot;, simulation_type=&quot;reactions&quot;)
+</pre></div>
+</div>
+</div>
+<p>Alternatively create a metabolite with default attribute values</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="n">zi</span> <span class="o">=</span> <span class="n">zi</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;metabolite&#39;</span><span class="p">,</span> <span class="s1">&#39;this_is_a_new_metabolite&#39;</span><span class="p">)</span>
+
+<span class="n">zi</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;metabolite&#39;</span><span class="p">,</span> <span class="s1">&#39;this_is_a_new_metabolite&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[19]:
+</pre></div>
+</div>
+<div class="output_area highlight-none"><div class="highlight"><pre>
+<span></span>Metabolite(name=&quot;this_is_a_new_metabolite&quot;, key=&quot;Metabolite_10001&quot;, compartment=&quot;Medium&quot;, concentration=&quot;1.0&quot;, particle_number=&quot;6.022140857e+14&quot;, simulation_type=&quot;reactions&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Add-a-global-quantity-to-the-model">
+<h2>Add a global quantity to the model<a class="headerlink" href="#Add-a-global-quantity-to-the-model" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="c1">## Create GlobalQuantity instance</span>
+<span class="n">x_global</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">GlobalQuantity</span><span class="p">(</span><span class="n">zi</span><span class="p">,</span> <span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="n">initial_value</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
+
+<span class="c1">## add to the model</span>
+<span class="n">zi</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;global_quantity&#39;</span><span class="p">,</span> <span class="n">x_global</span><span class="p">)</span>
+
+<span class="c1">## Get the global quantity</span>
+<span class="n">zi</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;global_quantity&#39;</span><span class="p">,</span> <span class="s1">&#39;X&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[20]:
+</pre></div>
+</div>
+<div class="output_area highlight-none"><div class="highlight"><pre>
+<span></span>GlobalQuantity(name=&#39;X&#39;, key=&#39;ModelValue_10000&#39;, initial_value=&#39;25.0&#39;, simulation_type=&#39;fixed&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Add-a-reaction">
+<h2>Add a reaction<a class="headerlink" href="#Add-a-reaction" title="Permalink to this headline">¶</a></h2>
+<p>A reaction takes a name, expression and rate law as minimum input
+requriments. The expression follows the same syntax as COPASI including
+the spaces. The rate law supports copasi syntax as well. If you want to
+us, wrap them in a ‘&lt;&gt;’ delimiterse any. of the other functions that
+copasi provides (such as <code class="docutils literal"><span class="pre">if</span></code>, <code class="docutils literal"><span class="pre">floor</span></code> or <code class="docutils literal"><span class="pre">ceil</span></code>), wrap them in a
+‘&lt;&gt;’ delimiters.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="c1">## create reaction</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Reaction</span><span class="p">(</span><span class="n">zi</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;new_reaction&#39;</span><span class="p">,</span> <span class="n">expression</span><span class="o">=</span><span class="s1">&#39;A -&gt; B ;C&#39;</span><span class="p">,</span> <span class="n">rate_law</span><span class="o">=</span><span class="s1">&#39;k*A^h-C&#39;</span><span class="p">)</span>
+
+
+<span class="c1">## add the reaction</span>
+<span class="n">zi</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;reaction&#39;</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+
+<span class="c1">## check the reaction exists</span>
+<span class="k">print</span><span class="p">(</span><span class="n">zi</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;reaction&#39;</span><span class="p">,</span> <span class="s1">&#39;new_reaction&#39;</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Reaction(name=&#34;new_reaction&#34;, expression=&#34; -&gt; &#34;, rate_law=&#34;k*LRC_Cave&#34;, parameters={&#39;k&#39;: 0.1, &#39;LRC_Cave&#39;: 0.1}, reversible=False, simulation_type=&#34;reactions&#34;)
+</pre></div></div>
+</div>
+<div class="section" id="Remove-model-components">
+<h3>Remove model components<a class="headerlink" href="#Remove-model-components" title="Permalink to this headline">¶</a></h3>
+<p>We’ve just added a metabolite called <code class="docutils literal"><span class="pre">metab</span></code> and
+<code class="docutils literal"><span class="pre">this_is_a_new_metabolite</span></code>, a global quantity called <code class="docutils literal"><span class="pre">X</span></code> and a
+reaction called <code class="docutils literal"><span class="pre">new_reaction</span></code>. We can remove these components again
+with the model.Remove method</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="c1">## Use simple list comprehension to remove both metabolites at the same time</span>
+<span class="p">[</span><span class="n">zi</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;metabolite&#39;</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;metab&#39;</span><span class="p">,</span> <span class="s1">&#39;this_is_a_new_metabolite&#39;</span><span class="p">]]</span>
+
+<span class="c1">## remove global_quantity called &#39;X&#39;</span>
+<span class="n">zi</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;global_quantity&#39;</span><span class="p">,</span> <span class="s1">&#39;X&#39;</span><span class="p">)</span>
+
+<span class="c1">## remove reaction called new_reaction</span>
+<span class="n">zi</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;reaction&#39;</span><span class="p">,</span> <span class="s1">&#39;new_reaction&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[27]:
+</pre></div>
+</div>
+<div class="output_area highlight-none"><div class="highlight"><pre>
+<span></span>Model(name=Zi2007_TGFbeta_signaling, time_unit=min, volume_unit=l, quantity_unit=nmol)
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Tutorial 1: The Model</a><ul>
+<li><a class="reference internal" href="#Imports">Imports</a><ul>
+<li><a class="reference internal" href="#Get-Example-Model">Get Example Model</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#Test-models">Test models</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#Parse-a-Model-into-Pycotools">Parse a Model into Pycotools</a></li>
+<li><a class="reference internal" href="#Open-and-Save">Open and Save</a></li>
+<li><a class="reference internal" href="#Get-Model-Information">Get Model Information</a></li>
+<li><a class="reference internal" href="#Get,-Set,-Add-and-Remove">Get, Set, Add and Remove</a><ul>
+<li><a class="reference internal" href="#Get-the-Smad3c-metabolite">Get the Smad3c metabolite</a></li>
+<li><a class="reference internal" href="#Get-any-global-quantity-with-a-fixed-simulation_type-attribute">Get any global quantity with a fixed simulation_type attribute</a></li>
+<li><a class="reference internal" href="#Get-a-function-by-its-expression">Get a function by its expression</a></li>
+<li><a class="reference internal" href="#Get-all-local-parameters-in-the-R17_LRC_formation-reaction">Get all local parameters in the R17_LRC_formation reaction</a><ul>
+<li><a class="reference internal" href="#How-to-change-existing-model-attributes">How to change existing model attributes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#Change-the-name-of-a-metabolite">Change the name of a metabolite</a></li>
+<li><a class="reference internal" href="#Change-initial_value-of-a-global_quantity">Change initial_value of a global_quantity</a><ul>
+<li><a class="reference internal" href="#How-to-add-a-model-component">How to add a model component</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#Add-a-metabolite">Add a metabolite</a></li>
+<li><a class="reference internal" href="#Add-a-global-quantity-to-the-model">Add a global quantity to the model</a></li>
+<li><a class="reference internal" href="#Add-a-reaction">Add a reaction</a><ul>
+<li><a class="reference internal" href="#Remove-model-components">Remove model components</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/Tutorial1TheModel.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Ciaran Welsh.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/Tutorial1TheModel.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,897 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Tutorial 1: The Model\n",
+    "The `pycotools.model.Model` class is of central importance in pycotools. Copasi models are parsed from the copasi xml into custom python classes for storing model components such as metabolites, global quantities or reactions.  \n",
+    "\n",
+    "### Imports"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-09-29T19:09:24.211029Z",
+     "start_time": "2017-09-29T19:09:23.575685Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "root:INFO:27:    Initializing pycotools\n",
+      "root:INFO:28:    Initializing logging System\n",
+      "root:INFO:29:    logging config file at: //home/b3053674/Documents/pycotools/pycotools/logging_config.conf\n"
+     ]
+    }
+   ],
+   "source": [
+    "import site\n",
+    "site.addsitedir('//home/b3053674/Documents/pycotools')\n",
+    "from pycotools import *\n",
+    "from pycotools.Tests import test_models\n",
+    "import os\n",
+    "from lxml import etree"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Get Example Model\n",
+    "The Tests folder of the pycotools distribution is a mini python package containing a single importable file called test_models. The test_models.py module is simply a container for a collection of copasi models in xml format. These models are used throughout the tutorials. \n",
+    "\n",
+    "### Test models\n",
+    "-  Zi et al 2012\n",
+    "-  Kholodenko 2000"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-09-29T19:09:24.222756Z",
+     "start_time": "2017-09-29T19:09:24.213680Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "## get string model from test_models\n",
+    "zi_model_string = test_models.TestModels().zi_model()\n",
+    "\n",
+    "## get a working directory. Change this to change this to wherever you like\n",
+    "directory = r'/home/b3053674/Documents/pycotools/ZiModel'\n",
+    "\n",
+    "## choose path to zi model\n",
+    "zi_path = os.path.join(directory, 'zi2012.cps')\n",
+    "\n",
+    "##write model to file\n",
+    "with open(zi_path, 'w') as f:\n",
+    "    f.write(zi_model_string)\n",
+    "    \n",
+    "## check file exists\n",
+    "if not os.path.isfile(zi_path):\n",
+    "    raise Exception\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Parse a Model into Pycotools\n",
+    "The model.Model class accepts a path to a existing copasi file"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-09-29T19:09:24.361647Z",
+     "start_time": "2017-09-29T19:09:24.225051Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Model(name=Zi2007_TGFbeta_signaling, time_unit=min, volume_unit=l, quantity_unit=nmol)"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "zi = model.Model(zi_path)\n",
+    "zi"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Open and Save\n",
+    "It is sometimes desirable to `open` a copasi model that you're working with to manually perform sanity checks. The Model class has the open method for convenience: "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-09-29T19:09:29.328804Z",
+     "start_time": "2017-09-29T19:09:24.363180Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "zi.open()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The `Model.open()` method implicitly saves to file before calling CopasiUI form the command line. This means that the environment variable CopasiUI must be set and pointing to the location of the CopasiUI.exe (this is usually done when copasi installs). By default, the model is overwritten but this behaviour can be modified by passing a new filename to the `copasi_file` argument:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-09-29T19:09:32.141278Z",
+     "start_time": "2017-09-29T19:09:29.332597Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "## modify the zi path\n",
+    "new_path = zi_path[:-4]+'2.cps'\n",
+    "\n",
+    "## saves model to new_path then opens\n",
+    "zi.open(copasi_file=new_path)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The `Model.save()` behaves similarly to `Model.open`. By default it overwrites but takes an optional `copasi_file` as an argument."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-09-29T19:09:32.172561Z",
+     "start_time": "2017-09-29T19:09:32.144740Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Model(name=Zi2007_TGFbeta_signaling, time_unit=min, volume_unit=l, quantity_unit=nmol)"
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "zi.save()\n",
+    "\n",
+    "##equivalent\n",
+    "zi.save(copasi_file=zi_path)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Get Model Information \n",
+    "## Model attributes\n",
+    "Global model information such as model units or components are available as python attributes. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-09-29T19:09:32.243136Z",
+     "start_time": "2017-09-29T19:09:32.175157Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "is time_unit in zi model attributes? --> True\n",
+      "is name in zi model attributes? --> True\n",
+      "is volume_unit in zi model attributes? --> True\n",
+      "is quantity_unit in zi model attributes? --> True\n",
+      "is area_unit in zi model attributes? --> True\n",
+      "is length_unit in zi model attributes? --> True\n"
+     ]
+    }
+   ],
+   "source": [
+    "attributes = ['time_unit', 'name', 'volume_unit', 'quantity_unit', 'area_unit', \n",
+    "        'length_unit']\n",
+    "for attr in attributes:\n",
+    "    print ('is {} in zi model attributes? --> {}'.format(attr, attr in dir(zi)))\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Access Model Attributes\n",
+    "Lists of `metabolites`, `global_quantities`, `functions`, `reactions`, `local_parameters` and `compartments` are all available as `model.Model` attributes. For example"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-09-29T19:09:32.381487Z",
+     "start_time": "2017-09-29T19:09:32.246752Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "(<type 'list'>, 16)\n"
+     ]
+    }
+   ],
+   "source": [
+    "## metabolites\n",
+    "print (type(zi.metabolites), len(zi.metabolites))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-09-29T19:09:32.520742Z",
+     "start_time": "2017-09-29T19:09:32.383569Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "(<type 'list'>, 26)\n"
+     ]
+    }
+   ],
+   "source": [
+    "## reactions\n",
+    "print (type(zi.reactions), len(zi.reactions))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Each element of the list returned from an attribute is a pycotools object."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-09-29T19:09:32.634630Z",
+     "start_time": "2017-09-29T19:09:32.526953Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "<class 'pycotools.model.Metabolite'>\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "Metabolite(name=\"Smad3n\", key=\"Metabolite_3\", compartment=\"Nucleus\", concentration=\"236.45\", particle_number=\"4.98377321973e+13\", simulation_type=\"reactions\")"
+      ]
+     },
+     "execution_count": 10,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "print(type(zi.metabolites[0]))\n",
+    "zi.metabolites[0]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "There are objects for `GlobalQuantity`, `Function`, `Reaction`, `LocalParameter` and `Compartment`. classes. These classes are storage classes and relevant information about that class is available as a python attribute."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-09-29T19:09:32.742313Z",
+     "start_time": "2017-09-29T19:09:32.638609Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "type list_of_global_quantities --> <type 'list'>\n",
+      "type global_quantity --> <class 'pycotools.model.GlobalQuantity'>\n",
+      "First global quantity in the list is --> Kexp_Smad2n\n",
+      "First global quantity in the list has initial value of --> 1.0\n"
+     ]
+    }
+   ],
+   "source": [
+    "##get global quantities list\n",
+    "list_of_global_quantities = zi.global_quantities\n",
+    "print ('type list_of_global_quantities --> {}'.format(type(list_of_global_quantities)))\n",
+    "\n",
+    "##get first GlobalQuantity in list\n",
+    "global_quantity = list_of_global_quantities[0]\n",
+    "print ('type global_quantity --> {}'.format(type(global_quantity)))\n",
+    "\n",
+    "## name of first GlobalQuantity\n",
+    "print ('First global quantity in the list is --> {}'.format(global_quantity.name))\n",
+    "\n",
+    "## starting value of first GlobalQuantity\n",
+    "print ('First global quantity in the list has initial value of --> {}'.format(global_quantity.initial_value))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Get, Set, Add and Remove\n",
+    "## How to get model objects\n",
+    "The `Model.get` method is a high level interface into pycotools model components. All types of pycotools component and their attributes are supported. Refer to the documentation for which model components contain which attributes. \n",
+    "\n",
+    "Here are some examples:\n",
+    "\n",
+    "### Get the Smad3c metabolite"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-09-29T19:09:32.890602Z",
+     "start_time": "2017-09-29T19:09:32.744176Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Metabolite(name=\"Smad3c\", key=\"Metabolite_1\", compartment=\"Cytoplasm\", concentration=\"492.610000001\", particle_number=\"3.11489514795e+14\", simulation_type=\"reactions\")\n"
+     ]
+    }
+   ],
+   "source": [
+    "## get smad3 metabolite by name\n",
+    "print (zi.get('metabolite', 'Smad3c', by='name'))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Get any global quantity with a fixed simulation_type attribute "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-09-29T19:09:32.989764Z",
+     "start_time": "2017-09-29T19:09:32.893080Z"
+    },
+    "scrolled": false
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[GlobalQuantity(name='Kexp_Smad2n', key='ModelValue_12', initial_value='1.0', simulation_type='fixed'), GlobalQuantity(name='Kdeg_T1R_EE', key='ModelValue_9', initial_value='0.005', simulation_type='fixed'), GlobalQuantity(name='Klid', key='ModelValue_8', initial_value='0.02609', simulation_type='fixed'), GlobalQuantity(name='kr_EE', key='ModelValue_3', initial_value='0.033', simulation_type='fixed'), GlobalQuantity(name='ki_EE', key='ModelValue_2', initial_value='0.33', simulation_type='fixed'), GlobalQuantity(name='v_T2R', key='ModelValue_1', initial_value='0.02869', simulation_type='fixed'), GlobalQuantity(name='v_T1R', key='ModelValue_0', initial_value='0.0103', simulation_type='fixed'), GlobalQuantity(name='k_LRC', key='ModelValue_7', initial_value='2197.0', simulation_type='fixed'), GlobalQuantity(name='Kcd', key='ModelValue_6', initial_value='0.005', simulation_type='fixed'), GlobalQuantity(name='kr_Cave', key='ModelValue_5', initial_value='0.03742', simulation_type='fixed'), GlobalQuantity(name='ki_Cave', key='ModelValue_4', initial_value='0.33', simulation_type='fixed'), GlobalQuantity(name='Kexp_Smad4n', key='ModelValue_14', initial_value='0.5', simulation_type='fixed'), GlobalQuantity(name='Kdiss_Smads_Complex_n', key='ModelValue_17', initial_value='0.1174', simulation_type='fixed'), GlobalQuantity(name='Kimp_Smad2c', key='ModelValue_11', initial_value='0.16', simulation_type='fixed'), GlobalQuantity(name='Kimp_Smads_Complex_c', key='ModelValue_16', initial_value='0.16', simulation_type='fixed'), GlobalQuantity(name='Kimp_Smad4c', key='ModelValue_13', initial_value='0.08', simulation_type='fixed'), GlobalQuantity(name='Kdeg_T2R_EE', key='ModelValue_10', initial_value='0.025', simulation_type='fixed'), GlobalQuantity(name='k_Smads_Complex_c', key='ModelValue_15', initial_value='6.85e-05', simulation_type='fixed')]\n"
+     ]
+    }
+   ],
+   "source": [
+    "## get qlobal quantities with fixed simulation type\n",
+    "print (zi.get('global_quantity', 'fixed', by='simulation_type'))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Get a function by its expression"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-09-29T19:09:33.105361Z",
+     "start_time": "2017-09-29T19:09:32.993347Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Function(name=\"Constant flux (irreversible)\", key=\"Function_6\", expression=\"v\", roles={})\n"
+     ]
+    }
+   ],
+   "source": [
+    "print (zi.get('function', 'v', by='expression'))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Get all local parameters in the R17_LRC_formation reaction"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-09-29T19:09:33.222529Z",
+     "start_time": "2017-09-29T19:09:33.108285Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "LocalParameter(name=\"k_LRC\", reaction_name=\"R17_LRC_formation, value=\"2197\", simulation_type=\"fixed\")\n"
+     ]
+    }
+   ],
+   "source": [
+    "print (zi.get('local_parameter', 'R17_LRC_formation', by='reaction_name'))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## How to change existing model attributes\n",
+    "Like `get` the `Model.set` method is a high level interface that takes a model component as first argument. The `set` method first searches the model for a component using the `get` method and then changes an attribute of the returned object. Often the attribute you want to change is the same as the attribute you've used to locate the object of interest (i.e. changing the name of a component). This does not need to be the case however. Here are some examples:\n",
+    "\n",
+    "### Change the name of a metabolite"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-09-29T19:09:33.368616Z",
+     "start_time": "2017-09-29T19:09:33.225185Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Metabolite(name=\"Smad3c\", key=\"Metabolite_1\", compartment=\"Cytoplasm\", concentration=\"492.610000001\", particle_number=\"3.11489514795e+14\", simulation_type=\"reactions\")\n",
+      "[]\n",
+      "Metabolite(name=\"NewSmad3c\", key=\"Metabolite_1\", compartment=\"Cytoplasm\", concentration=\"492.610000001\", particle_number=\"3.11489514795e+14\", simulation_type=\"reactions\")\n",
+      "Metabolite(name=\"Smad3c\", key=\"Metabolite_1\", compartment=\"Cytoplasm\", concentration=\"492.610000001\", particle_number=\"3.11489514795e+14\", simulation_type=\"reactions\")\n"
+     ]
+    }
+   ],
+   "source": [
+    "## before the change\n",
+    "print(zi.get('metabolite', 'Smad3c', by='name'))\n",
+    "\n",
+    "## Set the name of the metabolite with name 'Smad3c to 'NewSmad3c  \n",
+    "zi.set('metabolite', 'Smad3c', 'NewSmad3c', match_field='name', change_field='name')\n",
+    "\n",
+    "## get Smad3c after the change\n",
+    "print( zi.get('metabolite', 'Smad3c', by='name')) ## returns [] since it now doesn't exist\n",
+    "\n",
+    "## get NewSmad3c after the change\n",
+    "print(zi.get('metabolite', 'NewSmad3c', by='name')) ##default value for by arg is 'name'\n",
+    "\n",
+    "## Change the name back\n",
+    "zi.set('metabolite', 'NewSmad3c', 'Smad3c', match_field='name', change_field='name')\n",
+    "## get Smad3c again after the change back\n",
+    "print(zi.get('metabolite', 'Smad3c', by='name'))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Change initial_value of a global_quantity"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-09-29T19:09:36.234895Z",
+     "start_time": "2017-09-29T19:09:33.371947Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "GlobalQuantity(name='Kexp_Smad2n', key='ModelValue_12', initial_value='1.0', simulation_type='fixed')\n",
+      "Model(name=Zi2007_TGFbeta_signaling, time_unit=min, volume_unit=l, quantity_unit=nmol)\n",
+      "GlobalQuantity(name='Kexp_Smad2n', key='ModelValue_12', initial_value='35.0', simulation_type='fixed')\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "Model(name=Zi2007_TGFbeta_signaling, time_unit=min, volume_unit=l, quantity_unit=nmol)"
+      ]
+     },
+     "execution_count": 17,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "## get Kexp_Smad2n global before a change\n",
+    "kexp_smad2n = zi.get('global_quantity', 'Kexp_Smad2n', by='name')\n",
+    "print(kexp_smad2n)\n",
+    "\n",
+    "## keep the initial value for later\n",
+    "original_initial_value = kexp_smad2n.initial_value\n",
+    "\n",
+    "## change initial_value\n",
+    "print (zi.set('global_quantity', 'Kexp_Smad2n', 35, match_field='name', change_field='initial_value'))\n",
+    "zi.open()\n",
+    "## get Kexp_Smad2n after the change\n",
+    "print (zi.get('global_quantity', 'Kexp_Smad2n', by='name'))\n",
+    "\n",
+    "## change back to original value\n",
+    "zi.set('global_quantity', 'Kexp_Smad2n', original_initial_value, match_field='name', change_field='initial_value')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## How to add a model component\n",
+    "It is possible to add components to a copasi model directly from pycotools. However, the best way to add components is still to use the copasi GUI (easily accessable using the `Model.open` method). \n",
+    "\n",
+    "To add a component to the model directly from python, first create an instance of the class for the component you want to add. The possibilities are `model.Compartment`, `model.Metabolite`, `model.GlobalQuantity`, `model.Reaction`, `model.Function`. \n",
+    "\n",
+    "Note that support has not been built for assigning global_quantities to rate parameters for reactions. This is on the TODO list. \n",
+    "\n",
+    "### Add a metabolite"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-09-29T19:09:36.290953Z",
+     "start_time": "2017-09-29T19:09:36.238766Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Metabolite(name=\"metab\", key=\"Metabolite_10000\", compartment=\"Nucleus\", concentration=\"10.0\", particle_number=\"2.10774929995e+12\", simulation_type=\"reactions\")"
+      ]
+     },
+     "execution_count": 18,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "## create a model.Metabolite object with desired attributes\n",
+    "metab = model.Metabolite(zi, 'metab', concentration=10, compartment=zi.compartments[1])\n",
+    "\n",
+    "## add metabolite to model \n",
+    "zi = zi.add('metabolite', metab)\n",
+    "\n",
+    "## Check the metabolite exists\n",
+    "zi.get('metabolite', 'metab', by='name')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Alternatively create a metabolite with default attribute values"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-09-29T19:09:36.400930Z",
+     "start_time": "2017-09-29T19:09:36.293997Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Metabolite(name=\"this_is_a_new_metabolite\", key=\"Metabolite_10001\", compartment=\"Medium\", concentration=\"1.0\", particle_number=\"6.022140857e+14\", simulation_type=\"reactions\")"
+      ]
+     },
+     "execution_count": 19,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "zi = zi.add('metabolite', 'this_is_a_new_metabolite')\n",
+    "\n",
+    "zi.get('metabolite', 'this_is_a_new_metabolite')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Add a global quantity to the model"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-09-29T19:09:36.494410Z",
+     "start_time": "2017-09-29T19:09:36.404068Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "GlobalQuantity(name='X', key='ModelValue_10000', initial_value='25.0', simulation_type='fixed')"
+      ]
+     },
+     "execution_count": 20,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "## Create GlobalQuantity instance\n",
+    "x_global = model.GlobalQuantity(zi, 'X', initial_value=25)\n",
+    "\n",
+    "## add to the model\n",
+    "zi.add('global_quantity', x_global)\n",
+    "\n",
+    "## Get the global quantity\n",
+    "zi.get('global_quantity', 'X')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Add a reaction\n",
+    "A reaction takes a name, expression and rate law as minimum input requriments. The expression follows the same syntax as COPASI including the spaces. The rate law supports copasi syntax as well. If you want to us, wrap them in a '<>' delimiterse any.  of the other functions that copasi provides (such as `if`, `floor` or `ceil`), wrap them in a '<>' delimiters. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-09-29T19:11:10.380121Z",
+     "start_time": "2017-09-29T19:11:10.371533Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Reaction(name=\"new_reaction\", expression=\" -> \", rate_law=\"k*LRC_Cave\", parameters={'k': 0.1, 'LRC_Cave': 0.1}, reversible=False, simulation_type=\"reactions\")\n"
+     ]
+    }
+   ],
+   "source": [
+    "## create reaction\n",
+    "r = model.Reaction(zi, name='new_reaction', expression='A -> B ;C', rate_law='k*A^h-C')\n",
+    "\n",
+    "\n",
+    "## add the reaction\n",
+    "zi.add('reaction', r)\n",
+    "\n",
+    "## check the reaction exists\n",
+    "print(zi.get('reaction', 'new_reaction', by='name'))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Remove model components\n",
+    "We've just added a metabolite called `metab` and `this_is_a_new_metabolite`, a global quantity called `X` and a reaction called `new_reaction`. We can remove these components again with the model.Remove method"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2017-09-29T19:16:33.351415Z",
+     "start_time": "2017-09-29T19:16:33.307725Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Model(name=Zi2007_TGFbeta_signaling, time_unit=min, volume_unit=l, quantity_unit=nmol)"
+      ]
+     },
+     "execution_count": 27,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "## Use simple list comprehension to remove both metabolites at the same time\n",
+    "[zi.remove('metabolite', i) for i in ['metab', 'this_is_a_new_metabolite']]\n",
+    "\n",
+    "## remove global_quantity called 'X'\n",
+    "zi.remove('global_quantity', 'X')\n",
+    "\n",
+    "## remove reaction called new_reaction\n",
+    "zi.remove('reaction', 'new_reaction')"
+   ]
+  }
+ ],
+ "metadata": {
+  "hide_input": false,
+  "kernelspec": {
+   "display_name": "Python [conda env:py27]",
+   "language": "python",
+   "name": "conda-env-py27-py"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 2
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython2",
+   "version": "2.7.13"
+  },
+  "latex_envs": {
+   "LaTeX_envs_menu_present": true,
+   "autocomplete": true,
+   "bibliofile": "biblio.bib",
+   "cite_by": "apalike",
+   "current_citInitial": 1,
+   "eqLabelWithNumbers": true,
+   "eqNumInitial": 1,
+   "hotkeys": {
+    "equation": "Ctrl-E",
+    "itemize": "Ctrl-I"
+   },
+   "labels_anchors": false,
+   "latex_user_defs": false,
+   "report_style_numbering": false,
+   "user_envs_cfg": false
+  },
+  "toc": {
+   "colors": {
+    "hover_highlight": "#DAA520",
+    "navigate_num": "#000000",
+    "navigate_text": "#333333",
+    "running_highlight": "#FF0000",
+    "selected_highlight": "#FFD700",
+    "sidebar_border": "#EEEEEE",
+    "wrapper_background": "#FFFFFF"
+   },
+   "moveMenuLeft": true,
+   "nav_menu": {
+    "height": "238px",
+    "width": "252px"
+   },
+   "navigate_menu": true,
+   "number_sections": true,
+   "sideBar": true,
+   "threshold": 4,
+   "toc_cell": false,
+   "toc_section_display": "block",
+   "toc_window_display": true,
+   "widenNotebook": false
+  },
+  "varInspector": {
+   "cols": {
+    "lenName": 16,
+    "lenType": 16,
+    "lenVar": 40
+   },
+   "kernels_config": {
+    "python": {
+     "delete_cmd_postfix": "",
+     "delete_cmd_prefix": "del ",
+     "library": "var_list.py",
+     "varRefreshCmd": "print(var_dic_list())"
+    },
+    "r": {
+     "delete_cmd_postfix": ") ",
+     "delete_cmd_prefix": "rm(",
+     "library": "var_list.r",
+     "varRefreshCmd": "cat(var_dic_list()) "
+    }
+   },
+   "types_to_exclude": [
+    "module",
+    "function",
+    "builtin_function_or_method",
+    "instance",
+    "_Feature"
+   ],
+   "window_display": false
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
