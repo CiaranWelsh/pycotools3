@@ -1,8 +1,8 @@
-The Viz Module 
-==============
+Multiple Parameter Estimations
+==============================
 
 .. toctree::
-   :caption: The viz module
+   :caption: Multiple Parameter Estimations
 
    Tutorial5MultipleParameterEstimations
 

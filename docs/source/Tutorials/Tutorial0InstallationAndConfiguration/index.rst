@@ -2,7 +2,7 @@ Installation and Configuration
 ==============================
 
 .. toctree::
-   :caption: Tutorials
+   :caption: Installation and Configuration
 
    Tutorial0InstallationAndConfiguration
 

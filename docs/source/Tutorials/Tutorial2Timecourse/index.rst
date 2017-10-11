@@ -2,7 +2,7 @@ Timecourse
 ==============
 
 .. toctree::
-   :caption: Running Time Course
+   :caption: Time-Courses
 
    Tutorial2Timecourse
 

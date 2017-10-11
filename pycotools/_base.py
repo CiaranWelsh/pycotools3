@@ -1,6 +1,5 @@
 # -*-coding: utf-8 -*-
 """
-
  This file is part of pycotools.
 
  pycotools is free software: you can redistribute it and/or modify
@@ -17,22 +16,24 @@
  along with pycotools.  If not, see <http://www.gnu.org/licenses/>.
 
 
- $Author: Ciaran Welsh
+Author: 
+    Ciaran Welsh
+Date:
+    12/03/2017
 
-This module provides a set of base classes that are used in pycotools
+ Object:
+ 
+Miscellaneous bunch of useful classes and functions
 """
-# import model as m
+
 import tasks
-# import model
 import os
 import pandas
 from lxml import etree
 import errors
 import logging
-# from model import Model
 from contextlib import contextmanager
 from copy import deepcopy
-# from model import Model
 from mixin import Mixin, mixin
 LOG = logging.getLogger(__name__)
 
