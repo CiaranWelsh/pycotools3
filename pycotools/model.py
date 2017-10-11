@@ -46,17 +46,6 @@ LOG = logging.getLogger(__name__)
 ## TODO add list of reports property to model
 ## TODO after running a task, bind the results to the model instance so that they are retrievable
 
-# class Properties2DFMixin(mixin):
-#     def to_df(self):
-#         """
-#         Convert kwargs to 1D df
-#         :return: pandas.DataFrame
-#         """
-#         df = pandas.DataFrame(self.kwargs, index=['Value']).transpose()
-#         df.index.name = 'Property'
-#         return df
-
-
 
 
 class GetModelComponentFromStringMixin(Mixin):
@@ -105,12 +94,21 @@ class ComparisonMethodsMixin(Mixin):
         """Override the default hash behavior (that returns the id or the object)"""
         return hash(tuple(sorted(self.__dict__.items())))
 
-
-
-
 class Model(_base._Base):
+    """
+    The Model object is of central importance in pycotools as
+    it extracts relevant from a copasi definition file into
+    custom classes for model components.
+    """
     def __init__(self, copasi_file, quantity_type='concentration',
                  new_model=False, **kwargs):
+        """
+
+        :param copasi_file: String. Full path to a copasi file
+        :param quantity_type: String. either concentration or particle_numbers
+        :param new_model: Boolean.
+        :param kwargs:
+        """
         super(Model, self).__init__(**kwargs)
         self._copasi_file = copasi_file
         self.quantity_type = quantity_type
@@ -158,7 +156,7 @@ class Model(_base._Base):
     @copasi_file.setter
     def copasi_file(self, filename):
         """
-
+        Set the copasi file
         :param filename:
         :return:
         """
@@ -169,7 +167,7 @@ class Model(_base._Base):
 
     def copy(self, filename):
         """
-
+        Copy the model
         :return:
         """
         model = deepcopy(self)
@@ -178,7 +176,7 @@ class Model(_base._Base):
 
     def refresh(self):
         """
-
+        refresh the model
         :return:
         """
         self.xml = tasks.CopasiMLParser(self.copasi_file).copasiML
@@ -202,7 +200,7 @@ class Model(_base._Base):
     @property
     def time_unit(self):
         """
-        :return:
+        :return: String. Current time unit defined by copasi
         """
         query = '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
         return self.xml.xpath(query)[0].attrib['timeUnit']
@@ -210,6 +208,7 @@ class Model(_base._Base):
     @property
     def name(self):
         """
+        :return: Str. The model name
         """
         query = '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
         return self.xml.xpath(query)[0].attrib['name']
@@ -224,16 +223,28 @@ class Model(_base._Base):
 
     @property
     def volume_unit(self):
+        """
+
+        :return: string. The currently defined volume unit
+        """
         query = '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
         return self.xml.xpath(query)[0].attrib['volumeUnit']
 
     @property
     def quantity_unit(self):
+        """
+
+        :return: string. The currently defined quantity unit
+        """
         query = '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
         return self.xml.xpath(query)[0].attrib['quantityUnit']
 
     @property
     def area_unit(self):
+        """
+
+        :return: string. The currently defined area unit.
+        """
         query = '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
         return self.xml.xpath(query)[0].attrib['areaUnit']
 
@@ -265,8 +276,6 @@ class Model(_base._Base):
         """
         query = '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
         return self.xml.xpath(query)[0].attrib['key']
-
-
 
     @property
     def states(self):
@@ -394,7 +403,8 @@ class Model(_base._Base):
     @cached_property
     def compartments(self):
         """
-        Get dict of compartments. dict[compartment_name] = corresponding xml code as nested dict
+
+        :return: List of model.Compartments
         """
         collection= {}
         lst = []
@@ -503,7 +513,7 @@ class Model(_base._Base):
         a global variable assigned to them. The constant property
         returns all local parameters regardless of simulation type
         (fixed or assignment)
-        :return:
+        :return: List of local parameters
         """
         loc = self.constants#reduce(lambda x, y: x+y, [i.parameters for i in self.reactions])
 
@@ -588,6 +598,10 @@ class Model(_base._Base):
 
     @cached_property
     def metabolites(self):
+        """
+
+        :return: list of Metabolites
+        """
         metabs = {}
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfMetabolites':
@@ -717,7 +731,7 @@ class Model(_base._Base):
     def global_quantities(self):
         """
 
-        :return:
+        :return: List of GlobalQuantity instances
         """
         model_values = {}
         for i in self.xml.iter():

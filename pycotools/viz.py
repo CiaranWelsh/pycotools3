@@ -623,7 +623,7 @@ class PlotTimeCourseEnsemble(object):
                    'title': None,
                    'ylabel': None,
                    'xlabel': None,
-                   'run_mode': 'multiprocess',
+                   'run_mode': True,
                    }
 
         for i in kwargs.keys():
@@ -643,11 +643,7 @@ class PlotTimeCourseEnsemble(object):
                                     'and data files')
         self.experimental_data = self.parse_experimental_files
         self.exp_times = self.get_experiment_times
-        if self.parallel:
-            self.ensemble_data = self.simulate_ensemble_parallel
-
-        else:
-            self.ensemble_data = self.simulate_ensemble
+        self.ensemble_data = self.simulate_ensemble
         self.ensemble_data.index = self.ensemble_data.index.rename(['Index','Time'])
 
         if self.data_filename != None:
@@ -1070,7 +1066,7 @@ class PlotParameterEstimation(PlotKwargs):
 @mixin(ParseMixin)
 @mixin(CreateResultsDirectoryMixin)
 @mixin(TruncateDataMixin)
-class Boxplot(PlotKwargs):
+class Boxplots(PlotKwargs):
     """
     Create new folder for each experiment
     defined under the sub directory of results_directory
@@ -1187,7 +1183,7 @@ class RssVsIterations(PlotKwargs):
                                    'num_per_plot': 6,
                                    'xtick_rotation': 'vertical',
                                    'ylabel': 'Estimated Parameter\n Value(Log10)',
-                                   'title': 'Parameter Distributions',
+                                   'title': 'Rss Vs Iterations',
                                    'savefig': False,
                                    'results_directory': None,
                                    'dpi': 300,
@@ -1706,25 +1702,28 @@ class ModelSelection(object):
     '''
     ## could give
     '''
-    def __init__(self, multi_model_fit, **kwargs):
+    def __init__(self, multi_model_fit, savefig=False,
+                 dpi=300, log10=False, filename=None, pickle=None):
         self.multi_model_fit = multi_model_fit
         self.number_models = self.get_num_models()
-        self.savefig = False
+        self.savefig = savefig
         self.results_directory = self.multi_model_fit.project_dir
-        self.dpi = 300
-        self.log10= False
-        self.model_selection_filename = None
+        self.dpi = dpi
+        self.log10 = log10
+        self.filename = filename
+        self.pickle = pickle
         self._do_checks()
 
-        
-#        if self.model_selection_filename==None:
-#            self.model_selection_filename=os.path.join(self.multi_model_fit.wd,'ModelSelectionData.xlsx')
+        ## do model selection stuff
         self.results_folder_dct = self._get_results_directories()
         self.model_dct = self._get_model_dct()
         self.data_dct = self._parse_data()
         self.number_model_parameters = self._get_number_estimated_model_parameters()
         self.number_observations = self._get_n()
-        self.model_selection_data=self.calculate_model_selection_criteria()
+        self.model_selection_data = self.calculate_model_selection_criteria()
+
+        self.to_csv(self.filename)
+        self.boxplot()
 
     def __iter__(self):
         for MPE in self.multi_model_fit:
@@ -1753,8 +1752,11 @@ class ModelSelection(object):
 
         :return:
         """
-        if self.model_selection_filename is None:
-            self.model_selection_filename = os.path.join(self.results_directory, 'ModelSelectionCriteria.csv')
+        if self.filename is None:
+            self.filename = os.path.join(self.results_directory, 'ModelSelectionCriteria.csv')
+
+        # if self.pickle is None:
+        #     self.pickle = os.path.splitext(self.filename)[0]+'.pickle'
 
     def _get_results_directories(self):
         '''
@@ -1768,15 +1770,22 @@ class ModelSelection(object):
 
     def to_excel(self, filename=None):
         if filename is None:
-            filename = self.model_selection_filename[:-4]+'.xlsx'
+            filename = self.filename[:-4]+'.xlsx'
         self.model_selection_data.to_excel(filename)
 
     def to_csv(self, filename=None):
         if filename is None:
-            filename = self.model_selection_filename
+            filename = self.filename
         LOG.info('model selection data saved to {}'.format(filename))
         self.model_selection_data.to_csv(filename)
-        
+
+    def to_pickle(self, filename=None):
+        if filename is None:
+            filename = os.path.splitext(self.filename)[0]+'.pickle'
+
+        LOG.info('model selection pickle saved to {}'.format(filename))
+        self.model_selection_data.to_pickle(filename)
+
     def _get_model_dct(self):
         """
         Get a model dct. The model must be a configured model
@@ -1799,20 +1808,23 @@ class ModelSelection(object):
         '''
 
         '''
+        if self.pickle is not None:
+            #     self.pickle = os.path.splitext(self.filename)[0]+'.pickle'
+            return pandas.read_pickle(self.pickle)
+        else:
+            dct={}
+            for MPE in self.multi_model_fit:
 
-        dct={}
-        for MPE in self.multi_model_fit:
-
-            ## get the first cps file configured for eastimation in each MMF obj
-            cps_1 = glob.glob(
-                os.path.join(
-                    os.path.dirname(MPE.results_directory),
-                    '*_1.cps')
-            )[0]
-            dct[cps_1] = Parse(MPE.results_directory,
-                               copasi_file=cps_1,
-                               log10=self.log10)
-        return dct
+                ## get the first cps file configured for eastimation in each MMF obj
+                cps_1 = glob.glob(
+                    os.path.join(
+                        os.path.dirname(MPE.results_directory),
+                        '*_1.cps')
+                )[0]
+                dct[cps_1] = Parse(MPE.results_directory,
+                                   copasi_file=cps_1,
+                                   log10=self.log10)
+            return dct
 
     def _get_number_estimated_model_parameters(self):
         k_dct={}
@@ -1875,47 +1887,49 @@ class ModelSelection(object):
         '''
         
         '''
-        df_dct={}
+        df_dct = {}
         for model_num in range(len(self.model_dct)):
             keys = self.model_dct.keys()
             cps_key = self.model_dct[keys[model_num]].copasi_file
-            k=self.number_model_parameters[cps_key]
-            n=self.number_observations #constant throughout analysis
-            RSS=self.data_dct[cps_key].data.RSS
-            aic_dct={}
-            bic_dct={}
-            for i in range(len(RSS)):
-                aic=self.calculate1AIC(RSS.iloc[i],k,n)
-                bic=self.calculate1BIC(RSS.iloc[i],k,n)
-                aic_dct[i]=aic
-                bic_dct[i]=bic
-            aic= pandas.DataFrame.from_dict(aic_dct,orient='index')
-            RSS= pandas.DataFrame(RSS)
-            bic= pandas.DataFrame.from_dict(bic_dct,orient='index')
-            df=pandas.concat([RSS,aic,bic],axis=1)
-            df.columns=['RSS','AICc','BIC']
-            df.index.name='RSS Rank'
-            df_dct[os.path.split(cps_key)[1]]=df
-        df=pandas.concat(df_dct,axis=1)
+
+            k = self.number_model_parameters[cps_key]
+            n = self.number_observations #constant throughout analysis
+            rss = self.data_dct[cps_key].data.RSS
+            aic_dct = {}
+            bic_dct = {}
+            for i in range(len(rss)):
+                aic = self.calculate1AIC(rss.iloc[i], k, n)
+                bic = self.calculate1BIC(rss.iloc[i], k, n)
+                aic_dct[i] = aic
+                bic_dct[i] = bic
+            aic = pandas.DataFrame.from_dict(aic_dct,orient='index')
+            rss = pandas.DataFrame(rss)
+            bic = pandas.DataFrame.from_dict(bic_dct,orient='index')
+            df = pandas.concat([rss, aic,bic],axis=1)
+            df.columns = ['RSS', 'AICc', 'BIC']
+            df.index.name = 'RSS Rank'
+            df_dct[os.path.split(cps_key)[1][:-6]] = df
+        df = pandas.concat(df_dct, axis=1)
         return df
-    
-    
+
     def boxplot(self):
-        '''
-        
-        '''
+        """
+
+        :return:
+        """
+        seaborn.set_context(context='poster')
         data = self.model_selection_data
         
         data = data.unstack()
         data = data.reset_index()
-        data = data.rename(columns={'level_0':'Model',
-                                    'level_1':'Metric',
-                                    0:'Score'})
+        data = data.rename(columns={'level_0': 'Model',
+                                    'level_1': 'Metric',
+                                    0: 'Score'})
 #        print data
         for metric in data['Metric'].unique():
             plt.figure()
-            seaborn.boxplot(data = data[data['Metric']==metric],
-                            x='Model',y='Score')
+            seaborn.boxplot(data=data[data['Metric'] == metric],
+                            x='Model', y='Score')
             plt.xticks(rotation='vertical')
             plt.title('{} Scores'.format(metric))
             plt.xlabel(' ')
@@ -1925,12 +1939,10 @@ class ModelSelection(object):
                     os.mkdir(save_dir)
                 os.chdir(save_dir)
                 fname = os.path.join(save_dir, '{}.png'.format(metric))
-                plt.savefig(fname, dpi=self['dpi'], bbox_inches='tight')
-  
-        
-        
-        
-    def chi2_lookup_table(self,alpha):
+                plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
+                LOG.info('boxplot saved to : "{}"'.format(fname))
+
+    def chi2_lookup_table(self, alpha):
         '''
         Looks at the cdf of a chi2 distribution at incriments of 
         0.1 between 0 and 100. 
@@ -1938,8 +1950,8 @@ class ModelSelection(object):
         Returns the x axis value at which the alpha interval has been crossed, 
         i.e. gets the cut off point for chi2 dist with DOF and alpha . 
         '''
-        nums= numpy.arange(0,100,0.1)
-        table=zip(nums,scipy.stats.chi2.cdf(nums,self.kwargs.get('DOF')) )
+        nums = numpy.arange(0,100,0.1)
+        table=zip(nums, scipy.stats.chi2.cdf(nums,self.kwargs.get('DOF')) )
         for i in table:
             if i[1]<=alpha:
                 chi2_df_alpha=i[0]

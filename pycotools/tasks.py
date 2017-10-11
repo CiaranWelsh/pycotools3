@@ -266,7 +266,6 @@ class Run(object):
     """
     def __init__(self, model, **kwargs):
         """
-
         :param model: instance of model.Model
         :param kwargs:
         """
@@ -300,9 +299,6 @@ class Run(object):
 
         elif self.mode == 'multiprocess':
             self.multi_run()
-
-        # elif self.mode == 'parallel':
-        #     self.run_parallel()
 
 
     def _do_checks(self):
@@ -397,49 +393,7 @@ class Run(object):
         ## remove .sh file after used.
         os.remove(self.sge_job_filename)
 
-    # def run1(self, q, model):
-    #     """
-    #     Setup a single scan.
-    #     :param q: queue from multiprocessing
-    #     :param model: pycotools.model.Model
-    #     :param report: str.
-    #     :return:
-    #     """
-    #     start = time.time()
-    #     models = q.put(Scan(
-    #         model,
-    #         scan_type='scan',
-    #         variable=parameter,
-    #         number_of_steps=self.intervals,
-    #         subtask='parameter_estimation',
-    #         report_type='parameter_estimation',
-    #         report_name=report,
-    #         run=False,
-    #         append=self.append,
-    #         clear_scans=True,
-    #         output_in_subtask=self.output_in_subtask,#self.output_in_subtask,
-    #         )
-    #     )
-
-
-        # output, err = p.communicate()
-        # d = {}
-        # d['output'] = output
-        # d['error'] = err
-        # if err != '':
-        #     try:
-        #         self.run_linux()
-        #     except:
-        #         raise errors.CopasiError('Failed with Copasi error: \n\n' + d['error'])
-        # return d['output']
-
-
-
-
-
-
 @mixin(model.GetModelComponentFromStringMixin)
-# @mixin(GetModelVariableFromStringMixin)
 @mixin(UpdatePropertiesMixin)
 @mixin(model.ReadModelMixin)
 @mixin(CheckIntegrityMixin)
@@ -462,7 +416,6 @@ class RunParallel(object):
         LOG.info('running with {} processes'.format(self.processes))
         self.q = Queue.Queue(maxsize=self.processes)
         self.results = self.run_parallel()
-
 
     def _do_checks(self):
         """
@@ -758,15 +711,8 @@ class Reports(object):
         confirm_overwrite:
             True or False.  Default= False
 
-        save:
-            either False,'overwrite' or 'duplicate'.
-            false: don't write to file
-            overwrite: overwrite copasi_file
-            duplicate: write a new file named using the kwarg OutputML
-
-
         variable:
-            When report_type is profilelikelihood, theta is the parameter of interest
+            Model component to scan
 
     """
     def __init__(self, model, **kwargs):
@@ -1261,7 +1207,9 @@ class TimeCourse(object):
                 )
 
     def __str__(self):
-        return "TimeCourse({})".format(self.to_string())
+        return "TimeCourse(method={}, end={}, intervals={}, step_size={})".format(
+            self.method, self.end, self.intervals, self.step_size
+        )
 
     def run_task(self):
         R = Run(self.model, task='time_course', mode=self.run)
@@ -4252,6 +4200,7 @@ class MultiModelFit(object):
             raise errors.InputError('Cannot read multifit confuration as no Project kwarg is provided')
         ##make sure we're in the right directory
         os.chdir(self.project_dir)
+        LOG.debug('project dir is --> {}'.format(self.project_dir))
         cps_list=[]
         for cps_file in glob.glob('*.cps'):
             cps_list.append(cps_file)
