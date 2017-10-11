@@ -7,17 +7,11 @@ Welcome to Pycotools's documentation!
 =====================================
 
 .. toctree::
-   :maxdepth: 10
+   :maxdepth: 3
    :caption: Contents:
 
-   Tutorial0InstallationAndConfiguration
-   Tutorial1TheModel
-   Tutorial2Timecourse
-   Tutorial3Scan
-   Tutorial4SingleParameterEstimations
-   Tutorial5MultipleParameterEstimations
-   Tutorial6TheVizModule
-   Tutorial7InsertParameters
+
+   Tutorials/Tutorials
 
 
 

@@ -174,7 +174,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, 'Pycotools', u'Pycotools Documentation',
-     author, 'Pycotools', 'One line description of project.',
+     author, 'Ciaran Welsh', 'One line description of project.',
      'Miscellaneous'),
 ]
 
