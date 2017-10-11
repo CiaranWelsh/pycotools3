@@ -1,11 +1,4 @@
 sphinx>=1.4
 ipykernel
 nbsphinx
-pandas
-matplotlib
-numpy
-seaborn
-sklearn 
-scipy
-lxml
 

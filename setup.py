@@ -37,7 +37,7 @@ from setuptools import setup
 #version
 MAJOR = 0
 MINOR = 0
-MICRO = 10
+MICRO = 12
 
 
 ###test version
@@ -59,11 +59,19 @@ setup(
   requires=['lxml','argparse','pandas','numpy','scipy',
             'matplotlib','scipy','seaborn','sklearn',
             'retrying'],
-  package_data={'pycotools':['*.py','Documentation/*.pdf',
+  package_data={'pycotools':['*.py',
+                             'Documentation/*.pdf',
                              'logging_config.conf',
-                             'Documentation/*.html','Licence.txt',
+                             'Documentation/*.html',
+                             'Licence.txt',
                              'ReadMe.md',
-                             'Tests/*.py']},
+                             'Tests/*.py',
+                             'Examples/*.py',
+                             'Examples/ski_pcr_data.csv',
+                             'Examples/smad7_pcr_data.csv',
+                             'Scripts/*.py',
+                             'Tutorials/*.py',
+                             'Tutorials/*.ipynb']},
   author_email = 'c.welsh2@newcastle.ac.uk',
   url = 'https://github.com/CiaranWelsh/PyCoTools', # use the URL to the github repo
 
@@ -73,7 +81,9 @@ setup(
   license='GPL4',
   install_requires=['pandas','numpy','scipy','matplotlib',
                     'lxml', 'seaborn','sklearn','openpyxl','xlrd'],
-  long_description='''Tools for using Copasi via Python and calculating profile likelihoods. See Github page and documentation for more details''')
+  long_description='A python package for enhancing mathematical'
+                   ' modelling using COPASI. See github and docs for more details'
+)
 
 
 
