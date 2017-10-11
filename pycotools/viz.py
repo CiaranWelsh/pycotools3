@@ -128,6 +128,7 @@ class TruncateData(object):
     '''
 
     def __init__(self, data, mode='percent', theta=100, log10=False):
+
         self.data = data
         self.mode = mode
         self.theta = theta
@@ -163,7 +164,7 @@ class TruncateData(object):
 
 class ParseMixin(Mixin):
     @staticmethod
-    def parse(cls, log10):
+    def parse(cls, log10, copasi_file=None):
         """
         Use parse class to get the data
         :return:
@@ -171,7 +172,7 @@ class ParseMixin(Mixin):
         if type(cls) == Parse:
             return cls.data
         else:
-            return Parse(cls, log10=log10).data
+            return Parse(cls, log10=log10, copasi_file=copasi_file).data
 
 
 class TruncateDataMixin(Mixin):
@@ -342,9 +343,9 @@ class Parse(object):
                 data = pandas.read_csv(report_name,
                                        sep='\t', header=None, skiprows=[0])
             except:
-                LOG.warning('No Columns to parse from file. {} is empty. Returned None'.format(
+                LOG.warning('No Columns to parse from file. {} is empty. Skipping this file'.format(
                     report_name))
-                return None
+                continue
             bracket_columns = data[data.columns[[0, -2]]]
             if bracket_columns.iloc[0].iloc[0] != '(':
                 data = pandas.read_csv(report_name, sep='\t')
@@ -399,12 +400,17 @@ class Parse(object):
                 raise errors.FileDoesNotExistError('"{}" does not exist'.format(report_name))
 
             try:
+                LOG.debug('report_nme --> {}'.format(report_name))
                 data = pandas.read_csv(report_name,
                                        sep='\t', header=None, skiprows=[0])
             except:
-                LOG.warning('No Columns to parse from file. {} is empty. Returned None'.format(
-                    report_name))
-                return None
+                LOG.warning(
+                    'No Columns to parse from file. {} is empty. '
+                    'Continuing without parsing from thi file'.format(
+                        report_name
+                    )
+                )
+
             bracket_columns = data[data.columns[[0, -2]]]
             if bracket_columns.iloc[0].iloc[0] != '(':
                 data = pandas.read_csv(report_name, sep='\t')
@@ -624,6 +630,7 @@ class PlotTimeCourseEnsemble(object):
                    'ylabel': None,
                    'xlabel': None,
                    'run_mode': True,
+                   'copasi_file': None,
                    }
 
         for i in kwargs.keys():
@@ -633,7 +640,7 @@ class PlotTimeCourseEnsemble(object):
         self.update_properties(self.kwargs)
         self._do_checks()
 
-        self.data = self.parse(self.cls, log10=False)
+        self.data = self.parse(self.cls, log10=False, copasi_file=self.copasi_file)
         self.data = self.truncate(self.data,
                                   mode=self.truncate_mode,
                                   theta=self.theta)
