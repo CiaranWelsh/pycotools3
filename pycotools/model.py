@@ -49,7 +49,11 @@ LOG = logging.getLogger(__name__)
 
 
 class GetModelComponentFromStringMixin(Mixin):
-
+    """
+    Take a :py:class:`Model`, a component type and a string giving
+    the name of that component and return the pycotools object
+    for that component. Uses :py:meth:`Model.get`. 
+    """
     @staticmethod
     def get_component(model, component, string):
         """
