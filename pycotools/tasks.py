@@ -4248,9 +4248,6 @@ class ProfileLikelihood(object):
             'log10': True,
             'append': False,
             'output_in_subtask': True,
-            'iteration_limit': 50,
-            'tolerance': 1e-5,
-            'rho': 0.2,
             'run': False,
             'processes': 1,
             'results_directory': os.path.join(self.model.root,
@@ -4281,16 +4278,16 @@ class ProfileLikelihood(object):
         ##configures parameter estimation method parameters
         self.model = self.undefine_other_reports()
         self.model = self.make_experiment_files_absolute()
-        self.model.open()
-        # self.model = self.set_PE_method()
-        # self.index_dct = self.insert_parameters()
-        # self.model_dct = self.copy_model()
-        # self.model_dct = self.setup_report()
-        # # self.model.open()
-        # self.model_dct = self.setup_parameter_estimation()
-        # self.model_dct = self.setup_scan()
-        # # self.model_dct['current_parameters'][r'(ADeg).k1'].open()
+        self.model = self.set_PE_method()
+        self.index_dct = self.insert_parameters()
+        self.model_dct = self.copy_model()
+        self.model_dct = self.setup_report()
+        # self.model.open()
+        self.model_dct = self.setup_parameter_estimation()
+
+        self.model_dct = self.setup_scan()
         # self.to_file()
+        self.model_dct['current_parameters'][r'Ski'].open()
         #
         # if self.run == 'parallel':
         #     self.run_parallel()
@@ -4418,8 +4415,8 @@ class ProfileLikelihood(object):
 
         #Build xml for method.
         method_name, method_type = self._select_method()
-        method_params={'name':method_name, 'type':method_type}
-        method_element=etree.Element('Method',attrib=method_params)
+        method_params = {'name': method_name, 'type': method_type}
+        method_element = etree.Element('Method', attrib=method_params)
 
         #list of attribute dictionaries
         #Evolutionary strategy parametery
@@ -4530,10 +4527,10 @@ class ProfileLikelihood(object):
 
         tasks=self.model.xml.find('{http://www.copasi.org/static/schema}ListOfTasks')
 
-        method= tasks[5][-1]
-        parent=method.getparent()
+        method = tasks[5][-1]
+        parent = method.getparent()
         parent.remove(method)
-        parent.insert(2,method_element)
+        parent.insert(2, method_element)
         return self.model
 
 
@@ -4565,6 +4562,8 @@ class ProfileLikelihood(object):
                 new_copasi_filename = os.path.join(new_dir, misc.RemoveNonAscii(param).filter+'.cps')
                 dct[model][param] = self.index_dct[model].copy(new_copasi_filename)
                 dct[model][param].save()
+                ##problem with model name needing to be changed everywhere
+                # dct[model][param].name = param
         return dct
 
     def make_experiment_files_absolute(self):
@@ -4626,17 +4625,23 @@ class ProfileLikelihood(object):
 
         if count == 0:
             raise errors.NoFitItemsError('Model does not contain any fit items. Please setup a parameter estimation and try again')
+
+        ##save is needed
+        self.to_file()
+
         return self.model_dct
 
     def setup_report(self):
         for model in self.model_dct:
             for param in self.model_dct[model]:
+                LOG.debug('model -->{}'.format(self.model_dct[model][param]))
                 st = misc.RemoveNonAscii(param).filter
                 self.model_dct[model][param] = Reports(
                     self.model_dct[model][param],
                     report_type='multi_parameter_estimation',
                     report_name=st + '.txt'
                 ).model
+                self.model_dct[model][param].save()
         return self.model_dct
 
     def to_file(self):
@@ -4713,7 +4718,7 @@ class ProfileLikelihood(object):
                 # Since this is being executed in parallel sometimes
                 # we get process clashes. Not sure exactly whats going on
                 # but introducing a small delay seems to fix
-                # time.sleep(0.1)
+                time.sleep(0.1)
                 res[model][param] = q.get().model
         return res
 
