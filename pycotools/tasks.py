@@ -1729,7 +1729,7 @@ class TimeCourse(object):
         return key
 
 
-@mixin(model.GetModelComponentFromStringMixin)
+@mixin(GetModelVariableFromStringMixin)
 @mixin(UpdatePropertiesMixin)
 @mixin(Bool2Numeric)
 @mixin(model.ReadModelMixin)
@@ -4233,7 +4233,6 @@ class MultiModelFit(object):
 @mixin(CheckIntegrityMixin)
 class ProfileLikelihood(object):
     def __init__(self, model, **kwargs):
-        super(ProfileLikelihood, self).__init__(model, **kwargs)
         self.model = self.read_model(model)
         self.kwargs = kwargs
 
@@ -4272,9 +4271,9 @@ class ProfileLikelihood(object):
             'start_temperature': 1,
             'cooling_factor': 0.85,
         }
+        self.default_properties.update(self.kwargs)
         self.convert_bool_to_numeric(self.default_properties)
         self.update_properties(self.default_properties)
-        self.update_kwargs(kwargs)
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
         self._do_checks()
         self._convert_numeric_arguments_to_string()
@@ -4282,18 +4281,19 @@ class ProfileLikelihood(object):
         ##configures parameter estimation method parameters
         self.model = self.undefine_other_reports()
         self.model = self.make_experiment_files_absolute()
-        self.model = self.set_PE_method()
-        self.index_dct = self.insert_parameters()
-        self.model_dct = self.copy_model()
-        self.model_dct = self.setup_report()
-        # self.model.open()
-        self.model_dct = self.setup_parameter_estimation()
-        self.model_dct = self.setup_scan()
-        # self.model_dct['current_parameters'][r'(ADeg).k1'].open()
-        self.to_file()
-
-        if self.run == 'parallel':
-            self.run_parallel()
+        self.model.open()
+        # self.model = self.set_PE_method()
+        # self.index_dct = self.insert_parameters()
+        # self.model_dct = self.copy_model()
+        # self.model_dct = self.setup_report()
+        # # self.model.open()
+        # self.model_dct = self.setup_parameter_estimation()
+        # self.model_dct = self.setup_scan()
+        # # self.model_dct['current_parameters'][r'(ADeg).k1'].open()
+        # self.to_file()
+        #
+        # if self.run == 'parallel':
+        #     self.run_parallel()
 
         # print self.setup_parameter_estimation()
 
@@ -4311,7 +4311,7 @@ class ProfileLikelihood(object):
         if isinstance(self.x, str):
             self.x = self.get_variable_from_string(self.model, self.x)
 
-        if (self.df is None ) and (self.index != 'current_parameters'):
+        if (self.df is None) and (self.index != 'current_parameters'):
             LOG.warning('Got index argument without df argument. Setting index to "current_parameters"')
             self.index = 'current_parameters'
 

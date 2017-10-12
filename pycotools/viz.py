@@ -49,7 +49,9 @@ Features to include:
 ##TODO fix parameter estimation ensembles
 import contextlib
 import string
-import pandas 
+import pandas
+from pandas.parser import CParserError
+from pandas.errors import EmptyDataError
 import matplotlib.pyplot as plt
 import scipy 
 import os
@@ -346,7 +348,15 @@ class Parse(object):
                 LOG.warning('No Columns to parse from file. {} is empty. Skipping this file'.format(
                     report_name))
                 continue
-            bracket_columns = data[data.columns[[0, -2]]]
+            try:
+                bracket_columns = data[data.columns[[0, -2]]]
+
+            except IndexError:
+                raise errors.SomethingWentHorriblyWrongError(
+                    'Rare problem with data file : "{}". Check it manually'
+                    ' and remove if it is corrupt'.format(report_name)
+                )
+
             if bracket_columns.iloc[0].iloc[0] != '(':
                 data = pandas.read_csv(report_name, sep='\t')
                 d[report_name] = data
@@ -400,16 +410,18 @@ class Parse(object):
                 raise errors.FileDoesNotExistError('"{}" does not exist'.format(report_name))
 
             try:
-                LOG.debug('report_nme --> {}'.format(report_name))
                 data = pandas.read_csv(report_name,
                                        sep='\t', header=None, skiprows=[0])
-            except:
+            except EmptyDataError:
                 LOG.warning(
                     'No Columns to parse from file. {} is empty. '
-                    'Continuing without parsing from thi file'.format(
+                    'Continuing without parsing from this file'.format(
                         report_name
                     )
                 )
+                continue
+            except CParserError:
+                raise CParserError('Parameter estimation data file is empty')
 
             bracket_columns = data[data.columns[[0, -2]]]
             if bracket_columns.iloc[0].iloc[0] != '(':
@@ -611,7 +623,6 @@ class PlotTimeCourseEnsemble(object):
                    'truncate_mode': 'percent',
                    'theta': 100,
                    'xtick_rotation': 'horizontal',
-                   'ylabel': 'Frequency',
                    'savefig': False,
                    'results_directory': None,
                    'dpi': 300,
@@ -648,6 +659,7 @@ class PlotTimeCourseEnsemble(object):
             raise errors.InputError('No data. Check arguments to truncate_data and theta '
                                     'or your parameter estimation configuration '
                                     'and data files')
+
         self.experimental_data = self.parse_experimental_files
         self.exp_times = self.get_experiment_times
         self.ensemble_data = self.simulate_ensemble
@@ -685,10 +697,15 @@ class PlotTimeCourseEnsemble(object):
                 raise errors.InputError('If parsing estimation data from '
                                         'folder, please specify argument'
                                         ' to experiment_files')
+
+        elif type(self.cls) == tasks.MultiParameterEstimation:
+            self.experiment_files = self.cls.experiment_files
+
         if self.experiment_files is not None:
             if isinstance(self.experiment_files, str):
                 self.experiment_files = [self.experiment_files]
 
+                #LOG.debug('type after --> {}'.format(type(self.cls)))
                 # if self.results_directory == None:
                 #     self.results_directory = self.create_directory()
                 # self.results_directory = os.path.join(self.cls.model.root, 'EnsembleTimeCourses' )
@@ -718,6 +735,7 @@ class PlotTimeCourseEnsemble(object):
         for i in self.experimental_data:
             d[i] = {}
             for j in self.experimental_data[i].keys():
+
                 if j.lower() == 'time':
                     d[i] = self.experimental_data[i][j]
 
@@ -1629,7 +1647,6 @@ class LinearRegression(PlotKwargs):
         Compute coefficients for a single parameter
         using self['lin_model'] from sklearn
         """
-#        print self.data[y]
         y = numpy.array(self.data[parameter])
         X = self.data.drop(parameter, axis=1)
         X_train, X_test, y_train, y_test = model_selection.train_test_split(X, y)
@@ -1690,7 +1707,6 @@ class LinearRegression(PlotKwargs):
         """
         self.coef = self.coef.drop('RSS', axis=1)
         self.coef = self.coef.drop('RSS', axis=0)
-#        print self.coef
         plt.figure()
         seaborn.heatmap(self.coef)
         plt.title('Coefficient Heatmap. Parameters Vs Parameters',fontsize=self.title_fontsize)
@@ -1760,7 +1776,8 @@ class ModelSelection(object):
         :return:
         """
         if self.filename is None:
-            self.filename = os.path.join(self.results_directory, 'ModelSelectionCriteria.csv')
+            save_dir = os.path.join(self.results_directory, 'ModelSelectionGraphs')
+            self.filename = os.path.join(save_dir, 'ModelSelectionCriteria.csv')
 
         # if self.pickle is None:
         #     self.pickle = os.path.splitext(self.filename)[0]+'.pickle'
@@ -1854,9 +1871,7 @@ class ModelSelection(object):
             n[exp]=sum(l)
         n=sum(n.values())
         return n
-        
-        
-    
+
     def calculate1AIC(self,RSS,K,n):
         '''
         Calculate the corrected AIC:
@@ -1876,7 +1891,7 @@ class ModelSelection(object):
             K:
                 Number of model parameters
         '''
-        return n*numpy.log((RSS/n))  + 2*K + (2*K*(K+1))/(n-K-1) 
+        return n*numpy.log((RSS/n)) + 2*K + (2*K*(K+1))/(n-K-1)
         
     
     def calculate1BIC(self,RSS,K,n):
@@ -1932,7 +1947,6 @@ class ModelSelection(object):
         data = data.rename(columns={'level_0': 'Model',
                                     'level_1': 'Metric',
                                     0: 'Score'})
-#        print data
         for metric in data['Metric'].unique():
             plt.figure()
             seaborn.boxplot(data=data[data['Metric'] == metric],
@@ -1945,9 +1959,44 @@ class ModelSelection(object):
                 if os.path.isdir(save_dir)!=True:
                     os.mkdir(save_dir)
                 os.chdir(save_dir)
-                fname = os.path.join(save_dir, '{}.png'.format(metric))
+                fname = os.path.join(save_dir, 'boxplot_{}.png'.format(metric))
                 plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
                 LOG.info('boxplot saved to : "{}"'.format(fname))
+
+
+    def histogram(self):
+        """
+
+        :return:
+        """
+        seaborn.set_context(context='poster')
+        data = self.model_selection_data
+
+        data = data.unstack()
+        data = data.reset_index()
+        data = data.rename(columns={'level_0': 'Model',
+                                    'level_1': 'Metric',
+                                    0: 'Score'})
+        for label, df in data.groupby(by=['Metric']):
+            plt.figure()
+            for label2, df2 in df.groupby(by='Model'):
+                plot_data = df2['Score'].dropna()
+                seaborn.kdeplot(plot_data, shade=True, label=label2,
+                                legend=True)
+                plt.title("{} Score (n={})".format(label, plot_data.shape[0]))
+                plt.ylabel("Frequency")
+                plt.xlabel("Score".format(label, plot_data.shape[0]))
+                plt.legend(loc=(0, -0.5))
+
+
+            if self.savefig:
+                save_dir = os.path.join(self.results_directory, 'ModelSelectionGraphs')
+                if os.path.isdir(save_dir) != True:
+                    os.mkdir(save_dir)
+                os.chdir(save_dir)
+                fname = os.path.join(save_dir, 'Histogram_{}_{}.png'.format(label2, label))
+                plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
+                LOG.info('histograms saved to : "{}"'.format(fname))
 
     def chi2_lookup_table(self, alpha):
         '''
