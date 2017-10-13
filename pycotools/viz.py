@@ -662,6 +662,7 @@ class PlotTimeCourseEnsemble(object):
 
         self.experimental_data = self.parse_experimental_files
         self.exp_times = self.get_experiment_times
+        # print self.simulate_ensemble
         self.ensemble_data = self.simulate_ensemble
         self.ensemble_data.index = self.ensemble_data.index.rename(['Index','Time'])
 
@@ -766,7 +767,9 @@ class PlotTimeCourseEnsemble(object):
         intervals = max(end_times) / self.step_size
         d = {}
         for i in range(self.data.shape[0]):
+            LOG.debug('i --> {}'.format(i))
             I = model.InsertParameters(self.cls.model, df=self.data, index=i, inplace=True)
+
             if not self.silent:
                 LOG.info('inserting parameter set {}'.format(i))
                 LOG.info(I.parameters.transpose().sort_index())
@@ -776,6 +779,7 @@ class PlotTimeCourseEnsemble(object):
                                   intervals=intervals,
                                   plot=False,
                                   run=self.run_mode)
+            LOG.debug('TC.report_names --> {}'.format(TC.report_name))
             if self.check_as_you_plot:
                 self.cls.model.open()
             d[i] = self.parse(TC, log10=False)
@@ -2076,8 +2080,402 @@ class ModelSelection(object):
         if filename!=None:
             plt.savefig(filename,dpi=200,bbox_inches='tight')
 #
-        
-        
+
+
+class PlotProfileLikelihood(object):
+    def __init__(self, data, **kwargs):
+        self.data = data
+
+        options = {'x': None,
+                   'y': None,
+                   'log10': True,
+                   'estimator': numpy.mean,
+                   'n_boot': 10000,
+                   'ci_band_level': 95,  ## CI for estimator bootstrap
+                   'err_style': 'ci_band',
+                   'savefig': False,
+                   'results_directory': None,
+                   'dpi': 300,
+                   'plot_cl': True,
+                   'title': None,
+                   'xlabel': None,
+                   'ylabel': None,
+                   'color_palette': 'bright',
+                   'legend_location': None,
+                   }
+
+        for i in kwargs.keys():
+            assert i in options.keys(), '{} is not a keyword argument for plot'.format(i)
+        options.update(kwargs)
+        self.kwargs = options
+
+        if isinstance(self.data, pandas.core.frame.DataFrame) != True:
+            raise errors.InputError('{} should be a dataframe. Parse data with ParsePEData first.'.format(self.data))
+
+        self.parameter_list = sorted(list(self.data.columns))
+
+        if self['x'] == None:
+            raise errors.InputError('x cannot be None')
+
+        if self['y'] == None:
+            self['y'] = self.parameter_list
+
+        if self['y'] == None:
+            raise errors.InputError('y cannot be None')
+
+        if self['x'] not in self.parameter_list:
+            raise errors.InputError('{} not in {}'.format(self['x'], self.parameter_list))
+
+        if isinstance(self['y'], str):
+            if self['y'] not in self.parameter_list:
+                raise errors.InputError('{} not in {}'.format(self['y'], self.parameter_list))
+        if isinstance(self['y'], list):
+            for y_param in self['y']:
+                if y_param not in self.parameter_list:
+                    raise errors.InputError('{} not in {}'.format(y_param, self.parameter_list))
+
+        if self['savefig']:
+            if self['results_directory'] == None:
+                raise errors.InputError('Please specify argument to results_directory')
+
+        n = list(set(self.data.index.get_level_values(0)))
+        if self['title'] == None:
+            self['title'] = 'Profile Likelihood for\n{} (Rank={})'.format(self['x'], n)
+
+        self.data.rename(columns={'ParameterOfInterestValue': self['x']})
+
+        self.plot()
+
+    def __getitem__(self, key):
+        if key not in self.kwargs:
+            raise errors.InputError('{} not in {}'.format(key, self.kwargs.keys()))
+        return self.kwargs[key]
+
+    def __setitem__(self, key, value):
+        self.kwargs[key] = value
+
+    def plot(self):
+        """
+
+        """
+        if self['y'] == self['x']:
+            LOG.warning(errors.InputError(
+                'x parameter {} cannot equal y parameter {}. Plot function returned None'.format(self['x'], self['y'])))
+            return None
+
+        for label, df in self.data.groupby(level=[2]):
+            if label == self['x']:
+                data = df[self['y']]
+                if isinstance(data, pandas.core.frame.Series):
+                    data = pandas.DataFrame(data)
+                if isinstance(data, pandas.core.frame.DataFrame):
+                    data = pandas.DataFrame(data.stack(), columns=['Value'])
+        try:
+            data.index = data.index.rename(['ParameterSetRank',
+                                            'ConfidenceLevel',
+                                            'ParameterOfInterest',
+                                            'ParameterOfInterestValue',
+                                            'YParameter'])
+        except UnboundLocalError:
+            return 1
+
+        data = data.reset_index()
+        if self['log10']:
+            data['ConfidenceLevel'] = numpy.log10(data['ConfidenceLevel'])
+            data['Value'] = numpy.log10(data['Value'])
+            data['ParameterOfInterestValue'] = numpy.log10(data['ParameterOfInterestValue'])
+
+        plt.figure()
+        if self['plot_cl']:
+            cl_data = data[['ParameterSetRank', 'ConfidenceLevel',
+                            'ParameterOfInterestValue']]
+            cl_data = cl_data.drop_duplicates()
+            seaborn.tsplot(data=cl_data,
+                           time='ParameterOfInterestValue',
+                           value='ConfidenceLevel',
+                           unit='ParameterSetRank',
+                           color='green', linestyle='--',
+                           estimator=self['estimator'],
+                           err_style=self['err_style'],
+                           n_boot=self['n_boot'],
+                           ci=self['ci_band_level'])
+
+        seaborn.color_palette('husl', 8)
+        seaborn.tsplot(data=data,
+                       time='ParameterOfInterestValue',
+                       value='Value',
+                       condition='YParameter',
+                       unit='ParameterSetRank',
+                       estimator=self['estimator'],
+                       err_style=self['err_style'],
+                       n_boot=self['n_boot'],
+                       ci=self['ci_band_level'],
+                       color=seaborn.color_palette(self['color_palette'], len(self['y']))
+                       )
+        plt.title(self['title'])
+        if self['ylabel'] != None:
+            plt.ylabel(self['ylabel'])
+        if self['xlabel'] != None:
+            plt.xlabel(self['x_label'])
+
+        if self['legend_location'] != None:
+            plt.legend(loc=self['legend_location'])
+
+        if self['savefig']:
+            #            save_dir = os.path.join(self['results_directory'], 'ProfileLikelihood')
+            if os.path.isdir(self['results_directory']) != True:
+                os.makedirs(self['results_directory'])
+            os.chdir(self['results_directory'])
+            plt.savefig(os.path.join(self['results_directory'], '{}Vs{}.jpeg'.format(self['x'], self['y'])),
+                        dpi=self['dpi'], bbox_inches='tight')
+
+
+class ParsePLData():
+    """
+    get data from file into an appropriate format
+    1) ensure data is properly formatted with headers
+    2) read data into a df.
+        index 1 = parameter set
+        index 2 = parameter of interest
+        index 3 = best parameter value
+        index 4 = parameter scan value
+            data = matrix
+    """
+
+    def __init__(self, copasi_file, pl_directory, **kwargs):
+        self.copasi_file = copasi_file
+        self.pl_directory = pl_directory
+        self.copasiML = tasks.CopasiMLParser(self.copasi_file).copasiML
+
+        options = {'parameter_path': None,
+                   'index': -1,
+                   'rss': None,
+                   'dof': None,
+                   'num_data_points': None,
+                   'experiment_files': None,
+                   'alpha': 0.95,
+                   'log10': True,
+                   }
+
+        for i in kwargs.keys():
+            assert i in options.keys(), '{} is not a keyword argument for plot'.format(i)
+        options.update(kwargs)
+        self.kwargs = options
+
+        if self['parameter_path'] == None:
+            if self['rss'] == None:
+                raise errors.InputError('If parameter_path equals None then rss must not equal None')
+        if self['parameter_path'] != None:
+            if self['index'] == -1:
+                raise errors.InputError(
+                    'An argument is given to parameter_path but index is -1 (for PL around current parameter set). Change the index parameter')
+
+        if self['index'] != -1:
+            if self['parameter_path'] == None:
+                raise errors.InputError(
+                    'If index is not -1 (i.e. current parameter set in model) then an argument to parameter_path needs to be specified')
+
+        if self['experiment_files'] == None:
+            self['experiment_files'] = self.get_experiment_files_in_use()
+
+        self.index_dirs = self.get_index_dirs()
+
+        self.pl_data_files = self.get_pl_data_files()
+        self.pl_data_files = self.format_pl_data_files()
+        self.data = self.parse_data()
+        self.data = self.infer_parameter_of_interest()
+        if self['dof'] == None:
+            self['dof'] = self.get_dof()
+
+        if self['num_data_points'] == None:
+            self['num_data_points'] = self.get_num_data_points()
+
+        if self['rss'] == None:
+            self['rss'] = self.get_rss()
+
+        self.data = self.get_confidence_level()
+        self.data = self.data.drop('ParameterFile', axis=1)
+
+    def __getitem__(self, key):
+        if key not in self.kwargs:
+            raise errors.InputError('{} not in {}'.format(key, self.kwargs.keys()))
+        return self.kwargs[key]
+
+    def __setitem__(self, key, value):
+        self.kwargs[key] = value
+
+    def get_index_dirs(self):
+        '''
+        Under the ProfileLikelihood folder are a list of folders named after
+        the integer rank of best fit (.e. -1,0,1,2 ...)
+        returns list of these directories
+        '''
+        l = []
+        for i in glob.glob(os.path.join(self.pl_directory, '*')):
+            if os.path.isdir(i):
+                dire, fle = os.path.split(i)
+                try:
+                    int(fle)
+                    l.append(i)
+                except ValueError:
+                    LOG.warning(
+                        '{} is not a number and therefore does not contain a profile likleihood analysis. It will be ignored')
+                    continue
+                if os.path.isdir(i) != True:
+                    raise errors.FolderDoesNotExistError(i)
+        return l
+
+    def get_pl_data_files(self):
+        """
+        return all text files in
+        """
+        res = {}
+        for index_dir in self.index_dirs:
+            i = os.path.split(index_dir)[1]
+            try:
+                int(i)
+            except ValueError:
+                raise errors.InputError(
+                    'Cannot convert {} to int. Check there are no extra files in your profile likelihood directory'.format(
+                        i))
+            res[int(i)] = {}
+            for f in glob.glob(os.path.join(index_dir, '*.txt')):
+                dire, fle = os.path.split(f)
+                res[int(i)][fle] = f
+        if res == {}:
+            raise errors.InputError(
+                'Can\'t find PL data files. Have you given the correct path to profile likelihood directory?')
+
+        return res
+
+    def format_pl_data_files(self):
+        """
+
+        """
+        res = {}
+        for i in self.pl_data_files:
+            res[i] = {}
+            for j in self.pl_data_files[i]:
+                cps = self.pl_data_files[i][j][:-4] + '.cps'
+                try:
+                    res[i][j] = FormatPLData(cps, self.pl_data_files[i][j]).format
+                except errors.FileDoesNotExistError:
+                    pass
+        return res
+
+    def parse_data(self):
+        """
+
+        """
+        res = {}
+        df_dct = {}
+        for index in self.pl_data_files:
+            res[index] = {}
+            for data_file in self.pl_data_files[index]:
+                df_temp = pandas.read_csv(self.pl_data_files[index][data_file],
+                                          sep='\t', index_col=0)
+                res[index][data_file] = pandas.read_csv(self.pl_data_files[index][data_file],
+                                                        sep='\t',
+                                                        index_col=0)
+            df_dct[index] = pandas.concat(res[index])
+        df = pandas.concat(df_dct)
+        df.index = df.index.rename(['ParameterSetRank', 'ParameterFile', 'ParameterOfInterestValue'])
+        return df
+
+    def infer_parameter_of_interest(self):
+        """
+        """
+        parameters = sorted(list(self.data.columns))
+        filenames = sorted(list(set(self.data.index.get_level_values(1))))
+        #        print parameters, filenames
+        zipped = dict(zip(filenames, parameters))
+        self.data = self.data.reset_index(level=1)
+        l = []
+        for i in self.data['ParameterFile']:
+            l.append(zipped[i])
+        self.data['ParameterOfInterest'] = l
+        return self.data
+
+    def get_experiment_files_in_use(self):
+        '''
+        Need to exclude data files fromlist of parameters to plot
+        '''
+        query = '//*[@name="File Name"]'
+        l = []
+        for i in self.copasiML.xpath(query):
+            f = os.path.abspath(i.attrib['value'])
+            if os.path.isfile(f) != True:
+                raise errors.InputError(
+                    'Experimental files in use cannot be automatically determined. Please give a list of experiment file paths to the experiment_files keyword'.format())
+            l.append(os.path.abspath(i.attrib['value']))
+
+        return l
+
+    def get_dof(self):
+        '''
+        The number of parameters being estimated minus 1
+        '''
+        GMQ = tasks.GetModelQuantities(self.copasi_file)
+        return len(GMQ.get_fit_items().keys()) - 1
+
+    #        return self.get_num_estimated_paraemters()-1
+
+    def get_num_data_points(self):
+        '''
+        returns number of data points in your data files
+        '''
+        experimental_data = [pandas.read_csv(i, sep='\t') for i in self.kwargs['experiment_files']]
+        l = []
+        for i in experimental_data:
+            l.append(i.shape[0] * (i.shape[1] - 1))
+        s = sum(l)
+        if s == 0:
+            raise errors.InputError('''Number of data points cannot be 0.
+Experimental data is inferred from the parameter estimation task definition. 
+It might be that copasi_file refers to a 'fresh' copy of the model.
+Try redefining the same parameter estimation problem that you used in the profile likelihood, 
+using the setup method but not running the parameter estimation before trying again.''')
+        return s
+
+    def get_rss(self):
+        rss = {}
+
+        if self['index'] == -1:
+            assert self['rss'] != None
+            rss[-1] = self['rss']
+            return rss
+        else:
+            PED = viz.ParsePEData(self['parameter_path'])
+            if isinstance(self['index'], int):
+                rss[self['index']] = PED.data.iloc[self['index']['RSS']]
+            elif isinstance(self['index'], list):
+                for i in self['index']:
+                    rss[i] = PED.data.iloc[i]['RSS']
+            return rss
+
+    def get_confidence_level(self):
+        """
+
+        """
+        CL_dct = {}
+        for index in self['rss']:
+            rss = self['rss'][index]
+            CL_dct[index] = ChiSquaredStatistics(rss, self['dof'], self['num_data_points'],
+                                                 self['alpha']).CL
+
+        ranks = list(self.data.index.get_level_values(0))
+        #        print CL_dct
+        CL_list = [CL_dct[i] for i in ranks]
+        self.data['ConfidenceLevel'] = CL_list
+        self.data = self.data.reset_index()
+        self.data = self.data.set_index(
+            ['ParameterSetRank', 'ConfidenceLevel', 'ParameterOfInterest', 'ParameterOfInterestValue'])
+        return self.data
+
+
+#
+
+
 if __name__=='__main__':
     pass
 #    execfile('/home/b3053674/Documents/pycotools/pycotools/pycotoolsTutorial/Test/testing_kholodenko_manually.py')

@@ -65,9 +65,14 @@ class GetModelVariableFromStringMixin(Mixin):
         """
         Use model entity name to get the
         pycotools variable
-        :param m: model
-        :param v: str. variable in model
-        :return: variable as a model component
+        :param m:
+            :py:class:`model`
+
+        :param v:
+            `str` variable in model
+
+        :return:
+            variable as a model component
         """
         if not isinstance(m, model.Model):
             raise errors.InputError('expected model.Model but got "{}" instance'.format(
@@ -119,20 +124,23 @@ class UpdatePropertiesMixin(Mixin):
                 setattr(self, k, kwargs[k])
 
 class Bool2Numeric(Mixin):
+    """
+    CopasiML uses 1's and 0's for True or False in some
+    but not all places. When one of these options
+    is required by the user and is specified as bool,
+    this class converts them into 1's or 0's.
+
+    Use this method in early on in constructor for
+    all subclasses where this applies.
+    """
     @staticmethod
     def convert_bool_to_numeric(dct):
         """
-        CopasiML uses 1's and 0's for True or False in some
-        but not all places. When one of these options
-        is required by the user and is specified as bool,
-        this class converts them into 1's or 0's.
+        :param:
+            `dict`.  __dict__ or kwargs or options
 
-        Use this method in early on in constructor for
-        all subclasses where this applies.
-
-
-        :param: dct. Python dictionary.  __dict__ or kwargs or options
         :return:
+            `dict` with certain boolean args as 1's and 0's
         """
         lst = ['append',
                'confirm_overwrite',
@@ -169,7 +177,8 @@ class Bool2Numeric(Mixin):
 
 class Bool2Str():
     """
-    copasiML expects strings and we pythoners want to use python booleans not strings
+    copasiML expects strings and we pythoners
+    want to use python booleans not strings
     This class quickly converts between them
     """
     def __init__(self,dct):
@@ -211,9 +220,13 @@ class CheckIntegrityMixin(Mixin):
         """
         Method to raise an error when a wrong
         kwarg is passed to a subclass
-        :param: allowed. List of allowed kwargs
-        :param: given. List of kwargs given by user or default
-        :return: 0
+        :param allowed:
+            `list`. List of allowed kwargs
+
+        :param given: List of kwargs given by user or default
+
+        :return:
+            None
         """
         for key in given:
             if key not in allowed:
@@ -223,15 +236,20 @@ class CopasiMLParser(object):
 
     """
     Parse a copasi file into xml.etree.
-    The copasiML is availbale as the copasiML attribute.
 
-    args:
-        copasi_file:
-            A full path to a copasi file
+    Usage:
+
+        >>> model_path = r'/full/path/to/model.cps'
+        >>> xml = CopasiMLParser(model_path).xml
 
 
     """
     def __init__(self, copasi_file):
+        """
+
+        :param copasi_file:
+            `str` full path to a copasi file
+        """
         self.copasi_file = copasi_file
         if os.path.isfile(self.copasi_file)!=True:
             raise errors.FileDoesNotExistError('{} is not a copasi file'.format(self.copasi_file))
@@ -240,18 +258,19 @@ class CopasiMLParser(object):
         self.xml = self.copasiMLTree.getroot()
 
         os.chdir(os.path.dirname(self.copasi_file))
-            
+
     def _parse_copasiML(self):
-        '''
-        Parse xml doc with lxml 
-        '''
+        """
+        Parse xml doc with lxml
+        :return:
+        """
         tree= etree.parse(self.copasi_file)
         return tree
 
     def write_copasi_file(self,copasi_filename, xml):
-        '''
+        """
         write to file with lxml write function
-        '''
+        """
         #first convert the copasiML to a root element tree
         root=etree.ElementTree(xml)
         root.write(copasi_filename)
@@ -262,12 +281,73 @@ class CopasiMLParser(object):
 @mixin(CheckIntegrityMixin)
 class Run(object):
     """
-    ## TODO apply a Queue.Queue system to multirun as in MultiParameterEstimation._setup_scan
+    Execute a copasi model using CopasiSE. To
+    be operational the environment variable CopasiSE
+    must be set to point towards the location of
+    your CopasiSE executable. This is usually
+    done automatically.
+
+    Usage:
+
+    First get a model object
+        >>> model_path = r'/full/path/to/model.cps'
+        >>> model = model.Model(model_path)
+
+    To run a time_course task
+        >>> Run(model, task='time_course', mode=True)
+
+    To run the parameter estimation task:
+        >>> Run(model, task='parameter_estimation', mode=True)
+
+    To run the parameter estimation task with :py:mod:`multiprocessing`
+        >>> Run(model, task='parameter_estimation', mode='multiprocess')
+
+    To run the scan task but have python write a .sh script for submission to sun grid engine:
+        >>> Run(model, task='scan', mode='sge')
+
+    Properties
+
+    ==========          ===================
+    Property            Description
+    ==========          ===================
+    task                Task to run
+    mode                How to run the task
+    sge_job_filename    Optional name of sh file
+                        generated for running sge
+    ==========          ===================
+
+    =============
+    task options
+    =============
+    steady_state
+    time_course
+    scan
+    flux_mode
+    optimization
+    parameter_estimation
+    metabolic_control_analysis
+    lyapunov_exponents
+    time_scale_separation_analysis
+    sensitivities
+    moieties
+    cross_section
+    linear_noise_approximation
+    =============
+
+    ==============          ==============
+    Modes                   Description
+    =============           ==============
+    False                   Do not run
+    True                    Run one at a time
+    multiprocess            Run several at once
+    sge                     Run on sun grid engine
+    =============           ==============
     """
     def __init__(self, model, **kwargs):
         """
-        :param model: instance of model.Model
-        :param kwargs:
+        :param model:
+            :py:class:`model.Model`
+
         """
         self.model = self.read_model(model)
         self.kwargs = kwargs
@@ -400,6 +480,7 @@ class Run(object):
 @mixin(Bool2Numeric)
 class RunParallel(object):
     def __init__(self, models, **kwargs):
+        raise NotImplementedError('still work to do on this class')
         self.models = models
         self.kwargs = kwargs
 
@@ -571,6 +652,7 @@ class RunParallel(object):
 
 @mixin(UpdatePropertiesMixin)
 class iPythonParallel(_base._Base):
+    NotImplementedError('still work to do on this class')
     def __init__(self, models, **kwargs):
         self.models = models
         self.kwargs = kwargs
@@ -1239,7 +1321,7 @@ class TimeCourse(object):
         :return: lxml.etree._Element
         """
 
-        task = etree.Element('Task', attrib={'key': 'Task_15',
+        task = etree.Element('Task', attrib={'key': 'Task_100',
                                              'name': 'Time-Course',
                                              'type': 'timeCourse',
                                              'scheduled': 'false',
