@@ -4846,7 +4846,7 @@ class ProfileLikelihood(object):
             for param in self.model_dct[model]:
                 LOG.info('running {}'.format(self.model_dct[model][param].copasi_file))
                 sge_job_filename = "{}_{}.sh".format(model, param)
-                Run(self.model_dct[model][param], task='scan', mode=self.run_mode)
+                Run(self.model_dct[model][param], task='scan', mode=self.run_mode, sge_job_filename=sge_job_filename)
 
 if __name__=='__main__':
     pass
