@@ -4330,7 +4330,7 @@ class ProfileLikelihood(object):
             'log10': True,
             'append': False,
             'output_in_subtask': True,
-            'run': False,
+            'run_mode': False,
             'processes': 1,
             'results_directory': os.path.join(self.model.root,
                                               'ProfileLikelihoods'),
@@ -4364,17 +4364,17 @@ class ProfileLikelihood(object):
         self.index_dct = self.insert_parameters()
         self.model_dct = self.copy_model()
         self.model_dct = self.setup_report()
-        # self.model.open()
         self.model_dct = self.setup_parameter_estimation()
 
         self.model_dct = self.setup_scan()
-        # self.to_file()
-        self.model_dct['current_parameters'][r'Ski'].open()
-        #
-        # if self.run == 'parallel':
-        #     self.run_parallel()
+        self.to_file()
+        # self.model_dct['current_parameters'][r'Ski'].open()
 
-        # print self.setup_parameter_estimation()
+        if self.run_mode is not False:
+            self.run()
+        # else:
+        #     self.run()
+        #
 
     def _do_checks(self):
         """
@@ -4390,7 +4390,7 @@ class ProfileLikelihood(object):
         if isinstance(self.x, str):
             self.x = self.get_variable_from_string(self.model, self.x)
 
-        if (self.df is None) and (self.index != 'current_parameters'):
+        if ((self.df is None) and (self.parameter_path is None)) and (self.index != 'current_parameters'):
             LOG.warning('Got index argument without df argument. Setting index to "current_parameters"')
             self.index = 'current_parameters'
 
@@ -4627,7 +4627,10 @@ class ProfileLikelihood(object):
             dct['current_parameters'] = self.model
         else:
             for i in self.index:
-                new_model = model.InsertParameters(self.model, df=self.df, index=i).model
+                new_model = model.InsertParameters(
+                    self.model, df=self.df,
+                    parameter_path=self.parameter_path, index=i
+                ).model
                 dct[i] = new_model
         return dct
 
@@ -4738,6 +4741,7 @@ class ProfileLikelihood(object):
             for param in self.model_dct[model]:
                 ##already given new filename in copy_copasi
                 self.model_dct[model][param].save()
+                LOG.debug('model -0-> {}'.format(self.model_dct[model][param].root))
         return dct
 
 
@@ -4804,18 +4808,27 @@ class ProfileLikelihood(object):
                 res[model][param] = q.get().model
         return res
 
-    def run_parallel(self):
+    # def run_parallel(self):
+    #     """
+    #
+    #     :return:
+    #     """
+    #     list_of_models = []
+    #     for model in self.model_dct:
+    #         for param in self.model_dct[model]:
+    #             LOG.info('running {}'.format(self.model_dct[model][param].copasi_file))
+    #             list_of_models.append(self.model_dct[model][param])
+    #     R = RunParallel(list_of_models, processes=self.processes)
+
+    def run(self):
         """
 
         :return:
         """
-        list_of_models = []
         for model in self.model_dct:
             for param in self.model_dct[model]:
                 LOG.info('running {}'.format(self.model_dct[model][param].copasi_file))
-                list_of_models.append(self.model_dct[model][param])
-        R = RunParallel(list_of_models, processes=self.processes)
-
+                Run(self.model_dct[model][param], task='scan', mode=self.run_mode)
 
 if __name__=='__main__':
     pass

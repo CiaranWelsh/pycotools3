@@ -31,7 +31,7 @@ from lxml import etree
 
 # site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
 # import PyCoTools
-import errors, misc
+import errors, misc, viz
 import _base
 import tasks
 import pandas
@@ -3527,7 +3527,7 @@ class InsertParameters(object):
         self.model = self.read_model(model)
         self.parameter_dict = parameter_dict
         self.df = df
-        self.parameter_path=None
+        self.parameter_path = parameter_path
         self.index = index
         self.quantity_type = quantity_type
         self.inplace = inplace
@@ -3558,8 +3558,8 @@ class InsertParameters(object):
                             i,sorted(self.model.all_variable_names)
                         )
                     )
-
-        if (self.parameter_dict == None) and (self.parameter_path==None) and (self.df is None):
+        LOG.debug('parameter_path --> {}'.format(self.parameter_path))
+        if (self.parameter_dict is None) and (self.parameter_path is None) and (self.df is None):
             raise errors.InputError('You need to give at least one of parameter_dict,parameter_path or df keyword arguments')
 
         assert isinstance(self.index, int)
@@ -3590,7 +3590,7 @@ class InsertParameters(object):
         elif isinstance(self.parameters, pandas.core.frame.DataFrame):
             return self.parameters.to_dict()
 
-    @property
+    @cached_property
     def parameters(self):
         """
         Get parameters depending on the type of input.
@@ -3602,20 +3602,20 @@ class InsertParameters(object):
 
         """
         if self.parameter_dict != None:
-            assert isinstance(self.parameter_dict, dict),'The parameter_dict argument takes a Python dictionary'
+            assert isinstance(self.parameter_dict, dict), 'The parameter_dict argument takes a Python dictionary'
             for i in self.parameter_dict:
                 assert i in self.model.all_variable_names,'{} is not a parameter. These are your parameters:{}'.format(i,self.GMQ.get_all_model_variables().keys())
             return pandas.DataFrame(self.parameter_dict, index=[0])
 
         if self.parameter_path != None:
-            PED=viz.ParsePEData(self.parameter_path)
-            if isinstance(self.index,int):
-                return pandas.DataFrame(PED.data.iloc[self.index]).transpose()
+            P = viz.Parse(self.parameter_path, copasi_file=self.model.copasi_file)
+            if isinstance(self.index, int):
+                return pandas.DataFrame(P.data.iloc[self.index]).transpose()
             else:
-                return PED.data.iloc[self.index]
+                return P.data.iloc[self.index]
 
         if self.df is not None:
-            df= pandas.DataFrame(self.df.iloc[self.index]).transpose()
+            df = pandas.DataFrame(self.df.iloc[self.index]).transpose()
         return df
 
     def insert_locals(self):

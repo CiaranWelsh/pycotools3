@@ -767,7 +767,6 @@ class PlotTimeCourseEnsemble(object):
         intervals = max(end_times) / self.step_size
         d = {}
         for i in range(self.data.shape[0]):
-            LOG.debug('i --> {}'.format(i))
             I = model.InsertParameters(self.cls.model, df=self.data, index=i, inplace=True)
 
             if not self.silent:
@@ -779,7 +778,6 @@ class PlotTimeCourseEnsemble(object):
                                   intervals=intervals,
                                   plot=False,
                                   run=self.run_mode)
-            LOG.debug('TC.report_names --> {}'.format(TC.report_name))
             if self.check_as_you_plot:
                 self.cls.model.open()
             d[i] = self.parse(TC, log10=False)
@@ -819,6 +817,7 @@ class PlotTimeCourseEnsemble(object):
         # seaborn.despine()
         for parameter in self.y:
             if parameter not in ['ParameterFitIndex', 'Time']:
+                LOG.info('Plotting "{}"'.format(parameter))
                 plt.figure()
                 # seaborn.set_palette([self.color])
                 ax1 = seaborn.tsplot(
@@ -1129,8 +1128,8 @@ class Boxplots(PlotKwargs):
 
         self.data = self.parse(self.cls, log10=self.log10)
         self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
+        self.divide_data()
         self.plot()
-
 
     def _do_checks(self):
         pass
@@ -1157,7 +1156,7 @@ class Boxplots(PlotKwargs):
         """
 
         labels = self.divide_data()
-        for label_set in range(1, len(labels)):
+        for label_set in range(len(labels)):
             plt.figure()#
             data = self.data[labels[label_set]]
             seaborn.boxplot(data=data )
@@ -1182,11 +1181,13 @@ class Boxplots(PlotKwargs):
 #        assert n_per_plot<n_vars,'number of variables per plot must be smaller than the number of variables'
         int_division = n_vars//n_per_plot
         remainder = n_vars-(n_per_plot*int_division)
+
         l = []
         for i in range(int_division):
-            l.append(self.data.keys()[i*n_per_plot:(i+1)*n_per_plot])
-        l.append(self.data.keys()[-remainder:])
-        return [list(i) for i in l]
+            l.append(list(self.data.keys()[i*n_per_plot:(i+1)*n_per_plot]))
+        if remainder is not 0:
+            l.append(list(self.data.keys()[-remainder:]))
+        return l
 
 
 @mixin(tasks.UpdatePropertiesMixin)
@@ -1565,17 +1566,35 @@ class Scatters(PlotKwargs):
             self.y = self.data.keys()
 
         for x_var in self.x:
+            if x_var not in sorted(list(self.data.keys())):
+                raise errors.InputError('"{}" invalid. These are valid: "{}"'.format(
+                    x_var, self.data.keys()
+                ))
             for y_var in self.y:
+                if x_var not in sorted(list(self.data.keys())):
+                    raise errors.InputError('"{}" invalid. These are valid: "{}"'.format(
+                        y_var, self.data.keys()
+                    )
+                )
+                LOG.info('Plotting "{}" Vs "{}"'.format(x_var, y_var))
                 plt.figure()
                 plt.scatter(
                     self.data[x_var], self.data[y_var],
                     cmap=self.cmap, c=self.data['RSS'],
                 )
                 cb = plt.colorbar()
-                cb.set_label('RSS')
-                plt.xlabel(x_var)
-                plt.ylabel(y_var)
-                plt.title('Scatter graph of\n {} Vs {}'.format(x_var, y_var))
+                if self.log10:
+                    cb.set_label('log10(RSS)')
+                    plt.xlabel("log10({})".format(x_var))
+                    plt.ylabel('log10({})'.format(y_var))
+                else:
+                    cb.set_label('RSS')
+                    plt.xlabel(x_var)
+                    plt.ylabel(y_var)
+                plt.title('Scatter graph of\n {} Vs {}.(n={})'.format(
+                    x_var, y_var, self.data.shape[0]
+                    )
+                )
                 if self.savefig:
                     x_dir = os.path.join(self.results_directory, x_var)
                     self.create_directory(x_dir)
@@ -1627,8 +1646,6 @@ class LinearRegression(PlotKwargs):
 
         self.data = self.parse(self.cls, log10=self.log10)
         self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
-        
-
 
         self.scores, self.coef = self.compute_coefficients()
         self.coef = self.coef.fillna(value=0)
@@ -1658,7 +1675,7 @@ class LinearRegression(PlotKwargs):
         lin_model = self.lin_model(fit_intercept=True, n_alphas=self.n_alphas,
                     max_iter=self.max_iter)
         
-        lin_model.fit(X_train,y_train)
+        lin_model.fit(X_train, y_train)
         df = pandas.DataFrame(lin_model.coef_, index=X.columns, columns=[parameter])#.sort_values(by='Coefficients')
         df['abs_values'] = numpy.absolute(df[parameter])
         df = df.sort_values(by='abs_values', ascending=False)
@@ -1697,7 +1714,7 @@ class LinearRegression(PlotKwargs):
     def plot_rss(self):
         plt.figure()
         seaborn.heatmap(self.coef.RSS.sort_values(by='RSS', ascending=False))
-        plt.title('Lasso Regression. Y=RSS, X=all other Parameters'+'(n={})'.format(self.data.shape[0]), fontsize=self.title_fontsize)
+        plt.title('Lasso Regression \n(Y=RSS) (n={})'.format(self.data.shape[0]), fontsize=self.title_fontsize)
         if self.savefig:
             self.create_directory(self.results_directory)
             fname = os.path.join(self.results_directory, 'linregress_RSS.png')
@@ -1713,7 +1730,7 @@ class LinearRegression(PlotKwargs):
         self.coef = self.coef.drop('RSS', axis=0)
         plt.figure()
         seaborn.heatmap(self.coef)
-        plt.title('Coefficient Heatmap. Parameters Vs Parameters',fontsize=self.title_fontsize)
+        plt.title('Coefficient Heatmap',fontsize=self.title_fontsize)
         plt.xlabel('')
         if self.savefig:
             self.create_directory(self.results_directory)
