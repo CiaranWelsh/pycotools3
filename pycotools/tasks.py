@@ -457,12 +457,15 @@ class Run(object):
         ##TODO find better solution for running copasi files on linux
         os.system('CopasiSE "{}"'.format(self.model.copasi_file))
 
-    def submit_copasi_job_SGE(self, copasi_location=None):
-        '''
+    def submit_copasi_job_SGE(self, copasi_location='apps/COPASI/4.19.140-Linux-64bit'):
+        """
         Submit copasi file as job to SGE based job scheduler.
-        '''
-        if copasi_location is None:
-            copasi_location = 'apps/COPASI/4.19.140-Linux-64bit'
+        :param copasi_location:
+            Location to copasi on the sge cluster. Gets passed to `module add` to load copasi
+
+        :return:
+            None
+        """
         with open(self.sge_job_filename, 'w') as f:
             f.write('#!/bin/bash\n#$ -V -cwd\nmodule add {}\nCopasiSE {}'.format(
                 copasi_location, self.model.copasi_file
@@ -471,7 +474,7 @@ class Run(object):
         ## -N option for job namexx
         os.system('qsub {} -N {} '.format(self.sge_job_filename, self.sge_job_filename))
         ## remove .sh file after used.
-        os.remove(self.sge_job_filename)
+        # os.remove(self.sge_job_filename)
 
 @mixin(model.GetModelComponentFromStringMixin)
 @mixin(UpdatePropertiesMixin)
@@ -4282,7 +4285,7 @@ class MultiModelFit(object):
             raise errors.InputError('Cannot read multifit confuration as no Project kwarg is provided')
         ##make sure we're in the right directory
         os.chdir(self.project_dir)
-        LOG.debug('project dir is --> {}'.format(self.project_dir))
+        LOG.info('project dir is --> {}'.format(self.project_dir))
         cps_list=[]
         for cps_file in glob.glob('*.cps'):
             cps_list.append(cps_file)
@@ -4349,6 +4352,8 @@ class ProfileLikelihood(object):
             'number_of_iterations': 100000,
             'start_temperature': 1,
             'cooling_factor': 0.85,
+
+            'parallel_scan': True,
         }
         self.default_properties.update(self.kwargs)
         self.convert_bool_to_numeric(self.default_properties)
@@ -4361,7 +4366,7 @@ class ProfileLikelihood(object):
         self.model = self.undefine_other_reports()
         self.model = self.make_experiment_files_absolute()
         self.model = self.set_PE_method()
-        self.index_dct = self.insert_parameters()
+        self.index_dct, self.parameters = self.insert_parameters()
         self.model_dct = self.copy_model()
         self.model_dct = self.setup_report()
         self.model_dct = self.setup_parameter_estimation()
@@ -4372,6 +4377,10 @@ class ProfileLikelihood(object):
 
         if self.run_mode is not False:
             self.run()
+
+
+
+
         # else:
         #     self.run()
         #
@@ -4615,24 +4624,34 @@ class ProfileLikelihood(object):
         parent.insert(2, method_element)
         return self.model
 
-
-
     def insert_parameters(self):
         """
+        If index keyword is 'current_parameters', do nothing but collect
+        parameter values which are defined in parameter estimation task.
+        If index keyword specified, get the corresponding best parameter
+        set from df or parameter_path arguments and insert into the model.
 
         :return:
+            `tuple`. (`dict[index] = model with parameter set`,
+                      `dict[index] = estimated parameter values)
         """
         dct = {}
+        parameters = {}
         if self.index == 'current_parameters':
             dct['current_parameters'] = self.model
+            parameters = self.model.parameters[self.model.fit_item_order]
         else:
             for i in self.index:
-                new_model = model.InsertParameters(
+                I = model.InsertParameters(
                     self.model, df=self.df,
                     parameter_path=self.parameter_path, index=i
-                ).model
+                )
+                new_model = I.model
                 dct[i] = new_model
-        return dct
+
+                parameters[i] = I.parameters#new_model.parameters[new_model.fit_item_order]
+        return dct, parameters
+
 
     def copy_model(self):
         """
@@ -4719,7 +4738,6 @@ class ProfileLikelihood(object):
     def setup_report(self):
         for model in self.model_dct:
             for param in self.model_dct[model]:
-                LOG.debug('model -->{}'.format(self.model_dct[model][param]))
                 st = misc.RemoveNonAscii(param).filter
                 self.model_dct[model][param] = Reports(
                     self.model_dct[model][param],
@@ -4741,11 +4759,10 @@ class ProfileLikelihood(object):
             for param in self.model_dct[model]:
                 ##already given new filename in copy_copasi
                 self.model_dct[model][param].save()
-                LOG.debug('model -0-> {}'.format(self.model_dct[model][param].root))
         return dct
 
 
-    def setup1scan(self, q, model, report, parameter):
+    def setup1scan(self, q, model, report, parameter, parameter_value):
         """
         Setup a single scan.
         :param q: queue from multiprocessing
@@ -4760,14 +4777,41 @@ class ProfileLikelihood(object):
             variable=parameter,
             number_of_steps=self.intervals,
             subtask='parameter_estimation',
-            report_type='parameter_estimation',
+            report_type='multi_parameter_estimation',
             report_name=report,
             run=False,
             append=self.append,
             clear_scans=True,
             output_in_subtask=True,#self.output_in_subtask,
+            minimum=parameter_value / self.lower_bound_multiplier,
+            maximum=parameter_value * self.lower_bound_multiplier,
+            log10=self.log10
             )
         )
+    # def setup1scan(self, model, report, parameter):
+    #     """
+    #     Setup a single scan.
+    #     :param q: queue from multiprocessing
+    #     :param model: pycotools.model.Model
+    #     :param report: str.
+    #     :return:
+    #     """
+    #     start = time.time()
+    #     LOG.debug('log10 is --> {]'.format(self.log10))
+    #     models = Scan(
+    #         model,
+    #         scan_type='scan',
+    #         variable=parameter,
+    #         number_of_steps=self.intervals,
+    #         subtask='parameter_estimation',
+    #         report_type='parameter_estimation',
+    #         report_name=report,
+    #         run=False,
+    #         append=self.append,
+    #         clear_scans=True,
+    #         output_in_subtask=True,
+    #         log10=self.log10
+    #         ).model
 
     def setup_scan(self):
         """
@@ -4785,6 +4829,7 @@ class ProfileLikelihood(object):
         for model in self.model_dct:
             res[model] = {}
             for param in self.model_dct[model]:
+                LOG.debug('setting up scan for --> {}'.format(self.model_dct[model][param]))
 
                 report_name = os.path.join(
                     self.model_dct[model][param].root,
@@ -4792,13 +4837,18 @@ class ProfileLikelihood(object):
                         self.model_dct[model][param].copasi_file
                     )[0]+'.csv'
                 )
+                parameter_value = float(self.parameters[model][param])
+                # if self.parallel_scan:
                 t = threading.Thread(
                     target=self.setup1scan,
                     args=(
-                        q, self.model_dct[model][param].copasi_file,
-                        report_name, param
+                        q, self.model_dct[model][param],
+                        report_name, param, parameter_value
                     )
                 )
+                # else:
+                #     self.setup1scan(self.model_dct[model][param],
+                #                     report_name, param)
                 t.daemon = True
                 t.start()
                 # Since this is being executed in parallel sometimes
@@ -4806,6 +4856,7 @@ class ProfileLikelihood(object):
                 # but introducing a small delay seems to fix
                 time.sleep(0.1)
                 res[model][param] = q.get().model
+                res[model][param].save()
         return res
 
     # def run_parallel(self):

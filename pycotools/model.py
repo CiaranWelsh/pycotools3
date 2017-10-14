@@ -1272,7 +1272,6 @@ class Model(_base._Base):
         #LOG.warning('move below code to separate function for clean code')
         for i, dct in reactions_dict.items():
             if dct['function'] == []:
-                LOG.debug('substrates --> {}'.format(substrates))
                 dct['function'] = "k*{}".format(reduce(lambda x, y: '{}*{}'.format(x, y), substrates))
 
             substrates = [j.name for j in reactions_dict[i]['substrates']]
@@ -2469,12 +2468,6 @@ class Reaction(object):
                 role_dct[i] = 'constant'
 
         existing = self.model.get('function', self.rate_law, 'expression')
-        # LOG.debug('existing function --> {}'.format(existing))
-        # if (existing != []):# and (existing.roles == role_dct):
-        #     LOG.debug('existing roles == role dct --> {}=={},{}'.format(
-        #         existing.roles, role_dct, existing.roles == role_dct))
-        #     LOG.debug('function is existing so returning that instead --> {}'.format(existing))
-        #     return existing
 
 
         function = Function(
@@ -3558,7 +3551,6 @@ class InsertParameters(object):
                             i,sorted(self.model.all_variable_names)
                         )
                     )
-        LOG.debug('parameter_path --> {}'.format(self.parameter_path))
         if (self.parameter_dict is None) and (self.parameter_path is None) and (self.df is None):
             raise errors.InputError('You need to give at least one of parameter_dict,parameter_path or df keyword arguments')
 
