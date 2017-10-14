@@ -4788,30 +4788,7 @@ class ProfileLikelihood(object):
             log10=self.log10
             )
         )
-    # def setup1scan(self, model, report, parameter):
-    #     """
-    #     Setup a single scan.
-    #     :param q: queue from multiprocessing
-    #     :param model: pycotools.model.Model
-    #     :param report: str.
-    #     :return:
-    #     """
-    #     start = time.time()
-    #     LOG.debug('log10 is --> {]'.format(self.log10))
-    #     models = Scan(
-    #         model,
-    #         scan_type='scan',
-    #         variable=parameter,
-    #         number_of_steps=self.intervals,
-    #         subtask='parameter_estimation',
-    #         report_type='parameter_estimation',
-    #         report_name=report,
-    #         run=False,
-    #         append=self.append,
-    #         clear_scans=True,
-    #         output_in_subtask=True,
-    #         log10=self.log10
-    #         ).model
+
 
     def setup_scan(self):
         """
@@ -4859,17 +4836,6 @@ class ProfileLikelihood(object):
                 res[model][param].save()
         return res
 
-    # def run_parallel(self):
-    #     """
-    #
-    #     :return:
-    #     """
-    #     list_of_models = []
-    #     for model in self.model_dct:
-    #         for param in self.model_dct[model]:
-    #             LOG.info('running {}'.format(self.model_dct[model][param].copasi_file))
-    #             list_of_models.append(self.model_dct[model][param])
-    #     R = RunParallel(list_of_models, processes=self.processes)
 
     def run(self):
         """
@@ -4879,6 +4845,7 @@ class ProfileLikelihood(object):
         for model in self.model_dct:
             for param in self.model_dct[model]:
                 LOG.info('running {}'.format(self.model_dct[model][param].copasi_file))
+                sge_job_filename = "{}_{}.sh".format(model, param)
                 Run(self.model_dct[model][param], task='scan', mode=self.run_mode)
 
 if __name__=='__main__':
