@@ -1053,9 +1053,10 @@ class Reports(object):
         comment=etree.SubElement(report, 'Comment')
         table=etree.SubElement(report, 'Table')
         table.attrib['printTitle']=str(1)
-        LOG.debug('variable --> {}'.format(self.variable))
+
+        ##TODO cater for particle numbers
         if self.variable.name in [i.name for i in self.metabolites]:
-            cn = '{},{}'.format( self.model.reference, self.variable.initial_reference)
+            cn = '{},{},{}'.format(self.model.reference, self.variable.compartment.reference, self.variable.initial_reference)
 
         elif self.variable.name in [i.name for i in self.global_quantities]:
             cn = '{},{}'.format(self.model.reference, self.variable.initial_reference)

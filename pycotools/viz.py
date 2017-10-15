@@ -792,9 +792,9 @@ class Parse(object):
                     LOG.debug('res --> {}'.format(results_dict[index][param]))
                     df = pandas.read_csv(results_dict[index][param],
                                               sep='\t', skiprows=1, header=None)
+                    LOG.debug('df --> \n\n{}'.format(df))
                     bracket_indices = [1, -2]
                     df = df.drop(df.columns[bracket_indices], axis=1)
-                    LOG.debug('df --> \n\n{}'.format(df))
                     fit_items = [param] + fit_item_order_dict[index][param] + ['RSS']
                     # print fit_items
                     df.columns = fit_items
@@ -1417,6 +1417,7 @@ class PlotParameterEstimation(PlotKwargs):
             'show': False,
             'filename': None,
             'dpi': 300,
+            'log10': False,
         }
         self.default_properties.update(self.plot_kwargs)
         for i in kwargs.keys():

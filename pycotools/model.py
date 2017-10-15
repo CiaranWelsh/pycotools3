@@ -2051,6 +2051,14 @@ class Metabolite(object):
 
         return metabolite_element
 
+    def get_compartment(self):
+        """
+        Get containing compartment
+        :return:
+            :py:class:`Compartment`
+        """
+        return self.compartment
+
 
 class Substrate(Metabolite):
     def __init__(self, model,name='new_metabolite', particle_number=None,
