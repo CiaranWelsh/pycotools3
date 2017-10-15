@@ -1,4 +1,4 @@
-'''
+"""
  This file is part of pycotools.
 
  pycotools is free software: you can redistribute it and/or modify
@@ -14,35 +14,98 @@
  You should have received a copy of the GNU Lesser General Public License
  along with pycotools.  If not, see <http://www.gnu.org/licenses/>.
 
-
-
-
- Object:
  
- PEAnalysis provies a number of convenient classes for visualizing 
- and analysing parameter estimation data. The module can be used with 
- any PE data regardless of origin but has been developed with copasi in 
- mind. 
-  
-
 
  $Author: Ciaran Welsh
  $Date: 12-09-2016 
  Time:  20:33
 
-
-Features to include:
-    PCA for dimensionality reduction of the PE data. Identify component with most variance 
-    
-    Create class for computing model selection criteria
-        AIC/BIC
-        
-        
-    I could begin giving my python classes things like iteration capabilities or
-    getters...
+This module facilitates the visualziation of modelling tasks such as time courses and
+parameter estimations.
 
 
-'''
+
+
+
+Here are some kwargs used in most classes within the viz module:
+
+.. _kwargs:
+
+kwargs
+======
+
+
+
+.. _plot-kwargs:
+
+Kwargs for plotting
+-------------------
+
+These keyword arguments are passed on to matplotlib
+
+==========  ======================================
+kwarg       Description
+==========  ======================================
+linestyle   `str`.
+marker      `str`
+linewidth   `int`
+markersize  `int`
+alpha       `float` (0-1). Translucency of a patch
+title       `str` figure title
+xlabel      `str` label for x axis
+ylabel      `str` label for y axis
+show        `bool` show the plot
+==========  ======================================
+
+
+Each class in this module share a common set of kwargs to control saving figure to file. They are:
+
+.. _savefig-kwargs:
+
+savefig kwargs
+--------------
+
+==================  ========================================
+kwarg               Description
+==================  ========================================
+savefig             `bool`. Save plot to file. Default=False
+results_directory   `str`. Folder to save to if savefig=True
+title               `str`. Title of the plot
+xlabel              `str`. label for x axis
+ylabel              `str`. label for y axis
+show                `bool`. Show the plot or not
+filename            `str` specific filename for plot
+                    when savefig=True. Include extention
+dpi                 `int`. dots per inch when saving to file
+==================  ========================================
+
+
+
+.. _truncate-kwargs:
+
+truncate-kwargs
+---------------
+=========== =============================
+Mode        Description
+=========== =============================
+percentage  Keep top `percentage` percent.
+below_theta Keep parameter sets with a
+            RSS value below theta.
+ranks       Keep the top `ranks` ranks.
+=========== =============================
+
+Theta:
+
+======================= =============================
+theta arg when`mode` is Description
+======================= =============================
+percentage              Range between 0 and 100.
+below_theta             `float` or `int`. Denotes RSS
+                        cut off
+ranks                   `list` of integers
+======================= =============================
+
+"""
 
 
 ##TODO Fix plot_kwargs
@@ -82,6 +145,7 @@ SEABORN_OPTIONS = {'context': 'poster',
 seaborn.set_context(context=SEABORN_OPTIONS['context'], font_scale=SEABORN_OPTIONS['font_scale'])
 
 
+
 class PlotKwargs(object):
     def plot_kwargs(self):
         plot_kwargs = {
@@ -95,8 +159,8 @@ class PlotKwargs(object):
 
 class SaveFigMixin(Mixin):
     """
-    save figure to a directory and filename.
-    create teh directory if it doesn't exist.
+
+
     """
     @staticmethod
     def save_figure(directory, filename, dpi=300):
@@ -107,29 +171,43 @@ class SaveFigMixin(Mixin):
 
 @mixin(tasks.UpdatePropertiesMixin)
 class TruncateData(object):
-    '''
+    """
     Parameter estimation data in systems biology usually have runs which fall
-    into a local minima. Usually a user wants to remove these runs from further
-    analysis. TruncateData does this and provides two modes to do so. A useful
-    indication of where to truncate the data is to look at the plot produced
-    by the EvaluateOptimizationPerformance class and the histograms/boxplots/
-    profile likelihoods for your specific optimization problem.
+    into a local minima. This class removes these runs from further
+    analysis.
 
-    Args:
-        data:
-            The parameter estiamtion data for truncation. This is a pandas dataframe.
+    See :ref:`truncate-kwargs` for keyword arguments
 
-    kwargs:
-        mode:
-            Two modes accepted. When set to 'percent' take xth percentile of
-            data. when set to 'below_x', truncate data below the value x. Pay
-            attention to whether you are in log10 mode or not.
+    Examples assuming `df` is a `pandas.DataFrame` retuned from
+    the `Parse` class:
 
-        x:
-            Either xth percentive,  value to truncate data below or list specifying an index of best fit
-    '''
+    Analyze the top 10 percent of parameter fits. Conduct analysis on linear scale.
+
+        >>> data = TruncateData(data, mode=percent, theta=10, log10=False)
+
+    Analyze top 10 best parameter sets on a log10 scale
+
+        >>> data = TruncateData(data, mode='ranks', theta=range(10), log10=True)
+
+    Analyze parameter sets with a RSS value below 10^3.5 (because log10 is set to True)
+
+        >>> data = TruncateData(data, mode='below_x', theta=3.5, log10=True)
+    """
 
     def __init__(self, data, mode='percent', theta=100, log10=False):
+        """
+        :param data:
+            `pandas.DataFrame`. Data to truncate
+
+        :param mode:
+            `str`. Mode to use for truncation
+
+        :param theta:
+            `int` or `float`. Percentage, cut-off point or ranks
+
+        :param log10:
+            `bool` whether to truncate on log10 scale and return log10 scale data
+        """
 
         self.data = data
         self.mode = mode
@@ -140,23 +218,39 @@ class TruncateData(object):
         self.data = self.truncate()
 
     def below_theta(self):
+        """
+        remove data which is not below theta
+        :return:
+            :py:class:'pandas.DataFrame`
+        """
         assert self.data.shape[0] != 0, 'There are no data with RSS below {}. Choose a higher number'.format(self.theta)
         return self.data[self.data['RSS'] < self.theta]
 
     def top_theta_percent(self):
-        '''
-        get top theta percent data.
-        Defulat= 100 = all data
-        '''
+        """
+        Remove data not in top theta percent
+        :return:
+            :py:class:'pandas.DataFrame`
+        """
         if self.theta > 100 or self.theta < 1:
             raise errors.InputError('{} should be between 0 and 100')
         theta_quantile = int(numpy.round(self.data.shape[0] * (float(self.theta) / 100.0)))
         return self.data.iloc[:theta_quantile]
 
     def ranks(self):
+        """
+        Remove data which is not in the top ranks
+        parameter estimation data
+        :return:
+            :py:class:'pandas.DataFrame`
+        """
         return self.data.iloc[self.theta]
 
     def truncate(self):
+        """
+
+        :return:
+        """
         if self.mode == 'below_theta':
             return self.below_theta()  # self.data
         elif self.mode == 'percent':
@@ -168,7 +262,7 @@ class ParseMixin(Mixin):
     @staticmethod
     def parse(cls, log10, copasi_file=None):
         """
-        Use parse class to get the data
+        Mixin method interface to parse class
         :return:
         """
         if type(cls) == Parse:
@@ -178,7 +272,6 @@ class ParseMixin(Mixin):
 
 
 class TruncateDataMixin(Mixin):
-
     @staticmethod
     def truncate(data, mode, theta):
         """
@@ -204,7 +297,44 @@ class CreateResultsDirectoryMixin(Mixin):
 
 ##TODO use cached property
 class Parse(object):
+    """
+    General class for parsing copasi output into Python.
+
+    First argument is an instance of a pycotools class.
+
+    ==================================          ===========================
+    instance                                       Description
+    ==================================          ===========================
+    tasks.TimeCourse                            Parse time course data from
+                                                TC.report_name into pandas.df
+    tasks.ParameterEstimation                   Parse parameter estimation
+                                                data from PE.report_name into pandas.df
+    tasks.Scan                                  Parse scan data from scan.report_name
+    tasks.MultiParameterEstimation              Parse folder of parameter estimation
+                                                data from MPE.results_directory into
+                                                pandas.df
+    Parse                                       enable parsing from a parse instance.
+                                                Just returns itself
+    str                                         Parse data from folder of parameter
+                                                estimation data into pandas.df. Requires
+                                                the copasi file argument.
+    ==================================          ===========================
+    """
     def __init__(self, cls_instance, log10=False, copasi_file=None):
+        """
+
+        :param cls_instance:
+            A instance of pycotools class
+
+        :param log10:
+            `bool`. Whether to work on log10 scale
+
+        :param copasi_file:
+            `str`. Optional but necessary when cls_instance
+            is string. Must be the copasi_file which produced
+            the parameter estimation data as Parse extracts
+            data headers from the copasi file
+        """
         self.cls_instance = cls_instance
         self.log10 = log10
         self.copasi_file = copasi_file
@@ -454,7 +584,33 @@ class Parse(object):
 @mixin(ParseMixin)
 @mixin(CreateResultsDirectoryMixin)
 class PlotTimeCourse(PlotKwargs):
+    """
+    Plot time course data
+
+    Time course kwargs:
+
+    ================    ======================================
+    kwarg               Description
+    ================    ======================================
+    x                   `str`. Parameter to go on x axis.
+                        defaults to 'Time'. If not 'Time'
+                        then  plot is a phase space plot
+    y                   `str` or `list` of `str`. Parameters
+                        for the y axis.
+    log10               `bool` plot on log10 scale
+    separate            bool` separate time courses onto
+                        different axes. Default: True
+    **kwargs            See :ref:`kwargs` for more options
+    ================    ======================================
+    """
     def __init__(self, cls, **kwargs):
+        """
+
+        :param cls:
+            Instance of tasks.TimeCourse class
+
+        :param kwargs:
+        """
         super(PlotTimeCourse, self).__init__()
         self.cls = cls
         self.kwargs = kwargs
@@ -609,16 +765,77 @@ class PlotTimeCourse(PlotKwargs):
 @mixin(CreateResultsDirectoryMixin)
 class PlotTimeCourseEnsemble(object):
     """
+    Plot a time course ensemble from a model and
+    parameter ensemble. If `cls` argument is a
+    MultiParameterEstimation instance then the results
+    and copasi file are automatically extracted. If cls
+    is a string, then it must point to a folder of parameter
+    estimation data and a copasi file must be specified.
+
+    One by one the parameter sets are inserted into the copasi
+    model and a time course is simulated. The data is aggregated
+    using a :py:class:`seaborn.tsplot` using a statistic of
+    the users choice (default is :py:meth:`numpy.mean`). Confidence
+    intervals are estimated using a bootstrapping method which is
+    built-in to :py:class:`seaborn.tsplot`
 
 
-    To Do:
-        - Build option for including experimental data on the plots
+    kwargs
+
+    ================    ==========================================================
+    kwarg               Description
+    ================    ==========================================================
+    y                   `str` or list of `str`. Variable(s) to
+                        put on the y axis
+    x                   `str`. Variable to put on x axis.
+    truncate_mode       `str`. see :py:class:`TruncateData` class
+    theta               `str`. see :py:class:`TruncateData` class
+    xtick_rotation      `int`. Rotate the x axis by `xtick_rotation`
+                        degrees
+    step_size           `int`. Step size for time course integration
+    check_as_you_plot   `bool` if ``True``, open each model in turn
+                        so that you can manually verify inserted parameter
+                        or play around with the model
+    estimator           `func` estimator to bootstrap.
+                        Passed to :py:class:`seaborn.tsplot`
+    n_boot              `int`. number of boot strap samples to perform
+    ci                  `int` or `list` of `int`. confidence intervals
+                        between 0 and 100. If `list` multiple contours are
+                        plotted
+    color               `str` colour
+    show                `bool`. Show the figure. Default: False
+    silent              `bool`. default=True. Print parameters being
+                        inserted to screen
+    data_filename       `str` file name for writing ensemble time course
+                        data to file
+    exp_color           `str` colour of the experimental data
+    experiment_files    `str` or `list` of `str`. For use only
+                        when parsing from folder. Paths to experimental
+                        data that was used to generate the parameter estimation
+                        data
+    run_mode            `str` or `bool`. Passed to :py:class:`tasks.Run`
+                        Optionally perform time course simulations in parallel
+                        by giving ``run_mode=multiprocess``
+    copasi_file         `str` path to copasi file that was used to generate
+                        parameter ensemble. Must be still configured for
+                        parameter estimation in order to extract parameter headers
+    **kwargs            see :ref:`kwargs` for savefig options
+    ================    ==========================================================
     """
 
     def __init__(self, cls, **kwargs):
+        """
+
+        :param cls:
+            Instance of MultiParameterEstimation or str
+            containing path to parameter estimation data. If
+            string the same condition as in :py:class:`Parse` applies
+            with the `copasi_file` arg.
+
+        :param kwargs:
+        """
         self.cls = cls
-        options = {'sep': '\t',
-                   'y': None,
+        options = {'y': None,
                    'x': 'time',
                    'truncate_mode': 'percent',
                    'theta': 100,
@@ -873,6 +1090,9 @@ class PlotTimeCourseEnsemble(object):
 @mixin(ParseMixin)
 @mixin(CreateResultsDirectoryMixin)
 class PlotScan(object):
+    """
+    TODO: Create visualization facilities for parameter scans.
+    """
     def __init__(self, cls, **kwargs):
         self.cls = cls
         self.kwargs = kwargs
@@ -920,10 +1140,29 @@ class PlotScan(object):
 @mixin(CreateResultsDirectoryMixin)
 class PlotParameterEstimation(PlotKwargs):
     """
-    Create new folder for each experiment
-    defined under the sub directory of results_directory
+    Visualize parameter estimation runs against a single
+    parameter estimation. Similar to PlotTimeCourseEnsemble
+    but for a single parameter estimation run.
+
+
+
+    =========================================       =========================================
+    kwarg                                           Description
+    =========================================       =========================================
+    y                                               `str` or list of `str`. Parameter for plotting
+                                                    on y axis. Defaults to all estimated parameters.
+    **savefig_kwargs                                see savefig_kwargs for savefig options
+    =========================================       =========================================
+
     """
     def __init__(self, cls, **kwargs):
+        """
+        :param cls:
+            Instance of :py:class:`tasks.ParameterEstimation`
+
+        :param kwargs:
+
+        """
         self.cls = cls
         self.kwargs = kwargs
         self.plot_kwargs = self.plot_kwargs()
@@ -932,7 +1171,6 @@ class PlotParameterEstimation(PlotKwargs):
         default_y = [i.name for i in self.cls.model.metabolites] + [i.name for i in self.cls.model.global_quantities]
         self.default_properties = {
             'y': None,
-            'log10': False,
             'savefig': False,
             'results_directory': None,
             'title': 'TimeCourse',
@@ -1096,17 +1334,32 @@ class PlotParameterEstimation(PlotKwargs):
 @mixin(TruncateDataMixin)
 class Boxplots(PlotKwargs):
     """
-    Create new folder for each experiment
-    defined under the sub directory of results_directory
+    Plot a boxplot for multi parameter estimation data.
+
+    ============    =================================================
+    kwarg           Description
+    ============    =================================================
+    num_per_plot    Number of parameter per plot. Remainder
+                    fills up another plot.
+    **kwargs        see :ref:`kwargs`  options
+    ============    =================================================
     """
     def __init__(self, cls, **kwargs):
+        """
+
+        :param cls:
+            instance of tasks.MultiParameterEstimation or string .
+            Same as :py:class:`PlotTimeCourseEnsemble`
+
+
+        :param kwargs:
+        """
         self.cls = cls
         self.kwargs = kwargs
         self.plot_kwargs = self.plot_kwargs()
 
 
-        self.default_properties = {'sep': '\t',
-                                   'log10': False,
+        self.default_properties = {'log10': False,
                                    'truncate_mode': 'percent',
                                    'theta': 100,
                                    'num_per_plot': 6,
@@ -1196,21 +1449,30 @@ class Boxplots(PlotKwargs):
 @mixin(CreateResultsDirectoryMixin)
 class RssVsIterations(PlotKwargs):
     """
-    Create new folder for each experiment
-    defined under the sub directory of results_directory
+
+    Plot the ordered residual sum of squares (RSS) objective
+    function value against the RSS's rank of best fit.
+    See :ref:`kwargs` for list of keyword arguments.
     """
 
     def __init__(self, cls, **kwargs):
+        """
+
+        :param cls:
+            Instance of :py:class:`tasks.MultiParameterEstimation`
+            Same as :py:class:`PlotTimeCourseEnsemble`
+
+        :param kwargs:
+            see :ref:`kwargs`
+        """
         self.cls = cls
         self.kwargs = kwargs
         self.plot_kwargs = self.plot_kwargs()
 
 
-        self.default_properties = {'sep': '\t',
-                                   'log10': False,
+        self.default_properties = {'log10': False,
                                    'truncate_mode': 'percent',
                                    'theta': 100,
-                                   'num_per_plot': 6,
                                    'xtick_rotation': 'vertical',
                                    'ylabel': 'Estimated Parameter\n Value(Log10)',
                                    'title': 'Rss Vs Iterations',
@@ -1257,7 +1519,9 @@ class RssVsIterations(PlotKwargs):
 
     def plot(self):
         """
-        
+        Plot Rss Vs rank of best fit
+        :return:
+            None
         """
             
         plt.figure()
@@ -1283,8 +1547,25 @@ class RssVsIterations(PlotKwargs):
 @mixin(CreateResultsDirectoryMixin)
 class Pca(PlotKwargs):
     """
-    Create new folder for each experiment
-    defined under the sub directory of results_directory
+    Use the :py:class:`PCA` function to conduct
+    a principle component analysis on the parameter
+    estimation data.
+
+    ===================   ====================
+    kwargs                Description
+    ===================   ====================
+    by                    `str` either Determine which axes of parameter estimation
+                          data to undergoe data reduction. When ``by='iterations'``
+                          the data is reduced to one data point per parameter estimation
+                          run. When ``by='parameters'``, data is reduced to one data point
+                          per parameter.
+    legend_position       `tuple`. When ``by='parameters`` specify the (horizontal, verticle,
+                          line spacing) parameter for the legend location and formatting
+    cmap                  `str` a valid matplotlib colour map
+    annotate              `bool` annotate. Automatically on when ``by='parameters'``
+    annotation_fontsize   `int` or `float`. fontsize for annotation
+    **kwargs              See :ref:`kwargs for more options
+    ===================   ====================
     """
 
     def __init__(self, cls, **kwargs):
@@ -1438,11 +1719,20 @@ class Pca(PlotKwargs):
 @mixin(CreateResultsDirectoryMixin)
 class Histograms(PlotKwargs):
     """
-    Create new folder for each experiment
-    defined under the sub directory of results_directory
+    Plot a Histograms for multi parameter estimation data.
+
+    See :ref:`kwargs` for more options.
     """
 
     def __init__(self, cls, **kwargs):
+        """
+
+        :param cls:
+            Instance of :py:class:`tasks.MultiParameterEstimation`
+            Same as :py:class:`PlotTimeCourseEnsemble`
+
+        :param kwargs:
+        """
         self.cls = cls
         self.kwargs = kwargs
         self.plot_kwargs = self.plot_kwargs()
@@ -1471,7 +1761,9 @@ class Histograms(PlotKwargs):
         self.data = self.parse(self.cls, log10=self.log10)
         self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
         LOG.info('plotting histograms')
-        self.plot()
+        # self.plot()
+        self.coloured_plot()
+
 
     def _do_checks(self):
         """
@@ -1501,6 +1793,56 @@ class Histograms(PlotKwargs):
                                      misc.RemoveNonAscii(parameter).filter+'.png')
                 plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
 
+    def coloured_plot(self):
+        """
+
+        :return:
+        """
+        # for parameter in self.data.keys():
+        raise NotImplementedError('this is an attempt to colour bars '
+                                  'of histogram by RSS but the code does not '
+                                  'work. ')
+        parameter = 'Ski'
+        num_bins = 10
+        width = self.data[parameter].max() - self.data[parameter].min()
+        iqr = scipy.stats.iqr(self.data[parameter])
+        bins_size = 2 * (iqr/(self.data[parameter].shape[0]**1.0/3.0))
+        LOG.debug('bin size == {}'.format(bins_size))
+
+        bins = numpy.arange(self.data[parameter].min(), self.data[parameter].max(),
+                            bins_size)#width/num_bins
+        ## calculate the density of RSS
+        LOG.debug('bins --> {}'.format(bins))
+
+        groups = self.data.groupby([pandas.cut(self.data[parameter], bins), 'RSS'])
+        data = groups.size().reset_index([parameter, 'RSS'])
+        data2 = data.groupby(parameter)[0].sum()
+        # print data2
+        data3 = data.groupby(parameter)['RSS'].mean()
+        # print data3
+        data5 = pandas.concat([data2, data3], axis=1)
+        data5['Density'] = data5[0]/(numpy.sum(data5[0].fillna(0).values * numpy.diff(bins)))
+
+
+        ## colours
+        norm = plt.Normalize(numpy.nanmin(data5['RSS'].values),
+                             numpy.nanmax(data5['RSS'].values))
+        colours = plt.cm.plasma(norm(data5['RSS'].fillna(0).values))
+
+        fig, ax = plt.subplots()
+
+        ax.bar(bins[:-1], data5.fillna(0)['Density'], width=width, color=colours, align='edge')
+
+        # seaborn.kdeplot(data[parameter], ax=ax, color='k', lw=2)
+
+        sm = plt.cm.ScalarMappable(cmap='plasma', norm=norm)
+        sm.set_array([])
+        fig.colorbar(sm, ax=ax, label='RSS')
+        ax.set_ylabel('Density')
+        ax.set_xlabel(parameter)
+        plt.show()
+
+
 
 @mixin(tasks.UpdatePropertiesMixin)
 @mixin(ParseMixin)
@@ -1508,11 +1850,33 @@ class Histograms(PlotKwargs):
 @mixin(CreateResultsDirectoryMixin)
 class Scatters(PlotKwargs):
     """
-    Create new folder for each experiment
-    defined under the sub directory of results_directory
+    Plot scatter graphs. When 'x' and 'y' are lists, 2 way
+    combinations are automatically plotted and organized into
+    folders (when ``savefig=True``). Data is automatically
+    coloured by RSS.
+
+    ========    =================================================
+    kwarg       Description
+    ========    =================================================
+    x           `str` or `list` of `str`. Variable(s) to plot on x
+                axis. Defaults to ``RSS``
+    y           `str` or `list` of `str`. Variable(s) to plot on
+                y axis. Defaults to all parameters in data set.
+    cmap        `str` a valid matplotlib colour map
+
+    **kwargs    see :ref:`kwargs` for more options
+    ========    =================================================
     """
 
     def __init__(self, cls, **kwargs):
+        """
+
+        :param cls:
+            Instance of :py:class:`tasks.MultiParameterEstimation`
+            Same as :py:class:`PlotTimeCourseEnsemble`
+
+        :param kwargs:
+        """
         self.cls = cls
         self.kwargs = kwargs
         self.plot_kwargs = self.plot_kwargs()
@@ -1610,11 +1974,33 @@ class Scatters(PlotKwargs):
 @mixin(CreateResultsDirectoryMixin)
 class LinearRegression(PlotKwargs):
     """
-    Create new folder for each experiment
-    defined under the sub directory of results_directory
+    Perform multiple linear regression using
+    :py:module:`sklearn.linear_model`.
+
+    ========    =================================================
+    kwarg       Description
+    ========    =================================================
+    lin_model   `func`. default=LassoCV. Any linear model supported
+                by :py:module:`sklearn.linear_model`. see `here`
+
+                .. _here: http://scikit-learn.org/stable/modules/linear_model.html
+
+    n_alphas    `int` number of alphas
+    max_iter    `int`. Number of iterations.
+    **kwargs    see :ref:`kwargs` for more options
+    ========    =================================================
+
     """
 
     def __init__(self, cls, **kwargs):
+        """
+
+        :param cls:
+            Instance of :py:class:`tasks.MultiParameterEstimation`
+            Same as :py:class:`PlotTimeCourseEnsemble`
+
+        :param kwargs:
+        """
         self.cls = cls
         self.kwargs = kwargs
         self.plot_kwargs = self.plot_kwargs()
@@ -1671,10 +2057,10 @@ class LinearRegression(PlotKwargs):
         y = numpy.array(self.data[parameter])
         X = self.data.drop(parameter, axis=1)
         X_train, X_test, y_train, y_test = model_selection.train_test_split(X, y)
-        
+
         lin_model = self.lin_model(fit_intercept=True, n_alphas=self.n_alphas,
                     max_iter=self.max_iter)
-        
+
         lin_model.fit(X_train, y_train)
         df = pandas.DataFrame(lin_model.coef_, index=X.columns, columns=[parameter])#.sort_values(by='Coefficients')
         df['abs_values'] = numpy.absolute(df[parameter])
@@ -1683,22 +2069,22 @@ class LinearRegression(PlotKwargs):
         scores = [lin_model.score(X_train, y_train), lin_model.score(X_test, y_test)]
         scores = pandas.DataFrame(scores, index=['TrainScore', 'TestScore'])
         return scores, df
-    
+
     def compute_coefficients(self):
         parameters = list(self.data.columns)
         df_dct = {}
         score_dct={}
         for y in parameters:
             score_dct[y], df_dct[y] = self.compute1coef(y)
-            
+
         df1 = pandas.concat(score_dct,axis=1).transpose().sort_values(by='TestScore',
                            ascending=False)
         df2 = pandas.concat(df_dct,axis=1)
         return df1, df2
-    
+
     def plot_scores(self):
         """
-        
+
         """
         plt.figure()
         seaborn.heatmap(self.scores)
@@ -1709,8 +2095,8 @@ class LinearRegression(PlotKwargs):
             self.create_directory(self.results_directory)
             fname = os.path.join(self.results_directory, 'linregress_scores.png')
             plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
-        
-        
+
+
     def plot_rss(self):
         plt.figure()
         seaborn.heatmap(self.coef.RSS.sort_values(by='RSS', ascending=False))
@@ -1719,8 +2105,8 @@ class LinearRegression(PlotKwargs):
             self.create_directory(self.results_directory)
             fname = os.path.join(self.results_directory, 'linregress_RSS.png')
             plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
-                
-        
+
+
     def plot_coef(self):
         """
 
@@ -1743,11 +2129,26 @@ class LinearRegression(PlotKwargs):
 @mixin(TruncateDataMixin)
 @mixin(CreateResultsDirectoryMixin)
 class ModelSelection(object):
-    '''
-    ## could give
-    '''
+    """
+    Calculate model selection criteria AIC (corrected) and
+    BIC for a selection of models that have undergone fitting
+    using the :py:class:`tasks.MultiModelFit` class. Plot as
+    boxplots and histograms.
+    """
+
     def __init__(self, multi_model_fit, savefig=False,
                  dpi=300, log10=False, filename=None, pickle=None):
+        """
+
+        :param multi_model_fit:
+            a :py:class:`tasks.MultiModelFit` object
+
+        :param filename:
+            `str` file to save model selection data to
+
+        :param pickle:
+            `str` pickle path to save data too
+        """
         self.multi_model_fit = multi_model_fit
         self.number_models = self.get_num_models()
         self.savefig = savefig
@@ -1876,7 +2277,7 @@ class ModelSelection(object):
         for mod in self.model_dct.values():
             k_dct[mod.copasi_file] = len(mod.fit_item_order)
         return k_dct
-            
+
     def _get_n(self):
         '''
         get number of observed data points for AIC calculation
@@ -1894,41 +2295,41 @@ class ModelSelection(object):
         return n
 
     def calculate1AIC(self,RSS,K,n):
-        '''
+        """
         Calculate the corrected AIC:
-            
-            AICc = -2*ln(RSS/n) + 2*K + (2*K*(K+1))/(n-K-1) 
-                
+
+            AICc = -2*ln(RSS/n) + 2*K + (2*K*(K+1))/(n-K-1)
+
             or if likelihood function used instead of RSS
-                                
+
             AICc = -2*ln(likelihood) + 2*K + (2*K*(K+1))/(n-K-1)
-            
+
         Where:
             RSS:
                 Residual sum of squares for model fit
             n:
                 Number of observations collectively in all data files
-                
+
             K:
                 Number of model parameters
-        '''
+        """
         return n*numpy.log((RSS/n)) + 2*K + (2*K*(K+1))/(n-K-1)
-        
-    
+
+
     def calculate1BIC(self,RSS,K,n):
         '''
         Calculate the bayesian information criteria
             BIC = -2*ln(likelihood) + k*ln(n)
-            
+
                 Does this then go to:
-                    
+
             BIC = -2*ln(RSS/n) + k*ln(n)
         '''
         return  (n*numpy.log(RSS/n) ) + K*numpy.log(n)
-    
+
     def calculate_model_selection_criteria(self):
         '''
-        
+
         '''
         df_dct = {}
         for model_num in range(len(self.model_dct)):
@@ -1962,7 +2363,7 @@ class ModelSelection(object):
         """
         seaborn.set_context(context='poster')
         data = self.model_selection_data
-        
+
         data = data.unstack()
         data = data.reset_index()
         data = data.rename(columns={'level_0': 'Model',
@@ -2021,19 +2422,19 @@ class ModelSelection(object):
 
     def chi2_lookup_table(self, alpha):
         '''
-        Looks at the cdf of a chi2 distribution at incriments of 
-        0.1 between 0 and 100. 
-        
-        Returns the x axis value at which the alpha interval has been crossed, 
-        i.e. gets the cut off point for chi2 dist with DOF and alpha . 
+        Looks at the cdf of a chi2 distribution at incriments of
+        0.1 between 0 and 100.
+
+        Returns the x axis value at which the alpha interval has been crossed,
+        i.e. gets the cut off point for chi2 dist with DOF and alpha .
         '''
         nums = numpy.arange(0,100,0.1)
         table=zip(nums, scipy.stats.chi2.cdf(nums,self.kwargs.get('DOF')) )
         for i in table:
             if i[1]<=alpha:
                 chi2_df_alpha=i[0]
-        return chi2_df_alpha  
-        
+        return chi2_df_alpha
+
     def get_chi2_alpha(self):
         '''
         return the chi2 threshold for cut off point alpha and DOF degrees of freedom
@@ -2043,13 +2444,13 @@ class ModelSelection(object):
         for i in alphas:
             dct[round(i,3)]=self.chi2_lookup_table(i)
         return dct[0.05]
-    
+
     def compare_sim_vs_exp(self):
         '''
-        
+
         '''
         LOG.info('Visually comparing simulated Versus Experiemntal data.')
-        
+
         for cps, res in self.multi_model_fit.results_folder_dct.items():
             tasks.InsertParameters(cps,parameter_path=res, index=0)
             PE=tasks.ParameterEstimation(cps,self.multi_model_fit.exp_files,
@@ -2060,31 +2461,31 @@ class ModelSelection(object):
             PE.set_up()
             PE.run()
             PE.format_results()
-            
-            
+
+
     def get_best_parameters(self,filename=None):
         '''
-        
+
         '''
         df=pandas.DataFrame()
         for cps, res in self.multi_model_fit.results_folder_dct.items():
             df[os.path.split(cps)[1]]= ParsePEData(res).data.iloc[0]
-            
+
         if filename==None:
             return df
         else:
             df.to_excel(filename)
             return df
-        
-        
-        
+
+
+
     def compare_model_parameters(self,parameter_list,filename=None):
         '''
-        Compare all the parameters accross multiple models 
+        Compare all the parameters accross multiple models
         in a bar chart averaging and STD for a parameter accross
-        all models. 
-        
-        May have a problem with different models have different 
+        all models.
+
+        May have a problem with different models have different
         parameters as they are not directly comparible
         '''
         best_parameters=self.get_best_parameters()
@@ -2098,9 +2499,20 @@ class ModelSelection(object):
             plt.savefig(filename,dpi=200,bbox_inches='tight')
 #
 
-
+@mixin(tasks.UpdatePropertiesMixin)
+@mixin(ParseMixin)
+@mixin(TruncateDataMixin)
+@mixin(CreateResultsDirectoryMixin)
 class PlotProfileLikelihood(object):
+    """
+
+    """
     def __init__(self, data, **kwargs):
+        """
+        Plot profile likelihoods
+        :param data:
+        :param kwargs:
+        """
         self.data = data
 
         options = {'x': None,
@@ -2246,8 +2658,11 @@ class PlotProfileLikelihood(object):
             plt.savefig(os.path.join(self['results_directory'], '{}Vs{}.jpeg'.format(self['x'], self['y'])),
                         dpi=self['dpi'], bbox_inches='tight')
 
-
-class ParsePLData():
+@mixin(tasks.UpdatePropertiesMixin)
+@mixin(ParseMixin)
+@mixin(TruncateDataMixin)
+@mixin(CreateResultsDirectoryMixin)
+class ParsePLData(object):
     """
     get data from file into an appropriate format
     1) ensure data is properly formatted with headers
@@ -2274,10 +2689,15 @@ class ParsePLData():
                    'log10': True,
                    }
 
+        self.default_properties.update(self.plot_kwargs)
         for i in kwargs.keys():
-            assert i in options.keys(), '{} is not a keyword argument for plot'.format(i)
-        options.update(kwargs)
-        self.kwargs = options
+            assert i in self.default_properties.keys(), '{} is not a keyword argument for Scatters'.format(i)
+        self.kwargs = self.default_properties
+        self.default_properties.update(kwargs)
+        self.default_properties.update(self.plot_kwargs)
+        self.update_properties(self.default_properties)
+        self._do_checks()
+
 
         if self['parameter_path'] == None:
             if self['rss'] == None:
@@ -2457,14 +2877,14 @@ using the setup method but not running the parameter estimation before trying ag
     def get_rss(self):
         rss = {}
 
-        if self['index'] == -1:
-            assert self['rss'] != None
-            rss[-1] = self['rss']
+        if self.index == -1:
+            assert self.rss != None
+            rss[-1] = self.rss
             return rss
         else:
-            PED = viz.ParsePEData(self['parameter_path'])
-            if isinstance(self['index'], int):
-                rss[self['index']] = PED.data.iloc[self['index']['RSS']]
+            PED = viz.ParsePEData(self.parameter_path)
+            if isinstance(self.index, int):
+                rss[self.index = PED.data.iloc[self['index']['RSS']]
             elif isinstance(self['index'], list):
                 for i in self['index']:
                     rss[i] = PED.data.iloc[i]['RSS']

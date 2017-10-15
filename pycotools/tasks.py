@@ -467,12 +467,13 @@ class Run(object):
             None
         """
         with open(self.sge_job_filename, 'w') as f:
-            f.write('#!/bin/bash\n#$ -V -cwd\nmodule add {}\nCopasiSE {}'.format(
+            f.write('#!/bin/bash\n#$ -V -cwd\nmodule add {}\nCopasiSE "{}"'.format(
                 copasi_location, self.model.copasi_file
             )
         )
+
         ## -N option for job namexx
-        os.system('qsub {} -N {} '.format(self.sge_job_filename, self.sge_job_filename))
+        os.system('qsub "{}" -N "{}" '.format(self.sge_job_filename, self.sge_job_filename))
         ## remove .sh file after used.
         # os.remove(self.sge_job_filename)
 
@@ -1918,8 +1919,13 @@ class Scan(object):
 
         if self.scan_type == 'scan':
             if self.output_in_subtask !=True:
-                LOG.warning('output_in_subtask is False. Setting to True in order to have data from all scans output to file')
-                self.output_in_subtask = 'true'  ##string format needed for copasi
+                LOG.warning('output_in_subtask is False. '
+                            ' This means that the subtask will not output data '
+                            'as it is producing that data. For Scan tasks, we need this to be '
+                            'True as we would like all the output. For parameter estimations'
+                            'or profile likelihood, set this to False as we only want the'
+                            'final parameter set')
+                # self.output_in_subtask = 'true'  ##string format needed for copasi
 
         subtasks = ['steady_state', 'time_course',
                     'metabolic_control_anlysis',
@@ -4332,7 +4338,7 @@ class ProfileLikelihood(object):
             'intervals': 10,
             'log10': True,
             'append': False,
-            'output_in_subtask': True,
+            'output_in_subtask': False,
             'run_mode': False,
             'processes': 1,
             'results_directory': os.path.join(self.model.root,
@@ -4364,6 +4370,7 @@ class ProfileLikelihood(object):
 
         ##configures parameter estimation method parameters
         self.model = self.undefine_other_reports()
+        self.model = self.uncheck_randomize_start_values()
         self.model = self.make_experiment_files_absolute()
         self.model = self.set_PE_method()
         self.index_dct, self.parameters = self.insert_parameters()
@@ -4410,20 +4417,45 @@ class ProfileLikelihood(object):
         This method makes this conversion
         :return: void
         """
-        self.number_of_generations=str(self.number_of_generations)
-        self.population_size=str(self.population_size)
-        self.random_number_generator=str(self.random_number_generator)
-        self.seed=str(self.seed)
-        self.pf=str(self.pf)
-        self.iteration_limit=str(self.iteration_limit)
-        self.tolerance=str(self.tolerance)
-        self.rho=str(self.rho)
-        self.scale=str(self.scale)
-        self.swarm_size =str(self.swarm_size)
-        self.std_deviation =str(self.std_deviation)
-        self.number_of_iterations =str(self.number_of_iterations)
-        self.start_temperature =str(self.start_temperature)
-        self.cooling_factor =str(self.cooling_factor)
+        self.number_of_generations = str(self.number_of_generations)
+        self.population_size = str(self.population_size)
+        self.random_number_generator = str(self.random_number_generator)
+        self.seed = str(self.seed)
+        self.pf = str(self.pf)
+        self.iteration_limit = str(self.iteration_limit)
+        self.tolerance = str(self.tolerance)
+        self.rho = str(self.rho)
+        self.scale = str(self.scale)
+        self.swarm_size = str(self.swarm_size)
+        self.std_deviation = str(self.std_deviation)
+        self.number_of_iterations = str(self.number_of_iterations)
+        self.start_temperature = str(self.start_temperature)
+        self.cooling_factor = str(self.cooling_factor)
+
+    def uncheck_randomize_start_values(self):
+        """
+        Untick the randomize_start_values box
+        :return:
+            :py:class:`model.Model`
+        """
+        query = '//*[@name="Parameter Estimation"]'
+        for i in self.model.xml.xpath(query):
+            if 'type' in i.keys():
+                if i.attrib['type'] == 'parameterFitting':
+                    for j in i:
+                        if j.tag == '{http://www.copasi.org/static/schema}Problem':
+                            for k in j:
+                                if k.attrib['name'] == 'Maximize':
+                                    k.attrib['value'] = str(0)
+
+                                if k.attrib['name'] == 'Randomize Start Values':
+                                    k.attrib['value'] = str(0)
+
+                                if k.attrib['name'] == 'Calculate Statistics':
+                                    k.attrib['value'] = str(0)
+        self.model.save()
+        return self.model
+
 
 
     def _select_method(self):
@@ -4782,7 +4814,7 @@ class ProfileLikelihood(object):
             run=False,
             append=self.append,
             clear_scans=True,
-            output_in_subtask=True,#self.output_in_subtask,
+            output_in_subtask=False,#self.output_in_subtask,
             minimum=parameter_value / self.lower_bound_multiplier,
             maximum=parameter_value * self.lower_bound_multiplier,
             log10=self.log10
@@ -4806,8 +4838,6 @@ class ProfileLikelihood(object):
         for model in self.model_dct:
             res[model] = {}
             for param in self.model_dct[model]:
-                LOG.debug('setting up scan for --> {}'.format(self.model_dct[model][param]))
-
                 report_name = os.path.join(
                     self.model_dct[model][param].root,
                     os.path.splitext(
@@ -4823,9 +4853,6 @@ class ProfileLikelihood(object):
                         report_name, param, parameter_value
                     )
                 )
-                # else:
-                #     self.setup1scan(self.model_dct[model][param],
-                #                     report_name, param)
                 t.daemon = True
                 t.start()
                 # Since this is being executed in parallel sometimes
@@ -4845,8 +4872,9 @@ class ProfileLikelihood(object):
         for model in self.model_dct:
             for param in self.model_dct[model]:
                 LOG.info('running {}'.format(self.model_dct[model][param].copasi_file))
-                sge_job_filename = "{}_{}.sh".format(model, param)
-                Run(self.model_dct[model][param], task='scan', mode=self.run_mode, sge_job_filename=sge_job_filename)
+                sge_job_filename = "{}_{}".format(param, model)
+                sge_job_filename = re.sub('[().]', '', sge_job_filename)
+                Run(self.model_dct[model][param], task='scan', mode=self.run_mode, sge_job_filename=sge_job_filename+'.sh')
 
 if __name__=='__main__':
     pass
