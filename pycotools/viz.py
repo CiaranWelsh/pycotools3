@@ -137,7 +137,7 @@ from cached_property import cached_property
 import matplotlib.patches as mpatches
 from multiprocessing import Process, Queue
 from math import exp as exponential_function
-
+import math
 LOG=logging.getLogger(__name__)
 
 SEABORN_OPTIONS = {'context': 'poster',
@@ -792,17 +792,22 @@ class Parse(object):
                     LOG.debug('res --> {}'.format(results_dict[index][param]))
                     df = pandas.read_csv(results_dict[index][param],
                                               sep='\t', skiprows=1, header=None)
-                    bracket_indices = [0, -2]
+                    bracket_indices = [1, -2]
                     df = df.drop(df.columns[bracket_indices], axis=1)
-                    fit_items = fit_item_order_dict[index][param] + ['RSS']
+                    LOG.debug('df --> \n\n{}'.format(df))
+                    fit_items = [param] + fit_item_order_dict[index][param] + ['RSS']
                     # print fit_items
                     df.columns = fit_items
                     df['Parameter Of Interest'] = param
                     CL = confidence_level(self.cls_instance, alpha=0.95)
+                    if self.log10:
+                        df['Best Parameter Value'] = math.log10(float(self.cls_instance.parameters[index][param]))
+                        CL[index] = math.log10(CL[index])
+                    else:
+                        df['Best Parameter Value'] = float(self.cls_instance.parameters[index][param])
                     df['Confidence Level'] = CL[index]
                     df['Best Fit Index'] = index
-                    df['Best RSS'] = float(self.cls_instance.parameters[index]['RSS'])
-                    df = df.set_index(['Best Fit Index', 'Parameter Of Interest', 'Confidence Level', 'Best RSS'], drop=True)
+                    df = df.set_index(['Best Fit Index', 'Parameter Of Interest', 'Confidence Level', 'Best Parameter Value'], drop=True)
                     df_list.append(df)
             df = pandas.concat(df_list)
             return df
@@ -2748,76 +2753,79 @@ class PlotProfileLikelihood(object):
         """
         self.cls = cls
 
-        self.data = Parse(cls).data
 
         self.default_properties = {'x': None,
-                   'y': None,
-                   'log10': True,
-                   'estimator': numpy.mean,
-                   'n_boot': 10000,
-                   'ci_band_level': 95,  ## CI for estimator bootstrap
-                   'err_style': 'ci_band',
-                   'savefig': False,
-                   'results_directory': None,
-                   'dpi': 300,
-                   'plot_cl': True,
-                   'title': None,
-                   'xlabel': None,
-                   'ylabel': None,
-                   'color_palette': 'bright',
-                   'legend_location': None,
-                   }
+                                   'y': None,
+                                   'log10': True,
+                                   'estimator': numpy.mean,
+                                   'n_boot': 10000,
+                                   'ci_band_level': 95,  ## CI for estimator bootstrap
+                                   'err_style': 'ci_band',
+                                   'savefig': False,
+                                   'results_directory': self.cls.model.root,
+                                   'dpi': 300,
+                                   'plot_cl': True,
+                                   'title': None,
+                                   'xlabel': None,
+                                   'ylabel': None,
+                                   'color_palette': 'bright',
+                                   'legend_location': None,
+                                   'show': False,
+
+                                   }
 
         for i in kwargs.keys():
             assert i in self.default_properties.keys(), '{} is not a keyword argument for Scatters'.format(i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
         self.update_properties(self.default_properties)
+
+        ## parse data
+        self.data = Parse(cls, log10=self.log10).data
+
+        ## do some checks
         self._do_checks()
 
-        print self.data
-        # Parse(self.cls)
-
+        ## do plotting
+        self.plot()
 
     def _do_checks(self):
-        pass
+        if isinstance(self.data, pandas.core.frame.DataFrame) != True:
+            raise errors.InputError('{} should be a dataframe. Parse data with ParsePEData first.'.format(self.data))
 
-    #     if isinstance(self.data, pandas.core.frame.DataFrame) != True:
-    #         raise errors.InputError('{} should be a dataframe. Parse data with ParsePEData first.'.format(self.data))
-    #
-    #     self.parameter_list = sorted(list(self.data.columns))
-    #
-    #     if self['x'] == None:
-    #         raise errors.InputError('x cannot be None')
-    #
-    #     if self['y'] == None:
-    #         self['y'] = self.parameter_list
-    #
-    #     if self['y'] == None:
-    #         raise errors.InputError('y cannot be None')
-    #
-    #     if self['x'] not in self.parameter_list:
-    #         raise errors.InputError('{} not in {}'.format(self['x'], self.parameter_list))
-    #
-    #     if isinstance(self['y'], str):
-    #         if self['y'] not in self.parameter_list:
-    #             raise errors.InputError('{} not in {}'.format(self['y'], self.parameter_list))
-    #     if isinstance(self['y'], list):
-    #         for y_param in self['y']:
-    #             if y_param not in self.parameter_list:
-    #                 raise errors.InputError('{} not in {}'.format(y_param, self.parameter_list))
-    #
-    #     if self['savefig']:
-    #         if self['results_directory'] == None:
-    #             raise errors.InputError('Please specify argument to results_directory')
-    #
-    #     n = list(set(self.data.index.get_level_values(0)))
-    #     if self['title'] == None:
-    #         self['title'] = 'Profile Likelihood for\n{} (Rank={})'.format(self['x'], n)
-    #
-    #     self.data.rename(columns={'ParameterOfInterestValue': self['x']})
-    #
-    #     self.plot()
+        self.parameter_list = sorted(list(self.data.columns))
+
+        if self.x == None:
+            raise errors.InputError('x cannot be None')
+
+        if self.y == None:
+            self.y = self.parameter_list
+
+        if self.y == None:
+            raise errors.InputError('y cannot be None')
+
+        if self.x not in self.parameter_list:
+            raise errors.InputError('{} not in {}'.format(self.x, self.parameter_list))
+
+        if isinstance(self.y, str):
+            if self.y not in self.parameter_list:
+                raise errors.InputError('{} not in {}'.format(self.y, self.parameter_list))
+
+        if isinstance(self.y, list):
+            for y_param in self.y:
+                if y_param not in self.parameter_list:
+                    raise errors.InputError('{} not in {}'.format(y_param, self.parameter_list))
+
+        if self.savefig:
+            if self.results_directory == None:
+                raise errors.InputError('Please specify argument to results_directory')
+
+        n = list(set(self.data.index.get_level_values(0)))
+        if self.title == None:
+            self.title = 'Profile Likelihood for\n{} (Rank={})'.format(self.x, n)
+
+        self.data.rename(columns={'ParameterOfInterestValue': self.x})
+
     #
     # def __getitem__(self, key):
     #     if key not in self.kwargs:
@@ -2827,80 +2835,96 @@ class PlotProfileLikelihood(object):
     # def __setitem__(self, key, value):
     #     self.kwargs[key] = value
     #
-    # def plot(self):
-    #     """
-    #
-    #     """
-    #     if self['y'] == self['x']:
-    #         LOG.warning(errors.InputError(
-    #             'x parameter {} cannot equal y parameter {}. Plot function returned None'.format(self['x'], self['y'])))
-    #         return None
-    #
-    #     for label, df in self.data.groupby(level=[2]):
-    #         if label == self['x']:
-    #             data = df[self['y']]
-    #             if isinstance(data, pandas.core.frame.Series):
-    #                 data = pandas.DataFrame(data)
-    #             if isinstance(data, pandas.core.frame.DataFrame):
-    #                 data = pandas.DataFrame(data.stack(), columns=['Value'])
-    #     try:
-    #         data.index = data.index.rename(['ParameterSetRank',
-    #                                         'ConfidenceLevel',
-    #                                         'ParameterOfInterest',
-    #                                         'ParameterOfInterestValue',
-    #                                         'YParameter'])
-    #     except UnboundLocalError:
-    #         return 1
-    #
-    #     data = data.reset_index()
-    #     if self['log10']:
-    #         data['ConfidenceLevel'] = numpy.log10(data['ConfidenceLevel'])
-    #         data['Value'] = numpy.log10(data['Value'])
-    #         data['ParameterOfInterestValue'] = numpy.log10(data['ParameterOfInterestValue'])
-    #
-    #     plt.figure()
-    #     if self['plot_cl']:
-    #         cl_data = data[['ParameterSetRank', 'ConfidenceLevel',
-    #                         'ParameterOfInterestValue']]
-    #         cl_data = cl_data.drop_duplicates()
-    #         seaborn.tsplot(data=cl_data,
-    #                        time='ParameterOfInterestValue',
-    #                        value='ConfidenceLevel',
-    #                        unit='ParameterSetRank',
-    #                        color='green', linestyle='--',
-    #                        estimator=self['estimator'],
-    #                        err_style=self['err_style'],
-    #                        n_boot=self['n_boot'],
-    #                        ci=self['ci_band_level'])
-    #
-    #     seaborn.color_palette('husl', 8)
-    #     seaborn.tsplot(data=data,
-    #                    time='ParameterOfInterestValue',
-    #                    value='Value',
-    #                    condition='YParameter',
-    #                    unit='ParameterSetRank',
-    #                    estimator=self['estimator'],
-    #                    err_style=self['err_style'],
-    #                    n_boot=self['n_boot'],
-    #                    ci=self['ci_band_level'],
-    #                    color=seaborn.color_palette(self['color_palette'], len(self['y']))
-    #                    )
-    #     plt.title(self['title'])
-    #     if self['ylabel'] != None:
-    #         plt.ylabel(self['ylabel'])
-    #     if self['xlabel'] != None:
-    #         plt.xlabel(self['x_label'])
-    #
-    #     if self['legend_location'] != None:
-    #         plt.legend(loc=self['legend_location'])
-    #
-    #     if self['savefig']:
-    #         #            save_dir = os.path.join(self['results_directory'], 'ProfileLikelihood')
-    #         if os.path.isdir(self['results_directory']) != True:
-    #             os.makedirs(self['results_directory'])
-    #         os.chdir(self['results_directory'])
-    #         plt.savefig(os.path.join(self['results_directory'], '{}Vs{}.jpeg'.format(self['x'], self['y'])),
-    #                     dpi=self['dpi'], bbox_inches='tight')
+    def plot(self):
+        """
+
+        """
+        if self.y == self.x:
+            LOG.warning(errors.InputError(
+                'x parameter {} cannot equal y parameter {}. Plot function returned None'.format(
+                    self.x, self.y)
+            )
+            )
+            return None
+
+        ## get x data
+        # data = self.data.reset_index()
+        # x_data = self.data[self.x]
+        # print x_data
+        self.data.to_csv('/home/b3053674/Documents/Models/2017/10_Oct/Smad7ZiModels2/PL/data.csv')
+        # x_data = pandas.DataFrame(self.data[self.x])
+
+        # for label, df in self.data.groupby(level=[1]):
+        #     pass
+            # if label == self.x:
+            #         data = df[self.y]
+            # if isinstance(data, pandas.core.frame.Series):
+            #     data = pandas.DataFrame(data)
+            # if isinstance(data, pandas.core.frame.DataFrame):
+            #     data = pandas.DataFrame(data.stack(), columns=['Value'])
+            # print data
+            # try:
+            #     data.index = data.index.rename(['ParameterSetRank',
+            #                                     'ConfidenceLevel',
+            #                                     'ParameterOfInterest',
+            #                                     'ParameterOfInterestValue',
+            #                                     'YParameter'])
+            # except UnboundLocalError:
+            #     return 1
+            #
+            # data = data.reset_index()
+            # if self.log10:
+            #     data['ConfidenceLevel'] = numpy.log10(data['ConfidenceLevel'])
+            #     data['Value'] = numpy.log10(data['Value'])
+            #     data['ParameterOfInterestValue'] = numpy.log10(data['ParameterOfInterestValue'])
+            #
+            # plt.figure()
+            # if self.plot_cl:
+            #     cl_data = data[['ParameterSetRank', 'ConfidenceLevel',
+            #                     'ParameterOfInterestValue']]
+            #     cl_data = cl_data.drop_duplicates()
+            #     seaborn.tsplot(data=cl_data,
+            #                    time='ParameterOfInterestValue',
+            #                    value='ConfidenceLevel',
+            #                    unit='ParameterSetRank',
+            #                    color='green', linestyle='--',
+            #                    estimator=self.estimator,
+            #                    err_style=self.err_style,
+            #                    n_boot=self.n_boot,
+            #                    ci=self.ci_band_level)
+            #
+            # seaborn.color_palette('husl', 8)
+            # seaborn.tsplot(data=data,
+            #                time='ParameterOfInterestValue',
+            #                value='Value',
+            #                condition='YParameter',
+            #                unit='ParameterSetRank',
+            #                estimator=self.estimator,
+            #                err_style=self.err_style,
+            #                n_boot=self.n_boot,
+            #                ci=self.ci_band_level,
+            #                color=seaborn.color_palette(self.color_palette, len(self.y))
+            #                )
+            # plt.title(self.title)
+            # if self.ylabel != None:
+            #     plt.ylabel(self.ylabel)
+            # if self.xlabel != None:
+            #     plt.xlabel(self.x_label)
+            #
+            # if self.legend_location != None:
+            #     plt.legend(loc=self.legend_location)
+            #
+            # if self.savefig:
+            #     #            save_dir = os.path.join(self['results_directory'], 'ProfileLikelihood')
+            #     if os.path.isdir(self.results_directory) != True:
+            #         os.makedirs(self.results_directory)
+            #     os.chdir(self.results_directory)
+            #     fle = os.path.join(self.results_directory, '{}Vs{}.jpeg'.format(self.x, self.y))
+            #     plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
+            #     LOG.info('figure saved to --> {}'.format())
+            #
+            # if self.show:
+            #     plt.show()
 
 @mixin(tasks.UpdatePropertiesMixin)
 @mixin(ParseMixin)

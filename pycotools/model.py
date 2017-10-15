@@ -2822,6 +2822,17 @@ class LocalParameter(object):
         )
         return model_parameter_group
 
+    def get_reaction(self):
+        """
+        get the reaction object from which
+        parameter comes from
+        :return:
+            :py:class:`Reaction`
+        """
+        reaction = self.model.get('reaction', self.reaction_name, 'name')
+        if reaction == []:
+            raise errors.SomethingWentHorriblyWrongError('Reaction not in model')
+        return reaction
 
 @mixin(ReadModelMixin)
 class KeyFactory(object):

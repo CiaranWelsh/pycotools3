@@ -844,7 +844,7 @@ class Reports(object):
         if self.quantity_type not in ['concentration','particle_number']:
             raise errors.InputError('{} not concentration or particle_number'.format(self.quantity_type))
 
-        self.report_types=[None,'profilelikelihood', 'profilelikelihood2',
+        self.report_types=[None,'profile_likelihood', 'profilelikelihood2',
                            'time_course','parameter_estimation', 'multi_parameter_estimation']
         assert self.report_type in self.report_types,'valid report types include {}'.format(self.report_types)
 
@@ -853,11 +853,11 @@ class Reports(object):
 
 
         if self.report_name == None:
-            if self.report_type == 'profilelikelihood':
+            if self.report_type == 'profile_likelihood':
                 default_report_name='profilelikelihood.txt'
 
-            elif self.report_type=='profilelikelihood2':
-                default_report_name='profilelikelihood2.txt'
+            elif self.report_type=='profile_likelihood2':
+                default_report_name='profile_likelihood2.txt'
 
             elif self.report_type == 'time_course':
                 default_report_name='time_course.txt'
@@ -1034,15 +1034,15 @@ class Reports(object):
         keys=[]
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
             keys.append(i.attrib['key'])
-            if i.attrib['name']=='profilelikelihood':
-                self.model = self.remove_report('profilelikelihood')
+            if i.attrib['name']=='profile_likelihood':
+                self.model = self.remove_report('profile_likelihood')
 
         new_key='Report_31'
         while new_key in keys:
             new_key='Report_{}'.format(numpy.random.randint(30,100))
         report_attributes = {'precision': '6',
                              'separator': '\t',
-                             'name': 'profilelikelihood',
+                             'name': 'profile_likelihood',
                              'key': new_key,
                              'taskType': 'Scan'}
 
@@ -1051,15 +1051,20 @@ class Reports(object):
         report.attrib.update(report_attributes)
 
         comment=etree.SubElement(report, 'Comment')
-        table=etree.SubElement(report,'Table')
+        table=etree.SubElement(report, 'Table')
         table.attrib['printTitle']=str(1)
+        LOG.debug('variable --> {}'.format(self.variable))
         if self.variable.name in [i.name for i in self.metabolites]:
             cn = '{},{}'.format( self.model.reference, self.variable.initial_reference)
+
         elif self.variable.name in [i.name for i in self.global_quantities]:
             cn = '{},{}'.format(self.model.reference, self.variable.initial_reference)
+
         elif self.variable.name in [i.name for i in self.local_parameters]:
-            cn = '{},{}'.format(self.model.reference, self.variable.reference)
+            cn = '{},{},{}'.format(self.model.reference, self.variable.get_reaction().reference, self.variable.reference)
+
         etree.SubElement(table,'Object',attrib={'cn': cn})
+        etree.SubElement(table,'Object',attrib={'cn':"CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"})
         etree.SubElement(table,'Object',attrib={'cn': "CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"})
         return self.model
 
@@ -1149,7 +1154,7 @@ class Reports(object):
         elif self.report_type  == 'multi_parameter_estimation':
             self.model =self.multi_parameter_estimation()
 
-        elif self.report_type == 'profilelikelihood':
+        elif self.report_type == 'profile_likelihood':
             self.model = self.profile_likelihood()
 
         elif self.report_type == 'time_course':
@@ -1839,7 +1844,7 @@ class Scan(object):
                                    'confirm_overwrite': False,
                                    'update_model': False,
                                    'subtask': 'parameter_estimation',
-                                   'report_type': 'profilelikelihood',
+                                   'report_type': 'profile_likelihood',
                                    'output_in_subtask': False,
                                    'adjust_initial_conditions': False,
                                    'number_of_steps': 10,
@@ -4809,7 +4814,7 @@ class ProfileLikelihood(object):
             variable=parameter,
             number_of_steps=self.intervals,
             subtask='parameter_estimation',
-            report_type='multi_parameter_estimation',
+            report_type='profile_likelihood',
             report_name=report,
             run=False,
             append=self.append,
