@@ -98,11 +98,11 @@ class GetModelVariableFromStringMixin(Mixin):
                 assignments = m.get(
                     'local_parameter', 'assignment', by='simulation_type'
                 )
-                raise errors.InputError('Variable {} is not in model. '
+                raise errors.InputError('Variable "{}" is not in model. '
                                         'These are your model variables: '
                                         '{} and these are local_parameters '
                                         'with global_quantities assigned '
-                                        'to them: {}'.format(v, m.all_variable_names,
+                                        'to them: "{}"'.format(v, m.all_variable_names,
                                                              [i.global_name for i in assignments]))
         assert isinstance(v, str) != True
         return v
@@ -1062,7 +1062,7 @@ class Reports(object):
             cn = '{},{}'.format(self.model.reference, self.variable.initial_reference)
 
         elif self.variable.name in [i.name for i in self.local_parameters]:
-            cn = '{},{},{}'.format(self.model.reference, self.variable.get_reaction().reference, self.variable.reference)
+            cn = '{},{},{}'.format(self.model.reference, self.variable.get_reaction().reference, self.variable.value_reference)
 
         etree.SubElement(table,'Object',attrib={'cn': cn})
         etree.SubElement(table,'Object',attrib={'cn':"CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"})
@@ -1196,8 +1196,7 @@ class Reports(object):
         return self.model
 
 
-
-# @mixin(GetModelVariableFromStringMixin)
+@mixin(GetModelVariableFromStringMixin)
 @mixin(UpdatePropertiesMixin)
 @mixin(Bool2Numeric)
 @mixin(model.ReadModelMixin)
@@ -1286,17 +1285,30 @@ class TimeCourse(object):
         if os.path.isabs(self.report_name)!=True:
             self.report_name = os.path.join(os.path.dirname(self.model.copasi_file), self.report_name)
 
+        if not isinstance(self.metabolites, list):
+            self.metabolites = [self.metabolites]
+
+        if not isinstance(self.global_quantities, list):
+            self.global_quantities = [self.global_quantities]
+
         for metab in range(len(self.metabolites)):
             if isinstance(self.metabolites[metab], str):
                 self.metabolites[metab] = self.get_variable_from_string(
                     self.model, self.metabolites[metab]
                 )
 
+        glo_list = []
         for glo in range(len(self.global_quantities)):
             if isinstance(self.global_quantities[glo], str):
-                self.global_quantities[glo] = self.get_variable_from_string(
+                glo_list.append(self.get_variable_from_string(
                     self.model, self.global_quantities[glo]
+                    )
                 )
+            else:
+                glo_list.append(self.global_quantities[glo])
+
+        self.global_quantities = glo_list
+
 
     def __str__(self):
         return "TimeCourse(method={}, end={}, intervals={}, step_size={})".format(
@@ -4381,7 +4393,7 @@ class ProfileLikelihood(object):
         self.model = self.set_PE_method()
         self.index_dct, self.parameters = self.insert_parameters()
         self.model_dct = self.copy_model()
-        self.model_dct = self.setup_report()
+        # self.model_dct = self.setup_report()
         self.model_dct = self.setup_parameter_estimation()
 
         self.model_dct = self.setup_scan()
@@ -4773,17 +4785,17 @@ class ProfileLikelihood(object):
 
         return self.model_dct
 
-    def setup_report(self):
-        for model in self.model_dct:
-            for param in self.model_dct[model]:
-                st = misc.RemoveNonAscii(param).filter
-                self.model_dct[model][param] = Reports(
-                    self.model_dct[model][param],
-                    report_type='multi_parameter_estimation',
-                    report_name=st + '.txt'
-                ).model
-                self.model_dct[model][param].save()
-        return self.model_dct
+    # def setup_report(self):
+    #     for model in self.model_dct:
+    #         for param in self.model_dct[model]:
+    #             st = misc.RemoveNonAscii(param).filter
+    #             self.model_dct[model][param] = Reports(
+    #                 self.model_dct[model][param],
+    #                 report_type='multi_parameter_estimation',
+    #                 report_name=st + '.txt'
+    #             ).model
+    #             self.model_dct[model][param].save()
+    #     return self.model_dct
 
     def to_file(self):
         """

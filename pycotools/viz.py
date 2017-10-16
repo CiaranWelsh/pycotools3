@@ -424,8 +424,6 @@ class Parse(object):
                     'plotting functions are only available for scans (not repeat or random distributions)'
                 )
 
-        LOG.debug('type --> {}'.format(self.cls_instance))
-        LOG.debug('type --> {}'.format(isinstance(self.cls_instance, tasks.ProfileLikelihood)))
         self.data = self.parse()
 
 
@@ -436,8 +434,6 @@ class Parse(object):
         parsing the data type
         :return:
         """
-        LOG.debug('type --> {}'.format(type(self.cls_instance)))
-        LOG.debug(' --> {}'.format(self.cls_instance))
         data = None
 
         if isinstance(self.cls_instance, tasks.TimeCourse):
@@ -458,10 +454,12 @@ class Parse(object):
         elif type(self.cls_instance == str):
             data = self.from_folder()
 
-
         if self.log10:
-            data = numpy.log10(data)
-            return data
+            if not type(self.cls_instance) == tasks.ProfileLikelihood:
+                data = math.log10(data)
+                return data
+            else:
+                return data
         else:
             return data
 
@@ -669,19 +667,34 @@ class Parse(object):
             results_dirs = {}
             fit_item_order_dirs = {}
             param_of_interest_dict = {}
+
+            ## iterate over models in ProfileLikelihood task
             for model in self.cls_instance.model_dct:
+
+                ## create dict's for collection of results
                 results_dirs[model] = {}
                 fit_item_order_dirs[model] = {}
                 param_of_interest_dict[model] = {}
+
+                ## iterate over parameters in models
                 for param in self.cls_instance.model_dct[model]:
+
+                    ## get the copasi file from that model
                     copasi_file = self.cls_instance.model_dct[model][param].copasi_file
-                    # print os.path.split(copasi_file)
+
+                    ## infer the results file from copasi file
                     results_file = os.path.splitext(copasi_file)[0]+'.csv'
+
+                    ## ensure it exists
                     if not os.path.isfile(results_file):
                         raise errors.InputError('file does not exist: "{}"'.format(results_file))
+
+                    ## assign to dict
                     results_dirs[model][param] = results_file
+
+                    ## collect fit items
                     fit_item_order_dirs[model][param] = self.cls_instance.model_dct[model][param].fit_item_order
-                    fit_item_order_dirs[model][param] = self.cls_instance.model_dct[model][param].fit_item_order
+
             return results_dirs, fit_item_order_dirs
 
         def experiment_files_in_use(mod):
@@ -789,25 +802,38 @@ class Parse(object):
             for index in results_dict:
                 res[index] = {}
                 for param in results_dict[index]:
-                    LOG.debug('res --> {}'.format(results_dict[index][param]))
                     df = pandas.read_csv(results_dict[index][param],
-                                              sep='\t', skiprows=1, header=None)
-                    LOG.debug('df --> \n\n{}'.format(df))
+                                         sep='\t', skiprows=1, header=None)
                     bracket_indices = [1, -2]
                     df = df.drop(df.columns[bracket_indices], axis=1)
-                    fit_items = [param] + fit_item_order_dict[index][param] + ['RSS']
-                    # print fit_items
-                    df.columns = fit_items
-                    df['Parameter Of Interest'] = param
+                    df.columns = range(len(df.columns))
+                    items = ['Parameter Of Interest Value'] + fit_item_order_dict[index][param] + ['RSS']
+                    df.columns = items
+                    # print numpy.log10(df['Parameter Of Interest Value'])
+                    if self.log10:
+                        df_list2 = []
+                        for key in df.keys():
+                            l = []
+                            for i in range(df[key].shape[0]):
+                                l.append(numpy.log10(df[key].iloc[i]))
+                            df_list2.append(pandas.DataFrame(l, columns=[key]))
+                        df = pandas.concat(df_list2, axis=1)
                     CL = confidence_level(self.cls_instance, alpha=0.95)
                     if self.log10:
                         df['Best Parameter Value'] = math.log10(float(self.cls_instance.parameters[index][param]))
+                        df['Best RSS Value'] = math.log10(float(self.cls_instance.parameters[index]['RSS']))
                         CL[index] = math.log10(CL[index])
+                        # df['Parameter Of Interest Value'] = math.log10(df['Parameter Of Interest Value'])
+                        # df = math.log10(df)
                     else:
                         df['Best Parameter Value'] = float(self.cls_instance.parameters[index][param])
+                        df['Best RSS Value'] = float(self.cls_instance.parameters[index]['RSS'])
                     df['Confidence Level'] = CL[index]
                     df['Best Fit Index'] = index
-                    df = df.set_index(['Best Fit Index', 'Parameter Of Interest', 'Confidence Level', 'Best Parameter Value'], drop=True)
+                    df['Parameter Of Interest'] = param
+                    df = df.set_index(['Parameter Of Interest', 'Best Fit Index', 'Confidence Level',
+                                       'Best Parameter Value', 'Best RSS Value',
+                                       'Parameter Of Interest Value'], drop=True)
                     df_list.append(df)
             df = pandas.concat(df_list)
             return df
@@ -2757,6 +2783,7 @@ class PlotProfileLikelihood(object):
 
         self.default_properties = {'x': None,
                                    'y': None,
+                                   'index': None,
                                    'log10': True,
                                    'estimator': numpy.mean,
                                    'n_boot': 10000,
@@ -2770,9 +2797,10 @@ class PlotProfileLikelihood(object):
                                    'xlabel': None,
                                    'ylabel': None,
                                    'color_palette': 'bright',
+                                   'legend': False,
                                    'legend_location': None,
                                    'show': False,
-
+                                   'separate': True,
                                    }
 
         for i in kwargs.keys():
@@ -2787,7 +2815,7 @@ class PlotProfileLikelihood(object):
         ## do some checks
         self._do_checks()
 
-        ## do plotting
+        # ## do plotting
         self.plot()
 
     def _do_checks(self):
@@ -2795,6 +2823,16 @@ class PlotProfileLikelihood(object):
             raise errors.InputError('{} should be a dataframe. Parse data with ParsePEData first.'.format(self.data))
 
         self.parameter_list = sorted(list(self.data.columns))
+
+        if self.separate == False:
+
+            self.legend = True
+
+        if self.index is None:
+            self.index = 0
+
+        if not isinstance(self.index, list):
+            self.index = [self.index]
 
         if self.x == None:
             raise errors.InputError('x cannot be None')
@@ -2804,6 +2842,7 @@ class PlotProfileLikelihood(object):
 
         if self.y == None:
             raise errors.InputError('y cannot be None')
+
 
         if self.x not in self.parameter_list:
             raise errors.InputError('{} not in {}'.format(self.x, self.parameter_list))
@@ -2848,11 +2887,104 @@ class PlotProfileLikelihood(object):
             )
             return None
 
+        x_data = self.data.loc[self.x]
+        for i in self.index:
+            if not self.separate:
+                plt.figure()
+            for y in self.y:
+                y_data = x_data.loc[i][self.y]
+                plot_data = y_data.reset_index()
+                if self.separate:
+                    plt.figure()
+                plt.plot(plot_data['Parameter Of Interest Value'],
+                         plot_data[y], label=y)
+
+                print plot_data
+                plt.plot(plot_data['Parameter Of Interest Value'],
+                         plot_data['Confidence Level'], linewidth=3,
+                         linestyle='--', color='green', label='95% CL')
+                if y == 'RSS':
+                    best_rss = list(set(plot_data['Best RSS Value']))
+                    best_param_val = list(set(plot_data['Best Parameter Value']))
+                    plt.plot(best_param_val, best_rss, 'ro', linewidth=5)
+            plt.legend()
+            plt.show()
+
+
+
+
+
+
+
+
+
+            # if label == self.x:
+            #     y_data = df[self.y]
+            #     for y_param in y_data.keys():
+            #         print y_data[y_param]
+
+
+
+
+
+
+
+
+
+
+                # for y_param in self.y:
+                #     plot_data = df[y_param]
+                #     plot_data = pandas.DataFrame(plot_data)
+                #     plot_data = plot_data.reset_index()
+                #     plt.figure()
+                #     plot_data = plot_data.sort_values(by=['Best Fit Index', 'Parameter Of Interest Value'])
+                #     print plot_data
+                #     # seaborn.tsplot(data=plot_data, value=y_param,
+                #     #                time='Parameter Of Interest Value',
+                #     #                unit='Best Fit Index')
+                #     # plt.show()
+                # plot_data = pandas.DataFrame(plot_data.stack(), columns=['y_values'])
+                # plot_data = plot_data.reset_index()
+                # # plot_data = plot_data.dropna(axis=1)
+                # plot_data = plot_data.rename(columns={'level_5': 'Y Parameters'})
+                # plot_data = plot_data.sort_values(by=['Best Fit Index',
+                #                                       'Y Parameters',
+                #                                       'Parameter Of Interest Value'])
+                # plot_cols = ['Parameter Of Interest Value', 'Best Fit Index',
+                #              'Y Parameters', 'y_values']
+                #
+                # cl_cols = ['Best Fit Index', 'Parameter Of Interest Value', 'Confidence Level']
+                #
+                # # print plot_data
+                # cl_data = plot_data[cl_cols]
+                # plot_data = plot_data[plot_cols]
+                #
+                # print seaborn.algorithms.bootstrap()
+
+                # print plot_data
+                # seaborn.tsplot(data=plot_data, unit='Best Fit Index',
+                #                time='Parameter Of Interest Value',
+                #                value='Confidence Level')
+                # plt.show()
+
+                # for y_param in plot_data['Y Parameters'].unique():
+                #     plot_data2 = plot_data[plot_data['Y Parameters'] == y_param]
+                #     seaborn.tsplot(data=plot_data2, time='Parameter Of Interest Value',
+                #                    unit='Best Fit Index', value='y_values')
+                #     plt.show()
+
+                # plt.figure()
+                # plot_data = plot_data.reset_index(drop=True)
+                # print plot_data#.to_csv('/home/b3053674/Documents/Models/2017/10_Oct/Smad7ZiModels2/Fit3Dir/smad7_not_reproduced/ProfileLikelihoods/ProfileLikelihoods/data.csv')
+                # seaborn.tsplot(data=cl_data, time='Parameter Of Interest Value',
+                #                unit='Best Fit Index', condition='Y Parameters',
+                #                value='Confidence Level', estimator=numpy.mean)
+                # plt.show()
         ## get x data
         # data = self.data.reset_index()
         # x_data = self.data[self.x]
         # print x_data
-        self.data.to_csv('/home/b3053674/Documents/Models/2017/10_Oct/Smad7ZiModels2/PL/data.csv')
+        # self.data.to_csv('/home/b3053674/Documents/Models/2017/10_Oct/Smad7ZiModels2/PL/data.csv')
         # x_data = pandas.DataFrame(self.data[self.x])
 
         # for label, df in self.data.groupby(level=[1]):
