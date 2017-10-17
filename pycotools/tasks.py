@@ -354,7 +354,9 @@ class Run(object):
 
         self.default_properties = {'task': 'time_course',
                                    'mode': True,
-                                   'sge_job_filename': None}
+                                   'sge_job_filename': None,
+                                   'copasi_location': 'apps/COPASI/4.21.166-Linux-64bit', #for sge mode
+                                   }
 
         self.default_properties.update(self.kwargs)
         self.convert_bool_to_numeric(self.default_properties)
@@ -457,7 +459,7 @@ class Run(object):
         ##TODO find better solution for running copasi files on linux
         os.system('CopasiSE "{}"'.format(self.model.copasi_file))
 
-    def submit_copasi_job_SGE(self, copasi_location='apps/COPASI/4.19.140-Linux-64bit'):
+    def submit_copasi_job_SGE(self, ):
         """
         Submit copasi file as job to SGE based job scheduler.
         :param copasi_location:
@@ -468,7 +470,7 @@ class Run(object):
         """
         with open(self.sge_job_filename, 'w') as f:
             f.write('#!/bin/bash\n#$ -V -cwd\nmodule add {}\nCopasiSE "{}"'.format(
-                copasi_location, self.model.copasi_file
+                self.copasi_location, self.model.copasi_file
             )
         )
 

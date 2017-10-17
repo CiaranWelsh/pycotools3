@@ -456,7 +456,7 @@ class Parse(object):
 
         if self.log10:
             if not type(self.cls_instance) == tasks.ProfileLikelihood:
-                data = math.log10(data)
+                data = numpy.log10(data)
                 return data
             else:
                 return data
@@ -1123,6 +1123,8 @@ class PlotTimeCourseEnsemble(object):
                    'xlabel': None,
                    'run_mode': True,
                    'copasi_file': None,
+                   'despine': True,
+                   'ext': 'png'
                    }
 
         for i in kwargs.keys():
@@ -1323,6 +1325,8 @@ class PlotTimeCourseEnsemble(object):
                     exp_patch = mpatches.Patch(color=self.exp_color, label='Exp', alpha=0.4)
                     plt.legend(handles=[sim_patch, exp_patch], loc=(1, 0.5))
 
+                if self.despine:
+                    seaborn.despine(ax=ax1, top=True, right=True)
 
                 if self.title is None:
                     plt.title('{} (n={})'.format(parameter, self.data.shape[0]))
@@ -1344,7 +1348,8 @@ class PlotTimeCourseEnsemble(object):
 
                 if self.savefig:
                     self.results_directory = self.create_directory()
-                    fname = os.path.join(self.results_directory, '{}.png'.format(misc.RemoveNonAscii(parameter).filter))
+                    fname = os.path.join(self.results_directory, '{}.{}'.format(
+                        misc.RemoveNonAscii(parameter).filter, self.ext))
                     plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
         if self.show:
             plt.show()
@@ -1373,7 +1378,7 @@ class PlotScan(object):
             'ylabel': None,
             'show': False,
             'filename': None,
-            'dpi': 300,
+            'dpi': 400,
         }
 
         for i in kwargs.keys():
@@ -1442,7 +1447,7 @@ class PlotParameterEstimation(PlotKwargs):
             'ylabel': None,
             'show': False,
             'filename': None,
-            'dpi': 300,
+            'dpi': 400,
             'log10': False,
         }
         self.default_properties.update(self.plot_kwargs)
@@ -1633,8 +1638,11 @@ class Boxplots(PlotKwargs):
                                    'title': 'Parameter Distributions',
                                    'savefig': False,
                                    'results_directory': None,
-                                   'dpi': 300,
-                                   'show': False}
+                                   'dpi': 400,
+                                   'show': False,
+                                   'despine': True,
+                                   'ext': 'png'
+                                   }
         self.default_properties.update(self.plot_kwargs)
         for i in kwargs.keys():
             assert i in self.default_properties.keys(),'{} is not a keyword argument for Boxplot'.format(i)
@@ -1675,16 +1683,19 @@ class Boxplots(PlotKwargs):
 
         labels = self.divide_data()
         for label_set in range(len(labels)):
-            plt.figure()#
+            fig = plt.figure()#
             data = self.data[labels[label_set]]
             seaborn.boxplot(data=data )
             plt.xticks(rotation=self.xtick_rotation)
-            plt.title(self.title+'(n={})'.format(data.shape[0]))
+            if self.despine:
+                seaborn.despine(fig=fig, top=True, right=True)
+            if self.title is not None:
+                plt.title(self.title+'(n={})'.format(data.shape[0]))
             plt.ylabel(self.ylabel)
             if self.savefig:
                 self.results_directory = self.create_directory()
                 fle = os.path.join(self.results_directory,
-                                   'Boxplot{}.png'.format(label_set))
+                                   'Boxplot{}.{}'.format(label_set, self.ext))
                 plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
         if self.show:
             plt.show()
@@ -1738,13 +1749,17 @@ class RssVsIterations(PlotKwargs):
         self.default_properties = {'log10': False,
                                    'truncate_mode': 'percent',
                                    'theta': 100,
-                                   'xtick_rotation': 'vertical',
-                                   'ylabel': 'Estimated Parameter\n Value(Log10)',
+                                   'xtick_rotation': 'horizontal',
+                                   'ylabel': None,
                                    'title': 'Rss Vs Iterations',
                                    'savefig': False,
                                    'results_directory': None,
-                                   'dpi': 300,
-                                   'show': False}
+                                   'dpi': 400,
+                                   'show': False,
+                                   'filename': 'RssVsIterations.pdf',
+                                   'despine': True,
+                                   'ext': 'png'
+                                   }
 
         self.default_properties.update(self.plot_kwargs)
         for i in kwargs.keys():
@@ -1763,7 +1778,10 @@ class RssVsIterations(PlotKwargs):
 
         :return:
         """
-        pass
+        if self.log10:
+            self.ylabel = 'RSS (Log10)'
+        else:
+            self.ylabel = 'RSS'
 
 
     def create_directory(self):
@@ -1789,17 +1807,20 @@ class RssVsIterations(PlotKwargs):
             None
         """
             
-        plt.figure()
+        fig = plt.figure()
         plt.plot(range(self.data['RSS'].shape[0]),
                  self.data['RSS'].sort_values(ascending=True),
                  marker='o')
         plt.xticks(rotation=self.xtick_rotation)
-        plt.title(self.title+'(n={})'.format(self.data.shape[0]))
+        if self.title is not None:
+            plt.title(self.title+'(n={})'.format(self.data.shape[0]))
         plt.ylabel(self.ylabel)
         plt.xlabel('Rank of Best Fit')
+        if self.despine:
+            seaborn.despine(fig=fig, top=True, right=True)
         if self.savefig:
             self.results_directory = self.create_directory()
-            fle = os.path.join(self.results_directory, 'RssVsIterations.png')
+            fle = os.path.join(self.results_directory, 'RssVsIterations.{}'.fromat(self.ext))
             plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
 
         if self.show:
@@ -1847,7 +1868,7 @@ class Pca(PlotKwargs):
                                  'title': None,
                                  'savefig': False,
                                  'results_directory': None,
-                                 'dpi': 300,
+                                 'dpi': 400,
                                  'n_components': 2,
                                  'by': 'parameters', ##iterations or parameters
                                  'legend_position': None, ##Horizontal, verticle, line spacing
@@ -1856,6 +1877,8 @@ class Pca(PlotKwargs):
                                  'annotate': False,
                                  'annotation_fontsize': 25,
                                  'show': False,
+                                 'despine': True,
+                                 'ext': 'png'
                                  }
 
 
@@ -1895,7 +1918,11 @@ class Pca(PlotKwargs):
         varify integrity of user input
         :return:
         """
-
+        if self.title is None:
+            if self.by is 'parameters':
+                title = 'PCA by Parameters (n={})'.format(len(labels))
+            elif self.by is 'iterations':
+                title = 'PCA by Iterations (n={})'.format(len(labels))
 
         if self.by not in ['parameters','iterations']:
             raise errors.InputError('{} not in {}'.format(
@@ -1926,7 +1953,7 @@ class Pca(PlotKwargs):
         LOG.info('plotting PCA {}'.format(self.by))
         
         if self.by == 'parameters':
-            self.annotate=True
+            self.annotate = True
             if self.legend_position==None:
                 LOG.critical(
                     'When data reduction is by \'parameters\' you should specify an argument to legend_position. i.e. legend_position=(10,10,1.5) for horizontal, vertical and linespacing')
@@ -1944,7 +1971,6 @@ class Pca(PlotKwargs):
             projected = pca.fit(self.data.transpose()).transform(self.data.transpose())
             projected = pandas.DataFrame(projected, index=self.data.columns)
             labels = self.data.columns
-            title = 'PCA by Parameters (n={})'.format(len(labels))
             sc = ax.scatter(projected[0], projected[1])
 
 
@@ -1952,16 +1978,17 @@ class Pca(PlotKwargs):
             projected = pca.fit(self.data).transform(self.data)
             projected = pandas.DataFrame(projected, index=self.data.index)
             labels = list(self.data.index)
-            title = 'PCA by Iterations (n={})'.format(len(labels))
             projected = pandas.concat([rss, projected], axis=1)
             sc = ax.scatter(projected[0], projected[1], c=projected['RSS'], cmap=self.cmap)
             cb = plt.colorbar(sc)
             cb.ax.set_title('RSS')
-            
+
+        if self.despine:
+            seaborn.despine(fig=fig, top=True, right=True)
             
         plt.ylabel(self.ylabel)
         plt.xlabel(self.xlabel)
-        plt.title(title)
+        plt.title(self.title)
         #TODO connect copasi with the python community
         #TODO mjor selling point for pycoools.
         #TODO interafce with pysces, pyDStools and sloppycell
@@ -2008,11 +2035,19 @@ class Histograms(PlotKwargs):
                                    'theta': 100,
                                    'xtick_rotation': 'horizontal',
                                    'ylabel': 'Frequency',
+                                   'title': True, ##boolean here as title is inferred from parameter
                                    'savefig': False,
                                    'results_directory': None,
-                                   'dpi': 300,
+                                   'dpi': 400,
                                    'title_fontsize': 35,
-                                   'show': False}
+                                   'show': False,
+                                   'despine': True,
+                                   'ext': 'png',
+                                   'color': 'green',
+                                   'hist': True,
+                                   'kde': True,
+                                   'rug': False
+                                   }
 
         self.default_properties.update(self.plot_kwargs)
         for i in kwargs.keys():
@@ -2026,8 +2061,8 @@ class Histograms(PlotKwargs):
         self.data = self.parse(self.cls, log10=self.log10)
         self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
         LOG.info('plotting histograms')
-        # self.plot()
-        self.coloured_plot()
+        self.plot()
+        # self.coloured_plot()
 
 
     def _do_checks(self):
@@ -2048,14 +2083,18 @@ class Histograms(PlotKwargs):
         """
         for parameter in self.data.keys():
             plt.figure()
-            seaborn.distplot(self.data[parameter])
+            seaborn.distplot(
+                self.data[parameter], color=self.color, kde=self.kde, rug=self.rug,
+                hist=self.hist
+                )
             plt.ylabel(self.ylabel)
-            plt.title('{},n={}'.format(parameter, self.data[parameter].shape[0]),
+            if self.title is True:
+                plt.title('{},n={}'.format(parameter, self.data[parameter].shape[0]),
                       fontsize=self.title_fontsize)
             if self.savefig:
                 self.create_directory(self.results_directory)
                 fname = os.path.join(self.results_directory,
-                                     misc.RemoveNonAscii(parameter).filter+'.png')
+                                     misc.RemoveNonAscii(parameter).filter+'.{}'.format(self.ext))
                 plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
 
     def coloured_plot(self):
@@ -2158,9 +2197,14 @@ class Scatters(PlotKwargs):
             'ylabel': 'Frequency',
             'savefig': False,
             'results_directory': None,
-            'dpi': 300,
+            'dpi': 400,
             'title_fontsize': 35,
-            'show': False}
+            'title': True,  #Either True or None/False
+            'show': False,
+            'ext': 'png',
+            'despine': True,
+            'color_bar_pad': 0.1,   #padding for color bar. Dist between bar and axes
+        }
 
         self.default_properties.update(self.plot_kwargs)
         for i in kwargs.keys():
@@ -2206,12 +2250,18 @@ class Scatters(PlotKwargs):
                     )
                 )
                 LOG.info('Plotting "{}" Vs "{}"'.format(x_var, y_var))
-                plt.figure()
+                fig = plt.figure()
                 plt.scatter(
                     self.data[x_var], self.data[y_var],
                     cmap=self.cmap, c=self.data['RSS'],
                 )
-                cb = plt.colorbar()
+                cb = plt.colorbar(pad=self.color_bar_pad)
+
+                if self.title:
+                    title = 'Scatter graph of\n {} Vs {}.(n={})'.format(
+                        x_var, y_var, self.data.shape[0]
+                        )
+
                 if self.log10:
                     cb.set_label('log10(RSS)')
                     plt.xlabel("log10({})".format(x_var))
@@ -2220,14 +2270,15 @@ class Scatters(PlotKwargs):
                     cb.set_label('RSS')
                     plt.xlabel(x_var)
                     plt.ylabel(y_var)
-                plt.title('Scatter graph of\n {} Vs {}.(n={})'.format(
-                    x_var, y_var, self.data.shape[0]
-                    )
-                )
+
+                if self.despine:
+                    seaborn.despine(fig=fig, top=True, right=True)
+
+
                 if self.savefig:
                     x_dir = os.path.join(self.results_directory, x_var)
                     self.create_directory(x_dir)
-                    fle = os.path.join(x_dir, '{}.png'.format(y_var))
+                    fle = os.path.join(x_dir, '{}.{}'.format(y_var, self.ext))
                     plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
 
         if self.show:
@@ -2277,13 +2328,17 @@ class LinearRegression(PlotKwargs):
             'theta': 100,
             'xtick_rotation': 'horizontal',
             'ylabel': 'Frequency',
+            'scores_title': None,
+            'coef_title': None,
             'savefig': False,
             'results_directory': None,
-            'dpi': 300,
+            'dpi': 400,
             'title_fontsize': 35,
             'show': False,
             'n_alphas': 100,
-            'max_iter': 20000
+            'max_iter': 20000,
+            'ext': 'png',
+            'despine':True,
         }
 
         self.default_properties.update(self.plot_kwargs)
@@ -2312,6 +2367,22 @@ class LinearRegression(PlotKwargs):
         """
         if self.results_directory is None:
             self.results_directory = os.path.join(self.cls.model.root, 'LinearRegression')
+
+        if self.scores_title is None:
+            pass
+        if self.log10:
+            self.scores_title = 'Model Fitting Test and Train Scores (Log10)'
+
+        else:
+            self.scores_title = 'Model Fitting Test and Train Scores'
+
+
+        if self.coef_title is None:
+            if self.log10:
+                self.coef_title = 'Coefficients (Log10)'
+            else:
+                self.coef_title = 'Coefficients'
+
 
 
     def compute1coef(self, parameter):
@@ -2351,24 +2422,27 @@ class LinearRegression(PlotKwargs):
         """
 
         """
-        plt.figure()
+        fig = plt.figure()
         seaborn.heatmap(self.scores)
-        plt.title('Model Fitting Test and Train Scores'+'(n={})'.format(self.data.shape[0]),
-                  fontsize=self.title_fontsize)
+        if self.despine:
+            seaborn.despine(fig=fig, top=True, right=True)
+
+        plt.title(self.scores_title, fontsize=self.title_fontsize)
         if self.savefig:
-            save_dir = os.path.join(self.results_directory, 'LinearRegression')
             self.create_directory(self.results_directory)
-            fname = os.path.join(self.results_directory, 'linregress_scores.png')
+            fname = os.path.join(self.results_directory, 'linregress_scores.{}'.format(self.ext))
             plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
 
 
     def plot_rss(self):
-        plt.figure()
+        fig = plt.figure()
         seaborn.heatmap(self.coef.RSS.sort_values(by='RSS', ascending=False))
         plt.title('Lasso Regression \n(Y=RSS) (n={})'.format(self.data.shape[0]), fontsize=self.title_fontsize)
+        if self.despine:
+            seaborn.despine(fig=fig, top=True, right=True)
         if self.savefig:
             self.create_directory(self.results_directory)
-            fname = os.path.join(self.results_directory, 'linregress_RSS.png')
+            fname = os.path.join(self.results_directory, 'linregress_RSS.{}'.format(self.ext))
             plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
 
 
@@ -2377,15 +2451,19 @@ class LinearRegression(PlotKwargs):
 
         :return:
         """
+        self.coef.columns = self.coef.columns.droplevel(0)
         self.coef = self.coef.drop('RSS', axis=1)
         self.coef = self.coef.drop('RSS', axis=0)
-        plt.figure()
-        seaborn.heatmap(self.coef)
-        plt.title('Coefficient Heatmap',fontsize=self.title_fontsize)
+        fig = plt.figure()
+        seaborn.heatmap(self.coef, cbar_kws={'pad': 0.2})
+        if self.despine:
+            seaborn.despine(fig=fig, top=True, right=True)
+
+        plt.title(self.coef_title)
         plt.xlabel('')
         if self.savefig:
             self.create_directory(self.results_directory)
-            fname = os.path.join(self.results_directory, 'linregress_parameters.png')
+            fname = os.path.join(self.results_directory, 'linregress_parameters.{}'.format(self.ext))
             plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
 
 
@@ -2402,7 +2480,8 @@ class ModelSelection(object):
     """
 
     def __init__(self, multi_model_fit, savefig=False,
-                 dpi=300, log10=False, filename=None, pickle=None):
+                 dpi=400, log10=False, filename=None, pickle=None,
+                 despine=True, ext='png', title=True):
         """
 
         :param multi_model_fit:
@@ -2422,6 +2501,9 @@ class ModelSelection(object):
         self.log10 = log10
         self.filename = filename
         self.pickle = pickle
+        self.ext = ext
+        self.despine = despine
+        self.title = title
         self._do_checks()
 
         ## do model selection stuff
@@ -2432,8 +2514,9 @@ class ModelSelection(object):
         self.number_observations = self._get_n()
         self.model_selection_data = self.calculate_model_selection_criteria()
 
-        self.to_csv(self.filename)
         self.boxplot()
+        self.histogram()
+
 
     def __iter__(self):
         for MPE in self.multi_model_fit:
@@ -2635,18 +2718,21 @@ class ModelSelection(object):
                                     'level_1': 'Metric',
                                     0: 'Score'})
         for metric in data['Metric'].unique():
-            plt.figure()
+            fig = plt.figure()
             seaborn.boxplot(data=data[data['Metric'] == metric],
                             x='Model', y='Score')
             plt.xticks(rotation='vertical')
-            plt.title('{} Scores'.format(metric))
+            if self.title:
+                plt.title('{} Scores'.format(metric))
             plt.xlabel(' ')
+            if self.despine:
+                seaborn.despine(fig=fig, top=True, right=True)
             if self.savefig:
                 save_dir = os.path.join(self.results_directory, 'ModelSelectionGraphs')
                 if os.path.isdir(save_dir)!=True:
                     os.mkdir(save_dir)
                 os.chdir(save_dir)
-                fname = os.path.join(save_dir, 'boxplot_{}.png'.format(metric))
+                fname = os.path.join(save_dir, 'boxplot_{}.{}'.format(metric, self.ext))
                 plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
                 LOG.info('boxplot saved to : "{}"'.format(fname))
 
@@ -2665,14 +2751,17 @@ class ModelSelection(object):
                                     'level_1': 'Metric',
                                     0: 'Score'})
         for label, df in data.groupby(by=['Metric']):
-            plt.figure()
+            fig = plt.figure()
             for label2, df2 in df.groupby(by='Model'):
                 plot_data = df2['Score'].dropna()
                 seaborn.kdeplot(plot_data, shade=True, label=label2,
                                 legend=True)
-                plt.title("{} Score (n={})".format(label, plot_data.shape[0]))
+                if self.title:
+                    plt.title("{} Score (n={})".format(label, plot_data.shape[0]))
                 plt.ylabel("Frequency")
                 plt.xlabel("Score".format(label, plot_data.shape[0]))
+                if self.despine:
+                    seaborn.despine(fig=fig, top=True, right=True)
                 plt.legend(loc=(0, -0.5))
 
 
@@ -2681,10 +2770,10 @@ class ModelSelection(object):
                 if os.path.isdir(save_dir) != True:
                     os.mkdir(save_dir)
                 os.chdir(save_dir)
-                fname = os.path.join(save_dir, 'Histogram_{}_{}.png'.format(label2, label))
+                fname = os.path.join(save_dir, 'Histogram_{}_{}.{}'.format(label2, label, self.ext))
                 plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
                 LOG.info('histograms saved to : "{}"'.format(fname))
-
+                self.to_csv(self.filename)
     def chi2_lookup_table(self, alpha):
         '''
         Looks at the cdf of a chi2 distribution at incriments of
@@ -2791,7 +2880,7 @@ class PlotProfileLikelihood(object):
                                    'err_style': 'ci_band',
                                    'savefig': False,
                                    'results_directory': self.cls.model.root,
-                                   'dpi': 300,
+                                   'dpi': 400,
                                    'plot_cl': True,
                                    'title': None,
                                    'xlabel': None,
@@ -2899,15 +2988,22 @@ class PlotProfileLikelihood(object):
                 plt.plot(plot_data['Parameter Of Interest Value'],
                          plot_data[y], label=y)
 
-                print plot_data
                 plt.plot(plot_data['Parameter Of Interest Value'],
                          plot_data['Confidence Level'], linewidth=3,
-                         linestyle='--', color='green', label='95% CL')
+                         linestyle='--', color='green', label='CL')
                 if y == 'RSS':
                     best_rss = list(set(plot_data['Best RSS Value']))
                     best_param_val = list(set(plot_data['Best Parameter Value']))
                     plt.plot(best_param_val, best_rss, 'ro', linewidth=5)
-            plt.legend()
+                plt.legend()
+                if self.savefig:
+                    d = os.path.join(self.results_directory, index)
+                    d = os.path.join(d, self.x)
+                    self.create_directory(d)
+                    fname = os.path.join(self.results_directory,
+                                         misc.RemoveNonAscii(self.x).filter+'.png')
+                    plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
+                    LOG.debug('saved to --> {}'.format(fname))
             plt.show()
 
 
