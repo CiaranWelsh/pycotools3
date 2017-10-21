@@ -690,7 +690,7 @@ class Model(_base._Base):
         """
         m = [i.name for i in self.metabolites]
         g = [i.name for i in self.global_quantities]
-        l = [j.global_name for i in self.reactions for j in i.parameters]
+        l = [i.global_name for i in self.local_parameters]
         c = [i.name for i in self.compartments]
         return m + g + l + c
 
@@ -3635,6 +3635,7 @@ class InsertParameters(object):
         :return:
         """
         # print self.parameters
+
         locals = [j for i in self.model.reactions for j in i.parameters if j.global_name in self.parameters.keys()]
         if locals == []:
             return self.model

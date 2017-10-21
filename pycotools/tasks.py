@@ -354,7 +354,9 @@ class Run(object):
 
         self.default_properties = {'task': 'time_course',
                                    'mode': True,
-                                   'sge_job_filename': None}
+                                   'sge_job_filename': None,
+                                   'copasi_location': 'apps/COPASI/4.21.166-Linux-64bit', #for sge mode
+                                   }
 
         self.default_properties.update(self.kwargs)
         self.convert_bool_to_numeric(self.default_properties)
@@ -457,7 +459,7 @@ class Run(object):
         ##TODO find better solution for running copasi files on linux
         os.system('CopasiSE "{}"'.format(self.model.copasi_file))
 
-    def submit_copasi_job_SGE(self, copasi_location='apps/COPASI/4.19.140-Linux-64bit'):
+    def submit_copasi_job_SGE(self, ):
         """
         Submit copasi file as job to SGE based job scheduler.
         :param copasi_location:
@@ -468,12 +470,13 @@ class Run(object):
         """
         with open(self.sge_job_filename, 'w') as f:
             f.write('#!/bin/bash\n#$ -V -cwd\nmodule add {}\nCopasiSE "{}"'.format(
-                copasi_location, self.model.copasi_file
+                self.copasi_location, self.model.copasi_file
             )
         )
 
         ## -N option for job namexx
         os.system('qsub "{}" -N "{}" '.format(self.sge_job_filename, self.sge_job_filename))
+
         ## remove .sh file after used.
         # os.remove(self.sge_job_filename)
 
@@ -501,6 +504,11 @@ class RunParallel(object):
         LOG.info('running with {} processes'.format(self.processes))
         self.q = Queue.Queue(maxsize=self.processes)
         self.results = self.run_parallel()
+        raise NotImplementedError('This was an attempt to make a'
+                                  'more sophisticated queuing system '
+                                  'for jobs run in parallel. I wanted to get '
+                                  '(say) 8 models running at once but no'
+                                  'more. This issue is still unresolved. ')
 
     def _do_checks(self):
         """
@@ -652,101 +660,6 @@ class RunParallel(object):
         return output_dct
 
 
-
-
-@mixin(UpdatePropertiesMixin)
-class iPythonParallel(_base._Base):
-    NotImplementedError('still work to do on this class')
-    def __init__(self, models, **kwargs):
-        self.models = models
-        self.kwargs = kwargs
-
-        self.default_properties = {
-            'processes': 1,
-            'shell': True,
-        }
-        self.default_properties.update(kwargs)
-        self.update_properties(self.default_properties)
-        self.update_kwargs(kwargs)
-        self.check_integrity(self.default_properties.keys(), kwargs.keys())
-        raise NotImplementedError
-
-
-    def _do_checks(self):
-        """
-
-        :return:
-        """
-        if self.processes > cpu_count():
-            raise errors.InputError('number of processes should be less than the number of CPUs')
-
-        if not isinstance(self.models, list):
-            raise errors.InputError('input should be a list of models to run')
-
-        for i in self.models:
-            if not isinstance(i, model.Model):
-                raise errors.InputError('Input should be a list of models to run')
-
-
-    def x(self):
-        """
-
-        :return:
-        """
-        import thread
-        thread.start_new_thread(os.system, ('ipcluster start -n 4',))
-        import ipyparallel as ipp
-        c = ipp.Client()
-        print c.ids
-
-
-    def run1(self, model):
-        '''
-        Process the copasi file using CopasiSE
-        '''
-
-
-
-    def run_parallel(self):
-        """
-        :return:
-        """
-
-
-    def get_result(self):
-        """
-
-        :return:
-        """
-
-
-
-
-# class ParseStrVariableMixin(Mixin):
-#     """
-#     Mixin class for taking a string
-#     and returning the corresponding
-#     model quantity
-#     """
-#     ## allow a user to input a string not pycotools.model class
-#     @staticmethod
-#     def conversion(model, variable):
-#
-#         if isinstance(variable, str):
-#             if variable in [i.name for i in model.metabolites]:
-#                 variable = model.get('metabolite', variable,
-#                                                by='name')
-#
-#             elif variable in [i.name for i in model.global_quantities]:
-#                 variable = model.get('global_quantity', variable, by='name')
-#
-#             elif self.variable in [i.name for i in self.model.local_parameters]:
-#                 variable = model.get('constant', variable, by='name')
-#         else:
-#             raise errors.SomethingWentHorriblyWrongError('{} is not in your model'.format(variable))
-#         return variable
-
-
 @mixin(model.GetModelComponentFromStringMixin)
 # @mixin(GetModelVariableFromStringMixin)
 @mixin(UpdatePropertiesMixin)
@@ -755,53 +668,57 @@ class iPythonParallel(_base._Base):
 @mixin(Bool2Numeric)
 class Reports(object):
     """
-    Creates reports in copasi output specification section.
-    Use:
-        -the report_type kwarg to specify which type of report you want to make
-        -the metabolites and global_quantities kwargs to specify which parameters
-        to include
+    Creates reports in copasi output specification section. Which report is
+    controlled by the report_type key word. The following are valid types of
+    report:
 
+    .. _report_kwargs:
+    -----------------------
 
+    ===========================     ==============================================
+    Report Types                    Description
+    ===========================     ==============================================
+    time_course                     Report definition for collection of
+                                    time course data.
+    parameter_estimation            Collect parameter estimates from parameter
+                                    estimations run from the parameter estimation
+                                    task
+    multi_parameter_estimation      Collect parameter estimation data from
+                                    parameter estimations run from the scan
+                                    task with copasi's repeat feature
+    profile_likelihood              Collect both the parameter being scanned
+                                    value and the parameter estimates
+    ===========================     ==============================================
 
-    args:
-        copasi_file:
-            The copasi file you want to add a report too
+    Here are the keyword arguments accepted by the Reports class.
 
-    **kwargs:
+    ===========================     ==============================================
+    Report options                  Description
+    ===========================     ==============================================
+    metabolites                     `str` or list of `str`. Metabolites to included
+                                    in report
+    global_quantities               `str` or list of `str`. global quantities
+                                    to included in report
+    local_parameters               `str` or list of `str`. local parameters to included
+                                    in report
+    quantity_type                   `str`. either 'concentration' or 'particle_numbers'
+    report_name                     `str` valid path to where you want the report saved
+    append                          `bool`. Passed onto to copasi report options
+    confirm_overwrite               `bool`. Passed onto to copasi report options
+    update_model                    `bool`. Passed onto to copasi report options
 
-        report_type:
-            Which report to write. Options:
-                profilelikleihood:
-                    - for Pydentify, shouldn't need to manually touch this
-                time_course:
-                    -a table of time Vs concentrations. Included values are specified to the metabolites and//or global_quantities arguments
-            parameter_estimation:
-                    -a table of values from a parameter estimation and the residual sum of squares value for each run.
-
-
-        metabolites:
-            A list of valid model metabolites you want to include in the report. Default=All metabolites
-
-        global_quantities;
-            List of valid global quantities that you want to include in the report. Default=All global variables
-
-        quantity_type:
-            Either 'concentration' or 'particle_number'. Switch between having report output in either concentration of in particle_numbers.
-
-        report_name:
-            Name of the report. Default depends on kwarg report_type
-
-        append:
-            True or False. append to report. Default False
-
-        confirm_overwrite:
-            True or False.  Default= False
-
-        variable:
-            Model component to scan
-
+    variable                        `str` which variable scanned in profile likelihood
+    directory                       `str` directory to save report in
+    ===========================     ==============================================
     """
     def __init__(self, model, **kwargs):
+        """
+
+        :param model:
+            :py:class:`model.Model`.
+
+        :param kwargs: see :ref:`report_kwargs`
+        """
         # super(Reports, self).__init__(model, **kwargs)
         self.model = self.read_model(model)
         self.kwargs = kwargs
@@ -1246,9 +1163,9 @@ class TimeCourse(object):
                                'partitioning_interval': 1,
                                'runge_kutta_step_size': 0.001,
                                'run': True,
-                               'plot': False,
                                'correct_headers':  True,
-                               'save': False}
+                               'save': False,
+                               }
         default_properties.update(kwargs)
         default_properties = self.convert_bool_to_numeric(default_properties)
         self.check_integrity(default_properties.keys(), kwargs.keys())
@@ -1935,14 +1852,14 @@ class Scan(object):
         if self.clear_scans == True:
             self.model = self.remove_scans()
 
-        if self.scan_type == 'scan':
-            if self.output_in_subtask !=True:
-                LOG.warning('output_in_subtask is False. '
-                            ' This means that the subtask will not output data '
-                            'as it is producing that data. For Scan tasks, we need this to be '
-                            'True as we would like all the output. For parameter estimations'
-                            'or profile likelihood, set this to False as we only want the'
-                            'final parameter set')
+        # if self.scan_type == 'scan':
+        #     if self.output_in_subtask !=True:
+        #         LOG.warning('output_in_subtask is False. '
+        #                     ' This means that the subtask will not output data '
+        #                     'as it is producing that data. For Scan tasks, we need this to be '
+        #                     'True as we would like all the output. For parameter estimations'
+        #                     'or profile likelihood, set this to False as we only want the'
+        #                     'final parameter set')
                 # self.output_in_subtask = 'true'  ##string format needed for copasi
 
         subtasks = ['steady_state', 'time_course',
@@ -3999,38 +3916,16 @@ class MultiParameterEstimation(ParameterEstimation):
         return models
 
 
-    # def format_results(self):
-    #     """
-    #     Copasi output does not have headers. This function
-    #     gives PE data output headers
-    #     :return: list. Path to report files
-    #     """
-    #     try:
-    #         cps_keys = self.sub_copasi_files.keys()
-    #     except AttributeError:
-    #         self.setup()
-    #         cps_keys = self.sub_copasi_files.keys()
-    #     report_keys = self.report_files.keys()
-    #     for i in range(len(self.report_files)):
-    #         try:
-    #             FormatPEData(self.sub_copasi_files[cps_keys[i]], self.report_files[report_keys[i]],
-    #                      report_type='multi_parameter_estimation')
-    #         except errors.InputError:
-    #             LOG.warning('{} is empty. Cannot parse. Skipping this file'.format(self.report_files[report_keys[i]]))
-    #             continue
-    #     return self.report_files
-
-
-
-
-
-    ##void
-
-#
-#     ## void
-
-#
-#
+    def run_secondary_locals(self, log10=False, truncate_mode='percent',
+                             theta=100):
+        """
+        run a secondary local parameter estimation
+        for each
+        :return:
+        """
+        data = viz.Parse(self, log10=log10).data
+        data = viz.TruncateData(data, mode=truncate_mode, theta=theta).data
+        print data
 
 
 @mixin(UpdatePropertiesMixin)
@@ -4357,7 +4252,7 @@ class ProfileLikelihood(object):
             'log10': True,
             'append': False,
             'output_in_subtask': False,
-            'run_mode': False,
+            'run': False,
             'processes': 1,
             'results_directory': os.path.join(self.model.root,
                                               'ProfileLikelihoods'),
@@ -4400,15 +4295,8 @@ class ProfileLikelihood(object):
         self.to_file()
         # self.model_dct['current_parameters'][r'Ski'].open()
 
-        if self.run_mode is not False:
-            self.run()
-
-
-
-
-        # else:
-        #     self.run()
-        #
+        if self.run is not False:
+            self.run_analysis()
 
     def _do_checks(self):
         """
@@ -4882,7 +4770,7 @@ class ProfileLikelihood(object):
         return res
 
 
-    def run(self):
+    def run_analysis(self):
         """
 
         :return:
@@ -4892,7 +4780,7 @@ class ProfileLikelihood(object):
                 LOG.info('running {}'.format(self.model_dct[model][param].copasi_file))
                 sge_job_filename = "{}_{}".format(param, model)
                 sge_job_filename = re.sub('[().]', '', sge_job_filename)
-                Run(self.model_dct[model][param], task='scan', mode=self.run_mode, sge_job_filename=sge_job_filename+'.sh')
+                Run(self.model_dct[model][param], task='scan', mode=self.run, sge_job_filename=sge_job_filename+'.sh')
 
 if __name__=='__main__':
     pass
