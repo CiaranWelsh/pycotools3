@@ -11,8 +11,9 @@ Use:
         
 This package was developed on Python 2.7 and Copasi version 19. This is a beta version of PyCoTools that is being actively developed. If you happen to find any bugs please feel free to post a github issue.
 
-## jupyter notebook tutorial
-The tutorials are being actively developed. They are available under the [tutorials] (https://github.com/CiaranWelsh/PyCoTools/tree/CopasiVersion19/PyCoTools/PyCoToolsTutorial)
+## [jupyter notebook tutorials and documentation](pycotools.readthedocs.io)
+
+
 
 
 # Modules
