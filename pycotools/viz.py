@@ -138,12 +138,18 @@ import matplotlib.patches as mpatches
 from multiprocessing import Process, Queue
 from math import exp as exponential_function
 import math
+from scipy.interpolate import interp1d
 LOG=logging.getLogger(__name__)
 
-SEABORN_OPTIONS = {'context': 'poster',
-                   'font_scale': 2}
 
-seaborn.set_context(context=SEABORN_OPTIONS['context'], font_scale=SEABORN_OPTIONS['font_scale'])
+
+
+
+class SeabornContextMixin(Mixin):
+    def context(context='poster', font_scale=3, rc=None):
+        seaborn.set_context(
+            context=context, font_scale=font_scale, rc=rc
+        )
 
 
 
@@ -809,7 +815,7 @@ class Parse(object):
                     df.columns = range(len(df.columns))
                     items = ['Parameter Of Interest Value'] + fit_item_order_dict[index][param] + ['RSS']
                     df.columns = items
-                    # print numpy.log10(df['Parameter Of Interest Value'])
+            #         # print numpy.log10(df['Parameter Of Interest Value'])
                     if self.log10:
                         df_list2 = []
                         for key in df.keys():
@@ -818,6 +824,8 @@ class Parse(object):
                                 l.append(numpy.log10(df[key].iloc[i]))
                             df_list2.append(pandas.DataFrame(l, columns=[key]))
                         df = pandas.concat(df_list2, axis=1)
+                    # print df.head()
+                    # print self.cls_instance.parameters
                     CL = confidence_level(self.cls_instance, alpha=0.95)
                     if self.log10:
                         df['Best Parameter Value'] = math.log10(float(self.cls_instance.parameters[index][param]))
@@ -828,6 +836,7 @@ class Parse(object):
                     else:
                         df['Best Parameter Value'] = float(self.cls_instance.parameters[index][param])
                         df['Best RSS Value'] = float(self.cls_instance.parameters[index]['RSS'])
+
                     df['Confidence Level'] = CL[index]
                     df['Best Fit Index'] = index
                     df['Parameter Of Interest'] = param
@@ -892,6 +901,9 @@ class PlotTimeCourse(PlotKwargs):
             'show': False,
             'filename': None,
             'dpi': 300,
+            'context': 'talk',
+            'font_scale': 1.5,
+            'rc': None
         }
         self.default_properties.update(self.plot_kwargs())
         for i in kwargs.keys():
@@ -904,6 +916,8 @@ class PlotTimeCourse(PlotKwargs):
         self._do_checks()
 
         self.data = self.parse(self.cls, self.log10)
+        seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
+
         self.plot()
 
     def __str__(self):
@@ -1124,7 +1138,11 @@ class PlotTimeCourseEnsemble(object):
                    'run_mode': True,
                    'copasi_file': None,
                    'despine': True,
-                   'ext': 'png'
+                   'legend': True,
+                   'ext': 'png',
+                   'context': 'talk',
+                   'font_scale': 1.5,
+                   'rc': None
                    }
 
         for i in kwargs.keys():
@@ -1133,6 +1151,7 @@ class PlotTimeCourseEnsemble(object):
         self.kwargs = options
         self.update_properties(self.kwargs)
         self._do_checks()
+        seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
 
         self.data = self.parse(self.cls, log10=False, copasi_file=self.copasi_file)
         self.data = self.truncate(self.data,
@@ -1303,6 +1322,7 @@ class PlotTimeCourseEnsemble(object):
                 LOG.info('Plotting "{}"'.format(parameter))
                 plt.figure()
                 # seaborn.set_palette([self.color])
+                LOG.debug('legend is --> {}'.format(self.legend))
                 ax1 = seaborn.tsplot(
                     data=data, time='Time', value=parameter,
                     unit='ParameterFitIndex',
@@ -1311,6 +1331,7 @@ class PlotTimeCourseEnsemble(object):
                     n_boot=self.n_boot,
                     ci=self.ci,
                     color=self.color,
+                    legend=self.legend,
                 )
 
                 if parameter in self.observables:
@@ -1379,6 +1400,9 @@ class PlotScan(object):
             'show': False,
             'filename': None,
             'dpi': 400,
+            'context': 'talk',
+            'font_scale': 1.5,
+            'rc': None
         }
 
         for i in kwargs.keys():
@@ -1387,6 +1411,7 @@ class PlotScan(object):
         self.default_properties.update(kwargs)
         self.update_properties(self.default_properties)
         self._do_checks()
+        seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
 
         raise NotImplementedError
 
@@ -1449,6 +1474,9 @@ class PlotParameterEstimation(PlotKwargs):
             'filename': None,
             'dpi': 400,
             'log10': False,
+            'context': 'talk',
+            'font_scale': 1.5,
+            'rc': None
         }
         self.default_properties.update(self.plot_kwargs)
         for i in kwargs.keys():
@@ -1458,6 +1486,8 @@ class PlotParameterEstimation(PlotKwargs):
         self.default_properties.update(self.plot_kwargs)
         self.update_properties(self.default_properties)
         self._do_checks()
+
+        seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
 
         self.data = self.parse(self.cls, self.log10)
         self.cls.model = self.update_parameters()
@@ -1583,6 +1613,7 @@ class PlotParameterEstimation(PlotKwargs):
                             alpha=0.5,
                             color='#FC0077'
                         )
+
                         plt.legend(loc=(1, 0.5))
                         plt.title(key)
                         plt.xlabel('Time({})'.format(self.cls.model.time_unit))
@@ -1641,7 +1672,10 @@ class Boxplots(PlotKwargs):
                                    'dpi': 400,
                                    'show': False,
                                    'despine': True,
-                                   'ext': 'png'
+                                   'ext': 'png',
+                                   'context': 'talk',
+                                   'font_scale': 1.5,
+                                   'rc': None
                                    }
         self.default_properties.update(self.plot_kwargs)
         for i in kwargs.keys():
@@ -1651,6 +1685,8 @@ class Boxplots(PlotKwargs):
         self.default_properties.update(self.plot_kwargs)
         self.update_properties(self.default_properties)
         self._do_checks()
+
+        seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
 
         self.data = self.parse(self.cls, log10=self.log10)
         self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
@@ -1723,6 +1759,7 @@ class Boxplots(PlotKwargs):
 @mixin(ParseMixin)
 @mixin(TruncateDataMixin)
 @mixin(CreateResultsDirectoryMixin)
+@mixin(SeabornContextMixin)
 class RssVsIterations(PlotKwargs):
     """
 
@@ -1743,7 +1780,7 @@ class RssVsIterations(PlotKwargs):
         """
         self.cls = cls
         self.kwargs = kwargs
-        self.plot_kwargs = self.plot_kwargs()
+        # self.plot_kwargs = self.plot_kwargs()
 
 
         self.default_properties = {'log10': False,
@@ -1758,19 +1795,30 @@ class RssVsIterations(PlotKwargs):
                                    'show': False,
                                    'filename': 'RssVsIterations.pdf',
                                    'despine': True,
-                                   'ext': 'png'
+                                   'ext': 'png',
+                                   'line_transparency': 1, ##passed to matplotlib alpha parameter
+                                   'marker_transparency': 0.7,
+                                   'color': '#004ADF',
+                                   'markercolor': '#FF9709',
+                                   'linewidth': 3,
+                                   'markersize': 10,
+                                   'context': 'talk',
+                                   'font_scale': 1.5,
+                                   'rc': None,
                                    }
 
-        self.default_properties.update(self.plot_kwargs)
+        # self.default_properties.update(self.plot_kwargs)
         for i in kwargs.keys():
-            assert i in self.default_properties.keys(), '{} is not a keyword argument for Boxplot'.format(i)
+            assert i in self.default_properties.keys(), '{} is not a keyword argument for RssVsIterations'.format(i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
-        self.default_properties.update(self.plot_kwargs)
+        # self.default_properties.update(self.plot_kwargs)
         self.update_properties(self.default_properties)
         self._do_checks()
+        seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
 
         self.data = self.parse(self.cls, log10=self.log10)
+
         self.plot()
 
     def _do_checks(self):
@@ -1793,8 +1841,9 @@ class RssVsIterations(PlotKwargs):
             if type(self.cls) == Parse:
                 self.results_directory = os.path.join(os.path.dirname(self.cls.copasi_file), 'RssVsIterations')
             else:
-                self.results_directory = os.path.join(self.cls.model.root,
-                                                  'RssVsIterations')
+                self.results_directory = os.path.join(
+                    self.cls.model.root, 'RssVsIterations'
+                )
 
         if not os.path.isdir(self.results_directory):
             os.makedirs(self.results_directory)
@@ -1810,7 +1859,16 @@ class RssVsIterations(PlotKwargs):
         fig = plt.figure()
         plt.plot(range(self.data['RSS'].shape[0]),
                  self.data['RSS'].sort_values(ascending=True),
-                 marker='o')
+                 color=self.color, linewidth=self.linewidth,
+                 alpha=self.line_transparency,
+                 )
+
+        plt.plot(range(self.data['RSS'].shape[0]),
+                 self.data['RSS'].sort_values(ascending=True), 'o',
+                 color=self.markercolor, markersize=self.markersize,
+                 alpha=self.marker_transparency
+                 )
+
         plt.xticks(rotation=self.xtick_rotation)
         if self.title is not None:
             plt.title(self.title+'(n={})'.format(self.data.shape[0]))
@@ -1820,7 +1878,7 @@ class RssVsIterations(PlotKwargs):
             seaborn.despine(fig=fig, top=True, right=True)
         if self.savefig:
             self.results_directory = self.create_directory()
-            fle = os.path.join(self.results_directory, 'RssVsIterations.{}'.fromat(self.ext))
+            fle = os.path.join(self.results_directory, 'RssVsIterations.{}'.format(self.ext))
             plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
 
         if self.show:
@@ -1878,7 +1936,10 @@ class Pca(PlotKwargs):
                                  'annotation_fontsize': 25,
                                  'show': False,
                                  'despine': True,
-                                 'ext': 'png'
+                                 'ext': 'png',
+                                 'context': 'talk',
+                                 'font_scale': 1.5,
+                                 'rc': None
                                  }
 
 
@@ -1890,6 +1951,7 @@ class Pca(PlotKwargs):
         self.default_properties.update(self.plot_kwargs)
         self.update_properties(self.default_properties)
         self._do_checks()
+        seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
 
         self.data = self.parse(self.cls, log10=self.log10)
         self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
@@ -2002,7 +2064,7 @@ class Pca(PlotKwargs):
                     '{}: {}'.format(i,txt),fontsize=self.legend_fontsize)
         if self.savefig:
             self.create_directory()
-            fle = os.path.join(self.results_directory, 'Pca_by_{}'.format(self.by))
+            fle = os.path.join(self.results_directory, 'Pca_by_{}.{}'.format(self.by, self.ext))
             plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
 
 @mixin(tasks.UpdatePropertiesMixin)
@@ -2046,7 +2108,10 @@ class Histograms(PlotKwargs):
                                    'color': 'green',
                                    'hist': True,
                                    'kde': True,
-                                   'rug': False
+                                   'rug': False,
+                                   'context': 'talk',
+                                   'font_scale': 1.5,
+                                   'rc': None
                                    }
 
         self.default_properties.update(self.plot_kwargs)
@@ -2061,6 +2126,8 @@ class Histograms(PlotKwargs):
         self.data = self.parse(self.cls, log10=self.log10)
         self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
         LOG.info('plotting histograms')
+        seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
+
         self.plot()
         # self.coloured_plot()
 
@@ -2082,15 +2149,24 @@ class Histograms(PlotKwargs):
         
         """
         for parameter in self.data.keys():
-            plt.figure()
+            fig = plt.figure()
             seaborn.distplot(
                 self.data[parameter], color=self.color, kde=self.kde, rug=self.rug,
                 hist=self.hist
                 )
-            plt.ylabel(self.ylabel)
+            if self.log10:
+                plt.ylabel("log10({})".format(self.ylabel))
+                plt.xlabel("log10({})".format(parameter))
+            else:
+                plt.ylabel(self.ylabel)
+                plt.xlabel(parameter)
             if self.title is True:
                 plt.title('{},n={}'.format(parameter, self.data[parameter].shape[0]),
                       fontsize=self.title_fontsize)
+
+            if self.despine:
+                seaborn.despine(fig=fig, top=True, right=True)
+
             if self.savefig:
                 self.create_directory(self.results_directory)
                 fname = os.path.join(self.results_directory,
@@ -2204,6 +2280,9 @@ class Scatters(PlotKwargs):
             'ext': 'png',
             'despine': True,
             'color_bar_pad': 0.1,   #padding for color bar. Dist between bar and axes
+            'context': 'talk',
+            'font_scale': 1.5,
+            'rc': None
         }
 
         self.default_properties.update(self.plot_kwargs)
@@ -2214,6 +2293,8 @@ class Scatters(PlotKwargs):
         self.default_properties.update(self.plot_kwargs)
         self.update_properties(self.default_properties)
         self._do_checks()
+        seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
+
 
         self.data = self.parse(self.cls, log10=self.log10)
         self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
@@ -2338,7 +2419,10 @@ class LinearRegression(PlotKwargs):
             'n_alphas': 100,
             'max_iter': 20000,
             'ext': 'png',
-            'despine':True,
+            'despine': True,
+            'context': 'talk',
+            'font_scale': 1.5,
+            'rc': None
         }
 
         self.default_properties.update(self.plot_kwargs)
@@ -2349,6 +2433,7 @@ class LinearRegression(PlotKwargs):
         self.default_properties.update(self.plot_kwargs)
         self.update_properties(self.default_properties)
         self._do_checks()
+        seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
 
         self.data = self.parse(self.cls, log10=self.log10)
         self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
@@ -2394,8 +2479,11 @@ class LinearRegression(PlotKwargs):
         X = self.data.drop(parameter, axis=1)
         X_train, X_test, y_train, y_test = model_selection.train_test_split(X, y)
 
-        lin_model = self.lin_model(fit_intercept=True, n_alphas=self.n_alphas,
+        try:
+            lin_model = self.lin_model(fit_intercept=True, n_alphas=self.n_alphas,
                     max_iter=self.max_iter)
+        except TypeError:
+            lin_model = self.lin_model(fit_intercept=True)
 
         lin_model.fit(X_train, y_train)
         df = pandas.DataFrame(lin_model.coef_, index=X.columns, columns=[parameter])#.sort_values(by='Coefficients')
@@ -2481,7 +2569,8 @@ class ModelSelection(object):
 
     def __init__(self, multi_model_fit, savefig=False,
                  dpi=400, log10=False, filename=None, pickle=None,
-                 despine=True, ext='png', title=True):
+                 despine=True, ext='png', title=True,
+                 context='poster', font_scale=2, rc=None):
         """
 
         :param multi_model_fit:
@@ -2504,6 +2593,9 @@ class ModelSelection(object):
         self.ext = ext
         self.despine = despine
         self.title = title
+        self.context = context
+        self.font_scale = font_scale
+        self.rc = rc
         self._do_checks()
 
         ## do model selection stuff
@@ -2513,6 +2605,7 @@ class ModelSelection(object):
         self.number_model_parameters = self._get_number_estimated_model_parameters()
         self.number_observations = self._get_n()
         self.model_selection_data = self.calculate_model_selection_criteria()
+        seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
 
         self.boxplot()
         self.histogram()
@@ -2586,14 +2679,14 @@ class ModelSelection(object):
         (i.e. not the original and with a number after it)
         :return:
         """
-        dct={}
+        dct = {}
         for MPE in self.multi_model_fit:
 
             ## get the first cps file configured for eastimation in each MMF obj
             cps_1 = glob.glob(
                 os.path.join(
                     os.path.dirname(MPE.results_directory),
-                    '*_1.cps')
+                    '*_0.cps')
             )[0]
             dct[MPE.results_directory] = model.Model(cps_1)
         return dct
@@ -2874,22 +2967,25 @@ class PlotProfileLikelihood(object):
                                    'y': None,
                                    'index': None,
                                    'log10': True,
-                                   'estimator': numpy.mean,
-                                   'n_boot': 10000,
-                                   'ci_band_level': 95,  ## CI for estimator bootstrap
-                                   'err_style': 'ci_band',
                                    'savefig': False,
-                                   'results_directory': self.cls.model.root,
+                                   'results_directory': None,
                                    'dpi': 400,
                                    'plot_cl': True,
                                    'title': None,
                                    'xlabel': None,
                                    'ylabel': None,
-                                   'color_palette': 'bright',
                                    'legend': False,
                                    'legend_location': None,
                                    'show': False,
                                    'separate': True,
+                                   'filename': None,
+                                   'despine': True,
+                                   'ext': 'png',
+                                   'show_original_rss': False,
+                                   'ylim': None,
+                                   'xlim': None,
+                                   'interpolation': None,
+                                   'interpolation_resolution': 1000, #number of steps to interpolate
                                    }
 
         for i in kwargs.keys():
@@ -2897,6 +2993,7 @@ class PlotProfileLikelihood(object):
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
         self.update_properties(self.default_properties)
+        seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
 
         ## parse data
         self.data = Parse(cls, log10=self.log10).data
@@ -2904,12 +3001,49 @@ class PlotProfileLikelihood(object):
         ## do some checks
         self._do_checks()
 
-        # ## do plotting
+        ## do plotting
         self.plot()
 
     def _do_checks(self):
+        """
+
+        :return:
+        """
+
+        if self.ylim is not None:
+            if not isinstance(self.ylim, tuple):
+                raise errors.InputError('ylim arg should be tuple. Got "{}"'.format(type(self.ylim)))
+
+            if len(self.ylim) is not 2:
+                raise errors.InputError('ylim arg should be tuple of length 2. '
+                                        'See "https://matplotlib.org/devdocs/api/_as_gen/matplotlib.pyplot.ylim.html" '
+                                        'for details')
+
+        if self.xlim is not None:
+            if not isinstance(self.xlim, tuple):
+                raise errors.InputError('xlim arg should be tuple. Got "{}"'.format(type(self.xlim)))
+
+            if len(self.xlim) is not 2:
+                raise errors.InputError('xlim arg should be tuple of length 2. '
+                                        'See "https://matplotlib.org/devdocs/api/_as_gen/matplotlib.pyplot.xlim.html" '
+                                        'for details')
+
+        interpolation_kinds = ['linear', 'nearest', 'zero',
+                               'slinear', 'quadratic', 'cubic']
+
+        if self.interpolation is not None:
+            if self.interpolation not in interpolation_kinds:
+                raise errors.InputError('"{}" is not in "{}"'.format(
+                    self.interpolation, interpolation_kinds
+                ))
+
+        if type(self.cls) == tasks.ProfileLikelihood:
+            self.results_directory = self.cls.results_directory
+        else:
+            LOG.warning('cls not of type tasks.ProfileLikelihood')
+
         if isinstance(self.data, pandas.core.frame.DataFrame) != True:
-            raise errors.InputError('{} should be a dataframe. Parse data with ParsePEData first.'.format(self.data))
+            raise errors.InputError('"{}" should be a dataframe not "{}".'.format(self.data, type(self(data))))
 
         self.parameter_list = sorted(list(self.data.columns))
 
@@ -2924,490 +3058,128 @@ class PlotProfileLikelihood(object):
             self.index = [self.index]
 
         if self.x == None:
-            raise errors.InputError('x cannot be None')
+            self.x = [i for i in self.parameter_list if i is not 'RSS']
+            # raise errors.InputError('x cannot be None')
 
         if self.y == None:
+            self.y = 'RSS'
+
+        if self.y == 'all':
             self.y = self.parameter_list
 
         if self.y == None:
             raise errors.InputError('y cannot be None')
 
-
-        if self.x not in self.parameter_list:
-            raise errors.InputError('{} not in {}'.format(self.x, self.parameter_list))
-
         if isinstance(self.y, str):
-            if self.y not in self.parameter_list:
-                raise errors.InputError('{} not in {}'.format(self.y, self.parameter_list))
+            self.y = [self.y]
 
         if isinstance(self.y, list):
             for y_param in self.y:
                 if y_param not in self.parameter_list:
                     raise errors.InputError('{} not in {}'.format(y_param, self.parameter_list))
 
+        if isinstance(self.x, str):
+            self.x = [self.x]
+
+        if isinstance(self.x, list):
+            for x_param in self.x:
+                if x_param not in self.parameter_list:
+                    raise errors.InputError('{} not in {}'.format(x_param, self.parameter_list))
+
+        if self.filename is not None:
+            if not os.path.isabs(self.filename):
+                self.filename = os.path.join(self.results_directory, self.filename)
+
+            self.data.to_csv(self.filename)
+            LOG.info('Profile likelihood data saved to "{}"'.format(self.filename))
+
+
+    def plot1(self, x, y, i):
+        """
+
+        :return:
+        """
+        plot_data = self.data.loc[x, i][y]
+        if type(plot_data) == pandas.Series:
+            plot_data = pandas.DataFrame(plot_data)
+
+        fig = plt.figure()
+        plot_data = plot_data.reset_index()
+
+        x_plot = plot_data['Parameter Of Interest Value']
+        y_plot = plot_data[y]
+
+        if self.interpolation is not None:
+            f = interp1d(x_plot, y_plot, kind=self.interpolation)
+            minimum = x_plot.min()
+            maximum = x_plot.max()
+            step = (maximum - minimum)/self.interpolation_resolution
+            xnew = numpy.arange(start=minimum, stop=maximum, step=step)
+            ynew = f(xnew)
+            plt.plot(xnew, ynew)
+            plt.plot(x_plot, y_plot, 'ro', label=y)#linestyle='o', color='red')
+        else:
+            plt.plot(x_plot, y_plot, label=y)
+
+        plt.plot(plot_data['Parameter Of Interest Value'],
+                 plot_data['Confidence Level'], linewidth=3,
+                 linestyle='--', color='green', label='CL')
+
+        if self.show_original_rss:
+            best_rss = list(set(plot_data['Best RSS Value']))
+            best_param_val = list(set(plot_data['Best Parameter Value']))
+            plt.plot(best_param_val, best_rss, 'ro', linewidth=5)
+
+        if self.legend:
+            if self.legend_loc is not None:
+                plt.legend(loc=self.legend_loc)
+            else:
+                plt.legend(loc='best')
+
+        if self.despine:
+            seaborn.despine(fig=fig, top=True, right=True)
+
+        if self.title is None:
+            self.title = 'Profile Likelihoods for\n{} ' \
+                    'against {} (index={})'.format(x, y, i)
+
+        plt.title(self.title)
+        if self.log10:
+            plt.ylabel('log10({})'.format(y))
+            plt.xlabel('log10({})'.format(x))
+        else:
+            plt.ylabel(y)
+            plt.xlabel(x)
+
+        if self.ylim is not None:
+            plt.ylim(self.ylim)
+
+        if self.xlim is not None:
+            plt.xlim(self.xlim)
+
         if self.savefig:
-            if self.results_directory == None:
-                raise errors.InputError('Please specify argument to results_directory')
+            d = os.path.join(self.results_directory, str(i))
+            d = os.path.join(d, x)
+            self.create_directory(d)
+            fname = os.path.join(d, misc.RemoveNonAscii(y).filter+'.{}'.format(self.ext))
 
-        n = list(set(self.data.index.get_level_values(0)))
-        if self.title == None:
-            self.title = 'Profile Likelihood for\n{} (Rank={})'.format(self.x, n)
+            plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
+            LOG.info('saved to --> {}'.format(fname))
 
-        self.data.rename(columns={'ParameterOfInterestValue': self.x})
+        if self.show:
+            plt.show()
 
-    #
-    # def __getitem__(self, key):
-    #     if key not in self.kwargs:
-    #         raise errors.InputError('{} not in {}'.format(key, self.kwargs.keys()))
-    #     return self.kwargs[key]
-    #
-    # def __setitem__(self, key, value):
-    #     self.kwargs[key] = value
-    #
     def plot(self):
         """
 
-        """
-        if self.y == self.x:
-            LOG.warning(errors.InputError(
-                'x parameter {} cannot equal y parameter {}. Plot function returned None'.format(
-                    self.x, self.y)
-            )
-            )
-            return None
-
-        x_data = self.data.loc[self.x]
-        for i in self.index:
-            if not self.separate:
-                plt.figure()
-            for y in self.y:
-                y_data = x_data.loc[i][self.y]
-                plot_data = y_data.reset_index()
-                if self.separate:
-                    plt.figure()
-                plt.plot(plot_data['Parameter Of Interest Value'],
-                         plot_data[y], label=y)
-
-                plt.plot(plot_data['Parameter Of Interest Value'],
-                         plot_data['Confidence Level'], linewidth=3,
-                         linestyle='--', color='green', label='CL')
-                if y == 'RSS':
-                    best_rss = list(set(plot_data['Best RSS Value']))
-                    best_param_val = list(set(plot_data['Best Parameter Value']))
-                    plt.plot(best_param_val, best_rss, 'ro', linewidth=5)
-                plt.legend()
-                if self.savefig:
-                    d = os.path.join(self.results_directory, index)
-                    d = os.path.join(d, self.x)
-                    self.create_directory(d)
-                    fname = os.path.join(self.results_directory,
-                                         misc.RemoveNonAscii(self.x).filter+'.png')
-                    plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
-                    LOG.debug('saved to --> {}'.format(fname))
-            plt.show()
-
-
-
-
-
-
-
-
-
-            # if label == self.x:
-            #     y_data = df[self.y]
-            #     for y_param in y_data.keys():
-            #         print y_data[y_param]
-
-
-
-
-
-
-
-
-
-
-                # for y_param in self.y:
-                #     plot_data = df[y_param]
-                #     plot_data = pandas.DataFrame(plot_data)
-                #     plot_data = plot_data.reset_index()
-                #     plt.figure()
-                #     plot_data = plot_data.sort_values(by=['Best Fit Index', 'Parameter Of Interest Value'])
-                #     print plot_data
-                #     # seaborn.tsplot(data=plot_data, value=y_param,
-                #     #                time='Parameter Of Interest Value',
-                #     #                unit='Best Fit Index')
-                #     # plt.show()
-                # plot_data = pandas.DataFrame(plot_data.stack(), columns=['y_values'])
-                # plot_data = plot_data.reset_index()
-                # # plot_data = plot_data.dropna(axis=1)
-                # plot_data = plot_data.rename(columns={'level_5': 'Y Parameters'})
-                # plot_data = plot_data.sort_values(by=['Best Fit Index',
-                #                                       'Y Parameters',
-                #                                       'Parameter Of Interest Value'])
-                # plot_cols = ['Parameter Of Interest Value', 'Best Fit Index',
-                #              'Y Parameters', 'y_values']
-                #
-                # cl_cols = ['Best Fit Index', 'Parameter Of Interest Value', 'Confidence Level']
-                #
-                # # print plot_data
-                # cl_data = plot_data[cl_cols]
-                # plot_data = plot_data[plot_cols]
-                #
-                # print seaborn.algorithms.bootstrap()
-
-                # print plot_data
-                # seaborn.tsplot(data=plot_data, unit='Best Fit Index',
-                #                time='Parameter Of Interest Value',
-                #                value='Confidence Level')
-                # plt.show()
-
-                # for y_param in plot_data['Y Parameters'].unique():
-                #     plot_data2 = plot_data[plot_data['Y Parameters'] == y_param]
-                #     seaborn.tsplot(data=plot_data2, time='Parameter Of Interest Value',
-                #                    unit='Best Fit Index', value='y_values')
-                #     plt.show()
-
-                # plt.figure()
-                # plot_data = plot_data.reset_index(drop=True)
-                # print plot_data#.to_csv('/home/b3053674/Documents/Models/2017/10_Oct/Smad7ZiModels2/Fit3Dir/smad7_not_reproduced/ProfileLikelihoods/ProfileLikelihoods/data.csv')
-                # seaborn.tsplot(data=cl_data, time='Parameter Of Interest Value',
-                #                unit='Best Fit Index', condition='Y Parameters',
-                #                value='Confidence Level', estimator=numpy.mean)
-                # plt.show()
-        ## get x data
-        # data = self.data.reset_index()
-        # x_data = self.data[self.x]
-        # print x_data
-        # self.data.to_csv('/home/b3053674/Documents/Models/2017/10_Oct/Smad7ZiModels2/PL/data.csv')
-        # x_data = pandas.DataFrame(self.data[self.x])
-
-        # for label, df in self.data.groupby(level=[1]):
-        #     pass
-            # if label == self.x:
-            #         data = df[self.y]
-            # if isinstance(data, pandas.core.frame.Series):
-            #     data = pandas.DataFrame(data)
-            # if isinstance(data, pandas.core.frame.DataFrame):
-            #     data = pandas.DataFrame(data.stack(), columns=['Value'])
-            # print data
-            # try:
-            #     data.index = data.index.rename(['ParameterSetRank',
-            #                                     'ConfidenceLevel',
-            #                                     'ParameterOfInterest',
-            #                                     'ParameterOfInterestValue',
-            #                                     'YParameter'])
-            # except UnboundLocalError:
-            #     return 1
-            #
-            # data = data.reset_index()
-            # if self.log10:
-            #     data['ConfidenceLevel'] = numpy.log10(data['ConfidenceLevel'])
-            #     data['Value'] = numpy.log10(data['Value'])
-            #     data['ParameterOfInterestValue'] = numpy.log10(data['ParameterOfInterestValue'])
-            #
-            # plt.figure()
-            # if self.plot_cl:
-            #     cl_data = data[['ParameterSetRank', 'ConfidenceLevel',
-            #                     'ParameterOfInterestValue']]
-            #     cl_data = cl_data.drop_duplicates()
-            #     seaborn.tsplot(data=cl_data,
-            #                    time='ParameterOfInterestValue',
-            #                    value='ConfidenceLevel',
-            #                    unit='ParameterSetRank',
-            #                    color='green', linestyle='--',
-            #                    estimator=self.estimator,
-            #                    err_style=self.err_style,
-            #                    n_boot=self.n_boot,
-            #                    ci=self.ci_band_level)
-            #
-            # seaborn.color_palette('husl', 8)
-            # seaborn.tsplot(data=data,
-            #                time='ParameterOfInterestValue',
-            #                value='Value',
-            #                condition='YParameter',
-            #                unit='ParameterSetRank',
-            #                estimator=self.estimator,
-            #                err_style=self.err_style,
-            #                n_boot=self.n_boot,
-            #                ci=self.ci_band_level,
-            #                color=seaborn.color_palette(self.color_palette, len(self.y))
-            #                )
-            # plt.title(self.title)
-            # if self.ylabel != None:
-            #     plt.ylabel(self.ylabel)
-            # if self.xlabel != None:
-            #     plt.xlabel(self.x_label)
-            #
-            # if self.legend_location != None:
-            #     plt.legend(loc=self.legend_location)
-            #
-            # if self.savefig:
-            #     #            save_dir = os.path.join(self['results_directory'], 'ProfileLikelihood')
-            #     if os.path.isdir(self.results_directory) != True:
-            #         os.makedirs(self.results_directory)
-            #     os.chdir(self.results_directory)
-            #     fle = os.path.join(self.results_directory, '{}Vs{}.jpeg'.format(self.x, self.y))
-            #     plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
-            #     LOG.info('figure saved to --> {}'.format())
-            #
-            # if self.show:
-            #     plt.show()
-
-@mixin(tasks.UpdatePropertiesMixin)
-@mixin(ParseMixin)
-@mixin(TruncateDataMixin)
-@mixin(CreateResultsDirectoryMixin)
-class ParsePLData(object):
-    """
-    get data from file into an appropriate format
-    1) ensure data is properly formatted with headers
-    2) read data into a df.
-        index 1 = parameter set
-        index 2 = parameter of interest
-        index 3 = best parameter value
-        index 4 = parameter scan value
-            data = matrix
-    """
-
-    def __init__(self, copasi_file, pl_directory, **kwargs):
-        self.copasi_file = copasi_file
-        self.pl_directory = pl_directory
-        self.copasiML = tasks.CopasiMLParser(self.copasi_file).copasiML
-
-        options = {'parameter_path': None,
-                   'index': -1,
-                   'rss': None,
-                   'dof': None,
-                   'num_data_points': None,
-                   'experiment_files': None,
-                   'alpha': 0.95,
-                   'log10': True,
-                   }
-
-        self.default_properties.update(self.plot_kwargs)
-        for i in kwargs.keys():
-            assert i in self.default_properties.keys(), '{} is not a keyword argument for Scatters'.format(i)
-        self.kwargs = self.default_properties
-        self.default_properties.update(kwargs)
-        self.default_properties.update(self.plot_kwargs)
-        self.update_properties(self.default_properties)
-        self._do_checks()
-
-
-        if self.parameter_path == None:
-            if self.rss == None:
-                raise errors.InputError('If parameter_path equals None then rss must not equal None')
-        if self.parameter_path != None:
-            if self.index == -1:
-                raise errors.InputError(
-                    'An argument is given to parameter_path but index is -1 (for PL around current parameter set). Change the index parameter')
-
-        if self.index != -1:
-            if selfparameter_path == None:
-                raise errors.InputError(
-                    'If index is not -1 (i.e. current parameter set in model) then an argument to parameter_path needs to be specified')
-
-        if self.experiment_files == None:
-            self.experiment_files = self.get_experiment_files_in_use()
-
-        self.index_dirs = self.get_index_dirs()
-
-        self.pl_data_files = self.get_pl_data_files()
-        self.pl_data_files = self.format_pl_data_files()
-        self.data = self.parse_data()
-        self.data = self.infer_parameter_of_interest()
-        if self.dof == None:
-            self.dof = self.get_dof()
-
-        if self.num_data_points == None:
-            self.num_data_points = self.get_num_data_points()
-
-        if self.rss == None:
-            self.rss = self.get_rss()
-
-        self.data = self.get_confidence_level()
-        self.data = self.data.drop('ParameterFile', axis=1)
-
-    def get_index_dirs(self):
-        """
-        Under the ProfileLikelihood folder are a list of folders named after
-        the integer rank of best fit (.e. -1,0,1,2 ...)
-        returns list of these directories
         :return:
         """
-        l = []
-        for i in glob.glob(os.path.join(self.pl_directory, '*')):
-            if os.path.isdir(i):
-                dire, fle = os.path.split(i)
-                try:
-                    int(fle)
-                    l.append(i)
-                except ValueError:
-                    LOG.warning(
-                        '{} is not a number and therefore does not contain a profile likleihood analysis. It will be ignored')
-                    continue
-                if os.path.isdir(i) != True:
-                    raise errors.FolderDoesNotExistError(i)
-        return l
-
-    def get_pl_data_files(self):
-        """
-        return all text files in
-        """
-        res = {}
-        for index_dir in self.index_dirs:
-            i = os.path.split(index_dir)[1]
-            try:
-                int(i)
-            except ValueError:
-                raise errors.InputError(
-                    'Cannot convert {} to int. Check there are no extra files in your profile likelihood directory'.format(
-                        i))
-            res[int(i)] = {}
-            for f in glob.glob(os.path.join(index_dir, '*.txt')):
-                dire, fle = os.path.split(f)
-                res[int(i)][fle] = f
-        if res == {}:
-            raise errors.InputError(
-                'Can\'t find PL data files. Have you given the correct path to profile likelihood directory?')
-
-        return res
-
-    def format_pl_data_files(self):
-        """
-
-        """
-        res = {}
-        for i in self.pl_data_files:
-            res[i] = {}
-            for j in self.pl_data_files[i]:
-                cps = self.pl_data_files[i][j][:-4] + '.cps'
-                try:
-                    res[i][j] = FormatPLData(cps, self.pl_data_files[i][j]).format
-                except errors.FileDoesNotExistError:
-                    pass
-        return res
-
-    def parse_data(self):
-        """
-
-        """
-        res = {}
-        df_dct = {}
-        for index in self.pl_data_files:
-            res[index] = {}
-            for data_file in self.pl_data_files[index]:
-                df_temp = pandas.read_csv(self.pl_data_files[index][data_file],
-                                          sep='\t', index_col=0)
-                res[index][data_file] = pandas.read_csv(self.pl_data_files[index][data_file],
-                                                        sep='\t',
-                                                        index_col=0)
-            df_dct[index] = pandas.concat(res[index])
-        df = pandas.concat(df_dct)
-        df.index = df.index.rename(['ParameterSetRank', 'ParameterFile', 'ParameterOfInterestValue'])
-        return df
-
-    def infer_parameter_of_interest(self):
-        """
-        """
-        parameters = sorted(list(self.data.columns))
-        filenames = sorted(list(set(self.data.index.get_level_values(1))))
-        #        print parameters, filenames
-        zipped = dict(zip(filenames, parameters))
-        self.data = self.data.reset_index(level=1)
-        l = []
-        for i in self.data['ParameterFile']:
-            l.append(zipped[i])
-        self.data['ParameterOfInterest'] = l
-        return self.data
-
-    def get_experiment_files_in_use(self):
-        '''
-        Need to exclude data files fromlist of parameters to plot
-        '''
-        query = '//*[@name="File Name"]'
-        l = []
-        for i in self.copasiML.xpath(query):
-            f = os.path.abspath(i.attrib['value'])
-            if os.path.isfile(f) != True:
-                raise errors.InputError(
-                    'Experimental files in use cannot be automatically '
-                    ' determined. Please give a list of experiment file '
-                    'paths to the experiment_files keyword'.format())
-            l.append(os.path.abspath(i.attrib['value']))
-        return l
-
-    def get_dof(self):
-        '''
-        The number of parameters being estimated minus 1
-        '''
-        GMQ = tasks.GetModelQuantities(self.copasi_file)
-        return len(GMQ.get_fit_items().keys()) - 1
-
-    #        return self.get_num_estimated_paraemters()-1
-
-    def get_num_data_points(self):
-        '''
-        returns number of data points in your data files
-        '''
-        experimental_data = [pandas.read_csv(i, sep='\t') for i in self.experiment_files]
-        l = []
-        for i in experimental_data:
-            l.append(i.shape[0] * (i.shape[1] - 1))
-        s = sum(l)
-        if s == 0:
-            raise errors.InputError('Number of data points cannot be 0. '
-                                    'Experimental data is inferred from the '
-                                    'parameter estimation task definition. '
-                                    'It might be that copasi_file refers to a '
-                                    'fresh copy of the model. Try redefining the '
-                                    'same parameter estimation problem that you '
-                                    'used in the profile likelihood, using the '
-                                    'setup method but not running the '
-                                    'parameter estimation before trying again.')
-        return s
-
-    def get_rss(self):
-        rss = {}
-
-        if self.index == -1:
-            assert self.rss != None
-            rss[-1] = self.rss
-            return rss
-        else:
-            PED = viz.ParsePEData(self.parameter_path)
-            if isinstance(self.index, int):
-                rss[self.index] = PED.data.iloc[self.index.RSS]
-            elif isinstance(self.index, list):
-                for i in self.index:
-                    rss[i] = PED.data.iloc[i]['RSS']
-            return rss
-
-    def get_confidence_level(self):
-        """
-
-        """
-        CL_dct = {}
-        for index in self.rss:
-            rss = self.rss[index]
-            CL_dct[index] = ChiSquaredStatistics(
-                rss, self.dof, self.num_data_points,
-                self.alpha
-            ).CL
-
-        ranks = list(self.data.index.get_level_values(0))
-        #        print CL_dct
-        CL_list = [CL_dct[i] for i in ranks]
-        self.data['ConfidenceLevel'] = CL_list
-        self.data = self.data.reset_index()
-        self.data = self.data.set_index(
-            ['ParameterSetRank', 'ConfidenceLevel', 'ParameterOfInterest', 'ParameterOfInterestValue'])
-        return self.data
+        for i in self.index:
+            for x in self.x:
+                for y in self.y:
+                    self.plot1(x, y, i)
 
 
-#
 
 
 if __name__=='__main__':
