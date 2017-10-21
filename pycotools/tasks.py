@@ -1163,9 +1163,9 @@ class TimeCourse(object):
                                'partitioning_interval': 1,
                                'runge_kutta_step_size': 0.001,
                                'run': True,
-                               'plot': False,
                                'correct_headers':  True,
-                               'save': False}
+                               'save': False,
+                               }
         default_properties.update(kwargs)
         default_properties = self.convert_bool_to_numeric(default_properties)
         self.check_integrity(default_properties.keys(), kwargs.keys())
@@ -3916,38 +3916,16 @@ class MultiParameterEstimation(ParameterEstimation):
         return models
 
 
-    # def format_results(self):
-    #     """
-    #     Copasi output does not have headers. This function
-    #     gives PE data output headers
-    #     :return: list. Path to report files
-    #     """
-    #     try:
-    #         cps_keys = self.sub_copasi_files.keys()
-    #     except AttributeError:
-    #         self.setup()
-    #         cps_keys = self.sub_copasi_files.keys()
-    #     report_keys = self.report_files.keys()
-    #     for i in range(len(self.report_files)):
-    #         try:
-    #             FormatPEData(self.sub_copasi_files[cps_keys[i]], self.report_files[report_keys[i]],
-    #                      report_type='multi_parameter_estimation')
-    #         except errors.InputError:
-    #             LOG.warning('{} is empty. Cannot parse. Skipping this file'.format(self.report_files[report_keys[i]]))
-    #             continue
-    #     return self.report_files
-
-
-
-
-
-    ##void
-
-#
-#     ## void
-
-#
-#
+    def run_secondary_locals(self, log10=False, truncate_mode='percent',
+                             theta=100):
+        """
+        run a secondary local parameter estimation
+        for each
+        :return:
+        """
+        data = viz.Parse(self, log10=log10).data
+        data = viz.TruncateData(data, mode=truncate_mode, theta=theta).data
+        print data
 
 
 @mixin(UpdatePropertiesMixin)
@@ -4274,7 +4252,7 @@ class ProfileLikelihood(object):
             'log10': True,
             'append': False,
             'output_in_subtask': False,
-            'run_mode': False,
+            'run': False,
             'processes': 1,
             'results_directory': os.path.join(self.model.root,
                                               'ProfileLikelihoods'),
@@ -4317,15 +4295,8 @@ class ProfileLikelihood(object):
         self.to_file()
         # self.model_dct['current_parameters'][r'Ski'].open()
 
-        if self.run_mode is not False:
-            self.run()
-
-
-
-
-        # else:
-        #     self.run()
-        #
+        if self.run is not False:
+            self.run_analysis()
 
     def _do_checks(self):
         """
@@ -4799,7 +4770,7 @@ class ProfileLikelihood(object):
         return res
 
 
-    def run(self):
+    def run_analysis(self):
         """
 
         :return:
@@ -4809,7 +4780,7 @@ class ProfileLikelihood(object):
                 LOG.info('running {}'.format(self.model_dct[model][param].copasi_file))
                 sge_job_filename = "{}_{}".format(param, model)
                 sge_job_filename = re.sub('[().]', '', sge_job_filename)
-                Run(self.model_dct[model][param], task='scan', mode=self.run_mode, sge_job_filename=sge_job_filename+'.sh')
+                Run(self.model_dct[model][param], task='scan', mode=self.run, sge_job_filename=sge_job_filename+'.sh')
 
 if __name__=='__main__':
     pass

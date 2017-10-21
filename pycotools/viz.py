@@ -1,3 +1,4 @@
+# -*-coding: utf-8 -*-
 """
  This file is part of pycotools.
 
@@ -143,8 +144,6 @@ LOG=logging.getLogger(__name__)
 
 
 
-
-
 class SeabornContextMixin(Mixin):
     def context(context='poster', font_scale=3, rc=None):
         seaborn.set_context(
@@ -251,6 +250,7 @@ class TruncateData(object):
         :return:
             :py:class:'pandas.DataFrame`
         """
+        self.data = self.data.sort_values(by='RSS')
         return self.data.iloc[self.theta]
 
     def truncate(self):
@@ -273,7 +273,11 @@ class ParseMixin(Mixin):
         :return:
         """
         if type(cls) == Parse:
-            return cls.data
+
+            if log10:
+                return numpy.log10(cls.data)
+            else:
+                return cls.data
         else:
             return Parse(cls, log10=log10, copasi_file=copasi_file).data
 
@@ -415,7 +419,8 @@ class Parse(object):
                           tasks.MultiParameterEstimation,
                           str,
                           Parse,
-                          tasks.ProfileLikelihood]
+                          tasks.ProfileLikelihood,
+                          pandas.DataFrame]
 
         if type(self.cls_instance) not in accepted_types:
             raise errors.InputError('{} not in {}'.format(
@@ -452,11 +457,20 @@ class Parse(object):
             data = self.from_multi_parameter_estimation(self.cls_instance)
 
         elif type(self.cls_instance) == Parse:
-            return self.cls_instance.data
+            data = self.cls_instance.data
 
         elif type(self.cls_instance) == tasks.ProfileLikelihood:
             data = self.from_profile_likelihood()
 
+
+        elif type(self.cls_instance) == pandas.core.frame.DataFrame:
+            data = self.cls_instance
+            if 'RSS' not in data.keys():
+                raise errors.InputError('DataFrame should have an RSS column. Your '
+                                        'df only has these: "{}"'.format(data.columns))
+            data = data.sort_values(by='RSS')
+
+        ##They are all strings. So only do this last
         elif type(self.cls_instance == str):
             data = self.from_folder()
 
@@ -903,7 +917,13 @@ class PlotTimeCourse(PlotKwargs):
             'dpi': 300,
             'context': 'talk',
             'font_scale': 1.5,
-            'rc': None
+            'rc': None,
+            'copasi_file': None,
+            'despine': True,
+            'linewidth': 3,
+            'color': 'red',
+            'linestyle': '-',
+            'ext': 'png'
         }
         self.default_properties.update(self.plot_kwargs())
         for i in kwargs.keys():
@@ -915,7 +935,7 @@ class PlotTimeCourse(PlotKwargs):
         self.update_properties(self.default_properties)
         self._do_checks()
 
-        self.data = self.parse(self.cls, self.log10)
+        self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
 
         self.plot()
@@ -970,7 +990,7 @@ class PlotTimeCourse(PlotKwargs):
             self.ylabel = 'Concentration ({})'.format(self.cls.model.quantity_unit)
 
         if self.savefig and (self.separate is False) and (self.filename is None):
-            self.filename = 'TimeCourse.png'
+            self.filename = 'TimeCourse.{}'.format(self.ext)
             LOG.warning('filename is None. Setting default filename to {}'.format(self.filename))
 
     def plot(self):
@@ -1017,19 +1037,23 @@ class PlotTimeCourse(PlotKwargs):
                 figures.append(fig)
             y = self.data[y_var]
             x = self.data[self.x]
-            plt.plot(x, y, label=y_var)
+            plt.plot(x, y, label=y_var, linewidth=self.linewidth,
+                     linestyle=self.linestyle)
             plt.legend()
             plt.title(self.title)
             plt.xlabel(self.xlabel)
             plt.ylabel(self.ylabel)
+
+            if self.despine:
+                seaborn.despine(fig=fig, top=True, right=True)
+
             if self.savefig:
                 dirs = self.create_directory(self.results_directory)
+                fle = os.path.join(dirs, '{}.{}'.format(y_var, self.ext))
 
                 if self.separate:
-                    fle = os.path.join(dirs, '{}.png'.format(y_var))
                     fig.savefig(fle, dpi=self.dpi, bbox_inches='tight')
                 else:
-                    fle = os.path.join(dirs, self.filename)
                     fig.savefig(fle, dpi=self.dpi, bbox_inches='tight')
 
         if self.show:
@@ -1136,13 +1160,13 @@ class PlotTimeCourseEnsemble(object):
                    'ylabel': None,
                    'xlabel': None,
                    'run_mode': True,
-                   'copasi_file': None,
                    'despine': True,
                    'legend': True,
                    'ext': 'png',
                    'context': 'talk',
                    'font_scale': 1.5,
-                   'rc': None
+                   'rc': None,
+                   'copasi_file': None,
                    }
 
         for i in kwargs.keys():
@@ -1153,7 +1177,13 @@ class PlotTimeCourseEnsemble(object):
         self._do_checks()
         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
 
+
+
         self.data = self.parse(self.cls, log10=False, copasi_file=self.copasi_file)
+
+        if self.copasi_file is not None:
+            self.cls.model = model.Model(self.copasi_file)
+
         self.data = self.truncate(self.data,
                                   mode=self.truncate_mode,
                                   theta=self.theta)
@@ -1208,10 +1238,6 @@ class PlotTimeCourseEnsemble(object):
             if isinstance(self.experiment_files, str):
                 self.experiment_files = [self.experiment_files]
 
-                #LOG.debug('type after --> {}'.format(type(self.cls)))
-                # if self.results_directory == None:
-                #     self.results_directory = self.create_directory()
-                # self.results_directory = os.path.join(self.cls.model.root, 'EnsembleTimeCourses' )
 
     @property
     def parse_experimental_files(self):
@@ -1282,7 +1308,7 @@ class PlotTimeCourseEnsemble(object):
                                   run=self.run_mode)
             if self.check_as_you_plot:
                 self.cls.model.open()
-            d[i] = self.parse(TC, log10=False)
+            d[i] = self.parse(TC, log10=False, copasi_file=self.copasi_file)
         return pandas.concat(d)
 
 
@@ -1322,7 +1348,6 @@ class PlotTimeCourseEnsemble(object):
                 LOG.info('Plotting "{}"'.format(parameter))
                 plt.figure()
                 # seaborn.set_palette([self.color])
-                LOG.debug('legend is --> {}'.format(self.legend))
                 ax1 = seaborn.tsplot(
                     data=data, time='Time', value=parameter,
                     unit='ParameterFitIndex',
@@ -1372,8 +1397,8 @@ class PlotTimeCourseEnsemble(object):
                     fname = os.path.join(self.results_directory, '{}.{}'.format(
                         misc.RemoveNonAscii(parameter).filter, self.ext))
                     plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
-        if self.show:
-            plt.show()
+                if self.show:
+                    plt.show()
 
 @mixin(tasks.UpdatePropertiesMixin)
 @mixin(SaveFigMixin)
@@ -1402,7 +1427,8 @@ class PlotScan(object):
             'dpi': 400,
             'context': 'talk',
             'font_scale': 1.5,
-            'rc': None
+            'rc': None,
+            'copasi_file': None,
         }
 
         for i in kwargs.keys():
@@ -1415,7 +1441,8 @@ class PlotScan(object):
 
         raise NotImplementedError
 
-        self.data = self.parse(self.cls, self.log10)
+        self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
+
 
     def __str__(self):
         """
@@ -1476,7 +1503,8 @@ class PlotParameterEstimation(PlotKwargs):
             'log10': False,
             'context': 'talk',
             'font_scale': 1.5,
-            'rc': None
+            'rc': None,
+            'copasi_file': None,
         }
         self.default_properties.update(self.plot_kwargs)
         for i in kwargs.keys():
@@ -1489,7 +1517,7 @@ class PlotParameterEstimation(PlotKwargs):
 
         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
 
-        self.data = self.parse(self.cls, self.log10)
+        self.data = self.parse(self.cls, self.log10, copasi_file=self.copasi_file)
         self.cls.model = self.update_parameters()
         self.plot()
 
@@ -1573,7 +1601,8 @@ class PlotParameterEstimation(PlotKwargs):
         for i in time_dct:
             TC = tasks.TimeCourse(self.cls.model, end=time_dct[i],
                              step_size=step_size, intervals=time_dct[i]/step_size)
-            d[i] = self.parse(TC, log10=False)
+            d[i] = self.parse(self.cls, self.log10, copasi_file=self.copasi_file)
+
         return d
 
     def plot(self):
@@ -1675,7 +1704,8 @@ class Boxplots(PlotKwargs):
                                    'ext': 'png',
                                    'context': 'talk',
                                    'font_scale': 1.5,
-                                   'rc': None
+                                   'rc': None,
+                                   'copasi_file': None,
                                    }
         self.default_properties.update(self.plot_kwargs)
         for i in kwargs.keys():
@@ -1688,7 +1718,8 @@ class Boxplots(PlotKwargs):
 
         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
 
-        self.data = self.parse(self.cls, log10=self.log10)
+        self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
+
         self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
         self.divide_data()
         self.plot()
@@ -1805,6 +1836,7 @@ class RssVsIterations(PlotKwargs):
                                    'context': 'talk',
                                    'font_scale': 1.5,
                                    'rc': None,
+                                   'copasi_file': None,
                                    }
 
         # self.default_properties.update(self.plot_kwargs)
@@ -1827,9 +1859,13 @@ class RssVsIterations(PlotKwargs):
         :return:
         """
         if self.log10:
-            self.ylabel = 'RSS (Log10)'
+            self.ylabel = 'log10 RSS'
+            self.xlabel = 'log10 Rank of Best Fit'
         else:
             self.ylabel = 'RSS'
+            self.xlabel = 'Rank of Best Fit'
+
+
 
 
     def create_directory(self):
@@ -1857,13 +1893,18 @@ class RssVsIterations(PlotKwargs):
         """
             
         fig = plt.figure()
-        plt.plot(range(self.data['RSS'].shape[0]),
+        if self.log10:
+            x = numpy.log10(range(self.data['RSS'].shape[0]))
+        else:
+            x = range(self.data['RSS'].shape[0])
+
+        plt.plot(x,
                  self.data['RSS'].sort_values(ascending=True),
                  color=self.color, linewidth=self.linewidth,
                  alpha=self.line_transparency,
                  )
 
-        plt.plot(range(self.data['RSS'].shape[0]),
+        plt.plot(x,
                  self.data['RSS'].sort_values(ascending=True), 'o',
                  color=self.markercolor, markersize=self.markersize,
                  alpha=self.marker_transparency
@@ -1939,7 +1980,8 @@ class Pca(PlotKwargs):
                                  'ext': 'png',
                                  'context': 'talk',
                                  'font_scale': 1.5,
-                                 'rc': None
+                                 'rc': None,
+                                 'copasi_file': None,
                                  }
 
 
@@ -1953,7 +1995,7 @@ class Pca(PlotKwargs):
         self._do_checks()
         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
 
-        self.data = self.parse(self.cls, log10=self.log10)
+        self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
         self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
         self.pca()
 
@@ -1997,7 +2039,7 @@ class Pca(PlotKwargs):
             if self.log10==False:
                 self.ylabel = 'PC2'
             elif self.log10==True:
-                self.ylabel = 'PC2(Log10)'
+                self.ylabel = 'log10 PC2'
             else:
                 raise errors.SomethingWentHorriblyWrongError('{} not in {}'.format(
                     self.ylabel, [True, False]))
@@ -2006,7 +2048,7 @@ class Pca(PlotKwargs):
             if self.log10==False:
                 self.xlabel = 'PC1'
             elif self.log10==True:
-                self.xlabel = 'PC1(Log10)'
+                self.xlabel = 'log10 PC1'
             else:
                 raise errors.SomethingWentHorriblyWrongError(
                     '{} not in {}'.format(self.ylabel, [True, False]))
@@ -2111,7 +2153,8 @@ class Histograms(PlotKwargs):
                                    'rug': False,
                                    'context': 'talk',
                                    'font_scale': 1.5,
-                                   'rc': None
+                                   'rc': None,
+                                   'copasi_file': None,
                                    }
 
         self.default_properties.update(self.plot_kwargs)
@@ -2123,7 +2166,7 @@ class Histograms(PlotKwargs):
         self.update_properties(self.default_properties)
         self._do_checks()
 
-        self.data = self.parse(self.cls, log10=self.log10)
+        self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
         self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
         LOG.info('plotting histograms')
         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
@@ -2155,8 +2198,8 @@ class Histograms(PlotKwargs):
                 hist=self.hist
                 )
             if self.log10:
-                plt.ylabel("log10({})".format(self.ylabel))
-                plt.xlabel("log10({})".format(parameter))
+                plt.ylabel("log10 {}".format(self.ylabel))
+                plt.xlabel("log10 {}".format(parameter).transloate(SUB))
             else:
                 plt.ylabel(self.ylabel)
                 plt.xlabel(parameter)
@@ -2187,12 +2230,10 @@ class Histograms(PlotKwargs):
         width = self.data[parameter].max() - self.data[parameter].min()
         iqr = scipy.stats.iqr(self.data[parameter])
         bins_size = 2 * (iqr/(self.data[parameter].shape[0]**1.0/3.0))
-        LOG.debug('bin size == {}'.format(bins_size))
 
         bins = numpy.arange(self.data[parameter].min(), self.data[parameter].max(),
                             bins_size)#width/num_bins
         ## calculate the density of RSS
-        LOG.debug('bins --> {}'.format(bins))
 
         groups = self.data.groupby([pandas.cut(self.data[parameter], bins), 'RSS'])
         data = groups.size().reset_index([parameter, 'RSS'])
@@ -2282,7 +2323,8 @@ class Scatters(PlotKwargs):
             'color_bar_pad': 0.1,   #padding for color bar. Dist between bar and axes
             'context': 'talk',
             'font_scale': 1.5,
-            'rc': None
+            'rc': None,
+            'copasi_file': None,
         }
 
         self.default_properties.update(self.plot_kwargs)
@@ -2296,7 +2338,7 @@ class Scatters(PlotKwargs):
         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
 
 
-        self.data = self.parse(self.cls, log10=self.log10)
+        self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
         self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
         self.plot()
 
@@ -2344,9 +2386,9 @@ class Scatters(PlotKwargs):
                         )
 
                 if self.log10:
-                    cb.set_label('log10(RSS)')
-                    plt.xlabel("log10({})".format(x_var))
-                    plt.ylabel('log10({})'.format(y_var))
+                    cb.set_label('log10 RSS')
+                    plt.xlabel("log10 {}".format(x_var))
+                    plt.ylabel('log10 {}'.format(y_var))
                 else:
                     cb.set_label('RSS')
                     plt.xlabel(x_var)
@@ -2422,7 +2464,8 @@ class LinearRegression(PlotKwargs):
             'despine': True,
             'context': 'talk',
             'font_scale': 1.5,
-            'rc': None
+            'rc': None,
+            'copasi_file': None,
         }
 
         self.default_properties.update(self.plot_kwargs)
@@ -2435,7 +2478,7 @@ class LinearRegression(PlotKwargs):
         self._do_checks()
         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
 
-        self.data = self.parse(self.cls, log10=self.log10)
+        self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
         self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
 
         self.scores, self.coef = self.compute_coefficients()
@@ -2567,10 +2610,7 @@ class ModelSelection(object):
     boxplots and histograms.
     """
 
-    def __init__(self, multi_model_fit, savefig=False,
-                 dpi=400, log10=False, filename=None, pickle=None,
-                 despine=True, ext='png', title=True,
-                 context='poster', font_scale=2, rc=None):
+    def __init__(self, multi_model_fit, **kwargs):
         """
 
         :param multi_model_fit:
@@ -2584,18 +2624,51 @@ class ModelSelection(object):
         """
         self.multi_model_fit = multi_model_fit
         self.number_models = self.get_num_models()
-        self.savefig = savefig
-        self.results_directory = self.multi_model_fit.project_dir
-        self.dpi = dpi
-        self.log10 = log10
-        self.filename = filename
-        self.pickle = pickle
-        self.ext = ext
-        self.despine = despine
-        self.title = title
-        self.context = context
-        self.font_scale = font_scale
-        self.rc = rc
+
+
+        self.default_properties = {
+            'lin_model': linear_model.LinearRegression,
+            'savefig': False,
+            'results_directory': None,
+            'dpi': 400,
+            'log10': False,
+            'filename': None,
+            'pickle': None,
+            'despine': True,
+            'ext': 'png',
+            'title': True,
+            'context': 'poster',
+            'font_scale': 2,
+            'rc': None,
+            'bins': None,
+            'hist': True,
+            'kde': True,
+            'rug': False,
+            'fit': None,
+            'hist_kws': None,
+            'kde_kws': None,
+            'rug_kws': None,
+            'color': None,
+            'vertical': None,
+            'norm_hist': False,
+            'axlabel': None,
+            'label': None,
+            'ax': None,
+            'legend': True,
+            'legend_loc': (0, -0.5),
+            'show': False
+        }
+
+        for i in kwargs.keys():
+            assert i in self.default_properties.keys(), '{} is not a keyword argument for ModelSelection'.format(i)
+        self.kwargs = self.default_properties
+        self.default_properties.update(kwargs)
+        self.update_properties(self.default_properties)
+        self._do_checks()
+
+
+
+
         self._do_checks()
 
         ## do model selection stuff
@@ -2606,6 +2679,8 @@ class ModelSelection(object):
         self.number_observations = self._get_n()
         self.model_selection_data = self.calculate_model_selection_criteria()
         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
+
+
 
         self.boxplot()
         self.histogram()
@@ -2638,12 +2713,14 @@ class ModelSelection(object):
 
         :return:
         """
+        if self.results_directory is None:
+            self.results_directory = self.multi_model_fit.project_dir
+
+
         if self.filename is None:
             save_dir = os.path.join(self.results_directory, 'ModelSelectionGraphs')
             self.filename = os.path.join(save_dir, 'ModelSelectionCriteria.csv')
 
-        # if self.pickle is None:
-        #     self.pickle = os.path.splitext(self.filename)[0]+'.pickle'
 
     def _get_results_directories(self):
         '''
@@ -2692,9 +2769,6 @@ class ModelSelection(object):
         return dct
 
     def _parse_data(self):
-        '''
-
-        '''
         if self.pickle is not None:
             #     self.pickle = os.path.splitext(self.filename)[0]+'.pickle'
             return pandas.read_pickle(self.pickle)
@@ -2706,7 +2780,7 @@ class ModelSelection(object):
                 cps_1 = glob.glob(
                     os.path.join(
                         os.path.dirname(MPE.results_directory),
-                        '*_1.cps')
+                        '*_0.cps')
                 )[0]
                 dct[cps_1] = Parse(MPE.results_directory,
                                    copasi_file=cps_1,
@@ -2769,9 +2843,12 @@ class ModelSelection(object):
         return  (n*numpy.log(RSS/n) ) + K*numpy.log(n)
 
     def calculate_model_selection_criteria(self):
-        '''
-
-        '''
+        """
+        Calculate AIC corrected and BIC
+        :return:
+            pandas.DataFrame
+        """
+        print self.data_dct
         df_dct = {}
         for model_num in range(len(self.model_dct)):
             keys = self.model_dct.keys()
@@ -2779,6 +2856,7 @@ class ModelSelection(object):
 
             k = self.number_model_parameters[cps_key]
             n = self.number_observations #constant throughout analysis
+
             rss = self.data_dct[cps_key].data.RSS
             aic_dct = {}
             bic_dct = {}
@@ -2835,6 +2913,8 @@ class ModelSelection(object):
 
         :return:
         """
+
+
         seaborn.set_context(context='poster')
         data = self.model_selection_data
 
@@ -2846,17 +2926,24 @@ class ModelSelection(object):
         for label, df in data.groupby(by=['Metric']):
             fig = plt.figure()
             for label2, df2 in df.groupby(by='Model'):
+
                 plot_data = df2['Score'].dropna()
-                seaborn.kdeplot(plot_data, shade=True, label=label2,
-                                legend=True)
+                ax = seaborn.distplot(
+                    plot_data,
+                    bins=self.bins,
+                    hist=self.hist, kde=self.kde, rug=self.rug, fit=None,
+                    hist_kws=self.hist_kws, kde_kws=self.kde_kws, rug_kws=self.rug_kws,
+                    color=self.color, vertical=self.vertical, norm_hist=self.norm_hist,
+                    axlabel=self.axlabel, label=label2, ax=self.ax)
                 if self.title:
                     plt.title("{} Score (n={})".format(label, plot_data.shape[0]))
                 plt.ylabel("Frequency")
                 plt.xlabel("Score".format(label, plot_data.shape[0]))
                 if self.despine:
                     seaborn.despine(fig=fig, top=True, right=True)
-                plt.legend(loc=(0, -0.5))
 
+                if self.legend:
+                    plt.legend(loc=(self.legend_loc))
 
             if self.savefig:
                 save_dir = os.path.join(self.results_directory, 'ModelSelectionGraphs')
@@ -2867,6 +2954,10 @@ class ModelSelection(object):
                 plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
                 LOG.info('histograms saved to : "{}"'.format(fname))
                 self.to_csv(self.filename)
+
+            if self.show:
+                plt.show()
+
     def chi2_lookup_table(self, alpha):
         '''
         Looks at the cdf of a chi2 distribution at incriments of
@@ -2941,10 +3032,9 @@ class ModelSelection(object):
         f.set_xticklabels(parameter_list,rotation=90)
         plt.legend(loc=(1,1))
         plt.title('Barplot Comparing Parameter Estimation Results for specific\nParameters accross all models')
-        plt.ylabel('log10(parameter_value),Err=SEM')
+        plt.ylabel('log10 parameter_value,Err=SEM')
         if filename!=None:
             plt.savefig(filename,dpi=200,bbox_inches='tight')
-#
 
 @mixin(tasks.UpdatePropertiesMixin)
 @mixin(ParseMixin)
@@ -2964,7 +3054,7 @@ class PlotProfileLikelihood(object):
 
 
         self.default_properties = {'x': None,
-                                   'y': None,
+                                   'y': None, #can equal all
                                    'index': None,
                                    'log10': True,
                                    'savefig': False,
@@ -2978,6 +3068,7 @@ class PlotProfileLikelihood(object):
                                    'legend_location': None,
                                    'show': False,
                                    'separate': True,
+                                   'separate_index': True,
                                    'filename': None,
                                    'despine': True,
                                    'ext': 'png',
@@ -2986,6 +3077,9 @@ class PlotProfileLikelihood(object):
                                    'xlim': None,
                                    'interpolation': None,
                                    'interpolation_resolution': 1000, #number of steps to interpolate
+                                   'context': 'talk',
+                                   'font_scale': 1,
+                                   'rc': None,
                                    }
 
         for i in kwargs.keys():
@@ -2996,7 +3090,7 @@ class PlotProfileLikelihood(object):
         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
 
         ## parse data
-        self.data = Parse(cls, log10=self.log10).data
+        self.data = Parse(self.cls, log10=self.log10).data
 
         ## do some checks
         self._do_checks()
@@ -3094,90 +3188,88 @@ class PlotProfileLikelihood(object):
             LOG.info('Profile likelihood data saved to "{}"'.format(self.filename))
 
 
-    def plot1(self, x, y, i):
-        """
-
-        :return:
-        """
-        plot_data = self.data.loc[x, i][y]
-        if type(plot_data) == pandas.Series:
-            plot_data = pandas.DataFrame(plot_data)
-
-        fig = plt.figure()
-        plot_data = plot_data.reset_index()
-
-        x_plot = plot_data['Parameter Of Interest Value']
-        y_plot = plot_data[y]
-
-        if self.interpolation is not None:
-            f = interp1d(x_plot, y_plot, kind=self.interpolation)
-            minimum = x_plot.min()
-            maximum = x_plot.max()
-            step = (maximum - minimum)/self.interpolation_resolution
-            xnew = numpy.arange(start=minimum, stop=maximum, step=step)
-            ynew = f(xnew)
-            plt.plot(xnew, ynew)
-            plt.plot(x_plot, y_plot, 'ro', label=y)#linestyle='o', color='red')
-        else:
-            plt.plot(x_plot, y_plot, label=y)
-
-        plt.plot(plot_data['Parameter Of Interest Value'],
-                 plot_data['Confidence Level'], linewidth=3,
-                 linestyle='--', color='green', label='CL')
-
-        if self.show_original_rss:
-            best_rss = list(set(plot_data['Best RSS Value']))
-            best_param_val = list(set(plot_data['Best Parameter Value']))
-            plt.plot(best_param_val, best_rss, 'ro', linewidth=5)
-
-        if self.legend:
-            if self.legend_loc is not None:
-                plt.legend(loc=self.legend_loc)
-            else:
-                plt.legend(loc='best')
-
-        if self.despine:
-            seaborn.despine(fig=fig, top=True, right=True)
-
-        if self.title is None:
-            self.title = 'Profile Likelihoods for\n{} ' \
-                    'against {} (index={})'.format(x, y, i)
-
-        plt.title(self.title)
-        if self.log10:
-            plt.ylabel('log10({})'.format(y))
-            plt.xlabel('log10({})'.format(x))
-        else:
-            plt.ylabel(y)
-            plt.xlabel(x)
-
-        if self.ylim is not None:
-            plt.ylim(self.ylim)
-
-        if self.xlim is not None:
-            plt.xlim(self.xlim)
-
-        if self.savefig:
-            d = os.path.join(self.results_directory, str(i))
-            d = os.path.join(d, x)
-            self.create_directory(d)
-            fname = os.path.join(d, misc.RemoveNonAscii(y).filter+'.{}'.format(self.ext))
-
-            plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
-            LOG.info('saved to --> {}'.format(fname))
-
-        if self.show:
-            plt.show()
-
     def plot(self):
         """
 
         :return:
         """
-        for i in self.index:
-            for x in self.x:
-                for y in self.y:
-                    self.plot1(x, y, i)
+        for x in self.x:
+            for y in self.y:
+                if not self.separate_index:
+                    fig = plt.figure()
+                for i in self.index:
+                    plot_data = self.data.loc[x, i][y]
+                    if type(plot_data) == pandas.Series:
+                        plot_data = pandas.DataFrame(plot_data)
+
+                    if self.separate_index:
+                        fig = plt.figure()
+
+                    plot_data = plot_data.reset_index()
+
+                    x_plot = plot_data['Parameter Of Interest Value']
+                    y_plot = plot_data[y]
+
+                    if self.interpolation is not None:
+                        f = interp1d(x_plot, y_plot, kind=self.interpolation)
+                        minimum = x_plot.min()
+                        maximum = x_plot.max()
+                        step = (maximum - minimum) / self.interpolation_resolution
+                        xnew = numpy.arange(start=minimum, stop=maximum, step=step)
+                        ynew = f(xnew)
+                        plt.plot(xnew, ynew)
+                        plt.plot(x_plot, y_plot, 'ro', label=y)  # linestyle='o', color='red')
+                    else:
+                        plt.plot(x_plot, y_plot, label=y)
+
+                    if y is 'RSS':
+                        plt.plot(plot_data['Parameter Of Interest Value'],
+                             plot_data['Confidence Level'], linewidth=3,
+                             linestyle='--', color='green', label='CL')
+
+                    if self.show_original_rss:
+                        best_rss = list(set(plot_data['Best RSS Value']))
+                        best_param_val = list(set(plot_data['Best Parameter Value']))
+                        plt.plot(best_param_val, best_rss, 'go', linewidth=5)
+
+                    if self.legend:
+                        if self.legend_loc is not None:
+                            plt.legend(loc=self.legend_loc)
+                        else:
+                            plt.legend(loc='best')
+
+                    if self.despine:
+                        seaborn.despine(fig=fig, top=True, right=True)
+
+                    if self.title is None:
+                        self.title = 'Profile Likelihoods for\n{} ' \
+                                     'against {} (index={})'.format(x, y, i)
+
+                    plt.title(self.title)
+                    if self.log10:
+                        plt.ylabel('log10 {}'.format(y))
+                        plt.xlabel('log10 {}'.format(x))
+                    else:
+                        plt.ylabel(y)
+                        plt.xlabel(x)
+
+                    if self.ylim is not None:
+                        plt.ylim(self.ylim)
+
+                    if self.xlim is not None:
+                        plt.xlim(self.xlim)
+
+                    if self.savefig:
+                        d = os.path.join(self.results_directory, str(i))
+                        d = os.path.join(d, x)
+                        self.create_directory(d)
+                        fname = os.path.join(d, misc.RemoveNonAscii(y).filter + '.{}'.format(self.ext))
+
+                        plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
+                        LOG.info('saved to --> {}'.format(fname))
+
+                    if self.show:
+                        plt.show()
 
 
 
