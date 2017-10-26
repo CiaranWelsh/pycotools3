@@ -542,7 +542,7 @@ class RunParallel(object):
                 raise errors.InputError('Input should be a list of models to run')
 
         if self.max_active is None:
-            self.max_active = 1e5
+            self.max_active = len(self.models)
     # def __str__(self):
     #     return 'RunParallel({})'.format()
 
@@ -572,14 +572,12 @@ class RunParallel(object):
         """
         pids = []
         num_models_to_process = len(self.models)
-        for i in self.models:
-            print i
-        print len(self.models)
         while num_models_to_process > 0:
             # for copy_number, model in self.models.items():
             model = self.models[num_models_to_process - 1]
             if len(pids) < self.max_active:
                 num_models_to_process -= 1
+                LOG.debug('num left to process --> {}'.format(num_models_to_process))
                 subp = subprocess.Popen(['CopasiSE', model.copasi_file])
                 pids.append(subp.pid)
 
@@ -593,6 +591,7 @@ class RunParallel(object):
                         del pids[pid]
 
             except IndexError:
+                LOG.warning('index error skipped')
                 continue
 
 
@@ -3813,7 +3812,8 @@ class MultiParameterEstimation(ParameterEstimation):
             LOG.debug('run mode --> {}'.format(self.run_mode))
             LOG.debug('models --> {}'.format(self.models.values()))
             LOG.debug('len models --> {}'.format(len(self.models.values())))
-            RunParallel(self.models.values(), max_active=self.max_active)
+            RunParallel(self.models.values(), mode=self.run_mode, max_active=self.max_active,
+                        task='scan')
         else:
             for copy_number, model in self.models.items():
                 LOG.info('running model: {}'.format(copy_number))
