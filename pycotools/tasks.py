@@ -24,6 +24,7 @@
 import time
 import threading
 import Queue
+import psutil
 import shutil
 import numpy 
 import pandas
@@ -380,7 +381,8 @@ class Run(object):
             self.submit_copasi_job_SGE()
 
         elif self.mode == 'multiprocess':
-            self.multi_run()
+            raise ValueError('Use "RunParallel" class for multiprocess mode')
+            # self.multi_run()
 
 
     def _do_checks(self):
@@ -405,14 +407,15 @@ class Run(object):
         return 'Run({})'.format(self.to_string())
 
     def multi_run(self):
+        pids = []
         ##TODO build Queue.Queue system for multi running. 
         def run(x):
             if os.path.isfile(x) != True:
                 raise errors.FileDoesNotExistError('{} is not a file'.format(self.copasi_file))
-            subprocess.Popen(['CopasiSE', self.model.copasi_file])
+            p = subprocess.Popen(['CopasiSE', self.model.copasi_file])
+            return p.pid
+
         Process(run(self.model.copasi_file))
-
-
 
     def set_task(self):
         """
@@ -487,37 +490,50 @@ class Run(object):
 @mixin(Bool2Numeric)
 class RunParallel(object):
     def __init__(self, models, **kwargs):
-        raise NotImplementedError('still work to do on this class')
         self.models = models
         self.kwargs = kwargs
-
+        LOG.debug('i be models --> {}'.format(models))
         self.default_properties = {
-            'processes': 1,
-            'shell': True,
+            'max_active': None,
+            'task': 'parameter_estimation',
+            'mode': 'multiprocess'
         }
-        self.default_properties.update(kwargs)
+        self.default_properties.update(self.kwargs)
+        self.default_properties = self.convert_bool_to_numeric(self.default_properties)
         self.update_properties(self.default_properties)
-        self.update_kwargs(kwargs)
-        self.check_integrity(self.default_properties.keys(), kwargs.keys())
+        self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
+        LOG.debug('self.models from run --> {}'.format(self.models))
         self._do_checks()
+        # self.set_task()
 
-        LOG.info('running with {} processes'.format(self.processes))
-        self.q = Queue.Queue(maxsize=self.processes)
-        self.results = self.run_parallel()
-        raise NotImplementedError('This was an attempt to make a'
-                                  'more sophisticated queuing system '
-                                  'for jobs run in parallel. I wanted to get '
-                                  '(say) 8 models running at once but no'
-                                  'more. This issue is still unresolved. ')
+        self.models = self.set_task()
+        [i.save() for i in self.models]
+
+        # if self.mode is 'multiprocess':
+
+        self.run_parallel()
+
+        # else:
+        #     raise ValueError('Mode should be \'multiprocess\' '
+        #                      'to use parallel')
 
     def _do_checks(self):
         """
-
+        Varify integrity of user input
         :return:
         """
-        if self.processes > cpu_count():
-            raise errors.InputError('number of processes should be less than the number of CPUs')
+        tasks = ['steady_state', 'time_course',
+                 'scan', 'flux_mode', 'optimization',
+                 'parameter_estimation', 'metabolic_control_analysis',
+                 'lyapunov_exponents', 'time_scale_separation_analysis',
+                 'sensitivities', 'moieties', 'cross_section',
+                 'linear_noise_approximation']
+        if self.task not in tasks:
+            raise errors.InputError('{} not in list of tasks. List of tasks are: {}'.format(self.task, tasks))
 
+        modes = [False, 'multiprocess']
+        if self.mode not in modes:
+            raise errors.InputError('{} not in {}'.format(self.mode, modes))
         if not isinstance(self.models, list):
             raise errors.InputError('input should be a list of models to run')
 
@@ -525,139 +541,59 @@ class RunParallel(object):
             if not isinstance(i, model.Model):
                 raise errors.InputError('Input should be a list of models to run')
 
+        if self.max_active is None:
+            self.max_active = 1e5
+    # def __str__(self):
+    #     return 'RunParallel({})'.format()
 
-    def run1(self, model):
-        '''
-        Process the copasi file using CopasiSE
-        '''
-
-        args = ['CopasiSE', "{}".format(model.copasi_file)]
-        proc = subprocess.Popen(
-            args,
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            shell=False
-        )
-        # self.q.put(proc, block=True)
-        LOG.info('running from run1 "{}"'.format(model.copasi_file))
-        # self.q.join() ##blocks until all tasks are done
-        import time
-        import psutil
-
-
-        while proc.poll() != 0:
-
-            time.sleep(1)
-
-
-
-    def run_parallel2(self):
+    def set_task(self):
         """
-        This one works for just a single coapsi file
-        at a time
+
         :return:
         """
-        res = {}
-        import multiprocessing
-        # q = Queue.Queue()
-        q = multiprocessing.Queue(3)
-
-        for mod in self.models:
-            t = threading.Thread(target=self.run1, args=(mod,),
-                                 name=mod.copasi_file)
-            LOG.info('current process --> {}'.format(multiprocessing.current_process().name))
-            # t.daemon = True
-            t.start()
-            t.join()
-            # res[model] = self.q.get()#.model
-        # return res
-
-    def run_parallel2(self):
-        """
-        :return:
-        """
-        res = {}
-        import multiprocessing
-        # q = Queue.Queue()
-        q = multiprocessing.Queue(3)
-        threads = []
-        for mod in self.models:
-            t = threading.Thread(target=self.run1, args=(mod,),
-                                 name=mod.copasi_file)
-            t.daemon = True
-            threads.append(t)
-        for i in range(len(threads)):
-            threads[i].start()
-                # i.start()
-            #.join()
-            # res[model] = self.q.get()#.model
-            # return res
-
-    def submit(self, model):
-        process = subprocess.Popen(['CopasiSE',model])
-
-
-    def run1(self, q, model):
-        self.submit(model)
-
-    def do_stuff(self, q, model):
-        while True:
-            q.put(subprocess.Popen(['CopasiSE', '{}'.format(model.copasi_file)]))
-            proc = q.get()
-            if proc.wait() == 0:
-                q.task_done()
+        task = self.task.replace(' ', '_').lower()
+        model_list = []
+        for model in self.models:
+            for i in model.xml.find('{http://www.copasi.org/static/schema}ListOfTasks'):
+                i.attrib['scheduled'] = "false"  # set all to false
+                task_name = i.attrib['name'].lower().replace('-', '_').replace(' ', '_')
+                if task == task_name:
+                    i.attrib['scheduled'] = "true"
+            model_list.append(model)
+        assert len(self.models) == len(model_list)
+        return model_list
 
     def run_parallel(self):
-        q = Queue.Queue()
-        num_threads = 1
-        num_models = len(self.models)
-        batch_size = 1
-
-        while num_models > 0:
-            for i in range(num_threads):
-                try:
-                    num_models = num_models - 1
-                    if num_models == 0:
-                        break
-
-
-                    worker = threading.Thread(target=self.do_stuff,
-                                          args=(q, self.models[num_models]))
-                    worker.daemon = True
-                    worker.start()
-                except IndexError:
-                    break
-            q.join()
-
-
-        # for i in range(num_threads):
-        #     for j in range(batch_size):
-        #         try:
-        #             model = self.models[i*j+j]
-        #                 self.models[j].copasi_file))
-        #             worker = threading.Thread(target=self.do_stuff,
-        #                                       args=(q,self.models[j]))
-        #             worker.daemon = True
-        #             worker.start()
-        #         except IndexError:
-        #             break
-        #     q.join()
-
-    def get_result(self):
         """
-
+        Run models in parallel. Only have self.max_active
+        models running at once
         :return:
+            None
         """
-        output_dct = {}
-        for proc in self.results:
-            process = self.results[proc]
-            output, error = process.communicate()
+        pids = []
+        num_models_to_process = len(self.models)
+        for i in self.models:
+            print i
+        print len(self.models)
+        while num_models_to_process > 0:
+            # for copy_number, model in self.models.items():
+            model = self.models[num_models_to_process - 1]
+            if len(pids) < self.max_active:
+                num_models_to_process -= 1
+                subp = subprocess.Popen(['CopasiSE', model.copasi_file])
+                pids.append(subp.pid)
 
-            if error != '':
-                raise errors.CopasiError('Failed with a Copasi Error:\n\n{}'.format(error))
-            output_dct[proc] = output
-        return output_dct
+            try:
+                for pid in range(len(pids)):
+                    p = psutil.Process(pids[pid])
+                    if psutil.pid_exists(pids[pid]) is False:
+                        del pids[pid]
+
+                    if p.status() is 'zombie':
+                        del pids[pid]
+
+            except IndexError:
+                continue
 
 
 @mixin(model.GetModelComponentFromStringMixin)
@@ -2902,7 +2838,9 @@ class ParameterEstimation(object):
                                    'lower_bound': 0.000001,
                                    'upper_bound': 1000000,
                                    'start_value': 0.1,
-                                   'save': False}
+                                   'save': False,
+                                   'run_mode': True,
+                                   'max_active': None}
 
         self.default_properties.update(self.kwargs)
         self.default_properties = self.convert_bool_to_numeric(self.default_properties)
@@ -3017,6 +2955,12 @@ class ParameterEstimation(object):
             raise errors.InputError(
                 ''' Argument to the use_config_start_values must be \'True\' or \'False\' not {}'''.format(
                     self.use_config_start_values))
+            if self.randomize_start_values in ['true', 1, '1', True]:
+                LOG.warning('using config start values but randomize start '
+                            'values is set to True. ')
+
+        if type(self.start_value) is pandas.Series:
+            self.start_value = pandas.DataFrame(self.start_value)#, index=['start_value'])
 
 
     @property
@@ -3049,6 +2993,7 @@ class ParameterEstimation(object):
         self.model = self.insert_all_fit_items()
         assert self.model != None
         assert isinstance(self.model, model.Model)
+        self.model.save()
         return self.model
 
     def _select_method(self):
@@ -3143,7 +3088,8 @@ class ParameterEstimation(object):
         self.start_temperature =str(self.start_temperature)
         self.cooling_factor =str(self.cooling_factor)
         self.lower_bound =str( self.lower_bound)
-        self.start_value =str( self.start_value)
+        if isinstance(self.start_value, (float, int)):
+            self.start_value =str( self.start_value)
         self.upper_bound = str( self.upper_bound)
 
     @property
@@ -3185,30 +3131,6 @@ class ParameterEstimation(object):
                 key = i.attrib['key']
         assert key != None
         return key
-
-
-
-        # '''
-        # PlotPEDataKwargs plotting specific kwargs
-        # '''
-        # self.PlotPEDataKwargs={}
-        # self.PlotPEDataKwargs['line_width']=self.kwargs.get('line_width')
-        # self.PlotPEDataKwargs['font_size']=self.kwargs.get('font_size')
-        # self.PlotPEDataKwargs['axis_size']=self.kwargs.get('axis_size')
-        # self.PlotPEDataKwargs['extra_title']=self.kwargs.get('extra_title')
-        # self.PlotPEDataKwargs['show']=self.kwargs.get('show')
-        # self.PlotPEDataKwargs['savefig']=self.kwargs.get('savefig')
-        # self.PlotPEDataKwargs['title_wrap_size']=self.kwargs.get('title_wrap_size')
-        # self.PlotPEDataKwargs['ylimit']=self.kwargs.get('ylimit')
-        # self.PlotPEDataKwargs['xlimit']=self.kwargs.get('xlimit')
-        # self.PlotPEDataKwargs['dpi']=self.kwargs.get('dpi')
-        # self.PlotPEDataKwargs['xtick_rotation']=self.kwargs.get('xtick_rotation')
-        # self.PlotPEDataKwargs['marker_size']=self.kwargs.get('marker_size')
-        # self.PlotPEDataKwargs['legend_loc']=self.kwargs.get('legend_loc')
-        # self.PlotPEDataKwargs['prune_headers']=self.kwargs.get('prune_headers')
-        # self.PlotPEDataKwargs['separator']=self.kwargs.get('separator')
-        # self.PlotPEDataKwargs['results_directory']=self.kwargs.get('results_directory')
-
 
     def format_results(self):
         """
@@ -3417,6 +3339,17 @@ class ParameterEstimation(object):
         df['upper_bound'] = [self.upper_bound]*df.shape[0]
 
         df = df.set_index('name')
+        if isinstance(self.start_value, pandas.core.frame.DataFrame):
+            if len(self.start_value.columns) != 1:
+                raise errors.InputError('start values should have only one column. Got \n\n{}'.format(self.start_value))
+            self.start_value.columns = ['start_value']
+            for i in list(self.start_value.index):
+                if i != 'RSS':
+                    if i not in self.model.all_variable_names:
+                        raise errors.InputError('"{}" not in model. '
+                                                'These are in your model "{}"'.format(i, self.model.all_variable_names))
+
+                    df.loc[i]['start_value'] = float(self.start_value.loc[i])
 
         return df
 
@@ -3695,7 +3628,10 @@ class ParameterEstimation(object):
         Run the parameter estimation using the Run class
         :return:
         """
-        Run(self.model, mode=True, task='parameter_estimation')
+        if self.run_mode is 'multiprocess':
+            RunParallel(self.model, task='parameter_estimation', max_active=self.max_active)
+        else:
+            Run(self.model, mode=self.run_mode, task='parameter_estimation')
 
 
 
@@ -3713,12 +3649,14 @@ class MultiParameterEstimation(ParameterEstimation):
     '''
     ##TODO Merge ParameterEstimation and Multi into one class.
     def __init__(self, model, experiment_files, copy_number=1, pe_number=3,
-                 run_mode='multiprocess', results_directory=None, output_in_subtask=False, **kwargs):
+                 run_mode='multiprocess', results_directory=None,
+                 output_in_subtask=False, max_active=None, **kwargs):
         super(MultiParameterEstimation, self).__init__(model, experiment_files, **kwargs)
         ## add to ParameterEstimation defaults
         self.copy_number = copy_number
         self.pe_number = pe_number
         self.run_mode = run_mode
+        self.max_active = max_active
         self.results_directory = results_directory
         self.output_in_subtask = output_in_subtask
 
@@ -3733,12 +3671,15 @@ class MultiParameterEstimation(ParameterEstimation):
 
     ##void
     def __do_checks(self):
-        '''
+        """
 
-        '''
+        :return:
+        """
         if self.output_in_subtask:
             LOG.warning('output_in_subtask has been turned on. This means that you\'ll get function evaluations with the best parameter set that the algorithm finds')
-        run_arg_list=['multiprocess','SGE']
+
+        run_arg_list = ['multiprocess', 'SGE']
+
         if self.run_mode not in run_arg_list:
             raise errors.InputError('run_mode needs to be one of {}'.format(run_arg_list))
 
@@ -3868,9 +3809,15 @@ class MultiParameterEstimation(ParameterEstimation):
         # if os.path.isfile(self.copasi_file_pickle):
         #     with open(self.copasi_file_pickle) as f:
         #         self.sub_copasi_files=pickle.load(f)
-        for copy_number, model in self.models.items():
-            LOG.info('running model: {}'.format(copy_number))
-            Run(model, mode=self.run_mode, task='scan')
+        if self.run_mode == 'multiprocess':
+            LOG.debug('run mode --> {}'.format(self.run_mode))
+            LOG.debug('models --> {}'.format(self.models.values()))
+            LOG.debug('len models --> {}'.format(len(self.models.values())))
+            RunParallel(self.models.values(), max_active=self.max_active)
+        else:
+            for copy_number, model in self.models.items():
+                LOG.info('running model: {}'.format(copy_number))
+                Run(model, mode=self.run_mode, task='scan')
 
     def setup(self):
         """
@@ -3917,15 +3864,24 @@ class MultiParameterEstimation(ParameterEstimation):
 
 
     def run_secondary_locals(self, log10=False, truncate_mode='percent',
-                             theta=100):
+                             theta=100, iteration_limit=100, tolerance=1e-6):
         """
         run a secondary local parameter estimation
         for each
         :return:
         """
+        self.method = 'hooke_jeeves'
+        self.iteration_limit = iteration_limit
+        self.tolerance = tolerance
+        self.pe_number=1
         data = viz.Parse(self, log10=log10).data
         data = viz.TruncateData(data, mode=truncate_mode, theta=theta).data
-        print data
+        num_to_process = data.shape[0]
+
+
+
+class RunSecondaryParameterEstimations(object):
+    pass
 
 
 @mixin(UpdatePropertiesMixin)

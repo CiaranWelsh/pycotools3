@@ -307,13 +307,14 @@ class CreateResultsDirectoryMixin(Mixin):
         return results_directory
 
 class ChiSquaredStatistics(object):
-    def __init__(self, rss, dof, num_data_points, alpha, plot_chi2=False):
+    def __init__(self, rss, dof, num_data_points, alpha,
+                 plot_chi2=False, show=False):
         self.alpha = alpha
         self.dof = dof
         self.rss = rss
         self.num_data_points = num_data_points
         self.CL = self.calc_chi2_CL()
-
+        self.show=show
         if plot_chi2:
             self.plot_chi2_CL()
 
@@ -358,6 +359,8 @@ class ChiSquaredStatistics(object):
         plt.xlabel('x', fontsize=22)
         plt.ylabel('Probability', fontsize=22)
         plt.title('Chi2 distribution with {} dof'.format(self.dof), fontsize=22)
+        if self.show:
+            plt.show()
 
     def calc_chi2_CL(self):
         """
@@ -391,7 +394,7 @@ class Parse(object):
                                                 the copasi file argument.
     ==================================          ===========================
     """
-    def __init__(self, cls_instance, log10=False, copasi_file=None):
+    def __init__(self, cls_instance, log10=False, copasi_file=None, alpha=0.95):
         """
 
         :param cls_instance:
@@ -410,6 +413,7 @@ class Parse(object):
         self.log10 = log10
         self.copasi_file = copasi_file
         self.model = None
+        self.alpha = alpha
         if self.copasi_file is not None:
             self.model = model.Model(self.copasi_file)
 
@@ -610,10 +614,10 @@ class Parse(object):
         if self.copasi_file is None:
             raise errors.InputError('To read data from a folder of'
                                     'parameter estimation data files '
-                                    'specify argument to copasi_file. This'
+                                    'specify argument to copasi_file. This '
                                     'should be the configured model '
-                                    'that was used to generate the parameter'
-                                    ' estimation data. This is necessary to annotate'
+                                    'that was used to generate the parameter '
+                                    ' estimation data. This is necessary to annotate '
                                     ' data with model component names')
         m = model.Model(self.copasi_file)
         ## check that cps has a parameter estimation configured
@@ -783,7 +787,7 @@ class Parse(object):
                                         'parameter estimation before trying again.')
             return s
 
-        def confidence_level(cls, alpha=0.95):
+        def confidence_level(cls):
             """
             Get confidence level using ChiSquaredStatistics
 
@@ -796,7 +800,7 @@ class Parse(object):
                 experiment_files = experiment_files_in_use(cls.model)
                 CL_dct[index] = float(ChiSquaredStatistics(
                     rss_value, dof(cls.model), num_data_points(experiment_files),
-                    alpha
+                    self.alpha
                 ).CL)
             return CL_dct
 
@@ -840,13 +844,11 @@ class Parse(object):
                         df = pandas.concat(df_list2, axis=1)
                     # print df.head()
                     # print self.cls_instance.parameters
-                    CL = confidence_level(self.cls_instance, alpha=0.95)
+                    CL = confidence_level(self.cls_instance)
                     if self.log10:
                         df['Best Parameter Value'] = math.log10(float(self.cls_instance.parameters[index][param]))
                         df['Best RSS Value'] = math.log10(float(self.cls_instance.parameters[index]['RSS']))
                         CL[index] = math.log10(CL[index])
-                        # df['Parameter Of Interest Value'] = math.log10(df['Parameter Of Interest Value'])
-                        # df = math.log10(df)
                     else:
                         df['Best Parameter Value'] = float(self.cls_instance.parameters[index][param])
                         df['Best RSS Value'] = float(self.cls_instance.parameters[index]['RSS'])
@@ -1599,9 +1601,11 @@ class PlotParameterEstimation(PlotKwargs):
         d = {}
         step_size = 1
         for i in time_dct:
-            TC = tasks.TimeCourse(self.cls.model, end=time_dct[i],
-                             step_size=step_size, intervals=time_dct[i]/step_size)
-            d[i] = self.parse(self.cls, self.log10, copasi_file=self.copasi_file)
+            TC = tasks.TimeCourse(
+                self.cls.model, end=time_dct[i], step_size=step_size,
+                intervals=time_dct[i]/step_size,
+            )
+            d[i] = self.parse(TC, self.log10, copasi_file=self.copasi_file)
 
         return d
 
@@ -1791,7 +1795,7 @@ class Boxplots(PlotKwargs):
 @mixin(TruncateDataMixin)
 @mixin(CreateResultsDirectoryMixin)
 @mixin(SeabornContextMixin)
-class RssVsIterations(PlotKwargs):
+class LikelihoodRanks(PlotKwargs):
     """
 
     Plot the ordered residual sum of squares (RSS) objective
@@ -1849,7 +1853,7 @@ class RssVsIterations(PlotKwargs):
         self._do_checks()
         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
 
-        self.data = self.parse(self.cls, log10=self.log10)
+        self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
 
         self.plot()
 
@@ -2022,11 +2026,11 @@ class Pca(PlotKwargs):
         varify integrity of user input
         :return:
         """
-        if self.title is None:
-            if self.by is 'parameters':
-                title = 'PCA by Parameters (n={})'.format(len(labels))
-            elif self.by is 'iterations':
-                title = 'PCA by Iterations (n={})'.format(len(labels))
+        # if self.title is None:
+        #     if self.by is 'parameters':
+        #         title = 'PCA by Parameters (n={})'.format(len(labels))
+        #     elif self.by is 'iterations':
+        #         title = 'PCA by Iterations (n={})'.format(len(labels))
 
         if self.by not in ['parameters','iterations']:
             raise errors.InputError('{} not in {}'.format(
@@ -2108,6 +2112,9 @@ class Pca(PlotKwargs):
             self.create_directory()
             fle = os.path.join(self.results_directory, 'Pca_by_{}.{}'.format(self.by, self.ext))
             plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
+
+        if self.show:
+            plt.show()
 
 @mixin(tasks.UpdatePropertiesMixin)
 @mixin(ParseMixin)
@@ -2198,8 +2205,8 @@ class Histograms(PlotKwargs):
                 hist=self.hist
                 )
             if self.log10:
-                plt.ylabel("log10 {}".format(self.ylabel))
-                plt.xlabel("log10 {}".format(parameter).transloate(SUB))
+                plt.ylabel("{}".format(self.ylabel))
+                plt.xlabel("log10 {}".format(parameter))
             else:
                 plt.ylabel(self.ylabel)
                 plt.xlabel(parameter)
@@ -2303,7 +2310,7 @@ class Scatters(PlotKwargs):
         self.plot_kwargs = self.plot_kwargs()
 
         self.default_properties = {
-            'x':'RSS',
+            'x': 'RSS',
             'y': None,
             'sep': '\t',
             'log10': False,
@@ -2353,6 +2360,8 @@ class Scatters(PlotKwargs):
         if self.results_directory is None:
             self.results_directory = os.path.join(self.cls.model.root, 'Scatters')
 
+
+
     def plot(self):
         """
 
@@ -2360,6 +2369,13 @@ class Scatters(PlotKwargs):
         """
         if self.y is None:
             self.y = self.data.keys()
+
+        if self.y == 'all' or self.y == ['all']:
+            self.y = self.data.keys()
+
+        if self.x == 'all' or self.x == ['all']:
+            self.x = self.data.keys()
+
 
         for x_var in self.x:
             if x_var not in sorted(list(self.data.keys())):
@@ -2371,7 +2387,7 @@ class Scatters(PlotKwargs):
                     raise errors.InputError('"{}" invalid. These are valid: "{}"'.format(
                         y_var, self.data.keys()
                     )
-                )
+                    )
                 LOG.info('Plotting "{}" Vs "{}"'.format(x_var, y_var))
                 fig = plt.figure()
                 plt.scatter(
@@ -2383,7 +2399,7 @@ class Scatters(PlotKwargs):
                 if self.title:
                     title = 'Scatter graph of\n {} Vs {}.(n={})'.format(
                         x_var, y_var, self.data.shape[0]
-                        )
+                    )
 
                 if self.log10:
                     cb.set_label('log10 RSS')
@@ -3068,7 +3084,6 @@ class PlotProfileLikelihood(object):
                                    'legend_location': None,
                                    'show': False,
                                    'separate': True,
-                                   'separate_index': True,
                                    'filename': None,
                                    'despine': True,
                                    'ext': 'png',
@@ -3080,6 +3095,7 @@ class PlotProfileLikelihood(object):
                                    'context': 'talk',
                                    'font_scale': 1,
                                    'rc': None,
+                                   'multiplot': False,
                                    }
 
         for i in kwargs.keys():
@@ -3195,14 +3211,14 @@ class PlotProfileLikelihood(object):
         """
         for x in self.x:
             for y in self.y:
-                if not self.separate_index:
+                if self.multiplot:
                     fig = plt.figure()
                 for i in self.index:
                     plot_data = self.data.loc[x, i][y]
                     if type(plot_data) == pandas.Series:
                         plot_data = pandas.DataFrame(plot_data)
 
-                    if self.separate_index:
+                    if not self.multiplot:
                         fig = plt.figure()
 
                     plot_data = plot_data.reset_index()
@@ -3217,8 +3233,8 @@ class PlotProfileLikelihood(object):
                         step = (maximum - minimum) / self.interpolation_resolution
                         xnew = numpy.arange(start=minimum, stop=maximum, step=step)
                         ynew = f(xnew)
-                        plt.plot(xnew, ynew)
-                        plt.plot(x_plot, y_plot, 'ro', label=y)  # linestyle='o', color='red')
+                        plt.plot(xnew, ynew, 'k')
+                        plt.plot(x_plot, y_plot, 'ro', label=y, linewidth=2)  # linestyle='o', color='red')
                     else:
                         plt.plot(x_plot, y_plot, label=y)
 
@@ -3230,7 +3246,8 @@ class PlotProfileLikelihood(object):
                     if self.show_original_rss:
                         best_rss = list(set(plot_data['Best RSS Value']))
                         best_param_val = list(set(plot_data['Best Parameter Value']))
-                        plt.plot(best_param_val, best_rss, 'go', linewidth=5)
+                        plt.plot(best_param_val, best_rss, 'g*', linewidth=5,
+                                 markersize=12)
 
                     if self.legend:
                         if self.legend_loc is not None:

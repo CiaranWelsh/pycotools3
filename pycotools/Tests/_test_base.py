@@ -55,7 +55,7 @@ class _BaseTest(unittest.TestCase):
                        'ParameterEstimationPlots', 'test_mpe',
                        'EnsembleTimeCourse', 'Histograms',
                        'LinearRegression', 'MultipleParameterEstimationResults',
-                       'PCA', 'Scatters']
+                       'PCA', 'Scatters', 'ProfileLikelihoods']
             if delete_dirs:
                 for i in subdirs:
                     d = os.path.join(dire, i)
@@ -75,8 +75,12 @@ class _BaseTest(unittest.TestCase):
             for i in glob.glob(os.path.join(dire, '*.csv') ):
                 os.remove(i)
 
-            for i in glob.glob(os.path.join(dire, '*.pickle') ):
-                os.remove(i)
+            for i in glob.glob(os.path.join(dire, '*.pickle')):
+                dire, fle = os.path.split(i)
+                ## keep until I know keep list is not needed.
+                keep_list = []
+                if fle not in keep_list:
+                    os.remove(i)
 
 # class _ParameterEstimationBase(_BaseTest):
 #     """

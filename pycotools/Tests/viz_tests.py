@@ -36,6 +36,7 @@ import test_data
 import numpy
 import shutil
 import glob
+import time
 
 class VizTests(_test_base._BaseTest):
     def setUp(self):
@@ -259,6 +260,83 @@ class EnsembleTimeCourseTests(_test_base._BaseTest):
         super(EnsembleTimeCourseTests, self).setUp()
         self.model = pycotools.model.Model(self.copasi_file)
         self.original_parameters = self.model.parameters
+
+
+class PlotPLTests(_test_base._BaseTest):
+    def setUp(self):
+        super(PlotPLTests, self).setUp()
+        self.model = pycotools.model.Model(self.copasi_file)
+
+        ## simulate time course
+        tc = pycotools.tasks.TimeCourse(self.model, end=1000, intervals=1000, step_size=1)
+
+        ## format time course for parameter estimation
+        pycotools.misc.format_timecourse_data(tc.report_name)
+
+        ## get the paramete pickle filename
+        pe_data_file = os.path.join(self.model.root, 'test_profile_likleihood.pickle')
+
+        ##try and get data from parameter pickle.
+        ## if you can get the df, if not simulate the data
+        try:
+            PE = pycotools.tasks.MultiParameterEstimation(
+                self.model, tc.report_name, metabolites=[],
+                lower_bound=0.1, upper_bound=100, method='genetic_algorithm',
+                copy_number=1, pe_number=10, number_of_generations=1,
+                population_size=1, overwrite_config_file=True,
+            )
+            PE.write_config_file()
+            PE.setup()
+            df = pandas.read_pickle(pe_data_file)
+        except IOError:
+            PE = pycotools.tasks.MultiParameterEstimation(
+                self.model, tc.report_name, metabolites=[],
+                lower_bound=0.1, upper_bound=100, method='genetic_algorithm',
+                copy_number=5, pe_number=10, number_of_generations=1,
+                population_size=1, overwrite_config_file=True
+            )
+            PE.write_config_file()
+            PE.setup()
+            PE.run()
+            time.sleep(10)
+            p = pycotools.viz.Parse(PE)
+
+            ##write pickle
+            p.data.to_pickle(pe_data_file)
+            df = pandas.read_pickle(pe_data_file)
+
+        ## try read the profile likelihood data
+        ## if fail with input error, simulate profile likelihood data
+        try:
+            self.PL = pycotools.tasks.ProfileLikelihood(
+                self.model, df=df, index=[0, 1],
+                lower_bound_multiplier=1001,
+                log10=True, run=False, tolerance=1e-1,
+                iteration_limit=1
+            )
+            p = pycotools.viz.Parse(self.PL)
+
+        except pycotools.errors.InputError:
+            self.PL = pycotools.tasks.ProfileLikelihood(
+                self.model, df=df, index=[0, 1],
+                lower_bound_multiplier=1001,
+                log10=True, run='multiprocess', tolerance=1e-1,
+                iteration_limit=1, intervals=4,
+            )
+            time.sleep(100)
+            p = pycotools.viz.Parse(self.PL)
+
+    def test_parse(self):
+        p = pycotools.viz.Parse(self.PL)
+        self.assertTrue(isinstance(p.data, pandas.core.frame.DataFrame))
+
+    def test_parse_pl_log_linear(self):
+        p = pycotools.viz.Parse(self.PL)
+        linear_scale_value = p.data.loc['B2C']['RSS'].iloc[0]
+        log_scale = numpy.log10(linear_scale_value)
+        p2 = pycotools.viz.Parse(self.PL, log10=True)
+
+        self.assertEqual(log_scale, p2.data.loc['B2C']['RSS'].iloc[0])
 
 
 

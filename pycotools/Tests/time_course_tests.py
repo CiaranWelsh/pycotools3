@@ -101,18 +101,18 @@ class DeterministicTimeCourseTests(_test_base._BaseTest):
         df = pandas.read_csv(self.TC.report_name, sep='\t', index_col=0)
         self.assertEqual(df.shape, (11, 6) )
 
-    # def test_correct_output(self):
-    #     """
-    #
-    #     :return:
-    #     """
-    #     self.TC.correct_output_headers()
-    #     df = pandas.read_csv(self.TC.report_name, sep='\t')
-    #     check = True
-    #     for i in df.keys():
-    #         if '[' in i:
-    #             check = False
-    #     self.assertTrue(check)
+    def test_specific_variables(self):
+        """
+        Test being selective about which output user wants
+        :return:
+        """
+        TC = pycotools.tasks.TimeCourse(
+            self.model, intervals=10, step_size=100, end=1000,
+            metabolites=['A', 'B'], global_quantities=['B2C']
+        )
+        df = pandas.read_csv(TC.report_name, sep='\t', index_col=0)
+        self.assertEqual(df.shape[1], 3)
+
 
     def test_parser_in_viz(self):
         """
@@ -141,7 +141,6 @@ class DeterministicTimeCourseTests(_test_base._BaseTest):
         :return:
         """
         pycotools.viz.PlotTimeCourse(self.TC, y='metabolites')
-
 
 class GibsonBruckTimeCourseTests(_test_base._BaseTest):
     def setUp(self):
