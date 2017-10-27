@@ -3805,13 +3805,7 @@ class MultiParameterEstimation(ParameterEstimation):
             except errors.NotImplementedError:
                 LOG.warning('Attempting to run in SGE mode but SGE specific commands are unavailable. Switching to \'multiprocess\' mode')
                 self.run_mode = 'multiprocess'
-        # if os.path.isfile(self.copasi_file_pickle):
-        #     with open(self.copasi_file_pickle) as f:
-        #         self.sub_copasi_files=pickle.load(f)
         if self.run_mode == 'multiprocess':
-            LOG.debug('run mode --> {}'.format(self.run_mode))
-            LOG.debug('models --> {}'.format(self.models.values()))
-            LOG.debug('len models --> {}'.format(len(self.models.values())))
             RunParallel(self.models.values(), mode=self.run_mode, max_active=self.max_active,
                         task='scan')
         else:
