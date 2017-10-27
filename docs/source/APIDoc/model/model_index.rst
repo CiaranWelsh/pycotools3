@@ -1,5 +1,5 @@
 model
-==============
+=====
 
 .. toctree::
    :caption: model
