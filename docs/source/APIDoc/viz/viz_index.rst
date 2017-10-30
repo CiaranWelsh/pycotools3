@@ -1,5 +1,5 @@
 Viz
-==============
+===
 
 .. toctree::
    :caption: viz

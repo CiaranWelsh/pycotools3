@@ -55,9 +55,9 @@ class GetModelComponentFromStringMixin(Mixin):
     Take a :py:class:`Model`, a component type and a string giving
     the name of that component and return the pycotools object
     for that component. Uses :py:meth:`Model.get`. Implemented as
-    :py:mod:`mixin` to facilitate reuse accross all necessary classes.
+    :py:mod:`mixin` to facilitate reuse across all necessary classes.
 
-    Usage::
+    .. highlight::
 
         @mixin(GetModelComponentFromStringMixin)
         class NewClass(object):
@@ -756,15 +756,15 @@ class Model(_base._Base):
         :return:
             `float`. Molarity
         """
-        mol_dct={
-            'fmol':1e-15,
-            'pmol':1e-12,
-            'nmol':1e-9,
-            u'\xb5mol':1e-6,
-            'mmol':1e-3,
-            'mol':float(1),
-            'dimensionless':float(1),
-            '#':float(1)}
+        mol_dct = {
+            'fmol': 1e-15,
+            'pmol': 1e-12,
+            'nmol': 1e-9,
+            u'\xb5mol': 1e-6,
+            'mmol': 1e-3,
+            'mol': float(1),
+            'dimensionless': float(1),
+            '#': float(1)}
         mol_unit_value=mol_dct[mol_unit]
         avagadro=6.022140857e+23
         molarity=float(particles)/(avagadro*mol_unit_value*compartment_volume)
@@ -809,13 +809,13 @@ class Model(_base._Base):
             'mol':float(1),
             'dimensionless':1,
             '#':1}
-        mol_unit_value=mol_dct[mol_unit]
-        avagadro=6.022140857e+23
-        particles=float(moles)*avagadro*mol_unit_value*compartment_volume
-        if mol_unit=='dimensionless':# or '#':
+        mol_unit_value = mol_dct[mol_unit]
+        avagadro = 6.022140857e+23
+        particles = float(moles)*avagadro*mol_unit_value*compartment_volume
+        if mol_unit == 'dimensionless':# or '#':
             particles=float(moles)
-        if mol_unit=='#':
-            particles=float(moles)
+        if mol_unit =='#':
+            particles = float(moles)
         return particles
 
     @cached_property
@@ -1858,19 +1858,38 @@ class Compartment(object):
 @mixin(ComparisonMethodsMixin)
 class Metabolite(object):
     """
-    Metabolite class to hole attributes
-    associated with a Metabolite.
-
-    Concentration and particle numbers
-    are separate. Calculate them in Model
-    and assign from outside the Metabolite class
-    becuse that way the metabolite class doesn't
-    need to know about the Model
 
     """
     def __init__(self, model, name='new_metabolite', particle_number=None,
                  concentration=None, compartment=None, simulation_type=None,
                  key=None):
+        """
+
+        :param model:
+            :py:class:`Model`.
+
+        :param name:
+            `str`. Do not use non-ascii characters
+
+        :param particle_number:
+            `int` or `float`. Number of initial particles for new metabolite.
+            Calculated from concentration if missing.
+
+        :param concentration:
+            `int` or `float`. Concentration in model units for new metabolite at t=0.
+            Calculated from particle_number if missing.
+
+        :param compartment:
+            :py:class:`Compartment` or `str`. The compartment the metabolite belongs to.
+            If `str`, must be the name of a compartment. If left `None`, defaults to the
+            first compartment in the :py:meth:`Model.compartments`
+
+        :param simulation_type:
+            `str`. default is 'fixed'. Room for assignments but not implemented yet.
+
+        :param key:
+            `str`. Automatically assigned but can be overriden if you like.
+        """
         # super(Metabolite, self).__init__(model)
         self.model = self.read_model(model)
         self.name = name
@@ -1971,6 +1990,7 @@ class Metabolite(object):
         The copasi object reference for
         transient metabolite
         :return:
+            `str`
         """
         return 'Vector=Metabolites[{}],Reference=InitialConcentration'.format(self.name)
 
@@ -1980,6 +2000,7 @@ class Metabolite(object):
         The copasi object reference for
         transient metabolite
         :return:
+            `str`
         """
         return 'Vector=Metabolites[{}],Reference=Concentration'.format(self.name)
 
@@ -1989,6 +2010,7 @@ class Metabolite(object):
         The copasi object reference for
         initial  metabolite particle numbers
         :return:
+            `str`
         """
         return 'Vector=Metabolites[{}],Reference=InitialParticleNumber'.format(self.name)
 
@@ -1998,6 +2020,7 @@ class Metabolite(object):
         The copasi object reference for
         transient metabolite particle numbers
         :return:
+            `str`
         """
         return 'Vector=Metabolites[{}],Reference=ParticleNumber'.format(self.name)
 
@@ -2007,10 +2030,16 @@ class Metabolite(object):
         The copasi object reference for
         transient metabolite particle numbers
         :return:
+            `str`
         """
         return 'Vector=Metabolites[{}]'.format(self.name)
 
     def to_substrate(self):
+        """
+        Create :py:class:`Substrate' from Metabolite
+        :return:
+            :py:class:`Substrate`
+        """
         return Substrate(
             self.model, name=self.name,
             particle_number=self.particle_number,
@@ -2021,6 +2050,11 @@ class Metabolite(object):
         )
 
     def to_product(self):
+        """
+        Create :py:class:`Product' from Metabolite
+        :return:
+            :py:class:`Product`
+        """
         return Product(
             self.model, name=self.name,
             particle_number=self.particle_number,
@@ -2030,6 +2064,11 @@ class Metabolite(object):
             key=self.key
         )
     def to_modifier(self):
+        """
+        Create :py:class:`Modifier' from Metabolite
+        :return:
+            :py:class:`Modifier`
+        """
         return Modifier(
             self.model, name=self.name,
             particle_number=self.particle_number,
@@ -2040,10 +2079,11 @@ class Metabolite(object):
         )
     def to_xml(self):
         """
-
+        Product the xml needed to represent a Metabolite
+        in the Copasi xml
         :return:
+            `str`
         """
-
         metabolite_element = etree.Element('Metabolite', attrib={'key': self.key,
                                                                  'name': self.name,
                                                                  'simulationType': self.simulation_type,
@@ -2053,7 +2093,7 @@ class Metabolite(object):
 
     def get_compartment(self):
         """
-        Get containing compartment
+        Get compartment which the metabolite belongs to
         :return:
             :py:class:`Compartment`
         """
@@ -2061,7 +2101,10 @@ class Metabolite(object):
 
 
 class Substrate(Metabolite):
-    def __init__(self, model,name='new_metabolite', particle_number=None,
+    """
+    Inherits from Metabolite. Takes the same argument as Metabolite.
+    """
+    def __init__(self, model, name='new_metabolite', particle_number=None,
                  concentration=None, compartment=None, simulation_type=None,
                  key=None):
         self.name = name
@@ -2089,6 +2132,9 @@ class Substrate(Metabolite):
 
 
 class Product(Metabolite):
+    """
+    Inherits from Metabolite. Takes the same argument as Metabolite.
+    """
     def __init__(self, model,name='new_metabolite', particle_number=None,
                  concentration=None, compartment=None, simulation_type=None,
                  key=None):
@@ -2117,6 +2163,9 @@ class Product(Metabolite):
 
 
 class Modifier(Metabolite):
+    """
+    Inherits from Metabolite. Takes the same argument as Metabolite.
+    """
     def __init__(self, model, name='new_metabolite', particle_number=None,
                  concentration=None, compartment=None, simulation_type=None,
                  key=None):
@@ -2147,22 +2196,30 @@ class Modifier(Metabolite):
 @mixin(ReadModelMixin)
 class GlobalQuantity(object):
     """
-    Global quantities have names and are associated with a vlue.
-    This value can be constant or an assignment
+    Create a global quantity.
 
-    Type can be either fixed or assignment. If assignment
-    value can be defined in terms of other model
-
-    To Do:
-        implement the assignment part of this class.
-        Generally unless we're using this class to set assignment
-        global variables they are not all that useful within pycotools. Since
-        I'm not implementing 'setters' for PyCoTools just yet this feature
-        is of lower priority.
-
+    ##TODO:
+        Build support for assignments
     """
     def __init__(self, model, name='global_quantity', initial_value=None,
-                 key=None, simulation_type = None):
+                 key=None, simulation_type=None):
+        """
+
+        :param model:
+            :py:class:`Model`
+
+        :param name:
+            `str`. Name of GlobalQuantity. Do not use non-ascii characters.
+
+        :param initial_value:
+            `int` or `float`. default=1. Starting amount of GlobalQuantity.
+
+        :param key:
+            `str`. This is automatically assigned
+
+        :param simulation_type:
+            `str`. default=`fixed`. Assignment not yet supported.
+        """
         self.model = self.read_model(model)
         self.name = name
         self.initial_value = initial_value
@@ -2204,7 +2261,7 @@ class GlobalQuantity(object):
 
     def to_df(self):
         """
-
+        Return pandas.DataFrame with GlobalQuntity Attributes
         :return:
         """
         dict_of_properties = {
@@ -2246,8 +2303,10 @@ class GlobalQuantity(object):
 
     def to_xml(self):
         """
-
+        Build xml element needed to represent a global quantity in
+        copasi xml
         :return:
+            :py:class:`etree.Element`
         """
         if self.key == None:
             self.key = KeyFactory(self.model, type='global_quantity').generate()
@@ -2264,31 +2323,48 @@ class GlobalQuantity(object):
         return model_value
 
 
-    def insert_parameters(self):
-        """
-        class to insert parameters from dict, file, folder of files
-        or pandas dataframe
-        :return:
-        """
-        pass
-
 
 @mixin(ReadModelMixin)
 @mixin(ComparisonMethodsMixin)
 class Reaction(object):
     """
-    Reactions have rectants, products, rate laws and parameters
-    Not sure if this is a priority just yet
-    Here's an idea. Would it be a good idea to have just
-    a Parmeter class which a scope property which defines
-    whether its a model parameter or specific to a individual
-    reaction.
+    Build a copasi reaction.
+
+    ##TODO remove parameters, parameters_dict, substrate, products
+    and modifiers from the constructor of this class. They are not
+    needed.
     """
 
     def __init__(self, model, name='reaction_1', expression=None,
                  rate_law=None, reversible=False, simulation_type='reactions',
                  parameters=[], parameters_dict={}, substrates=[],
                  products=[], modifiers=[], key=None):
+        """
+
+        :param model:
+            A :py:class:`Model`
+
+        :param name:
+            `str`. Name of reaction.
+
+        :param expression:
+            `str`. The reaction string, i.e. "A -> B; C". Same syntax as the COPASI GUI
+
+        :param rate_law:
+            `str`. The reaction rate law. i.e. "k*A*C". Components of the expression are
+            recongized and assigned depending on position in the expression. Therefore
+            here, for example `A` will be a substrate but B would be a product and C a modifier.
+            All COPASI operators are recognized and all other strings (such as `k` here) become
+            reaction parameters.
+
+        :param reversible:
+            `bool` default=False
+
+        :param simulation_type:
+            `str`. default='reactions`. Assignments not yet supported
+
+        :param key:
+        """
         self.model = self.read_model(model)
         self.name = name
         self.expression = expression
@@ -2320,7 +2396,9 @@ class Reaction(object):
     @property
     def reference(self):
         """
+        Get reaction reference
         :return:
+            `str`
         """
         return "Vector=Reactions[{}]".format(self.name)
 
@@ -2366,6 +2444,7 @@ class Reaction(object):
         into lists of substrate, product, modifiers, constants.
         Assign reversible.
         :return:
+            None
         """
 
         trans = Translator(self.model, self.expression)
@@ -2412,20 +2491,7 @@ class Reaction(object):
         if isinstance(local_keys, str):
             local_keys = [local_keys]
 
-        # LOG.warning('You do not know the consequences of commenting out this block')
-        '''
-        Local parameters have been duplicated because of the below code
-        which is why I have commented it out. However I suspect that
-        when we create a new reaction this means that that reaction just
-        wont have a local parameter. Therefore I need to distinguigh between
-        reactions that are already in the model and new reactions. 
 
-        Only the reactions that are new in the model get a local 
-        parameter assigned here. 
-
-        However keep the code commented out until you locate the bugs 
-        error. 
-        '''
         for i in range(len(parameter_list)):
             if parameter_list[i] not in [j.name for j in self.parameters]:
                 ## do not re-add a parameter if it already exists
@@ -2500,6 +2566,8 @@ class Reaction(object):
 
     def to_xml(self):
         """
+        Create necessary xml Elements required to represent a
+        reaction in COPASI
         :return:
         """
         if self.fast:
@@ -2584,6 +2652,33 @@ class Function(object):
                  type=None, key=None, reversible=None,
                  list_of_parameter_descriptions=[],
                  roles={}):
+        """
+        :param model:
+            :py:class:`Model`
+
+        :param name:
+            `str`
+
+        :param expression:
+            `str`. The expression for the function. Like k*A for example
+
+        :param type:
+            defaults to `user_defined`.
+
+        :param key:
+            `str` Automatically assigned
+
+        :param reversible:
+            `bool`.
+
+        :param list_of_parameter_descriptions:
+            `list`. ParameterDescription objects. Created from roles
+            dict if empty.
+
+        :param roles:
+            `dict`. Roles for elements of expression. dict[name] = role
+            Used to create list_of_parameter_descriptions automatically
+        """
         self.model = self.read_model(model)
         self.name = name
         self.expression = expression
@@ -2658,7 +2753,7 @@ class Function(object):
 
     def to_xml(self):
         """
-        write mass action function as xml element
+
         :return:
         """
         if self.reversible == None:
@@ -2701,8 +2796,28 @@ class Function(object):
 @mixin(ReadModelMixin)
 @mixin(ComparisonMethodsMixin)
 class ParameterDescription(object):
+    """
+    ParameterDescription objects are part of a function which in turn
+    are used as rate laws.
+    """
     def __init__(self, model, name='parameter_description',
                  role='substrate', order=0, key=None):
+        """
+        :param model:
+            a :py:class:`Model`
+
+        :param name:
+            `str`
+
+        :param role:
+            `str`, parameter, substrate, modifier or product
+
+        :param order:
+            `int`. Used internally, leave defaults
+
+        :param key:
+            `str` assigned automatically.
+        """
         self.model = self.read_model(model)
         self.name = name
         self.role = role
@@ -2735,9 +2850,38 @@ class ParameterDescription(object):
 @mixin(ReadModelMixin)
 @mixin(ComparisonMethodsMixin)
 class LocalParameter(object):
+    """
+    A Parameter within the scope of a reaction
+    """
     def __init__(self, model, name='local_parameter', value=None,
                  parameter_type=None, reaction_name=None,
                  global_name=None, key=None, simulation_type='fixed'):
+        """
+        :param model:
+            :py:class:`Model`
+
+        :param name:
+            `str`
+
+        :param value:
+            `int` or `float`. Value of parameter
+
+        :param parameter_type:
+            `
+
+        :param reaction_name:
+            `str` The name of a reactions to which the parameter belongs.
+
+        :param global_name:
+            `str`. The reaction name in parenthesis followed by parameter
+            name. i.e. "(reaction1).k1". This is automatically assigned.
+
+        :param key:
+            `str` automatically assigned
+
+        :param simulation_type:
+            `str` automatically assigned. Will support assignments in future release.
+        """
         self.model = self.read_model(model)
         self.name = name
         self.value = value
@@ -2844,7 +2988,23 @@ class LocalParameter(object):
 
 @mixin(ReadModelMixin)
 class KeyFactory(object):
+    """
+    Class for generating all keys required by COPASI components
+    """
     def __init__(self, model, type='metabolite'):
+        """
+
+        :param model:
+            :py:class:`Model`
+        :param type:
+            `str`. The type of needed.
+
+        .. highlight::
+
+            Generate one metabolite key
+            >>> KF = KeyFactory(model, type='metabolite')
+            >>> KF.generate(n=1)
+        """
         self.model = self.read_model(model)
         self.type = type
 
@@ -2999,6 +3159,82 @@ class KeyFactory(object):
 
 @mixin(ComparisonMethodsMixin)
 class Expression(object):
+    """
+    Convert a expression (i.e. rate law expression) into
+    Expression object such that we can split by existing copasi
+    operators.
+
+    .. _expression_operators:
+
+    Operators
+    =========
+
+    These can be used anywhere and do not need to be enclosed
+    by <>
+
+    =============   ===================
+    Operator List   Description
+    =============   ===================
+    +               Addition
+    -               Subtraction
+    *               Multiplication
+    /               Dicision
+    %               Modulus
+    ^               Power
+    =============   ===================
+
+    The following operators can be used but must be enclosed by an
+    `<>` in the expression string. See the `copasi documentation <http://copasi.org/Support/User_Manual/Model_Creation/User_Defined_Functions/>`_
+    for more details.
+
+    =============   ===================
+    Operator List   Description
+    =============   ===================
+    abs             Absolute value
+    floor           floor division
+    ceil            Ceiling dividion
+    factorial       Factorial
+    log             Natural log
+    log10           Log base 10
+    exp             Expentional
+    sin             sine
+    cos             Cosine
+    tan             Tangent
+    sec
+    csc
+    cot
+    tanh
+    sech
+    csch
+    coth
+    asin
+    acos
+    atan
+    arcsec
+    arccsc
+    arcccot
+    arcsinh
+    arccosh
+    arctanh
+    arcsech
+    arccsch
+    arccoth
+    uniform         Uniform distribution
+    normal          Normal distibution
+    le              less than or equal
+    lt              less than
+    ge              greater than or equal
+    gt              greater than
+    ne              not equal
+    eq              equal
+    and             and
+    or              or
+    xor
+    not             not
+    if              if statement
+    =============   ===================
+
+    """
     def __init__(self, expression):
         self.expression = expression
 
@@ -3041,9 +3277,19 @@ class Translator(object):
     """
     Translate a copasi style reaction into
     lists of substrates, products and modifiers.
-
     """
     def __init__(self, model, reaction, reversible=False):
+        """
+
+        :param model:
+            :py:class:`Model`
+
+        :param reaction:
+            :py:class:`Reaction`
+
+        :param reversible:
+            `bool`
+        """
         self.model = self.read_model(model)
         self.reaction = reaction
         self.reversible = reversible
@@ -3219,6 +3465,10 @@ class Translator(object):
 
 
 class MassAction(Function):
+    """
+    Recreates the COPASI MassAction rate law but didn't get used
+    in main code.
+    """
     def __init__(self, model, **kwargs):
         super(MassAction, self).__init__(model, **kwargs)
         self.model = model
@@ -3492,50 +3742,43 @@ class ParameterSet(object):
 
 @mixin(ReadModelMixin)
 class InsertParameters(object):
-    '''
+    """
     Insert parameters from a file, dictionary or a pandas dataframe into a copasi
     file.
-
-    Positional Arguments:
-
-        copasi_file:
-            The copasi file you want to enter parameters into
-
-    **Kwargs
-        index:
-            index of parameter estimation run to input into the copasi file.
-            The index is ordered by rank of best fit, with 0 being the best.
-            Default=0
-
-        quantity_type:
-            Either 'particle_number' or 'concentration'. Default='concentration'
-
-        report_name;
-            Unused. Delete?
-
-        save:
-            either False,'overwrite' or 'duplicate',default=overwrite
-
-        parameter_dict:
-            A python dictionary with keys correponding to parameters in the model
-            and values the parameters (dict[parameter_name]=parameter value).
-            Default=None
-
-        df:
-            A pandas dataframe with parameters being column names matching
-            parameters in your model and RSS values and rows being individual
-            parameter estimationruns. In this case, ensure you have set the
-            index parameter to the index you want to use. Dataframes are
-            automatically sorted by the RSS column.
-
-        parameter_path:
-            Full path to a parameter estimation file ('.txt','.xls','.xlsx' or
-            '.csv') or a folder containing parameter estimation files.
-
-    '''
+    """
     def __init__(self, model, parameter_dict=None, df=None,
                  parameter_path=None, index=0, quantity_type='concentration',
                  inplace=False):
+        """
+        :param model:
+            :py:class:`Model`
+
+        :param parameter_dict:
+            `dict`. dict[ParameterName] = new_value
+
+        :param df:
+            :py:class:`Pandas.DataFrame`. Column headings must equate to model components.
+            If more than 1 row then `index` agument is required to specify which row you
+            want to insert
+
+        :param parameter_path:
+            `str` Full path to a directory containing parameter estimation output
+            such as output from :py:class:`tasks.MultiParameterEstimation`. `index` argument
+            specified which row to insert. Data is automatically ordered in increasing RSS order.
+
+        :param index:
+            `int`. index of parameter_path or df to insert. Indexes the rank of best fit. 0 is best.
+
+
+        :param quantity_type:
+            `str`. default='concentration'. Can also be `particle_numbers`
+
+        :param inplace:
+            `bool` default=False. Change the model you're working with. If False,
+            the model with new parameters are in the `model` attribute. If True,
+            the parameters get inserted into the model you used as argument to the
+            InsertParameters class.
+        """
         self.model = self.read_model(model)
         self.parameter_dict = parameter_dict
         self.df = df

@@ -13,6 +13,7 @@ Welcome to Pycotools's documentation!
 
    Tutorials/Tutorials
    APIDoc/APIIndex
+   Caveats.rst
 
 
 

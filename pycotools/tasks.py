@@ -20,6 +20,24 @@
  $Date: 12-09-2016 
  Time:  13:33
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 '''
 import time
 import threading
@@ -238,12 +256,10 @@ class CopasiMLParser(object):
     """
     Parse a copasi file into xml.etree.
 
-    Usage:
+    .. highlight::
 
         >>> model_path = r'/full/path/to/model.cps'
         >>> xml = CopasiMLParser(model_path).xml
-
-
     """
     def __init__(self, copasi_file):
         """
@@ -288,9 +304,9 @@ class Run(object):
     your CopasiSE executable. This is usually
     done automatically.
 
-    Usage:
+    .. highlight::
 
-    First get a model object
+        ## First get a model object
         >>> model_path = r'/full/path/to/model.cps'
         >>> model = model.Model(model_path)
 
@@ -608,7 +624,7 @@ class Reports(object):
     report:
 
     .. _report_kwargs:
-    -----------------------
+    ------------------
 
     ===========================     ==============================================
     Report Types                    Description
@@ -1055,12 +1071,50 @@ class Reports(object):
 @mixin(CheckIntegrityMixin)
 class TimeCourse(object):
     """
+    ##todo implement arguments that get passed on to report
+    as **report_kwargs
 
-    Change the plotting functions of time course.
-    Create new class. Like viz in ecell4 for visualizing
-    the data. This will give more flexibility than what we presently have.
-    The idea is that user will be able to enter x or y variable,
-    or multiple such variables for the y axis to plot whatever they like.
+    .. _timecourse_kwargs:
+
+    =================
+    TimeCourse Kwargs
+    =================
+    
+    These kwargs are directly passed on to copasi in the right situations. 
+    See copasi documentation for mode details.
+    
+    ===========================     ==============================================
+    TimeCourse Kwargs               Description
+    ===========================     ==============================================
+    intervals                       Default: 100
+    step_size                       Default: 0.01
+    end                             Default: 1
+    start                           Default: 0
+    update_model                    Default: False
+    method                          Default: deterministic
+    output_event                    Default: False
+    scheduled                       Default: True
+    automatic_step_size             Default: False
+    start_in_steady_state           Default: False
+    integrate_reduced_model         Default: False
+    relative_tolerance              Default: 1e-6
+    absolute_tolerance              Default: 1e-12
+    max_internal_steps              Default: 10000
+    max_internal_step_size          Default: 0
+    subtype                         Default: 2
+    use_random_seed                 Default: True
+    random_seed                     Default: 1
+    epsilon                         Default: 0.001
+    lower_limit                     Default: 800
+    upper_limit                     Default: 1000
+    partitioning_interval           Default: 1
+    runge_kutta_step_size           Default: 0.001
+    run                             Default: True
+    correct_headers                 Default: True
+    save                            Default: False
+    <report_kwargs>                 Arguments for :ref:`_report_kwargs` are also
+                                    accepted here
+    ===========================     ==============================================
     """
 
     def __init__(self, model, **kwargs):
@@ -1177,21 +1231,6 @@ class TimeCourse(object):
         for a time course. Define task and problem
         definition. This section of xml is common to all
         methods
-
-        Should look like this:
-
-            <Task key="Task_15" name="Time-Course" type="timeCourse" scheduled="false" updateModel="false">
-              <Problem>
-                <Parameter name="AutomaticStepSize" type="bool" value="0"/>
-                <Parameter name="StepNumber" type="unsignedInteger" value="100"/>
-                <Parameter name="StepSize" type="float" value="0.01"/>
-                <Parameter name="Duration" type="float" value="1"/>
-                <Parameter name="TimeSeriesRequested" type="bool" value="1"/>
-                <Parameter name="OutputStartTime" type="float" value="0"/>
-                <Parameter name="Output Event" type="bool" value="0"/>
-                <Parameter name="Start in Steady State" type="bool" value="0"/>
-              </Problem>
-
         :return: lxml.etree._Element
         """
 
@@ -1296,13 +1335,6 @@ class TimeCourse(object):
 
     def deterministic(self):
         """
-          <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
-            <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
-            <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-006"/>
-            <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-012"/>
-            <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
-            <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
-          </Method>
         :return:lxml.etree._Element
         """
         method = etree.Element('Method', attrib={'name': 'Deterministic (LSODA)',
@@ -1339,13 +1371,6 @@ class TimeCourse(object):
 
     def gibson_bruck(self):
         """
-          <Method name="Stochastic (Gibson + Bruck)" type="DirectMethod">
-            <Parameter name="Max Internal Steps" type="integer" value="1000000"/>
-            <Parameter name="Subtype" type="unsignedInteger" value="2"/>
-            <Parameter name="Use Random Seed" type="bool" value="0"/>
-            <Parameter name="Random Seed" type="unsignedInteger" value="1"/>
-          </Method>
-        </Task>
         :return:
         """
         method = etree.Element('Method', attrib={'name': 'Stochastic (Gibson + Bruck)',
@@ -1377,12 +1402,6 @@ class TimeCourse(object):
 
     def direct(self):
         """
-          <Method name="Stochastic (Direct method)" type="Stochastic">
-            <Parameter name="Max Internal Steps" type="integer" value="1000000"/>
-            <Parameter name="Use Random Seed" type="bool" value="0"/>
-            <Parameter name="Random Seed" type="unsignedInteger" value="1"/>
-          </Method>
-        </Task>
         :return:
         """
         method = etree.Element('Method', attrib={'name': 'Stochastic (Direct method)',
@@ -1409,13 +1428,6 @@ class TimeCourse(object):
 
     def tau_leap(self):
         """
-          <Method name="Stochastic (τ-Leap)" type="TauLeap">
-            <Parameter name="Epsilon" type="float" value="0.001"/>
-            <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
-            <Parameter name="Use Random Seed" type="bool" value="0"/>
-            <Parameter name="Random Seed" type="unsignedInteger" value="1"/>
-          </Method>
-        </Task>
         :return:
         """
         method = etree.Element('Method', attrib={'name': 'Stochastic (τ-Leap)',
@@ -1447,14 +1459,6 @@ class TimeCourse(object):
 
     def adaptive_tau_leap(self):
         """
-          </Problem>
-          <Method name="Stochastic (Adaptive SSA/τ-Leap)" type="AdaptiveSA">
-            <Parameter name="Epsilon" type="float" value="0.03"/>
-            <Parameter name="Max Internal Steps" type="integer" value="1000000"/>
-            <Parameter name="Use Random Seed" type="bool" value="0"/>
-            <Parameter name="Random Seed" type="unsignedInteger" value="1"/>
-          </Method>
-        </Task>
         :return:
         """
         method = etree.Element('Method', attrib={'name': 'Stochastic (Adaptive SSA/τ-Leap)',
@@ -1486,17 +1490,6 @@ class TimeCourse(object):
 
     def hybrid_runge_kutta(self):
         """
-
-          <Method name="Hybrid (Runge-Kutta)" type="Hybrid">
-            <Parameter name="Max Internal Steps" type="integer" value="1000000"/>
-            <Parameter name="Lower Limit" type="float" value="800"/>
-            <Parameter name="Upper Limit" type="float" value="1000"/>
-            <Parameter name="Partitioning Interval" type="unsignedInteger" value="1"/>
-            <Parameter name="Use Random Seed" type="bool" value="0"/>
-            <Parameter name="Random Seed" type="unsignedInteger" value="1"/>
-            <Parameter name="Runge Kutta Stepsize" type="float" value="0.001"/>
-          </Method>
-        </Task>
         :return:
         """
         method = etree.Element('Method', attrib={'name': 'Hybrid (Runge-Kutta)',
@@ -1542,19 +1535,6 @@ class TimeCourse(object):
 
     def hybrid_lsoda(self):
         """
-      <Method name="Hybrid (LSODA)" type="Hybrid (LSODA)">
-        <Parameter name="Max Internal Steps" type="integer" value="1000000"/>
-        <Parameter name="Lower Limit" type="float" value="800"/>
-        <Parameter name="Upper Limit" type="float" value="1000"/>
-        <Parameter name="Partitioning Interval" type="unsignedInteger" value="1"/>
-        <Parameter name="Use Random Seed" type="bool" value="0"/>
-        <Parameter name="Random Seed" type="unsignedInteger" value="1"/>
-        <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
-        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-006"/>
-        <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-012"/>
-        <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
-      </Method>
-    </Task>
         :return:
         """
         method = etree.Element('Method', attrib={'name': 'Hybrid (LSODA)',
@@ -1615,18 +1595,6 @@ class TimeCourse(object):
 
     def hybrid_rk45(self):
         """
-          <Method name="Hybrid (RK-45)" type="Hybrid (DSA-ODE45)">
-            <Parameter name="Max Internal Steps" type="unsignedInteger" value="100000"/>
-            <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-006"/>
-            <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-009"/>
-            <Parameter name="Partitioning Strategy" type="string" value="User specified Partition"/>
-            <ParameterGroup name="Deterministic Reactions">
-            </ParameterGroup>
-            <Parameter name="Use Random Seed" type="bool" value="0"/>
-            <Parameter name="Random Seed" type="unsignedInteger" value="1"/>
-          </Method>
-        </Task>
-
         :return:
         """
         raise errors.NotImplementedError('The hybrid-RK-45 method is not yet implemented')
@@ -1670,10 +1638,10 @@ class TimeCourse(object):
 
 
     def get_report_key(self):
-        '''
-        cros reference the timecourse task with the newly created
+        """
+        cross reference the timecourse task with the newly created
         time course reort to get the key
-        '''
+        """
         all_reports = []
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
             all_reports.append(i.attrib['name'])
@@ -1693,8 +1661,45 @@ class TimeCourse(object):
 class Scan(object):
     """
     Interface to COPASI scan task
+
+    .. _scan_kwargs:
+
+    Scan Kwargs
+    ===========
+
+    ===========================     ==============================================
+    Scan Kwargs               Description
+    ===========================     ==============================================
+    update_model                    Default: False
+    subtask                         Default: parameter_estimation
+    report_type                     Default: profile_likelihood. Name of report from
+                                    :py:class:`Reports` class
+    output_in_subtask               Default: False
+    adjust_initial_conditions       Default: False
+    number_of_steps                 Default: 10
+    maximum                         Default: 100
+    minimum                         Default: 0.01
+    log10                           Default: False
+    distribution_type               Default: normal
+    scan_type                       Default: scan
+    scheduled                       Default: True
+    save                            Default: False
+    clear_scans                     Default: True.  If true, will remove all scans
+                                    present then add new scan
+    run                             Default: False
+    <report_kwargs>                 Arguments for :ref:`_report_kwargs` are also
+                                    accepted here
+    ===========================     ==============================================
     """
     def __init__(self, model, **kwargs):
+        """
+
+        :param model:
+            :py:class:`Model`
+
+        :param kwargs:
+
+        """
         # super(Scan, self).__init__(model, **kwargs)
         self.model = self.read_model(model)
         self.kwargs = kwargs
@@ -2075,66 +2080,28 @@ class ExperimentMapper(object):
     Class for mapping variables from file to cps
 
 
+    .. _scan_kwargs:
 
-    This is what the xml should look like after using this class:
-         <Task key="Task_19" name="Parameter Estimation" type="parameterFitting" scheduled="false" updateModel="false">
-          <Report reference="Report_12" target="" append="1" confirmOverwrite="1"/>
-          <Problem>
-            <Parameter name="Maximize" type="bool" value="0"/>
-            <Parameter name="Randomize Start Values" type="bool" value="0"/>
-            <Parameter name="Calculate Statistics" type="bool" value="1"/>
-            <ParameterGroup name="OptimizationItemList">
-            </ParameterGroup>
-            <ParameterGroup name="OptimizationConstraintList">
-            </ParameterGroup>
-            <Parameter name="Steady-State" type="cn" value="CN=Root,Vector=TaskList[Steady-State]"/>
-            <Parameter name="Time-Course" type="cn" value="CN=Root,Vector=TaskList[Time-Course]"/>
-            <Parameter name="Create Parameter Sets" type="bool" value="0"/>
-            <ParameterGroup name="Experiment Set">
-              <ParameterGroup name="Experiment">
-                <Parameter name="Data is Row Oriented" type="bool" value="1"/>
-                <Parameter name="Experiment Type" type="unsignedInteger" value="1"/>
-                <Parameter name="File Name" type="file" value="TimeCourseData.csv"/>
-                <Parameter name="First Row" type="unsignedInteger" value="1"/>
-                <Parameter name="Key" type="key" value="Experiment_1"/>
-                <Parameter name="Last Row" type="unsignedInteger" value="12"/>
-                <Parameter name="Normalize Weights per Experiment" type="bool" value="1"/>
-                <Parameter name="Number of Columns" type="unsignedInteger" value="7"/>
-                <ParameterGroup name="Object Map">
-                  <ParameterGroup name="0">
-                    <Parameter name="Role" type="unsignedInteger" value="3"/>
-                  </ParameterGroup>
-                  <ParameterGroup name="1">
-                    <Parameter name="Object CN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=Concentration"/>
-                    <Parameter name="Role" type="unsignedInteger" value="2"/>
-                  </ParameterGroup>
-                  <ParameterGroup name="2">
-                    <Parameter name="Object CN" type="cn" value="CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=InitialConcentration"/>
-                    <Parameter name="Role" type="unsignedInteger" value="1"/>
-                  </ParameterGroup>
-                  <ParameterGroup name="3">
-                    <Parameter name="Role" type="unsignedInteger" value="0"/>
-                  </ParameterGroup>
-                  <ParameterGroup name="4">
-                    <Parameter name="Role" type="unsignedInteger" value="0"/>
-                  </ParameterGroup>
-                  <ParameterGroup name="5">
-                    <Parameter name="Role" type="unsignedInteger" value="0"/>
-                  </ParameterGroup>
-                  <ParameterGroup name="6">
-                    <Parameter name="Role" type="unsignedInteger" value="0"/>
-                  </ParameterGroup>
-                </ParameterGroup>
-                <Parameter name="Row containing Names" type="unsignedInteger" value="1"/>
-                <Parameter name="Separator" type="string" value="&#x09;"/>
-                <Parameter name="Weight Method" type="unsignedInteger" value="1"/>
-              </ParameterGroup>
-            </ParameterGroup>
-            <ParameterGroup name="Validation Set">
-              <Parameter name="Threshold" type="unsignedInteger" value="5"/>
-              <Parameter name="Weight" type="unsignedFloat" value="1"/>
-            </ParameterGroup>
-          </Problem>
+    Scan Kwargs
+    ===========
+
+    These kwargs are passed on to the COPASI experiment mapping window
+
+    =================================   ================================================================
+    ExperimentMapper Kwargs             Description
+    =================================         ==========================================================
+    type                                Default: 'experiment'. Alternative: 'validation_data'
+    row_orientation                     Default: [True]*len(self.experiment_files)
+    experiment_type                     Default: ['timecourse']*len(self.experiment_files)
+    first_row                           Default: [1]*len(self.experiment_files)
+    normalize_weights_per_experiment    Default: [True]*len(self.experiment_files)
+    row_containing_names                Default: [1]*len(self.experiment_files)
+    separator                           Default: ['\t']*len(self.experiment_files)
+    weight_method                       Default: ['mean_squared']*len(self.experiment_files)
+    threshold                           Default: [5]*len(self.experiment_files)
+    weight                              Default: [1]*len(self.experiment_files)
+    save                                Default: False. Save the model
+    =================================   =================================================================
     """
     def __init__(self, model, experiment_files, **kwargs):
         self.model = self.read_model(model)
@@ -2161,7 +2128,6 @@ class ExperimentMapper(object):
         self.update_properties(self.default_properties)
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
         self._do_checks()
-
 
         #run the experiment mapper
         self.model = self.map_experiments()
@@ -2256,14 +2222,14 @@ class ExperimentMapper(object):
         return existing_experiment_list
 
     def create_experiment(self, index):
-        '''
+        """
         Adds a single experiment set to the parameter estimation task
         exp_file is an experiment filename with exactly matching headers (independent variablies need '_indep' appended to the end)
         since this method is intended to be used in a loop in another function to
         deal with all experiment sets, the second argument 'i' is the index for the current experiment
 
         i is the exeriment_file index
-        '''
+        """
         assert isinstance(index, int)
         data=pandas.read_csv(self.experiment_files[index], sep=self.separator[index])
         #get observables from data. Must be exact match
@@ -2503,9 +2469,9 @@ class ExperimentMapper(object):
         return Exp
 
     def remove_experiment(self,experiment_name):
-        '''
+        """
         name attribute of experiment. usually Experiment_1 or something
-        '''
+        """
         if self.type == 'experiment':
             query = '//*[@name="Experiment Set"]'
         elif self.type == 'validation':
@@ -2559,230 +2525,88 @@ class ExperimentMapper(object):
 @mixin(CheckIntegrityMixin)
 @mixin(Bool2Numeric)
 class ParameterEstimation(object):
-    '''
-    Set up and run a parameter estimation in copasi. Since each parameter estimation
-    problem is different, this process cannot be done in a single line of code.
-    Instead the user should initialize an instance of the ParameterEstimation
-    class with all the relevant keyword arguments. Subsequently use the
-    write_item_template() method and modify the resulting xlsx in your copasi file
-    directory. save the file then close and run the setup() method to define your
-    optimization problem. When run is set to True, the parameter estimation will
-    automatically run in CopasiSE. If plot is also set to True, a plot comparing
-    experimental and simulated profiles are produced. Profiles are saved
-    to file with savefig=True
+    """
+    Set up and run a parameter estimation in copasi.
 
-    args:
+    To setup:
 
-        copasi_file:
-            The file path for the copasi file you want to perform parameter estimation on
+        # Make text or csv files containing experimental data. This is the
+        same as you would using the COPASI GUI except column headers **MUST**
+        be identical to the model component. For this reason, all model
+        components must have unique names. See Caveats in documentation.
+        # instantiate the ParameterEstimation class with all the
+          options that you want.
+        # run the write_config_file() method
+        # If options for which model components you want to include are
+        in point 1 then skip this point. If you are manually defining which
+        parameters you want to estimate, open the config file and
+        modify as you see fit.
+        # Use the setup() method
+        # use the run method
 
-        experiment_files:
-            Either a single experiment file path or a list of experiment file paths
+    .. _parameter_estimation_kwargs:
 
-    **Kwargs:
+    ParameterEstimation kwargs
+    ==========================
 
-        metabolites:
-            Which metabolites (ICs) to include in parameter esitmation. Default = all of them.
+    ===========================     ==================================================
+    ParameterEstimation Kwargs               Description
+    ===========================     ==================================================
+    update_model                    Default: False
+    randomize_start_values          Default: True
+    create_parameter_sets           Default: False
+    calculate_statistics            Default: False
+    use_config_start_values         Default: False. Use starting values from config file
+                                    Set randomize_start_values to False
+    method                          Default: 'genetic_algorithm'
+    number_of_generations           Default: 200
+    population_size                 Default: 50
+    random_number_generator         Default: 1
+    seed                            Default: 0
+    pf                              Default: 0.475
+    iteration_limit                 Default: 50
+    tolerance                       Default: 0.00001
+    rho                             Default: 0.2
+    scale                           Default: 10
+    swarm_size                      Default: 50
+    std_deviation                   Default: 0.000001
+    number_of_iterations            Default: 100000
+    start_temperature               Default: 1
+    cooling_factor                  Default: 0.85
+    scheduled                       Default: False
+    lower_bound                     Default: 0.000001
+    upper_bound                     Default: 1000000
+    start_value                     Default: 0.1
+    save                            Default: False
+    run_mode                        Default: True. Passed on to :ref:`run`
+    max_active                      Default: None. Max number of models to run at once.
+    metabolites                     Default: All metabolites. Metabolites to
+                                    include in the config file
+    global_quantities               Default: All global_quantities. Global quantities
+                                    to include in the config file
+    local_parameters                Default: All local_parameters. local parameters
+                                    to include in the config file
+    <report_kwargs>                 Arguments for :ref:`_report_kwargs` are also
+                                    accepted here and passed on
+    <experiment_mapper kwargs>      Arguments for :ref:`_experiment_mapper_kwargs` are
+                                    accepted here and passed on
+    ===========================     ==================================================
 
-        global_quantities:
-            Which global values to include in the parameter estimation. Default= all
-
-        quantity_type:
-            either 'concentration' or particle numbers
-
-        report_name:
-            name of the output report
-
-        append:
-            append to report or not,True or False
-
-        confirm_overwrite:
-            True or False, overwrite report or not
-
-        config_filename:
-            Filename for the parameter estimation config file
-
-        overwrite_config_file:,
-            True or False, overwrite the config file each time program is run
-
-        update_model:
-            Update model parameters after parameter estimation
-
-        randomize_start_values:
-            True or False. Check the randomize start values box or not. Default True
-
-        create_parameter_sets:
-            True or False. Check the create parameter sets box or not. Default False
-
-        calculate_statistics':str(1),
-            True or False. Check the calcualte statistics box or not. Default False
-
-        method:
-            Name of one of the copasi parameter estimation algorithms. Valid arguments:
-            ['CurrentSolutionStatistics','DifferentialEvolution','EvolutionaryStrategySR','EvolutionaryProgram',
-             'HookeJeeves','LevenbergMarquardt','NelderMead','ParticleSwarm','Praxis',
-             'RandomSearch','ScatterSearch','SimulatedAnnealing','SteepestDescent',
-             'TruncatedNewton','GeneticAlgorithm','GeneticAlgorithmSR'],
-             Default=GeneticAlgorithm
-
-        number_of_generations:
-            A parameter for parameter estimation algorithms. Default=200
-
-        population_size:
-            A parameter for parameter estimation algorithms. Default=50
-
-        random_number_generator:
-            A parameter for parameter estimation algorithms. Default=1
-
-        seed:
-            A parameter for parameter estimation algorithms. Default=0
-
-        pf:
-            A parameter for parameter estimation algorithms. Default=0.475
-
-        iteration_limit:
-            A parameter for parameter estimation algorithms. Default=50
-
-        tolerance:
-            A parameter for parameter estimation algorithms. Default=0.00001
-
-        rho;
-            A parameter for parameter estimation algorithms. Default=0.2
-
-        scale:
-            A parameter for parameter estimation algorithms. Default=10
-
-        swarm_size:
-            A parameter for parameter estimation algorithms. Default=50
-
-        std_deviation:
-            A parameter for parameter estimation algorithms. Default=0.000001
-
-        number_of_iterations:
-            A parameter for parameter estimation algorithms. Default=100000
-
-        start_temperature:
-            A parameter for parameter estimation algorithms. Default=1
-
-        cooling_factor:
-            A parameter for parameter estimation algorithms. Default=0.85
-
-        row_orientation:
-            1 means data is row oriented, 0 means its column oriented
-
-        experiment_type:
-            List with the same number elements as you have experiment files. Each element
-            is either 'timecourse' or 'steady_state' and describes the type of
-            data at that element in the experiment_files argument
-
-        first_row:
-            List with the same number elements as you have experiment files. Each element
-            is the starting line for data as an integer. Default is a list of 1's and this
-            rarely needs to be changed.
-
-        normalize_weights_per_experiment':[True]*len(self.experiment_files),
-            List with the same number elements as you have experiment files. Each element
-            is True or False and correlates to ticking the
-            normalize wieghts per experiment box in the copasi gui. Default [true]*len(experiments)
-
-        row_containing_names:
-            List with the same number elements as you have experiment files. Each element
-            is an integer value corresponding to the row in the data containing names. The default
-            is 1 for all experiment files [1]*len(experiment_files)
-
-
-        separator':['\t']*len(self.experiment_files),
-            List with the same number elements as you have experiment files. Each element
-            is the separator used in the data files. Defaults to a tab (\\t) for all files
-            though commas are also common
-
-        weight_method':['mean_squared']*len(self.experiment_files),
-            List with the same number elements as you have experiment files. Each element
-            is a list of the name of the normalization algorithm to use for that data set.
-            This should probably be the same for each experiment file and defaults to mean_squared.
-            Options are: ['mean','mean_squared','stardard_deviation','value_scaling']
-
-        save:
-            One of False,'duplicate' or 'overwrite'. If duplicate, use the name in
-            the keyword argument OutputML to save the file.
-
-
-        prune_headers:
-            Copasi uses references to distinguish between variable types. The report
-            output usually contains these references in variable names. True removes
-            the references while False leaves them in.
-        scheduled':False
-            True or False. Check the box called 'executable' in the top right hand
-            corner of the Copasi GUI. This tells Copasi to shedule a parameter estimation
-            task when using CopasiSE. This should be True of you are running a parameter
-            estimation from the parameter estimation task via the pycopi but False when you
-            want to set up a repeat item in the scan task with the parameter estimation subtask
-
-        use_config_start_values:
-            Default set to False. Determines whether the starting parameters
-            from within the fitItemTemplate.xlsx are use for starting values
-            in the parameter estimation or not
-
-        lower_bound:
-            Value of the default lower bound for the FitItemTemplate. Default 0.000001
-
-        upper_bound:
-            Value of default upper bound for FitItemTemplate. Default=1000000
-
-#        run:
-#            run the parameter estimation using CopasiSE. When running via the parameter
-#            estimation task, the output is a matrix of function evaluation progression over
-#            time. When running via the scan's repeat task, output is lines of parameter
-#            estimation runs
-
-        plot:
-            Whether to plot result or not. Defualt=True
-
-        font_size:
-            Control graph label font size
-
-        axis_size:
-            Control graph axis font size
-
-        extra_title:
-            When savefig=True, given the saved
-            file an extra label in the file path
-
-        line_width:
-            Control graph line_width
-
-        marker_size:
-            How big to plot the dots on the graph
-
-        savefig:
-            save graphs to file labelled after the index
-
-
-        title_wrap_size:
-            When graph titles are long, how many characters to have per
-            line before word wrap. Default=30.
-
-        show:
-            When not using iPython, use show=True to display graphs
-
-        ylimit: default==None, restrict amount of data shown on y axis.
-        Useful for honing in on small confidence intervals
-
-        xlimit: default==None, restrict amount of data shown on x axis.
-        Useful for honing in on small confidence intervals
-
-        dpi:
-            How big saved figure should be. Default=125
-
-        xtick_rotation:
-            How many degrees to rotate the x tick labels
-            of the output. Useful if you have very small or large
-            numbers that overlay when plotting.
-
-
-    '''
+    """
 
     def __init__(self, model, experiment_files, **kwargs):
+        """
+
+        :param model:
+            :py:class:`model.Model`
+
+        :param experiment_files:
+            `list` Each element a string to an appropriately
+            configured data file.
+
+        :param kwargs:
+            :ref:`parameter_estimation_kwargs`
+        """
         self.model = self.read_model(model)
         self.kwargs = kwargs
         # super(ParameterEstimation, self).__init__(model, **kwargs)
@@ -3643,9 +3467,33 @@ class ParameterEstimation(object):
 
 
 class MultiParameterEstimation(ParameterEstimation):
-    '''
+    """
+    Inherits from ParameterEstimation and accepts the same
+    kwargs :ref:`parameter_estimation_kwargs`
 
-    '''
+    .. _multi_parameter_estimation_kwargs:
+
+    MultiParameterEstimation Kwargs
+    ===============================
+
+    ===========================     ==================================================
+    ParameterEstimation Kwargs               Description
+    ===========================     ==================================================
+    copy_number                     default: 1. Number of model copies to configure
+    pe_number                       default: 3. Number of parameter estimations per
+                                    model
+    run_mode                        default: multiprocess
+    results_directory               default: MultiParameterEstimationResults in
+                                    same directory as :py:attr:`coapsi_file`
+    output_in_subtask               default: False. Passed on to Scan.
+                                    Whether to output during subtask. Mostly we want this
+                                    False so we only get best parameter values, rather
+                                    than intermittant function evaluations
+    max_active                      default: None. Number of models to run 
+                                    simultaneously. If None then run all.
+    ===========================     ==================================================
+
+    """
     ##TODO Merge ParameterEstimation and Multi into one class.
     def __init__(self, model, experiment_files, copy_number=1, pe_number=3,
                  run_mode='multiprocess', results_directory=None,
@@ -3875,6 +3723,7 @@ class MultiParameterEstimation(ParameterEstimation):
 
 
 class RunSecondaryParameterEstimations(object):
+    raise NotImplementedError
     pass
 
 
@@ -3883,62 +3732,48 @@ class RunSecondaryParameterEstimations(object):
 @mixin(model.ReadModelMixin)
 @mixin(CheckIntegrityMixin)
 class MultiModelFit(object):
-    '''
+    """
     Coordinate a systematic multi model fitting parameter estimation and
-    compare results using AIC/BIC.
+    compare results using :py:class:`viz.ModelSelection`
 
     Usage:
-        1):
-            Setup a new folder containing all models that you would like to fit
-            and all data you would like to fit to the model. Do not have any
-            other text or csv files in this folder as python will try and setup
-            fits for them. Data files must have 'Time' in the left column
-            and each subsequent column must be titled with a variable name mapping
-            to a model entity exactly (watch out for trailing spaces). It is
-            reccommended to supply a plain text file detailing the common
-            component between the models and what is different between each model.
-            This however should not be saved as a .txt file or python will
-            try and map it to the models. Just save the 'ReadMe' without an extention
-            to avoid this problem.
+        # Setup a new folder containing all models that you would like to fit
+          and all data you would like to fit to the model.
+          Do not have any other text or csv files in this folder as python will try and setup
+          fits for them.
 
                 i.e.:
                     ./project_dir
-                        --Exp data 1
-                        --Exp data n
+                        --Exp_data_1.csv
+                        --Exp_data_n.csv
                         --model1.cps
                         --model2.cps
 
-        2):
-            Instantiate instance of the MultimodelFit class with all relevant
-            keywords. Relevant keywords are described in the ParameterEstimation
-            or runMultiplePEs classes. As non-optional arguments this takes the absolute path
-            to the project directory that you created in step 1.
-            Python automatically creates subdirectories  for each model in your
-            model selection problem and maps all data files in the main directory
-            to each of the models.
-        3):
-            Use the write_item_template() method to create a spreadsheet containing
-            your a config file with it instructions. By default, all ICs and all kinetic (global or local)
-            parameters are included. Delete entries that you would like to keep fixed. Do not
-            modify the last columns which contain xml code for that variable.
-        4):
-            Once each model folder has a config file specific for that model
-            use the setup() method. Then open one of the child copasi files
-            in order to check that things are configured how you'd like them before
-            using the run_mode() method.
+        # Instantiate instance of the MultimodelFit class with all relevant
+          keywords. Python automatically creates subdirectories  for each model in your
+          model selection problem and maps all data files in the main directory
+          to each of the models.
+        # Use the write_config_file() method to create a spreadsheet containing
+          a config file per model. See :py:meth:`ParameterEstimation.write_config_file`.
+        # use run() method to run all models simultaneously.
+
+    .. _multi_model_fit_kwargs:
+
+    MultiModelFit Kwargs
+    ====================
 
 
-        **kwargs:
-            copy_number:
-                Default = 1. This is how many times to copy a copasi file before
-                running the parameter estimation on each model.
-            pe_number:
-                Default = 3. How many parameter estimations to perform in one model.
-                i.e. a repeat scan task is automatically configured.
-
-            All other kwargs are described in runMultiplePEs or ParameterEstimation
-    '''
+    """
     def __init__(self, project_dir, **kwargs):
+        """
+
+        :param project_dir:
+            The directory to your model selection directory
+
+        :param kwargs:
+                All kwargs that are accepted in :ref:`parameter_estimation_kwargs` and
+                :ref:`mutli_parameter_estimation_kwargs` are accepted here.
+        """
         self.project_dir = project_dir
 #        self.config_filename=config_filename
         self.kwargs = kwargs
@@ -3947,68 +3782,11 @@ class MultiModelFit(object):
         ## so we have access to exp_files and cps_files for lengths
         self.cps_files, self.exp_files = self.read_fit_config()
 
-        # self.default_properties = {'run_mode': 'multiprocess',
-        #                            'copy_number': 1,
-        #                            'pe_number': 3,
-        #                            'metabolites': [],
-        #                            'global_quantities': [],
-        #                            'local_parameters': [],
-        #                            'report_name': 'PE_report.csv',
-        #                            'results_directory': os.path.join(
-        #                                os.path.dirname(self.cps_files[0]), 'MultiModelFit'),
-        #                            ##default parameters for ParameterEstimation
-        #                            'method': 'genetic_algorithm',
-        #                            'plot': False,
-        #                            'quantity_type': 'concentration',
-        #                            'append': False,
-        #                            'confirm_overwrite': False,
-        #                            'config_filename': 'config_file.csv',
-        #                            'overwrite_config_file': False,
-        #                            'prune_headers': True,
-        #                            'update_model': False,
-        #                            'randomize_start_values': True,
-        #                            'create_parameter_sets': False,
-        #                            'calculate_statistics': False,
-        #                            'use_config_start_values': False,
-        #                            #method options
-        #                            #'DifferentialEvolution',
-        #                            'number_of_generations': 200,
-        #                            'population_size': 50,
-        #                            'random_number_generator': 1,
-        #                            'seed': 0,
-        #                            'pf': 0.475,
-        #                            'iteration_limit': 50,
-        #                            'tolerance': 0.0001,
-        #                            'rho': 0.2,
-        #                            'scale': 10,
-        #                            'swarm_size': 50,
-        #                            'std_deviation': 0.000001,
-        #                            'number_of_iterations': 100000,
-        #                            'start_temperature': 1,
-        #                            'cooling_factor': 0.85,
-        #                            #experiment definition options
-        #                            #need to include options for defining multiple experimental files at once
-        #                            'row_orientation': [True]*len(self.exp_files),
-        #                            'experiment_type': ['timecourse']*len(self.exp_files),
-        #                            'first_row': [str(1)]*len(self.exp_files),
-        #                            'normalize_weights_per_experiment': [True]*len(self.exp_files),
-        #                            'row_containing_names': [str(1)]*len(self.exp_files),
-        #                            'separator': ['\t']*len(self.exp_files),
-        #                            'weight_method': ['mean_squared']*len(self.exp_files),
-        #                            'save': 'overwrite',
-        #                            'scheduled': False,
-        #                            'lower_bound': 0.000001,
-        #                            'upper_bound': 1000000}
-        # # print self.exp_files
-        # self.convert_bool_to_numeric(self.default_properties)
-        # self.update_properties(self.default_properties)
-        # self.default_properties.update(self.kwargs)
-        # self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
         self._do_checks()
 
-        self.sub_cps_dirs=self.create_workspace()
-        self.MPE_dct=self.instantiate_run_multi_PEs_class()
-        self.results_folder_dct=self.get_output_directories()
+        self.sub_cps_dirs = self.create_workspace()
+        self.MPE_dct = self.instantiate_run_multi_PEs_class()
+        self.results_folder_dct = self.get_output_directories()
 
     def _do_checks(self):
         pass
@@ -4186,6 +3964,54 @@ class MultiModelFit(object):
 @mixin(model.ReadModelMixin)
 @mixin(CheckIntegrityMixin)
 class ProfileLikelihood(object):
+    """
+
+
+    .. _profile_likelihood_kwargs:
+
+    ProfileLikelihood Kwargs
+    ========================
+
+    ===========================     ==================================================
+    ProfileLikelihood  Kwargs       Description
+    ===========================     ==================================================
+    x                               default: All fit items configured in model.
+                                    This specifies which parameters to perform
+                                    a profile likelihood for. List or strings.
+    quantity_type                   default: 'concentration'. Alternative
+                                    'particle_numbers`
+    upper_bound_multiplier          default: 1000
+    lower_bound_multiplier          1000
+    intervals                       default: 10
+    log10                           default: True
+    run                             default: False. Passed on to Run or RunParallel
+    max_active                      default: None. number of models to run
+                                    simultaneously. None=all. For when run='multiprocess'
+    results_directory               default: ProfileLikelihoods in the
+                                    :py:attr:`model.root` directory
+    method                          default: 'hooke_jeeves'
+    number_of_generations           default: 200
+    population_size                 default: 50
+    random_number_generator         default: 1
+    seed                            default: 0
+    pf                              default: 0.475
+    iteration_limit                 default: 50
+    tolerance                       default: 0.00001
+    rho                             default: 0.2
+    scale                           default: 10
+    swarm_size                      default: 50
+    std_deviation                   default: 0.000001
+    number_of_iterations            default: 100000
+    start_temperature               default: 1
+    cooling_factor                  default: 0.85
+    <InsertParameters kwargs>       All parameters accepted in
+                                    :py:class:`model.InsertParameters` are accepted
+                                    here.
+    <Report kwargs>                 Arguments to :py:class:`Reports` are accepted here
+    ===========================     ==================================================
+
+
+    """
     def __init__(self, model, **kwargs):
         self.model = self.read_model(model)
         self.kwargs = kwargs
@@ -4206,7 +4032,7 @@ class ProfileLikelihood(object):
             'processes': 1,
             'results_directory': os.path.join(self.model.root,
                                               'ProfileLikelihoods'),
-            'method': 'genetic_algorithm',
+            'method': 'hooke_jeeves',
             'number_of_generations': 200,
             'population_size': 50,
             'random_number_generator': 1,

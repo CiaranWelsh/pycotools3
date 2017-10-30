@@ -1,5 +1,5 @@
 tasks
-==============
+=====
 
 .. toctree::
    :caption: tasks
