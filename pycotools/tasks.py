@@ -3723,8 +3723,8 @@ class MultiParameterEstimation(ParameterEstimation):
 
 
 class RunSecondaryParameterEstimations(object):
-    raise NotImplementedError
-    pass
+    def __init__(self):
+        raise NotImplementedError
 
 
 @mixin(UpdatePropertiesMixin)

@@ -1,5 +1,5 @@
 Parameter Estimation
-==============
+====================
 
 .. toctree::
    :caption: Single Parameter Estimation

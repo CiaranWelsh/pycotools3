@@ -1,5 +1,5 @@
 TheModel
-==============
+========
 
 .. toctree::
    :caption: The Model
