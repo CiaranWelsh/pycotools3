@@ -508,7 +508,6 @@ class RunParallel(object):
     def __init__(self, models, **kwargs):
         self.models = models
         self.kwargs = kwargs
-        LOG.debug('i be models --> {}'.format(models))
         self.default_properties = {
             'max_active': None,
             'task': 'parameter_estimation',
@@ -518,7 +517,6 @@ class RunParallel(object):
         self.default_properties = self.convert_bool_to_numeric(self.default_properties)
         self.update_properties(self.default_properties)
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
-        LOG.debug('self.models from run --> {}'.format(self.models))
         self._do_checks()
         # self.set_task()
 
@@ -593,7 +591,6 @@ class RunParallel(object):
             model = self.models[num_models_to_process - 1]
             if len(pids) < self.max_active:
                 num_models_to_process -= 1
-                LOG.debug('num left to process --> {}'.format(num_models_to_process))
                 subp = subprocess.Popen(['CopasiSE', model.copasi_file])
                 pids.append(subp.pid)
 
@@ -2680,9 +2677,6 @@ class ParameterEstimation(object):
         if self.save:
             self.model.save()
 
-        # for param in self.model.local_parameters:
-        #     LOG.debug('local parameters -> {}'.format(param))
-
     def __str__(self):
         return "ParameterEstimation(method='{}', config_filename='{}', report_name='{}')".format(
             self.method, self.config_filename, self.report_name)
@@ -3108,7 +3102,6 @@ class ParameterEstimation(object):
 
 
         for model_loc in self.model.local_parameters:
-            LOG.debug('model_loc is --> {}'.format(model_loc))
             for PE_loc in self.local_parameters:
                 if PE_loc.global_name == model_loc.global_name:
                     keep_locs.append(PE_loc)
@@ -3863,7 +3856,6 @@ class MultiModelFit(object):
         """
         conf_list=[]
         for MPE in self.MPE_dct:
-            LOG.debug('creating config file for MPE --> {}'.format(self.MPE_dct[MPE].results_directory))
             f = self.MPE_dct[MPE].write_config_file()
             conf_list.append(f)
         return conf_list

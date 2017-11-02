@@ -1195,7 +1195,6 @@ class Model(_base._Base):
                                                      simulation_type=dct[global_name]['simulation_type']
                                                      )
                                 res.append(loc)
-                                # LOG.debug('loc from constants --> {}'.format(loc))
         return res
 
     @cached_property
@@ -1311,7 +1310,6 @@ class Model(_base._Base):
         for i, dct in reactions_dict.items():
             ## skip the skipped reactions
             # if i not in skipped:
-            # LOG.debug('dct name striped --> "{}"'.format(dct['name'].strip(' ')))
             r = Reaction(self,
                                 name=dct['name'].strip(),
                                 key=dct['key'],
@@ -1325,7 +1323,6 @@ class Model(_base._Base):
                                 )
             lst.append(r)
 
-            # LOG.debug('reaction --> {}'.format(r))
         # self.reset_cache('reactions')
         return lst
 
