@@ -2413,7 +2413,6 @@ class Scatters(PlotKwargs):
                 if self.despine:
                     seaborn.despine(fig=fig, top=True, right=True)
 
-
                 if self.savefig:
                     x_dir = os.path.join(self.results_directory, x_var)
                     self.create_directory(x_dir)

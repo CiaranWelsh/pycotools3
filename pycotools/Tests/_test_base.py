@@ -16,7 +16,7 @@ site.addsitedir('/home/b3053674/Documents/pycotools')
 # site.addsitedir('C:\Users\Ciaran\Documents\pycotools')
 
 import pycotools
-import test_models, test_data
+import test_models#, test_data
 import unittest
 import glob
 import os

@@ -67,4 +67,5 @@ pycotools/Examples/*.pyc
 pycotools/Examples/*.cps
 pycotools/Examples/log.log
 pycotools/Tests/*.cps
+docs/log.log
 

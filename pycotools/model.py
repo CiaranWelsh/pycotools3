@@ -1186,16 +1186,16 @@ class Model(_base._Base):
                                 parameter_name = l.attrib['name']
                                 global_name = "({}).{}".format(reaction_name, parameter_name)
                                 parameter_key = l.attrib['key']
-
                                 loc = LocalParameter(self,
                                                      name=dct[global_name]['parameter_name'],
                                                      value=dct[global_name]['value'],
                                                      key=parameter_key,
                                                      reaction_name=dct[global_name]['reaction_name'],
                                                      global_name=global_name,
-                                                     simulation_type = dct[global_name]['simulation_type']
+                                                     simulation_type=dct[global_name]['simulation_type']
                                                      )
                                 res.append(loc)
+                                # LOG.debug('loc from constants --> {}'.format(loc))
         return res
 
     @cached_property
@@ -1311,8 +1311,9 @@ class Model(_base._Base):
         for i, dct in reactions_dict.items():
             ## skip the skipped reactions
             # if i not in skipped:
-            lst.append(Reaction(self,
-                                name=dct['name'],
+            # LOG.debug('dct name striped --> "{}"'.format(dct['name'].strip(' ')))
+            r = Reaction(self,
+                                name=dct['name'].strip(),
                                 key=dct['key'],
                                 expression=dct['expression'],
                                 rate_law=dct['function'],
@@ -1322,7 +1323,9 @@ class Model(_base._Base):
                                 parameters=dct['constants'],
                                 parameters_dict={j.name: j for j in dct['constants']},
                                 )
-                       )
+            lst.append(r)
+
+            # LOG.debug('reaction --> {}'.format(r))
         # self.reset_cache('reactions')
         return lst
 
@@ -2902,7 +2905,7 @@ class LocalParameter(object):
 
 
     def __str__(self):
-        return 'LocalParameter(name="{}", reaction_name="{}, value="{}", simulation_type="{}")'.format(
+        return 'LocalParameter(name="{}", reaction_name="{}", value="{}", simulation_type="{}")'.format(
             self.name, self.reaction_name, self.value, self.simulation_type
         )
 

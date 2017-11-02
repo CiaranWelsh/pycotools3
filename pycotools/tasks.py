@@ -1172,6 +1172,8 @@ class TimeCourse(object):
         if self.save:
             self.model.save()
 
+
+
     def _do_checks(self):
         """
         method for checking user input
@@ -2678,6 +2680,9 @@ class ParameterEstimation(object):
         if self.save:
             self.model.save()
 
+        # for param in self.model.local_parameters:
+        #     LOG.debug('local parameters -> {}'.format(param))
+
     def __str__(self):
         return "ParameterEstimation(method='{}', config_filename='{}', report_name='{}')".format(
             self.method, self.config_filename, self.report_name)
@@ -3103,6 +3108,7 @@ class ParameterEstimation(object):
 
 
         for model_loc in self.model.local_parameters:
+            LOG.debug('model_loc is --> {}'.format(model_loc))
             for PE_loc in self.local_parameters:
                 if PE_loc.global_name == model_loc.global_name:
                     keep_locs.append(PE_loc)
@@ -3239,7 +3245,7 @@ class ParameterEstimation(object):
             subA4 = {'type': 'cn', 'name': 'ObjectCN', 'value': '{},{},{}'.format(
                 self.model.reference,
                 self.model.get('reaction', component.reaction_name, by='name').reference,
-                component.value_reference) }
+                component.value_reference)}
 
         elif isinstance(component, model.GlobalQuantity):
             subA4={'type': 'cn',  'name': 'ObjectCN',  'value': '{},{}'.format(self.model.reference,
@@ -3722,9 +3728,9 @@ class MultiParameterEstimation(ParameterEstimation):
 
 
 
-class RunSecondaryParameterEstimations(object):
-    def __init__(self):
-        raise NotImplementedError
+# class RunSecondaryParameterEstimations(object):
+#     def __init__(self):
+#         raise NotImplementedError
 
 
 @mixin(UpdatePropertiesMixin)
@@ -3857,6 +3863,7 @@ class MultiModelFit(object):
         """
         conf_list=[]
         for MPE in self.MPE_dct:
+            LOG.debug('creating config file for MPE --> {}'.format(self.MPE_dct[MPE].results_directory))
             f = self.MPE_dct[MPE].write_config_file()
             conf_list.append(f)
         return conf_list
