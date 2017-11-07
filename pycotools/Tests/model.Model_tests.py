@@ -1146,21 +1146,34 @@ class NewModelTests(unittest.TestCase):
         model = pycotools.model.Model(self.cps_file, new_model=True)
         model.save()
 
-    def test_(self):
+    def test_compartment(self):
+        """
+        Test we can make a new compartment
+        in a empty model
+        :return:
+        """
         model = pycotools.model.Model(self.cps_file, new_model=True)
-        model2 = pycotools.model.Model(self.cps_file2, new_model=True)
-        model2 = model2.add('compartment', 'NewCompartment')
-        e = '{http://www.copasi.org/static/schema}ListOfCompartments'
-        for i in model2.xml.iter(e):
-            print i
-        # print model2.xml.find()
-        print model.save()
-        print model2.save()
+        model = model.add('compartment', 'NewCompartment')
+        comp = model.get('compartment', 'NewCompartment')
+        self.assertEqual(comp.name, 'NewCompartment')
+
+    def test_metabolite(self):
+        """
+        Test we can make a new metabolite
+        in a empty model
+        :return:
+        """
+        model = pycotools.model.Model(self.cps_file, new_model=True)
+        model = model.add('metabolite', 'NewMetabolite')
+        comp = model.get('compartment', 'NewMetabolite')
+        self.assertEqual(comp.name, 'NewMetabolite')
 
     def tearDown(self):
-        pass
-        # if os.path.isfile(self.cps_file):
-        #     os.remove(self.cps_file)
+        # pass
+        if os.path.isfile(self.cps_file):
+            os.remove(self.cps_file)
+        if os.path.isfile(self.cps_file2):
+            os.remove(self.cps_file2)
 
 
 

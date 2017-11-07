@@ -637,6 +637,23 @@ class Model(_base._Base):
 
         if 'compartments' in self.__dict__:
             del self.__dict__['compartments']
+
+        ## if ListOfCompartment tag not exist, create
+        comp_tag = '{http://www.copasi.org/static/schema}ListOfCompartments'
+        mod_tag = '{http://www.copasi.org/static/schema}Model'
+        miriam = r'{http://www.copasi.org/static/schema}MiriamAnnotation'
+
+
+        if self.xml.find(mod_tag).find(comp_tag) is None:
+            new_comp = etree.Element('{http://www.copasi.org/static/schema}ListOfCompartments')
+            for i in range(len(self.xml.find(mod_tag))):
+                print i, self.xml.find(mod_tag)[i]
+                if self.xml.find(mod_tag)[i].tag == miriam :
+                    miriam_index = i
+
+            LOG.debug('len  --> {}'.format(len(self.xml.find(mod_tag))))
+            self.xml.find(mod_tag).insert(miriam_index+1, new_comp)
+
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfCompartments':
                 i.append(compartment.to_xml())
@@ -725,16 +742,19 @@ class Model(_base._Base):
         :return:
             :py:class:`Model`
         """
+        ## remove frome cache
         if 'local_parameters' in self.__dict__:
             del self.__dict__['local_parameters']
-        # print local_parameter.to_xml()
+
+        ## do not add if already exists
         if local_parameter.global_name in [i.global_name for i in self.local_parameters]:
             return self
+
+        ##
         query = '//*[@cn="String=Kinetic Parameters"]'
         for i in self.xml.xpath(query):
             i.append(local_parameter.to_xml())
         return self
-            # if i.tag == '{http://www.copasi.org/static/schema}'
 
     @staticmethod
     def convert_particles_to_molar(particles, mol_unit, compartment_volume):
@@ -878,6 +898,15 @@ class Model(_base._Base):
 
         if not isinstance(metab, Metabolite):
             raise errors.InputError('Input must be Metabolite class')
+
+        ## if ListOfCompartment tag not exist, create
+        metab_tag = '{http://www.copasi.org/static/schema}ListOfMetabolites'
+        mod_tag = '{http://www.copasi.org/static/schema}Model'
+
+        # if self.xml.find(mod_tag).find(metab_tag) is None:
+        #     new_metab = etree.Element('{http://www.copasi.org/static/schema}ListOfMetabolites')
+        #     self.xml.find(mod_tag).append(new_metab)
+
 
         metabolite_element = metab.to_xml()
         ## add the metabolute to list of metabolites

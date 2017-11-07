@@ -69,3 +69,6 @@ class NoFitItemsError(Exception):
 
 class NonFormattedPEFileError(Exception):
     pass
+
+class AlreadyExistsError(Exception):
+    pass
