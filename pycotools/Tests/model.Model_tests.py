@@ -24,8 +24,8 @@ Module that tests the operations of the _Base base test
 """
 
 import site
-# site.addsitedir('C:\Users\Ciaran\Documents\pycotools')
-site.addsitedir('/home/b3053674/Documents/pycotools')
+site.addsitedir(r'C:\Users\Ciaran\Documents\pycotools')
+# site.addsitedir('/home/b3053674/Documents/pycotools')
 
 import pycotools
 from pycotools.Tests import _test_base
@@ -1129,20 +1129,38 @@ class InsertParameterTests(_test_base._BaseTest):
 
 
 
+class NewModelTests(unittest.TestCase):
+    """
+    tests relating to the development of new models from
+    nothing.
+    """
+    def setUp(self):
+        self.cps_file = os.path.join(os.path.dirname(__file__), 'NewModelTest.cps')
+        self.cps_file2 = os.path.join(os.path.dirname(__file__), 'NewModelTest2.cps')
 
+    def test_new_model_saves(self):#
+        """
+        Test that a new model is created and saved.
+        :return:
+        """
+        model = pycotools.model.Model(self.cps_file, new_model=True)
+        model.save()
 
+    def test_(self):
+        model = pycotools.model.Model(self.cps_file, new_model=True)
+        model2 = pycotools.model.Model(self.cps_file2, new_model=True)
+        model2 = model2.add('compartment', 'NewCompartment')
+        e = '{http://www.copasi.org/static/schema}ListOfCompartments'
+        for i in model2.xml.iter(e):
+            print i
+        # print model2.xml.find()
+        print model.save()
+        print model2.save()
 
-
-
-
-
-
-
-
-
-
-
-
+    def tearDown(self):
+        pass
+        # if os.path.isfile(self.cps_file):
+        #     os.remove(self.cps_file)
 
 
 

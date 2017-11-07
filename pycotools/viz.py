@@ -1490,10 +1490,9 @@ class PlotParameterEstimation(PlotKwargs):
         self.kwargs = kwargs
         self.plot_kwargs = self.plot_kwargs()
 
-
         default_y = [i.name for i in self.cls.model.metabolites] + [i.name for i in self.cls.model.global_quantities]
         self.default_properties = {
-            'y': None,
+            'y': default_y,
             'savefig': False,
             'results_directory': None,
             'title': 'TimeCourse',
@@ -1510,7 +1509,7 @@ class PlotParameterEstimation(PlotKwargs):
         }
         self.default_properties.update(self.plot_kwargs)
         for i in kwargs.keys():
-            assert i in self.default_properties.keys(),'{} is not a keyword argument for Boxplot'.format(i)
+            assert i in self.default_properties.keys(),'{} is not a keyword argument for "PlotParameterEstimation"'.format(i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
         self.default_properties.update(self.plot_kwargs)
@@ -1543,7 +1542,8 @@ class PlotParameterEstimation(PlotKwargs):
         if self.results_directory == None:
             self.results_directory = os.path.join(self.cls.model.root,
                                                   'ParameterEstimationPlots')
-
+        if not isinstance(self.y, list):
+            self.y = [self.y]
 
     def update_parameters(self):
         """
@@ -1614,14 +1614,24 @@ class PlotParameterEstimation(PlotKwargs):
         plot experimental data versus best parameter sets
         :return:
         """
-        if self.y == None:
-            self.y = self.read_experimental_data().values()[0].keys()
 
-            ## remove time from default plotting vars
-            self.y = [i for i in self.y if i != 'Time']
 
-            ## remove any independent variable from default plotting vars
-            self.y = [i for i in self.y if i[-6:] != '_indep']
+
+        # if self.y == None:
+        #     self.y = self.read_experimental_data().values()[0].keys()
+        #
+        #
+        #     ## remove time from default plotting vars
+        #     self.y = [i for i in self.y if i != 'Time']
+        #
+        #     ## remove any independent variable from default plotting vars
+        #     self.y = [i for i in self.y if i[-6:] != '_indep']
+        #
+        # else:
+        for y in self.y:
+            if y not in self.read_experimental_data().values()[0].keys():
+                raise errors.InputError('"{}" not in "{}"'.format(y, self.read_experimental_data().values()[0].keys()))
+
         exp_data = self.read_experimental_data()
         sim_data = self.simulate_time_course()
 

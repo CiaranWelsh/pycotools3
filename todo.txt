@@ -1,19 +1,10 @@
-To Do:
-  - Look into why GMQ not producing correct parmameters
-  - Go through each class, collect like kwargs. draw up tables of these 
-kwargs and what they do
-  - ensure doc strings are accurate. copy sklearns style. 
-  - include example with doc string
-  - Complete the tutorials
-    - insert parameters
-    - model selection
-    - get model quantities
-    - scripts
-    - parameter estimation
+To to:
 
-  - Render docs using sphinx
-  - try and upload to read the docs
-  - add profile likelihoods to poster
-  - run PLs on 'better PEData set'
-  - get cluster working - use neils account maybe? 
-  -  
+* Develop secondary parameter estimation method/class
+* quick start tutorial
+* kholodenko example
+* fix bug in build reactions
+* build lorenze attractor
+* ensemble time ocurse with more than one data set and independent variables. 
+* Documentation
+* Build model loader
