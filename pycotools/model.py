@@ -208,7 +208,7 @@ class Model(_base._Base):
 
     """
     def __init__(self, copasi_file, quantity_type='concentration',
-                 new_model=False, **kwargs):
+                 new=False, **kwargs):
         """
         :param copasi_file:
             `str`. Full path to a copasi file
@@ -216,7 +216,7 @@ class Model(_base._Base):
         :param quantity_type:
             `str`. 'concentration' or 'particle_numbers'
 
-        :param new_model:
+        :param new:
             `bool`. Begin new empty model. Untested.
 
         :param kwargs:
@@ -225,7 +225,7 @@ class Model(_base._Base):
         super(Model, self).__init__(**kwargs)
         self._copasi_file = copasi_file
         self.quantity_type = quantity_type
-        self.new_model = new_model
+        self.new_model = new
         if self.new_model:
             misc.new_model(copasi_file)
         self.xml = tasks.CopasiMLParser(copasi_file).copasiML
@@ -622,10 +622,11 @@ class Model(_base._Base):
         ## ensure we don't add compartment with existing name
         existing = self.get('compartment', compartment.name, by='name')
         if existing != []:
-            raise errors.AlreadyExistsError(
+            LOG.info(
                 'Model already contains compartment '
-                'with name: "{}"'.format(compartment.name)
+                'with name: "{}". Skipping'.format(compartment.name)
             )
+            return self
 
         ## ensure we don't add compartment with existing key
         existing = self.get('compartment', compartment.key, by='key')
@@ -643,15 +644,12 @@ class Model(_base._Base):
         mod_tag = '{http://www.copasi.org/static/schema}Model'
         miriam = r'{http://www.copasi.org/static/schema}MiriamAnnotation'
 
-
         if self.xml.find(mod_tag).find(comp_tag) is None:
             new_comp = etree.Element('{http://www.copasi.org/static/schema}ListOfCompartments')
             for i in range(len(self.xml.find(mod_tag))):
-                print i, self.xml.find(mod_tag)[i]
                 if self.xml.find(mod_tag)[i].tag == miriam :
                     miriam_index = i
 
-            LOG.debug('len  --> {}'.format(len(self.xml.find(mod_tag))))
             self.xml.find(mod_tag).insert(miriam_index+1, new_comp)
 
         for i in self.xml.iter():
@@ -752,6 +750,7 @@ class Model(_base._Base):
 
         ##
         query = '//*[@cn="String=Kinetic Parameters"]'
+        LOG.debug('local_parameter from add_loc --> {}'.format(local_parameter))
         for i in self.xml.xpath(query):
             i.append(local_parameter.to_xml())
         return self
@@ -884,6 +883,10 @@ class Model(_base._Base):
         :return:
             :py:class:`Model`
         """
+        ## if no compartments exist, make one
+        if self.compartments == []:
+            self.add('compartment', 'NewCompartment')
+            self.save()
 
         ## If metab is str convert to Metabolite
         ## with default parameters
@@ -895,18 +898,21 @@ class Model(_base._Base):
         if 'metabolites' in self.__dict__:
             del self.__dict__['metabolites']
 
-
         if not isinstance(metab, Metabolite):
             raise errors.InputError('Input must be Metabolite class')
 
         ## if ListOfCompartment tag not exist, create
-        metab_tag = '{http://www.copasi.org/static/schema}ListOfMetabolites'
+        m = '{http://www.copasi.org/static/schema}ListOfMetabolites'
         mod_tag = '{http://www.copasi.org/static/schema}Model'
+        comp = r'{http://www.copasi.org/static/schema}ListOfCompartments'
 
-        # if self.xml.find(mod_tag).find(metab_tag) is None:
-        #     new_metab = etree.Element('{http://www.copasi.org/static/schema}ListOfMetabolites')
-        #     self.xml.find(mod_tag).append(new_metab)
+        if self.xml.find(mod_tag).find(m) is None:
+            new_m = etree.Element('{http://www.copasi.org/static/schema}ListOfMetabolites')
+            for i in range(len(self.xml.find(mod_tag))):
+                if self.xml.find(mod_tag)[i].tag == comp:
+                    miriam_index = i
 
+            self.xml.find(mod_tag).insert(miriam_index + 1, new_m)
 
         metabolite_element = metab.to_xml()
         ## add the metabolute to list of metabolites
@@ -986,13 +992,28 @@ class Model(_base._Base):
         ## try and get existing
         existing = self.get('global_quantity', global_quantity.name, by='name')
         if existing != []:
-            raise errors.AlreadyExistsError(
+            LOG.info(
                 'Model already contains global_quantity '
-                'with name: "{}"'.format(global_quantity.name)
+                'with name: "{}". Skipping'.format(global_quantity.name)
             )
+            return self
 
         if 'global_quantities' in self.__dict__:
             del self.__dict__['global_quantities']
+
+        ## if ListOfCompartment tag not exist, create
+        m = '{http://www.copasi.org/static/schema}ListOfModelValues'
+        mod_tag = '{http://www.copasi.org/static/schema}Model'
+        comp = r'{http://www.copasi.org/static/schema}ListOfCompartments'
+        idx = 0
+        if self.xml.find(mod_tag).find(m) is None:
+            new_m = etree.Element(m)
+            for i in range(len(self.xml.find(mod_tag))):
+                if self.xml.find(mod_tag)[i].tag == comp:
+                    idx = i
+
+            self.xml.find(mod_tag).insert(idx + 1, new_m)
+
 
         model_value = global_quantity.to_xml()
         for i in self.xml.iter():
@@ -1124,9 +1145,6 @@ class Model(_base._Base):
         :return:
             :py:class:`Model`
         """
-
-
-
         if function.key == None:
             function.key = KeyFactory(self, type='function').generate()
 
@@ -1138,9 +1156,15 @@ class Model(_base._Base):
         else:
             function.reversible = 'false'
 
+        ## If ListOfFunctions element not exist, create
+        m = '{http://www.copasi.org/static/schema}ListOfFunctions'
+        if self.xml.find(m) is None:
+            self.xml.insert(0, etree.Element(m))
+
         ## add the function to list of functions
         if function.key in [i.key for i in self.functions]:
             return self
+
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfFunctions':
                 i.append(function.to_xml())
@@ -1233,6 +1257,15 @@ class Model(_base._Base):
         :return:
             `list` each element a :py:class:`Reaction`
         """
+        ## make sure list of reaction tag exists befor continuing
+        exist = False
+        for i in self.xml.iter():
+            if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
+                exist = True
+
+        if exist == False:
+            return []
+
         reaction_count = 0
         reactions_dict = {}
         for i in self.xml.iter():
@@ -1262,7 +1295,6 @@ class Model(_base._Base):
                                 substrate = substrate.to_substrate()
                                 list_of_substrates.append(substrate)
                             reactions_dict[reaction_count]['substrates'] = list_of_substrates
-
 
                         elif k.tag == '{http://www.copasi.org/static/schema}ListOfProducts':
                             list_of_products = []
@@ -1298,11 +1330,19 @@ class Model(_base._Base):
 
         ## assemble the expression for the reaction
         #LOG.warning('move below code to separate function for clean code')
-        for i, dct in reactions_dict.items():
-            if dct['function'] == []:
-                dct['function'] = "k*{}".format(reduce(lambda x, y: '{}*{}'.format(x, y), substrates))
+        ## return empty list when no reactions are in model
+        if len(reactions_dict) == 0:
+            return []
 
+
+        for i, dct in reactions_dict.items():
+            ## default constant flux or mass action
             substrates = [j.name for j in reactions_dict[i]['substrates']]
+            if dct['function'] == []:
+                # if dct['substrates'] == []:
+                #     dct['function'] = "v".format(reduce(lambda x, y: '{}*{}'.format(x, y), products))
+                # else:
+                dct['function'] = "k*{}".format(reduce(lambda x, y: '{}*{}'.format(x, y), substrates))
             if substrates != []:
                 sub_expression = reduce(lambda x, y: "{} + {}".format(x, y), substrates)
             else:
@@ -1335,7 +1375,10 @@ class Model(_base._Base):
                 expression = '{} {} {}; {}'.format(sub_expression, operator,
                                                    prod_expression, modifier_expression)
             reactions_dict[i]['expression'] = expression
+
+
         lst=[]
+
         for i, dct in reactions_dict.items():
             ## skip the skipped reactions
             # if i not in skipped:
@@ -1363,6 +1406,12 @@ class Model(_base._Base):
         :return:
             :py:class:`Model`
         """
+        '''
+        IF a reaction shares the same function as another
+        they have the same function parameter but different 
+        source parameters
+        '''
+        LOG.debug('reaction name from add_reaction --> {}'.format(reaction.name))
         if not isinstance(reaction, Reaction):
             raise errors.InputError(
                 'Expecting Reaction but '
@@ -1377,7 +1426,11 @@ class Model(_base._Base):
             )
 
         if reaction.key in [i.key for i in self.reactions]:
-            raise errors.ReactionAlreadyExists('Your model already contains a reaction with the key: {}'.format(reaction.key))
+            reaction.key = '{}_{}'.format(
+                reaction.key.split('_')[0],
+                int(reaction.key.split('_')[1])+1
+            )
+            LOG.info('Model already contains a reaction with the key: {}. Changing key'.format(reaction.key))
 
         if reaction.name in [i.name for i in self.reactions]:
             raise errors.ReactionAlreadyExists('Your model already contains a reaction with the name: {}'.format(reaction.name))
@@ -1391,24 +1444,36 @@ class Model(_base._Base):
 
         existing_function = self.get('function', reaction.rate_law.expression, by='expression')
 
-        if (existing_function == []):
+        if existing_function == []:
             self.add_function(reaction.rate_law)
         else:
             LOG.warning('Bug might occur here'
-                        'if an existing finction '
+                        'if an existing function '
                         'exists but has different'
                         'roles. then its not the same function'
                         'and should be added separetly')
             reaction.rate_law = existing_function
 
+        ## if ListOFReactions tag not exist, create
+        m = '{http://www.copasi.org/static/schema}ListOfReactions'
+        mod_tag = '{http://www.copasi.org/static/schema}Model'
+        metab = r'{http://www.copasi.org/static/schema}ListOfMetabolites'
+        idx = 0
+        if self.xml.find(mod_tag).find(m) is None:
+            new_m = etree.Element(m)
+            for i in range(len(self.xml.find(mod_tag))):
+                if self.xml.find(mod_tag)[i].tag == metab:
+                    idx = i
+
+            self.xml.find(mod_tag).insert(idx + 1, new_m)
 
         for i in self.xml.iter():
-            if i.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
+            if i.tag == m:
                 i.append(reaction.to_xml())
-
         ## needed?
-        # self.save()
+        self.save()
         for local_parameter in reaction.parameters:
+            LOG.debug('local_p --> {}'.format(local_parameter))
             self.add_local_parameter(local_parameter)
 
         return self
@@ -1747,10 +1812,7 @@ class Model(_base._Base):
         :return:
         """
         return NotImplementedError
-        # for i in self.xml.iter():
-        #     if i.tag=='{http://www.copasi.org/static/schema}ListOfModelParameterSets':
-        #         for j in i:
-        #             print j
+
 
     @property
     def parameters(self):
@@ -1876,7 +1938,7 @@ class Compartment(object):
         if self.simulation_type not in simulation_types:
             raise errors.InputError('{} not in {}'.format(self.simulation_type, simulation_types))
 
-        compartment_element = etree.Element('Compartment', attrib={'key': self.key,
+        compartment_element = etree.Element('{http://www.copasi.org/static/schema}Compartment', attrib={'key': self.key,
                                                                    'name': self.name,
                                                                    'simulationType': self.simulation_type,
                                                                    'dimensionality': '3'})
@@ -1884,6 +1946,7 @@ class Compartment(object):
 
 
 @mixin(ReadModelMixin)
+@mixin(ComparisonMethodsMixin)
 @mixin(ComparisonMethodsMixin)
 class Metabolite(object):
     """
@@ -1965,7 +2028,11 @@ class Metabolite(object):
             try:
                 self.compartment = self.model.compartments[0]
             except IndexError:
-                raise errors.InputError('No compartments in your model')
+                self.model = self.model.add('compartment', 'NewCompartment')
+                # self.model.save()#model.refresh()
+                self.compartment = self.model.compartments[0]
+                LOG.info('No compartments in model. adding default compartment '
+                         'called NewCompartment with initial volume == 1')
 
         if self.compartment != None:
             if isinstance(self.compartment, str):
@@ -1979,7 +2046,7 @@ class Metabolite(object):
                 if isinstance(self.compartment, Compartment) != True:
                     raise errors.InputError('compartment argument should be of type PyCoTools.tasks.Compartment')
 
-        if ('particle_number' not in self.__dict__.keys()) and  ('concentration' not in self.__dict__.keys() ):
+        if ('particle_number' not in self.__dict__.keys()) and ('concentration' not in self.__dict__.keys() ):
             raise errors.InputError('Must specify either concentration or particle numbers')
 
         if self.simulation_type == None:
@@ -2113,7 +2180,7 @@ class Metabolite(object):
         :return:
             `str`
         """
-        metabolite_element = etree.Element('Metabolite', attrib={'key': self.key,
+        metabolite_element = etree.Element('{http://www.copasi.org/static/schema}Metabolite', attrib={'key': self.key,
                                                                  'name': self.name,
                                                                  'simulationType': self.simulation_type,
                                                                  'compartment': self.compartment.key})
@@ -2410,6 +2477,11 @@ class Reaction(object):
 
         self._do_checks()
         self.create()
+
+        LOG.debug('Thy Reaction is \n\n\t{}\n{}'.format(
+            self,
+            self.key
+        ))
         # print self.to_df()
 
     def __str__(self):
@@ -2493,7 +2565,6 @@ class Reaction(object):
         ## for handling existing functions
         elif isinstance(self.rate_law, Function):
             if 'mass action' in self.rate_law.name.lower():
-                ##TODO add reversible here
                 forward = reduce(
                     lambda x, y: '{}*{}'.format(
                         x, y), [i.name for i in self.substrates]
@@ -2510,7 +2581,6 @@ class Reaction(object):
 
             else:
                 expression_components = Expression(self.rate_law.expression).to_list()
-
         parameter_list = []
         for i in expression_components:
             if i not in reaction_components:
@@ -2615,26 +2685,26 @@ class Reaction(object):
         if isinstance(self.fast, bool):
             raise Exception
 
-        reaction = etree.Element('Reaction', attrib={'key': self.key,
+        reaction = etree.Element('{http://www.copasi.org/static/schema}Reaction', attrib={'key': self.key,
                                                      'name': self.name,
                                                      'reversible': self.reversible,
                                                      'fast': self.fast})
-        list_of_substrates = etree.SubElement(reaction, 'ListOfSubstrates')
+        list_of_substrates = etree.SubElement(reaction, '{http://www.copasi.org/static/schema}ListOfSubstrates')
         for i in self.substrates:
-            etree.SubElement(list_of_substrates, 'Substrate', attrib={'metabolite': i.key,
+            etree.SubElement(list_of_substrates, '{http://www.copasi.org/static/schema}Substrate', attrib={'metabolite': i.key,
                                                                       'stoichiometry': str(i.stoichiometry)})
 
-        list_of_products = etree.SubElement(reaction, 'ListOfProducts')
+        list_of_products = etree.SubElement(reaction, '{http://www.copasi.org/static/schema}ListOfProducts')
         for i in self.products:
-            etree.SubElement(list_of_products, 'Product', attrib={'metabolite': i.key,
+            etree.SubElement(list_of_products, '{http://www.copasi.org/static/schema}Product', attrib={'metabolite': i.key,
                                                                   'stoichiometry': str(i.stoichiometry)})
 
-        list_of_modifiers = etree.SubElement(reaction, 'ListOfModifiers')
+        list_of_modifiers = etree.SubElement(reaction, '{http://www.copasi.org/static/schema}ListOfModifiers')
         for i in self.modifiers:
             etree.SubElement(list_of_modifiers, 'Modifier', attrib={'metabolite': i.key,
                                                                     'stoichiometry': str(i.stoichiometry)})
 
-        list_of_constants = etree.SubElement(reaction, 'ListOfConstants')
+        list_of_constants = etree.SubElement(reaction, '{http://www.copasi.org/static/schema}ListOfConstants')
 
         for i in self.parameters:
             etree.SubElement(list_of_constants, 'Constant', attrib={'key': i.key,
@@ -2643,29 +2713,33 @@ class Reaction(object):
         if 'mass_action' in self.rate_law.name.lower().replace(' ', '_'):
             kinetic_law = self.rate_law.to_xml()
         else:
+            try:
+                comp = self.substrates[0].compartment.reference
+            except IndexError:
+                comp = self.products[0].compartment.reference
+
             kinetic_law = etree.SubElement(reaction,
-                                           'KineticLaw',
+                                           '{http://www.copasi.org/static/schema}KineticLaw',
                                            attrib={'function': self.rate_law.key,
                                                    'unitType': 'Default',
                                                    'scalingCompartment': "{},{}".format(
                                                        self.model.reference,
-                                                       self.substrates[0].compartment.reference)})
-            call_parameters = etree.SubElement(kinetic_law, 'ListOfCallParameters')
+                                                       comp)})
+            call_parameters = etree.SubElement(kinetic_law, '{http://www.copasi.org/static/schema}ListOfCallParameters')
             for i in self.rate_law.list_of_parameter_descriptions:
                 call_parameter = etree.SubElement(call_parameters,
-                                                  'CallParameter',
+                                                  '{http://www.copasi.org/static/schema}CallParameter',
                                                   attrib={'functionParameter': i.key})
 
                 if i.role == 'constant':
                     ##TODO implement global quantities here
-
 
                     source_parameter = self.parameters_dict[i.name].key
 
                 elif (i.role == 'substrate') or (i.role == 'product') or (i.role == 'modifier'):
                     source_parameter = self.model.get('metabolite', i.name, by='name').key
 
-                etree.SubElement(call_parameter, 'SourceParameter', attrib={'reference': source_parameter})
+                etree.SubElement(call_parameter, '{http://www.copasi.org/static/schema}SourceParameter', attrib={'reference': source_parameter})
 
         return reaction
 
@@ -2797,12 +2871,12 @@ class Function(object):
         if self.name == None:
             raise errors.SomethingWentHorriblyWrongError('name argument is None')
 
-        func = etree.Element('Function', attrib=OrderedDict({'key': self.key,
+        func = etree.Element('{http://www.copasi.org/static/schema}Function', attrib=OrderedDict({'key': self.key,
                                                              'name': self.name,
                                                              'type': 'UserDefined',
                                                              'reversible': self.reversible}) )
 
-        expression = etree.SubElement(func, 'Expression')
+        expression = etree.SubElement(func, '{http://www.copasi.org/static/schema}Expression')
         if isinstance(self.expression, str):
             expression.text = self.expression
         elif isinstance(self.expression, Function):
@@ -2815,7 +2889,7 @@ class Function(object):
         list_of_p_desc = etree.SubElement(func, 'ListOfParameterDescriptions')
 
         for i in self.list_of_parameter_descriptions:
-            etree.SubElement(list_of_p_desc, 'ParameterDescription', attrib={'key': i.key,
+            etree.SubElement(list_of_p_desc, '{http://www.copasi.org/static/schema}ParameterDescription', attrib={'key': i.key,
                                                                              'name': i.name,
                                                                              'order': str(i.order),
                                                                              'role': i.role})
@@ -2920,7 +2994,6 @@ class LocalParameter(object):
         self.global_name = global_name
         self.key = key
 
-
         if self.name is None:
             raise errors.InputError('Name is "{}"'.format(self.name))
 
@@ -2928,7 +3001,6 @@ class LocalParameter(object):
             self.key = KeyFactory(self.model, type='parameter')
             if self.key is None:
                 raise errors.InputError('Key is "{}"'.format(self.key))
-
 
     def __str__(self):
         return 'LocalParameter(name="{}", reaction_name="{}", value="{}", simulation_type="{}")'.format(
@@ -2970,9 +3042,14 @@ class LocalParameter(object):
         section of parameter set
         :return: xml element
         """
+        LOG.debug('new_xml call')
         reaction = self.model.get('reaction', self.reaction_name, 'name')
+        LOG.debug('react is --> {}'.format(self.reaction_name))
+        # self.model.open()
         if reaction == []:
-            raise errors.SomethingWentHorriblyWrongError('Reaction not in model')
+            raise errors.SomethingWentHorriblyWrongError('Reaction called "{}" not in model'.format(
+                self.reaction_name
+            ))
         # print reaction
         cn = "{},{}".format(self.model.reference, reaction.reference)
         model_parameter_group = etree.Element('ModelParameterGroup',
@@ -3103,6 +3180,7 @@ class KeyFactory(object):
 
         :return:
         """
+        LOG.debug('model component --> {}'.format(model_component))
         ##TODO fix bug where create key only works for generating single key at a time.
         ##be consistent with the rest of copasi
         if self.type == 'global_quantity':
@@ -3268,7 +3346,7 @@ class Expression(object):
         self.expression = expression
 
         ## list of available operators according the copasi website
-        self.operator_list = ['+', '-', '*', r'/', '%', '^']
+        self.operator_list = ['+', '-', '*', r'/', '%', '^', '(', ')']
         self.letter_operators = ['abs', 'floor',
                                  'ceil', 'factorial', 'log',
                                  'log10', 'exp', 'sin'
@@ -3296,7 +3374,8 @@ class Expression(object):
 
         ## get list of elements by split
         split = self.expression.split(',')
-        return [i.strip() for i in split]
+        split = [i.strip() for i in split]
+        return sorted(list(set([i for i in split if i != ''])))
 
     def __str__(self):
         return "Expression({})".format(self.expression)
@@ -3325,6 +3404,7 @@ class Translator(object):
 
         ## split reaction by -> or = and ;. determine reversibility
         self.substrates, self.products, self.modifiers = self.split_reaction()
+
 
         ## split substrates and products by + and modifiers by empty spaces
         if self.substrates != []:
@@ -3466,7 +3546,15 @@ class Translator(object):
             #     continue
             metab = self.model.get('metabolite', comp, by='name')
             if metab == []:
-                metab = Metabolite(self.model, name=comp,
+                try:
+                    metab = Metabolite(self.model, name=comp,
+                                   concentration=1,
+                                   compartment=self.model.compartments[0],
+                                   key=KeyFactory(self.model,
+                                                  type='metabolite').generate() )
+                except IndexError:
+                    self.model.add('compartment', 'NewCompartment')
+                    metab = Metabolite(self.model, name=comp,
                                    concentration=1,
                                    compartment=self.model.compartments[0],
                                    key=KeyFactory(self.model,
@@ -3560,12 +3648,12 @@ class MassAction(Function):
         write mass action function as xml element
         :return:
         """
-        mass_action = etree.Element('Function', attrib=OrderedDict({'key': self.key,
+        mass_action = etree.Element('{http://www.copasi.org/static/schema}Function', attrib=OrderedDict({'key': self.key,
                                                                     'name': self.name,
                                                                     'type': 'MassAction',
                                                                     'reversible': self.reversible}) )
 
-        expression = etree.SubElement(mass_action, 'Expression')
+        expression = etree.SubElement(mass_action, '{http://www.copasi.org/static/schema}Expression')
         if self.reversible == 'false':
             expression.text = 'k1*PRODUCT&lt;substrate_i>'
 
@@ -3653,17 +3741,17 @@ class ParameterSet(object):
     def to_xml(self):
 
         ## top element
-        parameter_set = etree.Element('ModelParameterSet', attrib={'key': self.key,
+        parameter_set = etree.Element('{http://www.copasi.org/static/schema}ModelParameterSet', attrib={'key': self.key,
                                                          'name': self.name})
 
         ## time element
         model_parameter_group = etree.SubElement(
-            parameter_set,'ModelParameterGroup',
+            parameter_set,'{http://www.copasi.org/static/schema}ModelParameterGroup',
             attrib={'cn': 'String=Initial Time',
                     'type': 'Group'})
 
         ## time sub element
-        etree.SubElement(model_parameter_group, 'ModelParameter',
+        etree.SubElement(model_parameter_group, '{http://www.copasi.org/static/schema}ModelParameter',
                          attrib={'cn': self.model.reference,
                                  'value': str(self.initial_time),
                                  'type': 'Model',
@@ -3671,7 +3759,7 @@ class ParameterSet(object):
 
         ##compartment element
         model_parameter_group = etree.SubElement(
-            parameter_set, 'ModelParameterGroup',
+            parameter_set, '{http://www.copasi.org/static/schema}ModelParameterGroup',
             attrib={'cn': 'String=Initial Compartment Sizes',
                     'type': 'Group'}
         )
@@ -3679,7 +3767,7 @@ class ParameterSet(object):
         #
         ##compartment subelement
         for compartment in self.model.compartments:
-            etree.SubElement(model_parameter_group, 'ModelParameter',
+            etree.SubElement(model_parameter_group, '{http://www.copasi.org/static/schema}ModelParameter',
                          attrib={'cn': '{},{}'.format(self.model.reference, compartment.reference),
                                  'value': str(compartment.initial_value),
                                  'type': 'Compartment',
@@ -3688,7 +3776,7 @@ class ParameterSet(object):
 
         ##metabolites element
         model_parameter_group = etree.SubElement(
-            parameter_set, 'ModelParameterGroup',
+            parameter_set, '{http://www.copasi.org/static/schema}ModelParameterGroup',
             attrib={'cn': 'String=Initial Species Values',
                     'type': 'Group'}
         )
@@ -3699,7 +3787,7 @@ class ParameterSet(object):
         ##metabolite subelement
         for i in self.model.metabolites:
             etree.SubElement(model_parameter_group,
-                             'ModelParameter',
+                             '{http://www.copasi.org/static/schema}ModelParameter',
                              attrib={
                                  'cn': '{},{},{}'.format(
                                      self.model.reference,
@@ -3711,14 +3799,14 @@ class ParameterSet(object):
         #
         ##global quantities element
         model_parameter_group = etree.SubElement(
-            parameter_set, 'ModelParameterGroup',
+            parameter_set, '{http://www.copasi.org/static/schema}ModelParameterGroup',
         attrib = {'cn': 'String=Initial Global Quantities',
                   'type': 'Group'}
         )
 
         ##global quantity subelement
         for global_q  in self.model.global_quantities:
-            etree.SubElement(model_parameter_group, 'ModelParameter',
+            etree.SubElement(model_parameter_group, '{http://www.copasi.org/static/schema}ModelParameter',
                              attrib={'cn': '{},{}'.format(
                                  self.model.reference, global_q.reference),
                                  'value': global_q.initial_value,
@@ -3738,7 +3826,7 @@ class ParameterSet(object):
         ##kinetic parameters  subelement
         for r in self.model.reactions:
             reaction = etree.SubElement(model_parameter_group,
-                                        'ModelParameterGroup',
+                                        '{http://www.copasi.org/static/schema}ModelParameterGroup',
                                         attrib={
                                             'cn': "{},{}".format(self.model.reference,
                                                                  r.reference),
