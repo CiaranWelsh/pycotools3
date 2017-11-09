@@ -1,0 +1,57 @@
+INFO:root:__init__:<module>:25:Initializing pycotools
+INFO:root:__init__:<module>:26:Initializing logging System
+INFO:root:__init__:<module>:27:logging config file at: C:\Users\Ciaran\Documents\pycotools\pycotools\logging_config.conf
+DEBUG:pycotools.model:model:add_local_parameter:790:self.local_parameters--> []
+DEBUG:pycotools.model:model:add_local_parameter:790:self.local_parameters--> []
+DEBUG:pycotools.model:model:add_local_parameter:790:self.local_parameters--> []
+DEBUG:pycotools.model:model:all_variable_names:739:l--> ['(X).sigma', '(Y).r', '(Z).b']
+DEBUG:pycotools.model:model:all_variable_names:739:l--> ['(X).sigma', '(Y).r', '(Z).b']
+DEBUG:pycotools.model:model:all_variable_names:739:l--> ['(X).sigma', '(Y).r', '(Z).b']
+DEBUG:pycotools.model:model:all_variable_names:739:l--> ['(X).sigma', '(Y).r', '(Z).b']
+DEBUG:pycotools.model:model:all_variable_names:739:l--> ['(X).sigma', '(Y).r', '(Z).b']
+DEBUG:pycotools.model:model:all_variable_names:739:l--> ['(X).sigma', '(Y).r', '(Z).b']
+DEBUG:pycotools.model:model:add_local_parameter:790:self.local_parameters--> []
+DEBUG:pycotools.model:model:add_local_parameter:790:self.local_parameters--> []
+DEBUG:pycotools.model:model:add_local_parameter:790:self.local_parameters--> []
+DEBUG:pycotools.model:model:all_variable_names:739:l--> ['(X).sigma', '(Y).r', '(Z).b']
+DEBUG:pycotools.model:model:all_variable_names:739:l--> ['(X).sigma', '(Y).r', '(Z).b']
+DEBUG:pycotools.model:model:all_variable_names:739:l--> ['(X).sigma', '(Y).r', '(Z).b']
+DEBUG:pycotools.model:model:all_variable_names:739:l--> ['(X).sigma', '(Y).r', '(Z).b']
+DEBUG:pycotools.model:model:all_variable_names:739:l--> ['(X).sigma', '(Y).r', '(Z).b']
+DEBUG:pycotools.model:model:all_variable_names:739:l--> ['(X).sigma', '(Y).r', '(Z).b']
+INFO:root:__init__:<module>:25:Initializing pycotools
+INFO:root:__init__:<module>:26:Initializing logging System
+INFO:root:__init__:<module>:27:logging config file at: C:\Users\Ciaran\Documents\pycotools\pycotools\logging_config.conf
+INFO:root:__init__:<module>:25:Initializing pycotools
+INFO:root:__init__:<module>:26:Initializing logging System
+INFO:root:__init__:<module>:27:logging config file at: C:\Users\Ciaran\Documents\pycotools\pycotools\logging_config.conf
+INFO:root:__init__:<module>:25:Initializing pycotools
+INFO:root:__init__:<module>:26:Initializing logging System
+INFO:root:__init__:<module>:27:logging config file at: C:\Users\Ciaran\Documents\pycotools\pycotools\logging_config.conf
+INFO:root:__init__:<module>:25:Initializing pycotools
+INFO:root:__init__:<module>:26:Initializing logging System
+INFO:root:__init__:<module>:27:logging config file at: C:\Users\Ciaran\Documents\pycotools\pycotools\logging_config.conf
+INFO:root:__init__:<module>:25:Initializing pycotools
+INFO:root:__init__:<module>:26:Initializing logging System
+INFO:root:__init__:<module>:27:logging config file at: C:\Users\Ciaran\Documents\pycotools\pycotools\logging_config.conf
+INFO:root:__init__:<module>:25:Initializing pycotools
+INFO:root:__init__:<module>:26:Initializing logging System
+INFO:root:__init__:<module>:27:logging config file at: C:\Users\Ciaran\Documents\pycotools\pycotools\logging_config.conf
+INFO:root:__init__:<module>:25:Initializing pycotools
+INFO:root:__init__:<module>:26:Initializing logging System
+INFO:root:__init__:<module>:27:logging config file at: C:\Users\Ciaran\Documents\pycotools\pycotools\logging_config.conf
+INFO:root:__init__:<module>:25:Initializing pycotools
+INFO:root:__init__:<module>:26:Initializing logging System
+INFO:root:__init__:<module>:27:logging config file at: C:\Users\Ciaran\Documents\pycotools\pycotools\logging_config.conf
+INFO:root:__init__:<module>:25:Initializing pycotools
+INFO:root:__init__:<module>:26:Initializing logging System
+INFO:root:__init__:<module>:27:logging config file at: C:\Users\Ciaran\Documents\pycotools\pycotools\logging_config.conf
+INFO:root:__init__:<module>:25:Initializing pycotools
+INFO:root:__init__:<module>:26:Initializing logging System
+INFO:root:__init__:<module>:27:logging config file at: C:\Users\Ciaran\Documents\pycotools\pycotools\logging_config.conf
+INFO:root:__init__:<module>:25:Initializing pycotools
+INFO:root:__init__:<module>:26:Initializing logging System
+INFO:root:__init__:<module>:27:logging config file at: C:\Users\Ciaran\Documents\pycotools\pycotools\logging_config.conf
+INFO:root:__init__:<module>:25:Initializing pycotools
+INFO:root:__init__:<module>:26:Initializing logging System
+INFO:root:__init__:<module>:27:logging config file at: C:\Users\Ciaran\Documents\pycotools\pycotools\logging_config.conf

@@ -8,5 +8,4 @@ lxml
 numpy
 scipy
 sklearn
-pycotools
 psutil

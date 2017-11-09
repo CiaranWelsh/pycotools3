@@ -5,8 +5,8 @@ Examples
 
 .. toctree::
    
-   LorenzAttractor.ipynb
-
+   LorenzAttractor/LorenzAttractor.ipynb
+   LotkaVolterra/LotkaVolterra.ipynb
 
 
 
