@@ -736,7 +736,6 @@ class Model(_base._Base):
         g = [i.name for i in self.global_quantities]
         l = [i.global_name for i in self.local_parameters]
         c = [i.name for i in self.compartments]
-        LOG.debug('l--> {}'.format(l))
         return m + g + l + c
 
     @cached_property
@@ -751,8 +750,8 @@ class Model(_base._Base):
         :return:
             `list`. Each element is :py:class:`LocalParameter`
         """
-        if 'local_parameters' in self.__dict__:
-            del self.__dict__['local_parameters']
+        # if 'local_parameters' in self.__dict__:
+        #     del self.__dict__['local_parameters']
 
         loc = self.constants
 
@@ -787,7 +786,6 @@ class Model(_base._Base):
 
         # self.refresh()
         # print self.refresh().local_parameters
-        LOG.debug('self.local_parameters--> {}'.format(self.local_parameters))
         return self
 
     @staticmethod
@@ -1248,8 +1246,8 @@ class Model(_base._Base):
         :return:
             `list` each element :py:class:`LocalParameter`
         """
-        # if 'constants' in self.__dict__:
-        #     del self.__dict__['keys']
+        if 'constants' in self.__dict__:
+            del self.__dict__['keys']
         query = '//*[@cn="String=Kinetic Parameters"]'
         dct = {}
         for i in self.xml.xpath(query):

@@ -10,8 +10,9 @@ Welcome to Pycotools's documentation!
    :maxdepth: 3
    :caption: Contents:
 
-
+   QuickStart.ipynb
    Tutorials/Tutorials
+   Examples
    APIDoc/APIIndex
    Caveats.rst
 
