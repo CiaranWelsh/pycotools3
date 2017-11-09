@@ -750,7 +750,6 @@ class Model(_base._Base):
 
         ##
         query = '//*[@cn="String=Kinetic Parameters"]'
-        LOG.debug('local_parameter from add_loc --> {}'.format(local_parameter))
         for i in self.xml.xpath(query):
             i.append(local_parameter.to_xml())
         return self
@@ -1126,7 +1125,7 @@ class Model(_base._Base):
         """
         lst = []
         for i in self.xml.iter():
-            if  i.tag == '{http://www.copasi.org/static/schema}ParameterDescription':
+            if i.tag == '{http://www.copasi.org/static/schema}ParameterDescription':
                 lst.append(ParameterDescription(self,
                                                 name=i.attrib['name'],
                                                 key=i.attrib['key'],
@@ -1411,7 +1410,6 @@ class Model(_base._Base):
         they have the same function parameter but different 
         source parameters
         '''
-        LOG.debug('reaction name from add_reaction --> {}'.format(reaction.name))
         if not isinstance(reaction, Reaction):
             raise errors.InputError(
                 'Expecting Reaction but '
@@ -1438,21 +1436,22 @@ class Model(_base._Base):
         if 'reactions' in self.__dict__:
             del self.__dict__['reactions']
 
-        # existing_functions = [i.expression for i in self.functions]
-        # if reaction.rate_law.expression not in existing_functions:
-        #     self.add_function(reaction.rate_law)
-
-        existing_function = self.get('function', reaction.rate_law.expression, by='expression')
-
-        if existing_function == []:
+        existing_functions = [i.expression for i in self.functions]
+        if reaction.rate_law.expression not in existing_functions:
             self.add_function(reaction.rate_law)
-        else:
-            LOG.warning('Bug might occur here'
-                        'if an existing function '
-                        'exists but has different'
-                        'roles. then its not the same function'
-                        'and should be added separetly')
-            reaction.rate_law = existing_function
+
+
+        # existing_function = self.get('function', reaction.rate_law.expression, by='expression')
+        #
+        # if existing_function == []:
+        #     self.add_function(reaction.rate_law)
+        # else:
+        #     LOG.warning('Bug might occur here'
+        #                 'if an existing function '
+        #                 'exists but has different'
+        #                 'roles. then its not the same function'
+        #                 'and should be added separetly')
+        #     reaction.rate_law = existing_function
 
         ## if ListOFReactions tag not exist, create
         m = '{http://www.copasi.org/static/schema}ListOfReactions'
@@ -1471,11 +1470,11 @@ class Model(_base._Base):
             if i.tag == m:
                 i.append(reaction.to_xml())
         ## needed?
-        self.save()
+        # self.save()
         for local_parameter in reaction.parameters:
-            LOG.debug('local_p --> {}'.format(local_parameter))
+            if local_parameter.key in [i.key for i in self.local_parameters]:
+                local_parameter.key = KeyFactory(self, 'parameter').generate()
             self.add_local_parameter(local_parameter)
-
         return self
 
     def remove_reaction(self, value, by='name'):
@@ -2478,12 +2477,6 @@ class Reaction(object):
         self._do_checks()
         self.create()
 
-        LOG.debug('Thy Reaction is \n\n\t{}\n{}'.format(
-            self,
-            self.key
-        ))
-        # print self.to_df()
-
     def __str__(self):
         return 'Reaction(name="{}", expression="{}", rate_law="{}", parameters={}, reversible={}, simulation_type="{}")'.format(
             self.name, self.expression, self.rate_law.expression,
@@ -2562,6 +2555,7 @@ class Reaction(object):
         if isinstance(self.rate_law, str):
             expression_components = Expression(self.rate_law).to_list()
 
+            LOG.debug('epr compon --> {}'.format(expression_components))
         ## for handling existing functions
         elif isinstance(self.rate_law, Function):
             if 'mass action' in self.rate_law.name.lower():
@@ -2590,9 +2584,10 @@ class Reaction(object):
         if isinstance(local_keys, str):
             local_keys = [local_keys]
 
-
+        parameter_collection = []
+        parameter_collection_dct = {}
         for i in range(len(parameter_list)):
-            if parameter_list[i] not in [j.name for j in self.parameters]:
+            if parameter_list[i] not in [j.name for j in parameter_collection]:
                 ## do not re-add a parameter if it already exists
                 # LOG.info('adding parameter called --> {}'.format(parameter_list[i]))
                 p = LocalParameter(self.model,
@@ -2603,8 +2598,10 @@ class Reaction(object):
                                    global_name='({}).{}'.format(self.name, parameter_list[i]),
                                    )
                 # LOG.warning('deleted simulation_type from local parameter definition. May cause bugs')
-                self.parameters.append(p)
-                self.parameters_dict[parameter_list[i]] = p
+                parameter_collection.append(p)
+                parameter_collection_dct[parameter_list[i]] = p
+        self.parameters = parameter_collection
+        self.parameters_dict = parameter_collection_dct
 
     def create_rate_law_function(self):
         """
@@ -2641,8 +2638,9 @@ class Reaction(object):
                 role_dct[i] = 'constant'
 
         existing = self.model.get('function', self.rate_law, 'expression')
-
-
+        LOG.debug('existing --> {}'.format(
+            existing
+        ))
         function = Function(
             self.model,
             name="({}).{}".format(
@@ -2701,13 +2699,13 @@ class Reaction(object):
 
         list_of_modifiers = etree.SubElement(reaction, '{http://www.copasi.org/static/schema}ListOfModifiers')
         for i in self.modifiers:
-            etree.SubElement(list_of_modifiers, 'Modifier', attrib={'metabolite': i.key,
+            etree.SubElement(list_of_modifiers, '{http://www.copasi.org/static/schema}Modifier', attrib={'metabolite': i.key,
                                                                     'stoichiometry': str(i.stoichiometry)})
 
         list_of_constants = etree.SubElement(reaction, '{http://www.copasi.org/static/schema}ListOfConstants')
 
         for i in self.parameters:
-            etree.SubElement(list_of_constants, 'Constant', attrib={'key': i.key,
+            etree.SubElement(list_of_constants, '{http://www.copasi.org/static/schema}Constant', attrib={'key': i.key,
                                                                     'name': i.name,
                                                                     'value': str(i.value)})
         if 'mass_action' in self.rate_law.name.lower().replace(' ', '_'):
@@ -3002,6 +3000,7 @@ class LocalParameter(object):
             if self.key is None:
                 raise errors.InputError('Key is "{}"'.format(self.key))
 
+
     def __str__(self):
         return 'LocalParameter(name="{}", reaction_name="{}", value="{}", simulation_type="{}")'.format(
             self.name, self.reaction_name, self.value, self.simulation_type
@@ -3042,9 +3041,7 @@ class LocalParameter(object):
         section of parameter set
         :return: xml element
         """
-        LOG.debug('new_xml call')
         reaction = self.model.get('reaction', self.reaction_name, 'name')
-        LOG.debug('react is --> {}'.format(self.reaction_name))
         # self.model.open()
         if reaction == []:
             raise errors.SomethingWentHorriblyWrongError('Reaction called "{}" not in model'.format(
@@ -3070,7 +3067,7 @@ class LocalParameter(object):
         )
         model_parameters = etree.SubElement(
             model_parameter_group,
-            'ModelParameter',
+            '{http://www.copasi.org/static/schema}ModelParameter',
             attrib={
                 'cn': model_parameters_ref,
                 'value': str(0.1) if self.value is None else str(self.value),
@@ -3180,7 +3177,6 @@ class KeyFactory(object):
 
         :return:
         """
-        LOG.debug('model component --> {}'.format(model_component))
         ##TODO fix bug where create key only works for generating single key at a time.
         ##be consistent with the rest of copasi
         if self.type == 'global_quantity':
@@ -3258,8 +3254,8 @@ class KeyFactory(object):
                 existing.append(random_number)
                 keys.append(random_number)
                 count += 1
-        keys = ['{}_{}'.format('Parameter',i) for i in  keys]
-        if (len(keys)==1) and (isinstance(keys, list)):
+        keys = ['{}_{}'.format('Parameter',i) for i in keys]
+        if (len(keys) == 1) and (isinstance(keys, list)):
             return keys[0]
         else:
             return keys
@@ -3536,6 +3532,7 @@ class Translator(object):
 
         lst = []
         for comp in component_list:
+            LOG.debug('component from Translator --> {}'.format(comp))
             stoic = 1
             ## check for non 1 stoichiometry
             if '*' in comp:
@@ -3547,6 +3544,7 @@ class Translator(object):
             metab = self.model.get('metabolite', comp, by='name')
             if metab == []:
                 try:
+                    LOG.debug('comp2 --> {}'.format(comp))
                     metab = Metabolite(self.model, name=comp,
                                    concentration=1,
                                    compartment=self.model.compartments[0],
