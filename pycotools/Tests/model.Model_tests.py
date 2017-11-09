@@ -1192,7 +1192,7 @@ class TestReactionStuff(unittest.TestCase):
         if os.path.isfile(self.cps):
             os.remove(self.cps)
         self.mod = pycotools.model.Model(self.cps, new=True)
-        self.Y = pycotools.model.Reaction(self.mod, 'Y', '-> Y; Z X', '-X*Z + r*X -Y')
+        self.Y = pycotools.model.Reaction(self.mod, 'Y', '-> Y; Z X', '-X*Z + r*X - Y')
         self.X = pycotools.model.Reaction(self.mod, 'X', '-> X; Y', 'sigma*(Y-X)')
         self.Z = pycotools.model.Reaction(self.mod, 'Z', '-> Z; X Y', 'X*Y - b*Z ')
 
@@ -1247,7 +1247,7 @@ class TestReactionStuff(unittest.TestCase):
     def test_add_xy(self):
         # self.mod.add_reaction(self.X)
         self.mod.add_reaction(self.Y)
-        # self.mod.open()
+        self.mod.open()
 
 
 

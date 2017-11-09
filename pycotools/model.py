@@ -3488,13 +3488,13 @@ class Translator(object):
             raise errors.InputError('{} not in {}'.format(component, component_options))
 
         if type == 'substrate':
-            return [i.strip() for i in self.substrates.split('+')]
+            return [i.replace(' ','').strip() for i in self.substrates.split('+')]
 
         elif type == 'product':
-            return [i.strip() for i in self.products.split('+')]
+            return [i.replace(' ','').strip() for i in self.products.split('+')]
 
         elif type == 'modifier':
-            return [i.strip() for i in self.modifiers.split(' ') if i != '']
+            return [i.replace(' ','').strip() for i in self.modifiers.split(' ') if i != '']
 
 
     def determine_stoichiometry(self, component):
@@ -3521,17 +3521,22 @@ class Translator(object):
         """
 
         if component == 'substrate':
+            LOG.debug('sbstr --> {}'.format(self.substrates))
             component_list = self.substrates
 
         elif component == 'product':
+            LOG.debug('prod --> {}'.format(self.products))
             component_list = self.products
 
         elif component == 'modifier':
+            LOG.debug('mod --> {}'.format(self.modifiers))
             component_list = self.modifiers
 
-
+        operators = ['+', '-', '*', '/']
         lst = []
         for comp in component_list:
+            if comp in operators:
+                continue
             LOG.debug('component from Translator --> {}'.format(comp))
             stoic = 1
             ## check for non 1 stoichiometry
