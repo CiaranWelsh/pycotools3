@@ -1144,8 +1144,9 @@ class Model(_base._Base):
         :return:
             :py:class:`Model`
         """
-        if function.key == None:
-            function.key = KeyFactory(self, type='function').generate()
+        ##commented below bit out. Might still need
+        # if function.key == None:
+        #     function.key = KeyFactory(self, type='function').generate()
 
         if function.type == 'user_defined':
             function.type = 'UserDefined'
@@ -1436,8 +1437,8 @@ class Model(_base._Base):
         if 'reactions' in self.__dict__:
             del self.__dict__['reactions']
 
-        existing_functions = [i.expression for i in self.functions]
-        if reaction.rate_law.expression not in existing_functions:
+        existing_functions = [i.name for i in self.functions]
+        if reaction.rate_law.name not in existing_functions:
             self.add_function(reaction.rate_law)
 
 
@@ -2555,7 +2556,6 @@ class Reaction(object):
         if isinstance(self.rate_law, str):
             expression_components = Expression(self.rate_law).to_list()
 
-            LOG.debug('epr compon --> {}'.format(expression_components))
         ## for handling existing functions
         elif isinstance(self.rate_law, Function):
             if 'mass action' in self.rate_law.name.lower():
@@ -2638,9 +2638,6 @@ class Reaction(object):
                 role_dct[i] = 'constant'
 
         existing = self.model.get('function', self.rate_law, 'expression')
-        LOG.debug('existing --> {}'.format(
-            existing
-        ))
         function = Function(
             self.model,
             name="({}).{}".format(
@@ -3159,7 +3156,7 @@ class KeyFactory(object):
             return self.create_key(self.model.local_parameters).next()
 
         elif self.type == 'function':
-            return self.create_key(self.model.functions).next()
+            return self.create_function_key(n)
 
         elif self.type == 'constant':
             return self.create_constant_key(n)
@@ -3260,6 +3257,33 @@ class KeyFactory(object):
         else:
             return keys
 
+    def create_function_key(self, n=1):
+        """
+        create_key only works for generating a single key at a time.
+        When creating ParameterDescriptions, we often need several keys
+        generated at a time. This method generates these unique keys.
+        :return:
+        """
+        ## get keys
+        existing = [i.key for i in self.model.functions]
+
+        existing = [i.split('_')[1] for i in existing]
+        existing = [int(i) for i in existing]
+
+        bool = True
+        count = 0
+        keys = []
+        while count!=n:
+            random_number = randint(1000, 100000000)
+            if random_number not in existing:
+                existing.append(random_number)
+                keys.append(random_number)
+                count += 1
+        keys = ['{}_{}'.format('Function', i) for i in keys]
+        if (len(keys) == 1) and (isinstance(keys, list)):
+            return keys[0]
+        else:
+            return keys
 @mixin(ComparisonMethodsMixin)
 class Expression(object):
     """
@@ -3521,15 +3545,12 @@ class Translator(object):
         """
 
         if component == 'substrate':
-            LOG.debug('sbstr --> {}'.format(self.substrates))
             component_list = self.substrates
 
         elif component == 'product':
-            LOG.debug('prod --> {}'.format(self.products))
             component_list = self.products
 
         elif component == 'modifier':
-            LOG.debug('mod --> {}'.format(self.modifiers))
             component_list = self.modifiers
 
         operators = ['+', '-', '*', '/']
@@ -3537,7 +3558,6 @@ class Translator(object):
         for comp in component_list:
             if comp in operators:
                 continue
-            LOG.debug('component from Translator --> {}'.format(comp))
             stoic = 1
             ## check for non 1 stoichiometry
             if '*' in comp:
@@ -3549,7 +3569,6 @@ class Translator(object):
             metab = self.model.get('metabolite', comp, by='name')
             if metab == []:
                 try:
-                    LOG.debug('comp2 --> {}'.format(comp))
                     metab = Metabolite(self.model, name=comp,
                                    concentration=1,
                                    compartment=self.model.compartments[0],

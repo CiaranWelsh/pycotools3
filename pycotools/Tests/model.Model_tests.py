@@ -1244,10 +1244,17 @@ class TestReactionStuff(unittest.TestCase):
     #     for i in self.mod.xml.find(mod_tag).find(reactions_tag):
     #         self.assertEqual(i.attrib['name'], 'Z')
 
+
+
     def test_add_xy(self):
-        # self.mod.add_reaction(self.X)
+        self.mod.add_reaction(self.X)
         self.mod.add_reaction(self.Y)
-        self.mod.open()
+        self.assertEqual(len(self.mod.reactions), 2)
+        self.assertEqual(len(self.mod.functions), 2)
+        self.assertEqual(len(self.mod.metabolites), 3)
+        self.assertEqual(len(self.mod.global_quantities), 0)
+        self.assertEqual(len(self.mod.compartments), 1)
+
 
 
 
