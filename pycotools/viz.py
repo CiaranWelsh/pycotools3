@@ -904,6 +904,8 @@ class PlotTimeCourse(PlotKwargs):
         self.cls = cls
         self.kwargs = kwargs
 
+        #TODO implement `separate` keyword as `share` insteady
+
         self.default_properties = {
             'x': 'time',
             'y': None,
@@ -1049,6 +1051,7 @@ class PlotTimeCourse(PlotKwargs):
             if self.despine:
                 seaborn.despine(fig=fig, top=True, right=True)
 
+
             if self.savefig:
                 dirs = self.create_directory(self.results_directory)
                 fle = os.path.join(dirs, '{}.{}'.format(y_var, self.ext))
@@ -1056,7 +1059,7 @@ class PlotTimeCourse(PlotKwargs):
                 if self.separate:
                     fig.savefig(fle, dpi=self.dpi, bbox_inches='tight')
                 else:
-                    fig.savefig(fle, dpi=self.dpi, bbox_inches='tight')
+                    fig.savefig(self.filename, dpi=self.dpi, bbox_inches='tight')
 
         if self.show:
             plt.show()

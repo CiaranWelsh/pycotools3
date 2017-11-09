@@ -106,7 +106,8 @@ class GetModelComponentFromStringMixin(Mixin):
         if isinstance(component, LocalParameter):
             return model.get(component, string, by='global_name')
         else:
-            return model.get(component, string, by=name)
+            return model.get(component, string, by='name')
+
 
 class ComparisonMethodsMixin(Mixin):
     """
@@ -148,6 +149,21 @@ class ComparisonMethodsMixin(Mixin):
     def __hash__(self):
         """Override the default hash behavior (that returns the id or the object)"""
         return hash(tuple(sorted(self.__dict__.items())))
+
+
+class Build(object):
+    def __init__(self, copasi_file):
+        self.copasi_file = copasi_file
+
+    def __enter__(self):
+        self.model = Model(self.copasi_file, new=True)
+        return self.model
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.model.save()
+        self.model = Model(self.copasi_file, new=True)
+
+
 
 class Model(_base._Base):
     """
@@ -237,7 +253,6 @@ class Model(_base._Base):
                                       'particle_numbers']:
             raise errors.InputError('quantity_type argument should be concentration or particle_numbers')
 
-
     def __str__(self):
         return 'Model(name={}, time_unit={}, volume_unit={}, quantity_unit={})'.format(self.name, self.time_unit,self.volume_unit, self.quantity_unit)
 
@@ -300,15 +315,28 @@ class Model(_base._Base):
         model.copasi_file = filename
         return model
 
+    # def refresh(self):
+    #     """
+    #     Refresh the model by reading the xml
+    #     into :py:mod:`lxml.etree` again.
+    #
+    #     :return: :py:class:`Model`
+    #     """
+    #
+    #     self.xml = tasks.CopasiMLParser(self.copasi_file).copasiML
+    #     return self
+
     def refresh(self):
         """
-        Refresh the model by reading the xml
-        into :py:mod:`lxml.etree` again.
-
-        :return: :py:class:`Model`
+        Save the file then reload the Model. Can't use the
+        save method though because the save method uses
+        the refresh method.
+        :return:
         """
-        self.xml = tasks.CopasiMLParser(self.copasi_file).copasiML
-        return self
+        with open(self.copasi_file, 'w') as f:
+            f.write(etree.tostring(self.xml, pretty_print=True))
+
+        return Model(self.copasi_file)
 
     @property
     def root(self):
@@ -533,7 +561,7 @@ class Model(_base._Base):
 
         :return:
         """
-        element = etree.Element('StateTemplateVariable', attrib={'objectReference': state})
+        element = etree.Element('{http://www.copasi.org/static/schema}StateTemplateVariable', attrib={'objectReference': state})
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}StateTemplate':
                 i.append(element)
@@ -703,10 +731,12 @@ class Model(_base._Base):
         :return:
             `list`. Each element is `str`
         """
+        ##first delete from cache
         m = [i.name for i in self.metabolites]
         g = [i.name for i in self.global_quantities]
         l = [i.global_name for i in self.local_parameters]
         c = [i.name for i in self.compartments]
+        LOG.debug('l--> {}'.format(l))
         return m + g + l + c
 
     @cached_property
@@ -721,6 +751,9 @@ class Model(_base._Base):
         :return:
             `list`. Each element is :py:class:`LocalParameter`
         """
+        if 'local_parameters' in self.__dict__:
+            del self.__dict__['local_parameters']
+
         loc = self.constants
 
         ## We don't want to consider parameters tahat have already been assigned
@@ -748,10 +781,13 @@ class Model(_base._Base):
         if local_parameter.global_name in [i.global_name for i in self.local_parameters]:
             return self
 
-        ##
         query = '//*[@cn="String=Kinetic Parameters"]'
         for i in self.xml.xpath(query):
             i.append(local_parameter.to_xml())
+
+        # self.refresh()
+        # print self.refresh().local_parameters
+        LOG.debug('self.local_parameters--> {}'.format(self.local_parameters))
         return self
 
     @staticmethod
@@ -1212,7 +1248,8 @@ class Model(_base._Base):
         :return:
             `list` each element :py:class:`LocalParameter`
         """
-        res = []
+        # if 'constants' in self.__dict__:
+        #     del self.__dict__['keys']
         query = '//*[@cn="String=Kinetic Parameters"]'
         dct = {}
         for i in self.xml.xpath(query):
@@ -1248,6 +1285,7 @@ class Model(_base._Base):
                                                      simulation_type=dct[global_name]['simulation_type']
                                                      )
                                 res.append(loc)
+
         return res
 
     @cached_property
@@ -1406,11 +1444,6 @@ class Model(_base._Base):
         :return:
             :py:class:`Model`
         """
-        '''
-        IF a reaction shares the same function as another
-        they have the same function parameter but different 
-        source parameters
-        '''
         if not isinstance(reaction, Reaction):
             raise errors.InputError(
                 'Expecting Reaction but '
@@ -1476,7 +1509,8 @@ class Model(_base._Base):
             if local_parameter.key in [i.key for i in self.local_parameters]:
                 local_parameter.key = KeyFactory(self, 'parameter').generate()
             self.add_local_parameter(local_parameter)
-        return self
+        return self.refresh()
+
 
     def remove_reaction(self, value, by='name'):
         """
@@ -3146,7 +3180,7 @@ class KeyFactory(object):
             return self.create_key(self.model.global_quantities).next()
 
         elif self.type == 'reaction':
-            key = self.create_key(self.model.reactions).next()
+            key = self.create_reaction_key(n)
             return key
 
         elif self.type == 'parameter_set':
@@ -3198,6 +3232,36 @@ class KeyFactory(object):
                 key_list.append(key)
                 yield key
             count += 1
+
+    def create_reaction_key(self, n=1):
+        """
+        create_key only works for generating a single key at a time.
+        When creating ParameterDescriptions, we often need several keys
+        generated at a time. This method generates these unique keys.
+        :return:
+        """
+        ## get keys
+        existing = [i.key for i in self.model.reactions]
+
+        for i in existing:
+            assert '_' in i
+        existing = [i.split('_')[1] for i in existing]
+        existing = [int(i) for i in existing]
+
+        bool = True
+        count = 0
+        keys = []
+        while count!=n:
+            random_number = randint(1000, 100000000)
+            if random_number not in existing:
+                existing.append(random_number)
+                keys.append(random_number)
+                count += 1
+        keys = ['{}_{}'.format('Reaction',i) for i in keys]
+        if len(keys) == 1:
+            return keys[0]
+        else:
+            return keys
 
     def create_function_parameter_key(self, n=1):
         """
@@ -3949,7 +4013,7 @@ class InsertParameters(object):
                 if i not in self.model.all_variable_names:
                     raise errors.InputError(
                         'Parameter \'{}\' is not in your model. \n\nThese are in your model:\n{}'.format(
-                            i,sorted(self.model.all_variable_names)
+                            i, sorted(self.model.all_variable_names)
                         )
                     )
         if (self.parameter_dict is None) and (self.parameter_path is None) and (self.df is None):

@@ -1197,54 +1197,52 @@ class TestReactionStuff(unittest.TestCase):
         self.Z = pycotools.model.Reaction(self.mod, 'Z', '-> Z; X Y', 'X*Y - b*Z ')
 
 
-    # def test_expression1(self):
-    #     expr = 'sigma*(Y-X)'
-    #     E = pycotools.model.Expression(expr)
-    #     self.assertListEqual(
-    #         E.to_list(), sorted(['sigma', 'Y', 'X']
-    #     ))
-    #
-    # def test_expression2(self):
-    #     expr = '-X*Z + r*X -Y'
-    #     E = pycotools.model.Expression(expr)
-    #     self.assertListEqual(
-    #         E.to_list(), sorted(['X', 'Y', 'Z', 'r'])
-    #     )
-    #
-    # def test_add_two_reactions(self):
-    #     r1 = pycotools.model.Reaction(self.mod, '1', 'q -> w', 'k*k2*q')
-    #     self.mod.add_reaction(r1)
-    #     r2 = pycotools.model.Reaction(self.mod, '2', 'e -> r', 'k3*k4*e')
-    #     self.mod.add_reaction(r2)
-    #     self.assertEqual(len(self.mod.reactions), 2)
-    #
-    # def test_add_x(self):
-    #     self.mod.add_reaction(self.X)
-    #     self.mod.save()
-    #     mod_tag = '{http://www.copasi.org/static/schema}Model'
-    #     reactions_tag = '{http://www.copasi.org/static/schema}ListOfReactions'
-    #     for i in self.mod.xml.find(mod_tag).find(reactions_tag):
-    #         self.assertEqual(i.attrib['name'], 'X')
-    #
-    # def test_add_y(self):
-    #     self.mod.add_reaction(self.Y)
-    #     self.mod.save()
-    #     mod_tag = '{http://www.copasi.org/static/schema}Model'
-    #     reactions_tag = '{http://www.copasi.org/static/schema}ListOfReactions'
-    #
-    #     for i in self.mod.xml.find(mod_tag).find(reactions_tag):
-    #         self.assertEqual(i.attrib['name'], 'Y')
-    #
-    # def test_add_z(self):
-    #     self.mod.add_reaction(self.Z)
-    #     self.mod.save()
-    #     mod_tag = '{http://www.copasi.org/static/schema}Model'
-    #     reactions_tag = '{http://www.copasi.org/static/schema}ListOfReactions'
-    #
-    #     for i in self.mod.xml.find(mod_tag).find(reactions_tag):
-    #         self.assertEqual(i.attrib['name'], 'Z')
+    def test_expression1(self):
+        expr = 'sigma*(Y-X)'
+        E = pycotools.model.Expression(expr)
+        self.assertListEqual(
+            E.to_list(), sorted(['sigma', 'Y', 'X']
+        ))
 
+    def test_expression2(self):
+        expr = '-X*Z + r*X -Y'
+        E = pycotools.model.Expression(expr)
+        self.assertListEqual(
+            E.to_list(), sorted(['X', 'Y', 'Z', 'r'])
+        )
 
+    def test_add_two_reactions(self):
+        r1 = pycotools.model.Reaction(self.mod, '1', 'q -> w', 'k*k2*q')
+        self.mod.add_reaction(r1)
+        r2 = pycotools.model.Reaction(self.mod, '2', 'e -> r', 'k3*k4*e')
+        self.mod.add_reaction(r2)
+        self.assertEqual(len(self.mod.reactions), 2)
+
+    def test_add_x(self):
+        self.mod.add_reaction(self.X)
+        self.mod.save()
+        mod_tag = '{http://www.copasi.org/static/schema}Model'
+        reactions_tag = '{http://www.copasi.org/static/schema}ListOfReactions'
+        for i in self.mod.xml.find(mod_tag).find(reactions_tag):
+            self.assertEqual(i.attrib['name'], 'X')
+
+    def test_add_y(self):
+        self.mod.add_reaction(self.Y)
+        self.mod.save()
+        mod_tag = '{http://www.copasi.org/static/schema}Model'
+        reactions_tag = '{http://www.copasi.org/static/schema}ListOfReactions'
+
+        for i in self.mod.xml.find(mod_tag).find(reactions_tag):
+            self.assertEqual(i.attrib['name'], 'Y')
+
+    def test_add_z(self):
+        self.mod.add_reaction(self.Z)
+        self.mod.save()
+        mod_tag = '{http://www.copasi.org/static/schema}Model'
+        reactions_tag = '{http://www.copasi.org/static/schema}ListOfReactions'
+
+        for i in self.mod.xml.find(mod_tag).find(reactions_tag):
+            self.assertEqual(i.attrib['name'], 'Z')
 
     def test_add_xy(self):
         self.mod.add_reaction(self.X)
@@ -1255,13 +1253,19 @@ class TestReactionStuff(unittest.TestCase):
         self.assertEqual(len(self.mod.global_quantities), 0)
         self.assertEqual(len(self.mod.compartments), 1)
 
+    def test_add_xyz(self):
+        self.mod.open()
+        self.mod.add_reaction(self.X)
+        self.mod.open()
+        self.mod.add_reaction(self.Y)
+        self.mod.open()
 
-
+        self.mod.add_reaction(self.Z)
+        self.mod.open()
 
     def tearDown(self):
-        pass
-        # if os.path.isfile(self.cps):
-        #     os.remove(self.cps)
+        if os.path.isfile(self.cps):
+            os.remove(self.cps)
 
 
 
