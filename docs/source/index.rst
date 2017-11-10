@@ -6,14 +6,109 @@
 Welcome to Pycotools's documentation!
 =====================================
 
+
+QuickStart
+----------
+
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
    :caption: Contents:
 
-   QuickStart.ipynb
-   Tutorials/Tutorials
-   Examples
-   APIDoc/APIIndex
+   QuickStart
+   
+Tutorials
+=========
+
+Tutorial 1
+----------
+
+.. toctree::
+   :maxdepth: 2
+   
+   Tutorials/Tutorial0InstallationAndConfiguration
+   
+   
+Tutorial 2
+----------
+.. toctree::
+   :maxdepth: 2
+   
+   Tutorials/Tutorial1TheModel
+   
+Tutorial 2
+----------
+.. toctree::
+   :maxdepth: 2
+   
+   Tutorials/Tutorial2Timecourse
+   
+Tutorial 2
+----------
+
+.. toctree::
+   :maxdepth: 2
+   
+   Tutorials/Tutorial3Scan
+   
+
+Tutorial 2
+----------
+
+.. toctree::
+   :maxdepth: 2
+   
+   Tutorials/Tutorial4SingleParameterEstimations
+
+
+Tutorial 2
+----------
+
+.. toctree::
+   :maxdepth: 2
+   
+   Tutorials/Tutorial5MultipleParameterEstimations
+
+Tutorial 2
+----------
+
+.. toctree::
+   :maxdepth: 2
+   
+   Tutorials/Tutorial6TheVizModule
+
+Tutorial 2
+----------
+
+.. toctree::
+   :maxdepth: 2
+   
+   Tutorials/Tutorial7InsertParameters
+   
+
+Examples
+--------
+
+.. toctree::
+   :maxdepth: 2
+   
+   Examples/ExamplesIndex
+   
+
+API
+---
+
+.. toctree:: 
+   :maxdepth: 2
+   
+   APIDoc/APIIndex.rst
+   
+ 
+Caveats
+-------
+
+.. toctree::
+   :maxdepth: 2
+   
    Caveats.rst
 
 
