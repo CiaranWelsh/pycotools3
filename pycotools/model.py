@@ -918,7 +918,7 @@ class Model(_base._Base):
         """
         ## if no compartments exist, make one
         if self.compartments == []:
-            self.add('compartment', 'NewCompartment')
+            self.add_component('compartment', 'NewCompartment')
             self.save()
 
         ## If metab is str convert to Metabolite
@@ -1751,9 +1751,9 @@ class Model(_base._Base):
         setattr(comp, change_field, new_value)
 
         ##add back to model with new attribute
-        return self.add(component, comp)
+        return self.add_component(component, comp)
 
-    def add(self, component_name, component,
+    def add_component(self, component_name, component,
             reaction_expression=None, reaction_rate_law=None):
         """
         add a model component to the model
@@ -1790,6 +1790,48 @@ class Model(_base._Base):
 
         elif component_name == 'compartment':
             return self.add_compartment(component)
+
+    def add(self, component_name, **kwargs):
+        """
+        add a model component to the model
+        :param component_name:
+            `str`. i.e. 'reaction', 'function', 'metabolite
+
+        :param component:
+            :py:class:`model.<component>`. The component class to add i.e. Metabolite
+
+        :param reaction_expression:
+            When adding reaction using string as first arg,
+            this argument takes the reaction expression (i.e. A -> B)
+
+        :param reaction_rate_law:
+            When adding reaction using string as first argument
+            this argument takes the reaction rate law (i.e. k*A)
+
+        :return: :py:class:`Model
+        """
+        if component_name not in self._model_components():
+            raise errors.InputError('"{}" not valid. These are valid: {}'.format(component_name, self._model_components()))
+
+        if component_name == 'metabolite':
+            metab = Metabolite(self, **kwargs)
+            return self.add_metabolite(metab)
+
+        elif component_name == 'function':
+            f = Function(self, **kwargs)
+            return self.add_function(f)
+
+        elif component_name == 'reaction':
+            react = Reaction(self, **kwargs)
+            return self.add_reaction(react)
+
+        elif component_name == 'global_quantity':
+            global_q = GlobalQuantity(self, **kwargs)
+            return self.add_global_quantity(global_q)
+
+        elif component_name == 'compartment':
+            comp = Compartment(self, **kwargs)
+            return self.add_compartment(comp)
 
     def remove(self, component, name):
         """
@@ -2081,7 +2123,7 @@ class Metabolite(object):
             try:
                 self.compartment = self.model.compartments[0]
             except IndexError:
-                self.model = self.model.add('compartment', 'NewCompartment')
+                self.model = self.model.add_component('compartment', 'NewCompartment')
                 # self.model.save()#model.refresh()
                 self.compartment = self.model.compartments[0]
                 LOG.info('No compartments in model. adding default compartment '
@@ -2487,7 +2529,7 @@ class Reaction(object):
     def __init__(self, model, name='reaction_1', expression=None,
                  rate_law=None, reversible=False, simulation_type='reactions',
                  parameters=[], parameters_dict={}, substrates=[],
-                 products=[], modifiers=[], key=None):
+                 products=[], modifiers=[], key=None, parameter_values={}):
         """
 
         :param model:
@@ -2512,6 +2554,9 @@ class Reaction(object):
         :param simulation_type:
             `str`. default='reactions`. Assignments not yet supported
 
+        :param parameter_values:
+            `dict`. key to value mapping of parameter name to required value.
+
         :param key:
         """
         self.model = self.read_model(model)
@@ -2525,6 +2570,7 @@ class Reaction(object):
         self.modifiers = modifiers
         self.parameters = parameters
         self.parameters_dict = parameters_dict
+        self.parameter_values = parameter_values
         self.fast = False
         self.key = key
 
@@ -2641,15 +2687,26 @@ class Reaction(object):
         parameter_collection_dct = {}
         for i in range(len(parameter_list)):
             if parameter_list[i] not in [j.name for j in parameter_collection]:
+
                 ## do not re-add a parameter if it already exists
                 # LOG.info('adding parameter called --> {}'.format(parameter_list[i]))
-                p = LocalParameter(self.model,
+                try:
+                    p = LocalParameter(self.model,
+                                   name=parameter_list[i],
+                                   key=local_keys[i],
+                                   value=self.parameter_values[parameter_list[i]],
+                                   reaction_name=self.name,
+                                   global_name='({}).{}'.format(self.name, parameter_list[i]),
+                                   )
+                except KeyError:
+                    p = LocalParameter(self.model,
                                    name=parameter_list[i],
                                    key=local_keys[i],
                                    value=0.1,
                                    reaction_name=self.name,
                                    global_name='({}).{}'.format(self.name, parameter_list[i]),
                                    )
+
                 # LOG.warning('deleted simulation_type from local parameter definition. May cause bugs')
                 parameter_collection.append(p)
                 parameter_collection_dct[parameter_list[i]] = p
@@ -3658,7 +3715,7 @@ class Translator(object):
                                    key=KeyFactory(self.model,
                                                   type='metabolite').generate() )
                 except IndexError:
-                    self.model.add('compartment', 'NewCompartment')
+                    self.model.add_component('compartment', 'NewCompartment')
                     metab = Metabolite(self.model, name=comp,
                                    concentration=1,
                                    compartment=self.model.compartments[0],
