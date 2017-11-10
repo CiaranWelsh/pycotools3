@@ -4,9 +4,10 @@ Examples
 
 
 .. toctree::
+   :maxdepth: 3
    
-   LorenzAttractor/LorenzAttractor.ipynb
-   LotkaVolterra/LotkaVolterra.ipynb
+   LorenzAttractor/LorenzAttractor
+   LotkaVolterra/LotkaVolterra
 
 
 
