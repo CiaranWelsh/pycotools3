@@ -3,6 +3,7 @@ ipykernel
 nbsphinx
 sphinx_rtd_theme
 jupyter_client
+pandoc
 pandas
 lxml
 numpy

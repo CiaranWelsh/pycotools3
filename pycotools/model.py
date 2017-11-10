@@ -1434,19 +1434,31 @@ class Model(_base._Base):
         # self.reset_cache('reactions')
         return lst
 
-    def add_reaction(self, reaction):
+    def add_reaction(self, reaction, expression=None,
+                     rate_law=None):
         """
         :param reaction:
-            :py:class:`Reaction`.
+            :py:class:`Reaction` or `str`. If `str` then
+            must be the name of the reaction.
 
         :return:
             :py:class:`Model`
         """
         if not isinstance(reaction, Reaction):
-            raise errors.InputError(
-                'Expecting Reaction but '
-                'got "{}" instead'.format(type(reaction))
-            )
+            if not isinstance(reaction, str):
+                raise errors.InputError(
+                    'Expecting Reaction or string as'
+                    ' first argument but '
+                    'got "{}" instead'.format(type(reaction))
+                )
+            elif isinstance(reaction, str):
+                if expression is None or rate_law is None:
+                    raise errors.InputError(
+                        'When passing string as first argument '
+                        'to add_reaction, the expression and '
+                        'rate law arguments must be specified'
+                    )
+                reaction = Reaction(self, reaction, expression, rate_law)
         ## try and get existing
         existing = self.get('reaction', reaction.name, by='name')
         if existing != []:
@@ -1741,7 +1753,8 @@ class Model(_base._Base):
         ##add back to model with new attribute
         return self.add(component, comp)
 
-    def add(self, component_name, component):
+    def add(self, component_name, component,
+            reaction_expression=None, reaction_rate_law=None):
         """
         add a model component to the model
         :param component_name:
@@ -1749,6 +1762,14 @@ class Model(_base._Base):
 
         :param component:
             :py:class:`model.<component>`. The component class to add i.e. Metabolite
+
+        :param reaction_expression:
+            When adding reaction using string as first arg,
+            this argument takes the reaction expression (i.e. A -> B)
+
+        :param reaction_rate_law:
+            When adding reaction using string as first argument
+            this argument takes the reaction rate law (i.e. k*A)
 
         :return: :py:class:`Model
         """
@@ -1762,7 +1783,7 @@ class Model(_base._Base):
             return self.add_function(component)
 
         elif component_name == 'reaction':
-            return self.add_reaction(component)
+            return self.add_reaction(component, reaction_expression, reaction_rate_law)
 
         elif component_name == 'global_quantity':
             return self.add_global_quantity(component)
