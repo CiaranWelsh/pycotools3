@@ -3089,6 +3089,7 @@ class PlotProfileLikelihood(object):
                                    'results_directory': None,
                                    'dpi': 400,
                                    'plot_cl': True,
+                                   'alpha': 95,
                                    'title': None,
                                    'xlabel': None,
                                    'ylabel': None,
@@ -3108,24 +3109,29 @@ class PlotProfileLikelihood(object):
                                    'font_scale': 1,
                                    'rc': None,
                                    'multiplot': False,
+                                   'same_axis': False,
                                    }
 
         for i in kwargs.keys():
-            assert i in self.default_properties.keys(), '{} is not a keyword argument for Scatters'.format(i)
+            assert i in self.default_properties.keys(), '{} is not a keyword argument for PlotProfileLikelihood'.format(i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
         self.update_properties(self.default_properties)
         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
 
         ## parse data
-        self.data = Parse(self.cls, log10=self.log10).data
+        self.data = Parse(self.cls, log10=self.log10, alpha=self.alpha).data
 
         ## do some checks
         self._do_checks()
 
         ## do plotting
-        self.plot()
-        ##todo implement same_axis keyword
+        if self.same_axis:
+            self.plot_same_axis()
+        else:
+            self.plot()
+        ##todo implement ability to change confidence level from Plot.
+        ##at the moment the CL is conputer by Parse. This is not optimal
 
     def _do_checks(self):
         """
@@ -3219,6 +3225,85 @@ class PlotProfileLikelihood(object):
             self.data.to_csv(self.filename)
             LOG.info('Profile likelihood data saved to "{}"'.format(self.filename))
 
+    def plot_same_axis(self):
+        """
+
+        :return:
+        """
+        fig = plt.figure()
+        for x in self.x:
+            for y in self.y:
+                for i in self.index:
+                    plot_data = self.data.loc[x, i][y]
+                    if type(plot_data) == pandas.Series:
+                        plot_data = pandas.DataFrame(plot_data)
+
+                    plot_data = plot_data.reset_index()
+
+                    x_plot = plot_data['Parameter Of Interest Value']
+                    y_plot = plot_data[y]
+
+                    if self.interpolation is not None:
+                        f = interp1d(x_plot, y_plot, kind=self.interpolation)
+                        minimum = x_plot.min()
+                        maximum = x_plot.max()
+                        step = (maximum - minimum) / self.interpolation_resolution
+                        xnew = numpy.arange(start=minimum, stop=maximum, step=step)
+                        ynew = f(xnew)
+                        plt.plot(xnew, ynew, 'k')
+                        plt.plot(x_plot, y_plot, 'ro', label=y, linewidth=2)  # linestyle='o', color='red')
+                    else:
+                        plt.plot(x_plot, y_plot, label=y)
+
+                    if y is 'RSS':
+                        plt.plot(plot_data['Parameter Of Interest Value'],
+                             plot_data['Confidence Level'], linewidth=3,
+                             linestyle='--', color='green', label='CL')
+
+                    if self.show_original_rss:
+                        best_rss = list(set(plot_data['Best RSS Value']))
+                        best_param_val = list(set(plot_data['Best Parameter Value']))
+                        plt.plot(best_param_val, best_rss, 'g*', linewidth=5,
+                                 markersize=12)
+
+                    if self.legend:
+                        if self.legend_loc is not None:
+                            plt.legend(loc=self.legend_loc)
+                        else:
+                            plt.legend(loc='best')
+
+                    if self.despine:
+                        seaborn.despine(fig=fig, top=True, right=True)
+
+                    # if self.title is None:
+                    self.title = 'Profile Likelihoods for\n{} ' \
+                                     'against {} (index={})'.format(x, y, i)
+
+                    plt.title(self.title)
+                    if self.log10:
+                        plt.ylabel('log10 {}'.format(y))
+                        plt.xlabel('log10 {}'.format(x))
+                    else:
+                        plt.ylabel(y)
+                        plt.xlabel(x)
+
+                    if self.ylim is not None:
+                        plt.ylim(self.ylim)
+
+                    if self.xlim is not None:
+                        plt.xlim(self.xlim)
+
+                    if self.savefig:
+                        d = os.path.join(self.results_directory, str(i))
+                        d = os.path.join(d, x)
+                        self.create_directory(d)
+                        fname = os.path.join(d, misc.RemoveNonAscii(y).filter + '.{}'.format(self.ext))
+
+                        plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
+                        LOG.info('saved to --> {}'.format(fname))
+
+                    if self.show:
+                        plt.show()
 
     def plot(self):
         """
