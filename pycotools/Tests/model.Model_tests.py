@@ -259,7 +259,7 @@ class ModelComponentAttributeTests(_test_base._BaseTest):
         metab = pycotools.model.Metabolite(self.model,
                                            name='X',
                                            concentration=55)
-        self.assertEqual(str(metab.particle_number), str(3.31217747135e+22))
+        self.assertEqual(str(metab.particle_numbers), str(3.31217747135e+22))
 
 
 
@@ -286,7 +286,7 @@ class SetTests(_test_base._BaseTest):
 
         :return:
         """
-        metab = pycotools.model.Metabolite(self.model, name='F', particle_number=25,
+        metab = pycotools.model.Metabolite(self.model, name='F', particle_numbers=25,
                                            compartment=self.model.compartments[0])
         self.model = self.model.add_metabolite(metab)
         check = False
@@ -324,11 +324,11 @@ class SetTests(_test_base._BaseTest):
         :return:
         """
         metab = pycotools.model.Metabolite(self.model, name='X',
-                                           particle_number=1000)
+                                           particle_numbers=1000)
         model = self.model.add_component('metabolite', metab)
-        model = self.model.set('metabolite', 'X', 1234, 'name', 'particle_number')
+        model = self.model.set('metabolite', 'X', 1234, 'name', 'particle_numbers')
         metab = self.model.get('metabolite', 'X', by='name')
-        self.assertEqual(metab.particle_number, str(1234.0))
+        self.assertEqual(metab.particle_numbers, str(1234.0))
 
 
 
@@ -350,16 +350,16 @@ class SetTests(_test_base._BaseTest):
         :return:
         """
         metab = pycotools.model.Metabolite(self.model, name='X',
-                                           particle_number=1000)
+                                           particle_numbers=1000)
         model = self.model.add_component('metabolite', metab)
         model = self.model.set('metabolite',
                                match_value='X',
                                new_value=1234,
                                match_field='name',
-                               change_field='particle_number')
+                               change_field='particle_numbers')
 
         metab = self.model.get('metabolite', 'X', by='name')
-        self.assertEqual(metab.particle_number, str(1234.0))
+        self.assertEqual(metab.particle_numbers, str(1234.0))
 
     def test_change_metab_concentration_using_set(self):
         """
@@ -532,7 +532,7 @@ class RemoveTests(_test_base._BaseTest):
         :return:
         """
         ##TODO fix concentration attribute in set_metabolites
-        metab = pycotools.model.Metabolite(self.model, name='F', particle_number=25,
+        metab = pycotools.model.Metabolite(self.model, name='F', particle_numbers=25,
                                            compartment=self.model.compartments[0])
         self.model = self.model.add_metabolite(metab)
         F = self.model.get('metabolite', 'F', by='name')
@@ -925,9 +925,9 @@ class AddTests(_test_base._BaseTest):
 
         :return:
         """
-        model = self.model.add('metabolite', name='X', particle_number=1001)
+        model = self.model.add('metabolite', name='X', particle_numbers=1001)
         metab = self.model.get('metabolite', 'X')
-        self.assertEqual(metab.particle_number, str(1001.0))
+        self.assertEqual(metab.particle_numbers, str(1001.0))
 
     def test_add_global_quantity(self):
         """
@@ -1079,9 +1079,9 @@ class InsertParameterTests(_test_base._BaseTest):
                 'B': 78,
                 '(B2C).k2': 96,
                 'A2B':55
-            }, quantity_type='particle_number')
+            }, quantity_type='particle_numbers')
         self.model = I.insert()
-        part = [i.particle_number for i in self.model.metabolites if i.name == 'B']
+        part = [i.particle_numbers for i in self.model.metabolites if i.name == 'B']
         self.assertAlmostEqual(float(part[0]), float(78))
 
     def test_insert_parameters_globals(self):

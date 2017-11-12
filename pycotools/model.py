@@ -884,7 +884,7 @@ class Model(_base._Base):
 
         for key, value in self.states.items():
             if key in metabs.keys():
-                metabs[key]['particle_number'] = str(value)
+                metabs[key]['particle_numbers'] = str(value)
 
 
         lst = []
@@ -895,9 +895,9 @@ class Model(_base._Base):
             lst.append(Metabolite(self, name=metabs[key]['name'],
                                   compartment=comp,
                                   key=metabs[key]['key'],
-                                  particle_number=metabs[key]['particle_number'],
+                                  particle_numbers=metabs[key]['particle_numbers'],
                                   concentration=self.convert_particles_to_molar(
-                                      metabs[key]['particle_number'], self.quantity_unit, comp.initial_value),
+                                      metabs[key]['particle_numbers'], self.quantity_unit, comp.initial_value),
                                   simulation_type=metabs[key]['simulationType']))
 
         return lst
@@ -955,7 +955,7 @@ class Model(_base._Base):
                 i.append(metabolite_element)
 
         ## add metabolite to state_template and initial state fields
-        self.add_state(metab.key, metab.particle_number)
+        self.add_state(metab.key, metab.particle_numbers)
 
         ## call the metabolites property again
         ## to reset the cache
@@ -1741,7 +1741,7 @@ class Model(_base._Base):
                     comp.compartment.initial_value
                 )
                 ##now change the field of interest to particle number
-                change_field = 'particle_number'
+                change_field = 'particle_numbers'
 
 
         ##remove component of interest from model
@@ -1920,7 +1920,7 @@ class Model(_base._Base):
         if self.quantity_type == 'concentration':
             metabs = {i.name: i.concentration for i in self.metabolites}
         elif self.quantity_type == 'particle_numbers':
-            metabs = {i.name: i.particle_number for i in self.metabolites}
+            metabs = {i.name: i.particle_numbers for i in self.metabolites}
 
         locals = {i.global_name: i.value for i in self.local_parameters}
         globals_q = {i.name: i.initial_value for i in self.global_quantities}
@@ -1947,6 +1947,16 @@ class Model(_base._Base):
 
         os.system('CopasiSE {} -e {}'.format(self.copasi_file, sbml_file))
         return sbml_file
+
+    def insert_parameters(self, **kwargs):
+        """
+        Wrapper around the InsetParameters class
+        :param kwargs:
+            Arguments for InsertParameters
+        :return:
+            :py:class:`Model`
+        """
+        return InsertParameters(self, **kwargs)
 
 
 class ReadModelMixin(Mixin):
@@ -2047,7 +2057,7 @@ class Metabolite(object):
     """
 
     """
-    def __init__(self, model, name='new_metabolite', particle_number=None,
+    def __init__(self, model, name='new_metabolite', particle_numbers=None,
                  concentration=None, compartment=None, simulation_type=None,
                  key=None):
         """
@@ -2058,13 +2068,13 @@ class Metabolite(object):
         :param name:
             `str`. Do not use non-ascii characters
 
-        :param particle_number:
+        :param particle_numbers:
             `int` or `float`. Number of initial particles for new metabolite.
             Calculated from concentration if missing.
 
         :param concentration:
             `int` or `float`. Concentration in model units for new metabolite at t=0.
-            Calculated from particle_number if missing.
+            Calculated from particle_numbers if missing.
 
         :param compartment:
             :py:class:`Compartment` or `str`. The compartment the metabolite belongs to.
@@ -2080,7 +2090,7 @@ class Metabolite(object):
         # super(Metabolite, self).__init__(model)
         self.model = self.read_model(model)
         self.name = name
-        self.particle_number = particle_number
+        self.particle_numbers = particle_numbers
         self.concentration = concentration
         self.simulation_type = None
         self.compartment = compartment
@@ -2090,8 +2100,8 @@ class Metabolite(object):
         self._do_checks()
 
     def __str__(self):
-        return 'Metabolite(name="{}", key="{}", compartment="{}", concentration="{}", particle_number="{}", simulation_type="{}")'.format(
-            self.name, self.key, self.compartment.name, self.concentration, self.particle_number,
+        return 'Metabolite(name="{}", key="{}", compartment="{}", concentration="{}", particle_numbers="{}", simulation_type="{}")'.format(
+            self.name, self.key, self.compartment.name, self.concentration, self.particle_numbers,
             self.simulation_type)
 
     def __repr__(self):
@@ -2104,7 +2114,7 @@ class Metabolite(object):
         """
         dict_of_properties = {
             'name': self.name,
-            'particle_number': self.particle_number,
+            'particle_numbers': self.particle_numbers,
             'concentration': self.concentration,
             'simulation_type': self.simulation_type,
             'compartment': self.compartment,
@@ -2141,25 +2151,25 @@ class Metabolite(object):
                 if isinstance(self.compartment, Compartment) != True:
                     raise errors.InputError('compartment argument should be of type PyCoTools.tasks.Compartment')
 
-        if ('particle_number' not in self.__dict__.keys()) and ('concentration' not in self.__dict__.keys() ):
+        if ('particle_numbers' not in self.__dict__.keys()) and ('concentration' not in self.__dict__.keys() ):
             raise errors.InputError('Must specify either concentration or particle numbers')
 
         if self.simulation_type == None:
             self.simulation_type = 'reactions'
 
-        if (self.concentration is None) and (self.particle_number is None):
+        if (self.concentration is None) and (self.particle_numbers is None):
             self.concentration = str(float(1))
 
-        if (self.particle_number is None) and (self.concentration is not None):
-            self.particle_number = self.model.convert_molar_to_particles(
+        if (self.particle_numbers is None) and (self.concentration is not None):
+            self.particle_numbers = self.model.convert_molar_to_particles(
                 self.concentration,
                 self.model.quantity_unit,
                 self.compartment.initial_value
             )
 
-        if (self.concentration is None) and (self.particle_number is not None):
+        if (self.concentration is None) and (self.particle_numbers is not None):
             self.concentration = self.model.convert_particles_to_molar(
-                self.particle_number,
+                self.particle_numbers,
                 self.model.quantity_unit,
                 self.compartment.initial_value
             )
@@ -2167,12 +2177,12 @@ class Metabolite(object):
         if self.key is None:
             self.key = KeyFactory(self.model, type='metabolite').generate()
 
-        if not isinstance(self.particle_number, (float, int, str)):
+        if not isinstance(self.particle_numbers, (float, int, str)):
             raise errors.InputError('particle number should be float or int or string of numbers')
 
 
-        if isinstance(self.particle_number, (float, int)):
-            self.particle_number = str(self.particle_number)
+        if isinstance(self.particle_numbers, (float, int)):
+            self.particle_numbers = str(self.particle_numbers)
 
 
     @property
@@ -2233,7 +2243,7 @@ class Metabolite(object):
         """
         return Substrate(
             self.model, name=self.name,
-            particle_number=self.particle_number,
+            particle_numbers=self.particle_numbers,
             concentration=self.concentration,
             compartment=self.compartment,
             simulation_type=self.simulation_type,
@@ -2248,7 +2258,7 @@ class Metabolite(object):
         """
         return Product(
             self.model, name=self.name,
-            particle_number=self.particle_number,
+            particle_numbers=self.particle_numbers,
             concentration=self.concentration,
             compartment=self.compartment,
             simulation_type=self.simulation_type,
@@ -2262,7 +2272,7 @@ class Metabolite(object):
         """
         return Modifier(
             self.model, name=self.name,
-            particle_number=self.particle_number,
+            particle_numbers=self.particle_numbers,
             concentration=self.concentration,
             compartment=self.compartment,
             simulation_type=self.simulation_type,
@@ -2295,18 +2305,18 @@ class Substrate(Metabolite):
     """
     Inherits from Metabolite. Takes the same argument as Metabolite.
     """
-    def __init__(self, model, name='new_metabolite', particle_number=None,
+    def __init__(self, model, name='new_metabolite', particle_numbers=None,
                  concentration=None, compartment=None, simulation_type=None,
                  key=None):
         self.name = name
-        self.particle_number = particle_number
+        self.particle_numbers = particle_numbers
         self.concentration = concentration
         self.compartment = compartment
         self.simulation_type = simulation_type
         self.key = key
         super(Substrate, self).__init__(
             model, name=self.name,
-            particle_number=self.particle_number,
+            particle_numbers=self.particle_numbers,
             concentration=self.concentration,
             compartment=self.compartment,
             simulation_type=self.simulation_type,
@@ -2314,8 +2324,8 @@ class Substrate(Metabolite):
         )
 
     def __str__(self):
-        return 'Substrate(name="{}", key="{}", compartment="{}", concentration="{}", particle_number="{}", simulation_type="{}")'.format(
-            self.name, self.key, self.compartment.name, self.concentration, self.particle_number,
+        return 'Substrate(name="{}", key="{}", compartment="{}", concentration="{}", particle_numbers="{}", simulation_type="{}")'.format(
+            self.name, self.key, self.compartment.name, self.concentration, self.particle_numbers,
             self.simulation_type)
 
     def __repr__(self):
@@ -2326,18 +2336,18 @@ class Product(Metabolite):
     """
     Inherits from Metabolite. Takes the same argument as Metabolite.
     """
-    def __init__(self, model,name='new_metabolite', particle_number=None,
+    def __init__(self, model,name='new_metabolite', particle_numbers=None,
                  concentration=None, compartment=None, simulation_type=None,
                  key=None):
         self.name = name
-        self.particle_number = particle_number
+        self.particle_numbers = particle_numbers
         self.concentration = concentration
         self.compartment = compartment
         self.simulation_type = simulation_type
         self.key = key
         super(Product, self).__init__(
             model, name=self.name,
-            particle_number=self.particle_number,
+            particle_numbers=self.particle_numbers,
             concentration=self.concentration,
             compartment=self.compartment,
             simulation_type=self.simulation_type,
@@ -2345,8 +2355,8 @@ class Product(Metabolite):
         )
 
     def __str__(self):
-        return 'Product(name="{}", key="{}", compartment="{}", concentration="{}", particle_number="{}", simulation_type="{}")'.format(
-            self.name, self.key, self.compartment.name, self.concentration, self.particle_number,
+        return 'Product(name="{}", key="{}", compartment="{}", concentration="{}", particle_numbers="{}", simulation_type="{}")'.format(
+            self.name, self.key, self.compartment.name, self.concentration, self.particle_numbers,
             self.simulation_type)
 
     def __repr__(self):
@@ -2357,18 +2367,18 @@ class Modifier(Metabolite):
     """
     Inherits from Metabolite. Takes the same argument as Metabolite.
     """
-    def __init__(self, model, name='new_metabolite', particle_number=None,
+    def __init__(self, model, name='new_metabolite', particle_numbers=None,
                  concentration=None, compartment=None, simulation_type=None,
                  key=None):
         self.name = name
-        self.particle_number = particle_number
+        self.particle_numbers = particle_numbers
         self.concentration = concentration
         self.compartment = compartment
         self.simulation_type = simulation_type
         self.key = key
         super(Modifier, self).__init__(
             model, name=self.name,
-            particle_number=self.particle_number,
+            particle_numbers=self.particle_numbers,
             concentration=self.concentration,
             compartment=self.compartment,
             simulation_type=self.simulation_type,
@@ -2376,8 +2386,8 @@ class Modifier(Metabolite):
         )
 
     def __str__(self):
-        return 'Modifier(name="{}", key="{}", compartment="{}", concentration="{}", particle_number="{}", simulation_type="{}")'.format(
-            self.name, self.key, self.compartment.name, self.concentration, self.particle_number,
+        return 'Modifier(name="{}", key="{}", compartment="{}", concentration="{}", particle_numbers="{}", simulation_type="{}")'.format(
+            self.name, self.key, self.compartment.name, self.concentration, self.particle_numbers,
             self.simulation_type)
 
     def __repr__(self):
@@ -3955,7 +3965,7 @@ class ParameterSet(object):
                                      self.model.reference,
                                      i.compartment.reference,
                                      i.reference),
-                                 'value': i.particle_number,
+                                 'value': i.particle_numbers,
                                  'type': 'Species',
                                  'simulationType': i.simulation_type})
         #
@@ -4081,7 +4091,7 @@ class InsertParameters(object):
         Verity user input
         :return:
         """
-        assert self.quantity_type in ['concentration', 'particle_number']
+        assert self.quantity_type in ['concentration', 'particle_numbers']
         if self.parameter_dict != None:
             if isinstance(self.parameter_dict, dict)!=True:
                 raise errors.InputError('Argument to \'parameter_dict\' keyword needs to be of type dict')

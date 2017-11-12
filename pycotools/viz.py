@@ -3125,13 +3125,14 @@ class PlotProfileLikelihood(object):
 
         ## do plotting
         self.plot()
+        ##todo implement same_axis keyword
 
     def _do_checks(self):
         """
 
         :return:
         """
-
+        ## todo put original estimatd values on non rss graphs as well
         if self.ylim is not None:
             if not isinstance(self.ylim, tuple):
                 raise errors.InputError('ylim arg should be tuple. Got "{}"'.format(type(self.ylim)))
@@ -3188,6 +3189,9 @@ class PlotProfileLikelihood(object):
 
         if self.y == 'all':
             self.y = self.parameter_list
+
+        if self.x == 'all':
+            self.x = self.parameter_list
 
         if self.y == None:
             raise errors.InputError('y cannot be None')
@@ -3270,8 +3274,8 @@ class PlotProfileLikelihood(object):
                     if self.despine:
                         seaborn.despine(fig=fig, top=True, right=True)
 
-                    if self.title is None:
-                        self.title = 'Profile Likelihoods for\n{} ' \
+                    # if self.title is None:
+                    self.title = 'Profile Likelihoods for\n{} ' \
                                      'against {} (index={})'.format(x, y, i)
 
                     plt.title(self.title)

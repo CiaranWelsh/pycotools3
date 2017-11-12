@@ -382,8 +382,8 @@ class Run(object):
             self.submit_copasi_job_SGE()
 
         elif self.mode == 'multiprocess':
-            raise ValueError('Use "RunParallel" class for multiprocess mode')
-            # self.multi_run()
+            raise ValueError('"multiprocess" has been deprecated. Please'
+                             'use mode="parallel" instead')
 
 
     def _do_checks(self):
@@ -509,7 +509,10 @@ class RunParallel(object):
         [i.save() for i in self.models]
 
         # if self.mode is 'multiprocess':
+        # try:
 
+        ##TODO put Try except block here once you remember which error
+        ##is being raised
         self.run_parallel()
 
         # else:
@@ -581,7 +584,11 @@ class RunParallel(object):
 
             try:
                 for pid in range(len(pids)):
-                    p = psutil.Process(pids[pid])
+                    try:
+                        p = psutil.Process(pids[pid])
+                    except psutil.NoSuchProcess:
+                        LOG.info('No such process: {}. Skipping'.format(pid))
+                        continue
                     if psutil.pid_exists(pids[pid]) is False:
                         del pids[pid]
 
@@ -691,8 +698,8 @@ class Reports(object):
         if isinstance(self.local_parameters, str):
             self.local_parameters = [self.local_parameters]
 
-        if self.quantity_type not in ['concentration','particle_number']:
-            raise errors.InputError('{} not concentration or particle_number'.format(self.quantity_type))
+        if self.quantity_type not in ['concentration','particle_numbers']:
+            raise errors.InputError('{} not concentration or particle_numbers'.format(self.quantity_type))
 
         self.report_types=[None,'profile_likelihood', 'profilelikelihood2',
                            'time_course','parameter_estimation', 'multi_parameter_estimation']
@@ -777,7 +784,7 @@ class Reports(object):
                     cn = '{},{},{}'.format(self.model.reference,
                                                i.compartment.reference,
                                                i.transient_reference)
-                elif self.quantity_type == 'particle_number':
+                elif self.quantity_type == 'particle_numbers':
                     cn = '{},{},{}'.format(self.model.reference,
                                                                      i.compartment.reference,
                                                                      i.reference)
@@ -853,10 +860,10 @@ class Reports(object):
                     cn = '{},{},{}'.format(self.model.reference,
                                                i.compartment.reference,
                                                i.transient_reference)
-                elif self.quantity_type == 'particle_number':
+                elif self.quantity_type == 'particle_numbers':
                     cn = '{},{},{}'.format(self.model.reference,
-                                                                     i.compartment.reference,
-                                                                     i.reference)
+                                           i.compartment.reference,
+                                           i.reference)
 
             #add to xml
                 Object=etree.SubElement(table,'Object')
@@ -1922,7 +1929,7 @@ class Scan(object):
                                        self.variable.compartment.reference,
                                        self.variable.initial_reference)
 
-            elif self.quantity_type == 'particle_number':
+            elif self.quantity_type == 'particle_numbers':
                 cn = '{},{},{}'.format(self.model.reference,
                                        self.variable.compartment.reference,
                                        self.variable.initial_particle_reference)
@@ -3105,12 +3112,12 @@ class ParameterEstimation(object):
             metab = metab.rename(columns={'value': 'start_value'})
 
             if self.quantity_type == 'concentration':
-                metab.drop('particle_number', axis=1, inplace=True)
+                metab.drop('particle_numbers', axis=1, inplace=True)
                 metab = metab.rename(columns={'concentration': 'start_value'})
 
-            elif self.quantity_type == 'particle_number':
+            elif self.quantity_type == 'particle_numbers':
                 metab.drop('concentration', axis=1, inplace=True)
-                metab = metab.rename(columns={'particle_number': 'start_value'})
+                metab = metab.rename(columns={'particle_numbers': 'start_value'})
                 metab = metab[['name', 'start_value']]
             metabs = metabs.append(metab)
 
@@ -3970,7 +3977,7 @@ class ProfileLikelihood(object):
     log10                           default: True
     run                             default: False. Passed on to Run or RunParallel
     max_active                      default: None. number of models to run
-                                    simultaneously. None=all. For when run='multiprocess'
+                                    simultaneously. None=all. For when run='parallel'
     results_directory               default: ProfileLikelihoods in the
                                     :py:attr:`model.root` directory
     method                          default: 'hooke_jeeves'
@@ -4075,6 +4082,9 @@ class ProfileLikelihood(object):
         if ((self.df is None) and (self.parameter_path is None)) and (self.index != 'current_parameters'):
             LOG.warning('Got index argument without df argument. Setting index to "current_parameters"')
             self.index = 'current_parameters'
+
+        if not os.path.isabs(self.results_directory):
+            self.results_directory = os.path.join(self.model.root, self.results_directory)
 
 
     def _convert_numeric_arguments_to_string(self):
@@ -4535,12 +4545,20 @@ class ProfileLikelihood(object):
 
         :return:
         """
-        for model in self.model_dct:
-            for param in self.model_dct[model]:
-                LOG.info('running {}'.format(self.model_dct[model][param].copasi_file))
-                sge_job_filename = "{}_{}".format(param, model)
+        # if self.run == 'multiprocess'
+        model_list = []
+        if self.run is 'parallel':
+            for i in self.model_dct:
+                for j in self.model_dct[i]:
+                    model_list.append(self.model_dct[i][j])
+        RunParallel(model_list, max_active=self.max_active, task='scan')
+
+        for m in self.model_dct:
+            for param in self.model_dct[m]:
+                LOG.info('running {}'.format(self.model_dct[m][param].copasi_file))
+                sge_job_filename = "{}_{}".format(param, m)
                 sge_job_filename = re.sub('[().]', '', sge_job_filename)
-                Run(self.model_dct[model][param], task='scan', mode=self.run, sge_job_filename=sge_job_filename+'.sh')
+                Run(self.model_dct[m][param], task='scan', mode=self.run, sge_job_filename=sge_job_filename+'.sh')
 
 if __name__=='__main__':
     pass
