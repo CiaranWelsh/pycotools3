@@ -8,19 +8,18 @@ Pycotools's Documentation
 
 
 QuickStart
-----------
+==========
 
 .. toctree::
    :maxdepth: 1
-   :caption: Contents:
 
    QuickStart
    
 Tutorials
 =========
 
-Tutorial 1
-----------
+Tutorial 0: Installation and Configuration
+------------------------------------------
 
 .. toctree::
    :maxdepth: 1
@@ -28,21 +27,21 @@ Tutorial 1
    Tutorials/Tutorial0InstallationAndConfiguration
    
    
-Tutorial 2
-----------
+Tutorial 1: The Model
+---------------------
 .. toctree::
    :maxdepth: 1
    
    Tutorials/Tutorial1TheModel
    
-Tutorial 2
-----------
+Tutorial 2: Time Course
+-----------------------
 .. toctree::
    :maxdepth: 1
    
    Tutorials/Tutorial2Timecourse
    
-Tutorial 2
+Tutorial 3: 
 ----------
 
 .. toctree::
