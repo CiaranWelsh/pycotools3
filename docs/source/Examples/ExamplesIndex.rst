@@ -4,10 +4,11 @@ Examples
 
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 1
    
-   LorenzAttractor/LorenzAttractor
-   LotkaVolterra/LotkaVolterra
+   LorenzAttractor
+   LotkaVolterra
+   Repressilator
 
 
 

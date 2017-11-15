@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Pycotools's documentation!
+Pycotools's Documentation
 =====================================
 
 
@@ -11,7 +11,7 @@ QuickStart
 ----------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents:
 
    QuickStart
@@ -23,7 +23,7 @@ Tutorial 1
 ----------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    
    Tutorials/Tutorial0InstallationAndConfiguration
    
@@ -31,14 +31,14 @@ Tutorial 1
 Tutorial 2
 ----------
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    
    Tutorials/Tutorial1TheModel
    
 Tutorial 2
 ----------
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    
    Tutorials/Tutorial2Timecourse
    
@@ -46,7 +46,7 @@ Tutorial 2
 ----------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    
    Tutorials/Tutorial3Scan
    
@@ -55,7 +55,7 @@ Tutorial 2
 ----------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    
    Tutorials/Tutorial4SingleParameterEstimations
 
@@ -64,7 +64,7 @@ Tutorial 2
 ----------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    
    Tutorials/Tutorial5MultipleParameterEstimations
 
@@ -72,7 +72,7 @@ Tutorial 2
 ----------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    
    Tutorials/Tutorial6TheVizModule
 
@@ -80,25 +80,25 @@ Tutorial 2
 ----------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    
    Tutorials/Tutorial7InsertParameters
    
 
 Examples
---------
+========
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    
    Examples/ExamplesIndex
    
 
 API
----
+===
 
 .. toctree:: 
-   :maxdepth: 2
+   :maxdepth: 1
    
    APIDoc/APIIndex.rst
    
@@ -107,7 +107,7 @@ Caveats
 -------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    
    Caveats.rst
 
