@@ -3,18 +3,7 @@
 Package was developed by Ciaran Welsh (c.welsh2@newcastle.ac.uk) at Newcastle University, UK. 
 
 
-## Installation 
-Use:
-    `pip install PyCoTools` 
-        
-## Version 
-        
-This package was developed on Python 2.7 and Copasi version 19. This is a beta version of PyCoTools that is being actively developed. If you happen to find any bugs please feel free to post a github issue.
-
 ## [jupyter notebook tutorials and documentation](http://pycotools.readthedocs.io/en/copasiversion21/)
-
-
-
 
 # Modules
 
