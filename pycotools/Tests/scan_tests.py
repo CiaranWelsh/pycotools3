@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+"""
  This file is part of pycotools.
 
  pycotools is free software: you can redistribute it and/or modify
@@ -22,15 +22,8 @@ Date:
     12/03/2017
 
  Object:
-'''
-
-
-import site
-# site.addsitedir(r'C:\Users\Ciaran\Documents\pycotools')
-site.addsitedir(r'/home/b3053674/Documents/pycotools')
-
+"""
 import pycotools
-# from pycotools.pycotoolsTutorial import test_models
 import unittest
 import glob
 import os
@@ -182,7 +175,7 @@ class RepeatScanTests(_test_base._BaseTest):
     def setUp(self):
         super(RepeatScanTests, self).setUp()
         self.scan = pycotools.tasks.Scan(self.model,
-                                          report_type='profilelikelihood',
+                                          report_type='profile_likelihood',
                                           subtask='time_course',
                                           scan_type='repeat',
                                           number_of_steps=6)
@@ -198,7 +191,7 @@ class RepeatScanTests(_test_base._BaseTest):
         reports = new_model.find('{http://www.copasi.org/static/schema}ListOfReports')
         check = False
         for report in reports:
-            if report.attrib['name'] == 'profilelikelihood':
+            if report.attrib['name'] == 'profile_likelihood':
                 check = True
         self.assertTrue(check)
 

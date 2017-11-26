@@ -34,17 +34,17 @@ Setup tools for PyCoTools
 from setuptools import setup
 
 
-#version
+# #version
+# MAJOR = 0
+# MINOR = 0
+# MICRO = 47
+
+
+
+##test version
 MAJOR = 0
 MINOR = 0
-MICRO = 46
-
-
-
-###test version
-#MAJOR = 0
-#MINOR = 0
-#MICRO = 6
+MICRO = 52
 
 
 
@@ -52,36 +52,30 @@ MICRO = 46
 __version__ = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
 setup(
-  name = 'pycotools',
-  packages = ['pycotools'], # this must be the same as the name above
-  version = __version__,
-  description = 'A python toolbox for COPASI',
-  author = 'Ciaran Welsh',
-  requires=['lxml','argparse','pandas','numpy','scipy',
-            'matplotlib','scipy','seaborn','sklearn',
+  name='pycotools',
+  packages=['pycotools'], # this must be the same as the name above
+  version=__version__,
+  description='A python toolbox for COPASI',
+  author='Ciaran Welsh',
+  requires=['lxml', 'argparse', 'pandas', 'numpy', 'scipy',
+            'matplotlib', 'scipy', 'seaborn', 'sklearn',
             'retrying'],
   package_data={'pycotools':['*.py',
-                             'Documentation/*.pdf',
-                             'logging_config.conf',
-                             'Documentation/*.html',
                              'Licence.txt',
-                             'ReadMe.md',
                              'Tests/*.py',
-                             'Examples/*.py',
-                             'Examples/ski_pcr_data.csv',
-                             'Examples/smad7_pcr_data.csv',
-                             'Scripts/*.py',
-                             'Tutorials/*.py',
-                             'Tutorials/*.ipynb']},
-  author_email = 'c.welsh2@newcastle.ac.uk',
-  url = 'https://github.com/CiaranWelsh/PyCoTools', # use the URL to the github repo
+                             'logging_config.conf'],
+                # 'docs': ['build/*'],
+                # 'Tests': ['*.py']
+                },
+  author_email='c.welsh2@newcastle.ac.uk',
+  url='https://github.com/CiaranWelsh/PyCoTools',
 
-  keywords = ['systems biology','modelling','biological',
-              'networks','copasi','identifiability analysis','profile likelihood'],
+  keywords=['systems biology', 'modelling', 'biological',
+            'networks', 'copasi', 'identifiability analysis', 'profile likelihood'],
 
   license='GPL4',
-  install_requires=['pandas','numpy','scipy','matplotlib',
-                    'lxml', 'seaborn','sklearn','openpyxl','xlrd'],
+  install_requires=['pandas', 'numpy', 'scipy', 'matplotlib',
+                    'lxml', 'seaborn', 'sklearn', 'openpyxl', 'xlrd'],
   long_description='A python package for enhancing mathematical'
                    ' modelling using COPASI. See github and docs for more details'
 )

@@ -326,7 +326,7 @@ class DeterministicTimeCourseTests(_test_base._BaseTest):
         :return:
         """
         p = pycotools.viz.Parse(self.TC)
-        df = p.parse_timecourse()
+        df = p.parse()
         self.assertTrue(isinstance(df, pandas.core.frame.DataFrame))
 
 
@@ -335,7 +335,7 @@ class DeterministicTimeCourseTests(_test_base._BaseTest):
         :return:
         """
         p = pycotools.viz.Parse(self.TC)
-        df = p.parse_timecourse()
+        df = p.parse()
         boolean = True
         ## set boolean to false if square brackets still in timecourse
         for i in list(df.columns):

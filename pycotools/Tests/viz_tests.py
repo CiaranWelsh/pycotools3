@@ -23,16 +23,12 @@ Module that tests the operations of the _Base base test
 
 """
 
-import site
-site.addsitedir('C:\Users\Ciaran\Documents\pycotools')
-site.addsitedir('/home/b3053674/Documents/pycotools')
 import pandas
 import pycotools
 from pycotools.Tests import _test_base
 import unittest
 import os
 import pickle
-import test_data
 import numpy
 import shutil
 import glob
@@ -241,7 +237,7 @@ class BoxPlotTests(_test_base._BaseTest):
 
         :return:
         """
-        b = pycotools.viz.Boxplot(self.MPE, savefig=True, num_per_plot=3)
+        b = pycotools.viz.Boxplots(self.MPE, savefig=True, num_per_plot=3)
         self.assertEqual(len(glob.glob(b.results_directory+'/*')), 3)
 
     def test_amount_of_data(self):
@@ -249,7 +245,7 @@ class BoxPlotTests(_test_base._BaseTest):
 
         :return:
         """
-        b = pycotools.viz.Boxplot(self.MPE, savefig=True, num_per_plot=3)
+        b = pycotools.viz.Boxplots(self.MPE, savefig=True, num_per_plot=3)
         self.assertEqual(b.data.shape[0], 4)
 
 

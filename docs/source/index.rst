@@ -41,8 +41,8 @@ Tutorial 2: Time Course
    
    Tutorials/Tutorial2Timecourse
    
-Tutorial 3: 
-----------
+Tutorial 3: Scan
+----------------
 
 .. toctree::
    :maxdepth: 1
@@ -50,8 +50,8 @@ Tutorial 3:
    Tutorials/Tutorial3Scan
    
 
-Tutorial 2
-----------
+Tutorial 4: Single Parameter Estimations
+----------------------------------------
 
 .. toctree::
    :maxdepth: 1
@@ -59,7 +59,7 @@ Tutorial 2
    Tutorials/Tutorial4SingleParameterEstimations
 
 
-Tutorial 2
+Tutorial 5: Multiple Parameter Estimation, analysis and Identifiability Analysis
 ----------
 
 .. toctree::

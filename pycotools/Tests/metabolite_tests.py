@@ -22,10 +22,6 @@
 
 """
 
-import site
-# site.addsitedir('C:\Users\Ciaran\Documents\pycotools')
-site.addsitedir('/home/b3053674/Documents/pycotools')
-
 import pycotools
 
 from pycotools.Tests import _test_base
@@ -82,8 +78,8 @@ class TestMetabolites(_test_base._BaseTest):
 
     def test_particle_numbers(self):
         A = pycotools.model.Metabolite(self.model,
-                                       particle_number=10e23, compartment=self.nucleus)
-        self.assertTrue(A.particle_number, 10e23)
+                                       particle_numbers=10e23, compartment=self.nucleus)
+        self.assertTrue(A.particle_numbers, 10e23)
 
     def test_concentration(self):
         """

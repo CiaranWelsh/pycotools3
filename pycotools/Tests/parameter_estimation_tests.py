@@ -26,9 +26,6 @@ Date:
  
 '''
 
-import site
-site.addsitedir('/home/b3053674/Documents/pycotools')
-# site.addsitedir('C:\Users\Ciaran\Documents\pycotools')
 import pycotools
 from pycotools.Tests import test_models
 import unittest

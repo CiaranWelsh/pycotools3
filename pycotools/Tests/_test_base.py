@@ -10,11 +10,6 @@ It is not used in pycotools itself.
 
 
 """
-
-import site
-site.addsitedir('/home/b3053674/Documents/pycotools')
-# site.addsitedir('C:\Users\Ciaran\Documents\pycotools')
-
 import pycotools
 import test_models#, test_data
 import unittest
@@ -22,6 +17,7 @@ import glob
 import os
 import shutil 
 import pandas
+
 
 class _BaseTest(unittest.TestCase):
     """
@@ -61,7 +57,6 @@ class _BaseTest(unittest.TestCase):
                     d = os.path.join(dire, i)
                     if os.path.isdir(d):
                         shutil.rmtree(d)
-
 
             for i in glob.glob(os.path.join(dire, '*.xlsx') ):
                 os.remove(i)

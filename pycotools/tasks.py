@@ -4038,7 +4038,7 @@ class ProfileLikelihood(object):
             'number_of_iterations': 100000,
             'start_temperature': 1,
             'cooling_factor': 0.85,
-
+            'max_active': 3,
             'parallel_scan': True,
         }
         self.default_properties.update(self.kwargs)

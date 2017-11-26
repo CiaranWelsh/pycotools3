@@ -23,15 +23,12 @@ Module that tests the operations of the _Base base test
 
 """
 
-import site
-site.addsitedir('/home/b3053674/Documents/pycotools')
 import pandas
 import pycotools
 from pycotools.Tests import _test_base
 import unittest
 import os
 import pickle
-import test_data
 import numpy
 import shutil
 import glob
@@ -69,134 +66,134 @@ class ProfileLikelihoodTests(_test_base._BaseTest):
 
         self.MPE.write_config_file()
         self.MPE.setup()
+        self.MPE.run()
+        os.chdir(self.root)
+        import time
+        time.sleep(5)
+        self.PL = pycotools.tasks.ProfileLikelihood(self.model, parameter_path=self.MPE.results_directory,
+                                     method='hooke_jeeves', iteration_limit=1,
+                                     log10=True, run_mode=False, index=[0],
+                                     output_in_subtask=False)  # , parameter_path=param)
         # self.MPE.run()
-        # os.chdir(self.root)
-        # import time
-        # time.sleep(5)
-        # self.PL = pycotools.tasks.ProfileLikelihood(self.model, parameter_path=self.MPE.results_directory,
-        #                              method='hooke_jeeves', iteration_limit=1,
-        #                              log10=True, run_mode=False, index=[0],
-        #                              output_in_subtask=False)  # , parameter_path=param)
-        # # self.MPE.run()
 
 
-    # def test_undefine_other_reports(self):
-    #     """
-    #
-    #     :return:
-    #     """
-    #     self.MPE.run()
-    #     os.chdir(self.root)
-    #     import time
-    #     time.sleep(1)
-    #     PL = pycotools.tasks.ProfileLikelihood(self.model, parameter_path=self.MPE.results_directory,
-    #                                  method='hooke_jeeves', iteration_limit=1,
-    #                                  log10=True, run_mode=False, index=[0],
-    #                                  output_in_subtask=False)  # , parameter_path=param)
-    #     # self.MPE.run()
-    #     boolean = True
-    #     query = '//*[@name="Parameter Estimation"]'
-    #     for i in self.model.xml.xpath(query):
-    #         if 'type' in i.keys():
-    #             if i.attrib['type'] == 'parameterFitting':
-    #                 for j in i:
-    #                     if j.tag == '{http://www.copasi.org/static/schema}Problem':
-    #                         for k in j:
-    #                             if k.attrib['name'] == 'Randomize Start Values':
-    #                                 if k.attrib['value'] == str(0):
-    #                                     boolean = False
-    #     self.assertFalse(boolean)
+    def test_undefine_other_reports(self):
+        """
+
+        :return:
+        """
+        self.MPE.run()
+        os.chdir(self.root)
+        import time
+        time.sleep(1)
+        PL = pycotools.tasks.ProfileLikelihood(self.model, parameter_path=self.MPE.results_directory,
+                                     method='hooke_jeeves', iteration_limit=1,
+                                     log10=True, run_mode=False, index=[0],
+                                     output_in_subtask=False)  # , parameter_path=param)
+        # self.MPE.run()
+        boolean = True
+        query = '//*[@name="Parameter Estimation"]'
+        for i in self.model.xml.xpath(query):
+            if 'type' in i.keys():
+                if i.attrib['type'] == 'parameterFitting':
+                    for j in i:
+                        if j.tag == '{http://www.copasi.org/static/schema}Problem':
+                            for k in j:
+                                if k.attrib['name'] == 'Randomize Start Values':
+                                    if k.attrib['value'] == str(0):
+                                        boolean = False
+        self.assertFalse(boolean)
 
 
-    # def test_method(self):
-    #     """
-    #     Test method is correct
-    #     :return:
-    #     """
-    #     self.MPE.run()
-    #     os.chdir(self.root)
-    #     import time
-    #     time.sleep(2)
-    #     PL = pycotools.tasks.ProfileLikelihood(self.model, parameter_path=self.MPE.results_directory,
-    #                                            method='particle_swarm', iteration_limit=1,
-    #                                            log10=True, run_mode=False, index=[0],
-    #                                            output_in_subtask=False)  # , parameter_path=param)
-    #
-    #     boolean = False
-    #     query = '//*[@name="Parameter Estimation"]'
-    #     for i in self.model.xml.xpath(query):
-    #         if 'type' in i.keys():
-    #             if i.attrib['type'] == 'parameterFitting':
-    #                 for j in i:
-    #                     if j.tag == 'Method':
-    #                         if j.attrib['name'] == 'Particle Swarm':
-    #                             boolean = True
-    #     self.assertTrue(boolean)
+    def test_method(self):
+        """
+        Test method is correct
+        :return:
+        """
+        self.MPE.run()
+        os.chdir(self.root)
+        import time
+        time.sleep(2)
+        PL = pycotools.tasks.ProfileLikelihood(self.model, parameter_path=self.MPE.results_directory,
+                                               method='particle_swarm', iteration_limit=1,
+                                               log10=True, run_mode=False, index=[0],
+                                               output_in_subtask=False)  # , parameter_path=param)
 
-    # def test_parameters(self):
-    #     """
-    #
-    #     :return:
-    #     """
-    #
-    #     ##TODO find out why local parameters are not being inserted.
-    #     self.MPE.run()
-    #     os.chdir(self.root)
-    #     import time
-    #     time.sleep(2)
-    #     PL = pycotools.tasks.ProfileLikelihood(self.model, parameter_path=self.MPE.results_directory,
-    #                                            method='hooke_jeeves', iteration_limit=1,
-    #                                            log10=True, run_mode=False, index=[0],
-    #                                            output_in_subtask=False)  # , parameter_path=param)
-    #     PL.model.save()
-    #     boolean = False
-    #     A = self.model.get('metabolite', 'A')
-    #     k1 = self.model.get('local_parameter', '(B2C).k2', by='global_name')
-    #     A2B = self.model.get('global_quantity', 'A2B')
-    #     self.assertAlmostEqual(PL.parameters[0]['A'].item(), float(A.concentration))
-    #     self.assertAlmostEqual(PL.parameters[0]['(B2C).k2'].item(), float(k1.value))
-    #     self.assertAlmostEqual(PL.parameters[0]['A2B'].item(), float(A2B.initial_value))
+        boolean = False
+        query = '//*[@name="Parameter Estimation"]'
+        for i in self.model.xml.xpath(query):
+            if 'type' in i.keys():
+                if i.attrib['type'] == 'parameterFitting':
+                    for j in i:
+                        if j.tag == 'Method':
+                            if j.attrib['name'] == 'Particle Swarm':
+                                boolean = True
+        self.assertTrue(boolean)
 
-    # def test_copy_model(self):
-    #     """
-    #
-    #     :return:
-    #     """
-    #     ##TODO global variables and local parameters which point to the same model should only be included once in the copying
-    #     ##todo work out why number of estimated parameter does not match number of models
-    #     self.MPE.run()
-    #     os.chdir(self.root)
-    #     import time
-    #     time.sleep(2)
-    #     # self.model.open()
-    #     PL = pycotools.tasks.ProfileLikelihood(self.model, parameter_path=self.MPE.results_directory,
-    #                                            method='hooke_jeeves', iteration_limit=1,
-    #                                            log10=True, run_mode=False, index=[0])
-    #
-    #     index_dir = os.path.join(PL.results_directory, '0')
-    #     self.assertTrue(os.path.isdir(index_dir))
-    #     model_paths = glob.glob(os.path.join(index_dir, '*.cps'))
-    #     mod = pycotools.model.Model(model_paths[0])
-    #     num_estimated_params = len(mod.fit_item_order)+1
-    #     num_models = len(model_paths)
-    #     self.assertEqual(num_estimated_params, num_models)
+    def test_parameters(self):
+        """
 
-    # def test_absolute_experiment_files(self):
-    #     """
-    #
-    #     :return:
-    #     """
-    #     self.MPE.run()
-    #     os.chdir(self.root)
-    #     import time
-    #     time.sleep(2)
-    #     PL = pycotools.tasks.ProfileLikelihood(self.model, parameter_path=self.MPE.results_directory,
-    #                                            method='hooke_jeeves', iteration_limit=1,
-    #                                            log10=True, run_mode=False, index=[0])
-    #
-    #     query = '//*[@name="File Name"]'
-    #     for i in PL.model.xml.xpath(query):
-    #         self.assertTrue(os.path.isabs(i.attrib['value']))
+        :return:
+        """
+
+        ##TODO find out why local parameters are not being inserted.
+        self.MPE.run()
+        os.chdir(self.root)
+        import time
+        time.sleep(2)
+        PL = pycotools.tasks.ProfileLikelihood(self.model, parameter_path=self.MPE.results_directory,
+                                               method='hooke_jeeves', iteration_limit=1,
+                                               log10=True, run_mode=False, index=[0],
+                                               output_in_subtask=False)  # , parameter_path=param)
+        PL.model.save()
+        boolean = False
+        A = self.model.get('metabolite', 'A')
+        k1 = self.model.get('local_parameter', '(B2C).k2', by='global_name')
+        A2B = self.model.get('global_quantity', 'A2B')
+        self.assertAlmostEqual(PL.parameters[0]['A'].item(), float(A.concentration))
+        self.assertAlmostEqual(PL.parameters[0]['(B2C).k2'].item(), float(k1.value))
+        self.assertAlmostEqual(PL.parameters[0]['A2B'].item(), float(A2B.initial_value))
+
+    def test_copy_model(self):
+        """
+
+        :return:
+        """
+        ##TODO global variables and local parameters which point to the same model should only be included once in the copying
+        ##todo work out why number of estimated parameter does not match number of models
+        self.MPE.run()
+        os.chdir(self.root)
+        import time
+        time.sleep(2)
+        # self.model.open()
+        PL = pycotools.tasks.ProfileLikelihood(self.model, parameter_path=self.MPE.results_directory,
+                                               method='hooke_jeeves', iteration_limit=1,
+                                               log10=True, run_mode=False, index=[0])
+
+        index_dir = os.path.join(PL.results_directory, '0')
+        self.assertTrue(os.path.isdir(index_dir))
+        model_paths = glob.glob(os.path.join(index_dir, '*.cps'))
+        mod = pycotools.model.Model(model_paths[0])
+        num_estimated_params = len(mod.fit_item_order)+1
+        num_models = len(model_paths)
+        self.assertEqual(num_estimated_params, num_models)
+
+    def test_absolute_experiment_files(self):
+        """
+
+        :return:
+        """
+        self.MPE.run()
+        os.chdir(self.root)
+        import time
+        time.sleep(2)
+        PL = pycotools.tasks.ProfileLikelihood(self.model, parameter_path=self.MPE.results_directory,
+                                               method='hooke_jeeves', iteration_limit=1,
+                                               log10=True, run_mode=False, index=[0])
+
+        query = '//*[@name="File Name"]'
+        for i in PL.model.xml.xpath(query):
+            self.assertTrue(os.path.isabs(i.attrib['value']))
 
 
 
