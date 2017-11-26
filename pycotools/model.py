@@ -816,7 +816,7 @@ class Model(_base._Base):
             'mmol': 1e-3,
             'mol': float(1),
             'dimensionless': float(1),
-            '1': '1',
+            '1': float(1),
             '#': float(1)}
 
         try:
@@ -825,11 +825,16 @@ class Model(_base._Base):
             raise KeyError('"{}" unit is not yet supported. Please use a different unit'.format(mol_unit))
 
         avagadro=6.022140857e+23
-        molarity=float(particles)/(avagadro*mol_unit_value*compartment_volume)
-        if mol_unit=='dimensionless':
-            molarity=float(particles)
-        if mol_unit=='#':
-            molarity=float(particles)
+
+        molarity = float(particles)/(avagadro*mol_unit_value*compartment_volume)
+        if mol_unit == 'dimensionless':
+            molarity = float(particles)
+
+        if mol_unit == '#':
+            molarity = float(particles)
+
+        if mol_unit == '1':
+            molarity = float(particles)
         return molarity
 
     @staticmethod
@@ -865,19 +870,24 @@ class Model(_base._Base):
             u'\xb5mol':1e-6,
             'mmol':1e-3,
             'mol':float(1),
-            'dimensionless':1,
-            '1': float(1),
+            'dimensionless': 1,
+            '1': 1,
             '#':1}
         try:
             mol_unit_value = mol_dct[mol_unit]
-        except KeyError()
+        except KeyError:
             raise KeyError('"{}" unit is not yet supported. Please use a different unit'.format(mol_unit))
         avagadro = 6.022140857e+23
         particles = float(moles)*avagadro*mol_unit_value*compartment_volume
+
         if mol_unit == 'dimensionless':# or '#':
             particles=float(moles)
+
         if mol_unit =='#':
             particles = float(moles)
+
+        if mol_unit == '1':
+            molarity = float(particles)
         return particles
 
     @cached_property
