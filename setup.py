@@ -34,17 +34,17 @@ Setup tools for PyCoTools
 from setuptools import setup
 
 
-# #version
-# MAJOR = 0
-# MINOR = 0
-# MICRO = 47
+#version
+MAJOR = 0
+MINOR = 0
+MICRO = 53
 
 
 
 ##test version
-MAJOR = 0
-MINOR = 0
-MICRO = 52
+#MAJOR = 0
+#MINOR = 0
+#MICRO = 52
 
 
 

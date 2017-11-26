@@ -1867,6 +1867,7 @@ class LikelihoodRanks(PlotKwargs):
         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
 
         self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
+        self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
 
         self.plot()
 
@@ -1895,7 +1896,7 @@ class LikelihoodRanks(PlotKwargs):
                 self.results_directory = os.path.join(os.path.dirname(self.cls.copasi_file), 'RssVsIterations')
             else:
                 self.results_directory = os.path.join(
-                    self.cls.model.root, 'RssVsIterations'
+                    self.cls.model.root, 'LikelihoodRank'
                 )
 
         if not os.path.isdir(self.results_directory):
@@ -1936,7 +1937,7 @@ class LikelihoodRanks(PlotKwargs):
             seaborn.despine(fig=fig, top=True, right=True)
         if self.savefig:
             self.results_directory = self.create_directory()
-            fle = os.path.join(self.results_directory, 'RssVsIterations.{}'.format(self.ext))
+            fle = os.path.join(self.results_directory, 'LikelihoodRank.{}'.format(self.ext))
             plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
 
         if self.show:
