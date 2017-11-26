@@ -574,9 +574,12 @@ class RunParallel(object):
         """
         pids = []
         num_models_to_process = len(self.models)
+
         while num_models_to_process > 0:
+
             # for copy_number, model in self.models.items():
             model = self.models[num_models_to_process - 1]
+            LOG.debug('running {}'.format(model))
             if len(pids) < self.max_active:
                 num_models_to_process -= 1
                 subp = subprocess.Popen(['CopasiSE', model.copasi_file])
@@ -586,13 +589,18 @@ class RunParallel(object):
                 for pid in range(len(pids)):
                     try:
                         p = psutil.Process(pids[pid])
+                        LOG.debug('trying')
                     except psutil.NoSuchProcess:
                         LOG.info('No such process: {}. Skipping'.format(pid))
+                        LOG.debug('exception')
                         continue
                     if psutil.pid_exists(pids[pid]) is False:
+                        LOG.debug('deleting pid')
                         del pids[pid]
 
                     if p.status() is 'zombie':
+                        LOG.debug('is zombie')
+
                         del pids[pid]
 
             except IndexError:

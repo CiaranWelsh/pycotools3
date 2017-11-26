@@ -314,7 +314,13 @@ class ChiSquaredStatistics(object):
         self.rss = rss
         self.num_data_points = num_data_points
         self.CL = self.calc_chi2_CL()
-        self.show=show
+        self.show = show
+
+        if self.alpha > 1 or self.alpha < 0 or str(len(self.alpha)) > 4:
+            raise errors.InputError('alpha parameter should be between 0 and 1 and be '
+                                    'to 2 decimal places. I.e. 0.95')
+
+
         if plot_chi2:
             self.plot_chi2_CL()
 
@@ -3090,7 +3096,7 @@ class PlotProfileLikelihood(object):
                                    'results_directory': None,
                                    'dpi': 400,
                                    'plot_cl': True,
-                                   'alpha': 95,
+                                   'alpha': 0.95,
                                    'title': None,
                                    'xlabel': None,
                                    'ylabel': None,
