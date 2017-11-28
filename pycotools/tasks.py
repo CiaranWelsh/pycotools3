@@ -2214,7 +2214,6 @@ class ExperimentMapper(object):
         elif self.type == 'validation':
             query = '//*[@name="Validation Set"]'
 
-
         for i in self.model.xml.xpath(query):
             for j in list(i):
                 existing_experiment_list.append(j)
@@ -2230,7 +2229,8 @@ class ExperimentMapper(object):
         i is the exeriment_file index
         """
         assert isinstance(index, int)
-        data=pandas.read_csv(self.experiment_files[index], sep=self.separator[index])
+        data = pandas.read_csv(self.experiment_files[index], sep=self.separator[index], skip_blank_lines=False)
+        print data
         #get observables from data. Must be exact match
         obs = list(data.columns)
         num_rows = str(data.shape[0])
@@ -2244,7 +2244,7 @@ class ExperimentMapper(object):
         else:
             exp = self.experiment_files[index]
 
-        self.key='Experiment_{}'.format(index)
+        self.key=self.experiment_files[index]
 
         #necessary XML attributes
         Exp=etree.Element('ParameterGroup', attrib={'name': self.key})
@@ -3496,7 +3496,7 @@ class MultiParameterEstimation(ParameterEstimation):
     ##TODO Merge ParameterEstimation and Multi into one class.
     def __init__(self, model, experiment_files, copy_number=1, pe_number=3,
                  run_mode='multiprocess', results_directory=None,
-                 output_in_subtask=False, max_active=None, **kwargs):
+                 output_in_subtask=False, max_active=None, skip_config=False, **kwargs):
         super(MultiParameterEstimation, self).__init__(model, experiment_files, **kwargs)
         ## add to ParameterEstimation defaults
         self.copy_number = copy_number
@@ -3504,6 +3504,7 @@ class MultiParameterEstimation(ParameterEstimation):
         self.run_mode = run_mode
         self.max_active = max_active
         self.results_directory = results_directory
+        self.skip_config = skip_config
         self.output_in_subtask = output_in_subtask
 
         if self.results_directory is None:
@@ -3670,22 +3671,27 @@ class MultiParameterEstimation(ParameterEstimation):
         ## create output directory
         self._create_output_directory()
 
-        ## map experiments
-        EM = ExperimentMapper(self.model, self.experiment_files, **self._experiment_mapper_args)
-
-        ## get model from ExperimentMapper
-        self.model = EM.model
-
         ## create a report for PE results collection
         self.model = self.define_report()
 
-        ## get rid of existing parameter estimation definition
-        self.model = self.remove_all_fit_items()
 
-        ## create new parameter estimation
-        self.model = self.set_PE_method()
-        self.model = self.set_PE_options()
-        self.model = self.insert_all_fit_items()
+
+        ## If skip_config then do not configure the parameter estimation task
+        if not self.skip_config:
+
+            ## map experiments
+            EM = ExperimentMapper(self.model, self.experiment_files, **self._experiment_mapper_args)
+
+            ## get model from ExperimentMapper
+            self.model = EM.model
+
+            ## get rid of existing parameter estimation definition
+            self.model = self.remove_all_fit_items()
+
+            ## create new parameter estimation
+            self.model = self.set_PE_method()
+            self.model = self.set_PE_options()
+            self.model = self.insert_all_fit_items()
 
         ## ensure we have model
         assert self.model != None
@@ -4028,6 +4034,7 @@ class ProfileLikelihood(object):
             'append': False,
             'output_in_subtask': False,
             'run': False,
+            'max_active': 4,
             'processes': 1,
             'results_directory': os.path.join(self.model.root,
                                               'ProfileLikelihoods'),

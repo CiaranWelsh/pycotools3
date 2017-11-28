@@ -316,7 +316,7 @@ class ChiSquaredStatistics(object):
         self.CL = self.calc_chi2_CL()
         self.show = show
 
-        if self.alpha > 1 or self.alpha < 0 or str(len(self.alpha)) > 4:
+        if self.alpha > 1 or self.alpha < 0 or len(str(self.alpha)) > 4:
             raise errors.InputError('alpha parameter should be between 0 and 1 and be '
                                     'to 2 decimal places. I.e. 0.95')
 
@@ -1263,22 +1263,43 @@ class PlotTimeCourseEnsemble(object):
         else:
             exp_files = self.cls.experiment_files
 
+        ## if exp_files is empty then read_csv would not be called
         for i in range(len(exp_files)):
             df = pandas.read_csv(exp_files[i],
-                                 sep='\t')
-            df_dct[exp_files[i]] = df
+                                 sep='\t', skip_blank_lines=False)
+            is_null = df.isnull().all(1)
+            from collections import Counter
+            count = Counter(is_null)
+            if count[True] > 0:
+                df_list = numpy.split(df, df[df.isnull().all(1)].index)
+                df_list = [j.dropna(how='all') for j in df_list]
+                for j in range(len(df_list)):
+                    if df_list[j].empty:
+                        print 'empty'
+                        continue
+                    else:
+                        df_dct[exp_files[i]+str(j)] = df_list[j]
+            else:
+                df_dct[exp_files[i]] = df
         return df_dct
 
     @property
     def get_experiment_times(self):
         d = {}
+        time_marker = False
         for i in self.experimental_data:
             d[i] = {}
             for j in self.experimental_data[i].keys():
-
                 if j.lower() == 'time':
+                    time_marker = True
                     d[i] = self.experimental_data[i][j]
 
+        ## Protect against not having time column labelled correctly
+        if not time_marker:
+            raise errors.InputError('Column in data file called \'time\' or \'Time\' not '
+                                    ' detected. Please check your experiment file. The first '
+                                    'column should be labelled Time for time course.' )
+        LOG.debug(d)
         times = {}
         for i in d:
             times[i] = {}
@@ -3204,7 +3225,7 @@ class PlotProfileLikelihood(object):
             self.y = self.parameter_list
 
         if self.x == 'all':
-            self.x = self.parameter_list
+            self.x = [i for i in self.parameter_list if i != 'RSS']
 
         if self.y == None:
             raise errors.InputError('y cannot be None')
@@ -3344,7 +3365,7 @@ class PlotProfileLikelihood(object):
                         plt.plot(xnew, ynew, 'k')
                         plt.plot(x_plot, y_plot, 'ro', label=y, linewidth=2)  # linestyle='o', color='red')
                     else:
-                        plt.plot(x_plot, y_plot, label=y)
+                        plt.plot(x_plot, y_plot, label=y, marker='o')
 
                     if y is 'RSS':
                         plt.plot(plot_data['Parameter Of Interest Value'],

@@ -37,8 +37,7 @@ from setuptools import setup
 #version
 MAJOR = 0
 MINOR = 0
-MICRO = 53
-
+MICRO = 59
 
 
 ##test version
