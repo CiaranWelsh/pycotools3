@@ -423,8 +423,6 @@ class Run(object):
 
         :return:
         """
-        # print self.model
-        # task = self.task.replace('_', '').replace
         task = self.task.replace(' ', '_').lower()
 
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfTasks'):
@@ -472,6 +470,7 @@ class Run(object):
         :return:
             None
         """
+        self.sge_job_filename = self.sge_job_filename.replace('/', '_')
         with open(self.sge_job_filename, 'w') as f:
             f.write('#!/bin/bash\n#$ -V -cwd\nmodule add {}\nCopasiSE "{}"'.format(
                 self.copasi_location, self.model.copasi_file
@@ -589,13 +588,10 @@ class RunParallel(object):
                 for pid in range(len(pids)):
                     try:
                         p = psutil.Process(pids[pid])
-                        LOG.debug('trying')
                     except psutil.NoSuchProcess:
                         LOG.info('No such process: {}. Skipping'.format(pid))
-                        LOG.debug('exception')
                         continue
                     if psutil.pid_exists(pids[pid]) is False:
-                        LOG.debug('deleting pid')
                         del pids[pid]
 
                     if p.status() is 'zombie':
@@ -2230,21 +2226,20 @@ class ExperimentMapper(object):
         """
         assert isinstance(index, int)
         data = pandas.read_csv(self.experiment_files[index], sep=self.separator[index], skip_blank_lines=False)
-        print data
         #get observables from data. Must be exact match
         obs = list(data.columns)
         num_rows = str(data.shape[0])
         num_columns = str(data.shape[1]) #plus 1 to account for 0 indexed
 
+        LOG.debug('data == \n{}'.format(data))
+
         #if exp_file is in the same directory as copasi_file only use relative path
-        if os.path.dirname(
-                self.model.copasi_file) == os.path.dirname(
-                    self.experiment_files[index]):
+        if os.path.dirname(self.model.copasi_file) == os.path.dirname(self.experiment_files[index]):
             exp = os.path.split(self.experiment_files[index])[1]
         else:
             exp = self.experiment_files[index]
 
-        self.key=self.experiment_files[index]
+        self.key='Experiment_{}'.format(index)
 
         #necessary XML attributes
         Exp=etree.Element('ParameterGroup', attrib={'name': self.key})
@@ -4386,7 +4381,15 @@ class ProfileLikelihood(object):
             dct[model] = {}
             for param in self.x:
                 new_dir = os.path.join(self.results_directory, str(model))
-                new_copasi_filename = os.path.join(new_dir, misc.RemoveNonAscii(param).filter+'.cps')
+                param_name = misc.RemoveNonAscii(param).filter.replace(r'/', '_') + '.cps'
+                try:
+                    int(param_name[0])
+                    param_name = '_{}'.format(param_name)
+                except ValueError:
+                    continue
+
+                new_copasi_filename = os.path.join(new_dir, param_name)
+                LOG.debug('new_copasi_filename --> {}'.format(new_copasi_filename))
                 dct[model][param] = self.index_dct[model].copy(new_copasi_filename)
                 dct[model][param].save()
                 ##problem with model name needing to be changed everywhere

@@ -56,7 +56,7 @@ class RemoveNonAscii():
         
     def remove_non_ascii(self):
         for i in self.non_ascii_str:
-            if i not in string.ascii_letters+string.digits+r'[]-_().\:/':
+            if i not in string.ascii_letters+string.digits+r'[]-_().\:/ ':
                 self.non_ascii_str=self.non_ascii_str.replace(i,'_')
         return self.non_ascii_str
 
