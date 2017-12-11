@@ -140,6 +140,7 @@ from multiprocessing import Process, Queue
 from math import exp as exponential_function
 import math
 from scipy.interpolate import interp1d
+from itertools import combinations
 LOG=logging.getLogger(__name__)
 
 
@@ -3418,6 +3419,87 @@ class PlotProfileLikelihood(object):
                         plt.show()
 
 
+@mixin(tasks.UpdatePropertiesMixin)
+@mixin(ParseMixin)
+@mixin(TruncateDataMixin)
+@mixin(CreateResultsDirectoryMixin)
+class PearsonsHeatMap(PlotKwargs):
+    """
+
+    ========    =================================================
+    kwarg       Description
+    ========    =================================================
+    **kwargs    see :ref:`kwargs` for more options
+    ========    =================================================
+    """
+
+    def __init__(self, cls, **kwargs):
+        """
+
+        :param cls:
+            Instance of :py:class:`tasks.MultiParameterEstimation`
+            Same as :py:class:`PlotTimeCourseEnsemble`
+
+        :param kwargs:
+        """
+        self.cls = cls
+        self.kwargs = kwargs
+        self.plot_kwargs = self.plot_kwargs()
+
+        self.default_properties = {
+            'x': 'RSS',
+            'y': None,
+            'sep': '\t',
+            'log10': False,
+            'cmap': 'jet_r',
+            'truncate_mode': 'percent',
+            'theta': 100,
+            'xtick_rotation': 'horizontal',
+            'ylabel': 'Frequency',
+            'savefig': False,
+            'results_directory': None,
+            'dpi': 400,
+            'title_fontsize': 35,
+            'title': True,  #Either True or None/False
+            'show': False,
+            'ext': 'png',
+            'despine': True,
+            'color_bar_pad': 0.1,   #padding for color bar. Dist between bar and axes
+            'context': 'talk',
+            'font_scale': 1.5,
+            'rc': None,
+            'copasi_file': None,
+        }
+
+        self.default_properties.update(self.plot_kwargs)
+        for i in kwargs.keys():
+            assert i in self.default_properties.keys(), '{} is not a keyword argument for Scatters'.format(i)
+        self.kwargs = self.default_properties
+        self.default_properties.update(kwargs)
+        self.default_properties.update(self.plot_kwargs)
+        self.update_properties(self.default_properties)
+        self._do_checks()
+        seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
+
+
+        self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
+        self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
+        # self.plot()
+
+        self.get_combinations()
+
+    def _do_checks(self):
+        """
+
+        :return:
+        """
+        if self.results_directory is None:
+            self.results_directory = os.path.join(self.cls.model.root, 'Scatters')
+
+    def get_combinations(self):
+        return combinations(list(self.data.keys()), 2)
+
+    
 
 
 if __name__=='__main__':
