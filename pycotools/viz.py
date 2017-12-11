@@ -1863,7 +1863,7 @@ class LikelihoodRanks(PlotKwargs):
                                    'theta': 100,
                                    'xtick_rotation': 'horizontal',
                                    'ylabel': None,
-                                   'title': 'Likleihood Ranks',
+                                   'title': 'Likelihood-Ranks Plot',
                                    'savefig': False,
                                    'results_directory': None,
                                    'dpi': 400,
@@ -2838,9 +2838,15 @@ class ModelSelection(object):
                         os.path.dirname(MPE.results_directory),
                         '*_0.cps')
                 )[0]
-                dct[cps_1] = Parse(MPE.results_directory,
+                try:
+                    dct[cps_1] = Parse(MPE.results_directory,
                                    copasi_file=cps_1,
                                    log10=self.log10)
+                except ValueError as e:
+                    if str(e) == 'No objects to concatenate':
+                        LOG.warning('All data files are empty for model at "{}". '
+                                    'skipping'.format(MPE))
+                        continue
             return dct
 
     def _get_number_estimated_model_parameters(self):
@@ -2904,7 +2910,6 @@ class ModelSelection(object):
         :return:
             pandas.DataFrame
         """
-        print self.data_dct
         df_dct = {}
         for model_num in range(len(self.model_dct)):
             keys = self.model_dct.keys()

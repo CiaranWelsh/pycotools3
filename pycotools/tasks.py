@@ -2226,12 +2226,17 @@ class ExperimentMapper(object):
         """
         assert isinstance(index, int)
         data = pandas.read_csv(self.experiment_files[index], sep=self.separator[index], skip_blank_lines=False)
+
+        if data.isnull().any().any() == True:
+            raise NotImplementedError('Pycotools detected multiple experiments in "{}". This is not '
+                                      'yet supported. Please rearrange your data so that you have '
+                                      'one experiment file per experiment'.format(self.experiment_files[index]))
+
         #get observables from data. Must be exact match
         obs = list(data.columns)
         num_rows = str(data.shape[0])
         num_columns = str(data.shape[1]) #plus 1 to account for 0 indexed
 
-        LOG.debug('data == \n{}'.format(data))
 
         #if exp_file is in the same directory as copasi_file only use relative path
         if os.path.dirname(self.model.copasi_file) == os.path.dirname(self.experiment_files[index]):
@@ -3956,6 +3961,15 @@ class MultiModelFit(object):
         """
         for MPE in self.MPE_dct:
             self.MPE_dct[MPE].format_results()
+
+    # def insert_best_parameters(self):
+    #     """
+    #     Insert Best parameters for each model into the model
+    #     :return:
+    #     """
+    #     for MPE in self.MPE_dct:
+    #         MPE.model.insert_parameters()
+
 
 
 @mixin(model.GetModelComponentFromStringMixin)
