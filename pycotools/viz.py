@@ -140,7 +140,8 @@ from multiprocessing import Process, Queue
 from math import exp as exponential_function
 import math
 from scipy.interpolate import interp1d
-from itertools import combinations
+from scipy.stats.mstats import pearsonr
+from itertools import combinations, combinations_with_replacement, permutations
 LOG=logging.getLogger(__name__)
 
 
@@ -2198,7 +2199,7 @@ class Histograms(PlotKwargs):
                                    'ext': 'png',
                                    'color': 'green',
                                    'hist': True,
-                                   'kde': True,
+                                   'kde': False,
                                    'rug': False,
                                    'context': 'talk',
                                    'font_scale': 1.5,
@@ -3428,7 +3429,7 @@ class PlotProfileLikelihood(object):
 @mixin(ParseMixin)
 @mixin(TruncateDataMixin)
 @mixin(CreateResultsDirectoryMixin)
-class PearsonsHeatMap(PlotKwargs):
+class PearsonsCorrelation(PlotKwargs):
     """
 
     ========    =================================================
@@ -3456,7 +3457,6 @@ class PearsonsHeatMap(PlotKwargs):
             'y': None,
             'sep': '\t',
             'log10': False,
-            'cmap': 'jet_r',
             'truncate_mode': 'percent',
             'theta': 100,
             'xtick_rotation': 'horizontal',
@@ -3468,17 +3468,32 @@ class PearsonsHeatMap(PlotKwargs):
             'title': True,  #Either True or None/False
             'show': False,
             'ext': 'png',
-            'despine': True,
             'color_bar_pad': 0.1,   #padding for color bar. Dist between bar and axes
             'context': 'talk',
             'font_scale': 1.5,
             'rc': None,
             'copasi_file': None,
+            'cmap': 'BrBG_r',
+            'center': None,
+            'robust': False,
+            'annot': None,
+            'fmt': '.2g',
+            'annot_kws': None,
+            'linewidths':0,
+            'linecolor': 'white',
+            'cbar': True,
+            'cbar_kws': None,
+            'cbar_ax': None,
+            'square' : False,
+            'xticklabels': 'auto',
+            'yticklabels': 'auto',
+            'mask': None,
+            'ax': None,
         }
 
         self.default_properties.update(self.plot_kwargs)
         for i in kwargs.keys():
-            assert i in self.default_properties.keys(), '{} is not a keyword argument for Scatters'.format(i)
+            assert i in self.default_properties.keys(), '{} is not a keyword argument for PearsonsHeatMap'.format(i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
         self.default_properties.update(self.plot_kwargs)
@@ -3491,7 +3506,8 @@ class PearsonsHeatMap(PlotKwargs):
         self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
         # self.plot()
 
-        self.get_combinations()
+        self.combinations = self.get_combinations()
+        self.pearsons, self.p_val = self.do_pearsons()
 
     def _do_checks(self):
         """
@@ -3499,12 +3515,70 @@ class PearsonsHeatMap(PlotKwargs):
         :return:
         """
         if self.results_directory is None:
-            self.results_directory = os.path.join(self.cls.model.root, 'Scatters')
+            self.results_directory = os.path.join(self.cls.model.root, 'PearsonsHeatMap')
 
     def get_combinations(self):
-        return combinations(list(self.data.keys()), 2)
+        return permutations(list(self.data.keys()), 2)
 
-    
+    def do_pearsons(self):
+        """
+
+        :return:
+        """
+        dct = {}
+        for x, y in self.combinations:
+            dct[(x, y)] = pearsonr(self.data[x], self.data[y])
+
+        df = pandas.DataFrame(dct).transpose()#, index=['r2', 'p-val']).transpose()
+        df.columns = ['r2', 'p-val']
+        df.index.name = ['x', 'y']
+        df = df.unstack()
+        df = df.fillna(value=numpy.nan)
+        return df['r2'], df['p-val']
+
+    def heatmap(self):
+
+        data = self.pearsons
+
+        fig = seaborn.heatmap(data=data, cmap=self.cmap,
+                        vmin=-1, vmax=1, center=self.center,
+                        robust=self.robust,
+                        annot=self.annot,
+                        fmt=self.fmt,
+                        annot_kws=self.annot_kws,
+                        linewidths=self.linewidths,
+                        linecolor=self.linecolor,
+                        cbar=self.cbar, cbar_kws=self.cbar_kws,
+                        cbar_ax=self.cbar_ax,
+                        square=self.square,
+                        xticklabels=self.xticklabels,
+                        yticklabels=self.yticklabels,
+                        mask=self.mask,
+                        ax=self.ax,
+                        )
+
+        if self.log10:
+            plt.title('Pearsons Correlation (Log10)')
+
+        else:
+            plt.title('Pearsons Correlation')
+
+        if self.savefig:
+            d = os.path.join(self.results_directory, str(i))
+            d = os.path.join(d, x)
+            self.create_directory(d)
+            fname = os.path.join(d, misc.RemoveNonAscii(y).filter + '.{}'.format(self.ext))
+
+            plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
+            LOG.info('saved to --> {}'.format(fname))
+            pearsons_data_file = os.path.join(d, 'r2_data.csv')
+            p_val_file = os.path.join(d, 'p_val_data.csv')
+            self.pearsons.to_csv(pearsons_data_file, sep='\t')
+            self.p_val.to_csv(p_val_file, sep='\t')
+
+
+        if self.show:
+            plt.show()
 
 
 if __name__=='__main__':

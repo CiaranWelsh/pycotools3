@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-'''
+"""
  This file is part of pycotools.
 
  pycotools is free software: you can redistribute it and/or modify
@@ -24,8 +24,9 @@ Date:
 
  Object:
 
-'''
-
+"""
+import site
+site.addsitedir('/home/b3053674/Documents/pycotools')
 from pycotools import model, viz, tasks, misc
 from pycotools.Tests import test_models
 import unittest
@@ -91,11 +92,13 @@ class PearsonsHeatMapTests(unittest.TestCase):
         self.model = michaelis_menten
 
         import time
-        time.sleep(10)
+        time.sleep(5)
 
 
-    def test_combinations(self):
-        viz.PearsonsHeatMap(self.fit1)
+    def test(self):
+        P = viz.PearsonsHeatMap(self.fit1)
+        print P.pearsons
+        print P.p_val
 
 if __name__ == '__main__':
     unittest.main()

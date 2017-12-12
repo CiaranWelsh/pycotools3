@@ -4082,6 +4082,7 @@ class ProfileLikelihood(object):
         # self.model_dct = self.setup_report()
         self.model_dct = self.setup_parameter_estimation()
 
+
         self.model_dct = self.setup_scan()
         self.to_file()
         # self.model_dct['current_parameters'][r'Ski'].open()
@@ -4294,7 +4295,7 @@ class ProfileLikelihood(object):
         if self.method=='levenberg_marquardt'.lower():
             etree.SubElement(method_element,'Parameter',attrib=iteration_limit)
             etree.SubElement(method_element,'Parameter',attrib=tolerance)
-#
+        #
         if self.method=='nelder_mead'.lower():
             etree.SubElement(method_element,'Parameter',attrib=iteration_limit)
             etree.SubElement(method_element,'Parameter',attrib=tolerance)
@@ -4321,15 +4322,15 @@ class ProfileLikelihood(object):
             etree.SubElement(method_element,'Parameter',attrib=tolerance)
             etree.SubElement(method_element,'Parameter',attrib=random_number_generator)
             etree.SubElement(method_element,'Parameter',attrib=seed)
-#
+        #
         if self.method=='steepest_descent'.lower():
             etree.SubElement(method_element,'Parameter',attrib=iteration_limit)
             etree.SubElement(method_element,'Parameter',attrib=tolerance)
-#
+        #
         if self.method=='truncated_newton'.lower():
             #required no additonal paraemters
             pass
-#
+        #
         if self.method=='scatter_search'.lower():
             etree.SubElement(method_element,'Parameter',attrib=number_of_iterations)
 
@@ -4395,19 +4396,18 @@ class ProfileLikelihood(object):
             dct[model] = {}
             for param in self.x:
                 new_dir = os.path.join(self.results_directory, str(model))
-                param_name = misc.RemoveNonAscii(param).filter.replace(r'/', '_') + '.cps'
-                try:
-                    int(param_name[0])
-                    param_name = '_{}'.format(param_name)
-                except ValueError:
-                    continue
+                param_name = misc.RemoveNonAscii(param).filter + '.cps'
+                #
+                # try:
+                #     int(param_name[0])
+                #     param_name = '_{}'.format(param_name)
+                # except ValueError:
+                #     LOG.warning()
+                #     continue
 
                 new_copasi_filename = os.path.join(new_dir, param_name)
-                LOG.debug('new_copasi_filename --> {}'.format(new_copasi_filename))
                 dct[model][param] = self.index_dct[model].copy(new_copasi_filename)
                 dct[model][param].save()
-                ##problem with model name needing to be changed everywhere
-                # dct[model][param].name = param
         return dct
 
     def make_experiment_files_absolute(self):
@@ -4444,9 +4444,10 @@ class ProfileLikelihood(object):
         for model in self.model_dct:
             count = 0
             for param in self.model_dct[model]:
+                # self.model_dct[model][param].open()
                 ##ascertain which parameter this is
                 for i in self.model_dct[model][param].xml.xpath(query):
-                    count += 1
+                    count = count + 1
                     for j in i:
                         if j.attrib['name'] == 'ObjectCN':
                             ## for globals
@@ -4469,7 +4470,7 @@ class ProfileLikelihood(object):
 
         if count == 0:
             raise errors.NoFitItemsError('Model does not contain any fit items. Please setup a parameter estimation and try again')
-
+        # print count
         ##save is needed
         self.to_file()
 
@@ -4526,7 +4527,7 @@ class ProfileLikelihood(object):
             minimum=parameter_value / self.lower_bound_multiplier,
             maximum=parameter_value * self.lower_bound_multiplier,
             log10=self.log10
-            )
+        )
         )
 
 
