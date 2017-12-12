@@ -59,30 +59,22 @@ Tutorial 4: Single Parameter Estimations
    Tutorials/Tutorial4SingleParameterEstimations
 
 
-Tutorial 5: Multiple Parameter Estimation, analysis and Identifiability Analysis
+Tutorial 5: Parameter Estimation Workflow
+-----------------------------------------
+
+.. toctree::
+   :maxdepth: 1
+   
+   Tutorials/Tutorial5ParameterEstimationWorkflow
+
+Tutorial 6
 ----------
 
 .. toctree::
    :maxdepth: 1
    
-   Tutorials/Tutorial5MultipleParameterEstimations
-
-Tutorial 2
-----------
-
-.. toctree::
-   :maxdepth: 1
-   
-   Tutorials/Tutorial6TheVizModule
-
-Tutorial 2
-----------
-
-.. toctree::
-   :maxdepth: 1
-   
-   Tutorials/Tutorial7InsertParameters
-   
+   Tutorials/Tutorial6InsertParameters
+  
 
 Examples
 ========
