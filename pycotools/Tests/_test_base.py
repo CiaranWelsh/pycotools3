@@ -42,7 +42,7 @@ class _BaseTest(unittest.TestCase):
         self.model = pycotools.model.Model(self.copasi_file)
 
     def tearDown(self):
-        tear_down = False
+        tear_down = True
         delete_dirs = True
 
         if tear_down:

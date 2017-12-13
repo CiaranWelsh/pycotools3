@@ -489,6 +489,10 @@ class Run(object):
 @mixin(CheckIntegrityMixin)
 @mixin(Bool2Numeric)
 class RunParallel(object):
+    """
+
+
+    """
     def __init__(self, models, **kwargs):
         self.models = models
         self.kwargs = kwargs
@@ -2587,7 +2591,7 @@ class ParameterEstimation(object):
                                     to include in the config file
     <report_kwargs>                 Arguments for :ref:`_report_kwargs` are also
                                     accepted here and passed on
-    <experiment_mapper kwargs>      Arguments for :ref:`_experiment_mapper_kwargs` are
+    <experiment_mapper_kwargs>      Arguments for :ref:`_experiment_mapper_kwargs` are
                                     accepted here and passed on
     ===========================     ==================================================
 
@@ -2781,8 +2785,18 @@ class ParameterEstimation(object):
                 LOG.warning('using config start values but randomize start '
                             'values is set to True. ')
 
+        ## if start_value is series make it a df
         if type(self.start_value) is pandas.Series:
-            self.start_value = pandas.DataFrame(self.start_value)#, index=['start_value'])
+            self.start_value = pandas.DataFrame(self.start_value)
+
+        ## if start_value is is pandas dataframe set randomize start values to false
+        ## and use_config_start_values to True
+        if type(self.start_value) is pandas.DataFrame:
+            LOG.info('using user specified starting parameters so setting '
+                     'randomize_start_values to False')
+
+            self.randomize_start_values = '0'
+            self.use_config_start_values = True
 
 
     @property
@@ -3161,6 +3175,7 @@ class ParameterEstimation(object):
         df['upper_bound'] = [self.upper_bound]*df.shape[0]
 
         df = df.set_index('name')
+
         if isinstance(self.start_value, pandas.core.frame.DataFrame):
             if len(self.start_value.columns) != 1:
                 raise errors.InputError('start values should have only one column. Got \n\n{}'.format(self.start_value))
@@ -3209,6 +3224,7 @@ class ParameterEstimation(object):
         subA1={'name': 'Affected Cross Validation Experiments'}
         subA2={'name': 'Affected Experiments'}
         subA3={'type': 'cn',  'name': 'LowerBound',  'value': str(item['lower_bound'])}
+
         if self.use_config_start_values == True:
             subA5={'type': 'float',  'name': 'StartValue',  'value': str(item['start_value'])}
 
@@ -3710,26 +3726,204 @@ class MultiParameterEstimation(ParameterEstimation):
         return models
 
 
-    def run_secondary_locals(self, log10=False, truncate_mode='percent',
-                             theta=100, iteration_limit=100, tolerance=1e-6):
-        """
-        run a secondary local parameter estimation
-        for each
-        :return:
-        """
-        self.method = 'hooke_jeeves'
+    # def run_secondary_locals(self, log10=False, truncate_mode='percent',
+    #                          theta=100, iteration_limit=100, tolerance=1e-6):
+    #     """
+    #     run a secondary local parameter estimation
+    #     using the truncate data facilities to select a subset
+    #     :return:
+    #     """
+    #     self.method = 'hooke_jeeves'
+    #     self.iteration_limit = iteration_limit
+    #     self.tolerance = tolerance
+    #     self.pe_number=1
+    #     data = viz.Parse(self, log10=log10).data
+    #     data = viz.TruncateData(data, mode=truncate_mode, theta=theta).data
+    #     num_to_process = data.shape[0]
+    #     print self.model
+
+
+
+class ChaserParameterEstimations(object):
+    def __init__(self, cls=None, model=None, experiment_files=None, pe_data=None, log10=False, truncate_mode='percent',
+                 theta=100, iteration_limit=100, tolerance=1e-6, results_directory=None,
+                 run_mode=False, max_active=2, **kwargs):
+
+        ## Define class variables
+        self.model = model
+        self.log10 = log10
+        self.experiment_files = experiment_files
+        self.truncate_mode = truncate_mode
+        self.theta = theta
+        self.cls = cls
+        self.pe_data = pe_data
         self.iteration_limit = iteration_limit
         self.tolerance = tolerance
-        self.pe_number=1
-        data = viz.Parse(self, log10=log10).data
-        data = viz.TruncateData(data, mode=truncate_mode, theta=theta).data
-        num_to_process = data.shape[0]
+        self.results_directory = results_directory
+        self.run_mode = run_mode
+        self.max_active = max_active
+        self.kwargs = kwargs
+
+        ## verify integrity of user input
+        self.do_checks()
+
+        ## converge the two routes of user input
+        self._assign_model_and_pe_data_arguments_from_cls()
+
+        if self.results_directory is None:
+            self.results_directory = os.path.join(
+                os.path.dirname(self.model.copasi_file),
+                'ChaserEstimations'
+            )
+
+        LOG.debug('results_directory --> {}'.format(self.results_directory))
+
+        if not os.path.isdir(self.results_directory):
+            os.makedirs(self.results_directory)
+
+        ## Parse the parameter estimation data
+        self.data = self.parse_pe_data()
+
+        ##truncate the data to only parameter sets to improve
+        self.data = viz.TruncateData(self.data,
+                                     mode=self.truncate_mode,
+                                     theta=self.theta).data
+
+        self.pe_dct = self.configure()
+        raise NotImplementedError('Still building this class. Problem with '
+                                  'data file names. Data is currently '
+                                  'being overwritten in one file instead of writing more'
+                                  ' files. Fix this when you can')
 
 
+    def do_checks(self):
+        """
 
-# class RunSecondaryParameterEstimations(object):
-#     def __init__(self):
-#         raise NotImplementedError
+        :return:
+        """
+
+        if self.model is None and self.cls is None and self.pe_data is None:
+            raise errors.InputError('Please give argument to either "cls" which '
+                             'should be an instance of MultiParameterEstimation '
+                             'or arguments to both "model" and "pe_data" which are'
+                             'the model and data you want to use in the chaser estimations')
+
+        if (self.model is not None) and (self.pe_data is None):
+            raise errors.InputError('If you have given argument to '
+                             '"model" argument you need to also'
+                             ' give an argument to "pe_data"')
+
+        if self.pe_data is not None and self.model is None:
+            raise errors.InputError('If you have given argument to '
+                             '"pe_data" argument you need to also'
+                             ' give an argument to "model"')
+
+        if self.model is not None and self.experiment_files is None:
+            raise errors.InputError('If using the "model" argument '
+                                    'please give argument to "experimental_files"')
+
+        if self.cls is not None:
+            if type(self.cls) != MultiParameterEstimation:
+                raise errors.InputError('"cls" argument should '
+                                        'be an instance of MultiParameterEstimation. '
+                                        'got "{}" instead'.format(type(self.cls)))
+
+    def _assign_model_and_pe_data_arguments_from_cls(self):
+        """
+        if argument to cls is not none, assign the model and pe_data
+        from cls (which is of type MultiParameterEstimation)
+        :return:
+        """
+        if self.cls is not None:
+            self.model = self.cls.model
+            self.pe_data = self.cls.results_directory
+            self.experiment_files = self.cls.experiment_files
+
+    def parse_pe_data(self):
+        """
+
+        :return:
+        """
+
+        ## if pe_data is string it shuold be path to folder of pe_data
+        if type(self.pe_data) == str:
+
+            ## A save is required to update the model on file
+            ## with the parameter estimation configuration in self.model
+            self.model.save()
+            data = viz.Parse(self.pe_data, copasi_file=self.model.copasi_file).data
+
+        ## can also already be a dataframe
+        elif type(self.pe_data) == pandas.core.frame.DataFrame:
+            data = viz.Parse(self.pe_data).data
+
+        return data
+
+    def configure(self):
+        """
+        Iterate over parameter sets.
+        :return:
+        """
+        cps_dct = {}
+        ## Iterate over parameter sets
+        for i in range(self.data.shape[0]):
+
+            ## Create new cps name
+            new_cps = self.model.copasi_file[:-4]+'_'+str(i)+'.cps'
+
+            filename = os.path.join(self.results_directory, "PE_data_{}.txt".format(i))
+            LOG.debug('filename is --> {}'.format(filename))
+            LOG.debug('new_cps = {}'.format(new_cps))
+            ## save model to new name
+            mod = self.model.save(new_cps)
+            LOG.debug('mod = {}'.format(mod))
+
+            PE = ParameterEstimation(mod, self.experiment_files, report_name=filename,
+                                method='hooke_jeeves', tolerance=self.tolerance,
+                                iteration_limit=self.iteration_limit, run_mode=False, **self.kwargs)
+
+            cps_dct[new_cps] = PE
+
+
+        return cps_dct
+
+    def setup(self):
+        """
+
+        :return:
+        """
+        for pe in self.pe_dct:
+            LOG.debug('pe report --> {}'.format(self.pe_dct[pe]))#.report_name))
+            self.pe_dct[pe].setup()
+
+
+    def run(self):
+        """
+
+        :return:
+        """
+        ##get models
+        mod_dct = {}
+        for cps in self.pe_dct:
+            LOG.debug(cps)
+            mod_dct[cps] = self.pe_dct[cps].model
+
+        if self.run_mode is False:
+            return mod_dct
+
+        elif self.run_mode is 'parallel':
+            LOG.info('running "{}"'.format(cps))
+            RunParallel(mod_dct.values(), max_active=self.max_active,
+                        take='parameter_estimation')
+
+        else:
+            for cps, mod in mod_dct.items():
+
+                LOG.info('running "{}"'.format(cps))
+                # mod.open()
+                Run(mod, task='parameter_estimation', mode=self.run_mode)
+
+
 
 
 @mixin(UpdatePropertiesMixin)

@@ -1301,7 +1301,6 @@ class PlotTimeCourseEnsemble(object):
             raise errors.InputError('Column in data file called \'time\' or \'Time\' not '
                                     ' detected. Please check your experiment file. The first '
                                     'column should be labelled Time for time course.' )
-        LOG.debug(d)
         times = {}
         for i in d:
             times[i] = {}
@@ -2700,7 +2699,7 @@ class ModelSelection(object):
             'rc': None,
             'bins': None,
             'hist': True,
-            'kde': True,
+            'kde': False,
             'rug': False,
             'fit': None,
             'hist_kws': None,

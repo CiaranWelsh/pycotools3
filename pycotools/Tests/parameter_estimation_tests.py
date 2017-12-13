@@ -172,6 +172,10 @@ class ParameterEstimationTests(_test_base._BaseTest):
         self.model = self.PE.setup()
         # self.model.open()
 
+
+
+
+
 class ParameterEstimationConfigFileTests(_test_base._BaseTest):
     def setUp(self):
         super(ParameterEstimationConfigFileTests, self).setUp()
@@ -380,7 +384,6 @@ class TwoParameterEstimationTests(_test_base._BaseTest):
         for i in PE.model.xml.xpath(query):
             count += 1
         self.assertEqual(count, 2)
-
 
 
 
