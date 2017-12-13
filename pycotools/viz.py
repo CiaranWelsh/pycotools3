@@ -1209,7 +1209,7 @@ class PlotTimeCourseEnsemble(object):
         self.exp_times = self.get_experiment_times
         # print self.simulate_ensemble
         self.ensemble_data = self.simulate_ensemble
-        self.ensemble_data.index = self.ensemble_data.index.rename(['Index','Time'])
+        self.ensemble_data.index = self.ensemble_data.index.rename(['Index', 'Time'])
 
         if self.data_filename != None:
             self.ensemble_data.to_csv(self.data_filename)
@@ -1751,6 +1751,7 @@ class Boxplots(PlotKwargs):
                                    'font_scale': 1.5,
                                    'rc': None,
                                    'copasi_file': None,
+                                   'filename': 'boxplot'
                                    }
         self.default_properties.update(self.plot_kwargs)
         for i in kwargs.keys():
@@ -1807,7 +1808,7 @@ class Boxplots(PlotKwargs):
             if self.savefig:
                 self.results_directory = self.create_directory()
                 fle = os.path.join(self.results_directory,
-                                   'Boxplot{}.{}'.format(label_set, self.ext))
+                                   '{}{}.{}'.format(self.filename, label_set, self.ext))
                 plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
         if self.show:
             plt.show()
@@ -2015,7 +2016,7 @@ class Pca(PlotKwargs):
                                  'results_directory': None,
                                  'dpi': 400,
                                  'n_components': 2,
-                                 'by': 'parameters', ##iterations or parameters
+                                 'by': 'iterations', ##iterations or parameters
                                  'legend_position': None, ##Horizontal, verticle, line spacing
                                  'legend_fontsize': 25,
                                  'cmap': 'viridis',
@@ -3521,10 +3522,10 @@ class PearsonsCorrelation(PlotKwargs):
 
         self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
         self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
-        # self.plot()
 
         self.combinations = self.get_combinations()
         self.pearsons, self.p_val = self.do_pearsons()
+        self.heatmap()
 
     def _do_checks(self):
         """
@@ -3557,22 +3558,26 @@ class PearsonsCorrelation(PlotKwargs):
 
         data = self.pearsons
 
-        fig = seaborn.heatmap(data=data, cmap=self.cmap,
-                        vmin=-1, vmax=1, center=self.center,
-                        robust=self.robust,
-                        annot=self.annot,
-                        fmt=self.fmt,
-                        annot_kws=self.annot_kws,
-                        linewidths=self.linewidths,
-                        linecolor=self.linecolor,
-                        cbar=self.cbar, cbar_kws=self.cbar_kws,
-                        cbar_ax=self.cbar_ax,
-                        square=self.square,
-                        xticklabels=self.xticklabels,
-                        yticklabels=self.yticklabels,
-                        mask=self.mask,
-                        ax=self.ax,
-                        )
+        plt.figure()
+        fig = seaborn.heatmap(data=data,
+                              cmap=self.cmap,
+                              vmin=-1, vmax=1,
+                              center=self.center,
+                              robust=self.robust,
+                              annot=self.annot,
+                              fmt=self.fmt,
+                              annot_kws=self.annot_kws,
+                              linewidths=self.linewidths,
+                              linecolor=self.linecolor,
+                              cbar=self.cbar,
+                              cbar_kws=self.cbar_kws,
+                              cbar_ax=self.cbar_ax,
+                              square=self.square,
+                              xticklabels=self.xticklabels,
+                              yticklabels=self.yticklabels,
+                              mask=self.mask,
+                              ax=self.ax,
+                              )
 
         if self.log10:
             plt.title('Pearsons Correlation (Log10)')
@@ -3581,18 +3586,15 @@ class PearsonsCorrelation(PlotKwargs):
             plt.title('Pearsons Correlation')
 
         if self.savefig:
-            d = os.path.join(self.results_directory, str(i))
-            d = os.path.join(d, x)
-            self.create_directory(d)
-            fname = os.path.join(d, misc.RemoveNonAscii(y).filter + '.{}'.format(self.ext))
+            self.create_directory(self.results_directory)
+            fname = os.path.join(self.results_directory, 'PearsonsHeatmap' + '.{}'.format(self.ext))
 
             plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
             LOG.info('saved to --> {}'.format(fname))
-            pearsons_data_file = os.path.join(d, 'r2_data.csv')
-            p_val_file = os.path.join(d, 'p_val_data.csv')
+            pearsons_data_file = os.path.join(self.results_directory, 'r2_data.csv')
+            p_val_file = os.path.join(self.results_directory, 'p_val_data.csv')
             self.pearsons.to_csv(pearsons_data_file, sep='\t')
             self.p_val.to_csv(p_val_file, sep='\t')
-
 
         if self.show:
             plt.show()
