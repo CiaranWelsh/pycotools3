@@ -2709,6 +2709,7 @@ class ModelSelection(object):
             'vertical': None,
             'norm_hist': False,
             'axlabel': None,
+            'model_labels': None,
             'label': None,
             'ax': None,
             'legend': True,
@@ -2721,16 +2722,29 @@ class ModelSelection(object):
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
         self.update_properties(self.default_properties)
-        self._do_checks()
-
-
-
 
         self._do_checks()
 
         ## do model selection stuff
         self.results_folder_dct = self._get_results_directories()
         self.model_dct = self._get_model_dct()
+
+
+        ## code for having default legend labels
+        self.default_model_labels = {os.path.split(i)[1][:-6]: os.path.split(i)[1][:-6] for i in [j.copasi_file for j in self.model_dct.values()]}
+
+
+        if self.model_labels is not None:
+            if type(self.model_labels) is not dict:
+                raise errors.InputError('model labels should be a dict')
+
+            for label in self.model_labels:
+                if label not in self.default_model_labels:
+                    raise errors.InputError('keys of the model_labels dict should be one of '
+                                            '"{}"'.format(self.default_model_labels))
+        elif self.model_labels is None:
+            self.model_labels = self.default_model_labels
+
         self.data_dct = self._parse_data()
         self.number_model_parameters = self._get_number_estimated_model_parameters()
         self.number_observations = self._get_n()
@@ -2777,6 +2791,8 @@ class ModelSelection(object):
         if self.filename is None:
             save_dir = os.path.join(self.results_directory, 'ModelSelectionGraphs')
             self.filename = os.path.join(save_dir, 'ModelSelectionCriteria.csv')
+
+
 
 
     def _get_results_directories(self):
@@ -2927,10 +2943,10 @@ class ModelSelection(object):
                 bic = self.calculate1BIC(rss.iloc[i], k, n)
                 aic_dct[i] = aic
                 bic_dct[i] = bic
-            aic = pandas.DataFrame.from_dict(aic_dct,orient='index')
+            aic = pandas.DataFrame.from_dict(aic_dct, orient='index')
             rss = pandas.DataFrame(rss)
-            bic = pandas.DataFrame.from_dict(bic_dct,orient='index')
-            df = pandas.concat([rss, aic,bic],axis=1)
+            bic = pandas.DataFrame.from_dict(bic_dct, orient='index')
+            df = pandas.concat([rss, aic, bic], axis=1)
             df.columns = ['RSS', 'AICc', 'BIC']
             df.index.name = 'RSS Rank'
             df_dct[os.path.split(cps_key)[1][:-6]] = df
@@ -2960,9 +2976,10 @@ class ModelSelection(object):
             plt.xlabel(' ')
             if self.despine:
                 seaborn.despine(fig=fig, top=True, right=True)
+
             if self.savefig:
                 save_dir = os.path.join(self.results_directory, 'ModelSelectionGraphs')
-                if os.path.isdir(save_dir)!=True:
+                if os.path.isdir(save_dir) is not True:
                     os.mkdir(save_dir)
                 os.chdir(save_dir)
                 fname = os.path.join(save_dir, 'boxplot_{}.{}'.format(metric, self.ext))
@@ -2985,6 +3002,7 @@ class ModelSelection(object):
         data = data.rename(columns={'level_0': 'Model',
                                     'level_1': 'Metric',
                                     0: 'Score'})
+        LOG.debug('model_labels --> {}'.format(self.model_labels))
         for label, df in data.groupby(by=['Metric']):
             fig = plt.figure()
             for label2, df2 in df.groupby(by='Model'):
@@ -2996,7 +3014,7 @@ class ModelSelection(object):
                     hist=self.hist, kde=self.kde, rug=self.rug, fit=None,
                     hist_kws=self.hist_kws, kde_kws=self.kde_kws, rug_kws=self.rug_kws,
                     color=self.color, vertical=self.vertical, norm_hist=self.norm_hist,
-                    axlabel=self.axlabel, label=label2, ax=self.ax)
+                    axlabel=self.axlabel, label=self.model_labels[label2], ax=self.ax)
                 if self.title:
                     plt.title("{} Score (n={})".format(label, plot_data.shape[0]))
                 plt.ylabel("Frequency")
