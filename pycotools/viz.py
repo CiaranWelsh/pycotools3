@@ -643,8 +643,8 @@ class Parse(object):
                         'is here to remind you that you have removed the try '
                         'except block until you find out which error has replaced '
                         'the pandas.error.EmptyDataError')
-            # try:
-            data = pandas.read_csv(report_name, sep='\t', header=None, skiprows=[0])
+            try:
+                data = pandas.read_csv(report_name, sep='\t', header=None, skiprows=[0])
             # except EmptyDataError:
             #     LOG.warning(
             #         'No Columns to parse from file. {} is empty. '
@@ -652,7 +652,7 @@ class Parse(object):
             #             report_name
             #         )
             #     )
-                continue
+            #     continue
             except CParserError:
                 raise CParserError('Parameter estimation data file is empty')
 
