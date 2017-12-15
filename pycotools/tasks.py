@@ -461,7 +461,7 @@ class Run(object):
         ##TODO find better solution for running copasi files on linux
         os.system('CopasiSE "{}"'.format(self.model.copasi_file))
 
-    def submit_copasi_job_SGE(self, ):
+    def submit_copasi_job_SGE(self):
         """
         Submit copasi file as job to SGE based job scheduler.
         :param copasi_location:
@@ -480,6 +480,24 @@ class Run(object):
         ## -N option for job namexx
         os.system('qsub "{}" -N "{}" '.format(self.sge_job_filename, self.sge_job_filename))
 
+    def submit_copasi_job_slurm(self):
+        """
+        Submit copasi file as job to SGE based job scheduler.
+        :param copasi_location:
+            Location to copasi on the sge cluster. Gets passed to `module add` to load copasi
+
+        :return:
+            None
+        """
+        self.sge_job_filename = self.sge_job_filename.replace('/', '_')
+        with open(self.sge_job_filename, 'w') as f:
+            f.write('#!/bin/bash\n#$ -V -cwd\nmodule add {}\nCopasiSE "{}"'.format(
+                ' COPASI/4.22.170', self.model.copasi_file
+            )
+            )
+
+        ## -N option for job namexx
+        os.system('qsub "{}" -N "{}" '.format(self.sge_job_filename, self.sge_job_filename))
         ## remove .sh file after used.
         # os.remove(self.sge_job_filename)
 

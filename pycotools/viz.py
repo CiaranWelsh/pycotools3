@@ -115,7 +115,6 @@ import contextlib
 import string
 import pandas
 from pandas.parser import CParserError
-from pandas.errors import EmptyDataError
 import matplotlib.pyplot as plt
 import scipy 
 import os
@@ -639,17 +638,20 @@ class Parse(object):
             report_name = os.path.abspath(report_name)
             if os.path.isfile(report_name) != True:
                 raise errors.FileDoesNotExistError('"{}" does not exist'.format(report_name))
-
-            try:
-                data = pandas.read_csv(report_name,
-                                       sep='\t', header=None, skiprows=[0])
-            except EmptyDataError:
-                LOG.warning(
-                    'No Columns to parse from file. {} is empty. '
-                    'Continuing without parsing from this file'.format(
-                        report_name
-                    )
-                )
+            LOG.warning('You have commented out a try except block because '
+                        'pandas has deprecated the error in use. This warning '
+                        'is here to remind you that you have removed the try '
+                        'except block until you find out which error has replaced '
+                        'the pandas.error.EmptyDataError')
+            # try:
+            data = pandas.read_csv(report_name, sep='\t', header=None, skiprows=[0])
+            # except EmptyDataError:
+            #     LOG.warning(
+            #         'No Columns to parse from file. {} is empty. '
+            #         'Continuing without parsing from this file'.format(
+            #             report_name
+            #         )
+            #     )
                 continue
             except CParserError:
                 raise CParserError('Parameter estimation data file is empty')

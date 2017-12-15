@@ -121,13 +121,32 @@ class ChaserParameterEstimationTests(_test_base._BaseTest):
     #
     #     self.assertTrue(bool)
 
-    def test(self):
+    # def test_correct_report_names_in_self_dot_pe_dct(self):
+    #     CPE = tasks.ChaserParameterEstimations(self.MPE, truncate_mode='ranks',
+    #                                            theta=range(2), run_mode=True,
+    #                                            tolerance=1e-1, iteration_limit=5)
+    #     report_names = [os.path.split(i.report_name)[1] for i in CPE.pe_dct.values()]
+    #     self.assertListEqual(report_names, ['PE_data_1.txt', 'PE_data_0.txt'])
+
+    def test_run_is_True(self):
         CPE = tasks.ChaserParameterEstimations(self.MPE, truncate_mode='ranks',
-                                               theta=range(3), run_mode=True,
+                                               theta=range(2), run_mode=True,
                                                tolerance=1e-1, iteration_limit=5)
         CPE.setup()
-
         CPE.run()
+        files = glob.glob(os.path.join(CPE.results_directory, '*.txt'))
+        self.assertEqual(len(files), 2)
+
+    def test_run_is_parallel(self):
+        CPE = tasks.ChaserParameterEstimations(self.MPE, truncate_mode='ranks',
+                                               theta=range(2), run_mode='parallel',
+                                               tolerance=1e-1, iteration_limit=5)
+        CPE.setup()
+        CPE.run()
+        files = glob.glob(os.path.join(CPE.results_directory, '*.txt'))
+        self.assertEqual(len(files), 2)
+
+
 
 
 
