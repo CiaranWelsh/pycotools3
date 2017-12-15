@@ -3175,6 +3175,8 @@ class PlotProfileLikelihood(object):
         ## parse data
         self.data = Parse(self.cls, log10=self.log10, alpha=self.alpha).data
 
+        print self.data.head()
+
         ## do some checks
         self._do_checks()
 

@@ -499,7 +499,6 @@ class RunParallel(object):
         self.default_properties = {
             'max_active': None,
             'task': 'parameter_estimation',
-            'mode': 'multiprocess'
         }
         self.default_properties.update(self.kwargs)
         self.default_properties = self.convert_bool_to_numeric(self.default_properties)
@@ -511,16 +510,10 @@ class RunParallel(object):
         self.models = self.set_task()
         [i.save() for i in self.models]
 
-        # if self.mode is 'multiprocess':
-        # try:
-
         ##TODO put Try except block here once you remember which error
         ##is being raised
         self.run_parallel()
 
-        # else:
-        #     raise ValueError('Mode should be \'multiprocess\' '
-        #                      'to use parallel')
 
     def _do_checks(self):
         """
@@ -536,9 +529,9 @@ class RunParallel(object):
         if self.task not in tasks:
             raise errors.InputError('{} not in list of tasks. List of tasks are: {}'.format(self.task, tasks))
 
-        modes = [False, 'multiprocess']
-        if self.mode not in modes:
-            raise errors.InputError('{} not in {}'.format(self.mode, modes))
+        # modes = [False, 'multiprocess']
+        # if self.mode not in modes:
+        #     raise errors.InputError('{} not in {}'.format(self.mode, modes))
         if not isinstance(self.models, list):
             raise errors.InputError('input should be a list of models to run')
 
@@ -3790,10 +3783,10 @@ class ChaserParameterEstimations(object):
                                      theta=self.theta).data
 
         self.pe_dct = self.configure()
-        raise NotImplementedError('Still building this class. Problem with '
-                                  'data file names. Data is currently '
-                                  'being overwritten in one file instead of writing more'
-                                  ' files. Fix this when you can')
+        # raise NotImplementedError('Still building this class. Problem with '
+        #                           'data file names. Data is currently '
+        #                           'being overwritten in one file instead of writing more'
+        #                           ' files. Fix this when you can')
 
 
     def do_checks(self):
@@ -3865,25 +3858,30 @@ class ChaserParameterEstimations(object):
         :return:
         """
         cps_dct = {}
+        original_cps_filename = self.model.copasi_file
         ## Iterate over parameter sets
         for i in range(self.data.shape[0]):
 
             ## Create new cps name
-            new_cps = self.model.copasi_file[:-4]+'_'+str(i)+'.cps'
+            new_cps = original_cps_filename[:-4]+'_'+str(i)+'.cps'
 
             filename = os.path.join(self.results_directory, "PE_data_{}.txt".format(i))
-            LOG.debug('filename is --> {}'.format(filename))
-            LOG.debug('new_cps = {}'.format(new_cps))
-            ## save model to new name
-            mod = self.model.save(new_cps)
-            LOG.debug('mod = {}'.format(mod))
 
-            PE = ParameterEstimation(mod, self.experiment_files, report_name=filename,
-                                method='hooke_jeeves', tolerance=self.tolerance,
-                                iteration_limit=self.iteration_limit, run_mode=False, **self.kwargs)
+            ## save model to new name and do d
+            mod = deepcopy(self.model.save(new_cps))
+
+            LOG.debug('copasi_file is "{}"'.format(mod.copasi_file))
+
+            PE = ParameterEstimation(mod, self.experiment_files,
+                                     report_name=filename,
+                                     method='hooke_jeeves',
+                                     tolerance=self.tolerance,
+                                     randomize_start_values=False,
+                                     iteration_limit=self.iteration_limit,
+                                     run_mode=False,
+                                     **self.kwargs)
 
             cps_dct[new_cps] = PE
-
 
         return cps_dct
 
@@ -3893,8 +3891,9 @@ class ChaserParameterEstimations(object):
         :return:
         """
         for pe in self.pe_dct:
-            LOG.debug('pe report --> {}'.format(self.pe_dct[pe]))#.report_name))
+            LOG.debug('PE is --> {}'.format(pe))
             self.pe_dct[pe].setup()
+            # self.pe_dct[pe].model.save()
 
 
     def run(self):
@@ -3904,8 +3903,8 @@ class ChaserParameterEstimations(object):
         """
         ##get models
         mod_dct = {}
-        for cps in self.pe_dct:
-            LOG.debug(cps)
+
+        for cps, pe in self.pe_dct.items():
             mod_dct[cps] = self.pe_dct[cps].model
 
         if self.run_mode is False:
@@ -3918,9 +3917,7 @@ class ChaserParameterEstimations(object):
 
         else:
             for cps, mod in mod_dct.items():
-
                 LOG.info('running "{}"'.format(cps))
-                # mod.open()
                 Run(mod, task='parameter_estimation', mode=self.run_mode)
 
 

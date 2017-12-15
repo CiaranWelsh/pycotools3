@@ -326,17 +326,7 @@ class Model(_base._Base):
     #     self.xml = tasks.CopasiMLParser(self.copasi_file).copasiML
     #     return self
 
-    def refresh(self):
-        """
-        Save the file then reload the Model. Can't use the
-        save method though because the save method uses
-        the refresh method.
-        :return:
-        """
-        with open(self.copasi_file, 'w') as f:
-            f.write(etree.tostring(self.xml, pretty_print=True))
 
-        return Model(self.copasi_file)
 
     @property
     def root(self):
@@ -1573,6 +1563,18 @@ class Model(_base._Base):
             del self.__dict__['reactions']
         return self
 
+    def refresh(self):
+        """
+        Save the file then reload the Model. Can't use the
+        save method though because the save method uses
+        the refresh method.
+        :return:
+        """
+        with open(self.copasi_file, 'w') as f:
+            f.write(etree.tostring(self.xml, pretty_print=True))
+
+        return Model(self.copasi_file)
+
     def save(self, copasi_file=None):
         """
         Save copasiML to copasi_filename.
@@ -1599,6 +1601,9 @@ class Model(_base._Base):
         with open(copasi_file, 'w') as f:
             f.write(etree.tostring(self.xml, pretty_print=True))
         # self.xml.getroot().write(copasi_file)
+
+        ## update copasi file for when copasi_file is not None
+        self.copasi_file = copasi_file
         self.refresh()
         return self
 
