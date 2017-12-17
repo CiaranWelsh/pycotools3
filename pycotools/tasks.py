@@ -3539,8 +3539,8 @@ class MultiParameterEstimation(ParameterEstimation):
 
 
     def __str__(self):
-        return 'MultiParameterEstimation(copy_number="{}", pe_number="{}", method="{}", config_filename="{}")'.format(
-            self.copy_number, self.pe_number, self.method, self.config_filename
+        return 'MultiParameterEstimation(copy_number="{}", pe_number="{}", method="{}")'.format(
+            self.copy_number, self.pe_number, self.method
         )
 
     ##void
@@ -3889,7 +3889,7 @@ class ChaserParameterEstimations(object):
             mod = deepcopy(self.model.save(new_cps))
 
             LOG.debug('copasi_file is "{}"'.format(mod.copasi_file))
-
+            mod.insert_parameters(df=self.data, index=i, inplace=True)
             PE = ParameterEstimation(mod, self.experiment_files,
                                      report_name=filename,
                                      method='hooke_jeeves',
@@ -3898,20 +3898,20 @@ class ChaserParameterEstimations(object):
                                      iteration_limit=self.iteration_limit,
                                      run_mode=False,
                                      **self.kwargs)
-
+            PE.setup()
             cps_dct[new_cps] = PE
 
         return cps_dct
 
-    def setup(self):
-        """
-
-        :return:
-        """
-        for pe in self.pe_dct:
-            LOG.debug('PE is --> {}'.format(pe))
-            self.pe_dct[pe].setup()
-            # self.pe_dct[pe].model.save()
+    # def setup(self):
+    #     """
+    #
+    #     :return:
+    #     """
+    #     for pe in self.pe_dct:
+    #         LOG.debug('PE is --> {}'.format(pe))
+    #         self.pe_dct[pe].setup()
+    #         # self.pe_dct[pe].model.save()
 
 
     def run(self):

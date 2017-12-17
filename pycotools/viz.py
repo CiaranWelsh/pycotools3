@@ -638,21 +638,23 @@ class Parse(object):
             report_name = os.path.abspath(report_name)
             if os.path.isfile(report_name) != True:
                 raise errors.FileDoesNotExistError('"{}" does not exist'.format(report_name))
-            LOG.warning('You have commented out a try except block because '
-                        'pandas has deprecated the error in use. This warning '
-                        'is here to remind you that you have removed the try '
-                        'except block until you find out which error has replaced '
-                        'the pandas.error.EmptyDataError')
+            # LOG.warning('You have commented out a try except block because '
+            #             'pandas has deprecated the error in use. This warning '
+            #             'is here to remind you that you have removed the try '
+            #             'except block until you find out which error has replaced '
+            #             'the pandas.error.EmptyDataError')
             try:
                 data = pandas.read_csv(report_name, sep='\t', header=None, skiprows=[0])
-            # except EmptyDataError:
-            #     LOG.warning(
-            #         'No Columns to parse from file. {} is empty. '
-            #         'Continuing without parsing from this file'.format(
-            #             report_name
-            #         )
-            #     )
-            #     continue
+            except ValueError as e:
+                if str(e) == 'No columns to parse from file':
+                    LOG.warning(
+                        'No Columns to parse from file. {} is empty. '
+                        'Continuing without parsing from this file'.format(
+                            report_name
+                        )
+                    )
+                else:
+                    raise ValueError(e)
             except CParserError:
                 raise CParserError('Parameter estimation data file is empty')
 
@@ -2850,23 +2852,22 @@ class ModelSelection(object):
             return pandas.read_pickle(self.pickle)
         else:
             dct={}
-            for MPE in self.multi_model_fit:
-
-                ## get the first cps file configured for eastimation in each MMF obj
-                cps_1 = glob.glob(
-                    os.path.join(
-                        os.path.dirname(MPE.results_directory),
-                        '*_0.cps')
-                )[0]
+            for cps, MPE in self.multi_model_fit.items():
+                cps_0 = cps[:-4]+'_0.cps'
                 try:
-                    dct[cps_1] = Parse(MPE.results_directory,
-                                   copasi_file=cps_1,
+                    dct[cps_0] = Parse(MPE.results_directory,
+                                   copasi_file=cps_0,
                                    log10=self.log10)
                 except ValueError as e:
                     if str(e) == 'No objects to concatenate':
                         LOG.warning('All data files are empty for model at "{}". '
                                     'skipping'.format(MPE))
-                        continue
+                        # continue
+                    elif str(e) == 'No columns to parse from file':
+                        LOG.warning('ValueError Was raised because some data files are empty')
+
+                    else:
+                        raise ValueError(e)
             return dct
 
     def _get_number_estimated_model_parameters(self):
@@ -2937,7 +2938,6 @@ class ModelSelection(object):
 
             k = self.number_model_parameters[cps_key]
             n = self.number_observations #constant throughout analysis
-
             rss = self.data_dct[cps_key].data.RSS
             aic_dct = {}
             bic_dct = {}
@@ -3005,7 +3005,6 @@ class ModelSelection(object):
         data = data.rename(columns={'level_0': 'Model',
                                     'level_1': 'Metric',
                                     0: 'Score'})
-        LOG.debug('model_labels --> {}'.format(self.model_labels))
         for label, df in data.groupby(by=['Metric']):
             fig = plt.figure()
             for label2, df2 in df.groupby(by='Model'):
