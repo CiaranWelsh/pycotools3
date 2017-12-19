@@ -431,7 +431,8 @@ class Parse(object):
                           str,
                           Parse,
                           tasks.ProfileLikelihood,
-                          pandas.DataFrame]
+                          pandas.DataFrame,
+                          tasks.ChaserParameterEstimations]
 
         if type(self.cls_instance) not in accepted_types:
             raise errors.InputError('{} not in {}'.format(
@@ -473,6 +474,8 @@ class Parse(object):
         elif type(self.cls_instance) == tasks.ProfileLikelihood:
             data = self.from_profile_likelihood()
 
+        elif type(self.cls_instance) == tasks.ChaserParameterEstimations:
+            data = self.from_chaser_estimations(self.cls_instance)
 
         elif type(self.cls_instance) == pandas.core.frame.DataFrame:
             data = self.cls_instance
@@ -612,6 +615,58 @@ class Parse(object):
 
         return df.reset_index(drop=True)
 
+    # @cached_property
+    def from_chaser_estimations(self, cls_instance, folder=None):
+        """
+        :return:
+        """
+
+        if folder == None:
+            folder = cls_instance.results_directory
+
+        d = []
+
+        report_names = glob.glob(os.path.join(folder, '*.txt'))
+        for report_name in report_names:
+            # report_name = os.path.abspath(report_name)
+            if os.path.isfile(report_name) is not True:
+                raise errors.FileDoesNotExistError('"{}" does not exist'.format(report_name))
+
+            # df = pandas.read_csv(report_name, sep='\t', header=None)
+            # print df
+            # d.append(df)
+            try:
+                df = pandas.read_csv(report_name, sep='\t', header=None)
+                if '(' in list(df.iloc[0]):
+                    raise errors.NonFormattedPEFileError
+
+                d.append(df)
+            #
+            #     # raise NotImplementedError('Still developing this function to read data from CPE')
+            #
+            except errors.NonFormattedPEFileError:
+                df = pandas.read_csv(
+                    report_name,
+                    sep='\t', header=None,
+                )
+
+                data = df.drop(df.columns[0], axis=1)
+                width = data.shape[1]
+            #     # remove the extra bracket
+                data[width] = data[width].str[1:]
+                names = self.cls_instance.model.fit_item_order + ['RSS']
+                data.columns = names
+                # os.remove(report_name)
+                # data.to_csv(report_name,
+                #             sep='\t',
+                #             index=False)
+            #     # d[report_name] = data
+                d.append(data)
+
+        df = pandas.concat(d)
+        df = df.sort_values(by='RSS').reset_index(drop=True)
+        return df
+
     def from_folder(self):
         """
         
@@ -643,8 +698,14 @@ class Parse(object):
             #             'is here to remind you that you have removed the try '
             #             'except block until you find out which error has replaced '
             #             'the pandas.error.EmptyDataError')
+
+            # data = pandas.read_csv(report_name, sep='\t', header=None, skiprows=[0])
+            # LOG.debug('data --> {}'.format(data))
+            # data = pandas.read_csv(report_name, sep='\t', header=None)
             try:
                 data = pandas.read_csv(report_name, sep='\t', header=None, skiprows=[0])
+                read_type = 'multi_parameter_estimation'
+
             except ValueError as e:
                 if str(e) == 'No columns to parse from file':
                     LOG.warning(
@@ -653,19 +714,49 @@ class Parse(object):
                             report_name
                         )
                     )
-                else:
-                    raise ValueError(e)
+
+                try:
+                    data = pandas.read_csv(report_name, sep='\t', header=None)
+                    read_type = 'parameter_estimation'
+                except ValueError as e:
+                    if str(e) == 'No columns to parse from file':
+                        LOG.warning(
+                            'No Columns to parse from file. {} is empty. '
+                            'Continuing without parsing from this file'.format(
+                                report_name
+                            )
+                        )
+                        continue
+                    else:
+                        raise ValueError(e)
+
             except CParserError:
                 raise CParserError('Parameter estimation data file is empty')
 
-            bracket_columns = data[data.columns[[0, -2]]]
-            if bracket_columns.iloc[0].iloc[0] != '(':
-                data = pandas.read_csv(report_name, sep='\t')
-                d[report_name] = data
-            else:
-                data = data.drop(data.columns[[0, -2]], axis=1)
-                data.columns = range(data.shape[1])
-                ### parameter of interest has been removed.
+            if read_type == 'multi_parameter_estimation':
+                bracket_columns = data[data.columns[[0, -2]]]
+                if bracket_columns.iloc[0].iloc[0] != '(':
+                    data = pandas.read_csv(report_name, sep='\t')
+                    d[report_name] = data
+                else:
+                    data = data.drop(data.columns[[0, -2]], axis=1)
+                    data.columns = range(data.shape[1])
+                    ### parameter of interest has been removed.
+                    names = m.fit_item_order + ['RSS']
+                    if len(names) != data.shape[1]:
+                        raise errors.SomethingWentHorriblyWrongError(
+                            'length of parameter estimation data does not equal number of parameters estimated')
+
+                    if os.path.isfile(report_name):
+                        os.remove(report_name)
+                    data.columns = names
+                    data.to_csv(report_name, sep='\t', index=False)
+                    d[report_name] = data
+
+            elif read_type == 'parameter_estimation':
+                left_bracket_columns = data[data.columns[0]]
+                data = data.drop(data.columns[0], axis=1)
+                data[data.columns[-1]] = float(data[data.columns[-1]].str[1:][0])
                 names = m.fit_item_order + ['RSS']
                 if len(names) != data.shape[1]:
                     raise errors.SomethingWentHorriblyWrongError(
@@ -676,6 +767,7 @@ class Parse(object):
                 data.columns = names
                 data.to_csv(report_name, sep='\t', index=False)
                 d[report_name] = data
+
         df = pandas.concat(d)
         columns = df.columns
         ## reindex, drop and sort by RSS
@@ -2854,20 +2946,24 @@ class ModelSelection(object):
             dct={}
             for cps, MPE in self.multi_model_fit.items():
                 cps_0 = cps[:-4]+'_0.cps'
-                try:
-                    dct[cps_0] = Parse(MPE.results_directory,
-                                   copasi_file=cps_0,
-                                   log10=self.log10)
-                except ValueError as e:
-                    if str(e) == 'No objects to concatenate':
-                        LOG.warning('All data files are empty for model at "{}". '
-                                    'skipping'.format(MPE))
-                        # continue
-                    elif str(e) == 'No columns to parse from file':
-                        LOG.warning('ValueError Was raised because some data files are empty')
-
-                    else:
-                        raise ValueError(e)
+                dct[cps_0] = Parse(MPE.results_directory, copasi_file=cps_0, log10=self.log10)
+                # try:
+                #     dct[cps_0] = Parse(MPE.results_directory,
+                #                    copasi_file=cps_0,
+                #                    log10=self.log10)
+                # except ValueError as e:
+                #     if str(e) == 'No objects to concatenate':
+                #         LOG.warning('All data files are empty for model at "{}". '
+                #                     'skipping'.format(MPE))
+                #         # continue
+                #     elif str(e) == 'No columns to parse from file':
+                #         LOG.warning('ValueError Was raised because some data files are empty. Skipping these files.')
+                #
+                #     # elif str(e) == 'could not convert string to float: askList[Parameter Estimation].(Problem)Parameter Estimation.Best Value':
+                #     #     LOG.warning('ValueError Was raised because some data files are empty. Skipping these files.')
+                #
+                #     else:
+                #         raise ValueError(e)
             return dct
 
     def _get_number_estimated_model_parameters(self):

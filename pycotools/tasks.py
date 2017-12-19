@@ -3888,7 +3888,6 @@ class ChaserParameterEstimations(object):
             ## save model to new name and do d
             mod = deepcopy(self.model.save(new_cps))
 
-            LOG.debug('copasi_file is "{}"'.format(mod.copasi_file))
             mod.insert_parameters(df=self.data, index=i, inplace=True)
             PE = ParameterEstimation(mod, self.experiment_files,
                                      report_name=filename,
