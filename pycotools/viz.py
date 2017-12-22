@@ -488,8 +488,13 @@ class Parse(object):
         elif type(self.cls_instance == str):
             data = self.from_folder()
 
+        #
+        # LOG.debug('type data : {}'.format(type(data)))
+        # LOG.debug('data : {}'.format(data))
         if self.log10:
             if not type(self.cls_instance) == tasks.ProfileLikelihood:
+                # LOG.debug(data)
+                # LOG.debug('type {}'.format(type(self.cls_instance)))
                 data = numpy.log10(data)
                 return data
             else:
@@ -636,11 +641,19 @@ class Parse(object):
             # print df
             # d.append(df)
             try:
+                ## read df without header
                 df = pandas.read_csv(report_name, sep='\t', header=None)
+
+                ## if first column is brckets we have raw copasi output which needs
+                ## formatting. Raise the error and then pick up from below
                 if '(' in list(df.iloc[0]):
                     raise errors.NonFormattedPEFileError
 
+                ## if data already formatted, set the index to top column
+                ## before adding to list to concat below
+                df = df.transpose().set_index(0).transpose()
                 d.append(df)
+
             #
             #     # raise NotImplementedError('Still developing this function to read data from CPE')
             #
@@ -665,7 +678,7 @@ class Parse(object):
 
         df = pandas.concat(d)
         df = df.sort_values(by='RSS').reset_index(drop=True)
-        return df
+        return df.apply(pandas.to_numeric)#astype('float')
 
     def from_folder(self):
         """
@@ -1355,11 +1368,19 @@ class PlotTimeCourseEnsemble(object):
         :return:
         """
         df_dct = {}
-
+        LOG.debug('tpe self.cls parse --> {}'.format(self.cls))
         if type(self.cls) == Parse:
             exp_files = self.experiment_files
+
+        elif type(self.cls) is pandas.core.frame.DataFrame:
+            exp_files = self.experiment_files
+
         else:
             exp_files = self.cls.experiment_files
+
+        if exp_files is None:
+            raise errors.InputError('if input class is Parse or pandas.DataFrame object '
+                                    'experiment_files argument cannot be None')
 
         ## if exp_files is empty then read_csv would not be called
         for i in range(len(exp_files)):
@@ -3244,13 +3265,14 @@ class PlotProfileLikelihood(object):
                                    'xlabel': None,
                                    'ylabel': None,
                                    'legend': False,
-                                   'legend_location': None,
+                                   'legend_loc': None,
                                    'show': False,
                                    'separate': True,
                                    'filename': None,
                                    'despine': True,
                                    'ext': 'png',
-                                   'show_original_rss': False,
+                                   'show_best_rss': True,
+                                   'best_rss_marker': 'k*', ##Any matplotlib marker
                                    'ylim': None,
                                    'xlim': None,
                                    'interpolation': None,
@@ -3272,7 +3294,7 @@ class PlotProfileLikelihood(object):
         ## parse data
         self.data = Parse(self.cls, log10=self.log10, alpha=self.alpha).data
 
-        print self.data.head()
+        # print self.data.head()
 
         ## do some checks
         self._do_checks()
@@ -3412,10 +3434,10 @@ class PlotProfileLikelihood(object):
                              plot_data['Confidence Level'], linewidth=3,
                              linestyle='--', color='green', label='CL')
 
-                    if self.show_original_rss:
+                    if self.show_best_rss:
                         best_rss = list(set(plot_data['Best RSS Value']))
                         best_param_val = list(set(plot_data['Best Parameter Value']))
-                        plt.plot(best_param_val, best_rss, 'g*', linewidth=5,
+                        plt.plot(best_param_val, best_rss, self.best_rss_marker, linewidth=5,
                                  markersize=12)
 
                     if self.legend:
@@ -3427,11 +3449,16 @@ class PlotProfileLikelihood(object):
                     if self.despine:
                         seaborn.despine(fig=fig, top=True, right=True)
 
-                    # if self.title is None:
-                    self.title = 'Profile Likelihoods for\n{} ' \
+                    if self.title is None:
+                        self.title = 'Profile Likelihoods for\n{} ' \
                                      'against {} (index={})'.format(x, y, i)
 
-                    plt.title(self.title)
+                    elif self.title is 'profile':
+                        self.title = x
+
+                    else:
+                        plt.title(self.title)
+
                     if self.log10:
                         plt.ylabel('log10 {}'.format(y))
                         plt.xlabel('log10 {}'.format(x))
@@ -3496,10 +3523,11 @@ class PlotProfileLikelihood(object):
                              plot_data['Confidence Level'], linewidth=3,
                              linestyle='--', color='green', label='CL')
 
-                    if self.show_original_rss:
+
+                    if self.show_best_rss:
                         best_rss = list(set(plot_data['Best RSS Value']))
                         best_param_val = list(set(plot_data['Best Parameter Value']))
-                        plt.plot(best_param_val, best_rss, 'g*', linewidth=5,
+                        plt.plot(best_param_val, best_rss, self.best_rss_marker, linewidth=5,
                                  markersize=12)
 
                     if self.legend:
@@ -3511,11 +3539,16 @@ class PlotProfileLikelihood(object):
                     if self.despine:
                         seaborn.despine(fig=fig, top=True, right=True)
 
-                    # if self.title is None:
-                    self.title = 'Profile Likelihoods for\n{} ' \
+                    if self.title is None:
+                        self.title = 'Profile Likelihoods for\n{} ' \
                                      'against {} (index={})'.format(x, y, i)
 
-                    plt.title(self.title)
+                    elif self.title is 'profile':
+                        self.title = x
+
+                    else:
+                        plt.title(self.title)
+
                     if self.log10:
                         plt.ylabel('log10 {}'.format(y))
                         plt.xlabel('log10 {}'.format(x))

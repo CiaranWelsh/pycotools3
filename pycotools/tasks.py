@@ -366,8 +366,12 @@ class Run(object):
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
         self._do_checks()
 
+
         if self.sge_job_filename == None:
             self.sge_job_filename = os.path.join(os.getcwd(), 'sge_job_file.sh')
+
+        if 'mode' is 'slurm':
+            self.copasi_location = r'COPASI/4.22.170'
 
         self.model = self.set_task()
         self.model.save()
@@ -491,13 +495,13 @@ class Run(object):
         """
         self.sge_job_filename = self.sge_job_filename.replace('/', '_')
         with open(self.sge_job_filename, 'w') as f:
-            f.write('#!/bin/bash\n#$ -V -cwd\nmodule add {}\nCopasiSE "{}"'.format(
-                ' COPASI/4.22.170', self.model.copasi_file
+            f.write('#!/bin/bash\n#$ \nmodule add {}\nCopasiSE "{}"'.format(
+                self.copasi_location, self.model.copasi_file
             )
             )
 
         ## -N option for job namexx
-        os.system('qsub "{}" -N "{}" '.format(self.sge_job_filename, self.sge_job_filename))
+        os.system('sbatch "{}"  --job-name "{}"'.format(self.sge_job_filename, self.sge_job_filename))
         ## remove .sh file after used.
         # os.remove(self.sge_job_filename)
 
