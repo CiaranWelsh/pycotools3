@@ -116,6 +116,7 @@ import string
 import pandas
 from pandas.parser import CParserError
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
 import scipy 
 import os
 import matplotlib
@@ -574,7 +575,8 @@ class Parse(object):
         if folder == None:
             folder = cls_instance.results_directory
         d = {}
-        for report_name in glob.glob(folder+r'/*'):
+
+        for report_name in glob.glob(folder+r'/*.txt'):
             report_name = os.path.abspath(report_name)
             if os.path.isfile(report_name) != True:
                 raise errors.FileDoesNotExistError('"{}" does not exist'.format(report_name))
@@ -676,6 +678,10 @@ class Parse(object):
             #     # d[report_name] = data
                 d.append(data)
 
+            except ValueError as e:
+                if str(e) == 'No columns to parse from file':
+                    LOG.info('Empty file "{}". Skipping'.format(report_name))
+
         df = pandas.concat(d)
         df = df.sort_values(by='RSS').reset_index(drop=True)
         return df.apply(pandas.to_numeric)#astype('float')
@@ -718,6 +724,7 @@ class Parse(object):
             try:
                 data = pandas.read_csv(report_name, sep='\t', header=None, skiprows=[0])
                 read_type = 'multi_parameter_estimation'
+                # LOG.debug('data -- > {}'.format(data))
 
             except ValueError as e:
                 if str(e) == 'No columns to parse from file':
@@ -727,7 +734,7 @@ class Parse(object):
                             report_name
                         )
                     )
-
+                    continue
                 try:
                     data = pandas.read_csv(report_name, sep='\t', header=None)
                     read_type = 'parameter_estimation'
@@ -769,6 +776,8 @@ class Parse(object):
             elif read_type == 'parameter_estimation':
                 left_bracket_columns = data[data.columns[0]]
                 data = data.drop(data.columns[0], axis=1)
+                # LOG.debug('file is --> {}'.format(report_name))
+                # LOG.debug('data --> {}'.format(data))
                 data[data.columns[-1]] = float(data[data.columns[-1]].str[1:][0])
                 names = m.fit_item_order + ['RSS']
                 if len(names) != data.shape[1]:
@@ -1245,6 +1254,16 @@ class PlotTimeCourseEnsemble(object):
                         parameter estimation in order to extract parameter headers
     **kwargs            see :ref:`kwargs` for savefig options
     ================    ==========================================================
+
+
+    #todo
+    =====
+    Currently initial values are used as starting conditions but in some situations
+    like when independent variables are used to set starting parameters for an experiment
+    this is not being captured in the ensemble time course.
+
+    Therefore, modify to follow directions in data files from independent data. Also run
+    multiple times if you have multiple experiments measuring the same varibale.
     """
 
     def __init__(self, cls, **kwargs):
@@ -1987,7 +2006,7 @@ class LikelihoodRanks(PlotKwargs):
                                    'results_directory': None,
                                    'dpi': 400,
                                    'show': False,
-                                   'filename': 'LikelihoodRanks.pdf',
+                                   'filename': 'LikelihoodRanks',
                                    'despine': True,
                                    'ext': 'png',
                                    'line_transparency': 1, ##passed to matplotlib alpha parameter
@@ -2083,7 +2102,7 @@ class LikelihoodRanks(PlotKwargs):
             seaborn.despine(fig=fig, top=True, right=True)
         if self.savefig:
             self.results_directory = self.create_directory()
-            fle = os.path.join(self.results_directory, 'LikelihoodRank.{}'.format(self.ext))
+            fle = os.path.join(self.results_directory, '{}.{}'.format(self.filename, self.ext))
             plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
 
         if self.show:
@@ -3456,8 +3475,7 @@ class PlotProfileLikelihood(object):
                     elif self.title is 'profile':
                         self.title = x
 
-                    else:
-                        plt.title(self.title)
+                    plt.title(self.title)
 
                     if self.log10:
                         plt.ylabel('log10 {}'.format(y))
@@ -3489,6 +3507,531 @@ class PlotProfileLikelihood(object):
 
         :return:
         """
+        for x in self.x:
+            for y in self.y:
+                if self.multiplot:
+                    fig = plt.figure()
+                for i in self.index:
+                    plot_data = self.data.loc[x, i][y]
+                    if type(plot_data) == pandas.Series:
+                        plot_data = pandas.DataFrame(plot_data)
+
+                    if not self.multiplot:
+                        fig = plt.figure()
+
+                    plot_data = plot_data.reset_index()
+
+                    x_plot = plot_data['Parameter Of Interest Value']
+                    y_plot = plot_data[y]
+
+                    if self.interpolation is not None:
+                        f = interp1d(x_plot, y_plot, kind=self.interpolation)
+                        minimum = x_plot.min()
+                        maximum = x_plot.max()
+                        step = (maximum - minimum) / self.interpolation_resolution
+                        xnew = numpy.arange(start=minimum, stop=maximum, step=step)
+                        ynew = f(xnew)
+                        plt.plot(xnew, ynew, 'k')
+                        plt.plot(x_plot, y_plot, 'ro', label=y, linewidth=2)  # linestyle='o', color='red')
+                    else:
+                        plt.plot(x_plot, y_plot, label=y, marker='o')
+
+                    if y is 'RSS':
+                        plt.plot(plot_data['Parameter Of Interest Value'],
+                             plot_data['Confidence Level'], linewidth=3,
+                             linestyle='--', color='green', label='CL')
+
+
+                    if self.show_best_rss:
+                        best_rss = list(set(plot_data['Best RSS Value']))
+                        best_param_val = list(set(plot_data['Best Parameter Value']))
+                        plt.plot(best_param_val, best_rss, self.best_rss_marker, linewidth=5,
+                                 markersize=12)
+
+                    if self.legend:
+                        if self.legend_loc is not None:
+                            plt.legend(loc=self.legend_loc)
+                        else:
+                            plt.legend(loc='best')
+
+                    if self.despine:
+                        seaborn.despine(fig=fig, top=True, right=True)
+
+                    # LOG.debug('title is --> {}'.format(self.title))
+                    # if self.title is None:
+                    self.title = 'Profile Likelihoods for\n{} ' \
+                                 'against {} (index={})'.format(x, y, i)
+
+                    # elif self.title is 'profile':
+                    #     self.title = x
+
+                    plt.title(self.title)
+
+                    if self.log10:
+                        plt.ylabel('log10 {}'.format(y))
+                        plt.xlabel('log10 {}'.format(x))
+                    else:
+                        plt.ylabel(y)
+                        plt.xlabel(x)
+
+                    if self.ylim is not None:
+                        plt.ylim(self.ylim)
+
+                    if self.xlim is not None:
+                        plt.xlim(self.xlim)
+
+                    if self.savefig:
+                        d = os.path.join(self.results_directory, str(i))
+                        d = os.path.join(d, x)
+                        self.create_directory(d)
+                        fname = os.path.join(d, misc.RemoveNonAscii(y).filter + '.{}'.format(self.ext))
+
+                        plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
+                        LOG.info('saved to --> {}'.format(fname))
+
+                    if self.show:
+                        plt.show()
+
+    def plot_pdf(self):
+        """
+
+        :return:
+        """
+        raise NotImplementedError
+        # with PdfPages()
+        for x in self.x:
+            for y in self.y:
+                if self.multiplot:
+                    fig = plt.figure()
+                for i in self.index:
+                    plot_data = self.data.loc[x, i][y]
+                    if type(plot_data) == pandas.Series:
+                        plot_data = pandas.DataFrame(plot_data)
+
+                    if not self.multiplot:
+                        fig = plt.figure()
+
+                    plot_data = plot_data.reset_index()
+
+                    x_plot = plot_data['Parameter Of Interest Value']
+                    y_plot = plot_data[y]
+
+                    if self.interpolation is not None:
+                        f = interp1d(x_plot, y_plot, kind=self.interpolation)
+                        minimum = x_plot.min()
+                        maximum = x_plot.max()
+                        step = (maximum - minimum) / self.interpolation_resolution
+                        xnew = numpy.arange(start=minimum, stop=maximum, step=step)
+                        ynew = f(xnew)
+                        plt.plot(xnew, ynew, 'k')
+                        plt.plot(x_plot, y_plot, 'ro', label=y, linewidth=2)  # linestyle='o', color='red')
+                    else:
+                        plt.plot(x_plot, y_plot, label=y, marker='o')
+
+                    if y is 'RSS':
+                        plt.plot(plot_data['Parameter Of Interest Value'],
+                             plot_data['Confidence Level'], linewidth=3,
+                             linestyle='--', color='green', label='CL')
+
+
+                    if self.show_best_rss:
+                        best_rss = list(set(plot_data['Best RSS Value']))
+                        best_param_val = list(set(plot_data['Best Parameter Value']))
+                        plt.plot(best_param_val, best_rss, self.best_rss_marker, linewidth=5,
+                                 markersize=12)
+
+                    if self.legend:
+                        if self.legend_loc is not None:
+                            plt.legend(loc=self.legend_loc)
+                        else:
+                            plt.legend(loc='best')
+
+                    if self.despine:
+                        seaborn.despine(fig=fig, top=True, right=True)
+
+                    if self.title is None:
+                        self.title = 'Profile Likelihoods for\n{} ' \
+                                     'against {} (index={})'.format(x, y, i)
+
+                    elif self.title is 'profile':
+                        self.title = x
+
+                    else:
+                        plt.title(self.title)
+
+                    if self.log10:
+                        plt.ylabel('log10 {}'.format(y))
+                        plt.xlabel('log10 {}'.format(x))
+                    else:
+                        plt.ylabel(y)
+                        plt.xlabel(x)
+
+                    if self.ylim is not None:
+                        plt.ylim(self.ylim)
+
+                    if self.xlim is not None:
+                        plt.xlim(self.xlim)
+
+                    if self.savefig:
+                        d = os.path.join(self.results_directory, str(i))
+                        d = os.path.join(d, x)
+                        self.create_directory(d)
+                        fname = os.path.join(d, misc.RemoveNonAscii(y).filter + '.{}'.format(self.ext))
+
+                        plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
+                        LOG.info('saved to --> {}'.format(fname))
+
+                    if self.show:
+                        plt.show()
+
+@mixin(tasks.UpdatePropertiesMixin)
+@mixin(ParseMixin)
+@mixin(TruncateDataMixin)
+@mixin(CreateResultsDirectoryMixin)
+class PlotProfileLikelihood3d(object):
+    """
+
+    """
+    def __init__(self, cls, data=None, **kwargs):
+        """
+        Plot profile likelihoods
+        :param data:
+        :param kwargs:
+        """
+        self.cls = cls
+
+
+        self.default_properties = {'x': None,
+                                   'y': None, #can equal all
+                                   'z': None,
+                                   'index': None,
+                                   'log10': True,
+                                   'savefig': False,
+                                   'results_directory': None,
+                                   'dpi': 400,
+                                   'plot_cl': True,
+                                   'alpha': 0.95,
+                                   'title': None,
+                                   'xlabel': None,
+                                   'ylabel': None,
+                                   'legend': False,
+                                   'legend_loc': None,
+                                   'show': False,
+                                   'separate': True,
+                                   'filename': None,
+                                   'despine': True,
+                                   'ext': 'png',
+                                   'show_best_rss': True,
+                                   'best_rss_marker': 'k*', ##Any matplotlib marker
+                                   'ylim': None,
+                                   'xlim': None,
+                                   'interpolation': None,
+                                   'interpolation_resolution': 1000, #number of steps to interpolate
+                                   'context': 'talk',
+                                   'font_scale': 1,
+                                   'rc': None,
+                                   'multiplot': False,
+                                   'same_axis': False,
+                                   }
+        # raise NotImplementedError('Not yet implemented')
+
+        ## todo - colour plots by RSS
+        for i in kwargs.keys():
+            assert i in self.default_properties.keys(), '{} is not a keyword argument for PlotProfileLikelihood'.format(i)
+        self.kwargs = self.default_properties
+        self.default_properties.update(kwargs)
+        self.update_properties(self.default_properties)
+        seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
+
+        ## parse data
+        self.data = Parse(self.cls, log10=self.log10, alpha=self.alpha).data
+
+        # print self.data.head()
+
+        ## do some checks
+        self._do_checks()
+
+        ## do plotting
+        if self.same_axis:
+            self.plot_same_axis()
+        else:
+            self.plot()
+        ##todo implement ability to change confidence level from Plot.
+        ##at the moment the CL is conputer by Parse. This is not optimal
+
+    def _do_checks(self):
+        """
+
+        :return:
+        """
+        ## todo put original estimatd values on non rss graphs as well
+        if self.ylim is not None:
+            if not isinstance(self.ylim, tuple):
+                raise errors.InputError('ylim arg should be tuple. Got "{}"'.format(type(self.ylim)))
+
+            if len(self.ylim) is not 2:
+                raise errors.InputError('ylim arg should be tuple of length 2. '
+                                        'See "https://matplotlib.org/devdocs/api/_as_gen/matplotlib.pyplot.ylim.html" '
+                                        'for details')
+
+        if self.xlim is not None:
+            if not isinstance(self.xlim, tuple):
+                raise errors.InputError('xlim arg should be tuple. Got "{}"'.format(type(self.xlim)))
+
+            if len(self.xlim) is not 2:
+                raise errors.InputError('xlim arg should be tuple of length 2. '
+                                        'See "https://matplotlib.org/devdocs/api/_as_gen/matplotlib.pyplot.xlim.html" '
+                                        'for details')
+
+        interpolation_kinds = ['linear', 'nearest', 'zero',
+                               'slinear', 'quadratic', 'cubic']
+
+        if self.interpolation is not None:
+            if self.interpolation not in interpolation_kinds:
+                raise errors.InputError('"{}" is not in "{}"'.format(
+                    self.interpolation, interpolation_kinds
+                ))
+
+        if type(self.cls) == tasks.ProfileLikelihood:
+            self.results_directory = self.cls.results_directory
+        else:
+            LOG.warning('cls not of type tasks.ProfileLikelihood')
+
+        if isinstance(self.data, pandas.core.frame.DataFrame) != True:
+            raise errors.InputError('"{}" should be a dataframe not "{}".'.format(self.data, type(self(data))))
+
+        self.parameter_list = sorted(list(self.data.columns))
+
+        if self.separate == False:
+
+            self.legend = True
+
+        if self.index is None:
+            self.index = 0
+
+        if not isinstance(self.index, list):
+            self.index = [self.index]
+
+        if self.x == None:
+            self.x = [i for i in self.parameter_list if i is not 'RSS']
+            # raise errors.InputError('x cannot be None')
+
+        if self.y == None:
+            self.y = 'RSS'
+
+        if self.y == 'all':
+            self.y = self.parameter_list
+
+        if self.x == 'all':
+            self.x = [i for i in self.parameter_list if i != 'RSS']
+
+        if self.y == None:
+            raise errors.InputError('y cannot be None')
+
+        if isinstance(self.y, str):
+            self.y = [self.y]
+
+        if isinstance(self.y, list):
+            for y_param in self.y:
+                if y_param not in self.parameter_list:
+                    raise errors.InputError('{} not in {}'.format(y_param, self.parameter_list))
+
+        if isinstance(self.x, str):
+            self.x = [self.x]
+
+        if isinstance(self.x, list):
+            for x_param in self.x:
+                if x_param not in self.parameter_list:
+                    raise errors.InputError('{} not in {}'.format(x_param, self.parameter_list))
+
+        if self.filename is not None:
+            if not os.path.isabs(self.filename):
+                self.filename = os.path.join(self.results_directory, self.filename)
+
+            self.data.to_csv(self.filename)
+            LOG.info('Profile likelihood data saved to "{}"'.format(self.filename))
+
+    def plot_same_axis(self):
+        """
+
+        :return:
+        """
+        fig = plt.figure()
+        for x in self.x:
+            for y in self.y:
+                for i in self.index:
+                    plot_data = self.data.loc[x, i][y]
+                    if type(plot_data) == pandas.Series:
+                        plot_data = pandas.DataFrame(plot_data)
+
+                    plot_data = plot_data.reset_index()
+
+                    x_plot = plot_data['Parameter Of Interest Value']
+                    y_plot = plot_data[y]
+
+                    if self.interpolation is not None:
+                        f = interp1d(x_plot, y_plot, kind=self.interpolation)
+                        minimum = x_plot.min()
+                        maximum = x_plot.max()
+                        step = (maximum - minimum) / self.interpolation_resolution
+                        xnew = numpy.arange(start=minimum, stop=maximum, step=step)
+                        ynew = f(xnew)
+                        plt.plot(xnew, ynew, 'k')
+                        plt.plot(x_plot, y_plot, 'ro', label=y, linewidth=2)  # linestyle='o', color='red')
+                    else:
+                        plt.plot(x_plot, y_plot, label=y)
+
+                    if y is 'RSS':
+                        plt.plot(plot_data['Parameter Of Interest Value'],
+                             plot_data['Confidence Level'], linewidth=3,
+                             linestyle='--', color='green', label='CL')
+
+                    if self.show_best_rss:
+                        best_rss = list(set(plot_data['Best RSS Value']))
+                        best_param_val = list(set(plot_data['Best Parameter Value']))
+                        plt.plot(best_param_val, best_rss, self.best_rss_marker, linewidth=5,
+                                 markersize=12)
+
+                    if self.legend:
+                        if self.legend_loc is not None:
+                            plt.legend(loc=self.legend_loc)
+                        else:
+                            plt.legend(loc='best')
+
+                    if self.despine:
+                        seaborn.despine(fig=fig, top=True, right=True)
+
+                    if self.title is None:
+                        self.title = 'Profile Likelihoods for\n{} ' \
+                                     'against {} (index={})'.format(x, y, i)
+
+                    elif self.title is 'profile':
+                        self.title = x
+
+                    plt.title(self.title)
+
+                    if self.log10:
+                        plt.ylabel('log10 {}'.format(y))
+                        plt.xlabel('log10 {}'.format(x))
+                    else:
+                        plt.ylabel(y)
+                        plt.xlabel(x)
+
+                    if self.ylim is not None:
+                        plt.ylim(self.ylim)
+
+                    if self.xlim is not None:
+                        plt.xlim(self.xlim)
+
+                    if self.savefig:
+                        d = os.path.join(self.results_directory, str(i))
+                        d = os.path.join(d, x)
+                        self.create_directory(d)
+                        fname = os.path.join(d, misc.RemoveNonAscii(y).filter + '.{}'.format(self.ext))
+
+                        plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
+                        LOG.info('saved to --> {}'.format(fname))
+
+                    if self.show:
+                        plt.show()
+
+    def plot(self):
+        """
+
+        :return:
+        """
+        for x in self.x:
+            for y in self.y:
+                if self.multiplot:
+                    fig = plt.figure()
+                for i in self.index:
+                    plot_data = self.data.loc[x, i][y]
+                    if type(plot_data) == pandas.Series:
+                        plot_data = pandas.DataFrame(plot_data)
+
+                    if not self.multiplot:
+                        fig = plt.figure()
+
+                    plot_data = plot_data.reset_index()
+
+                    x_plot = plot_data['Parameter Of Interest Value']
+                    y_plot = plot_data[y]
+
+                    if self.interpolation is not None:
+                        f = interp1d(x_plot, y_plot, kind=self.interpolation)
+                        minimum = x_plot.min()
+                        maximum = x_plot.max()
+                        step = (maximum - minimum) / self.interpolation_resolution
+                        xnew = numpy.arange(start=minimum, stop=maximum, step=step)
+                        ynew = f(xnew)
+                        plt.plot(xnew, ynew, 'k')
+                        plt.plot(x_plot, y_plot, 'ro', label=y, linewidth=2)  # linestyle='o', color='red')
+                    else:
+                        plt.plot(x_plot, y_plot, label=y, marker='o')
+
+                    if y is 'RSS':
+                        plt.plot(plot_data['Parameter Of Interest Value'],
+                             plot_data['Confidence Level'], linewidth=3,
+                             linestyle='--', color='green', label='CL')
+
+
+                    if self.show_best_rss:
+                        best_rss = list(set(plot_data['Best RSS Value']))
+                        best_param_val = list(set(plot_data['Best Parameter Value']))
+                        plt.plot(best_param_val, best_rss, self.best_rss_marker, linewidth=5,
+                                 markersize=12)
+
+                    if self.legend:
+                        if self.legend_loc is not None:
+                            plt.legend(loc=self.legend_loc)
+                        else:
+                            plt.legend(loc='best')
+
+                    if self.despine:
+                        seaborn.despine(fig=fig, top=True, right=True)
+
+                    # LOG.debug('title is --> {}'.format(self.title))
+                    # if self.title is None:
+                    self.title = 'Profile Likelihoods for\n{} ' \
+                                 'against {} (index={})'.format(x, y, i)
+
+                    # elif self.title is 'profile':
+                    #     self.title = x
+
+                    plt.title(self.title)
+
+                    if self.log10:
+                        plt.ylabel('log10 {}'.format(y))
+                        plt.xlabel('log10 {}'.format(x))
+                    else:
+                        plt.ylabel(y)
+                        plt.xlabel(x)
+
+                    if self.ylim is not None:
+                        plt.ylim(self.ylim)
+
+                    if self.xlim is not None:
+                        plt.xlim(self.xlim)
+
+                    if self.savefig:
+                        d = os.path.join(self.results_directory, str(i))
+                        d = os.path.join(d, x)
+                        self.create_directory(d)
+                        fname = os.path.join(d, misc.RemoveNonAscii(y).filter + '.{}'.format(self.ext))
+
+                        plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
+                        LOG.info('saved to --> {}'.format(fname))
+
+                    if self.show:
+                        plt.show()
+
+    def plot_pdf(self):
+        """
+
+        :return:
+        """
+        raise NotImplementedError
+        # with PdfPages()
         for x in self.x:
             for y in self.y:
                 if self.multiplot:
@@ -3687,7 +4230,7 @@ class PearsonsCorrelation(PlotKwargs):
         return df['r2'], df['p-val']
 
     def heatmap(self):
-
+        seaborn.set_context(context=self.context, font_scale=self.font_scale)
         data = self.pearsons
 
         plt.figure()

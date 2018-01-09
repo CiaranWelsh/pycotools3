@@ -370,7 +370,7 @@ class Run(object):
         if self.sge_job_filename == None:
             self.sge_job_filename = os.path.join(os.getcwd(), 'sge_job_file.sh')
 
-        if 'mode' is 'slurm':
+        if self.mode is 'slurm':
             self.copasi_location = r'COPASI/4.22.170'
 
         self.model = self.set_task()
@@ -389,6 +389,8 @@ class Run(object):
             raise ValueError('"multiprocess" has been deprecated. Please'
                              'use mode="parallel" instead')
 
+        elif self.mode == 'slurm':
+            self.submit_copasi_job_slurm()
 
     def _do_checks(self):
         """
@@ -404,7 +406,7 @@ class Run(object):
         if self.task not in tasks:
             raise errors.InputError('{} not in list of tasks. List of tasks are: {}'.format(self.task, tasks))
 
-        modes = [True, False, 'multiprocess', 'parallel', 'sge']
+        modes = [True, False, 'multiprocess', 'parallel', 'sge', 'slurm']
         if self.mode not in modes:
             raise errors.InputError('{} not in {}'.format(self.mode, modes))
 
@@ -2162,7 +2164,8 @@ class ExperimentMapper(object):
             if os.path.isabs(self.experiment_files[i])!=True:
                 self.experiment_files[i] = os.path.abspath(self.experiment_files[i])
 
-        weight_method_string = ['mean','mean_squared','stardard_deviation','value_scaling']
+        weight_method_string = ['mean_squared', 'stardard_deviation', 'value_scaling',
+                                'mean']  # line 2144
         weight_method_numbers = [str(i) for i in [1,2,3,4] ]
         weight_method_dict = dict(zip(weight_method_string, weight_method_numbers))
         self.weight_method = [weight_method_dict[i] for i in self.weight_method  ]
@@ -2892,7 +2895,7 @@ class ParameterEstimation(object):
             method_name='Random Search'
             method_type='RandomSearch'
 
-        if self.method == 'simulated_nnealing'.lower():
+        if self.method == 'simulated_annealing'.lower():
             method_name='Simulated Annealing'
             method_type='SimulatedAnnealing'
 
@@ -3760,7 +3763,8 @@ class MultiParameterEstimation(ParameterEstimation):
 
 
 class ChaserParameterEstimations(object):
-    def __init__(self, cls=None, model=None, experiment_files=None, pe_data=None, log10=False, truncate_mode='percent',
+    def __init__(self, cls=None, model=None, experiment_files=None,
+                 pe_data=None, log10=False, truncate_mode='percent',
                  theta=100, iteration_limit=100, tolerance=1e-6, results_directory=None,
                  run_mode=False, max_active=2, **kwargs):
 
@@ -3798,13 +3802,20 @@ class ChaserParameterEstimations(object):
 
         ## Parse the parameter estimation data
         self.data = self.parse_pe_data()
+        LOG.debug('1')
 
+        LOG.debug('2')
         ##truncate the data to only parameter sets to improve
         self.data = viz.TruncateData(self.data,
                                      mode=self.truncate_mode,
                                      theta=self.theta).data
+        LOG.debug('3')
 
         self.pe_dct = self.configure()
+        LOG.debug('4')
+
+        self.run()
+        LOG.debug('5')
         # raise NotImplementedError('Still building this class. Problem with '
         #                           'data file names. Data is currently '
         #                           'being overwritten in one file instead of writing more'
@@ -3835,7 +3846,7 @@ class ChaserParameterEstimations(object):
 
         if self.model is not None and self.experiment_files is None:
             raise errors.InputError('If using the "model" argument '
-                                    'please give argument to "experimental_files"')
+                                    'please give argument to "experiment_files"')
 
         if self.cls is not None:
             if type(self.cls) != MultiParameterEstimation:
@@ -3879,6 +3890,8 @@ class ChaserParameterEstimations(object):
         Iterate over parameter sets.
         :return:
         """
+        import multiprocessing
+        q = multiprocessing.Queue()
         cps_dct = {}
         original_cps_filename = self.model.copasi_file
         ## Iterate over parameter sets
@@ -3889,22 +3902,67 @@ class ChaserParameterEstimations(object):
 
             filename = os.path.join(self.results_directory, "PE_data_{}.txt".format(i))
 
-            ## save model to new name and do d
-            mod = deepcopy(self.model.save(new_cps))
 
-            mod.insert_parameters(df=self.data, index=i, inplace=True)
-            PE = ParameterEstimation(mod, self.experiment_files,
-                                     report_name=filename,
-                                     method='hooke_jeeves',
-                                     tolerance=self.tolerance,
-                                     randomize_start_values=False,
-                                     iteration_limit=self.iteration_limit,
-                                     run_mode=False,
-                                     **self.kwargs)
-            PE.setup()
-            cps_dct[new_cps] = PE
+            ## save model to new name and do d
+
+            mod = deepcopy(self.model.save(new_cps))
+            LOG.debug('configuring --> {}'.format(filename))
+            p = multiprocessing.Process(target=self.configure1, args=(mod, filename, self.data, i))
+            p.start()
+            p.join()
 
         return cps_dct
+
+    def configure1(self, mod, filename, data, index):
+        """
+        function to parallelize
+        :return:
+        """
+        mod.insert_parameters(df=data, index=index, inplace=True)
+        PE = ParameterEstimation(mod, self.experiment_files,
+                                 report_name=filename,
+                                 method='hooke_jeeves',
+                                 tolerance=self.tolerance,
+                                 randomize_start_values=False,
+                                 iteration_limit=self.iteration_limit,
+                                 run_mode=False,
+                                 **self.kwargs)
+        PE.setup()
+        return PE
+
+
+
+    # def configure(self):
+    #     """
+    #     Iterate over parameter sets.
+    #     :return:
+    #     """
+    #     cps_dct = {}
+    #     original_cps_filename = self.model.copasi_file
+    #     ## Iterate over parameter sets
+    #     for i in range(self.data.shape[0]):
+    #
+    #         ## Create new cps name
+    #         new_cps = original_cps_filename[:-4]+'_'+str(i)+'.cps'
+    #
+    #         filename = os.path.join(self.results_directory, "PE_data_{}.txt".format(i))
+    #
+    #         ## save model to new name and do d
+    #         mod = deepcopy(self.model.save(new_cps))
+    #
+    #         mod.insert_parameters(df=self.data, index=i, inplace=True)
+    #         PE = ParameterEstimation(mod, self.experiment_files,
+    #                                  report_name=filename,
+    #                                  method='hooke_jeeves',
+    #                                  tolerance=self.tolerance,
+    #                                  randomize_start_values=False,
+    #                                  iteration_limit=self.iteration_limit,
+    #                                  run_mode=False,
+    #                                  **self.kwargs)
+    #         PE.setup()
+    #         cps_dct[new_cps] = PE
+    #
+    #     return cps_dct
 
     # def setup(self):
     #     """
@@ -3924,7 +3982,7 @@ class ChaserParameterEstimations(object):
         """
         ##get models
         mod_dct = {}
-
+        LOG.debug('run mode --> {}'.format(self.run_mode))
         for cps, pe in self.pe_dct.items():
             mod_dct[cps] = self.pe_dct[cps].model
 
@@ -4278,11 +4336,16 @@ class ProfileLikelihood(object):
             'parallel_scan': True,
         }
         self.default_properties.update(self.kwargs)
+        if self.default_properties.get('run_mode') is not None:
+            raise errors.InputError('"run_mode" argument given but for ProfileLikelihood should be "run" instead')
         self.convert_bool_to_numeric(self.default_properties)
         self.update_properties(self.default_properties)
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
         self._do_checks()
         self._convert_numeric_arguments_to_string()
+
+        ##protect against using run_mode instead of run
+
 
         ##configures parameter estimation method parameters
         self.model = self.undefine_other_reports()

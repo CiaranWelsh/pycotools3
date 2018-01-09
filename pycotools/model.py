@@ -1981,7 +1981,9 @@ class Model(_base._Base):
         :return:
             :py:class:`Model`
         """
-        return InsertParameters(self, **kwargs)
+        I = InsertParameters(self, **kwargs)
+        if kwargs.get('show_parameters'):
+            LOG.debug('Parameter set that was inserted: \n\n{}'.format(I.parameters.transpose()))
 
 
 class ReadModelMixin(Mixin):
