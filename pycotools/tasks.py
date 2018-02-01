@@ -2252,7 +2252,8 @@ class ExperimentMapper(object):
         if data.isnull().any().any() == True:
             raise NotImplementedError('Pycotools detected multiple experiments in "{}". This is not '
                                       'yet supported. Please rearrange your data so that you have '
-                                      'one experiment file per experiment'.format(self.experiment_files[index]))
+                                      'one experiment file per experiment. Alternatively ensure no trailing white '
+                                      'lines exist in your data file.'.format(self.experiment_files[index]))
 
         #get observables from data. Must be exact match
         obs = list(data.columns)
@@ -4313,7 +4314,6 @@ class ProfileLikelihood(object):
             'append': False,
             'output_in_subtask': False,
             'run': False,
-            'max_active': 4,
             'processes': 1,
             'results_directory': os.path.join(self.model.root,
                                               'ProfileLikelihoods'),
