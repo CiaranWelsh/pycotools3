@@ -41,6 +41,3 @@ Known Bugs
 * viz.PlotTimeCourseEnsembles doesn't work properly if user is fitting multiple experiments with multiple conditions (i.e. defined by independent variables)
 
 
-
-
-
