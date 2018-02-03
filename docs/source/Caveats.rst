@@ -38,8 +38,8 @@ component
 
 Known Bugs
 ==========
-* viz.PlotTimeCourseEnsembles doesn't work properly if user is fitting multiple experiments
-* Bug in model.add('reaction' where constant rate constants do not work
+* viz.PlotTimeCourseEnsembles doesn't work properly if user is fitting multiple experiments with multiple conditions (i.e. defined by independent variables)
+
 
 
 
