@@ -599,7 +599,6 @@ class RunParallel(object):
 
             # for copy_number, model in self.models.items():
             model = self.models[num_models_to_process - 1]
-            LOG.debug('running {}'.format(model))
             if len(pids) < self.max_active:
                 num_models_to_process -= 1
                 subp = subprocess.Popen(['CopasiSE', model.copasi_file])

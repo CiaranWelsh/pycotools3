@@ -1,10 +1,8 @@
 To to:
 
 * Develop secondary parameter estimation method/class
-* quick start tutorial
 * kholodenko example
-* fix bug in build reactions
-* build lorenze attractor
 * ensemble time ocurse with more than one data set and independent variables. 
 * Documentation
 * Build model loader
+* Implement plotting class for repeat stochastic models
