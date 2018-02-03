@@ -171,6 +171,8 @@ class Model(_base._Base):
     it extracts relevant information from a copasi definition
     file into python objects.
 
+    #todo- Fix bug where constant rate laws cannot be used
+
     These are :py:class:`Model` properties:
 
     =======================     =======================
@@ -2012,6 +2014,7 @@ class Compartment(object):
         self.model = self.read_model(model)
         self.name = name
         self.initial_value = initial_value
+        
         self.key = key
         self.simulation_type = simulation_type
 
@@ -2983,10 +2986,15 @@ class Function(object):
                 self.model, type='function_parameter'
             ).generate(len(self.roles))
 
-            # LOG.warning('line 2127 is experimental')
             self.list_of_parameter_descriptions = []
             keys = self.roles.keys()
             values = self.roles.values()
+
+            ## if our function param keys is singular and string, convert to list
+            ## so we can iterate over it (and not the characters in the string by mistake)
+            if isinstance(function_parameter_keys, str):
+                function_parameter_keys = [function_parameter_keys]
+
             for i in range(len(self.roles)):
                 self.list_of_parameter_descriptions.append(
                     ParameterDescription(self.model,
@@ -3385,7 +3393,6 @@ class KeyFactory(object):
         """
         ## get keys
         existing = [i.key for i in self.model.parameter_descriptions]
-
         for i in existing:
             assert '_' in i
         existing = [i.split('_')[1] for i in existing]
@@ -3400,8 +3407,8 @@ class KeyFactory(object):
                 existing.append(random_number)
                 keys.append(random_number)
                 count += 1
-        keys = ['{}_{}'.format('FunctionParameter',i) for i in  keys]
-        if len(keys)==1:
+        keys = ['{}_{}'.format('FunctionParameter',i) for i in keys]
+        if len(keys) == 1:
             return keys[0]
         else:
             return keys
@@ -3572,7 +3579,8 @@ class Expression(object):
         ## get list of elements by split
         split = self.expression.split(',')
         split = [i.strip() for i in split]
-        return sorted(list(set([i for i in split if i != ''])))
+        split = sorted(list(set([i for i in split if i != ''])))
+        return split
 
     def __str__(self):
         return "Expression({})".format(self.expression)
@@ -3877,8 +3885,6 @@ class MassAction(Function):
 @mixin(ComparisonMethodsMixin)
 class ParameterSet(object):
     """
-    This class is taking time that I don't have.
-    Just implement the InsertParameters class for now.
     """
     def __init__(self, model, name='Initial State', initial_time=0,
                  compartments=[], metabolites=[], global_quantities=[],
@@ -3894,7 +3900,6 @@ class ParameterSet(object):
 
         ##update all keys to none
         self._do_checks()
-
 
 
     def _do_checks(self):
@@ -3980,9 +3985,6 @@ class ParameterSet(object):
                     'type': 'Group'}
         )
 
-
-
-
         ##metabolite subelement
         for i in self.model.metabolites:
             etree.SubElement(model_parameter_group,
@@ -4004,7 +4006,7 @@ class ParameterSet(object):
         )
 
         ##global quantity subelement
-        for global_q  in self.model.global_quantities:
+        for global_q in self.model.global_quantities:
             etree.SubElement(model_parameter_group, '{http://www.copasi.org/static/schema}ModelParameter',
                              attrib={'cn': '{},{}'.format(
                                  self.model.reference, global_q.reference),

@@ -36,7 +36,10 @@ with the same name because they are different entities. This is not
 supported in Pycotools and you must use unique names for every model
 component
 
-
+Known Bugs
+==========
+* viz.PlotTimeCourseEnsembles doesn't work properly if user is fitting multiple experiments
+* Bug in model.add('reaction' where constant rate constants do not work
 
 
 

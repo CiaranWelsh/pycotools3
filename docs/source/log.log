@@ -1,0 +1,11 @@
+DEBUG:pycotools.tasks:tasks:run_parallel:602:running Model(name=Michaelis-Menten, time_unit=s, volume_unit=ml, quantity_unit=mmol)
+DEBUG:pycotools.tasks:tasks:run_parallel:602:running Model(name=Michaelis-Menten, time_unit=s, volume_unit=ml, quantity_unit=mmol)
+DEBUG:pycotools.tasks:tasks:run_parallel:602:running Model(name=Michaelis-Menten, time_unit=s, volume_unit=ml, quantity_unit=mmol)
+DEBUG:pycotools.viz:viz:parse_experimental_files:1390:tpe self.cls parse --> MultiParameterEstimation(copy_number="3", pe_number="20", method="genetic_algorithm_sr")
+INFO:pycotools.viz:viz:plot:1517:Plotting "E"
+INFO:pycotools.viz:viz:plot:1517:Plotting "ES"
+INFO:pycotools.viz:viz:plot:1517:Plotting "P"
+INFO:pycotools.viz:viz:plot:1517:Plotting "S"
+INFO:pycotools.tasks:tasks:run_analysis:4866:running /home/b3053674/Documents/Models/2018/01_Jan/PyCoToolsQuickStart/ProfileLikelihoods/0/(S bind E).kf.cps
+INFO:pycotools.tasks:tasks:run_analysis:4866:running /home/b3053674/Documents/Models/2018/01_Jan/PyCoToolsQuickStart/ProfileLikelihoods/0/(ES produce P).kcat.cps
+INFO:pycotools.tasks:tasks:run_analysis:4866:running /home/b3053674/Documents/Models/2018/01_Jan/PyCoToolsQuickStart/ProfileLikelihoods/0/(S unbind E).kb.cps

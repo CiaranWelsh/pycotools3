@@ -1,0 +1,2 @@
+Version 0.081
+- 03-02-2018: Bug fix where constant rate constants were not being accepted because a single character 'v' was creating a string function key, rather than the usual list.
