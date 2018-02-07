@@ -103,11 +103,11 @@ class GetModelVariableFromStringMixin(Mixin):
                     'local_parameter', 'assignment', by='simulation_type'
                 )
                 raise errors.InputError('Variable "{}" is not in model. '
-                                        'These are your model variables: '
-                                        '{} and these are local_parameters '
+                                        'These are your model variables:\n '
+                                        '{} \n These are local_parameters '
                                         'with global_quantities assigned '
-                                        'to them: "{}"'.format(v, m.all_variable_names,
-                                                             [i.global_name for i in assignments]))
+                                        'to them: \n"{}"'.format(v, m.all_variable_names,
+                                                                 [i.global_name for i in assignments]))
         assert isinstance(v, str) != True
         return v
 

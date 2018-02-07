@@ -1109,6 +1109,9 @@ class PlotTimeCourse(PlotKwargs):
             self.results_directory = os.path.join(
                 self.cls.model.root, 'TimeCourseGraphs'
             )
+        else:
+            if not os.path.isabs(self.results_directory):
+                self.results_directory = os.path.join(self.cls.model.root, self.results_directory)
 
         if self.x.lower() == 'time':
             self.xlabel = "Time ({})".format(self.cls.model.time_unit)
