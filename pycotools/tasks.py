@@ -2369,7 +2369,7 @@ class ExperimentMapper(object):
                             etree.SubElement(map_group, 'Parameter', attrib=independent_ICs)
 
                         elif obs[i][:-6] in [j.name for j in self.model.global_quantities]:
-                            glob = [j for j in self.model.global_quantities if j.name == obs[i]][0]
+                            glob = [j for j in self.model.global_quantities if j.name == obs[i][:-6]][0]
                             cn = '{},{}'.format(self.model.reference,
                                                 glob.initial_reference)
 
