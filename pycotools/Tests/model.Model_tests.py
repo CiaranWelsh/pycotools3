@@ -25,7 +25,7 @@ Module that tests the operations of the _Base base test
 
 import site
 site.addsitedir(r'C:\Users\Ciaran\Documents\pycotools')
-# site.addsitedir('/home/b3053674/Documents/pycotools')
+site.addsitedir('/home/b3053674/Documents/pycotools')
 
 import pycotools
 from pycotools.Tests import _test_base
@@ -1297,14 +1297,27 @@ class TestReactionStuff(unittest.TestCase):
             os.remove(self.cps)
 
 
-# class BuildTests(unittest.TestCase):
-#     def setUp(self):
-#         self.cps = os.path.join(
-#             os.path.dirname(__file__), 'build_test_model.cps'
-#         )
-#
-#     def test(self):
-#         with pycotools.model.Build(self.cps):
+
+class BuildWithAntimony(unittest.TestCase):
+
+    def setUp(self):
+        self.antimony_str = 'S1 -> S2; k1*S1; k1 = 0.1; S1 = 10'
+        self.cps = os.path.join(os.path.dirname(__file__), 'antimony_model.cps')
+        if os.path.isfile(self.cps):
+            os.remove(self.cps)
+
+    def tearDown(self):
+        if os.path.isfile(self.cps):
+            os.remove(self.cps)
+
+    def test_build_with_antimony(self):
+        # mod = pycotools.model.Model(self.cps, new=True)
+        with pycotools.model.BuildAntimony(self.cps) as loader:
+            mod = loader.load(
+                'S1 -> S2; k1*S1; k1 = 0.1; S1 = 10'
+            )
+        self.assertTrue(type(mod), pycotools.model.Model)
+        # print pycotools.viz.PlotTimeCourse(tasks.timecourse(end=100, intervals=100, step_size=1), savefig=True)
 
 
 

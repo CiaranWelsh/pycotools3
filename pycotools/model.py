@@ -41,11 +41,22 @@ from copy import deepcopy
 from mixin import mixin, Mixin
 from functools import wraps
 from cached_property import cached_property_with_ttl, cached_property
+from subprocess import check_call, call
+
 LOG = logging.getLogger(__name__)
+
+try:
+    import tellurium as te
+
+except ImportError:
+    LOG.warning('tellurium module not loaded. Either install with `pip install tellurium` '
+                'or if its already installed there could be a problem with tellurium '
+                'and the tellurium functions of PyCoTools will be temporarile unavailable')
+    pass
+
 
 ## TODO add list of reports property to model
 ## TODO after running a task, bind the results to the model instance so that they are retrievable
-
 
 
 class GetModelComponentFromStringMixin(Mixin):
@@ -163,15 +174,44 @@ class Build(object):
         self.model.save()
         self.model = Model(self.copasi_file, new=True)
 
+class BuildAntimony(object):
+    def __init__(self, copasi_file):
+        self.copasi_file = copasi_file
+        self.sbml_file = os.path.splitext(self.copasi_file)[0] #+ '.sbml'
+        # self.antimony_str = antimony_str
 
+    def __enter__(self):
+        LOG.debug('Entering')
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        LOG.debug('exiting')
+        if os.path.isfile(self.sbml_file):
+            os.remove(self.sbml_file)
+        self.mod.name = os.path.split(self.copasi_file)[1][:-4]
+
+    def load(self, antimony_str):
+        LOG.debug('loading')
+        # ant = te.loada(antimony_str)
+        self.sbml = te.antimonyToSBML(antimony_str)
+        with open(self.sbml_file, 'w') as f:
+            f.write(self.sbml)
+
+        if not os.path.isfile(self.sbml_file):
+            raise errors.FileDoesNotExistError('Sbml file does not exist')
+
+        # LOG.debug('sbml file --> {}'.format(self.sbml_file))
+        check_call(['CopasiSE', '-i', self.sbml_file])
+
+        self.mod = Model(self.copasi_file)
+        
+        return self.mod
 
 class Model(_base._Base):
     """
     The Model object is of central importance in pycotools as
     it extracts relevant information from a copasi definition
     file into python objects.
-
-    #todo- Fix bug where constant rate laws cannot be used
 
     These are :py:class:`Model` properties:
 
@@ -304,6 +344,9 @@ class Model(_base._Base):
         if ext != '.cps':
             raise errors.InputError('expected a .cps file. Got {} instead'.format(ext))
         self._copasi_file = filename
+
+    def from_antimony(self, antimony_str):
+        mod = te.loada(antimony_str)
 
     def copy(self, filename):
         """

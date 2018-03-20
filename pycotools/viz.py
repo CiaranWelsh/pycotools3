@@ -1534,6 +1534,9 @@ class PlotTimeCourseEnsemble(object):
                 if parameter in self.observables:
                     for df in self.experimental_data.values():
                         if parameter in df.keys():
+                            if df.columns[0] == 'time':
+                                df = df.rename(columns={'time': 'Time'})
+
                             # plt.figure()
                             ax2 = plt.plot(list(df['Time']), list(df[parameter]), '--', color=self.exp_color,
                                            label='Exp', alpha=0.4, marker='o')
