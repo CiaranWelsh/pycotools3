@@ -2896,8 +2896,9 @@ class ModelSelection(object):
 
 
 
-        self.boxplot()
-        self.histogram()
+        # self.boxplot()
+        # self.histogram()
+        self.violin()
 
 
     def __iter__(self):
@@ -3181,6 +3182,35 @@ class ModelSelection(object):
 
             if self.show:
                 plt.show()
+
+    def violin(self):
+        seaborn.set_context(context='poster')
+        data = self.model_selection_data
+
+        data = data.unstack()
+        data = data.reset_index()
+        data = data.rename(columns={'level_0': 'Model',
+                                    'level_1': 'Metric',
+                                    0: 'Score'})
+        for metric in data['Metric'].unique():
+            fig = plt.figure()
+            seaborn.violinplot(data=data[data['Metric'] == metric],
+                            x='Model', y='Score')
+            plt.xticks(rotation='vertical')
+            if self.title:
+                plt.title('{} Scores'.format(metric))
+            plt.xlabel(' ')
+            if self.despine:
+                seaborn.despine(fig=fig, top=True, right=True)
+
+            if self.savefig:
+                save_dir = os.path.join(self.results_directory, 'ModelSelectionGraphs')
+                if os.path.isdir(save_dir) is not True:
+                    os.mkdir(save_dir)
+                os.chdir(save_dir)
+                fname = os.path.join(save_dir, 'ViolinPlot_{}.{}'.format(metric, self.ext))
+                plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
+                LOG.info('Violin plot saved to : "{}"'.format(fname))
 
     def chi2_lookup_table(self, alpha):
         '''

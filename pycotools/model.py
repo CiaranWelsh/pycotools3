@@ -163,6 +163,12 @@ class ComparisonMethodsMixin(Mixin):
 
 
 class Build(object):
+    """
+    Context manager for building a copasi model with
+    only PyCoTools Functions.
+
+    Users should also see :py:class:`BuildAntimony'
+    """
     def __init__(self, copasi_file):
         self.copasi_file = copasi_file
 
@@ -175,36 +181,65 @@ class Build(object):
         self.model = Model(self.copasi_file, new=True)
 
 class BuildAntimony(object):
+    """
+    Context manager around telluriums antimony to SBML conversion.
+    Builds an sbml from antimony code, converts it to a copasi
+    file which is then coerced into a pycotools model.
+    """
     def __init__(self, copasi_file):
         self.copasi_file = copasi_file
         self.sbml_file = os.path.splitext(self.copasi_file)[0] #+ '.sbml'
-        # self.antimony_str = antimony_str
+        ## place for saving model
+        self.mod = None
+        ## place for saving any exceptions that occur
+        self.E = None
 
     def __enter__(self):
-        LOG.debug('Entering')
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        LOG.debug('exiting')
+        ## remove intermediate sbml file
         if os.path.isfile(self.sbml_file):
             os.remove(self.sbml_file)
-        self.mod.name = os.path.split(self.copasi_file)[1][:-4]
+
+        ## if exception was raised due to
+        ## incorrect syntax etc. re-raise it here
+        if self.E is not None:
+            raise self.E
+
+        ## otherwide, set the model name
+        else:
+            self.mod.name = os.path.split(self.copasi_file)[1][:-4]
 
     def load(self, antimony_str):
-        LOG.debug('loading')
-        # ant = te.loada(antimony_str)
-        self.sbml = te.antimonyToSBML(antimony_str)
+        """
+        :param antimony_str:
+        :return:
+        """
+        ## wrap conversion function in try block
+        ## so we can store the exception
+        ## for raising in the __exit__ function
+        ## Otherwise the error gets suppressed.
+        try:
+            self.sbml = te.antimonyToSBML(antimony_str)
+        except Exception as E:
+            self.E = E
+
+        ## save sbml
         with open(self.sbml_file, 'w') as f:
             f.write(self.sbml)
 
+        ## ensure sbml exists. This code should never be invoked
         if not os.path.isfile(self.sbml_file):
             raise errors.FileDoesNotExistError('Sbml file does not exist')
 
-        # LOG.debug('sbml file --> {}'.format(self.sbml_file))
+        ## Perform conversion wtih CopasiSE
         check_call(['CopasiSE', '-i', self.sbml_file])
 
+        ## create a pycotools model from the resulting copasi_file
         self.mod = Model(self.copasi_file)
-        
+
+        ## return the model so that we can change its name on exit
         return self.mod
 
 class Model(_base._Base):
