@@ -151,8 +151,8 @@ class ModelSelectionTests(unittest.TestCase):
     def configure_model_selection(self):
         MMF = tasks.MultiModelFit(self.dire,
                                   method='genetic_algorithm',
-                                  population_size=10,
-                                  number_of_generations=10,
+                                  population_size=30,
+                                  number_of_generations=100,
                                   copy_number=1,
                                   pe_number=3,
                                   run_mode=True,
@@ -164,13 +164,12 @@ class ModelSelectionTests(unittest.TestCase):
         MMF.run()
         return MMF
 
-    # def test_plot_violin(self):
-    #     pass
+    def test_plot_violin(self):
+        MS = viz.ModelSelection(self.MMF, savefig=True)
+        files = glob.glob(os.path.join(MS.results_directory), '*')
+        ## make sure 3 files are written, one for each model selection criteria and one for the csv file
+        self.assertEqual(len(files), 4)
 
-
-
-    def test(self):
-        pass
 
 
 

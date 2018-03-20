@@ -42,6 +42,7 @@ from mixin import mixin, Mixin
 from functools import wraps
 from cached_property import cached_property_with_ttl, cached_property
 from subprocess import check_call, call
+from shutil import copy
 
 LOG = logging.getLogger(__name__)
 
@@ -188,7 +189,8 @@ class BuildAntimony(object):
     """
     def __init__(self, copasi_file):
         self.copasi_file = copasi_file
-        self.sbml_file = os.path.splitext(self.copasi_file)[0] #+ '.sbml'
+        self.copasiSE_output_file = self.copasi_file[:-4]+'.sbml.cps'
+        self.sbml_file = os.path.splitext(self.copasi_file)[0] + '.sbml'
         ## place for saving model
         self.mod = None
         ## place for saving any exceptions that occur
@@ -202,14 +204,12 @@ class BuildAntimony(object):
         if os.path.isfile(self.sbml_file):
             os.remove(self.sbml_file)
 
-        ## if exception was raised due to
-        ## incorrect syntax etc. re-raise it here
-        if self.E is not None:
-            raise self.E
+        if isinstance(exc_type, type):
+            raise exc_type, exc_val, exc_tb
 
-        ## otherwide, set the model name
-        else:
-            self.mod.name = os.path.split(self.copasi_file)[1][:-4]
+        self.mod.name = os.path.split(self.copasi_file)[1][:-4]
+
+
 
     def load(self, antimony_str):
         """
@@ -220,10 +220,7 @@ class BuildAntimony(object):
         ## so we can store the exception
         ## for raising in the __exit__ function
         ## Otherwise the error gets suppressed.
-        try:
-            self.sbml = te.antimonyToSBML(antimony_str)
-        except Exception as E:
-            self.E = E
+        self.sbml = te.antimonyToSBML(antimony_str)
 
         ## save sbml
         with open(self.sbml_file, 'w') as f:
@@ -235,6 +232,10 @@ class BuildAntimony(object):
 
         ## Perform conversion wtih CopasiSE
         check_call(['CopasiSE', '-i', self.sbml_file])
+
+        ## copy from temporary copasiSE output name to user specified name
+        copy(self.copasiSE_output_file, self.copasi_file)
+        os.remove(self.copasiSE_output_file)
 
         ## create a pycotools model from the resulting copasi_file
         self.mod = Model(self.copasi_file)

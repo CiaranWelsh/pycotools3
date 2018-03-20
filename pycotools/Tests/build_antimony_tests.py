@@ -195,8 +195,6 @@ class BuildAntimonyTestsWithoutRemovalBetweenTests(unittest.TestCase):
 
         self.assertNotIn('B', [i.name for i in mod.metabolites])
 
-
-
 if __name__ == '__main__':
     unittest.main()
 

@@ -1132,7 +1132,7 @@ class PlotTimeCourse(PlotKwargs):
         :return:
         """
         if self.y == None:
-            self.y = self.data.keys()
+            self.y = [i.name for i in self.cls.model.metabolites]
             self.y = [i for i in self.y if i.lower() != 'time']
 
         if self.y == 'metabolites':
@@ -2899,6 +2899,7 @@ class ModelSelection(object):
         # self.boxplot()
         # self.histogram()
         self.violin()
+        self.to_csv()
 
 
     def __iter__(self):
@@ -2944,7 +2945,7 @@ class ModelSelection(object):
         Find the results directories embedded within MultimodelFit
         and RunMutliplePEs.
         '''
-        return  self.multi_model_fit.results_folder_dct
+        return self.multi_model_fit.results_folder_dct
 
     def get_num_models(self):
         return len(self.multi_model_fit.cps_files)

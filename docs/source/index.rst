@@ -75,6 +75,14 @@ Tutorial 6
    
    Tutorials/Tutorial6InsertParameters
   
+Tutorial 7
+----------
+
+.. toctree::
+   :maxdepth: 1
+   
+   Tutorials/Tutorial7InsertParameters
+  
 
 Examples
 ========
