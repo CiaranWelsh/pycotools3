@@ -207,8 +207,6 @@ class BuildAntimony(object):
         if isinstance(exc_type, type):
             raise exc_type, exc_val, exc_tb
 
-        self.mod.name = os.path.split(self.copasi_file)[1][:-4]
-
 
 
     def load(self, antimony_str):
@@ -242,6 +240,62 @@ class BuildAntimony(object):
 
         ## return the model so that we can change its name on exit
         return self.mod
+
+class ImportSBML(object):
+    """
+    Accepts an SBML file, converts it to copasi
+    format and reads it into a Model object
+    """
+    def __init__(self, sbml_file, copasi_file=None):
+        """
+
+        :param sbml_file:
+        :param copasi_file: Defaults is None. If left None,
+                            copasi filename is the same as
+                            sbml_file with cps extension.
+        """
+        self.sbml_file = sbml_file
+        self.copasi_file = copasi_file
+
+        if self.copasi_file is None:
+            self.copasi_file = self.copasi_filename()
+
+        if os.path.splitext(self.sbml_file)[1] != '.sbml':
+            raise errors.InputError('"sbml_file" argument should be an sbml file. '
+                                    'Got "{}" instead'.format(self.sbml_file))
+
+        self.convert()
+        
+        self.model = self.load_model()
+
+    def copasi_filename(self):
+        return os.path.splitext(self.sbml_file)[0]+'.cps'
+
+    def convert(self):
+        """
+        Perform conversion using CopasiSE
+        :return: 
+        """
+        check_call(['CopasiSE', '-i', self.sbml_file])
+        temp_copasi_file = self.sbml_file + '.cps'
+        if not os.path.isfile(temp_copasi_file):
+            raise errors.FileDoesNotExistError('SBML file has not been translated. '
+                                               'Please ensure your environment variables are '
+                                               'correctly configured so that the "CopasiSE" command'
+                                               ' gives you the CopasiSE help text. ')
+
+        ## copy to desired copasi filename
+        copy(temp_copasi_file, self.copasi_file)
+
+        ##remove temporary copasi file
+        os.remove(temp_copasi_file)
+        
+        return self.copasi_file
+    
+    def load_model(self):
+        return Model(self.copasi_file)
+
+
 
 class Model(_base._Base):
     """
@@ -381,9 +435,6 @@ class Model(_base._Base):
             raise errors.InputError('expected a .cps file. Got {} instead'.format(ext))
         self._copasi_file = filename
 
-    def from_antimony(self, antimony_str):
-        mod = te.loada(antimony_str)
-
     def copy(self, filename):
         """
         Copy the model to `filename`
@@ -407,7 +458,13 @@ class Model(_base._Base):
     #     self.xml = tasks.CopasiMLParser(self.copasi_file).copasiML
     #     return self
 
-
+    def to_antimony(self):
+        sbml_file = self.to_sbml()
+        assert os.path.isfile(sbml_file)
+        with open(sbml_file) as f:
+            antimony = te.sbmlToAntimony(f.read())
+        os.remove(sbml_file)
+        return antimony
 
     @property
     def root(self):

@@ -2802,7 +2802,7 @@ class LinearRegression(PlotKwargs):
 @mixin(ParseMixin)
 @mixin(TruncateDataMixin)
 @mixin(CreateResultsDirectoryMixin)
-class ModelSelection(object):
+class ModelSelectionOld(object):
     """
     Calculate model selection criteria AIC (corrected) and
     BIC for a selection of models that have undergone fitting
@@ -2849,6 +2849,8 @@ class ModelSelection(object):
             'kde_kws': None,
             'rug_kws': None,
             'color': None,
+            'palette': None,
+            'saturation': 0.75,
             'vertical': None,
             'norm_hist': False,
             'axlabel': None,
@@ -2937,9 +2939,6 @@ class ModelSelection(object):
             save_dir = os.path.join(self.results_directory, 'ModelSelectionGraphs')
             self.filename = os.path.join(save_dir, 'ModelSelectionCriteria.csv')
 
-
-
-
     def _get_results_directories(self):
         '''
         Find the results directories embedded within MultimodelFit
@@ -2995,23 +2994,6 @@ class ModelSelection(object):
             for cps, MPE in self.multi_model_fit.items():
                 cps_0 = cps[:-4]+'_0.cps'
                 dct[cps_0] = Parse(MPE.results_directory, copasi_file=cps_0, log10=self.log10)
-                # try:
-                #     dct[cps_0] = Parse(MPE.results_directory,
-                #                    copasi_file=cps_0,
-                #                    log10=self.log10)
-                # except ValueError as e:
-                #     if str(e) == 'No objects to concatenate':
-                #         LOG.warning('All data files are empty for model at "{}". '
-                #                     'skipping'.format(MPE))
-                #         # continue
-                #     elif str(e) == 'No columns to parse from file':
-                #         LOG.warning('ValueError Was raised because some data files are empty. Skipping these files.')
-                #
-                #     # elif str(e) == 'could not convert string to float: askList[Parameter Estimation].(Problem)Parameter Estimation.Best Value':
-                #     #     LOG.warning('ValueError Was raised because some data files are empty. Skipping these files.')
-                #
-                #     else:
-                #         raise ValueError(e)
             return dct
 
     def _get_number_estimated_model_parameters(self):
@@ -3195,8 +3177,408 @@ class ModelSelection(object):
                                     0: 'Score'})
         for metric in data['Metric'].unique():
             fig = plt.figure()
+            print data
             seaborn.violinplot(data=data[data['Metric'] == metric],
-                            x='Model', y='Score')
+                               x='Model',
+                               y='Score',
+                               color=self.color,
+                               palette=self.palette,
+                               saturation=self.saturation,
+                               axlabel=self.axlabel,
+                               ax=self.ax)
+            plt.xticks(rotation='vertical')
+            if self.title:
+                plt.title('{} Scores'.format(metric))
+            plt.xlabel(' ')
+            if self.despine:
+                seaborn.despine(fig=fig, top=True, right=True)
+
+            if self.savefig:
+                save_dir = os.path.join(self.results_directory, 'ModelSelectionGraphs')
+                if os.path.isdir(save_dir) is not True:
+                    os.mkdir(save_dir)
+                os.chdir(save_dir)
+                fname = os.path.join(save_dir, 'ViolinPlot_{}.{}'.format(metric, self.ext))
+                plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
+                LOG.info('Violin plot saved to : "{}"'.format(fname))
+
+    def chi2_lookup_table(self, alpha):
+        '''
+        Looks at the cdf of a chi2 distribution at incriments of
+        0.1 between 0 and 100.
+
+        Returns the x axis value at which the alpha interval has been crossed,
+        i.e. gets the cut off point for chi2 dist with DOF and alpha .
+        '''
+        nums = numpy.arange(0,100,0.1)
+        table=zip(nums, scipy.stats.chi2.cdf(nums,self.kwargs.get('DOF')) )
+        for i in table:
+            if i[1]<=alpha:
+                chi2_df_alpha=i[0]
+        return chi2_df_alpha
+
+    def get_chi2_alpha(self):
+        '''
+        return the chi2 threshold for cut off point alpha and DOF degrees of freedom
+        '''
+        dct={}
+        alphas=numpy.arange(0,1,0.01)
+        for i in alphas:
+            dct[round(i,3)]=self.chi2_lookup_table(i)
+        return dct[0.05]
+
+    def compare_sim_vs_exp(self):
+        '''
+
+        '''
+        LOG.info('Visually comparing simulated Versus Experiemntal data.')
+
+        for cps, res in self.multi_model_fit.results_folder_dct.items():
+            tasks.InsertParameters(cps,parameter_path=res, index=0)
+            PE=tasks.ParameterEstimation(cps,self.multi_model_fit.exp_files,
+                                       randomize_start_values=False,
+                                       method='CurrentSolutionStatistics',
+                                       plot=True,savefig=True,
+                                       )
+            PE.set_up()
+            PE.run()
+            PE.format_results()
+
+
+    def get_best_parameters(self,filename=None):
+        '''
+
+        '''
+        df=pandas.DataFrame()
+        for cps, res in self.multi_model_fit.results_folder_dct.items():
+            df[os.path.split(cps)[1]]= ParsePEData(res).data.iloc[0]
+
+        if filename==None:
+            return df
+        else:
+            df.to_excel(filename)
+            return df
+
+
+
+    def compare_model_parameters(self,parameter_list,filename=None):
+        '''
+        Compare all the parameters accross multiple models
+        in a bar chart averaging and STD for a parameter accross
+        all models.
+
+        May have a problem with different models have different
+        parameters as they are not directly comparible
+        '''
+        best_parameters=self.get_best_parameters()
+        data= best_parameters.loc[parameter_list].transpose()
+        f=seaborn.barplot(data=numpy.log10(data))
+        f.set_xticklabels(parameter_list,rotation=90)
+        plt.legend(loc=(1,1))
+        plt.title('Barplot Comparing Parameter Estimation Results for specific\nParameters accross all models')
+        plt.ylabel('log10 parameter_value,Err=SEM')
+        if filename!=None:
+            plt.savefig(filename,dpi=200,bbox_inches='tight')
+
+
+@mixin(tasks.UpdatePropertiesMixin)
+@mixin(ParseMixin)
+@mixin(TruncateDataMixin)
+@mixin(CreateResultsDirectoryMixin)
+class ModelSelection(object):
+    """
+    Calculate model selection criteria AIC (corrected) and
+    BIC for a selection of models that have undergone fitting
+    using the :py:class:`tasks.MultiModelFit` class. Plot as
+    boxplots and histograms.
+    """
+
+    def __init__(self, multi_model_fit, **kwargs):
+        """
+
+        :param multi_model_fit:
+            a :py:class:`tasks.MultiModelFit` object
+
+        :param filename:
+            `str` file to save model selection data to
+
+        :param pickle:
+            `str` pickle path to save data too
+        """
+        self.multi_model_fit = multi_model_fit
+        self.number_models = self.get_num_models()
+
+
+        self.default_properties = {
+            'savefig': False,
+            'results_directory': None,
+            'dpi': 400,
+            'log10': False,
+            'filename': None,
+            'pickle': None,
+            'despine': True,
+            'ext': 'png',
+            'title': True,
+            'context': 'poster',
+            'font_scale': 2,
+            'rc': None,
+            'color': None,
+            'palette': None,
+            'saturation': 0.75,
+            'model_labels': None,
+            'label': None,
+            'ax': None,
+            'show': False
+        }
+
+        for i in kwargs.keys():
+            assert i in self.default_properties.keys(), '{} is not a keyword argument for ModelSelection'.format(i)
+        self.kwargs = self.default_properties
+        self.default_properties.update(kwargs)
+        self.update_properties(self.default_properties)
+
+        self._do_checks()
+
+        ## do model selection stuff
+        self.results_folder_dct = self._get_results_directories()
+        self.model_dct = self._get_model_dct()
+
+
+        ## code for having default legend labels
+        self.default_model_labels = {os.path.split(i)[1][:-6]: os.path.split(i)[1][:-6] for i in [j.copasi_file for j in self.model_dct.values()]}
+
+
+        if self.model_labels is not None:
+            if type(self.model_labels) is not dict:
+                raise errors.InputError('model labels should be a dict')
+
+            for label in self.model_labels:
+                if label not in self.default_model_labels:
+                    raise errors.InputError('keys of the model_labels dict should be one of '
+                                            '"{}"'.format(self.default_model_labels))
+        elif self.model_labels is None:
+            self.model_labels = self.default_model_labels
+
+        self.data_dct = self._parse_data()
+        self.number_model_parameters = self._get_number_estimated_model_parameters()
+        self.number_observations = self._get_n()
+        self.model_selection_data = self.calculate_model_selection_criteria()
+        seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
+
+
+
+        # self.boxplot()
+        # self.histogram()
+        self.violin()
+        self.to_csv()
+
+
+    def __iter__(self):
+        for MPE in self.multi_model_fit:
+            yield MPE
+
+    def __getitem__(self, item):
+        return self.multi_model_fit[item]
+
+    def __setitem__(self, key, value):
+        self.multi_model_fit[key] = value
+
+    def __delitem__(self, key):
+        del self.multi_model_fit[key]
+
+    def keys(self):
+        return self.multi_model_fit.keys()
+
+    def values(self):
+        return self.multi_model_fit.values()
+
+    def items(self):
+        return self.multi_model_fit.items()
+
+    def _do_checks(self):
+        """
+
+        :return:
+        """
+        if self.results_directory is None:
+            self.results_directory = self.multi_model_fit.project_dir
+
+
+        if self.filename is None:
+            save_dir = os.path.join(self.results_directory, 'ModelSelectionGraphs')
+            self.filename = os.path.join(save_dir, 'ModelSelectionCriteria.csv')
+
+    def _get_results_directories(self):
+        '''
+        Find the results directories embedded within MultimodelFit
+        and RunMutliplePEs.
+        '''
+        return self.multi_model_fit.results_folder_dct
+
+    def get_num_models(self):
+        return len(self.multi_model_fit.cps_files)
+
+    def to_excel(self, filename=None):
+        if filename is None:
+            filename = self.filename[:-4]+'.xlsx'
+        self.model_selection_data.to_excel(filename)
+
+    def to_csv(self, filename=None):
+        if filename is None:
+            filename = self.filename
+        LOG.info('model selection data saved to {}'.format(filename))
+        self.model_selection_data.to_csv(filename)
+
+    def to_pickle(self, filename=None):
+        if filename is None:
+            filename = os.path.splitext(self.filename)[0]+'.pickle'
+
+        LOG.info('model selection pickle saved to {}'.format(filename))
+        self.model_selection_data.to_pickle(filename)
+
+    def _get_model_dct(self):
+        """
+        Get a model dct. The model must be a configured model
+        (i.e. not the original and with a number after it)
+        :return:
+        """
+        dct = {}
+        for MPE in self.multi_model_fit:
+
+            ## get the first cps file configured for eastimation in each MMF obj
+            cps_1 = glob.glob(
+                os.path.join(
+                    os.path.dirname(MPE.results_directory),
+                    '*_0.cps')
+            )[0]
+            dct[MPE.results_directory] = model.Model(cps_1)
+        return dct
+
+    def _parse_data(self):
+        if self.pickle is not None:
+            #     self.pickle = os.path.splitext(self.filename)[0]+'.pickle'
+            return pandas.read_pickle(self.pickle)
+        else:
+            dct={}
+            for cps, MPE in self.multi_model_fit.items():
+                cps_0 = cps[:-4]+'_0.cps'
+                dct[cps_0] = Parse(MPE.results_directory, copasi_file=cps_0, log10=self.log10)
+            return dct
+
+    def _get_number_estimated_model_parameters(self):
+        k_dct={}
+        for mod in self.model_dct.values():
+            k_dct[mod.copasi_file] = len(mod.fit_item_order)
+        return k_dct
+
+    def _get_n(self):
+        '''
+        get number of observed data points for AIC calculation
+        '''
+        n={}
+        for exp in self.multi_model_fit.exp_files:
+            data=pandas.read_csv(exp,sep='\t')
+            l=[]
+            for key in data.keys() :
+                if key.lower()!='time':
+                    if key[-6:]!='_indep':
+                        l.append(int(data[key].shape[0]))
+            n[exp]=sum(l)
+        n=sum(n.values())
+        return n
+
+    def calculate1AIC(self,RSS,K,n):
+        """
+        Calculate the corrected AIC:
+
+            AICc = -2*ln(RSS/n) + 2*K + (2*K*(K+1))/(n-K-1)
+
+            or if likelihood function used instead of RSS
+
+            AICc = -2*ln(likelihood) + 2*K + (2*K*(K+1))/(n-K-1)
+
+        Where:
+            RSS:
+                Residual sum of squares for model fit
+            n:
+                Number of observations collectively in all data files
+
+            K:
+                Number of model parameters
+        """
+        return n*numpy.log((RSS/n)) + 2*K + (2*K*(K+1))/(n-K-1)
+
+
+    def calculate1BIC(self,RSS,K,n):
+        '''
+        Calculate the bayesian information criteria
+            BIC = -2*ln(likelihood) + k*ln(n)
+
+                Does this then go to:
+
+            BIC = -2*ln(RSS/n) + k*ln(n)
+        '''
+        return  (n*numpy.log(RSS/n) ) + K*numpy.log(n)
+
+    def calculate_model_selection_criteria(self):
+        """
+        Calculate AIC corrected and BIC
+        :return:
+            pandas.DataFrame
+        """
+        df_dct = {}
+        for model_num in range(len(self.model_dct)):
+            keys = self.model_dct.keys()
+            cps_key = self.model_dct[keys[model_num]].copasi_file
+
+            k = self.number_model_parameters[cps_key]
+            n = self.number_observations #constant throughout analysis
+            rss = self.data_dct[cps_key].data.RSS
+            aic_dct = {}
+            bic_dct = {}
+            for i in range(len(rss)):
+                aic = self.calculate1AIC(rss.iloc[i], k, n)
+                bic = self.calculate1BIC(rss.iloc[i], k, n)
+                aic_dct[i] = aic
+                bic_dct[i] = bic
+            aic = pandas.DataFrame.from_dict(aic_dct, orient='index')
+            rss = pandas.DataFrame(rss)
+            bic = pandas.DataFrame.from_dict(bic_dct, orient='index')
+            df = pandas.concat([rss, aic, bic], axis=1)
+            df.columns = ['RSS', 'AICc', 'BIC']
+            df.index.name = 'RSS Rank'
+            df_dct[os.path.split(cps_key)[1][:-6]] = df
+        df = pandas.concat(df_dct, axis=1)
+        return df
+
+    def violin(self):
+        seaborn.set_context(context='poster')
+        data = self.model_selection_data
+
+        data = data.unstack()
+        data = data.reset_index()
+        data = data.rename(columns={'level_0': 'Model',
+                                    'level_1': 'Metric',
+                                    0: 'Score'})
+
+        new_names = []
+        for mod in data['Model']:
+            for j in self.model_labels:
+                if mod == j:
+                    new_names.append(self.model_labels[j])
+
+        data['Model'] = new_names
+        print data
+        print self.model_labels
+        for metric in data['Metric'].unique():
+            fig = plt.figure()
+            seaborn.violinplot(data=data[data['Metric'] == metric],
+                               x='Model',
+                               y='Score',
+                               color=self.color,
+                               palette=self.palette,
+                               saturation=self.saturation,
+                               ax=self.ax)
             plt.xticks(rotation='vertical')
             if self.title:
                 plt.title('{} Scores'.format(metric))
