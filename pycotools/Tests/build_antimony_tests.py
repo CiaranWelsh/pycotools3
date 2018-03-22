@@ -195,6 +195,55 @@ class BuildAntimonyTestsWithoutRemovalBetweenTests(unittest.TestCase):
 
         self.assertNotIn('B', [i.name for i in mod.metabolites])
 
+
+class TestModelComponentsWithAntimonyDerivedModels(unittest.TestCase):
+    """
+    Test the case where a model already exists
+    """
+    def setUp(self):
+        ## create model selection directory
+
+        self.dire = os.path.join(os.path.dirname(__file__), 'AntimonyModels')
+        if not os.path.isdir(self.dire):
+            os.makedirs(self.dire)
+
+        self.copasi_file1 = os.path.join(self.dire, 'negative_feedback.cps')
+
+        with model.BuildAntimony(self.copasi_file1) as loader:
+            self.mod = loader.load(
+                """
+                model model1
+                    compartment cell = 1.0
+                    var A in cell
+                    var B in cell
+
+                    vAProd = 0.1
+                    kADeg = 0.2
+                    kBProd = 0.3
+                    kBDeg = 0.4
+                    vBasalAProd = 0.001
+                    A = 0
+                    B = 0
+
+                    AProd: => A; cell*vAProd*B+vBasalAProd
+                    ADeg: A =>; cell*kADeg*A
+                    BProd: => B; cell*kBProd*A
+                    BDeg: B => ; cell*kBDeg*B
+                end
+                """
+            )
+
+        assert os.path.isfile(self.copasi_file1)
+
+    def tearDown(self):
+        rmtree(self.dire)
+
+    def test_metabolites(self):
+        self.assertListEqual(['A', 'B'], sorted([i.name for i in self.mod.metabolites]))
+
+    def test_globals(self):
+        self.assertListEqual(sorted(['vAProd', 'kADeg', 'kBProd', 'kBDeg', 'vBasalAProd']), sorted([i.name for i in self.mod.global_quantities]))
+
 if __name__ == '__main__':
     unittest.main()
 

@@ -1037,9 +1037,7 @@ class Model(_base._Base):
 
         lst = []
         for key in metabs:
-            comp = self.get('compartment',
-                     metabs[key]['compartment'],
-                     'key')
+            comp = self.get('compartment', metabs[key]['compartment'], 'key')
             lst.append(Metabolite(self, name=metabs[key]['name'],
                                   compartment=comp,
                                   key=metabs[key]['key'],
@@ -1880,9 +1878,9 @@ class Model(_base._Base):
         if component not in self._model_components():
             raise errors.InputError('{} not in list of components'.format(component))
 
+        
         ##get the component of interest
         comp = self.get(component, match_value, by=match_field)
-
 
         if isinstance(comp, list):
             raise errors.SomethingWentHorriblyWrongError(
@@ -2258,7 +2256,7 @@ class Metabolite(object):
         self.name = name
         self.particle_numbers = particle_numbers
         self.concentration = concentration
-        self.simulation_type = None
+        self.simulation_type = simulation_type
         self.compartment = compartment
         self.key = key
 

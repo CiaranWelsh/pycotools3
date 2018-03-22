@@ -1787,24 +1787,15 @@ class PlotParameterEstimation(PlotKwargs):
         plot experimental data versus best parameter sets
         :return:
         """
-
-
-
-        # if self.y == None:
-        #     self.y = self.read_experimental_data().values()[0].keys()
-        #
-        #
-        #     ## remove time from default plotting vars
-        #     self.y = [i for i in self.y if i != 'Time']
-        #
-        #     ## remove any independent variable from default plotting vars
-        #     self.y = [i for i in self.y if i[-6:] != '_indep']
-        #
-        # else:
+        ## filter out y values which are not in the data file
+        new_y = []
         for y in self.y:
             if y not in self.read_experimental_data().values()[0].keys():
-                raise errors.InputError('"{}" not in "{}"'.format(y, self.read_experimental_data().values()[0].keys()))
+                LOG.warning('"{0}" not in "{1}". "{0}" is being ignored'.format(y, self.read_experimental_data().values()[0].keys()))
+            else:
+                new_y.append(y)
 
+        self.y = new_y
         exp_data = self.read_experimental_data()
         sim_data = self.simulate_time_course()
 

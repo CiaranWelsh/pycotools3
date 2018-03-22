@@ -33,48 +33,47 @@ Tutorial 1: The Model
    :maxdepth: 1
    
    Tutorials/Tutorial1TheModel
+
+Tutorial 2: Build Model with Antimony
+---------------------
+.. toctree::
+   :maxdepth: 1
    
-Tutorial 2: Time Course
+   Tutorials/Tutorial2BuildModelsWithAntimony
+   
+Tutorial 3: Time Course
 -----------------------
 .. toctree::
    :maxdepth: 1
    
-   Tutorials/Tutorial2Timecourse
+   Tutorials/Tutorial3Timecourse
    
-Tutorial 3: Scan
+Tutorial 4: Scan
 ----------------
 
 .. toctree::
    :maxdepth: 1
    
-   Tutorials/Tutorial3Scan
+   Tutorials/Tutorial4Scan
    
 
-Tutorial 4: Single Parameter Estimations
+Tutorial 5: Single Parameter Estimations
 ----------------------------------------
 
 .. toctree::
    :maxdepth: 1
    
-   Tutorials/Tutorial4SingleParameterEstimations
+   Tutorials/Tutorial5SingleParameterEstimations
 
 
-Tutorial 5: Parameter Estimation Workflow
+Tutorial 6: Parameter Estimation Workflow
 -----------------------------------------
 
 .. toctree::
    :maxdepth: 1
    
-   Tutorials/Tutorial5ParameterEstimationWorkflow
+   Tutorials/Tutorial6ParameterEstimationWorkflow
 
-Tutorial 6
-----------
-
-.. toctree::
-   :maxdepth: 1
-   
-   Tutorials/Tutorial6InsertParameters
-  
 Tutorial 7
 ----------
 
@@ -82,6 +81,13 @@ Tutorial 7
    :maxdepth: 1
    
    Tutorials/Tutorial7InsertParameters
+  
+Tutorial 8
+----------
+
+.. toctree::
+   :maxdepth: 1
+      Tutorials/Tutorial8InsertParameters
   
 
 Examples
