@@ -68,4 +68,5 @@ pycotools/Examples/*.cps
 pycotools/Examples/log.log
 pycotools/Tests/*.cps
 docs/log.log
+docs/source/Tutorials/*.ipynb_checkpoints
 

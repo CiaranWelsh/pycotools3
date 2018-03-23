@@ -63,7 +63,7 @@ Tutorial 5: Single Parameter Estimations
 .. toctree::
    :maxdepth: 1
    
-   Tutorials/Tutorial5SingleParameterEstimations
+   Tutorials/Tutorial5ParameterEstimation
 
 
 Tutorial 6: Parameter Estimation Workflow
@@ -74,20 +74,20 @@ Tutorial 6: Parameter Estimation Workflow
    
    Tutorials/Tutorial6ParameterEstimationWorkflow
 
-Tutorial 7
-----------
+Tutorial 7: Insert Parameters
+-----------------------------
 
 .. toctree::
    :maxdepth: 1
    
    Tutorials/Tutorial7InsertParameters
   
-Tutorial 8
-----------
+Tutorial 8: Model Selection Workflow 
+------------------------------------
 
 .. toctree::
    :maxdepth: 1
-      Tutorials/Tutorial8InsertParameters
+      Tutorials/Tutorial8ModelSelectionWorkflow
   
 
 Examples
