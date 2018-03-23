@@ -4258,6 +4258,7 @@ class InsertParameters(object):
         if self.parameter_dict != None:
             if isinstance(self.parameter_dict, dict)!=True:
                 raise errors.InputError('Argument to \'parameter_dict\' keyword needs to be of type dict')
+            
             for i in self.parameter_dict.keys():
                 if i not in self.model.all_variable_names:
                     raise errors.InputError(

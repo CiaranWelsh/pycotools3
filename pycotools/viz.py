@@ -1663,7 +1663,8 @@ class PlotParameterEstimation(PlotKwargs):
         self.kwargs = kwargs
         self.plot_kwargs = self.plot_kwargs()
 
-        default_y = [i.name for i in self.cls.model.metabolites] + [i.name for i in self.cls.model.global_quantities]
+        ## defaults to metabolites andglobal quantities with assignments
+        default_y = [i.name for i in self.cls.model.metabolites] + [i.name for i in self.cls.model.global_quantities if i.simulation_type == 'Assignment']
         self.default_properties = {
             'y': default_y,
             'savefig': False,
@@ -1691,7 +1692,12 @@ class PlotParameterEstimation(PlotKwargs):
 
         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
 
+
         self.data = self.parse(self.cls, self.log10, copasi_file=self.copasi_file)
+
+        self.exp_data = self.read_experimental_data()
+        self.sim_data = self.simulate_time_course()
+
         self.cls.model = self.update_parameters()
         self.plot()
 
@@ -1759,9 +1765,9 @@ class PlotParameterEstimation(PlotKwargs):
         :return:
         """
         dct = {}
-        data_dct = self.read_experimental_data()
-        for i in data_dct:
-            dct[i] = data_dct[i]['Time'].max()
+
+        for i in self.exp_data:
+            dct[i] = self.exp_data[i]['Time'].max()
         return dct
 
     def simulate_time_course(self):
@@ -1773,12 +1779,21 @@ class PlotParameterEstimation(PlotKwargs):
         time_dct = self.get_time()
         d = {}
         step_size = 1
-        for i in time_dct:
+        for exp in time_dct:
+            indep_dct = {}
+            for exp_key in self.exp_data[exp].keys():
+                if exp_key[-6:] == '_indep':
+                    indep_dct[exp_key[:-6]] = self.exp_data[exp][exp_key].iloc[0]
+
+                ## Insert independent vars
+                model.InsertParameters(self.cls.model, parameter_dict=indep_dct, inplace=True)
+
+
             TC = tasks.TimeCourse(
-                self.cls.model, end=time_dct[i], step_size=step_size,
-                intervals=time_dct[i]/step_size,
+                self.cls.model, end=time_dct[exp], step_size=step_size,
+                intervals=time_dct[exp]/step_size,
             )
-            d[i] = self.parse(TC, self.log10, copasi_file=self.copasi_file)
+            d[exp] = self.parse(TC, self.log10, copasi_file=self.copasi_file)
 
         return d
 
@@ -1788,24 +1803,19 @@ class PlotParameterEstimation(PlotKwargs):
         :return:
         """
         ## filter out y values which are not in the data file
-        new_y = []
         for y in self.y:
             if y not in self.read_experimental_data().values()[0].keys():
-                LOG.warning('"{0}" not in "{1}". "{0}" is being ignored'.format(y, self.read_experimental_data().values()[0].keys()))
-            else:
-                new_y.append(y)
+                raise errors.InputError('"{0}" not in "{1}". "{0}" is being ignored'.format(y, self.read_experimental_data().values()[0].keys()))
 
-        self.y = new_y
-        exp_data = self.read_experimental_data()
-        sim_data = self.simulate_time_course()
-
-        for exp in exp_data:
-            for sim in sim_data:
+        for exp in self.exp_data:
+            for sim in self.sim_data:
                 if exp == sim:
+
                     for key in self.y:
+
                         plt.figure()
                         plt.plot(
-                            exp_data[exp]['Time'], exp_data[exp][key],
+                            self.exp_data[exp]['Time'], self.exp_data[exp][key],
                             label='Exp', linestyle=self.linestyle,
                             marker=self.marker, linewidth=self.linewidth,
                             markersize=self.markersize,
@@ -1813,7 +1823,7 @@ class PlotParameterEstimation(PlotKwargs):
                             color='#0E00FA',
                         )
                         plt.plot(
-                            sim_data[sim]['Time'], sim_data[sim][key],
+                            self.sim_data[sim]['Time'], self.sim_data[sim][key],
                             label='Sim', linestyle=self.linestyle,
                             marker=self.marker, linewidth=self.linewidth,
                             markersize=self.markersize,

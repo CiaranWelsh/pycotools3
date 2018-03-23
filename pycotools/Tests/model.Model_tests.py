@@ -1298,51 +1298,6 @@ class BuildWithAntimony(unittest.TestCase):
         # print pycotools.viz.PlotTimeCourse(tasks.timecourse(end=100, intervals=100, step_size=1), savefig=True)
 
 
-# class InsertParametersWithFixedSpecies(unittest.TestCase):
-#     """
-#     In the model defined in setup, the species $Signal is fixed.
-#     When you change a fixed species using InsertParameters
-#     """
-#     def setUp(self):
-#         copasi_file = os.path.join(os.path.dirname(__file__), 'test_model.cps')
-#         with pycotools.model.BuildAntimony(copasi_file) as loader:
-#             self.mod = loader.load(
-#                 """
-#                 model negative_feedback
-#                     compartment cell = 1.0
-#                     var A in cell
-#                     var B in cell
-#                     var Signal in cell
-# 
-#                     vAProd = 0.1
-#                     kADeg = 0.2
-#                     kBProd = 0.3
-#                     kBDeg = 0.4
-#                     A = 0
-#                     B = 0
-#                     Signal = 10
-# 
-#                     AProd: $Signal => A; cell*vAProd*Signal
-#                     ADeg: A =>; cell*kADeg*A*B
-#                     BProd: => B; cell*kBProd*A
-#                     BDeg: B => ; cell*kBDeg*B
-#                 end
-#                 """
-#             )
-# 
-#     def test(self):
-#         # print 'before'
-#         # print self.mod.get('metabolite', 'Signal')
-#         # for i in self.mod.metabolites:
-#         #     print i
-#         # print [i for i in self.mod.metabolites if getattr(i, 'name') == 'Signal']
-#         # self.mod.metabolites#copasi_file
-#         # self.mod.set('metabolite', 'Signal', 25, change_field='concentration')
-#         # print 'after'
-#         # self.mod.metabolites#copasi_file
-# 
-#         # pycotools.model.InsertParameters(self.mod, parameter_dict={'Signal': 25}, inplace=True)
-# 
 
 if __name__ == '__main__':
     # pass
