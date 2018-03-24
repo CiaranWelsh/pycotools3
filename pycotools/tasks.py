@@ -3767,8 +3767,9 @@ class MultiParameterEstimation(ParameterEstimation):
 
 class ChaserParameterEstimations(object):
     def __init__(self, cls=None, model=None, experiment_files=None,
-                 pe_data=None, log10=False, truncate_mode='percent',
-                 theta=100, iteration_limit=100, tolerance=1e-6, results_directory=None,
+                 parameter_path=None, log10=False, truncate_mode='percent',
+                 theta=100, iteration_limit=100, 
+                 tolerance=1e-6, results_directory=None,
                  run_mode=False, max_active=2, **kwargs):
 
         ## Define class variables
@@ -3778,7 +3779,7 @@ class ChaserParameterEstimations(object):
         self.truncate_mode = truncate_mode
         self.theta = theta
         self.cls = cls
-        self.pe_data = pe_data
+        self.pe_data = parameter_path
         self.iteration_limit = iteration_limit
         self.tolerance = tolerance
         self.results_directory = results_directory
@@ -3798,27 +3799,18 @@ class ChaserParameterEstimations(object):
                 'ChaserEstimations'
             )
 
-        LOG.debug('results_directory --> {}'.format(self.results_directory))
-
         if not os.path.isdir(self.results_directory):
             os.makedirs(self.results_directory)
 
         ## Parse the parameter estimation data
         self.data = self.parse_pe_data()
-        LOG.debug('1')
-
-        LOG.debug('2')
         ##truncate the data to only parameter sets to improve
         self.data = viz.TruncateData(self.data,
                                      mode=self.truncate_mode,
                                      theta=self.theta).data
-        LOG.debug('3')
-
         self.pe_dct = self.configure()
-        LOG.debug('4')
 
         self.run()
-        LOG.debug('5')
         # raise NotImplementedError('Still building this class. Problem with '
         #                           'data file names. Data is currently '
         #                           'being overwritten in one file instead of writing more'
@@ -3909,7 +3901,6 @@ class ChaserParameterEstimations(object):
             ## save model to new name and do d
 
             mod = deepcopy(self.model.save(new_cps))
-            LOG.debug('configuring --> {}'.format(filename))
             p = multiprocessing.Process(target=self.configure1, args=(mod, filename, self.data, i))
             p.start()
             p.join()

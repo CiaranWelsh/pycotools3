@@ -489,13 +489,8 @@ class Parse(object):
         elif type(self.cls_instance == str):
             data = self.from_folder()
 
-        #
-        # LOG.debug('type data : {}'.format(type(data)))
-        # LOG.debug('data : {}'.format(data))
         if self.log10:
             if not type(self.cls_instance) == tasks.ProfileLikelihood:
-                # LOG.debug(data)
-                # LOG.debug('type {}'.format(type(self.cls_instance)))
                 data = numpy.log10(data)
                 return data
             else:
@@ -639,9 +634,6 @@ class Parse(object):
             if os.path.isfile(report_name) is not True:
                 raise errors.FileDoesNotExistError('"{}" does not exist'.format(report_name))
 
-            # df = pandas.read_csv(report_name, sep='\t', header=None)
-            # print df
-            # d.append(df)
             try:
                 ## read df without header
                 df = pandas.read_csv(report_name, sep='\t', header=None)
@@ -1311,6 +1303,9 @@ class PlotTimeCourseEnsemble(object):
                    'font_scale': 1.5,
                    'rc': None,
                    'copasi_file': None,
+                   'normalize_y_axis': False,
+                   'ymin': None,
+                   'ymax': None,
                    }
 
         for i in kwargs.keys():
@@ -1390,7 +1385,6 @@ class PlotTimeCourseEnsemble(object):
         :return:
         """
         df_dct = {}
-        LOG.debug('tpe self.cls parse --> {}'.format(self.cls))
         if type(self.cls) == Parse:
             exp_files = self.experiment_files
 
@@ -1515,6 +1509,7 @@ class PlotTimeCourseEnsemble(object):
         data = data.reset_index()
         data.sort_values(by=['Time', 'ParameterFitIndex']).head(5)
         # seaborn.despine()
+
         for parameter in self.y:
             if parameter not in ['ParameterFitIndex', 'Time']:
                 LOG.info('Plotting "{}"'.format(parameter))
@@ -1530,6 +1525,7 @@ class PlotTimeCourseEnsemble(object):
                     color=self.color,
                     legend=self.legend,
                 )
+                
 
                 if parameter in self.observables:
                     for df in self.experimental_data.values():
@@ -1542,9 +1538,10 @@ class PlotTimeCourseEnsemble(object):
                                            label='Exp', alpha=0.4, marker='o')
 
 
-                    sim_patch = mpatches.Patch(color=self.color, label='Sim', alpha=0.4)
-                    exp_patch = mpatches.Patch(color=self.exp_color, label='Exp', alpha=0.4)
-                    plt.legend(handles=[sim_patch, exp_patch], loc=(1, 0.5))
+                    if self.legend:
+                        sim_patch = mpatches.Patch(color=self.color, label='Sim', alpha=0.4)
+                        exp_patch = mpatches.Patch(color=self.exp_color, label='Exp', alpha=0.4)
+                        plt.legend(handles=[sim_patch, exp_patch], loc=(1, 0.5))
 
                 if self.despine:
                     seaborn.despine(ax=ax1, top=True, right=True)
@@ -1556,7 +1553,8 @@ class PlotTimeCourseEnsemble(object):
                     plt.title(self.title)
 
                 if self.ylabel is None:
-                    plt.ylabel('{}'.format(self.cls.model.quantity_unit))
+                    plt.ylabel('{}/{}'.format(self.cls.model.quantity_unit,
+                                              self.cls.model.volume_unit)+'$^{-1}$')
 
                 else:
                     plt.ylabel(self.ylabel)
@@ -1566,6 +1564,12 @@ class PlotTimeCourseEnsemble(object):
 
                 else:
                     plt.xlabel(self.xlabel)
+                    
+                if self.ymin is not None:
+                    plt.ylim(ymin=self.ymin)
+
+                if self.ymax is not None:
+                    plt.ylim(ymax=self.ymax)
 
                 if self.savefig:
                     self.results_directory = self.create_directory()
@@ -2408,7 +2412,7 @@ class Histograms(PlotKwargs):
                 fname = os.path.join(self.results_directory,
                                      misc.RemoveNonAscii(parameter).filter+'.{}'.format(self.ext))
                 plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
-
+                LOG.info('plot save to "{}"'.format(fname))
     def coloured_plot(self):
         """
 
@@ -2589,8 +2593,8 @@ class Scatters(PlotKwargs):
 
                 if self.log10:
                     cb.set_label('log10 RSS')
-                    plt.xlabel("log10 {}".format(x_var))
-                    plt.ylabel('log10 {}'.format(y_var))
+                    plt.xlabel('log$_{10}$'+'[{}]'.format(x_var))
+                    plt.ylabel('log$_{10}$'+'[{}]'.format(y_var))
                 else:
                     cb.set_label('RSS')
                     plt.xlabel(x_var)
@@ -3178,7 +3182,6 @@ class ModelSelectionOld(object):
                                     0: 'Score'})
         for metric in data['Metric'].unique():
             fig = plt.figure()
-            print data
             seaborn.violinplot(data=data[data['Metric'] == metric],
                                x='Model',
                                y='Score',
@@ -3569,8 +3572,6 @@ class ModelSelection(object):
                     new_names.append(self.model_labels[j])
 
         data['Model'] = new_names
-        print data
-        print self.model_labels
         for metric in data['Metric'].unique():
             fig = plt.figure()
             seaborn.violinplot(data=data[data['Metric'] == metric],
@@ -3733,8 +3734,6 @@ class PlotProfileLikelihood(object):
         ## parse data
         self.data = Parse(self.cls, log10=self.log10, alpha=self.alpha).data
 
-        # print self.data.head()
-
         ## do some checks
         self._do_checks()
 
@@ -3874,10 +3873,11 @@ class PlotProfileLikelihood(object):
                              linestyle='--', color='green', label='CL')
 
                     if self.show_best_rss:
-                        best_rss = list(set(plot_data['Best RSS Value']))
-                        best_param_val = list(set(plot_data['Best Parameter Value']))
-                        plt.plot(best_param_val, best_rss, self.best_rss_marker, linewidth=5,
-                                 markersize=12)
+                        if y is 'RSS':
+                            best_rss = list(set(plot_data['Best RSS Value']))
+                            best_param_val = list(set(plot_data['Best Parameter Value']))
+                            plt.plot(best_param_val, best_rss, self.best_rss_marker, linewidth=5,
+                                     markersize=12)
 
                     if self.legend:
                         if self.legend_loc is not None:
@@ -3898,8 +3898,8 @@ class PlotProfileLikelihood(object):
                     plt.title(self.title)
 
                     if self.log10:
-                        plt.ylabel('log10 {}'.format(y))
-                        plt.xlabel('log10 {}'.format(x))
+                        plt.ylabel(r'$log_{10}$[{}]'.format(y))
+                        plt.xlabel(r'$log_{10}$[{}]'.format(x))
                     else:
                         plt.ylabel(y)
                         plt.xlabel(x)
@@ -3963,10 +3963,11 @@ class PlotProfileLikelihood(object):
 
 
                     if self.show_best_rss:
-                        best_rss = list(set(plot_data['Best RSS Value']))
-                        best_param_val = list(set(plot_data['Best Parameter Value']))
-                        plt.plot(best_param_val, best_rss, self.best_rss_marker, linewidth=5,
-                                 markersize=12)
+                        if y == 'RSS':
+                            best_rss = list(set(plot_data['Best RSS Value']))
+                            best_param_val = list(set(plot_data['Best Parameter Value']))
+                            plt.plot(best_param_val, best_rss, self.best_rss_marker, linewidth=5,
+                                     markersize=12)
 
                     if self.legend:
                         if self.legend_loc is not None:
@@ -3978,9 +3979,10 @@ class PlotProfileLikelihood(object):
                         seaborn.despine(fig=fig, top=True, right=True)
 
                     # LOG.debug('title is --> {}'.format(self.title))
-                    # if self.title is None:
-                    self.title = 'Profile Likelihoods for\n{} ' \
+                    if self.title is None:
+                        self.title = 'Profile Likelihoods for\n{} ' \
                                  'against {} (index={})'.format(x, y, i)
+
 
                     # elif self.title is 'profile':
                     #     self.title = x
@@ -3988,8 +3990,8 @@ class PlotProfileLikelihood(object):
                     plt.title(self.title)
 
                     if self.log10:
-                        plt.ylabel('log10 {}'.format(y))
-                        plt.xlabel('log10 {}'.format(x))
+                        plt.ylabel(r'log$_{10}$'+'[{}]'.format(y))
+                        plt.xlabel(r'log$_{10}$'+'[{}]'.format(x))
                     else:
                         plt.ylabel(y)
                         plt.xlabel(x)
@@ -4165,8 +4167,6 @@ class PlotProfileLikelihood3d(object):
 
         ## parse data
         self.data = Parse(self.cls, log10=self.log10, alpha=self.alpha).data
-
-        # print self.data.head()
 
         ## do some checks
         self._do_checks()
@@ -4616,6 +4616,8 @@ class PearsonsCorrelation(PlotKwargs):
 
 
         self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
+
+
         self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
 
         self.combinations = self.get_combinations()
@@ -4627,8 +4629,18 @@ class PearsonsCorrelation(PlotKwargs):
 
         :return:
         """
+        if isinstance(self.cls, str):
+            if self.copasi_file is None:
+                raise ValueError('When first argument is a string '
+                                 'pointing to parameter estimation data '
+                                 'specify an argument to copasi_file')
         if self.results_directory is None:
-            self.results_directory = os.path.join(self.cls.model.root, 'PearsonsHeatMap')
+            try:
+                self.results_directory = os.path.join(self.cls.model.root, 'PearsonsCorrelation')
+            except AttributeError as e:
+                self.results_directory = os.path.join(
+                    os.path.dirname(self.copasi_file), 'PearsonsCorrelation'
+                )
 
     def get_combinations(self):
         return permutations(list(self.data.keys()), 2)
@@ -4652,6 +4664,9 @@ class PearsonsCorrelation(PlotKwargs):
     def heatmap(self):
         seaborn.set_context(context=self.context, font_scale=self.font_scale)
         data = self.pearsons
+
+        data = data.drop('RSS', axis=0)
+        data = data.drop('RSS', axis=1)
 
         plt.figure()
         fig = seaborn.heatmap(data=data,
