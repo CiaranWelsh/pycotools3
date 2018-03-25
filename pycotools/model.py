@@ -296,7 +296,6 @@ class ImportSBML(object):
         return Model(self.copasi_file)
 
 
-
 class Model(_base._Base):
     """
     The Model object is of central importance in pycotools as
@@ -459,6 +458,10 @@ class Model(_base._Base):
     #     return self
 
     def to_antimony(self):
+        """
+        Return model as Antimony model string
+        :return:
+        """
         sbml_file = self.to_sbml()
         assert os.path.isfile(sbml_file)
         with open(sbml_file) as f:

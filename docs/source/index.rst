@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Pycotools's Documentation
-=====================================
+==========================
 
 
 QuickStart
@@ -35,7 +35,7 @@ Tutorial 1: The Model
    Tutorials/Tutorial1TheModel
 
 Tutorial 2: Build Model with Antimony
----------------------
+-------------------------------------
 .. toctree::
    :maxdepth: 1
    
@@ -81,14 +81,16 @@ Tutorial 7: Insert Parameters
    :maxdepth: 1
    
    Tutorials/Tutorial7InsertParameters
-  
-Tutorial 8: Model Selection Workflow 
-------------------------------------
+
+
+Tutorial 8: Model Selection Demo
+--------------------------------
 
 .. toctree::
    :maxdepth: 1
-      Tutorials/Tutorial8ModelSelectionWorkflow
-  
+   
+   Tutorials/Tutorial8ModelSelectionDemo
+
 
 Examples
 ========

@@ -1045,7 +1045,8 @@ class PlotTimeCourse(PlotKwargs):
             'linewidth': 3,
             'color': 'red',
             'linestyle': '-',
-            'ext': 'png'
+            'ext': 'png',
+            'legend_loc': 'best',
         }
         self.default_properties.update(self.plot_kwargs())
         for i in kwargs.keys():
@@ -1164,7 +1165,12 @@ class PlotTimeCourse(PlotKwargs):
             x = self.data[self.x]
             plt.plot(x, y, label=y_var, linewidth=self.linewidth,
                      linestyle=self.linestyle)
-            plt.legend()
+
+            if self.legend_loc is 'best':
+                plt.legend(loc='best')
+            else:
+                plt.legend(loc=self.legend_loc)
+
             plt.title(self.title)
             plt.xlabel(self.xlabel)
             plt.ylabel(self.ylabel)
