@@ -1813,9 +1813,13 @@ class PlotParameterEstimation(PlotKwargs):
         :return:
         """
         ## filter out y values which are not in the data file
+        newy = []
         for y in self.y:
-            if y not in self.read_experimental_data().values()[0].keys():
-                raise errors.InputError('"{0}" not in "{1}". "{0}" is being ignored'.format(y, self.read_experimental_data().values()[0].keys()))
+            if y in self.read_experimental_data().values()[0].keys():
+                # print '"{0}" not in "{1}". "{0}" is being ignored'.format(y, self.read_experimental_data().values()[0].keys())
+                newy.append(y)
+
+        self.y = newy
 
         for exp in self.exp_data:
             for sim in self.sim_data:
