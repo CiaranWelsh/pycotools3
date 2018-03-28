@@ -25,7 +25,8 @@ Date:
  Object:
  
 '''
-
+import site
+site.addsitedir('/home/b3053674/Documents/pycotools')
 import pycotools
 from pycotools.Tests import test_models
 import unittest
