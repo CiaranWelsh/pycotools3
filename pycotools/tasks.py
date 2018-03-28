@@ -102,11 +102,11 @@ class GetModelVariableFromStringMixin(Mixin):
                 assignments = m.get(
                     'local_parameter', 'assignment', by='simulation_type'
                 )
-                raise errors.InputError('Variable "{}" is not in model. '
+                raise errors.InputError('Variable "{}" is not in model "{}". '
                                         'These are your model variables:\n '
                                         '{} \n These are local_parameters '
                                         'with global_quantities assigned '
-                                        'to them: \n"{}"'.format(v, m.all_variable_names,
+                                        'to them: \n"{}"'.format(v, m.name, m.all_variable_names,
                                                                  [i.global_name for i in assignments]))
         assert isinstance(v, str) != True
         return v
@@ -505,7 +505,7 @@ class Run(object):
         ## -N option for job namexx
         os.system('sbatch "{}"  --job-name "{}"'.format(self.sge_job_filename, self.sge_job_filename))
         ## remove .sh file after used.
-        # os.remove(self.sge_job_filename)
+        os.remove(self.sge_job_filename)
 
 @mixin(model.GetModelComponentFromStringMixin)
 @mixin(UpdatePropertiesMixin)
@@ -2246,7 +2246,9 @@ class ExperimentMapper(object):
         i is the exeriment_file index
         """
         assert isinstance(index, int)
-        data = pandas.read_csv(self.experiment_files[index], sep=self.separator[index], skip_blank_lines=False)
+        data = pandas.read_csv(self.experiment_files[index], sep=self.separator[index], skip_blank_lines=False,
+                               header=None)
+        data = data.rename(columns=data.iloc[0], copy=False).iloc[1:].reset_index(drop=True)
 
         if data.isnull().any().any() == True:
             raise NotImplementedError('Pycotools detected multiple experiments in "{}". This is not '
@@ -2270,7 +2272,9 @@ class ExperimentMapper(object):
 
         #necessary XML attributes
         Exp=etree.Element('ParameterGroup', attrib={'name': self.key})
+
         # Exp = etree.Element('ParameterGroup', attrib={'name': self.experiment_files[index]})
+
 
         row_orientation = {'type': 'bool',
                          'name': 'Data is Row Oriented',
@@ -2346,12 +2350,12 @@ class ExperimentMapper(object):
                                    'value': '1'}
 
         ignored_role = {'type': 'unsignedInteger',
-                               'name': 'Role',
-                               'value': '0'}
+                                'name': 'Role',
+                                'value': '0'}
 
         for i in range(int(num_columns)):
             map_group=etree.SubElement(Map, 'ParameterGroup', attrib={'name': (str(i))})
-            if self.experiment_type[index]==str(1): #when Experiment type is set to time course it should be 1
+            if self.experiment_type[index] == str(1): #when Experiment type is set to time course it should be 1
                 ## first column is time
                 if i == 0:
                     etree.SubElement(map_group, 'Parameter', attrib=time_role)
@@ -2532,9 +2536,45 @@ class ExperimentMapper(object):
         map all experiment sets
         :return:
         """
+
         self.remove_all_experiments()
-        for i in range(len(self.experiment_files)):
-            Experiment = self.create_experiment(i)
+        for index in range(len(self.experiment_files)):
+            ## read data to get headers.
+            ## read in such a way that duplicate columns are not mangled
+            data = pandas.read_csv(self.experiment_files[index], sep=self.separator[index], skip_blank_lines=False,
+                                   header=None)
+            data = data.rename(columns=data.iloc[0], copy=False).iloc[1:].reset_index(drop=True)
+
+            ## if none of the variables in the experiment file exist then skip
+            variable_exists_list = []
+            for i in data.columns:
+                if i not in self.model.all_variable_names:
+                    variable_exists_list.append(False)
+                else:
+                    variable_exists_list.append(True)
+
+            ## if variable exists list ends up being False, we know
+            ## that none of the data in the datafile have
+            ## variables correlating to model components. In this case,
+            ## pycotools skips mapping this file and sends a warning
+
+            # print list(set(variable_exists_list))[0]
+            # print list(set(variable_exists_list))
+            if (list(set(variable_exists_list))[0] == False) and (len(list(set(variable_exists_list))) == 1):
+                LOG.warning('None of the column headers in your experimental '
+                            'data file ("{}") match any model variable in model "{}". If '
+                            'this is intentional, you can ignore this warning. This '
+                            'most commonly occurs when using MultiModelFit. In this case '
+                            'the data file is intended for an alternative model which is '
+                            'why the variable is not in the model. If this is not the case, '
+                            'please check your experimental data variable names to ensure they exactly match '
+                            'corresponding model variable names. For convenience here is a list of '
+                            'variables in your model: \n "{}"'.format(self.experiment_files[index],
+                                                                      self.model.name,
+                                                                      self.model.all_variable_names))
+                continue
+
+            Experiment = self.create_experiment(index)
             self.model = self.add_experiment_set(Experiment)
             # self.save() ## Note sure whether this save is needed. Keep commented until you're sure
         return self.model
