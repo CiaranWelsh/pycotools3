@@ -704,7 +704,6 @@ class Parse(object):
             report_name = os.path.abspath(report_name)
             if os.path.isfile(report_name) != True:
                 raise errors.FileDoesNotExistError('"{}" does not exist'.format(report_name))
-            LOG.debug(report_name)
             # LOG.warning('You have commented out a try except block because '
             #             'pandas has deprecated the error in use. This warning '
             #             'is here to remind you that you have removed the try '
@@ -3469,11 +3468,11 @@ class ModelSelection(object):
         for MPE in self.multi_model_fit:
 
             ## get the first cps file configured for eastimation in each MMF obj
-            cps_1 = glob.glob(
+            cps_1 = sorted(glob.glob(
                 os.path.join(
                     os.path.dirname(MPE.results_directory),
                     '*.cps')
-            )[0]
+            ))[0]
             dct[MPE.results_directory] = model.Model(cps_1)
         return dct
 
@@ -3484,7 +3483,7 @@ class ModelSelection(object):
         else:
             dct={}
             for cps, MPE in self.multi_model_fit.items():
-                cps_0 = cps[:-4]+'_0.cps'
+                cps_0 = cps[:-4]+'.cps'
                 dct[cps_0] = Parse(MPE.results_directory, copasi_file=cps_0, log10=self.log10)
             return dct
 
@@ -3997,7 +3996,6 @@ class PlotProfileLikelihood(object):
                     if self.despine:
                         seaborn.despine(fig=fig, top=True, right=True)
 
-                    # LOG.debug('title is --> {}'.format(self.title))
                     if self.title is None:
                         self.title = 'Profile Likelihoods for\n{} ' \
                                  'against {} (index={})'.format(x, y, i)
@@ -4429,8 +4427,6 @@ class PlotProfileLikelihood3d(object):
                     if self.despine:
                         seaborn.despine(fig=fig, top=True, right=True)
 
-                    # LOG.debug('title is --> {}'.format(self.title))
-                    # if self.title is None:
                     self.title = 'Profile Likelihoods for\n{} ' \
                                  'against {} (index={})'.format(x, y, i)
 
