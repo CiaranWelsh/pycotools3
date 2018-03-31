@@ -3653,7 +3653,8 @@ class MultiParameterEstimation(ParameterEstimation):
         :return: dict[index] = model copy
         """
         dct = {}
-        for i in range(self.copy_number):
+        dct[0] = deepcopy(self.model)
+        for i in range(1, self.copy_number):
             dire, fle = os.path.split(self.model.copasi_file)
             new_cps = os.path.join(dire, fle[:-4]+'_{}.cps'.format(i))
             model = deepcopy(self.model)

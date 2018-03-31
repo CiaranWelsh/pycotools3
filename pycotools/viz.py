@@ -704,6 +704,7 @@ class Parse(object):
             report_name = os.path.abspath(report_name)
             if os.path.isfile(report_name) != True:
                 raise errors.FileDoesNotExistError('"{}" does not exist'.format(report_name))
+            LOG.debug(report_name)
             # LOG.warning('You have commented out a try except block because '
             #             'pandas has deprecated the error in use. This warning '
             #             'is here to remind you that you have removed the try '
@@ -740,7 +741,15 @@ class Parse(object):
                         )
                         continue
                     else:
-                        raise ValueError(e)
+                        raise ValueError(
+                            """
+                            pandas raised the following error \n {} \n while trying 
+                            to read from "{}". It is likely that for some reson not all your 
+                            data files are uniform in shape. Perhaps this has occured
+                            because more than one parameter estimation iterations have tried 
+                            to write to the same file?
+                            """.format(e, report_name)
+                        )
 
             except CParserError:
                 raise CParserError('Parameter estimation data file is empty')
@@ -3463,7 +3472,7 @@ class ModelSelection(object):
             cps_1 = glob.glob(
                 os.path.join(
                     os.path.dirname(MPE.results_directory),
-                    '*_0.cps')
+                    '*.cps')
             )[0]
             dct[MPE.results_directory] = model.Model(cps_1)
         return dct
