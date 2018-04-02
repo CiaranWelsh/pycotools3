@@ -4243,8 +4243,7 @@ class InsertParameters(object):
         self.inplace = inplace
         self._do_checks()
 
-
-        self.model= self.insert()
+        self.model = self.insert()
         if self.inplace:
             self.model.save()
 

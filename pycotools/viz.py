@@ -223,6 +223,7 @@ class TruncateData(object):
         self.log10 = log10
         assert self.mode in ['below_theta', 'percent', 'ranks']
 
+
         self.data = self.truncate()
 
     def below_theta(self):
@@ -252,7 +253,10 @@ class TruncateData(object):
         :return:
             :py:class:'pandas.DataFrame`
         """
-        self.data = self.data.sort_values(by='RSS')
+        ## need to reset the index after sorting just in case some of the RSS
+        ## values are identical. In this case there is no guarentee that
+        ## self.data is in ascending order and breaks with .iloc[0].
+        self.data = self.data.sort_values(by='RSS').reset_index(drop=True)
         return self.data.iloc[self.theta]
 
     def truncate(self):
@@ -449,6 +453,7 @@ class Parse(object):
                 )
 
         self.data = self.parse()
+        self.data.to_csv('/home/b3053674/Documents/Models/2018/04_April/data.csv')
 
 
     def parse(self):
@@ -2578,7 +2583,7 @@ class Scatters(PlotKwargs):
         if self.y is None:
             self.y = self.data.keys()
 
-        if self.y == 'all' or self.y == ['all']:
+        if (self.y == 'all') or (self.y == ['all']):
             self.y = self.data.keys()
 
         if self.x == 'all' or self.x == ['all']:

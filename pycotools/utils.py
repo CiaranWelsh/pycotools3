@@ -66,11 +66,46 @@ def format_timecourse_data(report_name):
 
 
 class Latex(object):
-    def __init__(self, filename):
+    def __init__(self, filename, file_types='.png'):
         self.filename = filename
+        self.file_types = file_types
+
         if self.filename.endswith('.pdf'):
             self.filename = os.path.splitext(self.filename)[0]
-        
+
+    def search_recursive(self, directory):
+        """
+        recursively add all png, pdf or jpg
+        files to a list
+        :param directory:
+        :return:
+        """
+
+        files = {}
+        for i in sorted(os.listdir(directory)):
+            fname = os.path.join(directory, i)
+            if os.path.isfile(fname):
+                if os.path.splitext(fname)[1] in self.file_types:
+                    key = os.path.dirname(fname)
+                    if key in files.keys():
+                        files[key] = files[key] + [fname]
+                    elif key not in files.keys():
+                        files[key] = [fname]
+                    else:
+                        raise Exception
+            elif os.path.isdir(fname):
+                files.update(self.search_recursive(fname))
+        return files
+
+    def search(self, directory):
+        file_types = ['*.{}'.format(i) for i in file_types]
+        files = []
+        for i in self.file_types:
+            patterns = os.path.join(directory, i)
+            for j in glob.glob(patterns):
+                if j is not []:
+                    files.append(j)
+        return files
         
     def prepare_document(self, directory, subdirs=False, file_types='.png'):
         """
@@ -84,44 +119,14 @@ class Latex(object):
         if isinstance(file_types, str):
             file_types = [file_types]
 
-        def add_image_files(directory, file_types):
-            """
-            recursively add all png, pdf or jpg
-            files to a list
-            :param directory:
-            :return:
-            """
-
-            files = {}
-            for i in sorted(os.listdir(directory)):
-                fname = os.path.join(directory, i)
-                if os.path.isfile(fname):
-                    if os.path.splitext(fname)[1] in file_types:
-                        print 'fname', fname
-                        key = os.path.dirname(fname)
-                        if key in files.keys():
-                            files[key] = files[key] + [fname]
-                        elif key not in files.keys():
-                            files[key] = [fname]
-                        else:
-                            raise Exception
-                elif os.path.isdir(fname):
-                    files.update(add_image_files(fname, file_types))
-            return files
 
         if subdirs:
-            files = add_image_files(directory, file_types)
+            files = self.search(directory, file_types)
 
         else:
-            file_types = ['*.{}'.forat(i) for i in file_types]
-            files = []
-            for i in file_types:
-                patterns = os.path.join(directory, i)
-                for j in glob.glob(patterns):
-                    if j is not []:
-                        files.append(j)
+            files = self.search()
 
-        if files == []:
+        if files is []:
             raise errors.InputError(
                 '''Cannot locate pdf, jpg or png files in "{}". Please 
                 give the full path to where your model selection results are
@@ -135,7 +140,7 @@ class Latex(object):
             if v is not None:
                 with doc.create(pylatex.Section(os.path.join(*Path(k).parts[-1:]))):
                     doc.append(k)
-                    # doc.append(pylatex.NoEscape(r'\\*'))
+                    doc.append(pylatex.NoEscape(r'\\*'))
                     if len(v) == 1:
                         with doc.create(
                                 pylatex.Figure(
@@ -152,25 +157,70 @@ class Latex(object):
                                 width=pylatex.NoEscape(r'\linewidth'),
                                 )
                         ) as fig:
-                            for i in v:
+                            for i in range(len(v)):
                                 with doc.create(
                                         pylatex.SubFigure(
                                             width=pylatex.NoEscape(r'0.3\linewidth')
                                         )
                                 ) as sub:
-                                    sub.add_image(i)
-                                    sub.add_caption('')
+                                    sub.add_image(v[i])
+                                    # sub.add_caption('')
+                                if i % 3 == 0:
+                                    doc.append(pylatex.NoEscape(r'\break'))
                                     # sub.add_label(i)
-                            fig.add_caption(os.path.join(*Path(i).parts[-3:-1]))
+                            fig.add_caption(os.path.join(*Path(v[i]).parts[-3:-1]))
                     doc.append(pylatex.NoEscape(r'\hfill'))
 
 
         doc.generate_pdf()
         LOG.info('PDF generated at "{}"'.format(doc.default_filepath))
 
+    def profile_likelihood(self, pl_directory, subfiles=False, file_types='.png'):
+        """
+        compile any pdf, jpg and png files
+        in directory into a latex pdf document
+        :return:
+        """
+        if subfiles not in [True, False]:
+            raise errors.InputError('subdirs argument should be either True or False')
 
+        if isinstance(file_types, str):
+            file_types = [file_types]
 
+        if subfiles:
+            files = self.search_recursive(pl_directory)
 
+        else:
+            files = self.search(pl_directory)
+
+        if files is []:
+            raise errors.InputError(
+                '''Cannot locate pdf, jpg or png files in "{}". Please 
+                give the full path to where your model selection results are
+                 plotted. 
+                '''.format(pl_directory)
+            )
+        doc = pylatex.Document(self.filename, documentclass='article')
+
+        for k, v in files.items():
+            assert isinstance(v, list)
+            if v is not None:
+                with doc.create(pylatex.Figure(
+                        position='htbp!',
+                        width=pylatex.NoEscape(r'\linewidth'))) as fig:
+                    for i in range(len(v)):
+                        with doc.create(pylatex.SubFigure(
+                                    width=pylatex.NoEscape(r'0.3\linewidth'))) as sub:
+                            sub.add_image(v[i])
+                            # sub.add_caption('')
+                        if i % 3 == 0:
+                            doc.append(pylatex.NoEscape(r'\break'))
+                            # sub.add_label(i)
+                    # fig.add_caption(os.path.join(*Path(v[i]).parts[-3:-1]))
+            doc.append(pylatex.NoEscape(r'\hfill'))
+
+        doc.generate_pdf()
+        LOG.info('PDF generated at "{}"'.format(doc.default_filepath))
 
 
 

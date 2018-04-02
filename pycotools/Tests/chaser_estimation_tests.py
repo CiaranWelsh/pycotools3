@@ -29,7 +29,7 @@ import pickle
 import site
 site.addsitedir('/home/b3053674/Documents/pycotools')
 site.addsitedir('C:\Users\Ciaran\Documents\pycotools')
-from pycotools import tasks, viz, misc, model
+from pycotools import tasks, viz, misc, model, utils
 from pycotools.retrying import retry
 from pycotools.Tests import test_models
 import unittest
@@ -43,14 +43,45 @@ import time
 
 
 
-class ChaserParameterEstimationTests(_test_base._BaseTest):
-    def setUp(self):
-        super(ChaserParameterEstimationTests, self).setUp()
+class ChaserParameterEstimationTests(unittest.TestCase):
 
-        self.TC1 = tasks.TimeCourse(self.model, end=1000, step_size=100,
+    def setUp(self):
+        ## create model selection directory
+
+        self.dire = os.path.join(os.path.dirname(__file__), 'ChaserEstimationTests')
+        if not os.path.isdir(self.dire):
+            os.makedirs(self.dire)
+
+        self.copasi_file = os.path.join(self.dire, 'negative_feedback.cps')
+
+        with model.BuildAntimony(self.copasi_file) as loader:
+            self.mod = loader.load(
+                """
+                model model1
+                    compartment cell = 1.0
+                    var A in cell
+                    var B in cell
+
+                    vAProd = 0.1
+                    kADeg = 0.2
+                    kBProd = 0.3
+                    kBDeg = 0.4
+                    vBasalAProd = 0.001
+                    A = 0
+                    B = 0
+
+                    AProd: => A; cell*vAProd*B+vBasalAProd
+                    ADeg: A =>; cell*kADeg*A
+                    BProd: => B; cell*kBProd*A
+                    BDeg: B => ; cell*kBDeg*B
+                end
+                """
+            )
+
+        self.TC1 = tasks.TimeCourse(self.mod, end=1000, step_size=100,
                                               intervals=10, report_name='report1.txt')
 
-        misc.correct_copasi_timecourse_headers(self.TC1.report_name)
+        utils.format_timecourse_data(self.TC1.report_name)
         ## add some noise
         data1 = misc.add_noise(self.TC1.report_name)
 
@@ -60,91 +91,96 @@ class ChaserParameterEstimationTests(_test_base._BaseTest):
         ## rewrite the data with noise
         data1.to_csv(self.TC1.report_name, sep='\t')
 
+        self.copy_number = 2
+        self.pe_number = 3
+
         self.MPE = tasks.MultiParameterEstimation(
-            self.model,
+            self.mod,
             self.TC1.report_name,
-            copy_number=4,
-            pe_number=8,
+            copy_number=self.copy_number,
+            pe_number=self.pe_number,
             method='genetic_algorithm',
             population_size=10,
             number_of_generations=10,
             overwrite_config_file=True,
-            results_directory='test_mpe')
+            results_directory='test_mpe',
+            run_mode=True
+        )
 
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
 
         self.MPE.write_config_file()
         self.MPE.setup()
         self.MPE.run()
-        time.sleep(5)
 
+    def tearDown(self):
+        import shutil
+        shutil.rmtree(self.dire)
 
-    # def test_from_pe_data_str(self):
-    #     """
-    #     instantiate with argument to model and pe_data.
-    #
-    #     pe_data is string
-    #     :return:
-    #     """
-    #     bool = True
-    #     try:
-    #         C = tasks.ChaserParameterEstimations(model=self.model, pe_data=self.MPE.results_directory)
-    #     except:
-    #         bool = False
-    #
-    #     self.assertTrue(bool)
-    #
-    # def test_from_pe_data_pandas_df(self):
-    #     """
-    #     instantiate with argument to model and pe_data.
-    #
-    #     pe_data is pandas dataframe
-    #     :return:
-    #     """
-    #     self.model.save()
-    #     data = viz.Parse(self.MPE.results_directory, copasi_file=self.model.copasi_file).data
-    #
-    #     bool = True
-    #     try:
-    #         C = tasks.ChaserParameterEstimations(model=self.model, pe_data=data)
-    #     except:
-    #         bool = False
-    #
-    #     self.assertTrue(bool)
-    #
-    # def test_from_mpe(self):
-    #     bool = True
-    #     try:
-    #         C = tasks.ChaserParameterEstimations(self.MPE)
-    #     except:
-    #         bool = False
-    #
-    #     self.assertTrue(bool)
+    def test_MPE_worked(self):
+        data = viz.Parse(self.MPE).data
+        self.assertEqual(data.shape[0], self.copy_number*self.pe_number)
 
-    # def test_correct_report_names_in_self_dot_pe_dct(self):
-    #     CPE = tasks.ChaserParameterEstimations(self.MPE, truncate_mode='ranks',
-    #                                            theta=range(2), run_mode=True,
-    #                                            tolerance=1e-1, iteration_limit=5)
-    #     report_names = [os.path.split(i.report_name)[1] for i in CPE.pe_dct.values()]
-    #     self.assertListEqual(report_names, ['PE_data_1.txt', 'PE_data_0.txt'])
+    def test_pe_dict_is_created(self):
+        """
+        configuration is parallelized. This tests that the
+        pe_dict containing cps files and sub parameter estimation
+        is correctly created. 
+        :return: 
+        """
+        CPE = tasks.ChaserParameterEstimations(self.MPE, truncate_mode='ranks',
+                                               theta=range(2), run_mode=False,
+                                               tolerance=1e-1, iteration_limit=5)
+        # print viz.Parse(CPE).data
+        self.assertTrue(len(CPE.pe_dct.items()) == self.copy_number)
 
-    def test_run_is_True(self):
+    def test_run_true(self):
         CPE = tasks.ChaserParameterEstimations(self.MPE, truncate_mode='ranks',
                                                theta=range(2), run_mode=True,
                                                tolerance=1e-1, iteration_limit=5)
-        CPE.setup()
-        CPE.run()
-        files = glob.glob(os.path.join(CPE.results_directory, '*.txt'))
-        self.assertEqual(len(files), 2)
+        results = viz.Parse(CPE).data
+        self.assertEqual(results.shape[0], 2)
 
-    def test_run_is_parallel(self):
+    # def test_run_parallel(self):
+    #     CPE = tasks.ChaserParameterEstimations(self.MPE, truncate_mode='ranks',
+    #                                            theta=range(2), run_mode='parallel',
+    #                                            tolerance=1e-1, iteration_limit=5)
+    #     ## sleep long enough for subprocesses to run the estimations
+    #     time.sleep(10)
+    #     results = viz.Parse(CPE).data
+    #     self.assertEqual(results.shape[0], 2)
+
+
+    def test_parameters(self):
+        """
+        make sure that new parameter sets are being inserted into the
+        model before running the estimation
+        :return:
+        """
+
         CPE = tasks.ChaserParameterEstimations(self.MPE, truncate_mode='ranks',
-                                               theta=range(2), run_mode='parallel',
+                                               theta=range(2), run_mode=True,
                                                tolerance=1e-1, iteration_limit=5)
-        CPE.setup()
-        CPE.run()
-        files = glob.glob(os.path.join(CPE.results_directory, '*.txt'))
-        self.assertEqual(len(files), 2)
+
+        ## get parameters that were estimated in MPE
+        pe_data = viz.Parse(self.MPE).data
+
+        ## get keys to ordered dict
+        keys = CPE.pe_dct.keys()
+
+        ## key 0 should have best parameter set from MPE
+        zero = CPE.pe_dct[keys[0]]
+
+
+        pe_data0 = pe_data.iloc[0]
+
+        model_params = zero.model.parameters
+
+        pe_data.drop('RSS', inplace=True, axis=1)
+        
+        for i in pe_data.keys():
+            self.assertAlmostEqual(float(model_params[i]), float(pe_data0[i]))
+
 
 
 

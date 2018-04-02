@@ -52,6 +52,7 @@ from copy import deepcopy
 from subprocess import check_call
 from collections import OrderedDict
 from mixin import Mixin, mixin
+import multiprocessing
 
 ## TODO use generators when iterating over a function with another function. i.e. plotting
 
@@ -615,7 +616,7 @@ class RunParallel(object):
                         del pids[pid]
 
                     if p.status() is 'zombie':
-                        LOG.debug('is zombie')
+                        LOG.info('is zombie')
 
                         del pids[pid]
 
@@ -3807,20 +3808,71 @@ class MultiParameterEstimation(ParameterEstimation):
 
 
 class ChaserParameterEstimations(object):
-    def __init__(self, cls=None, model=None, experiment_files=None,
-                 parameter_path=None, log10=False, truncate_mode='percent',
-                 theta=100, iteration_limit=100, 
+    """
+    Perform secondary hook and jeeves parameter estimations
+    starting from the best values of a primary global estimator.
+
+    #todo: This class performs slowly in serial. Parallelize the configuration
+    of the parameter estimation class in each model.
+    """
+    def __init__(self, cls=None, model=None, parameter_path=None, truncate_mode='percent',
+                 experiment_files=None, theta=100, iteration_limit=100,
                  tolerance=1e-6, results_directory=None,
                  run_mode=False, max_active=2, **kwargs):
+        """
+
+        :param cls:
+            A :class:`MultiParameterEstimation` object. If present
+            then model, experiment_files and parameter path args are not
+            required.
+        :param model:
+            Used when :class:`MultiParameterEstimation` is None. A
+            :class:`model.Model` object that was used to
+            run the primary global estimations. If using model arg,
+            parameter_path and experiment_files must also be specified.
+        :param parameter_path:
+            Used when :class:`MultiParameterEstimation` is None. This
+            argument is passed on :class:`viz.Parse` to read parameter estimation
+            data from the folder containing parameter estimation data. Used with
+            model and experiment_files arguments.
+        :param experiment_files:
+            Used when :class:`MultiParameterEstimation` is None. This argument is
+            passed along to :class:`ParameterEstimation` and should be path or list
+            of paths to experimental data to be used in the parameter estimation.
+        :param truncate_mode:
+            Either 'percent', 'below_x' or 'ranks'. Default: 'percent'. Determines
+            how to truncate the parameter estimation data. Used in conjunction with
+            the theta argument.
+        :param theta:
+            When truncate_mode is 'percent', a number between 0 and 100, the percentage of
+            best parameter sets to chase.
+            When truncate_mode is 'below_x': a number representing a RSS value cut off. All
+            parameter sets with a RSS lower than theta are chased.
+            When truncate_mode is 'ranks', a list of numbers containing the ranks of best fitting
+            parameter sets to include. For example range(10) would chase the top 10.
+        :param iteration_limit:
+            The Hook and Jeeves iteration limit parameter
+        :param tolerance:
+            The Hook and Jeeves tolerance parameter
+        :param results_directory:
+            The name of the directory for the results. If not exists, create it. Defaults to
+            ChaserEstimations in the same directory as the model (or cls.model)
+        :param run_mode:
+            Passed on to :class:`Run`.
+        :param max_active:
+            Passed on to :class:`Run`.
+        :param kwargs:
+            Any other keyword argument to be passed on
+            to :class:`ParameterEstimation`
+        """
 
         ## Define class variables
         self.model = model
-        self.log10 = log10
         self.experiment_files = experiment_files
         self.truncate_mode = truncate_mode
         self.theta = theta
         self.cls = cls
-        self.pe_data = parameter_path
+        self.parameter_path = parameter_path
         self.iteration_limit = iteration_limit
         self.tolerance = tolerance
         self.results_directory = results_directory
@@ -3845,17 +3897,15 @@ class ChaserParameterEstimations(object):
 
         ## Parse the parameter estimation data
         self.data = self.parse_pe_data()
-        ##truncate the data to only parameter sets to improve
+        # ##truncate the data to only parameter sets to improve
         self.data = viz.TruncateData(self.data,
                                      mode=self.truncate_mode,
                                      theta=self.theta).data
         self.pe_dct = self.configure()
 
+        self.setup()
+
         self.run()
-        # raise NotImplementedError('Still building this class. Problem with '
-        #                           'data file names. Data is currently '
-        #                           'being overwritten in one file instead of writing more'
-        #                           ' files. Fix this when you can')
 
 
     def do_checks(self):
@@ -3864,21 +3914,21 @@ class ChaserParameterEstimations(object):
         :return:
         """
 
-        if self.model is None and self.cls is None and self.pe_data is None:
+        if self.model is None and self.cls is None and self.parameter_path is None:
             raise errors.InputError('Please give argument to either "cls" which '
                              'should be an instance of MultiParameterEstimation '
-                             'or arguments to both "model" and "pe_data" which are'
+                             'or arguments to both "model" and "parameter_path" which are'
                              'the model and data you want to use in the chaser estimations')
 
-        if (self.model is not None) and (self.pe_data is None):
+        if (self.model is not None) and (self.parameter_path is None):
             raise errors.InputError('If you have given argument to '
                              '"model" argument you need to also'
-                             ' give an argument to "pe_data"')
+                             ' give an argument to "parameter_path" and "experiment_files"')
 
-        if self.pe_data is not None and self.model is None:
+        if self.parameter_path is not None and self.model is None:
             raise errors.InputError('If you have given argument to '
-                             '"pe_data" argument you need to also'
-                             ' give an argument to "model"')
+                             '"parameter_path" argument you need to also'
+                             ' give an argument to "model" and "experiment_files"')
 
         if self.model is not None and self.experiment_files is None:
             raise errors.InputError('If using the "model" argument '
@@ -3898,7 +3948,7 @@ class ChaserParameterEstimations(object):
         """
         if self.cls is not None:
             self.model = self.cls.model
-            self.pe_data = self.cls.results_directory
+            self.parameter_path = self.cls.results_directory
             self.experiment_files = self.cls.experiment_files
 
     def parse_pe_data(self):
@@ -3906,29 +3956,78 @@ class ChaserParameterEstimations(object):
 
         :return:
         """
-
         ## if pe_data is string it shuold be path to folder of pe_data
-        if type(self.pe_data) == str:
+        if type(self.parameter_path) == str:
 
             ## A save is required to update the model on file
             ## with the parameter estimation configuration in self.model
             self.model.save()
-            data = viz.Parse(self.pe_data, copasi_file=self.model.copasi_file).data
-
+            data = viz.Parse(self.parameter_path, copasi_file=self.model.copasi_file).data
         ## can also already be a dataframe
-        elif type(self.pe_data) == pandas.core.frame.DataFrame:
-            data = viz.Parse(self.pe_data).data
+        elif type(self.parameter_path) == pandas.core.frame.DataFrame:
+            data = viz.Parse(self.parameter_path).data
 
         return data
+
+    # def configure(self):
+    #     """
+    #     Iterate over parameter sets.
+    #     :return:
+    #     """
+    #     q = multiprocessing.Queue()
+    #     # cps_dct = {}
+    #     original_cps_filename = self.model.copasi_file
+    #     ## Iterate over parameter sets
+    #     jobs = []
+    #     for i in range(self.data.shape[0]):
+    #
+    #         ## Create new cps name
+    #         new_cps = original_cps_filename[:-4]+'_'+str(i)+'.cps'
+    #
+    #         filename = os.path.join(self.results_directory, "PE_data_{}.txt".format(i))
+    #         # cps_dct[new_cps] = filename
+    #         ## save model to new name and do d
+    #
+    #         mod = deepcopy(self.model.save(new_cps))
+    #         p = multiprocessing.Process(target=self.configure1, args=(mod, filename, self.data, i))
+    #         p.start()
+    #         p.join()
+    #
+    #     # for proc in jobs:
+    #     #     proc.join()
+    #
+    #
+    #     # return cps_dct
+    #
+    # def configure1(self, mod, filename, data, index):
+    #     """
+    #     function to parallelize
+    #     :return:
+    #     """
+    #     # LOG.debug('data --> {}'.format(self.data))
+    #
+    #     mod.insert_parameters(df=data, index=index, inplace=True)
+    #     PE = ParameterEstimation(mod, self.experiment_files,
+    #                              report_name=filename,
+    #                              method='hooke_jeeves',
+    #                              tolerance=self.tolerance,
+    #                              randomize_start_values=False,
+    #                              iteration_limit=self.iteration_limit,
+    #                              run_mode=False,
+    #                              **self.kwargs)
+    #     PE.setup()
+    #     self.pe_dct[mod.copasi_file] = PE
+    #
+    #     return PE
+
+
 
     def configure(self):
         """
         Iterate over parameter sets.
         :return:
         """
-        import multiprocessing
-        q = multiprocessing.Queue()
-        cps_dct = {}
+        pe_dct = OrderedDict()
         original_cps_filename = self.model.copasi_file
         ## Iterate over parameter sets
         for i in range(self.data.shape[0]):
@@ -3938,76 +4037,32 @@ class ChaserParameterEstimations(object):
 
             filename = os.path.join(self.results_directory, "PE_data_{}.txt".format(i))
 
-
             ## save model to new name and do d
-
             mod = deepcopy(self.model.save(new_cps))
-            p = multiprocessing.Process(target=self.configure1, args=(mod, filename, self.data, i))
-            p.start()
-            p.join()
 
-        return cps_dct
 
-    def configure1(self, mod, filename, data, index):
+            mod.insert_parameters(df=self.data, index=i, inplace=True)
+            PE = ParameterEstimation(mod, self.experiment_files,
+                                     report_name=filename,
+                                     method='hooke_jeeves',
+                                     tolerance=self.tolerance,
+                                     randomize_start_values=False,
+                                     iteration_limit=self.iteration_limit,
+                                     run_mode=False,
+                                     **self.kwargs)
+            PE.setup()
+            pe_dct[new_cps] = PE
+
+        return pe_dct
+
+    def setup(self):
         """
-        function to parallelize
+
         :return:
         """
-        mod.insert_parameters(df=data, index=index, inplace=True)
-        PE = ParameterEstimation(mod, self.experiment_files,
-                                 report_name=filename,
-                                 method='hooke_jeeves',
-                                 tolerance=self.tolerance,
-                                 randomize_start_values=False,
-                                 iteration_limit=self.iteration_limit,
-                                 run_mode=False,
-                                 **self.kwargs)
-        PE.setup()
-        return PE
-
-
-
-    # def configure(self):
-    #     """
-    #     Iterate over parameter sets.
-    #     :return:
-    #     """
-    #     cps_dct = {}
-    #     original_cps_filename = self.model.copasi_file
-    #     ## Iterate over parameter sets
-    #     for i in range(self.data.shape[0]):
-    #
-    #         ## Create new cps name
-    #         new_cps = original_cps_filename[:-4]+'_'+str(i)+'.cps'
-    #
-    #         filename = os.path.join(self.results_directory, "PE_data_{}.txt".format(i))
-    #
-    #         ## save model to new name and do d
-    #         mod = deepcopy(self.model.save(new_cps))
-    #
-    #         mod.insert_parameters(df=self.data, index=i, inplace=True)
-    #         PE = ParameterEstimation(mod, self.experiment_files,
-    #                                  report_name=filename,
-    #                                  method='hooke_jeeves',
-    #                                  tolerance=self.tolerance,
-    #                                  randomize_start_values=False,
-    #                                  iteration_limit=self.iteration_limit,
-    #                                  run_mode=False,
-    #                                  **self.kwargs)
-    #         PE.setup()
-    #         cps_dct[new_cps] = PE
-    #
-    #     return cps_dct
-
-    # def setup(self):
-    #     """
-    #
-    #     :return:
-    #     """
-    #     for pe in self.pe_dct:
-    #         LOG.debug('PE is --> {}'.format(pe))
-    #         self.pe_dct[pe].setup()
-    #         # self.pe_dct[pe].model.save()
+        for pe in self.pe_dct:
+            self.pe_dct[pe].setup()
+            self.pe_dct[pe].model.save()
 
 
     def run(self):
@@ -4016,8 +4071,10 @@ class ChaserParameterEstimations(object):
         :return:
         """
         ##get models
+        # key = self.pe_dct.keys()
+        # mod = self.pe_dct[key[0]]
+        # mod.model.open()
         mod_dct = {}
-        LOG.debug('run mode --> {}'.format(self.run_mode))
         for cps, pe in self.pe_dct.items():
             mod_dct[cps] = self.pe_dct[cps].model
 
@@ -4025,9 +4082,9 @@ class ChaserParameterEstimations(object):
             return mod_dct
 
         elif self.run_mode is 'parallel':
-            LOG.info('running "{}"'.format(cps))
+            LOG.info('running "{}" in parallel'.format(cps))
             RunParallel(mod_dct.values(), max_active=self.max_active,
-                        take='parameter_estimation')
+                        task='parameter_estimation')
 
         else:
             for cps, mod in mod_dct.items():
