@@ -453,8 +453,6 @@ class Parse(object):
                 )
 
         self.data = self.parse()
-        self.data.to_csv('/home/b3053674/Documents/Models/2018/04_April/data.csv')
-
 
     def parse(self):
         """
@@ -511,11 +509,17 @@ class Parse(object):
         """
 
         df = pandas.read_csv(self.cls_instance.report_name, sep='\t')
-        headers = [re.findall('(Time)|\[(.*)\]', i)[0] for i in list(df.columns)]
-        time = headers[0][0]
-        headers = [i[1] for i in headers]
-        headers[0] = time
-        df.columns = headers
+        try:
+            headers = [re.findall('(Time)|\[(.*)\]', i)[0] for i in list(df.columns)]
+            time = headers[0][0]
+            headers = [i[1] for i in headers]
+            headers[0] = time
+            df.columns = headers
+        except IndexError as e:
+            if e.message == 'list index out of range':
+                pass
+
+
         return df
 
     def parse_scan(self):
@@ -702,29 +706,23 @@ class Parse(object):
         if m.fit_item_order == []:
             raise errors.InputError('No fit items exist. Its possible that you have'
                                     ' not given the copasi file that was used to generate this'
-                                    ' parameter estimation data')
+                                    ' parameter estimation data. This is a common error when '
+                                    'shifting data to and from a cluster. In this case, set '
+                                    '"run_mode" to False and use the setup method of '
+                                    'ParameterEstimation, MultiParameterEstimation or '
+                                    'MultiModelFit classes. ')
 
         d = {}
         for report_name in glob.glob(os.path.join(self.cls_instance, '*.txt')):
             report_name = os.path.abspath(report_name)
             if os.path.isfile(report_name) != True:
                 raise errors.FileDoesNotExistError('"{}" does not exist'.format(report_name))
-            # LOG.warning('You have commented out a try except block because '
-            #             'pandas has deprecated the error in use. This warning '
-            #             'is here to remind you that you have removed the try '
-            #             'except block until you find out which error has replaced '
-            #             'the pandas.error.EmptyDataError')
 
-            # data = pandas.read_csv(report_name, sep='\t', header=None, skiprows=[0])
-            # LOG.debug('data --> {}'.format(data))
-            # data = pandas.read_csv(report_name, sep='\t', header=None)
             try:
                 data = pandas.read_csv(report_name, sep='\t', header=None, skiprows=[0])
                 read_type = 'multi_parameter_estimation'
-                # LOG.debug('data -- > {}'.format(data))
-
             except ValueError as e:
-                if str(e) == 'No columns to parse from file':
+                if e.message == 'No columns to parse from file':
                     LOG.warning(
                         'No Columns to parse from file. {} is empty. '
                         'Continuing without parsing from this file'.format(
@@ -732,6 +730,7 @@ class Parse(object):
                         )
                     )
                     continue
+
                 try:
                     data = pandas.read_csv(report_name, sep='\t', header=None)
                     read_type = 'parameter_estimation'
@@ -744,13 +743,14 @@ class Parse(object):
                             )
                         )
                         continue
+
                     else:
                         raise ValueError(
                             """
-                            pandas raised the following error \n {} \n while trying 
-                            to read from "{}". It is likely that for some reson not all your 
+                            pandas raised the following error \n {} \n while trying
+                            to read from "{}". It is likely that for some reason not all your
                             data files are uniform in shape. Perhaps this has occured
-                            because more than one parameter estimation iterations have tried 
+                            because more than one parameter estimation iterations have tried
                             to write to the same file?
                             """.format(e, report_name)
                         )
@@ -781,8 +781,6 @@ class Parse(object):
             elif read_type == 'parameter_estimation':
                 left_bracket_columns = data[data.columns[0]]
                 data = data.drop(data.columns[0], axis=1)
-                # LOG.debug('file is --> {}'.format(report_name))
-                # LOG.debug('data --> {}'.format(data))
                 data[data.columns[-1]] = float(data[data.columns[-1]].str[1:][0])
                 names = m.fit_item_order + ['RSS']
                 if len(names) != data.shape[1]:
@@ -1044,7 +1042,7 @@ class PlotTimeCourse(PlotKwargs):
             'separate': True,
             'savefig': False,
             'results_directory': None,
-            'title': 'TimeCourse',
+            'title': None,
             'xlabel': None,
             'ylabel': None,
             'show': False,
@@ -1306,6 +1304,9 @@ class PlotTimeCourseEnsemble(object):
                    'n_boot': 5000,
                    'ci': 95,
                    'color': 'blue',
+                   'err_style': 'ci_band',
+                   'err_palette': None,
+                   'err_kws': None,
                    'show': False,
                    'silent': True,
                    'data_filename': None,  # For outputting ensemble data to file
@@ -1420,7 +1421,11 @@ class PlotTimeCourseEnsemble(object):
         ## if exp_files is empty then read_csv would not be called
         for i in range(len(exp_files)):
             df = pandas.read_csv(exp_files[i],
-                                 sep='\t', skip_blank_lines=False)
+                                 sep='\t', skip_blank_lines=False, header=None)
+            ## mangle dupe cols
+            df = df.rename(columns=df.iloc[0], copy=False).iloc[1:].reset_index(drop=True)
+
+            df = df.astype(float)
             is_null = df.isnull().all(1)
             from collections import Counter
             count = Counter(is_null)
@@ -1514,7 +1519,9 @@ class PlotTimeCourseEnsemble(object):
 
         """
         if self.y == None:
-            self.y = list(self.ensemble_data.keys())
+            self.y = [i for i in list(self.observables) if i in self.ensemble_data.keys()]
+
+        LOG.debug('self y {}'.format(self.y))
 
         if isinstance(self.y, list) != True:
             self.y = [self.y]
@@ -1535,9 +1542,12 @@ class PlotTimeCourseEnsemble(object):
                 plt.figure()
                 # seaborn.set_palette([self.color])
                 ax1 = seaborn.tsplot(
-                    data=data, time='Time', value=parameter,
+                    data=data, time='Time', 
+                    value=parameter,
                     unit='ParameterFitIndex',
-                    err_style='ci_band',
+                    err_style=self.err_style,
+                    err_palette=self.err_palette,
+                    err_kws=self.err_kws,
                     estimator=self.estimator,
                     n_boot=self.n_boot,
                     ci=self.ci,
@@ -1551,9 +1561,14 @@ class PlotTimeCourseEnsemble(object):
                         if parameter in df.keys():
                             if df.columns[0] == 'time':
                                 df = df.rename(columns={'time': 'Time'})
-
                             # plt.figure()
-                            ax2 = plt.plot(list(df['Time']), list(df[parameter]), '--', color=self.exp_color,
+                            df_keys = df[parameter].keys()
+                            if len(df_keys) > 1:
+                                # for i in range(len(df_keys)):
+                                ax2 = plt.plot(list(df['Time']), df[parameter], '--', color=self.exp_color,
+                                               label='Exp', alpha=0.4, marker='o')
+                            else:
+                                ax2 = plt.plot(list(df['Time']), list(df[parameter]), '--', color=self.exp_color,
                                            label='Exp', alpha=0.4, marker='o')
 
 
@@ -2076,8 +2091,8 @@ class LikelihoodRanks(PlotKwargs):
         :return:
         """
         if self.log10:
-            self.ylabel = 'log10 RSS'
-            self.xlabel = 'log10 Rank of Best Fit'
+            self.ylabel = 'log$_{10}$ RSS'
+            self.xlabel = 'log$_{10}$ Rank of Best Fit'
         else:
             self.ylabel = 'RSS'
             self.xlabel = 'Rank of Best Fit'
@@ -2374,6 +2389,7 @@ class Histograms(PlotKwargs):
                                    'context': 'talk',
                                    'font_scale': 1.5,
                                    'rc': None,
+                                   'bins': None,
                                    'copasi_file': None,
                                    }
 
@@ -2415,11 +2431,12 @@ class Histograms(PlotKwargs):
             fig = plt.figure()
             seaborn.distplot(
                 self.data[parameter], color=self.color, kde=self.kde, rug=self.rug,
-                hist=self.hist
+                hist=self.hist,
+                bins=self.bins
                 )
             if self.log10:
                 plt.ylabel("{}".format(self.ylabel))
-                plt.xlabel("log10 {}".format(parameter))
+                plt.xlabel("log$_{10}$"+"[{}]".format(parameter))
             else:
                 plt.ylabel(self.ylabel)
                 plt.xlabel(parameter)
@@ -2436,6 +2453,7 @@ class Histograms(PlotKwargs):
                                      misc.RemoveNonAscii(parameter).filter+'.{}'.format(self.ext))
                 plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
                 LOG.info('plot save to "{}"'.format(fname))
+
     def coloured_plot(self):
         """
 
@@ -2496,17 +2514,17 @@ class Scatters(PlotKwargs):
     folders (when ``savefig=True``). Data is automatically
     coloured by RSS.
 
-    ========    =================================================
-    kwarg       Description
-    ========    =================================================
-    x           `str` or `list` of `str`. Variable(s) to plot on x
-                axis. Defaults to ``RSS``
-    y           `str` or `list` of `str`. Variable(s) to plot on
-                y axis. Defaults to all parameters in data set.
-    cmap        `str` a valid matplotlib colour map
-
-    **kwargs    see :ref:`kwargs` for more options
-    ========    =================================================
+    ========        =================================================
+    kwarg           Description
+    ========        =================================================
+    x               `str` or `list` of `str`. Variable(s) to plot on x
+                    axis. Defaults to ``RSS``
+    y               `str` or `list` of `str`. Variable(s) to plot on
+                    y axis. Defaults to all parameters in data set.
+    cmap            `str` a valid matplotlib colour map
+    colorbar_pad    Default=0.2. Distance of color bar from plot.
+    **kwargs        see :ref:`kwargs` for more options
+    ========        =================================================
     """
 
     def __init__(self, cls, **kwargs):
@@ -2540,7 +2558,7 @@ class Scatters(PlotKwargs):
             'show': False,
             'ext': 'png',
             'despine': True,
-            'color_bar_pad': 0.1,   #padding for color bar. Dist between bar and axes
+            'colorbar_pad': 0.2,   #padding for color bar. Dist between bar and axes
             'context': 'talk',
             'font_scale': 1.5,
             'rc': None,
@@ -2607,7 +2625,11 @@ class Scatters(PlotKwargs):
                     self.data[x_var], self.data[y_var],
                     cmap=self.cmap, c=self.data['RSS'],
                 )
-                cb = plt.colorbar(pad=self.color_bar_pad)
+                # c_ax = plt.subplot(199)
+                # cb = matplotlib.colorbar.ColorbarBase(c_ax, orientation='vertical')
+                # c_ax.yaxis.set_ticks_position('right')
+                cb = plt.colorbar(pad=self.colorbar_pad)
+                # cb.set_
 
                 if self.title:
                     title = 'Scatter graph of\n {} Vs {}.(n={})'.format(
@@ -3355,7 +3377,8 @@ class ModelSelection(object):
             'model_labels': None,
             'label': None,
             'ax': None,
-            'show': False
+            'show': False,
+            'order': None,
         }
 
         for i in kwargs.keys():
@@ -3372,8 +3395,7 @@ class ModelSelection(object):
 
 
         ## code for having default legend labels
-        self.default_model_labels = {os.path.split(i)[1][:-6]: os.path.split(i)[1][:-6] for i in [j.copasi_file for j in self.model_dct.values()]}
-
+        self.default_model_labels = {i.name: i.name for i in self.model_dct.values()}
 
         if self.model_labels is not None:
             if type(self.model_labels) is not dict:
@@ -3382,7 +3404,7 @@ class ModelSelection(object):
             for label in self.model_labels:
                 if label not in self.default_model_labels:
                     raise errors.InputError('keys of the model_labels dict should be one of '
-                                            '"{}"'.format(self.default_model_labels))
+                                            '"{}"'.format(self.default_model_labels.keys()))
         elif self.model_labels is None:
             self.model_labels = self.default_model_labels
 
@@ -3574,12 +3596,14 @@ class ModelSelection(object):
             df = pandas.concat([rss, aic, bic], axis=1)
             df.columns = ['RSS', 'AICc', 'BIC']
             df.index.name = 'RSS Rank'
-            df_dct[os.path.split(cps_key)[1][:-6]] = df
+            # df_dct[os.path.split(cps_key)[1][:-6]] = df
+            df_dct[self.model_dct[keys[model_num]].name] = df
         df = pandas.concat(df_dct, axis=1)
+        LOG.debug('df \n{}'.format(df))
         return df
 
     def violin(self):
-        seaborn.set_context(context='poster')
+        # seaborn.set_context(context='poster')
         data = self.model_selection_data
 
         data = data.unstack()
@@ -3595,6 +3619,7 @@ class ModelSelection(object):
                     new_names.append(self.model_labels[j])
 
         data['Model'] = new_names
+        LOG.debug('dat --> {}'.format(data.head()))
         for metric in data['Metric'].unique():
             fig = plt.figure()
             seaborn.violinplot(data=data[data['Metric'] == metric],
@@ -3603,7 +3628,8 @@ class ModelSelection(object):
                                color=self.color,
                                palette=self.palette,
                                saturation=self.saturation,
-                               ax=self.ax)
+                               ax=self.ax,
+                               order=self.order)
             plt.xticks(rotation='vertical')
             if self.title:
                 plt.title('{} Scores'.format(metric))
@@ -3727,6 +3753,8 @@ class PlotProfileLikelihood(object):
                                    'title': None,
                                    'xlabel': None,
                                    'ylabel': None,
+                                   'color': None, #if RSS, colour plots by RSS
+                                   'cmap': 'jet_r',
                                    'legend': False,
                                    'legend_loc': None,
                                    'show': False,
@@ -3745,6 +3773,7 @@ class PlotProfileLikelihood(object):
                                    'rc': None,
                                    'multiplot': False,
                                    'same_axis': False,
+                                   'colorbar_pad': 0.2,
                                    }
 
         for i in kwargs.keys():
@@ -3868,8 +3897,12 @@ class PlotProfileLikelihood(object):
         fig = plt.figure()
         for x in self.x:
             for y in self.y:
+                colorbar_present = False
                 for i in self.index:
-                    plot_data = self.data.loc[x, i][y]
+                    if y == 'RSS':
+                        plot_data = self.data.loc[x, i][y]
+                    else:
+                        plot_data = self.data.loc[x, i][[y, 'RSS']]
                     if type(plot_data) == pandas.Series:
                         plot_data = pandas.DataFrame(plot_data)
 
@@ -3877,6 +3910,11 @@ class PlotProfileLikelihood(object):
 
                     x_plot = plot_data['Parameter Of Interest Value']
                     y_plot = plot_data[y]
+
+                    if self.color == 'RSS':
+                        c = plot_data['RSS']
+                    elif self.color is None:
+                        c = 'r'
 
                     if self.interpolation is not None:
                         f = interp1d(x_plot, y_plot, kind=self.interpolation)
@@ -3886,9 +3924,16 @@ class PlotProfileLikelihood(object):
                         xnew = numpy.arange(start=minimum, stop=maximum, step=step)
                         ynew = f(xnew)
                         plt.plot(xnew, ynew, 'k')
-                        plt.plot(x_plot, y_plot, 'ro', label=y, linewidth=2)  # linestyle='o', color='red')
+                        plt.scatter(x_plot, y_plot, c=c, cmap=self.cmap,
+                                    marker='o', label=y, linewidth=2)  # linestyle='o', color='red')
                     else:
-                        plt.plot(x_plot, y_plot, label=y)
+                        plt.scatter(x_plot, y_plot, c=c, cmap=self.cmap,
+                                    marker='o', label=y, linewidth=2)
+
+                    if self.color == 'RSS':
+                        if not colorbar_present:
+                            cb = plt.colorbar(pad=self.colorbar_pad)
+                            colorbar_present = True
 
                     if y is 'RSS':
                         plt.plot(plot_data['Parameter Of Interest Value'],
@@ -3918,14 +3963,19 @@ class PlotProfileLikelihood(object):
                     elif self.title is 'profile':
                         self.title = x
 
-                    plt.title(self.title)
+                    if self.title is not False:
+                        plt.title(self.title)
 
                     if self.log10:
                         plt.ylabel(r'$log_{10}$[{}]'.format(y))
                         plt.xlabel(r'$log_{10}$[{}]'.format(x))
+                        if self.color == 'RSS':
+                            cb.set_label('log_${10}$[RSS]')
                     else:
                         plt.ylabel(y)
                         plt.xlabel(x)
+                        if self.color == 'RSS':
+                            cb.set_label('RSS')
 
                     if self.ylim is not None:
                         plt.ylim(self.ylim)
@@ -3952,10 +4002,15 @@ class PlotProfileLikelihood(object):
         """
         for x in self.x:
             for y in self.y:
+                ##indicator var for colorbar
+                colorbar_present = False
                 if self.multiplot:
                     fig = plt.figure()
                 for i in self.index:
-                    plot_data = self.data.loc[x, i][y]
+                    if y == 'RSS':
+                        plot_data = self.data.loc[x, i][y]
+                    else:
+                        plot_data = self.data.loc[x, i][[y, 'RSS']]
                     if type(plot_data) == pandas.Series:
                         plot_data = pandas.DataFrame(plot_data)
 
@@ -3967,6 +4022,11 @@ class PlotProfileLikelihood(object):
                     x_plot = plot_data['Parameter Of Interest Value']
                     y_plot = plot_data[y]
 
+                    if self.color == 'RSS':
+                        c = plot_data['RSS']
+                    elif self.color is None:
+                        c = 'r'
+
                     if self.interpolation is not None:
                         f = interp1d(x_plot, y_plot, kind=self.interpolation)
                         minimum = x_plot.min()
@@ -3975,14 +4035,22 @@ class PlotProfileLikelihood(object):
                         xnew = numpy.arange(start=minimum, stop=maximum, step=step)
                         ynew = f(xnew)
                         plt.plot(xnew, ynew, 'k')
-                        plt.plot(x_plot, y_plot, 'ro', label=y, linewidth=2)  # linestyle='o', color='red')
+                        plt.scatter(x_plot, y_plot, c=c,
+                                    marker='o', label=y, linewidth=2,
+                                    )
                     else:
-                        plt.plot(x_plot, y_plot, label=y, marker='o')
+                        plt.scatter(x_plot, y_plot, c=c, cmap=self.cmap,
+                                    label=y, marker='o')
+
+                    if self.color == 'RSS':
+                        if not colorbar_present:
+                            cb = plt.colorbar(pad=self.colorbar_pad)
+                            colorbar_present = True
 
                     if y is 'RSS':
                         plt.plot(plot_data['Parameter Of Interest Value'],
-                             plot_data['Confidence Level'], linewidth=3,
-                             linestyle='--', color='green', label='CL')
+                                 plot_data['Confidence Level'], linewidth=3,
+                                 linestyle='--', color='green', label='CL')
 
 
                     if self.show_best_rss:
@@ -4003,20 +4071,24 @@ class PlotProfileLikelihood(object):
 
                     if self.title is None:
                         self.title = 'Profile Likelihoods for\n{} ' \
-                                 'against {} (index={})'.format(x, y, i)
+                                     'against {} (index={})'.format(x, y, i)
 
 
                     # elif self.title is 'profile':
                     #     self.title = x
 
-                    plt.title(self.title)
+                    # plt.title(self.title)
 
                     if self.log10:
-                        plt.ylabel(r'log$_{10}$'+'[{}]'.format(y))
+                        plt.ylabel(r'log$_{10}$' +'[{}]'.format(y))
                         plt.xlabel(r'log$_{10}$'+'[{}]'.format(x))
+                        if self.color == 'RSS':
+                            cb.set_label('log$_{10}$[RSS]')
                     else:
                         plt.ylabel(y)
                         plt.xlabel(x)
+                        if self.color == 'RSS':
+                            cb.set_label('RSS')
 
                     if self.ylim is not None:
                         plt.ylim(self.ylim)
@@ -4601,7 +4673,7 @@ class PearsonsCorrelation(PlotKwargs):
             'title': True,  #Either True or None/False
             'show': False,
             'ext': 'png',
-            'color_bar_pad': 0.1,   #padding for color bar. Dist between bar and axes
+            'colorbar_pad': 0.1,   #padding for color bar. Dist between bar and axes
             'context': 'talk',
             'font_scale': 1.5,
             'rc': None,

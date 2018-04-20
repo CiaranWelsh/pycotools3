@@ -4042,14 +4042,18 @@ class ChaserParameterEstimations(object):
 
 
             mod.insert_parameters(df=self.data, index=i, inplace=True)
-            PE = ParameterEstimation(mod, self.experiment_files,
-                                     report_name=filename,
-                                     method='hooke_jeeves',
-                                     tolerance=self.tolerance,
-                                     randomize_start_values=False,
-                                     iteration_limit=self.iteration_limit,
-                                     run_mode=False,
-                                     **self.kwargs)
+            PE = MultiParameterEstimation(
+                mod, self.experiment_files,
+                report_name=filename,
+                method='hooke_jeeves',
+                tolerance=self.tolerance,
+                randomize_start_values=False,
+                ieration_limit=self.iteration_limit,
+                run_mode=False,
+                copy_number=1,
+                pe_number=1,
+                **self.kwargs
+            )
             PE.setup()
             pe_dct[new_cps] = PE
 
@@ -4070,11 +4074,7 @@ class ChaserParameterEstimations(object):
 
         :return:
         """
-        ##get models
-        # key = self.pe_dct.keys()
-        # mod = self.pe_dct[key[0]]
-        # mod.model.open()
-        mod_dct = {}
+        mod_dct = OrderedDict()
         for cps, pe in self.pe_dct.items():
             mod_dct[cps] = self.pe_dct[cps].model
 
@@ -4763,13 +4763,6 @@ class ProfileLikelihood(object):
             for param in self.x:
                 new_dir = os.path.join(self.results_directory, str(model))
                 param_name = misc.RemoveNonAscii(param).filter + '.cps'
-                #
-                # try:
-                #     int(param_name[0])
-                #     param_name = '_{}'.format(param_name)
-                # except ValueError:
-                #     LOG.warning()
-                #     continue
 
                 new_copasi_filename = os.path.join(new_dir, param_name)
                 dct[model][param] = self.index_dct[model].copy(new_copasi_filename)

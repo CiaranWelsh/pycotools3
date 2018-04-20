@@ -81,7 +81,7 @@ class Latex(object):
         :return:
         """
 
-        files = {}
+        files = OrderedDict()
         for i in sorted(os.listdir(directory)):
             fname = os.path.join(directory, i)
             if os.path.isfile(fname):
@@ -98,7 +98,7 @@ class Latex(object):
         return files
 
     def search(self, directory):
-        file_types = ['*.{}'.format(i) for i in file_types]
+        file_types = ['*.{}'.format(i) for i in self.file_types]
         files = []
         for i in self.file_types:
             patterns = os.path.join(directory, i)
@@ -121,7 +121,7 @@ class Latex(object):
 
 
         if subdirs:
-            files = self.search(directory, file_types)
+            files = self.search_recursive(directory)
 
         else:
             files = self.search()
@@ -175,23 +175,16 @@ class Latex(object):
         doc.generate_pdf()
         LOG.info('PDF generated at "{}"'.format(doc.default_filepath))
 
-    def profile_likelihood(self, pl_directory, subfiles=False, file_types='.png'):
+    def profile_likelihood(self, pl_directory, size=0.3, num_per_row=3):
         """
         compile any pdf, jpg and png files
         in directory into a latex pdf document
         :return:
         """
-        if subfiles not in [True, False]:
-            raise errors.InputError('subdirs argument should be either True or False')
+        if isinstance(self.file_types, str):
+            self.file_types = [self.file_types]
 
-        if isinstance(file_types, str):
-            file_types = [file_types]
-
-        if subfiles:
-            files = self.search_recursive(pl_directory)
-
-        else:
-            files = self.search(pl_directory)
+        files = self.search_recursive(pl_directory)
 
         if files is []:
             raise errors.InputError(
@@ -208,16 +201,19 @@ class Latex(object):
                 with doc.create(pylatex.Figure(
                         position='htbp!',
                         width=pylatex.NoEscape(r'\linewidth'))) as fig:
+                    # [fig.add_image(i) for i in v]
                     for i in range(len(v)):
                         with doc.create(pylatex.SubFigure(
-                                    width=pylatex.NoEscape(r'0.3\linewidth'))) as sub:
+                                width=pylatex.NoEscape(str(size) + r'\linewidth'))) as sub:
                             sub.add_image(v[i])
-                            # sub.add_caption('')
-                        if i % 3 == 0:
+                            sub.add_caption(os.path.split(v[i])[1])
+                        if i is not 0 and i % num_per_row is 0:
                             doc.append(pylatex.NoEscape(r'\break'))
                             # sub.add_label(i)
-                    # fig.add_caption(os.path.join(*Path(v[i]).parts[-3:-1]))
-            doc.append(pylatex.NoEscape(r'\hfill'))
+                            #         # fig.add_caption(os.path.join(*Path(v[i]).parts[-3:-1]))
+
+                        doc.append(pylatex.NoEscape(r'\hfill'))
+                    fig.add_caption(os.path.split(k)[1])
 
         doc.generate_pdf()
         LOG.info('PDF generated at "{}"'.format(doc.default_filepath))
