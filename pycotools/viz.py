@@ -582,6 +582,7 @@ class Parse(object):
 
         for report_name in glob.glob(folder+r'/*.txt'):
             report_name = os.path.abspath(report_name)
+            LOG.debug('report_name --> {}'.format(report_name))
             if os.path.isfile(report_name) != True:
                 raise errors.FileDoesNotExistError('"{}" does not exist'.format(report_name))
 
@@ -611,6 +612,7 @@ class Parse(object):
                 names = cls_instance.model.fit_item_order+['RSS']
                 if cls_instance.model.fit_item_order == []:
                     raise errors.SomethingWentHorriblyWrongError('Parameter Estimation task is empty')
+
                 if len(names) != data.shape[1]:
                     raise errors.SomethingWentHorriblyWrongError('length of parameter estimation data does not equal number of parameters estimated')
 

@@ -66,7 +66,7 @@ sns.set_context(context='poster',
 
 class GetModelVariableFromStringMixin(Mixin):
     @staticmethod
-    def get_variable_from_string(m, v):
+    def get_variable_from_string(m, v, glob=False):
         """
         Use model entity name to get the
         pycotools variable
@@ -4310,9 +4310,11 @@ class MultiModelFit(object):
 
             for exp_file in glob.glob(typ):
                 exp_list.append(os.path.abspath(exp_file))
-        if cps_list==[]:
+
+        if cps_list == []:
             raise errors.InputError('No cps files in your project')
-        if exp_list==[]:
+
+        if exp_list == []:
             raise errors.InputError('No experiment files in your project')
         return cps_list, exp_list
 

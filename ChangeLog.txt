@@ -1,2 +1,5 @@
-Version 0.081
+Version 0.0081
 - 03-02-2018: Bug fix where constant rate constants were not being accepted because a single character 'v' was creating a string function key, rather than the usual list.
+
+Version 0.0.91
+- 31-05-2018: Bug fix where constraints were included in the Model.FitItemOrder method so that when it came to parsing parameter estimation data, parameter names could not be inferred properly.

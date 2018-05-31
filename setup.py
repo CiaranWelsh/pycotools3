@@ -32,23 +32,9 @@ Setup tools for PyCoTools
 
 #from distutils.core import setup
 from setuptools import setup
+from .pycotools import __version__
 
 
-#version
-MAJOR = 0
-MINOR = 0
-MICRO = 90
-
-
-##test version
-#MAJOR = 0
-#MINOR = 0
-#MICRO = 52
-
-
-
-
-__version__ = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
 setup(
   name='pycotools',
