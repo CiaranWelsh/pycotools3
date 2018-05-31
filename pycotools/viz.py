@@ -582,7 +582,6 @@ class Parse(object):
 
         for report_name in glob.glob(folder+r'/*.txt'):
             report_name = os.path.abspath(report_name)
-            LOG.debug('report_name --> {}'.format(report_name))
             if os.path.isfile(report_name) != True:
                 raise errors.FileDoesNotExistError('"{}" does not exist'.format(report_name))
 
@@ -1522,8 +1521,6 @@ class PlotTimeCourseEnsemble(object):
         """
         if self.y == None:
             self.y = [i for i in list(self.observables) if i in self.ensemble_data.keys()]
-
-        LOG.debug('self y {}'.format(self.y))
 
         if isinstance(self.y, list) != True:
             self.y = [self.y]
@@ -3601,7 +3598,6 @@ class ModelSelection(object):
             # df_dct[os.path.split(cps_key)[1][:-6]] = df
             df_dct[self.model_dct[keys[model_num]].name] = df
         df = pandas.concat(df_dct, axis=1)
-        LOG.debug('df \n{}'.format(df))
         return df
 
     def violin(self):
@@ -3621,7 +3617,6 @@ class ModelSelection(object):
                     new_names.append(self.model_labels[j])
 
         data['Model'] = new_names
-        LOG.debug('dat --> {}'.format(data.head()))
         for metric in data['Metric'].unique():
             fig = plt.figure()
             seaborn.violinplot(data=data[data['Metric'] == metric],

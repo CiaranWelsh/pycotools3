@@ -29,7 +29,7 @@ import threading
 import Queue
 import psutil
 import shutil
-import numpy 
+import numpy
 import pandas
 import scipy
 import os
@@ -39,13 +39,13 @@ import os
 import subprocess
 import re
 import pickle
-import viz,errors, misc, _base, model
+import viz, errors, misc, _base, model
 import matplotlib
 import matplotlib.pyplot as plt
 from textwrap import wrap
 import string
 import itertools
-from  multiprocessing import Process, cpu_count
+from multiprocessing import Process, cpu_count
 import glob
 import seaborn as sns
 from copy import deepcopy
@@ -57,9 +57,10 @@ import multiprocessing
 ## TODO use generators when iterating over a function with another function. i.e. plotting
 
 
-LOG=logging.getLogger(__name__)
+LOG = logging.getLogger(__name__)
 sns.set_context(context='poster',
                 font_scale=3)
+
 
 ## TODO change pycopi to tasks
 
@@ -112,6 +113,7 @@ class GetModelVariableFromStringMixin(Mixin):
         assert isinstance(v, str) != True
         return v
 
+
 class UpdatePropertiesMixin(Mixin):
 
     def update_properties(self, kwargs):
@@ -128,6 +130,7 @@ class UpdatePropertiesMixin(Mixin):
             except AttributeError:
                 setattr(self, k, kwargs[k])
 
+
 class Bool2Numeric(Mixin):
     """
     CopasiML uses 1's and 0's for True or False in some
@@ -138,6 +141,7 @@ class Bool2Numeric(Mixin):
     Use this method in early on in constructor for
     all subclasses where this applies.
     """
+
     @staticmethod
     def convert_bool_to_numeric(dct):
         """
@@ -180,22 +184,24 @@ class Bool2Numeric(Mixin):
                     raise Exception('{} is not True or False'.format(v))
         return dct
 
+
 class Bool2Str():
     """
     copasiML expects strings and we pythoners
     want to use python booleans not strings
     This class quickly converts between them
     """
-    def __init__(self,dct):
+
+    def __init__(self, dct):
         self.dct = dct
-        if isinstance(self.dct,dict)!=True:
+        if isinstance(self.dct, dict) != True:
             raise errors.InputError('Input must be dict')
 
-        self.acceptable_kwargs = ['append','confirm_overwrite','update_model',
-                                  'output_in_subtask','adjust_initial_conditions',
-                                  'randomize_start_values','log10','scheduled','output_event']
+        self.acceptable_kwargs = ['append', 'confirm_overwrite', 'update_model',
+                                  'output_in_subtask', 'adjust_initial_conditions',
+                                  'randomize_start_values', 'log10', 'scheduled', 'output_event']
 
-    def convert(self,boolean):
+    def convert(self, boolean):
         if boolean == True:
             return "true"
         elif boolean == False:
@@ -211,11 +217,11 @@ class Bool2Str():
         """
         for kwarg in self.dct.keys():
             if kwarg in self.acceptable_kwargs:
-                if self.dct[kwarg]==True:
-                    self.dct.update({kwarg:"true"})
+                if self.dct[kwarg] == True:
+                    self.dct.update({kwarg: "true"})
                 else:
-                    self.dct.update({kwarg:"false"})
-#
+                    self.dct.update({kwarg: "false"})
+        #
         return self.dct
 
 
@@ -237,8 +243,8 @@ class CheckIntegrityMixin(Mixin):
             if key not in allowed:
                 raise errors.InputError('{} not in {}'.format(key, allowed))
 
-class CopasiMLParser(object):
 
+class CopasiMLParser(object):
     """
     Parse a copasi file into xml.etree.
 
@@ -247,6 +253,7 @@ class CopasiMLParser(object):
         >>> model_path = r'/full/path/to/model.cps'
         >>> xml = CopasiMLParser(model_path).xml
     """
+
     def __init__(self, copasi_file):
         """
 
@@ -254,10 +261,10 @@ class CopasiMLParser(object):
             `str` full path to a copasi file
         """
         self.copasi_file = copasi_file
-        if os.path.isfile(self.copasi_file)!=True:
+        if os.path.isfile(self.copasi_file) != True:
             raise errors.FileDoesNotExistError('{} is not a copasi file'.format(self.copasi_file))
-        self.copasiMLTree=self._parse_copasiML()
-        self.copasiML=self.copasiMLTree.getroot()
+        self.copasiMLTree = self._parse_copasiML()
+        self.copasiML = self.copasiMLTree.getroot()
         self.xml = self.copasiMLTree.getroot()
 
         os.chdir(os.path.dirname(self.copasi_file))
@@ -267,16 +274,17 @@ class CopasiMLParser(object):
         Parse xml doc with lxml
         :return:
         """
-        tree= etree.parse(self.copasi_file)
+        tree = etree.parse(self.copasi_file)
         return tree
 
-    def write_copasi_file(self,copasi_filename, xml):
+    def write_copasi_file(self, copasi_filename, xml):
         """
         write to file with lxml write function
         """
-        #first convert the copasiML to a root element tree
-        root=etree.ElementTree(xml)
+        # first convert the copasiML to a root element tree
+        root = etree.ElementTree(xml)
         root.write(copasi_filename)
+
 
 @mixin(UpdatePropertiesMixin)
 @mixin(Bool2Numeric)
@@ -346,6 +354,7 @@ class Run(object):
     sge                     Run on sun grid engine
     =============           ==============
     """
+
     def __init__(self, model, **kwargs):
         """
         :param model:
@@ -358,7 +367,7 @@ class Run(object):
         self.default_properties = {'task': 'time_course',
                                    'mode': True,
                                    'sge_job_filename': None,
-                                   'copasi_location': 'apps/COPASI/4.21.166-Linux-64bit', #for sge mode
+                                   'copasi_location': 'apps/COPASI/4.21.166-Linux-64bit',  # for sge mode
                                    }
 
         self.default_properties.update(self.kwargs)
@@ -366,7 +375,6 @@ class Run(object):
         self.update_properties(self.default_properties)
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
         self._do_checks()
-
 
         if self.sge_job_filename == None:
             self.sge_job_filename = os.path.join(os.getcwd(), 'sge_job_file.sh')
@@ -416,7 +424,8 @@ class Run(object):
 
     def multi_run(self):
         pids = []
-        ##TODO build Queue.Queue system for multi running. 
+
+        ##TODO build Queue.Queue system for multi running.
         def run(x):
             if os.path.isfile(x) != True:
                 raise errors.FileDoesNotExistError('{} is not a file'.format(self.copasi_file))
@@ -482,7 +491,7 @@ class Run(object):
             f.write('#!/bin/bash\n#$ -V -cwd\nmodule add {}\nCopasiSE "{}"'.format(
                 self.copasi_location, self.model.copasi_file
             )
-        )
+            )
 
         ## -N option for job namexx
         os.system('qsub "{}" -N "{}" '.format(self.sge_job_filename, self.sge_job_filename))
@@ -508,6 +517,7 @@ class Run(object):
         ## remove .sh file after used.
         os.remove(self.sge_job_filename)
 
+
 @mixin(model.GetModelComponentFromStringMixin)
 @mixin(UpdatePropertiesMixin)
 @mixin(model.ReadModelMixin)
@@ -518,6 +528,7 @@ class RunParallel(object):
 
 
     """
+
     def __init__(self, models, **kwargs):
         self.models = models
         self.kwargs = kwargs
@@ -538,7 +549,6 @@ class RunParallel(object):
         ##TODO put Try except block here once you remember which error
         ##is being raised
         self.run_parallel()
-
 
     def _do_checks(self):
         """
@@ -566,6 +576,7 @@ class RunParallel(object):
 
         if self.max_active is None:
             self.max_active = len(self.models)
+
     # def __str__(self):
     #     return 'RunParallel({})'.format()
 
@@ -676,6 +687,7 @@ class Reports(object):
     directory                       `str` directory to save report in
     ===========================     ==============================================
     """
+
     def __init__(self, model, **kwargs):
         """
 
@@ -688,18 +700,18 @@ class Reports(object):
         self.model = self.read_model(model)
         self.kwargs = kwargs
         self.default_properties = {'metabolites': self.model.metabolites,
-                                 'global_quantities': self.model.global_quantities,
-                                 'local_parameters': self.model.local_parameters,
-                                 'quantity_type': 'concentration',
-                                 'report_name': None,
-                                 'append': False,
-                                 'confirm_overwrite': False,
-                                 'separator': '\t',
-                                 'update_model': False,
-                                 'report_type': 'parameter_estimation',
-                                 'variable': self.model.metabolites[0], #only for profile_likelihood
-                                 'directory': None,
-                                 }
+                                   'global_quantities': self.model.global_quantities,
+                                   'local_parameters': self.model.local_parameters,
+                                   'quantity_type': 'concentration',
+                                   'report_name': None,
+                                   'append': False,
+                                   'confirm_overwrite': False,
+                                   'separator': '\t',
+                                   'update_model': False,
+                                   'report_type': 'parameter_estimation',
+                                   'variable': self.model.metabolites[0],  # only for profile_likelihood
+                                   'directory': None,
+                                   }
 
         self.default_properties.update(self.kwargs)
         self.convert_bool_to_numeric(self.default_properties)
@@ -715,36 +727,35 @@ class Reports(object):
         :return:
         """
 
-        if isinstance(self.metabolites,str):
+        if isinstance(self.metabolites, str):
             self.metabolites = [self.metabolites]
-        if isinstance(self.global_quantities,str):
-            self.global_quantities=[self.global_quantities]
+        if isinstance(self.global_quantities, str):
+            self.global_quantities = [self.global_quantities]
 
         if isinstance(self.local_parameters, str):
             self.local_parameters = [self.local_parameters]
 
-        if self.quantity_type not in ['concentration','particle_numbers']:
+        if self.quantity_type not in ['concentration', 'particle_numbers']:
             raise errors.InputError('{} not concentration or particle_numbers'.format(self.quantity_type))
 
-        self.report_types=[None,'profile_likelihood', 'profilelikelihood2',
-                           'time_course','parameter_estimation', 'multi_parameter_estimation']
-        assert self.report_type in self.report_types,'valid report types include {}'.format(self.report_types)
+        self.report_types = [None, 'profile_likelihood', 'profilelikelihood2',
+                             'time_course', 'parameter_estimation', 'multi_parameter_estimation']
+        assert self.report_type in self.report_types, 'valid report types include {}'.format(self.report_types)
 
         quantity_types = ['particle_numbers', 'concentration']
         assert self.quantity_type in quantity_types
 
-
         if self.report_name == None:
             if self.report_type == 'profile_likelihood':
-                default_report_name='profilelikelihood.txt'
+                default_report_name = 'profilelikelihood.txt'
 
-            elif self.report_type=='profile_likelihood2':
-                default_report_name='profile_likelihood2.txt'
+            elif self.report_type == 'profile_likelihood2':
+                default_report_name = 'profile_likelihood2.txt'
 
             elif self.report_type == 'time_course':
-                default_report_name='time_course.txt'
+                default_report_name = 'time_course.txt'
 
-            elif self.report_type =='parameter_estimation':
+            elif self.report_type == 'parameter_estimation':
                 default_report_name = 'parameter_estimation.txt'
 
             elif self.report_type == 'multi_parameter_estimation':
@@ -764,16 +775,16 @@ class Reports(object):
         lists of metabolites to the metabolites keyword or global quantities to the
         global quantities keyword
         '''
-        #get existing report keys
-        keys=[]
+        # get existing report keys
+        keys = []
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
             keys.append(i.attrib['key'])
-            if i.attrib['name']=='Time-Course':
+            if i.attrib['name'] == 'Time-Course':
                 self.model = self.remove_report('time_course')
 
-        new_key='Report_30'
-        while new_key  in keys:
-            new_key='Report_{}'.format(numpy.random.randint(30,100))
+        new_key = 'Report_30'
+        while new_key in keys:
+            new_key = 'Report_{}'.format(numpy.random.randint(30, 100))
 
         ListOfReports = self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports')
         report = etree.SubElement(ListOfReports,
@@ -781,21 +792,21 @@ class Reports(object):
                                   attrib={'precision': '6',
                                           'separator': '\t',
                                           'name': 'Time-Course',
-                                          'key':new_key,
+                                          'key': new_key,
                                           'taskType': 'Time-Course'})
-        comment=etree.SubElement(report, 'Comment')
-        comment=comment #get rid of annoying squiggly line above
-        table=etree.SubElement(report, 'Table')
-        table.attrib['printTitle']=str(1)
-        #Objects for the report to report
-        time=etree.SubElement(table, 'Object')
-        #first element always time.
-        time.attrib['cn']='CN=Root,Model={},Reference=Time'.format(self.model.name)
+        comment = etree.SubElement(report, 'Comment')
+        comment = comment  # get rid of annoying squiggly line above
+        table = etree.SubElement(report, 'Table')
+        table.attrib['printTitle'] = str(1)
+        # Objects for the report to report
+        time = etree.SubElement(table, 'Object')
+        # first element always time.
+        time.attrib['cn'] = 'CN=Root,Model={},Reference=Time'.format(self.model.name)
 
         '''
         generate more SubElements dynamically
         '''
-        #for metabolites
+        # for metabolites
         if self.metabolites != None:
             for i in self.metabolites:
                 if self.quantity_type == 'concentration':
@@ -807,18 +818,18 @@ class Reports(object):
                     # cn= self.model.metabolites[i].reference
                     # print self.model.reference
                     cn = '{},{},{}'.format(self.model.reference,
-                                               i.compartment.reference,
-                                               i.transient_reference)
+                                           i.compartment.reference,
+                                           i.transient_reference)
                 elif self.quantity_type == 'particle_numbers':
                     cn = '{},{},{}'.format(self.model.reference,
-                                                                     i.compartment.reference,
-                                                                     i.reference)
+                                           i.compartment.reference,
+                                           i.reference)
 
-            #add to xml
-                Object=etree.SubElement(table,'Object')
-                Object.attrib['cn']=cn
+                # add to xml
+                Object = etree.SubElement(table, 'Object')
+                Object.attrib['cn'] = cn
 
-        #for global quantities
+        # for global quantities
         if self.global_quantities != None:
             for i in self.global_quantities:
                 """
@@ -827,10 +838,9 @@ class Reports(object):
                     cn="CN=Root,Model=New Model,Vector=Values[B2C],Reference=Value"
                 """
                 cn = '{},{}'.format(self.model.reference, i.transient_reference)
-                Object=etree.SubElement(table,'Object')
-                Object.attrib['cn']=cn
+                Object = etree.SubElement(table, 'Object')
+                Object.attrib['cn'] = cn
         return self.model
-
 
     def scan(self):
         '''
@@ -841,18 +851,18 @@ class Reports(object):
         lists of metabolites to the metabolites keyword or global quantities to the
         global quantities keyword
         '''
-        #get existing report keys
+        # get existing report keys
 
         ##TODO implement self.variable as column in scan
-        keys=[]
+        keys = []
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
             keys.append(i.attrib['key'])
-            if i.attrib['name']=='Time-Course':
+            if i.attrib['name'] == 'Time-Course':
                 self.model = self.remove_report('time_course')
 
-        new_key='Report_30'
-        while new_key  in keys:
-            new_key='Report_{}'.format(numpy.random.randint(30,100))
+        new_key = 'Report_30'
+        while new_key in keys:
+            new_key = 'Report_{}'.format(numpy.random.randint(30, 100))
 
         ListOfReports = self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports')
         report = etree.SubElement(ListOfReports,
@@ -860,17 +870,16 @@ class Reports(object):
                                   attrib={'precision': '6',
                                           'separator': '\t',
                                           'name': 'Time-Course',
-                                          'key':new_key,
+                                          'key': new_key,
                                           'taskType': 'Time-Course'})
-        comment=etree.SubElement(report, 'Comment')
-        comment=comment #get rid of annoying squiggly line above
-        table=etree.SubElement(report, 'Table')
-        table.attrib['printTitle']=str(1)
-        #Objects for the report to report
-        time=etree.SubElement(table, 'Object')
-        #first element always time.
-        time.attrib['cn']='CN=Root,Model={},Reference=Time'.format(self.model.name)
-
+        comment = etree.SubElement(report, 'Comment')
+        comment = comment  # get rid of annoying squiggly line above
+        table = etree.SubElement(report, 'Table')
+        table.attrib['printTitle'] = str(1)
+        # Objects for the report to report
+        time = etree.SubElement(table, 'Object')
+        # first element always time.
+        time.attrib['cn'] = 'CN=Root,Model={},Reference=Time'.format(self.model.name)
 
         if self.metabolites != None:
             for i in self.metabolites:
@@ -883,18 +892,18 @@ class Reports(object):
                     # cn= self.model.metabolites[i].reference
                     # print self.model.reference
                     cn = '{},{},{}'.format(self.model.reference,
-                                               i.compartment.reference,
-                                               i.transient_reference)
+                                           i.compartment.reference,
+                                           i.transient_reference)
                 elif self.quantity_type == 'particle_numbers':
                     cn = '{},{},{}'.format(self.model.reference,
                                            i.compartment.reference,
                                            i.reference)
 
-            #add to xml
-                Object=etree.SubElement(table,'Object')
-                Object.attrib['cn']=cn
+                # add to xml
+                Object = etree.SubElement(table, 'Object')
+                Object.attrib['cn'] = cn
 
-        #for global quantities
+        # for global quantities
         if self.global_quantities != None:
             for i in self.global_quantities:
                 """
@@ -903,54 +912,58 @@ class Reports(object):
                     cn="CN=Root,Model=New Model,Vector=Values[B2C],Reference=Value"
                 """
                 cn = '{},{}'.format(self.model.reference, i.transient_reference)
-                Object=etree.SubElement(table,'Object')
-                Object.attrib['cn']=cn
+                Object = etree.SubElement(table, 'Object')
+                Object.attrib['cn'] = cn
         return self.model
+
     #
     def profile_likelihood(self):
         '''
         Create report of a parameter and best value for a parameter estimation
         for profile likelihoods
         '''
-        #get existing report keys
-        keys=[]
+        # get existing report keys
+        keys = []
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
             keys.append(i.attrib['key'])
-            if i.attrib['name']=='profile_likelihood':
+            if i.attrib['name'] == 'profile_likelihood':
                 self.model = self.remove_report('profile_likelihood')
 
-        new_key='Report_31'
+        new_key = 'Report_31'
         while new_key in keys:
-            new_key='Report_{}'.format(numpy.random.randint(30,100))
+            new_key = 'Report_{}'.format(numpy.random.randint(30, 100))
         report_attributes = {'precision': '6',
                              'separator': '\t',
                              'name': 'profile_likelihood',
                              'key': new_key,
                              'taskType': 'Scan'}
 
-        ListOfReports=self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports')
-        report=etree.SubElement(ListOfReports,'Report')
+        ListOfReports = self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports')
+        report = etree.SubElement(ListOfReports, 'Report')
         report.attrib.update(report_attributes)
 
-        comment=etree.SubElement(report, 'Comment')
-        table=etree.SubElement(report, 'Table')
-        table.attrib['printTitle']=str(1)
+        comment = etree.SubElement(report, 'Comment')
+        table = etree.SubElement(report, 'Table')
+        table.attrib['printTitle'] = str(1)
 
         ##TODO cater for particle numbers
         if self.variable.name in [i.name for i in self.metabolites]:
-            cn = '{},{},{}'.format(self.model.reference, self.variable.compartment.reference, self.variable.initial_reference)
+            cn = '{},{},{}'.format(self.model.reference, self.variable.compartment.reference,
+                                   self.variable.initial_reference)
 
         elif self.variable.name in [i.name for i in self.global_quantities]:
             cn = '{},{}'.format(self.model.reference, self.variable.initial_reference)
 
         elif self.variable.name in [i.name for i in self.local_parameters]:
-            cn = '{},{},{}'.format(self.model.reference, self.variable.get_reaction().reference, self.variable.value_reference)
+            cn = '{},{},{}'.format(self.model.reference, self.variable.get_reaction().reference,
+                                   self.variable.value_reference)
 
-        etree.SubElement(table,'Object',attrib={'cn': cn})
-        etree.SubElement(table,'Object',attrib={'cn':"CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"})
-        etree.SubElement(table,'Object',attrib={'cn': "CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"})
+        etree.SubElement(table, 'Object', attrib={'cn': cn})
+        etree.SubElement(table, 'Object', attrib={
+            'cn': "CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"})
+        etree.SubElement(table, 'Object', attrib={
+            'cn': "CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"})
         return self.model
-
 
     def parameter_estimation(self):
         '''
@@ -961,32 +974,34 @@ class Reports(object):
         These can be over-ridden with the global_quantities, LocalParameters and metabolites
         keywords.
         '''
-        #get existing report keys
-        keys=[]
+        # get existing report keys
+        keys = []
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
             keys.append(i.attrib['key'])
-            if i.attrib['name']=='parameter_estimation':
+            if i.attrib['name'] == 'parameter_estimation':
                 self.model = self.remove_report('parameter_estimation')
 
-        new_key='Report_32'
-        while new_key  in keys:
-            new_key='Report_{}'.format(numpy.random.randint(30,100))
-        report_attributes={'precision': '6',
-                           'separator': '\t',
-                           'name': 'parameter_estimation',
-                           'key': new_key,
-                           'taskType': 'parameterFitting'}
+        new_key = 'Report_32'
+        while new_key in keys:
+            new_key = 'Report_{}'.format(numpy.random.randint(30, 100))
+        report_attributes = {'precision': '6',
+                             'separator': '\t',
+                             'name': 'parameter_estimation',
+                             'key': new_key,
+                             'taskType': 'parameterFitting'}
 
         # print self.model, type(self.model)
-        ListOfReports=self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports')
-        report=etree.SubElement(ListOfReports,'Report')
+        ListOfReports = self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports')
+        report = etree.SubElement(ListOfReports, 'Report')
         report.attrib.update(report_attributes)
-        comment=etree.SubElement(report,'Comment')
-        footer=etree.SubElement(report,'Footer')
-        Object=etree.SubElement(footer,'Object')
-        Object.attrib['cn']="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"
-        Object=etree.SubElement(footer,'Object')
-        Object.attrib['cn']="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"
+        comment = etree.SubElement(report, 'Comment')
+        footer = etree.SubElement(report, 'Footer')
+        Object = etree.SubElement(footer, 'Object')
+        Object.attrib[
+            'cn'] = "CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"
+        Object = etree.SubElement(footer, 'Object')
+        Object.attrib[
+            'cn'] = "CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"
         return self.model
 
     def multi_parameter_estimation(self):
@@ -998,33 +1013,33 @@ class Reports(object):
         These can be over-ridden with the global_quantities, LocalParameters and metabolites
         keywords.
         '''
-        #get existing report keys
-        keys=[]
+        # get existing report keys
+        keys = []
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
             keys.append(i.attrib['key'])
-            if i.attrib['name']=='multi_parameter_estimation':
+            if i.attrib['name'] == 'multi_parameter_estimation':
                 self.model = self.remove_report('multi_parameter_estimation')
 
-        new_key='Report_32'
-        while new_key  in keys:
-            new_key='Report_{}'.format(numpy.random.randint(30,100))
-        report_attributes={'precision': '6',
-                           'separator': '\t',
-                           'name': 'multi_parameter_estimation',
-                           'key': new_key,
-                           'taskType': 'parameterFitting'}
+        new_key = 'Report_32'
+        while new_key in keys:
+            new_key = 'Report_{}'.format(numpy.random.randint(30, 100))
+        report_attributes = {'precision': '6',
+                             'separator': '\t',
+                             'name': 'multi_parameter_estimation',
+                             'key': new_key,
+                             'taskType': 'parameterFitting'}
 
-        ListOfReports=self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports')
-        report=etree.SubElement(ListOfReports,'Report')
+        ListOfReports = self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports')
+        report = etree.SubElement(ListOfReports, 'Report')
         report.attrib.update(report_attributes)
-        comment=etree.SubElement(report,'Comment')
-        table=etree.SubElement(report,'Table')
-        table.attrib['printTitle']=str(1)
-        etree.SubElement(table,'Object',attrib={'cn':"CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"})
-        etree.SubElement(table,'Object',attrib={'cn':"CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"})
+        comment = etree.SubElement(report, 'Comment')
+        table = etree.SubElement(report, 'Table')
+        table.attrib['printTitle'] = str(1)
+        etree.SubElement(table, 'Object', attrib={
+            'cn': "CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"})
+        etree.SubElement(table, 'Object', attrib={
+            'cn': "CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"})
         return self.model
-
-
 
     def run(self):
         '''
@@ -1034,8 +1049,8 @@ class Reports(object):
             self.model = self.parameter_estimation()
 
 
-        elif self.report_type  == 'multi_parameter_estimation':
-            self.model =self.multi_parameter_estimation()
+        elif self.report_type == 'multi_parameter_estimation':
+            self.model = self.multi_parameter_estimation()
 
         elif self.report_type == 'profile_likelihood':
             self.model = self.profile_likelihood()
@@ -1048,21 +1063,21 @@ class Reports(object):
 
         return self.model
 
-    def remove_report(self,report_name):
+    def remove_report(self, report_name):
         """
 
         remove report called report_name
         :param report_name:
         :return: pycotools.model.Model
         """
-        assert report_name in self.report_types,'{} not a valid report type. These are valid report types: {}'.format(report_name,self.report_types)
+        assert report_name in self.report_types, '{} not a valid report type. These are valid report types: {}'.format(
+            report_name, self.report_types)
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
-            if report_name=='time_course':
-                report_name='time-course'
+            if report_name == 'time_course':
+                report_name = 'time-course'
             if i.attrib['name'].lower() == report_name.lower():
                 i.getparent().remove(i)
         return self.model
-
 
     def clear_all_reports(self):
         """
@@ -1074,7 +1089,7 @@ class Reports(object):
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfTasks'):
             for j in list(i):
                 if 'target' in j.attrib.keys():
-                    j.attrib['target']=''
+                    j.attrib['target'] = ''
         return self.model
 
 
@@ -1136,39 +1151,39 @@ class TimeCourse(object):
         default_report_name = os.path.join(os.path.dirname(self.model.copasi_file), 'TimeCourseData.txt')
 
         default_properties = {'intervals': 100,
-                               'step_size': 0.01,
-                               'end': 1,
-                               'start': 0,
-                               'update_model': False,
-                               # report variables
-                               'metabolites': self.model.metabolites,
-                               'global_quantities': self.model.global_quantities,
-                               'quantity_type': 'concentration',
-                               'report_name': default_report_name,
-                               'append': False,
-                               'confirm_overwrite': False,
-                               'method': 'deterministic',
-                               'output_event': False,
-                               'scheduled': True,
-                               'automatic_step_size': False,
-                               'start_in_steady_state': False,
-                               'integrate_reduced_model': False,
-                               'relative_tolerance': 1e-6,
-                               'absolute_tolerance': 1e-12,
-                               'max_internal_steps': 10000,
-                               'max_internal_step_size': 0,
-                               'subtype': 2,
-                               'use_random_seed': True,
-                               'random_seed': 1,
-                               'epsilon': 0.001,
-                               'lower_limit': 800,
-                               'upper_limit': 1000,
-                               'partitioning_interval': 1,
-                               'runge_kutta_step_size': 0.001,
-                               'run': True,
-                               'correct_headers':  True,
-                               'save': False,
-                               }
+                              'step_size': 0.01,
+                              'end': 1,
+                              'start': 0,
+                              'update_model': False,
+                              # report variables
+                              'metabolites': self.model.metabolites,
+                              'global_quantities': self.model.global_quantities,
+                              'quantity_type': 'concentration',
+                              'report_name': default_report_name,
+                              'append': False,
+                              'confirm_overwrite': False,
+                              'method': 'deterministic',
+                              'output_event': False,
+                              'scheduled': True,
+                              'automatic_step_size': False,
+                              'start_in_steady_state': False,
+                              'integrate_reduced_model': False,
+                              'relative_tolerance': 1e-6,
+                              'absolute_tolerance': 1e-12,
+                              'max_internal_steps': 10000,
+                              'max_internal_step_size': 0,
+                              'subtype': 2,
+                              'use_random_seed': True,
+                              'random_seed': 1,
+                              'epsilon': 0.001,
+                              'lower_limit': 800,
+                              'upper_limit': 1000,
+                              'partitioning_interval': 1,
+                              'runge_kutta_step_size': 0.001,
+                              'run': True,
+                              'correct_headers': True,
+                              'save': False,
+                              }
         default_properties.update(kwargs)
         default_properties = self.convert_bool_to_numeric(default_properties)
         self.check_integrity(default_properties.keys(), kwargs.keys())
@@ -1180,13 +1195,10 @@ class TimeCourse(object):
 
         self.run_task()
 
-
         ## self.correct_output_headers()
 
         if self.save:
             self.model.save()
-
-
 
     def _do_checks(self):
         """
@@ -1202,9 +1214,10 @@ class TimeCourse(object):
                        'hybrid_lsoda',
                        'hybrid_rk45']
         if self.method not in method_list:
-            raise errors.InputError('{} is not a valid method. These are valid methods {}'.format(self.method, method_list))
+            raise errors.InputError(
+                '{} is not a valid method. These are valid methods {}'.format(self.method, method_list))
 
-        if os.path.isabs(self.report_name)!=True:
+        if os.path.isabs(self.report_name) != True:
             self.report_name = os.path.join(os.path.dirname(self.model.copasi_file), self.report_name)
 
         if not isinstance(self.metabolites, list):
@@ -1224,13 +1237,12 @@ class TimeCourse(object):
             if isinstance(self.global_quantities[glo], str):
                 glo_list.append(self.get_variable_from_string(
                     self.model, self.global_quantities[glo]
-                    )
+                )
                 )
             else:
                 glo_list.append(self.global_quantities[glo])
 
         self.global_quantities = glo_list
-
 
     def __str__(self):
         return "TimeCourse(method={}, end={}, intervals={}, step_size={})".format(
@@ -1523,7 +1535,7 @@ class TimeCourse(object):
 
         dct = {'name': 'Upper Limit',
                'type': 'float',
-               'value': str(self.upper_limit) }
+               'value': str(self.upper_limit)}
         etree.SubElement(method, 'Parameter', attrib=dct)
 
         dct = {'name': 'Partitioning Interval',
@@ -1567,7 +1579,7 @@ class TimeCourse(object):
 
         dct = {'name': 'Upper Limit',
                'type': 'float',
-               'value': str(self.upper_limit) }
+               'value': str(self.upper_limit)}
         etree.SubElement(method, 'Parameter', attrib=dct)
 
         dct = {'name': 'Partitioning Interval',
@@ -1652,7 +1664,6 @@ class TimeCourse(object):
                 i.insert(0, report)
         return self.model
 
-
     def get_report_key(self):
         """
         cross reference the timecourse task with the newly created
@@ -1665,7 +1676,7 @@ class TimeCourse(object):
                 key = i.attrib['key']
         if 'Time-Course' not in all_reports:
             raise errors.SomethingWentHorriblyWrongError('No report called "Time-Course". '
-                                                             'Have you set one up yet?')
+                                                         'Have you set one up yet?')
         return key
 
 
@@ -1707,6 +1718,7 @@ class Scan(object):
                                     accepted here
     ===========================     ==============================================
     """
+
     def __init__(self, model, **kwargs):
         """
 
@@ -1758,7 +1770,6 @@ class Scan(object):
         else:
             self.log10 = str(1)
 
-
         self.model = self.define_report()
         self.model = self.create_scan()
         self.model = self.set_scan_options()
@@ -1804,7 +1815,6 @@ class Scan(object):
                         )
                     )
 
-
         if self.clear_scans == True:
             self.model = self.remove_scans()
 
@@ -1816,7 +1826,7 @@ class Scan(object):
         #                     'True as we would like all the output. For parameter estimations'
         #                     'or profile likelihood, set this to False as we only want the'
         #                     'final parameter set')
-                # self.output_in_subtask = 'true'  ##string format needed for copasi
+        # self.output_in_subtask = 'true'  ##string format needed for copasi
 
         subtasks = ['steady_state', 'time_course',
                     'metabolic_control_anlysis',
@@ -1859,7 +1869,6 @@ class Scan(object):
         #     if i[0] == self.distribution_type:
         #         self.distribution_type = str(i[1])
 
-
         ## allow a user to input a string not pycotools.model class
         if isinstance(self.variable, str):
             if self.variable in [i.name for i in self.model.metabolites]:
@@ -1871,8 +1880,6 @@ class Scan(object):
 
             elif self.variable in [i.name for i in self.model.local_parameters]:
                 self.variable = self.model.get('local_parameter', self.variable, by='global_name')
-
-
 
     def define_report(self):
         """
@@ -1903,7 +1910,8 @@ class Scan(object):
             if i.attrib['name'].lower() == self.report_type.lower():
                 key = i.attrib['key']
         if key == None:
-            raise errors.ReportDoesNotExistError('Report doesn\'t exist. Check to see if you have either defined the report manually or used the pycopi.Reports class')
+            raise errors.ReportDoesNotExistError(
+                'Report doesn\'t exist. Check to see if you have either defined the report manually or used the pycopi.Reports class')
         return key
 
     def create_scan(self):
@@ -1916,8 +1924,8 @@ class Scan(object):
         ## get model entity if variable is a string
         if isinstance(self.variable, str):
             metab = self.model.get('metabolite', self.variable, by='name')
-            glob  = self.model.get('global_quantity', self.variable, by='name')
-            loca  = self.model.get('local_parameter', self.variable, by='global_name')
+            glob = self.model.get('global_quantity', self.variable, by='name')
+            loca = self.model.get('local_parameter', self.variable, by='global_name')
 
             ##small bit of extra code to check that
             ## we only have one self.variable
@@ -1935,7 +1943,8 @@ class Scan(object):
 
             all = metab_for_checking + glob_for_checking + loca_for_checking
             if len(all) > 1:
-                raise errors.SomethingWentHorriblyWrongError('Getting variable from model but matched more than one entity')
+                raise errors.SomethingWentHorriblyWrongError(
+                    'Getting variable from model but matched more than one entity')
 
             if metab != []:
                 self.variable = metab
@@ -1970,7 +1979,7 @@ class Scan(object):
 
         number_of_steps_attrib = {'type': 'unsignedInteger',
                                   'name': 'Number of steps',
-                                  'value': str(self.number_of_steps )}
+                                  'value': str(self.number_of_steps)}
 
         scan_item_attrib = {'type': 'cn',
                             'name': 'Object',
@@ -2026,6 +2035,7 @@ class Scan(object):
         for i in self.model.xml.xpath(query):
             i.append(scanItem_element)
         return self.model
+
     #
     def set_scan_options(self):
         report_attrib = {'append': self.append,
@@ -2086,6 +2096,7 @@ class Scan(object):
     def execute(self):
         R = Run(self.model, task='scan', mode=self.run)
 
+
 @mixin(model.GetModelComponentFromStringMixin)
 @mixin(UpdatePropertiesMixin)
 @mixin(model.ReadModelMixin)
@@ -2119,38 +2130,37 @@ class ExperimentMapper(object):
     save                                Default: False. Save the model
     =================================   =================================================================
     """
+
     def __init__(self, model, experiment_files, **kwargs):
         self.model = self.read_model(model)
         self.kwargs = kwargs
         # super(ExperimentMapper, self).__init__(model, **kwargs)
         self.experiment_files = experiment_files
-        if isinstance(self.experiment_files, list) !=True:
+        if isinstance(self.experiment_files, list) != True:
             self.experiment_files = [self.experiment_files]
 
-
-        self.default_properties={'type': 'experiment', #or 'validation_data
-                                 'row_orientation': [True]*len(self.experiment_files),
-                                 'experiment_type': ['timecourse']*len(self.experiment_files),
-                                 'first_row': [1]*len(self.experiment_files),
-                                 'normalize_weights_per_experiment': [True]*len(self.experiment_files),
-                                 'row_containing_names': [1]*len(self.experiment_files),
-                                 'separator': ['\t']*len(self.experiment_files),
-                                 'weight_method': ['mean_squared']*len(self.experiment_files),
-                                 'threshold': [5]*len(self.experiment_files),
-                                 'weight': [1]*len(self.experiment_files) ,
-                                 'save': False}
+        self.default_properties = {'type': 'experiment',  # or 'validation_data
+                                   'row_orientation': [True] * len(self.experiment_files),
+                                   'experiment_type': ['timecourse'] * len(self.experiment_files),
+                                   'first_row': [1] * len(self.experiment_files),
+                                   'normalize_weights_per_experiment': [True] * len(self.experiment_files),
+                                   'row_containing_names': [1] * len(self.experiment_files),
+                                   'separator': ['\t'] * len(self.experiment_files),
+                                   'weight_method': ['mean_squared'] * len(self.experiment_files),
+                                   'threshold': [5] * len(self.experiment_files),
+                                   'weight': [1] * len(self.experiment_files),
+                                   'save': False}
         self.default_properties.update(self.kwargs)
         self.convert_bool_to_numeric(self.default_properties)
         self.update_properties(self.default_properties)
         self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
         self._do_checks()
 
-        #run the experiment mapper
+        # run the experiment mapper
         self.model = self.map_experiments()
 
         if self.save:
             self.model.save()
-
 
     def _do_checks(self):
         """
@@ -2161,25 +2171,24 @@ class ExperimentMapper(object):
             raise errors.InputError('{} not in {}'.format(self.type, data_types))
 
         for i in range(len(self.experiment_files)):
-            if os.path.isabs(self.experiment_files[i])!=True:
+            if os.path.isabs(self.experiment_files[i]) != True:
                 self.experiment_files[i] = os.path.abspath(self.experiment_files[i])
 
         weight_method_string = ['mean_squared', 'stardard_deviation', 'value_scaling',
                                 'mean']  # line 2144
-        weight_method_numbers = [str(i) for i in [1,2,3,4] ]
+        weight_method_numbers = [str(i) for i in [1, 2, 3, 4]]
         weight_method_dict = dict(zip(weight_method_string, weight_method_numbers))
-        self.weight_method = [weight_method_dict[i] for i in self.weight_method  ]
+        self.weight_method = [weight_method_dict[i] for i in self.weight_method]
 
-
-        experiment_type_string = ['steadystate','timecourse']
+        experiment_type_string = ['steadystate', 'timecourse']
         experiment_type_numbers = [str(i) for i in [0, 1]]
         experiment_type_dict = dict(zip(experiment_type_string, experiment_type_numbers))
         self.experiment_type = [experiment_type_dict[i] for i in self.experiment_type]
 
-        l=[]
+        l = []
         assert isinstance(self.row_orientation, list)
         for i in self.row_orientation:
-            assert i in [True,False]
+            assert i in [True, False]
             if i == True:
                 l.append(str(1))
             else:
@@ -2187,46 +2196,45 @@ class ExperimentMapper(object):
         self.row_orientation = l
 
         assert isinstance(self.first_row, list)
-        l=[]
+        l = []
         for i in self.first_row:
-            assert i!=0
-            assert i!=str(0)
+            assert i != 0
+            assert i != str(0)
             l.append(str(i))
         self.first_row = l
 
-        l=[]
+        l = []
         assert isinstance(self.normalize_weights_per_experiment, list)
         for i in self.normalize_weights_per_experiment:
-            assert i in [True,False],'{} should be true or false'.format(i)
+            assert i in [True, False], '{} should be true or false'.format(i)
             if i == True:
                 l.append(str(1))
             else:
                 l.append(str(0))
         self.normalize_weights_per_experiment = l
 
-        l=[]
+        l = []
         assert isinstance(self.row_orientation, list)
         for i in self.row_orientation:
             l.append(str(i))
-        self.row_orientation=l
+        self.row_orientation = l
 
-        l=[]
-        assert isinstance(self.row_containing_names,list)
+        l = []
+        assert isinstance(self.row_containing_names, list)
         for i in self.row_containing_names:
             l.append(str(i))
         self.row_containing_names = l
 
-
-        assert isinstance(self.separator,list)
+        assert isinstance(self.separator, list)
         for i in self.separator:
-            assert isinstance(i,str),'separator should be given asa python list'
+            assert isinstance(i, str), 'separator should be given asa python list'
 
     def __str__(self):
         return 'ExperimentMapper({})'.format(self.to_string())
 
     @property
     def experiments(self):
-        existing_experiment_list=[]
+        existing_experiment_list = []
         if self.type == 'experiment':
             query = '//*[@name="Experiment Set"]'
         elif self.type == 'validation':
@@ -2257,33 +2265,31 @@ class ExperimentMapper(object):
                                       'one experiment file per experiment. Alternatively ensure no trailing white '
                                       'lines exist in your data file.'.format(self.experiment_files[index]))
 
-        #get observables from data. Must be exact match
+        # get observables from data. Must be exact match
         obs = list(data.columns)
         num_rows = str(data.shape[0])
-        num_columns = str(data.shape[1]) #plus 1 to account for 0 indexed
+        num_columns = str(data.shape[1])  # plus 1 to account for 0 indexed
 
-
-        #if exp_file is in the same directory as copasi_file only use relative path
+        # if exp_file is in the same directory as copasi_file only use relative path
         if os.path.dirname(self.model.copasi_file) == os.path.dirname(self.experiment_files[index]):
             exp = os.path.split(self.experiment_files[index])[1]
         else:
             exp = self.experiment_files[index]
 
-        self.key='Experiment_{}'.format(index)
+        self.key = 'Experiment_{}'.format(index)
 
-        #necessary XML attributes
-        Exp=etree.Element('ParameterGroup', attrib={'name': self.key})
+        # necessary XML attributes
+        Exp = etree.Element('ParameterGroup', attrib={'name': self.key})
 
         # Exp = etree.Element('ParameterGroup', attrib={'name': self.experiment_files[index]})
 
-
         row_orientation = {'type': 'bool',
-                         'name': 'Data is Row Oriented',
-                         'value': self.row_orientation[index]}
+                           'name': 'Data is Row Oriented',
+                           'value': self.row_orientation[index]}
 
         experiment_type = {'type': 'unsignedInteger',
-                         'name': 'Experiment Type',
-                         'value': self.experiment_type[index]}
+                           'name': 'Experiment Type',
+                           'value': self.experiment_type[index]}
 
         ExpFile = {'type': 'file',
                    'name': 'File Name',
@@ -2299,7 +2305,7 @@ class ExperimentMapper(object):
 
         LastRow = {'type': 'unsignedInteger',
                    'name': 'Last Row',
-                   'value': str(int(num_rows)+1)} #add 1 to account for 0 indexed python
+                   'value': str(int(num_rows) + 1)}  # add 1 to account for 0 indexed python
 
         normalize_weights_per_experiment = {'type': 'bool',
                                             'name': 'Normalize Weights per Experiment',
@@ -2337,26 +2343,26 @@ class ExperimentMapper(object):
         etree.SubElement(Exp, 'Parameter', attrib=separator)
         etree.SubElement(Exp, 'Parameter', attrib=weight_method)
 
-        #define object role attributes
+        # define object role attributes
         time_role = {'type': 'unsignedInteger',
-                    'name': 'Role',
-                    'value': '3'}
+                     'name': 'Role',
+                     'value': '3'}
 
         dependent_variable_role = {'type': 'unsignedInteger',
-                                 'name': 'Role',
-                                 'value': '2'}
+                                   'name': 'Role',
+                                   'value': '2'}
 
         independent_variable_role = {'type': 'unsignedInteger',
-                                   'name': 'Role',
-                                   'value': '1'}
+                                     'name': 'Role',
+                                     'value': '1'}
 
         ignored_role = {'type': 'unsignedInteger',
-                                'name': 'Role',
-                                'value': '0'}
+                        'name': 'Role',
+                        'value': '0'}
 
         for i in range(int(num_columns)):
-            map_group=etree.SubElement(Map, 'ParameterGroup', attrib={'name': (str(i))})
-            if self.experiment_type[index] == str(1): #when Experiment type is set to time course it should be 1
+            map_group = etree.SubElement(Map, 'ParameterGroup', attrib={'name': (str(i))})
+            if self.experiment_type[index] == str(1):  # when Experiment type is set to time course it should be 1
                 ## first column is time
                 if i == 0:
                     etree.SubElement(map_group, 'Parameter', attrib=time_role)
@@ -2386,7 +2392,8 @@ class ExperimentMapper(object):
                                              'Parameter',
                                              attrib=independent_globs)
                         else:
-                            etree.SubElement(map_group, 'Parameter', attrib=ignored_role)
+                            continue
+                            ##etree.SubElement(map_group, 'Parameter', attrib=ignored_role)
                             LOG.warning('{} not found. Set to ignore'.format(obs[i]))
                         etree.SubElement(map_group, 'Parameter', attrib=independent_variable_role)
 
@@ -2419,7 +2426,8 @@ class ExperimentMapper(object):
                         ## remember that local parameters are not mapped to experimental
                         ## data
                         else:
-                            etree.SubElement(map_group, 'Parameter', attrib=ignored_role)
+                            continue
+                            ##etree.SubElement(map_group, 'Parameter', attrib=ignored_role)
                             LOG.warning('{} not found. Set to ignore'.format(obs[i]))
                         ## map for time course dependent variable
                         etree.SubElement(map_group, 'Parameter', attrib=dependent_variable_role)
@@ -2428,7 +2436,7 @@ class ExperimentMapper(object):
             else:
 
                 ## do independent variables first
-                if obs[i][-6:]=='_indep':
+                if obs[i][-6:] == '_indep':
 
                     ## for metabolites
                     if obs[i][:-6] in [j.name for j in self.model.metabolites]:
@@ -2457,7 +2465,8 @@ class ExperimentMapper(object):
                                          attrib=independent_globs)
                     ## local parameters are never mapped
                     else:
-                        etree.SubElement(map_group, 'Parameter', attrib=ignored_role)
+                        continue
+                        #etree.SubElement(map_group, 'Parameter', attrib=ignored_role)
                         LOG.warning('{} not found. Set to ignore'.format(obs[i]))
                     etree.SubElement(map_group, 'Parameter', attrib=independent_variable_role)
 
@@ -2489,12 +2498,13 @@ class ExperimentMapper(object):
                                          attrib=independent_globs)
                     ## local parameters are never mapped
                     else:
-                        etree.SubElement(map_group, 'Parameter', attrib=ignored_role)
+                        continue
+                        ##etree.SubElement(map_group, 'Parameter', attrib=ignored_role)
                         LOG.warning('{} not found. Set to ignore'.format(obs[i]))
                     etree.SubElement(map_group, 'Parameter', attrib=dependent_variable_role)
         return Exp
 
-    def remove_experiment(self,experiment_name):
+    def remove_experiment(self, experiment_name):
         """
         name attribute of experiment. usually Experiment_1 or something
         """
@@ -2515,7 +2525,7 @@ class ExperimentMapper(object):
             self.remove_experiment(experiment_name)
         return self.model
 
-    def add_experiment_set(self,experiment_element):
+    def add_experiment_set(self, experiment_element):
         """
         Map a single experiment set
         :param experiment_element:
@@ -2530,7 +2540,6 @@ class ExperimentMapper(object):
         for j in self.model.xml.xpath(query):
             j.insert(0, experiment_element)
         return self.model
-
 
     def map_experiments(self):
         """
@@ -2579,6 +2588,7 @@ class ExperimentMapper(object):
             self.model = self.add_experiment_set(Experiment)
             # self.save() ## Note sure whether this save is needed. Keep commented until you're sure
         return self.model
+
 
 @mixin(GetModelVariableFromStringMixin)
 @mixin(model.GetModelComponentFromStringMixin)
@@ -2673,7 +2683,7 @@ class ParameterEstimation(object):
         self.kwargs = kwargs
         # super(ParameterEstimation, self).__init__(model, **kwargs)
         self.experiment_files = experiment_files
-        if isinstance(self.experiment_files, list) !=True:
+        if isinstance(self.experiment_files, list) != True:
             self.experiment_files = [self.experiment_files]
 
         default_report_name = os.path.join(os.path.dirname(self.model.copasi_file), 'PEData.txt')
@@ -2777,13 +2787,13 @@ class ParameterEstimation(object):
                     new_attr.append(self.get_variable_from_string(self.model, getattribute[i]))
                     setattr(self, attr, new_attr)
 
-        if os.path.isabs(self.report_name)!=True:
+        if os.path.isabs(self.report_name) != True:
             self.report_name = os.path.join(os.path.dirname(self.model.copasi_file),
                                             self.report_name)
 
         ## ensure experiment files exist
         for fle in self.experiment_files:
-            if os.path.isfile(fle)!=True:
+            if os.path.isfile(fle) != True:
                 raise errors.InputError('{} does not exist'.format(fle))
 
         ## ensure method exists
@@ -2820,21 +2830,21 @@ class ParameterEstimation(object):
             if i not in [j.name for j in self.model.local_parameters]:
                 raise errors.InputError(
                     '"{}" not a local_parameter. These are your local parameters: {}'.format(
-                        i, self.model.local_parameters) )
+                        i, self.model.local_parameters))
 
         ## ensure arguments to metabolites exist
         for i in [j.name for j in self.metabolites]:
             if i not in [j.name for j in self.model.metabolites]:
                 raise errors.InputError(
                     '"{}" not a metabolite. These are your local parameters: {}'.format(
-                        i,self.model.metabolites) )
+                        i, self.model.metabolites))
 
         ## ensure arguments to global_quantities exist
         for i in [j.name for j in self.global_quantities]:
             if i not in [j.name for j in self.model.global_quantities]:
                 raise errors.InputError(
                     '"{}" not a global_quantity. These are your local parameters: {}'.format(
-                        i,self.model.global_quantities) )
+                        i, self.model.global_quantities))
 
         if self.use_config_start_values not in [True, False]:
             raise errors.InputError(
@@ -2857,14 +2867,13 @@ class ParameterEstimation(object):
             self.randomize_start_values = '0'
             self.use_config_start_values = True
 
-
     @property
     def _experiment_mapper_args(self):
         """
         method to construct a dictionary to pass to ExperimentMapper
         :return:
         """
-        kwargs_experiment={}
+        kwargs_experiment = {}
         kwargs_experiment['row_orientation'] = self.row_orientation
         kwargs_experiment['experiment_type'] = self.experiment_type
         kwargs_experiment['first_row'] = self.first_row
@@ -2879,7 +2888,7 @@ class ParameterEstimation(object):
         Setup a parameter estimation
         :return:
         """
-        EM=ExperimentMapper(self.model, self.experiment_files, **self._experiment_mapper_args)
+        EM = ExperimentMapper(self.model, self.experiment_files, **self._experiment_mapper_args)
         self.model = EM.model
         self.model = self.define_report()
         self.model = self.remove_all_fit_items()
@@ -2897,68 +2906,68 @@ class ParameterEstimation(object):
         :return: tuple. (str, str), (method_name, method_type)
         """
         if self.method == 'current_solution_statistics'.lower():
-            method_name='Current Solution Statistics'
-            method_type='CurrentSolutionStatistics'
+            method_name = 'Current Solution Statistics'
+            method_type = 'CurrentSolutionStatistics'
 
         if self.method == 'differential_evolution'.lower():
-            method_name='Differential Evolution'
-            method_type='DifferentialEvolution'
+            method_name = 'Differential Evolution'
+            method_type = 'DifferentialEvolution'
 
         if self.method == 'evolutionary_strategy_sr'.lower():
-            method_name='Evolution Strategy (SRES)'
-            method_type='EvolutionaryStrategySR'
+            method_name = 'Evolution Strategy (SRES)'
+            method_type = 'EvolutionaryStrategySR'
 
         if self.method == 'evolutionary_program'.lower():
-            method_name='Evolutionary Programming'
-            method_type='EvolutionaryProgram'
+            method_name = 'Evolutionary Programming'
+            method_type = 'EvolutionaryProgram'
 
         if self.method == 'hooke_jeeves'.lower():
-            method_name='Hooke &amp; Jeeves'
-            method_type='HookeJeeves'
+            method_name = 'Hooke &amp; Jeeves'
+            method_type = 'HookeJeeves'
 
         if self.method == 'levenberg_marquardt'.lower():
-            method_name='Levenberg - Marquardt'
-            method_type='LevenbergMarquardt'
+            method_name = 'Levenberg - Marquardt'
+            method_type = 'LevenbergMarquardt'
 
         if self.method == 'nelder_mead'.lower():
-            method_name='Nelder - Mead'
-            method_type='NelderMead'
+            method_name = 'Nelder - Mead'
+            method_type = 'NelderMead'
 
         if self.method == 'particle_swarm'.lower():
-            method_name='Particle Swarm'
-            method_type='ParticleSwarm'
+            method_name = 'Particle Swarm'
+            method_type = 'ParticleSwarm'
 
         if self.method == 'praxis'.lower():
-            method_name='Praxis'
-            method_type='Praxis'
+            method_name = 'Praxis'
+            method_type = 'Praxis'
 
         if self.method == 'random_search'.lower():
-            method_name='Random Search'
-            method_type='RandomSearch'
+            method_name = 'Random Search'
+            method_type = 'RandomSearch'
 
         if self.method == 'simulated_annealing'.lower():
-            method_name='Simulated Annealing'
-            method_type='SimulatedAnnealing'
+            method_name = 'Simulated Annealing'
+            method_type = 'SimulatedAnnealing'
 
         if self.method == 'steepest_descent'.lower():
-            method_name='Steepest Descent'
-            method_type='SteepestDescent'
+            method_name = 'Steepest Descent'
+            method_type = 'SteepestDescent'
 
         if self.method == 'truncated_newton'.lower():
-            method_name='Truncated Newton'
-            method_type='TruncatedNewton'
+            method_name = 'Truncated Newton'
+            method_type = 'TruncatedNewton'
 
         if self.method == 'scatter_search'.lower():
-            method_name='Scatter Search'
-            method_type='ScatterSearch'
+            method_name = 'Scatter Search'
+            method_type = 'ScatterSearch'
 
         if self.method == 'genetic_algorithm'.lower():
-            method_name='Genetic Algorithm'
-            method_type='GeneticAlgorithm'
+            method_name = 'Genetic Algorithm'
+            method_type = 'GeneticAlgorithm'
 
         if self.method == 'genetic_algorithm_sr'.lower():
-            method_name='Genetic Algorithm SR'
-            method_type='GeneticAlgorithmSR'
+            method_name = 'Genetic Algorithm SR'
+            method_type = 'GeneticAlgorithmSR'
 
         return method_name, method_type
 
@@ -2968,24 +2977,24 @@ class ParameterEstimation(object):
         This method makes this conversion
         :return: void
         """
-        self.number_of_generations=str(self.number_of_generations)
-        self.population_size=str(self.population_size)
-        self.random_number_generator=str(self.random_number_generator)
-        self.seed=str(self.seed)
-        self.pf=str(self.pf)
-        self.iteration_limit=str(self.iteration_limit)
-        self.tolerance=str(self.tolerance)
-        self.rho=str(self.rho)
-        self.scale=str(self.scale)
-        self.swarm_size =str(self.swarm_size)
-        self.std_deviation =str(self.std_deviation)
-        self.number_of_iterations =str(self.number_of_iterations)
-        self.start_temperature =str(self.start_temperature)
-        self.cooling_factor =str(self.cooling_factor)
-        self.lower_bound =str( self.lower_bound)
+        self.number_of_generations = str(self.number_of_generations)
+        self.population_size = str(self.population_size)
+        self.random_number_generator = str(self.random_number_generator)
+        self.seed = str(self.seed)
+        self.pf = str(self.pf)
+        self.iteration_limit = str(self.iteration_limit)
+        self.tolerance = str(self.tolerance)
+        self.rho = str(self.rho)
+        self.scale = str(self.scale)
+        self.swarm_size = str(self.swarm_size)
+        self.std_deviation = str(self.std_deviation)
+        self.number_of_iterations = str(self.number_of_iterations)
+        self.start_temperature = str(self.start_temperature)
+        self.cooling_factor = str(self.cooling_factor)
+        self.lower_bound = str(self.lower_bound)
         if isinstance(self.start_value, (float, int)):
-            self.start_value =str( self.start_value)
-        self.upper_bound = str( self.upper_bound)
+            self.start_value = str(self.start_value)
+        self.upper_bound = str(self.upper_bound)
 
     @property
     def _report_arguments(self):
@@ -2993,16 +3002,16 @@ class ParameterEstimation(object):
         collect report specific arguments in a dict
         :return: dict
         """
-        #report specific arguments
-        report_dict={}
-        report_dict['metabolites']=self.metabolites
-        report_dict['global_quantities']=self.global_quantities
-        report_dict['local_parameters']=self.local_parameters
-        report_dict['quantity_type']=self.quantity_type
-        report_dict['report_name']=self.report_name
-        report_dict['append']=self.append
-        report_dict['confirm_overwrite']=self.confirm_overwrite
-        report_dict['report_type']='parameter_estimation'
+        # report specific arguments
+        report_dict = {}
+        report_dict['metabolites'] = self.metabolites
+        report_dict['global_quantities'] = self.global_quantities
+        report_dict['local_parameters'] = self.local_parameters
+        report_dict['quantity_type'] = self.quantity_type
+        report_dict['report_name'] = self.report_name
+        report_dict['append'] = self.append
+        report_dict['confirm_overwrite'] = self.confirm_overwrite
+        report_dict['report_type'] = 'parameter_estimation'
         return report_dict
 
     def define_report(self):
@@ -3041,79 +3050,81 @@ class ParameterEstimation(object):
         Get existing fit items
         :return: dict
         """
-        d={}
-        query='//*[@name="FitItem"]'
+        d = {}
+        query = '//*[@name="FitItem"]'
         for i in self.model.xml.xpath(query):
             for j in list(i):
-                if j.attrib['name']=='ObjectCN':
-                    match=re.findall('Reference=(.*)',j.attrib['value'])[0]
+                if j.attrib['name'] == 'ObjectCN':
+                    match = re.findall('Reference=(.*)', j.attrib['value'])[0]
 
-                    if match=='Value':
-                        match2=re.findall('Reactions\[(.*)\].*Parameter=(.*),', j.attrib['value'])
-                        if match2!=[]:
-                            match2='({}).{}'.format(match2[0][0],match2[0][1])
+                    if match == 'Value':
+                        match2 = re.findall('Reactions\[(.*)\].*Parameter=(.*),', j.attrib['value'])
+                        if match2 != []:
+                            match2 = '({}).{}'.format(match2[0][0], match2[0][1])
 
-                    elif match=='InitialValue':
-                        match2=re.findall('Values\[(.*)\]', j.attrib['value'])
-                        if match2!=[]:
-                            match2=match2[0]
-                    elif match=='InitialConcentration':
+                    elif match == 'InitialValue':
+                        match2 = re.findall('Values\[(.*)\]', j.attrib['value'])
+                        if match2 != []:
+                            match2 = match2[0]
+                    elif match == 'InitialConcentration':
 
-                        match2=re.findall('Metabolites\[(.*)\]',j.attrib['value'])
-                        if match2!=[]:
-                            match2=match2[0]
-                    if match2!=[]:
-                        d[match2]=j.attrib
+                        match2 = re.findall('Metabolites\[(.*)\]', j.attrib['value'])
+                        if match2 != []:
+                            match2 = match2[0]
+                    if match2 != []:
+                        d[match2] = j.attrib
         return d
 
-    def remove_fit_item(self,item):
+    def remove_fit_item(self, item):
         """
         Remove item from parameter estimation
         :param item:
         :return: pycotools.model.Model
         """
-        all_items= self._fit_items.keys()
-        query='//*[@name="FitItem"]'
-        assert item in all_items,'{} is not a fit item. These are the fit items: {}'.format(item,all_items)
-        item=self._fit_items[item]
+        all_items = self._fit_items.keys()
+        query = '//*[@name="FitItem"]'
+        assert item in all_items, '{} is not a fit item. These are the fit items: {}'.format(item, all_items)
+        item = self._fit_items[item]
         for i in self.model.xml.xpath(query):
             for j in list(i):
-                if j.attrib['name']=='ObjectCN':
-                    #locate references
-                    #remove local parameters from PE task
-                    match=re.findall('Reference=(.*)',j.attrib['value'])[0]
-                    if match=='Value':
-                        pattern='Reactions\[(.*)\].*Parameter=(.*),Reference=(.*)'
-                        match2_copasiML=re.findall(pattern, j.attrib['value'])
-                        if match2_copasiML!=[]:
-                            match2_item=re.findall(pattern, item['value'])
-                            if match2_item!=[]:
-                                if match2_item==match2_copasiML:
+                if j.attrib['name'] == 'ObjectCN':
+                    # locate references
+                    # remove local parameters from PE task
+                    match = re.findall('Reference=(.*)', j.attrib['value'])[0]
+                    if match == 'Value':
+                        pattern = 'Reactions\[(.*)\].*Parameter=(.*),Reference=(.*)'
+                        match2_copasiML = re.findall(pattern, j.attrib['value'])
+                        if match2_copasiML != []:
+                            match2_item = re.findall(pattern, item['value'])
+                            if match2_item != []:
+                                if match2_item == match2_copasiML:
                                     i.getparent().remove(i)
 
-                    #rempve global parameters from PE task
-                    elif match=='InitialValue':
-                        pattern='Values\[(.*)\].*Reference=(.*)'
-                        match2_copasiML=re.findall(pattern, j.attrib['value'])
-                        if match2_copasiML!=[]:
-                            match2_item=re.findall(pattern,item['value'])
-                            if match2_item==match2_copasiML:
+                    # rempve global parameters from PE task
+                    elif match == 'InitialValue':
+                        pattern = 'Values\[(.*)\].*Reference=(.*)'
+                        match2_copasiML = re.findall(pattern, j.attrib['value'])
+                        if match2_copasiML != []:
+                            match2_item = re.findall(pattern, item['value'])
+                            if match2_item == match2_copasiML:
                                 i.getparent().remove(i)
 
-                    #remove IC parameters from PE task
-                    elif match=='InitialConcentration' or match=='InitialParticleNumber':
-                        pattern='Metabolites\[(.*)\],Reference=(.*)'
-                        match2_copasiML=re.findall(pattern,j.attrib['value'])
-                        if match2_copasiML!=[]:
-                            if match2_copasiML[0][1]=='InitialConcentration' or match2_copasiML[0][1]=='InitialParticleNumber':
-                                match2_item=re.findall(pattern,item['value'])
-                                if match2_item!=[]:
-                                    if match2_item==match2_copasiML:
+                    # remove IC parameters from PE task
+                    elif match == 'InitialConcentration' or match == 'InitialParticleNumber':
+                        pattern = 'Metabolites\[(.*)\],Reference=(.*)'
+                        match2_copasiML = re.findall(pattern, j.attrib['value'])
+                        if match2_copasiML != []:
+                            if match2_copasiML[0][1] == 'InitialConcentration' or match2_copasiML[0][
+                                1] == 'InitialParticleNumber':
+                                match2_item = re.findall(pattern, item['value'])
+                                if match2_item != []:
+                                    if match2_item == match2_copasiML:
                                         i.getparent().remove(i)
                     else:
-                        raise TypeError('Parameter {} is not a local parameter, initial concentration parameter or a global parameter.initial_value'.format(match2_item))
+                        raise TypeError(
+                            'Parameter {} is not a local parameter, initial concentration parameter or a global parameter.initial_value'.format(
+                                match2_item))
         return self.model
-
 
     def remove_all_fit_items(self):
         """
@@ -3124,7 +3135,6 @@ class ParameterEstimation(object):
         for i in self._fit_items:
             self.model = self.remove_fit_item(i)
         return self.model
-
 
     def write_config_file(self):
         """
@@ -3142,14 +3152,17 @@ class ParameterEstimation(object):
         :return:
         """
         if os.path.isfile(self.config_filename) != True:
-            raise errors.InputError('ConfigFile does not exist. run \'write_config_file\' method and modify it how you like then run the setup()  method again.')
+            raise errors.InputError(
+                'ConfigFile does not exist. run \'write_config_file\' method and modify it how you like then run the setup()  method again.')
         df = pandas.read_csv(self.config_filename)
         parameter_names = list(df[df.columns[0]])
 
         model_parameters = self.model.all_variable_names
         for parameter in parameter_names:
             if parameter not in model_parameters:
-                raise errors.InputError('{} not in {}\n\n Ensure you are using the correct PE config file!'.format(parameter, model_parameters))
+                raise errors.InputError(
+                    '{} not in {}\n\n Ensure you are using the correct PE config file!'.format(parameter,
+                                                                                               model_parameters))
         return df
 
     @property
@@ -3173,12 +3186,10 @@ class ParameterEstimation(object):
                 if PE_glob.name == model_glob.name:
                     keep_globs.append(PE_glob)
 
-
         for model_loc in self.model.local_parameters:
             for PE_loc in self.local_parameters:
                 if PE_loc.global_name == model_loc.global_name:
                     keep_locs.append(PE_loc)
-
 
         keep_metabs = [i.to_df() for i in keep_metabs]
         keep_globs = [i.to_df() for i in keep_globs]
@@ -3205,7 +3216,6 @@ class ParameterEstimation(object):
         if not metabs.empty:
             metabs = metabs.sort_values(by='name')
 
-
         los = pandas.DataFrame()
         if keep_locs != []:
             lo = pandas.concat(keep_locs, axis=1).transpose()
@@ -3216,7 +3226,6 @@ class ParameterEstimation(object):
 
         if not los.empty:
             los = los.sort_values(by='name')
-
 
         gls = pandas.DataFrame()
         if keep_globs != []:
@@ -3230,8 +3239,8 @@ class ParameterEstimation(object):
 
         df = pandas.concat([metabs, gls, los], axis=0)
 
-        df['lower_bound'] = [self.lower_bound]*df.shape[0]
-        df['upper_bound'] = [self.upper_bound]*df.shape[0]
+        df['lower_bound'] = [self.lower_bound] * df.shape[0]
+        df['upper_bound'] = [self.upper_bound] * df.shape[0]
 
         df = df.set_index('name')
 
@@ -3249,8 +3258,7 @@ class ParameterEstimation(object):
 
         return df
 
-
-    def add_fit_item(self,item):
+    def add_fit_item(self, item):
         """
         Add fit item to model
         :param item: a row from the config template as pandas series
@@ -3273,40 +3281,40 @@ class ParameterEstimation(object):
                 ' model variables: {}'.format(
                     item['name'],
                     str(self.model.all_variable_names))
-                )
+            )
 
-        #initialize new element
+        # initialize new element
         new_element = etree.Element('ParameterGroup', attrib={'name': 'FitItem'})
-        all_items= self.read_config_file()
+        all_items = self.read_config_file()
         # assert item in list(all_items['name']), '{} is not in your ItemTemplate. You item template contains: {}'.format(item, list(all_items.index))
         # item= all_items.loc[item]
 
         ##TODO include affected Cross Validation Experiments
         ##TODO include Affected Experiment options
-        subA1={'name': 'Affected Cross Validation Experiments'}
-        subA2={'name': 'Affected Experiments'}
-        subA3={'type': 'cn',  'name': 'LowerBound',  'value': str(item['lower_bound'])}
+        subA1 = {'name': 'Affected Cross Validation Experiments'}
+        subA2 = {'name': 'Affected Experiments'}
+        subA3 = {'type': 'cn', 'name': 'LowerBound', 'value': str(item['lower_bound'])}
 
         if self.use_config_start_values == True:
-            subA5={'type': 'float',  'name': 'StartValue',  'value': str(item['start_value'])}
+            subA5 = {'type': 'float', 'name': 'StartValue', 'value': str(item['start_value'])}
 
-        subA6={'type': 'cn',  'name': 'UpperBound',  'value': str(item['upper_bound'])}
+        subA6 = {'type': 'cn', 'name': 'UpperBound', 'value': str(item['upper_bound'])}
         etree.SubElement(new_element, 'ParameterGroup', attrib=subA1)
         etree.SubElement(new_element, 'ParameterGroup', attrib=subA2)
-        etree.SubElement(new_element, 'Parameter',  attrib=subA3)
+        etree.SubElement(new_element, 'Parameter', attrib=subA3)
 
         if self.use_config_start_values == True:
             etree.SubElement(new_element, 'Parameter', attrib=subA5)
         etree.SubElement(new_element, 'Parameter', attrib=subA6)
 
-        #for IC parameters
+        # for IC parameters
         if isinstance(component, model.Metabolite):
             if self.quantity_type == 'concentration':
-                subA4={'type': 'cn',  'name': 'ObjectCN',  'value': '{},{},{}'.format(self.model.reference,
+                subA4 = {'type': 'cn', 'name': 'ObjectCN', 'value': '{},{},{}'.format(self.model.reference,
                                                                                       component.compartment.reference,
-                                                                                      component.initial_reference) }
+                                                                                      component.initial_reference)}
             else:
-                subA4={'type': 'cn',  'name': 'ObjectCN',  'value': '{},{},{}'.format(
+                subA4 = {'type': 'cn', 'name': 'ObjectCN', 'value': '{},{},{}'.format(
                     self.model.reference,
                     component.compartment.reference,
                     component.initial_particle_reference
@@ -3319,8 +3327,8 @@ class ParameterEstimation(object):
                 component.value_reference)}
 
         elif isinstance(component, model.GlobalQuantity):
-            subA4={'type': 'cn',  'name': 'ObjectCN',  'value': '{},{}'.format(self.model.reference,
-                                                                               component.initial_reference) }
+            subA4 = {'type': 'cn', 'name': 'ObjectCN', 'value': '{},{}'.format(self.model.reference,
+                                                                               component.initial_reference)}
 
         elif isinstance(component, model.Compartment):
             subA4 = {'type': 'cn',
@@ -3358,129 +3366,128 @@ class ParameterEstimation(object):
             self.model = self.add_fit_item(self.read_config_file().iloc[row])
         return self.model
 
-
     def set_PE_method(self):
         '''
         Choose PE algorithm and set algorithm specific parameters
         '''
-        #Build xml for method.
+        # Build xml for method.
         method_name, method_type = self._select_method()
-        method_params={'name':method_name, 'type':method_type}
-        method_element=etree.Element('Method',attrib=method_params)
+        method_params = {'name': method_name, 'type': method_type}
+        method_element = etree.Element('Method', attrib=method_params)
 
-        #list of attribute dictionaries
-        #Evolutionary strategy parametery
-        number_of_generations={'type': 'unsignedInteger', 'name': 'Number of Generations', 'value': self.number_of_generations}
-        population_size={'type': 'unsignedInteger', 'name': 'Population Size', 'value': self.population_size}
-        random_number_generator={'type': 'unsignedInteger', 'name': 'Random Number Generator', 'value': self.random_number_generator}
-        seed={'type': 'unsignedInteger', 'name': 'Seed', 'value': self.seed}
-        pf={'type': 'float', 'name': 'Pf', 'value': self.pf}
-        #local method parameters
-        iteration_limit={'type': 'unsignedInteger', 'name': 'Iteration Limit', 'value': self.iteration_limit}
-        tolerance={'type': 'float', 'name': 'Tolerance', 'value': self.tolerance}
+        # list of attribute dictionaries
+        # Evolutionary strategy parametery
+        number_of_generations = {'type': 'unsignedInteger', 'name': 'Number of Generations',
+                                 'value': self.number_of_generations}
+        population_size = {'type': 'unsignedInteger', 'name': 'Population Size', 'value': self.population_size}
+        random_number_generator = {'type': 'unsignedInteger', 'name': 'Random Number Generator',
+                                   'value': self.random_number_generator}
+        seed = {'type': 'unsignedInteger', 'name': 'Seed', 'value': self.seed}
+        pf = {'type': 'float', 'name': 'Pf', 'value': self.pf}
+        # local method parameters
+        iteration_limit = {'type': 'unsignedInteger', 'name': 'Iteration Limit', 'value': self.iteration_limit}
+        tolerance = {'type': 'float', 'name': 'Tolerance', 'value': self.tolerance}
         rho = {'type': 'float', 'name': 'Rho', 'value': self.rho}
         scale = {'type': 'unsignedFloat', 'name': 'Scale', 'value': self.scale}
-        #Particle Swarm parmeters
+        # Particle Swarm parmeters
         swarm_size = {'type': 'unsignedInteger', 'name': 'Swarm Size', 'value': self.swarm_size}
         std_deviation = {'type': 'unsignedFloat', 'name': 'Std. Deviation', 'value': self.std_deviation}
-        #Random Search parameters
-        number_of_iterations = {'type': 'unsignedInteger', 'name': 'Number of Iterations', 'value': self.number_of_iterations}
-        #Simulated Annealing parameters
+        # Random Search parameters
+        number_of_iterations = {'type': 'unsignedInteger', 'name': 'Number of Iterations',
+                                'value': self.number_of_iterations}
+        # Simulated Annealing parameters
         start_temperature = {'type': 'unsignedFloat', 'name': 'Start Temperature', 'value': self.start_temperature}
         cooling_factor = {'type': 'unsignedFloat', 'name': 'Cooling Factor', 'value': self.cooling_factor}
 
-
-        #build the appropiate xML, with method at root (for now)
+        # build the appropiate xML, with method at root (for now)
         if self.method == 'current_solution_statistics':
-            pass #no additional parameter elements required
+            pass  # no additional parameter elements required
 
-        if self.method=='differential_evolution'.lower():
+        if self.method == 'differential_evolution'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
             etree.SubElement(method_element, 'Parameter', attrib=population_size)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
 
-        if self.method=='evolutionary_strategy_sr'.lower():
+        if self.method == 'evolutionary_strategy_sr'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
             etree.SubElement(method_element, 'Parameter', attrib=population_size)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
             etree.SubElement(method_element, 'Parameter', attrib=pf)
 
-        if self.method=='evolutionary_program'.lower():
+        if self.method == 'evolutionary_program'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
             etree.SubElement(method_element, 'Parameter', attrib=population_size)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
 
-        if self.method=='hooke_jeeves'.lower():
+        if self.method == 'hooke_jeeves'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
             etree.SubElement(method_element, 'Parameter', attrib=tolerance)
             etree.SubElement(method_element, 'Parameter', attrib=rho)
 
-        if self.method=='levenberg_marquardt'.lower():
-            etree.SubElement(method_element,'Parameter',attrib=iteration_limit)
-            etree.SubElement(method_element,'Parameter',attrib=tolerance)
-#
-        if self.method=='nelder_mead'.lower():
-            etree.SubElement(method_element,'Parameter',attrib=iteration_limit)
-            etree.SubElement(method_element,'Parameter',attrib=tolerance)
-            etree.SubElement(method_element,'Parameter',attrib=scale)
+        if self.method == 'levenberg_marquardt'.lower():
+            etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
+            etree.SubElement(method_element, 'Parameter', attrib=tolerance)
+        #
+        if self.method == 'nelder_mead'.lower():
+            etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
+            etree.SubElement(method_element, 'Parameter', attrib=tolerance)
+            etree.SubElement(method_element, 'Parameter', attrib=scale)
 
-        if self.method=='particle_swarm'.lower():
-            etree.SubElement(method_element,'Parameter',attrib=iteration_limit)
-            etree.SubElement(method_element,'Parameter',attrib=swarm_size)
-            etree.SubElement(method_element,'Parameter',attrib=std_deviation)
-            etree.SubElement(method_element,'Parameter',attrib=random_number_generator)
-            etree.SubElement(method_element,'Parameter',attrib=seed)
+        if self.method == 'particle_swarm'.lower():
+            etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
+            etree.SubElement(method_element, 'Parameter', attrib=swarm_size)
+            etree.SubElement(method_element, 'Parameter', attrib=std_deviation)
+            etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
+            etree.SubElement(method_element, 'Parameter', attrib=seed)
 
-        if self.method=='praxis'.lower():
-            etree.SubElement(method_element,'Parameter',attrib=tolerance)
+        if self.method == 'praxis'.lower():
+            etree.SubElement(method_element, 'Parameter', attrib=tolerance)
 
-        if self.method=='random_search'.lower():
-            etree.SubElement(method_element,'Parameter',attrib=number_of_iterations)
-            etree.SubElement(method_element,'Parameter',attrib=random_number_generator)
-            etree.SubElement(method_element,'Parameter',attrib=seed)
+        if self.method == 'random_search'.lower():
+            etree.SubElement(method_element, 'Parameter', attrib=number_of_iterations)
+            etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
+            etree.SubElement(method_element, 'Parameter', attrib=seed)
 
-        if self.method=='simulated_annealing'.lower():
-            etree.SubElement(method_element,'Parameter',attrib=start_temperature)
-            etree.SubElement(method_element,'Parameter',attrib=cooling_factor)
-            etree.SubElement(method_element,'Parameter',attrib=tolerance)
-            etree.SubElement(method_element,'Parameter',attrib=random_number_generator)
-            etree.SubElement(method_element,'Parameter',attrib=seed)
-#
-        if self.method=='steepest_descent'.lower():
-            etree.SubElement(method_element,'Parameter',attrib=iteration_limit)
-            etree.SubElement(method_element,'Parameter',attrib=tolerance)
-#
-        if self.method=='truncated_newton'.lower():
-            #required no additonal paraemters
+        if self.method == 'simulated_annealing'.lower():
+            etree.SubElement(method_element, 'Parameter', attrib=start_temperature)
+            etree.SubElement(method_element, 'Parameter', attrib=cooling_factor)
+            etree.SubElement(method_element, 'Parameter', attrib=tolerance)
+            etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
+            etree.SubElement(method_element, 'Parameter', attrib=seed)
+        #
+        if self.method == 'steepest_descent'.lower():
+            etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
+            etree.SubElement(method_element, 'Parameter', attrib=tolerance)
+        #
+        if self.method == 'truncated_newton'.lower():
+            # required no additonal paraemters
             pass
-#
-        if self.method=='scatter_search'.lower():
-            etree.SubElement(method_element,'Parameter',attrib=number_of_iterations)
+        #
+        if self.method == 'scatter_search'.lower():
+            etree.SubElement(method_element, 'Parameter', attrib=number_of_iterations)
 
+        if self.method == 'genetic_algorithm'.lower():
+            etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
+            etree.SubElement(method_element, 'Parameter', attrib=population_size)
+            etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
+            etree.SubElement(method_element, 'Parameter', attrib=seed)
 
-        if self.method=='genetic_algorithm'.lower():
-            etree.SubElement(method_element,'Parameter',attrib=number_of_generations)
-            etree.SubElement(method_element,'Parameter',attrib=population_size)
-            etree.SubElement(method_element,'Parameter',attrib=random_number_generator)
-            etree.SubElement(method_element,'Parameter',attrib=seed)
+        if self.method == 'genetic_algorithm_sr'.lower():
+            etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
+            etree.SubElement(method_element, 'Parameter', attrib=population_size)
+            etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
+            etree.SubElement(method_element, 'Parameter', attrib=seed)
+            etree.SubElement(method_element, 'Parameter', attrib=pf)
 
-        if self.method=='genetic_algorithm_sr'.lower():
-            etree.SubElement(method_element,'Parameter',attrib=number_of_generations)
-            etree.SubElement(method_element,'Parameter',attrib=population_size)
-            etree.SubElement(method_element,'Parameter',attrib=random_number_generator)
-            etree.SubElement(method_element,'Parameter',attrib=seed)
-            etree.SubElement(method_element,'Parameter',attrib=pf)
+        tasks = self.model.xml.find('{http://www.copasi.org/static/schema}ListOfTasks')
 
-
-        tasks=self.model.xml.find('{http://www.copasi.org/static/schema}ListOfTasks')
-
-        method= tasks[5][-1]
-        parent=method.getparent()
+        method = tasks[5][-1]
+        parent = method.getparent()
         parent.remove(method)
-        parent.insert(2,method_element)
+        parent.insert(2, method_element)
         return self.model
 
     def set_PE_options(self):
@@ -3489,37 +3496,35 @@ class ParameterEstimation(object):
         :return: pycotools.model.Model
         """
 
+        scheluled_attrib = {'scheduled': self.scheduled,
+                            'updateModel': self.update_model}
 
-        scheluled_attrib={'scheduled': self.scheduled,
-                          'updateModel': self.update_model}
+        report_attrib = {'append': self.append,
+                         'reference': self.get_report_key(),
+                         'target': self.report_name,
+                         'confirmOverwrite': self.confirm_overwrite}
 
-        report_attrib={'append': self.append,
-                       'reference': self.get_report_key(),
-                       'target': self.report_name,
-                       'confirmOverwrite': self.confirm_overwrite}
+        randomize_start_values = {'type': 'bool',
+                                  'name': 'Randomize Start Values',
+                                  'value': self.randomize_start_values}
 
+        calculate_stats = {'type': 'bool', 'name': 'Calculate Statistics', 'value': self.calculate_statistics}
+        create_parameter_sets = {'type': 'bool', 'name': 'Create Parameter Sets', 'value': self.create_parameter_sets}
 
-        randomize_start_values={'type': 'bool',
-                                'name': 'Randomize Start Values',
-                                'value': self.randomize_start_values}
-
-        calculate_stats={'type': 'bool', 'name': 'Calculate Statistics', 'value': self.calculate_statistics}
-        create_parameter_sets={'type': 'bool', 'name': 'Create Parameter Sets', 'value': self.create_parameter_sets}
-
-        query='//*[@name="Parameter Estimation"]' and '//*[@type="parameterFitting"]'
+        query = '//*[@name="Parameter Estimation"]' and '//*[@type="parameterFitting"]'
         for i in self.model.xml.xpath(query):
             i.attrib.update(scheluled_attrib)
             for j in list(i):
                 if self.report_name != None:
                     if 'append' in j.attrib.keys():
                         j.attrib.update(report_attrib)
-                if list(j)!=[]:
+                if list(j) != []:
                     for k in list(j):
-                        if k.attrib['name']=='Randomize Start Values':
+                        if k.attrib['name'] == 'Randomize Start Values':
                             k.attrib.update(randomize_start_values)
-                        elif k.attrib['name']=='Calculate Statistics':
+                        elif k.attrib['name'] == 'Calculate Statistics':
                             k.attrib.update(calculate_stats)
-                        elif k.attrib['name']=='Create Parameter Sets':
+                        elif k.attrib['name'] == 'Create Parameter Sets':
                             k.attrib.update(create_parameter_sets)
         return self.model
 
@@ -3533,14 +3538,9 @@ class ParameterEstimation(object):
         else:
             Run(self.model, mode=self.run_mode, task='parameter_estimation')
 
-
-
-
     # def plot(self):
     #     self.PL=viz.PlotPEData(self.copasi_file,self.experiment_files,self.kwargs.get('report_name'),
     #                     **self.PlotPEDataKwargs)
-
-
 
 
 class MultiParameterEstimation(ParameterEstimation):
@@ -3571,6 +3571,7 @@ class MultiParameterEstimation(ParameterEstimation):
     ===========================     ==================================================
 
     """
+
     ##TODO Merge ParameterEstimation and Multi into one class.
     def __init__(self, model, experiment_files, copy_number=1, pe_number=3,
                  run_mode='multiprocess', results_directory=None,
@@ -3586,8 +3587,8 @@ class MultiParameterEstimation(ParameterEstimation):
         self.output_in_subtask = output_in_subtask
 
         if self.results_directory is None:
-            self.results_directory = os.path.join(os.path.dirname(self.model.copasi_file), 'MultipleParameterEstimationResults')
-
+            self.results_directory = os.path.join(os.path.dirname(self.model.copasi_file),
+                                                  'MultipleParameterEstimationResults')
 
     def __str__(self):
         return 'MultiParameterEstimation(copy_number="{}", pe_number="{}", method="{}")'.format(
@@ -3601,17 +3602,18 @@ class MultiParameterEstimation(ParameterEstimation):
         :return:
         """
         if self.output_in_subtask:
-            LOG.warning('output_in_subtask has been turned on. This means that you\'ll get function evaluations with the best parameter set that the algorithm finds')
+            LOG.warning(
+                'output_in_subtask has been turned on. This means that you\'ll get function evaluations with the best parameter set that the algorithm finds')
 
         run_arg_list = ['multiprocess', 'SGE']
 
         if self.run_mode not in run_arg_list:
             raise errors.InputError('run_mode needs to be one of {}'.format(run_arg_list))
 
-        if isinstance(self.copy_number,int)!=True:
+        if isinstance(self.copy_number, int) != True:
             raise errors.InputError('copy_number argument is of type int')
 
-        if isinstance(self.kwargs['pe_number'],int)!=True:
+        if isinstance(self.kwargs['pe_number'], int) != True:
             raise errors.InputError('pe_number argument is of type int')
 
     def _create_output_directory(self):
@@ -3619,7 +3621,7 @@ class MultiParameterEstimation(ParameterEstimation):
         Create directory for estimation results
         :return:
         """
-        if os.path.isdir(self.results_directory)!=True:
+        if os.path.isdir(self.results_directory) != True:
             os.mkdir(self.results_directory)
 
     def define_report(self):
@@ -3632,18 +3634,18 @@ class MultiParameterEstimation(ParameterEstimation):
         return Reports(self.model, **self._report_arguments).model
 
     def enumerate_PE_output(self):
-            """
-            Create a filename for each file to collect PE results
-            :return: dict['model_copy_number]=enumerated_report_name
-            """
+        """
+        Create a filename for each file to collect PE results
+        :return: dict['model_copy_number]=enumerated_report_name
+        """
 
-            dct = {}
-            dire, fle = os.path.split(self.report_name)
-            for i in range(self.copy_number):
-                new_file = os.path.join(self.results_directory,
-                                      fle[:-4]+'{}.txt'.format(str(i)))
-                dct[i] = new_file
-            return dct
+        dct = {}
+        dire, fle = os.path.split(self.report_name)
+        for i in range(self.copy_number):
+            new_file = os.path.join(self.results_directory,
+                                    fle[:-4] + '{}.txt'.format(str(i)))
+            dct[i] = new_file
+        return dct
 
     ##TODO work out whether parameter_estimation report shuold be multi_parameter_estimation
 
@@ -3657,7 +3659,7 @@ class MultiParameterEstimation(ParameterEstimation):
         dct[0] = deepcopy(self.model)
         for i in range(1, self.copy_number):
             dire, fle = os.path.split(self.model.copasi_file)
-            new_cps = os.path.join(dire, fle[:-4]+'_{}.cps'.format(i))
+            new_cps = os.path.join(dire, fle[:-4] + '_{}.cps'.format(i))
             model = deepcopy(self.model)
             model.copasi_file = new_cps
             model.save()
@@ -3674,18 +3676,16 @@ class MultiParameterEstimation(ParameterEstimation):
         """
         start = time.time()
         models = q.put(Scan(model,
-                   scan_type='repeat',
-                   number_of_steps=self.pe_number,
-                   subtask='parameter_estimation',
-                   report_type='multi_parameter_estimation',
-                   report_name=report,
-                   run=False,
-                   append=self.append,
-                   confirm_overwrite=self.confirm_overwrite,
-                   output_in_subtask=self.output_in_subtask,
-                   save=True))
-
-
+                            scan_type='repeat',
+                            number_of_steps=self.pe_number,
+                            subtask='parameter_estimation',
+                            report_type='multi_parameter_estimation',
+                            report_name=report,
+                            run=False,
+                            append=self.append,
+                            confirm_overwrite=self.confirm_overwrite,
+                            output_in_subtask=self.output_in_subtask,
+                            save=True))
 
     def _setup_scan(self, models):
         """
@@ -3713,7 +3713,6 @@ class MultiParameterEstimation(ParameterEstimation):
         time.sleep(0.1)
         return res
 
-
     def run(self):
         """
 
@@ -3730,7 +3729,8 @@ class MultiParameterEstimation(ParameterEstimation):
             try:
                 check_call('qhost')
             except errors.NotImplementedError:
-                LOG.warning('Attempting to run in SGE mode but SGE specific commands are unavailable. Switching to \'multiprocess\' mode')
+                LOG.warning(
+                    'Attempting to run in SGE mode but SGE specific commands are unavailable. Switching to \'multiprocess\' mode')
                 self.run_mode = 'multiprocess'
         if self.run_mode == 'multiprocess':
             RunParallel(self.models.values(), mode=self.run_mode, max_active=self.max_active,
@@ -3753,11 +3753,8 @@ class MultiParameterEstimation(ParameterEstimation):
         ## create a report for PE results collection
         self.model = self.define_report()
 
-
-
         ## If skip_config then do not configure the parameter estimation task
         if not self.skip_config:
-
             ## map experiments
             EM = ExperimentMapper(self.model, self.experiment_files, **self._experiment_mapper_args)
 
@@ -3788,7 +3785,6 @@ class MultiParameterEstimation(ParameterEstimation):
         assert isinstance(models[0], model.Model)
         return models
 
-
     # def run_secondary_locals(self, log10=False, truncate_mode='percent',
     #                          theta=100, iteration_limit=100, tolerance=1e-6):
     #     """
@@ -3806,7 +3802,6 @@ class MultiParameterEstimation(ParameterEstimation):
     #     print self.model
 
 
-
 class ChaserParameterEstimations(object):
     """
     Perform secondary hook and jeeves parameter estimations
@@ -3815,6 +3810,7 @@ class ChaserParameterEstimations(object):
     #todo: This class performs slowly in serial. Parallelize the configuration
     of the parameter estimation class in each model.
     """
+
     def __init__(self, cls=None, model=None, parameter_path=None, truncate_mode='percent',
                  experiment_files=None, theta=100, iteration_limit=100,
                  tolerance=1e-6, results_directory=None,
@@ -3907,7 +3903,6 @@ class ChaserParameterEstimations(object):
 
         self.run()
 
-
     def do_checks(self):
         """
 
@@ -3916,19 +3911,19 @@ class ChaserParameterEstimations(object):
 
         if self.model is None and self.cls is None and self.parameter_path is None:
             raise errors.InputError('Please give argument to either "cls" which '
-                             'should be an instance of MultiParameterEstimation '
-                             'or arguments to both "model" and "parameter_path" which are'
-                             'the model and data you want to use in the chaser estimations')
+                                    'should be an instance of MultiParameterEstimation '
+                                    'or arguments to both "model" and "parameter_path" which are'
+                                    'the model and data you want to use in the chaser estimations')
 
         if (self.model is not None) and (self.parameter_path is None):
             raise errors.InputError('If you have given argument to '
-                             '"model" argument you need to also'
-                             ' give an argument to "parameter_path" and "experiment_files"')
+                                    '"model" argument you need to also'
+                                    ' give an argument to "parameter_path" and "experiment_files"')
 
         if self.parameter_path is not None and self.model is None:
             raise errors.InputError('If you have given argument to '
-                             '"parameter_path" argument you need to also'
-                             ' give an argument to "model" and "experiment_files"')
+                                    '"parameter_path" argument you need to also'
+                                    ' give an argument to "model" and "experiment_files"')
 
         if self.model is not None and self.experiment_files is None:
             raise errors.InputError('If using the "model" argument '
@@ -4020,8 +4015,6 @@ class ChaserParameterEstimations(object):
     #
     #     return PE
 
-
-
     def configure(self):
         """
         Iterate over parameter sets.
@@ -4031,15 +4024,13 @@ class ChaserParameterEstimations(object):
         original_cps_filename = self.model.copasi_file
         ## Iterate over parameter sets
         for i in range(self.data.shape[0]):
-
             ## Create new cps name
-            new_cps = original_cps_filename[:-4]+'_'+str(i)+'.cps'
+            new_cps = original_cps_filename[:-4] + '_' + str(i) + '.cps'
 
             filename = os.path.join(self.results_directory, "PE_data_{}.txt".format(i))
 
             ## save model to new name and do d
             mod = deepcopy(self.model.save(new_cps))
-
 
             mod.insert_parameters(df=self.data, index=i, inplace=True)
             PE = MultiParameterEstimation(
@@ -4068,7 +4059,6 @@ class ChaserParameterEstimations(object):
             self.pe_dct[pe].setup()
             self.pe_dct[pe].model.save()
 
-
     def run(self):
         """
 
@@ -4090,8 +4080,6 @@ class ChaserParameterEstimations(object):
             for cps, mod in mod_dct.items():
                 LOG.info('running "{}"'.format(cps))
                 Run(mod, task='parameter_estimation', mode=self.run_mode)
-
-
 
 
 @mixin(UpdatePropertiesMixin)
@@ -4131,6 +4119,7 @@ class MultiModelFit(object):
 
 
     """
+
     def __init__(self, project_dir, **kwargs):
         """
 
@@ -4142,7 +4131,7 @@ class MultiModelFit(object):
                 :ref:`mutli_parameter_estimation_kwargs` are accepted here.
         """
         self.project_dir = project_dir
-#        self.config_filename=config_filename
+        #        self.config_filename=config_filename
         self.kwargs = kwargs
 
         ## This needs to be before setting default properties
@@ -4187,7 +4176,7 @@ class MultiModelFit(object):
 
         :Returns: dict[model_filename]=runMultiplePEs_instance
         """
-        dct={}
+        dct = {}
 
         for cps_dir in self.sub_cps_dirs:
             os.chdir(cps_dir)
@@ -4196,7 +4185,6 @@ class MultiModelFit(object):
             #     self.config_filename = os.path.split(self.config_filename)[1]
 
             m = model.Model(self.sub_cps_dirs[cps_dir])
-
 
             dct[self.sub_cps_dirs[cps_dir]] = MultiParameterEstimation(
                 self.sub_cps_dirs[cps_dir], self.exp_files,
@@ -4209,12 +4197,12 @@ class MultiModelFit(object):
         """
         :returns:Dict. Location of parameter estimation output files
         """
-        output_dct={}
+        output_dct = {}
         for MPE in self.MPE_dct:
-            output_dct[MPE]=self.MPE_dct[MPE].results_directory
+            output_dct[MPE] = self.MPE_dct[MPE].results_directory
         return output_dct
 
-    #void
+    # void
     def write_config_file(self):
         """
         A class to write a config file template for each
@@ -4222,7 +4210,7 @@ class MultiModelFit(object):
         write_config_file from the runMultiplePEs class
         :returns: list. config file paths
         """
-        conf_list=[]
+        conf_list = []
         for MPE in self.MPE_dct:
             f = self.MPE_dct[MPE].write_config_file()
             conf_list.append(f)
@@ -4248,7 +4236,6 @@ class MultiModelFit(object):
             LOG.info('Running models from {}'.format(self.MPE_dct[MPE].results_directory))
             self.MPE_dct[MPE].run()
 
-
     def create_workspace(self):
         """
         Creates a workspace from cps and experiment files in self.project_dir
@@ -4267,21 +4254,21 @@ class MultiModelFit(object):
         LOG.info('Creating workspace from project_dir')
         ## Create entire working directory for analysis
         self.wd = self.project_dir
-        if os.path.isdir(self.wd)!=True:
+        if os.path.isdir(self.wd) != True:
             os.mkdir(self.wd)
         os.chdir(self.project_dir)
-        cps_dirs={}
+        cps_dirs = {}
         for cps in self.cps_files:
-            cps_abs=os.path.abspath(cps)
-            cps_filename=os.path.split(cps_abs)[1]
-            sub_cps_dir=os.path.join(self.wd,cps_filename[:-4])
-            if os.path.isdir(sub_cps_dir)!=True:
+            cps_abs = os.path.abspath(cps)
+            cps_filename = os.path.split(cps_abs)[1]
+            sub_cps_dir = os.path.join(self.wd, cps_filename[:-4])
+            if os.path.isdir(sub_cps_dir) != True:
                 os.mkdir(sub_cps_dir)
-            sub_cps_abs=os.path.join(sub_cps_dir,cps_filename)
-            shutil.copy(cps_abs,sub_cps_abs)
-            if os.path.isfile(sub_cps_abs)!=True:
+            sub_cps_abs = os.path.join(sub_cps_dir, cps_filename)
+            shutil.copy(cps_abs, sub_cps_abs)
+            if os.path.isfile(sub_cps_abs) != True:
                 raise Exception('Error in copying copasi file to sub directories')
-            cps_dirs[sub_cps_dir]=sub_cps_abs
+            cps_dirs[sub_cps_dir] = sub_cps_abs
         LOG.info('Workspace created')
         return cps_dirs
 
@@ -4295,17 +4282,17 @@ class MultiModelFit(object):
                 Any independent variables should have the '_indep' suffix
         This function will read this multifit config and produce a directory tree for subsequent analysis
         '''
-        if self.project_dir==None:
+        if self.project_dir == None:
             raise errors.InputError('Cannot read multifit confuration as no Project kwarg is provided')
         ##make sure we're in the right directory
         os.chdir(self.project_dir)
         LOG.info('project dir is --> {}'.format(self.project_dir))
-        cps_list=[]
+        cps_list = []
         for cps_file in glob.glob('*.cps'):
             cps_list.append(cps_file)
 
-        exp_list=[]
-        exp_file_types=('*.csv','*.txt')
+        exp_list = []
+        exp_file_types = ('*.csv', '*.txt')
         for typ in exp_file_types:
 
             for exp_file in glob.glob(typ):
@@ -4317,7 +4304,6 @@ class MultiModelFit(object):
         if exp_list == []:
             raise errors.InputError('No experiment files in your project')
         return cps_list, exp_list
-
 
     def format_data(self):
         """
@@ -4333,7 +4319,6 @@ class MultiModelFit(object):
     #     """
     #     for MPE in self.MPE_dct:
     #         MPE.model.insert_parameters()
-
 
 
 @mixin(model.GetModelComponentFromStringMixin)
@@ -4390,6 +4375,7 @@ class ProfileLikelihood(object):
 
 
     """
+
     def __init__(self, model, **kwargs):
         self.model = self.read_model(model)
         self.kwargs = kwargs
@@ -4439,7 +4425,6 @@ class ProfileLikelihood(object):
 
         ##protect against using run_mode instead of run
 
-
         ##configures parameter estimation method parameters
         self.model = self.undefine_other_reports()
         self.model = self.uncheck_randomize_start_values()
@@ -4449,7 +4434,6 @@ class ProfileLikelihood(object):
         self.model_dct = self.copy_model()
         # self.model_dct = self.setup_report()
         self.model_dct = self.setup_parameter_estimation()
-
 
         self.model_dct = self.setup_scan()
         self.to_file()
@@ -4467,7 +4451,8 @@ class ProfileLikelihood(object):
             self.index = [self.index]
         if self.df is None:
             if self.index == 'current_parameters':
-                LOG.warning('Parameter estimation data has been specified without an index so will be ignored. Specify argument to index kwarg')
+                LOG.warning(
+                    'Parameter estimation data has been specified without an index so will be ignored. Specify argument to index kwarg')
 
         if isinstance(self.x, str):
             self.x = self.get_variable_from_string(self.model, self.x)
@@ -4478,7 +4463,6 @@ class ProfileLikelihood(object):
 
         if not os.path.isabs(self.results_directory):
             self.results_directory = os.path.join(self.model.root, self.results_directory)
-
 
     def _convert_numeric_arguments_to_string(self):
         """
@@ -4525,76 +4509,74 @@ class ProfileLikelihood(object):
         self.model.save()
         return self.model
 
-
-
     def _select_method(self):
         """
         copied from Parameter estimation class
         :return:
         """
         if self.method == 'current_solution_statistics'.lower():
-            method_name='Current Solution Statistics'
-            method_type='CurrentSolutionStatistics'
+            method_name = 'Current Solution Statistics'
+            method_type = 'CurrentSolutionStatistics'
 
         if self.method == 'differential_evolution'.lower():
-            method_name='Differential Evolution'
-            method_type='DifferentialEvolution'
+            method_name = 'Differential Evolution'
+            method_type = 'DifferentialEvolution'
 
         if self.method == 'evolutionary_strategy_sr'.lower():
-            method_name='Evolution Strategy (SRES)'
-            method_type='EvolutionaryStrategySR'
+            method_name = 'Evolution Strategy (SRES)'
+            method_type = 'EvolutionaryStrategySR'
 
         if self.method == 'evolutionary_program'.lower():
-            method_name='Evolutionary Programming'
-            method_type='EvolutionaryProgram'
+            method_name = 'Evolutionary Programming'
+            method_type = 'EvolutionaryProgram'
 
         if self.method == 'hooke_jeeves'.lower():
-            method_name='Hooke &amp; Jeeves'
-            method_type='HookeJeeves'
+            method_name = 'Hooke &amp; Jeeves'
+            method_type = 'HookeJeeves'
 
         if self.method == 'levenberg_marquardt'.lower():
-            method_name='Levenberg - Marquardt'
-            method_type='LevenbergMarquardt'
+            method_name = 'Levenberg - Marquardt'
+            method_type = 'LevenbergMarquardt'
 
         if self.method == 'nelder_mead'.lower():
-            method_name='Nelder - Mead'
-            method_type='NelderMead'
+            method_name = 'Nelder - Mead'
+            method_type = 'NelderMead'
 
         if self.method == 'particle_swarm'.lower():
-            method_name='Particle Swarm'
-            method_type='ParticleSwarm'
+            method_name = 'Particle Swarm'
+            method_type = 'ParticleSwarm'
 
         if self.method == 'praxis'.lower():
-            method_name='Praxis'
-            method_type='Praxis'
+            method_name = 'Praxis'
+            method_type = 'Praxis'
 
         if self.method == 'random_search'.lower():
-            method_name='Random Search'
-            method_type='RandomSearch'
+            method_name = 'Random Search'
+            method_type = 'RandomSearch'
 
         if self.method == 'simulated_nnealing'.lower():
-            method_name='Simulated Annealing'
-            method_type='SimulatedAnnealing'
+            method_name = 'Simulated Annealing'
+            method_type = 'SimulatedAnnealing'
 
         if self.method == 'steepest_descent'.lower():
-            method_name='Steepest Descent'
-            method_type='SteepestDescent'
+            method_name = 'Steepest Descent'
+            method_type = 'SteepestDescent'
 
         if self.method == 'truncated_newton'.lower():
-            method_name='Truncated Newton'
-            method_type='TruncatedNewton'
+            method_name = 'Truncated Newton'
+            method_type = 'TruncatedNewton'
 
         if self.method == 'scatter_search'.lower():
-            method_name='Scatter Search'
-            method_type='ScatterSearch'
+            method_name = 'Scatter Search'
+            method_type = 'ScatterSearch'
 
         if self.method == 'genetic_algorithm'.lower():
-            method_name='Genetic Algorithm'
-            method_type='GeneticAlgorithm'
+            method_name = 'Genetic Algorithm'
+            method_type = 'GeneticAlgorithm'
 
         if self.method == 'genetic_algorithm_sr'.lower():
-            method_name='Genetic Algorithm SR'
-            method_type='GeneticAlgorithmSR'
+            method_name = 'Genetic Algorithm SR'
+            method_type = 'GeneticAlgorithmSR'
 
         return method_name, method_type
 
@@ -4605,119 +4587,119 @@ class ProfileLikelihood(object):
         :return: model
         """
 
-        #Build xml for method.
+        # Build xml for method.
         method_name, method_type = self._select_method()
         method_params = {'name': method_name, 'type': method_type}
         method_element = etree.Element('Method', attrib=method_params)
 
-        #list of attribute dictionaries
-        #Evolutionary strategy parametery
-        number_of_generations={'type': 'unsignedInteger', 'name': 'Number of Generations', 'value': self.number_of_generations}
-        population_size={'type': 'unsignedInteger', 'name': 'Population Size', 'value': self.population_size}
-        random_number_generator={'type': 'unsignedInteger', 'name': 'Random Number Generator', 'value': self.random_number_generator}
-        seed={'type': 'unsignedInteger', 'name': 'Seed', 'value': self.seed}
-        pf={'type': 'float', 'name': 'Pf', 'value': self.pf}
-        #local method parameters
-        iteration_limit={'type': 'unsignedInteger', 'name': 'Iteration Limit', 'value': self.iteration_limit}
-        tolerance={'type': 'float', 'name': 'Tolerance', 'value': self.tolerance}
+        # list of attribute dictionaries
+        # Evolutionary strategy parametery
+        number_of_generations = {'type': 'unsignedInteger', 'name': 'Number of Generations',
+                                 'value': self.number_of_generations}
+        population_size = {'type': 'unsignedInteger', 'name': 'Population Size', 'value': self.population_size}
+        random_number_generator = {'type': 'unsignedInteger', 'name': 'Random Number Generator',
+                                   'value': self.random_number_generator}
+        seed = {'type': 'unsignedInteger', 'name': 'Seed', 'value': self.seed}
+        pf = {'type': 'float', 'name': 'Pf', 'value': self.pf}
+        # local method parameters
+        iteration_limit = {'type': 'unsignedInteger', 'name': 'Iteration Limit', 'value': self.iteration_limit}
+        tolerance = {'type': 'float', 'name': 'Tolerance', 'value': self.tolerance}
         rho = {'type': 'float', 'name': 'Rho', 'value': self.rho}
         scale = {'type': 'unsignedFloat', 'name': 'Scale', 'value': self.scale}
-        #Particle Swarm parmeters
+        # Particle Swarm parmeters
         swarm_size = {'type': 'unsignedInteger', 'name': 'Swarm Size', 'value': self.swarm_size}
         std_deviation = {'type': 'unsignedFloat', 'name': 'Std. Deviation', 'value': self.std_deviation}
-        #Random Search parameters
-        number_of_iterations = {'type': 'unsignedInteger', 'name': 'Number of Iterations', 'value': self.number_of_iterations}
-        #Simulated Annealing parameters
+        # Random Search parameters
+        number_of_iterations = {'type': 'unsignedInteger', 'name': 'Number of Iterations',
+                                'value': self.number_of_iterations}
+        # Simulated Annealing parameters
         start_temperature = {'type': 'unsignedFloat', 'name': 'Start Temperature', 'value': self.start_temperature}
         cooling_factor = {'type': 'unsignedFloat', 'name': 'Cooling Factor', 'value': self.cooling_factor}
 
-
-        #build the appropiate xML, with method at root (for now)
+        # build the appropiate xML, with method at root (for now)
         if self.method == 'current_solution_statistics':
-            pass #no additional parameter elements required
+            pass  # no additional parameter elements required
 
-        if self.method=='differential_evolution'.lower():
+        if self.method == 'differential_evolution'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
             etree.SubElement(method_element, 'Parameter', attrib=population_size)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
 
-        if self.method=='evolutionary_strategy_sr'.lower():
+        if self.method == 'evolutionary_strategy_sr'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
             etree.SubElement(method_element, 'Parameter', attrib=population_size)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
             etree.SubElement(method_element, 'Parameter', attrib=pf)
 
-        if self.method=='evolutionary_program'.lower():
+        if self.method == 'evolutionary_program'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
             etree.SubElement(method_element, 'Parameter', attrib=population_size)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
 
-        if self.method=='hooke_jeeves'.lower():
+        if self.method == 'hooke_jeeves'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
             etree.SubElement(method_element, 'Parameter', attrib=tolerance)
             etree.SubElement(method_element, 'Parameter', attrib=rho)
 
-        if self.method=='levenberg_marquardt'.lower():
-            etree.SubElement(method_element,'Parameter',attrib=iteration_limit)
-            etree.SubElement(method_element,'Parameter',attrib=tolerance)
+        if self.method == 'levenberg_marquardt'.lower():
+            etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
+            etree.SubElement(method_element, 'Parameter', attrib=tolerance)
         #
-        if self.method=='nelder_mead'.lower():
-            etree.SubElement(method_element,'Parameter',attrib=iteration_limit)
-            etree.SubElement(method_element,'Parameter',attrib=tolerance)
-            etree.SubElement(method_element,'Parameter',attrib=scale)
+        if self.method == 'nelder_mead'.lower():
+            etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
+            etree.SubElement(method_element, 'Parameter', attrib=tolerance)
+            etree.SubElement(method_element, 'Parameter', attrib=scale)
 
-        if self.method=='particle_swarm'.lower():
-            etree.SubElement(method_element,'Parameter',attrib=iteration_limit)
-            etree.SubElement(method_element,'Parameter',attrib=swarm_size)
-            etree.SubElement(method_element,'Parameter',attrib=std_deviation)
-            etree.SubElement(method_element,'Parameter',attrib=random_number_generator)
-            etree.SubElement(method_element,'Parameter',attrib=seed)
+        if self.method == 'particle_swarm'.lower():
+            etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
+            etree.SubElement(method_element, 'Parameter', attrib=swarm_size)
+            etree.SubElement(method_element, 'Parameter', attrib=std_deviation)
+            etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
+            etree.SubElement(method_element, 'Parameter', attrib=seed)
 
-        if self.method=='praxis'.lower():
-            etree.SubElement(method_element,'Parameter',attrib=tolerance)
+        if self.method == 'praxis'.lower():
+            etree.SubElement(method_element, 'Parameter', attrib=tolerance)
 
-        if self.method=='random_search'.lower():
-            etree.SubElement(method_element,'Parameter',attrib=number_of_iterations)
-            etree.SubElement(method_element,'Parameter',attrib=random_number_generator)
-            etree.SubElement(method_element,'Parameter',attrib=seed)
+        if self.method == 'random_search'.lower():
+            etree.SubElement(method_element, 'Parameter', attrib=number_of_iterations)
+            etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
+            etree.SubElement(method_element, 'Parameter', attrib=seed)
 
-        if self.method=='simulated_annealing'.lower():
-            etree.SubElement(method_element,'Parameter',attrib=start_temperature)
-            etree.SubElement(method_element,'Parameter',attrib=cooling_factor)
-            etree.SubElement(method_element,'Parameter',attrib=tolerance)
-            etree.SubElement(method_element,'Parameter',attrib=random_number_generator)
-            etree.SubElement(method_element,'Parameter',attrib=seed)
+        if self.method == 'simulated_annealing'.lower():
+            etree.SubElement(method_element, 'Parameter', attrib=start_temperature)
+            etree.SubElement(method_element, 'Parameter', attrib=cooling_factor)
+            etree.SubElement(method_element, 'Parameter', attrib=tolerance)
+            etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
+            etree.SubElement(method_element, 'Parameter', attrib=seed)
         #
-        if self.method=='steepest_descent'.lower():
-            etree.SubElement(method_element,'Parameter',attrib=iteration_limit)
-            etree.SubElement(method_element,'Parameter',attrib=tolerance)
+        if self.method == 'steepest_descent'.lower():
+            etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
+            etree.SubElement(method_element, 'Parameter', attrib=tolerance)
         #
-        if self.method=='truncated_newton'.lower():
-            #required no additonal paraemters
+        if self.method == 'truncated_newton'.lower():
+            # required no additonal paraemters
             pass
         #
-        if self.method=='scatter_search'.lower():
-            etree.SubElement(method_element,'Parameter',attrib=number_of_iterations)
+        if self.method == 'scatter_search'.lower():
+            etree.SubElement(method_element, 'Parameter', attrib=number_of_iterations)
 
+        if self.method == 'genetic_algorithm'.lower():
+            etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
+            etree.SubElement(method_element, 'Parameter', attrib=population_size)
+            etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
+            etree.SubElement(method_element, 'Parameter', attrib=seed)
 
-        if self.method=='genetic_algorithm'.lower():
-            etree.SubElement(method_element,'Parameter',attrib=number_of_generations)
-            etree.SubElement(method_element,'Parameter',attrib=population_size)
-            etree.SubElement(method_element,'Parameter',attrib=random_number_generator)
-            etree.SubElement(method_element,'Parameter',attrib=seed)
+        if self.method == 'genetic_algorithm_sr'.lower():
+            etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
+            etree.SubElement(method_element, 'Parameter', attrib=population_size)
+            etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
+            etree.SubElement(method_element, 'Parameter', attrib=seed)
+            etree.SubElement(method_element, 'Parameter', attrib=pf)
 
-        if self.method=='genetic_algorithm_sr'.lower():
-            etree.SubElement(method_element,'Parameter',attrib=number_of_generations)
-            etree.SubElement(method_element,'Parameter',attrib=population_size)
-            etree.SubElement(method_element,'Parameter',attrib=random_number_generator)
-            etree.SubElement(method_element,'Parameter',attrib=seed)
-            etree.SubElement(method_element,'Parameter',attrib=pf)
-
-
-        tasks=self.model.xml.find('{http://www.copasi.org/static/schema}ListOfTasks')
+        tasks = self.model.xml.find('{http://www.copasi.org/static/schema}ListOfTasks')
 
         method = tasks[5][-1]
         parent = method.getparent()
@@ -4750,9 +4732,8 @@ class ProfileLikelihood(object):
                 new_model = I.model
                 dct[i] = new_model
 
-                parameters[i] = I.parameters#new_model.parameters[new_model.fit_item_order]
+                parameters[i] = I.parameters  # new_model.parameters[new_model.fit_item_order]
         return dct, parameters
-
 
     def copy_model(self):
         """
@@ -4783,7 +4764,6 @@ class ProfileLikelihood(object):
             i.attrib['value'] = fle
         return self.model
 
-
     def undefine_other_reports(self):
         """
         remove reports defined elsewhere, i.e. the parameter estimation task
@@ -4801,7 +4781,7 @@ class ProfileLikelihood(object):
         the parameter estimation task
         :return:
         """
-        query = "//*[@name='FitItem']" #query="//*[@name='FitItem']"
+        query = "//*[@name='FitItem']"  # query="//*[@name='FitItem']"
         for model in self.model_dct:
             count = 0
             for param in self.model_dct[model]:
@@ -4830,7 +4810,8 @@ class ProfileLikelihood(object):
                                     j.getparent().getparent().remove(j.getparent())
 
         if count == 0:
-            raise errors.NoFitItemsError('Model does not contain any fit items. Please setup a parameter estimation and try again')
+            raise errors.NoFitItemsError(
+                'Model does not contain any fit items. Please setup a parameter estimation and try again')
         # print count
         ##save is needed
         self.to_file()
@@ -4863,7 +4844,6 @@ class ProfileLikelihood(object):
                 self.model_dct[model][param].save()
         return dct
 
-
     def setup1scan(self, q, model, report, parameter, parameter_value):
         """
         Setup a single scan.
@@ -4884,13 +4864,12 @@ class ProfileLikelihood(object):
             run=False,
             append=self.append,
             clear_scans=True,
-            output_in_subtask=False,#self.output_in_subtask,
+            output_in_subtask=False,  # self.output_in_subtask,
             minimum=parameter_value / self.lower_bound_multiplier,
             maximum=parameter_value * self.lower_bound_multiplier,
             log10=self.log10
         )
         )
-
 
     def setup_scan(self):
         """
@@ -4912,7 +4891,7 @@ class ProfileLikelihood(object):
                     self.model_dct[model][param].root,
                     os.path.splitext(
                         self.model_dct[model][param].copasi_file
-                    )[0]+'.csv'
+                    )[0] + '.csv'
                 )
                 parameter_value = float(self.parameters[model][param])
                 # if self.parallel_scan:
@@ -4933,7 +4912,6 @@ class ProfileLikelihood(object):
                 res[model][param].save()
         return res
 
-
     def run_analysis(self):
         """
 
@@ -4952,9 +4930,10 @@ class ProfileLikelihood(object):
                 LOG.info('running {}'.format(self.model_dct[m][param].copasi_file))
                 sge_job_filename = "{}_{}".format(param, m)
                 sge_job_filename = re.sub('[().]', '', sge_job_filename)
-                Run(self.model_dct[m][param], task='scan', mode=self.run, sge_job_filename=sge_job_filename+'.sh')
+                Run(self.model_dct[m][param], task='scan', mode=self.run, sge_job_filename=sge_job_filename + '.sh')
 
-if __name__=='__main__':
+
+if __name__ == '__main__':
     pass
 #    execfile('/home/b3053674/Documents/Models/2017/08_Aug/pycotoolsTests/RunPEs.py')
-        #    execfile('/home/b3053674/Documents/pycotools/pycotools/pycotoolsTutorial/Test/testing_kholodenko_manually.py')
+#    execfile('/home/b3053674/Documents/pycotools/pycotools/pycotoolsTutorial/Test/testing_kholodenko_manually.py')

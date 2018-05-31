@@ -672,7 +672,6 @@ class Model(_base._Base):
         query = '//*[@name="FitItem"]'
         for i in self.xml.xpath(query):
             ## exclude FitItems that match elements of the constraint list
-            LOG.debug('parent name --> {}'.format(i.getparent().attrib['name']))
             if i.getparent().attrib['name'] == 'OptimizationConstraintList':
                 continue
 
@@ -2130,7 +2129,7 @@ class Model(_base._Base):
         """
         I = InsertParameters(self, **kwargs)
         if kwargs.get('show_parameters'):
-            LOG.debug('Parameter set that was inserted: \n\n{}'.format(I.parameters.transpose()))
+            LOG.info('Parameter set that was inserted: \n\n{}'.format(I.parameters.transpose()))
 
 
 class ReadModelMixin(Mixin):

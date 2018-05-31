@@ -3,3 +3,4 @@ Version 0.0081
 
 Version 0.0.91
 - 31-05-2018: Bug fix where constraints were included in the Model.FitItemOrder method so that when it came to parsing parameter estimation data, parameter names could not be inferred properly.
+- 31-05-2018: Bug fix where components of a parameter estimation data file were not properly being ignored by copasi. 
