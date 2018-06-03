@@ -32,7 +32,7 @@ Setup tools for PyCoTools
 
 #from distutils.core import setup
 from setuptools import setup
-from .pycotools import __version__
+from pycotools import __version__
 
 
 
