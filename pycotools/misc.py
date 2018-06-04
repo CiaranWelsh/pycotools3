@@ -136,11 +136,11 @@ def download_models(directory,percent=100,SKIP_ALREADY_DOWNLOADED=True):
     os.chdir(directory)
     ## get Biomodels service 
     bio=BioModels()
-    print 'The number of models in biomodels right now is {}'.format(len(bio))
+    print('The number of models in biomodels right now is {}'.format(len(bio)))
     model=bio.getAllCuratedmodelsId()
-    print 'The number of curated models in biomodels is: {}'.format(len(model))
+    print('The number of curated models in biomodels is: {}'.format(len(model)))
     per=len(model)//100.0*percent
-    print 'You are about to download {} models'.format(per)
+    print('You are about to download {} models'.format(per))
     model_dct={}
     model_files=[]
     skipped=0
@@ -169,20 +169,20 @@ def download_models(directory,percent=100,SKIP_ALREADY_DOWNLOADED=True):
         try:
 
             model_dct[author]=bio.getmodelSBMLById(i[1])
-            print 'downloading model {} of {}: {}:\t{}'.format(i[0],per,i[1],author.encode('utf8'))
+            print('downloading model {} of {}: {}:\t{}'.format(i[0],per,i[1],author.encode('utf8')))
             fle=os.path.join(dire,author+'.xml')
-            print fle
+            print(fle)
             if os.path.isfile(fle)!=True:
                 with open(fle,'w') as f:
                     f.write(model_dct[author].encode('utf8'))
             time.sleep(0.25)
             model_files.append(fle)
-            print 'saved to : {}'.format(fle)
+            print('saved to : {}'.format(fle))
         except UnicodeEncodeError:
-            print 'model with author {} skipped as the name contains non-ascii characters'.format(author)
+            print('model with author {} skipped as the name contains non-ascii characters'.format(author))
             continue
-    print 'You have downloaded {} out of {} models'.format(len(model_dct.keys()),len(model))
-    print 'you have skipped {} models because you already have a folder for them'.format(skipped)
+    print('You have downloaded {} out of {} models'.format(len(list(model_dct.keys())),len(model)))
+    print('you have skipped {} models because you already have a folder for them'.format(skipped))
     df=pandas.DataFrame(model_files)
     pickle_file=os.path.join(directory,'BiomodelsFilesPickle.pickle')
     df.to_pickle(pickle_file)    
@@ -202,7 +202,7 @@ def xml2cps(paths):
     start=time.time()
     jobs=[]
     for i in paths:
-        print i
+        print(i)
         p=threading.Thread(target=worker,args=(paths['successful'][i],))
         jobs.append(p)
         p.start()

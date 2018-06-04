@@ -60,14 +60,14 @@ class ExperimentMapperTests(_test_base._BaseTest):
 
         df = pandas.read_csv(self.TC2.report_name, sep='\t')
         ## remove square brackets around species
-        df = df.rename(columns={df.keys()[2]: df.keys()[2]+str('_indep')})
+        df = df.rename(columns={list(df.keys())[2]: list(df.keys())[2]+str('_indep')})
         self.report3 = os.path.join(os.path.dirname(self.TC2.report_name), 'report3.txt')
         df.to_csv(self.report3, sep='\t', index=False)
         assert os.path.isfile(self.report3)
 
         ## create some SS data for fitting
         ss_df = df.drop('Time', axis=1)
-        ss_df = pandas.DataFrame(ss_df.iloc[0].transpose(), index=ss_df.keys()).transpose()
+        ss_df = pandas.DataFrame(ss_df.iloc[0].transpose(), index=list(ss_df.keys())).transpose()
         self.report4= os.path.join(os.path.dirname(self.TC2.report_name), 'report4.txt')
         ss_df.to_csv(self.report4, sep='\t', index=False)
 

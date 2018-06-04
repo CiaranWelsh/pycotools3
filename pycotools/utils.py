@@ -22,7 +22,7 @@
  Time:  20:33
 """
 from pathlib2 import Path
-import tasks, errors, misc, model
+from . import tasks, errors, misc, model
 import contextlib
 import string
 import pandas
@@ -38,8 +38,8 @@ import logging
 import glob
 import re
 import numpy
-from mixin import Mixin, mixin
-from cached_property import cached_property
+from .mixin import Mixin, mixin
+from .cached_property import cached_property
 from multiprocessing import Process, Queue
 import pylatex
 from collections import OrderedDict
@@ -87,9 +87,9 @@ class Latex(object):
             if os.path.isfile(fname):
                 if os.path.splitext(fname)[1] in self.file_types:
                     key = os.path.dirname(fname)
-                    if key in files.keys():
+                    if key in list(files.keys()):
                         files[key] = files[key] + [fname]
-                    elif key not in files.keys():
+                    elif key not in list(files.keys()):
                         files[key] = [fname]
                     else:
                         raise Exception
@@ -135,7 +135,7 @@ class Latex(object):
             )
         doc = pylatex.Document(self.filename, documentclass='article')
 
-        for k, v in files.items():
+        for k, v in list(files.items()):
             assert isinstance(v, list)
             if v is not None:
                 with doc.create(pylatex.Section(os.path.join(*Path(k).parts[-1:]))):
@@ -195,7 +195,7 @@ class Latex(object):
             )
         doc = pylatex.Document(self.filename, documentclass='article')
 
-        for k, v in files.items():
+        for k, v in list(files.items()):
             assert isinstance(v, list)
             if v is not None:
                 with doc.create(pylatex.Figure(

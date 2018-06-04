@@ -26,7 +26,7 @@ Date:
 """
 import site
 # site.addsitedir('/home/b3053674/Documents/PyCoTools')
-site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
+site.addsitedir('C:\\Users\Ciaran\Documents\PyCoTools')
 import PyCoTools
 from PyCoTools.PyCoToolsTutorial import test_models
 from PyCoTools.Tests import _test_base
@@ -47,7 +47,7 @@ class TestInsertPEFromDict(_test_base._BaseTest):
     def test_local(self):
         names = self.GMQ.get_local_parameters()
         values = [i*random.random() for i in range(1, len(names)+1)]
-        parameter_dict = dict(zip(names, values) )
+        parameter_dict = dict(list(zip(names, values)) )
         I = PyCoTools.pycopi.InsertParameters(self.copasi_file, 
                                           parameter_dict=parameter_dict)
         GMQ = PyCoTools.pycopi.GetModelQuantities(self.copasi_file)
@@ -59,9 +59,9 @@ class TestInsertPEFromDict(_test_base._BaseTest):
             
 
     def test_metabolites(self):
-        names = self.GMQ.get_metabolites().keys()
+        names = list(self.GMQ.get_metabolites().keys())
         values = [i*random.random() for i in range(1, len(names)+1)]
-        parameter_dict = dict(zip(names, values))
+        parameter_dict = dict(list(zip(names, values)))
         I = PyCoTools.pycopi.InsertParameters(self.copasi_file,
                                       parameter_dict=parameter_dict)
         GMQ = PyCoTools.pycopi.GetModelQuantities(self.copasi_file)

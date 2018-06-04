@@ -26,7 +26,7 @@
 '''
 import time
 import threading
-import Queue
+import queue
 import psutil
 import shutil
 import numpy
@@ -39,7 +39,7 @@ import os
 import subprocess
 import re
 import pickle
-import viz, errors, misc, _base, model
+from . import viz, errors, misc, _base, model
 import matplotlib
 import matplotlib.pyplot as plt
 from textwrap import wrap
@@ -51,7 +51,7 @@ import seaborn as sns
 from copy import deepcopy
 from subprocess import check_call
 from collections import OrderedDict
-from mixin import Mixin, mixin
+from .mixin import Mixin, mixin
 import multiprocessing
 
 ## TODO use generators when iterating over a function with another function. i.e. plotting
@@ -170,7 +170,7 @@ class Bool2Numeric(Mixin):
                'calculate_statistics',
                'randomize_start_values',
                ]
-        for k, v in dct.items():
+        for k, v in list(dct.items()):
             if k in lst:
                 if v == True:
                     dct[k] = '1'
@@ -215,7 +215,7 @@ class Bool2Str():
         ----
         return
         """
-        for kwarg in self.dct.keys():
+        for kwarg in list(self.dct.keys()):
             if kwarg in self.acceptable_kwargs:
                 if self.dct[kwarg] == True:
                     self.dct.update({kwarg: "true"})
@@ -373,7 +373,7 @@ class Run(object):
         self.default_properties.update(self.kwargs)
         self.convert_bool_to_numeric(self.default_properties)
         self.update_properties(self.default_properties)
-        self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
+        self.check_integrity(list(self.default_properties.keys()), list(self.kwargs.keys()))
         self._do_checks()
 
         if self.sge_job_filename == None:
@@ -539,7 +539,7 @@ class RunParallel(object):
         self.default_properties.update(self.kwargs)
         self.default_properties = self.convert_bool_to_numeric(self.default_properties)
         self.update_properties(self.default_properties)
-        self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
+        self.check_integrity(list(self.default_properties.keys()), list(self.kwargs.keys()))
         self._do_checks()
         # self.set_task()
 
@@ -716,7 +716,7 @@ class Reports(object):
         self.default_properties.update(self.kwargs)
         self.convert_bool_to_numeric(self.default_properties)
         self.update_properties(self.default_properties)
-        self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
+        self.check_integrity(list(self.default_properties.keys()), list(self.kwargs.keys()))
         self.__do_checks()
 
         self.model = self.run()
@@ -1088,7 +1088,7 @@ class Reports(object):
         """
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfTasks'):
             for j in list(i):
-                if 'target' in j.attrib.keys():
+                if 'target' in list(j.attrib.keys()):
                     j.attrib['target'] = ''
         return self.model
 
@@ -1186,7 +1186,7 @@ class TimeCourse(object):
                               }
         default_properties.update(kwargs)
         default_properties = self.convert_bool_to_numeric(default_properties)
-        self.check_integrity(default_properties.keys(), kwargs.keys())
+        self.check_integrity(list(default_properties.keys()), list(kwargs.keys()))
         self.update_properties(default_properties)
         self._do_checks()
 
@@ -1656,7 +1656,7 @@ class TimeCourse(object):
         present = False
         for i in self.model.xml.xpath(query):
             for j in list(i):
-                if 'append' and 'target' in j.attrib.keys():
+                if 'append' and 'target' in list(j.attrib.keys()):
                     present = True
                     j.attrib.update(arg_dct)
             if present == False:
@@ -1759,7 +1759,7 @@ class Scan(object):
         self.default_properties.update(self.kwargs)
         self.convert_bool_to_numeric(self.default_properties)
         self.update_properties(self.default_properties)
-        self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
+        self.check_integrity(list(self.default_properties.keys()), list(self.kwargs.keys()))
         self._do_checks()
 
         ## conflicts with other classes in base
@@ -1780,8 +1780,8 @@ class Scan(object):
         self.execute()
 
     def __str__(self):
-        types = {v: k for (k, v) in self.scan_type_numbers.items()}
-        subtasks = {v: k for (k, v) in self.subtask_numbers.items()}
+        types = {v: k for (k, v) in list(self.scan_type_numbers.items())}
+        subtasks = {v: k for (k, v) in list(self.subtask_numbers.items())}
         return "Scan(scan_type='{}', subtask='{}', variable='{}', report_type='{}', " \
                "report_name='{}', number_of_steps='{}', minimum={}, maximum={})".format(
             types[self.scan_type], subtasks[self.subtask], self.variable.name, self.report_type,
@@ -1844,14 +1844,14 @@ class Scan(object):
 
         # numericify the some keyword arguments
         self.subtask_numbers = [0, 1, 6, 7, 4, 5, 9, 12, 11, 8]
-        self.subtask_numbers = dict(zip(subtasks, [str(i) for i in self.subtask_numbers]))
-        for i, j in self.subtask_numbers.items():
+        self.subtask_numbers = dict(list(zip(subtasks, [str(i) for i in self.subtask_numbers])))
+        for i, j in list(self.subtask_numbers.items()):
             if i == self.subtask:
                 self.subtask = j
 
         scan_type_numbers = [1, 0, 2]
-        self.scan_type_numbers = dict(zip(scan_types, [str(i) for i in scan_type_numbers]))
-        for i, j in self.scan_type_numbers.items():
+        self.scan_type_numbers = dict(list(zip(scan_types, [str(i) for i in scan_type_numbers])))
+        for i, j in list(self.scan_type_numbers.items()):
             if i == self.scan_type:
                 self.scan_type = j
 
@@ -1860,8 +1860,8 @@ class Scan(object):
                 self.scan_type = str(i[1])
 
         dist_types_numbers = [0, 1, 2, 3]
-        self.dist_type_numbers = dict(zip(dist_types, [str(i) for i in dist_types_numbers]))
-        for i, j in self.dist_type_numbers.items():
+        self.dist_type_numbers = dict(list(zip(dist_types, [str(i) for i in dist_types_numbers])))
+        for i, j in list(self.dist_type_numbers.items()):
             if i == self.distribution_type:
                 self.distribution_type = j
 
@@ -2153,7 +2153,7 @@ class ExperimentMapper(object):
         self.default_properties.update(self.kwargs)
         self.convert_bool_to_numeric(self.default_properties)
         self.update_properties(self.default_properties)
-        self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
+        self.check_integrity(list(self.default_properties.keys()), list(self.kwargs.keys()))
         self._do_checks()
 
         # run the experiment mapper
@@ -2177,12 +2177,12 @@ class ExperimentMapper(object):
         weight_method_string = ['mean_squared', 'stardard_deviation', 'value_scaling',
                                 'mean']  # line 2144
         weight_method_numbers = [str(i) for i in [1, 2, 3, 4]]
-        weight_method_dict = dict(zip(weight_method_string, weight_method_numbers))
+        weight_method_dict = dict(list(zip(weight_method_string, weight_method_numbers)))
         self.weight_method = [weight_method_dict[i] for i in self.weight_method]
 
         experiment_type_string = ['steadystate', 'timecourse']
         experiment_type_numbers = [str(i) for i in [0, 1]]
-        experiment_type_dict = dict(zip(experiment_type_string, experiment_type_numbers))
+        experiment_type_dict = dict(list(zip(experiment_type_string, experiment_type_numbers)))
         self.experiment_type = [experiment_type_dict[i] for i in self.experiment_type]
 
         l = []
@@ -2741,7 +2741,7 @@ class ParameterEstimation(object):
         self.default_properties = self.convert_bool_to_numeric(self.default_properties)
         self.update_properties(self.default_properties)
         self._remove_multiparameter_estimation_arg()
-        self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
+        self.check_integrity(list(self.default_properties.keys()), list(self.kwargs.keys()))
 
         self._do_checks()
 
@@ -2769,7 +2769,7 @@ class ParameterEstimation(object):
                'pe_number',
                'results_directory']
         for i in lst:
-            if i in self.kwargs.keys():
+            if i in list(self.kwargs.keys()):
                 del self.kwargs[i]
 
     def _do_checks(self):
@@ -3081,7 +3081,7 @@ class ParameterEstimation(object):
         :param item:
         :return: pycotools.model.Model
         """
-        all_items = self._fit_items.keys()
+        all_items = list(self._fit_items.keys())
         query = '//*[@name="FitItem"]'
         assert item in all_items, '{} is not a fit item. These are the fit items: {}'.format(item, all_items)
         item = self._fit_items[item]
@@ -3350,7 +3350,7 @@ class ParameterEstimation(object):
         ## TODO add support for OptimizationConstraintList --> problem[4]
         assert problem.tag == '{http://www.copasi.org/static/schema}Problem'
         optimization_item_list = problem[3]
-        assert optimization_item_list.attrib.values()[0] == 'OptimizationItemList'
+        assert list(optimization_item_list.attrib.values())[0] == 'OptimizationItemList'
         optimization_item_list.append(new_element)
         return self.model
 
@@ -3516,7 +3516,7 @@ class ParameterEstimation(object):
             i.attrib.update(scheluled_attrib)
             for j in list(i):
                 if self.report_name != None:
-                    if 'append' in j.attrib.keys():
+                    if 'append' in list(j.attrib.keys()):
                         j.attrib.update(report_attrib)
                 if list(j) != []:
                     for k in list(j):
@@ -3696,10 +3696,10 @@ class MultiParameterEstimation(ParameterEstimation):
         :return:
         """
         number_of_cpu = cpu_count()
-        q = Queue.Queue(maxsize=number_of_cpu)
+        q = queue.Queue(maxsize=number_of_cpu)
         report_files = self.enumerate_PE_output()
         res = {}
-        for copy_number, model in models.items():
+        for copy_number, model in list(models.items()):
             t = threading.Thread(target=self._setup1scan,
                                  args=(q, model, report_files[copy_number]))
             t.daemon = True
@@ -3733,10 +3733,10 @@ class MultiParameterEstimation(ParameterEstimation):
                     'Attempting to run in SGE mode but SGE specific commands are unavailable. Switching to \'multiprocess\' mode')
                 self.run_mode = 'multiprocess'
         if self.run_mode == 'multiprocess':
-            RunParallel(self.models.values(), mode=self.run_mode, max_active=self.max_active,
+            RunParallel(list(self.models.values()), mode=self.run_mode, max_active=self.max_active,
                         task='scan')
         else:
-            for copy_number, model in self.models.items():
+            for copy_number, model in list(self.models.items()):
                 LOG.info('running model: {}'.format(copy_number))
                 Run(model, mode=self.run_mode, task='scan')
 
@@ -4065,7 +4065,7 @@ class ChaserParameterEstimations(object):
         :return:
         """
         mod_dct = OrderedDict()
-        for cps, pe in self.pe_dct.items():
+        for cps, pe in list(self.pe_dct.items()):
             mod_dct[cps] = self.pe_dct[cps].model
 
         if self.run_mode is False:
@@ -4073,11 +4073,11 @@ class ChaserParameterEstimations(object):
 
         elif self.run_mode is 'parallel':
             LOG.info('running "{}" in parallel'.format(cps))
-            RunParallel(mod_dct.values(), max_active=self.max_active,
+            RunParallel(list(mod_dct.values()), max_active=self.max_active,
                         task='parameter_estimation')
 
         else:
-            for cps, mod in mod_dct.items():
+            for cps, mod in list(mod_dct.items()):
                 LOG.info('running "{}"'.format(cps))
                 Run(mod, task='parameter_estimation', mode=self.run_mode)
 
@@ -4148,7 +4148,7 @@ class MultiModelFit(object):
         pass
 
     def __iter__(self):
-        for MPE in self.MPE_dct.values():
+        for MPE in list(self.MPE_dct.values()):
             yield MPE
 
     def __getitem__(self, item):
@@ -4161,13 +4161,13 @@ class MultiModelFit(object):
         del self.MPE_dct[key]
 
     def keys(self):
-        return self.MPE_dct.keys()
+        return list(self.MPE_dct.keys())
 
     def values(self):
-        return self.MPE_dct.values()
+        return list(self.MPE_dct.values())
 
     def items(self):
-        return self.MPE_dct.items()
+        return list(self.MPE_dct.items())
 
     def instantiate_run_multi_PEs_class(self):
         """
@@ -4419,7 +4419,7 @@ class ProfileLikelihood(object):
             raise errors.InputError('"run_mode" argument given but for ProfileLikelihood should be "run" instead')
         self.convert_bool_to_numeric(self.default_properties)
         self.update_properties(self.default_properties)
-        self.check_integrity(self.default_properties.keys(), self.kwargs.keys())
+        self.check_integrity(list(self.default_properties.keys()), list(self.kwargs.keys()))
         self._do_checks()
         self._convert_numeric_arguments_to_string()
 
@@ -4493,7 +4493,7 @@ class ProfileLikelihood(object):
         """
         query = '//*[@name="Parameter Estimation"]'
         for i in self.model.xml.xpath(query):
-            if 'type' in i.keys():
+            if 'type' in list(i.keys()):
                 if i.attrib['type'] == 'parameterFitting':
                     for j in i:
                         if j.tag == '{http://www.copasi.org/static/schema}Problem':
@@ -4880,7 +4880,7 @@ class ProfileLikelihood(object):
         :return:
         """
         number_of_cpu = cpu_count()
-        q = Queue.Queue(maxsize=number_of_cpu)
+        q = queue.Queue(maxsize=number_of_cpu)
         # report_files = self.enumerate_PE_output()
         res = {}
         res = {}

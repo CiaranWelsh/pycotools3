@@ -54,7 +54,7 @@ class ModelLevelAttributeTests(_test_base._BaseTest):
         self.assertEqual(self.model.volume_unit, 'ml')
 
     def test_quantity(self):
-        self.assertEqual(self.model.area_unit, u'm\xb2')
+        self.assertEqual(self.model.area_unit, 'm\xb2')
 
     def test_length(self):
         self.assertEqual(self.model.length_unit, 'm')
@@ -225,7 +225,7 @@ class ModelComponentAttributeTests(_test_base._BaseTest):
                                           key=k,
                                           name='k1',
                                           reaction_name='v1')
-        self.assertTrue('global_name' in L.__dict__.keys())
+        self.assertTrue('global_name' in list(L.__dict__.keys()))
 
     def test_functions(self):
         self.assertTrue(len(self.model.functions), 2)
@@ -303,7 +303,7 @@ class SetTests(_test_base._BaseTest):
         state_numbers = [0.0, 1, 2, 3, 3, 4, 5, 6, 7]
         self.model.states = state_numbers
         self.assertListEqual([float(i) for i in state_numbers],
-                             [float(i) for i in self.model.states.values()])
+                             [float(i) for i in list(self.model.states.values())])
 
     def test_set_global_initial_value(self):
         """

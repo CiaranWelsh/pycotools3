@@ -72,8 +72,8 @@ class ScanTests(_test_base._BaseTest):
             for j in list(i):
                 if j.attrib['name'] == 'Subtask':
                     ## get which subtask is defined
-                    sub = {k: v for k, v in self.scan.subtask_numbers.items() if v==j.attrib['value']}
-                    self.assertEqual(sub.values()[0], self.scan.subtask)
+                    sub = {k: v for k, v in list(self.scan.subtask_numbers.items()) if v==j.attrib['value']}
+                    self.assertEqual(list(sub.values())[0], self.scan.subtask)
 
     def test_scan2(self):
         """
@@ -211,8 +211,8 @@ class RepeatScanTests(_test_base._BaseTest):
             for j in list(i):
                 if j.attrib['name'] == 'Subtask':
                     ## get which subtask is defined
-                    sub = {k: v for k, v in self.scan.subtask_numbers.items() if v == j.attrib['value']}
-                    self.assertEqual(sub.values()[0], self.scan.subtask)
+                    sub = {k: v for k, v in list(self.scan.subtask_numbers.items()) if v == j.attrib['value']}
+                    self.assertEqual(list(sub.values())[0], self.scan.subtask)
 
     def test_scan_if_repeat(self):
         """
@@ -271,9 +271,9 @@ class RandomDistributionScanTests(_test_base._BaseTest):
             for j in list(i):
                 if j.attrib['name'] == 'Subtask':
                     ## get which subtask is defined
-                    sub = {k: v for k, v in self.scan.subtask_numbers.items() if
+                    sub = {k: v for k, v in list(self.scan.subtask_numbers.items()) if
                            v == j.attrib['value']}
-                    self.assertEqual(sub.values()[0], self.scan.subtask)
+                    self.assertEqual(list(sub.values())[0], self.scan.subtask)
 
     def test_scan_is_random_dist(self):
         """

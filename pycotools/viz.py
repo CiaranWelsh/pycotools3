@@ -121,20 +121,20 @@ import scipy
 import os
 import matplotlib
 import itertools
-import tasks,errors, misc, model
+from . import tasks,errors, misc, model
 import seaborn 
 import logging
 from subprocess import check_call,Popen
 import glob
 import re
 import numpy
-from mixin import Mixin, mixin
+from .mixin import Mixin, mixin
 from textwrap import wrap
 from sklearn.decomposition import PCA
 from sklearn import linear_model
 from sklearn import model_selection
-import _base
-from cached_property import cached_property
+from . import _base
+from .cached_property import cached_property
 import matplotlib.patches as mpatches
 from multiprocessing import Process, Queue
 from math import exp as exponential_function
@@ -339,7 +339,7 @@ class ChiSquaredStatistics(object):
         i.e. gets the cut off point for chi2 dist with dof and alpha .
         """
         nums = numpy.arange(0, 100, 0.1)
-        table = zip(nums, scipy.stats.chi2.cdf(nums, self.dof))
+        table = list(zip(nums, scipy.stats.chi2.cdf(nums, self.dof)))
         for i in table:
             if i[1] <= alpha:
                 chi2_df_alpha = i[0]
@@ -483,7 +483,7 @@ class Parse(object):
 
         elif type(self.cls_instance) == pandas.core.frame.DataFrame:
             data = self.cls_instance
-            if 'RSS' not in data.keys():
+            if 'RSS' not in list(data.keys()):
                 raise errors.InputError('DataFrame should have an RSS column. Your '
                                         'df only has these: "{}"'.format(data.columns))
             data = data.sort_values(by='RSS')
@@ -606,7 +606,7 @@ class Parse(object):
                 d[report_name] = data
             else:
                 data = data.drop(data.columns[[0, -2]], axis=1)
-                data.columns = range(data.shape[1])
+                data.columns = list(range(data.shape[1]))
                 ### parameter of interest has been removed.
                 names = cls_instance.model.fit_item_order+['RSS']
                 if cls_instance.model.fit_item_order == []:
@@ -766,7 +766,7 @@ class Parse(object):
                     d[report_name] = data
                 else:
                     data = data.drop(data.columns[[0, -2]], axis=1)
-                    data.columns = range(data.shape[1])
+                    data.columns = list(range(data.shape[1]))
                     ### parameter of interest has been removed.
                     names = m.fit_item_order + ['RSS']
                     if len(names) != data.shape[1]:
@@ -960,13 +960,13 @@ class Parse(object):
                                          sep='\t', skiprows=1, header=None)
                     bracket_indices = [1, -2]
                     df = df.drop(df.columns[bracket_indices], axis=1)
-                    df.columns = range(len(df.columns))
+                    df.columns = list(range(len(df.columns)))
                     items = ['Parameter Of Interest Value'] + fit_item_order_dict[index][param] + ['RSS']
                     df.columns = items
             #         # print numpy.log10(df['Parameter Of Interest Value'])
                     if self.log10:
                         df_list2 = []
-                        for key in df.keys():
+                        for key in list(df.keys()):
                             l = []
                             for i in range(df[key].shape[0]):
                                 l.append(numpy.log10(df[key].iloc[i]))
@@ -1061,8 +1061,8 @@ class PlotTimeCourse(PlotKwargs):
             'legend_loc': 'best',
         }
         self.default_properties.update(self.plot_kwargs())
-        for i in kwargs.keys():
-            assert i in self.default_properties.keys(),'{} is not a keyword ' \
+        for i in list(kwargs.keys()):
+            assert i in list(self.default_properties.keys()),'{} is not a keyword ' \
                                                        'argument for PlotTimeCourse'.format(i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
@@ -1154,13 +1154,13 @@ class PlotTimeCourse(PlotKwargs):
 
 
         for i in self.y:
-            if i not in self.data.keys():
-                raise errors.InputError('{} not in {}'.format(i, self.data.keys()))
+            if i not in list(self.data.keys()):
+                raise errors.InputError('{} not in {}'.format(i, list(self.data.keys())))
 
         if self.x == 'time':
             self.x = 'Time'
-        if self.x not in self.data.keys():
-            raise errors.InputError('{} not in {}'.format(self.x, self.data.keys()))
+        if self.x not in list(self.data.keys()):
+            raise errors.InputError('{} not in {}'.format(self.x, list(self.data.keys())))
 
         figures = []
         if not self.separate:
@@ -1329,8 +1329,8 @@ class PlotTimeCourseEnsemble(object):
                    'ymax': None,
                    }
 
-        for i in kwargs.keys():
-            assert i in options.keys(), '{} is not a keyword argument for ParameterEnsemble'.format(i)
+        for i in list(kwargs.keys()):
+            assert i in list(options.keys()), '{} is not a keyword argument for ParameterEnsemble'.format(i)
         options.update(kwargs)
         self.kwargs = options
         self.update_properties(self.kwargs)
@@ -1435,7 +1435,7 @@ class PlotTimeCourseEnsemble(object):
                 df_list = [j.dropna(how='all') for j in df_list]
                 for j in range(len(df_list)):
                     if df_list[j].empty:
-                        print 'empty'
+                        print('empty')
                         continue
                     else:
                         df_dct[exp_files[i]+str(j)] = df_list[j]
@@ -1449,7 +1449,7 @@ class PlotTimeCourseEnsemble(object):
         time_marker = False
         for i in self.experimental_data:
             d[i] = {}
-            for j in self.experimental_data[i].keys():
+            for j in list(self.experimental_data[i].keys()):
                 if j.lower() == 'time':
                     time_marker = True
                     d[i] = self.experimental_data[i][j]
@@ -1520,13 +1520,13 @@ class PlotTimeCourseEnsemble(object):
 
         """
         if self.y == None:
-            self.y = [i for i in list(self.observables) if i in self.ensemble_data.keys()]
+            self.y = [i for i in list(self.observables) if i in list(self.ensemble_data.keys())]
 
         if isinstance(self.y, list) != True:
             self.y = [self.y]
 
         for param in self.y:
-            if param not in self.ensemble_data.keys():
+            if param not in list(self.ensemble_data.keys()):
                 raise errors.InputError('{} not in your data set. {}'.format(param, sorted(self.ensemble_data.keys())))
 
         data = self.ensemble_data.reset_index(level=1, drop=True)
@@ -1556,12 +1556,12 @@ class PlotTimeCourseEnsemble(object):
                 
 
                 if parameter in self.observables:
-                    for df in self.experimental_data.values():
-                        if parameter in df.keys():
+                    for df in list(self.experimental_data.values()):
+                        if parameter in list(df.keys()):
                             if df.columns[0] == 'time':
                                 df = df.rename(columns={'time': 'Time'})
                             # plt.figure()
-                            df_keys = df[parameter].keys()
+                            df_keys = list(df[parameter].keys())
                             if len(df_keys) > 1:
                                 # for i in range(len(df_keys)):
                                 ax2 = plt.plot(list(df['Time']), df[parameter], '--', color=self.exp_color,
@@ -1643,8 +1643,8 @@ class PlotScan(object):
             'copasi_file': None,
         }
 
-        for i in kwargs.keys():
-            assert i in self.default_properties.keys(), '{} is not a keyword argument for Boxplot'.format(i)
+        for i in list(kwargs.keys()):
+            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for Boxplot'.format(i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
         self.update_properties(self.default_properties)
@@ -1719,8 +1719,8 @@ class PlotParameterEstimation(PlotKwargs):
             'copasi_file': None,
         }
         self.default_properties.update(self.plot_kwargs)
-        for i in kwargs.keys():
-            assert i in self.default_properties.keys(),'{} is not a keyword argument for "PlotParameterEstimation"'.format(i)
+        for i in list(kwargs.keys()):
+            assert i in list(self.default_properties.keys()),'{} is not a keyword argument for "PlotParameterEstimation"'.format(i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
         self.default_properties.update(self.plot_kwargs)
@@ -1818,7 +1818,7 @@ class PlotParameterEstimation(PlotKwargs):
         step_size = 1
         for exp in time_dct:
             indep_dct = {}
-            for exp_key in self.exp_data[exp].keys():
+            for exp_key in list(self.exp_data[exp].keys()):
                 if exp_key[-6:] == '_indep':
                     indep_dct[exp_key[:-6]] = self.exp_data[exp][exp_key].iloc[0]
 
@@ -1842,7 +1842,7 @@ class PlotParameterEstimation(PlotKwargs):
         ## filter out y values which are not in the data file
         newy = []
         for y in self.y:
-            if y in self.read_experimental_data().values()[0].keys():
+            if y in list(self.read_experimental_data().values())[0].keys():
                 # print '"{0}" not in "{1}". "{0}" is being ignored'.format(y, self.read_experimental_data().values()[0].keys())
                 newy.append(y)
 
@@ -1938,8 +1938,8 @@ class Boxplots(PlotKwargs):
                                    'filename': 'boxplot'
                                    }
         self.default_properties.update(self.plot_kwargs)
-        for i in kwargs.keys():
-            assert i in self.default_properties.keys(),'{} is not a keyword argument for Boxplot'.format(i)
+        for i in list(kwargs.keys()):
+            assert i in list(self.default_properties.keys()),'{} is not a keyword argument for Boxplot'.format(i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
         self.default_properties.update(self.plot_kwargs)
@@ -2002,7 +2002,7 @@ class Boxplots(PlotKwargs):
         split data into multi plot
         :return:
         """
-        n_vars = len(self.data.keys())
+        n_vars = len(list(self.data.keys()))
         n_per_plot = self.num_per_plot
 #        assert n_per_plot<n_vars,'number of variables per plot must be smaller than the number of variables'
         int_division = n_vars//n_per_plot
@@ -2010,9 +2010,9 @@ class Boxplots(PlotKwargs):
 
         l = []
         for i in range(int_division):
-            l.append(list(self.data.keys()[i*n_per_plot:(i+1)*n_per_plot]))
+            l.append(list(list(self.data.keys())[i*n_per_plot:(i+1)*n_per_plot]))
         if remainder is not 0:
-            l.append(list(self.data.keys()[-remainder:]))
+            l.append(list(list(self.data.keys())[-remainder:]))
         return l
 
 
@@ -2070,8 +2070,8 @@ class LikelihoodRanks(PlotKwargs):
                                    }
 
         # self.default_properties.update(self.plot_kwargs)
-        for i in kwargs.keys():
-            assert i in self.default_properties.keys(), '{} is not a keyword argument for RssVsIterations'.format(i)
+        for i in list(kwargs.keys()):
+            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for RssVsIterations'.format(i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
         # self.default_properties.update(self.plot_kwargs)
@@ -2125,9 +2125,9 @@ class LikelihoodRanks(PlotKwargs):
             
         fig = plt.figure()
         if self.log10:
-            x = numpy.log10(range(self.data['RSS'].shape[0]))
+            x = numpy.log10(list(range(self.data['RSS'].shape[0])))
         else:
-            x = range(self.data['RSS'].shape[0])
+            x = list(range(self.data['RSS'].shape[0]))
 
         plt.plot(x,
                  self.data['RSS'].sort_values(ascending=True),
@@ -2217,8 +2217,8 @@ class Pca(PlotKwargs):
 
 
         self.default_properties.update(self.plot_kwargs)
-        for i in kwargs.keys():
-            assert i in self.default_properties.keys(), '{} is not a keyword argument for Pca'.format(i)
+        for i in list(kwargs.keys()):
+            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for Pca'.format(i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
         self.default_properties.update(self.plot_kwargs)
@@ -2393,8 +2393,8 @@ class Histograms(PlotKwargs):
                                    }
 
         self.default_properties.update(self.plot_kwargs)
-        for i in kwargs.keys():
-            assert i in self.default_properties.keys(), '{} is not a keyword argument for Histograms'.format(i)
+        for i in list(kwargs.keys()):
+            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for Histograms'.format(i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
         self.default_properties.update(self.plot_kwargs)
@@ -2426,7 +2426,7 @@ class Histograms(PlotKwargs):
         """
         
         """
-        for parameter in self.data.keys():
+        for parameter in list(self.data.keys()):
             fig = plt.figure()
             seaborn.distplot(
                 self.data[parameter], color=self.color, kde=self.kde, rug=self.rug,
@@ -2565,8 +2565,8 @@ class Scatters(PlotKwargs):
         }
 
         self.default_properties.update(self.plot_kwargs)
-        for i in kwargs.keys():
-            assert i in self.default_properties.keys(), '{} is not a keyword argument for Scatters'.format(i)
+        for i in list(kwargs.keys()):
+            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for Scatters'.format(i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
         self.default_properties.update(self.plot_kwargs)
@@ -2598,24 +2598,24 @@ class Scatters(PlotKwargs):
         :return:
         """
         if self.y is None:
-            self.y = self.data.keys()
+            self.y = list(self.data.keys())
 
         if (self.y == 'all') or (self.y == ['all']):
-            self.y = self.data.keys()
+            self.y = list(self.data.keys())
 
         if self.x == 'all' or self.x == ['all']:
-            self.x = self.data.keys()
+            self.x = list(self.data.keys())
 
 
         for x_var in self.x:
             if x_var not in sorted(list(self.data.keys())):
                 raise errors.InputError('"{}" invalid. These are valid: "{}"'.format(
-                    x_var, self.data.keys()
+                    x_var, list(self.data.keys())
                 ))
             for y_var in self.y:
                 if x_var not in sorted(list(self.data.keys())):
                     raise errors.InputError('"{}" invalid. These are valid: "{}"'.format(
-                        y_var, self.data.keys()
+                        y_var, list(self.data.keys())
                     )
                     )
                 LOG.info('Plotting "{}" Vs "{}"'.format(x_var, y_var))
@@ -2718,8 +2718,8 @@ class LinearRegression(PlotKwargs):
         }
 
         self.default_properties.update(self.plot_kwargs)
-        for i in kwargs.keys():
-            assert i in self.default_properties.keys(), '{} is not a keyword argument for LinearRegression'.format(i)
+        for i in list(kwargs.keys()):
+            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for LinearRegression'.format(i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
         self.default_properties.update(self.plot_kwargs)
@@ -2911,8 +2911,8 @@ class ModelSelectionOld(object):
             'show': False
         }
 
-        for i in kwargs.keys():
-            assert i in self.default_properties.keys(), '{} is not a keyword argument for ModelSelection'.format(i)
+        for i in list(kwargs.keys()):
+            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for ModelSelection'.format(i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
         self.update_properties(self.default_properties)
@@ -2925,7 +2925,7 @@ class ModelSelectionOld(object):
 
 
         ## code for having default legend labels
-        self.default_model_labels = {os.path.split(i)[1][:-6]: os.path.split(i)[1][:-6] for i in [j.copasi_file for j in self.model_dct.values()]}
+        self.default_model_labels = {os.path.split(i)[1][:-6]: os.path.split(i)[1][:-6] for i in [j.copasi_file for j in list(self.model_dct.values())]}
 
 
         if self.model_labels is not None:
@@ -2967,13 +2967,13 @@ class ModelSelectionOld(object):
         del self.multi_model_fit[key]
 
     def keys(self):
-        return self.multi_model_fit.keys()
+        return list(self.multi_model_fit.keys())
 
     def values(self):
-        return self.multi_model_fit.values()
+        return list(self.multi_model_fit.values())
 
     def items(self):
-        return self.multi_model_fit.items()
+        return list(self.multi_model_fit.items())
 
     def _do_checks(self):
         """
@@ -3040,14 +3040,14 @@ class ModelSelectionOld(object):
             return pandas.read_pickle(self.pickle)
         else:
             dct={}
-            for cps, MPE in self.multi_model_fit.items():
+            for cps, MPE in list(self.multi_model_fit.items()):
                 cps_0 = cps[:-4]+'_0.cps'
                 dct[cps_0] = Parse(MPE.results_directory, copasi_file=cps_0, log10=self.log10)
             return dct
 
     def _get_number_estimated_model_parameters(self):
         k_dct={}
-        for mod in self.model_dct.values():
+        for mod in list(self.model_dct.values()):
             k_dct[mod.copasi_file] = len(mod.fit_item_order)
         return k_dct
 
@@ -3059,7 +3059,7 @@ class ModelSelectionOld(object):
         for exp in self.multi_model_fit.exp_files:
             data=pandas.read_csv(exp,sep='\t')
             l=[]
-            for key in data.keys() :
+            for key in list(data.keys()) :
                 if key.lower()!='time':
                     if key[-6:]!='_indep':
                         l.append(int(data[key].shape[0]))
@@ -3108,7 +3108,7 @@ class ModelSelectionOld(object):
         """
         df_dct = {}
         for model_num in range(len(self.model_dct)):
-            keys = self.model_dct.keys()
+            keys = list(self.model_dct.keys())
             cps_key = self.model_dct[keys[model_num]].copasi_file
 
             k = self.number_model_parameters[cps_key]
@@ -3259,7 +3259,7 @@ class ModelSelectionOld(object):
         i.e. gets the cut off point for chi2 dist with DOF and alpha .
         '''
         nums = numpy.arange(0,100,0.1)
-        table=zip(nums, scipy.stats.chi2.cdf(nums,self.kwargs.get('DOF')) )
+        table=list(zip(nums, scipy.stats.chi2.cdf(nums,self.kwargs.get('DOF')) ))
         for i in table:
             if i[1]<=alpha:
                 chi2_df_alpha=i[0]
@@ -3281,7 +3281,7 @@ class ModelSelectionOld(object):
         '''
         LOG.info('Visually comparing simulated Versus Experiemntal data.')
 
-        for cps, res in self.multi_model_fit.results_folder_dct.items():
+        for cps, res in list(self.multi_model_fit.results_folder_dct.items()):
             tasks.InsertParameters(cps,parameter_path=res, index=0)
             PE=tasks.ParameterEstimation(cps,self.multi_model_fit.exp_files,
                                        randomize_start_values=False,
@@ -3298,7 +3298,7 @@ class ModelSelectionOld(object):
 
         '''
         df=pandas.DataFrame()
-        for cps, res in self.multi_model_fit.results_folder_dct.items():
+        for cps, res in list(self.multi_model_fit.results_folder_dct.items()):
             df[os.path.split(cps)[1]]= ParsePEData(res).data.iloc[0]
 
         if filename==None:
@@ -3380,8 +3380,8 @@ class ModelSelection(object):
             'order': None,
         }
 
-        for i in kwargs.keys():
-            assert i in self.default_properties.keys(), '{} is not a keyword argument for ModelSelection'.format(i)
+        for i in list(kwargs.keys()):
+            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for ModelSelection'.format(i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
         self.update_properties(self.default_properties)
@@ -3394,7 +3394,7 @@ class ModelSelection(object):
 
 
         ## code for having default legend labels
-        self.default_model_labels = {i.name: i.name for i in self.model_dct.values()}
+        self.default_model_labels = {i.name: i.name for i in list(self.model_dct.values())}
 
         if self.model_labels is not None:
             if type(self.model_labels) is not dict:
@@ -3403,7 +3403,7 @@ class ModelSelection(object):
             for label in self.model_labels:
                 if label not in self.default_model_labels:
                     raise errors.InputError('keys of the model_labels dict should be one of '
-                                            '"{}"'.format(self.default_model_labels.keys()))
+                                            '"{}"'.format(list(self.default_model_labels.keys())))
         elif self.model_labels is None:
             self.model_labels = self.default_model_labels
 
@@ -3435,13 +3435,13 @@ class ModelSelection(object):
         del self.multi_model_fit[key]
 
     def keys(self):
-        return self.multi_model_fit.keys()
+        return list(self.multi_model_fit.keys())
 
     def values(self):
-        return self.multi_model_fit.values()
+        return list(self.multi_model_fit.values())
 
     def items(self):
-        return self.multi_model_fit.items()
+        return list(self.multi_model_fit.items())
 
     def _do_checks(self):
         """
@@ -3508,14 +3508,14 @@ class ModelSelection(object):
             return pandas.read_pickle(self.pickle)
         else:
             dct={}
-            for cps, MPE in self.multi_model_fit.items():
+            for cps, MPE in list(self.multi_model_fit.items()):
                 cps_0 = cps[:-4]+'.cps'
                 dct[cps_0] = Parse(MPE.results_directory, copasi_file=cps_0, log10=self.log10)
             return dct
 
     def _get_number_estimated_model_parameters(self):
         k_dct={}
-        for mod in self.model_dct.values():
+        for mod in list(self.model_dct.values()):
             k_dct[mod.copasi_file] = len(mod.fit_item_order)
         return k_dct
 
@@ -3527,7 +3527,7 @@ class ModelSelection(object):
         for exp in self.multi_model_fit.exp_files:
             data=pandas.read_csv(exp,sep='\t')
             l=[]
-            for key in data.keys() :
+            for key in list(data.keys()) :
                 if key.lower()!='time':
                     if key[-6:]!='_indep':
                         l.append(int(data[key].shape[0]))
@@ -3576,7 +3576,7 @@ class ModelSelection(object):
         """
         df_dct = {}
         for model_num in range(len(self.model_dct)):
-            keys = self.model_dct.keys()
+            keys = list(self.model_dct.keys())
             cps_key = self.model_dct[keys[model_num]].copasi_file
 
             k = self.number_model_parameters[cps_key]
@@ -3652,7 +3652,7 @@ class ModelSelection(object):
         i.e. gets the cut off point for chi2 dist with DOF and alpha .
         '''
         nums = numpy.arange(0,100,0.1)
-        table=zip(nums, scipy.stats.chi2.cdf(nums,self.kwargs.get('DOF')) )
+        table=list(zip(nums, scipy.stats.chi2.cdf(nums,self.kwargs.get('DOF')) ))
         for i in table:
             if i[1]<=alpha:
                 chi2_df_alpha=i[0]
@@ -3674,7 +3674,7 @@ class ModelSelection(object):
         '''
         LOG.info('Visually comparing simulated Versus Experiemntal data.')
 
-        for cps, res in self.multi_model_fit.results_folder_dct.items():
+        for cps, res in list(self.multi_model_fit.results_folder_dct.items()):
             tasks.InsertParameters(cps,parameter_path=res, index=0)
             PE=tasks.ParameterEstimation(cps,self.multi_model_fit.exp_files,
                                        randomize_start_values=False,
@@ -3691,7 +3691,7 @@ class ModelSelection(object):
 
         '''
         df=pandas.DataFrame()
-        for cps, res in self.multi_model_fit.results_folder_dct.items():
+        for cps, res in list(self.multi_model_fit.results_folder_dct.items()):
             df[os.path.split(cps)[1]]= ParsePEData(res).data.iloc[0]
 
         if filename==None:
@@ -3773,8 +3773,8 @@ class PlotProfileLikelihood(object):
                                    'colorbar_pad': 0.2,
                                    }
 
-        for i in kwargs.keys():
-            assert i in self.default_properties.keys(), '{} is not a keyword argument for PlotProfileLikelihood'.format(i)
+        for i in list(kwargs.keys()):
+            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for PlotProfileLikelihood'.format(i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
         self.update_properties(self.default_properties)
@@ -4249,8 +4249,8 @@ class PlotProfileLikelihood3d(object):
         # raise NotImplementedError('Not yet implemented')
 
         ## todo - colour plots by RSS
-        for i in kwargs.keys():
-            assert i in self.default_properties.keys(), '{} is not a keyword argument for PlotProfileLikelihood'.format(i)
+        for i in list(kwargs.keys()):
+            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for PlotProfileLikelihood'.format(i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
         self.update_properties(self.default_properties)
@@ -4694,8 +4694,8 @@ class PearsonsCorrelation(PlotKwargs):
         }
 
         self.default_properties.update(self.plot_kwargs)
-        for i in kwargs.keys():
-            assert i in self.default_properties.keys(), '{} is not a keyword argument for PearsonsHeatMap'.format(i)
+        for i in list(kwargs.keys()):
+            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for PearsonsHeatMap'.format(i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
         self.default_properties.update(self.plot_kwargs)

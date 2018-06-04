@@ -133,7 +133,7 @@ class LatexTests(unittest.TestCase):
         return MMF
 
     def plot_data(self):
-        print 'plotting data'
+        print('plotting data')
         P = Process(target=viz.ModelSelection, args=(self.MMF,),
                     kwargs={'savefig': True})
         P.start()

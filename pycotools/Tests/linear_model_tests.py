@@ -101,4 +101,4 @@ class TestLinearModel(unittest.TestCase):
         # shutil.rmtree(self.working_directory)
 
     def test(self):
-        print viz.Parse(self.MPE)
+        print(viz.Parse(self.MPE))

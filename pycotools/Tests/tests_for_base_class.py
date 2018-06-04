@@ -24,7 +24,7 @@ Module that tests the operations of the _Base base test
 """
 
 import site
-site.addsitedir('C:\Users\Ciaran\Documents\pycotools')
+site.addsitedir('C:\\Users\Ciaran\Documents\pycotools')
 site.addsitedir(r'/home/b3053674/Documents/pycotools')
 import pycotools
 from pycotools.Tests import _test_base
@@ -69,11 +69,11 @@ class TestBase(_test_base._BaseTest):
 #
     def test_as_dict_values(self):
         keys = ['A', 'B', 'key']
-        self.assertListEqual(keys, self._base.to_dict().keys())
+        self.assertListEqual(keys, list(self._base.to_dict().keys()))
 
     def test_as_dict_values(self):
         keys = ['a', 'b', 'MadeUpKey1']
-        self.assertListEqual(keys, self._base.to_dict().values() )
+        self.assertListEqual(keys, list(self._base.to_dict().values()) )
 
     def test_update_properties(self):
         class New(pycotools._base._ModelBase):
@@ -135,7 +135,7 @@ class TestBase(_test_base._BaseTest):
 
                 options = self.convert_bool_to_numeric(options)
                 self.update_properties(options)
-                self.check_integrity(options.keys(), kwargs.keys())
+                self.check_integrity(list(options.keys()), list(kwargs.keys()))
         with self.assertRaises(pycotools.errors.InputError) as context:
             New(self.copasi_file, wrong_option=True)
         self.assertTrue(isinstance(context.exception, pycotools.errors.InputError))
@@ -225,7 +225,7 @@ class BaseModelTests(_test_base._BaseTest):
                 return 'A({})'.format(self.to_string())
 
         a = A(self.model, a=4)
-        print a
+        print(a)
 
 
             # def test_save(self):

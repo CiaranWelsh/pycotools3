@@ -143,8 +143,8 @@ class ProfileLikelihood2():
                  'pickle_path': default_pickle_path}
                  
 
-        for i in kwargs.keys():
-            assert i in options.keys(),'{} is not a keyword argument for ProfileLikelihood'.format(i)
+        for i in list(kwargs.keys()):
+            assert i in list(options.keys()),'{} is not a keyword argument for ProfileLikelihood'.format(i)
         options.update( kwargs) 
         self.kwargs=options    
         
@@ -207,8 +207,8 @@ class ProfileLikelihood2():
         self.run()
 
     def __getitem__(self,key):
-        if key not in self.kwargs.keys():
-            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
+        if key not in list(self.kwargs.keys()):
+            raise TypeError('{} not in {}'.format(key,list(self.kwargs.keys())))
         return self.kwargs[key]
 
     def __setitem__(self,key,value):
@@ -247,7 +247,7 @@ class ProfileLikelihood2():
         1) create relevant folders and copy copasi file into these based on the index parameter
         '''
         cps_dct={}
-        estimated_parameters= self.GMQ.get_fit_items().keys()
+        estimated_parameters= list(self.GMQ.get_fit_items().keys())
         IA_dir=self.kwargs['results_directory']
         if os.path.isdir(IA_dir)==False:
             os.mkdir(IA_dir)
@@ -447,7 +447,7 @@ class ProfileLikelihood2():
         run using one process, separately, one after another
         '''
         res={}
-        for i in self.cps_dct.keys():
+        for i in list(self.cps_dct.keys()):
             for j in self.cps_dct[i]:
                 LOG.debug( 'running {}'.format(j))
                 res[self.cps_dct[i][j]]= tasks.Run(self.cps_dct[i][j],task='scan',mode='slow').run()
@@ -463,7 +463,7 @@ class ProfileLikelihood2():
         from multiprocessing import Pool
         pool = Pool(processes=4)
         for index in self.cps_dct:
-            result = pool.apply_async(run, (self.cps_dct[index].values(),))
+            result = pool.apply_async(run, (list(self.cps_dct[index].values()),))
             pool.close()
             pool.join()
 
@@ -472,7 +472,7 @@ class ProfileLikelihood2():
         run using one process, separately, one after another
         '''
         res={}
-        for i in self.cps_dct.keys():
+        for i in list(self.cps_dct.keys()):
             for j in self.cps_dct[i]:
                 LOG.info( 'running {}'.format(j))
                 res[self.cps_dct[i][j]]= tasks.Run(self.cps_dct[i][j],
@@ -480,7 +480,7 @@ class ProfileLikelihood2():
         return res
     
     def run_SGE(self):
-        for i in self.cps_dct.keys():
+        for i in list(self.cps_dct.keys()):
             for j in self.cps_dct[i]:
                 with open('run_script.sh','w') as f:
                     f.write('#!/bin/bash\n#$ -V -cwd\nmodule addapps/COPASI/4.16.104-Linux-64bit\nCopasiSE "{}"'.format(self.cps_dct[i][j]))
@@ -531,7 +531,7 @@ class FormatPLData():
             return self.report_name
         else:
             data = data.drop(data.columns[[1,-2]], axis=1)
-            data.columns = range(data.shape[1])
+            data.columns = list(range(data.shape[1]))
             LOG.debug('Shape of estimated parameters: {}'.format(data.shape))
             poe = os.path.split(self.copasi_file)[1][:-4]
             ### parameter of interest has been removed. 
@@ -720,8 +720,8 @@ class Plot2():
                  
                  }
                  
-        for i in kwargs.keys():
-            assert i in options.keys(),'{} is not a keyword argument for plot'.format(i)
+        for i in list(kwargs.keys()):
+            assert i in list(options.keys()),'{} is not a keyword argument for plot'.format(i)
         options.update( kwargs) 
         self.kwargs=options       
         
@@ -870,8 +870,8 @@ class Plot2():
             LOG.info( 'Confidence level for index {} is {} or {} on a log10 scale'.format(i,CI[i],numpy.log10(CI[i])))
 
     def __getitem__(self,key):
-        if key not in self.kwargs.keys():
-            raise TypeError('{} not in {}'.format(key,self.kwargs.keys()))
+        if key not in list(self.kwargs.keys()):
+            raise TypeError('{} not in {}'.format(key,list(self.kwargs.keys())))
             
         return self.kwargs[key]
     
@@ -1020,7 +1020,7 @@ class Plot2():
 #        return df_dict
 ##        
     def list_parameters(self):
-        return self.GMQ.get_fit_items().keys()
+        return list(self.GMQ.get_fit_items().keys())
 #        first_index = self.data.keys()[0]
 #        return sorted(self.data[first_index].keys())
 
@@ -1029,8 +1029,8 @@ class Plot2():
         """
         
         """
-        first_key= self.data.keys()[0]
-        count= len( self.data[first_key].keys())
+        first_key= list(self.data.keys())[0]
+        count= len( list(self.data[first_key].keys()))
         return count
         
         
@@ -1078,7 +1078,7 @@ class Plot2():
         i.e. gets the cut off point for chi2 dist with dof and alpha . 
         '''
         nums= numpy.arange(0,100,0.1)
-        table=zip(nums,scipy.stats.chi2.cdf(nums,self.kwargs['dof']) )
+        table=list(zip(nums,scipy.stats.chi2.cdf(nums,self.kwargs['dof']) ))
         for i in table:
             if i[1]<=alpha:
                 chi2_df_alpha=i[0]
@@ -1193,7 +1193,7 @@ class Plot2():
             
             
             
-        parameter_val,RSS_val=(data[data.keys()[0]],data[data.keys()[1]])
+        parameter_val,RSS_val=(data[list(data.keys())[0]],data[list(data.keys())[1]])
         #plot parameter vs rss once as green circles the other as lines
         try:
             plt.plot(parameter_val,RSS_val,'bo')#,markersize=self.kwargs.get('marker_size'))
@@ -1225,7 +1225,7 @@ class Plot2():
         st=misc.RemoveNonAscii(parameter).filter
 #        print st
         
-        print LOG.warning(best_parameter_value)
+        print(LOG.warning(best_parameter_value))
 
         if best_parameter_value!=None:         
             #best parameter value contains the model value for pparameter
@@ -1363,7 +1363,7 @@ class ChiSquaredStatistics():
         i.e. gets the cut off point for chi2 dist with dof and alpha . 
         '''
         nums= numpy.arange(0,100,0.1)
-        table=zip(nums,scipy.stats.chi2.cdf(nums,self.dof) )
+        table=list(zip(nums,scipy.stats.chi2.cdf(nums,self.dof) ))
         for i in table:
             if i[1]<=alpha:
                 chi2_df_alpha=i[0]
@@ -1428,8 +1428,8 @@ class Plot():
                  }
         
         
-        for i in kwargs.keys():
-            assert i in options.keys(),'{} is not a keyword argument for plot'.format(i)
+        for i in list(kwargs.keys()):
+            assert i in list(options.keys()),'{} is not a keyword argument for plot'.format(i)
         options.update( kwargs) 
         self.kwargs=options  
         
@@ -1475,7 +1475,7 @@ class Plot():
 
     def __getitem__(self,key):
         if key not in self.kwargs:
-            raise errors.InputError('{} not in {}'.format(key, self.kwargs.keys()))
+            raise errors.InputError('{} not in {}'.format(key, list(self.kwargs.keys())))
         return self.kwargs[key]
     
     def __setitem__(self,key, value):
@@ -1589,8 +1589,8 @@ class ParsePLData():
                  }
         
         
-        for i in kwargs.keys():
-            assert i in options.keys(),'{} is not a keyword argument for plot'.format(i)
+        for i in list(kwargs.keys()):
+            assert i in list(options.keys()),'{} is not a keyword argument for plot'.format(i)
         options.update( kwargs) 
         self.kwargs=options  
         
@@ -1631,7 +1631,7 @@ class ParsePLData():
 
     def __getitem__(self,key):
         if key not in self.kwargs:
-            raise errors.InputError('{} not in {}'.format(key, self.kwargs.keys()))
+            raise errors.InputError('{} not in {}'.format(key, list(self.kwargs.keys())))
         return self.kwargs[key]
     
     def __setitem__(self,key, value):
@@ -1719,7 +1719,7 @@ class ParsePLData():
         parameters = sorted(list(self.data.columns))
         filenames = sorted(list(set(self.data.index.get_level_values(1))))
 #        print parameters, filenames
-        zipped =  dict(zip(filenames, parameters))
+        zipped =  dict(list(zip(filenames, parameters)))
         self.data = self.data.reset_index(level=1)
         l = []
         for i in self.data['ParameterFile']:
@@ -1749,7 +1749,7 @@ class ParsePLData():
         The number of parameters being estimated minus 1
         '''
         GMQ = tasks.GetModelQuantities(self.copasi_file)
-        return len(GMQ.get_fit_items().keys())-1
+        return len(list(GMQ.get_fit_items().keys()))-1
 #        return self.get_num_estimated_paraemters()-1
         
     def get_num_data_points(self):

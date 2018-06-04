@@ -180,12 +180,12 @@ class TestParse(unittest.TestCase):
         MPE.run()
 
         CPE = tasks.ChaserParameterEstimations(
-            MPE, truncate_mode='ranks', theta=range(2),
+            MPE, truncate_mode='ranks', theta=list(range(2)),
             tolerance=1e-2, iteration_limit=5,
             run_mode=True
         )
         data = viz.Parse(CPE.results_directory, copasi_file=CPE.model.copasi_file).data
-        print data
+        print(data)
         self.assertEqual(data.shape[0], 2)
 
 

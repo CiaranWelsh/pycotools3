@@ -101,7 +101,7 @@ class TestTruncateData(unittest.TestCase):
 
     def test_read_data(self):
         data = viz.Parse(self.MPE).data
-        print viz.TruncateData(data=data, mode='ranks', theta=[0, 1]).data
+        print(viz.TruncateData(data=data, mode='ranks', theta=[0, 1]).data)
 
 if __name__ == '__main__':
     unittest.main()

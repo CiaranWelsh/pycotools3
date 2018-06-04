@@ -1,10 +1,10 @@
-import viz
-import tasks
-import errors
+from . import viz
+from . import tasks
+from . import errors
 import os
-import misc
-import model
-import models
+from . import misc
+from . import model
+from . import models
 
 import logging
 import logging.config

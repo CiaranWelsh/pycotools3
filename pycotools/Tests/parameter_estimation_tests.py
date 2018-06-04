@@ -133,7 +133,7 @@ class ParameterEstimationTests(_test_base._BaseTest):
         self.PE.write_config_file()
         self.model = self.PE.setup()
         self.PE.run()
-        print self.PE.report_name
+        print(self.PE.report_name)
         self.assertTrue(os.path.isfile(self.PE.report_name))
 
 
@@ -232,7 +232,7 @@ class ParameterEstimationConfigFileTests(_test_base._BaseTest):
         locs = ['(ADeg).k1', '(B2C).k2', '(C2A).k1']
         for i in locs:
             if i not in list(item_template.index):
-                print '{} not in template'.format(i)
+                print('{} not in template'.format(i))
                 boolean = True
         self.assertFalse(boolean)
 
@@ -252,7 +252,7 @@ class ParameterEstimationConfigFileTests(_test_base._BaseTest):
         locs = ['A', 'B', 'C']
         for i in locs:
             if i not in list(item_template.index):
-                print '{} not in template'.format(i)
+                print('{} not in template'.format(i))
                 boolean = True
         self.assertFalse(boolean)
 
@@ -273,7 +273,7 @@ class ParameterEstimationConfigFileTests(_test_base._BaseTest):
         metabs = []
         for i in metabs:
             if i not in list(item_template.index):
-                print '{} not in template'.format(i)
+                print('{} not in template'.format(i))
                 boolean = True
         self.assertFalse(boolean)
 
@@ -294,7 +294,7 @@ class ParameterEstimationConfigFileTests(_test_base._BaseTest):
         metabs = ['A']
         for i in metabs:
             if i not in list(item_template.index):
-                print '{} not in template'.format(i)
+                print('{} not in template'.format(i))
                 boolean = True
         self.assertFalse(boolean)
 
@@ -315,7 +315,7 @@ class ParameterEstimationConfigFileTests(_test_base._BaseTest):
         globs = ['A2B']
         for i in globs:
             if i not in list(item_template.index):
-                print '{} not in template'.format(i)
+                print('{} not in template'.format(i))
                 boolean = True
         self.assertFalse(boolean)
 
@@ -336,7 +336,7 @@ class ParameterEstimationConfigFileTests(_test_base._BaseTest):
         globs = ['ThisIsAssignment', 'B2C', 'A2B']
         for i in globs:
             if i not in list(item_template.index):
-                print '{} not in template'.format(i)
+                print('{} not in template'.format(i))
                 boolean = True
         self.assertFalse(boolean)
 

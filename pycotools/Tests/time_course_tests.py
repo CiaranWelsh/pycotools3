@@ -22,7 +22,7 @@ site.addsitedir('/home/b3053674/Documents/pycotools')
 # site.addsitedir('C:\Users\Ciaran\Documents\pycotools')
 
 import pycotools
-import test_models
+from . import test_models
 import unittest
 import glob
 import os
@@ -56,7 +56,7 @@ class DeterministicTimeCourseTests(_test_base._BaseTest):
         for i in self.new_model.find(self.list_of_tasks):
             if i.attrib['name'] == 'Time-Course':
                 for j in i:
-                    if 'target' in j.attrib.keys():
+                    if 'target' in list(j.attrib.keys()):
                         self.assertEqual(j.attrib['target'], self.TC.report_name)
 
     def test_deterministic_options1(self):
@@ -229,7 +229,7 @@ site.addsitedir('/home/b3053674/Documents/pycotools')
 # site.addsitedir('C:\Users\Ciaran\Documents\pycotools')
 
 import pycotools
-import test_models
+from . import test_models
 import unittest
 import glob
 import os
@@ -263,7 +263,7 @@ class DeterministicTimeCourseTests(_test_base._BaseTest):
         for i in self.new_model.find(self.list_of_tasks):
             if i.attrib['name'] == 'Time-Course':
                 for j in i:
-                    if 'target' in j.attrib.keys():
+                    if 'target' in list(j.attrib.keys()):
                         self.assertEqual(j.attrib['target'], self.TC.report_name)
 
     def test_deterministic_options1(self):

@@ -31,18 +31,19 @@ from lxml import etree
 
 # site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
 # import PyCoTools
-import errors, misc, viz
-import _base
-import tasks
+from . import errors, misc, viz
+from . import _base
+from . import tasks
 import pandas
 import re
 import sys, inspect
 from copy import deepcopy
-from mixin import mixin, Mixin
+from .mixin import mixin, Mixin
 from functools import wraps
-from cached_property import cached_property_with_ttl, cached_property
+from .cached_property import cached_property_with_ttl, cached_property
 from subprocess import check_call, call
 from shutil import copy
+from functools import reduce
 
 LOG = logging.getLogger(__name__)
 
@@ -209,7 +210,7 @@ class BuildAntimony(object):
             os.remove(self.sbml_file)
 
         if isinstance(exc_type, type):
-            raise exc_type, exc_val, exc_tb
+            raise exc_type(exc_val).with_traceback(exc_tb)
 
     def load(self, antimony_str):
         """
@@ -628,7 +629,7 @@ class Model(_base._Base):
         state_values = [i for i in state_values if i not in ['', ' ', '\n']]
         state_values = [float(i) for i in state_values]
 
-        return OrderedDict(zip(collection, state_values))
+        return OrderedDict(list(zip(collection, state_values)))
 
     @states.setter
     def states(self, states):
@@ -958,7 +959,7 @@ class Model(_base._Base):
             'fmol': 1e-15,
             'pmol': 1e-12,
             'nmol': 1e-9,
-            u'\xb5mol': 1e-6,
+            '\xb5mol': 1e-6,
             'mmol': 1e-3,
             'mol': float(1),
             'dimensionless': float(1),
@@ -1014,7 +1015,7 @@ class Model(_base._Base):
             'fmol': 1e-15,
             'pmol': 1e-12,
             'nmol': 1e-9,
-            u'\xb5mol': 1e-6,
+            '\xb5mol': 1e-6,
             'mmol': 1e-3,
             'mol': float(1),
             'dimensionless': 1,
@@ -1049,8 +1050,8 @@ class Model(_base._Base):
                 for j in i:
                     metabs[j.attrib['key']] = j.attrib
 
-        for key, value in self.states.items():
-            if key in metabs.keys():
+        for key, value in list(self.states.items()):
+            if key in list(metabs.keys()):
                 metabs[key]['particle_numbers'] = str(value)
 
         lst = []
@@ -1233,8 +1234,8 @@ class Model(_base._Base):
                 for j in i:
                     model_values[j.attrib['key']] = j.attrib
 
-        for key, value in self.states.items():
-            if key in model_values.keys():
+        for key, value in list(self.states.items()):
+            if key in list(model_values.keys()):
                 model_values[key]['initial_value'] = str(value)
 
         lst = []
@@ -1531,7 +1532,7 @@ class Model(_base._Base):
         if len(reactions_dict) == 0:
             return []
 
-        for i, dct in reactions_dict.items():
+        for i, dct in list(reactions_dict.items()):
             ## default constant flux or mass action
             substrates = [j.name for j in reactions_dict[i]['substrates']]
             if dct['function'] == []:
@@ -1574,7 +1575,7 @@ class Model(_base._Base):
 
         lst = []
 
-        for i, dct in reactions_dict.items():
+        for i, dct in list(reactions_dict.items()):
             ## skip the skipped reactions
             # if i not in skipped:
             r = Reaction(self,
@@ -1898,7 +1899,7 @@ class Model(_base._Base):
                 'model.get has returned a list --> {}'.format(comp)
             )
 
-        if change_field not in comp.__dict__.keys():
+        if change_field not in list(comp.__dict__.keys()):
             raise errors.InputError('"{}" not valid for component type "{}"'.format(
                 change_field, component
             ))
@@ -2323,7 +2324,7 @@ class Metabolite(object):
                 if isinstance(self.compartment, Compartment) != True:
                     raise errors.InputError('compartment argument should be of type PyCoTools.tasks.Compartment')
 
-        if ('particle_numbers' not in self.__dict__.keys()) and ('concentration' not in self.__dict__.keys()):
+        if ('particle_numbers' not in list(self.__dict__.keys())) and ('concentration' not in list(self.__dict__.keys())):
             raise errors.InputError('Must specify either concentration or particle numbers')
 
         if self.simulation_type == None:
@@ -3138,8 +3139,8 @@ class Function(object):
             ).generate(len(self.roles))
 
             self.list_of_parameter_descriptions = []
-            keys = self.roles.keys()
-            values = self.roles.values()
+            keys = list(self.roles.keys())
+            values = list(self.roles.values())
 
             ## if our function param keys is singular and string, convert to list
             ## so we can iterate over it (and not the characters in the string by mistake)
@@ -3448,23 +3449,23 @@ class KeyFactory(object):
         :return:
         """
         if self.type == 'metabolite':
-            return self.create_key(self.model.metabolites).next()
+            return next(self.create_key(self.model.metabolites))
 
         elif self.type == 'compartment':
-            return self.create_key(self.model.compartments).next()
+            return next(self.create_key(self.model.compartments))
 
         elif self.type == 'global_quantity':
-            return self.create_key(self.model.global_quantities).next()
+            return next(self.create_key(self.model.global_quantities))
 
         elif self.type == 'reaction':
             key = self.create_reaction_key(n)
             return key
 
         elif self.type == 'parameter_set':
-            return self.create_key(self.model.parameter_sets).next()
+            return next(self.create_key(self.model.parameter_sets))
 
         elif self.type == 'parameter':
-            return self.create_key(self.model.local_parameters).next()
+            return next(self.create_key(self.model.local_parameters))
 
         elif self.type == 'function':
             return self.create_function_key(n)
@@ -3874,7 +3875,7 @@ class Translator(object):
             if count[i] > 1:
                 count['{}*{}'.format(count[i], i)] = 1
                 del count[i]
-        return count.keys()
+        return list(count.keys())
 
     def get_components(self, component='substrate'):
         """
@@ -4175,7 +4176,7 @@ class ParameterSet(object):
             attrib={'cn': 'String=Kinetic Parameters',
                     'type': 'Group'}
         )
-        print etree.tostring(parameter_set, pretty_print=True)
+        print(etree.tostring(parameter_set, pretty_print=True))
 
         ##kinetic parameters  subelement
         for r in self.model.reactions:
@@ -4197,7 +4198,7 @@ class ParameterSet(object):
                                      'type': 'ReactionParameter',
                                      'simulationType': k.simulation_type})
 
-        print etree.tostring(parameter_set, pretty_print=True)
+        print(etree.tostring(parameter_set, pretty_print=True))
 
 
 #
@@ -4279,7 +4280,7 @@ class InsertParameters(object):
             if isinstance(self.parameter_dict, dict) != True:
                 raise errors.InputError('Argument to \'parameter_dict\' keyword needs to be of type dict')
 
-            for i in self.parameter_dict.keys():
+            for i in list(self.parameter_dict.keys()):
                 if i not in self.model.all_variable_names:
                     raise errors.InputError(
                         'Parameter \'{}\' is not in your model. \n\nThese are in your model:\n{}'.format(
@@ -4333,7 +4334,7 @@ class InsertParameters(object):
             assert isinstance(self.parameter_dict, dict), 'The parameter_dict argument takes a Python dictionary'
             for i in self.parameter_dict:
                 assert i in self.model.all_variable_names, '{} is not a parameter. These are your parameters:{}'.format(
-                    i, self.GMQ.get_all_model_variables().keys())
+                    i, list(self.GMQ.get_all_model_variables().keys()))
             return pandas.DataFrame(self.parameter_dict, index=[0])
 
         if self.parameter_path != None:
@@ -4354,7 +4355,7 @@ class InsertParameters(object):
         """
         # print self.parameters
 
-        locals = [j for i in self.model.reactions for j in i.parameters if j.global_name in self.parameters.keys()]
+        locals = [j for i in self.model.reactions for j in i.parameters if j.global_name in list(self.parameters.keys())]
         if locals == []:
             return self.model
         else:

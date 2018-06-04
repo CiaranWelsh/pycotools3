@@ -28,7 +28,7 @@ Date:
 import pickle
 import site
 site.addsitedir('/home/b3053674/Documents/pycotools')
-site.addsitedir('C:\Users\Ciaran\Documents\pycotools')
+site.addsitedir('C:\\Users\Ciaran\Documents\pycotools')
 from pycotools import tasks, viz, misc, model, utils
 from pycotools.retrying import retry
 from pycotools.Tests import test_models
@@ -129,14 +129,14 @@ class ChaserParameterEstimationTests(unittest.TestCase):
         :return: 
         """
         CPE = tasks.ChaserParameterEstimations(self.MPE, truncate_mode='ranks',
-                                               theta=range(2), run_mode=False,
+                                               theta=list(range(2)), run_mode=False,
                                                tolerance=1e-1, iteration_limit=5)
         # print viz.Parse(CPE).data
-        self.assertTrue(len(CPE.pe_dct.items()) == self.copy_number)
+        self.assertTrue(len(list(CPE.pe_dct.items())) == self.copy_number)
 
     def test_run_true(self):
         CPE = tasks.ChaserParameterEstimations(self.MPE, truncate_mode='ranks',
-                                               theta=range(2), run_mode=True,
+                                               theta=list(range(2)), run_mode=True,
                                                tolerance=1e-1, iteration_limit=5)
         results = viz.Parse(CPE).data
         self.assertEqual(results.shape[0], 2)
@@ -159,14 +159,14 @@ class ChaserParameterEstimationTests(unittest.TestCase):
         """
 
         CPE = tasks.ChaserParameterEstimations(self.MPE, truncate_mode='ranks',
-                                               theta=range(2), run_mode=True,
+                                               theta=list(range(2)), run_mode=True,
                                                tolerance=1e-1, iteration_limit=5)
 
         ## get parameters that were estimated in MPE
         pe_data = viz.Parse(self.MPE).data
 
         ## get keys to ordered dict
-        keys = CPE.pe_dct.keys()
+        keys = list(CPE.pe_dct.keys())
 
         ## key 0 should have best parameter set from MPE
         zero = CPE.pe_dct[keys[0]]
@@ -178,7 +178,7 @@ class ChaserParameterEstimationTests(unittest.TestCase):
 
         pe_data.drop('RSS', inplace=True, axis=1)
         
-        for i in pe_data.keys():
+        for i in list(pe_data.keys()):
             self.assertAlmostEqual(float(model_params[i]), float(pe_data0[i]))
 
 

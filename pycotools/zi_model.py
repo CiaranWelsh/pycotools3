@@ -3,7 +3,7 @@ site.addsitedir('/home/b3053674/Documents/pycotools')
 from pycotools import model, viz, tasks, Models
 import glob, os
 
-print Models
+print(Models)
 
 zi_model_dire = r'/home/b3053674/Documents/Models/2018/01_Jan/ZiModel'
 

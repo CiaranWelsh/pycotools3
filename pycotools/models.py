@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from mixin import mixin, Mixin
+from .mixin import mixin, Mixin
 
 
 class ToFileMixin(Mixin):

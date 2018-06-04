@@ -97,8 +97,8 @@ class PearsonsHeatMapTests(unittest.TestCase):
 
     def test(self):
         P = viz.PearsonsHeatMap(self.fit1)
-        print P.pearsons
-        print P.p_val
+        print(P.pearsons)
+        print(P.p_val)
 
 if __name__ == '__main__':
     unittest.main()

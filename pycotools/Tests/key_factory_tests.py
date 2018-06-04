@@ -29,7 +29,7 @@ import pickle
 import site
 
 # site.addsitedir('/home/b3053674/Documents/PyCoTools')
-site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
+site.addsitedir('C:\\Users\Ciaran\Documents\PyCoTools')
 import PyCoTools
 from PyCoTools.PyCoToolsTutorial import test_models
 import unittest
@@ -60,7 +60,7 @@ class KeyFactoryTests(_test_base._BaseTest):
         key = KF.generate()
         compartment_keys = [i.key for i in self.model.compartments]
         x = True
-        print key
+        print(key)
         if key in compartment_keys:
             x = False
         self.assertTrue(x)

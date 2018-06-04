@@ -94,7 +94,7 @@ class ProfileLikelihoodTests(_test_base._BaseTest):
         boolean = True
         query = '//*[@name="Parameter Estimation"]'
         for i in self.model.xml.xpath(query):
-            if 'type' in i.keys():
+            if 'type' in list(i.keys()):
                 if i.attrib['type'] == 'parameterFitting':
                     for j in i:
                         if j.tag == '{http://www.copasi.org/static/schema}Problem':
@@ -122,7 +122,7 @@ class ProfileLikelihoodTests(_test_base._BaseTest):
         boolean = False
         query = '//*[@name="Parameter Estimation"]'
         for i in self.model.xml.xpath(query):
-            if 'type' in i.keys():
+            if 'type' in list(i.keys()):
                 if i.attrib['type'] == 'parameterFitting':
                     for j in i:
                         if j.tag == 'Method':

@@ -34,7 +34,7 @@ PY3 = sys.version_info[0] == 3
 if PY3:
     class_types = type,
 else:
-    class_types = (type, types.ClassType)
+    class_types = (type, type)
 
 def add_metaclass(metaclass):
     """Class decorator for creating a class with a metaclass."""

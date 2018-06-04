@@ -63,7 +63,7 @@ if TIMECOURSE:
                                           intervals=10, report_name='report1.txt')
 
     T = pycotools.viz.PlotTimeCourse(TC1, savefig=True)
-    print T.plot()
+    print(T.plot())
 
 if SCAN:
     ##configure time course
@@ -77,7 +77,7 @@ if SCAN:
     # ##configure and run scan
     S = pycotools.tasks.Scan(model, scan_type='scan',
                              subtask='time_course', run=True)
-    print S.model.open()
+    print(S.model.open())
 
 
 if PARAMETER_ESTIMATION:
@@ -112,7 +112,7 @@ if PARAMETER_ESTIMATION:
     PE.run()
     # # PE.model.open()
     pl = pycotools.viz.PlotParameterEstimation(PE, savefig=True)
-    print pl.savefig
+    print(pl.savefig)
 
 
 if MULTI_PARAMETER_ESTIMATION:
@@ -199,7 +199,7 @@ if PROFILE_LIKELIHOOD:
     files = glob.glob(dire+'/*.cps')
     models = [pycotools.model.Model(i) for i in files]
     ip = pycotools.tasks.RunParallel(models)
-    print ip.run_parallel()
+    print(ip.run_parallel())
     # mod = pycotools.model.Model(f)
     # pl = pycotools.tasks.ProfileLikelihood(
     #     mod, index=[0, 1], run='parallel',
