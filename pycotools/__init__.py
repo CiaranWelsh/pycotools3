@@ -4,9 +4,7 @@ from . import errors
 import os
 from . import misc
 from . import model
-from . import models
 
-import logging
 import logging.config
 
 global LOG_FILENAME

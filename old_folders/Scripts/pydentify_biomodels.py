@@ -180,7 +180,7 @@ if __name__=='__main__':
     
     cps_files=xml2cps(F.model_downloads_pickle,F.cps_files_pickle)
         
-    print pydentify_biomodels(F.cps_files_pickle)
+    print(pydentify_biomodels(F.cps_files_pickle))
     
     
 

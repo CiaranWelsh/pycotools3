@@ -56,10 +56,10 @@ def runHJ(copasi_file,experimental_data,parameters,report_name):
     
     Need to instantiate ParameterEstimation class before inserting parameters
     '''
-    if 'RSS' in parameters.keys():
+    if 'RSS' in list(parameters.keys()):
         del parameters['RSS']
     for i in parameters:
-        print i,':\t',parameters[i]
+        print(i,':\t',parameters[i])
     PyCoTools.pycopi.InsertParameters(copasi_file,parameter_dict=parameters)
     
     PE=PyCoTools.pycopi.ParameterEstimation(copasi_file,experimental_data,
@@ -76,9 +76,9 @@ def runHJ(copasi_file,experimental_data,parameters,report_name):
     PE.set_up()
     ## run via scan task because this gives only best values in function
     ## evaluations, rather than the periodic function evaluations as well
-    print '\n\n'
-    print report_name
-    print '\n'
+    print('\n\n')
+    print(report_name)
+    print('\n')
     PyCoTools.pycopi.Scan(copasi_file,scan_type='repeat',
                           number_of_steps=1,
                           report_name=report,
@@ -100,11 +100,11 @@ if __name__=='__main__':
     if args.p>1 or args.p<0:
         raise Exception('args.p should be between 0 and 1')
     for i in range(int(data.shape[0]*args.p)):
-        print 'running index {} with starting RSS of {}'.format(i,data.iloc[i]['RSS'])
+        print('running index {} with starting RSS of {}'.format(i,data.iloc[i]['RSS']))
         if os.path.isdir(args.o)!=True:
             os.mkdir(args.o)
         report=os.path.join(args.o,'{}.txt'.format(i))
-        print runHJ(args.model,args.experimental_data,data.iloc[i].to_dict(),report)
+        print(runHJ(args.model,args.experimental_data,data.iloc[i].to_dict(),report))
         
 
 

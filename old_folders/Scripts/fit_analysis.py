@@ -47,7 +47,7 @@ parser.add_argument('-tol','-tolerance',help='tolerance parameter',type=float,de
 args=parser.parse_args()
 #===============================================================================
 PD=P.PEAnalysis.ParsePEData(args.path)
-print 'Number of PE runs: {}'.format(PD.data.shape[0])
+print('Number of PE runs: {}'.format(PD.data.shape[0]))
 
 if args.truncate_model==None:
     args.truncate_model='tolerance'
@@ -80,7 +80,7 @@ for i in['OptimizationPerformance','Histograms','Scatters','Boxplots','HexMapRSS
     l.append(os.path.join(args.o,i))
 
 
-print args
+print(args)
 P.PEAnalysis.EvaluateOptimizationPerformance(args.path,
                                              savefig='true',
                                              log10=args.log10,
@@ -146,7 +146,7 @@ P.PEAnalysis.plotHexMap(args.path,
 
 
 for i in l:
-    print i
+    print(i)
 
 
 
