@@ -22,16 +22,9 @@
 
 """
 
-import site
-# site.addsitedir('C:\Users\Ciaran\Documents\pycotools')
-site.addsitedir('/home/b3053674/Documents/pycotools')
-
 import pycotools
-from pycotools.Tests import _test_base
-import os, glob
-import pandas
+from Tests import _test_base
 import unittest
-
 
 
 class TestGlobalQuantities(_test_base._BaseTest):

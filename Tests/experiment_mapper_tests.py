@@ -25,20 +25,11 @@ Date:
 '''
 
 
-import site
-# site.addsitedir(r'C:\Users\Ciaran\Documents\pycotools')
-site.addsitedir(r'/home/b3053674/Documents/pycotools')
-
 import pycotools
-from pycotools.Tests import test_models
 import unittest
-import glob
 import os
-import shutil
 import pandas
-from pycotools.Tests import _test_base
-import re
-from lxml import etree
+from Tests import _test_base
 
 class ExperimentMapperTests(_test_base._BaseTest):
     def setUp(self):

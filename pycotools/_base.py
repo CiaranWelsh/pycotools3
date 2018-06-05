@@ -26,15 +26,9 @@ Date:
 Miscellaneous bunch of useful classes and functions
 """
 
-from . import tasks
-import os
 import pandas
-from lxml import etree
-from . import errors
 import logging
-from contextlib import contextmanager
 from copy import deepcopy
-from .mixin import Mixin, mixin
 LOG = logging.getLogger(__name__)
 
 class _Base(object):

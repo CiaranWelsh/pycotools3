@@ -22,18 +22,15 @@
 Module that tests the operations of the _Base base test
 
 """
-import site
-site.addsitedir('/home/b3053674/Documents/pycotools')
 import pandas
 import pycotools
-from pycotools.Tests import _test_base
+from Tests import _test_base
 import unittest
 import os
-import pickle
 import numpy
-import shutil
 import glob
 import time
+
 
 class VizTests(_test_base._BaseTest):
     def setUp(self):

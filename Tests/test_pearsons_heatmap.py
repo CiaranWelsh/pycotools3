@@ -25,17 +25,12 @@ Date:
  Object:
 
 """
-import site
-site.addsitedir('/home/b3053674/Documents/pycotools')
 from pycotools import model, viz, tasks, misc
-from pycotools.Tests import test_models
+from Tests import test_models
 import unittest
-import glob
 import os
-import shutil
-import pandas
 
-from pycotools.Tests import _test_base
+from Tests import _test_base
 
 
 class PearsonsHeatMapTests(unittest.TestCase):

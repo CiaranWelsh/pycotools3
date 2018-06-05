@@ -22,19 +22,9 @@
 Module that tests the operations of the _Base base test
 
 """
-import site
-site.addsitedir('/home/b3053674/Documents/pycotools')
 from pycotools import tasks, model, utils, viz
-import pandas
 import unittest
 import os
-import pickle
-import numpy
-import shutil
-import glob
-import time
-
-
 
 
 class TestTruncateData(unittest.TestCase):

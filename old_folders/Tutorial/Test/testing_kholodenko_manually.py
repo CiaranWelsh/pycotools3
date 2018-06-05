@@ -59,7 +59,7 @@ pe_dir = '/home/b3053674/Documents/PyCoTools/PyCoTools/PyCoToolsTutorial/Multipl
 #PE.setup()
 data = PyCoTools.pydentify.ParsePLData(kholodenko_model, pl_dire, parameter_path=pe_dir,
                                        index=[0,1]).data
-keys = data.keys()
+keys = list(data.keys())
 #print keys
 #for i,k in enumerate(keys):
 #    print k

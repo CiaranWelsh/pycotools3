@@ -27,19 +27,9 @@ Date:
 
 import pickle
 import site
-site.addsitedir('/home/b3053674/Documents/pycotools')
-site.addsitedir('C:\\Users\Ciaran\Documents\pycotools')
 from pycotools import tasks, viz, misc, model, utils
-from pycotools.retrying import retry
-from pycotools.Tests import test_models
 import unittest
-import glob
 import os
-import shutil
-import pandas
-from pycotools.Tests import _test_base
-import time
-
 
 
 

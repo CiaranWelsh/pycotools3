@@ -24,11 +24,8 @@
 
 import pycotools
 
-from pycotools.Tests import _test_base
-import os, glob
-import pandas
+from Tests import _test_base
 import unittest
-
 
 
 class TestMetabolites(_test_base._BaseTest):

@@ -25,21 +25,13 @@ Date:
  Object:
  
 '''
-import site
-site.addsitedir('/home/b3053674/Documents/pycotools')
 import pycotools
-from pycotools.Tests import test_models
 import unittest
-import glob
 import os
-import shutil 
 import pandas
-
-from pycotools.Tests import _test_base
-
+from Tests import _test_base
 
 ##TODO Test that local_parameters, metabolites and global quantity argument work
-
 
 def parse_timecourse(self):
     """

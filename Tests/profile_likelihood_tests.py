@@ -23,18 +23,13 @@ Module that tests the operations of the _Base base test
 
 """
 
-import pandas
 import pycotools
-from pycotools.Tests import _test_base
+from Tests import _test_base
 import unittest
 import os
-import pickle
-import numpy
-import shutil
 import glob
 
-
-
+## todo update profile likelihood test model
 class ProfileLikelihoodTests(_test_base._BaseTest):
     def setUp(self):
         super(ProfileLikelihoodTests, self).setUp()
@@ -72,7 +67,7 @@ class ProfileLikelihoodTests(_test_base._BaseTest):
         time.sleep(5)
         self.PL = pycotools.tasks.ProfileLikelihood(self.model, parameter_path=self.MPE.results_directory,
                                      method='hooke_jeeves', iteration_limit=1,
-                                     log10=True, run_mode=False, index=[0],
+                                     log10=True, run=False, index=[0],
                                      output_in_subtask=False)  # , parameter_path=param)
         # self.MPE.run()
 
@@ -88,7 +83,7 @@ class ProfileLikelihoodTests(_test_base._BaseTest):
         time.sleep(1)
         PL = pycotools.tasks.ProfileLikelihood(self.model, parameter_path=self.MPE.results_directory,
                                      method='hooke_jeeves', iteration_limit=1,
-                                     log10=True, run_mode=False, index=[0],
+                                     log10=True, run=False, index=[0],
                                      output_in_subtask=False)  # , parameter_path=param)
         # self.MPE.run()
         boolean = True
@@ -116,7 +111,7 @@ class ProfileLikelihoodTests(_test_base._BaseTest):
         time.sleep(2)
         PL = pycotools.tasks.ProfileLikelihood(self.model, parameter_path=self.MPE.results_directory,
                                                method='particle_swarm', iteration_limit=1,
-                                               log10=True, run_mode=False, index=[0],
+                                               log10=True, run=False, index=[0],
                                                output_in_subtask=False)  # , parameter_path=param)
 
         boolean = False
@@ -143,7 +138,7 @@ class ProfileLikelihoodTests(_test_base._BaseTest):
         time.sleep(2)
         PL = pycotools.tasks.ProfileLikelihood(self.model, parameter_path=self.MPE.results_directory,
                                                method='hooke_jeeves', iteration_limit=1,
-                                               log10=True, run_mode=False, index=[0],
+                                               log10=True, run=False, index=[0],
                                                output_in_subtask=False)  # , parameter_path=param)
         PL.model.save()
         boolean = False
@@ -168,7 +163,7 @@ class ProfileLikelihoodTests(_test_base._BaseTest):
         # self.model.open()
         PL = pycotools.tasks.ProfileLikelihood(self.model, parameter_path=self.MPE.results_directory,
                                                method='hooke_jeeves', iteration_limit=1,
-                                               log10=True, run_mode=False, index=[0])
+                                               log10=True, run=False, index=[0])
 
         index_dir = os.path.join(PL.results_directory, '0')
         self.assertTrue(os.path.isdir(index_dir))
@@ -189,7 +184,7 @@ class ProfileLikelihoodTests(_test_base._BaseTest):
         time.sleep(2)
         PL = pycotools.tasks.ProfileLikelihood(self.model, parameter_path=self.MPE.results_directory,
                                                method='hooke_jeeves', iteration_limit=1,
-                                               log10=True, run_mode=False, index=[0])
+                                               log10=True, run=False, index=[0])
 
         query = '//*[@name="File Name"]'
         for i in PL.model.xml.xpath(query):
@@ -209,7 +204,7 @@ class ProfileLikelihoodTests(_test_base._BaseTest):
         # self.model.open()
         PL = pycotools.tasks.ProfileLikelihood(self.model, parameter_path=self.MPE.results_directory,
                                                method='hooke_jeeves', iteration_limit=1,
-                                               log10=True, run_mode=False, index=[0])
+                                               log10=True, run=False, index=[0])
         index_dir = os.path.join(PL.results_directory, '0')
         model_paths = glob.glob(os.path.join(index_dir, '*.cps'))
         mods = {i: pycotools.model.Model(i) for i in model_paths}

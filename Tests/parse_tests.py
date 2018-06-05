@@ -22,13 +22,9 @@
 Module that tests the operations of the _Base base test
 
 """
-import site
-site.addsitedir('/home/b3053674/Documents/pycotools')
 from pycotools import tasks, model, utils, viz
-import os, glob
+import os
 import unittest
-
-
 
 
 class TestParse(unittest.TestCase):

@@ -24,17 +24,9 @@ Module that tests the operations of the _Base base test
 """
 import site
 
-site.addsitedir('/home/b3053674/Documents/pycotools')
-import pandas
 from pycotools import model, tasks, misc, viz
-from pycotools.Tests import _test_base
 import unittest
 import os
-import pickle
-import numpy
-import shutil
-import glob
-import time
 from shutil import rmtree
 
 class BuildAntimonyTestsCreateFromNew(unittest.TestCase):
@@ -117,13 +109,7 @@ class BuildAntimonyTestsCreateFromNew(unittest.TestCase):
 
     def tearDown(self):
         rmtree(self.dire)
-        # path_list = [
-        #     self.copasi_file1,
-        #     self.copasi_file2,
-        #     self.copasi_file3,
-        #     self.TC.report_name
-        # ]
-        # [os.remove(i) for i in path_list]
+
 
 
 class BuildAntimonyTestsWithoutRemovalBetweenTests(unittest.TestCase):

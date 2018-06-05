@@ -1,11 +1,9 @@
-import site
-site.addsitedir('/home/b3053674/Documents/pycotools')
 from pycotools import utils, tasks, viz, model
 import os
 from multiprocessing import Process
 import unittest
 
-
+raise NotImplemented
 
 class LatexTests(unittest.TestCase):
     def setUp(self):

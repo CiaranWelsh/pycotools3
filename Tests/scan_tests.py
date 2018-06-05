@@ -25,12 +25,8 @@ Date:
 """
 import pycotools
 import unittest
-import glob
 import os
-import shutil
-import pandas
-from pycotools.Tests import _test_base
-import re
+from Tests import _test_base
 
 
 class ScanTests(_test_base._BaseTest):

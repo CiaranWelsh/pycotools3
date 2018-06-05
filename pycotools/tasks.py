@@ -39,7 +39,7 @@ import os
 import subprocess
 import re
 import pickle
-from . import viz, errors, misc, _base, model
+import viz, errors, misc, _base, model
 import matplotlib
 import matplotlib.pyplot as plt
 from textwrap import wrap

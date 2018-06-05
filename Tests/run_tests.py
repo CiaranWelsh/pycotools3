@@ -22,19 +22,11 @@ Author:
 Date:
     19-08-2017
  '''
-import site
-site.addsitedir('/home/b3053674/Documents/pycotools')
-# site.addsitedir('C:\Users\Ciaran\Documents\pycotools')
 
 import pycotools
-from pycotools.Tests import test_models
 import unittest
-import glob
 import os
-import shutil
-import pandas
-from pycotools.Tests import _test_base
-from lxml import etree
+from Tests import _test_base
 
 
 class RunTests(_test_base._BaseTest):

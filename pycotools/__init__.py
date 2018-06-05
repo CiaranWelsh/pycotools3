@@ -1,9 +1,9 @@
-from . import viz
-from . import tasks
-from . import errors
+import viz
+import tasks
+import errors
 import os
-from . import misc
-from . import model
+import misc
+import model
 
 import logging.config
 

@@ -5,7 +5,7 @@ import os
 from multiprocessing import Process
 import unittest
 
-
+raise NotImplementedError
 
 class LatexTests(unittest.TestCase):
     def setUp(self):
