@@ -210,7 +210,7 @@ class BuildAntimony(object):
             os.remove(self.sbml_file)
 
         if isinstance(exc_type, type):
-            raise exc_type(exc_val).with_traceback(exc_tb)
+            raise exc_type(exc_val)#.with_traceback(exc_tb)
 
     def load(self, antimony_str):
         """

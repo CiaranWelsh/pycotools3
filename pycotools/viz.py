@@ -3378,6 +3378,8 @@ class ModelSelection(object):
             'ax': None,
             'show': False,
             'order': None,
+            'figsize': (8, 6),
+            'violin_kwargs': {},
         }
 
         for i in list(kwargs.keys()):
@@ -3417,7 +3419,7 @@ class ModelSelection(object):
 
         # self.boxplot()
         # self.histogram()
-        self.violin()
+        self.fig = self.violin()
         self.to_csv()
 
 
@@ -3616,9 +3618,10 @@ class ModelSelection(object):
                 if mod == j:
                     new_names.append(self.model_labels[j])
 
+        figs = []
         data['Model'] = new_names
         for metric in data['Metric'].unique():
-            fig = plt.figure()
+            fig = plt.figure(figsize=self.figsize)
             seaborn.violinplot(data=data[data['Metric'] == metric],
                                x='Model',
                                y='Score',
@@ -3626,7 +3629,9 @@ class ModelSelection(object):
                                palette=self.palette,
                                saturation=self.saturation,
                                ax=self.ax,
-                               order=self.order)
+                               order=self.order,
+                               **self.violin_kwargs
+            )
             plt.xticks(rotation='vertical')
             if self.title:
                 plt.title('{} Scores'.format(metric))
@@ -3642,6 +3647,9 @@ class ModelSelection(object):
                 fname = os.path.join(save_dir, 'ViolinPlot_{}.{}'.format(metric, self.ext))
                 plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
                 LOG.info('Violin plot saved to : "{}"'.format(fname))
+
+            figs.append(fig)
+        return figs
 
     def chi2_lookup_table(self, alpha):
         '''

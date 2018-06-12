@@ -11,7 +11,7 @@ It is not used in pycotools itself.
 
 """
 import pycotools
-from . import test_models#, test_data
+import test_models#, test_data
 import unittest
 import glob
 import os

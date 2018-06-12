@@ -23,10 +23,12 @@ Module that tests the operations of the _Base base test
 
 """
 
-import pycotools
-from Tests import _test_base
-
 import os, glob
+# import site
+# site.addsitedir(os.path.dirname(os.path.dirname(__file__)))
+import _test_base
+import pycotools
+
 import pandas
 import unittest
 from lxml import etree
@@ -50,7 +52,7 @@ class ModelLevelAttributeTests(_test_base._BaseTest):
         self.assertEqual(self.model.volume_unit, 'ml')
 
     def test_quantity(self):
-        self.assertEqual(self.model.area_unit, 'm\xb2')
+        self.assertEqual(unicode(self.model.area_unit), u'm\xb2')
 
     def test_length(self):
         self.assertEqual(self.model.length_unit, 'm')
@@ -1120,6 +1122,69 @@ class InsertParameterTests(_test_base._BaseTest):
         self.model = pycotools.model.InsertParameters(self.model, df=df, inplace=True).model
         conc = [i.concentration for i in self.model.metabolites if i.name == 'B']
         self.assertAlmostEqual(float(conc[0]), float(35))
+
+
+class InsertParameterTestsWithAssignments(unittest.TestCase):
+    """
+    May have found a bug when inserting parameters that are global
+    variables and have assignments. This test was built to ensure
+    everything is working correctly in this situation
+    """
+
+    def setUp(self):
+        self.ant_str = """
+        
+        model TestyModel()
+           R1: A => B ; k1*A 
+           R2: B => C ; k2*B
+           R3: C + A => D ; k3*C*A
+           R4: D => ; k4*D
+           
+           k1 = 0.5
+           k2 := k1
+           k3 = 0.1
+           k4 = 0.3
+           
+           A = 300
+           B = 0
+           C = 0
+           D = 0
+           
+        end
+        """
+
+        self.cps_file = os.path.join(os.path.dirname(__file__), 'testy_model.cps')
+        with pycotools.model.BuildAntimony(self.cps_file) as loader:
+            self.mod = loader.load(self.ant_str)
+
+
+    def test_model_builds(self):
+        """
+        ensure antimony builds
+        :return:
+        """
+
+        self.assertTrue(isinstance(self.mod, pycotools.model.Model))
+
+    def test_k2_is_assignment(self):
+        ##
+        k2 = self.mod.get('global_quantity', 'k2')
+        self.assertEqual(k2.simulation_type, 'assignment')
+
+    def test_insert_parameter_works(self):
+        d = {'k3': 50, 'k1': 60}
+        self.mod.insert_parameters(parameter_dict=d, inplace=True)
+        self.assertEqual(self.mod.get('global_quantity', 'k1').initial_value, str(60.0))
+
+    def test_insert_parameter_with_assignment(self):
+        d = {'k2': 50, 'k1': 60}
+        self.mod.insert_parameters(parameter_dict=d, inplace=True)
+        self.mod.open()
+        # self.assertEqual(self.mod.get('global_quantity', 'k1').initial_value, str(60.0))
+
+
+
+
 
 
 class NewModelTests(unittest.TestCase):
