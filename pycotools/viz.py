@@ -1337,8 +1337,6 @@ class PlotTimeCourseEnsemble(object):
         self._do_checks()
         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
 
-
-
         self.data = self.parse(self.cls, log10=False, copasi_file=self.copasi_file)
 
         if self.copasi_file is not None:
@@ -1354,14 +1352,15 @@ class PlotTimeCourseEnsemble(object):
 
         self.experimental_data = self.parse_experimental_files
         self.exp_times = self.get_experiment_times
-        # print self.simulate_ensemble
-        self.ensemble_data = self.simulate_ensemble
-        self.ensemble_data.index = self.ensemble_data.index.rename(['Index', 'Time'])
 
-        if self.data_filename != None:
-            self.ensemble_data.to_csv(self.data_filename)
-            LOG.info('Data written to {}'.format(self.data_filename))
-        self.plot()
+        self.independent_vars_dct = (self.collect_independent_vars())
+        self.ensemble_data = self.simulate_ensemble()
+        self.ensemble_data.index = self.ensemble_data.index.rename(['Index', 'Time'])
+        #
+        # if self.data_filename != None:
+        #     self.ensemble_data.to_csv(self.data_filename)
+        #     LOG.info('Data written to {}'.format(self.data_filename))
+        # self.plot()
 
     def create_directory(self):
         """
@@ -1471,7 +1470,25 @@ class PlotTimeCourseEnsemble(object):
             times[i]['intervals'] = int(d[i].shape[0]) - 1
         return times
 
-    @cached_property
+    def collect_independent_vars(self):
+        """
+        If experiment file has independant vars (_indep) defined, go and get them
+        :return:
+        """
+        d = {}
+        for i in self.experimental_data:
+            d[i] = {}
+            for j in list(self.experimental_data[i].keys()):
+                if j[-6:] == '_indep':
+
+                    val = list(set(self.experimental_data[i][j]))
+                    if len(val) is not 1:
+                        raise ValueError('Independant values should be unique in data file. '
+                                         'Found "{}" distinct numbers'.format(len(val)))
+                    d[i][j] = val[0]
+        return d
+
+
     def simulate_ensemble(self):
         """
 
