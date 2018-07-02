@@ -26,7 +26,7 @@
 '''
 import time
 import threading
-import queue
+import Queue as queue
 import psutil
 import shutil
 import numpy
@@ -55,14 +55,12 @@ from .mixin import Mixin, mixin
 import multiprocessing
 
 ## TODO use generators when iterating over a function with another function. i.e. plotting
-
+## TODO: create a base class called Task instead of all of these mixin functions.
 
 LOG = logging.getLogger(__name__)
 sns.set_context(context='poster',
                 font_scale=3)
 
-
-## TODO change pycopi to tasks
 
 
 class GetModelVariableFromStringMixin(Mixin):
@@ -4931,6 +4929,52 @@ class ProfileLikelihood(object):
                 sge_job_filename = "{}_{}".format(param, m)
                 sge_job_filename = re.sub('[().]', '', sge_job_filename)
                 Run(self.model_dct[m][param], task='scan', mode=self.run, sge_job_filename=sge_job_filename + '.sh')
+
+@mixin(model.GetModelComponentFromStringMixin)
+@mixin(UpdatePropertiesMixin)
+@mixin(Bool2Numeric)
+@mixin(model.ReadModelMixin)
+@mixin(CheckIntegrityMixin)
+class Sensitivities(object):
+
+
+
+
+    def __init__(self, model, **kwargs):
+        self.model = self.read_model(model)
+        default_report_name = os.path.join(os.path.dirname(self.model.copasi_file), 'sensitivities.txt')
+
+        default_properties = {
+                              'update_model': False,
+                              # report variables
+                              'report_name': default_report_name,
+                              'append': False,
+                              'confirm_overwrite': False,
+                              'scheduled': True,
+                              'run': True,
+                              'correct_headers': True,
+                              }
+
+        default_properties.update(kwargs)
+        default_properties = self.convert_bool_to_numeric(default_properties)
+        self.check_integrity(list(default_properties.keys()), list(kwargs.keys()))
+        self.update_properties(default_properties)
+        self._do_checks()
+
+
+    def _do_checks(self):
+        pass
+
+
+
+
+
+
+
+
+
+
+
 
 
 if __name__ == '__main__':
