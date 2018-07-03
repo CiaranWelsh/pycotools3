@@ -105,11 +105,10 @@ class BuildAntimonyTestsCreateFromNew(unittest.TestCase):
                 )
 
         except Exception as E:
-            self.assertEqual(E.message, exception_message)
+            self.assertEqual(str(E.message), str(exception_message))
 
-    def tearDown(self):
-        rmtree(self.dire)
-
+    # def tearDown(self):
+    #     rmtree(self.dire)
 
 
 class BuildAntimonyTestsWithoutRemovalBetweenTests(unittest.TestCase):
@@ -151,8 +150,8 @@ class BuildAntimonyTestsWithoutRemovalBetweenTests(unittest.TestCase):
 
         assert os.path.isfile(self.copasi_file1)
 
-    def tearDown(self):
-        rmtree(self.dire)
+    # def tearDown(self):
+    #     rmtree(self.dire)
 
     def test_build_model_to_file_path_which_already_exists(self):
         with model.BuildAntimony(self.copasi_file1) as loader:
@@ -221,8 +220,8 @@ class TestModelComponentsWithAntimonyDerivedModels(unittest.TestCase):
 
         assert os.path.isfile(self.copasi_file1)
 
-    def tearDown(self):
-        rmtree(self.dire)
+    # def tearDown(self):
+    #     rmtree(self.dire)
 
     def test_metabolites(self):
         self.assertListEqual(['A', 'B'], sorted([i.name for i in self.mod.metabolites]))
