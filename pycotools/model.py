@@ -4415,6 +4415,10 @@ class InsertParameters(object):
             return self.model
         else:
             for i in global_quantities:
+                if i.simulation_type == 'assignment':
+                    LOG.info('Global quantity "{}" skipped because it is set to assignment'.format(i.name))
+                    continue
+
                 self.model = self.model.set('global_quantity',
                                             i.name,
                                             str(self.parameters[i.name][self.index]),

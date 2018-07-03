@@ -1179,7 +1179,12 @@ class InsertParameterTestsWithAssignments(unittest.TestCase):
     def test_insert_parameter_with_assignment(self):
         d = {'k2': 50, 'k1': 60}
         self.mod.insert_parameters(parameter_dict=d, inplace=True)
-        self.mod.open()
+        '''
+        Test not finished because I do not yet have mechanism for 
+        accessing global variable expressions. 
+        ## todo build expressions into global variables
+        '''
+        # self.mod.open()
         # self.assertEqual(self.mod.get('global_quantity', 'k1').initial_value, str(60.0))
 
 
