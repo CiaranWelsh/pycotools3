@@ -91,7 +91,7 @@ class PearsonsHeatMapTests(unittest.TestCase):
 
 
     def test(self):
-        P = viz.PearsonsHeatMap(self.fit1)
+        P = viz.PearsonsCorrelation(self.fit1)
         print(P.pearsons)
         print(P.p_val)
 

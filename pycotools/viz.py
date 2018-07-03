@@ -145,15 +145,6 @@ from itertools import combinations, combinations_with_replacement, permutations
 LOG=logging.getLogger(__name__)
 
 
-
-class SeabornContextMixin(Mixin):
-    def context(context='poster', font_scale=3, rc=None):
-        seaborn.set_context(
-            context=context, font_scale=font_scale, rc=rc
-        )
-
-
-
 class PlotKwargs(object):
     def plot_kwargs(self):
         plot_kwargs = {
@@ -165,20 +156,76 @@ class PlotKwargs(object):
         }
         return plot_kwargs
 
-class SaveFigMixin(Mixin):
-    """
 
-
+class _Viz(object):
     """
+    base class for viz
+    """
+    def context(context='poster', font_scale=3, rc=None):
+        seaborn.set_context(
+            context=context, font_scale=font_scale, rc=rc
+        )
+
     @staticmethod
     def save_figure(directory, filename, dpi=300):
         if not os.path.isdir(directory):
             os.mkdir(directory)
         plt.savefig(filename, dpi=dpi, bbox_inches='tight')
 
+    def update_properties(self, kwargs):
+        """
+        method for updating properties from kwargs
 
-@mixin(tasks.UpdatePropertiesMixin)
-class TruncateData(object):
+        :param kwargs: dict of options for subclass
+        :return: void
+        """
+        for k in kwargs:
+            try:
+                getattr(self, k)
+                setattr(self, k, kwargs[k])
+            except AttributeError:
+                setattr(self, k, kwargs[k])
+
+    @staticmethod
+    def parse(cls, log10, copasi_file=None):
+        """
+        Mixin method interface to parse class
+        :return:
+        """
+        if type(cls) == Parse:
+
+            if log10:
+                return numpy.log10(cls.data)
+            else:
+                return cls.data
+        else:
+            return Parse(cls, log10=log10, copasi_file=copasi_file).data
+
+
+    @staticmethod
+    def truncate(data, mode, theta):
+        """
+        mixin method interface to truncate data
+        """
+        df = TruncateData(data,
+                            mode=mode,
+                            theta=theta).data
+        return df
+
+    @staticmethod
+    def create_directory(results_directory):
+        """
+        create directory for results and switch to it
+        :param results_directory:
+        :return:
+        """
+        if not os.path.isdir(results_directory):
+            os.makedirs(results_directory)
+        os.chdir(results_directory)
+        return results_directory
+
+
+class TruncateData(_Viz):
     """
     Parameter estimation data in systems biology usually have runs which fall
     into a local minima. This class removes these runs from further
@@ -270,47 +317,6 @@ class TruncateData(object):
             return self.top_theta_percent()
         elif self.mode == 'ranks':
             return self.ranks()
-
-class ParseMixin(Mixin):
-    @staticmethod
-    def parse(cls, log10, copasi_file=None):
-        """
-        Mixin method interface to parse class
-        :return:
-        """
-        if type(cls) == Parse:
-
-            if log10:
-                return numpy.log10(cls.data)
-            else:
-                return cls.data
-        else:
-            return Parse(cls, log10=log10, copasi_file=copasi_file).data
-
-
-class TruncateDataMixin(Mixin):
-    @staticmethod
-    def truncate(data, mode, theta):
-        """
-        mixin method interface to truncate data
-        """
-        df = TruncateData(data,
-                            mode=mode,
-                            theta=theta).data
-        return df
-
-class CreateResultsDirectoryMixin(Mixin):
-    @staticmethod
-    def create_directory(results_directory):
-        """
-        create directory for results and switch to it
-        :param results_directory:
-        :return:
-        """
-        if not os.path.isdir(results_directory):
-            os.makedirs(results_directory)
-        os.chdir(results_directory)
-        return results_directory
 
 class ChiSquaredStatistics(object):
     def __init__(self, rss, dof, num_data_points, alpha,
@@ -998,11 +1004,7 @@ class Parse(object):
         return parse_data(results, fit_item_order)
 
 
-@mixin(tasks.UpdatePropertiesMixin)
-@mixin(SaveFigMixin)
-@mixin(ParseMixin)
-@mixin(CreateResultsDirectoryMixin)
-class PlotTimeCourse(PlotKwargs):
+class PlotTimeCourse(_Viz):
     """
     Plot time course data
 
@@ -1205,11 +1207,7 @@ class PlotTimeCourse(PlotKwargs):
         return figures
 
 
-@mixin(tasks.UpdatePropertiesMixin)
-@mixin(ParseMixin)
-@mixin(TruncateDataMixin)
-@mixin(CreateResultsDirectoryMixin)
-class PlotTimeCourseEnsemble(object):
+class PlotTimeCourseEnsemble(_Viz):
     """
     Plot a time course ensemble from a model and
     parameter ensemble. If `cls` argument is a
@@ -1612,11 +1610,8 @@ class PlotTimeCourseEnsemble(object):
                 if self.show:
                     plt.show()
 
-@mixin(tasks.UpdatePropertiesMixin)
-@mixin(SaveFigMixin)
-@mixin(ParseMixin)
-@mixin(CreateResultsDirectoryMixin)
-class PlotScan(object):
+
+class PlotScan(_Viz):
     """
     TODO: Create visualization facilities for parameter scans.
     """
@@ -1667,11 +1662,7 @@ class PlotScan(object):
             self.results_directory
         )
 
-@mixin(tasks.UpdatePropertiesMixin)
-@mixin(SaveFigMixin)
-@mixin(ParseMixin)
-@mixin(CreateResultsDirectoryMixin)
-class PlotParameterEstimation(PlotKwargs):
+class PlotParameterEstimation(_Viz, PlotKwargs):
     """
     Visualize parameter estimation runs against a single
     parameter estimation. Similar to PlotTimeCourseEnsemble
@@ -1886,12 +1877,7 @@ class PlotParameterEstimation(PlotKwargs):
             plt.show()
 
 
-@mixin(tasks.UpdatePropertiesMixin)
-@mixin(SaveFigMixin)
-@mixin(ParseMixin)
-@mixin(CreateResultsDirectoryMixin)
-@mixin(TruncateDataMixin)
-class Boxplots(PlotKwargs):
+class Boxplots(_Viz, PlotKwargs):
     """
     Plot a boxplot for multi parameter estimation data.
 
@@ -2016,12 +2002,7 @@ class Boxplots(PlotKwargs):
         return l
 
 
-@mixin(tasks.UpdatePropertiesMixin)
-@mixin(ParseMixin)
-@mixin(TruncateDataMixin)
-@mixin(CreateResultsDirectoryMixin)
-@mixin(SeabornContextMixin)
-class LikelihoodRanks(PlotKwargs):
+class LikelihoodRanks(_Viz, PlotKwargs):
     """
 
     Plot the ordered residual sum of squares (RSS) objective
@@ -2157,11 +2138,7 @@ class LikelihoodRanks(PlotKwargs):
             plt.show()
 
 
-@mixin(tasks.UpdatePropertiesMixin)
-@mixin(ParseMixin)
-@mixin(TruncateDataMixin)
-@mixin(CreateResultsDirectoryMixin)
-class Pca(PlotKwargs):
+class Pca(_Viz, PlotKwargs):
     """
     Use the :py:class:`PCA` function to conduct
     a principle component analysis on the parameter
@@ -2343,11 +2320,7 @@ class Pca(PlotKwargs):
         if self.show:
             plt.show()
 
-@mixin(tasks.UpdatePropertiesMixin)
-@mixin(ParseMixin)
-@mixin(TruncateDataMixin)
-@mixin(CreateResultsDirectoryMixin)
-class Histograms(PlotKwargs):
+class Histograms(_Viz, PlotKwargs):
     """
     Plot a Histograms for multi parameter estimation data.
 
@@ -2502,11 +2475,7 @@ class Histograms(PlotKwargs):
 
 
 
-@mixin(tasks.UpdatePropertiesMixin)
-@mixin(ParseMixin)
-@mixin(TruncateDataMixin)
-@mixin(CreateResultsDirectoryMixin)
-class Scatters(PlotKwargs):
+class Scatters(_Viz, PlotKwargs):
     """
     Plot scatter graphs. When 'x' and 'y' are lists, 2 way
     combinations are automatically plotted and organized into
@@ -2656,11 +2625,7 @@ class Scatters(PlotKwargs):
         if self.show:
             plt.show()
 
-@mixin(tasks.UpdatePropertiesMixin)
-@mixin(ParseMixin)
-@mixin(TruncateDataMixin)
-@mixin(CreateResultsDirectoryMixin)
-class LinearRegression(PlotKwargs):
+class LinearRegression(_Viz, PlotKwargs):
     """
     Perform multiple linear regression using
     :py:module:`sklearn.linear_model`.
@@ -2847,11 +2812,7 @@ class LinearRegression(PlotKwargs):
             plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
 
 
-@mixin(tasks.UpdatePropertiesMixin)
-@mixin(ParseMixin)
-@mixin(TruncateDataMixin)
-@mixin(CreateResultsDirectoryMixin)
-class ModelSelectionOld(object):
+class ModelSelectionOld(_Viz):
     """
     Calculate model selection criteria AIC (corrected) and
     BIC for a selection of models that have undergone fitting
@@ -3329,11 +3290,7 @@ class ModelSelectionOld(object):
             plt.savefig(filename,dpi=200,bbox_inches='tight')
 
 
-@mixin(tasks.UpdatePropertiesMixin)
-@mixin(ParseMixin)
-@mixin(TruncateDataMixin)
-@mixin(CreateResultsDirectoryMixin)
-class ModelSelection(object):
+class ModelSelection(_Viz):
     """
     Calculate model selection criteria AIC (corrected) and
     BIC for a selection of models that have undergone fitting
@@ -3729,11 +3686,7 @@ class ModelSelection(object):
         if filename!=None:
             plt.savefig(filename,dpi=200,bbox_inches='tight')
 
-@mixin(tasks.UpdatePropertiesMixin)
-@mixin(ParseMixin)
-@mixin(TruncateDataMixin)
-@mixin(CreateResultsDirectoryMixin)
-class PlotProfileLikelihood(object):
+class PlotProfileLikelihood(_Viz):
     """
 
     """
@@ -4205,11 +4158,7 @@ class PlotProfileLikelihood(object):
                     if self.show:
                         plt.show()
 
-@mixin(tasks.UpdatePropertiesMixin)
-@mixin(ParseMixin)
-@mixin(TruncateDataMixin)
-@mixin(CreateResultsDirectoryMixin)
-class PlotProfileLikelihood3d(object):
+class PlotProfileLikelihood3d(_Viz):
     """
 
     """
@@ -4635,11 +4584,7 @@ class PlotProfileLikelihood3d(object):
                         plt.show()
 
 
-@mixin(tasks.UpdatePropertiesMixin)
-@mixin(ParseMixin)
-@mixin(TruncateDataMixin)
-@mixin(CreateResultsDirectoryMixin)
-class PearsonsCorrelation(PlotKwargs):
+class PearsonsCorrelation(_Viz):
     """
 
     ========    =================================================

@@ -62,8 +62,10 @@ sns.set_context(context='poster',
                 font_scale=3)
 
 
-
-class GetModelVariableFromStringMixin(Mixin):
+class _Task(object):
+    """
+    base class for tasks
+    """
     @staticmethod
     def get_variable_from_string(m, v, glob=False):
         """
@@ -111,9 +113,6 @@ class GetModelVariableFromStringMixin(Mixin):
         assert isinstance(v, str) != True
         return v
 
-
-class UpdatePropertiesMixin(Mixin):
-
     def update_properties(self, kwargs):
         """
         method for updating properties from kwargs
@@ -128,21 +127,16 @@ class UpdatePropertiesMixin(Mixin):
             except AttributeError:
                 setattr(self, k, kwargs[k])
 
-
-class Bool2Numeric(Mixin):
-    """
-    CopasiML uses 1's and 0's for True or False in some
-    but not all places. When one of these options
-    is required by the user and is specified as bool,
-    this class converts them into 1's or 0's.
-
-    Use this method in early on in constructor for
-    all subclasses where this applies.
-    """
-
     @staticmethod
     def convert_bool_to_numeric(dct):
         """
+        CopasiML uses 1's and 0's for True or False in some
+        but not all places. When one of these options
+        is required by the user and is specified as bool,
+        this class converts them into 1's or 0's.
+
+        Use this method in early on in constructor for
+        all subclasses where this applies.
         :param:
             `dict`.  __dict__ or kwargs or options
 
@@ -182,8 +176,25 @@ class Bool2Numeric(Mixin):
                     raise Exception('{} is not True or False'.format(v))
         return dct
 
+    @staticmethod
+    def check_integrity(allowed, given):
+        """
+        Method to raise an error when a wrong
+        kwarg is passed to a subclass
+        :param allowed:
+            `list`. List of allowed kwargs
 
-class Bool2Str():
+        :param given: List of kwargs given by user or default
+
+        :return:
+            None
+        """
+        for key in given:
+            if key not in allowed:
+                raise errors.InputError('{} not in {}'.format(key, allowed))
+
+
+class Bool2Str(object):
     """
     copasiML expects strings and we pythoners
     want to use python booleans not strings
@@ -191,6 +202,10 @@ class Bool2Str():
     """
 
     def __init__(self, dct):
+        """
+
+        :param dct: dict[kwarg] = boolean
+        """
         self.dct = dct
         if isinstance(self.dct, dict) != True:
             raise errors.InputError('Input must be dict')
@@ -223,26 +238,7 @@ class Bool2Str():
         return self.dct
 
 
-class CheckIntegrityMixin(Mixin):
-    @staticmethod
-    def check_integrity(allowed, given):
-        """
-        Method to raise an error when a wrong
-        kwarg is passed to a subclass
-        :param allowed:
-            `list`. List of allowed kwargs
-
-        :param given: List of kwargs given by user or default
-
-        :return:
-            None
-        """
-        for key in given:
-            if key not in allowed:
-                raise errors.InputError('{} not in {}'.format(key, allowed))
-
-
-class CopasiMLParser(object):
+class CopasiMLParser(_Task):
     """
     Parse a copasi file into xml.etree.
 
@@ -284,11 +280,8 @@ class CopasiMLParser(object):
         root.write(copasi_filename)
 
 
-@mixin(UpdatePropertiesMixin)
-@mixin(Bool2Numeric)
 @mixin(model.ReadModelMixin)
-@mixin(CheckIntegrityMixin)
-class Run(object):
+class Run(_Task):
     """
     Execute a copasi model using CopasiSE. To
     be operational the environment variable CopasiSE
@@ -517,11 +510,8 @@ class Run(object):
 
 
 @mixin(model.GetModelComponentFromStringMixin)
-@mixin(UpdatePropertiesMixin)
 @mixin(model.ReadModelMixin)
-@mixin(CheckIntegrityMixin)
-@mixin(Bool2Numeric)
-class RunParallel(object):
+class RunParallel(_Task):
     """
 
 
@@ -635,12 +625,8 @@ class RunParallel(object):
 
 
 @mixin(model.GetModelComponentFromStringMixin)
-# @mixin(GetModelVariableFromStringMixin)
-@mixin(UpdatePropertiesMixin)
 @mixin(model.ReadModelMixin)
-@mixin(CheckIntegrityMixin)
-@mixin(Bool2Numeric)
-class Reports(object):
+class Reports(_Task):
     """
     Creates reports in copasi output specification section. Which report is
     controlled by the report_type key word. The following are valid types of
@@ -1091,12 +1077,8 @@ class Reports(object):
         return self.model
 
 
-@mixin(GetModelVariableFromStringMixin)
-@mixin(UpdatePropertiesMixin)
-@mixin(Bool2Numeric)
 @mixin(model.ReadModelMixin)
-@mixin(CheckIntegrityMixin)
-class TimeCourse(object):
+class TimeCourse(_Task):
     """
     ##todo implement arguments that get passed on to report
     as **report_kwargs
@@ -1678,12 +1660,8 @@ class TimeCourse(object):
         return key
 
 
-@mixin(GetModelVariableFromStringMixin)
-@mixin(UpdatePropertiesMixin)
-@mixin(Bool2Numeric)
 @mixin(model.ReadModelMixin)
-@mixin(CheckIntegrityMixin)
-class Scan(object):
+class Scan(_Task):
     """
     Interface to COPASI scan task
 
@@ -2096,11 +2074,8 @@ class Scan(object):
 
 
 @mixin(model.GetModelComponentFromStringMixin)
-@mixin(UpdatePropertiesMixin)
 @mixin(model.ReadModelMixin)
-@mixin(CheckIntegrityMixin)
-@mixin(Bool2Numeric)
-class ExperimentMapper(object):
+class ExperimentMapper(_Task):
     """
     Class for mapping variables from file to cps
 
@@ -2588,13 +2563,9 @@ class ExperimentMapper(object):
         return self.model
 
 
-@mixin(GetModelVariableFromStringMixin)
 @mixin(model.GetModelComponentFromStringMixin)
-@mixin(UpdatePropertiesMixin)
 @mixin(model.ReadModelMixin)
-@mixin(CheckIntegrityMixin)
-@mixin(Bool2Numeric)
-class ParameterEstimation(object):
+class ParameterEstimation(_Task):
     """
     Set up and run a parameter estimation in copasi.
 
@@ -3800,7 +3771,7 @@ class MultiParameterEstimation(ParameterEstimation):
     #     print self.model
 
 
-class ChaserParameterEstimations(object):
+class ChaserParameterEstimations(_Task):
     """
     Perform secondary hook and jeeves parameter estimations
     starting from the best values of a primary global estimator.
@@ -4080,11 +4051,8 @@ class ChaserParameterEstimations(object):
                 Run(mod, task='parameter_estimation', mode=self.run_mode)
 
 
-@mixin(UpdatePropertiesMixin)
-@mixin(Bool2Numeric)
 @mixin(model.ReadModelMixin)
-@mixin(CheckIntegrityMixin)
-class MultiModelFit(object):
+class MultiModelFit(_Task):
     """
     Coordinate a systematic multi model fitting parameter estimation and
     compare results using :py:class:`viz.ModelSelection`
@@ -4320,11 +4288,8 @@ class MultiModelFit(object):
 
 
 @mixin(model.GetModelComponentFromStringMixin)
-@mixin(UpdatePropertiesMixin)
-@mixin(Bool2Numeric)
 @mixin(model.ReadModelMixin)
-@mixin(CheckIntegrityMixin)
-class ProfileLikelihood(object):
+class ProfileLikelihood(_Task):
     """
 
 
@@ -4930,14 +4895,10 @@ class ProfileLikelihood(object):
                 sge_job_filename = re.sub('[().]', '', sge_job_filename)
                 Run(self.model_dct[m][param], task='scan', mode=self.run, sge_job_filename=sge_job_filename + '.sh')
 
+
 @mixin(model.GetModelComponentFromStringMixin)
-@mixin(UpdatePropertiesMixin)
-@mixin(Bool2Numeric)
 @mixin(model.ReadModelMixin)
-@mixin(CheckIntegrityMixin)
-class Sensitivities(object):
-
-
+class Sensitivities(_Task):
 
 
     def __init__(self, model, **kwargs):
