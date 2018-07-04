@@ -34,17 +34,12 @@ import pandas
 import scipy
 import os
 from lxml import etree
+from StringIO import StringIO
 import logging
 import os
 import subprocess
 import re
-import pickle
 import viz, errors, misc, _base, model
-import matplotlib
-import matplotlib.pyplot as plt
-from textwrap import wrap
-import string
-import itertools
 from multiprocessing import Process, cpu_count
 import glob
 import seaborn as sns
@@ -52,7 +47,6 @@ from copy import deepcopy
 from subprocess import check_call
 from collections import OrderedDict
 from .mixin import Mixin, mixin
-import multiprocessing
 
 ## TODO use generators when iterating over a function with another function. i.e. plotting
 ## TODO: create a base class called Task instead of all of these mixin functions.
@@ -66,6 +60,7 @@ class _Task(object):
     """
     base class for tasks
     """
+    schema = '{http://www.copasi.org/static/schema}'
     @staticmethod
     def get_variable_from_string(m, v, glob=False):
         """
@@ -268,10 +263,12 @@ class CopasiMLParser(_Task):
         Parse xml doc with lxml
         :return:
         """
-        tree = etree.parse(self.copasi_file)
+        parser = etree.XMLParser(remove_blank_text=True)
+        tree = etree.parse(self.copasi_file, parser)
         return tree
 
-    def write_copasi_file(self, copasi_filename, xml):
+    @staticmethod
+    def write_copasi_file(copasi_filename, xml):
         """
         write to file with lxml write function
         """
@@ -713,6 +710,7 @@ class Reports(_Task):
 
         if isinstance(self.metabolites, str):
             self.metabolites = [self.metabolites]
+
         if isinstance(self.global_quantities, str):
             self.global_quantities = [self.global_quantities]
 
@@ -723,7 +721,8 @@ class Reports(_Task):
             raise errors.InputError('{} not concentration or particle_numbers'.format(self.quantity_type))
 
         self.report_types = [None, 'profile_likelihood', 'profilelikelihood2',
-                             'time_course', 'parameter_estimation', 'multi_parameter_estimation']
+                             'time_course', 'parameter_estimation', 'multi_parameter_estimation',
+                             'sensitivity']
         assert self.report_type in self.report_types, 'valid report types include {}'.format(self.report_types)
 
         quantity_types = ['particle_numbers', 'concentration']
@@ -744,6 +743,12 @@ class Reports(_Task):
 
             elif self.report_type == 'multi_parameter_estimation':
                 default_report_name = 'multi_parameter_estimation.txt'
+
+            elif self.report_type == 'sensitivity':
+                default_report_name = 'sensitivities.txt'
+
+            else:
+                raise NotImplementedError
 
             self.report_name = default_report_name
 
@@ -900,7 +905,6 @@ class Reports(_Task):
                 Object.attrib['cn'] = cn
         return self.model
 
-    #
     def profile_likelihood(self):
         '''
         Create report of a parameter and best value for a parameter estimation
@@ -1025,13 +1029,42 @@ class Reports(_Task):
             'cn': "CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"})
         return self.model
 
+    def sensitivity(self):
+        # get existing report keys
+        keys = []
+        for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
+            keys.append(i.attrib['key'])
+            if i.attrib['name'] == 'sensitivity':
+                self.model = self.remove_report('sensitivity')
+
+        new_key = 'Report_31'
+        while new_key in keys:
+            new_key = 'Report_{}'.format(numpy.random.randint(30, 100))
+        report_attributes = {'precision': '6',
+                             'separator': '\t',
+                             'name': 'sensitivity',
+                             'key': new_key,
+                             'taskType': 'Sensitivities'}
+
+        ListOfReports = self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports')
+        report = etree.SubElement(ListOfReports, 'Report')
+        report.attrib.update(report_attributes)
+
+        comment = etree.SubElement(report, 'Comment')
+        table = etree.SubElement(report, 'Table')
+        table.attrib['printTitle'] = str(1)
+
+        etree.SubElement(table, 'Object', attrib={
+            'cn': "CN=Root,Vector=TaskList[Sensitivities],Object=Result"
+        })
+        return self.model
+
     def run(self):
         '''
         Execute code that builds the report defined by the kwargs
         '''
         if self.report_type == 'parameter_estimation':
             self.model = self.parameter_estimation()
-
 
         elif self.report_type == 'multi_parameter_estimation':
             self.model = self.multi_parameter_estimation()
@@ -1042,8 +1075,14 @@ class Reports(_Task):
         elif self.report_type == 'time_course':
             self.model = self.timecourse()
 
+        elif self.report_type == 'sensitivity':
+            self.model = self.sensitivity()
+
         elif self.report_type == None:
             self.model = self.model
+
+        else:
+            raise NotImplementedError
 
         return self.model
 
@@ -4899,22 +4938,118 @@ class ProfileLikelihood(_Task):
 @mixin(model.GetModelComponentFromStringMixin)
 @mixin(model.ReadModelMixin)
 class Sensitivities(_Task):
+    """
+    Interface to COPASI sensitivity task
 
+    """
+
+    ## subtasks
+    subtasks = {
+        'evaluation': '0',
+        'steady_state': '1',
+        'time_series': '2',
+        'parameter_estimation': '3',
+        'optimization': '4',
+        'cross_section': '5',
+    }
+
+    evaluation_effect = [
+        'not_set'
+        'single_object',
+        'concentration_fluxes',
+        'particle_fluxes',
+        'concentration_rates',
+        'particle_rates',
+        'non_constant_global_quantities'
+    ]
+
+    steady_state_effect = evaluation_effect + [
+        'all_variables',
+        'non_constant_species_concentrations',
+        'non_constant_species_numbers',
+        'real_part_of_eigenvalues_of_reduced_jacobian',
+        'imaginary_part_of_eigenvalues_of_reduced_jacobian'
+    ]
+    time_series_effect = [i for i in steady_state_effect if i not in ['real_part_of_eigenvalues_of_reduced_jacobian',
+                                                                      'imaginary_part_of_eigenvalues_of_reduced_jacobian']]
+
+    parameter_estimation_effect = ['single_object']
+    optimization_effect = deepcopy(parameter_estimation_effect)
+    cross_section_effect = deepcopy(parameter_estimation_effect)
+
+    steady_state_cause = [
+        'not_set',
+        'single_object',
+        'local_parameters',
+        'all_parameters',
+        'initial_concentrations'
+    ]
+
+    time_series_cause = steady_state_cause + [
+        'all_parameters_and_initial_concentrations'
+    ]
+
+    parameter_estimation_cause = deepcopy(time_series_cause)
+    optimization_cause = deepcopy(time_series_cause)
+    cross_section_cause = deepcopy(time_series_cause)
+
+    evaluation_cause = [
+        'not_set',
+        'single_object',
+        'non_constant_species_concentration',
+        'species_concentration',
+        'non_constant_species_numbers',
+        'non_constant_global_quantities',
+        'global_quantities',
+        'local_parameters',
+        'all_parameters'
+    ]
+
+    ## for the 'ObjectListType xml element
+    sensitivitity_number_map = {
+        'single_object': '1',
+        'concentration_fluxes': '21',
+        'particle_fluxes': '22',
+        'concentration_rates': '17',
+        'particle_rates': '18',
+        'global_quantity_rates': '30',
+        'all_variables': '43',
+        'non_constant_species_concentrations': '7',
+        'non_constant_species_numbers': '8',
+        'non_constant_global_quantities': '26',
+        'real_part_of_eigenvalues_of_jacobian': '45',
+        'imaginary_part_of_eigenvalues_of_jacobian': '46',
+        'not_set': '0',
+        'species_concentrations': '5',
+        'global_quaantities': '25',
+        'local_parameter_values': '40',
+        'all_parameters': '41',
+        'initial_concentrations': '3',
+        'all_parameters_and_initial_concentrations': '42',
+    }
+
+    update_model = False
 
     def __init__(self, model, **kwargs):
         self.model = self.read_model(model)
         default_report_name = os.path.join(os.path.dirname(self.model.copasi_file), 'sensitivities.txt')
 
         default_properties = {
-                              'update_model': False,
-                              # report variables
-                              'report_name': default_report_name,
-                              'append': False,
-                              'confirm_overwrite': False,
-                              'scheduled': True,
-                              'run': True,
-                              'correct_headers': True,
-                              }
+            'subtask': 'time_series',
+            'cause': 'all_parameters',
+            'effect': 'all_variables',
+            'effect_single_object': None,
+            'cause_single_object': None,
+            'secondary_cause_single_object': None,
+            'secondary_cause': 'not_set',
+            'delta_factor': 0.001,
+            'delta_minimum': 1e-12,
+            'report_name': default_report_name,
+            'append': False,
+            'confirm_overwrite': False,
+            'scheduled': True,
+            'run': True,
+        }
 
         default_properties.update(kwargs)
         default_properties = self.convert_bool_to_numeric(default_properties)
@@ -4922,12 +5057,353 @@ class Sensitivities(_Task):
         self.update_properties(default_properties)
         self._do_checks()
 
+        ## change signle obejct reference for the pycotools model variable equiv
+        self.get_single_object_references()
+        ## add a report to output specifications
+        self.model = self.create_new_report()
+
+        ## build up task sequentially. This list of commands shold
+        ## be executed in order
+        self.task = self.create_sensitivity_task()
+        self.task = self.set_report()
+        self.task = self.create_problem()
+        self.task = self.set_subtask()
+        self.task = self.set_effect()
+        self.task = self.add_list_of_variables_element()
+        self.task = self.set_cause()
+        self.task = self.set_secondary_cause()
+        self.task = self.set_method()
+        self.model = self.replace_sensitivities_task()
+        self.model = self.run_task()
+
+        ## extract relevant (non scaled) data from the copasi report
+        self.sensitivities = self.process_data()
+
+        ## overwrite the copasi report with only relevant data
+        self.sensitivities.to_csv(self.report_name, sep='\t')
 
     def _do_checks(self):
+        if self.subtask == 'evaluation':
+            if self.cause not in self.evaluation_cause:
+                raise errors.InputError('cause "{}" not in "{}"'.format(self.cause, self.evaluation_cause))
+
+            if self.effect not in self.evaluation_effect:
+                raise errors.InputError('effect  "{}" not in "{}"'.format(self.effect, self.evaluation_effect))
+
+            if self.secondary_cause not in self.evaluation_cause:
+                raise errors.InputError('secondary cause "{}" not in "{}"'.format(self.secondary_cause, self.evaluation_cause))
+
+        elif self.subtask == 'steady_state':
+            if self.cause not in self.steady_state_cause:
+                raise errors.InputError('cause "{}" not in "{}"'.format(self.cause, self.steady_state_cause))
+
+            if self.effect not in self.steady_state_effect:
+                raise errors.InputError('effect  "{}" not in "{}"'.format(self.effect, self.steady_state_effect))
+
+            if self.secondary_cause not in self.steady_state_effect:
+                raise errors.InputError(
+                    'secondary cause "{}" not in "{}"'.format(self.secondary_cause, self.steady_state_effect))
+
+        elif self.subtask == 'time_series':
+            if self.cause not in self.time_series_cause:
+                raise errors.InputError('cause "{}" not in "{}"'.format(self.cause, self.time_series_cause))
+
+            if self.effect not in self.time_series_effect:
+                raise errors.InputError('effect  "{}" not in "{}"'.format(self.effect, self.time_series_effect))
+
+            if self.secondary_cause not in self.time_series_cause:
+                raise errors.InputError(
+                    'secondary cause "{}" not in "{}"'.format(self.secondary_cause, self.time_series_cause))
+
+        elif self.subtask == 'parameter_estimation':
+            if self.cause not in self.parameter_estimation_cause:
+                raise errors.InputError('cause "{}" not in "{}"'.format(self.cause, self.parameter_estimation_cause))
+
+            if self.effect not in self.parameter_estimation_effect:
+                raise errors.InputError('effect  "{}" not in "{}"'.format(self.effect, self.parameter_estimation_effect))
+
+            if self.secondary_cause not in self.parameter_estimation_cause:
+                raise errors.InputError(
+                    'secondary cause "{}" not in "{}"'.format(self.secondary_cause, self.parameter_estimation_cause))
+
+        elif self.subtask == 'optimization':
+            if self.cause not in self.optimization_cause:
+                raise errors.InputError('cause "{}" not in "{}"'.format(self.cause, self.optimization_cause))
+
+            if self.effect not in self.optimization_effect:
+                raise errors.InputError('effect  "{}" not in "{}"'.format(self.effect, self.optimization_effect))
+
+            if self.secondary_cause not in self.optimization_cause:
+                raise errors.InputError(
+                    'secondary cause "{}" not in "{}"'.format(self.secondary_cause, self.optimization_cause))
+
+        elif self.subtask == 'cross_section':
+            if self.cause not in self.cross_section_cause:
+                raise errors.InputError('cause "{}" not in "{}"'.format(self.cause, self.cross_section_cause))
+
+            if self.effect not in self.cross_section_effect:
+                raise errors.InputError('effect  "{}" not in "{}"'.format(self.effect, self.cross_section_effect))
+
+            if self.secondary_cause not in self.cross_section_cause:
+                raise errors.InputError(
+                    'secondary cause "{}" not in "{}"'.format(self.secondary_cause, self.cross_section_cause))
+
+        ## verify that single objects are actually in the model
+        ## and are strings
+        if self.effect_single_object is not None:
+            if not isinstance(self.effect_single_object, str):
+                raise errors.TypeError("effect_single_object parameter should be of type str. "
+                                        "Got '{}' instead".format(type(self.effect_single_object)))
+
+            if self.effect_single_object not in self.model.all_variable_names:
+                raise errors.InputError('Variable "{}" is not in model. These '
+                                        'are in your model "{}"'.format(self.effect_single_object,
+                                                                        self.model.all_variable_names))
+
+        if self.cause_single_object is not None:
+            if not isinstance(self.cause_single_object , str):
+                raise errors.TypeError("cause_single_object parameter should be of type str. "
+                                        "Got '{}' instead".format(type(self.cause_single_object)))
+
+            if self.cause_single_object not in self.model.all_variable_names:
+                raise errors.InputError('Variable "{}" is not in model. These '
+                                        'are in your model "{}"'.format(self.cause_single_object,
+                                                                        self.model.all_variable_names))
+
+        if self.secondary_cause_single_object is not None:
+            if not isinstance(self.secondary_cause_single_object , str):
+                raise errors.TypeError("secondary_cause_single_object  parameter should be of type str. "
+                                        "Got '{}' instead".format(type(self.secondary_cause_single_object )))
+
+            if self.secondary_cause_single_object not in self.model.all_variable_names:
+                raise errors.InputError('Variable "{}" is not in model. These '
+                                        'are in your model "{}"'.format(self.secondary_cause_single_object,
+                                                                        self.model.all_variable_names))
+
+    def get_single_object_references(self):
+        if self.cause_single_object is not None:
+            self.cause_single_object = self.get_variable_from_string(self.model, self.cause_single_object)
+
+        if self.effect_single_object is not None:
+            self.cause_single_object = self.get_variable_from_string(self.model, self.effect_single_object)
+
+        if self.secondary_cause_single_object is not None:
+            self.cause_single_object = self.get_variable_from_string(self.model, self.secondary_cause_single_object)
+
+    def sensitivity_task_key(self):
+        """
+        Get the sensitivity task as it currently is
+        in the model as etree.Element
+        :return:
+        """
+        # query = './/Task/*[@name="Sensitivities"]'
+        tasks = self.model.xml.findall(self.schema + 'ListOfTasks')[0]
+        for i in tasks:
+            if i.attrib['name'] == 'Sensitivities':
+                return i.attrib['key']
+
+    def create_sensitivity_task(self):
+        return etree.Element('Task', attrib=OrderedDict({
+            'key': self.sensitivity_task_key(),
+            'name': 'Sensitivities',
+            'type': 'sensitivities',
+            'scheduled': 'false',
+            'updateModel': 'false'
+        }))
+
+    def create_new_report(self):
+        report_options = OrderedDict({
+            'report_name': self.report_name,
+            'append': self.append,
+            'confirm_overwrite': self.confirm_overwrite,
+            'update_model': self.update_model,
+            'report_type': 'sensitivity'
+        })
+        report = Reports(self.model, **report_options)
+        return report.model
+
+    def get_report_key(self):
+        ## get the report key
+        for i in self.model.xml:
+            if i.tag == self.schema + 'ListOfReports':
+                for j in i:
+                    if j.attrib['name'] == 'sensitivity':
+                        return j.attrib['key']
+
+    def set_report(self):
+        attrib = OrderedDict({
+            'reference': self.get_report_key(),
+            'target': self.report_name,
+            'append': self.append,
+            'confirmOverwrite': self.confirm_overwrite
+        })
+        etree.SubElement(self.task, 'Report', attrib=attrib)
+        return self.task
+
+    def create_problem(self):
+        etree.SubElement(self.task, 'Problem')
+        return self.task
+
+    def set_subtask(self):
+        assert self.task[1].tag == 'Problem'
+        attrib = OrderedDict({
+            'name': 'SubtaskType',
+            'type': 'unsignedInteger',
+            'value': self.subtasks[self.subtask]
+        })
+        etree.SubElement(self.task[1], 'Parameter', attrib=attrib)
+        return self.task
+
+    def set_effect(self):
+        assert self.task[1].tag == 'Problem'
+        parameter_group = etree.SubElement(self.task[-1], 'ParameterGroup',
+                                attrib={'name': 'TargetFunctions'})
+        single_object_attrib = OrderedDict({
+            'name': 'SingleObject',
+            'type': 'cn',
+            'value': "" if self.effect_single_object is None else self.effect_single_object
+        })
+        object_list_type_attrib = OrderedDict({
+            'name': 'ObjectListType',
+            'type': 'unsignedInteger',
+            'value': self.sensitivitity_number_map[self.effect]
+        })
+        etree.SubElement(parameter_group, 'Parameter', attrib=single_object_attrib)
+        etree.SubElement(parameter_group, 'Parameter', attrib=object_list_type_attrib)
+        return self.task
+
+    def add_list_of_variables_element(self):
+        assert self.task[1].tag == 'Problem'
+        parameter_group = etree.SubElement(self.task[-1], 'ParameterGroup',
+                                           attrib={'name': 'ListOfVariables'})
+        return self.task
+
+    def set_cause(self):
+        assert self.task[1].tag == 'Problem'
+        assert self.task[1][2].attrib['name'] == 'ListOfVariables'
+        parameter_group = etree.SubElement(
+            self.task[1][2], 'ParameterGroup', attrib={'name': 'Variables'}
+        )
+
+        single_object_attrib = OrderedDict({
+            'name': 'SingleObject',
+            'type': 'cn',
+            'value': "" if self.cause_single_object is None else self.cause_single_object
+        })
+        object_list_type_attrib = OrderedDict({
+            'name': 'ObjectListType',
+            'type': 'unsignedInteger',
+            'value': self.sensitivitity_number_map[self.cause]
+        })
+        etree.SubElement(parameter_group, 'Parameter', attrib=single_object_attrib)
+        etree.SubElement(parameter_group, 'Parameter', attrib=object_list_type_attrib)
+        return self.task
+
+    def set_secondary_cause(self):
         pass
+        assert self.task[1].tag == 'Problem'
+        assert self.task[1][2].attrib['name'] == 'ListOfVariables'
+        parameter_group = etree.SubElement(
+            self.task[1][2], 'ParameterGroup', attrib={'name': 'Variables'}
+        )
+        single_object_attrib = OrderedDict({
+            'name': 'SingleObject',
+            'type': 'cn',
+            'value': "" if self.secondary_cause_single_object is None else self.secondary_cause_single_object
+        })
+        object_list_type_attrib = OrderedDict({
+            'name': 'ObjectListType',
+            'type': 'unsignedInteger',
+            'value': self.sensitivitity_number_map[self.secondary_cause]
+        })
+        etree.SubElement(parameter_group, 'Parameter', attrib=single_object_attrib)
+        etree.SubElement(parameter_group, 'Parameter', attrib=object_list_type_attrib)
+        return self.task
+
+    def set_method(self):
+        method_attrib = OrderedDict({
+            'name': 'Sensitivities Method',
+            'type': 'SensitivitiesMethod',
+        })
+        method = etree.SubElement(self.task, 'Method', attrib=method_attrib)
+        etree.SubElement(method, 'Parameter', attrib=OrderedDict({
+            'name': 'Delta factor',
+            'type': 'unsignedFloat',
+            'value': str(self.delta_factor)
+        }))
+
+        etree.SubElement(method, 'Parameter', attrib=OrderedDict({
+            'name': 'Delta minimum',
+            'type': 'unsignedFloat',
+            'value': str(self.delta_minimum)
+        }))
+        return self.task
+
+    def replace_sensitivities_task(self):
+        task_list = self.model.xml.findall(self.schema + 'ListOfTasks')[0]
+        for i in task_list:
+            if i.attrib['name'] == 'Sensitivities':
+                i.getparent().remove(i)
+        task_list.insert(9, self.task)
+        return self.model
+
+    def run_task(self):
+        r = Run(self.model, task='sensitivities', mode=self.run)
+        return r.model
+
+    def process_data(self):
+        if not os.path.isfile(self.report_name):
+            raise ValueError('Sensitivity report missing. Please ensure you have '
+                             'executed the sensitivity task and the report exists. '
+                             'The report should be here "{}"'.format(self.report_name))
+
+        with open(self.report_name, 'r') as f:
+            data = f.read()
+
+        pattern='Sensitivities array(.*)Scaled sensitivities array'
+        data = re.findall(pattern, data, re.DOTALL)
+        data = [i.strip() for i in data]
+        assert data[0][:4] == 'Rows'
+        data = data[0].split('\n')
+        data = reduce(lambda x, y: x + '\n' + y, data[2:])
+        data = StringIO(data)
+        df = pandas.read_csv(data, sep='\t', index_col=0)
+        new_headers = []
+        for i in df.columns:
+            match = re.findall('.*\[(.*)\]', i)
+            if match == []:
+                new_headers.append(i)
+            else:
+                new_headers.append(match[0])
+        df.columns = new_headers
+        df.columns.name = self.cause
+
+        new_index = []
+        for i in df.index:
+            match = re.findall('.*\[(.*)\]', i)
+            if match == []:
+                new_index.append(i)
+            else:
+                new_index.append(match[0])
+
+        df[self.effect] = new_index
+        return df.set_index(self.effect)
 
 
+class Jacobian(Sensitivities):
+    pass
 
+class FIM(Sensitivities):
+    pass
+
+class Hessian(Sensitivities):
+    pass
+
+class GlobalSensitivities(Sensitivities):
+    """
+    Sensitivity around parameter estimates
+    """
+    pass
 
 
 

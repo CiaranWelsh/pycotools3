@@ -1747,9 +1747,8 @@ class Model(_base._Base):
         if os.path.isfile(copasi_file):
             os.remove(copasi_file)
 
-        with open(copasi_file, 'w') as f:
-            f.write(etree.tostring(self.xml, pretty_print=True))
-        # self.xml.getroot().write(copasi_file)
+        ## write
+        tasks.CopasiMLParser.write_copasi_file(self.copasi_file, self.xml)
 
         ## update copasi file for when copasi_file is not None
         self.copasi_file = copasi_file
