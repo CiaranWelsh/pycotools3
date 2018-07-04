@@ -4967,8 +4967,8 @@ class Sensitivities(_Task):
         'all_variables',
         'non_constant_species_concentrations',
         'non_constant_species_numbers',
-        'real_part_of_eigenvalues_of_reduced_jacobian',
-        'imaginary_part_of_eigenvalues_of_reduced_jacobian'
+        'real_part_of_eigenvalues_of_jacobian',
+        'imaginary_part_of_eigenvalues_of_jacobian'
     ]
     time_series_effect = [i for i in steady_state_effect if i not in ['real_part_of_eigenvalues_of_reduced_jacobian',
                                                                       'imaginary_part_of_eigenvalues_of_reduced_jacobian']]
@@ -5095,58 +5095,80 @@ class Sensitivities(_Task):
 
         elif self.subtask == 'steady_state':
             if self.cause not in self.steady_state_cause:
-                raise errors.InputError('cause "{}" not in "{}"'.format(self.cause, self.steady_state_cause))
+                raise errors.InputError('cause "{}" not in available for "{}" '
+                                        'subtask. These are available: "{}"'.format(self.cause, self.subtask, self.steady_state_cause))
 
             if self.effect not in self.steady_state_effect:
-                raise errors.InputError('effect  "{}" not in "{}"'.format(self.effect, self.steady_state_effect))
+                raise errors.InputError('effect "{}" not in available for "{}" '
+                                        'subtask. These are available: "{}"'.format(
+                    self.effect, self.subtask, self.steady_state_effect))
 
-            if self.secondary_cause not in self.steady_state_effect:
-                raise errors.InputError(
-                    'secondary cause "{}" not in "{}"'.format(self.secondary_cause, self.steady_state_effect))
+            if self.secondary_cause not in self.steady_state_cause:
+                raise errors.InputError('Secondary cause "{}" not in available for "{}" '
+                                        'subtask. These are available: "{}"'.format(self.cause, self.subtask, self.steady_state_cause))
 
         elif self.subtask == 'time_series':
             if self.cause not in self.time_series_cause:
-                raise errors.InputError('cause "{}" not in "{}"'.format(self.cause, self.time_series_cause))
+                raise errors.InputError('cause "{}" not in available for "{}" '
+                                        'subtask. These are available: "{}"'.format(self.cause, self.subtask, self.time_series_cause))
 
             if self.effect not in self.time_series_effect:
-                raise errors.InputError('effect  "{}" not in "{}"'.format(self.effect, self.time_series_effect))
+                raise errors.InputError('effect "{}" not in available for "{}" '
+                                        'subtask. These are available: "{}"'.format(self.effect, self.subtask,
+                                                                                    self.time_series_cause))
 
             if self.secondary_cause not in self.time_series_cause:
-                raise errors.InputError(
-                    'secondary cause "{}" not in "{}"'.format(self.secondary_cause, self.time_series_cause))
+                raise errors.InputError('cause "{}" not in available for "{}" '
+                                        'subtask. These are available: "{}"'.format(self.cause, self.subtask,
+                                                                                    self.time_series_cause))
 
         elif self.subtask == 'parameter_estimation':
             if self.cause not in self.parameter_estimation_cause:
-                raise errors.InputError('cause "{}" not in "{}"'.format(self.cause, self.parameter_estimation_cause))
+                raise errors.InputError('cause "{}" not in available for "{}" '
+                                        'subtask. These are available: "{}"'.format(self.cause, self.subtask,
+                                                                                    self.parameter_estimation_cause))
 
             if self.effect not in self.parameter_estimation_effect:
-                raise errors.InputError('effect  "{}" not in "{}"'.format(self.effect, self.parameter_estimation_effect))
+                raise errors.InputError('effect "{}" not in available for "{}" '
+                                        'subtask. These are available: "{}"'.format(self.effect, self.subtask,
+                                                                                    self.parameter_estimation_cause))
 
             if self.secondary_cause not in self.parameter_estimation_cause:
-                raise errors.InputError(
-                    'secondary cause "{}" not in "{}"'.format(self.secondary_cause, self.parameter_estimation_cause))
+                raise errors.InputError('cause "{}" not in available for "{}" '
+                                        'subtask. These are available: "{}"'.format(self.cause, self.subtask,
+                                                                                    self.parameter_estimation_cause))
 
         elif self.subtask == 'optimization':
             if self.cause not in self.optimization_cause:
-                raise errors.InputError('cause "{}" not in "{}"'.format(self.cause, self.optimization_cause))
+                raise errors.InputError('cause "{}" not in available for "{}" '
+                                        'subtask. These are available: "{}"'.format(self.cause, self.subtask,
+                                                                                    self.optimization_cause))
 
             if self.effect not in self.optimization_effect:
-                raise errors.InputError('effect  "{}" not in "{}"'.format(self.effect, self.optimization_effect))
+                raise errors.InputError('effect "{}" not in available for "{}" '
+                                        'subtask. These are available: "{}"'.format(self.effect, self.subtask,
+                                                                                    self.optimization_cause))
 
             if self.secondary_cause not in self.optimization_cause:
-                raise errors.InputError(
-                    'secondary cause "{}" not in "{}"'.format(self.secondary_cause, self.optimization_cause))
+                raise errors.InputError('cause "{}" not in available for "{}" '
+                                        'subtask. These are available: "{}"'.format(self.cause, self.subtask,
+                                                                                    self.optimization_cause))
 
         elif self.subtask == 'cross_section':
             if self.cause not in self.cross_section_cause:
-                raise errors.InputError('cause "{}" not in "{}"'.format(self.cause, self.cross_section_cause))
+                raise errors.InputError('cause "{}" not in available for "{}" '
+                                        'subtask. These are available: "{}"'.format(self.cause, self.subtask,
+                                                                                    self.cross_section_cause))
 
             if self.effect not in self.cross_section_effect:
-                raise errors.InputError('effect  "{}" not in "{}"'.format(self.effect, self.cross_section_effect))
+                raise errors.InputError('effect "{}" not in available for "{}" '
+                                        'subtask. These are available: "{}"'.format(self.effect, self.subtask,
+                                                                                    self.cross_section_cause))
 
             if self.secondary_cause not in self.cross_section_cause:
-                raise errors.InputError(
-                    'secondary cause "{}" not in "{}"'.format(self.secondary_cause, self.cross_section_cause))
+                raise errors.InputError('cause "{}" not in available for "{}" '
+                                        'subtask. These are available: "{}"'.format(self.cause, self.subtask,
+                                                                                    self.cross_section_cause))
 
         ## verify that single objects are actually in the model
         ## and are strings
@@ -5390,11 +5412,30 @@ class Sensitivities(_Task):
         return df.set_index(self.effect)
 
 
-class Jacobian(Sensitivities):
-    pass
-
 class FIM(Sensitivities):
-    pass
+    """
+    Let S = matrix of partial derivatives of metabolites with respect to
+    kinetic parameters. Then the fisher information matrix (FIM) is:
+        FIM = S^TS
+
+
+
+    """
+    subtask = 'time_series'
+    effect = 'all_variables'
+    cause = 'all_parameters'
+    secondary_cause = 'not_set'
+
+    def __init__(self, model, **kwargs):
+        kwargs['subtask'] = self.subtask
+        kwargs['effect'] = self.effect
+        kwargs['cause'] = self.cause
+        kwargs['secondary_cause'] = self.secondary_cause
+        super(FIM, self).__init__(model, **kwargs)
+
+    @property
+    def fim(self):
+        return self.sensitivities.transpose().dot(self.sensitivities)
 
 class Hessian(Sensitivities):
     pass

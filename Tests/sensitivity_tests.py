@@ -172,11 +172,43 @@ class TestSensitivities(unittest.TestCase):
         s = tasks.Sensitivities(self.mod, report_name=self.report_name, run=True)
         self.assertTrue(isinstance(s.sensitivities, pandas.DataFrame))
 
-    def test(self):
-        s = tasks.Sensitivities(self.mod, report_name=self.report_name, run=True,
-                                subtask='steady_state', cause='all_parameters',
-                                effect='real_part_of_eigenvalues_of_reduced_jacobian')
-        print(s.sensitivities)
+class TestFIM(unittest.TestCase):
+
+    def setUp(self):
+        self.directory = os.path.join(os.path.dirname(__file__), 'SensitivityTests')
+        os.makedirs(self.directory) if not os.path.isdir(self.directory) else None
+        self.cps_file = os.path.join(self.directory, 'test_model.cps')
+        self.antimony_string = """
+            model test_model()
+                R1: A => B; kAtoB*A
+                R2: B => C; kBtoC*B
+
+                kAtoB = 0.1
+                kBtoC = 0.1
+                A = 1000
+                B = 0
+                C = 0 
+            end
+            """
+
+        with model.BuildAntimony(self.cps_file) as loader:
+            self.mod = loader.load(antimony_str=self.antimony_string)
+
+        assert isinstance(self.mod, model.Model)
+
+        ##  add reaction using oo interfce to get a local parameter in
+        self.mod.add_reaction('R3', 'C -> D', 'k*C')
+        self.mod.save()
+
+        self.report_name = os.path.join(self.directory, 'sensitivity_report.txt')
+
+    def test_sensitivities_runs(self):
+        s = tasks.FIM(self.mod)
+        self.assertTrue(isinstance(s.sensitivities, pandas.DataFrame))
+
+    def test_matrix_multiply(self):
+        s = tasks.FIM(self.mod)#
+        self.assertTrue(s.fim.shape[0], s.fim.shape[1])
 
 
 if __name__ == '__main__':
