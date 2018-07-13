@@ -4893,8 +4893,14 @@ class ProfileLikelihood(object):
                         self.model_dct[model][param].copasi_file
                     )[0] + '.csv'
                 )
-                parameter_value = float(self.parameters[model][param])
-                # if self.parallel_scan:
+                ## cater for the case where index=='current_parameters'
+                if self.index == 'current_parameters':
+                    assert model == 'current_parameters'
+                    parameter_value = float(self.parameters.loc[model][param])
+
+                ## then all other situations
+                else:
+                    parameter_value = float(self.parameters[model][param])                # if self.parallel_scan:
                 t = threading.Thread(
                     target=self.setup1scan,
                     args=(
