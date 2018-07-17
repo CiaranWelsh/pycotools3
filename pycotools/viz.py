@@ -414,7 +414,8 @@ class Parse(object):
                                                 the copasi file argument.
     ==================================          ===========================
     """
-    def __init__(self, cls_instance, log10=False, copasi_file=None, alpha=0.95):
+    def __init__(self, cls_instance, log10=False, copasi_file=None, alpha=0.95,
+                 rss_value=None, num_data_points=None):
         """
 
         :param cls_instance:
@@ -428,12 +429,24 @@ class Parse(object):
             is string. Must be the copasi_file which produced
             the parameter estimation data as Parse extracts
             data headers from the copasi file
+        :param rss_value: float
+            When cls is a profile likelihood with the current_parameters setting,
+             rss_value may not be empty. It is not automatically inferable from
+             the COPASI model and must be specified separetly.
+        :param num_data_points: int
+            When cls is a profile likelihood with current paraemters setting,
+            the number of data points cannot be automatically inferred for the calculation
+            of likelihood ratio based confidence intervals. Therefore, this must be specified
+            by the user.
         """
         self.cls_instance = cls_instance
         self.log10 = log10
         self.copasi_file = copasi_file
         self.model = None
         self.alpha = alpha
+        self.rss_value = rss_value
+        self.num_data_points = num_data_points
+
         if self.copasi_file is not None:
             self.model = model.Model(self.copasi_file)
 
@@ -459,6 +472,22 @@ class Parse(object):
                 raise errors.InputError(
                     'plotting functions are only available for scans (not repeat or random distributions)'
                 )
+
+        if isinstance(self.cls_instance, tasks.ProfileLikelihood):
+            if self.cls_instance.index == 'current_parameters':
+                if self.rss_value is None:
+                    raise errors.InputError('When parsing from the ProfileLikelihood class and the '
+                                            'profile likelihood was set to "current parameters" '
+                                            'you must manually specify an argument to the "rss_value" keyword '
+                                            'argument. This is because it is not inferable from the model without'
+                                            ' being first written to file.')
+
+                # if self.num_data_points is None:
+                #     raise errors.InputError(
+                #         'When parsing from the ProfileLikelihood class and you used the "currrent_parameter" '
+                #         'setting, it is necessary to specify the number of data points in the "num_data_points" '
+                #         'argument because it cannot be inferred automatically.'
+                #     )
 
         self.data = self.parse()
 
@@ -933,13 +962,16 @@ class Parse(object):
                 dict[index][confidence_level]
             """
             CL_dct = {}
+
             for index in cls.parameters:
-                rss_value = cls.parameters[index]['RSS']
+                if cls.parameters.index == 'current_parameters':
+                    rss_value = self.rss_value
+
+                else:
+                    rss_value = cls.parameters[index]['RSS']
                 experiment_files = experiment_files_in_use(cls.model)
-                CL_dct[index] = float(ChiSquaredStatistics(
-                    rss_value, dof(cls.model), num_data_points(experiment_files),
-                    self.alpha
-                ).CL)
+                CL_dct[index] = float(ChiSquaredStatistics(rss_value, dof(cls.model),
+                                                           num_data_points(experiment_files), self.alpha).CL)
             return CL_dct
 
         def parse_data(results_dict, fit_item_order_dict):
@@ -962,8 +994,10 @@ class Parse(object):
             res = {}
             df_list = []
             for index in results_dict:
+                print('cheese')
                 res[index] = {}
                 for param in results_dict[index]:
+                    print('reading: ', param, index)
                     df = pandas.read_csv(results_dict[index][param],
                                          sep='\t', skiprows=1, header=None)
                     bracket_indices = [1, -2]
@@ -971,7 +1005,6 @@ class Parse(object):
                     df.columns = list(range(len(df.columns)))
                     items = ['Parameter Of Interest Value'] + fit_item_order_dict[index][param] + ['RSS']
                     df.columns = items
-            #         # print numpy.log10(df['Parameter Of Interest Value'])
                     if self.log10:
                         df_list2 = []
                         for key in list(df.keys()):
@@ -980,18 +1013,44 @@ class Parse(object):
                                 l.append(numpy.log10(df[key].iloc[i]))
                             df_list2.append(pandas.DataFrame(l, columns=[key]))
                         df = pandas.concat(df_list2, axis=1)
-                    # print df.head()
-                    # print self.cls_instance.parameters
                     CL = confidence_level(self.cls_instance)
-                    if self.log10:
-                        df['Best Parameter Value'] = math.log10(float(self.cls_instance.parameters[index][param]))
-                        df['Best RSS Value'] = math.log10(float(self.cls_instance.parameters[index]['RSS']))
-                        CL[index] = math.log10(CL[index])
-                    else:
-                        df['Best Parameter Value'] = float(self.cls_instance.parameters[index][param])
-                        df['Best RSS Value'] = float(self.cls_instance.parameters[index]['RSS'])
 
-                    df['Confidence Level'] = CL[index]
+                    if self.cls_instance.index == 'current_parameters':
+                        """
+                        This is a patch over what was here originally to 
+                        get the current parameters index working. 
+                        """
+                        ## set index name to current parameters
+                        self.cls_instance.parameters['best_parameter_set'] = 'current_parameters'
+                        self.cls_instance.parameters.set_index('best_parameter_set', drop=True, inplace=True)
+
+                        if self.log10:
+                            ## get best parameters
+                            df['Best Parameter Value'] = math.log10(float(self.cls_instance.parameters.loc[index][param]))
+                            df['Best RSS Value'] = math.log10(float(self.rss_value))
+                            ## This is the old version::
+                            # CL[index] = math.log10(CL[index])
+                            ## new version::
+                            CL[param] = math.log10(CL[param])
+                        else:
+                            df['Best Parameter Value'] = float(self.cls_instance.parameters.loc[index][param])
+                            df['Best RSS Value'] = float(self.rss_value)
+                    else:
+
+                        if self.log10:
+                            df['Best Parameter Value'] = math.log10(float(self.cls_instance.parameters[index][param]))
+                            df['Best RSS Value'] = math.log10(float(self.cls_instance.parameters[index]['RSS']))
+                            CL[index] = math.log10(CL[index])
+
+                        else:
+                            df['Best Parameter Value'] = float(self.cls_instance.parameters[index][param])
+                            df['Best RSS Value'] = float(self.cls_instance.parameters[index]['RSS'])
+
+                    ## end of patch
+                    # print(CL)
+                    ## with index works with from file but not from current_parameters
+                    # df['Confidence Level'] = CL[index]
+                    df['Confidence Level'] = CL[param]
                     df['Best Fit Index'] = index
                     df['Parameter Of Interest'] = param
                     df = df.set_index(['Parameter Of Interest', 'Best Fit Index', 'Confidence Level',
@@ -3863,6 +3922,7 @@ class PlotProfileLikelihood(_Viz):
         self.default_properties = {'x': None,
                                    'y': None, #can equal all
                                    'index': None,
+                                   'rss_value': None,
                                    'log10': True,
                                    'savefig': False,
                                    'results_directory': None,
@@ -3903,7 +3963,8 @@ class PlotProfileLikelihood(_Viz):
         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
 
         ## parse data
-        self.data = Parse(self.cls, log10=self.log10, alpha=self.alpha).data
+        self.data = Parse(self.cls, log10=self.log10,
+                          alpha=self.alpha, rss_value=self.rss_value).data
 
         ## do some checks
         self._do_checks()
