@@ -4723,9 +4723,9 @@ class ProfileLikelihood(_Task):
         dct = {}
         parameters = {}
         if self.index == 'current_parameters':
-            dct['current_parameters'] = self.model
+            dct[0] = self.model
             parameters = self.model.parameters[self.model.fit_item_order]
-            parameters['index'] = ['current_parameters']
+            parameters['index'] = [0]
             parameters = parameters.set_index('index', drop=True)
 
         else:
@@ -4900,8 +4900,8 @@ class ProfileLikelihood(_Task):
                 )
                 ## cater for the case where index=='current_parameters'
                 if self.index == 'current_parameters':
-                    assert model == 'current_parameters'
-                    parameter_value = float(self.parameters.loc[model][param])
+                    assert model == 0
+                    parameter_value = float(self.parameters.loc[0][param])
 
 
                 ## then all other situations

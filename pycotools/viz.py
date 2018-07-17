@@ -962,16 +962,17 @@ class Parse(object):
                 dict[index][confidence_level]
             """
             CL_dct = {}
-
-            for index in cls.parameters:
-                if cls.parameters.index == 'current_parameters':
-                    rss_value = self.rss_value
-
-                else:
-                    rss_value = cls.parameters[index]['RSS']
+            if cls.index == 'current_parameters':
+                rss_value = self.rss_value
                 experiment_files = experiment_files_in_use(cls.model)
-                CL_dct[index] = float(ChiSquaredStatistics(rss_value, dof(cls.model),
+                CL_dct[0] = float(ChiSquaredStatistics(rss_value, dof(cls.model),
                                                            num_data_points(experiment_files), self.alpha).CL)
+            else:
+                for index in cls.parameters:
+                    rss_value = cls.parameters[index]['RSS']
+                    experiment_files = experiment_files_in_use(cls.model)
+                    CL_dct[index] = float(ChiSquaredStatistics(rss_value, dof(cls.model),
+                                                               num_data_points(experiment_files), self.alpha).CL)
             return CL_dct
 
         def parse_data(results_dict, fit_item_order_dict):
@@ -994,10 +995,9 @@ class Parse(object):
             res = {}
             df_list = []
             for index in results_dict:
-                print('cheese')
+                print('idx', index)
                 res[index] = {}
                 for param in results_dict[index]:
-                    print('reading: ', param, index)
                     df = pandas.read_csv(results_dict[index][param],
                                          sep='\t', skiprows=1, header=None)
                     bracket_indices = [1, -2]
@@ -1021,8 +1021,8 @@ class Parse(object):
                         get the current parameters index working. 
                         """
                         ## set index name to current parameters
-                        self.cls_instance.parameters['best_parameter_set'] = 'current_parameters'
-                        self.cls_instance.parameters.set_index('best_parameter_set', drop=True, inplace=True)
+                        # self.cls_instance.parameters['best_parameter_set'] = 0#'current_parameters'
+                        # self.cls_instance.parameters.set_index('best_parameter_set', drop=True, inplace=True)
 
                         if self.log10:
                             ## get best parameters
@@ -1030,13 +1030,13 @@ class Parse(object):
                             df['Best RSS Value'] = math.log10(float(self.rss_value))
                             ## This is the old version::
                             # CL[index] = math.log10(CL[index])
-                            ## new version::
-                            CL[param] = math.log10(CL[param])
+                            print('index', index, CL)
+                            CL[index] = math.log10(CL[index])
                         else:
                             df['Best Parameter Value'] = float(self.cls_instance.parameters.loc[index][param])
                             df['Best RSS Value'] = float(self.rss_value)
                     else:
-
+                    # print self.cls_instance.parameters
                         if self.log10:
                             df['Best Parameter Value'] = math.log10(float(self.cls_instance.parameters[index][param]))
                             df['Best RSS Value'] = math.log10(float(self.cls_instance.parameters[index]['RSS']))
@@ -1049,8 +1049,8 @@ class Parse(object):
                     ## end of patch
                     # print(CL)
                     ## with index works with from file but not from current_parameters
-                    # df['Confidence Level'] = CL[index]
-                    df['Confidence Level'] = CL[param]
+                    df['Confidence Level'] = CL[index]
+                    # df['Confidence Level'] = CL[param]
                     df['Best Fit Index'] = index
                     df['Parameter Of Interest'] = param
                     df = df.set_index(['Parameter Of Interest', 'Best Fit Index', 'Confidence Level',
