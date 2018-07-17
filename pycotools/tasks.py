@@ -4725,6 +4725,9 @@ class ProfileLikelihood(_Task):
         if self.index == 'current_parameters':
             dct['current_parameters'] = self.model
             parameters = self.model.parameters[self.model.fit_item_order]
+            parameters['index'] = ['current_parameters']
+            parameters = parameters.set_index('index', drop=True)
+
         else:
             for i in self.index:
                 I = model.InsertParameters(
@@ -4899,6 +4902,7 @@ class ProfileLikelihood(_Task):
                 if self.index == 'current_parameters':
                     assert model == 'current_parameters'
                     parameter_value = float(self.parameters.loc[model][param])
+
 
                 ## then all other situations
                 else:
