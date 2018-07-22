@@ -159,7 +159,7 @@ class PlotKwargs(object):
         return plot_kwargs
 
 
-class _Viz(object):
+class _Viz(PlotKwargs):
     """
     base class for viz
     """
@@ -995,7 +995,6 @@ class Parse(object):
             res = {}
             df_list = []
             for index in results_dict:
-                print('idx', index)
                 res[index] = {}
                 for param in results_dict[index]:
                     df = pandas.read_csv(results_dict[index][param],
