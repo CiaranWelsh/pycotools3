@@ -23,7 +23,7 @@ LOG = logging.getLogger('root')
 #version
 MAJOR = 0
 MINOR = 0
-MICRO = 95
+MICRO = 97
 
 global __version__
 __version__ = '%d.%d.%d' % (MAJOR, MINOR, MICRO)

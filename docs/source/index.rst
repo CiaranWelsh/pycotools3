@@ -92,6 +92,15 @@ Tutorial 8: Model Selection Demo
    Tutorials/Tutorial8ModelSelectionDemo
 
 
+Tutorial 9: Profile Likelihoods
+-------------------------------
+
+.. toctree::
+   :maxdepth: 1
+   
+   Tutorials/Tutorial9ProfileLikelihoods
+
+
 Examples
 ========
 
