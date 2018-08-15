@@ -114,7 +114,7 @@ ranks                   `list` of integers
 import contextlib
 import string
 import pandas
-from pandas.parser import CParserError
+# from pandas.parser import CParserError
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 import scipy 
@@ -793,8 +793,8 @@ class Parse(object):
                             """.format(e, report_name)
                         )
 
-            except CParserError:
-                raise CParserError('Parameter estimation data file is empty')
+            # except CParserError:
+            #     raise CParserError('Parameter estimation data file is empty')
 
             if read_type == 'multi_parameter_estimation':
                 bracket_columns = data[data.columns[[0, -2]]]
