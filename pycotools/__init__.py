@@ -1,9 +1,9 @@
-import viz
-import tasks
-import errors
+# import viz
+# import tasks
+# import errors
+# import misc
+# import model
 import os
-import misc
-import model
 
 import logging.config
 
@@ -20,10 +20,10 @@ LOG = logging.getLogger('root')
 
 
 
-#version
-MAJOR = 0
-MINOR = 0
-MICRO = 98
-
 global __version__
+#version
+MAJOR = 1
+MINOR = 0
+MICRO = 2
+
 __version__ = '%d.%d.%d' % (MAJOR, MINOR, MICRO)

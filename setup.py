@@ -61,7 +61,8 @@ setup(
 
   license='GPL4',
   install_requires=['pandas', 'numpy', 'scipy', 'matplotlib',
-                    'lxml', 'seaborn', 'sklearn', 'openpyxl', 'xlrd', 'psutil'],
+                    'lxml', 'seaborn', 'sklearn', 'openpyxl', 'xlrd', 'psutil',
+                    'tellurium', 'matplotlib.pyplot'],
 
   long_description='A python package for enhancing mathematical'
                    ' modelling using COPASI. See github and docs for more details',
