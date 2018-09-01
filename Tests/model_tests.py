@@ -46,7 +46,7 @@ class ModelLevelAttributeTests(_test_base._BaseTest):
         self.assertEqual(self.model.time_unit, 's')
 
     def test_model_name(self):
-        self.assertEqual(self.model.name, 'New Model')
+        self.assertEqual(self.model.name, 'New_Model')
 
     def test_volume(self):
         self.assertEqual(self.model.volume_unit, 'ml')
@@ -58,10 +58,10 @@ class ModelLevelAttributeTests(_test_base._BaseTest):
         self.assertEqual(self.model.length_unit, 'm')
 
     def test_avagadro(self):
-        self.assertEqual(self.model.avagadro, 6.022140857e+23)
+        self.assertEqual(self.model.avagadro, 6.02214179e+23)
 
     def test_model_key(self):
-        self.assertEqual(self.model.key, 'Model_3')
+        self.assertEqual(self.model.key, 'Model_1')
 
     def test_reference(self):
         self.assertTrue('CN=Root,Model=New Model', self.model.reference)
@@ -174,7 +174,7 @@ class ModelComponentAttributeTests(_test_base._BaseTest):
 
     def test_global_quantities(self):
         # print self.model.global_quantities()
-        self.assertEqual(len(self.model.global_quantities), 3)
+        self.assertEqual(len(self.model.global_quantities), 6)
 
     def test_global_quantities2(self):
         check = True
@@ -190,7 +190,7 @@ class ModelComponentAttributeTests(_test_base._BaseTest):
         Currently giving the wrong keys
         :return:
         '''
-        self.assertTrue(len(self.model.local_parameters), 3)
+        self.assertEqual(len(self.model.local_parameters), 0)
     #
     def test_local_parameters2(self):
         for i in self.model.constants:
@@ -298,7 +298,7 @@ class SetTests(_test_base._BaseTest):
 
         :return:
         """
-        state_numbers = [0.0, 1, 2, 3, 3, 4, 5, 6, 7]
+        state_numbers = [0.0, 1, 2, 3, 3, 4, 5, 6, 7, 8, 9, 10]
         self.model.states = state_numbers
         self.assertListEqual([float(i) for i in state_numbers],
                              [float(i) for i in list(self.model.states.values())])
@@ -458,7 +458,7 @@ class GetTests(_test_base._BaseTest):
         :return:
         """
         metab = self.model.get('metabolite', 'Metabolite_1', by='key')
-        self.assertEqual(metab.name, 'A')
+        self.assertEqual(metab.name, 'B')
 
 
     def test_get_metbolite_by_name(self):
@@ -1036,7 +1036,7 @@ class InsertParameterTests(_test_base._BaseTest):
         :return:
         """
         I= pycotools.model.InsertParameters(self.model, parameter_dict={'B': 35,
-                                                                        '(B2C).k2': 45,
+                                                                        'B2C_0_k2': 45,
                                                                         'A2B':55})
         self.model = I.insert()
 
@@ -1054,7 +1054,7 @@ class InsertParameterTests(_test_base._BaseTest):
             parameter_dict={
                 # 'nuc': 85,
                 'B': 78,
-                '(B2C).k2': 96,
+                'B2C_0_k2': 96,
                 'A2B':55
             }, quantity_type='particle_numbers')
         self.model = I.insert()
@@ -1071,8 +1071,8 @@ class InsertParameterTests(_test_base._BaseTest):
             parameter_dict={
                 # 'nuc': 85,
                 'B': 35,
-                '(B2C).k2': 45,
-                'A2B':32
+                'B2C_0_k2': 45,
+                'A2B': 32
             })
         self.model = I.insert()
         val = [i.initial_value for i in self.model.global_quantities if i.name == 'A2B']
@@ -1088,7 +1088,7 @@ class InsertParameterTests(_test_base._BaseTest):
             parameter_dict={
                 # 'nuc': 85,
                 'B': 35,
-                '(B2C).k2': 64,
+                'B2C_0_k2': 64,
                 'A2B': 597,
             }, inplace=True).model
         val = [i.initial_value for i in self.model.global_quantities if i.name == 'A2B']
@@ -1100,7 +1100,7 @@ class InsertParameterTests(_test_base._BaseTest):
         :return:
         """
         parameter_dict = {'B': 35,
-                          '(B2C).k2': 64,
+                          'B2C_0_k2': 64,
                           'A2B': 597}
 
         df = pandas.DataFrame(parameter_dict, index=[0])
@@ -1115,7 +1115,7 @@ class InsertParameterTests(_test_base._BaseTest):
         :return:
         """
         parameter_dict = {'B': 35,
-                          '(B2C).k2': 64,
+                          'B2C_0_k2': 64,
                           'A2B': 597}
 
         df = pandas.DataFrame(parameter_dict, index=[0])

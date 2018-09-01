@@ -112,7 +112,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
                 if j.attrib['name'] == 'Experiment_3':
                     for k in j:
                         if k.attrib['name'] =='Weight Method':
-                            self.assertEqual(k.attrib['value'], '2')
+                            self.assertEqual(k.attrib['value'], '1')
 
     def test_experiment4(self):
         """
@@ -128,7 +128,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
                         if k.attrib['name'] =='Object Map':
                             for l in k:
                                 if l.attrib['name'] == '1':
-                                    self.assertEqual('CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=Concentration',
+                                    self.assertEqual('CN=Root,Model=New_Model,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=Concentration',
                                                      l[0].attrib['value'])
 
     def test_experiment5(self):
@@ -145,7 +145,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
                         if k.attrib['name'] =='Object Map':
                             for l in k:
                                 if l.attrib['name'] == '1':
-                                    self.assertEqual('CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=InitialConcentration',
+                                    self.assertEqual('CN=Root,Model=New_Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=InitialConcentration',
                                                      l[0].attrib['value'])
 
     def test_experiment6(self):

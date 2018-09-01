@@ -68,7 +68,13 @@ class TestSBMLFunctions(unittest.TestCase):
                                                'setting up the test case'.format(self.copasi_file1))
 
     def tearDown(self):
-        rmtree(self.dire)
+        """
+        tests fail with :
+         WindowsError: [Error 32] The process cannot access the file because it is being used by another process: 'D:\\pycotools\\Tests\\AntimonyModels\\TimeCourseGraphs'
+        If you try to delete directory here
+        :return:
+        """
+        # rmtree(self.dire)
 
     def test_sbml_export(self):
         """

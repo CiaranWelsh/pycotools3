@@ -158,7 +158,7 @@ class ModelSelectionTests(unittest.TestCase):
 
     def test_plot_violin(self):
         MS = viz.ModelSelection(self.MMF, savefig=True)
-        files = glob.glob(os.path.join(MS.results_directory), '*')
+        files = glob.glob(os.path.join(MS.results_directory, '*'))
         ## make sure 3 files are written, one for each model selection criteria and one for the csv file
         self.assertEqual(len(files), 4)
 
