@@ -32,8 +32,15 @@ Setup tools for PyCoTools
 
 #from distutils.core import setup
 from setuptools import setup
-from pycotools import __version__
 
+
+global __version__
+#version
+MAJOR = 1
+MINOR = 0
+MICRO = 8
+
+__version__ = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
 
 
@@ -62,7 +69,7 @@ setup(
   license='GPL4',
   install_requires=['pandas', 'numpy', 'scipy', 'matplotlib',
                     'lxml', 'seaborn', 'sklearn', 'openpyxl', 'xlrd', 'psutil',
-                    'tellurium', 'matplotlib.pyplot'],
+                    'tellurium'],
 
   long_description='A python package for enhancing mathematical'
                    ' modelling using COPASI. See github and docs for more details',

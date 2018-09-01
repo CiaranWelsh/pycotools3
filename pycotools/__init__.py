@@ -1,11 +1,16 @@
-# import viz
-# import tasks
-# import errors
-# import misc
-# import model
+import viz
+import tasks
+import errors
+import misc
+import model
 import os
 
 import logging.config
+
+import warnings
+
+warnings.filterwarnings("ignore", message=".*numpy.dtype.*")
+warnings.filterwarnings("ignore", message=".*numpy.ufunc.*")
 
 global LOG_FILENAME
 LOG_CONFIG_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
@@ -20,10 +25,10 @@ LOG = logging.getLogger('root')
 
 
 
-global __version__
-#version
-MAJOR = 1
-MINOR = 0
-MICRO = 2
-
-__version__ = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
+# global __version__
+# #version
+# MAJOR = 1
+# MINOR = 0
+# MICRO = 3
+#
+# __version__ = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
