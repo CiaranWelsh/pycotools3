@@ -1,7 +1,6 @@
 # PyCoTools
 
-Package was developed by Ciaran Welsh (c.welsh2@newcastle.ac.uk) at Newcastle University, UK. 
-
+A set of tools for interacting with [COPASI simulation software](http://copasi.org/) from Python
 
 ## [Tutorials and Documentation](http://pycotools.readthedocs.io/en/copasiversion21/)
 
