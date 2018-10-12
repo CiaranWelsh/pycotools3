@@ -29,7 +29,6 @@ import pickle
 import site
 import pycotools
 from pycotools.retrying import retry
-from Tests import test_models
 import unittest
 import os
 import pandas

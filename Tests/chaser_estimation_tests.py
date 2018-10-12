@@ -104,8 +104,13 @@ class ChaserParameterEstimationTests(unittest.TestCase):
         self.MPE.run()
 
     def tearDown(self):
-        import shutil
-        shutil.rmtree(self.dire)
+        """
+        Tests fail with:
+         WindowsError: [Error 32] The process cannot access the file because it is being used by another process: 'D:\\pycotools\\Tests\\ChaserEstimationTests'
+        if you try and remove ChaserEstimation Folder here
+        :return:
+        """
+        pass
 
     def test_MPE_worked(self):
         data = viz.Parse(self.MPE).data

@@ -26,7 +26,6 @@ Date:
 
 """
 from pycotools import model, viz, tasks, misc
-from Tests import test_models
 import unittest
 import os
 

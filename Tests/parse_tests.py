@@ -82,7 +82,7 @@ class TestParse(unittest.TestCase):
 
     def tearDown(self):
         import shutil
-        shutil.rmtree(self.working_directory)
+        # shutil.rmtree(self.working_directory)
 
     # def test_timecourse(self):
     #     data = viz.Parse(self.TC).data

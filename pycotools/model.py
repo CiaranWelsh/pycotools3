@@ -59,7 +59,9 @@ except ImportError:
 
 ## TODO add list of reports property to model
 ## TODO after running a task, bind the results to the model instance so that they are retrievable
-
+## todo stop using mixin and start using base class
+## todo convert to python 3
+## todo investigate use of official copasi api
 
 class GetModelComponentFromStringMixin(Mixin):
     """
@@ -581,7 +583,7 @@ class Model(_base._Base):
         """
         Not really needed but good to check
         consistancy of avagadros number.
-        **This number was updated between between version 16 and 19
+        **This number was updated between between version 16 and 19 and messed with things
 
         :return:
             `int`
@@ -589,10 +591,11 @@ class Model(_base._Base):
         query = '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
         avagadro_from_model = float(self.xml.xpath(query)[0].attrib['avogadroConstant'])
         avagadros_from_version19 = 6.022140857e+23
-        if avagadro_from_model != avagadros_from_version19:
+        avagadros_from_version21 = 6.02214179e+23
+        if avagadro_from_model != avagadros_from_version21:
             raise errors.AvagadrosError(
                 'Avagadro from model {} is not equal to {}. Check to see whether COPASI have updated the value of avagadro\'s number'.format(
-                    avagadro_from_model, avagadros_from_version19))
+                    avagadro_from_model, avagadros_from_version21))
         return avagadro_from_model
 
     @property
