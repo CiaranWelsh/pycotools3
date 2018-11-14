@@ -1493,6 +1493,8 @@ class PlotTimeCourseEnsemble(_Viz):
             ## mangle dupe cols
             df = df.rename(columns=df.iloc[0], copy=False).iloc[1:].reset_index(drop=True)
             df = df.astype(float)
+            df = df.dropna(axis=0)
+
             is_null = df.isnull().all(1)
             from collections import Counter
             count = Counter(is_null)
@@ -1501,8 +1503,8 @@ class PlotTimeCourseEnsemble(_Viz):
                 df_list = [j.dropna(how='all') for j in df_list]
                 for j in range(len(df_list)):
                     if df_list[j].empty:
-                        print('empty')
-                        continue
+                        raise ValueError('Empty parameter set. ')
+
                     else:
                         df_dct[exp_files[i]+str(j)] = df_list[j]
             else:
@@ -1550,9 +1552,11 @@ class PlotTimeCourseEnsemble(_Viz):
 
                     val = list(set(self.experimental_data[i][j]))
                     if len(val) is not 1:
-                        raise ValueError('Independant values should be unique in data file. '
-                                         'Found "{}" distinct numbers'.format(len(val)))
-                    d[i][j] = val[0]
+
+                        raise ValueError('Independant values should be unique in a single data column, '
+                                         'i.e. the column should be a single number. '
+                                         'Found "{}" distinct numbers. Please amend input data file'.format(len(val)))
+                    d[i][j] = val
         return d
 
     def simulate_ensemble(self):
@@ -1570,7 +1574,11 @@ class PlotTimeCourseEnsemble(_Viz):
         df_dct = OrderedDict()
         for exp_file in sorted(self.independent_vars_dct):
             indep_vars = self.independent_vars_dct[exp_file]
+            ## indep_vars now contains a list of indep vars in the file
+            ## I need to change all of the independent values per file at once
             indep_vars = {i[:-6]: v for i, v in indep_vars.items()}
+
+
             I = model.InsertParameters(self.cls.model, parameter_dict=indep_vars, inplace=True)
             d[exp_file] = OrderedDict()
             for i in range(self.data.shape[0]):
@@ -1624,20 +1632,14 @@ class PlotTimeCourseEnsemble(_Viz):
         ## remove the existing time column so we can get it back again by resetting index
         data = data.drop('Time', axis=1)
         data = data.reset_index(level=[1, 2])
-        # print(data.head())
-        #
+
         experiments = sorted(list(set(data.index)))
 
         for parameter in sorted(self.y):
             if parameter not in ['ParameterFitIndex', 'Time']:
                 LOG.info('Plotting "{}"'.format(parameter))
                 fig, ax = plt.subplots()
-                # for exp in experiments:
-                # plot_data = data[data['Experiment'] == exp]
-                # plot_data = data.loc[exp].reset_index(drop=True)
                 plot_data = data.reset_index()
-                # plot_data = plot_data[['Experiment', 'Index', 'Time', parameter]]
-                # print(plot_data.head())
 
                 ax1 = seaborn.tsplot(
                     data=plot_data,
@@ -1657,6 +1659,10 @@ class PlotTimeCourseEnsemble(_Viz):
                 for exp in sorted(self.experimental_data):
                     df = self.experimental_data[exp]
                     exp = os.path.split(exp)[1][:-4]
+                    # print('experiment', exp)
+                    # print('parameter', parameter)
+                    # print('df.kays()', df.keys())
+                    # print(parameter in list(df.keys()))
                     if parameter in list(df.keys()):
                         if df.columns[0] == 'time':
                             df = df.rename(columns={'time': 'Time'})
@@ -1666,10 +1672,10 @@ class PlotTimeCourseEnsemble(_Viz):
                         if len(df_keys) > 1:
                             # for i in range(len(df_keys)):
                             plt.plot(list(df['Time']), df[parameter], '--',
-                                           label=exp, alpha=0.4, marker='o')
+                                     label=exp, alpha=0.4, marker='o')
                         else:
                             plt.plot(list(df['Time']), sorted(list(df[parameter])), '--',
-                                       label=exp, alpha=0.4, marker='o')
+                                     label=exp, alpha=0.4, marker='o')
                 if self.legend:
                     # sim_patch = mpatches.Patch(color=self.color, label='Sim', alpha=0.4)
                     # exp_patch = mpatches.Patch(color=self.exp_color, label='Exp', alpha=0.4)
@@ -1725,109 +1731,6 @@ class PlotTimeCourseEnsemble(_Viz):
             if self.show:
                 plt.show()
 
-    def plot(self):
-        """
-
-        """
-        if self.y == None:
-            self.y = [i for i in list(self.observables) if i in list(self.ensemble_data.keys())]
-
-        if isinstance(self.y, list) != True:
-            self.y = [self.y]
-
-        for param in self.y:
-            if param not in list(self.ensemble_data.keys()):
-                raise errors.InputError('{} not in your data set. {}'.format(param, sorted(self.ensemble_data.keys())))
-
-        experiments = self.experimental_data.keys()
-        # data = {i.reset_index(level=1, drop=True) for i in self.ensemble_data}
-        for exp_file in experiments:
-            data = self.ensemble_data.loc[exp_file]
-            # data = data.reset_index(level=1, drop=True)
-            # print(data2.head())
-        #     print('exp_f', exp_file)
-        #     data.index.name = 'ParameterFitIndex'
-        #     data = data.reset_index()
-        #     data.sort_values(by=['Time', 'ParameterFitIndex']).head(5)
-            # # seaborn.despine()
-            #
-            # for parameter in self.y:
-            #     if parameter not in ['ParameterFitIndex', 'Time']:
-            #         LOG.info('Plotting "{}"'.format(parameter))
-            #         plt.figure()
-            #         # seaborn.set_palette([self.color])
-            #         ax1 = seaborn.tsplot(
-            #             data=data, time='Time',
-            #             value=parameter,
-            #             unit='ParameterFitIndex',
-            #             err_style=self.err_style,
-            #             err_palette=self.err_palette,
-            #             err_kws=self.err_kws,
-            #             estimator=self.estimator,
-            #             n_boot=self.n_boot,
-            #             ci=self.ci,
-            #             color=self.color,
-            #             legend=self.legend,
-            #         )
-            #
-            #
-            #         if parameter in self.observables:
-            #             for df in list(self.experimental_data.values()):
-            #                 if parameter in list(df.keys()):
-            #                     if df.columns[0] == 'time':
-            #                         df = df.rename(columns={'time': 'Time'})
-            #                     # plt.figure()
-            #                     df_keys = list(df[parameter].keys())
-            #                     if len(df_keys) > 1:
-            #                         # for i in range(len(df_keys)):
-            #                         ax2 = plt.plot(list(df['Time']), df[parameter], '--', color=self.exp_color,
-            #                                        label='Exp', alpha=0.4, marker='o')
-            #                     else:
-            #                         ax2 = plt.plot(list(df['Time']), list(df[parameter]), '--', color=self.exp_color,
-            #                                    label='Exp', alpha=0.4, marker='o')
-            #
-            #
-            #             if self.legend:
-            #                 sim_patch = mpatches.Patch(color=self.color, label='Sim', alpha=0.4)
-            #                 exp_patch = mpatches.Patch(color=self.exp_color, label='Exp', alpha=0.4)
-            #                 plt.legend(handles=[sim_patch, exp_patch], loc=(1, 0.5))
-            #
-            #         if self.despine:
-            #             seaborn.despine(ax=ax1, top=True, right=True)
-            #
-            #         if self.title is None:
-            #             plt.title('{} (n={})'.format(parameter, self.data.shape[0]))
-            #
-            #         else:
-            #             plt.title(self.title)
-            #
-            #         if self.ylabel is None:
-            #             plt.ylabel('{}/{}'.format(self.cls.model.quantity_unit,
-            #                                       self.cls.model.volume_unit)+'$^{-1}$')
-            #
-            #         else:
-            #             plt.ylabel(self.ylabel)
-            #
-            #         if self.xlabel is None:
-            #             plt.xlabel('Time ({})'.format(self.cls.model.time_unit))
-            #
-            #         else:
-            #             plt.xlabel(self.xlabel)
-            #
-            #         if self.ymin is not None:
-            #             plt.ylim(ymin=self.ymin)
-            #
-            #         if self.ymax is not None:
-            #             plt.ylim(ymax=self.ymax)
-            #
-            #         if self.savefig:
-            #             self.results_directory = self.create_directory()
-            #             fname = os.path.join(self.results_directory, '{}.{}'.format(
-            #                 misc.RemoveNonAscii(parameter).filter, self.ext))
-            #             plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
-            #         if self.show:
-            #             plt.show()
-            #     plt.show()
 
 
 class PlotScan(_Viz):

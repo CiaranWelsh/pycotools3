@@ -2270,9 +2270,10 @@ class ExperimentMapper(_Task):
         data = pandas.read_csv(self.experiment_files[index], sep=self.separator[index], skip_blank_lines=False,
                                header=None)
         data = data.rename(columns=data.iloc[0], copy=False).iloc[1:].reset_index(drop=True)
-
+        data = data.dropna(axis=0)
         if data.isnull().any().any() == True:
-            raise NotImplementedError('Pycotools detected multiple experiments in "{}". This is not '
+            raise NotImplementedError('Pycotools detected multiple experimental repeats in "{}", separated by a blank line.'
+                                      ' This is not '
                                       'yet supported. Please rearrange your data so that you have '
                                       'one experiment file per experiment. Alternatively ensure no trailing white '
                                       'lines exist in your data file.'.format(self.experiment_files[index]))
