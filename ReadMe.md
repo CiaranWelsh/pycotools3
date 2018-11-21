@@ -5,3 +5,5 @@ A set of tools for interacting with [COPASI simulation software](http://copasi.o
 ## [Tutorials and Documentation](http://pycotools.readthedocs.io/en/copasiversion21/)
 
 ## <a href=https://academic.oup.com/bioinformatics/advance-article/doi/10.1093/bioinformatics/bty409/5001390>Publication</a>
+
+For support either post an issue or email c.welsh2@newcastle.ac.uk
