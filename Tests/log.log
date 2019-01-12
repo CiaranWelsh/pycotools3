@@ -265,3 +265,111 @@ INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIs
 DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
 DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
 DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report1\A.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report1\B.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report1\C.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report2\A.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report2\B.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report2\C.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report1\A.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report1\B.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report1\C.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report2\A.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report2\B.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report2\C.png"
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report1\A.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report1\B.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report2\A.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report2\B.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report1\A.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report1\B.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report2\A.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report2\B.png"
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
