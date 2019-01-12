@@ -257,7 +257,7 @@ class ModelComponentAttributeTests(_test_base._BaseTest):
         metab = pycotools.model.Metabolite(self.model,
                                            name='X',
                                            concentration=55)
-        self.assertEqual(str(metab.particle_numbers), str(3.31217747135e+22))
+        self.assertEqual(str(metab.particle_numbers), str(3.3121774713500003e+22))
 
 
 

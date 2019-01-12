@@ -39,12 +39,11 @@ import logging
 import os
 import subprocess
 import re
-from .model import *
-from .viz import *
-from .errors import *
-from .misc import *
-from ._base import *
-from .model import *
+from . import viz
+from . import errors
+from . import misc
+from . import _base
+from . import model
 from multiprocessing import Process, cpu_count
 import glob
 import seaborn as sns

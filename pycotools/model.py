@@ -31,12 +31,13 @@ from lxml import etree
 
 # site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
 # import PyCoTools
-import errors
-import viz
-import misc
+from . import errors
+from . import viz
+from . import misc
 # import errors, misc, viz
-import _base
-import tasks
+from . import _base
+from . import tasks
+
 import pandas
 import re
 import sys, inspect
@@ -375,7 +376,7 @@ class Model(_base._Base):
             `str`. 'concentration' or 'particle_numbers'
 
         :param new:
-            `bool`. Begin new empty model. Untested.
+            `bool`. Begin new empty model.
 
         :param kwargs:
             Unused.
@@ -416,7 +417,7 @@ class Model(_base._Base):
         """
         if prop not in self.__dict__:
             raise errors.InputError('Property "{}" does not '
-                                    'exist from model.Model class'.format(prop))
+                                    'exist in model.Model class'.format(prop))
         del self.__dict__[prop]
         getattr(self, prop)
         return self
@@ -458,17 +459,6 @@ class Model(_base._Base):
         model = deepcopy(self)
         model.copasi_file = filename
         return model
-
-    # def refresh(self):
-    #     """
-    #     Refresh the model by reading the xml
-    #     into :py:mod:`lxml.etree` again.
-    #
-    #     :return: :py:class:`Model`
-    #     """
-    #
-    #     self.xml = tasks.CopasiMLParser(self.copasi_file).copasiML
-    #     return self
 
     def to_antimony(self):
         """
@@ -1725,7 +1715,7 @@ class Model(_base._Base):
         the refresh method.
         :return:
         """
-        with open(self.copasi_file, 'w') as f:
+        with open(self.copasi_file, 'wb') as f:
             f.write(etree.tostring(self.xml, pretty_print=True))
 
         return Model(self.copasi_file)
