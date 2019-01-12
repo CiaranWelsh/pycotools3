@@ -128,7 +128,7 @@ LOG.debug('noise added to {}'.format(TCreport_name))
 
 LOG.debug('running parameter estimation')
 PEResults_file=os.path.join(directory,'PEResults.txt')
-print('running parameter estimation for  {}'.format(PEResults_file))
+print(('running parameter estimation for  {}'.format(PEResults_file)))
 PE=P.pycopi.ParameterEstimation(model,noisy_datafile,method='GeneticAlgorithm',
                                 randomize_start_values='false')
 PE.write_item_template() #estimate all paraemter variables, therefore doesn't need editing 

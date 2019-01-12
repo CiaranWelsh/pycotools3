@@ -97,7 +97,7 @@ else:
     ## Set model variable to a path to COPASI file if not using COMMAND_LINE option
     model=r"D:\MPhil\Python\My_Python_Modules\modelling_Tools\PydentifyingBiomodelFoldersFromPyCoTools\PydentifyingBiomodels\BIOMD0000000016\Goldbeter1995_CircClock.cps"
 
-print model
+print(model)
 ## get working directory and file
 directory,fle=os.path.split(model)
 log_filename=os.path.join(directory,fle[:-4]+'log.log')
@@ -128,7 +128,7 @@ LOG.debug('noise added to {}'.format(TCreport_name))
 
 LOG.debug('running parameter estimation')
 PEResults_file=os.path.join(directory,'PEResults.txt')
-print 'running parameter estimation for  {}'.format(PEResults_file)
+print('running parameter estimation for  {}'.format(PEResults_file))
 PE=P.pycopi.ParameterEstimation(model,noisy_datafile,method='GeneticAlgorithm',
                                 randomize_start_values='false')
 PE.write_item_template() #estimate all paraemter variables, therefore doesn't need editing 

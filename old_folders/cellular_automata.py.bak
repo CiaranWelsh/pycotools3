@@ -332,28 +332,28 @@ class Lattice(OrderedDict):
         '''
         if self.dimensions==1:
             for cell in self:
-                for direction,x in self[cell].neighbours.items():
-                    if x not in range(self.x):
+                for direction,x in list(self[cell].neighbours.items()):
+                    if x not in list(range(self.x)):
                         del self[cell].neighbours[direction]
         if self.dimensions==2:
             for cell in self:
-                for direction,(x,y) in self[cell].neighbours.items():
-                    if x not in range(self.x):# direction,x,y
+                for direction,(x,y) in list(self[cell].neighbours.items()):
+                    if x not in list(range(self.x)):# direction,x,y
                         del self[cell].neighbours[direction]
-                for direction,(x,y) in self[cell].neighbours.items():
-                    if y not in range(self.y):
+                for direction,(x,y) in list(self[cell].neighbours.items()):
+                    if y not in list(range(self.y)):
                         del self[cell].neighbours[direction]
                         
         if self.dimensions==3:
             for cell in self:
-                for direction,(x,y,z) in self[cell].neighbours.items():
-                    if x not in range(self.x):# direction,x,y
+                for direction,(x,y,z) in list(self[cell].neighbours.items()):
+                    if x not in list(range(self.x)):# direction,x,y
                         del self[cell].neighbours[direction]
-                for direction,(x,y,z) in self[cell].neighbours.items():
-                    if y not in range(self.y):
+                for direction,(x,y,z) in list(self[cell].neighbours.items()):
+                    if y not in list(range(self.y)):
                         del self[cell].neighbours[direction]
-                for direction,(x,y,z) in self[cell].neighbours.items():
-                    if z not in range(self.y):
+                for direction,(x,y,z) in list(self[cell].neighbours.items()):
+                    if z not in list(range(self.y)):
                         del self[cell].neighbours[direction]
     
     ##private
@@ -433,12 +433,12 @@ class Automaton(object):
         self.set_environment()
         self.set_seeds()
         self.behaviours=self.get_behaviours()
-        print self.turn()
+        print(self.turn())
         
     def turn(self):
         lattice2=self.lattice
         for i in self.lattice:
-            print lattice2[i]
+            print(lattice2[i])
                 
     def get_behaviours(self):
         '''
@@ -522,11 +522,11 @@ class Automaton(object):
         for i in range(len(pattern)):
             d[i]={}
         for i in range(len(pattern)):
-            d[i][pattern[i][0]]= map(int,pattern[i][1].split(','))
+            d[i][pattern[i][0]]= list(map(int,pattern[i][1].split(',')))
             
         LOG.debug('seeding {}:\n\nseed Dict=\n\t{}'.format(self.seeds,d))
         for seed in d:
-            self.lattice[ d[seed].values()[0][0]] = Cell(d[seed].keys()[0],x=d[seed].values()[0][0])
+            self.lattice[ list(d[seed].values())[0][0]] = Cell(list(d[seed].keys())[0],x=list(d[seed].values())[0][0])
         return d
 
         
@@ -560,9 +560,9 @@ if __name__=='__main__':
     
     c=Cell('Black',x=4,behaviours=['-> White<4> : constant_production',
                                    'Black-> White : transition'])
-    print c
+    print(c)
     c.update()
-    print c
+    print(c)
 #    L=Lattice(c,x=20)
 #    print L
 

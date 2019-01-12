@@ -135,7 +135,7 @@ if __name__=='__main__':
                               report_type='parameter_estimation', ## report automatically set up within copasi. 
                               report_name=result_files[i],
                               run='false') #run the scan task automatically in the background
-    for i in copasi_files.values():
+    for i in list(copasi_files.values()):
         PyCoTools.pycopi.run(i,mode='multiprocess',Task='scan')
     
                                     

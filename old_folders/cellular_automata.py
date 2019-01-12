@@ -433,12 +433,12 @@ class Automaton(object):
         self.set_environment()
         self.set_seeds()
         self.behaviours=self.get_behaviours()
-        print(self.turn())
+        print((self.turn()))
         
     def turn(self):
         lattice2=self.lattice
         for i in self.lattice:
-            print(lattice2[i])
+            print((lattice2[i]))
                 
     def get_behaviours(self):
         '''

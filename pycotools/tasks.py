@@ -26,7 +26,7 @@
 '''
 import time
 import threading
-import Queue as queue
+import queue as queue
 import psutil
 import shutil
 import numpy
@@ -34,12 +34,17 @@ import pandas
 import scipy
 import os
 from lxml import etree
-from StringIO import StringIO
+from io import StringIO
 import logging
 import os
 import subprocess
 import re
-import viz, errors, misc, _base, model
+from .model import *
+from .viz import *
+from .errors import *
+from .misc import *
+from ._base import *
+from .model import *
 from multiprocessing import Process, cpu_count
 import glob
 import seaborn as sns
@@ -47,6 +52,7 @@ from copy import deepcopy
 from subprocess import check_call
 from collections import OrderedDict
 from .mixin import Mixin, mixin
+from functools import reduce
 
 ## TODO use generators when iterating over a function with another function. i.e. plotting
 ## TODO: create a base class called Task instead of all of these mixin functions.

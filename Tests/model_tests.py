@@ -26,7 +26,7 @@ Module that tests the operations of the _Base base test
 import os, glob
 # import site
 # site.addsitedir(os.path.dirname(os.path.dirname(__file__)))
-import _test_base
+from . import _test_base
 import pycotools
 
 import pandas
@@ -52,7 +52,7 @@ class ModelLevelAttributeTests(_test_base._BaseTest):
         self.assertEqual(self.model.volume_unit, 'ml')
 
     def test_quantity(self):
-        self.assertEqual(unicode(self.model.area_unit), u'm\xb2')
+        self.assertEqual(str(self.model.area_unit), u'm\xb2'.decode('utf-8'))
 
     def test_length(self):
         self.assertEqual(self.model.length_unit, 'm')

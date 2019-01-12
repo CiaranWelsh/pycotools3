@@ -82,7 +82,7 @@ class TestClassVariables(unittest.TestCase):
         self.assertEqual(len(self.s.time_series_cause), 6)
 
     def test_time_series_effect(self):
-        print(self.s.time_series_effect)
+        print((self.s.time_series_effect))
         self.assertEqual(len(self.s.time_series_effect), 11)
 
     def test_parameter_estimation_effect(self):

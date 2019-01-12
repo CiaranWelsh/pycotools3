@@ -31,16 +31,19 @@ from lxml import etree
 
 # site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
 # import PyCoTools
-import errors, misc, viz
+import errors
+import viz
+import misc
+# import errors, misc, viz
 import _base
 import tasks
 import pandas
 import re
 import sys, inspect
 from copy import deepcopy
-from mixin import mixin, Mixin
+from .mixin import mixin, Mixin
 from functools import wraps
-from cached_property import cached_property_with_ttl, cached_property
+from .cached_property import cached_property_with_ttl, cached_property
 from subprocess import check_call, call
 from shutil import copy
 from functools import reduce
@@ -4178,7 +4181,7 @@ class ParameterSet(object):
             attrib={'cn': 'String=Kinetic Parameters',
                     'type': 'Group'}
         )
-        print(etree.tostring(parameter_set, pretty_print=True))
+        print((etree.tostring(parameter_set, pretty_print=True)))
 
         ##kinetic parameters  subelement
         for r in self.model.reactions:
@@ -4200,7 +4203,7 @@ class ParameterSet(object):
                                      'type': 'ReactionParameter',
                                      'simulationType': k.simulation_type})
 
-        print(etree.tostring(parameter_set, pretty_print=True))
+        print((etree.tostring(parameter_set, pretty_print=True)))
 
 
 #

@@ -148,8 +148,8 @@ if __name__=='__main__':
     with open(log,'w') as f:
         pickle.dump((df.shape,'\n',d.shape),f)
         
-    print('computation times shape: {}'.format(df.shape))
-    print('not processed shape: {}'.format(d.shape))
+    print(('computation times shape: {}'.format(df.shape)))
+    print(('not processed shape: {}'.format(d.shape)))
         
 
 

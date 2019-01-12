@@ -50,7 +50,7 @@ experiment_files= GMQ.get_experiment_files()
 
 PEData=PyCoTools.PEAnalysis.ParsePEData(args.parameter_path)
 
-print 'best estimated parameters:\n',PEData.data.iloc[args.index].sort_index()
+print('best estimated parameters:\n',PEData.data.iloc[args.index].sort_index())
 PyCoTools.pycopi.InsertParameters(args.model,parameter_path=args.parameter_path,index=args.index)
 PE=PyCoTools.pycopi.ParameterEstimation(args.model,experiment_files,
                                         method='CurrentSolutionStatistics',

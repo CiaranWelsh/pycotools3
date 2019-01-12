@@ -75,7 +75,7 @@ if args.index==None:
     
 if args.parameter_path!=None:
     parameters=PyCoTools.PEAnalysis.ParsePEData(args.parameter_path)
-    print parameters.data.iloc[args.index].sort_index().transpose()
+    print(parameters.data.iloc[args.index].sort_index().transpose())
 
 PyCoTools.pydentify2.ProfileLikelihood(args.model, #full path to the model
                                        parameter_path=args.parameter_path, #full path to the PEData

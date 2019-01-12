@@ -84,7 +84,7 @@ class Submit_Copasi_Job(object):
         query = "//*[@name='Scan']" and "//*[@type='scan']"
         for i in copasiML.xpath(query): 
             for j in i.getchildren():
-                for k in j.attrib.keys():
+                for k in list(j.attrib.keys()):
                     if k=='target':
                         j.attrib['target']=self.report_name
         os.remove(self.copasi_file) #remove original and replace with new copasiML

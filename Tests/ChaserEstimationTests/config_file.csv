@@ -1,0 +1,8 @@
+name,start_value,lower_bound,upper_bound
+A,0.0,1e-06,1000000
+B,0.0,1e-06,1000000
+kADeg,0.2,1e-06,1000000
+kBDeg,0.4,1e-06,1000000
+kBProd,0.3,1e-06,1000000
+vAProd,0.1,1e-06,1000000
+vBasalAProd,0.001,1e-06,1000000

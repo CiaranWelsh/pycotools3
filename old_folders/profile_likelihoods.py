@@ -1225,7 +1225,7 @@ class Plot2():
         st=misc.RemoveNonAscii(parameter).filter
 #        print st
         
-        print(LOG.warning(best_parameter_value))
+        print((LOG.warning(best_parameter_value)))
 
         if best_parameter_value!=None:         
             #best parameter value contains the model value for pparameter

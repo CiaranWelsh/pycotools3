@@ -48,7 +48,7 @@ if args.index==None:
 
 IP=PyCoTools.pycopi.InsertParameters(args.copasi_file,parameter_path=args.path,index=args.index)
 
-print(IP.parameters.transpose())
+print((IP.parameters.transpose()))
 
 
 

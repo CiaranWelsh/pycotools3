@@ -1,0 +1,32 @@
+INFO:pycotools.tasks:tasks:run:3750:running model: 0
+INFO:pycotools.tasks:tasks:run:3750:running model: 1
+INFO:pycotools.tasks:tasks:run:3750:running model: 0
+INFO:pycotools.tasks:tasks:run:3750:running model: 1
+INFO:pycotools.tasks:tasks:run:4091:running "D:\pycotools\Tests\ChaserEstimationTests\negative_feedback_0.cps"
+INFO:pycotools.tasks:tasks:run:4091:running "D:\pycotools\Tests\ChaserEstimationTests\negative_feedback_1.cps"
+INFO:pycotools.tasks:tasks:run:3750:running model: 0
+INFO:pycotools.tasks:tasks:run:3750:running model: 1
+INFO:pycotools.tasks:tasks:run:3750:running model: 0
+INFO:pycotools.tasks:tasks:run:3750:running model: 1
+INFO:pycotools.tasks:tasks:run:4091:running "D:\pycotools\Tests\ChaserEstimationTests\negative_feedback_0.cps"
+INFO:pycotools.tasks:tasks:run:4091:running "D:\pycotools\Tests\ChaserEstimationTests\negative_feedback_1.cps"
+DEBUG:matplotlib.font_manager:font_manager:findfont:1346:findfont: Matching :family=sans-serif:style=normal:variant=normal:weight=normal:stretch=normal:size=24.75 to DejaVu Sans (u'C:\\ProgramData\\Miniconda3\\envs\\py27\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSans.ttf') with score of 0.050000
+DEBUG:matplotlib.font_manager:font_manager:findfont:1346:findfont: Matching :family=sans-serif:style=normal:variant=normal:weight=normal:stretch=normal:size=27.0 to DejaVu Sans (u'C:\\ProgramData\\Miniconda3\\envs\\py27\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSans.ttf') with score of 0.050000
+INFO:matplotlib.backends._backend_tk:_backend_tk:new_figure_manager_given_figure:1060:Could not load matplotlib icon: can't use "pyimage10" as iconphoto: not a photo image
+INFO:pycotools.tasks:tasks:read_fit_config:4296:project dir is --> D:\pycotools\Tests\model_selection
+INFO:pycotools.tasks:tasks:create_workspace:4261:Creating workspace from project_dir
+INFO:pycotools.tasks:tasks:create_workspace:4279:Workspace created
+INFO:pycotools.tasks:tasks:run:4243:Running models from D:\pycotools\Tests\model_selection\positive_feedback\MultipleParameterEstimationResults
+INFO:pycotools.tasks:tasks:run:3750:running model: 0
+INFO:pycotools.tasks:tasks:run:4243:Running models from D:\pycotools\Tests\model_selection\negative_feedback\MultipleParameterEstimationResults
+INFO:pycotools.tasks:tasks:run:3750:running model: 0
+INFO:pycotools.tasks:tasks:run:4243:Running models from D:\pycotools\Tests\model_selection\feedforward\MultipleParameterEstimationResults
+INFO:pycotools.tasks:tasks:run:3750:running model: 0
+DEBUG:matplotlib.font_manager:font_manager:findfont:1346:findfont: Matching :family=sans-serif:style=normal:variant=normal:weight=normal:stretch=normal:size=44.0 to DejaVu Sans (u'C:\\ProgramData\\Miniconda3\\envs\\py27\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSans.ttf') with score of 0.050000
+DEBUG:matplotlib.font_manager:font_manager:findfont:1346:findfont: Matching :family=sans-serif:style=normal:variant=normal:weight=normal:stretch=normal:size=48.0 to DejaVu Sans (u'C:\\ProgramData\\Miniconda3\\envs\\py27\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSans.ttf') with score of 0.050000
+INFO:pycotools.viz:viz:violin:3728:Violin plot saved to : "D:\pycotools\Tests\model_selection\ModelSelectionGraphs\ViolinPlot_RSS.png"
+INFO:matplotlib.backends._backend_tk:_backend_tk:new_figure_manager_given_figure:1060:Could not load matplotlib icon: can't use "pyimage10" as iconphoto: not a photo image
+INFO:pycotools.viz:viz:violin:3728:Violin plot saved to : "D:\pycotools\Tests\model_selection\ModelSelectionGraphs\ViolinPlot_AICc.png"
+INFO:matplotlib.backends._backend_tk:_backend_tk:new_figure_manager_given_figure:1060:Could not load matplotlib icon: can't use "pyimage19" as iconphoto: not a photo image
+INFO:pycotools.viz:viz:violin:3728:Violin plot saved to : "D:\pycotools\Tests\model_selection\ModelSelectionGraphs\ViolinPlot_BIC.png"
+INFO:pycotools.viz:viz:to_csv:3558:model selection data saved to D:\pycotools\Tests\model_selection\ModelSelectionGraphs\ModelSelectionCriteria.csv

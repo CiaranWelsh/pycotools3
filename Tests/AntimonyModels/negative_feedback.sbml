@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created by COPASI version 4.24 (Build 197) on 2019-01-12 10:32 with libSBML version 5.17.0. -->
+<sbml xmlns="http://www.sbml.org/sbml/level2/version4" level="2" version="4">
+  <model metaid="COPASI0" id="model1" name="model1">
+    <listOfFunctionDefinitions>
+      <functionDefinition id="Function_for_AProd" name="Function for AProd">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> B </ci>
+            </bvar>
+            <bvar>
+              <ci> cell </ci>
+            </bvar>
+            <bvar>
+              <ci> vAProd </ci>
+            </bvar>
+            <bvar>
+              <ci> vBasalAProd </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <plus/>
+                <apply>
+                  <times/>
+                  <ci> cell </ci>
+                  <ci> vAProd </ci>
+                  <ci> B </ci>
+                </apply>
+                <ci> vBasalAProd </ci>
+              </apply>
+              <ci> cell </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_BProd" name="Function for BProd">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> A </ci>
+            </bvar>
+            <bvar>
+              <ci> kBProd </ci>
+            </bvar>
+            <apply>
+              <times/>
+              <ci> kBProd </ci>
+              <ci> A </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+    </listOfFunctionDefinitions>
+    <listOfCompartments>
+      <compartment id="cell" name="cell" spatialDimensions="3" size="1" constant="true"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species id="A" name="A" compartment="cell" initialConcentration="0" boundaryCondition="false" constant="false"/>
+      <species id="B" name="B" compartment="cell" initialConcentration="0" boundaryCondition="false" constant="false"/>
+    </listOfSpecies>
+    <listOfParameters>
+      <parameter id="vAProd" name="vAProd" value="0.1" constant="true"/>
+      <parameter id="kADeg" name="kADeg" value="0.2" constant="true"/>
+      <parameter id="kBProd" name="kBProd" value="0.3" constant="true"/>
+      <parameter id="kBDeg" name="kBDeg" value="0.4" constant="true"/>
+      <parameter id="vBasalAProd" name="vBasalAProd" value="0.001" constant="true"/>
+    </listOfParameters>
+    <listOfReactions>
+      <reaction id="AProd" name="AProd" reversible="false">
+        <listOfProducts>
+          <speciesReference species="A" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="B"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> cell </ci>
+              <apply>
+                <ci> Function_for_AProd </ci>
+                <ci> B </ci>
+                <ci> cell </ci>
+                <ci> vAProd </ci>
+                <ci> vBasalAProd </ci>
+              </apply>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="ADeg" name="ADeg" reversible="false">
+        <listOfReactants>
+          <speciesReference species="A" stoichiometry="1"/>
+        </listOfReactants>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> cell </ci>
+              <ci> kADeg </ci>
+              <ci> A </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="BProd" name="BProd" reversible="false">
+        <listOfProducts>
+          <speciesReference species="B" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="A"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> cell </ci>
+              <apply>
+                <ci> Function_for_BProd </ci>
+                <ci> A </ci>
+                <ci> kBProd </ci>
+              </apply>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="BDeg" name="BDeg" reversible="false">
+        <listOfReactants>
+          <speciesReference species="B" stoichiometry="1"/>
+        </listOfReactants>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> cell </ci>
+              <ci> kBDeg </ci>
+              <ci> B </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+    </listOfReactions>
+  </model>
+</sbml>

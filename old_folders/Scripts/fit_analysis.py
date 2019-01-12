@@ -47,7 +47,7 @@ parser.add_argument('-tol','-tolerance',help='tolerance parameter',type=float,de
 args=parser.parse_args()
 #===============================================================================
 PD=P.PEAnalysis.ParsePEData(args.path)
-print('Number of PE runs: {}'.format(PD.data.shape[0]))
+print(('Number of PE runs: {}'.format(PD.data.shape[0])))
 
 if args.truncate_model==None:
     args.truncate_model='tolerance'

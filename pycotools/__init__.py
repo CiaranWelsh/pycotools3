@@ -1,8 +1,8 @@
-import viz
-import tasks
-import errors
-import misc
-import model
+from . import viz
+from . import tasks
+from . import errors
+from . import misc
+from . import model
 import os
 
 import logging.config
@@ -22,6 +22,9 @@ logging.config.fileConfig(LOG_CONFIG_FILE,
                           disable_existing_loggers=False)
 
 LOG = logging.getLogger('root')
+
+## define the list of modules imported with the "from pycotools import *" statement
+__all__ = ['tasks', 'model', 'viz']
 
 
 

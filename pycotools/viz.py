@@ -1029,7 +1029,7 @@ class Parse(object):
                             df['Best RSS Value'] = math.log10(float(self.rss_value))
                             ## This is the old version::
                             # CL[index] = math.log10(CL[index])
-                            print('index', index, CL)
+                            print(('index', index, CL))
                             CL[index] = math.log10(CL[index])
                         else:
                             df['Best Parameter Value'] = float(self.cls_instance.parameters.loc[index][param])
@@ -1576,7 +1576,7 @@ class PlotTimeCourseEnsemble(_Viz):
             indep_vars = self.independent_vars_dct[exp_file]
             ## indep_vars now contains a list of indep vars in the file
             ## I need to change all of the independent values per file at once
-            indep_vars = {i[:-6]: v for i, v in indep_vars.items()}
+            indep_vars = {i[:-6]: v for i, v in list(indep_vars.items())}
 
 
             I = model.InsertParameters(self.cls.model, parameter_dict=indep_vars, inplace=True)
@@ -1955,7 +1955,7 @@ class PlotParameterEstimation(_Viz, PlotKwargs):
         ## filter out y values which are not in the data file
         newy = []
         for y in self.y:
-            if y in list(self.read_experimental_data().values())[0].keys():
+            if y in list(list(self.read_experimental_data().values())[0].keys()):
                 # print '"{0}" not in "{1}". "{0}" is being ignored'.format(y, self.read_experimental_data().values()[0].keys())
                 newy.append(y)
 

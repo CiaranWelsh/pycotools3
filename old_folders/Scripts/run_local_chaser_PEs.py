@@ -59,7 +59,7 @@ def runHJ(copasi_file,experimental_data,parameters,report_name):
     if 'RSS' in list(parameters.keys()):
         del parameters['RSS']
     for i in parameters:
-        print(i,':\t',parameters[i])
+        print((i,':\t',parameters[i]))
     PyCoTools.pycopi.InsertParameters(copasi_file,parameter_dict=parameters)
     
     PE=PyCoTools.pycopi.ParameterEstimation(copasi_file,experimental_data,
@@ -100,11 +100,11 @@ if __name__=='__main__':
     if args.p>1 or args.p<0:
         raise Exception('args.p should be between 0 and 1')
     for i in range(int(data.shape[0]*args.p)):
-        print('running index {} with starting RSS of {}'.format(i,data.iloc[i]['RSS']))
+        print(('running index {} with starting RSS of {}'.format(i,data.iloc[i]['RSS'])))
         if os.path.isdir(args.o)!=True:
             os.mkdir(args.o)
         report=os.path.join(args.o,'{}.txt'.format(i))
-        print(runHJ(args.model,args.experimental_data,data.iloc[i].to_dict(),report))
+        print((runHJ(args.model,args.experimental_data,data.iloc[i].to_dict(),report)))
         
 
 

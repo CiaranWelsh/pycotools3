@@ -41,7 +41,7 @@ import os
 import pickle
 import pandas
 import datetime
-import pydentify_biomodels
+from . import pydentify_biomodels
 import logging
 import matplotlib.pyplot as  plt
 import seaborn 
@@ -83,7 +83,7 @@ def get_num_parameters(model):
     '''
     GMQ=PyCoTools.pycopi.GetModelQuantities(model)
     model_vars= GMQ.get_all_model_variables()
-    return len(model_vars.keys())
+    return len(list(model_vars.keys()))
     
     
     
@@ -148,8 +148,8 @@ if __name__=='__main__':
     with open(log,'w') as f:
         pickle.dump((df.shape,'\n',d.shape),f)
         
-    print 'computation times shape: {}'.format(df.shape)
-    print 'not processed shape: {}'.format(d.shape)
+    print('computation times shape: {}'.format(df.shape))
+    print('not processed shape: {}'.format(d.shape))
         
 
 
