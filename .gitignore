@@ -51,22 +51,11 @@ Temporary Items
 
 #my gitignore files 
 .idea
-pycotools/*.pyc
-pycotools/Tests/*.pyc
-pycotools/Examples/*.pyc
+*.pyc
 pycotools.egg-info/*
 dist/*
 docs/build/*
-pycotools/Examples/.*ipynb_checkpoints
-pycotools/Examples/Fit1Dir/*
-pycotools/Examples/Fit2Dir/*
-pycotools/Examples/SkiDataDirectory/*
-pycotools/Examples/Smad7mRNADataDirectory/*
-pycotools/Examples/Smad7ProteinDataDirectory/*
-pycotools/Examples/*.pyc
-pycotools/Examples/*.cps
-pycotools/Examples/log.log
-pycotools/Tests/*.cps
-docs/log.log
+*.ipynb_checkpoints
+*.log
 docs/source/Tutorials/*.ipynb_checkpoints
 
