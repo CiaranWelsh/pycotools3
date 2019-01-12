@@ -128,7 +128,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
                         if k.attrib['name'] =='Object Map':
                             for l in k:
                                 if l.attrib['name'] == '1':
-                                    self.assertEqual('CN=Root,Model=New_Model,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=Concentration',
+                                    self.assertEqual('CN=Root,Model=New_Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration',
                                                      l[0].attrib['value'])
 
     def test_experiment5(self):

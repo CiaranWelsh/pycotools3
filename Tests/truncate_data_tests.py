@@ -1,4 +1,4 @@
-#-*-coding: utf-8 -*-
+# -*-coding: utf-8 -*-
 """
 
  This file is part of pycotools.
@@ -32,6 +32,7 @@ class TestTruncateData(unittest.TestCase):
     In the model defined in setup, the species $Signal is fixed.
     When you change a fixed species using InsertParameters
     """
+
     def setUp(self):
         self.working_directory = os.path.join(os.path.dirname(__file__), 'viz_tests')
         if not os.path.isdir(self.working_directory):
@@ -76,10 +77,12 @@ class TestTruncateData(unittest.TestCase):
         df.to_csv(self.TC.report_name, sep='\t', index=False)
 
         self.MPE = tasks.MultiParameterEstimation(self.mod, self.TC.report_name,
-                                                 method='genetic_algorithm',
-                                                 population_size=10,
-                                                 number_of_generations=20,
-                                                 run_mode=True)
+                                                  method='genetic_algorithm',
+                                                  population_size=10,
+                                                  number_of_generations=20,
+                                                  run_mode=True,
+                                                  overwrite_config_file=True
+                                                  )
         self.MPE.write_config_file()
         self.MPE.setup()
         self.MPE.run()
@@ -88,27 +91,10 @@ class TestTruncateData(unittest.TestCase):
         from shutil import rmtree
         rmtree(self.working_directory)
 
-
     def test_read_data(self):
         data = viz.Parse(self.MPE).data
         print((viz.TruncateData(data=data, mode='ranks', theta=[0, 1]).data))
 
+
 if __name__ == '__main__':
     unittest.main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

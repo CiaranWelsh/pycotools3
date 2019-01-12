@@ -179,26 +179,6 @@ class ParameterEstimationConfigFileTests(_test_base._BaseTest):
 
         pycotools.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
 
-    def test_config_file_locals1(self):
-        """
-
-        :return:
-        """
-        PE = pycotools.tasks.ParameterEstimation(self.model,
-                                                 self.TC1.report_name,
-                                                 method='genetic_algorithm',
-                                                 population_size=10,
-                                                 number_of_generations=10,
-                                                 report_name='PE_report_name.csv',
-                                                 global_parameters=['B2C_0_k2'],
-                                                 metabolites=['A', 'B'])
-        item_template = PE.item_template
-        boolean = False
-        for i in list(item_template.index):
-            if i == 'B2C_0_k2':
-                boolean = True
-        self.assertFalse(boolean)
-
     def test_config_file_locals2(self):
         """
 

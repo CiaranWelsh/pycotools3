@@ -51,15 +51,15 @@ Reaction scheme where the products are created from the reactants and the change
       </Compartment>
     </ListOfCompartments>
     <ListOfMetabolites>
-      <Metabolite compartment="Compartment_0" key="Metabolite_1" name="B" simulationType="reactions" particle_numbers="4.63328462185e+22"/>
-      <Metabolite compartment="Compartment_0" key="Metabolite_0" name="A" simulationType="reactions" particle_numbers="2.64705008012e+20"/>
+      <Metabolite compartment="Compartment_0" key="Metabolite_0" name="A" simulationType="reactions" particle_numbers="2.123033493445066e+18"/>
+      <Metabolite compartment="Compartment_0" key="Metabolite_1" name="B" simulationType="reactions" particle_numbers="3.479857961372308e+21"/>
     </ListOfMetabolites>
     <ListOfModelValues>
-      <ModelValue key="ModelValue_3" name="kBDeg" simulationType="fixed" initial_value="1.56545e-06"/>
-      <ModelValue key="ModelValue_2" name="kBProd" simulationType="fixed" initial_value="1.03716e-06"/>
-      <ModelValue key="ModelValue_1" name="kADeg" simulationType="fixed" initial_value="99.6322"/>
-      <ModelValue key="ModelValue_0" name="vAProd" simulationType="fixed" initial_value="0.000530436"/>
-      <ModelValue key="ModelValue_4" name="vBasalAProd" simulationType="fixed" initial_value="0.000151551"/>
+      <ModelValue key="ModelValue_0" name="vAProd" simulationType="fixed" initial_value="0.015894799999999997"/>
+      <ModelValue key="ModelValue_1" name="kADeg" simulationType="fixed" initial_value="1.34706e-05"/>
+      <ModelValue key="ModelValue_2" name="kBProd" simulationType="fixed" initial_value="6.49865"/>
+      <ModelValue key="ModelValue_3" name="kBDeg" simulationType="fixed" initial_value="14.5302"/>
+      <ModelValue key="ModelValue_4" name="vBasalAProd" simulationType="fixed" initial_value="1e-06"/>
     </ListOfModelValues>
     <ListOfReactions>
       <Reaction key="Reaction_0" name="AProd" reversible="false" fast="false" addNoise="false">
@@ -207,15 +207,15 @@ Reaction scheme where the products are created from the reactants and the change
     <StateTemplate>
       <StateTemplateVariable objectReference="Model_1"/>
       <StateTemplateVariable objectReference="Compartment_0"/>
-      <StateTemplateVariable objectReference="ModelValue_3"/>
-      <StateTemplateVariable objectReference="ModelValue_2"/>
-      <StateTemplateVariable objectReference="ModelValue_1"/>
       <StateTemplateVariable objectReference="ModelValue_0"/>
+      <StateTemplateVariable objectReference="ModelValue_1"/>
+      <StateTemplateVariable objectReference="ModelValue_2"/>
+      <StateTemplateVariable objectReference="ModelValue_3"/>
       <StateTemplateVariable objectReference="ModelValue_4"/>
-      <StateTemplateVariable objectReference="Metabolite_1"/>
       <StateTemplateVariable objectReference="Metabolite_0"/>
+      <StateTemplateVariable objectReference="Metabolite_1"/>
     </StateTemplate>
-    <InitialState type="initialState">0.0 1.0 1.56545e-06 1.03716e-06 99.6322 0.000530436 0.000151551 4.63328462185e+22 2.64705008012e+20 
+    <InitialState type="initialState">0.0 1.0 0.015894799999999997 1.34706e-05 6.49865 14.5302 1e-06 2.123033493445066e+18 3.479857961372308e+21 
 </InitialState>
   </Model>
   <ListOfTasks>
@@ -310,7 +310,7 @@ Reaction scheme where the products are created from the reactants and the change
         <Parameter name="Time-Course" type="cn" value="CN=Root,Vector=TaskList[Time-Course]"/>
         <Parameter name="Create Parameter Sets" type="bool" value="0"/>
         <ParameterGroup name="Experiment Set">
-        <ParameterGroup name="Experiment_0"><Parameter name="Data is Row Oriented" type="bool" value="1"/><Parameter name="Experiment Type" type="unsignedInteger" value="1"/><Parameter name="File Name" type="file" value="report1.txt"/><Parameter name="First Row" type="unsignedInteger" value="1"/><Parameter name="Key" type="key" value="Experiment_0"/><Parameter name="Last Row" type="unsignedInteger" value="12"/><Parameter name="Normalize Weights per Experiment" type="bool" value="1"/><Parameter name="Number of Columns" type="unsignedInteger" value="8"/><ParameterGroup name="Object Map"><ParameterGroup name="0"><Parameter name="Role" type="unsignedInteger" value="3"/></ParameterGroup><ParameterGroup name="1"><Parameter name="Object CN" type="cn" value="CN=Root,Model=model1,Vector=Compartments[cell],Vector=Metabolites[B],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="2"><Parameter name="Object CN" type="cn" value="CN=Root,Model=model1,Vector=Compartments[cell],Vector=Metabolites[A],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="3"><Parameter name="Object CN" type="cn" value="CN=Root,Model=model1,Vector=Values[kBDeg],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="4"><Parameter name="Object CN" type="cn" value="CN=Root,Model=model1,Vector=Values[kBProd],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="5"><Parameter name="Object CN" type="cn" value="CN=Root,Model=model1,Vector=Values[kADeg],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="6"><Parameter name="Object CN" type="cn" value="CN=Root,Model=model1,Vector=Values[vAProd],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="7"><Parameter name="Object CN" type="cn" value="CN=Root,Model=model1,Vector=Values[vBasalAProd],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup></ParameterGroup><Parameter name="Row containing Names" type="unsignedInteger" value="1"/><Parameter name="separator" type="string" value="&#9;"/><Parameter name="Weight Method" type="unsignedInteger" value="1"/></ParameterGroup></ParameterGroup>
+        <ParameterGroup name="Experiment_0"><Parameter name="Data is Row Oriented" type="bool" value="1"/><Parameter name="Experiment Type" type="unsignedInteger" value="1"/><Parameter name="File Name" type="file" value="report1.txt"/><Parameter name="First Row" type="unsignedInteger" value="1"/><Parameter name="Key" type="key" value="Experiment_0"/><Parameter name="Last Row" type="unsignedInteger" value="12"/><Parameter name="Normalize Weights per Experiment" type="bool" value="1"/><Parameter name="Number of Columns" type="unsignedInteger" value="8"/><ParameterGroup name="Object Map"><ParameterGroup name="0"><Parameter name="Role" type="unsignedInteger" value="3"/></ParameterGroup><ParameterGroup name="1"><Parameter name="Object CN" type="cn" value="CN=Root,Model=model1,Vector=Compartments[cell],Vector=Metabolites[A],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="2"><Parameter name="Object CN" type="cn" value="CN=Root,Model=model1,Vector=Compartments[cell],Vector=Metabolites[B],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="3"><Parameter name="Object CN" type="cn" value="CN=Root,Model=model1,Vector=Values[vAProd],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="4"><Parameter name="Object CN" type="cn" value="CN=Root,Model=model1,Vector=Values[kADeg],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="5"><Parameter name="Object CN" type="cn" value="CN=Root,Model=model1,Vector=Values[kBProd],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="6"><Parameter name="Object CN" type="cn" value="CN=Root,Model=model1,Vector=Values[kBDeg],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="7"><Parameter name="Object CN" type="cn" value="CN=Root,Model=model1,Vector=Values[vBasalAProd],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup></ParameterGroup><Parameter name="Row containing Names" type="unsignedInteger" value="1"/><Parameter name="separator" type="string" value="&#9;"/><Parameter name="Weight Method" type="unsignedInteger" value="1"/></ParameterGroup></ParameterGroup>
         <ParameterGroup name="Validation Set">
           <Parameter name="Weight" type="unsignedFloat" value="1"/>
           <Parameter name="Threshold" type="unsignedInteger" value="5"/>
@@ -562,16 +562,16 @@ Reaction scheme where the products are created from the reactants and the change
       <Comment/>
       <Table printTitle="1">
         <Object cn="CN=Root,Model=model1,Reference=Time"/>
-        <Object cn="CN=Root,Model=model1,Vector=Compartments[cell],Vector=Metabolites[B],Reference=Concentration"/>
         <Object cn="CN=Root,Model=model1,Vector=Compartments[cell],Vector=Metabolites[A],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=model1,Vector=Values[kBDeg],Reference=Value"/>
-        <Object cn="CN=Root,Model=model1,Vector=Values[kBProd],Reference=Value"/>
-        <Object cn="CN=Root,Model=model1,Vector=Values[kADeg],Reference=Value"/>
+        <Object cn="CN=Root,Model=model1,Vector=Compartments[cell],Vector=Metabolites[B],Reference=Concentration"/>
         <Object cn="CN=Root,Model=model1,Vector=Values[vAProd],Reference=Value"/>
+        <Object cn="CN=Root,Model=model1,Vector=Values[kADeg],Reference=Value"/>
+        <Object cn="CN=Root,Model=model1,Vector=Values[kBProd],Reference=Value"/>
+        <Object cn="CN=Root,Model=model1,Vector=Values[kBDeg],Reference=Value"/>
         <Object cn="CN=Root,Model=model1,Vector=Values[vBasalAProd],Reference=Value"/>
       </Table>
     </Report>
-    <Report taskType="parameterFitting" separator="&#9;" precision="6" key="Report_32" name="parameter_estimation">
+    <Report precision="6" separator="&#9;" name="parameter_estimation" key="Report_32" taskType="parameterFitting">
       <Comment/>
       <Footer>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"/>

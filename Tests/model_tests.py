@@ -52,7 +52,8 @@ class ModelLevelAttributeTests(_test_base._BaseTest):
         self.assertEqual(self.model.volume_unit, 'ml')
 
     def test_quantity(self):
-        self.assertEqual(str(self.model.area_unit), u'm\xb2'.decode('utf-8'))
+        self.assertEqual(str(self.model.area_unit), 'm\xb2'.encode('utf-8'))
+        self.assertEqual(str(self.model.area_unit), 'm\xb2'.encode('utf-8'))
 
     def test_length(self):
         self.assertEqual(self.model.length_unit, 'm')

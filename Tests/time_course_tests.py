@@ -286,7 +286,7 @@ class DeterministicTimeCourseTests(_test_base._BaseTest):
         :return:
         """
         df = pandas.read_csv(self.TC.report_name, sep='\t', index_col=0)
-        self.assertEqual(df.shape, (11, 6))
+        self.assertEqual(df.shape, (11, 9))
 
     # def test_correct_output(self):
     #     """

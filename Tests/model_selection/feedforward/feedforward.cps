@@ -319,11 +319,11 @@ Reaction scheme where the products are created from the reactants and the change
       </Method>
     </Task>
     <Task key="Task_16" name="Scan" type="scan" scheduled="true" updateModel="0">
-      <Report append="0" confirmOverwrite="0" reference="Report_30" target="D:\pycotools\Tests\model_selection\feedforward\MultipleParameterEstimationResults\PEData0.txt"/>
+      <Report append="0" confirmOverwrite="0" reference="Report_37" target="D:\pycotools\Tests\model_selection\feedforward\MultipleParameterEstimationResults\PEData0.txt"/>
       <Problem>
         <Parameter name="Subtask" type="unsignedInteger" value="5"/>
         <ParameterGroup name="ScanItems">
-        <ParameterGroup name="ScanItem"><Parameter name="Number of steps" type="unsignedInteger" value="3"/><Parameter name="Type" type="unsignedInteger" value="0"/><Parameter name="Object" type="cn" value="CN=Root,Model=model3,Vector=Compartments[cell],Vector=Metabolites[C],Reference=InitialConcentration"/></ParameterGroup></ParameterGroup>
+        <ParameterGroup name="ScanItem"><Parameter name="Number of steps" type="unsignedInteger" value="3"/><Parameter name="Type" type="unsignedInteger" value="0"/><Parameter name="Object" type="cn" value="CN=Root,Model=model3,Vector=Compartments[cell],Vector=Metabolites[A],Reference=InitialConcentration"/></ParameterGroup></ParameterGroup>
         <Parameter name="Output in subtask" type="bool" value="0"/>
         <Parameter name="Adjust initial conditions" type="bool" value="0"/>
       </Problem>
@@ -449,27 +449,27 @@ Reaction scheme where the products are created from the reactants and the change
                 <Parameter name="Role" type="unsignedInteger" value="3"/>
               </ParameterGroup>
               <ParameterGroup name="1">
-                <Parameter name="Object CN" type="cn" value="CN=Root,Model=model3,Vector=Compartments[cell],Vector=Metabolites[B],Reference=Concentration"/>
-                <Parameter name="Role" type="unsignedInteger" value="2"/>
-              </ParameterGroup>
-              <ParameterGroup name="2">
                 <Parameter name="Object CN" type="cn" value="CN=Root,Model=model3,Vector=Compartments[cell],Vector=Metabolites[A],Reference=Concentration"/>
                 <Parameter name="Role" type="unsignedInteger" value="2"/>
               </ParameterGroup>
+              <ParameterGroup name="2">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=model3,Vector=Compartments[cell],Vector=Metabolites[B],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
               <ParameterGroup name="3">
-                <Parameter name="Object CN" type="cn" value="CN=Root,Model=model3,Vector=Values[kBDeg],Reference=Value"/>
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=model3,Vector=Values[vAProd],Reference=Value"/>
                 <Parameter name="Role" type="unsignedInteger" value="2"/>
               </ParameterGroup>
               <ParameterGroup name="4">
-                <Parameter name="Object CN" type="cn" value="CN=Root,Model=model3,Vector=Values[kBProd],Reference=Value"/>
-                <Parameter name="Role" type="unsignedInteger" value="2"/>
-              </ParameterGroup>
-              <ParameterGroup name="5">
                 <Parameter name="Object CN" type="cn" value="CN=Root,Model=model3,Vector=Values[kADeg],Reference=Value"/>
                 <Parameter name="Role" type="unsignedInteger" value="2"/>
               </ParameterGroup>
+              <ParameterGroup name="5">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=model3,Vector=Values[kBProd],Reference=Value"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
               <ParameterGroup name="6">
-                <Parameter name="Object CN" type="cn" value="CN=Root,Model=model3,Vector=Values[vAProd],Reference=Value"/>
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=model3,Vector=Values[kBDeg],Reference=Value"/>
                 <Parameter name="Role" type="unsignedInteger" value="2"/>
               </ParameterGroup>
             </ParameterGroup>
@@ -726,14 +726,14 @@ Reaction scheme where the products are created from the reactants and the change
         <Object cn="CN=Root,Vector=TaskList[Linear Noise Approximation],Object=Result"/>
       </Footer>
     </Report>
-    <Report taskType="parameterFitting" separator="&#9;" precision="6" key="Report_32" name="parameter_estimation">
+    <Report precision="6" separator="&#9;" name="parameter_estimation" key="Report_32" taskType="parameterFitting">
       <Comment/>
       <Footer>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"/>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/>
       </Footer>
     </Report>
-    <Report taskType="parameterFitting" separator="&#9;" precision="6" key="Report_30" name="multi_parameter_estimation">
+    <Report precision="6" separator="&#9;" name="multi_parameter_estimation" key="Report_37" taskType="parameterFitting">
       <Comment/>
       <Table printTitle="1">
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"/>

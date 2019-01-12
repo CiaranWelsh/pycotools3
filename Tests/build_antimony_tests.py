@@ -105,7 +105,7 @@ class BuildAntimonyTestsCreateFromNew(unittest.TestCase):
                 )
 
         except Exception as E:
-            self.assertEqual(str(E.message), str(exception_message))
+            self.assertEqual(str(E), str(exception_message))
 
     # def tearDown(self):
     #     rmtree(self.dire)

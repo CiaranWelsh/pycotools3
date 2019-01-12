@@ -1,8 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created by COPASI version 4.24 (Build 197) on 2019-01-12 10:32 with libSBML version 5.17.0. -->
+<!-- Created by COPASI version 4.24 (Build 197) on 2019-01-12 11:18 with libSBML version 5.17.0. -->
 <sbml xmlns="http://www.sbml.org/sbml/level2/version4" level="2" version="4">
   <model metaid="COPASI0" id="model1" name="model1">
     <listOfFunctionDefinitions>
+      <functionDefinition id="Function_for_BProd" name="Function for BProd">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> A </ci>
+            </bvar>
+            <bvar>
+              <ci> kBProd </ci>
+            </bvar>
+            <apply>
+              <times/>
+              <ci> kBProd </ci>
+              <ci> A </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
       <functionDefinition id="Function_for_AProd" name="Function for AProd">
         <math xmlns="http://www.w3.org/1998/Math/MathML">
           <lambda>
@@ -31,23 +48,6 @@
                 <ci> vBasalAProd </ci>
               </apply>
               <ci> cell </ci>
-            </apply>
-          </lambda>
-        </math>
-      </functionDefinition>
-      <functionDefinition id="Function_for_BProd" name="Function for BProd">
-        <math xmlns="http://www.w3.org/1998/Math/MathML">
-          <lambda>
-            <bvar>
-              <ci> A </ci>
-            </bvar>
-            <bvar>
-              <ci> kBProd </ci>
-            </bvar>
-            <apply>
-              <times/>
-              <ci> kBProd </ci>
-              <ci> A </ci>
             </apply>
           </lambda>
         </math>

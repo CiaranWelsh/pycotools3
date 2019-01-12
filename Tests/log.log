@@ -30,3 +30,238 @@ INFO:pycotools.viz:viz:violin:3728:Violin plot saved to : "D:\pycotools\Tests\mo
 INFO:matplotlib.backends._backend_tk:_backend_tk:new_figure_manager_given_figure:1060:Could not load matplotlib icon: can't use "pyimage19" as iconphoto: not a photo image
 INFO:pycotools.viz:viz:violin:3728:Violin plot saved to : "D:\pycotools\Tests\model_selection\ModelSelectionGraphs\ViolinPlot_BIC.png"
 INFO:pycotools.viz:viz:to_csv:3558:model selection data saved to D:\pycotools\Tests\model_selection\ModelSelectionGraphs\ModelSelectionCriteria.csv
+INFO:pycotools.tasks:tasks:run:3754:running model: 0
+INFO:pycotools.tasks:tasks:run:3754:running model: 1
+INFO:pycotools.tasks:tasks:run:3754:running model: 0
+INFO:pycotools.tasks:tasks:run:3754:running model: 1
+INFO:pycotools.tasks:tasks:run:4095:running "D:\pycotools\Tests\ChaserEstimationTests\negative_feedback_0.cps"
+INFO:pycotools.tasks:tasks:run:4095:running "D:\pycotools\Tests\ChaserEstimationTests\negative_feedback_1.cps"
+INFO:pycotools.tasks:tasks:run:3754:running model: 0
+INFO:pycotools.tasks:tasks:run:3754:running model: 1
+INFO:pycotools.tasks:tasks:run:3754:running model: 0
+INFO:pycotools.tasks:tasks:run:3754:running model: 1
+INFO:pycotools.tasks:tasks:run:4095:running "D:\pycotools\Tests\ChaserEstimationTests\negative_feedback_0.cps"
+INFO:pycotools.tasks:tasks:run:4095:running "D:\pycotools\Tests\ChaserEstimationTests\negative_feedback_1.cps"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.font_manager:font_manager:_findfont_cached:1251:findfont: Matching :family=sans-serif:style=normal:variant=normal:weight=normal:stretch=normal:size=24.75 to DejaVu Sans ('C:\\ProgramData\\Miniconda3\\envs\\py36\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSans.ttf') with score of 0.050000.
+DEBUG:matplotlib.font_manager:font_manager:_findfont_cached:1251:findfont: Matching :family=sans-serif:style=normal:variant=normal:weight=normal:stretch=normal:size=27.0 to DejaVu Sans ('C:\\ProgramData\\Miniconda3\\envs\\py36\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSans.ttf') with score of 0.050000.
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.tasks:tasks:read_fit_config:4300:project dir is --> D:\pycotools\Tests\model_selection
+INFO:pycotools.tasks:tasks:create_workspace:4265:Creating workspace from project_dir
+INFO:pycotools.tasks:tasks:create_workspace:4283:Workspace created
+INFO:pycotools.tasks:tasks:run:4247:Running models from D:\pycotools\Tests\model_selection\feedforward\MultipleParameterEstimationResults
+INFO:pycotools.tasks:tasks:run:3754:running model: 0
+INFO:pycotools.tasks:tasks:run:4247:Running models from D:\pycotools\Tests\model_selection\negative_feedback\MultipleParameterEstimationResults
+INFO:pycotools.tasks:tasks:run:3754:running model: 0
+INFO:pycotools.tasks:tasks:run:4247:Running models from D:\pycotools\Tests\model_selection\positive_feedback\MultipleParameterEstimationResults
+INFO:pycotools.tasks:tasks:run:3754:running model: 0
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.font_manager:font_manager:_findfont_cached:1251:findfont: Matching :family=sans-serif:style=normal:variant=normal:weight=normal:stretch=normal:size=44.0 to DejaVu Sans ('C:\\ProgramData\\Miniconda3\\envs\\py36\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSans.ttf') with score of 0.050000.
+DEBUG:matplotlib.font_manager:font_manager:_findfont_cached:1251:findfont: Matching :family=sans-serif:style=normal:variant=normal:weight=normal:stretch=normal:size=48.0 to DejaVu Sans ('C:\\ProgramData\\Miniconda3\\envs\\py36\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSans.ttf') with score of 0.050000.
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:violin:3728:Violin plot saved to : "D:\pycotools\Tests\model_selection\ModelSelectionGraphs\ViolinPlot_RSS.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:violin:3728:Violin plot saved to : "D:\pycotools\Tests\model_selection\ModelSelectionGraphs\ViolinPlot_AICc.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:violin:3728:Violin plot saved to : "D:\pycotools\Tests\model_selection\ModelSelectionGraphs\ViolinPlot_BIC.png"
+INFO:pycotools.viz:viz:to_csv:3558:model selection data saved to D:\pycotools\Tests\model_selection\ModelSelectionGraphs\ModelSelectionCriteria.csv
+INFO:pycotools.tasks:tasks:run:3754:running model: 0
+INFO:pycotools.tasks:tasks:run:3754:running model: 1
+INFO:pycotools.tasks:tasks:run:4095:running "D:\pycotools\Tests\viz_tests\test_model_0.cps"
+INFO:pycotools.tasks:tasks:run:4095:running "D:\pycotools\Tests\viz_tests\test_model_1.cps"
+INFO:pycotools.tasks:tasks:run:3754:running model: 0
+INFO:pycotools.tasks:tasks:run:3754:running model: 1
+INFO:pycotools.tasks:tasks:run:4095:running "D:\pycotools\Tests\viz_tests\test_model_0.cps"
+INFO:pycotools.tasks:tasks:run:4095:running "D:\pycotools\Tests\viz_tests\test_model_1.cps"
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+WARNING:pycotools.viz:viz:from_multi_parameter_estimation:630:No Columns to parse from file. D:\pycotools\Tests\test_mpe\PEData3.txt is empty. Skipping this file
+DEBUG:matplotlib.colorbar:colorbar:_get_ticker_locator_formatter:503:locator: <matplotlib.ticker.MaxNLocator object at 0x00000167A3B0F278>
+DEBUG:matplotlib.colorbar:colorbar:update_ticks:532:Using auto colorbar locator on colorbar
+DEBUG:matplotlib.colorbar:colorbar:update_ticks:533:locator: <matplotlib.ticker.MaxNLocator object at 0x00000167A3B0F278>
+DEBUG:matplotlib.colorbar:colorbar:_add_solids:678:Setting pcolormesh
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.font_manager:font_manager:_findfont_cached:1251:findfont: Matching :family=sans-serif:style=normal:variant=normal:weight=normal:stretch=normal:size=24.75 to DejaVu Sans ('C:\\ProgramData\\Miniconda3\\envs\\py36\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSans.ttf') with score of 0.050000.
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+INFO:pycotools.tasks:tasks:run_analysis:4948:running D:\pycotools\Tests\ProfileLikelihoods\0\A2B.cps
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+INFO:pycotools.tasks:tasks:run_analysis:4948:running D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\A2B.cps
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.font_manager:font_manager:_findfont_cached:1251:findfont: Matching :family=sans-serif:style=normal:variant=normal:weight=normal:stretch=normal:size=24.75 to DejaVu Sans ('C:\\ProgramData\\Miniconda3\\envs\\py36\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSans.ttf') with score of 0.050000.
+DEBUG:matplotlib.font_manager:font_manager:_findfont_cached:1251:findfont: Matching :family=sans-serif:style=normal:variant=normal:weight=normal:stretch=normal:size=27.0 to DejaVu Sans ('C:\\ProgramData\\Miniconda3\\envs\\py36\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSans.ttf') with score of 0.050000.
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report1\A.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report1\B.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report1\C.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report2\A.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report2\B.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report2\C.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report1\A.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report1\B.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report1\C.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report2\A.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report2\B.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report2\C.png"
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report1\A.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report1\B.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report2\A.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report2\B.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report1\A.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report1\B.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report2\A.png"
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.viz:viz:plot:1997:figure saved to "D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\ParameterEstimationPlots\report2\B.png"
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.tasks:tasks:run:3754:running model: 0
+INFO:pycotools.tasks:tasks:run:3754:running model: 0
+INFO:pycotools.tasks:tasks:run:3754:running model: 0
+INFO:pycotools.tasks:tasks:run:3754:running model: 0
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.font_manager:font_manager:_findfont_cached:1251:findfont: Matching :family=sans-serif:style=normal:variant=normal:weight=normal:stretch=normal:size=24.75 to DejaVu Sans ('C:\\ProgramData\\Miniconda3\\envs\\py36\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSans.ttf') with score of 0.050000.
+DEBUG:matplotlib.font_manager:font_manager:_findfont_cached:1251:findfont: Matching :family=sans-serif:style=normal:variant=normal:weight=normal:stretch=normal:size=27.0 to DejaVu Sans ('C:\\ProgramData\\Miniconda3\\envs\\py36\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSans.ttf') with score of 0.050000.
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+INFO:pycotools.tasks:tasks:run_analysis:4948:running D:\pycotools\Tests\ProfileLikelihoods\0\A2B.cps
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+INFO:pycotools.tasks:tasks:run_analysis:4948:running D:\pycotools\Tests\ProfileLikelihoods\0\ProfileLikelihoods\0\A2B.cps
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+INFO:pycotools.model:model:insert_global_quantities:4414:Global quantity "ThisIsAssignment" skipped because it is set to assignment
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos
+DEBUG:matplotlib.axes._base:_base:_update_title_position:2491:update_title_pos

@@ -573,12 +573,12 @@ Reaction scheme where the products are created from the reactants and the change
       <Comment/>
       <Table printTitle="1">
         <Object cn="CN=Root,Model=model1,Reference=Time"/>
-        <Object cn="CN=Root,Model=model1,Vector=Compartments[cell],Vector=Metabolites[B],Reference=Concentration"/>
         <Object cn="CN=Root,Model=model1,Vector=Compartments[cell],Vector=Metabolites[A],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=model1,Vector=Values[kBDeg],Reference=Value"/>
-        <Object cn="CN=Root,Model=model1,Vector=Values[kBProd],Reference=Value"/>
-        <Object cn="CN=Root,Model=model1,Vector=Values[kADeg],Reference=Value"/>
+        <Object cn="CN=Root,Model=model1,Vector=Compartments[cell],Vector=Metabolites[B],Reference=Concentration"/>
         <Object cn="CN=Root,Model=model1,Vector=Values[vAProd],Reference=Value"/>
+        <Object cn="CN=Root,Model=model1,Vector=Values[kADeg],Reference=Value"/>
+        <Object cn="CN=Root,Model=model1,Vector=Values[kBProd],Reference=Value"/>
+        <Object cn="CN=Root,Model=model1,Vector=Values[kBDeg],Reference=Value"/>
         <Object cn="CN=Root,Model=model1,Vector=Values[vBasalAProd],Reference=Value"/>
       </Table>
     </Report>

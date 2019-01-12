@@ -1,0 +1,7 @@
+name,start_value,lower_bound,upper_bound
+A2B,4.0,0.1,100
+ADeg_k1,0.1,0.1,100
+B2C,9.0,0.1,100
+B2C_0_k2,0.1,0.1,100
+C2A_k1,0.1,0.1,100
+ThisIsAssignment,13.0,0.1,100

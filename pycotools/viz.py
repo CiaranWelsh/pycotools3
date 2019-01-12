@@ -760,7 +760,7 @@ class Parse(object):
                 data = pandas.read_csv(report_name, sep='\t', header=None, skiprows=[0])
                 read_type = 'multi_parameter_estimation'
             except ValueError as e:
-                if e.message == 'No columns to parse from file':
+                if e == 'No columns to parse from file':
                     LOG.warning(
                         'No Columns to parse from file. {} is empty. '
                         'Continuing without parsing from this file'.format(
