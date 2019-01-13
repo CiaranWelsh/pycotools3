@@ -24,3 +24,5 @@ retrying
 plotly
 jinja2
 tellurium
+nbsphinx
+sphinx
