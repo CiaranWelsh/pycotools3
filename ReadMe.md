@@ -6,4 +6,14 @@ A set of tools for interacting with [COPASI simulation software](http://copasi.o
 
 ## <a href=https://academic.oup.com/bioinformatics/advance-article/doi/10.1093/bioinformatics/bty409/5001390>Publication</a>
 
-For support either post an issue or email c.welsh2@newcastle.ac.uk
+For support you may contact me on ciaran.welsh@newcsatle.ac.uk. 
+
+Contributions welcome. 
+
+
+
+
+
+
+
+
