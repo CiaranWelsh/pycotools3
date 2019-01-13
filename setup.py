@@ -30,55 +30,47 @@ Setup tools for PyCoTools
 
 """
 
-#from distutils.core import setup
+# from distutils.core import setup
 from setuptools import setup
 
-
 global __version__
-#version
+# version
 MAJOR = 1
 MINOR = 0
 MICRO = 9
 
 __version__ = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
-
-
 setup(
-  name='pycotools3',
-  packages=['pycotools3'], # this must be the same as the name above
-  version=__version__,
-  description='A python toolbox for COPASI',
-  author='Ciaran Welsh',
-  requires=['lxml', 'argparse', 'pandas', 'numpy', 'scipy',
-            'matplotlib', 'scipy', 'seaborn', 'sklearn',
-            'retrying', 'psutil', 'tellurium'],
-  package_data={'pycotools3':['*.py',
-                             'Licence.txt',
-                             'Tests/*.py',
-                             'logging_config.conf'],
-                },
-  author_email='ciaran.welsh@newcastle.ac.uk',
-  url='https://github.com/CiaranWelsh/pycotools3',
+    name='pycotools3',
+    packages=['pycotools3'],  # this must be the same as the name above
+    version=__version__,
+    description='A python toolbox for COPASI',
+    author='Ciaran Welsh',
+    requires=['lxml', 'argparse', 'pandas', 'numpy', 'scipy',
+              'matplotlib', 'scipy', 'seaborn', 'sklearn',
+              'retrying', 'psutil', 'tellurium'],
+    package_data={'pycotools3': ['*.py',
+                                 'Licence.txt',
+                                 'Tests/*.py',
+                                 'logging_config.conf'],
+                  },
+    author_email='ciaran.welsh@newcastle.ac.uk',
+    url='https://github.com/CiaranWelsh/pycotools3',
 
-  keywords=['systems biology', 'modelling', 'biological',
-            'networks', 'copasi', 'identifiability analysis', 'profile likelihood'],
+    keywords=['systems biology', 'modelling', 'biological',
+              'networks', 'copasi', 'identifiability analysis', 'profile likelihood'],
 
-  license='GPL4',
-  install_requires=['pandas', 'numpy', 'scipy', 'matplotlib',
-                    'lxml', 'seaborn', 'sklearn', 'psutil',
-                    'tellurium'],
+    license='GPL4',
+    install_requires=['pandas', 'numpy', 'scipy', 'matplotlib',
+                      'lxml', 'seaborn', 'sklearn', 'psutil',
+                      'tellurium'],
 
-  long_description='A python package for enhancing mathematical'
-                   ' modelling using COPASI. This package supports Python 3'
+    long_description='A python package for enhancing mathematical'
+                     ' modelling using COPASI. This package supports Python 3',
+    extras_require={
+        'docs': [
+            'sphinx >= 1.4',
+            'sphinx_rtd_theme']
+    }
 )
-
-
-
-
-
-
-
-
-
-
