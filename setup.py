@@ -45,34 +45,32 @@ __version__ = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
 
 setup(
-  name='pycotools',
-  packages=['pycotools'], # this must be the same as the name above
+  name='pycotools3',
+  packages=['pycotools3'], # this must be the same as the name above
   version=__version__,
   description='A python toolbox for COPASI',
   author='Ciaran Welsh',
   requires=['lxml', 'argparse', 'pandas', 'numpy', 'scipy',
             'matplotlib', 'scipy', 'seaborn', 'sklearn',
-            'retrying'],
-  package_data={'pycotools':['*.py',
+            'retrying', 'psutil', 'tellurium'],
+  package_data={'pycotools3':['*.py',
                              'Licence.txt',
                              'Tests/*.py',
                              'logging_config.conf'],
-                # 'docs': ['build/*'],
-                # 'Tests': ['*.py']
                 },
-  author_email='c.welsh2@newcastle.ac.uk',
-  url='https://github.com/CiaranWelsh/PyCoTools',
+  author_email='ciaran.welsh@newcastle.ac.uk',
+  url='https://github.com/CiaranWelsh/pycotools3',
 
   keywords=['systems biology', 'modelling', 'biological',
             'networks', 'copasi', 'identifiability analysis', 'profile likelihood'],
 
   license='GPL4',
   install_requires=['pandas', 'numpy', 'scipy', 'matplotlib',
-                    'lxml', 'seaborn', 'sklearn', 'openpyxl', 'xlrd', 'psutil',
+                    'lxml', 'seaborn', 'sklearn', 'psutil',
                     'tellurium'],
 
   long_description='A python package for enhancing mathematical'
-                   ' modelling using COPASI. See github and docs for more details',
+                   ' modelling using COPASI. This package supports Python 3'
 )
 
 

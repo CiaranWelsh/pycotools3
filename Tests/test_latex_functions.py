@@ -1,6 +1,6 @@
 import site
-site.addsitedir('/home/b3053674/Documents/pycotools')
-from pycotools import utils, tasks, viz, model
+site.addsitedir('/home/b3053674/Documents/pycotools3')
+from pycotools3 import utils, tasks, viz, model
 import os
 from multiprocessing import Process
 import unittest

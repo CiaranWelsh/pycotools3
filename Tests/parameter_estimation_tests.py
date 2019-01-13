@@ -1,20 +1,20 @@
 # -*- coding: utf-8 -*-
 
 '''
- This file is part of pycotools.
+ This file is part of pycotools3.
 
- pycotools is free software: you can redistribute it and/or modify
+ pycotools3 is free software: you can redistribute it and/or modify
  it under the terms of the GNU Lesser General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
 
- pycotools is distributed in the hope that it will be useful,
+ pycotools3 is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU Lesser General Public License for more details.
 
  You should have received a copy of the GNU Lesser General Public License
- along with pycotools.  If not, see <http://www.gnu.org/licenses/>.
+ along with pycotools3.  If not, see <http://www.gnu.org/licenses/>.
 
 
 Author: 
@@ -25,7 +25,7 @@ Date:
  Object:
  
 '''
-import pycotools
+import pycotools3
 import unittest
 import os
 import pandas
@@ -54,11 +54,11 @@ class ParameterEstimationTests(_test_base._BaseTest):
     def setUp(self):
         super(ParameterEstimationTests, self).setUp()
 
-        self.TC1 = pycotools.tasks.TimeCourse(self.model, end=1000, step_size=100,
-                                              intervals=10, report_name='report1.txt')
+        self.TC1 = pycotools3.tasks.TimeCourse(self.model, end=1000, step_size=100,
+                                               intervals=10, report_name='report1.txt')
 
         ## add some noise
-        data1 = pycotools.misc.add_noise(self.TC1.report_name)
+        data1 = pycotools3.misc.add_noise(self.TC1.report_name)
 
         ## remove the data
         os.remove(self.TC1.report_name)
@@ -66,14 +66,14 @@ class ParameterEstimationTests(_test_base._BaseTest):
         ## rewrite the data with noise
         data1.to_csv(self.TC1.report_name, sep='\t')
 
-        pycotools.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
+        pycotools3.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
 
-        self.PE = pycotools.tasks.ParameterEstimation(self.model,
-                                                      self.TC1.report_name,
-                                                      method='genetic_algorithm',
-                                                      population_size=10,
-                                                      number_of_generations=10,
-                                                      report_name='PE_report_name.csv')
+        self.PE = pycotools3.tasks.ParameterEstimation(self.model,
+                                                       self.TC1.report_name,
+                                                       method='genetic_algorithm',
+                                                       population_size=10,
+                                                       number_of_generations=10,
+                                                       report_name='PE_report_name.csv')
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
 
     def test_report_name(self):
@@ -99,7 +99,7 @@ class ParameterEstimationTests(_test_base._BaseTest):
         self.PE.model = self.PE.remove_all_fit_items()
         self.model = self.PE.insert_all_fit_items()
         self.model.save()
-        new_xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
+        new_xml = pycotools3.tasks.CopasiMLParser(self.model.copasi_file).xml
         list_of_tasks = new_xml.find(self.list_of_tasks)
         ## [5][1][3] indexes the parameter estimation item list
         optimization_item_list = list_of_tasks[5][1][3]
@@ -133,7 +133,7 @@ class ParameterEstimationTests(_test_base._BaseTest):
         self.PE.write_config_file()
         self.model = self.PE.setup()
         self.PE.run()
-        p = pycotools.viz.Parse(self.PE)
+        p = pycotools3.viz.Parse(self.PE)
         order = ['A', 'B', 'C', 'A2B', 'ADeg_k1',
                  'B2C', 'B2C_0_k2', 'C2A_k1', 'ThisIsAssignment', 'RSS']
         df = p.from_parameter_estimation
@@ -148,7 +148,7 @@ class ParameterEstimationTests(_test_base._BaseTest):
         self.PE.write_config_file()
         self.model = self.PE.setup()
         self.PE.run()
-        p = pycotools.viz.Parse(self.PE)
+        p = pycotools3.viz.Parse(self.PE)
         df = p.from_parameter_estimation
         self.assertEqual(df.shape[0], 1)
 
@@ -165,11 +165,11 @@ class ParameterEstimationConfigFileTests(_test_base._BaseTest):
     def setUp(self):
         super(ParameterEstimationConfigFileTests, self).setUp()
 
-        self.TC1 = pycotools.tasks.TimeCourse(self.model, end=1000, step_size=100,
-                                              intervals=10, report_name='report1.txt')
+        self.TC1 = pycotools3.tasks.TimeCourse(self.model, end=1000, step_size=100,
+                                               intervals=10, report_name='report1.txt')
 
         ## add some noise
-        data1 = pycotools.misc.add_noise(self.TC1.report_name)
+        data1 = pycotools3.misc.add_noise(self.TC1.report_name)
 
         ## remove the data
         os.remove(self.TC1.report_name)
@@ -177,19 +177,19 @@ class ParameterEstimationConfigFileTests(_test_base._BaseTest):
         ## rewrite the data with noise
         data1.to_csv(self.TC1.report_name, sep='\t')
 
-        pycotools.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
+        pycotools3.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
 
     def test_config_file_locals2(self):
         """
 
         :return:
         """
-        PE = pycotools.tasks.ParameterEstimation(self.model,
-                                                 self.TC1.report_name,
-                                                 method='genetic_algorithm',
-                                                 population_size=10,
-                                                 number_of_generations=10,
-                                                 report_name='PE_report_name.csv')
+        PE = pycotools3.tasks.ParameterEstimation(self.model,
+                                                  self.TC1.report_name,
+                                                  method='genetic_algorithm',
+                                                  population_size=10,
+                                                  number_of_generations=10,
+                                                  report_name='PE_report_name.csv')
         item_template = PE.item_template
         boolean = False
         locs = ['(ADeg).k1', '(B2C).k2', '(C2A).k1']
@@ -204,12 +204,12 @@ class ParameterEstimationConfigFileTests(_test_base._BaseTest):
 
         :return:
         """
-        PE = pycotools.tasks.ParameterEstimation(self.model,
-                                                 self.TC1.report_name,
-                                                 method='genetic_algorithm',
-                                                 population_size=10,
-                                                 number_of_generations=10,
-                                                 report_name='PE_report_name.csv')
+        PE = pycotools3.tasks.ParameterEstimation(self.model,
+                                                  self.TC1.report_name,
+                                                  method='genetic_algorithm',
+                                                  population_size=10,
+                                                  number_of_generations=10,
+                                                  report_name='PE_report_name.csv')
         item_template = PE.item_template
         boolean = False
         locs = ['A', 'B', 'C']
@@ -224,13 +224,13 @@ class ParameterEstimationConfigFileTests(_test_base._BaseTest):
 
         :return:
         """
-        PE = pycotools.tasks.ParameterEstimation(self.model,
-                                                 self.TC1.report_name,
-                                                 method='genetic_algorithm',
-                                                 population_size=10,
-                                                 number_of_generations=10,
-                                                 report_name='PE_report_name.csv',
-                                                 metabolites=[])
+        PE = pycotools3.tasks.ParameterEstimation(self.model,
+                                                  self.TC1.report_name,
+                                                  method='genetic_algorithm',
+                                                  population_size=10,
+                                                  number_of_generations=10,
+                                                  report_name='PE_report_name.csv',
+                                                  metabolites=[])
         item_template = PE.item_template
         boolean = False
         metabs = []
@@ -245,13 +245,13 @@ class ParameterEstimationConfigFileTests(_test_base._BaseTest):
 
         :return:
         """
-        PE = pycotools.tasks.ParameterEstimation(self.model,
-                                                 self.TC1.report_name,
-                                                 method='genetic_algorithm',
-                                                 population_size=10,
-                                                 number_of_generations=10,
-                                                 report_name='PE_report_name.csv',
-                                                 metabolites=['A'])
+        PE = pycotools3.tasks.ParameterEstimation(self.model,
+                                                  self.TC1.report_name,
+                                                  method='genetic_algorithm',
+                                                  population_size=10,
+                                                  number_of_generations=10,
+                                                  report_name='PE_report_name.csv',
+                                                  metabolites=['A'])
         item_template = PE.item_template
         boolean = False
         metabs = ['A']
@@ -266,13 +266,13 @@ class ParameterEstimationConfigFileTests(_test_base._BaseTest):
 
         :return:
         """
-        PE = pycotools.tasks.ParameterEstimation(self.model,
-                                                 self.TC1.report_name,
-                                                 method='genetic_algorithm',
-                                                 population_size=10,
-                                                 number_of_generations=10,
-                                                 report_name='PE_report_name.csv',
-                                                 global_quantities=['A2B'])
+        PE = pycotools3.tasks.ParameterEstimation(self.model,
+                                                  self.TC1.report_name,
+                                                  method='genetic_algorithm',
+                                                  population_size=10,
+                                                  number_of_generations=10,
+                                                  report_name='PE_report_name.csv',
+                                                  global_quantities=['A2B'])
         item_template = PE.item_template
         boolean = False
         globs = ['A2B']
@@ -287,13 +287,13 @@ class ParameterEstimationConfigFileTests(_test_base._BaseTest):
 
         :return:
         """
-        PE = pycotools.tasks.ParameterEstimation(self.model,
-                                                 self.TC1.report_name,
-                                                 method='genetic_algorithm',
-                                                 population_size=10,
-                                                 number_of_generations=10,
-                                                 report_name='PE_report_name.csv',
-                                                 )
+        PE = pycotools3.tasks.ParameterEstimation(self.model,
+                                                  self.TC1.report_name,
+                                                  method='genetic_algorithm',
+                                                  population_size=10,
+                                                  number_of_generations=10,
+                                                  report_name='PE_report_name.csv',
+                                                  )
         item_template = PE.item_template
         boolean = False
         globs = ['ThisIsAssignment', 'B2C', 'A2B']
@@ -308,17 +308,17 @@ class TwoParameterEstimationTests(_test_base._BaseTest):
     def setUp(self):
         super(TwoParameterEstimationTests, self).setUp()
 
-        self.TC1 = pycotools.tasks.TimeCourse(self.model, end=1000, step_size=100,
-                                              intervals=10, report_name='report1.txt')
+        self.TC1 = pycotools3.tasks.TimeCourse(self.model, end=1000, step_size=100,
+                                               intervals=10, report_name='report1.txt')
 
         self.model.set('metabolite', 'A', 150, match_field='name', change_field='concentration')
 
-        self.TC2 = pycotools.tasks.TimeCourse(self.model, end=1000, step_size=100,
-                                              intervals=10, report_name='report2.txt')
+        self.TC2 = pycotools3.tasks.TimeCourse(self.model, end=1000, step_size=100,
+                                               intervals=10, report_name='report2.txt')
 
         ## add some noise
-        data1 = pycotools.misc.add_noise(self.TC1.report_name)
-        data2 = pycotools.misc.add_noise(self.TC2.report_name)
+        data1 = pycotools3.misc.add_noise(self.TC1.report_name)
+        data2 = pycotools3.misc.add_noise(self.TC2.report_name)
 
         ## remove the data
         os.remove(self.TC1.report_name)
@@ -328,11 +328,11 @@ class TwoParameterEstimationTests(_test_base._BaseTest):
         data1.to_csv(self.TC1.report_name, sep='\t')
         data2.to_csv(self.TC2.report_name, sep='\t')
 
-        pycotools.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
-        pycotools.misc.correct_copasi_timecourse_headers(self.TC2.report_name)
+        pycotools3.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
+        pycotools3.misc.correct_copasi_timecourse_headers(self.TC2.report_name)
 
     def test_setup_has_two_data_files(self):
-        PE = pycotools.tasks.ParameterEstimation(
+        PE = pycotools3.tasks.ParameterEstimation(
             self.model, [self.TC1.report_name, self.TC2.report_name], method='genetic_algorithm',
             population_size=5, number_of_generations=20,
             metabolites=[], local_parameters=[], lower_bound=0.1,

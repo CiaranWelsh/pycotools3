@@ -1,4 +1,4 @@
-from pycotools import utils, tasks, viz, model
+from pycotools3 import utils, tasks, viz, model
 import os
 from multiprocessing import Process
 import unittest

@@ -1,23 +1,23 @@
 # -*- coding: utf-8 -*-
 
 '''
- This file is part of pycotools.
- pycotools is free software: you can redistribute it and/or modify
+ This file is part of pycotools3.
+ pycotools3 is free software: you can redistribute it and/or modify
  it under the terms of the GNU Lesser General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- pycotools is distributed in the hope that it will be useful,
+ pycotools3 is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU Lesser General Public License for more details.
  You should have received a copy of the GNU Lesser General Public License
- along with pycotools.  If not, see <http://www.gnu.org/licenses/>.
+ along with pycotools3.  If not, see <http://www.gnu.org/licenses/>.
 Author:
     Ciaran Welsh
 Date:
     19-08-2017
  '''
-import pycotools
+import pycotools3
 import unittest
 from Tests import _test_base
 
@@ -25,13 +25,13 @@ from Tests import _test_base
 class DeterministicTimeCourseTests(_test_base._BaseTest):
     def setUp(self):
         super(DeterministicTimeCourseTests, self).setUp()
-        self.TC = pycotools.tasks.TimeCourse(self.model, end=1000,
-                                             step_size=100, intervals=10,
-                                             max_internal_steps=50000,
-                                             report_name='test_time_course.csv')
+        self.TC = pycotools3.tasks.TimeCourse(self.model, end=1000,
+                                              step_size=100, intervals=10,
+                                              max_internal_steps=50000,
+                                              report_name='test_time_course.csv')
         self.timecourse = self.TC.model  # self.TC.set_timecourse()
         self.timecourse.save()
-        self.new_model = pycotools.tasks.CopasiMLParser(self.copasi_file).copasiML
+        self.new_model = pycotools3.tasks.CopasiMLParser(self.copasi_file).copasiML
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
         self.list_of_reports = '{http://www.copasi.org/static/schema}ListOfReports'
 
@@ -93,7 +93,7 @@ class DeterministicTimeCourseTests(_test_base._BaseTest):
         Test being selective about which output user wants
         :return:
         """
-        TC = pycotools.tasks.TimeCourse(
+        TC = pycotools3.tasks.TimeCourse(
             self.model, intervals=10, step_size=100, end=1000,
             metabolites=['A', 'B'], global_quantities=['B2C']
         )
@@ -104,7 +104,7 @@ class DeterministicTimeCourseTests(_test_base._BaseTest):
         """
         :return:
         """
-        p = pycotools.viz.Parse(self.TC)
+        p = pycotools3.viz.Parse(self.TC)
         df = p.from_timecourse()
         self.assertTrue(isinstance(df, pandas.core.frame.DataFrame))
 
@@ -112,7 +112,7 @@ class DeterministicTimeCourseTests(_test_base._BaseTest):
         """
         :return:
         """
-        p = pycotools.viz.Parse(self.TC)
+        p = pycotools3.viz.Parse(self.TC)
         df = p.from_timecourse()
         boolean = True
         ## set boolean to false if square brackets still in timecourse
@@ -125,19 +125,19 @@ class DeterministicTimeCourseTests(_test_base._BaseTest):
         """
         :return:
         """
-        pycotools.viz.PlotTimeCourse(self.TC, y='metabolites')
+        pycotools3.viz.PlotTimeCourse(self.TC, y='metabolites')
 
 
 class GibsonBruckTimeCourseTests(_test_base._BaseTest):
     def setUp(self):
         super(GibsonBruckTimeCourseTests, self).setUp()
-        self.TC = pycotools.tasks.TimeCourse(self.model, end=1000,
-                                             step_size=100, intervals=10,
-                                             max_internal_steps=50000,
-                                             method='gibson_bruck')
+        self.TC = pycotools3.tasks.TimeCourse(self.model, end=1000,
+                                              step_size=100, intervals=10,
+                                              max_internal_steps=50000,
+                                              method='gibson_bruck')
         self.timecourse = self.TC.model  # self.TC.set_timecourse()
         self.timecourse.save()
-        self.new_model = pycotools.tasks.CopasiMLParser(self.copasi_file).xml
+        self.new_model = pycotools3.tasks.CopasiMLParser(self.copasi_file).xml
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
         self.list_of_reports = '{http://www.copasi.org/static/schema}ListOfReports'
 
@@ -194,17 +194,17 @@ if __name__ == '__main__':
     unittest.main()  # -*- coding: utf-8 -*-
 
 '''
- This file is part of pycotools.
- pycotools is free software: you can redistribute it and/or modify
+ This file is part of pycotools3.
+ pycotools3 is free software: you can redistribute it and/or modify
  it under the terms of the GNU Lesser General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- pycotools is distributed in the hope that it will be useful,
+ pycotools3 is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU Lesser General Public License for more details.
  You should have received a copy of the GNU Lesser General Public License
- along with pycotools.  If not, see <http://www.gnu.org/licenses/>.
+ along with pycotools3.  If not, see <http://www.gnu.org/licenses/>.
 Author:
     Ciaran Welsh
 Date:
@@ -212,10 +212,10 @@ Date:
  '''
 import site
 
-site.addsitedir('/home/b3053674/Documents/pycotools')
-# site.addsitedir('C:\Users\Ciaran\Documents\pycotools')
+site.addsitedir('/home/b3053674/Documents/pycotools3')
+# site.addsitedir('C:\Users\Ciaran\Documents\pycotools3')
 
-import pycotools
+import pycotools3
 import unittest
 import os
 import pandas
@@ -225,13 +225,13 @@ from Tests import _test_base
 class DeterministicTimeCourseTests(_test_base._BaseTest):
     def setUp(self):
         super(DeterministicTimeCourseTests, self).setUp()
-        self.TC = pycotools.tasks.TimeCourse(self.model, end=1000,
-                                             step_size=100, intervals=10,
-                                             max_internal_steps=50000,
-                                             report_name='test_time_course.csv')
+        self.TC = pycotools3.tasks.TimeCourse(self.model, end=1000,
+                                              step_size=100, intervals=10,
+                                              max_internal_steps=50000,
+                                              report_name='test_time_course.csv')
         self.timecourse = self.TC.model  # self.TC.set_timecourse()
         self.timecourse.save()
-        self.new_model = pycotools.tasks.CopasiMLParser(self.copasi_file).copasiML
+        self.new_model = pycotools3.tasks.CopasiMLParser(self.copasi_file).copasiML
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
         self.list_of_reports = '{http://www.copasi.org/static/schema}ListOfReports'
 
@@ -305,7 +305,7 @@ class DeterministicTimeCourseTests(_test_base._BaseTest):
         """
         :return:
         """
-        p = pycotools.viz.Parse(self.TC)
+        p = pycotools3.viz.Parse(self.TC)
         df = p.parse()
         self.assertTrue(isinstance(df, pandas.core.frame.DataFrame))
 
@@ -313,7 +313,7 @@ class DeterministicTimeCourseTests(_test_base._BaseTest):
         """
         :return:
         """
-        p = pycotools.viz.Parse(self.TC)
+        p = pycotools3.viz.Parse(self.TC)
         df = p.parse()
         boolean = True
         ## set boolean to false if square brackets still in timecourse
@@ -326,13 +326,13 @@ class DeterministicTimeCourseTests(_test_base._BaseTest):
 class GibsonBruckTimeCourseTests(_test_base._BaseTest):
     def setUp(self):
         super(GibsonBruckTimeCourseTests, self).setUp()
-        self.TC = pycotools.tasks.TimeCourse(self.model, end=1000,
-                                             step_size=100, intervals=10,
-                                             max_internal_steps=50000,
-                                             method='gibson_bruck')
+        self.TC = pycotools3.tasks.TimeCourse(self.model, end=1000,
+                                              step_size=100, intervals=10,
+                                              max_internal_steps=50000,
+                                              method='gibson_bruck')
         self.timecourse = self.TC.model  # self.TC.set_timecourse()
         self.timecourse.save()
-        self.new_model = pycotools.tasks.CopasiMLParser(self.copasi_file).xml
+        self.new_model = pycotools3.tasks.CopasiMLParser(self.copasi_file).xml
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
         self.list_of_reports = '{http://www.copasi.org/static/schema}ListOfReports'
 

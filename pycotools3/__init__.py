@@ -23,7 +23,7 @@ logging.config.fileConfig(LOG_CONFIG_FILE,
 
 LOG = logging.getLogger('root')
 
-## define the list of modules imported with the "from pycotools import *" statement
+## define the list of modules imported with the "from pycotools3 import *" statement
 __all__ = ['tasks', 'model', 'viz']
 
 

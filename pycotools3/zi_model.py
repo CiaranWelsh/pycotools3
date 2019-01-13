@@ -1,6 +1,6 @@
 import site
-site.addsitedir('/home/b3053674/Documents/pycotools')
-from pycotools import model, viz, tasks, Models
+site.addsitedir('/home/b3053674/Documents/pycotools3')
+from pycotools3 import model, viz, tasks, Models
 import glob, os
 
 print(Models)

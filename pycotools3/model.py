@@ -72,7 +72,7 @@ class GetModelComponentFromStringMixin(Mixin):
     For Developers
 
     Take a :py:class:`Model`, a component type and a string giving
-    the name of that component and return the pycotools object
+    the name of that component and return the pycotools3 object
     for that component. Uses :py:meth:`Model.get`. Implemented as
     :py:mod:`mixin` to facilitate reuse across all necessary classes.
 
@@ -195,7 +195,7 @@ class BuildAntimony(object):
     """
     Context manager around telluriums antimony to SBML conversion.
     Builds an sbml from antimony code, converts it to a copasi
-    file which is then coerced into a pycotools model.
+    file which is then coerced into a pycotools3 model.
     """
 
     def __init__(self, copasi_file):
@@ -244,7 +244,7 @@ class BuildAntimony(object):
         copy(self.copasiSE_output_file, self.copasi_file)
         os.remove(self.copasiSE_output_file)
 
-        ## create a pycotools model from the resulting copasi_file
+        ## create a pycotools3 model from the resulting copasi_file
         self.mod = Model(self.copasi_file)
 
         ## return the model so that we can change its name on exit
@@ -359,7 +359,7 @@ class Model(_base._Base):
     =======================     =======================
 
     Usage:
-        >>> from pycotools.model import Model
+        >>> from pycotools3.model import Model
         >>> model_path = r'/full/path/to/model.cps'
         >>> model = Model(model_path) ##work in concentration units
         >>> model = Model(model_path, quantity_type='particle_numbers') ## work in particle numbers
@@ -2899,7 +2899,7 @@ class Reaction(object):
     def create_rate_law_function(self):
         """
         interpret the exression given for rate law
-        and produce a pycotools function object
+        and produce a pycotools3 function object
         :return:
         """
 

@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 '''
- This file is part of pycotools.
+ This file is part of pycotools3.
 
- pycotools is free software: you can redistribute it and/or modify
+ pycotools3 is free software: you can redistribute it and/or modify
  it under the terms of the GNU Lesser General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
 
- pycotools is distributed in the hope that it will be useful,
+ pycotools3 is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU Lesser General Public License for more details.
 
  You should have received a copy of the GNU Lesser General Public License
- along with pycotools.  If not, see <http://www.gnu.org/licenses/>.
+ along with pycotools3.  If not, see <http://www.gnu.org/licenses/>.
 
 
 Author:
@@ -25,7 +25,7 @@ Date:
 '''
 
 
-import pycotools
+import pycotools3
 import unittest
 import os
 import pandas
@@ -35,19 +35,19 @@ class ExperimentMapperTests(_test_base._BaseTest):
     def setUp(self):
         super(ExperimentMapperTests, self).setUp()
 
-        self.TC1 = pycotools.tasks.TimeCourse(self.model,
+        self.TC1 = pycotools3.tasks.TimeCourse(self.model,
                                                end=1000,
                                                step_size=100,
                                                intervals=10,
                                                report_name='report1.txt')
-        self.TC2 = pycotools.tasks.TimeCourse(self.model,
+        self.TC2 = pycotools3.tasks.TimeCourse(self.model,
                                                end=1000,
                                                step_size=100,
                                                intervals=10,
                                                report_name='report2.txt')
 
-        pycotools.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
-        pycotools.misc.correct_copasi_timecourse_headers(self.TC2.report_name)
+        pycotools3.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
+        pycotools3.misc.correct_copasi_timecourse_headers(self.TC2.report_name)
 
         df = pandas.read_csv(self.TC2.report_name, sep='\t')
         ## remove square brackets around species
@@ -62,7 +62,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
         self.report4= os.path.join(os.path.dirname(self.TC2.report_name), 'report4.txt')
         ss_df.to_csv(self.report4, sep='\t', index=False)
 
-        self.E = pycotools.tasks.ExperimentMapper(self.model,
+        self.E = pycotools3.tasks.ExperimentMapper(self.model,
                                                    [self.TC1.report_name,
                                                     self.TC2.report_name,
                                                     self.report3,
@@ -71,7 +71,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
                                                                     'timecourse', 'steadystate'])
         self.model = self.E.model
         self.model.save()
-        self.new_xml = pycotools.tasks.CopasiMLParser(self.model.copasi_file).xml
+        self.new_xml = pycotools3.tasks.CopasiMLParser(self.model.copasi_file).xml
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
 
     def test_experiment(self):

@@ -1,19 +1,19 @@
 # -*-coding: utf-8 -*-
 """
- This file is part of pycotools.
+ This file is part of pycotools3.
 
- pycotools is free software: you can redistribute it and/or modify
+ pycotools3 is free software: you can redistribute it and/or modify
  it under the terms of the GNU Lesser General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
 
- pycotools is distributed in the hope that it will be useful,
+ pycotools3 is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU Lesser General Public License for more details.
 
  You should have received a copy of the GNU Lesser General Public License
- along with pycotools.  If not, see <http://www.gnu.org/licenses/>.
+ along with pycotools3.  If not, see <http://www.gnu.org/licenses/>.
 
  
 
@@ -394,7 +394,7 @@ class Parse(object):
     """
     General class for parsing copasi output into Python.
 
-    First argument is an instance of a pycotools class.
+    First argument is an instance of a pycotools3 class.
 
     ==================================          ===========================
     instance                                       Description
@@ -419,7 +419,7 @@ class Parse(object):
         """
 
         :param cls_instance:
-            A instance of pycotools class
+            A instance of pycotools3 class
 
         :param log10:
             `bool`. Whether to work on log10 scale
@@ -4878,7 +4878,7 @@ class PearsonsCorrelation(_Viz):
 
 if __name__=='__main__':
     pass
-#    execfile('/home/b3053674/Documents/pycotools/pycotools/pycotoolsTutorial/Test/testing_kholodenko_manually.py')
+#    execfile('/home/b3053674/Documents/pycotools3/pycotools3/pycotoolsTutorial/Test/testing_kholodenko_manually.py')
 
     
     

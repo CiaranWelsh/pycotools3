@@ -5,12 +5,12 @@ Created on Tue Aug  1 14:43:23 2017
 
 @author: b3053674
 
-This file provides a set of base classes for pycotools.Tests only.
-It is not used in pycotools itself.
+This file provides a set of base classes for pycotools3.Tests only.
+It is not used in pycotools3 itself.
 
 
 """
-import pycotools
+import pycotools3
 import unittest
 import glob
 import os
@@ -72,7 +72,7 @@ class _BaseTest(unittest.TestCase):
                           B2C_0 is "B2C";
                         end"""
 
-        with pycotools.model.BuildAntimony(self.copasi_file) as loader:
+        with pycotools3.model.BuildAntimony(self.copasi_file) as loader:
             self.model = loader.load(self.ant)
 
     def tearDown(self):

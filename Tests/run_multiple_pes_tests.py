@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 '''
- This file is part of pycotools.
+ This file is part of pycotools3.
 
- pycotools is free software: you can redistribute it and/or modify
+ pycotools3 is free software: you can redistribute it and/or modify
  it under the terms of the GNU Lesser General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
 
- pycotools is distributed in the hope that it will be useful,
+ pycotools3 is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU Lesser General Public License for more details.
 
  You should have received a copy of the GNU Lesser General Public License
- along with pycotools.  If not, see <http://www.gnu.org/licenses/>.
+ along with pycotools3.  If not, see <http://www.gnu.org/licenses/>.
 
 
 Author:
@@ -27,8 +27,8 @@ Date:
 
 import pickle
 import site
-import pycotools
-from pycotools.retrying import retry
+import pycotools3
+from pycotools3.retrying import retry
 import unittest
 import os
 import pandas
@@ -40,12 +40,12 @@ class MultiParameterEstimationTests(_test_base._BaseTest):
     def setUp(self):
         super(MultiParameterEstimationTests, self).setUp()
 
-        self.TC1 = pycotools.tasks.TimeCourse(self.model, end=1000, step_size=100,
+        self.TC1 = pycotools3.tasks.TimeCourse(self.model, end=1000, step_size=100,
                                                intervals=10, report_name='report1.txt')
 
-        pycotools.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
+        pycotools3.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
         ## add some noise
-        data1 = pycotools.misc.add_noise(self.TC1.report_name)
+        data1 = pycotools3.misc.add_noise(self.TC1.report_name)
 
         ## remove the data
         os.remove(self.TC1.report_name)
@@ -53,7 +53,7 @@ class MultiParameterEstimationTests(_test_base._BaseTest):
         ## rewrite the data with noise
         data1.to_csv(self.TC1.report_name, sep='\t')
 
-        self.MPE = pycotools.tasks.MultiParameterEstimation(
+        self.MPE = pycotools3.tasks.MultiParameterEstimation(
             self.model,
             self.TC1.report_name,
             copy_number=4,
@@ -121,7 +121,7 @@ class MultiParameterEstimationTests(_test_base._BaseTest):
         :return:
         """
         self.MPE.run()
-        P = pycotools.viz.Parse(self.MPE)
+        P = pycotools3.viz.Parse(self.MPE)
         self.assertTrue(isinstance(P.data, pandas.core.frame.DataFrame))
 
     def test_usage_of_start_value(self):
@@ -132,8 +132,8 @@ class MultiParameterEstimationTests(_test_base._BaseTest):
         :return:
         """
         self.MPE.run()
-        p = pycotools.viz.Parse(self.MPE)
-        PE = pycotools.tasks.ParameterEstimation(
+        p = pycotools3.viz.Parse(self.MPE)
+        PE = pycotools3.tasks.ParameterEstimation(
             self.model, self.TC1.report_name,
             method='genetic_algorithm',
             population_size=20,

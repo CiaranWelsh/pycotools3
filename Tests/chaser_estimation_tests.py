@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 '''
- This file is part of pycotools.
+ This file is part of pycotools3.
 
- pycotools is free software: you can redistribute it and/or modify
+ pycotools3 is free software: you can redistribute it and/or modify
  it under the terms of the GNU Lesser General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
 
- pycotools is distributed in the hope that it will be useful,
+ pycotools3 is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU Lesser General Public License for more details.
 
  You should have received a copy of the GNU Lesser General Public License
- along with pycotools.  If not, see <http://www.gnu.org/licenses/>.
+ along with pycotools3.  If not, see <http://www.gnu.org/licenses/>.
 
 
 Author:
@@ -27,7 +27,7 @@ Date:
 
 import pickle
 import site
-from pycotools import tasks, viz, misc, model, utils
+from pycotools3 import tasks, viz, misc, model, utils
 import unittest
 import os
 
@@ -106,7 +106,7 @@ class ChaserParameterEstimationTests(unittest.TestCase):
     def tearDown(self):
         """
         Tests fail with:
-         WindowsError: [Error 32] The process cannot access the file because it is being used by another process: 'D:\\pycotools\\Tests\\ChaserEstimationTests'
+         WindowsError: [Error 32] The process cannot access the file because it is being used by another process: 'D:\\pycotools3\\Tests\\ChaserEstimationTests'
         if you try and remove ChaserEstimation Folder here
         :return:
         """

@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 '''
- This file is part of pycotools.
+ This file is part of pycotools3.
 
- pycotools is free software: you can redistribute it and/or modify
+ pycotools3 is free software: you can redistribute it and/or modify
  it under the terms of the GNU Lesser General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
 
- pycotools is distributed in the hope that it will be useful,
+ pycotools3 is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU Lesser General Public License for more details.
 
  You should have received a copy of the GNU Lesser General Public License
- along with pycotools.  If not, see <http://www.gnu.org/licenses/>.
+ along with pycotools3.  If not, see <http://www.gnu.org/licenses/>.
 
 
  $Author: Ciaran Welsh
@@ -70,7 +70,7 @@ class _Task(object):
     def get_variable_from_string(m, v, glob=False):
         """
         Use model entity name to get the
-        pycotools variable
+        pycotools3 variable
         :param m:
             :py:class:`model`
 
@@ -86,7 +86,7 @@ class _Task(object):
             ))
         if not isinstance(v, str):
             raise errors.InputError('variable_name should be a string')
-        ## allow a user to input a string not pycotools.model class
+        ## allow a user to input a string not pycotools3.model class
         if isinstance(v, str):
             if v in [i.name for i in m.metabolites]:
                 v = m.get('metabolite', v, by='name')
@@ -1096,7 +1096,7 @@ class Reports(_Task):
 
         remove report called report_name
         :param report_name:
-        :return: pycotools.model.Model
+        :return: pycotools3.model.Model
         """
         assert report_name in self.report_types, '{} not a valid report type. These are valid report types: {}'.format(
             report_name, self.report_types)
@@ -1656,7 +1656,7 @@ class TimeCourse(_Task):
         ser a time course report containing time
         and all species or global quantities defined by the user.
 
-        :return: pycotools.model.Model
+        :return: pycotools3.model.Model
         """
         report_options = {'metabolites': self.metabolites,
                           'global_quantities': self.global_quantities,
@@ -1889,7 +1889,7 @@ class Scan(_Task):
         #     if i[0] == self.distribution_type:
         #         self.distribution_type = str(i[1])
 
-        ## allow a user to input a string not pycotools.model class
+        ## allow a user to input a string not pycotools3.model class
         if isinstance(self.variable, str):
             if self.variable in [i.name for i in self.model.metabolites]:
                 self.variable = self.model.get('metabolite', self.variable,
@@ -2584,7 +2584,7 @@ class ExperimentMapper(_Task):
             ## if variable exists list ends up being False, we know
             ## that none of the data in the datafile have
             ## variables correlating to model components. In this case,
-            ## pycotools skips mapping this file and sends a warning
+            ## pycotools3 skips mapping this file and sends a warning
 
             # print list(set(variable_exists_list))[0]
             # print list(set(variable_exists_list))
@@ -3032,7 +3032,7 @@ class ParameterEstimation(_Task):
         """
         create parameter estimation report
         for result collection
-        :return: pycotools.model.Model
+        :return: pycotools3.model.Model
         """
         return Reports(self.model, **self._report_arguments).model
 
@@ -3093,7 +3093,7 @@ class ParameterEstimation(_Task):
         """
         Remove item from parameter estimation
         :param item:
-        :return: pycotools.model.Model
+        :return: pycotools3.model.Model
         """
         all_items = list(self._fit_items.keys())
         query = '//*[@name="FitItem"]'
@@ -3144,7 +3144,7 @@ class ParameterEstimation(_Task):
         """
         Iterate over all fit items and remove them
         from the parameter estimation task
-        :return: pycotools.model.Model
+        :return: pycotools3.model.Model
         """
         for i in self._fit_items:
             self.model = self.remove_fit_item(i)
@@ -3276,7 +3276,7 @@ class ParameterEstimation(_Task):
         """
         Add fit item to model
         :param item: a row from the config template as pandas series
-        :return: pycotools.model.Model
+        :return: pycotools3.model.Model
         """
         ## figure out what type of variable item is and assign to component
         if item['name'] in [i.name for i in self.metabolites]:
@@ -3507,7 +3507,7 @@ class ParameterEstimation(_Task):
     def set_PE_options(self):
         """
         Set parameter estimation sepcific arguments
-        :return: pycotools.model.Model
+        :return: pycotools3.model.Model
         """
 
         scheluled_attrib = {'scheduled': self.scheduled,
@@ -3642,7 +3642,7 @@ class MultiParameterEstimation(ParameterEstimation):
         """
         create parameter estimation report
         for result collection
-        :return: pycotools.model.Model
+        :return: pycotools3.model.Model
         """
         self._report_arguments['report_type'] = 'multi_parameter_estimation'
         return Reports(self.model, **self._report_arguments).model
@@ -3684,7 +3684,7 @@ class MultiParameterEstimation(ParameterEstimation):
         """
         Setup a single scan.
         :param q: queue from multiprocessing
-        :param model: pycotools.model.Model
+        :param model: pycotools3.model.Model
         :param report: str.
         :return:
         """
@@ -4859,7 +4859,7 @@ class ProfileLikelihood(_Task):
         """
         Setup a single scan.
         :param q: queue from multiprocessing
-        :param model: pycotools.model.Model
+        :param model: pycotools3.model.Model
         :param report: str.
         :return:
         """
@@ -5073,7 +5073,7 @@ class Sensitivities(_Task):
         self.update_properties(default_properties)
         self._do_checks()
 
-        ## change signle obejct reference for the pycotools model variable equiv
+        ## change signle obejct reference for the pycotools3 model variable equiv
         self.get_single_object_references()
         ## add a report to output specifications
         self.model = self.create_new_report()
@@ -5474,4 +5474,4 @@ class GlobalSensitivities(Sensitivities):
 if __name__ == '__main__':
     pass
 #    execfile('/home/b3053674/Documents/Models/2017/08_Aug/pycotoolsTests/RunPEs.py')
-#    execfile('/home/b3053674/Documents/pycotools/pycotools/pycotoolsTutorial/Test/testing_kholodenko_manually.py')
+#    execfile('/home/b3053674/Documents/pycotools3/pycotools3/pycotoolsTutorial/Test/testing_kholodenko_manually.py')
