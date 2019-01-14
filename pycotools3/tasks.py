@@ -603,7 +603,7 @@ class RunParallel(_Task):
             model = self.models[num_models_to_process - 1]
             if len(pids) < self.max_active:
                 num_models_to_process -= 1
-                subp = subprocess.Popen(['CopasiSE', model.copasi_file])
+                subp = subprocess.Popen(['CopasiSE', model.copasi_file], shell=True)
                 pids.append(subp.pid)
 
             try:
@@ -2151,7 +2151,6 @@ class ExperimentMapper(_Task):
     def __init__(self, model, experiment_files, **kwargs):
         self.model = self.read_model(model)
         self.kwargs = kwargs
-        # super(ExperimentMapper, self).__init__(model, **kwargs)
         self.experiment_files = experiment_files
         if isinstance(self.experiment_files, list) != True:
             self.experiment_files = [self.experiment_files]
@@ -2272,18 +2271,23 @@ class ExperimentMapper(_Task):
         i is the exeriment_file index
         """
         assert isinstance(index, int)
-        data = pandas.read_csv(self.experiment_files[index], sep=self.separator[index], skip_blank_lines=False,
-                               header=None)
-        data = data.rename(columns=data.iloc[0], copy=False).iloc[1:].reset_index(drop=True)
-        data = data.dropna(axis=0)
-        if data.isnull().any().any() == True:
-            raise NotImplementedError('Pycotools detected multiple experimental repeats in "{}", separated by a blank line.'
-                                      ' This is not '
-                                      'yet supported. Please rearrange your data so that you have '
-                                      'one experiment file per experiment. Alternatively ensure no trailing white '
-                                      'lines exist in your data file.'.format(self.experiment_files[index]))
+        data = pandas.read_csv(
+            self.experiment_files[index],
+            sep=self.separator[index])
+        # data = data.rename(columns=data.iloc[0], copy=False).iloc[1:].reset_index(drop=True)
+        # data = data.dropna(axis=0)
+        # if data.isnull().any().any() == True:
+        #     raise NotImplementedError('Pycotools detected multiple experimental repeats in "{}", separated by a blank line.'
+        #                               ' This is not '
+        #                               'yet supported. Please rearrange your data so that you have '
+        #                               'one experiment file per experiment. Alternatively ensure no trailing white '
+        #                               'lines exist in your data file.'.format(self.experiment_files[index]))
 
         # get observables from data. Must be exact match
+        # print(data)
+        # print(pandas.read_csv(
+        #     self.experiment_files[index],
+        #     sep=self.separator[index]))
         obs = list(data.columns)
         num_rows = str(data.shape[0])
         num_columns = str(data.shape[1])  # plus 1 to account for 0 indexed
