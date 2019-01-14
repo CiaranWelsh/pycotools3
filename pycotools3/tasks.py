@@ -3623,7 +3623,7 @@ class MultiParameterEstimation(ParameterEstimation):
             LOG.warning(
                 'output_in_subtask has been turned on. This means that you\'ll get function evaluations with the best parameter set that the algorithm finds')
 
-        run_arg_list = ['multiprocess', 'SGE']
+        run_arg_list = ['parallel', 'sge']
 
         if self.run_mode not in run_arg_list:
             raise errors.InputError('run_mode needs to be one of {}'.format(run_arg_list))
@@ -3743,7 +3743,7 @@ class MultiParameterEstimation(ParameterEstimation):
         except AttributeError:
             raise errors.IncorrectUsageError('You must use the setup method before the run method')
 
-        if self.run_mode == 'SGE':
+        if self.run_mode == 'sge':
             try:
                 check_call('qhost')
             except errors.NotImplementedError:
