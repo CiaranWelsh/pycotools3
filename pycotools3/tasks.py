@@ -603,7 +603,7 @@ class RunParallel(_Task):
             model = self.models[num_models_to_process - 1]
             if len(pids) < self.max_active:
                 num_models_to_process -= 1
-                subp = subprocess.Popen(['CopasiSE', model.copasi_file], shell=True)
+                subp = subprocess.Popen(['CopasiSE', model.copasi_file])
                 pids.append(subp.pid)
 
             try:

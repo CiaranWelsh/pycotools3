@@ -72,5 +72,6 @@ setup(
         'docs': [
             'sphinx >= 1.4',
             'sphinx_rtd_theme']
-    }
+    },
+    python_requires='>=3'
 )
