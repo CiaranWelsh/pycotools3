@@ -3749,14 +3749,16 @@ class MultiParameterEstimation(ParameterEstimation):
             except errors.NotImplementedError:
                 LOG.warning(
                     'Attempting to run in SGE mode but SGE specific commands are unavailable. Switching to \'multiprocess\' mode')
-                self.run_mode = 'multiprocess'
-        if self.run_mode == 'multiprocess':
+                self.run_mode = 'parallel'
+        if self.run_mode == 'parallel':
             RunParallel(list(self.models.values()), mode=self.run_mode, max_active=self.max_active,
                         task='scan')
-        else:
+        elif self.run_mode:
             for copy_number, model in list(self.models.items()):
                 LOG.info('running model: {}'.format(copy_number))
                 Run(model, mode=self.run_mode, task='scan')
+        else:
+            raise ValueError('"{}" is not a valid argument'.format(self.run_mode))
 
     def setup(self):
         """
