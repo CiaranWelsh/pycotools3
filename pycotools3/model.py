@@ -3245,8 +3245,9 @@ class ParameterDescription(object):
             self.role = 'constant'
 
         roles = ['constant', 'modifier', 'substrate',
-                 'product', 'volume']
+                 'product', 'volume', 'variable']
         if self.role not in roles:
+            print('role', self.role)
             raise errors.InputError('{} is not one of {}'.format(self.role, roles))
 
 
