@@ -2298,8 +2298,8 @@ class ExperimentMapper(_Task):
         else:
             exp = self.experiment_files[index]
 
-        self.key = 'Experiment_{}'.format(index)
-
+        # self.key = 'Experiment_{}'.format(index)
+        self.key = os.path.split(self.experiment_files[index])[1][:-4]
         # necessary XML attributes
         Exp = etree.Element('ParameterGroup', attrib={'name': self.key})
 
@@ -3757,6 +3757,9 @@ class MultiParameterEstimation(ParameterEstimation):
             for copy_number, model in list(self.models.items()):
                 LOG.info('running model: {}'.format(copy_number))
                 Run(model, mode=self.run_mode, task='scan')
+        elif not self.run_mode:
+            pass
+
         else:
             raise ValueError('"{}" is not a valid argument'.format(self.run_mode))
 

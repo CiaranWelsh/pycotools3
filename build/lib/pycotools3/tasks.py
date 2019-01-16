@@ -2151,7 +2151,6 @@ class ExperimentMapper(_Task):
     def __init__(self, model, experiment_files, **kwargs):
         self.model = self.read_model(model)
         self.kwargs = kwargs
-        # super(ExperimentMapper, self).__init__(model, **kwargs)
         self.experiment_files = experiment_files
         if isinstance(self.experiment_files, list) != True:
             self.experiment_files = [self.experiment_files]
@@ -2272,18 +2271,23 @@ class ExperimentMapper(_Task):
         i is the exeriment_file index
         """
         assert isinstance(index, int)
-        data = pandas.read_csv(self.experiment_files[index], sep=self.separator[index], skip_blank_lines=False,
-                               header=None)
-        data = data.rename(columns=data.iloc[0], copy=False).iloc[1:].reset_index(drop=True)
-        data = data.dropna(axis=0)
-        if data.isnull().any().any() == True:
-            raise NotImplementedError('Pycotools detected multiple experimental repeats in "{}", separated by a blank line.'
-                                      ' This is not '
-                                      'yet supported. Please rearrange your data so that you have '
-                                      'one experiment file per experiment. Alternatively ensure no trailing white '
-                                      'lines exist in your data file.'.format(self.experiment_files[index]))
+        data = pandas.read_csv(
+            self.experiment_files[index],
+            sep=self.separator[index])
+        # data = data.rename(columns=data.iloc[0], copy=False).iloc[1:].reset_index(drop=True)
+        # data = data.dropna(axis=0)
+        # if data.isnull().any().any() == True:
+        #     raise NotImplementedError('Pycotools detected multiple experimental repeats in "{}", separated by a blank line.'
+        #                               ' This is not '
+        #                               'yet supported. Please rearrange your data so that you have '
+        #                               'one experiment file per experiment. Alternatively ensure no trailing white '
+        #                               'lines exist in your data file.'.format(self.experiment_files[index]))
 
         # get observables from data. Must be exact match
+        # print(data)
+        # print(pandas.read_csv(
+        #     self.experiment_files[index],
+        #     sep=self.separator[index]))
         obs = list(data.columns)
         num_rows = str(data.shape[0])
         num_columns = str(data.shape[1])  # plus 1 to account for 0 indexed
@@ -3619,7 +3623,7 @@ class MultiParameterEstimation(ParameterEstimation):
             LOG.warning(
                 'output_in_subtask has been turned on. This means that you\'ll get function evaluations with the best parameter set that the algorithm finds')
 
-        run_arg_list = ['multiprocess', 'SGE']
+        run_arg_list = ['parallel', 'sge']
 
         if self.run_mode not in run_arg_list:
             raise errors.InputError('run_mode needs to be one of {}'.format(run_arg_list))
@@ -3739,20 +3743,25 @@ class MultiParameterEstimation(ParameterEstimation):
         except AttributeError:
             raise errors.IncorrectUsageError('You must use the setup method before the run method')
 
-        if self.run_mode == 'SGE':
+        if self.run_mode == 'sge':
             try:
                 check_call('qhost')
             except errors.NotImplementedError:
                 LOG.warning(
                     'Attempting to run in SGE mode but SGE specific commands are unavailable. Switching to \'multiprocess\' mode')
-                self.run_mode = 'multiprocess'
-        if self.run_mode == 'multiprocess':
+                self.run_mode = 'parallel'
+        if self.run_mode == 'parallel':
             RunParallel(list(self.models.values()), mode=self.run_mode, max_active=self.max_active,
                         task='scan')
-        else:
+        elif self.run_mode:
             for copy_number, model in list(self.models.items()):
                 LOG.info('running model: {}'.format(copy_number))
                 Run(model, mode=self.run_mode, task='scan')
+        elif not self.run_mode:
+            pass
+
+        else:
+            raise ValueError('"{}" is not a valid argument'.format(self.run_mode))
 
     def setup(self):
         """

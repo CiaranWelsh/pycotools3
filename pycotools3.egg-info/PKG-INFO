@@ -1,6 +1,6 @@
-Metadata-Version: 1.1
+Metadata-Version: 2.1
 Name: pycotools3
-Version: 1.0.9
+Version: 1.0.10
 Summary: A python toolbox for COPASI
 Home-page: https://github.com/CiaranWelsh/pycotools3
 Author: Ciaran Welsh
@@ -21,3 +21,5 @@ Requires: sklearn
 Requires: retrying
 Requires: psutil
 Requires: tellurium
+Requires-Python: >=3
+Provides-Extra: docs
