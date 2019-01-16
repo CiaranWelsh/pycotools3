@@ -2298,8 +2298,8 @@ class ExperimentMapper(_Task):
         else:
             exp = self.experiment_files[index]
 
-        self.key = 'Experiment_{}'.format(index)
-
+        # self.key = 'Experiment_{}'.format(index)
+        self.key = os.path.split(self.experiment_files[index])[1][:-4]
         # necessary XML attributes
         Exp = etree.Element('ParameterGroup', attrib={'name': self.key})
 

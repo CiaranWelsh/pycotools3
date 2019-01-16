@@ -2127,6 +2127,18 @@ class Model(_base._Base):
         if kwargs.get('show_parameters'):
             LOG.info('Parameter set that was inserted: \n\n{}'.format(I.parameters.transpose()))
 
+    def to_antimony(self):
+        """
+        Returns antimony string of model. Wrapper around tellurium
+        functions
+        :return:
+        """
+        sbml_file = self.to_sbml()
+        with open(sbml_file) as f:
+            sbml = f.read()
+        antimony_str = te.sbmlToAntimony(sbml)
+        return antimony_str
+
 
 class ReadModelMixin(Mixin):
     """
