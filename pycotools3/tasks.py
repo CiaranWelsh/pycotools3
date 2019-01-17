@@ -2274,20 +2274,7 @@ class ExperimentMapper(_Task):
         data = pandas.read_csv(
             self.experiment_files[index],
             sep=self.separator[index])
-        # data = data.rename(columns=data.iloc[0], copy=False).iloc[1:].reset_index(drop=True)
-        # data = data.dropna(axis=0)
-        # if data.isnull().any().any() == True:
-        #     raise NotImplementedError('Pycotools detected multiple experimental repeats in "{}", separated by a blank line.'
-        #                               ' This is not '
-        #                               'yet supported. Please rearrange your data so that you have '
-        #                               'one experiment file per experiment. Alternatively ensure no trailing white '
-        #                               'lines exist in your data file.'.format(self.experiment_files[index]))
 
-        # get observables from data. Must be exact match
-        # print(data)
-        # print(pandas.read_csv(
-        #     self.experiment_files[index],
-        #     sep=self.separator[index]))
         obs = list(data.columns)
         num_rows = str(data.shape[0])
         num_columns = str(data.shape[1])  # plus 1 to account for 0 indexed
@@ -2344,7 +2331,7 @@ class ExperimentMapper(_Task):
                                 'value': str(self.row_containing_names[index])}
 
         separator = {'type': 'string',
-                     'name': 'separator',
+                     'name': 'Separator',
                      'value': self.separator[index]}
 
         weight_method = {'type': 'unsignedInteger',
@@ -2590,8 +2577,6 @@ class ExperimentMapper(_Task):
             ## variables correlating to model components. In this case,
             ## pycotools3 skips mapping this file and sends a warning
 
-            # print list(set(variable_exists_list))[0]
-            # print list(set(variable_exists_list))
             if (list(set(variable_exists_list))[0] == False) and (len(list(set(variable_exists_list))) == 1):
                 LOG.warning('None of the column headers in your experimental '
                             'data file ("{}") match any model variable in model "{}". If '
