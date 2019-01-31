@@ -56,38 +56,84 @@ class ParameterEstimationTests(_test_base._BaseTest):
         self.TC1 = pycotools3.tasks.TimeCourse(self.model, end=1000, step_size=100,
                                                intervals=10, report_name='report1.txt')
 
+        self.TC2 = pycotools3.tasks.TimeCourse(self.model, end=1000, step_size=100,
+                                               intervals=10, report_name='report2.txt')
+
+        self.TC3 = pycotools3.tasks.TimeCourse(self.model, end=1000, step_size=100,
+                                               intervals=10, report_name='report3.txt')
+
         ## add some noise
         data1 = pycotools3.misc.add_noise(self.TC1.report_name)
+        data2 = pycotools3.misc.add_noise(self.TC2.report_name)
+        data2 = pycotools3.misc.add_noise(self.TC3.report_name)
 
         ## remove the data
         os.remove(self.TC1.report_name)
+        os.remove(self.TC2.report_name)
+        os.remove(self.TC3.report_name)
 
         ## rewrite the data with noise
         data1.to_csv(self.TC1.report_name, sep='\t')
+        data2.to_csv(self.TC2.report_name, sep='\t')
+        data2.to_csv(self.TC3.report_name, sep='\t')
 
         pycotools3.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
+        pycotools3.misc.correct_copasi_timecourse_headers(self.TC2.report_name)
+        pycotools3.misc.correct_copasi_timecourse_headers(self.TC3.report_name)
 
         self.PE = pycotools3.tasks.ParameterEstimation(self.model,
-                                                       self.TC1.report_name,
+                                                       [self.TC1.report_name, self.TC2.report_name,
+                                                        self.TC3.report_name],
+                                                       validation=[False, True, True],
                                                        method='genetic_algorithm',
                                                        population_size=10,
                                                        number_of_generations=10,
-                                                       report_name='PE_report_name')
+                                                       report_name='PE_report_name',
+                                                       overwrite_config_file=True,
+                                                       validation_weight=2.5,
+                                                       validation_threshold=9.5,
+                                                       )
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
 
+
+
     def test_report_name(self):
-        print(self.PE.report_name)
         self.assertTrue(self.PE.report_name == 'PE_report_name')
 
-    def test_config_file(self):
+    def test_validation_data(self):
+        self.PE.write_config_file()
+        self.PE.setup()
+        self.PE.model.open()
+
+    def test_get_experiment_keys1(self):
+        experiment_keys = self.PE._get_experiment_keys()
+        print(experiment_keys)
+        self.assertEqual(experiment_keys['report2'], 'Experiment_1')
+
+    def test_get_experiment_keys2(self):
+        experiment_keys = self.PE._get_experiment_keys()
+        print(experiment_keys)
+        self.assertEqual(len(experiment_keys), 2)
+
+    def test_write_config_file(self):
         """
         A test that PE writes the config file to the
         right place
         :return:
         """
-        # self.PE.item_template
         self.PE.write_config_file()
         self.assertTrue(os.path.isfile(self.PE.config_filename))
+
+    def test_read_config_file(self):
+        """
+        A test that PE writes the config file to the
+        right place
+        :return:
+        """
+        from collections import OrderedDict
+        self.PE.read_config_file()
+        self.assertIsInstance(self.PE.mappings, OrderedDict)
+        self.assertIsInstance(self.PE.optimization_item_list, pandas.DataFrame)
 
     def test_insert_fit_items(self):
         '''
@@ -157,8 +203,9 @@ class ParameterEstimationTests(_test_base._BaseTest):
         if os.path.isfile(self.PE.config_filename):
             os.remove(self.PE.config_filename)
         self.PE.write_config_file()
-        self.model = self.PE.setup()
-        # self.model.open()
+        self.models_dct = self.PE.setup()
+        keys = list(self.models_dct.keys())
+        # self.models_dct[keys[0]].open()
 
 
 class ParameterEstimationConfigFileTests(_test_base._BaseTest):

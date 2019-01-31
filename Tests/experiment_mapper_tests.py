@@ -68,10 +68,15 @@ class ExperimentMapperTests(_test_base._BaseTest):
                                                     self.report3,
                                                     self.report4],
                                                    experiment_type=['timecourse', 'timecourse',
-                                                                    'timecourse', 'steadystate'])
+                                                                    'timecourse', 'steadystate'],
+                                                   validation=[False, True, True, False],
+                                                   validation_weight=2,
+                                                   validation_thershold=6
+                                                   )
         self.model = self.E.model
         self.model.save()
-        self.new_xml = pycotools3.tasks.CopasiMLParser(self.model.copasi_file).xml
+        self.new_cps = pycotools3.tasks.CopasiMLParser(self.model.copasi_file)
+        self.new_xml = self.new_cps.xml
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
 
     def test_experiment(self):
@@ -84,7 +89,48 @@ class ExperimentMapperTests(_test_base._BaseTest):
         for i in self.new_xml.xpath(query):
             for j in i:
                 count += 1
-        self.assertEqual(count, 4)
+        self.assertEqual(count, 2)
+
+    def test_validation_weight(self):
+        """
+        Test that 2 experiments have been set up
+        :return:
+        """
+
+        query = '//*[@name="Validation Set"]'
+
+        for j in self.new_xml.xpath(query):
+            for k in list(j):
+                if k.attrib['name'] == 'Weight':
+                    self.assertEqual(k.attrib['value'], str(self.E.validation_weight))
+
+
+    def test_validation_threshold(self):
+        """
+        Test that 2 experiments have been set up
+        :return:
+        """
+
+        query = '//*[@name="Validation Set"]'
+
+        for j in self.new_xml.xpath(query):
+            for k in list(j):
+                if k.attrib['name'] == 'Threshold':
+                    self.assertEqual(k.attrib['value'], str(self.E.validation_threshold))
+
+    def test_validation(self):
+        """
+        Test that 2 validation experiments have been set up
+        :return:
+        """
+        count = 0
+        query = '//*[@name="Validation Set"]'
+        for i in self.new_xml.xpath(query):
+            for j in i:
+                ## new validation experiments are under a parameter group tag, under Validation Set
+                if j.tag == '{http://www.copasi.org/static/schema}ParameterGroup':
+                    count += 1
+        self.assertEqual(count, 2)
 
     def test_experiment2(self):
         """

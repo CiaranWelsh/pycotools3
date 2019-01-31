@@ -76,8 +76,8 @@ class _BaseTest(unittest.TestCase):
             self.model = loader.load(self.ant)
 
     def tearDown(self):
-        tear_down = True
-        delete_dirs = True
+        tear_down = False
+        delete_dirs = False
 
         if tear_down:
             dire = os.path.dirname(self.copasi_file)
