@@ -2670,6 +2670,21 @@ class ParameterEstimation(_Task):
                                     accepted here and passed on
     ===========================     ==================================================
 
+
+
+     ===========================     ==================================================
+     ParameterEstimation Kwargs               Description
+     ===========================     ==================================================
+     copy_number                     default: 1. Number of model copies to configure
+     pe_number                       default: 1. Number of parameter estimations per
+                                     model
+     run_mode                        default: True
+     results_directory               default: MultiParameterEstimationResults in
+                                     same directory as :py:attr:`coapsi_file`
+     max_active                      default: None. Number of models to run
+                                     simultaneously. If None then run all.
+     ===========================     ==================================================
+
     """
 
     def __init__(self, model, experiment_files, **kwargs):
@@ -2684,6 +2699,7 @@ class ParameterEstimation(_Task):
 
         :param kwargs:
             :ref:`parameter_estimation_kwargs`
+
         """
         self.model = self.read_model(model)
         self.kwargs = kwargs
@@ -2692,61 +2708,66 @@ class ParameterEstimation(_Task):
         if isinstance(self.experiment_files, list) != True:
             self.experiment_files = [self.experiment_files]
 
-        default_report_name = os.path.join(os.path.dirname(self.model.copasi_file), 'PEData.txt')
+        # default_report_name = os.path.join(os.path.dirname(self.model.copasi_file), 'PEData.txt')
         config_file = os.path.join(os.path.dirname(self.model.copasi_file), 'config_file.csv')
 
-        self.default_properties = {'metabolites': self.model.metabolites,
-                                   'global_quantities': self.model.global_quantities,
-                                   'local_parameters': self.model.local_parameters,
-                                   'quantity_type': 'concentration',
-                                   'report_name': default_report_name,
-                                   'append': False,
-                                   'confirm_overwrite': False,
-                                   'config_filename': config_file,
-                                   'overwrite_config_file': False,
-                                   'update_model': False,
-                                   'randomize_start_values': True,
-                                   'create_parameter_sets': False,
-                                   'calculate_statistics': False,
-                                   'use_config_start_values': False,
-                                   # method options
-                                   'method': 'genetic_algorithm',
-                                   # 'DifferentialEvolution',
-                                   'number_of_generations': 200,
-                                   'population_size': 50,
-                                   'random_number_generator': 1,
-                                   'seed': 0,
-                                   'pf': 0.475,
-                                   'iteration_limit': 50,
-                                   'tolerance': 0.00001,
-                                   'rho': 0.2,
-                                   'scale': 10,
-                                   'swarm_size': 50,
-                                   'std_deviation': 0.000001,
-                                   'number_of_iterations': 100000,
-                                   'start_temperature': 1,
-                                   'cooling_factor': 0.85,
-                                   # experiment definition options
-                                   # need to include options for defining multiple experimental files at once
-                                   'row_orientation': [True] * len(self.experiment_files),
-                                   'experiment_type': ['timecourse'] * len(self.experiment_files),
-                                   'first_row': [str(1)] * len(self.experiment_files),
-                                   'normalize_weights_per_experiment': [True] * len(self.experiment_files),
-                                   'row_containing_names': [str(1)] * len(self.experiment_files),
-                                   'separator': ['\t'] * len(self.experiment_files),
-                                   'weight_method': ['mean_squared'] * len(self.experiment_files),
-                                   'scheduled': False,
-                                   'lower_bound': 0.000001,
-                                   'upper_bound': 1000000,
-                                   'start_value': 0.1,
-                                   'save': False,
-                                   'run_mode': True,
-                                   'max_active': None}
+        self.default_properties = {
+            'metabolites': self.model.metabolites,
+            'global_quantities': self.model.global_quantities,
+            'local_parameters': self.model.local_parameters,
+            'copy_number': 1,
+            'pe_number': 1,
+            'results_directory': os.path.join(self.model.root, 'ParameterEstimationResults'),
+            'quantity_type': 'concentration',
+            'report_name': 'PEData.txt',
+            'append': False,
+            'confirm_overwrite': False,
+            'config_filename': config_file,
+            'overwrite_config_file': False,
+            'update_model': False,
+            'randomize_start_values': True,
+            'create_parameter_sets': False,
+            'calculate_statistics': False,
+            'use_config_start_values': False,
+            # method options
+            'method': 'genetic_algorithm',
+            # 'DifferentialEvolution',
+            'number_of_generations': 200,
+            'population_size': 50,
+            'random_number_generator': 1,
+            'seed': 0,
+            'pf': 0.475,
+            'iteration_limit': 50,
+            'tolerance': 0.00001,
+            'rho': 0.2,
+            'scale': 10,
+            'swarm_size': 50,
+            'std_deviation': 0.000001,
+            'number_of_iterations': 100000,
+            'start_temperature': 1,
+            'cooling_factor': 0.85,
+            # experiment definition options
+            # need to include options for defining multiple experimental files at once
+            'row_orientation': [True] * len(self.experiment_files),
+            'experiment_type': ['timecourse'] * len(self.experiment_files),
+            'first_row': [str(1)] * len(self.experiment_files),
+            'normalize_weights_per_experiment': [True] * len(self.experiment_files),
+            'row_containing_names': [str(1)] * len(self.experiment_files),
+            'separator': ['\t'] * len(self.experiment_files),
+            'weight_method': ['mean_squared'] * len(self.experiment_files),
+            'scheduled': False,
+            'lower_bound': 0.000001,
+            'upper_bound': 1000000,
+            'start_value': 0.1,
+            'save': False,
+            'run_mode': True,
+            'max_active': None
+        }
 
         self.default_properties.update(self.kwargs)
         self.default_properties = self.convert_bool_to_numeric(self.default_properties)
         self.update_properties(self.default_properties)
-        self._remove_multiparameter_estimation_arg()
+        # self._remove_multiparameter_estimation_arg()
         self.check_integrity(list(self.default_properties.keys()), list(self.kwargs.keys()))
 
         self._do_checks()
@@ -2763,20 +2784,20 @@ class ParameterEstimation(_Task):
     def get_default_properties(self):
         return self.default_properties
 
-    def _remove_multiparameter_estimation_arg(self):
-        """
-        MultiParameterEstimation inherits from ParameterEstimation
-        and passes new arguments to the ParameterEstimation class
-        which get fed into self.check_integrity causing Exception.
-        This method removes those arguments
-        :return:
-        """
-        lst = ['copy_number',
-               'pe_number',
-               'results_directory']
-        for i in lst:
-            if i in list(self.kwargs.keys()):
-                del self.kwargs[i]
+    # def _remove_multiparameter_estimation_arg(self):
+    #     """
+    #     MultiParameterEstimation inherits from ParameterEstimation
+    #     and passes new arguments to the ParameterEstimation class
+    #     which get fed into self.check_integrity causing Exception.
+    #     This method removes those arguments
+    #     :return:
+    #     """
+    #     lst = ['copy_number',
+    #            'pe_number',
+    #            'results_directory']
+    #     for i in lst:
+    #         if i in list(self.kwargs.keys()):
+    #             del self.kwargs[i]
 
     def _do_checks(self):
         """
@@ -2793,9 +2814,9 @@ class ParameterEstimation(_Task):
                     new_attr.append(self.get_variable_from_string(self.model, getattribute[i]))
                     setattr(self, attr, new_attr)
 
-        if os.path.isabs(self.report_name) != True:
-            self.report_name = os.path.join(os.path.dirname(self.model.copasi_file),
-                                            self.report_name)
+        # if os.path.isabs(self.report_name) != True:
+        #     self.report_name = os.path.join(os.path.dirname(self.model.copasi_file),
+        #                                     self.report_name)
 
         ## ensure experiment files exist
         for fle in self.experiment_files:
@@ -2873,6 +2894,22 @@ class ParameterEstimation(_Task):
             self.randomize_start_values = '0'
             self.use_config_start_values = True
 
+
+        # if self.output_in_subtask:
+        #     LOG.warning(
+        #         'output_in_subtask has been turned on. This means that you\'ll get function evaluations with the best parameter set that the algorithm finds')
+
+        run_arg_list = [False, True, 'parallel', 'sge']
+
+        if self.run_mode not in run_arg_list:
+            raise errors.InputError('run_mode needs to be one of {}'.format(run_arg_list))
+
+        if isinstance(self.copy_number, int) != True:
+            raise errors.InputError('copy_number argument is of type int')
+
+        if isinstance(self.pe_number, int) != True:
+            raise errors.InputError('pe_number argument is of type int')
+
     @property
     def _experiment_mapper_args(self):
         """
@@ -2889,22 +2926,22 @@ class ParameterEstimation(_Task):
         kwargs_experiment['weight_method'] = self.weight_method
         return kwargs_experiment
 
-    def setup(self):
-        """
-        Setup a parameter estimation
-        :return:
-        """
-        EM = ExperimentMapper(self.model, self.experiment_files, **self._experiment_mapper_args)
-        self.model = EM.model
-        self.model = self.define_report()
-        self.model = self.remove_all_fit_items()
-        self.model = self.set_PE_method()
-        self.model = self.set_PE_options()
-        self.model = self.insert_all_fit_items()
-        assert self.model != None
-        assert isinstance(self.model, model.Model)
-        self.model.save()
-        return self.model
+    # def setup(self):
+    #     """
+    #     Setup a parameter estimation
+    #     :return:
+    #     """
+    #     EM = ExperimentMapper(self.model, self.experiment_files, **self._experiment_mapper_args)
+    #     self.model = EM.model
+    #     self.model = self.define_report()
+    #     self.model = self.remove_all_fit_items()
+    #     self.model = self.set_PE_method()
+    #     self.model = self.set_PE_options()
+    #     self.model = self.insert_all_fit_items()
+    #     assert self.model != None
+    #     assert isinstance(self.model, model.Model)
+    #     self.model.save()
+    #     return self.model
 
     def _select_method(self):
         """
@@ -3017,7 +3054,7 @@ class ParameterEstimation(_Task):
         report_dict['report_name'] = self.report_name
         report_dict['append'] = self.append
         report_dict['confirm_overwrite'] = self.confirm_overwrite
-        report_dict['report_type'] = 'parameter_estimation'
+        report_dict['report_type'] = 'multi_parameter_estimation'
         return report_dict
 
     def define_report(self):
@@ -3028,6 +3065,7 @@ class ParameterEstimation(_Task):
         """
         return Reports(self.model, **self._report_arguments).model
 
+
     def get_report_key(self):
         """
         After creating the report to collect
@@ -3037,18 +3075,10 @@ class ParameterEstimation(_Task):
         :return:
         """
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
-            if i.attrib['name'].lower() == 'parameter_estimation':
+            if i.attrib['name'].lower() == 'multi_parameter_estimation':
                 key = i.attrib['key']
         assert key != None
         return key
-
-    def format_results(self):
-        """
-        Results come without headers - parse the results
-        give them the proper headers then overwrite the file again
-        :return:
-        """
-        FormatPEData(self.model, self.report_name, report_type='parameter_estimation')
 
     @property
     def _fit_items(self):
@@ -3534,93 +3564,17 @@ class ParameterEstimation(_Task):
                             k.attrib.update(create_parameter_sets)
         return self.model
 
-    def run(self):
-        """
-        Run the parameter estimation using the Run class
-        :return:
-        """
-        if self.run_mode is 'multiprocess':
-            RunParallel(self.model, task='parameter_estimation', max_active=self.max_active)
-        else:
-            Run(self.model, mode=self.run_mode, task='parameter_estimation')
-
-    # def plot(self):
-    #     self.PL=viz.PlotPEData(self.copasi_file,self.experiment_files,self.kwargs.get('report_name'),
-    #                     **self.PlotPEDataKwargs)
+    # def run(self):
+    #     """
+    #     Run the parameter estimation using the Run class
+    #     :return:
+    #     """
+    #     if self.run_mode is 'multiprocess':
+    #         RunParallel(self.model, task='parameter_estimation', max_active=self.max_active)
+    #     else:
+    #         Run(self.model, mode=self.run_mode, task='parameter_estimation')
 
 
-class MultiParameterEstimation(ParameterEstimation):
-    """
-    Inherits from ParameterEstimation and accepts the same
-    kwargs :ref:`parameter_estimation_kwargs`
-
-    .. _multi_parameter_estimation_kwargs:
-
-    MultiParameterEstimation Kwargs
-    ===============================
-
-    ===========================     ==================================================
-    ParameterEstimation Kwargs               Description
-    ===========================     ==================================================
-    copy_number                     default: 1. Number of model copies to configure
-    pe_number                       default: 3. Number of parameter estimations per
-                                    model
-    run_mode                        default: parallel
-    results_directory               default: MultiParameterEstimationResults in
-                                    same directory as :py:attr:`coapsi_file`
-    output_in_subtask               default: False. Passed on to Scan.
-                                    Whether to output during subtask. Mostly we want this
-                                    False so we only get best parameter values, rather
-                                    than intermittant function evaluations
-    max_active                      default: None. Number of models to run 
-                                    simultaneously. If None then run all.
-    ===========================     ==================================================
-
-    """
-
-    ##TODO Merge ParameterEstimation and Multi into one class.
-    def __init__(self, model, experiment_files, copy_number=1, pe_number=3,
-                 run_mode='parallel', results_directory=None,
-                 output_in_subtask=False, max_active=None, skip_config=False, **kwargs):
-        super(MultiParameterEstimation, self).__init__(model, experiment_files, **kwargs)
-        ## add to ParameterEstimation defaults
-        self.copy_number = copy_number
-        self.pe_number = pe_number
-        self.run_mode = run_mode
-        self.max_active = max_active
-        self.results_directory = results_directory
-        self.skip_config = skip_config
-        self.output_in_subtask = output_in_subtask
-
-        if self.results_directory is None:
-            self.results_directory = os.path.join(os.path.dirname(self.model.copasi_file),
-                                                  'MultipleParameterEstimationResults')
-
-    def __str__(self):
-        return 'MultiParameterEstimation(copy_number="{}", pe_number="{}", method="{}")'.format(
-            self.copy_number, self.pe_number, self.method
-        )
-
-    ##void
-    def __do_checks(self):
-        """
-
-        :return:
-        """
-        if self.output_in_subtask:
-            LOG.warning(
-                'output_in_subtask has been turned on. This means that you\'ll get function evaluations with the best parameter set that the algorithm finds')
-
-        run_arg_list = ['parallel', 'sge']
-
-        if self.run_mode not in run_arg_list:
-            raise errors.InputError('run_mode needs to be one of {}'.format(run_arg_list))
-
-        if isinstance(self.copy_number, int) != True:
-            raise errors.InputError('copy_number argument is of type int')
-
-        if isinstance(self.kwargs['pe_number'], int) != True:
-            raise errors.InputError('pe_number argument is of type int')
 
     def _create_output_directory(self):
         """
@@ -3630,15 +3584,6 @@ class MultiParameterEstimation(ParameterEstimation):
         if os.path.isdir(self.results_directory) != True:
             os.mkdir(self.results_directory)
 
-    def define_report(self):
-        """
-        create parameter estimation report
-        for result collection
-        :return: pycotools3.model.Model
-        """
-        self._report_arguments['report_type'] = 'multi_parameter_estimation'
-        return Reports(self.model, **self._report_arguments).model
-
     def enumerate_PE_output(self):
         """
         Create a filename for each file to collect PE results
@@ -3646,10 +3591,12 @@ class MultiParameterEstimation(ParameterEstimation):
         """
 
         dct = {}
-        dire, fle = os.path.split(self.report_name)
         for i in range(self.copy_number):
-            new_file = os.path.join(self.results_directory,
-                                    fle[:-4] + '{}.txt'.format(str(i)))
+            new_file = os.path.join(
+                self.results_directory, '{}_{}.txt'.format(self.report_name, i)
+            )
+
+
             dct[i] = new_file
         return dct
 
@@ -3690,7 +3637,7 @@ class MultiParameterEstimation(ParameterEstimation):
                             run=False,
                             append=self.append,
                             confirm_overwrite=self.confirm_overwrite,
-                            output_in_subtask=self.output_in_subtask,
+                            output_in_subtask=False,
                             save=True))
 
     def _setup_scan(self, models):
@@ -3751,6 +3698,23 @@ class MultiParameterEstimation(ParameterEstimation):
         else:
             raise ValueError('"{}" is not a valid argument'.format(self.run_mode))
 
+    # def setup(self):
+    #     """
+    #     Setup a parameter estimation
+    #     :return:
+    #     """
+    #     EM = ExperimentMapper(self.model, self.experiment_files, **self._experiment_mapper_args)
+    #     self.model = EM.model
+    #     self.model = self.define_report()
+    #     self.model = self.remove_all_fit_items()
+    #     self.model = self.set_PE_method()
+    #     self.model = self.set_PE_options()
+    #     self.model = self.insert_all_fit_items()
+    #     assert self.model != None
+    #     assert isinstance(self.model, model.Model)
+    #     self.model.save()
+    #     return self.model
+
     def setup(self):
         """
         Over-ride the setup method from parameter estimation.
@@ -3764,21 +3728,19 @@ class MultiParameterEstimation(ParameterEstimation):
         ## create a report for PE results collection
         self.model = self.define_report()
 
-        ## If skip_config then do not configure the parameter estimation task
-        if not self.skip_config:
-            ## map experiments
-            EM = ExperimentMapper(self.model, self.experiment_files, **self._experiment_mapper_args)
+        ## map experiments
+        EM = ExperimentMapper(self.model, self.experiment_files, **self._experiment_mapper_args)
 
-            ## get model from ExperimentMapper
-            self.model = EM.model
+        ## get model from ExperimentMapper
+        self.model = EM.model
 
-            ## get rid of existing parameter estimation definition
-            self.model = self.remove_all_fit_items()
+        ## get rid of existing parameter estimation definition
+        self.model = self.remove_all_fit_items()
 
-            ## create new parameter estimation
-            self.model = self.set_PE_method()
-            self.model = self.set_PE_options()
-            self.model = self.insert_all_fit_items()
+        ## create new parameter estimation
+        self.model = self.set_PE_method()
+        self.model = self.set_PE_options()
+        self.model = self.insert_all_fit_items()
 
         ## ensure we have model
         assert self.model != None
@@ -3795,22 +3757,6 @@ class MultiParameterEstimation(ParameterEstimation):
         self.models = self._setup_scan(models)
         assert isinstance(models[0], model.Model)
         return models
-
-    # def run_secondary_locals(self, log10=False, truncate_mode='percent',
-    #                          theta=100, iteration_limit=100, tolerance=1e-6):
-    #     """
-    #     run a secondary local parameter estimation
-    #     using the truncate data facilities to select a subset
-    #     :return:
-    #     """
-    #     self.method = 'hooke_jeeves'
-    #     self.iteration_limit = iteration_limit
-    #     self.tolerance = tolerance
-    #     self.pe_number=1
-    #     data = viz.Parse(self, log10=log10).data
-    #     data = viz.TruncateData(data, mode=truncate_mode, theta=theta).data
-    #     num_to_process = data.shape[0]
-    #     print self.model
 
 
 class ChaserParameterEstimations(_Task):
@@ -4149,7 +4095,7 @@ class MultiModelFit(_Task):
         self._do_checks()
 
         self.sub_cps_dirs = self.create_workspace()
-        self.MPE_dct = self.instantiate_run_multi_PEs_class()
+        self.MPE_dct = self.instantiate_parameter_estimation_classes()
         self.results_folder_dct = self.get_output_directories()
 
     def _do_checks(self):
@@ -4177,7 +4123,7 @@ class MultiModelFit(_Task):
     def items(self):
         return list(self.MPE_dct.items())
 
-    def instantiate_run_multi_PEs_class(self):
+    def instantiate_parameter_estimation_classes(self):
         """
         pass correct arguments to the runMultiplePEs class in order
         to instantiate a runMultiplePEs instance for each model.
@@ -4194,7 +4140,7 @@ class MultiModelFit(_Task):
 
             m = model.Model(self.sub_cps_dirs[cps_dir])
 
-            dct[self.sub_cps_dirs[cps_dir]] = MultiParameterEstimation(
+            dct[self.sub_cps_dirs[cps_dir]] = ParameterEstimation(
                 self.sub_cps_dirs[cps_dir], self.exp_files,
                 **self.kwargs
             )
@@ -4826,18 +4772,6 @@ class ProfileLikelihood(_Task):
 
         return self.model_dct
 
-    # def setup_report(self):
-    #     for model in self.model_dct:
-    #         for param in self.model_dct[model]:
-    #             st = misc.RemoveNonAscii(param).filter
-    #             self.model_dct[model][param] = Reports(
-    #                 self.model_dct[model][param],
-    #                 report_type='multi_parameter_estimation',
-    #                 report_name=st + '.txt'
-    #             ).model
-    #             self.model_dct[model][param].save()
-    #     return self.model_dct
-
     def to_file(self):
         """
         create and write our profile likelihood
@@ -4889,8 +4823,6 @@ class ProfileLikelihood(_Task):
         """
         number_of_cpu = cpu_count()
         q = queue.Queue(maxsize=number_of_cpu)
-        # report_files = self.enumerate_PE_output()
-        res = {}
         res = {}
         for model in self.model_dct:
             res[model] = {}
@@ -4932,7 +4864,6 @@ class ProfileLikelihood(_Task):
 
         :return:
         """
-        # if self.run == 'multiprocess'
         model_list = []
         if self.run is 'parallel':
             for i in self.model_dct:

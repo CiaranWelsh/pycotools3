@@ -85,7 +85,8 @@ class _BaseTest(unittest.TestCase):
                        'ParameterEstimationPlots', 'test_mpe',
                        'EnsembleTimeCourse', 'Histograms',
                        'LinearRegression', 'MultipleParameterEstimationResults',
-                       'PCA', 'Scatters', 'ProfileLikelihoods']
+                       'PCA', 'Scatters', 'ProfileLikelihoods',
+                       'ParameterEstimationResults']
             if delete_dirs:
                 for i in subdirs:
                     d = os.path.join(dire, i)

@@ -29,10 +29,9 @@ import pycotools3
 import unittest
 import os
 import pandas
+import re
 from Tests import _test_base
 
-
-##TODO Test that local_parameters, metabolites and global quantity argument work
 
 def parse_timecourse(self):
     """
@@ -73,12 +72,12 @@ class ParameterEstimationTests(_test_base._BaseTest):
                                                        method='genetic_algorithm',
                                                        population_size=10,
                                                        number_of_generations=10,
-                                                       report_name='PE_report_name.csv')
+                                                       report_name='PE_report_name')
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
 
     def test_report_name(self):
-        self.assertTrue(
-            self.PE.report_name == os.path.join(os.path.dirname(self.model.copasi_file), self.PE.report_name))
+        print(self.PE.report_name)
+        self.assertTrue(self.PE.report_name == 'PE_report_name')
 
     def test_config_file(self):
         """
@@ -121,8 +120,8 @@ class ParameterEstimationTests(_test_base._BaseTest):
         self.PE.write_config_file()
         self.model = self.PE.setup()
         self.PE.run()
-        print((self.PE.report_name))
-        self.assertTrue(os.path.isfile(self.PE.report_name))
+        f = os.path.join(self.PE.results_directory, self.PE.report_name) + '_0.txt'
+        self.assertTrue(os.path.isfile(f))
 
     def test_viz_param_est_parser(self):
         """
@@ -134,9 +133,8 @@ class ParameterEstimationTests(_test_base._BaseTest):
         self.model = self.PE.setup()
         self.PE.run()
         p = pycotools3.viz.Parse(self.PE)
-        order = ['A', 'B', 'C', 'A2B', 'ADeg_k1',
-                 'B2C', 'B2C_0_k2', 'C2A_k1', 'ThisIsAssignment', 'RSS']
-        df = p.from_parameter_estimation
+        order = ['A', 'B', 'C', 'A2B', 'ADeg_k1', 'B2C', 'B2C_0_k2', 'C2A_k1', 'ThisIsAssignment', 'RSS']
+        df = p.from_multi_parameter_estimation(self.PE)
         self.assertListEqual(sorted(order), sorted(list(df.columns)))
 
     def test_viz_param_est_parser_len(self):
@@ -148,8 +146,10 @@ class ParameterEstimationTests(_test_base._BaseTest):
         self.PE.write_config_file()
         self.model = self.PE.setup()
         self.PE.run()
+        import time
+        time.sleep(2)
         p = pycotools3.viz.Parse(self.PE)
-        df = p.from_parameter_estimation
+        df = p.from_multi_parameter_estimation(self.PE)
         self.assertEqual(df.shape[0], 1)
 
     #

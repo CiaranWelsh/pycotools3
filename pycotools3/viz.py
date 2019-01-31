@@ -453,7 +453,6 @@ class Parse(object):
         accepted_types = [tasks.TimeCourse,
                           tasks.Scan,
                           tasks.ParameterEstimation,
-                          tasks.MultiParameterEstimation,
                           str,
                           Parse,
                           tasks.ProfileLikelihood,
@@ -503,10 +502,10 @@ class Parse(object):
         if isinstance(self.cls_instance, tasks.TimeCourse):
             data = self.from_timecourse()
 
-        elif type(self.cls_instance) == tasks.ParameterEstimation:
-            data = self.from_parameter_estimation
+        # elif type(self.cls_instance) == tasks.ParameterEstimation:
+        #     data = self.from_parameter_estimation
 
-        elif type(self.cls_instance) == tasks.MultiParameterEstimation:
+        elif type(self.cls_instance) == tasks.ParameterEstimation:
             data = self.from_multi_parameter_estimation(self.cls_instance)
 
         elif type(self.cls_instance) == Parse:
@@ -555,8 +554,6 @@ class Parse(object):
         except IndexError as e:
             if e.message == 'list index out of range':
                 pass
-
-
         return df
 
     def parse_scan(self):
@@ -569,8 +566,6 @@ class Parse(object):
             sep='\t',
             skip_blank_lines=False,
         )
-        # names = []
-        # d = {names[i]: x.dropna() for i, x in df.groupby(df[0].isnull().cumsum())}
         return NotImplementedError('scan plotting features are not yet implemented')
 
     @cached_property

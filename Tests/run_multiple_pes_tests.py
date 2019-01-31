@@ -53,12 +53,13 @@ class MultiParameterEstimationTests(_test_base._BaseTest):
         ## rewrite the data with noise
         data1.to_csv(self.TC1.report_name, sep='\t')
 
-        self.MPE = pycotools3.tasks.MultiParameterEstimation(
+        self.MPE = pycotools3.tasks.ParameterEstimation(
             self.model,
             self.TC1.report_name,
             copy_number=4,
             pe_number=8,
             method='genetic_algorithm',
+            run_mode=True,
             population_size=20,
             number_of_generations=20,
             overwrite_config_file=True,
@@ -67,6 +68,11 @@ class MultiParameterEstimationTests(_test_base._BaseTest):
 
         self.MPE.write_config_file()
         self.MPE.setup()
+
+    def test(self):
+        self.MPE.write_config_file()
+        self.MPE.setup()
+        self.MPE.run()
 
     def test_output_directory(self):
         self.assertTrue(os.path.isdir(self.MPE.results_directory))
@@ -114,41 +120,41 @@ class MultiParameterEstimationTests(_test_base._BaseTest):
             df_dct[f] = pandas.read_csv(f, sep='\t', skiprows=1, header=None)
         df = pandas.concat(df_dct)
         self.assertTrue(df.shape[0] == x)
-
-    def test_viz_parser(self):
-        """
-
-        :return:
-        """
-        self.MPE.run()
-        P = pycotools3.viz.Parse(self.MPE)
-        self.assertTrue(isinstance(P.data, pandas.core.frame.DataFrame))
-
-    def test_usage_of_start_value(self):
-        """
-        Start values can be given to the start_value
-        argument.
-
-        :return:
-        """
-        self.MPE.run()
-        p = pycotools3.viz.Parse(self.MPE)
-        PE = pycotools3.tasks.ParameterEstimation(
-            self.model, self.TC1.report_name,
-            method='genetic_algorithm',
-            population_size=20,
-            number_of_generations=20,
-            start_value=p.data.iloc[0],
-            overwrite_config_file=True,
-        )
-        PE.write_config_file()
-        PE.setup()
-
-        ## No time to finish the test but opening
-        ## the model shows that parameter have been inserted
-        ## into the ParameterEstimation start values option
-        # print p
-        # PE.model.open()
+    #
+    # def test_viz_parser(self):
+    #     """
+    #
+    #     :return:
+    #     """
+    #     self.MPE.run()
+    #     P = pycotools3.viz.Parse(self.MPE)
+    #     self.assertTrue(isinstance(P.data, pandas.core.frame.DataFrame))
+    #
+    # def test_usage_of_start_value(self):
+    #     """
+    #     Start values can be given to the start_value
+    #     argument.
+    #
+    #     :return:
+    #     """
+    #     self.MPE.run()
+    #     p = pycotools3.viz.Parse(self.MPE)
+    #     PE = pycotools3.tasks.ParameterEstimation(
+    #         self.model, self.TC1.report_name,
+    #         method='genetic_algorithm',
+    #         population_size=20,
+    #         number_of_generations=20,
+    #         start_value=p.data.iloc[0],
+    #         overwrite_config_file=True,
+    #     )
+    #     PE.write_config_file()
+    #     PE.setup()
+    #
+    #     ## No time to finish the test but opening
+    #     ## the model shows that parameter have been inserted
+    #     ## into the ParameterEstimation start values option
+    #     # print p
+    #     # PE.model.open()
 
 
 

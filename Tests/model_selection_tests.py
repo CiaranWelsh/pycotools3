@@ -27,6 +27,7 @@ from Tests import _test_base
 import unittest
 import os
 import glob
+import shutil
 
 
 class ModelSelectionTests(unittest.TestCase):
@@ -158,9 +159,21 @@ class ModelSelectionTests(unittest.TestCase):
 
     def test_plot_violin(self):
         MS = viz.ModelSelection(self.MMF, savefig=True)
-        files = glob.glob(os.path.join(MS.results_directory, '*'))
+        dire = os.path.join(MS.results_directory, 'ModelSelectionGraphs')
+        files = glob.glob(os.path.join(dire, '*.png'))
         ## make sure 3 files are written, one for each model selection criteria and one for the csv file
-        self.assertEqual(len(files), 4)
+        self.assertEqual(len(files), 3)
+
+
+    def tearDown(self):
+        tear_down = True
+        delete_dirs = True
+        if tear_down:
+            try:
+                shutil.rmtree(self.dire)
+            except WindowsError:
+                print('failed with windows error')
+
 
 
 
