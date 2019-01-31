@@ -2185,7 +2185,7 @@ class LikelihoodRanks(_Viz, PlotKwargs):
         self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
         self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
 
-        self.plot()
+        self.fig = self.plot()
 
     def _do_checks(self):
         """
@@ -2258,6 +2258,8 @@ class LikelihoodRanks(_Viz, PlotKwargs):
 
         if self.show:
             plt.show()
+
+        return fig
 
 
 class Pca(_Viz, PlotKwargs):

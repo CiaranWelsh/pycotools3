@@ -343,8 +343,9 @@ class Run(_Task):
     =============           ==============
     False                   Do not run
     True                    Run one at a time
-    multiprocess            Run several at once
+    parallel                Run several at once
     sge                     Run on sun grid engine
+    slurm                   Run on Slurm
     =============           ==============
     """
 
@@ -488,6 +489,8 @@ class Run(_Task):
 
         ## -N option for job namexx
         os.system('qsub "{}" -N "{}" '.format(self.sge_job_filename, self.sge_job_filename))
+        os.remove(self.sge_job_filename)
+
 
     def submit_copasi_job_slurm(self):
         """
@@ -3562,7 +3565,7 @@ class MultiParameterEstimation(ParameterEstimation):
     copy_number                     default: 1. Number of model copies to configure
     pe_number                       default: 3. Number of parameter estimations per
                                     model
-    run_mode                        default: multiprocess
+    run_mode                        default: parallel
     results_directory               default: MultiParameterEstimationResults in
                                     same directory as :py:attr:`coapsi_file`
     output_in_subtask               default: False. Passed on to Scan.
@@ -3577,7 +3580,7 @@ class MultiParameterEstimation(ParameterEstimation):
 
     ##TODO Merge ParameterEstimation and Multi into one class.
     def __init__(self, model, experiment_files, copy_number=1, pe_number=3,
-                 run_mode='multiprocess', results_directory=None,
+                 run_mode='parallel', results_directory=None,
                  output_in_subtask=False, max_active=None, skip_config=False, **kwargs):
         super(MultiParameterEstimation, self).__init__(model, experiment_files, **kwargs)
         ## add to ParameterEstimation defaults
@@ -3733,7 +3736,7 @@ class MultiParameterEstimation(ParameterEstimation):
                 check_call('qhost')
             except errors.NotImplementedError:
                 LOG.warning(
-                    'Attempting to run in SGE mode but SGE specific commands are unavailable. Switching to \'multiprocess\' mode')
+                    'Attempting to run in SGE mode but SGE specific commands are unavailable. Switching to \'parallel\' mode')
                 self.run_mode = 'parallel'
         if self.run_mode == 'parallel':
             RunParallel(list(self.models.values()), mode=self.run_mode, max_active=self.max_active,
