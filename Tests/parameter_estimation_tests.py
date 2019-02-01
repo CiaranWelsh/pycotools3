@@ -62,48 +62,62 @@ class ParameterEstimationTests(_test_base._BaseTest):
         self.TC3 = pycotools3.tasks.TimeCourse(self.model, end=1000, step_size=100,
                                                intervals=10, report_name='report3.txt')
 
+        self.TC4 = pycotools3.tasks.TimeCourse(self.model, end=1000, step_size=100,
+                                               intervals=10, report_name='report4.txt')
+
+        self.TC5 = pycotools3.tasks.TimeCourse(self.model, end=1000, step_size=100,
+                                               intervals=10, report_name='report5.txt')
+
         ## add some noise
         data1 = pycotools3.misc.add_noise(self.TC1.report_name)
         data2 = pycotools3.misc.add_noise(self.TC2.report_name)
-        data2 = pycotools3.misc.add_noise(self.TC3.report_name)
+        data3 = pycotools3.misc.add_noise(self.TC3.report_name)
+        data4 = pycotools3.misc.add_noise(self.TC4.report_name)
+        data5 = pycotools3.misc.add_noise(self.TC5.report_name)
 
         ## remove the data
         os.remove(self.TC1.report_name)
         os.remove(self.TC2.report_name)
         os.remove(self.TC3.report_name)
+        os.remove(self.TC4.report_name)
+        os.remove(self.TC5.report_name)
 
         ## rewrite the data with noise
         data1.to_csv(self.TC1.report_name, sep='\t')
         data2.to_csv(self.TC2.report_name, sep='\t')
-        data2.to_csv(self.TC3.report_name, sep='\t')
+        data3.to_csv(self.TC3.report_name, sep='\t')
+        data4.to_csv(self.TC4.report_name, sep='\t')
+        data5.to_csv(self.TC5.report_name, sep='\t')
 
         pycotools3.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
         pycotools3.misc.correct_copasi_timecourse_headers(self.TC2.report_name)
         pycotools3.misc.correct_copasi_timecourse_headers(self.TC3.report_name)
+        pycotools3.misc.correct_copasi_timecourse_headers(self.TC4.report_name)
+        pycotools3.misc.correct_copasi_timecourse_headers(self.TC5.report_name)
 
         self.PE = pycotools3.tasks.ParameterEstimation(self.model,
                                                        [self.TC1.report_name, self.TC2.report_name,
-                                                        self.TC3.report_name],
-                                                       validation=[False, True, True],
+                                                        self.TC3.report_name, self.TC4.report_name,
+                                                        self.TC5.report_name],
+                                                       validation=[False, True, True, False, False],
                                                        method='genetic_algorithm',
                                                        population_size=10,
                                                        number_of_generations=10,
                                                        report_name='PE_report_name',
-                                                       overwrite_config_file=True,
+                                                       overwrite_config_file=False,
                                                        validation_weight=2.5,
                                                        validation_threshold=9.5,
                                                        )
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
 
+    def test_affected_experiments(self):
+        self.PE.write_config_file()
+        self.PE.setup()
+        self.PE.model.open()
 
 
     def test_report_name(self):
         self.assertTrue(self.PE.report_name == 'PE_report_name')
-
-    def test_validation_data(self):
-        self.PE.write_config_file()
-        self.PE.setup()
-        self.PE.model.open()
 
     def test_get_experiment_keys1(self):
         experiment_keys = self.PE._get_experiment_keys()

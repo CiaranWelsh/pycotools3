@@ -2346,6 +2346,9 @@ class ExperimentMapper(_Task):
             exp = self.experiment_files[index]
 
         self.key = os.path.split(self.experiment_files[index])[1][:-4]
+        self.key = self.experiment_fil
+        print('key', self.key)
+        # raise NotImplementedError(Need to change the line above to ensure correct key is used)
         # necessary XML attributes
         experiment_group = etree.Element('ParameterGroup', attrib={'name': self.key})
 
@@ -3232,19 +3235,20 @@ class ParameterEstimation(_Task):
 
         for i in range(len(self.experiment_files)):
             df = pandas.read_csv(self.experiment_files[i], sep=exp_kwargs['separator'][i])
-            key = 'Experiment_{}'.format(i)
-            exp_dct[key] = OrderedDict()
-            exp_dct[key]['filename'] = self.experiment_files[i]
-            exp_dct[key]['experiment_type'] = exp_kwargs['experiment_type'][i]
-            exp_dct[key]['first_row'] = int(exp_kwargs['first_row'][i])
-            exp_dct[key]['last_row'] = int(df.shape[0])
-            exp_dct[key]['normalize_weights_per_experiment'] = exp_kwargs['normalize_weights_per_experiment'][i]
-            exp_dct[key]['weight_method'] = exp_kwargs['weight_method'][i]
-            exp_dct[key]['row_containing_names'] = exp_kwargs['row_containing_names'][i]
-            exp_dct[key]['separator'] = exp_kwargs['separator'][i]
-            exp_dct[key]['validation'] = exp_kwargs['validation'][i]
+            name = os.path.split(self.experiment_files[i])[1][:-4]
+            exp_dct[name] = OrderedDict()
+            exp_dct[name]['filename'] = self.experiment_files[i]
+            exp_dct[name]['key'] = 'Experiment_{}'.format(i)
+            exp_dct[name]['experiment_type'] = exp_kwargs['experiment_type'][i]
+            exp_dct[name]['first_row'] = int(exp_kwargs['first_row'][i])
+            exp_dct[name]['last_row'] = int(df.shape[0])
+            exp_dct[name]['normalize_weights_per_experiment'] = exp_kwargs['normalize_weights_per_experiment'][i]
+            exp_dct[name]['weight_method'] = exp_kwargs['weight_method'][i]
+            exp_dct[name]['row_containing_names'] = exp_kwargs['row_containing_names'][i]
+            exp_dct[name]['separator'] = exp_kwargs['separator'][i]
+            exp_dct[name]['validation'] = exp_kwargs['validation'][i]
 
-            exp_dct[key]['Mappings'] = OrderedDict()
+            exp_dct[name]['Mappings'] = OrderedDict()
             for item in range(df.shape[1]):
                 experiment_type = 'ignored'
                 if df.columns[item][:-6] == '_indep':
@@ -3254,10 +3258,10 @@ class ParameterEstimation(_Task):
                 elif df.columns[item].lower() == 'time':
                     experiment_type = 'time'
 
-                exp_dct[key]['Mappings']['column_{}'.format(item)] = OrderedDict()
-                exp_dct[key]['Mappings']['column_{}'.format(item)]['data_column_name'] = df.columns[item]
-                exp_dct[key]['Mappings']['column_{}'.format(item)]['model_object'] = df.columns[item]
-                exp_dct[key]['Mappings']['column_{}'.format(item)]['experiment_type'] = experiment_type
+                exp_dct[name]['Mappings']['column_{}'.format(item)] = OrderedDict()
+                exp_dct[name]['Mappings']['column_{}'.format(item)]['data_column_name'] = df.columns[item]
+                exp_dct[name]['Mappings']['column_{}'.format(item)]['model_object'] = df.columns[item]
+                exp_dct[name]['Mappings']['column_{}'.format(item)]['experiment_type'] = experiment_type
 
         ## convert start_value to numeric to keep yaml file consistent
         item_template = self.item_template.transpose()
@@ -3311,6 +3315,7 @@ class ParameterEstimation(_Task):
                         experiment_mapping_args = dct[k]
                         experiment_files = []
                         experiment_type = []
+                        experiment_keys = []
                         first_row = []
                         last_row = []
                         normalize_weights_per_experiment = []
@@ -3319,20 +3324,25 @@ class ParameterEstimation(_Task):
                         separator = []
                         validation = []
 
-                        for experiment_key in experiment_mapping_args:
-                            experiment_files.append(experiment_mapping_args[experiment_key]['filename'])
-                            experiment_type.append(experiment_mapping_args[experiment_key]['experiment_type'])
-                            first_row.append(experiment_mapping_args[experiment_key]['first_row'])
-                            last_row.append(experiment_mapping_args[experiment_key]['last_row'])
+                        for experiment_name in experiment_mapping_args:
+                            print('exp k', experiment_name)
+                            experiment_files.append(experiment_mapping_args[experiment_name]['filename'])
+                            experiment_type.append(experiment_mapping_args[experiment_name]['experiment_type'])
+                            experiment_keys.append(experiment_mapping_args[experiment_name]['key'])
+                            first_row.append(experiment_mapping_args[experiment_name]['first_row'])
+                            last_row.append(experiment_mapping_args[experiment_name]['last_row'])
                             normalize_weights_per_experiment.append(
-                                experiment_mapping_args[experiment_key]['normalize_weights_per_experiment'])
-                            weight_method.append(experiment_mapping_args[experiment_key]['weight_method'])
-                            row_containing_names.append(experiment_mapping_args[experiment_key]['row_containing_names'])
-                            separator.append(experiment_mapping_args[experiment_key]['separator'])
-                            validation.append(experiment_mapping_args[experiment_key]['validation'])
-                            mappings[experiment_key] = experiment_mapping_args[experiment_key]['Mappings']
+                                experiment_mapping_args[experiment_name]['normalize_weights_per_experiment'])
+                            weight_method.append(experiment_mapping_args[experiment_name]['weight_method'])
+                            row_containing_names.append(experiment_mapping_args[experiment_name]['row_containing_names'])
+                            separator.append(experiment_mapping_args[experiment_name]['separator'])
+                            validation.append(experiment_mapping_args[experiment_name]['validation'])
+                            mappings[experiment_name] = experiment_mapping_args[experiment_name]['Mappings']
 
                         setattr(self, 'experiment_type', experiment_type)
+                        setattr(self, 'experiment_keys', experiment_keys)
+                        # raise NotImplementedError('Need to ensure config file is read properly aftr '
+                        #                           'changing it so that experiment names not keys are ids ')
                         setattr(self, 'first_row', first_row)
                         setattr(self, 'last_row', last_row)
                         setattr(self, 'normalize_weights_per_experiment', normalize_weights_per_experiment)
@@ -3344,6 +3354,7 @@ class ParameterEstimation(_Task):
 
                     elif k == 'OptimizationItemList':
                         opt = pandas.DataFrame(dct[k]).transpose()
+                        print(opt)
                         setattr(self, 'optimization_item_list', opt)
 
                     elif k == 'OptimizationConstraintList':
@@ -3492,10 +3503,33 @@ class ParameterEstimation(_Task):
         # initialize new element
         new_element = etree.Element('ParameterGroup', attrib={'name': 'FitItem'})
 
+        '''
+                                <ParameterGroup name="Affected Cross Validation Experiments">
+                        </ParameterGroup>
+                        <ParameterGroup name="Affected Experiments">
+                            <Parameter name="Experiment Key" type="key" value="Experiment_1"/>
+                        </ParameterGroup>
+        '''
+
         ##TODO include affected Cross Validation Experiments
         ##TODO include Affected Experiment options
         subA1 = {'name': 'Affected Cross Validation Experiments'}
+
         subA2 = {'name': 'Affected Experiments'}
+        print(self._get_experiment_keys())
+
+        # if item['affected_experiments'] != 'all':
+        #     if isinstance(item['affected_experiments'], str):
+        #         item['affected_experiments'] = [item['affected_experiments']]
+        #
+        #     affected_experiments_attr = {}
+        #     for affected_experiment in item['affected_experiments']:
+        #         print('aff', affected_experiment)
+        #         affected_experiments_attr[affected_experiment] = {}
+        #         affected_experiments_attr[affected_experiment]['name'] = 'Experiment Key'
+        #         affected_experiments_attr[affected_experiment]['type'] = 'key'
+        #         affected_experiments_attr[affected_experiment]['value'] = self._get_experiment_keys()[affected_experiment]
+
         subA3 = {'type': 'cn', 'name': 'LowerBound', 'value': str(item['lower_bound'])}
 
         if self.use_config_start_values == True:
@@ -3503,7 +3537,12 @@ class ParameterEstimation(_Task):
 
         subA6 = {'type': 'cn', 'name': 'UpperBound', 'value': str(item['upper_bound'])}
         etree.SubElement(new_element, 'ParameterGroup', attrib=subA1)
-        etree.SubElement(new_element, 'ParameterGroup', attrib=subA2)
+        affected_experiments_element = etree.SubElement(new_element, 'ParameterGroup', attrib=subA2)
+        # if item['affected_experiments'] != 'all':
+        #     for affected_experiment in affected_experiments_attr:
+        #         etree.SubElement(
+        #             affected_experiments_element, 'Parameter', attrib=affected_experiments_attr[affected_experiment]
+        #         )
         etree.SubElement(new_element, 'Parameter', attrib=subA3)
 
         if self.use_config_start_values == True:
