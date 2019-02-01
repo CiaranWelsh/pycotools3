@@ -54,7 +54,6 @@ from .mixin import Mixin, mixin
 from functools import reduce
 
 ## TODO use generators when iterating over a function with another function. i.e. plotting
-## TODO: create a base class called Task instead of all of these mixin functions.
 
 LOG = logging.getLogger(__name__)
 sns.set_context(context='poster',
