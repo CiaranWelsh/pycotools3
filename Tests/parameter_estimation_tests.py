@@ -104,7 +104,7 @@ class ParameterEstimationTests(_test_base._BaseTest):
                                                        population_size=10,
                                                        number_of_generations=10,
                                                        report_name='PE_report_name',
-                                                       overwrite_config_file=True,
+                                                       overwrite_config_file=False,
                                                        validation_weight=2.5,
                                                        validation_threshold=9.5,
                                                        )
@@ -115,7 +115,7 @@ class ParameterEstimationTests(_test_base._BaseTest):
         # Why are variables not being mapped anymore?
         self.PE.write_config_file()
         self.PE.setup()
-        # self.PE.model.open()
+        self.PE.model.open()
 
     def test_report_name(self):
         self.assertTrue(self.PE.report_name == 'PE_report_name')

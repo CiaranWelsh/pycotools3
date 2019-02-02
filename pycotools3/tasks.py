@@ -2339,8 +2339,8 @@ class ExperimentMapper(_Task):
         else:
             exp = self.experiment_files[index]
 
-        # self.key = os.path.split(self.experiment_files[index])[1][:-4]
         self.key = self.experiment_keys[index]
+
         # necessary XML attributes
         experiment_group = etree.Element('ParameterGroup', attrib={'name': self.key})
 
@@ -2608,8 +2608,6 @@ class ExperimentMapper(_Task):
         self.remove_all_experiments()
         self.remove_all_validation_experiments()
         for index in range(len(self.experiment_files)):
-            # print(self.experiment_files, index)
-            # print(self.separator, index)
 
             ## read data to get headers.
             ## read in such a way that duplicate columns are not mangled
@@ -2649,10 +2647,8 @@ class ExperimentMapper(_Task):
                 query = '//*[@name="Validation Set"]'
             else:
                 query = '//*[@name="Experiment Set"]'
-            # query = '//*[@name="Experiment Set"]'
 
             for j in self.model.xml.xpath(query):
-                # is this being inserted into the correct place?
                 j.insert(0, experiment_element)
                 if self.validation[index]:
                     for k in list(j):
@@ -3322,7 +3318,6 @@ class ParameterEstimation(_Task):
                         validation = []
 
                         for experiment_name in experiment_mapping_args:
-                            print('exp k', experiment_name)
                             experiment_files.append(experiment_mapping_args[experiment_name]['filename'])
                             experiment_type.append(experiment_mapping_args[experiment_name]['experiment_type'])
                             experiment_keys.append(experiment_mapping_args[experiment_name]['key'])
@@ -3350,7 +3345,6 @@ class ParameterEstimation(_Task):
 
                     elif k == 'OptimizationItemList':
                         opt = pandas.DataFrame(dct[k]).transpose()
-                        print(opt)
                         setattr(self, 'optimization_item_list', opt)
 
                     elif k == 'OptimizationConstraintList':
@@ -3509,42 +3503,57 @@ class ParameterEstimation(_Task):
 
         ##TODO include affected Cross Validation Experiments
         ##TODO include Affected Experiment options
-        subA1 = {'name': 'Affected Cross Validation Experiments'}
+        affected_cross_validation_experiments = {'name': 'Affected Cross Validation Experiments'}
 
-        subA2 = {'name': 'Affected Experiments'}
-        print(self._get_experiment_keys())
+        affected_experiments = {'name': 'Affected Experiments'}
 
-        # if item['affected_experiments'] != 'all':
-        #     if isinstance(item['affected_experiments'], str):
-        #         item['affected_experiments'] = [item['affected_experiments']]
-        #
-        #     affected_experiments_attr = {}
-        #     for affected_experiment in item['affected_experiments']:
-        #         print('aff', affected_experiment)
-        #         affected_experiments_attr[affected_experiment] = {}
-        #         affected_experiments_attr[affected_experiment]['name'] = 'Experiment Key'
-        #         affected_experiments_attr[affected_experiment]['type'] = 'key'
-        #         affected_experiments_attr[affected_experiment]['value'] = self._get_experiment_keys()[affected_experiment]
+        ## read affected experiments from config file.yaml
+        affected_experiments_attr = OrderedDict()
+        ## when affected experiments is 'all', the affected experiment element is empty
+        if item['affected_experiments'] != 'all':
+            ## convert a string to a list of 1 so we can cater for the case
+            ## where we have a list of strings with the same code
+            if isinstance(item['affected_experiments'], str):
+                item['affected_experiments'] = [item['affected_experiments']]
 
-        subA3 = {'type': 'cn', 'name': 'LowerBound', 'value': str(item['lower_bound'])}
+            ## iterate over list. Raise ValueError is can't find experiment name
+            ## otherwise add the corresponding experiment key to the affected experiments attr dict
+            for affected_experiment in item['affected_experiments']:  ## iterate over the list
+                if affected_experiment not in self._get_experiment_keys():
+                    raise ValueError('"{}" is not one of your experiments. These are '
+                                     'your valid experimments: "{}"'.format(
+                        affected_experiment, self._get_experiment_keys().keys()
+                    ))
+
+                affected_experiments_attr[affected_experiment] = {}
+                affected_experiments_attr[affected_experiment]['name'] = 'Experiment Key'
+                affected_experiments_attr[affected_experiment]['type'] = 'key'
+                affected_experiments_attr[affected_experiment]['value'] = self._get_experiment_keys()[
+                    affected_experiment]
+        etree.SubElement(new_element, 'ParameterGroup', attrib=affected_cross_validation_experiments)
+        affected_experiments_element = etree.SubElement(new_element, 'ParameterGroup', attrib=affected_experiments)
+
+        ## now add the attributes to the affected experiments element
+        for affected_experiment in affected_experiments_attr:
+            etree.SubElement(
+                affected_experiments_element, 'Parameter', attrib=affected_experiments_attr[affected_experiment]
+            )
+
+        ## get lower bound from config file and add to element
+        lower_bound_element = {'type': 'cn', 'name': 'LowerBound', 'value': str(item['lower_bound'])}
+        etree.SubElement(new_element, 'Parameter', attrib=lower_bound_element)
 
         if self.use_config_start_values == True:
-            subA5 = {'type': 'float', 'name': 'StartValue', 'value': str(item['start_value'])}
+            start_value_element = {'type': 'float', 'name': 'StartValue', 'value': str(item['start_value'])}
 
-        subA6 = {'type': 'cn', 'name': 'UpperBound', 'value': str(item['upper_bound'])}
-        etree.SubElement(new_element, 'ParameterGroup', attrib=subA1)
-        affected_experiments_element = etree.SubElement(new_element, 'ParameterGroup', attrib=subA2)
-        # if item['affected_experiments'] != 'all':
-        #     for affected_experiment in affected_experiments_attr:
-        #         etree.SubElement(
-        #             affected_experiments_element, 'Parameter', attrib=affected_experiments_attr[affected_experiment]
-        #         )
-        etree.SubElement(new_element, 'Parameter', attrib=subA3)
+        ## get upper bound from config file and add to element
+        upper_bound_element = {'type': 'cn', 'name': 'UpperBound', 'value': str(item['upper_bound'])}
+        etree.SubElement(new_element, 'Parameter', attrib=upper_bound_element)
 
         if self.use_config_start_values == True:
-            etree.SubElement(new_element, 'Parameter', attrib=subA5)
-        etree.SubElement(new_element, 'Parameter', attrib=subA6)
+            etree.SubElement(new_element, 'Parameter', attrib=start_value_element)
 
+        ## Now begin creating the object map.
         # for IC parameters
         if isinstance(component, model.Metabolite):
             if self.quantity_type == 'concentration':
