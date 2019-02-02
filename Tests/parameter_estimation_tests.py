@@ -104,17 +104,18 @@ class ParameterEstimationTests(_test_base._BaseTest):
                                                        population_size=10,
                                                        number_of_generations=10,
                                                        report_name='PE_report_name',
-                                                       overwrite_config_file=False,
+                                                       overwrite_config_file=True,
                                                        validation_weight=2.5,
                                                        validation_threshold=9.5,
                                                        )
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
 
     def test_affected_experiments(self):
+
+        # Why are variables not being mapped anymore?
         self.PE.write_config_file()
         self.PE.setup()
-        self.PE.model.open()
-
+        # self.PE.model.open()
 
     def test_report_name(self):
         self.assertTrue(self.PE.report_name == 'PE_report_name')
@@ -127,7 +128,7 @@ class ParameterEstimationTests(_test_base._BaseTest):
     def test_get_experiment_keys2(self):
         experiment_keys = self.PE._get_experiment_keys()
         print(experiment_keys)
-        self.assertEqual(len(experiment_keys), 2)
+        self.assertEqual(len(experiment_keys), 5)
 
     def test_write_config_file(self):
         """
@@ -137,6 +138,15 @@ class ParameterEstimationTests(_test_base._BaseTest):
         """
         self.PE.write_config_file()
         self.assertTrue(os.path.isfile(self.PE.config_filename))
+
+    # def test_write_config_file(self):
+    #     """
+    #     A test that PE writes the config file to the
+    #     right place
+    #     :return:
+    #     """
+    #     self.PE.write_config_file()
+    #     # self.assertTrue(os.path.isfile(self.PE.config_filename))
 
     def test_read_config_file(self):
         """
@@ -155,9 +165,8 @@ class ParameterEstimationTests(_test_base._BaseTest):
         as there are fit items inserted into copasi
         '''
         self.PE.write_config_file()
-        self.PE.model = self.PE.remove_all_fit_items()
-        self.model = self.PE.insert_all_fit_items()
-        self.model.save()
+        self.PE.setup()
+        self.model = self.PE.model.save()
         new_xml = pycotools3.tasks.CopasiMLParser(self.model.copasi_file).xml
         list_of_tasks = new_xml.find(self.list_of_tasks)
         ## [5][1][3] indexes the parameter estimation item list
@@ -190,11 +199,11 @@ class ParameterEstimationTests(_test_base._BaseTest):
         :return:
         """
         self.PE.write_config_file()
-        self.model = self.PE.setup()
+        self.PE.setup()
         self.PE.run()
         p = pycotools3.viz.Parse(self.PE)
         order = ['A', 'B', 'C', 'A2B', 'ADeg_k1', 'B2C', 'B2C_0_k2', 'C2A_k1', 'ThisIsAssignment', 'RSS']
-        df = p.from_multi_parameter_estimation(self.PE)
+        df = p.from_parameter_estimation(self.PE)
         self.assertListEqual(sorted(order), sorted(list(df.columns)))
 
     def test_viz_param_est_parser_len(self):

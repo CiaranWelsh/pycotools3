@@ -178,7 +178,6 @@ class _Task(object):
                     raise Exception('{} is not True or False'.format(v))
         return dct
 
-
     def convert_bool_to_numeric2(self):
         """
         CopasiML uses 1's and 0's for True or False in some
@@ -857,8 +856,6 @@ class Reports(_Task):
                     looks like this:
                         "CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration"
                     '''
-                    # cn= self.model.metabolites[i].reference
-                    # print self.model.reference
                     cn = '{},{},{}'.format(self.model.reference,
                                            i.compartment.reference,
                                            i.transient_reference)
@@ -931,8 +928,6 @@ class Reports(_Task):
                     looks like this:
                         "CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration"
                     '''
-                    # cn= self.model.metabolites[i].reference
-                    # print self.model.reference
                     cn = '{},{},{}'.format(self.model.reference,
                                            i.compartment.reference,
                                            i.transient_reference)
@@ -1031,7 +1026,6 @@ class Reports(_Task):
                              'key': new_key,
                              'taskType': 'parameterFitting'}
 
-        # print self.model, type(self.model)
         ListOfReports = self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports')
         report = etree.SubElement(ListOfReports, 'Report')
         report.attrib.update(report_attributes)
@@ -2099,7 +2093,6 @@ class Scan(_Task):
             etree.SubElement(scanItem_element, 'Parameter', attrib=log_attrib)
             etree.SubElement(scanItem_element, 'Parameter', attrib=dist_type_attrib)
         query = '//*[@name="ScanItems"]'
-        # print etree.tostring(scanItem_element, pretty_print=True)
         for i in self.model.xml.xpath(query):
             i.append(scanItem_element)
         return self.model
@@ -2207,6 +2200,7 @@ class ExperimentMapper(_Task):
             'validation': [False] * len(self.experiment_files),
             'row_orientation': [True] * len(self.experiment_files),
             'experiment_type': ['timecourse'] * len(self.experiment_files),
+            'experiment_keys': ['Experiment_{}'.format(i) for i in range(len(self.experiment_files))],
             'first_row': [1] * len(self.experiment_files),
             'normalize_weights_per_experiment': [True] * len(self.experiment_files),
             'row_containing_names': [1] * len(self.experiment_files),
@@ -2345,10 +2339,8 @@ class ExperimentMapper(_Task):
         else:
             exp = self.experiment_files[index]
 
-        self.key = os.path.split(self.experiment_files[index])[1][:-4]
-        self.key = self.experiment_fil
-        print('key', self.key)
-        # raise NotImplementedError(Need to change the line above to ensure correct key is used)
+        # self.key = os.path.split(self.experiment_files[index])[1][:-4]
+        self.key = self.experiment_keys[index]
         # necessary XML attributes
         experiment_group = etree.Element('ParameterGroup', attrib={'name': self.key})
 
@@ -2371,7 +2363,7 @@ class ExperimentMapper(_Task):
                      'value': str(self.first_row[index])}
 
         key = {'type': 'key',
-               'name': 'key',
+               'name': 'Key',
                'value': self.key}
 
         last_row = {'type': 'unsignedInteger',
@@ -2386,7 +2378,7 @@ class ExperimentMapper(_Task):
                              'name': 'Number of Columns',
                              'value': num_columns}
 
-        object_map = {'name': 'Object map'}
+        object_map = {'name': 'Object Map'}
 
         row_containing_names = {'type': 'unsignedInteger',
                                 'name': 'Row containing Names',
@@ -2399,20 +2391,18 @@ class ExperimentMapper(_Task):
         weight_method = {'type': 'unsignedInteger',
                          'name': 'Weight Method',
                          'value': self.weight_method[index]}
-
-        etree.SubElement(experiment_group, 'Parameter', attrib=row_orientation)
-        etree.SubElement(experiment_group, 'Parameter', attrib=experiment_type)
-        etree.SubElement(experiment_group, 'Parameter', attrib=experiment_file)
-        etree.SubElement(experiment_group, 'Parameter', attrib=first_row)
         etree.SubElement(experiment_group, 'Parameter', attrib=key)
+        etree.SubElement(experiment_group, 'Parameter', attrib=experiment_file)
+        etree.SubElement(experiment_group, 'Parameter', attrib=row_orientation)
+        etree.SubElement(experiment_group, 'Parameter', attrib=first_row)
         etree.SubElement(experiment_group, 'Parameter', attrib=last_row)
+        etree.SubElement(experiment_group, 'Parameter', attrib=experiment_type)
         etree.SubElement(experiment_group, 'Parameter', attrib=normalize_weights_per_experiment)
-        etree.SubElement(experiment_group, 'Parameter', attrib=number_of_columns)
-        ## map looks out of place but this order must be maintained
-        map = etree.SubElement(experiment_group, 'ParameterGroup', attrib=object_map)
-        etree.SubElement(experiment_group, 'Parameter', attrib=row_containing_names)
         etree.SubElement(experiment_group, 'Parameter', attrib=separator)
         etree.SubElement(experiment_group, 'Parameter', attrib=weight_method)
+        etree.SubElement(experiment_group, 'Parameter', attrib=row_containing_names)
+        etree.SubElement(experiment_group, 'Parameter', attrib=number_of_columns)
+        map = etree.SubElement(experiment_group, 'ParameterGroup', attrib=object_map)
 
         # define object role attributes
         time_role = {'type': 'unsignedInteger',
@@ -2618,6 +2608,9 @@ class ExperimentMapper(_Task):
         self.remove_all_experiments()
         self.remove_all_validation_experiments()
         for index in range(len(self.experiment_files)):
+            # print(self.experiment_files, index)
+            # print(self.separator, index)
+
             ## read data to get headers.
             ## read in such a way that duplicate columns are not mangled
             data = pandas.read_csv(self.experiment_files[index], sep=self.separator[index], skip_blank_lines=False,
@@ -2656,8 +2649,10 @@ class ExperimentMapper(_Task):
                 query = '//*[@name="Validation Set"]'
             else:
                 query = '//*[@name="Experiment Set"]'
+            # query = '//*[@name="Experiment Set"]'
 
             for j in self.model.xml.xpath(query):
+                # is this being inserted into the correct place?
                 j.insert(0, experiment_element)
                 if self.validation[index]:
                     for k in list(j):
@@ -2819,13 +2814,14 @@ class ParameterEstimation(_Task):
             # need to include options for defining multiple experimental files at once
             'row_orientation': [True] * len(self.experiment_files),
             'experiment_type': ['timecourse'] * len(self.experiment_files),
+            'experiment_keys': ["Experiment_{}".format(i) for i in range(len(self.experiment_files))],
             'first_row': [str(1)] * len(self.experiment_files),
             'normalize_weights_per_experiment': [True] * len(self.experiment_files),
             'row_containing_names': [1] * len(self.experiment_files),
             'separator': ['\t'] * len(self.experiment_files),
             'weight_method': ['mean_squared'] * len(self.experiment_files),
             'validation': [False] * len(self.experiment_files),
-            'validatation_weight': 1,
+            'validation_weight': 1,
             'validation_threshold': 5,
             'scheduled': False,
             'lower_bound': 0.000001,
@@ -2972,6 +2968,7 @@ class ParameterEstimation(_Task):
         kwargs_experiment = {}
         kwargs_experiment['row_orientation'] = self.row_orientation
         kwargs_experiment['experiment_type'] = self.experiment_type
+        kwargs_experiment['experiment_keys'] = self.experiment_keys
         kwargs_experiment['first_row'] = self.first_row
         kwargs_experiment['normalize_weights_per_experiment'] = self.normalize_weights_per_experiment
         kwargs_experiment['row_containing_names'] = self.row_containing_names
@@ -3334,15 +3331,14 @@ class ParameterEstimation(_Task):
                             normalize_weights_per_experiment.append(
                                 experiment_mapping_args[experiment_name]['normalize_weights_per_experiment'])
                             weight_method.append(experiment_mapping_args[experiment_name]['weight_method'])
-                            row_containing_names.append(experiment_mapping_args[experiment_name]['row_containing_names'])
+                            row_containing_names.append(
+                                experiment_mapping_args[experiment_name]['row_containing_names'])
                             separator.append(experiment_mapping_args[experiment_name]['separator'])
                             validation.append(experiment_mapping_args[experiment_name]['validation'])
                             mappings[experiment_name] = experiment_mapping_args[experiment_name]['Mappings']
 
                         setattr(self, 'experiment_type', experiment_type)
                         setattr(self, 'experiment_keys', experiment_keys)
-                        # raise NotImplementedError('Need to ensure config file is read properly aftr '
-                        #                           'changing it so that experiment names not keys are ids ')
                         setattr(self, 'first_row', first_row)
                         setattr(self, 'last_row', last_row)
                         setattr(self, 'normalize_weights_per_experiment', normalize_weights_per_experiment)
