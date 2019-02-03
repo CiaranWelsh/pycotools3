@@ -3250,31 +3250,18 @@ class ParameterEstimation(_Task):
 
             experiment_set_mapping_dct[name]['Mappings'] = OrderedDict()
             for item in range(df.shape[1]):
-                experiment_type = 'ignored'
+                role = 'ignored'
                 if df.columns[item][:-6] == '_indep':
-                    experiment_type = 'independent'
+                    role = 'independent'
                 elif df.columns[item] in self.model.all_variable_names:
-                    experiment_type = 'dependent'
+                    role = 'dependent'
                 elif df.columns[item].lower() == 'time':
-                    experiment_type = 'time'
-
-                affected_experiments = 'all'
-                for k, v in self.affected_experiments.items():
-                    if k == df.columns[item]:
-                        affected_experiments = v
-
-                affected_validation_experiments = 'all'
-                for k, v in self.affected_validation_experiments.items():
-                    if k == df.columns[item]:
-                        affected_validation_experiments = v
+                    role = 'time'
 
                 experiment_set_mapping_dct[name]['Mappings']['column_{}'.format(item)] = OrderedDict()
                 experiment_set_mapping_dct[name]['Mappings']['column_{}'.format(item)]['data_column_name'] = df.columns[item]
                 experiment_set_mapping_dct[name]['Mappings']['column_{}'.format(item)]['model_object'] = df.columns[item]
-                experiment_set_mapping_dct[name]['Mappings']['column_{}'.format(item)]['experiment_type'] = experiment_type
-                ## affected experiments should be a part of OptimizationItemList. Not ExperimentSet mapping
-                # experiment_set_mapping_dct[name]['Mappings']['column_{}'.format(item)]['affected_experiments'] = affected_experiments
-                # experiment_set_mapping_dct[name]['Mappings']['column_{}'.format(item)]['affected_validation_experiments'] = affected_validation_experiments
+                experiment_set_mapping_dct[name]['Mappings']['column_{}'.format(item)]['role'] = role
 
         ## convert start_value to numeric to keep yaml file consistent
         item_template = self.item_template.transpose()
@@ -3341,14 +3328,9 @@ class ParameterEstimation(_Task):
                         row_containing_names = []
                         separator = []
                         validation = []
-                        # affected_experiments = []
-                        # affected_validation_experiments = []
 
 
                         for experiment_name in experiment_mapping_args:
-                            # for k, v in sorted(experiment_mapping_args[experiment_name].items()):
-                            #     print(k, v)
-                            # print(experiment_mapping_args[experiment_name])
                             experiment_files.append(experiment_mapping_args[experiment_name]['filename'])
                             experiment_type.append(experiment_mapping_args[experiment_name]['experiment_type'])
                             experiment_keys.append(experiment_mapping_args[experiment_name]['key'])
@@ -3361,15 +3343,7 @@ class ParameterEstimation(_Task):
                                 experiment_mapping_args[experiment_name]['row_containing_names'])
                             separator.append(experiment_mapping_args[experiment_name]['separator'])
                             validation.append(experiment_mapping_args[experiment_name]['validation'])
-                            # affected_experiments.append(experiment_mapping_args[experiment_name]['affected_experiments'])
-                            # affected_validation_experiments.append(experiment_mapping_args[experiment_name]['affected_validation_experiments'])
                             mappings[experiment_name] = experiment_mapping_args[experiment_name]['Mappings']
-
-                        # the affected experiments will follow the same mechanism as mapping column
-                        # names properly. This is not yet implemented and currently, correct mappingsrelies on
-                        # the names in the config file being the same as model names.
-                        # Next, spend time modifying the code so that the mapping items from the yaml config file are
-                        # used. This means using the 'mappings' attribute.
 
 
                         setattr(self, 'experiment_type', experiment_type)
@@ -3388,14 +3362,11 @@ class ParameterEstimation(_Task):
 
                     elif k == 'OptimizationItemList':
                         opt = pandas.DataFrame(dct[k]).transpose()
-                        print('opt\n', opt)
                         setattr(self, 'optimization_item_list', opt)
 
                     elif k == 'OptimizationConstraintList':
                         print('Warning: OptimizationConstraintList is not yet implemented. Entried are being'
                               ' ignored. ')
-
-            setattr(self, 'mappings', mappings)
 
         else:
             raise ValueError('Config filename is not of a supported file type. Please ensure the config file '
@@ -3691,7 +3662,6 @@ class ParameterEstimation(_Task):
         affected_cross_validation_experiments_element = etree.SubElement(fit_item_element, 'ParameterGroup', attrib=affected_cross_validation_experiments)
 
         ## now add the attributes to the affected experiments element
-        print('aff', affected_validation_experiments_attr)
         for affected_validation_experiment_attr in affected_validation_experiments_attr:
             etree.SubElement(
                 affected_cross_validation_experiments_element, 'Parameter',
@@ -3766,11 +3736,9 @@ class ParameterEstimation(_Task):
         into the model
         :return:
         """
-        print(self.optimization_item_list.keys())
         for row in range(self.optimization_item_list.shape[0]):
             assert row != 'nan'
             ## feed each item from the config file into add_fit_item
-            print(self.optimization_item_list.iloc[row])
             self.model = self.add_fit_item(self.optimization_item_list.iloc[row])
         return self.model
 
@@ -5114,7 +5082,6 @@ class ProfileLikelihood(_Task):
         if count == 0:
             raise errors.NoFitItemsError(
                 'Model does not contain any fit items. Please setup a parameter estimation and try again')
-        # print count
         ##save is needed
         self.to_file()
 

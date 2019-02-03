@@ -125,7 +125,7 @@ class ParameterEstimationTests(_test_base._BaseTest):
         # Why are variables not being mapped anymore?
         self.PE.write_config_file()
         self.PE.setup()
-        self.PE.model.open()
+        # self.PE.model.open()
 
     def test_report_name(self):
         self.assertTrue(self.PE.report_name == 'PE_report_name')
@@ -133,12 +133,17 @@ class ParameterEstimationTests(_test_base._BaseTest):
     def test_get_experiment_keys1(self):
         experiment_keys = self.PE._get_experiment_keys()
         print(experiment_keys)
+        self.assertEqual(experiment_keys['report1'], 'Experiment_0')
+
+    def test_get_validation_keys1(self):
+        experiment_keys = self.PE._get_validation_keys()
+        print(experiment_keys)
         self.assertEqual(experiment_keys['report2'], 'Experiment_1')
 
     def test_get_experiment_keys2(self):
         experiment_keys = self.PE._get_experiment_keys()
         print(experiment_keys)
-        self.assertEqual(len(experiment_keys), 5)
+        self.assertEqual(len(experiment_keys), 3)
 
     def test_write_config_file(self):
         """
@@ -202,19 +207,19 @@ class ParameterEstimationTests(_test_base._BaseTest):
         f = os.path.join(self.PE.results_directory, self.PE.report_name) + '_0.txt'
         self.assertTrue(os.path.isfile(f))
 
-    def test_viz_param_est_parser(self):
-        """
-        test that viz.Parser correctly formats the
-        parameter estimation data
-        :return:
-        """
-        self.PE.write_config_file()
-        self.PE.setup()
-        self.PE.run()
-        p = pycotools3.viz.Parse(self.PE)
-        order = ['A', 'B', 'C', 'A2B', 'ADeg_k1', 'B2C', 'B2C_0_k2', 'C2A_k1', 'ThisIsAssignment', 'RSS']
-        df = p.from_parameter_estimation(self.PE)
-        self.assertListEqual(sorted(order), sorted(list(df.columns)))
+    # def test_viz_param_est_parser(self):
+    #     """
+    #     test that viz.Parser correctly formats the
+    #     parameter estimation data
+    #     :return:
+    #     """
+    #     self.PE.write_config_file()
+    #     self.PE.setup()
+    #     self.PE.run()
+    #     p = pycotools3.viz.Parse(self.PE)
+    #     order = ['A', 'B', 'C', 'A2B', 'ADeg_k1', 'B2C', 'B2C_0_k2', 'C2A_k1', 'ThisIsAssignment', 'RSS']
+    #     df = p.from_parameter_estimation(self.PE)
+    #     self.assertListEqual(sorted(order), sorted(list(df.columns)))
 
     def test_viz_param_est_parser_len(self):
         """

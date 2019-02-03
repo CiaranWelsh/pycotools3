@@ -254,5 +254,20 @@ class ExperimentMapperTests(_test_base._BaseTest):
                         count += 1
         self.assertEqual(count, 2)
 
+    def test_experiment9(self):
+        """
+        First row of experiment_0==1
+        :return:
+        """
+        count = 0
+
+        query = '//*[@name="Validation Set"]'
+        for i in self.new_xml.xpath(query):
+            for j in i:
+                for k in j:
+                    if k.attrib['name'] == 'Object Map':
+                        count += 1
+        self.assertEqual(count, 2)
+
 if __name__=='__main__':
     unittest.main()
