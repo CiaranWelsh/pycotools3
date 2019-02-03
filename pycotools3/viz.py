@@ -1329,7 +1329,7 @@ class PlotTimeCourseEnsemble(_Viz):
     this is not being captured in the ensemble time course.
 
     Therefore, modify to follow directions in data files from independent data. Also run
-    multiple times if you have multiple experiments measuring the same varibale.
+    multiple times if you have multiple _experiments measuring the same varibale.
     """
 
     def __init__(self, cls, **kwargs):
@@ -1608,7 +1608,7 @@ class PlotTimeCourseEnsemble(_Viz):
 
     def plot_per_observable(self):
         """
-        Plot observables with experiments on same graph.
+        Plot observables with _experiments on same graph.
         i.e. variable x in treated and control conditions
         will be plotted together.
         """
@@ -1881,7 +1881,7 @@ class PlotParameterEstimation(_Viz, PlotKwargs):
     def create_directories(self):
         """
         create a directory in project root called result_directory
-        create subfolders with name of experiments
+        create subfolders with name of _experiments
         :return: dict
         """
         directories = {}
@@ -1906,7 +1906,7 @@ class PlotParameterEstimation(_Viz, PlotKwargs):
 
     def get_time(self):
         """
-        get dict of experiments and max time
+        get dict of _experiments and max time
         :return:
         """
         dct = {}

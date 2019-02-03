@@ -14,7 +14,7 @@ Parameter Estimation
 
 Currently we cannot setup:
 
-* Affected experiments in parameter estimations 
+* Affected _experiments in parameter estimations
 
 
 Duplicate Names
@@ -27,6 +27,6 @@ component
 
 Known Bugs
 ==========
-* viz.PlotTimeCourseEnsembles doesn't work properly if user is fitting multiple experiments with multiple conditions (i.e. defined by independent variables)
+* viz.PlotTimeCourseEnsembles doesn't work properly if user is fitting multiple _experiments with multiple conditions (i.e. defined by independent variables)
 
 

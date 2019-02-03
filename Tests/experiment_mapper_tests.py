@@ -81,7 +81,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
 
     def test_experiment(self):
         """
-        Test that four  experiments have been set up
+        Test that four  _experiments have been set up
         :return:
         """
         count = 0
@@ -93,7 +93,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
 
     def test_validation_weight(self):
         """
-        Test that 2 experiments have been set up
+        Test that 2 _experiments have been set up
         :return:
         """
 
@@ -107,7 +107,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
 
     def test_validation_threshold(self):
         """
-        Test that 2 experiments have been set up
+        Test that 2 _experiments have been set up
         :return:
         """
 
@@ -120,14 +120,14 @@ class ExperimentMapperTests(_test_base._BaseTest):
 
     def test_validation(self):
         """
-        Test that 2 validation experiments have been set up
+        Test that 2 validation _experiments have been set up
         :return:
         """
         count = 0
         query = '//*[@name="Validation Set"]'
         for i in self.new_xml.xpath(query):
             for j in i:
-                ## new validation experiments are under a parameter group tag, under Validation Set
+                ## new validation _experiments are under a parameter group tag, under Validation Set
                 if j.tag == '{http://www.copasi.org/static/schema}ParameterGroup':
                     count += 1
         self.assertEqual(count, 2)

@@ -3365,7 +3365,7 @@ class ParameterEstimation(_Task):
         """
         for row in range(self.read_config_file().shape[0]):
             assert row != 'nan'
-            ## feed each item from the config file into add_fit_item
+            ## feed each item from the config file into _add_fit_item
             self.model = self.add_fit_item(self.read_config_file().iloc[row])
         return self.model
 
@@ -3763,7 +3763,7 @@ class MultiParameterEstimation(ParameterEstimation):
 
         ## If skip_config then do not configure the parameter estimation task
         if not self.skip_config:
-            ## map experiments
+            ## map _experiments
             EM = ExperimentMapper(self.model, self.experiment_files, **self._experiment_mapper_args)
 
             ## get model from ExperimentMapper
@@ -4886,7 +4886,7 @@ class ProfileLikelihood(_Task):
         """
         number_of_cpu = cpu_count()
         q = queue.Queue(maxsize=number_of_cpu)
-        # report_files = self.enumerate_PE_output()
+        # report_files = self._enumerate_PE_output()
         res = {}
         res = {}
         for model in self.model_dct:

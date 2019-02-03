@@ -170,7 +170,7 @@ class ParameterEstimationTests(_test_base._BaseTest):
         :return:
         """
         from collections import OrderedDict
-        self.PE.read_config_file()
+        self.PE._read_config_file()
         self.assertIsInstance(self.PE.mappings, OrderedDict)
         self.assertIsInstance(self.PE.optimization_item_list, pandas.DataFrame)
 
@@ -277,7 +277,7 @@ class ParameterEstimationConfigFileTests(_test_base._BaseTest):
                                                   population_size=10,
                                                   number_of_generations=10,
                                                   report_name='PE_report_name.csv')
-        item_template = PE.item_template
+        item_template = PE._item_template
         boolean = False
         locs = ['(ADeg).k1', '(B2C).k2', '(C2A).k1']
         for i in locs:
@@ -297,7 +297,7 @@ class ParameterEstimationConfigFileTests(_test_base._BaseTest):
                                                   population_size=10,
                                                   number_of_generations=10,
                                                   report_name='PE_report_name.csv')
-        item_template = PE.item_template
+        item_template = PE._item_template
         boolean = False
         locs = ['A', 'B', 'C']
         for i in locs:
@@ -318,7 +318,7 @@ class ParameterEstimationConfigFileTests(_test_base._BaseTest):
                                                   number_of_generations=10,
                                                   report_name='PE_report_name.csv',
                                                   metabolites=[])
-        item_template = PE.item_template
+        item_template = PE._item_template
         boolean = False
         metabs = []
         for i in metabs:
@@ -339,7 +339,7 @@ class ParameterEstimationConfigFileTests(_test_base._BaseTest):
                                                   number_of_generations=10,
                                                   report_name='PE_report_name.csv',
                                                   metabolites=['A'])
-        item_template = PE.item_template
+        item_template = PE._item_template
         boolean = False
         metabs = ['A']
         for i in metabs:
@@ -360,7 +360,7 @@ class ParameterEstimationConfigFileTests(_test_base._BaseTest):
                                                   number_of_generations=10,
                                                   report_name='PE_report_name.csv',
                                                   global_quantities=['A2B'])
-        item_template = PE.item_template
+        item_template = PE._item_template
         boolean = False
         globs = ['A2B']
         for i in globs:
@@ -381,7 +381,7 @@ class ParameterEstimationConfigFileTests(_test_base._BaseTest):
                                                   number_of_generations=10,
                                                   report_name='PE_report_name.csv',
                                                   )
-        item_template = PE.item_template
+        item_template = PE._item_template
         boolean = False
         globs = ['ThisIsAssignment', 'B2C', 'A2B']
         for i in globs:

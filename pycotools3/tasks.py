@@ -2853,9 +2853,72 @@ class ParameterEstimation(_Task):
 
     def _do_checks(self):
         """
-        Validate integrity of user input
-        :return:
+
         """
+        for i in self.validation:
+            if not isinstance(i, bool):
+                raise errors.InputError('"validation" should be of type bool. Got "{}"'.format(
+                    type(i)))
+
+        for i in range(len(self.experiment_files)):
+            if os.path.isabs(self.experiment_files[i]) != True:
+                self.experiment_files[i] = os.path.abspath(self.experiment_files[i])
+
+        weight_method_string = ['mean_squared', 'stardard_deviation', 'value_scaling',
+                                'mean']  # line 2144
+        weight_method_numbers = [str(i) for i in [1, 2, 3, 4]]
+        weight_method_dict = dict(list(zip(weight_method_string, weight_method_numbers)))
+        self.weight_method = [weight_method_dict[i] for i in self.weight_method]
+
+        experiment_type_string = ['steadystate', 'timecourse']
+        experiment_type_numbers = [str(i) for i in [0, 1]]
+        experiment_type_dict = dict(list(zip(experiment_type_string, experiment_type_numbers)))
+        self.experiment_type = [experiment_type_dict[i] for i in self.experiment_type]
+
+        l = []
+        assert isinstance(self.row_orientation, list)
+        for i in self.row_orientation:
+            assert i in [True, False]
+            if i == True:
+                l.append(str(1))
+            else:
+                l.append(str(0))
+        self.row_orientation = l
+
+        assert isinstance(self.first_row, list)
+        l = []
+        for i in self.first_row:
+            assert i != 0
+            assert i != str(0)
+            l.append(str(i))
+        self.first_row = l
+
+        l = []
+        assert isinstance(self.normalize_weights_per_experiment, list)
+        for i in self.normalize_weights_per_experiment:
+            assert i in [True, False], '{} should be true or false'.format(i)
+            if i == True:
+                l.append(str(1))
+            else:
+                l.append(str(0))
+        self.normalize_weights_per_experiment = l
+
+        l = []
+        assert isinstance(self.row_orientation, list)
+        for i in self.row_orientation:
+            l.append(str(i))
+        self.row_orientation = l
+
+        l = []
+        assert isinstance(self.row_containing_names, list)
+        for i in self.row_containing_names:
+            l.append(str(i))
+        self.row_containing_names = l
+
+        assert isinstance(self.separator, list)
+        for i in self.separator:
+            assert isinstance(i, str), 'separator should be given asa python list'
+
         ## Allow acceptance of strings as arguments to metabolites, local_parameters
         ## and global_quantities
         for attr in ['metabolites', 'local_parameters', 'global_quantities']:
@@ -2962,7 +3025,372 @@ class ParameterEstimation(_Task):
             raise errors.InputError('pe_number argument is of type int')
 
     @property
-    def _experiment_mapper_args(self):
+    def _experiments(self):
+        existing_experiment_list = []
+        query = '//*[@name="Experiment Set"]'
+
+        for i in self.model.xml.xpath(query):
+            for j in list(i):
+                existing_experiment_list.append(j)
+        return existing_experiment_list
+
+    @property
+    def _validations(self):
+        existing_validation_list = []
+        query = '//*[@name="Validation Set"]'
+
+        for i in self.model.xml.xpath(query):
+            for j in list(i):
+                existing_validation_list.append(j)
+        return existing_validation_list
+
+    def _create_experiment(self, index):
+        """
+        Adds a single experiment set to the parameter estimation task
+        exp_file is an experiment filename with exactly matching headers (independent variablies need '_indep' appended to the end)
+        since this method is intended to be used in a loop in another function to
+        deal with all experiment sets, the second argument 'i' is the index for the current experiment
+
+        i is the exeriment_file index
+        """
+        assert isinstance(index, int)
+        data = pandas.read_csv(
+            self.experiment_files[index],
+            sep=self.separator[index])
+
+        obs = list(data.columns)
+        num_rows = str(data.shape[0])
+        num_columns = str(data.shape[1])  # plus 1 to account for 0 indexed
+
+        # if exp_file is in the same directory as copasi_file only use relative path
+        if os.path.dirname(self.model.copasi_file) == os.path.dirname(self.experiment_files[index]):
+            exp = os.path.split(self.experiment_files[index])[1]
+        else:
+            exp = self.experiment_files[index]
+
+        self.key = self.experiment_keys[index]
+
+        # necessary XML attributes
+        experiment_group = etree.Element('ParameterGroup', attrib={'name': self.key})
+
+        # Exp = etree.Element('ParameterGroup', attrib={'name': self.experiment_files[index]})
+
+        row_orientation = {'type': 'bool',
+                           'name': 'Data is Row Oriented',
+                           'value': self.row_orientation[index]}
+
+        experiment_type = {'type': 'unsignedInteger',
+                           'name': 'Experiment Type',
+                           'value': self.experiment_type[index]}
+
+        experiment_file = {'type': 'file',
+                           'name': 'File Name',
+                           'value': exp}
+
+        first_row = {'type': 'unsignedInteger',
+                     'name': 'First Row',
+                     'value': str(self.first_row[index])}
+
+        key = {'type': 'key',
+               'name': 'Key',
+               'value': self.key}
+
+        last_row = {'type': 'unsignedInteger',
+                    'name': 'Last Row',
+                    'value': str(int(num_rows) + 1)}  # add 1 to account for 0 indexed python
+
+        normalize_weights_per_experiment = {'type': 'bool',
+                                            'name': 'Normalize Weights per Experiment',
+                                            'value': self.normalize_weights_per_experiment[index]}
+
+        number_of_columns = {'type': 'unsignedInteger',
+                             'name': 'Number of Columns',
+                             'value': num_columns}
+
+        object_map = {'name': 'Object Map'}
+
+        row_containing_names = {'type': 'unsignedInteger',
+                                'name': 'Row containing Names',
+                                'value': str(self.row_containing_names[index])}
+
+        separator = {'type': 'string',
+                     'name': 'Separator',
+                     'value': self.separator[index]}
+
+        weight_method = {'type': 'unsignedInteger',
+                         'name': 'Weight Method',
+                         'value': self.weight_method[index]}
+        etree.SubElement(experiment_group, 'Parameter', attrib=key)
+        etree.SubElement(experiment_group, 'Parameter', attrib=experiment_file)
+        etree.SubElement(experiment_group, 'Parameter', attrib=row_orientation)
+        etree.SubElement(experiment_group, 'Parameter', attrib=first_row)
+        etree.SubElement(experiment_group, 'Parameter', attrib=last_row)
+        etree.SubElement(experiment_group, 'Parameter', attrib=experiment_type)
+        etree.SubElement(experiment_group, 'Parameter', attrib=normalize_weights_per_experiment)
+        etree.SubElement(experiment_group, 'Parameter', attrib=separator)
+        etree.SubElement(experiment_group, 'Parameter', attrib=weight_method)
+        etree.SubElement(experiment_group, 'Parameter', attrib=row_containing_names)
+        etree.SubElement(experiment_group, 'Parameter', attrib=number_of_columns)
+        map = etree.SubElement(experiment_group, 'ParameterGroup', attrib=object_map)
+
+        # define object role attributes
+        time_role = {'type': 'unsignedInteger',
+                     'name': 'Role',
+                     'value': '3'}
+
+        dependent_variable_role = {'type': 'unsignedInteger',
+                                   'name': 'Role',
+                                   'value': '2'}
+
+        independent_variable_role = {'type': 'unsignedInteger',
+                                     'name': 'Role',
+                                     'value': '1'}
+
+        ignored_role = {'type': 'unsignedInteger',
+                        'name': 'Role',
+                        'value': '0'}
+
+
+        for i in range(int(num_columns)):
+            map_group = etree.SubElement(map, 'ParameterGroup', attrib={'name': (str(i))})
+            if self.experiment_type[index] == str(1):  # when Experiment type is set to time course it should be 1
+                ## first column is time
+                if i == 0:
+                    etree.SubElement(map_group, 'Parameter', attrib=time_role)
+                else:
+                    ## map independent variables
+                    if obs[i][-6:] == '_indep':
+                        if obs[i][:-6] in [j.name for j in self.model.metabolites]:
+                            metab = [j for j in self.model.metabolites if j.name == obs[i][:-6]][0]
+                            cn = '{},{},{}'.format(self.model.reference,
+                                                   metab.compartment.reference,
+                                                   metab.initial_reference)
+                            independent_ICs = {'type': 'cn',
+                                               'name': 'Object CN',
+                                               'value': cn}
+                            etree.SubElement(map_group, 'Parameter', attrib=independent_ICs)
+
+                        elif obs[i][:-6] in [j.name for j in self.model.global_quantities]:
+                            glob = [j for j in self.model.global_quantities if j.name == obs[i][:-6]][0]
+                            cn = '{},{}'.format(self.model.reference,
+                                                glob.initial_reference)
+
+                            independent_globs = {'type': 'cn',
+                                                 'name': 'Object CN',
+                                                 'value': cn}
+
+                            etree.SubElement(map_group,
+                                             'Parameter',
+                                             attrib=independent_globs)
+                        else:
+                            continue
+                            ##etree.SubElement(map_group, 'Parameter', attrib=ignored_role)
+                            LOG.warning('{} not found. Set to ignore'.format(obs[i]))
+                        etree.SubElement(map_group, 'Parameter', attrib=independent_variable_role)
+
+                    ## now do dependent variables
+                    elif obs[i][:-6] != '_indep':
+                        ## metabolites
+                        if obs[i] in [j.name for j in self.model.metabolites]:
+                            metab = [j for j in self.model.metabolites if j.name == obs[i]][0]
+                            cn = '{},{},{}'.format(self.model.reference,
+                                                   metab.compartment.reference,
+                                                   metab.transient_reference)
+
+                            dependent_ICs = {'type': 'cn',
+                                             'name': 'Object CN',
+                                             'value': cn}
+
+                            etree.SubElement(map_group, 'Parameter', attrib=dependent_ICs)
+
+                        ## global quantities
+                        elif obs[i] in [j.name for j in self.model.global_quantities]:
+                            glob = [j for j in self.model.global_quantities if j.name == obs[i]][0]
+                            cn = '{},{}'.format(self.model.reference,
+                                                glob.transient_reference)
+                            dependent_globs = {'type': 'cn',
+                                               'name': 'Object CN',
+                                               'value': cn}
+                            etree.SubElement(map_group,
+                                             'Parameter',
+                                             attrib=dependent_globs)
+                        ## remember that local parameters are not mapped to experimental
+                        ## data
+                        else:
+                            continue
+                            ##etree.SubElement(map_group, 'Parameter', attrib=ignored_role)
+                            LOG.warning('{} not found. Set to ignore'.format(obs[i]))
+                        ## map for time course dependent variable
+                        etree.SubElement(map_group, 'Parameter', attrib=dependent_variable_role)
+
+            ## and now for steady state data
+            else:
+
+                ## do independent variables first
+                if obs[i][-6:] == '_indep':
+
+                    ## for metabolites
+                    if obs[i][:-6] in [j.name for j in self.model.metabolites]:
+                        metab = [j for j in self.model.metabolites if j.name == obs[i][:-6]][0]
+                        cn = '{},{},{}'.format(self.model.reference,
+                                               metab.compartment.reference,
+                                               metab.initial_reference)
+
+                        independent_ICs = {'type': 'cn',
+                                           'name': 'Object CN',
+                                           'value': cn}
+                        x = etree.SubElement(map_group, 'Parameter', attrib=independent_ICs)
+
+                    ## now for global quantities
+                    elif obs[i][:-6] in [j.name for j in self.model.global_quantities]:
+                        glob = [j for j in self.model.global_quantities if j.name == obs[i]][0]
+                        cn = '{},{}'.format(self.model.reference,
+                                            glob.initial_reference)
+
+                        independent_globs = {'type': 'cn',
+                                             'name': 'Object CN',
+                                             'value': cn}
+
+                        etree.SubElement(map_group,
+                                         'Parameter',
+                                         attrib=independent_globs)
+                    ## local parameters are never mapped
+                    else:
+                        continue
+                        # etree.SubElement(map_group, 'Parameter', attrib=ignored_role)
+                        LOG.warning('{} not found. Set to ignore'.format(obs[i]))
+                    etree.SubElement(map_group, 'Parameter', attrib=independent_variable_role)
+
+
+                elif obs[i][-6:] != '_indep':
+                    ## for metabolites
+                    if obs[i] in [j.name for j in self.model.metabolites]:
+                        metab = [j for j in self.model.metabolites if j.name == obs[i]][0]
+                        cn = '{},{},{}'.format(self.model.reference,
+                                               metab.compartment.reference,
+                                               metab.transient_reference)
+                        independent_ICs = {'type': 'cn',
+                                           'name': 'Object CN',
+                                           'value': cn}
+                        etree.SubElement(map_group, 'Parameter', attrib=independent_ICs)
+
+                    ## now for global quantities
+                    elif obs[i] in [j.name for j in self.model.global_quantities]:
+                        glob = [j for j in self.model.global_quantities if j.name == obs[i]][0]
+                        cn = '{},{}'.format(self.model.reference,
+                                            glob.transient_reference)
+
+                        independent_globs = {'type': 'cn',
+                                             'name': 'Object CN',
+                                             'value': cn}
+
+                        etree.SubElement(map_group,
+                                         'Parameter',
+                                         attrib=independent_globs)
+                    ## local parameters are never mapped
+                    else:
+                        continue
+                        ##etree.SubElement(map_group, 'Parameter', attrib=ignored_role)
+                        LOG.warning('{} not found. Set to ignore'.format(obs[i]))
+                    etree.SubElement(map_group, 'Parameter', attrib=dependent_variable_role)
+        return experiment_group
+
+    def _remove_experiment(self, experiment_name):
+        """
+        name attribute of experiment. usually Experiment_1 or something
+        """
+        query = '//*[@name="Experiment Set"]'
+        for i in self.model.xml.xpath(query):
+            for j in list(i):
+                if j.attrib['name'] == experiment_name:
+                    j.getparent().remove(j)
+        return self.model
+
+    def _remove_all_experiments(self):
+        for i in self._experiments:
+            experiment_name = i.attrib['name']
+            self._remove_experiment(experiment_name)
+        return self.model
+
+    def _remove_validation_experiment(self, validation_experiment_name):
+        """
+        name attribute of experiment. usually Experiment_1 or something
+        """
+        query = '//*[@name="Validation Set"]'
+        for i in self.model.xml.xpath(query):
+            for j in list(i):
+                if j.attrib['name'] == validation_experiment_name:
+                    j.getparent().remove(j)
+        return self.model
+
+    def _remove_all_validation_experiments(self):
+        for i in self._validations:
+            validation_experiment_name = i.attrib['name']
+            self._remove_experiment(validation_experiment_name)
+        return self.model
+
+    def _map_experiments(self):
+        """
+        map all experiment sets
+        :return:
+        """
+
+        self._remove_all_experiments()
+        self._remove_all_validation_experiments()
+        for index in range(len(self.experiment_files)):
+
+            ## read data to get headers.
+            ## read in such a way that duplicate columns are not mangled
+            data = pandas.read_csv(self.experiment_files[index], sep=self.separator[index], skip_blank_lines=False,
+                                   header=None)
+            data = data.rename(columns=data.iloc[0], copy=False).iloc[1:].reset_index(drop=True)
+
+            ## if none of the variables in the experiment file exist then skip
+            variable_exists_list = []
+            for i in data.columns:
+                if i not in self.model.all_variable_names:
+                    variable_exists_list.append(False)
+                else:
+                    variable_exists_list.append(True)
+
+            ## if variable exists list ends up being False, we know
+            ## that none of the data in the datafile have
+            ## variables correlating to model components. In this case,
+            ## pycotools3 skips mapping this file and sends a warning
+
+            if (list(set(variable_exists_list))[0] == False) and (len(list(set(variable_exists_list))) == 1):
+                LOG.warning('None of the column headers in your experimental '
+                            'data file ("{}") match any model variable in model "{}". If '
+                            'this is intentional, you can ignore this warning. This '
+                            'most commonly occurs when using MultiModelFit. In this case '
+                            'the data file is intended for an alternative model which is '
+                            'why the variable is not in the model. If this is not the case, '
+                            'please check your experimental data variable names to ensure they exactly match '
+                            'corresponding model variable names. For convenience here is a list of '
+                            'variables in your model: \n "{}"'.format(self.experiment_files[index],
+                                                                      self.model.name,
+                                                                      self.model.all_variable_names))
+                continue
+            experiment_element = self._create_experiment(index)
+
+            if self.validation[index]:
+                query = '//*[@name="Validation Set"]'
+            else:
+                query = '//*[@name="Experiment Set"]'
+
+            for j in self.model.xml.xpath(query):
+                j.insert(0, experiment_element)
+                if self.validation[index]:
+                    for k in list(j):
+                        if k.attrib['name'] == 'Weight':
+                            k.attrib['value'] = str(self.validation_weight)
+                        if k.attrib['name'] == 'Threshold':
+                            k.attrib['value'] = str(self.validation_threshold)
+
+        return self.model
+
+    @property
+    def _experiment_mapping_args(self):
         """
         method to construct a dictionary to pass to ExperimentMapper
         :return:
@@ -3096,7 +3524,7 @@ class ParameterEstimation(_Task):
         report_dict['report_type'] = 'multi_parameter_estimation'
         return report_dict
 
-    def define_report(self):
+    def _define_report(self):
         """
         create parameter estimation report
         for result collection
@@ -3104,7 +3532,7 @@ class ParameterEstimation(_Task):
         """
         return Reports(self.model, **self._report_arguments).model
 
-    def get_report_key(self):
+    def _get_report_key(self):
         """
         After creating the report to collect
         results, this method gets the corresponding key
@@ -3149,7 +3577,7 @@ class ParameterEstimation(_Task):
                         d[match2] = j.attrib
         return d
 
-    def remove_fit_item(self, item):
+    def _remove_fit_item(self, item):
         """
         Remove item from parameter estimation
         :param item:
@@ -3200,14 +3628,14 @@ class ParameterEstimation(_Task):
                                 match2_item))
         return self.model
 
-    def remove_all_fit_items(self):
+    def _remove_all_fit_items(self):
         """
         Iterate over all fit items and remove them
         from the parameter estimation task
         :return: pycotools3.model.Model
         """
         for i in self._fit_items:
-            self.model = self.remove_fit_item(i)
+            self.model = self._remove_fit_item(i)
         return self.model
 
     def write_config_file(self):
@@ -3216,7 +3644,7 @@ class ParameterEstimation(_Task):
         self.config_filename.
         :return: str. Path to config file
         """
-        exp_kwargs = self._experiment_mapper_args
+        exp_kwargs = self._experiment_mapping_args
 
         settings_dct = OrderedDict()
         settings_dct['randomize_start_values'] = self.randomize_start_values
@@ -3264,7 +3692,7 @@ class ParameterEstimation(_Task):
                 experiment_set_mapping_dct[name]['Mappings']['column_{}'.format(item)]['role'] = role
 
         ## convert start_value to numeric to keep yaml file consistent
-        item_template = self.item_template.transpose()
+        item_template = self._item_template.transpose()
         item_template.loc['start_value'] = pandas.to_numeric(item_template.loc['start_value'])
         item_template = item_template.to_dict()
 
@@ -3287,7 +3715,7 @@ class ParameterEstimation(_Task):
                 yaml.dump(dct, stream=f, default_flow_style=False)
         return self.config_filename
 
-    def read_config_file(self):
+    def _read_config_file(self):
         """
 
         :return:
@@ -3356,8 +3784,6 @@ class ParameterEstimation(_Task):
                         setattr(self, 'separator', separator)
                         setattr(self, 'validation', validation)
                         setattr(self, 'mappings', mappings)
-                        # setattr(self, 'affected_experiments', affected_experiments)
-                        # setattr(self, 'affected_validation_experiments', affected_validation_experiments)
 
 
                     elif k == 'OptimizationItemList':
@@ -3376,7 +3802,7 @@ class ParameterEstimation(_Task):
         """
         Experiment keys are always 'Experiment_i' where 'i' indexes
         the experiment in the order they are given in the experiment
-        list. This method extracts the experiments that are not for validation
+        list. This method extracts the _experiments that are not for validation
         :return:
         """
         dct = OrderedDict()
@@ -3391,7 +3817,7 @@ class ParameterEstimation(_Task):
         """
         Experiment keys are always 'Experiment_i' where 'i' indexes
         the experiment in the order they are given in the experiment
-        list. This method extracts the experiments that are for validation
+        list. This method extracts the _experiments that are for validation
 
         :return:
         """
@@ -3404,7 +3830,7 @@ class ParameterEstimation(_Task):
         return dct
 
     @property
-    def item_template(self):
+    def _item_template(self):
         """
         Collect information about the model in order to
         create a config file template.
@@ -3556,7 +3982,7 @@ class ParameterEstimation(_Task):
 
         return df
 
-    def add_fit_item(self, item):
+    def _add_fit_item(self, item):
         """
         Add fit item to model
         :param item: a row from the config template as pandas series
@@ -3586,9 +4012,9 @@ class ParameterEstimation(_Task):
 
 
         affected_experiments = {'name': 'Affected Experiments'}
-        ## read affected experiments from config file.yaml
+        ## read affected _experiments from config file.yaml
         affected_experiments_attr = OrderedDict()
-        ## when affected experiments is 'all', the affected experiment element is empty
+        ## when affected _experiments is 'all', the affected experiment element is empty
         if item['affected_experiments'] != 'all':
             ## convert a string to a list of 1 so we can cater for the case
             ## where we have a list of strings with the same code
@@ -3596,17 +4022,17 @@ class ParameterEstimation(_Task):
                 item['affected_experiments'] = [item['affected_experiments']]
 
             ## iterate over list. Raise ValueError is can't find experiment name
-            ## otherwise add the corresponding experiment key to the affected experiments attr dict
+            ## otherwise add the corresponding experiment key to the affected _experiments attr dict
             for affected_experiment in item['affected_experiments']:  ## iterate over the list
                 if affected_experiment in self._get_validation_keys():
                     raise ValueError('"{}" has been given as a validation experiment and therefore '
-                                     'I cannot add this experiment to the list of experiments that '
+                                     'I cannot add this experiment to the list of _experiments that '
                                      'affect the {} parameter'.format(
                         affected_experiment, component.name
                     ))
 
                 if affected_experiment not in self._get_experiment_keys():
-                    raise ValueError('"{}" is not one of your experiments. These are '
+                    raise ValueError('"{}" is not one of your _experiments. These are '
                                      'your valid experimments: "{}"'.format(
                         affected_experiment, self._get_experiment_keys().keys()
                     ))
@@ -3617,18 +4043,18 @@ class ParameterEstimation(_Task):
                 affected_experiments_attr[affected_experiment]['value'] = self._get_experiment_keys()[
                     affected_experiment]
 
-        ## add affected experiments to element
+        ## add affected _experiments to element
         affected_experiments_element = etree.SubElement(fit_item_element, 'ParameterGroup', attrib=affected_experiments)
 
-        ## now add the attributes to the affected experiments element
+        ## now add the attributes to the affected _experiments element
         for affected_experiment in affected_experiments_attr:
             etree.SubElement(
                 affected_experiments_element, 'Parameter', attrib=affected_experiments_attr[affected_experiment]
             )
 
-        ## read affected validation experiments from config file.yaml
+        ## read affected validation _experiments from config file.yaml
         affected_validation_experiments_attr = OrderedDict()
-        ## when affected experiments is 'all', the affected experiment element is empty
+        ## when affected _experiments is 'all', the affected experiment element is empty
         if item['affected_validation_experiments'] != 'all':
             ## convert a string to a list of 1 so we can cater for the case
             ## where we have a list of strings with the same code
@@ -3636,17 +4062,17 @@ class ParameterEstimation(_Task):
                 item['affected_validation_experiments'] = [item['affected_validation_experiments']]
 
             ## iterate over list. Raise ValueError is can't find experiment name
-            ## otherwise add the corresponding experiment key to the affected experiments attr dict
+            ## otherwise add the corresponding experiment key to the affected _experiments attr dict
             for affected_validation_experiment in item['affected_validation_experiments']:  ## iterate over the list
                 if affected_validation_experiment in self._get_experiment_keys():
                     raise ValueError('"{}" has been given as an experiment and therefore '
-                                     'I cannot add this experiment to the list of validation experiments that '
+                                     'I cannot add this experiment to the list of validation _experiments that '
                                      'affect the {} parameter'.format(
                         affected_validation_experiment, component.name
                     ))
 
                 if affected_validation_experiment not in self._get_validation_keys():
-                    raise ValueError('"{}" is not one of your experiments. These are '
+                    raise ValueError('"{}" is not one of your _experiments. These are '
                                      'your valid experimments: "{}"'.format(
                         affected_validation_experiment, self._get_validation_keys().keys()
                     ))
@@ -3661,7 +4087,7 @@ class ParameterEstimation(_Task):
 
         affected_cross_validation_experiments_element = etree.SubElement(fit_item_element, 'ParameterGroup', attrib=affected_cross_validation_experiments)
 
-        ## now add the attributes to the affected experiments element
+        ## now add the attributes to the affected _experiments element
         for affected_validation_experiment_attr in affected_validation_experiments_attr:
             etree.SubElement(
                 affected_cross_validation_experiments_element, 'Parameter',
@@ -3730,7 +4156,7 @@ class ParameterEstimation(_Task):
         optimization_item_list.append(fit_item_element)
         return self.model
 
-    def insert_all_fit_items(self):
+    def _insert_all_fit_items(self):
         """
         insert all fit items defined in config file
         into the model
@@ -3738,11 +4164,11 @@ class ParameterEstimation(_Task):
         """
         for row in range(self.optimization_item_list.shape[0]):
             assert row != 'nan'
-            ## feed each item from the config file into add_fit_item
-            self.model = self.add_fit_item(self.optimization_item_list.iloc[row])
+            ## feed each item from the config file into _add_fit_item
+            self.model = self._add_fit_item(self.optimization_item_list.iloc[row])
         return self.model
 
-    def set_PE_method(self):
+    def _set_PE_method(self):
         '''
         Choose PE algorithm and set algorithm specific parameters
         '''
@@ -3866,7 +4292,7 @@ class ParameterEstimation(_Task):
         parent.insert(2, method_element)
         return self.model
 
-    def set_PE_options(self):
+    def _set_PE_options(self):
         """
         Set parameter estimation sepcific arguments
         :return: pycotools3.model.Model
@@ -3876,7 +4302,7 @@ class ParameterEstimation(_Task):
                             'updateModel': self.update_model}
 
         report_attrib = {'append': self.append,
-                         'reference': self.get_report_key(),
+                         'reference': self._get_report_key(),
                          'target': self.report_name,
                          'confirmOverwrite': self.confirm_overwrite}
 
@@ -3912,7 +4338,7 @@ class ParameterEstimation(_Task):
         if os.path.isdir(self.results_directory) != True:
             os.mkdir(self.results_directory)
 
-    def enumerate_PE_output(self):
+    def _enumerate_PE_output(self):
         """
         Create a filename for each file to collect PE results
         :return: dict['model_copy_number]=enumerated_report_name
@@ -3927,7 +4353,7 @@ class ParameterEstimation(_Task):
             dct[i] = new_file
         return dct
 
-    def copy_model(self):
+    def _copy_model(self):
         """
         Copy the model n times
         Uses deep copy to ensure separate models
@@ -3975,7 +4401,7 @@ class ParameterEstimation(_Task):
         """
         number_of_cpu = cpu_count()
         q = queue.Queue(maxsize=number_of_cpu)
-        report_files = self.enumerate_PE_output()
+        report_files = self._enumerate_PE_output()
         res = {}
         for copy_number, model in list(models.items()):
             t = threading.Thread(target=self._setup1scan,
@@ -4028,7 +4454,7 @@ class ParameterEstimation(_Task):
         :return:
         """
         ## read config file
-        self.read_config_file()
+        self._read_config_file()
 
         ## make appropriate changes to arguments to make them compatible
         ## with the copasi xml
@@ -4040,30 +4466,30 @@ class ParameterEstimation(_Task):
         self._create_output_directory()
 
         ## create a report for PE results collection
-        self.model = self.define_report()
+        self.model = self._define_report()
 
-        ## map experiments
-        EM = ExperimentMapper(self.model, self.experiment_files, **self._experiment_mapper_args)
+        ## map _experiments
+        # EM = ExperimentMapper(self.model, self.experiment_files, **self._experiment_mapping_args)
 
         ## get model from ExperimentMapper
-        self.model = EM.model
+        self.model = self._map_experiments()
 
         ## get rid of existing parameter estimation definition
-        self.model = self.remove_all_fit_items()
+        self.model = self._remove_all_fit_items()
 
         # self.convert_bool_to_numeric()
 
         ## create new parameter estimation
-        self.model = self.set_PE_method()
-        self.model = self.set_PE_options()
-        self.model = self.insert_all_fit_items()
+        self.model = self._set_PE_method()
+        self.model = self._set_PE_options()
+        self.model = self._insert_all_fit_items()
 
         ## ensure we have model
         assert self.model != None
         assert isinstance(self.model, model.Model)
 
         ##copy the number `copy_number` times
-        models = self.copy_model()
+        models = self._copy_model()
 
         ## ensure we have dict of models
         assert isinstance(models, dict)
