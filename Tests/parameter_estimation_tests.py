@@ -95,16 +95,26 @@ class ParameterEstimationTests(_test_base._BaseTest):
         pycotools3.misc.correct_copasi_timecourse_headers(self.TC4.report_name)
         pycotools3.misc.correct_copasi_timecourse_headers(self.TC5.report_name)
 
+        self.affected_experiments = {
+            'A': ['report1', 'report4']
+        }
+
+        self.affected_validation_experiments = {
+            'B': ['report2', 'report3']
+        }
+
         self.PE = pycotools3.tasks.ParameterEstimation(self.model,
                                                        [self.TC1.report_name, self.TC2.report_name,
                                                         self.TC3.report_name, self.TC4.report_name,
                                                         self.TC5.report_name],
                                                        validation=[False, True, True, False, False],
+                                                       affected_experiments=self.affected_experiments,
+                                                       affected_validation_experiments=self.affected_validation_experiments,
                                                        method='genetic_algorithm',
                                                        population_size=10,
                                                        number_of_generations=10,
                                                        report_name='PE_report_name',
-                                                       overwrite_config_file=False,
+                                                       overwrite_config_file=True,
                                                        validation_weight=2.5,
                                                        validation_threshold=9.5,
                                                        )
@@ -230,6 +240,8 @@ class ParameterEstimationTests(_test_base._BaseTest):
         keys = list(self.models_dct.keys())
         # self.models_dct[keys[0]].open()
 
+    def test_that_error_on_line3539_is_raised(self):
+        pass
 
 class ParameterEstimationConfigFileTests(_test_base._BaseTest):
     def setUp(self):

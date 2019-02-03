@@ -2210,7 +2210,8 @@ class ExperimentMapper(_Task):
             'weight': [1] * len(self.experiment_files),
             'save': False,
             'validation_weight': 1,
-            'validation_threshold': 5
+            'validation_threshold': 5,
+            'mappings': None,
         }
         self.default_properties.update(self.kwargs)
         self.convert_bool_to_numeric(self.default_properties)
@@ -2420,6 +2421,7 @@ class ExperimentMapper(_Task):
         ignored_role = {'type': 'unsignedInteger',
                         'name': 'Role',
                         'value': '0'}
+
 
         for i in range(int(num_columns)):
             map_group = etree.SubElement(map, 'ParameterGroup', attrib={'name': (str(i))})
@@ -2771,6 +2773,7 @@ class ParameterEstimation(_Task):
         # default_report_name = os.path.join(os.path.dirname(self.model.copasi_file), 'PEData.txt')
         config_file = os.path.join(os.path.dirname(self.model.copasi_file), 'config_file.yaml')
 
+
         self.default_properties = {
             'metabolites': self.model.metabolites,
             'global_quantities': self.model.global_quantities,
@@ -2819,13 +2822,16 @@ class ParameterEstimation(_Task):
             'validation': [False] * len(self.experiment_files),
             'validation_weight': 1,
             'validation_threshold': 5,
+            'affected_experiments': {},
+            'affected_validation_experiments': {},
             'scheduled': False,
             'lower_bound': 0.000001,
             'upper_bound': 1000000,
             'start_value': 0.1,
             'save': False,
             'run_mode': True,
-            'max_active': None
+            'max_active': None,
+            'mappings': None,
         }
 
         self.default_properties.update(self.kwargs)
@@ -2973,6 +2979,7 @@ class ParameterEstimation(_Task):
         kwargs_experiment['validation'] = self.validation
         kwargs_experiment['validation_weight'] = self.validation_weight
         kwargs_experiment['validation_threshold'] = self.validation_threshold
+        kwargs_experiment['mappings'] = self.mappings
         return kwargs_experiment
 
     def _select_method(self):
@@ -3224,24 +3231,24 @@ class ParameterEstimation(_Task):
         settings_dct['create_parameter_sets'] = self.create_parameter_sets
         settings_dct['calculate_statistics'] = self.calculate_statistics
 
-        exp_dct = OrderedDict()
+        experiment_set_mapping_dct = OrderedDict()
 
         for i in range(len(self.experiment_files)):
             df = pandas.read_csv(self.experiment_files[i], sep=exp_kwargs['separator'][i])
             name = os.path.split(self.experiment_files[i])[1][:-4]
-            exp_dct[name] = OrderedDict()
-            exp_dct[name]['filename'] = self.experiment_files[i]
-            exp_dct[name]['key'] = 'Experiment_{}'.format(i)
-            exp_dct[name]['experiment_type'] = exp_kwargs['experiment_type'][i]
-            exp_dct[name]['first_row'] = int(exp_kwargs['first_row'][i])
-            exp_dct[name]['last_row'] = int(df.shape[0])
-            exp_dct[name]['normalize_weights_per_experiment'] = exp_kwargs['normalize_weights_per_experiment'][i]
-            exp_dct[name]['weight_method'] = exp_kwargs['weight_method'][i]
-            exp_dct[name]['row_containing_names'] = exp_kwargs['row_containing_names'][i]
-            exp_dct[name]['separator'] = exp_kwargs['separator'][i]
-            exp_dct[name]['validation'] = exp_kwargs['validation'][i]
+            experiment_set_mapping_dct[name] = OrderedDict()
+            experiment_set_mapping_dct[name]['filename'] = self.experiment_files[i]
+            experiment_set_mapping_dct[name]['key'] = 'Experiment_{}'.format(i)
+            experiment_set_mapping_dct[name]['experiment_type'] = exp_kwargs['experiment_type'][i]
+            experiment_set_mapping_dct[name]['first_row'] = int(exp_kwargs['first_row'][i])
+            experiment_set_mapping_dct[name]['last_row'] = int(df.shape[0])
+            experiment_set_mapping_dct[name]['normalize_weights_per_experiment'] = exp_kwargs['normalize_weights_per_experiment'][i]
+            experiment_set_mapping_dct[name]['weight_method'] = exp_kwargs['weight_method'][i]
+            experiment_set_mapping_dct[name]['row_containing_names'] = exp_kwargs['row_containing_names'][i]
+            experiment_set_mapping_dct[name]['separator'] = exp_kwargs['separator'][i]
+            experiment_set_mapping_dct[name]['validation'] = exp_kwargs['validation'][i]
 
-            exp_dct[name]['Mappings'] = OrderedDict()
+            experiment_set_mapping_dct[name]['Mappings'] = OrderedDict()
             for item in range(df.shape[1]):
                 experiment_type = 'ignored'
                 if df.columns[item][:-6] == '_indep':
@@ -3251,10 +3258,23 @@ class ParameterEstimation(_Task):
                 elif df.columns[item].lower() == 'time':
                     experiment_type = 'time'
 
-                exp_dct[name]['Mappings']['column_{}'.format(item)] = OrderedDict()
-                exp_dct[name]['Mappings']['column_{}'.format(item)]['data_column_name'] = df.columns[item]
-                exp_dct[name]['Mappings']['column_{}'.format(item)]['model_object'] = df.columns[item]
-                exp_dct[name]['Mappings']['column_{}'.format(item)]['experiment_type'] = experiment_type
+                affected_experiments = 'all'
+                for k, v in self.affected_experiments.items():
+                    if k == df.columns[item]:
+                        affected_experiments = v
+
+                affected_validation_experiments = 'all'
+                for k, v in self.affected_validation_experiments.items():
+                    if k == df.columns[item]:
+                        affected_validation_experiments = v
+
+                experiment_set_mapping_dct[name]['Mappings']['column_{}'.format(item)] = OrderedDict()
+                experiment_set_mapping_dct[name]['Mappings']['column_{}'.format(item)]['data_column_name'] = df.columns[item]
+                experiment_set_mapping_dct[name]['Mappings']['column_{}'.format(item)]['model_object'] = df.columns[item]
+                experiment_set_mapping_dct[name]['Mappings']['column_{}'.format(item)]['experiment_type'] = experiment_type
+                ## affected experiments should be a part of OptimizationItemList. Not ExperimentSet mapping
+                # experiment_set_mapping_dct[name]['Mappings']['column_{}'.format(item)]['affected_experiments'] = affected_experiments
+                # experiment_set_mapping_dct[name]['Mappings']['column_{}'.format(item)]['affected_validation_experiments'] = affected_validation_experiments
 
         ## convert start_value to numeric to keep yaml file consistent
         item_template = self.item_template.transpose()
@@ -3263,12 +3283,17 @@ class ParameterEstimation(_Task):
 
         dct = OrderedDict(
             ParameterEstimationSettings=settings_dct,
-            ExperimentSetMapping=exp_dct,
+            ExperimentSetMapping=experiment_set_mapping_dct,
             OptimizationItemList=item_template,
             OptimizationConstraintList=OrderedDict()
         )
         yaml.add_representer(OrderedDict,
                              lambda dumper, data: dumper.represent_mapping('tag:yaml.org,2002:map', data.items()))
+
+        ## modify dumper class so that we do not write aliases for variables
+        ## yaml have seen before.
+        noalias_dumper = yaml.dumper.Dumper
+        noalias_dumper.ignore_aliases = lambda self, data: True
 
         if (os.path.isfile(self.config_filename) == False) or (self.overwrite_config_file == True):
             with open(self.config_filename, 'w') as f:
@@ -3316,8 +3341,14 @@ class ParameterEstimation(_Task):
                         row_containing_names = []
                         separator = []
                         validation = []
+                        # affected_experiments = []
+                        # affected_validation_experiments = []
+
 
                         for experiment_name in experiment_mapping_args:
+                            # for k, v in sorted(experiment_mapping_args[experiment_name].items()):
+                            #     print(k, v)
+                            # print(experiment_mapping_args[experiment_name])
                             experiment_files.append(experiment_mapping_args[experiment_name]['filename'])
                             experiment_type.append(experiment_mapping_args[experiment_name]['experiment_type'])
                             experiment_keys.append(experiment_mapping_args[experiment_name]['key'])
@@ -3330,7 +3361,16 @@ class ParameterEstimation(_Task):
                                 experiment_mapping_args[experiment_name]['row_containing_names'])
                             separator.append(experiment_mapping_args[experiment_name]['separator'])
                             validation.append(experiment_mapping_args[experiment_name]['validation'])
+                            # affected_experiments.append(experiment_mapping_args[experiment_name]['affected_experiments'])
+                            # affected_validation_experiments.append(experiment_mapping_args[experiment_name]['affected_validation_experiments'])
                             mappings[experiment_name] = experiment_mapping_args[experiment_name]['Mappings']
+
+                        # the affected experiments will follow the same mechanism as mapping column
+                        # names properly. This is not yet implemented and currently, correct mappingsrelies on
+                        # the names in the config file being the same as model names.
+                        # Next, spend time modifying the code so that the mapping items from the yaml config file are
+                        # used. This means using the 'mappings' attribute.
+
 
                         setattr(self, 'experiment_type', experiment_type)
                         setattr(self, 'experiment_keys', experiment_keys)
@@ -3341,10 +3381,14 @@ class ParameterEstimation(_Task):
                         setattr(self, 'row_containing_names', row_containing_names)
                         setattr(self, 'separator', separator)
                         setattr(self, 'validation', validation)
+                        setattr(self, 'mappings', mappings)
+                        # setattr(self, 'affected_experiments', affected_experiments)
+                        # setattr(self, 'affected_validation_experiments', affected_validation_experiments)
 
 
                     elif k == 'OptimizationItemList':
                         opt = pandas.DataFrame(dct[k]).transpose()
+                        print('opt\n', opt)
                         setattr(self, 'optimization_item_list', opt)
 
                     elif k == 'OptimizationConstraintList':
@@ -3361,14 +3405,31 @@ class ParameterEstimation(_Task):
         """
         Experiment keys are always 'Experiment_i' where 'i' indexes
         the experiment in the order they are given in the experiment
-        list.
+        list. This method extracts the experiments that are not for validation
         :return:
         """
         dct = OrderedDict()
         for i in range(len(self.experiment_files)):
-            key = "Experiment_{}".format(i)
-            name = os.path.split(self.experiment_files[i])[1][:-4]
-            dct[name] = key
+            if not self.validation[i]:
+                key = "Experiment_{}".format(i)
+                name = os.path.split(self.experiment_files[i])[1][:-4]
+                dct[name] = key
+        return dct
+
+    def _get_validation_keys(self):
+        """
+        Experiment keys are always 'Experiment_i' where 'i' indexes
+        the experiment in the order they are given in the experiment
+        list. This method extracts the experiments that are for validation
+
+        :return:
+        """
+        dct = OrderedDict()
+        for i in range(len(self.experiment_files)):
+            if self.validation[i]:
+                key = "Experiment_{}".format(i)
+                name = os.path.split(self.experiment_files[i])[1][:-4]
+                dct[name] = key
         return dct
 
     @property
@@ -3444,12 +3505,71 @@ class ParameterEstimation(_Task):
             gls = gls.sort_values(by='name')
 
         df = pandas.concat([metabs, gls, los], axis=0)
-
-        df['lower_bound'] = [self.lower_bound] * df.shape[0]
-        df['upper_bound'] = [self.upper_bound] * df.shape[0]
-        df['affected_experiments'] = ['all'] * df.shape[0]
-
         df = df.set_index('name')
+        if isinstance(self.lower_bound, (float, int)):
+            df['lower_bound'] = [self.lower_bound] * df.shape[0]
+        elif isinstance(self.lower_bound, dict):
+            df['lower_bound'] = [self.lower_bound] * df.shape[0]
+            for k, v in self.lower_bound.items():
+                if k not in df.index:
+                    raise IndexError('The key "{0}" is not available. These are available: "{1}. Check for typo\'s '
+                                     'and check that you have included "{0}" in your '
+                                     'estimation by adding it as argument to "metabolites" '
+                                     '"local_parameters" or "global_quantities" argument'.format(k, df.index))
+                df.loc[k] = v
+        else:
+            raise errors.InputError('lower_bound argument must be an integer '
+                                    'or dict mapping estimated parameters '
+                                    'to integers')
+
+        if isinstance(self.upper_bound, (float, int)):
+            df['upper_bound'] = [self.upper_bound] * df.shape[0]
+        elif isinstance(self.upper_bound, dict):
+            df['upper_bound'] = [self.upper_bound] * df.shape[0]
+            for k, v in self.upper_bound.items():
+                if k not in df.index:
+                    raise IndexError('The key "{0}" is not available. These are available: "{1}. Check for typo\'s '
+                                     'and check that you have included "{0}" in your '
+                                     'estimation by adding it as argument to "metabolites" '
+                                     '"local_parameters" or "global_quantities" argument'.format(k, df.index))
+                df.loc[k] = v
+        else:
+            raise errors.InputError('upper_bound argument must be an integer '
+                                    'or dict mapping estimated parameters '
+                                    'to integers')
+
+        if isinstance(self.affected_experiments, str):
+            df['affected_experiments'] = ['all'] * df.shape[0]
+        elif isinstance(self.affected_experiments, dict):
+            df['affected_experiments'] = ['all'] * df.shape[0]
+            for k, v in self.affected_experiments.items():
+                if k not in df.index:
+                    raise IndexError('The key "{0}" is not available. These are available: "{1}. Check for typo\'s '
+                                     'and check that you have included "{0}" in your '
+                                     'estimation by adding it as argument to "metabolites" '
+                                     '"local_parameters" or "global_quantities" argument'.format(k, df.index))
+                df.at[k, 'affected_experiments'] = v
+        else:
+            raise errors.InputError('affected_experiments argument must be "all" '
+                                    'or dict mapping estimated parameters '
+                                    'to a list of experiment names')
+
+        if isinstance(self.affected_validation_experiments, str):
+            df['affected_validation_experiments'] = ['all'] * df.shape[0]
+        elif isinstance(self.affected_validation_experiments, dict):
+            df['affected_validation_experiments'] = ['all'] * df.shape[0]
+            for k, v in self.affected_validation_experiments.items():
+                if k not in df.index:
+                    raise IndexError('The key "{0}" is not available. These are available: "{1}. Check for typo\'s '
+                                     'and check that you have included "{0}" in your '
+                                     'estimation by adding it as argument to "metabolites" '
+                                     '"local_parameters" or "global_quantities" argument'.format(k, df.index))
+                df.at[k, 'affected_validation_experiments'] = v
+        else:
+            raise errors.InputError('"affected_validation_experiments" argument must be "all" '
+                                    'or dict mapping estimated parameters '
+                                    'to a list of experiment names')
+
 
         if isinstance(self.start_value, pandas.core.frame.DataFrame):
             if len(self.start_value.columns) != 1:
@@ -3491,22 +3611,10 @@ class ParameterEstimation(_Task):
             )
 
         # initialize new element
-        new_element = etree.Element('ParameterGroup', attrib={'name': 'FitItem'})
+        fit_item_element = etree.Element('ParameterGroup', attrib={'name': 'FitItem'})
 
-        '''
-                                <ParameterGroup name="Affected Cross Validation Experiments">
-                        </ParameterGroup>
-                        <ParameterGroup name="Affected Experiments">
-                            <Parameter name="Experiment Key" type="key" value="Experiment_1"/>
-                        </ParameterGroup>
-        '''
-
-        ##TODO include affected Cross Validation Experiments
-        ##TODO include Affected Experiment options
-        affected_cross_validation_experiments = {'name': 'Affected Cross Validation Experiments'}
 
         affected_experiments = {'name': 'Affected Experiments'}
-
         ## read affected experiments from config file.yaml
         affected_experiments_attr = OrderedDict()
         ## when affected experiments is 'all', the affected experiment element is empty
@@ -3519,6 +3627,13 @@ class ParameterEstimation(_Task):
             ## iterate over list. Raise ValueError is can't find experiment name
             ## otherwise add the corresponding experiment key to the affected experiments attr dict
             for affected_experiment in item['affected_experiments']:  ## iterate over the list
+                if affected_experiment in self._get_validation_keys():
+                    raise ValueError('"{}" has been given as a validation experiment and therefore '
+                                     'I cannot add this experiment to the list of experiments that '
+                                     'affect the {} parameter'.format(
+                        affected_experiment, component.name
+                    ))
+
                 if affected_experiment not in self._get_experiment_keys():
                     raise ValueError('"{}" is not one of your experiments. These are '
                                      'your valid experimments: "{}"'.format(
@@ -3530,8 +3645,9 @@ class ParameterEstimation(_Task):
                 affected_experiments_attr[affected_experiment]['type'] = 'key'
                 affected_experiments_attr[affected_experiment]['value'] = self._get_experiment_keys()[
                     affected_experiment]
-        etree.SubElement(new_element, 'ParameterGroup', attrib=affected_cross_validation_experiments)
-        affected_experiments_element = etree.SubElement(new_element, 'ParameterGroup', attrib=affected_experiments)
+
+        ## add affected experiments to element
+        affected_experiments_element = etree.SubElement(fit_item_element, 'ParameterGroup', attrib=affected_experiments)
 
         ## now add the attributes to the affected experiments element
         for affected_experiment in affected_experiments_attr:
@@ -3539,19 +3655,62 @@ class ParameterEstimation(_Task):
                 affected_experiments_element, 'Parameter', attrib=affected_experiments_attr[affected_experiment]
             )
 
+        ## read affected validation experiments from config file.yaml
+        affected_validation_experiments_attr = OrderedDict()
+        ## when affected experiments is 'all', the affected experiment element is empty
+        if item['affected_validation_experiments'] != 'all':
+            ## convert a string to a list of 1 so we can cater for the case
+            ## where we have a list of strings with the same code
+            if isinstance(item['affected_validation_experiments'], str):
+                item['affected_validation_experiments'] = [item['affected_validation_experiments']]
+
+            ## iterate over list. Raise ValueError is can't find experiment name
+            ## otherwise add the corresponding experiment key to the affected experiments attr dict
+            for affected_validation_experiment in item['affected_validation_experiments']:  ## iterate over the list
+                if affected_validation_experiment in self._get_experiment_keys():
+                    raise ValueError('"{}" has been given as an experiment and therefore '
+                                     'I cannot add this experiment to the list of validation experiments that '
+                                     'affect the {} parameter'.format(
+                        affected_validation_experiment, component.name
+                    ))
+
+                if affected_validation_experiment not in self._get_validation_keys():
+                    raise ValueError('"{}" is not one of your experiments. These are '
+                                     'your valid experimments: "{}"'.format(
+                        affected_validation_experiment, self._get_validation_keys().keys()
+                    ))
+
+                affected_validation_experiments_attr[affected_validation_experiment] = {}
+                affected_validation_experiments_attr[affected_validation_experiment]['name'] = 'Experiment Key'
+                affected_validation_experiments_attr[affected_validation_experiment]['type'] = 'key'
+                affected_validation_experiments_attr[affected_validation_experiment]['value'] = self._get_validation_keys()[
+                    affected_validation_experiment]
+
+        affected_cross_validation_experiments = {'name': 'Affected Cross Validation Experiments'}
+
+        affected_cross_validation_experiments_element = etree.SubElement(fit_item_element, 'ParameterGroup', attrib=affected_cross_validation_experiments)
+
+        ## now add the attributes to the affected experiments element
+        print('aff', affected_validation_experiments_attr)
+        for affected_validation_experiment_attr in affected_validation_experiments_attr:
+            etree.SubElement(
+                affected_cross_validation_experiments_element, 'Parameter',
+                attrib=affected_validation_experiments_attr[affected_validation_experiment_attr]
+            )
+
         ## get lower bound from config file and add to element
         lower_bound_element = {'type': 'cn', 'name': 'LowerBound', 'value': str(item['lower_bound'])}
-        etree.SubElement(new_element, 'Parameter', attrib=lower_bound_element)
+        etree.SubElement(fit_item_element, 'Parameter', attrib=lower_bound_element)
 
         if self.use_config_start_values == True:
             start_value_element = {'type': 'float', 'name': 'StartValue', 'value': str(item['start_value'])}
 
         ## get upper bound from config file and add to element
         upper_bound_element = {'type': 'cn', 'name': 'UpperBound', 'value': str(item['upper_bound'])}
-        etree.SubElement(new_element, 'Parameter', attrib=upper_bound_element)
+        etree.SubElement(fit_item_element, 'Parameter', attrib=upper_bound_element)
 
         if self.use_config_start_values == True:
-            etree.SubElement(new_element, 'Parameter', attrib=start_value_element)
+            etree.SubElement(fit_item_element, 'Parameter', attrib=start_value_element)
 
         ## Now begin creating the object map.
         # for IC parameters
@@ -3587,7 +3746,7 @@ class ParameterEstimation(_Task):
             raise errors.InputError('{} is not a valid parameter for estimation'.format(list(item)))
 
         ## add element
-        etree.SubElement(new_element, 'Parameter', attrib=subA4)
+        etree.SubElement(fit_item_element, 'Parameter', attrib=subA4)
 
         ##insert fit item
 
@@ -3598,7 +3757,7 @@ class ParameterEstimation(_Task):
         assert problem.tag == '{http://www.copasi.org/static/schema}Problem'
         optimization_item_list = problem[3]
         assert list(optimization_item_list.attrib.values())[0] == 'OptimizationItemList'
-        optimization_item_list.append(new_element)
+        optimization_item_list.append(fit_item_element)
         return self.model
 
     def insert_all_fit_items(self):
@@ -3607,9 +3766,11 @@ class ParameterEstimation(_Task):
         into the model
         :return:
         """
+        print(self.optimization_item_list.keys())
         for row in range(self.optimization_item_list.shape[0]):
             assert row != 'nan'
             ## feed each item from the config file into add_fit_item
+            print(self.optimization_item_list.iloc[row])
             self.model = self.add_fit_item(self.optimization_item_list.iloc[row])
         return self.model
 
