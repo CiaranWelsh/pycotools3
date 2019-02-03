@@ -2885,27 +2885,6 @@ class ParameterEstimation(_Task):
 
         return self.model
 
-    @property
-    def _experiment_mapping_args(self):
-        """
-        method to construct a dictionary to pass to ExperimentMapper
-        :return:
-        """
-        kwargs_experiment = {}
-        kwargs_experiment['row_orientation'] = self.row_orientation
-        kwargs_experiment['experiment_type'] = self.experiment_type
-        kwargs_experiment['experiment_keys'] = self.experiment_keys
-        kwargs_experiment['first_row'] = self.first_row
-        kwargs_experiment['normalize_weights_per_experiment'] = self.normalize_weights_per_experiment
-        kwargs_experiment['row_containing_names'] = self.row_containing_names
-        kwargs_experiment['separator'] = self.separator
-        kwargs_experiment['weight_method'] = self.weight_method
-        kwargs_experiment['validation'] = self.validation
-        kwargs_experiment['validation_weight'] = self.validation_weight
-        kwargs_experiment['validation_threshold'] = self.validation_threshold
-        kwargs_experiment['mappings'] = self.mappings
-        return kwargs_experiment
-
     def _select_method(self):
         """
         #determine which method to use
@@ -3140,7 +3119,19 @@ class ParameterEstimation(_Task):
         self.config_filename.
         :return: str. Path to config file
         """
-        exp_kwargs = self._experiment_mapping_args
+        exp_kwargs = {}
+        exp_kwargs['row_orientation'] = self.row_orientation
+        exp_kwargs['experiment_type'] = self.experiment_type
+        exp_kwargs['experiment_keys'] = self.experiment_keys
+        exp_kwargs['first_row'] = self.first_row
+        exp_kwargs['normalize_weights_per_experiment'] = self.normalize_weights_per_experiment
+        exp_kwargs['row_containing_names'] = self.row_containing_names
+        exp_kwargs['separator'] = self.separator
+        exp_kwargs['weight_method'] = self.weight_method
+        exp_kwargs['validation'] = self.validation
+        exp_kwargs['validation_weight'] = self.validation_weight
+        exp_kwargs['validation_threshold'] = self.validation_threshold
+        exp_kwargs['mappings'] = self.mappings
 
         settings_dct = OrderedDict()
         settings_dct['randomize_start_values'] = self.randomize_start_values

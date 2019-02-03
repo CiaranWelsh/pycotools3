@@ -471,16 +471,18 @@ class ExperimentMapperTests(_test_base._BaseTest):
         self.report4= os.path.join(os.path.dirname(self.TC2.report_name), 'report4.txt')
         ss_df.to_csv(self.report4, sep='\t', index=False)
 
-        self.PE = pycotools3.tasks.ParameterEstimation(self.model,
-                                                   [self.TC1.report_name,
-                                                    self.TC2.report_name,
-                                                    self.report3,
-                                                    self.report4],
-                                                   experiment_type=['timecourse', 'timecourse',
-                                                                    'timecourse', 'steadystate'],
-                                                   validation=[False, True, True, False],
-                                                   validation_weight=2,
-                                                   validation_thershold=6
+        self.PE = pycotools3.tasks.ParameterEstimation(
+            self.model,
+            [self.TC1.report_name,
+            self.TC2.report_name,
+            self.report3,
+            self.report4],
+            experiment_type=['timecourse', 'timecourse',
+            'timecourse', 'steadystate'],
+            validation=[False, True, True, False],
+            validation_weight=2,
+            validation_thershold=6,
+            overwrite_config_file=True
                                                    )
         self.PE.write_config_file()
         self.PE.setup()
@@ -510,7 +512,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
         for j in self.PE.model.xml.xpath(query):
             for k in list(j):
                 if k.attrib['name'] == 'Weight':
-                    self.assertEqual(k.attrib['value'], str(self.E.validation_weight))
+                    self.assertEqual(k.attrib['value'], str(self.PE.validation_weight))
 
 
     def test_validation_threshold(self):
@@ -524,7 +526,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
         for j in self.PE.model.xml.xpath(query):
             for k in list(j):
                 if k.attrib['name'] == 'Threshold':
-                    self.assertEqual(k.attrib['value'], str(self.E.validation_threshold))
+                    self.assertEqual(k.attrib['value'], str(self.PE.validation_threshold))
 
     def test_validation(self):
         """
@@ -535,8 +537,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
         query = '//*[@name="Validation Set"]'
         for i in self.PE.model.xml.xpath(query):
             for j in i:
-                ## new validation _experiments are under a parameter group tag, under Validation Set
-                if j.tag == '{http://www.copasi.org/static/schema}ParameterGroup':
+                if 'Experiment_' in j.attrib['name']:
                     count += 1
         self.assertEqual(count, 2)
 
