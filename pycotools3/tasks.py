@@ -207,17 +207,33 @@ class _Task(object):
                'create_parameter_sets',
                'calculate_statistics',
                'randomize_start_values',
+               'row_orientation',
+               'normalize_weights_per_experiment',
                ]
         for attr in lst:
             try:
                 ans = getattr(self, attr)
-                if ans:
-                    setattr(self, attr, '1')
-                elif not ans:
-                    setattr(self, attr, '0')
-                else:
-                    if ans not in [True, False, '0', '1']:
-                        raise ValueError
+                if isinstance(ans, bool):
+                    if ans:
+                        setattr(self, attr, '1')
+                    elif not ans:
+                        setattr(self, attr, '0')
+                    else:
+                        if ans not in [True, False, '0', '1']:
+                            raise ValueError
+                elif isinstance(ans, list):
+                    new_list = []
+                    for b in ans:
+                        if not isinstance(b, bool):
+                            raise TypeError
+                        if b:
+                            new_list.append('1')
+                        elif not b:
+                            new_list.append('0')
+                        else:
+                            if b not in [True, False, '0', '1']:
+                                raise ValueError
+                    setattr(self, attr, new_list)
             except AttributeError:
                 continue
 
@@ -255,9 +271,12 @@ class Bool2Str(object):
         if isinstance(self.dct, dict) != True:
             raise errors.InputError('Input must be dict')
 
-        self.acceptable_kwargs = ['append', 'confirm_overwrite', 'update_model',
-                                  'output_in_subtask', 'adjust_initial_conditions',
-                                  'randomize_start_values', 'log10', 'scheduled', 'output_event']
+        self.acceptable_kwargs = [
+            'append', 'confirm_overwrite', 'update_model',
+            'output_in_subtask', 'adjust_initial_conditions',
+            'randomize_start_values', 'log10',
+            'scheduled', 'output_event',
+        ]
 
     def convert(self, boolean):
         if boolean == True:
@@ -2323,6 +2342,8 @@ class ParameterEstimation(_Task):
             'scheduled': False,
             'lower_bound': 0.000001,
             'upper_bound': 1000000,
+            'lower_bound_dct': {},
+            'upper_bound_dct': {},
             'start_value': 0.1,
             'save': False,
             'run_mode': True,
@@ -2332,7 +2353,6 @@ class ParameterEstimation(_Task):
 
         self.default_properties.update(self.kwargs)
         self.update_properties(self.default_properties)
-        # self._remove_multiparameter_estimation_arg()
         self.check_integrity(list(self.default_properties.keys()), list(self.kwargs.keys()))
 
         self._do_checks()
@@ -2360,57 +2380,6 @@ class ParameterEstimation(_Task):
             if os.path.isabs(self.experiment_files[i]) != True:
                 self.experiment_files[i] = os.path.abspath(self.experiment_files[i])
 
-        weight_method_string = ['mean_squared', 'stardard_deviation', 'value_scaling',
-                                'mean']  # line 2144
-        weight_method_numbers = [str(i) for i in [1, 2, 3, 4]]
-        weight_method_dict = dict(list(zip(weight_method_string, weight_method_numbers)))
-        self.weight_method = [weight_method_dict[i] for i in self.weight_method]
-
-        experiment_type_string = ['steadystate', 'timecourse']
-        experiment_type_numbers = [str(i) for i in [0, 1]]
-        experiment_type_dict = dict(list(zip(experiment_type_string, experiment_type_numbers)))
-        self.experiment_type = [experiment_type_dict[i] for i in self.experiment_type]
-
-        l = []
-        assert isinstance(self.row_orientation, list)
-        for i in self.row_orientation:
-            assert i in [True, False]
-            if i == True:
-                l.append(str(1))
-            else:
-                l.append(str(0))
-        self.row_orientation = l
-
-        assert isinstance(self.first_row, list)
-        l = []
-        for i in self.first_row:
-            assert i != 0
-            assert i != str(0)
-            l.append(str(i))
-        self.first_row = l
-
-        l = []
-        assert isinstance(self.normalize_weights_per_experiment, list)
-        for i in self.normalize_weights_per_experiment:
-            assert i in [True, False], '{} should be true or false'.format(i)
-            if i == True:
-                l.append(str(1))
-            else:
-                l.append(str(0))
-        self.normalize_weights_per_experiment = l
-
-        l = []
-        assert isinstance(self.row_orientation, list)
-        for i in self.row_orientation:
-            l.append(str(i))
-        self.row_orientation = l
-
-        l = []
-        assert isinstance(self.row_containing_names, list)
-        for i in self.row_containing_names:
-            l.append(str(i))
-        self.row_containing_names = l
-
         assert isinstance(self.separator, list)
         for i in self.separator:
             assert isinstance(i, str), 'separator should be given asa python list'
@@ -2424,10 +2393,6 @@ class ParameterEstimation(_Task):
                 if isinstance(getattribute[i], str):
                     new_attr.append(self.get_variable_from_string(self.model, getattribute[i]))
                     setattr(self, attr, new_attr)
-
-        # if os.path.isabs(self.report_name) != True:
-        #     self.report_name = os.path.join(os.path.dirname(self.model.copasi_file),
-        #                                     self.report_name)
 
         ## ensure experiment files exist
         for fle in self.experiment_files:
@@ -2505,10 +2470,6 @@ class ParameterEstimation(_Task):
             self.randomize_start_values = '0'
             self.use_config_start_values = True
 
-        # if self.output_in_subtask:
-        #     LOG.warning(
-        #         'output_in_subtask has been turned on. This means that you\'ll get function evaluations with the best parameter set that the algorithm finds')
-
         run_arg_list = [False, True, 'parallel', 'sge']
 
         if self.run_mode not in run_arg_list:
@@ -2540,6 +2501,120 @@ class ParameterEstimation(_Task):
                 existing_validation_list.append(j)
         return existing_validation_list
 
+    def _create_metabolite_reference(self, parent, metabolite, role):
+        if not isinstance(metabolite, model.Metabolite):
+            raise ValueError('Input should be "model.Metabolite" class. Got "{}"'.format(type(metabolite)))
+
+        if role == 'independent':
+            cn = '{},{},{}'.format(self.model.reference,
+                               metabolite.compartment.reference,
+                               metabolite.initial_reference)
+        elif role == 'dependent':
+            cn = '{},{},{}'.format(self.model.reference,
+                                   metabolite.compartment.reference,
+                                   metabolite.transient_reference)
+        else:
+            raise ValueError
+
+        ics_attrs = {
+            'type': 'cn',
+            'name': 'Object CN',
+            'value': cn
+        }
+        return etree.SubElement(parent, 'Parameter', attrib=ics_attrs)
+
+    def _create_local_parameter_reference(self, parent, local_parameter, role):
+        """
+        Not used because local parameters are not usually mapped to experimental
+        variables. However, this method will be kept until the next release
+        to ensure no bugs arise because of a lack of local parameter reference
+
+        :param parent:
+        :param local_parameter:
+        :param role:
+        :return:
+        """
+        if not isinstance(local_parameter, model.LocalParameter):
+            raise ValueError('Input should be "model.LocalParameter" class. Got "{}"'.format(type(metabolite)))
+
+        if role == 'independent':
+            cn = '{},{},{}'.format(self.model.reference,
+                                   local_parameter.compartment.reference,
+                                   local_parameter.initial_reference)
+        elif role == 'dependent':
+            cn = '{},{},{}'.format(self.model.reference,
+                                   local_parameter.compartment.reference,
+                                   local_parameter.transient_reference)
+        else:
+            raise ValueError
+
+        local_attrs = {
+            'type': 'cn',
+            'name': 'Object CN',
+            'value': cn
+        }
+        parent = etree.SubElement(parent, 'Parameter', attrib=local_attrs )
+        return parent
+
+    def _create_global_quantity_reference(self, parent, global_quantity, role):
+        if not isinstance(global_quantity, model.GlobalQuantity):
+            raise ValueError('Input should be "model.GlobalQuantity" class. Got "{}"'.format(type(global_quantity)))
+
+        if role == 'independent':
+            cn = '{},{}'.format(self.model.reference,
+                                global_quantity.initial_reference)
+
+        elif role == 'dependent':
+            cn = '{},{}'.format(self.model.reference,
+                                global_quantity.initial_reference)
+        else:
+            raise ValueError
+
+        global_attrs = {
+            'type': 'cn',
+            'name': 'Object CN',
+            'value': cn
+        }
+        etree.SubElement(parent, 'Parameter', attrib=global_attrs )
+        return parent
+
+    def _assign_role(self, parent, role):
+        """
+        Used in create experiment to correctly map the role of each variable in
+        experiemtnal data columns
+        :return:
+        """
+        # define object role attributes
+        time_role = {'type': 'unsignedInteger',
+                     'name': 'Role',
+                     'value': '3'}
+
+        dependent_variable_role = {'type': 'unsignedInteger',
+                                   'name': 'Role',
+                                   'value': '2'}
+
+        independent_variable_role = {'type': 'unsignedInteger',
+                                     'name': 'Role',
+                                     'value': '1'}
+
+        ignored_role = {'type': 'unsignedInteger',
+                        'name': 'Role',
+                        'value': '0'}
+
+        ## assign the correct role
+        if role == 'dependent':
+            parent = etree.SubElement(parent, 'Parameter', attrib=dependent_variable_role)
+        elif role == 'independent':
+            parent = etree.SubElement(parent, 'Parameter', attrib=independent_variable_role)
+        elif role == 'time':
+            parent = etree.SubElement(parent, 'Parameter', attrib=time_role)
+        elif role == 'ignored':
+            parent = etree.SubElement(parent, 'Parameter', attrib=ignored_role)
+        else:
+            raise ValueError('"{}" is not a valid role'.format(role) )
+
+        return parent
+
     def _create_experiment(self, index):
         """
         Adds a single experiment set to the parameter estimation task
@@ -2553,10 +2628,9 @@ class ParameterEstimation(_Task):
         data = pandas.read_csv(
             self.experiment_files[index],
             sep=self.separator[index])
-
         obs = list(data.columns)
         num_rows = str(data.shape[0])
-        num_columns = str(data.shape[1])  # plus 1 to account for 0 indexed
+        num_columns = str(data.shape[1])
 
         # if exp_file is in the same directory as copasi_file only use relative path
         if os.path.dirname(self.model.copasi_file) == os.path.dirname(self.experiment_files[index]):
@@ -2564,12 +2638,19 @@ class ParameterEstimation(_Task):
         else:
             exp = self.experiment_files[index]
 
-        self.key = self.experiment_keys[index]
+        experiment_file = {'type': 'file',
+                           'name': 'File Name',
+                           'value': exp}
+        key = {'type': 'key',
+               'name': 'Key',
+               'value': self.experiment_keys[index]
+               }
 
         # necessary XML attributes
-        experiment_group = etree.Element('ParameterGroup', attrib={'name': self.key})
-
-        # Exp = etree.Element('ParameterGroup', attrib={'name': self.experiment_files[index]})
+        experiment_group = etree.Element('ParameterGroup',
+                                         attrib={
+                                             'name': os.path.split(self.experiment_files[index])[1][:-4]
+                                         })
 
         row_orientation = {'type': 'bool',
                            'name': 'Data is Row Oriented',
@@ -2579,17 +2660,9 @@ class ParameterEstimation(_Task):
                            'name': 'Experiment Type',
                            'value': self.experiment_type[index]}
 
-        experiment_file = {'type': 'file',
-                           'name': 'File Name',
-                           'value': exp}
-
         first_row = {'type': 'unsignedInteger',
                      'name': 'First Row',
                      'value': str(self.first_row[index])}
-
-        key = {'type': 'key',
-               'name': 'Key',
-               'value': self.key}
 
         last_row = {'type': 'unsignedInteger',
                     'name': 'Last Row',
@@ -2629,167 +2702,220 @@ class ParameterEstimation(_Task):
         etree.SubElement(experiment_group, 'Parameter', attrib=number_of_columns)
         map = etree.SubElement(experiment_group, 'ParameterGroup', attrib=object_map)
 
-        # define object role attributes
-        time_role = {'type': 'unsignedInteger',
-                     'name': 'Role',
-                     'value': '3'}
+        experiment_name = os.path.split(self.experiment_files[index])[1][:-4]
 
-        dependent_variable_role = {'type': 'unsignedInteger',
-                                   'name': 'Role',
-                                   'value': '2'}
+        for i in self.mappings:
+            if i == experiment_name:
+                data_column_number = 0
+                for data_column_name in self.mappings[i]:
+                    if data_column_name not in obs:
+                        raise errors.InputError('Incorrect Mapping. In your config file you have '
+                                                'specified a column ({}) that is not present '
+                                                'in your experiment ("{}"). These are variables '
+                                                'in your data file: "{}"'.format(
+                            data_column_name, experiment_name, obs
+                        ))
+                    column_mapping = self.mappings[i][data_column_name]['model_object']
 
-        independent_variable_role = {'type': 'unsignedInteger',
-                                     'name': 'Role',
-                                     'value': '1'}
-
-        ignored_role = {'type': 'unsignedInteger',
-                        'name': 'Role',
-                        'value': '0'}
+                    # if column_mapping[-6:] == '_indep':
+                    #     column_mapping = column_mapping[:-6]
 
 
-        for i in range(int(num_columns)):
-            map_group = etree.SubElement(map, 'ParameterGroup', attrib={'name': (str(i))})
-            if self.experiment_type[index] == str(1):  # when Experiment type is set to time course it should be 1
-                ## first column is time
-                if i == 0:
-                    etree.SubElement(map_group, 'Parameter', attrib=time_role)
-                else:
-                    ## map independent variables
-                    if obs[i][-6:] == '_indep':
-                        if obs[i][:-6] in [j.name for j in self.model.metabolites]:
-                            metab = [j for j in self.model.metabolites if j.name == obs[i][:-6]][0]
-                            cn = '{},{},{}'.format(self.model.reference,
-                                                   metab.compartment.reference,
-                                                   metab.initial_reference)
-                            independent_ICs = {'type': 'cn',
-                                               'name': 'Object CN',
-                                               'value': cn}
-                            etree.SubElement(map_group, 'Parameter', attrib=independent_ICs)
+                    ## use data column number for column name
+                    map_group = etree.SubElement(map, 'ParameterGroup', attrib={'name': str(data_column_number)})
+                    data_column_number += 1
 
-                        elif obs[i][:-6] in [j.name for j in self.model.global_quantities]:
-                            glob = [j for j in self.model.global_quantities if j.name == obs[i][:-6]][0]
-                            cn = '{},{}'.format(self.model.reference,
-                                                glob.initial_reference)
+                    # if self.experiment_type[index] == str(1): ##str(1) is code for timecourse
+                    #     if current_col == 0:
+                    #         etree.SubElement(map_group, 'Parameter', attrib=time_role)
 
-                            independent_globs = {'type': 'cn',
-                                                 'name': 'Object CN',
-                                                 'value': cn}
 
-                            etree.SubElement(map_group,
-                                             'Parameter',
-                                             attrib=independent_globs)
-                        else:
-                            continue
-                            ##etree.SubElement(map_group, 'Parameter', attrib=ignored_role)
-                            LOG.warning('{} not found. Set to ignore'.format(obs[i]))
-                        etree.SubElement(map_group, 'Parameter', attrib=independent_variable_role)
+                    if column_mapping.lower() == 'time':
+                        self._assign_role(map_group, self.mappings[i][data_column_name]['role'])
+                        # map_group = etree.SubElement(map_group, 'Parameter', attrib=time_role)
 
-                    ## now do dependent variables
-                    elif obs[i][:-6] != '_indep':
-                        ## metabolites
-                        if obs[i] in [j.name for j in self.model.metabolites]:
-                            metab = [j for j in self.model.metabolites if j.name == obs[i]][0]
-                            cn = '{},{},{}'.format(self.model.reference,
-                                                   metab.compartment.reference,
-                                                   metab.transient_reference)
+                    elif column_mapping in [j.name for j in self.model.metabolites]:
+                        metab = [j for j in self.model.metabolites if j.name == column_mapping]
+                        assert len(metab) == 1
 
-                            dependent_ICs = {'type': 'cn',
-                                             'name': 'Object CN',
-                                             'value': cn}
+                        ## create appropriate reference for metabolite
+                        self._create_metabolite_reference(
+                            map_group,
+                            metab[0],
+                            self.mappings[i][data_column_name]['role'])
+                        self._assign_role(map_group, self.mappings[i][data_column_name]['role'])
 
-                            etree.SubElement(map_group, 'Parameter', attrib=dependent_ICs)
+                    elif column_mapping in [j.name for j in self.model.global_quantities]:
+                        global_quantity = [j for j in self.model.global_quantities if j.name == column_mapping]
+                        assert len(global_quantity) == 1
+                        map_group = self._create_global_quantity_reference(
+                            map_group,
+                            global_quantity[0],
+                            self.mappings[i][data_column_name]['role']
+                        )
 
-                        ## global quantities
-                        elif obs[i] in [j.name for j in self.model.global_quantities]:
-                            glob = [j for j in self.model.global_quantities if j.name == obs[i]][0]
-                            cn = '{},{}'.format(self.model.reference,
-                                                glob.transient_reference)
-                            dependent_globs = {'type': 'cn',
-                                               'name': 'Object CN',
-                                               'value': cn}
-                            etree.SubElement(map_group,
-                                             'Parameter',
-                                             attrib=dependent_globs)
-                        ## remember that local parameters are not mapped to experimental
-                        ## data
-                        else:
-                            continue
-                            ##etree.SubElement(map_group, 'Parameter', attrib=ignored_role)
-                            LOG.warning('{} not found. Set to ignore'.format(obs[i]))
-                        ## map for time course dependent variable
-                        etree.SubElement(map_group, 'Parameter', attrib=dependent_variable_role)
+                        self._assign_role(map_group, self.mappings[i][data_column_name]['role'])
 
-            ## and now for steady state data
-            else:
 
-                ## do independent variables first
-                if obs[i][-6:] == '_indep':
-
-                    ## for metabolites
-                    if obs[i][:-6] in [j.name for j in self.model.metabolites]:
-                        metab = [j for j in self.model.metabolites if j.name == obs[i][:-6]][0]
-                        cn = '{},{},{}'.format(self.model.reference,
-                                               metab.compartment.reference,
-                                               metab.initial_reference)
-
-                        independent_ICs = {'type': 'cn',
-                                           'name': 'Object CN',
-                                           'value': cn}
-                        x = etree.SubElement(map_group, 'Parameter', attrib=independent_ICs)
-
-                    ## now for global quantities
-                    elif obs[i][:-6] in [j.name for j in self.model.global_quantities]:
-                        glob = [j for j in self.model.global_quantities if j.name == obs[i]][0]
-                        cn = '{},{}'.format(self.model.reference,
-                                            glob.initial_reference)
-
-                        independent_globs = {'type': 'cn',
-                                             'name': 'Object CN',
-                                             'value': cn}
-
-                        etree.SubElement(map_group,
-                                         'Parameter',
-                                         attrib=independent_globs)
-                    ## local parameters are never mapped
                     else:
-                        continue
-                        # etree.SubElement(map_group, 'Parameter', attrib=ignored_role)
-                        LOG.warning('{} not found. Set to ignore'.format(obs[i]))
-                    etree.SubElement(map_group, 'Parameter', attrib=independent_variable_role)
-
-
-                elif obs[i][-6:] != '_indep':
-                    ## for metabolites
-                    if obs[i] in [j.name for j in self.model.metabolites]:
-                        metab = [j for j in self.model.metabolites if j.name == obs[i]][0]
-                        cn = '{},{},{}'.format(self.model.reference,
-                                               metab.compartment.reference,
-                                               metab.transient_reference)
-                        independent_ICs = {'type': 'cn',
-                                           'name': 'Object CN',
-                                           'value': cn}
-                        etree.SubElement(map_group, 'Parameter', attrib=independent_ICs)
-
-                    ## now for global quantities
-                    elif obs[i] in [j.name for j in self.model.global_quantities]:
-                        glob = [j for j in self.model.global_quantities if j.name == obs[i]][0]
-                        cn = '{},{}'.format(self.model.reference,
-                                            glob.transient_reference)
-
-                        independent_globs = {'type': 'cn',
-                                             'name': 'Object CN',
-                                             'value': cn}
-
-                        etree.SubElement(map_group,
-                                         'Parameter',
-                                         attrib=independent_globs)
-                    ## local parameters are never mapped
-                    else:
-                        continue
-                        ##etree.SubElement(map_group, 'Parameter', attrib=ignored_role)
-                        LOG.warning('{} not found. Set to ignore'.format(obs[i]))
-                    etree.SubElement(map_group, 'Parameter', attrib=dependent_variable_role)
+                        LOG.warning('data_column_name "{}" is not in your model '
+                                    'metabolites, local_parameters or global_quantities and '
+                                    'therefore is being ignored in your estimation. Please '
+                                    'review. '.format(column_mapping))
         return experiment_group
+
+                    # elif self.experiment_types[index] == str(0): ##code for steady state
+                    #     pass
+
+
+                    # else:
+                    #     raise ValueError('Experiment type is not a 1 or 0')
+
+                    # print(experiment_name, column, self.mappings[i][current_col])
+
+        # for i in range(int(num_columns)):
+        #     map_group = etree.SubElement(map, 'ParameterGroup', attrib={'name': (str(i))})
+        #     if self.experiment_type[index] == str(1):  # when Experiment type is set to time course it should be 1
+        #         ## first column is time
+        #         if i == 0:
+        #             etree.SubElement(map_group, 'Parameter', attrib=time_role)
+        #         else:
+        #             ## map independent variables
+        #             if obs[i][-6:] == '_indep':
+        #                 if obs[i][:-6] in [j.name for j in self.model.metabolites]:
+        #                     metab = [j for j in self.model.metabolites if j.name == obs[i][:-6]][0]
+        #                     cn = '{},{},{}'.format(self.model.reference,
+        #                                            metab.compartment.reference,
+        #                                            metab.initial_reference)
+        #                     independent_ICs = {'type': 'cn',
+        #                                        'name': 'Object CN',
+        #                                        'value': cn}
+        #                     etree.SubElement(map_group, 'Parameter', attrib=independent_ICs)
+        #
+        #                 elif obs[i][:-6] in [j.name for j in self.model.global_quantities]:
+        #                     glob = [j for j in self.model.global_quantities if j.name == obs[i][:-6]][0]
+        #                     cn = '{},{}'.format(self.model.reference,
+        #                                         glob.initial_reference)
+        #
+        #                     independent_globs = {'type': 'cn',
+        #                                          'name': 'Object CN',
+        #                                          'value': cn}
+        #
+        #                     etree.SubElement(map_group,
+        #                                      'Parameter',
+        #                                      attrib=independent_globs)
+        #                 else:
+        #                     continue
+        #                     ##etree.SubElement(map_group, 'Parameter', attrib=ignored_role)
+        #                     LOG.warning('{} not found. Set to ignore'.format(obs[i]))
+        #                 etree.SubElement(map_group, 'Parameter', attrib=independent_variable_role)
+        #
+        #             ## now do dependent variables
+        #             elif obs[i][:-6] != '_indep':
+        #                 ## metabolites
+        #                 if obs[i] in [j.name for j in self.model.metabolites]:
+        #                     metab = [j for j in self.model.metabolites if j.name == obs[i]][0]
+        #                     cn = '{},{},{}'.format(self.model.reference,
+        #                                            metab.compartment.reference,
+        #                                            metab.transient_reference)
+        #
+        #                     dependent_ICs = {'type': 'cn',
+        #                                      'name': 'Object CN',
+        #                                      'value': cn}
+        #
+        #                     etree.SubElement(map_group, 'Parameter', attrib=dependent_ICs)
+        #
+        #                 ## global quantities
+        #                 elif obs[i] in [j.name for j in self.model.global_quantities]:
+        #                     glob = [j for j in self.model.global_quantities if j.name == obs[i]][0]
+        #                     cn = '{},{}'.format(self.model.reference,
+        #                                         glob.initial_reference)
+        #                     dependent_globs = {'type': 'cn',
+        #                                        'name': 'Object CN',
+        #                                        'value': cn}
+        #                     etree.SubElement(map_group,
+        #                                      'Parameter',
+        #                                      attrib=dependent_globs)
+        #                 ## remember that local parameters are not mapped to experimental
+        #                 ## data
+        #                 else:
+        #                     continue
+        #                     ##etree.SubElement(map_group, 'Parameter', attrib=ignored_role)
+        #                     LOG.warning('{} not found. Set to ignore'.format(obs[i]))
+        #                 ## map for time course dependent variable
+        #                 etree.SubElement(map_group, 'Parameter', attrib=dependent_variable_role)
+        #
+        #     ## and now for steady state data
+        #     else:
+        #
+        #         ## do independent variables first
+        #         if obs[i][-6:] == '_indep':
+        #
+        #             ## for metabolites
+        #             if obs[i][:-6] in [j.name for j in self.model.metabolites]:
+        #                 metab = [j for j in self.model.metabolites if j.name == obs[i][:-6]][0]
+        #                 cn = '{},{},{}'.format(self.model.reference,
+        #                                        metab.compartment.reference,
+        #                                        metab.initial_reference)
+        #
+        #                 independent_ICs = {'type': 'cn',
+        #                                    'name': 'Object CN',
+        #                                    'value': cn}
+        #                 x = etree.SubElement(map_group, 'Parameter', attrib=independent_ICs)
+        #
+        #             ## now for global quantities
+        #             elif obs[i][:-6] in [j.name for j in self.model.global_quantities]:
+        #                 glob = [j for j in self.model.global_quantities if j.name == obs[i]][0]
+        #                 cn = '{},{}'.format(self.model.reference,
+        #                                     glob.initial_reference)
+        #
+        #                 independent_globs = {'type': 'cn',
+        #                                      'name': 'Object CN',
+        #                                      'value': cn}
+        #
+        #                 etree.SubElement(map_group,
+        #                                  'Parameter',
+        #                                  attrib=independent_globs)
+        #             ## local parameters are never mapped
+        #             else:
+        #                 continue
+        #                 # etree.SubElement(map_group, 'Parameter', attrib=ignored_role)
+        #                 LOG.warning('{} not found. Set to ignore'.format(obs[i]))
+        #             etree.SubElement(map_group, 'Parameter', attrib=independent_variable_role)
+        #
+        #
+        #         elif obs[i][-6:] != '_indep':
+        #             ## for metabolites
+        #             if obs[i] in [j.name for j in self.model.metabolites]:
+        #                 metab = [j for j in self.model.metabolites if j.name == obs[i]][0]
+        #                 cn = '{},{},{}'.format(self.model.reference,
+        #                                        metab.compartment.reference,
+        #                                        metab.transient_reference)
+        #                 independent_ICs = {'type': 'cn',
+        #                                    'name': 'Object CN',
+        #                                    'value': cn}
+        #                 etree.SubElement(map_group, 'Parameter', attrib=independent_ICs)
+        #
+        #             ## now for global quantities
+        #             elif obs[i] in [j.name for j in self.model.global_quantities]:
+        #                 glob = [j for j in self.model.global_quantities if j.name == obs[i]][0]
+        #                 cn = '{},{}'.format(self.model.reference,
+        #                                     glob.transient_reference)
+        #
+        #                 independent_globs = {'type': 'cn',
+        #                                      'name': 'Object CN',
+        #                                      'value': cn}
+        #
+        #                 etree.SubElement(map_group,
+        #                                  'Parameter',
+        #                                  attrib=independent_globs)
+        #             ## local parameters are never mapped
+        #             else:
+        #                 continue
+        #                 ##etree.SubElement(map_group, 'Parameter', attrib=ignored_role)
+        #                 LOG.warning('{} not found. Set to ignore'.format(obs[i]))
+        #             etree.SubElement(map_group, 'Parameter', attrib=dependent_variable_role)
+        # return experiment_group
 
     def _remove_experiment(self, experiment_name):
         """
@@ -3163,20 +3289,27 @@ class ParameterEstimation(_Task):
             experiment_set_mapping_dct[name]['separator'] = exp_kwargs['separator'][i]
             experiment_set_mapping_dct[name]['validation'] = exp_kwargs['validation'][i]
 
-            experiment_set_mapping_dct[name]['Mappings'] = OrderedDict()
+            experiment_set_mapping_dct[name]['mappings'] = OrderedDict()
             for item in range(df.shape[1]):
+                model_obj = df.columns[item]
+
                 role = 'ignored'
-                if df.columns[item][:-6] == '_indep':
+                if df.columns[item][-6:] == '_indep':
                     role = 'independent'
+                    model_obj = df.columns[item][:-6]
                 elif df.columns[item] in self.model.all_variable_names:
                     role = 'dependent'
                 elif df.columns[item].lower() == 'time':
                     role = 'time'
+                elif role == 'ignored':
+                    pass
+                else:
+                    raise ValueError('role cannot be "{}". Must be one of "ignored", "dependent", '
+                                     '"independent" or "time"'.format(df.columns[item]))
 
-                experiment_set_mapping_dct[name]['Mappings']['column_{}'.format(item)] = OrderedDict()
-                experiment_set_mapping_dct[name]['Mappings']['column_{}'.format(item)]['data_column_name'] = df.columns[item]
-                experiment_set_mapping_dct[name]['Mappings']['column_{}'.format(item)]['model_object'] = df.columns[item]
-                experiment_set_mapping_dct[name]['Mappings']['column_{}'.format(item)]['role'] = role
+                experiment_set_mapping_dct[name]['mappings'][df.columns[item]] = OrderedDict()
+                experiment_set_mapping_dct[name]['mappings'][df.columns[item]]['model_object'] = model_obj
+                experiment_set_mapping_dct[name]['mappings'][df.columns[item]]['role'] = role
 
         ## convert start_value to numeric to keep yaml file consistent
         item_template = self._item_template.transpose()
@@ -3246,6 +3379,7 @@ class ParameterEstimation(_Task):
 
 
                         for experiment_name in experiment_mapping_args:
+                            # print(experiment_name, experiment_mapping_args[experiment_name])
                             experiment_files.append(experiment_mapping_args[experiment_name]['filename'])
                             experiment_type.append(experiment_mapping_args[experiment_name]['experiment_type'])
                             experiment_keys.append(experiment_mapping_args[experiment_name]['key'])
@@ -3258,7 +3392,37 @@ class ParameterEstimation(_Task):
                                 experiment_mapping_args[experiment_name]['row_containing_names'])
                             separator.append(experiment_mapping_args[experiment_name]['separator'])
                             validation.append(experiment_mapping_args[experiment_name]['validation'])
-                            mappings[experiment_name] = experiment_mapping_args[experiment_name]['Mappings']
+                            mappings[experiment_name] = experiment_mapping_args[experiment_name]['mappings']
+
+                        ## convert weight method to numerical values that are
+                        ## interpreted by COAPSI - with some input checking
+                        weight_method_strings = ['mean_squared', 'stardard_deviation',
+                                                'value_scaling', 'mean']  # line 2144
+                        for i in weight_method:
+                            if i not in weight_method_strings:
+                                raise errors.InputError(
+                                    '"{}" is not a valid weight method. Please choose '
+                                    'on of "{}"'.format(i, weight_method_strings)
+                                )
+
+                        weight_method_numbers = [str(i) for i in [1, 2, 3, 4]]
+                        weight_method_dict = dict(list(zip(weight_method_strings, weight_method_numbers)))
+                        weight_method = [weight_method_dict[i] for i in weight_method]
+
+                        ## convert experiment type to numerical values that are
+                        ## interpreted by COAPSI - with some input checking
+                        experiment_type_strings = ['steadystate', 'timecourse']
+
+                        for i in experiment_type:
+                            if i not in experiment_type_strings:
+                                raise errors.InputError(
+                                    '"{}" is not a valid experiment type. Please choose '
+                                    'on of "{}"'.format(i, experiment_type_strings)
+                                )
+
+                        experiment_type_numbers = [str(i) for i in [0, 1]]
+                        experiment_type_dict = dict(list(zip(experiment_type_strings, experiment_type_numbers)))
+                        experiment_type = [experiment_type_dict[i] for i in experiment_type]
 
 
                         setattr(self, 'experiment_type', experiment_type)
@@ -3392,35 +3556,36 @@ class ParameterEstimation(_Task):
         df = df.set_index('name')
         if isinstance(self.lower_bound, (float, int)):
             df['lower_bound'] = [self.lower_bound] * df.shape[0]
-        elif isinstance(self.lower_bound, dict):
-            df['lower_bound'] = [self.lower_bound] * df.shape[0]
-            for k, v in self.lower_bound.items():
-                if k not in df.index:
-                    raise IndexError('The key "{0}" is not available. These are available: "{1}. Check for typo\'s '
-                                     'and check that you have included "{0}" in your '
-                                     'estimation by adding it as argument to "metabolites" '
-                                     '"local_parameters" or "global_quantities" argument'.format(k, df.index))
-                df.loc[k] = v
         else:
-            raise errors.InputError('lower_bound argument must be an integer '
-                                    'or dict mapping estimated parameters '
-                                    'to integers')
+            raise ValueError
+
+        for i in [self.lower_bound_dct, self.upper_bound_dct]:
+            if not isinstance(i, dict):
+                raise errors.InputError('{} argument must be a '
+                                    'dict mapping parameter estimation boundaries '
+                                    'to integers. Got "{}"'.format(i, type(self.lower_bound_dct)))
+
+        for k, v in self.lower_bound_dct.items():
+            if k not in df.index:
+                raise IndexError('The key "{0}" is not available. These are available: "{1}. Check for typo\'s '
+                                 'and check that you have included "{0}" in your '
+                                 'estimation by adding it as argument to "metabolites" '
+                                 '"local_parameters" or "global_quantities" argument'.format(k, df.index))
+            df.loc[k, 'lower_bound'] = v
+
 
         if isinstance(self.upper_bound, (float, int)):
             df['upper_bound'] = [self.upper_bound] * df.shape[0]
-        elif isinstance(self.upper_bound, dict):
-            df['upper_bound'] = [self.upper_bound] * df.shape[0]
-            for k, v in self.upper_bound.items():
-                if k not in df.index:
-                    raise IndexError('The key "{0}" is not available. These are available: "{1}. Check for typo\'s '
-                                     'and check that you have included "{0}" in your '
-                                     'estimation by adding it as argument to "metabolites" '
-                                     '"local_parameters" or "global_quantities" argument'.format(k, df.index))
-                df.loc[k] = v
         else:
-            raise errors.InputError('upper_bound argument must be an integer '
-                                    'or dict mapping estimated parameters '
-                                    'to integers')
+            raise ValueError
+
+        for k, v in self.upper_bound_dct.items():
+            if k not in df.index:
+                raise IndexError('The key "{0}" is not available. These are available: "{1}. Check for typo\'s '
+                                 'and check that you have included "{0}" in your '
+                                 'estimation by adding it as argument to "metabolites" '
+                                 '"local_parameters" or "global_quantities" argument'.format(k, df.index))
+            df.loc[k, 'upper_bound'] = v
 
         if isinstance(self.affected_experiments, str):
             df['affected_experiments'] = ['all'] * df.shape[0]
@@ -3948,7 +4113,7 @@ class ParameterEstimation(_Task):
         self.convert_bool_to_numeric2()
         # self.default_properties = self.convert_bool_to_numeric(self.default_properties)
         self._convert_numeric_arguments_to_string()
-
+        # Try moving the above two lines to the constructor
         ## create output directory
         self._create_output_directory()
 

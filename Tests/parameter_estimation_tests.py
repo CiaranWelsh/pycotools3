@@ -117,17 +117,61 @@ class ParameterEstimationTests(_test_base._BaseTest):
                                                        overwrite_config_file=True,
                                                        validation_weight=2.5,
                                                        validation_threshold=9.5,
+                                                       weight_method=['value_scaling'] * 5
                                                        )
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
 
-    def test_affected_experiments(self):
+    def test_mapping(self):
+        pass
 
-        # Why are variables not being mapped anymore?
+    def test_sdfs(self):
         self.PE.write_config_file()
         self.PE.setup()
-        # self.PE.model.open()
+        self.PE.model.open()
+
+
+    def test_affected_experiments(self):
+        self.PE.write_config_file()
+        self.PE.setup()
+        xml = self.PE.model.xml
+        count = 0
+        for i in xml.findall('.//*[@name="Affected Experiments"]'):
+            ## returns True of element has children
+            if len(i) != 0:
+                count += 1
+
+        ## only 1 of 3 experiment datasets has affected_experiments
+        self.assertEqual(count, 1)
+
+    def test_affected_validation_experiments(self):
+        self.PE.write_config_file()
+        self.PE.setup()
+        xml = self.PE.model.xml
+        count = 0
+        for i in xml.findall('.//*[@name="Affected Cross Validation Experiments"]'):
+            ## returns True of element has children
+            if len(i) != 0:
+                count += 1
+
+        ## only 1 of 3 experiment datasets has affected validation experiments
+        self.assertEqual(count, 1)
 
     def test_report_name(self):
+        """
+        Might need to do another for scan!!
+        :return:
+        """
+        self.PE.write_config_file()
+        self.PE.setup()
+        report = False
+        for i in self.PE.model.xml.xpath('//*[@name="Parameter Estimation"]'):
+            if i.tag == '{http://www.copasi.org/static/schema}Task':
+                for j in i:
+                    if j.tag == '{http://www.copasi.org/static/schema}Report':
+                        report = j.attrib['target']
+        self.assertEqual(self.PE.report_name, report)
+
+
         self.assertTrue(self.PE.report_name == 'PE_report_name')
 
     def test_get_experiment_keys1(self):
@@ -153,15 +197,6 @@ class ParameterEstimationTests(_test_base._BaseTest):
         """
         self.PE.write_config_file()
         self.assertTrue(os.path.isfile(self.PE.config_filename))
-
-    # def test_write_config_file(self):
-    #     """
-    #     A test that PE writes the config file to the
-    #     right place
-    #     :return:
-    #     """
-    #     self.PE.write_config_file()
-    #     # self.assertTrue(os.path.isfile(self.PE.config_filename))
 
     def test_read_config_file(self):
         """
@@ -237,7 +272,7 @@ class ParameterEstimationTests(_test_base._BaseTest):
         self.assertEqual(df.shape[0], 1)
 
     #
-    def test_(self):
+    def test_c(self):
         if os.path.isfile(self.PE.config_filename):
             os.remove(self.PE.config_filename)
         self.PE.write_config_file()
@@ -469,6 +504,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
         ss_df = df.drop('Time', axis=1)
         ss_df = pandas.DataFrame(ss_df.iloc[0].transpose(), index=list(ss_df.keys())).transpose()
         self.report4= os.path.join(os.path.dirname(self.TC2.report_name), 'report4.txt')
+
         ss_df.to_csv(self.report4, sep='\t', index=False)
 
         self.PE = pycotools3.tasks.ParameterEstimation(
@@ -477,16 +513,96 @@ class ExperimentMapperTests(_test_base._BaseTest):
             self.TC2.report_name,
             self.report3,
             self.report4],
+            metabolites=['A', 'B'],
+            global_quantities=['A2B', 'B2C', 'B2C_0_k2', 'C2A_k1'],
             experiment_type=['timecourse', 'timecourse',
             'timecourse', 'steadystate'],
             validation=[False, True, True, False],
             validation_weight=2,
             validation_thershold=6,
-            overwrite_config_file=True
-                                                   )
+            overwrite_config_file=True,
+            upper_bound=500000,
+            lower_bound=0.001,
+            upper_bound_dct={'A': 39486, 'A2B': 98647},
+            lower_bound_dct={'B2C': 72414}
+            )
         self.PE.write_config_file()
         self.PE.setup()
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
+
+    def test_lower_bound_dct(self):
+        ref = r'CN=Root,Model=New_Model,Vector=Values[B2C],Reference=InitialValue'
+        query = '//*[@name="FitItem"]'
+        for i in self.PE.model.xml.xpath(query):
+            for j in i:
+                if j.attrib['name'] == 'ObjectCN':
+                    if j.attrib['value'] == ref:
+                        for k in j.getparent():
+                            if k.attrib['name'] == 'LowerBound':
+                                lower_bound_value = k.attrib['value']
+        self.assertEqual(float(self.PE.lower_bound_dct['B2C']),
+                         float(lower_bound_value))
+
+
+    def test_lower_bound_dct2(self):
+        ref = r'CN=Root,Model=New_Model,Vector=Values[B2C],Reference=InitialValue'
+        query = '//*[@name="FitItem"]'
+        for i in self.PE.model.xml.xpath(query):
+            for j in i:
+                if j.attrib['name'] == 'ObjectCN':
+                    if j.attrib['value'] == ref:
+                        for k in j.getparent():
+                            if k.attrib['name'] == 'UpperBound':
+                                upper_bound_value = k.attrib['value']
+        self.assertEqual(float(self.PE.upper_bound),
+                         float(upper_bound_value))
+
+    def test_upper_bound_dct(self):
+        ref = r'CN=Root,Model=New_Model,Vector=Values[A2B],Reference=InitialValue'
+        query = '//*[@name="FitItem"]'
+        for i in self.PE.model.xml.xpath(query):
+            for j in i:
+                if j.attrib['name'] == 'ObjectCN':
+                    if j.attrib['value'] == ref:
+                        for k in j.getparent():
+                            if k.attrib['name'] == 'UpperBound':
+                                upper_bound_value = k.attrib['value']
+        self.assertEqual(float(self.PE.upper_bound_dct['A2B']),
+                         float(upper_bound_value))
+
+    def test_upper_bound_dct2(self):
+        ref = r'CN=Root,Model=New_Model,Vector=Values[A2B],Reference=InitialValue'
+        query = '//*[@name="FitItem"]'
+        for i in self.PE.model.xml.xpath(query):
+            for j in i:
+                if j.attrib['name'] == 'ObjectCN':
+                    if j.attrib['value'] == ref:
+                        for k in j.getparent():
+                            if k.attrib['name'] == 'LowerBound':
+                                lower_bound_value = k.attrib['value']
+        self.assertEqual(float(self.PE.lower_bound),
+                         float(lower_bound_value))
+
+    def test_metabolite_entries(self):
+        """
+        test that A and B are estimated but not C
+        :return:
+        """
+        bool = False
+        for i in self.model.fit_item_order:
+            if 'C' == i:
+                bool = True
+        self.assertFalse(bool)
+
+    def test_global_quantity_entries(self):
+        """
+        :return:
+        """
+        bool = False
+        for i in self.model.fit_item_order:
+            if 'ADeg_k1' == i:
+                bool = True
+        self.assertFalse(bool)
 
     def test_experiment(self):
         """
@@ -537,9 +653,9 @@ class ExperimentMapperTests(_test_base._BaseTest):
         query = '//*[@name="Validation Set"]'
         for i in self.PE.model.xml.xpath(query):
             for j in i:
-                if 'Experiment_' in j.attrib['name']:
+                if j.attrib['name'] not in ['Weight', 'Threshold']:
                     count += 1
-        self.assertEqual(count, 2)
+        self.assertEqual(2, count)
 
     def test_experiment2(self):
         """
@@ -601,6 +717,23 @@ class ExperimentMapperTests(_test_base._BaseTest):
                             for l in k:
                                 if l.attrib['name'] == '1':
                                     self.assertEqual('CN=Root,Model=New_Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=InitialConcentration',
+                                                     l[0].attrib['value'])
+
+    def test_validation_map1(self):
+        """
+        First row of experiment_0==1
+        :return:
+        """
+
+        query = '//*[@name="Validation Set"]'
+        for i in self.PE.model.xml.xpath(query):
+            for j in i:
+                if j.attrib['name'] == 'report3':
+                    for k in j:
+                        if k.attrib['name'] =='Object Map':
+                            for l in k:
+                                if l.attrib['name'] == '1':
+                                    self.assertEqual('CN=Root,Model=New_Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration',
                                                      l[0].attrib['value'])
 
     def test_experiment6(self):
