@@ -4,6 +4,14 @@ from . import errors
 from . import misc
 from . import model
 import os
+from sys import version_info
+
+if version_info[0] < 3:
+    raise RuntimeError('On python version >3 you must use "import pycotools3" rather '
+                       'than "import pycotools". To install pycotools3 '
+                       ' use "pip install pycotools3". Please note'
+                       ' that improvements will only be made to pycotools3 in '
+                       'future. ')
 
 import logging.config
 
