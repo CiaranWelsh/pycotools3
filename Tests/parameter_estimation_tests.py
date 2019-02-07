@@ -121,8 +121,10 @@ class ParameterEstimationTests(_test_base._BaseTest):
                                                        )
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
 
-    def test_mapping(self):
-        pass
+    # def test_mapping(self):
+    #     self.PE.write_config_file()
+    #     self.PE.setup()
+    #     sel
 
     def test_sdfs(self):
         self.PE.write_config_file()
@@ -521,6 +523,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
             validation_weight=2,
             validation_thershold=6,
             overwrite_config_file=True,
+            weight_method=['value_scaling']*4,
             upper_bound=500000,
             lower_bound=0.001,
             upper_bound_dct={'A': 39486, 'A2B': 98647},
@@ -622,13 +625,15 @@ class ExperimentMapperTests(_test_base._BaseTest):
         Test that 2 _experiments have been set up
         :return:
         """
+        ans = None
 
         query = '//*[@name="Validation Set"]'
 
         for j in self.PE.model.xml.xpath(query):
             for k in list(j):
                 if k.attrib['name'] == 'Weight':
-                    self.assertEqual(k.attrib['value'], str(self.PE.validation_weight))
+                    ans = k.attrib['value']
+        self.assertEqual(ans, str(self.PE.validation_weight))
 
 
     def test_validation_threshold(self):
@@ -636,13 +641,14 @@ class ExperimentMapperTests(_test_base._BaseTest):
         Test that 2 _experiments have been set up
         :return:
         """
-
+        ans = None
         query = '//*[@name="Validation Set"]'
 
         for j in self.PE.model.xml.xpath(query):
             for k in list(j):
                 if k.attrib['name'] == 'Threshold':
-                    self.assertEqual(k.attrib['value'], str(self.PE.validation_threshold))
+                    ans = k.attrib['value']
+        self.assertEqual(ans, str(self.PE.validation_threshold))
 
     def test_validation(self):
         """
@@ -662,35 +668,37 @@ class ExperimentMapperTests(_test_base._BaseTest):
         First row of experiment_0==1
         :return:
         """
-
+        ans = None
         query = '//*[@name="Experiment Set"]'
         for i in self.PE.model.xml.xpath(query):
             for j in i:
-                if j.attrib['name'] == 'Experiment_0':
+                if j.attrib['name'] == 'report1':
                     for k in j:
                         if k.attrib['name'] =='First Row':
-                            self.assertEqual(k.attrib['value'], '1')
+                            ans = k.attrib['value']
+        self.assertEqual(ans, '1')
 
-    def test_experiment3(self):
+    def test_experiment_correct_weighting_method(self):
         """
         First row of experiment_0==1
         :return:
         """
-
+        ans = None
         query = '//*[@name="Experiment Set"]'
         for i in self.PE.model.xml.xpath(query):
             for j in i:
-                if j.attrib['name'] == 'Experiment_3':
+                if j.attrib['name'] == 'report4':
                     for k in j:
                         if k.attrib['name'] =='Weight Method':
-                            self.assertEqual(k.attrib['value'], '1')
+                            ans = k.attrib['value']
+        self.assertEqual(ans, '3')
 
-    def test_experiment4(self):
+    def test_experiment_correct_reference1(self):
         """
         First row of experiment_0==1
         :return:
         """
-
+        ans = None
         query = '//*[@name="Experiment Set"]'
         for i in self.PE.model.xml.xpath(query):
             for j in i:
@@ -699,15 +707,18 @@ class ExperimentMapperTests(_test_base._BaseTest):
                         if k.attrib['name'] =='Object Map':
                             for l in k:
                                 if l.attrib['name'] == '1':
-                                    self.assertEqual('CN=Root,Model=New_Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration',
-                                                     l[0].attrib['value'])
+                                    ans = l[0].attrib['value']
+        self.assertEqual(
+            ans,
+            'CN=Root,Model=New_Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration'
+        )
 
-    def test_experiment5(self):
+    def test_experiment_correct_reference2(self):
         """
         First row of experiment_0==1
         :return:
         """
-
+        ans = None
         query = '//*[@name="Experiment Set"]'
         for i in self.PE.model.xml.xpath(query):
             for j in i:
@@ -716,15 +727,18 @@ class ExperimentMapperTests(_test_base._BaseTest):
                         if k.attrib['name'] =='Object Map':
                             for l in k:
                                 if l.attrib['name'] == '1':
-                                    self.assertEqual('CN=Root,Model=New_Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=InitialConcentration',
-                                                     l[0].attrib['value'])
+                                    ans = l[0].attrib['value']
+        self.assertEqual(
+            ans,
+            'CN=Root,Model=New_Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=InitialConcentration',
+            )
 
     def test_validation_map1(self):
         """
         First row of experiment_0==1
         :return:
         """
-
+        ans = None
         query = '//*[@name="Validation Set"]'
         for i in self.PE.model.xml.xpath(query):
             for j in i:
@@ -733,15 +747,18 @@ class ExperimentMapperTests(_test_base._BaseTest):
                         if k.attrib['name'] =='Object Map':
                             for l in k:
                                 if l.attrib['name'] == '1':
-                                    self.assertEqual('CN=Root,Model=New_Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration',
-                                                     l[0].attrib['value'])
+                                    ans = l[0].attrib['value']
+        self.assertEqual(
+            ans,
+            'CN=Root,Model=New_Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration'
+            )
 
-    def test_experiment6(self):
+    def test_experiment_steady_state(self):
         """
         First row of experiment_0==1
         :return:
         """
-
+        ans = None
         query = '//*[@name="Experiment Set"]'
         for i in self.PE.model.xml.xpath(query):
             for j in i:
@@ -749,13 +766,15 @@ class ExperimentMapperTests(_test_base._BaseTest):
                     for k in j:
                         if k.attrib['name'] == 'Experiment Type':
                             ## code for steady state is '0'
-                            self.assertEqual(k.attrib['value'], str('0'))
+                            ans = k.attrib['value']
+        self.assertEqual(ans, str('0'))
 
-    def test_experiment7(self):
+    def test_experiment_time_course(self):
         """
         First row of experiment_0==1
         :return:
         """
+        ans = None
         query = '//*[@name="Experiment Set"]'
         for i in self.PE.model.xml.xpath(query):
             for j in i:
@@ -763,16 +782,16 @@ class ExperimentMapperTests(_test_base._BaseTest):
                     for k in j:
                         if k.attrib['name'] == 'Experiment Type':
                             ## code for steady state is '0'
-                            self.assertEqual(k.attrib['value'], str(1))
+                            ans = k.attrib['value']
+        self.assertEqual(ans, str(1))
 
 
-    def test_experiment8(self):
+    def test_experiment_correct_number_of_object_maps(self):
         """
         First row of experiment_0==1
         :return:
         """
         count = 0
-
         query = '//*[@name="Experiment Set"]'
         for i in self.PE.model.xml.xpath(query):
             for j in i:
@@ -781,7 +800,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
                         count += 1
         self.assertEqual(count, 2)
 
-    def test_experiment9(self):
+    def test_experiment_correct_number_of_validation_obj_maps(self):
         """
         First row of experiment_0==1
         :return:
@@ -796,20 +815,6 @@ class ExperimentMapperTests(_test_base._BaseTest):
                         count += 1
         self.assertEqual(count, 2)
 
-    # def test_experiment10(self):
-    #     """
-    #     First row of experiment_0==1
-    #     :return:
-    #     """
-    #     count = 0
-    #
-    #     query = '//*[@name="Validation Set"]'
-    #     for i in self.PE.model.xml.xpath(query):
-    #         for j in i:
-    #             for k in j:
-    #                 if k.attrib['name'] == 'Object Map':
-    #                     count += 1
-    #     self.assertEqual(count, 2)
 
 
 

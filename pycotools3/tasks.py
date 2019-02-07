@@ -3442,6 +3442,9 @@ class ParameterEstimation(_Task):
                         setattr(self, 'optimization_item_list', opt)
 
                     elif k == 'OptimizationConstraintList':
+                        constr = pandas.DataFrame(dct[k]).transpose()
+                        setattr(self, 'optimization_constraint_list', constr)
+
                         print('Warning: OptimizationConstraintList is not yet implemented. Entried are being'
                               ' ignored. ')
 
@@ -3634,7 +3637,7 @@ class ParameterEstimation(_Task):
 
         return df
 
-    def _add_fit_item(self, item):
+    def _add_fit_item(self, item, constraint=False):
         """
         Add fit item to model
         :param item: a row from the config template as pandas series
@@ -3801,11 +3804,15 @@ class ParameterEstimation(_Task):
         list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
         parameter_est = self.model.xml.find(list_of_tasks)[5]
         problem = parameter_est[1]
-        ## TODO add support for OptimizationConstraintList --> problem[4]
         assert problem.tag == '{http://www.copasi.org/static/schema}Problem'
-        optimization_item_list = problem[3]
-        assert list(optimization_item_list.attrib.values())[0] == 'OptimizationItemList'
-        optimization_item_list.append(fit_item_element)
+
+        if constraint:
+            item_list = problem[4]
+            assert list(item_list.attrib.values())[0] == 'OptimizationConstraintList'
+        else:
+            item_list = problem[3]
+            assert list(item_list.attrib.values())[0] == 'OptimizationItemList'
+        item_list.append(fit_item_element)
         return self.model
 
     def _insert_all_fit_items(self):
@@ -3814,10 +3821,17 @@ class ParameterEstimation(_Task):
         into the model
         :return:
         """
+
+        ## for optimization items
         for row in range(self.optimization_item_list.shape[0]):
             assert row != 'nan'
             ## feed each item from the config file into _add_fit_item
             self.model = self._add_fit_item(self.optimization_item_list.iloc[row])
+
+        ## for constraints
+        for row in range(self.optimization_constraint_list.shape[0]):
+            assert row != 'nan'
+            self.model = self._add_fit_item(self.optimization_constraint_list.iloc[row], constraint=True)
         return self.model
 
     def _set_PE_method(self):
