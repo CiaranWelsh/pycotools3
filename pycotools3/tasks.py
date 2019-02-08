@@ -31,8 +31,6 @@ import psutil
 import shutil
 import numpy
 import pandas
-import scipy
-import os
 from lxml import etree
 from io import StringIO
 import logging
@@ -42,17 +40,16 @@ import re
 from . import viz
 from . import errors
 from . import misc
-from . import _base
 from . import model
 from multiprocessing import Process, cpu_count
 import glob
 import seaborn as sns
 from copy import deepcopy
 from subprocess import check_call
-from collections import OrderedDict
-from .mixin import Mixin, mixin
+from collections import OrderedDict, Mapping
+from .mixin import mixin
 from functools import reduce
-import yaml
+import yaml, json
 
 ## TODO use generators when iterating over a function with another function. i.e. plotting
 ## TODO: create a base class called Task instead of all of these mixin functions.
@@ -2264,6 +2261,96 @@ class ParameterEstimation(_Task):
      ===========================     ==================================================
 
     """
+
+    class _Config:
+        def __init__(self, **kwargs):
+            self.kwargs = kwargs
+
+
+        def update_recursive(self, orig_dict, new_dict):
+            """
+            recursively update nested dictionaries
+            :param orig_dict: Dict containing original values
+            :param new_dict: Dict containing values you want to be updated
+            :return: OrderedDict
+            """
+            for key, val in new_dict.items():
+                if isinstance(val, Mapping):
+                    tmp = self.update(orig_dict.get(key, {}), val)
+                    orig_dict[key] = tmp
+                elif isinstance(val, list):
+                    orig_dict[key] = (orig_dict.get(key, []) + val)
+                else:
+                    orig_dict[key] = new_dict[key]
+            return orig_dict
+
+        def pretty_print(self, sort_keys=False):
+            """
+            Use json to pretty print a nested dictionary
+            :param sort_keys:
+            :return:
+            """
+            return json.dumps(self.kwargs, indent=4, sort_keys=sort_keys)
+
+        def validate_kwargs(self, dct, valid_kwargs):
+            """
+            Ensure the dict `dct` has valid entries
+            :param dct: A `dict` to validate
+            :param valid_kwargs: list of valid kwards
+            :return: None
+            """
+            for k in dct:
+                if k not in self.valid_kwargs:
+                    raise ValueError(
+                        '"{}" is not a valid key. '
+                        'Valid kwargs are "{}"'.format(
+                            k, valid_kwargs))
+
+        def __str__(self):
+            return self.pretty_print()
+
+    class _DataConfig(_Config):
+
+        valid_kwargs = ['filename', 'normalize_weights_per_experiment',
+                        'weight_method', 'separator']
+
+        def __init__(self, files, **kwargs):
+            super().__init__(**kwargs)
+            self.files = files
+            self.kwargs = kwargs
+
+    class _ExperimentConfig(_DataConfig):
+
+        def __init__(self, experiment_files, **kwargs):
+            super().__init__(experiment_files, **kwargs)
+            self.experiment_files = experiment_files
+            self.kwargs = kwargs
+
+    class _ValidationConfig(_DataConfig):
+        def __init__(self, validation_files, **kwargs):
+            super().__init__(validation_files, **kwargs)
+            self.valid_kwargs += [
+                'validation_weight',
+                'validation_threshold'
+            ]
+            self.validation_files = validation_files
+            self.kwargs = kwargs
+
+    class _ItemConfig(_Config):
+        def __init__(self, **kwargs):
+            self.kwargs = kwargs
+
+    class _FitItemConfig(_ItemConfig):
+        def __init__(self, **kwargs):
+            self.kwargs = kwargs
+
+    class _ConstraintItemConfig(_ItemConfig):
+        def __init__(self, **kwargs):
+            self.kwargs = kwargs
+
+    class _Settings(_Config):
+        def __init__(self, **kwargs):
+            self.kwargs = kwargs
 
     def __init__(self, model, experiment_files, **kwargs):
         """

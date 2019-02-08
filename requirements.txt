@@ -14,6 +14,9 @@ sbml2matlab
 tenuml
 tecombine
 libroadrunner
+tellurium
+yaml
+json
 phrasedml
 tesbml
 urllib3
@@ -23,6 +26,5 @@ antimony
 retrying
 plotly
 jinja2
-tellurium
 nbsphinx
 sphinx
