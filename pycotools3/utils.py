@@ -143,6 +143,10 @@ class ParameterEstimationConfiguration:
                         'Valid kwargs are "{}"'.format(
                             k, valid_kwargs))
 
+        def __str__(self):
+            return self.pretty_print()
+
+
     class _ExperimentsKW(_KW):
         valid_kwargs = ['filename', 'normalize_weights_per_experiment',
                         'weight_method', 'separator']
@@ -165,13 +169,13 @@ class ParameterEstimationConfiguration:
                 self.validate_kwargs(v, self.valid_kwargs)
                 setattr(self, k, v)
 
-
-        def __str__(self):
-            return self.pretty_print().__str__()
+            setattr(self, 'experiment_names', list(self.kwargs.keys()))
 
         def __len__(self):
             return len(self.kwargs)
 
+        # def __str__(self):
+        #     return self.pretty_print()
 
     class _ValidationKW(_KW):
         valid_kwargs = [
@@ -204,6 +208,11 @@ class ParameterEstimationConfiguration:
                 self.validate_kwargs(v, self.valid_kwargs)
                 setattr(self, k, v)
 
+            setattr(self, 'validation_names', list(self.kwargs.keys()))
+
+        def __len__(self):
+            return len(self.kwargs)
+
     class _FitItemKW(_KW):
         valid_kwargs = [
             'lower_bound',
@@ -213,7 +222,6 @@ class ParameterEstimationConfiguration:
             'upper_bound_dct',
             'affected_experiments',
             'affected_validation_experiments',
-            'fit_items'
         ]
         def __init__(self, fit_items, **kwargs):
             super().__init__(**kwargs)
@@ -235,6 +243,10 @@ class ParameterEstimationConfiguration:
             for k, v in self.kwargs.items():
                 self.validate_kwargs(v, self.valid_kwargs)
                 setattr(self, k, v)
+
+            setattr(self, 'fit_items', list(self.kwargs.keys()))
+
+
 
     class _ConstraintItemKW(_KW):
         valid_kwargs = [
@@ -268,6 +280,10 @@ class ParameterEstimationConfiguration:
                 self.validate_kwargs(v, self.valid_kwargs)
                 setattr(self, k, v)
 
+            setattr(self, 'constraint_items', list(self.kwargs.keys()))
+
+
+
     class _ReportKW(_KW):
         valid_kwargs = [
             'report_name',
@@ -289,7 +305,8 @@ class ParameterEstimationConfiguration:
             for i in self.kwargs:
                 setattr(self, i, self.kwargs[i])
 
-
+        def __str__(self):
+            return self.pretty_print()
 
 
 

@@ -52,7 +52,13 @@ class ParameterEstimationConfigurationTests(unittest.TestCase):
     def setUp(self):
 
         self.experiment_files = ['/path/to/f1.txt', '/path/to/f2.txt']
-        self.config = ParameterEstimationConfiguration(self.experiment_files)
+        self.validation_files = ['/path/to/v1.txt', '/path/to/v2.txt']
+        self.fit_items = ['A', 'B', 'C']
+        self.config = ParameterEstimationConfiguration(
+            experiment_files=self.experiment_files,
+            validation_files=self.validation_files,
+            fit_items=self.fit_items
+        )
 
     def test_experiments_length(self):
         self.assertEqual(len(self.config.experiments), 2)
@@ -60,7 +66,14 @@ class ParameterEstimationConfigurationTests(unittest.TestCase):
     def test_experiment_filename(self):
         self.assertEqual(self.config.experiments.f1['filename'], self.experiment_files[0])
 
+    def test_experiments_length(self):
+        self.assertEqual(len(self.config.validations), 2)
 
+    def test_experiment_filename(self):
+        self.assertEqual(self.config.validations.v1['filename'], self.validation_files[0])
+
+    def test(self):
+        print(self.config.fit_items)
 
 
 class ParameterEstimationTests(_test_base._BaseTest):
