@@ -62,6 +62,8 @@ class ParameterEstimationConfiguration:
     def __init__(self,
                  experiment_files=[],
                  validation_files=[],
+                 fit_items=[],
+                 constraint_items=[],
                  copy_number=1,
                  pe_number=1,
                  overwrite_config_file=False,
@@ -79,6 +81,8 @@ class ParameterEstimationConfiguration:
                  ):
         self.experiment_files = experiment_files
         self.validation_files = validation_files
+        self.fit_items = fit_items
+        self.constraint_items = constraint_items
         self.copy_number = copy_number
         self.pe_number = pe_number
         self.overwrite_config_file = overwrite_config_file
@@ -108,9 +112,9 @@ class ParameterEstimationConfiguration:
 
         self.experiments = self._ExperimentsKW(self.experiment_files, **self.experiments_kw)
         self.validations = self._ValidationKW(self.validation_files, **self.validations_kw)
-        self.fit_items = self._FitItemKW(**self.fit_item_kw)
-        # self.constraint_items = self._ConstraintItemKW(self.constraint_item_kw)
-        # self.report = self._ReportKW(self.report_kw)
+        self.fit_items = self._FitItemKW(self.fit_items, **self.fit_item_kw)
+        self.constraint_items = self._ConstraintItemKW(self.constraint_items, **self.constraint_item_kw)
+        self.report = self._ReportKW(**self.report_kw)
 
 
     class _KW:
@@ -273,7 +277,7 @@ class ParameterEstimationConfiguration:
         def __init__(self, **kwargs):
             super().__init__(**kwargs)
             dct = OrderedDict()
-            dct['report_name'] = None
+            dct['report_name'] = ''
             dct['append'] = False
             dct['confirm_overwrite'] = False
 
@@ -281,9 +285,9 @@ class ParameterEstimationConfiguration:
 
             self.kwargs = dct
 
-            for k, v in self.kwargs.items():
-                self.validate_kwargs(v, self.valid_kwargs)
-                setattr(self, k, v)
+            self.validate_kwargs(self.kwargs, self.valid_kwargs)
+            for i in self.kwargs:
+                setattr(self, i, self.kwargs[i])
 
 
 
