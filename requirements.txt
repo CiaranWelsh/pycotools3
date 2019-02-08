@@ -15,7 +15,7 @@ tenuml
 tecombine
 libroadrunner
 tellurium
-yaml
+pyyaml
 json
 phrasedml
 tesbml
