@@ -2177,6 +2177,7 @@ class Scan(_Task):
         R = Run(self.model, task='scan', mode=self.run)
 
 
+
 @mixin(model.GetModelComponentFromStringMixin)
 @mixin(model.ReadModelMixin)
 class ParameterEstimation(_Task):
