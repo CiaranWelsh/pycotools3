@@ -2175,7 +2175,6 @@ class Scan(_Task):
         R = Run(self.model, task='scan', mode=self.run)
 
 
-
 class _ConfigBase:
     def __init__(self, **kwargs):
         self.kwargs = kwargs
@@ -2226,7 +2225,6 @@ class _ConfigBase:
         """
         pass
 
-
     def set_kwargs(self):
         """
         A contraption for adding experiments to the parameter estimation
@@ -2260,7 +2258,27 @@ class _ConfigBase:
                     self.kwargs[parameter] = DotDict(self.kwargs[parameter], recursive=True)
                     setattr(self, parameter, self.kwargs[parameter])
 
-    def set_default_mapping(self, ):
+    def set_default_experiment_mappings(self):
+        """
+
+        :return:
+        """
+        for experiment_name in self.keys():
+            if isinstance(self[experiment_name], dict) and 'filename' in self[experiment_name].keys():
+                if self[experiment_name].filename != '':
+                    df = pandas.read_csv(self[experiment_name].filename, sep='\t')
+                    column_names = list(df.columns)
+                    default_mappings_dct = {
+                        i: {
+                            'model_object': i,
+                            'role': 'dependent'
+                        } for i in column_names
+                    }
+
+                    default_mappings_dct.update(
+                        self[experiment_name].mappings
+                    )
+                    self[experiment_name].mappings = DotDict(default_mappings_dct, recursive=True)
 
     @property
     def defaults(self):
@@ -2289,6 +2307,7 @@ class _ConfigBase:
 
     def __setitem__(self, key, value):
         self.kwargs[key] = value
+
 
 @mixin(model.GetModelComponentFromStringMixin)
 @mixin(model.ReadModelMixin)
@@ -2377,16 +2396,13 @@ class ParameterEstimation(_Task):
 
     """
 
-
     class _Config(_ConfigBase):
-
 
         def __init__(self, **kwargs):
             self.kwargs = kwargs
             self.datasets = self._DataSets(**self.kwargs.get('datasets', {}))
             self.items = self._Items(**self.kwargs.get('items', {}))
             self.settings = self._Settings(**self.kwargs.get('settings', {}))
-
 
         class _DataSets(_ConfigBase):
 
@@ -2428,7 +2444,6 @@ class ParameterEstimation(_Task):
                     self.kwargs = kwargs
                     self.set_kwargs()
 
-
             class _ExperimentSet(_ConfigBase):
                 """
 
@@ -2436,27 +2451,15 @@ class ParameterEstimation(_Task):
                 add the default to the dict.
 
                 """
+
                 def __init__(self, **kwargs):
                     self.kwargs = kwargs
-                    self.set_kwargs()git status
-                    
-
-                    # for experiment_name in self.keys():
-                    #     if self[experiment_name].filename != '':
-                    #         df = pandas.read_csv(self[experiment_name].filename, sep='\t')
-                    #         column_names = list(df.columns)
-
-
-                    # if self.filename != '':
-                    #     df = pandas.read_csv(self.filename)
-                    #     print(df.columns)
-
-                    ## get experiment_name
+                    self.set_kwargs()
+                    self.set_default_experiment_mappings()
 
                 @property
                 def defaults(self):
-
-                    defaults =  {
+                    defaults = {
                         'filename': '',
                         'normalize_weights_per_experiment': True,
                         'weight_method': 'mean_squared',
@@ -2465,11 +2468,11 @@ class ParameterEstimation(_Task):
                     }
                     return defaults
 
-
             class _ValidationSet(_ConfigBase):
                 def __init__(self, **kwargs):
                     self.kwargs = kwargs
                     self.set_kwargs()
+                    self.set_default_experiment_mappings()
 
                 @property
                 def defaults(self):
@@ -2482,7 +2485,6 @@ class ParameterEstimation(_Task):
                         'threshold': 5,
                         'mappings': {},
                     }
-
 
         class _Items(_ConfigBase):
             def __init__(self, **kwargs):
@@ -2506,8 +2508,8 @@ class ParameterEstimation(_Task):
                         'upper_bound': 1e6,
                         'start_value': 'model_value',
                         'affected_experiments': 'all',
-                        'affected_validation_experiments': 'all' ,
-                        }
+                        'affected_validation_experiments': 'all',
+                    }
 
             class _ConstraintItems(_ConfigBase):
                 def __init__(self, **kwargs):
@@ -2521,8 +2523,8 @@ class ParameterEstimation(_Task):
                         'upper_bound': 1e6,
                         'start_value': 'model_value',
                         'affected_experiments': 'all',
-                        'affected_validation_experiments': 'all' ,
-                        }
+                        'affected_validation_experiments': 'all',
+                    }
 
         class _Settings(_ConfigBase):
             def __init__(self, **kwargs):
@@ -2565,7 +2567,6 @@ class ParameterEstimation(_Task):
         self.settings = settings
         self.kwargs = kwargs
 
-
         # # super(ParameterEstimation, self).__init__(model, **kwargs)
         # self.experiment_files = experiment_files
         # if isinstance(self.experiment_files, list) != True:
@@ -2574,7 +2575,6 @@ class ParameterEstimation(_Task):
         # default_report_name = os.path.join(os.path.dirname(self.model.copasi_file), 'PEData.txt')
         if self.config_filename == '':
             self.config_filename = os.path.join(os.path.dirname(self.model.copasi_file), 'config_file.yaml')
-
 
         # self.default_properties = {
         #     'metabolites': self.model.metabolites,
@@ -2802,8 +2802,8 @@ class ParameterEstimation(_Task):
 
         if role == 'independent':
             cn = '{},{},{}'.format(self.model.reference,
-                               metabolite.compartment.reference,
-                               metabolite.initial_reference)
+                                   metabolite.compartment.reference,
+                                   metabolite.initial_reference)
         elif role == 'dependent':
             cn = '{},{},{}'.format(self.model.reference,
                                    metabolite.compartment.reference,
@@ -2848,7 +2848,7 @@ class ParameterEstimation(_Task):
             'name': 'Object CN',
             'value': cn
         }
-        parent = etree.SubElement(parent, 'Parameter', attrib=local_attrs )
+        parent = etree.SubElement(parent, 'Parameter', attrib=local_attrs)
         return parent
 
     def _create_global_quantity_reference(self, parent, global_quantity, role):
@@ -2870,7 +2870,7 @@ class ParameterEstimation(_Task):
             'name': 'Object CN',
             'value': cn
         }
-        etree.SubElement(parent, 'Parameter', attrib=global_attrs )
+        etree.SubElement(parent, 'Parameter', attrib=global_attrs)
         return parent
 
     def _assign_role(self, parent, role):
@@ -2906,7 +2906,7 @@ class ParameterEstimation(_Task):
         elif role == 'ignored':
             parent = etree.SubElement(parent, 'Parameter', attrib=ignored_role)
         else:
-            raise ValueError('"{}" is not a valid role'.format(role) )
+            raise ValueError('"{}" is not a valid role'.format(role))
 
         return parent
 
@@ -3015,7 +3015,6 @@ class ParameterEstimation(_Task):
                     # if column_mapping[-6:] == '_indep':
                     #     column_mapping = column_mapping[:-6]
 
-
                     ## use data column number for column name
                     map_group = etree.SubElement(map, 'ParameterGroup', attrib={'name': str(data_column_number)})
                     data_column_number += 1
@@ -3023,7 +3022,6 @@ class ParameterEstimation(_Task):
                     # if self.experiment_type[index] == str(1): ##str(1) is code for timecourse
                     #     if current_col == 0:
                     #         etree.SubElement(map_group, 'Parameter', attrib=time_role)
-
 
                     if column_mapping.lower() == 'time':
                         self._assign_role(map_group, self.mappings[i][data_column_name]['role'])
@@ -3059,14 +3057,13 @@ class ParameterEstimation(_Task):
                                     'review. '.format(column_mapping))
         return experiment_group
 
-                    # elif self.experiment_types[index] == str(0): ##code for steady state
-                    #     pass
+        # elif self.experiment_types[index] == str(0): ##code for steady state
+        #     pass
 
+        # else:
+        #     raise ValueError('Experiment type is not a 1 or 0')
 
-                    # else:
-                    #     raise ValueError('Experiment type is not a 1 or 0')
-
-                    # print(experiment_name, column, self.mappings[i][current_col])
+        # print(experiment_name, column, self.mappings[i][current_col])
 
         # for i in range(int(num_columns)):
         #     map_group = etree.SubElement(map, 'ParameterGroup', attrib={'name': (str(i))})
@@ -3578,7 +3575,8 @@ class ParameterEstimation(_Task):
             experiment_set_mapping_dct[name]['experiment_type'] = exp_kwargs['experiment_type'][i]
             experiment_set_mapping_dct[name]['first_row'] = int(exp_kwargs['first_row'][i])
             experiment_set_mapping_dct[name]['last_row'] = int(df.shape[0])
-            experiment_set_mapping_dct[name]['normalize_weights_per_experiment'] = exp_kwargs['normalize_weights_per_experiment'][i]
+            experiment_set_mapping_dct[name]['normalize_weights_per_experiment'] = \
+            exp_kwargs['normalize_weights_per_experiment'][i]
             experiment_set_mapping_dct[name]['weight_method'] = exp_kwargs['weight_method'][i]
             experiment_set_mapping_dct[name]['row_containing_names'] = exp_kwargs['row_containing_names'][i]
             experiment_set_mapping_dct[name]['separator'] = exp_kwargs['separator'][i]
@@ -3672,7 +3670,6 @@ class ParameterEstimation(_Task):
                         separator = []
                         validation = []
 
-
                         for experiment_name in experiment_mapping_args:
                             # print(experiment_name, experiment_mapping_args[experiment_name])
                             experiment_files.append(experiment_mapping_args[experiment_name]['filename'])
@@ -3692,7 +3689,7 @@ class ParameterEstimation(_Task):
                         ## convert weight method to numerical values that are
                         ## interpreted by COAPSI - with some input checking
                         weight_method_strings = ['mean_squared', 'stardard_deviation',
-                                                'value_scaling', 'mean']  # line 2144
+                                                 'value_scaling', 'mean']  # line 2144
                         for i in weight_method:
                             if i not in weight_method_strings:
                                 raise errors.InputError(
@@ -3718,7 +3715,6 @@ class ParameterEstimation(_Task):
                         experiment_type_numbers = [str(i) for i in [0, 1]]
                         experiment_type_dict = dict(list(zip(experiment_type_strings, experiment_type_numbers)))
                         experiment_type = [experiment_type_dict[i] for i in experiment_type]
-
 
                         setattr(self, 'experiment_type', experiment_type)
                         setattr(self, 'experiment_keys', experiment_keys)
@@ -3860,8 +3856,8 @@ class ParameterEstimation(_Task):
         for i in [self.lower_bound_dct, self.upper_bound_dct]:
             if not isinstance(i, dict):
                 raise errors.InputError('{} argument must be a '
-                                    'dict mapping parameter estimation boundaries '
-                                    'to integers. Got "{}"'.format(i, type(self.lower_bound_dct)))
+                                        'dict mapping parameter estimation boundaries '
+                                        'to integers. Got "{}"'.format(i, type(self.lower_bound_dct)))
 
         for k, v in self.lower_bound_dct.items():
             if k not in df.index:
@@ -3870,7 +3866,6 @@ class ParameterEstimation(_Task):
                                  'estimation by adding it as argument to "metabolites" '
                                  '"local_parameters" or "global_quantities" argument'.format(k, df.index))
             df.loc[k, 'lower_bound'] = v
-
 
         if isinstance(self.upper_bound, (float, int)):
             df['upper_bound'] = [self.upper_bound] * df.shape[0]
@@ -3917,7 +3912,6 @@ class ParameterEstimation(_Task):
                                     'or dict mapping estimated parameters '
                                     'to a list of experiment names')
 
-
         if isinstance(self.start_value, pandas.core.frame.DataFrame):
             if len(self.start_value.columns) != 1:
                 raise errors.InputError('start values should have only one column. Got \n\n{}'.format(self.start_value))
@@ -3959,7 +3953,6 @@ class ParameterEstimation(_Task):
 
         # initialize new element
         fit_item_element = etree.Element('ParameterGroup', attrib={'name': 'FitItem'})
-
 
         affected_experiments = {'name': 'Affected Experiments'}
         ## read affected _experiments from config file.yaml
@@ -4030,12 +4023,14 @@ class ParameterEstimation(_Task):
                 affected_validation_experiments_attr[affected_validation_experiment] = {}
                 affected_validation_experiments_attr[affected_validation_experiment]['name'] = 'Experiment Key'
                 affected_validation_experiments_attr[affected_validation_experiment]['type'] = 'key'
-                affected_validation_experiments_attr[affected_validation_experiment]['value'] = self._get_validation_keys()[
+                affected_validation_experiments_attr[affected_validation_experiment]['value'] = \
+                self._get_validation_keys()[
                     affected_validation_experiment]
 
         affected_cross_validation_experiments = {'name': 'Affected Cross Validation Experiments'}
 
-        affected_cross_validation_experiments_element = etree.SubElement(fit_item_element, 'ParameterGroup', attrib=affected_cross_validation_experiments)
+        affected_cross_validation_experiments_element = etree.SubElement(fit_item_element, 'ParameterGroup',
+                                                                         attrib=affected_cross_validation_experiments)
 
         ## now add the attributes to the affected _experiments element
         for affected_validation_experiment_attr in affected_validation_experiments_attr:

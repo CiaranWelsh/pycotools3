@@ -285,66 +285,6 @@ class ParameterEstimationTests2(_test_base._BaseTest):
         self.assertEqual(conf.settings.population_size, 38)
 
 
-'''
-top level kwargs:
-    copy_number
-    pe_number
-    config_filename
-    overwrite_config_file
-    quantity_type (perhaps this should be part of fit item dict? )
-    results_directory
-        if true, save the output from copasi generated PE report from best parameters
-    use_config_start_values - might remove this option
-    sheduled
-        - remove this option
-
-report_kw:
-    append
-    confirm_overwrite
-    report_name
-
-ParameterEstimationSettings
-    randomize_start_values
-    create_parameter_sets
-    calculate_statistics
-    method
-    all the algorithm specific parameters
-
-
-experiment_kw
-    row_orientation
-        - remove this option and enfoce this as a requirement
-    experiment_type (time course or ss)
-    first row
-        - remove this option. Do not support multiple experiments in one file
-    row containing names
-        - remove this option. ensure this is always 1
-    separator
-    weight_method
-        - Should be the same throughput the estimation. Factor out of the experiment_kw options
-
-validation_kw:
-    same as experiment_kw
-    validation_weight
-    validation_threshold
-
-fit_item_kwargs:
-    lower_bound
-    upper_bound
-    lower_bound_dct
-    upper_bound_dct
-    affected_experiments
-    affected_validation_experiments
-    start_value
-
-constraint_kw
-    same as fit_item
-
-
-Can I make the config file optional? 
-'''
-
-
 class ParameterEstimationTests(_test_base._BaseTest):
     def setUp(self):
         super(ParameterEstimationTests, self).setUp()
@@ -399,66 +339,6 @@ class ParameterEstimationTests(_test_base._BaseTest):
             'B': ['report2', 'report3']
         }
 
-        '''
-        top level kwargs:
-            copy_number
-            pe_number
-            config_filename
-            overwrite_config_file
-            quantity_type (perhaps this should be part of fit item dict? )
-            results_directory
-                if true, save the output from copasi generated PE report from best parameters
-            use_config_start_values - might remove this option
-            sheduled
-                - remove this option
-            
-        report_kw:
-            append
-            confirm_overwrite
-            report_name
-            
-        ParameterEstimationSettings
-            randomize_start_values
-            create_parameter_sets
-            calculate_statistics
-            method
-            all the algorithm specific parameters
-            
-        
-        experiment_kw
-            row_orientation
-                - remove this option and enfoce this as a requirement
-            experiment_type (time course or ss)
-            first row
-                - remove this option. Do not support multiple experiments in one file
-            row containing names
-                - remove this option. ensure this is always 1
-            separator
-            weight_method
-                - Should be the same throughput the estimation. Factor out of the experiment_kw options
-                
-        validation_kw:
-            same as experiment_kw
-            validation_weight
-            validation_threshold
-            
-        fit_item_kwargs:
-            lower_bound
-            upper_bound
-            lower_bound_dct
-            upper_bound_dct
-            affected_experiments
-            affected_validation_experiments
-            start_value
-            
-        constraint_kw
-            same as fit_item
-            
-            
-        Can I make the config file optional? 
-            
-            
-        '''
 
         experiment_args = {
             'report1': {
@@ -486,11 +366,7 @@ class ParameterEstimationTests(_test_base._BaseTest):
                                                        )
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
 
-    # def test_mapping(self):
-    #     self.PE.write_config_file()
-    #     self.PE.setup()
-    #     sel
-
+git status
     def test_sdfs(self):
         self.PE.write_config_file()
         self.PE.setup()
