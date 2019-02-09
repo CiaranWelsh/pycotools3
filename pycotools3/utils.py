@@ -30,6 +30,7 @@ import json
 
 LOG = logging.getLogger(__name__)
 
+
 def format_timecourse_data(report_name):
     """
     read time course data into pandas dataframe. Remove
@@ -49,11 +50,7 @@ def format_timecourse_data(report_name):
     return df
 
 
-
-
 class ParameterEstimationConfiguration:
-
-
     """
 
 
@@ -116,7 +113,6 @@ class ParameterEstimationConfiguration:
         self.constraint_items = self._ConstraintItemKW(self.constraint_items, **self.constraint_item_kw)
         self.report = self._ReportKW(**self.report_kw)
 
-
     class _KW:
         def __init__(self, **kwargs):
             self.kwargs = kwargs
@@ -146,10 +142,10 @@ class ParameterEstimationConfiguration:
         def __str__(self):
             return self.pretty_print()
 
-
     class _ExperimentsKW(_KW):
         valid_kwargs = ['filename', 'normalize_weights_per_experiment',
                         'weight_method', 'separator']
+
         def __init__(self, experiment_files, **kwargs):
             super().__init__(**kwargs)
             dct = OrderedDict()
@@ -186,6 +182,7 @@ class ParameterEstimationConfiguration:
             'validation_weight',
             'validation_threshold'
         ]
+
         def __init__(self, validation_files, **kwargs):
             super().__init__(**kwargs)
 
@@ -223,6 +220,7 @@ class ParameterEstimationConfiguration:
             'affected_experiments',
             'affected_validation_experiments',
         ]
+
         def __init__(self, fit_items, **kwargs):
             super().__init__(**kwargs)
             dct = OrderedDict()
@@ -246,8 +244,6 @@ class ParameterEstimationConfiguration:
 
             setattr(self, 'fit_items', list(self.kwargs.keys()))
 
-
-
     class _ConstraintItemKW(_KW):
         valid_kwargs = [
             'lower_bound',
@@ -258,6 +254,7 @@ class ParameterEstimationConfiguration:
             'affected_experiments',
             'affected_validation_experiments',
         ]
+
         def __init__(self, constraint_items, **kwargs):
             super().__init__(**kwargs)
 
@@ -282,14 +279,13 @@ class ParameterEstimationConfiguration:
 
             setattr(self, 'constraint_items', list(self.kwargs.keys()))
 
-
-
     class _ReportKW(_KW):
         valid_kwargs = [
             'report_name',
             'append',
             'confirm_overwrite',
         ]
+
         def __init__(self, **kwargs):
             super().__init__(**kwargs)
             dct = OrderedDict()
@@ -309,35 +305,17 @@ class ParameterEstimationConfiguration:
             return self.pretty_print()
 
 
-
-
-
-
-
-
-
-
 class DotDict(dict):
     """dot.notation access to dictionary attributes"""
+
+    def __init__(self, kwargs, recursive=False):
+        super().__init__(kwargs)
+
+        if recursive:
+            for k in self:
+                if isinstance(self[k], dict):
+                    self[k] = DotDict(self[k], recursive=recursive)
+
     __getattr__ = dict.get
     __setattr__ = dict.__setitem__
     __delattr__ = dict.__delitem__
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

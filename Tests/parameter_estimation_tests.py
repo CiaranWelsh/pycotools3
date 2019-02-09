@@ -77,6 +77,39 @@ class ParameterEstimationConfigurationTests(unittest.TestCase):
         print(self.config.fit_items)
 
 
+class DotDictTests(unittest.TestCase):
+    def setUp(self):
+        pass
+
+    def test1(self):
+        from pycotools3.utils import DotDict
+        dct = {'d': 4}
+        dct = DotDict(dct)
+        self.assertEqual(dct.d, 4)
+
+    def test2(self):
+        from pycotools3.utils import DotDict
+        dct = {
+            'd': {
+                'c': 94
+            }
+        }
+        dct = DotDict(dct, recursive=True)
+        self.assertEqual(dct.d.c, 94)
+
+    def test2(self):
+        from pycotools3.utils import DotDict
+        dct = {
+            'd': {
+                'c': {
+                    'b': 7
+                }
+            }
+        }
+        dct = DotDict(dct, recursive=True)
+        self.assertEqual(dct.d.c.b, 7)
+
+
 class ParameterEstimationTests2(_test_base._BaseTest):
     def setUp(self):
         super(ParameterEstimationTests2, self).setUp()
@@ -139,7 +172,18 @@ class ParameterEstimationTests2(_test_base._BaseTest):
                 'weight_method': 'value_scaling',
                 'experiments': {
                     'report1': {
-                        'filename': self.TC1.report_name
+                        'filename': self.TC1.report_name,
+                        'mappings': {
+                            'Time': {
+                                'model_object': 'Time',
+                                'role': 'time'
+                            },
+                            'A': {
+                                'model_object': 'A',
+                                'role': 'dependent',
+                            }
+
+                        }
                     },
                     'report2': {
                         'filename': self.TC2.report_name,
@@ -207,6 +251,18 @@ class ParameterEstimationTests2(_test_base._BaseTest):
     def test_validation_kw2(self):
         conf = self.PE._config()
         self.assertEqual(conf.datasets.validations.weight, 4)
+
+    def test_mappings1(self):
+        conf = self.PE._config()
+        self.assertEqual(conf.datasets.experiments.report1.mappings.A.model_object, 'A')
+
+    def test_mappings2(self):
+        conf = self.PE._config()
+        self.assertEqual(conf.datasets.experiments.report1.mappings.B.model_object, 'B')
+
+    def test_mappings3(self):
+        conf = self.PE._config()
+        self.assertEqual(conf.datasets.experiments.report1.mappings.C.model_object, 'C')
 
     def test_fit_items1(self):
         conf = self.PE._config()

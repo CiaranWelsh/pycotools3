@@ -2250,15 +2250,17 @@ class _ConfigBase:
                 ## if all necessary kwargs are specified then we have the empty set
                 ## and do not need to update with defaults
                 if unspecified_kwargs == set():
-                    setattr(self, parameter, DotDict(self.kwargs[parameter]))
+                    setattr(self, parameter, DotDict(self.kwargs[parameter], recursive=True))
 
                 ## otherwise, update kwargs with defaults.
                 for unspecified_kwarg in unspecified_kwargs:
                     for default_kwarg in self.defaults:
                         if unspecified_kwarg == default_kwarg:
                             self.kwargs[parameter][default_kwarg] = self.defaults[default_kwarg]
-                    self.kwargs[parameter] = DotDict(self.kwargs[parameter])
+                    self.kwargs[parameter] = DotDict(self.kwargs[parameter], recursive=True)
                     setattr(self, parameter, self.kwargs[parameter])
+
+    def set_default_mapping(self, ):
 
     @property
     def defaults(self):
@@ -2381,7 +2383,6 @@ class ParameterEstimation(_Task):
 
         def __init__(self, **kwargs):
             self.kwargs = kwargs
-
             self.datasets = self._DataSets(**self.kwargs.get('datasets', {}))
             self.items = self._Items(**self.kwargs.get('items', {}))
             self.settings = self._Settings(**self.kwargs.get('settings', {}))
@@ -2401,6 +2402,32 @@ class ParameterEstimation(_Task):
                 self.experiments = self._ExperimentSet(**experiments)
                 self.validations = self._ValidationSet(**validations)
 
+                ## need a mappings class?
+
+            class _Mapping(_ConfigBase):
+                """
+
+                Read the file. Take data headers as columns names.
+                Make each element.
+
+                By default, assume that columns map exactly to
+                model objects.
+                    mappings:
+                      Time:
+                        model_object: Time
+                        role: time
+                      A:
+                        model_object: A
+                        role: dependent
+                      B:
+                        model_object: B
+                        role: dependent
+                """
+
+                def __init__(self, **kwargs):
+                    self.kwargs = kwargs
+                    self.set_kwargs()
+
 
             class _ExperimentSet(_ConfigBase):
                 """
@@ -2411,16 +2438,32 @@ class ParameterEstimation(_Task):
                 """
                 def __init__(self, **kwargs):
                     self.kwargs = kwargs
-                    self.set_kwargs()
+                    self.set_kwargs()git status
+                    
+
+                    # for experiment_name in self.keys():
+                    #     if self[experiment_name].filename != '':
+                    #         df = pandas.read_csv(self[experiment_name].filename, sep='\t')
+                    #         column_names = list(df.columns)
+
+
+                    # if self.filename != '':
+                    #     df = pandas.read_csv(self.filename)
+                    #     print(df.columns)
+
+                    ## get experiment_name
 
                 @property
                 def defaults(self):
-                    return {
+
+                    defaults =  {
                         'filename': '',
                         'normalize_weights_per_experiment': True,
                         'weight_method': 'mean_squared',
-                        'separator': '\t'
+                        'separator': '\t',
+                        'mappings': {}
                     }
+                    return defaults
 
 
             class _ValidationSet(_ConfigBase):
@@ -2437,6 +2480,7 @@ class ParameterEstimation(_Task):
                         'separator': '\t',
                         'weight': 1,
                         'threshold': 5,
+                        'mappings': {},
                     }
 
 
