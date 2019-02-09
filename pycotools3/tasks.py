@@ -41,6 +41,7 @@ from . import viz
 from . import errors
 from . import misc
 from . import model
+from .utils import DotDict
 from multiprocessing import Process, cpu_count
 import glob
 import seaborn as sns
@@ -2175,6 +2176,118 @@ class Scan(_Task):
 
 
 
+class _ConfigBase:
+    def __init__(self, **kwargs):
+        self.kwargs = kwargs
+
+    def update_recursive(self, orig_dict, new_dict):
+        """
+        recursively update nested dictionaries
+        :param orig_dict: Dict containing original values
+        :param new_dict: Dict containing values you want to be updated
+        :return: OrderedDict
+        """
+        for key, val in new_dict.items():
+            if isinstance(val, Mapping):
+                tmp = self.update(orig_dict.get(key, {}), val)
+                orig_dict[key] = tmp
+            elif isinstance(val, list):
+                orig_dict[key] = (orig_dict.get(key, []) + val)
+            else:
+                orig_dict[key] = new_dict[key]
+        return orig_dict
+
+    def pretty_print(self, sort_keys=False):
+        """
+        Use json to pretty print a nested dictionary
+        :param sort_keys:
+        :return:
+        """
+        return json.dumps(self.kwargs, indent=4, sort_keys=sort_keys)
+
+    def validate_kwargs(self, dct, valid_kwargs):
+        """
+        Ensure the dict `dct` has valid entries
+        :param dct: A `dict` to validate
+        :param valid_kwargs: list of valid kwards
+        :return: None
+        """
+        for k in dct:
+            if k not in self.valid_kwargs:
+                raise ValueError(
+                    '"{}" is not a valid key. '
+                    'Valid kwargs are "{}"'.format(
+                        k, valid_kwargs))
+
+    def set_defaults(self):
+        """
+        user property.setter on defaults property to update the default dict
+        :return:
+        """
+        pass
+
+
+    def set_kwargs(self):
+        """
+        A contraption for adding experiments to the parameter estimation
+        configuration object. Used to create both experiment and validation sets.
+
+        :return:
+        """
+
+        for parameter in self.kwargs:
+            if not isinstance(self.kwargs[parameter], dict):
+                setattr(self, parameter, self.kwargs[parameter])
+            else:
+                user_specified_kwargs = list(self.kwargs[parameter].keys())
+                for kw in self.kwargs[parameter]:
+                    if kw not in self.defaults.keys():
+                        raise ValueError('"{}" is not a valid keyword argument. '
+                                         'These are valid: "{}"'.format(kw, list(self.defaults.keys())))
+
+                ## these kwargs are those not specified by user and need to take on the default value
+                unspecified_kwargs = set(user_specified_kwargs).symmetric_difference(set(self.defaults.keys()))
+                ## if all necessary kwargs are specified then we have the empty set
+                ## and do not need to update with defaults
+                if unspecified_kwargs == set():
+                    setattr(self, parameter, DotDict(self.kwargs[parameter]))
+
+                ## otherwise, update kwargs with defaults.
+                for unspecified_kwarg in unspecified_kwargs:
+                    for default_kwarg in self.defaults:
+                        if unspecified_kwarg == default_kwarg:
+                            self.kwargs[parameter][default_kwarg] = self.defaults[default_kwarg]
+                    self.kwargs[parameter] = DotDict(self.kwargs[parameter])
+                    setattr(self, parameter, self.kwargs[parameter])
+
+    @property
+    def defaults(self):
+        return {}
+
+    def keys(self):
+        return self.kwargs.keys()
+
+    def items(self):
+        return self.kwargs.items()
+
+    def values(self):
+        return self.kwargs.values()
+
+    def __str__(self):
+        return self.pretty_print()
+
+    def __iter__(self):
+        return self.kwargs.__iter__()
+
+    def __next__(self):
+        return self.kwargs.__next__()
+
+    def __getitem__(self, item):
+        return self.kwargs.__getitem__(item)
+
+    def __setitem__(self, key, value):
+        self.kwargs[key] = value
+
 @mixin(model.GetModelComponentFromStringMixin)
 @mixin(model.ReadModelMixin)
 class ParameterEstimation(_Task):
@@ -2262,97 +2375,128 @@ class ParameterEstimation(_Task):
 
     """
 
-    class _Config:
+
+    class _Config(_ConfigBase):
+
+
         def __init__(self, **kwargs):
             self.kwargs = kwargs
 
+            self.datasets = self._DataSets(**self.kwargs.get('datasets', {}))
+            self.items = self._Items(**self.kwargs.get('items', {}))
+            self.settings = self._Settings(**self.kwargs.get('settings', {}))
 
-        def update_recursive(self, orig_dict, new_dict):
-            """
-            recursively update nested dictionaries
-            :param orig_dict: Dict containing original values
-            :param new_dict: Dict containing values you want to be updated
-            :return: OrderedDict
-            """
-            for key, val in new_dict.items():
-                if isinstance(val, Mapping):
-                    tmp = self.update(orig_dict.get(key, {}), val)
-                    orig_dict[key] = tmp
-                elif isinstance(val, list):
-                    orig_dict[key] = (orig_dict.get(key, []) + val)
-                else:
-                    orig_dict[key] = new_dict[key]
-            return orig_dict
 
-        def pretty_print(self, sort_keys=False):
-            """
-            Use json to pretty print a nested dictionary
-            :param sort_keys:
-            :return:
-            """
-            return json.dumps(self.kwargs, indent=4, sort_keys=sort_keys)
+        class _DataSets(_ConfigBase):
 
-        def validate_kwargs(self, dct, valid_kwargs):
-            """
-            Ensure the dict `dct` has valid entries
-            :param dct: A `dict` to validate
-            :param valid_kwargs: list of valid kwards
-            :return: None
-            """
-            for k in dct:
-                if k not in self.valid_kwargs:
-                    raise ValueError(
-                        '"{}" is not a valid key. '
-                        'Valid kwargs are "{}"'.format(
-                            k, valid_kwargs))
+            def __init__(self, **kwargs):
+                self.kwargs = kwargs
 
-        def __str__(self):
-            return self.pretty_print()
+                for kw in self.kwargs:
+                    setattr(self, kw, self.kwargs[kw])
 
-    class _DataConfig(_Config):
+                experiments = self.kwargs.get('experiments', '')
+                validations = self.kwargs.get('validations', '')
 
-        valid_kwargs = ['filename', 'normalize_weights_per_experiment',
-                        'weight_method', 'separator']
+                self.experiments = self._ExperimentSet(**experiments)
+                self.validations = self._ValidationSet(**validations)
 
-        def __init__(self, files, **kwargs):
-            super().__init__(**kwargs)
-            self.files = files
-            self.kwargs = kwargs
 
-    class _ExperimentConfig(_DataConfig):
+            class _ExperimentSet(_ConfigBase):
+                """
 
-        def __init__(self, experiment_files, **kwargs):
-            super().__init__(experiment_files, **kwargs)
-            self.experiment_files = experiment_files
-            self.kwargs = kwargs
+                If a valid argument is present, accept it. Otherwise
+                add the default to the dict.
 
-    class _ValidationConfig(_DataConfig):
-        def __init__(self, validation_files, **kwargs):
-            super().__init__(validation_files, **kwargs)
-            self.valid_kwargs += [
-                'validation_weight',
-                'validation_threshold'
-            ]
-            self.validation_files = validation_files
-            self.kwargs = kwargs
+                """
+                def __init__(self, **kwargs):
+                    self.kwargs = kwargs
+                    self.set_kwargs()
 
-    class _ItemConfig(_Config):
-        def __init__(self, **kwargs):
-            self.kwargs = kwargs
+                @property
+                def defaults(self):
+                    return {
+                        'filename': '',
+                        'normalize_weights_per_experiment': True,
+                        'weight_method': 'mean_squared',
+                        'separator': '\t'
+                    }
 
-    class _FitItemConfig(_ItemConfig):
-        def __init__(self, **kwargs):
-            self.kwargs = kwargs
 
-    class _ConstraintItemConfig(_ItemConfig):
-        def __init__(self, **kwargs):
-            self.kwargs = kwargs
+            class _ValidationSet(_ConfigBase):
+                def __init__(self, **kwargs):
+                    self.kwargs = kwargs
+                    self.set_kwargs()
 
-    class _Settings(_Config):
-        def __init__(self, **kwargs):
-            self.kwargs = kwargs
+                @property
+                def defaults(self):
+                    return {
+                        'filename': '',
+                        'normalize_weights_per_experiment': True,
+                        'weight_method': 'mean_squared',
+                        'separator': '\t',
+                        'weight': 1,
+                        'threshold': 5,
+                    }
 
-    def __init__(self, model, experiment_files, **kwargs):
+
+        class _Items(_ConfigBase):
+            def __init__(self, **kwargs):
+                self.kwargs = kwargs
+
+                fit_items = self.kwargs.get('fit_items', '')
+                constraint_items = self.kwargs.get('constraint_items', '')
+
+                self.fit_items = self._FitItems(**fit_items)
+                self.constraint_items = self._ConstraintItems(**constraint_items)
+
+            class _FitItems(_ConfigBase):
+                def __init__(self, **kwargs):
+                    self.kwargs = kwargs
+                    self.set_kwargs()
+
+                @property
+                def defaults(self):
+                    return {
+                        'lower_bound': 1e-6,
+                        'upper_bound': 1e6,
+                        'start_value': 'model_value',
+                        'affected_experiments': 'all',
+                        'affected_validation_experiments': 'all' ,
+                        }
+
+            class _ConstraintItems(_ConfigBase):
+                def __init__(self, **kwargs):
+                    self.kwargs = kwargs
+                    self.set_kwargs()
+
+                @property
+                def defaults(self):
+                    return {
+                        'lower_bound': 1e-6,
+                        'upper_bound': 1e6,
+                        'start_value': 'model_value',
+                        'affected_experiments': 'all',
+                        'affected_validation_experiments': 'all' ,
+                        }
+
+        class _Settings(_ConfigBase):
+            def __init__(self, **kwargs):
+                self.kwargs = kwargs
+                self.set_kwargs()
+
+    def __init__(self,
+                 model,
+                 copy_number=1,
+                 pe_number=1,
+                 config_filename='',
+                 overwrite_config_file=False,
+                 results_directory='',
+                 datasets={},
+                 items={},
+                 settings={},
+                 **kwargs
+                 ):
         """
 
         :param model:
@@ -2367,93 +2511,112 @@ class ParameterEstimation(_Task):
 
         """
         self.model = self.read_model(model)
+        self.copy_number = copy_number
+        self.pe_number = pe_number
+        self.config_filename = config_filename
+        self.overwrite_config_file = overwrite_config_file
+        self.results_directory = results_directory
+        self.datasets = datasets
+        self.items = items
+        self.settings = settings
         self.kwargs = kwargs
-        # super(ParameterEstimation, self).__init__(model, **kwargs)
-        self.experiment_files = experiment_files
-        if isinstance(self.experiment_files, list) != True:
-            self.experiment_files = [self.experiment_files]
+
+
+        # # super(ParameterEstimation, self).__init__(model, **kwargs)
+        # self.experiment_files = experiment_files
+        # if isinstance(self.experiment_files, list) != True:
+        #     self.experiment_files = [self.experiment_files]
 
         # default_report_name = os.path.join(os.path.dirname(self.model.copasi_file), 'PEData.txt')
-        config_file = os.path.join(os.path.dirname(self.model.copasi_file), 'config_file.yaml')
+        if self.config_filename == '':
+            self.config_filename = os.path.join(os.path.dirname(self.model.copasi_file), 'config_file.yaml')
 
 
-        self.default_properties = {
-            'metabolites': self.model.metabolites,
-            'global_quantities': self.model.global_quantities,
-            'local_parameters': self.model.local_parameters,
-            'copy_number': 1,
-            'pe_number': 1,
-            'results_directory': os.path.join(self.model.root, 'ParameterEstimationResults'),
-            'quantity_type': 'concentration',
-            'report_name': 'PEData.txt',
-            'append': False,
-            'confirm_overwrite': False,
-            'config_filename': config_file,
-            'overwrite_config_file': False,
-            'update_model': False,
-            'randomize_start_values': True,
-            'create_parameter_sets': False,
-            'calculate_statistics': False,
-            'use_config_start_values': False,
-            # method options
-            'method': 'genetic_algorithm',
-            # 'DifferentialEvolution',
-            'number_of_generations': 200,
-            'population_size': 50,
-            'random_number_generator': 1,
-            'seed': 0,
-            'pf': 0.475,
-            'iteration_limit': 50,
-            'tolerance': 0.00001,
-            'rho': 0.2,
-            'scale': 10,
-            'swarm_size': 50,
-            'std_deviation': 0.000001,
-            'number_of_iterations': 100000,
-            'start_temperature': 1,
-            'cooling_factor': 0.85,
-            # experiment definition options
-            # need to include options for defining multiple experimental files at once
-            'row_orientation': [True] * len(self.experiment_files),
-            'experiment_type': ['timecourse'] * len(self.experiment_files),
-            'experiment_keys': ["Experiment_{}".format(i) for i in range(len(self.experiment_files))],
-            'first_row': [str(1)] * len(self.experiment_files),
-            'normalize_weights_per_experiment': [True] * len(self.experiment_files),
-            'row_containing_names': [1] * len(self.experiment_files),
-            'separator': ['\t'] * len(self.experiment_files),
-            'weight_method': ['mean_squared'] * len(self.experiment_files),
-            'validation': [False] * len(self.experiment_files),
-            'validation_weight': 1,
-            'validation_threshold': 5,
-            'affected_experiments': {},
-            'affected_validation_experiments': {},
-            'scheduled': False,
-            'lower_bound': 0.000001,
-            'upper_bound': 1000000,
-            'lower_bound_dct': {},
-            'upper_bound_dct': {},
-            'start_value': 0.1,
-            'save': False,
-            'run_mode': True,
-            'max_active': None,
-            'mappings': None,
-        }
+        # self.default_properties = {
+        #     'metabolites': self.model.metabolites,
+        #     'global_quantities': self.model.global_quantities,
+        #     'local_parameters': self.model.local_parameters,
+        #     'copy_number': 1,
+        #     'pe_number': 1,
+        #     'results_directory': os.path.join(self.model.root, 'ParameterEstimationResults'),
+        #     'quantity_type': 'concentration',
+        #     'report_name': 'PEData.txt',
+        #     'append': False,
+        #     'confirm_overwrite': False,
+        #     'config_filename': config_file,
+        #     'overwrite_config_file': False,
+        #     'update_model': False,
+        #     'randomize_start_values': True,
+        #     'create_parameter_sets': False,
+        #     'calculate_statistics': False,
+        #     'use_config_start_values': False,
+        #     # method options
+        #     'method': 'genetic_algorithm',
+        #     # 'DifferentialEvolution',
+        #     'number_of_generations': 200,
+        #     'population_size': 50,
+        #     'random_number_generator': 1,
+        #     'seed': 0,
+        #     'pf': 0.475,
+        #     'iteration_limit': 50,
+        #     'tolerance': 0.00001,
+        #     'rho': 0.2,
+        #     'scale': 10,
+        #     'swarm_size': 50,
+        #     'std_deviation': 0.000001,
+        #     'number_of_iterations': 100000,
+        #     'start_temperature': 1,
+        #     'cooling_factor': 0.85,
+        #     # experiment definition options
+        #     # need to include options for defining multiple experimental files at once
+        #     'row_orientation': [True] * len(self.experiment_files),
+        #     'experiment_type': ['timecourse'] * len(self.experiment_files),
+        #     'experiment_keys': ["Experiment_{}".format(i) for i in range(len(self.experiment_files))],
+        #     'first_row': [str(1)] * len(self.experiment_files),
+        #     'normalize_weights_per_experiment': [True] * len(self.experiment_files),
+        #     'row_containing_names': [1] * len(self.experiment_files),
+        #     'separator': ['\t'] * len(self.experiment_files),
+        #     'weight_method': ['mean_squared'] * len(self.experiment_files),
+        #     'validation': [False] * len(self.experiment_files),
+        #     'validation_weight': 1,
+        #     'validation_threshold': 5,
+        #     'affected_experiments': {},
+        #     'affected_validation_experiments': {},
+        #     'scheduled': False,
+        #     'lower_bound': 0.000001,
+        #     'upper_bound': 1000000,
+        #     'lower_bound_dct': {},
+        #     'upper_bound_dct': {},
+        #     'start_value': 0.1,
+        #     'save': False,
+        #     'run_mode': True,
+        #     'max_active': None,
+        #     'mappings': None,
+        # }
+        #
+        # self.default_properties.update(self.kwargs)
+        # self.update_properties(self.default_properties)
+        # self.check_integrity(list(self.default_properties.keys()), list(self.kwargs.keys()))
+        #
+        # self._do_checks()
+        #
+        # # self.default_properties = self.convert_bool_to_numeric(self.default_properties)
+        # # self._convert_numeric_arguments_to_string()
+        #
+        # if self.save:
+        #     self.model.save()
 
-        self.default_properties.update(self.kwargs)
-        self.update_properties(self.default_properties)
-        self.check_integrity(list(self.default_properties.keys()), list(self.kwargs.keys()))
+    def _config(self):
+        return self._Config(
+            datasets=self.datasets,
+            items=self.items,
+            settings=self.settings,
+            **self.kwargs
+        )
 
-        self._do_checks()
-
-        # self.default_properties = self.convert_bool_to_numeric(self.default_properties)
-        # self._convert_numeric_arguments_to_string()
-
-        if self.save:
-            self.model.save()
-
-    def __str__(self):
-        return "ParameterEstimation(method='{}', config_filename='{}', report_name='{}')".format(
-            self.method, self.config_filename, self.report_name)
+    # def __str__(self):
+    #     return "ParameterEstimation(method='{}', config_filename='{}', report_name='{}')".format(
+    #         self.method, self.config_filename, self.report_name)
 
     def _do_checks(self):
         """

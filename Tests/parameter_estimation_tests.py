@@ -31,7 +31,8 @@ import os
 import pandas
 import re
 from Tests import _test_base
-from pycotools3.utils import ParameterEstimationConfiguration
+from pycotools3.tasks import ParameterEstimation
+
 
 def parse_timecourse(self):
     """
@@ -48,9 +49,9 @@ def parse_timecourse(self):
     df.columns = headers
     return df
 
+
 class ParameterEstimationConfigurationTests(unittest.TestCase):
     def setUp(self):
-
         self.experiment_files = ['/path/to/f1.txt', '/path/to/f2.txt']
         self.validation_files = ['/path/to/v1.txt', '/path/to/v2.txt']
         self.fit_items = ['A', 'B', 'C']
@@ -74,6 +75,218 @@ class ParameterEstimationConfigurationTests(unittest.TestCase):
 
     def test(self):
         print(self.config.fit_items)
+
+
+class ParameterEstimationTests2(_test_base._BaseTest):
+    def setUp(self):
+        super(ParameterEstimationTests2, self).setUp()
+
+        self.TC1 = pycotools3.tasks.TimeCourse(self.model, end=1000, step_size=100,
+                                               intervals=10, report_name='report1.txt')
+
+        self.TC2 = pycotools3.tasks.TimeCourse(self.model, end=1000, step_size=100,
+                                               intervals=10, report_name='report2.txt')
+
+        self.TC3 = pycotools3.tasks.TimeCourse(self.model, end=1000, step_size=100,
+                                               intervals=10, report_name='report3.txt')
+
+        self.TC4 = pycotools3.tasks.TimeCourse(self.model, end=1000, step_size=100,
+                                               intervals=10, report_name='report4.txt')
+
+        self.TC5 = pycotools3.tasks.TimeCourse(self.model, end=1000, step_size=100,
+                                               intervals=10, report_name='report5.txt')
+
+        ## add some noise
+        data1 = pycotools3.misc.add_noise(self.TC1.report_name)
+        data2 = pycotools3.misc.add_noise(self.TC2.report_name)
+        data3 = pycotools3.misc.add_noise(self.TC3.report_name)
+        data4 = pycotools3.misc.add_noise(self.TC4.report_name)
+        data5 = pycotools3.misc.add_noise(self.TC5.report_name)
+
+        ## remove the data
+        os.remove(self.TC1.report_name)
+        os.remove(self.TC2.report_name)
+        os.remove(self.TC3.report_name)
+        os.remove(self.TC4.report_name)
+        os.remove(self.TC5.report_name)
+
+        ## rewrite the data with noise
+        data1.to_csv(self.TC1.report_name, sep='\t')
+        data2.to_csv(self.TC2.report_name, sep='\t')
+        data3.to_csv(self.TC3.report_name, sep='\t')
+        data4.to_csv(self.TC4.report_name, sep='\t')
+        data5.to_csv(self.TC5.report_name, sep='\t')
+
+        pycotools3.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
+        pycotools3.misc.correct_copasi_timecourse_headers(self.TC2.report_name)
+        pycotools3.misc.correct_copasi_timecourse_headers(self.TC3.report_name)
+        pycotools3.misc.correct_copasi_timecourse_headers(self.TC4.report_name)
+        pycotools3.misc.correct_copasi_timecourse_headers(self.TC5.report_name)
+
+        self.affected_experiments = {
+            'A': ['report1', 'report4']
+        }
+
+        self.affected_validation_experiments = {
+            'B': ['report2', 'report3']
+        }
+
+        self.PE = ParameterEstimation(
+            self.model,
+
+            # fit_items='all', ## special arguments = all, metabolites, local_parameters, global quantities,
+            datasets={
+                'weight_method': 'value_scaling',
+                'experiments': {
+                    'report1': {
+                        'filename': self.TC1.report_name
+                    },
+                    'report2': {
+                        'filename': self.TC2.report_name,
+                        'separator': ','
+                    }
+                },
+                'validations': {
+                    'weight': 4,
+                    'threshold': 8.5,
+                    'report3': {
+                        'filename': self.TC3.report_name
+                    }
+                }
+            },
+
+            items={
+                'fit_items': {
+
+                    'A': {
+                        'lower_bound': 15,
+                        'upper_bound': 35,
+                        'affected_experiments': 'report1',
+                        'affected_validation_experiments': 'report3',
+                        'start_value': 17.5
+                    },
+                    'B': {},
+                    'C': {}
+                },
+                'constraint_items': {
+                    'C': {
+                        'upper_bound': 26,
+                        'lower_bound': 16
+                    }
+                },
+            },
+
+            settings={
+                'method': 'genetic_algorithm_sr',
+                'population_size': 38,
+                'number_of_generations': 100,
+                'copy_number': 1,
+                'pe_number': 1,
+                'lower_bound': 1e-5,
+                'upper_bound': 1e3,
+            }
+
+        )
+
+    def test_experiment_kw1(self):
+        conf = self.PE._config()
+        self.assertEqual(conf.datasets.experiments.report1.filename, self.TC1.report_name)
+
+    def test_experiment_kw2(self):
+        conf = self.PE._config()
+        self.assertEqual(conf.datasets.experiments.report1.separator, '\t')
+
+    def test_experiment_kw3(self):
+        conf = self.PE._config()
+        self.assertEqual(conf.datasets.experiments.report2.separator, ',')
+
+    def test_validation_kw1(self):
+        conf = self.PE._config()
+        self.assertEqual(conf.datasets.validations.report3.filename, self.TC3.report_name)
+
+    def test_validation_kw2(self):
+        conf = self.PE._config()
+        self.assertEqual(conf.datasets.validations.weight, 4)
+
+    def test_fit_items1(self):
+        conf = self.PE._config()
+        self.assertEqual(conf.items.fit_items.A.lower_bound, 15)
+
+    def test_fit_items2(self):
+        conf = self.PE._config()
+        self.assertEqual(conf.items.fit_items.A.affected_experiments, 'report1')
+
+    def test_constraint_items1(self):
+        conf = self.PE._config()
+        self.assertEqual(conf.items.constraint_items.C.lower_bound, 16)
+
+    def test_settings1(self):
+        conf = self.PE._config()
+        self.assertEqual(conf.settings.method, 'genetic_algorithm_sr')
+
+    def test_settings2(self):
+        conf = self.PE._config()
+        self.assertEqual(conf.settings.population_size, 38)
+
+
+'''
+top level kwargs:
+    copy_number
+    pe_number
+    config_filename
+    overwrite_config_file
+    quantity_type (perhaps this should be part of fit item dict? )
+    results_directory
+        if true, save the output from copasi generated PE report from best parameters
+    use_config_start_values - might remove this option
+    sheduled
+        - remove this option
+
+report_kw:
+    append
+    confirm_overwrite
+    report_name
+
+ParameterEstimationSettings
+    randomize_start_values
+    create_parameter_sets
+    calculate_statistics
+    method
+    all the algorithm specific parameters
+
+
+experiment_kw
+    row_orientation
+        - remove this option and enfoce this as a requirement
+    experiment_type (time course or ss)
+    first row
+        - remove this option. Do not support multiple experiments in one file
+    row containing names
+        - remove this option. ensure this is always 1
+    separator
+    weight_method
+        - Should be the same throughput the estimation. Factor out of the experiment_kw options
+
+validation_kw:
+    same as experiment_kw
+    validation_weight
+    validation_threshold
+
+fit_item_kwargs:
+    lower_bound
+    upper_bound
+    lower_bound_dct
+    upper_bound_dct
+    affected_experiments
+    affected_validation_experiments
+    start_value
+
+constraint_kw
+    same as fit_item
+
+
+Can I make the config file optional? 
+'''
 
 
 class ParameterEstimationTests(_test_base._BaseTest):
@@ -138,9 +351,6 @@ class ParameterEstimationTests(_test_base._BaseTest):
             overwrite_config_file
             quantity_type (perhaps this should be part of fit item dict? )
             results_directory
-            randomize_start_values
-            create_parameter_sets
-            calculate_statistics
                 if true, save the output from copasi generated PE report from best parameters
             use_config_start_values - might remove this option
             sheduled
@@ -152,6 +362,9 @@ class ParameterEstimationTests(_test_base._BaseTest):
             report_name
             
         ParameterEstimationSettings
+            randomize_start_values
+            create_parameter_sets
+            calculate_statistics
             method
             all the algorithm specific parameters
             
@@ -227,7 +440,6 @@ class ParameterEstimationTests(_test_base._BaseTest):
         self.PE.setup()
         self.PE.model.open()
 
-
     def test_affected_experiments(self):
         self.PE.write_config_file()
         self.PE.setup()
@@ -268,7 +480,6 @@ class ParameterEstimationTests(_test_base._BaseTest):
                     if j.tag == '{http://www.copasi.org/static/schema}Report':
                         report = j.attrib['target']
         self.assertEqual(self.PE.report_name, report)
-
 
         self.assertTrue(self.PE.report_name == 'PE_report_name')
 
@@ -380,6 +591,7 @@ class ParameterEstimationTests(_test_base._BaseTest):
 
     def test_that_error_on_line3539_is_raised(self):
         pass
+
 
 class ParameterEstimationConfigFileTests(_test_base._BaseTest):
     def setUp(self):
@@ -570,9 +782,6 @@ class TwoParameterEstimationTests(_test_base._BaseTest):
         self.assertEqual(count, 2)
 
 
-
-
-
 class ExperimentMapperTests(_test_base._BaseTest):
     def setUp(self):
         super(ExperimentMapperTests, self).setUp()
@@ -593,7 +802,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
 
         df = pandas.read_csv(self.TC2.report_name, sep='\t')
         ## remove square brackets around species
-        df = df.rename(columns={list(df.keys())[2]: list(df.keys())[2]+str('_indep')})
+        df = df.rename(columns={list(df.keys())[2]: list(df.keys())[2] + str('_indep')})
         self.report3 = os.path.join(os.path.dirname(self.TC2.report_name), 'report3.txt')
         df.to_csv(self.report3, sep='\t', index=False)
         assert os.path.isfile(self.report3)
@@ -601,30 +810,30 @@ class ExperimentMapperTests(_test_base._BaseTest):
         ## create some SS data for fitting
         ss_df = df.drop('Time', axis=1)
         ss_df = pandas.DataFrame(ss_df.iloc[0].transpose(), index=list(ss_df.keys())).transpose()
-        self.report4= os.path.join(os.path.dirname(self.TC2.report_name), 'report4.txt')
+        self.report4 = os.path.join(os.path.dirname(self.TC2.report_name), 'report4.txt')
 
         ss_df.to_csv(self.report4, sep='\t', index=False)
 
         self.PE = pycotools3.tasks.ParameterEstimation(
             self.model,
             [self.TC1.report_name,
-            self.TC2.report_name,
-            self.report3,
-            self.report4],
+             self.TC2.report_name,
+             self.report3,
+             self.report4],
             metabolites=['A', 'B'],
             global_quantities=['A2B', 'B2C', 'B2C_0_k2', 'C2A_k1'],
             experiment_type=['timecourse', 'timecourse',
-            'timecourse', 'steadystate'],
+                             'timecourse', 'steadystate'],
             validation=[False, True, True, False],
             validation_weight=2,
             validation_thershold=6,
             overwrite_config_file=True,
-            weight_method=['value_scaling']*4,
+            weight_method=['value_scaling'] * 4,
             upper_bound=500000,
             lower_bound=0.001,
             upper_bound_dct={'A': 39486, 'A2B': 98647},
             lower_bound_dct={'B2C': 72414}
-            )
+        )
         self.PE.write_config_file()
         self.PE.setup()
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
@@ -641,7 +850,6 @@ class ExperimentMapperTests(_test_base._BaseTest):
                                 lower_bound_value = k.attrib['value']
         self.assertEqual(float(self.PE.lower_bound_dct['B2C']),
                          float(lower_bound_value))
-
 
     def test_lower_bound_dct2(self):
         ref = r'CN=Root,Model=New_Model,Vector=Values[B2C],Reference=InitialValue'
@@ -731,7 +939,6 @@ class ExperimentMapperTests(_test_base._BaseTest):
                     ans = k.attrib['value']
         self.assertEqual(ans, str(self.PE.validation_weight))
 
-
     def test_validation_threshold(self):
         """
         Test that 2 _experiments have been set up
@@ -770,7 +977,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
             for j in i:
                 if j.attrib['name'] == 'report1':
                     for k in j:
-                        if k.attrib['name'] =='First Row':
+                        if k.attrib['name'] == 'First Row':
                             ans = k.attrib['value']
         self.assertEqual(ans, '1')
 
@@ -785,7 +992,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
             for j in i:
                 if j.attrib['name'] == 'report4':
                     for k in j:
-                        if k.attrib['name'] =='Weight Method':
+                        if k.attrib['name'] == 'Weight Method':
                             ans = k.attrib['value']
         self.assertEqual(ans, '3')
 
@@ -800,7 +1007,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
             for j in i:
                 if j.attrib['name'] == 'Experiment_0':
                     for k in j:
-                        if k.attrib['name'] =='Object Map':
+                        if k.attrib['name'] == 'Object Map':
                             for l in k:
                                 if l.attrib['name'] == '1':
                                     ans = l[0].attrib['value']
@@ -820,14 +1027,14 @@ class ExperimentMapperTests(_test_base._BaseTest):
             for j in i:
                 if j.attrib['name'] == 'Experiment_3':
                     for k in j:
-                        if k.attrib['name'] =='Object Map':
+                        if k.attrib['name'] == 'Object Map':
                             for l in k:
                                 if l.attrib['name'] == '1':
                                     ans = l[0].attrib['value']
         self.assertEqual(
             ans,
             'CN=Root,Model=New_Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=InitialConcentration',
-            )
+        )
 
     def test_validation_map1(self):
         """
@@ -840,14 +1047,14 @@ class ExperimentMapperTests(_test_base._BaseTest):
             for j in i:
                 if j.attrib['name'] == 'report3':
                     for k in j:
-                        if k.attrib['name'] =='Object Map':
+                        if k.attrib['name'] == 'Object Map':
                             for l in k:
                                 if l.attrib['name'] == '1':
                                     ans = l[0].attrib['value']
         self.assertEqual(
             ans,
             'CN=Root,Model=New_Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration'
-            )
+        )
 
     def test_experiment_steady_state(self):
         """
@@ -881,7 +1088,6 @@ class ExperimentMapperTests(_test_base._BaseTest):
                             ans = k.attrib['value']
         self.assertEqual(ans, str(1))
 
-
     def test_experiment_correct_number_of_object_maps(self):
         """
         First row of experiment_0==1
@@ -910,8 +1116,6 @@ class ExperimentMapperTests(_test_base._BaseTest):
                     if k.attrib['name'] == 'Object Map':
                         count += 1
         self.assertEqual(count, 2)
-
-
 
 
 if __name__ == '__main__':
