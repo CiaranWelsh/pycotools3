@@ -285,6 +285,56 @@ class ParameterEstimationTests2(_test_base._BaseTest):
         self.assertEqual(conf.settings.population_size, 38)
 
 
+class ParameterEstimationConfigDefaultsTests(_test_base._BaseTest):
+    def setUp(self):
+        super(ParameterEstimationConfigDefaultsTests, self).setUp()
+
+        self.TC1 = pycotools3.tasks.TimeCourse(self.model, end=1000, step_size=100,
+                                               intervals=10, report_name='report1.txt')
+
+        ## add some noise
+        data1 = pycotools3.misc.add_noise(self.TC1.report_name)
+
+        ## remove the data
+        os.remove(self.TC1.report_name)
+
+        ## rewrite the data with noise
+        data1.to_csv(self.TC1.report_name, sep='\t')
+
+        pycotools3.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
+
+        self.PE = pycotools3.tasks.ParameterEstimation(
+            self.model,
+            datasets=dict(
+                experiments=dict(
+                    ds1=dict(
+                        filename=self.TC1.report_name
+                    )
+                )
+            )
+           )
+
+        ## test the various ways that you want to instantiate the ParameterEstiamtion class
+
+    def test_experiment_set(self):
+
+        conf = self.PE.config
+        g = getattr(conf.datasets, 'experiments')
+        self.assertIsInstance(g, self.PE._Config._DataSets._ExperimentSet)
+
+    def test_default_separator(self):
+
+        conf = self.PE.config
+        self.assertEqual(conf.datasets.experiments.ds1.separator, '\t')
+
+    def test_default_(self):
+
+        conf = self.PE.config
+        print(conf)
+        # self.assertEqual(conf.datasets.experiments.ds1.separator, '\t')
+
+
+
 class ParameterEstimationTests(_test_base._BaseTest):
     def setUp(self):
         super(ParameterEstimationTests, self).setUp()
@@ -366,11 +416,11 @@ class ParameterEstimationTests(_test_base._BaseTest):
                                                        )
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
 
-git status
     def test_sdfs(self):
-        self.PE.write_config_file()
-        self.PE.setup()
-        self.PE.model.open()
+        print(self.PE)
+        # self.PE.write_config_file()
+        # self.PE.setup()
+        # self.PE.model.open()
 
     def test_affected_experiments(self):
         self.PE.write_config_file()

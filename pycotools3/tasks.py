@@ -2196,13 +2196,14 @@ class _ConfigBase:
                 orig_dict[key] = new_dict[key]
         return orig_dict
 
-    def pretty_print(self, sort_keys=False):
+    @staticmethod
+    def pretty_print(dct, sort_keys=False):
         """
         Use json to pretty print a nested dictionary
         :param sort_keys:
         :return:
         """
-        return json.dumps(self.kwargs, indent=4, sort_keys=sort_keys)
+        return json.dumps(dct, indent=4, sort_keys=sort_keys)
 
     def validate_kwargs(self, dct, valid_kwargs):
         """
@@ -2258,6 +2259,10 @@ class _ConfigBase:
                     self.kwargs[parameter] = DotDict(self.kwargs[parameter], recursive=True)
                     setattr(self, parameter, self.kwargs[parameter])
 
+        if self.kwargs == {}:
+            self.kwargs = self.defaults
+            self.set_kwargs()
+
     def set_default_experiment_mappings(self):
         """
 
@@ -2294,7 +2299,10 @@ class _ConfigBase:
         return self.kwargs.values()
 
     def __str__(self):
-        return self.pretty_print()
+        return self.pretty_print(self.kwargs)
+
+    def __repr__(self):
+        return self.__str__()
 
     def __iter__(self):
         return self.kwargs.__iter__()
@@ -2313,136 +2321,67 @@ class _ConfigBase:
 @mixin(model.ReadModelMixin)
 class ParameterEstimation(_Task):
     """
-    Set up and run a parameter estimation in copasi.
-
-    To setup:
-
-        # Make text or csv files containing experimental data. This is the
-        same as you would using the COPASI GUI except column headers **MUST**
-        be identical to the model component. For this reason, all model
-        components must have unique names. See Caveats in documentation.
-        # instantiate the ParameterEstimation class with all the
-          options that you want.
-        # run the write_config_file() method
-        # If options for which model components you want to include are
-        in point 1 then skip this point. If you are manually defining which
-        parameters you want to estimate, open the config file and
-        modify as you see fit.
-        # Use the setup() method
-        # use the run method
-
-    .. _parameter_estimation_kwargs:
-
-    ParameterEstimation kwargs
-    ==========================
-
-    ===========================     ==================================================
-    ParameterEstimation Kwargs               Description
-    ===========================     ==================================================
-    update_model                    Default: False
-    randomize_start_values          Default: True
-    create_parameter_sets           Default: False
-    calculate_statistics            Default: False
-    use_config_start_values         Default: False. Use starting values from config file
-                                    Set randomize_start_values to False
-    method                          Default: 'genetic_algorithm'
-    number_of_generations           Default: 200
-    population_size                 Default: 50
-    random_number_generator         Default: 1
-    seed                            Default: 0
-    pf                              Default: 0.475
-    iteration_limit                 Default: 50
-    tolerance                       Default: 0.00001
-    rho                             Default: 0.2
-    scale                           Default: 10
-    swarm_size                      Default: 50
-    std_deviation                   Default: 0.000001
-    number_of_iterations            Default: 100000
-    start_temperature               Default: 1
-    cooling_factor                  Default: 0.85
-    scheduled                       Default: False
-    lower_bound                     Default: 0.000001
-    upper_bound                     Default: 1000000
-    start_value                     Default: 0.1
-    save                            Default: False
-    run_mode                        Default: True. Passed on to :ref:`run`
-    max_active                      Default: None. Max number of models to run at once.
-    metabolites                     Default: All metabolites. Metabolites to
-                                    include in the config file
-    global_quantities               Default: All global_quantities. Global quantities
-                                    to include in the config file
-    local_parameters                Default: All local_parameters. local parameters
-                                    to include in the config file
-    <report_kwargs>                 Arguments for :ref:`_report_kwargs` are also
-                                    accepted here and passed on
-    <experiment_mapper_kwargs>      Arguments for :ref:`_experiment_mapper_kwargs` are
-                                    accepted here and passed on
-    ===========================     ==================================================
-
-
-
-     ===========================     ==================================================
-     ParameterEstimation Kwargs               Description
-     ===========================     ==================================================
-     copy_number                     default: 1. Number of model copies to configure
-     pe_number                       default: 1. Number of parameter estimations per
-                                     model
-     run_mode                        default: True
-     results_directory               default: MultiParameterEstimationResults in
-                                     same directory as :py:attr:`coapsi_file`
-     max_active                      default: None. Number of models to run
-                                     simultaneously. If None then run all.
-     ===========================     ==================================================
 
     """
 
     class _Config(_ConfigBase):
 
-        def __init__(self, **kwargs):
+        def __init__(self, datasets, **kwargs):
             self.kwargs = kwargs
-            self.datasets = self._DataSets(**self.kwargs.get('datasets', {}))
+            self.datasets = self._DataSets(**datasets)
             self.items = self._Items(**self.kwargs.get('items', {}))
             self.settings = self._Settings(**self.kwargs.get('settings', {}))
 
+            # print('jgvjy', self.datasets)
+
+        def __str__(self):
+            return self.pretty_print({
+                'settings': self.settings.kwargs,
+                'datasets': self.datasets.kwargs,
+                'items': self.items.kwargs,
+                }
+            )
+
+
         class _DataSets(_ConfigBase):
+            """
+            enforce the requirement for at least one experimental dataset
+            but validation data sets are optional
+            """
 
             def __init__(self, **kwargs):
                 self.kwargs = kwargs
+                # self.set_kwargs()
+                try:
+                    experiments = self.kwargs['experiments']
+                except KeyError as e:
+                    raise errors.InputError(
+                        'The "experiments" keyword argument must be supplied.'
+                    ) from e
 
-                for kw in self.kwargs:
-                    setattr(self, kw, self.kwargs[kw])
-
-                experiments = self.kwargs.get('experiments', '')
-                validations = self.kwargs.get('validations', '')
+                validations = self.kwargs.get('validations', {})
 
                 self.experiments = self._ExperimentSet(**experiments)
                 self.validations = self._ValidationSet(**validations)
 
-                ## need a mappings class?
 
-            class _Mapping(_ConfigBase):
-                """
 
-                Read the file. Take data headers as columns names.
-                Make each element.
+            # @property
+            # def defaults(self):
+            #     return {
+            #         'validations': self._ValidationSet(**{}).kwargs
+            #     }
+            #
+            def __str__(self):
+                return self.pretty_print(
+                    {
+                        'experiments': self.experiments.kwargs,
+                        'validations': self.validations.kwargs,
+                    }
+                )
 
-                By default, assume that columns map exactly to
-                model objects.
-                    mappings:
-                      Time:
-                        model_object: Time
-                        role: time
-                      A:
-                        model_object: A
-                        role: dependent
-                      B:
-                        model_object: B
-                        role: dependent
-                """
-
-                def __init__(self, **kwargs):
-                    self.kwargs = kwargs
-                    self.set_kwargs()
+            def __repr__(self):
+                return self.__str__()
 
             class _ExperimentSet(_ConfigBase):
                 """
@@ -2456,6 +2395,7 @@ class ParameterEstimation(_Task):
                     self.kwargs = kwargs
                     self.set_kwargs()
                     self.set_default_experiment_mappings()
+
 
                 @property
                 def defaults(self):
@@ -2490,11 +2430,21 @@ class ParameterEstimation(_Task):
             def __init__(self, **kwargs):
                 self.kwargs = kwargs
 
-                fit_items = self.kwargs.get('fit_items', '')
-                constraint_items = self.kwargs.get('constraint_items', '')
+                fit_items = self.kwargs.get('fit_items', {})
+                constraint_items = self.kwargs.get('constraint_items', {})
 
                 self.fit_items = self._FitItems(**fit_items)
                 self.constraint_items = self._ConstraintItems(**constraint_items)
+
+            def __str__(self):
+                return self.pretty_print({
+                    'fit_items': self.fit_items.kwargs.__str__(),
+                    'constraint_items': self.constraint_items.kwargs.__str__(),
+                })
+
+            def __repr__(self):
+                return self.__str__()
+
 
             class _FitItems(_ConfigBase):
                 def __init__(self, **kwargs):
@@ -2510,6 +2460,8 @@ class ParameterEstimation(_Task):
                         'affected_experiments': 'all',
                         'affected_validation_experiments': 'all',
                     }
+
+
 
             class _ConstraintItems(_ConfigBase):
                 def __init__(self, **kwargs):
@@ -2531,14 +2483,53 @@ class ParameterEstimation(_Task):
                 self.kwargs = kwargs
                 self.set_kwargs()
 
+            @property
+            def defaults(self):
+                return {
+                    'copy_number': 1,
+                    'pe_number': 1,
+                    'results_directory': '', #os.path.join(self.model.root, 'ParameterEstimationResults'),
+                    'config_filename': '', #os.path.join(self.model.root, 'config_file.yaml'),
+                    'overwrite_config_file': False,
+                    'update_model': False,
+                    'randomize_start_values': True,
+                    'create_parameter_sets': False,
+                    'calculate_statistics': False,
+                    'use_config_start_values': False,
+                    'method': 'genetic_algorithm',
+                    'number_of_generations': 200,
+                    'population_size': 50,
+                    'random_number_generator': 1,
+                    'seed': 0,
+                    'pf': 0.475,
+                    'iteration_limit': 50,
+                    'tolerance': 0.00001,
+                    'rho': 0.2,
+                    'scale': 10,
+                    'swarm_size': 50,
+                    'std_deviation': 0.000001,
+                    'number_of_iterations': 100000,
+                    'start_temperature': 1,
+                    'cooling_factor': 0.85,
+                    'lower_bound': 0.000001,
+                    'upper_bound': 1000000,
+                    'start_value': 0.1,
+                    'save': False,
+                    'run_mode': True,
+                }
+
+
     def __init__(self,
                  model,
+                 datasets,
+                 experiment_files=[],
+                 validation_files=[],
+                 config=None,
                  copy_number=1,
                  pe_number=1,
                  config_filename='',
                  overwrite_config_file=False,
                  results_directory='',
-                 datasets={},
                  items={},
                  settings={},
                  **kwargs
@@ -2557,6 +2548,9 @@ class ParameterEstimation(_Task):
 
         """
         self.model = self.read_model(model)
+        self.config = config
+        self.experiment_files = [],
+        self.validation_files = [],
         self.copy_number = copy_number
         self.pe_number = pe_number
         self.config_filename = config_filename
@@ -2567,77 +2561,11 @@ class ParameterEstimation(_Task):
         self.settings = settings
         self.kwargs = kwargs
 
-        # # super(ParameterEstimation, self).__init__(model, **kwargs)
-        # self.experiment_files = experiment_files
-        # if isinstance(self.experiment_files, list) != True:
-        #     self.experiment_files = [self.experiment_files]
-
-        # default_report_name = os.path.join(os.path.dirname(self.model.copasi_file), 'PEData.txt')
         if self.config_filename == '':
             self.config_filename = os.path.join(os.path.dirname(self.model.copasi_file), 'config_file.yaml')
 
-        # self.default_properties = {
-        #     'metabolites': self.model.metabolites,
-        #     'global_quantities': self.model.global_quantities,
-        #     'local_parameters': self.model.local_parameters,
-        #     'copy_number': 1,
-        #     'pe_number': 1,
-        #     'results_directory': os.path.join(self.model.root, 'ParameterEstimationResults'),
-        #     'quantity_type': 'concentration',
-        #     'report_name': 'PEData.txt',
-        #     'append': False,
-        #     'confirm_overwrite': False,
-        #     'config_filename': config_file,
-        #     'overwrite_config_file': False,
-        #     'update_model': False,
-        #     'randomize_start_values': True,
-        #     'create_parameter_sets': False,
-        #     'calculate_statistics': False,
-        #     'use_config_start_values': False,
-        #     # method options
-        #     'method': 'genetic_algorithm',
-        #     # 'DifferentialEvolution',
-        #     'number_of_generations': 200,
-        #     'population_size': 50,
-        #     'random_number_generator': 1,
-        #     'seed': 0,
-        #     'pf': 0.475,
-        #     'iteration_limit': 50,
-        #     'tolerance': 0.00001,
-        #     'rho': 0.2,
-        #     'scale': 10,
-        #     'swarm_size': 50,
-        #     'std_deviation': 0.000001,
-        #     'number_of_iterations': 100000,
-        #     'start_temperature': 1,
-        #     'cooling_factor': 0.85,
-        #     # experiment definition options
-        #     # need to include options for defining multiple experimental files at once
-        #     'row_orientation': [True] * len(self.experiment_files),
-        #     'experiment_type': ['timecourse'] * len(self.experiment_files),
-        #     'experiment_keys': ["Experiment_{}".format(i) for i in range(len(self.experiment_files))],
-        #     'first_row': [str(1)] * len(self.experiment_files),
-        #     'normalize_weights_per_experiment': [True] * len(self.experiment_files),
-        #     'row_containing_names': [1] * len(self.experiment_files),
-        #     'separator': ['\t'] * len(self.experiment_files),
-        #     'weight_method': ['mean_squared'] * len(self.experiment_files),
-        #     'validation': [False] * len(self.experiment_files),
-        #     'validation_weight': 1,
-        #     'validation_threshold': 5,
-        #     'affected_experiments': {},
-        #     'affected_validation_experiments': {},
-        #     'scheduled': False,
-        #     'lower_bound': 0.000001,
-        #     'upper_bound': 1000000,
-        #     'lower_bound_dct': {},
-        #     'upper_bound_dct': {},
-        #     'start_value': 0.1,
-        #     'save': False,
-        #     'run_mode': True,
-        #     'max_active': None,
-        #     'mappings': None,
-        # }
-        #
+        self.config = self._config()
+
         # self.default_properties.update(self.kwargs)
         # self.update_properties(self.default_properties)
         # self.check_integrity(list(self.default_properties.keys()), list(self.kwargs.keys()))
@@ -2656,6 +2584,34 @@ class ParameterEstimation(_Task):
             items=self.items,
             settings=self.settings,
             **self.kwargs
+        )
+
+    def default_config(self):
+        # print(self._Config())
+        return self._Config(
+            datasets={
+                'filename': '',
+
+            },
+            items={
+                'fit_items': {
+                    i: {
+                        'lower_bound': 1e-6,
+                        'upper_bound': 1e6,
+                        'start_value': 'model_value',
+                        'affected_experiments': 'all',
+                        'affected_validation_experiments': 'all'
+                    } for i in [i.name for i in self.model.metabolites] +
+                               [i.name for i in self.model.local_parameters] +
+                               [i.name for i in self.model.global_quantities if i.simulation_type != 'assignment']
+                }
+
+            },
+            settings={
+                'method': 'genetic_algorithm',
+                'number_of_generations': 200,
+                'population_size': 50,
+            }
         )
 
     # def __str__(self):
@@ -3576,7 +3532,7 @@ class ParameterEstimation(_Task):
             experiment_set_mapping_dct[name]['first_row'] = int(exp_kwargs['first_row'][i])
             experiment_set_mapping_dct[name]['last_row'] = int(df.shape[0])
             experiment_set_mapping_dct[name]['normalize_weights_per_experiment'] = \
-            exp_kwargs['normalize_weights_per_experiment'][i]
+                exp_kwargs['normalize_weights_per_experiment'][i]
             experiment_set_mapping_dct[name]['weight_method'] = exp_kwargs['weight_method'][i]
             experiment_set_mapping_dct[name]['row_containing_names'] = exp_kwargs['row_containing_names'][i]
             experiment_set_mapping_dct[name]['separator'] = exp_kwargs['separator'][i]
@@ -4024,8 +3980,8 @@ class ParameterEstimation(_Task):
                 affected_validation_experiments_attr[affected_validation_experiment]['name'] = 'Experiment Key'
                 affected_validation_experiments_attr[affected_validation_experiment]['type'] = 'key'
                 affected_validation_experiments_attr[affected_validation_experiment]['value'] = \
-                self._get_validation_keys()[
-                    affected_validation_experiment]
+                    self._get_validation_keys()[
+                        affected_validation_experiment]
 
         affected_cross_validation_experiments = {'name': 'Affected Cross Validation Experiments'}
 
