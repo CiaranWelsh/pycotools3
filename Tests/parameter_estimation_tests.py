@@ -25,6 +25,229 @@ Date:
  Object:
  
 '''
+
+
+'''
+
+    class _Config(_ConfigBase):
+
+        def __init__(self, datasets, **kwargs):
+            self.kwargs = kwargs
+            self.datasets = self._DataSets(**datasets)
+            self.items = self._Items(**self.kwargs.get('items', {}))
+            self.settings = self._Settings(**self.kwargs.get('settings', {}))
+
+
+        def __str__(self):
+            return self.pretty_print({
+                'settings': self.settings.kwargs,
+                'datasets': self.datasets.kwargs,
+                'items': self.items.kwargs,
+                }
+            )
+
+
+        class _DataSets(_ConfigBase):
+            """
+            enforce the requirement for at least one experimental dataset
+            but validation data sets are optional
+            """
+
+            def __init__(self, **kwargs):
+                self.kwargs = kwargs
+                # self.set_kwargs()
+                try:
+                    experiments = self.kwargs['experiments']
+                except KeyError as e:
+                    raise errors.InputError(
+                        'The "experiments" keyword argument must be supplied.'
+                    ) from e
+
+                validations = self.kwargs.get('validations', {})
+
+                self.experiments = self._ExperimentSet(**experiments)
+                self.validations = self._ValidationSet(**validations)
+
+
+
+            # @property
+            # def defaults(self):
+            #     return {
+            #         'validations': self._ValidationSet(**{}).kwargs
+            #     }
+            #
+            def __str__(self):
+                return self.pretty_print(
+                    {
+                        'experiments': self.experiments.kwargs,
+                        'validations': self.validations.kwargs,
+                    }
+                )
+
+            def __repr__(self):
+                return self.__str__()
+
+            class _ExperimentSet(_ConfigBase):
+                """
+
+                If a valid argument is present, accept it. Otherwise
+                add the default to the dict.
+
+                """
+
+                def __init__(self, **kwargs):
+                    self.kwargs = kwargs
+                    self.set_kwargs()
+                    self.set_default_experiment_mappings()
+
+
+                @property
+                def defaults(self):
+                    defaults = {
+                        'filename': '',
+                        'normalize_weights_per_experiment': True,
+                        'weight_method': 'mean_squared',
+                        'separator': '\t',
+                        'mappings': {}
+                    }
+                    return defaults
+
+            class _ValidationSet(_ConfigBase):
+                def __init__(self, **kwargs):
+                    self.kwargs = kwargs
+                    self.set_kwargs()
+                    self.set_default_experiment_mappings()
+
+                @property
+                def defaults(self):
+                    return {
+                        'filename': '',
+                        'normalize_weights_per_experiment': True,
+                        'weight_method': 'mean_squared',
+                        'separator': '\t',
+                        'weight': 1,
+                        'threshold': 5,
+                        'mappings': {},
+                    }
+
+        class _Items(_ConfigBase):
+            def __init__(self, **kwargs):
+                self.kwargs = kwargs
+
+                fit_items = self.kwargs.get('fit_items', {})
+                constraint_items = self.kwargs.get('constraint_items', {})
+
+                self.fit_items = self._FitItems(**fit_items)
+                self.constraint_items = self._ConstraintItems(**constraint_items)
+
+            def __str__(self):
+                return self.pretty_print({
+                    'fit_items': self.fit_items.kwargs.__str__(),
+                    'constraint_items': self.constraint_items.kwargs.__str__(),
+                })
+
+            def __repr__(self):
+                return self.__str__()
+
+
+            class _FitItems(_ConfigBase):
+                def __init__(self, **kwargs):
+                    self.kwargs = kwargs
+                    self.set_kwargs()
+
+                @property
+                def defaults(self):
+                    return {
+                        'lower_bound': 1e-6,
+                        'upper_bound': 1e6,
+                        'start_value': 'model_value',
+                        'affected_experiments': 'all',
+                        'affected_validation_experiments': 'all',
+                    }
+
+
+
+            class _ConstraintItems(_ConfigBase):
+                def __init__(self, **kwargs):
+                    self.kwargs = kwargs
+                    self.set_kwargs()
+
+                @property
+                def defaults(self):
+                    return {
+                        'lower_bound': 1e-6,
+                        'upper_bound': 1e6,
+                        'start_value': 'model_value',
+                        'affected_experiments': 'all',
+                        'affected_validation_experiments': 'all',
+                    }
+
+        class _Settings(_ConfigBase):
+            def __init__(self, **kwargs):
+                self.kwargs = kwargs
+                self.set_kwargs()
+
+            @property
+            def defaults(self):
+                return {
+                    'copy_number': 1,
+                    'pe_number': 1,
+                    'results_directory': '', #os.path.join(self.model.root, 'ParameterEstimationResults'),
+                    'config_filename': '', #os.path.join(self.model.root, 'config_file.yaml'),
+                    'overwrite_config_file': False,
+                    'update_model': False,
+                    'randomize_start_values': True,
+                    'create_parameter_sets': False,
+                    'calculate_statistics': False,
+                    'use_config_start_values': False,
+                    'method': 'genetic_algorithm',
+                    'number_of_generations': 200,
+                    'population_size': 50,
+                    'random_number_generator': 1,
+                    'seed': 0,
+                    'pf': 0.475,
+                    'iteration_limit': 50,
+                    'tolerance': 0.00001,
+                    'rho': 0.2,
+                    'scale': 10,
+                    'swarm_size': 50,
+                    'std_deviation': 0.000001,
+                    'number_of_iterations': 100000,
+                    'start_temperature': 1,
+                    'cooling_factor': 0.85,
+                    'lower_bound': 0.000001,
+                    'upper_bound': 1000000,
+                    'start_value': 0.1,
+                    'save': False,
+                    'run_mode': True,
+                }
+'''
+
+
+
+
+
+
+
+
+"""
+By default, make the user enter all the necessary information 
+for parameter estimation. This is insteady of including all model 
+items as fit items by default. 
+
+However, when you rewrite write_config_file method, implement a means
+of easily producing a config file with items already in it. 
+
+Is there a shortcut method for implementing this. 
+"""
+
+
+
+
+
+
+
+
 import pycotools3
 import unittest
 import os
@@ -50,32 +273,6 @@ def parse_timecourse(self):
     return df
 
 
-class ParameterEstimationConfigurationTests(unittest.TestCase):
-    def setUp(self):
-        self.experiment_files = ['/path/to/f1.txt', '/path/to/f2.txt']
-        self.validation_files = ['/path/to/v1.txt', '/path/to/v2.txt']
-        self.fit_items = ['A', 'B', 'C']
-        self.config = ParameterEstimationConfiguration(
-            experiment_files=self.experiment_files,
-            validation_files=self.validation_files,
-            fit_items=self.fit_items
-        )
-
-    def test_experiments_length(self):
-        self.assertEqual(len(self.config.experiments), 2)
-
-    def test_experiment_filename(self):
-        self.assertEqual(self.config.experiments.f1['filename'], self.experiment_files[0])
-
-    def test_experiments_length(self):
-        self.assertEqual(len(self.config.validations), 2)
-
-    def test_experiment_filename(self):
-        self.assertEqual(self.config.validations.v1['filename'], self.validation_files[0])
-
-    def test(self):
-        print(self.config.fit_items)
-
 
 class DotDictTests(unittest.TestCase):
     def setUp(self):
@@ -97,7 +294,7 @@ class DotDictTests(unittest.TestCase):
         dct = DotDict(dct, recursive=True)
         self.assertEqual(dct.d.c, 94)
 
-    def test2(self):
+    def test3(self):
         from pycotools3.utils import DotDict
         dct = {
             'd': {
@@ -156,18 +353,10 @@ class ParameterEstimationTests2(_test_base._BaseTest):
         pycotools3.misc.correct_copasi_timecourse_headers(self.TC4.report_name)
         pycotools3.misc.correct_copasi_timecourse_headers(self.TC5.report_name)
 
-        self.affected_experiments = {
-            'A': ['report1', 'report4']
-        }
-
-        self.affected_validation_experiments = {
-            'B': ['report2', 'report3']
-        }
-
-        self.PE = ParameterEstimation(
-            self.model,
-
-            # fit_items='all', ## special arguments = all, metabolites, local_parameters, global quantities,
+        self.config = ParameterEstimation.Config(
+            models={
+                'model1': self.model
+            },
             datasets={
                 'weight_method': 'value_scaling',
                 'experiments': {
@@ -187,7 +376,7 @@ class ParameterEstimationTests2(_test_base._BaseTest):
                     },
                     'report2': {
                         'filename': self.TC2.report_name,
-                        'separator': ','
+                        'separator': '\t'
                     }
                 },
                 'validations': {
@@ -226,64 +415,105 @@ class ParameterEstimationTests2(_test_base._BaseTest):
                 'number_of_generations': 100,
                 'copy_number': 1,
                 'pe_number': 1,
-                'lower_bound': 1e-5,
-                'upper_bound': 1e3,
             }
 
         )
+        self.PE = ParameterEstimation(self.config)
+
+    def test_update_defaults_and_run_code(self):
+        """
+        1) update defaults dct
+        2) build conf
+        3) test that it changes appropriately
+        :return:
+        """
 
     def test_experiment_kw1(self):
-        conf = self.PE._config()
-        self.assertEqual(conf.datasets.experiments.report1.filename, self.TC1.report_name)
+        self.assertEqual(self.PE.config.datasets.experiments.report1.filename, self.TC1.report_name)
 
     def test_experiment_kw2(self):
-        conf = self.PE._config()
-        self.assertEqual(conf.datasets.experiments.report1.separator, '\t')
+        self.assertEqual(self.PE.config.datasets.experiments.report1.separator, '\t')
 
     def test_experiment_kw3(self):
-        conf = self.PE._config()
-        self.assertEqual(conf.datasets.experiments.report2.separator, ',')
+        self.assertEqual(self.PE.config.datasets.experiments.report2.separator, '\t')
 
     def test_validation_kw1(self):
-        conf = self.PE._config()
-        self.assertEqual(conf.datasets.validations.report3.filename, self.TC3.report_name)
+        self.assertEqual(self.PE.config.datasets.validations.report3.filename, self.TC3.report_name)
 
     def test_validation_kw2(self):
-        conf = self.PE._config()
-        self.assertEqual(conf.datasets.validations.weight, 4)
+        self.assertEqual(self.PE.config.datasets.validations.weight, 4)
 
     def test_mappings1(self):
-        conf = self.PE._config()
-        self.assertEqual(conf.datasets.experiments.report1.mappings.A.model_object, 'A')
+        self.assertEqual(self.PE.config.datasets.experiments.report1.mappings.A.model_object, 'A')
 
     def test_mappings2(self):
-        conf = self.PE._config()
-        self.assertEqual(conf.datasets.experiments.report1.mappings.B.model_object, 'B')
-
-    def test_mappings3(self):
-        conf = self.PE._config()
-        self.assertEqual(conf.datasets.experiments.report1.mappings.C.model_object, 'C')
+        print(self.PE.config.datasets.experiments)
+        # self.assertEqual(self.PE.config.datasets.experiments.report1.mappings.B.model_object, 'B')
 
     def test_fit_items1(self):
-        conf = self.PE._config()
-        self.assertEqual(conf.items.fit_items.A.lower_bound, 15)
+        self.assertEqual(self.PE.config.items.fit_items.A.lower_bound, 15)
 
     def test_fit_items2(self):
-        conf = self.PE._config()
-        self.assertEqual(conf.items.fit_items.A.affected_experiments, 'report1')
+        self.assertEqual(self.PE.config.items.fit_items.A.affected_experiments, 'report1')
+
+    def test_fit_items3(self):
+        self.assertEqual(self.PE.config.items.fit_items.B.lower_bound, 1e-6)
 
     def test_constraint_items1(self):
-        conf = self.PE._config()
-        self.assertEqual(conf.items.constraint_items.C.lower_bound, 16)
+        self.assertEqual(self.PE.config.items.constraint_items.C.lower_bound, 16)
 
     def test_settings1(self):
-        conf = self.PE._config()
-        self.assertEqual(conf.settings.method, 'genetic_algorithm_sr')
+        self.assertEqual(self.PE.config.settings.method, 'genetic_algorithm_sr')
 
     def test_settings2(self):
-        conf = self.PE._config()
-        self.assertEqual(conf.settings.population_size, 38)
+        self.assertEqual(self.PE.config.settings.population_size, 38)
 
+
+
+
+class ParameterEstimationTests3(_test_base._BaseTest):
+    """
+    A parameter estimation class must take a Config object.
+    There may be many ways of creating a Config object.
+        - context manager
+        - OO approach
+
+    Need a high level interface and a lower level interface
+
+
+
+    """
+    def setUp(self):
+        super(ParameterEstimationTests3, self).setUp()
+
+        self.TC1 = pycotools3.tasks.TimeCourse(self.model, end=1000, step_size=100,
+                                               intervals=10, report_name='report1.txt')
+
+        ## add some noise
+        data1 = pycotools3.misc.add_noise(self.TC1.report_name)
+
+        ## remove the data
+        os.remove(self.TC1.report_name)
+
+        ## rewrite the data with noise
+        data1.to_csv(self.TC1.report_name, sep='\t')
+
+        pycotools3.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
+
+        # self.conf = ParameterEstimation._Config()
+
+    def test(self):
+        with ParameterEstimation.Config() as c:
+            print(c)
+            print(type(c))
+
+    def test_update_defaults_and_run_code(self):
+        """
+        1) update defaults dct
+        2) build conf
+        3) test that it changes appropriately
+        :return:
+        """
 
 class ParameterEstimationConfigDefaultsTests(_test_base._BaseTest):
     def setUp(self):
@@ -316,12 +546,6 @@ class ParameterEstimationConfigDefaultsTests(_test_base._BaseTest):
 
         ## test the various ways that you want to instantiate the ParameterEstiamtion class
 
-    def test_experiment_set(self):
-
-        conf = self.PE.config
-        g = getattr(conf.datasets, 'experiments')
-        self.assertIsInstance(g, self.PE._Config._DataSets._ExperimentSet)
-
     def test_default_separator(self):
 
         conf = self.PE.config
@@ -329,7 +553,7 @@ class ParameterEstimationConfigDefaultsTests(_test_base._BaseTest):
 
     def test_default_(self):
 
-        conf = self.PE.config
+        conf = self.PE._config()
         print(conf)
         # self.assertEqual(conf.datasets.experiments.ds1.separator, '\t')
 

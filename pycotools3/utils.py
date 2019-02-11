@@ -308,6 +308,10 @@ class ParameterEstimationConfiguration:
 class DotDict(dict):
     """dot.notation access to dictionary attributes"""
 
+    __getattr__ = dict.get
+    __setattr__ = dict.__setitem__
+    __delattr__ = dict.__delitem__
+
     def __init__(self, kwargs, recursive=False):
         super().__init__(kwargs)
 
@@ -316,6 +320,17 @@ class DotDict(dict):
                 if isinstance(self[k], dict):
                     self[k] = DotDict(self[k], recursive=recursive)
 
-    __getattr__ = dict.get
-    __setattr__ = dict.__setitem__
-    __delattr__ = dict.__delitem__
+    @staticmethod
+    def pretty_print(dct, sort_keys=False):
+        """
+        Use json to pretty print a nested dictionary
+        :param sort_keys:
+        :return:
+        """
+        return json.dumps(dct, indent=4, sort_keys=sort_keys)
+
+    def __str__(self):
+        return self.pretty_print(self)
+
+    def __repr__(self):
+        return self.__str__()
