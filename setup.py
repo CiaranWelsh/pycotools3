@@ -49,7 +49,7 @@ setup(
     author='Ciaran Welsh',
     requires=['lxml', 'argparse', 'pandas', 'numpy', 'scipy',
               'matplotlib', 'scipy', 'seaborn', 'sklearn',
-              'retrying', 'psutil', 'tellurium'],
+              'retrying', 'psutil', 'tellurium', 'pyyaml'],
     package_data={'pycotools3': ['*.py',
                                  'Licence.txt',
                                  'Tests/*.py',
@@ -64,7 +64,7 @@ setup(
     license='GPL4',
     install_requires=['pandas', 'numpy', 'scipy', 'matplotlib',
                       'lxml', 'seaborn', 'sklearn', 'psutil',
-                      'tellurium'],
+                      'tellurium', 'pyyaml'],
 
     long_description='A python package for enhancing mathematical'
                      ' modelling using COPASI. This package supports Python 3',
