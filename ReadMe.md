@@ -1,6 +1,8 @@
+[![Build Status](https://travis-ci.com/CiaranWelsh/pycotools3.svg?branch=master)](https://travis-ci.com/CiaranWelsh/pycotools3)
+
 # PyCoTools
 
-A set of tools for interacting with [COPASI simulation software](http://copasi.org/) from Python
+A set of tools for interacting with [COPASI simulation software](http://copasi.org/) from Python 3. 
 
 ## [Tutorials and Documentation](http://pycotools.readthedocs.io/en/latest/)
 
