@@ -310,7 +310,7 @@ class ImportSBML(object):
         Perform conversion using CopasiSE
         :return: 
         """
-        check_call(['CopasiSE', '-i', self.sbml_file])
+        check_call([f'{COPASISE}', '-i', self.sbml_file])
         temp_copasi_file = self.sbml_file + '.cps'
         if not os.path.isfile(temp_copasi_file):
             raise errors.FileDoesNotExistError('SBML file has not been translated. '
@@ -2135,7 +2135,7 @@ class Model(_base._Base):
         if sbml_file is None:
             sbml_file = os.path.join(self.root, self.copasi_file[:-4] + '.sbml')
 
-        os.system('CopasiSE {} -e {}'.format(self.copasi_file, sbml_file))
+        os.system(f'{COPASISE} {self.copasi_file} -e {sbml_file}')
         return sbml_file
 
     def insert_parameters(self, **kwargs):
