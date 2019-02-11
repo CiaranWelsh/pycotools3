@@ -4,7 +4,7 @@ from . import errors
 from . import misc
 from . import model
 import os
-from sys import version_info
+from sys import version_info, platform
 
 if version_info[0] < 3:
     raise RuntimeError('On python version >3 you must use "import pycotools3" rather '
@@ -32,7 +32,8 @@ logging.config.fileConfig(LOG_CONFIG_FILE,
 LOG = logging.getLogger('root')
 
 ## define the list of modules imported with the "from pycotools3 import *" statement
-__all__ = ['tasks', 'model', 'viz']
+__all__ = ['tasks', 'model', 'viz', 'utils']
+
 
 
 

@@ -49,6 +49,26 @@ from subprocess import check_call, call
 from shutil import copy
 from functools import reduce
 
+
+import sys
+
+COPASI_DIR = os.path.join(os.path.dirname(__file__), 'COPASI')
+assert os.path.isdir(COPASI_DIR)
+
+if sys.platform == 'linux':
+    COPASI_DIR = os.path.join(COPASI_DIR, 'linux')
+    COPASISE = os.path.join(COPASI_DIR, 'CopasiSE')
+    COPASIUI = os.path.join(COPASI_DIR, 'CopasiUI')
+
+elif sys.platform == 'win32':
+    COPASI_DIR = os.path.join(COPASI_DIR, 'windows')
+    COPASISE = os.path.join(COPASI_DIR, 'CopasiSE.exe')
+    COPASIUI = os.path.join(COPASI_DIR, 'CopasiUI.exe')
+
+elif sys.platform == 'os2':
+    COPASI_DIR = os.path.join(COPASI_DIR, 'mac')
+
+
 LOG = logging.getLogger(__name__)
 
 try:
@@ -59,6 +79,7 @@ except ImportError:
                 'or if its already installed there could be a problem with tellurium '
                 'and the tellurium functions of PyCoTools will be temporarile unavailable')
     pass
+
 
 
 ## TODO add list of reports property to model
@@ -215,6 +236,7 @@ class BuildAntimony(object):
         if os.path.isfile(self.sbml_file):
             os.remove(self.sbml_file)
 
+
         if isinstance(exc_type, type):
             raise exc_type(exc_val)#.with_traceback(exc_tb)
 
@@ -238,7 +260,8 @@ class BuildAntimony(object):
             raise errors.FileDoesNotExistError('Sbml file does not exist')
 
         ## Perform conversion wtih CopasiSE
-        check_call(['CopasiSE', '-i', self.sbml_file])
+        os.system(f"export PATH={COPASI_DIR}:$PATH; CopasiSE -i {self.sbml_file}")
+
 
         ## copy from temporary copasiSE output name to user specified name
         copy(self.copasiSE_output_file, self.copasi_file)

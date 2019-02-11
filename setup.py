@@ -36,15 +36,7 @@ from sys import platform
 global __version__
 
 
-## platform
-if platform == 'linux':
-    copasi_dir = 'COPASI/linux'
 
-elif platform == 'win32':
-    copasi_dir = 'COPASI/windows'
-
-elif platform == 'os2':
-    copasi_dir = 'COPASI/mac'
 
 
 # version

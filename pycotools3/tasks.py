@@ -24,6 +24,7 @@
 
 
 '''
+# from pycotools3 import COPASI_DIR
 import time
 import threading
 import queue as queue
@@ -51,6 +52,25 @@ from collections import OrderedDict, Mapping
 from .mixin import mixin
 from functools import reduce
 import yaml, json
+import sys
+
+COPASI_DIR = os.path.join(os.path.dirname(__file__), 'COPASI')
+assert os.path.isdir(COPASI_DIR)
+
+if sys.platform == 'linux':
+    COPASI_DIR = os.path.join(COPASI_DIR, 'linux')
+    COPASISE = os.path.join(COPASI_DIR, 'CopasiSE')
+    COPASIUI = os.path.join(COPASI_DIR, 'CopasiUI')
+
+elif sys.platform == 'win32':
+    COPASI_DIR = os.path.join(COPASI_DIR, 'windows')
+    COPASISE = os.path.join(COPASI_DIR, 'CopasiSE.exe')
+    COPASIUI = os.path.join(COPASI_DIR, 'CopasiUI.exe')
+
+elif sys.platform == 'os2':
+    COPASI_DIR = os.path.join(COPASI_DIR, 'mac')
+
+
 
 ## TODO use generators when iterating over a function with another function. i.e. plotting
 ## TODO: create a base class called Task instead of all of these mixin functions.
@@ -418,12 +438,15 @@ class Run(_Task):
 
         """
         self.model = self.read_model(model)
+
         self.kwargs = kwargs
+
 
         self.default_properties = {'task': 'time_course',
                                    'mode': True,
                                    'sge_job_filename': None,
-                                   'copasi_location': 'apps/COPASI/4.21.166-Linux-64bit',  # for sge mode
+                                   'copasi_location': COPASI_DIR
+                                   # 'copasi_location': 'apps/COPASI/4.21.166-Linux-64bit',  # for sge mode
                                    }
 
         self.default_properties.update(self.kwargs)
@@ -432,16 +455,16 @@ class Run(_Task):
         self.check_integrity(list(self.default_properties.keys()), list(self.kwargs.keys()))
         self._do_checks()
 
-        if self.sge_job_filename == None:
+        if self.sge_job_filename is None:
             self.sge_job_filename = os.path.join(os.getcwd(), 'sge_job_file.sh')
 
-        if self.mode is 'slurm':
-            self.copasi_location = r'COPASI/4.22.170'
+        # if self.mode is 'slurm':
+        #     self.copasi_location = r'COPASI/4.22.170'
 
         self.model = self.set_task()
         self.model.save()
 
-        if self.mode == True:
+        if self.mode is True:
             try:
                 self.run()
             except errors.CopasiError:
@@ -485,7 +508,11 @@ class Run(_Task):
         def run(x):
             if os.path.isfile(x) != True:
                 raise errors.FileDoesNotExistError('{} is not a file'.format(self.copasi_file))
-            p = subprocess.Popen(['CopasiSE', self.model.copasi_file])
+            p = subprocess.Popen(
+                [
+                    f'{COPASISE}', self.model.copasi_file
+                ], shell=True
+            )
             return p.pid
 
         Process(run(self.model.copasi_file))
@@ -508,7 +535,9 @@ class Run(_Task):
         '''
         Process the copasi file using CopasiSE
         '''
-        args = ['CopasiSE', "{}".format(self.model.copasi_file)]
+        args = [
+            f'{COPASISE}', f"{self.model.copasi_file}"
+        ]
         p = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         output, err = p.communicate()
         d = {}
@@ -531,7 +560,7 @@ class Run(_Task):
         :return:
         """
         ##TODO find better solution for running copasi files on linux
-        os.system('CopasiSE "{}"'.format(self.model.copasi_file))
+        os.system(f'{COPASISE} {self.model.copasi_file}')
 
     def submit_copasi_job_SGE(self):
         """
