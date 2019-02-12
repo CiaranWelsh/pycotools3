@@ -307,9 +307,9 @@ class DotDictTests(unittest.TestCase):
         self.assertEqual(dct.d.c.b, 7)
 
 
-class ParameterEstimationTests2(_test_base._BaseTest):
+class ParameterEstimationTestsConfig2(_test_base._BaseTest):
     def setUp(self):
-        super(ParameterEstimationTests2, self).setUp()
+        super(ParameterEstimationTestsConfig2, self).setUp()
 
         self.TC1 = pycotools3.tasks.TimeCourse(self.model, end=1000, step_size=100,
                                                intervals=10, report_name='report1.txt')
@@ -352,16 +352,19 @@ class ParameterEstimationTests2(_test_base._BaseTest):
         pycotools3.misc.correct_copasi_timecourse_headers(self.TC3.report_name)
         pycotools3.misc.correct_copasi_timecourse_headers(self.TC4.report_name)
         pycotools3.misc.correct_copasi_timecourse_headers(self.TC5.report_name)
-
         self.config = ParameterEstimation.Config(
             models={
-                'model1': self.model
+                'model1': {
+                    'copasi_file': self.model.copasi_file,
+                    'results_directory': os.path.join(self.model.root, 'ParameterEstimationResults')
+                },
             },
             datasets={
                 'weight_method': 'value_scaling',
                 'experiments': {
                     'report1': {
                         'filename': self.TC1.report_name,
+                        'affected_models': 'all',
                         'mappings': {
                             'Time': {
                                 'model_object': 'Time',
@@ -370,8 +373,7 @@ class ParameterEstimationTests2(_test_base._BaseTest):
                             'A': {
                                 'model_object': 'A',
                                 'role': 'dependent',
-                            }
-
+                            },
                         }
                     },
                     'report2': {
@@ -383,7 +385,9 @@ class ParameterEstimationTests2(_test_base._BaseTest):
                     'weight': 4,
                     'threshold': 8.5,
                     'report3': {
-                        'filename': self.TC3.report_name
+                        'filename': self.TC3.report_name,
+                        'affected_models': 'model1',
+
                     }
                 }
             },
@@ -396,6 +400,7 @@ class ParameterEstimationTests2(_test_base._BaseTest):
                         'upper_bound': 35,
                         'affected_experiments': 'report1',
                         'affected_validation_experiments': 'report3',
+                        'affected_models': 'all',
                         'start_value': 17.5
                     },
                     'B': {},
@@ -420,6 +425,10 @@ class ParameterEstimationTests2(_test_base._BaseTest):
         )
         self.PE = ParameterEstimation(self.config)
 
+    def test___str__(self):
+        string = "{'model1': Model(name=New_Model, time_unit=s, volume_unit=ml, quantity_unit=mmol)}"
+        self.assertEqual(str(self.config.models), string)
+
     def test_update_defaults_and_run_code(self):
         """
         1) update defaults dct
@@ -427,6 +436,7 @@ class ParameterEstimationTests2(_test_base._BaseTest):
         3) test that it changes appropriately
         :return:
         """
+        self.PE.config.models.model1
 
     def test_experiment_kw1(self):
         self.assertEqual(self.PE.config.datasets.experiments.report1.filename, self.TC1.report_name)
@@ -437,18 +447,34 @@ class ParameterEstimationTests2(_test_base._BaseTest):
     def test_experiment_kw3(self):
         self.assertEqual(self.PE.config.datasets.experiments.report2.separator, '\t')
 
+    def test_experiment_kw4(self):
+        print(self.PE.config.datasets.experiments.report2.mappings)
+        # self.assertEqual(self.PE.config.datasets.experiments.report2.mappings, '\t')
+
     def test_validation_kw1(self):
         self.assertEqual(self.PE.config.datasets.validations.report3.filename, self.TC3.report_name)
 
     def test_validation_kw2(self):
         self.assertEqual(self.PE.config.datasets.validations.weight, 4)
 
+    def test_validation_mapppings1(self):
+        # self.PE.config
+        self.assertEqual(self.PE.config.datasets.validations.report3.mappings.C.object_type, 'Metabolite')
+
     def test_mappings1(self):
         self.assertEqual(self.PE.config.datasets.experiments.report1.mappings.A.model_object, 'A')
 
     def test_mappings2(self):
-        print(self.PE.config.datasets.experiments)
+        print(self.PE.config.model_objects)
         # self.assertEqual(self.PE.config.datasets.experiments.report1.mappings.B.model_object, 'B')
+
+    def test_mappings3(self):
+        self.assertEqual(
+            self.PE.config.datasets.experiments.report2.
+                mappings.B.model_object, 'B')
+
+    def test_weight_method_updates(self):
+        pass
 
     def test_fit_items1(self):
         self.assertEqual(self.PE.config.items.fit_items.A.lower_bound, 15)
@@ -468,52 +494,23 @@ class ParameterEstimationTests2(_test_base._BaseTest):
     def test_settings2(self):
         self.assertEqual(self.PE.config.settings.population_size, 38)
 
-
-
-
-class ParameterEstimationTests3(_test_base._BaseTest):
-    """
-    A parameter estimation class must take a Config object.
-    There may be many ways of creating a Config object.
-        - context manager
-        - OO approach
-
-    Need a high level interface and a lower level interface
-
-
-
-    """
-    def setUp(self):
-        super(ParameterEstimationTests3, self).setUp()
-
-        self.TC1 = pycotools3.tasks.TimeCourse(self.model, end=1000, step_size=100,
-                                               intervals=10, report_name='report1.txt')
-
-        ## add some noise
-        data1 = pycotools3.misc.add_noise(self.TC1.report_name)
-
-        ## remove the data
-        os.remove(self.TC1.report_name)
-
-        ## rewrite the data with noise
-        data1.to_csv(self.TC1.report_name, sep='\t')
-
-        pycotools3.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
-
-        # self.conf = ParameterEstimation._Config()
-
-    def test(self):
-        with ParameterEstimation.Config() as c:
-            print(c)
-            print(type(c))
-
-    def test_update_defaults_and_run_code(self):
+    def test_iteration(self):
         """
-        1) update defaults dct
-        2) build conf
-        3) test that it changes appropriately
+        tests that it is possible to iterate over a Conffig obj
         :return:
         """
+        ## will error if cannot iter
+        l = []
+        for i in self.PE.config:
+            l.append(i)
+        expected = [
+            'models',
+            'datasets',
+            'items',
+            'settings',
+        ]
+        self.assertListEqual(sorted(expected), sorted(l))
+
 
 class ParameterEstimationConfigDefaultsTests(_test_base._BaseTest):
     def setUp(self):
@@ -622,32 +619,96 @@ class ParameterEstimationTests(_test_base._BaseTest):
 
         }
 
-        self.PE = pycotools3.tasks.ParameterEstimation(self.model,
-                                                       [self.TC1.report_name, self.TC2.report_name,
-                                                        self.TC3.report_name, self.TC4.report_name,
-                                                        self.TC5.report_name],
-                                                       validation=[False, True, True, False, False],
-                                                       affected_experiments=self.affected_experiments,
-                                                       affected_validation_experiments=self.affected_validation_experiments,
-                                                       method='genetic_algorithm',
-                                                       population_size=10,
-                                                       number_of_generations=10,
-                                                       report_name='PE_report_name',
-                                                       overwrite_config_file=True,
-                                                       validation_weight=2.5,
-                                                       validation_threshold=9.5,
-                                                       weight_method=['value_scaling'] * 5
-                                                       )
+        self.conf_dct = dict(
+            models=dict(
+                model1=dict(
+                    copasi_file=self.model.copasi_file,
+                    results_directory=os.path.join(self.model.root, 'ParameterEstimationResults'))
+                ),
+            datasets=dict(
+                experiments=dict(
+                    weight_method='value_scaling',
+                    report1=dict(
+                        filename=self.TC1.report_name,
+                    ),
+                    report4=dict(
+                        filename=self.TC4.report_name
+                    ),
+                    report5=dict(
+                        filename=self.TC5.report_name
+                    )
+                ),
+                validations=dict(
+                    weight=2.5,
+                    threshold=9,
+                    report2=dict(
+                        filename=self.TC2.report_name
+                    ),
+                    report3=dict(
+                        filename=self.TC3.report_name
+                    )
+                )
+            ),
+            items=dict(
+                fit_items=dict(
+                    A=dict(
+                        affected_experiments=['report1', 'report4']
+                    ),
+                    B=dict(
+                        affected_validation_experiments=['report2']
+                    ),
+                    C={},
+                    A2B={},
+                    B2C={},
+                    B2C_0_k2={},
+                    C2A_k1={},
+                    ADeg_k1={},
+                )
+            ),
+            settings=dict(
+                method='genetic_algorithm_sr',
+                population_size=10,
+                number_of_generations=10,
+            )
+        )
+        self.conf = ParameterEstimation.Config(**self.conf_dct)
+
+        self.PE = pycotools3.tasks.ParameterEstimation(self.conf)
+
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
 
-    def test_sdfs(self):
-        print(self.PE)
+    def test_load_model(self):
+        self.assertIsInstance(self.PE.config.models.model1.model, pycotools3.model.Model)
+
+    def test_create_output_directory(self):
+        results_directory = os.path.join(self.model.root, 'ParameterEstimationResults')
+        self.assertEqual(self.PE.config.models.model1.results_directory, results_directory)
+
+    def test_metabolites(self):
+        self.PE.metabolites
+
+    def test_configure_report(self):
+        print(self.PE.config)
+
+    def test_report_name(self):
+        """
+        Might need to do another for scan!!
+        :return:
+        """
         # self.PE.write_config_file()
-        # self.PE.setup()
-        # self.PE.model.open()
+        self.PE.setup()
+        report = False
+        for i in self.PE.model.xml.xpath('//*[@name="Parameter Estimation"]'):
+            if i.tag == '{http://www.copasi.org/static/schema}Task':
+                for j in i:
+                    if j.tag == '{http://www.copasi.org/static/schema}Report':
+                        report = j.attrib['target']
+        self.assertEqual(self.PE.report_name, report)
+
+        self.assertTrue(self.PE.report_name == 'PE_report_name')
 
     def test_affected_experiments(self):
-        self.PE.write_config_file()
+        # self.PE.write_config_file()
         self.PE.setup()
         xml = self.PE.model.xml
         count = 0
@@ -671,23 +732,6 @@ class ParameterEstimationTests(_test_base._BaseTest):
 
         ## only 1 of 3 experiment datasets has affected validation experiments
         self.assertEqual(count, 1)
-
-    def test_report_name(self):
-        """
-        Might need to do another for scan!!
-        :return:
-        """
-        self.PE.write_config_file()
-        self.PE.setup()
-        report = False
-        for i in self.PE.model.xml.xpath('//*[@name="Parameter Estimation"]'):
-            if i.tag == '{http://www.copasi.org/static/schema}Task':
-                for j in i:
-                    if j.tag == '{http://www.copasi.org/static/schema}Report':
-                        report = j.attrib['target']
-        self.assertEqual(self.PE.report_name, report)
-
-        self.assertTrue(self.PE.report_name == 'PE_report_name')
 
     def test_get_experiment_keys1(self):
         experiment_keys = self.PE._get_experiment_keys()
@@ -713,16 +757,16 @@ class ParameterEstimationTests(_test_base._BaseTest):
         self.PE.write_config_file()
         self.assertTrue(os.path.isfile(self.PE.config_filename))
 
-    def test_read_config_file(self):
-        """
-        A test that PE writes the config file to the
-        right place
-        :return:
-        """
-        from collections import OrderedDict
-        self.PE._read_config_file()
-        self.assertIsInstance(self.PE.mappings, OrderedDict)
-        self.assertIsInstance(self.PE.optimization_item_list, pandas.DataFrame)
+    # def test_read_config_file(self):
+    #     """
+    #     A test that PE writes the config file to the
+    #     right place
+    #     :return:
+    #     """
+    #     from collections import OrderedDict
+    #     self.PE._read_config_file()
+    #     self.assertIsInstance(self.PE.mappings, OrderedDict)
+    #     self.assertIsInstance(self.PE.optimization_item_list, pandas.DataFrame)
 
     def test_insert_fit_items(self):
         '''

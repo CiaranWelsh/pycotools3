@@ -37,6 +37,7 @@ from . import misc
 # import errors, misc, viz
 from . import _base
 from . import tasks
+from .utils import load_copasi
 
 import pandas
 import re
@@ -52,21 +53,7 @@ from functools import reduce
 
 import sys
 
-COPASI_DIR = os.path.join(os.path.dirname(__file__), 'COPASI')
-assert os.path.isdir(COPASI_DIR)
-
-if sys.platform == 'linux':
-    COPASI_DIR = os.path.join(COPASI_DIR, 'linux')
-    COPASISE = os.path.join(COPASI_DIR, 'CopasiSE')
-    COPASIUI = os.path.join(COPASI_DIR, 'CopasiUI')
-
-elif sys.platform == 'win32':
-    COPASI_DIR = os.path.join(COPASI_DIR, 'windows')
-    COPASISE = os.path.join(COPASI_DIR, 'CopasiSE.exe')
-    COPASIUI = os.path.join(COPASI_DIR, 'CopasiUI.exe')
-
-elif sys.platform == 'os2':
-    COPASI_DIR = os.path.join(COPASI_DIR, 'mac')
+COPASISE, COPASIUI = load_copasi()
 
 
 LOG = logging.getLogger(__name__)
@@ -260,7 +247,7 @@ class BuildAntimony(object):
             raise errors.FileDoesNotExistError('Sbml file does not exist')
 
         ## Perform conversion wtih CopasiSE
-        os.system(f"export PATH={COPASI_DIR}:$PATH; CopasiSE -i {self.sbml_file}")
+        os.system(f"{COPASISE} -i {self.sbml_file}")
 
 
         ## copy from temporary copasiSE output name to user specified name
@@ -1799,7 +1786,9 @@ class Model(_base._Base):
         if as_temp:
             copasi_temp = os.path.join(self.root, os.path.split(self.copasi_file)[1][:-4] + '_1.cps')
         self.save(copasi_file)
-        os.system('CopasiUI "{}"'.format(copasi_file))
+        cmd = '{} "{}"'.format(COPASIUI, copasi_file)
+        print('cmd', cmd)
+        os.system(cmd)
         if as_temp:
             os.remove(copasi_temp)
 

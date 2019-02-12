@@ -27,6 +27,7 @@ import logging
 import re
 from collections import OrderedDict, Mapping
 import json
+import sys
 
 LOG = logging.getLogger(__name__)
 
@@ -48,6 +49,42 @@ def format_timecourse_data(report_name):
     os.remove(report_name)
     df.to_csv(report_name, sep='\t', index=False)
     return df
+
+
+
+def load_copasi():
+    COPASI_DIR = os.path.join(os.path.dirname(__file__), 'COPASI')
+    assert os.path.isdir(COPASI_DIR)
+
+    if sys.platform == 'linux':
+        LINUX_DIR = os.path.join(COPASI_DIR, 'linux')
+
+        if not os.path.isdir(LINUX_DIR):
+            raise ValueError(f"{LINUX_DIR} is not a directory")
+
+        BIN_DIR = os.path.join(LINUX_DIR, 'bin')
+        if not os.path.isdir(BIN_DIR):
+            raise ValueError(f"{BIN_DIR} is not a directory")
+
+        COPASISE = os.path.join(BIN_DIR, 'CopasiSE')
+
+        if not os.path.isfile(COPASISE):
+            raise ValueError(f"{COPASISE} is not a file")
+
+        COPASIUI = os.path.join(BIN_DIR, 'CopasiUI')
+
+        if not os.path.isfile(COPASIUI):
+            raise ValueError(f"{COPASIUI} is not a file")
+
+    elif sys.platform == 'win32':
+        COPASI_DIR = os.path.join(COPASI_DIR, 'windows')
+        COPASISE = os.path.join(COPASI_DIR, 'CopasiSE.exe')
+        COPASIUI = os.path.join(COPASI_DIR, 'CopasiUI.exe')
+
+    elif sys.platform == 'os2':
+        COPASI_DIR = os.path.join(COPASI_DIR, 'mac')
+
+    return COPASISE, COPASIUI
 
 
 class ParameterEstimationConfiguration:
@@ -308,7 +345,7 @@ class ParameterEstimationConfiguration:
 class DotDict(dict):
     """dot.notation access to dictionary attributes"""
 
-    __getattr__ = dict.get
+    # __getattr__ = dict.get
     __setattr__ = dict.__setitem__
     __delattr__ = dict.__delitem__
 
@@ -320,6 +357,13 @@ class DotDict(dict):
                 if isinstance(self[k], dict):
                     self[k] = DotDict(self[k], recursive=recursive)
 
+    def __getattr__(self, item):
+        ans = self.get(item)
+        if ans is None:
+            raise ValueError(f'"{item}" is not a valid attribute of this DotDict')
+
+        return ans
+
     @staticmethod
     def pretty_print(dct, sort_keys=False):
         """
@@ -327,10 +371,29 @@ class DotDict(dict):
         :param sort_keys:
         :return:
         """
-        return json.dumps(dct, indent=4, sort_keys=sort_keys)
+        if dct is None:
+            raise ValueError('Cannot pretty print Null')
+
+        def stringify(dct):
+            """
+            recursively convert all objects of nested dct
+            to strings before printing
+            :param dct:
+            :return:
+            """
+            for k, v in dct.items():
+                if isinstance(v, dict):
+                    stringify(dct[k])
+                else:
+                    dct[k] = str(v)
+            return dct
+
+        return json.dumps(stringify(dct), indent=4, sort_keys=sort_keys)
 
     def __str__(self):
         return self.pretty_print(self)
 
     def __repr__(self):
         return self.__str__()
+
+

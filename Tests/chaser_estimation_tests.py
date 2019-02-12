@@ -84,7 +84,7 @@ class ChaserParameterEstimationTests(unittest.TestCase):
         self.copy_number = 2
         self.pe_number = 3
 
-        self.MPE = tasks.MultiParameterEstimation(
+        self.MPE = tasks.ParameterEstimation(
             self.mod,
             self.TC1.report_name,
             copy_number=self.copy_number,
