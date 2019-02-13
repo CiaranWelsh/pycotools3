@@ -230,21 +230,6 @@ Date:
 
 
 
-"""
-By default, make the user enter all the necessary information 
-for parameter estimation. This is insteady of including all model 
-items as fit items by default. 
-
-However, when you rewrite write_config_file method, implement a means
-of easily producing a config file with items already in it. 
-
-Is there a shortcut method for implementing this. 
-"""
-
-
-
-
-
 
 
 
@@ -255,6 +240,7 @@ import pandas
 import re
 from Tests import _test_base
 from pycotools3.tasks import ParameterEstimation
+from pycotools3.utils import DotDict
 
 
 def parse_timecourse(self):
@@ -305,6 +291,17 @@ class DotDictTests(unittest.TestCase):
         }
         dct = DotDict(dct, recursive=True)
         self.assertEqual(dct.d.c.b, 7)
+
+    def test4(self):
+        dct = {
+            'd': {
+                'c': {
+                    'b': 7
+                }
+            }
+        }
+        dct = DotDict(dct, recursive=True)
+        self.assertListEqual(dct.lev(0), ['d'])
 
 
 class ParameterEstimationTestsConfig2(_test_base._BaseTest):
@@ -684,28 +681,74 @@ class ParameterEstimationTests(_test_base._BaseTest):
         results_directory = os.path.join(self.model.root, 'ParameterEstimationResults')
         self.assertEqual(self.PE.config.models.model1.results_directory, results_directory)
 
+    def test_get_model_obj_from_strings(self):
+        self.assertEqual(len(self.PE.get_model_objects_from_strings()), 9)
+
     def test_metabolites(self):
-        self.PE.metabolites
+        metabs = ['A', 'B', 'C']
+        self.assertListEqual(sorted(metabs), sorted(self.PE.metabolites))
 
-    def test_configure_report(self):
-        print(self.PE.config)
+    def test_global_quantities(self):
+        glo = ['A2B', 'ADeg_k1', 'B2C', 'B2C_0_k2', 'C2A_k1', 'ThisIsAssignment']
+        self.assertListEqual(sorted(glo), sorted(self.PE.global_quantities))
 
-    def test_report_name(self):
-        """
-        Might need to do another for scan!!
-        :return:
-        """
-        # self.PE.write_config_file()
-        self.PE.setup()
-        report = False
-        for i in self.PE.model.xml.xpath('//*[@name="Parameter Estimation"]'):
+    def test_local_parameter(self):
+        loc = []
+        self.assertListEqual(sorted(loc), sorted(self.PE.local_parameters))
+
+    def test_report_arguments(self):
+        dct = {
+            'metabolites': ['A', 'B', 'C'],
+            'global_quantities': sorted(['C2A_k1', 'A2B', 'ADeg_k1', 'ThisIsAssignment', 'B2C', 'B2C_0_k2']),
+            'local_parameters': [],
+            'quantity_type': 'concentration',
+            'report_name': 'PEData.txt', 'append': False, 'confirm_overwrite': False, 'report_type': 'multi_parameter_estimation'}
+        report = self.PE._report_arguments
+        for i in report:
+            if isinstance(report[i], list):
+                report[i] = sorted(report[i])
+
+        self.assertEqual(report, dct)
+
+    def test_define_report(self):
+        models = self.PE._define_report()
+        model = models['model1'].model
+        for i in model.xml.xpath('//*[@name="Parameter Estimation"]'):
             if i.tag == '{http://www.copasi.org/static/schema}Task':
                 for j in i:
                     if j.tag == '{http://www.copasi.org/static/schema}Report':
                         report = j.attrib['target']
-        self.assertEqual(self.PE.report_name, report)
+        self.assertEqual(self.PE.config.settings.report_name, 'PEData.txt')
 
-        self.assertTrue(self.PE.report_name == 'PE_report_name')
+    def test_get_report_key(self):
+        keys = self.PE._get_report_key()
+        expected = {'model1': 'Report_32'}
+        self.assertEqual(expected, keys)
+
+    def test_get_experiment_keys1(self):
+        experiment_keys = self.PE._get_experiment_keys()
+        print(experiment_keys)
+        self.assertEqual(experiment_keys['report1'], 'Experiment_0')
+
+    def test_get_validation_keys1(self):
+        experiment_keys = self.PE._get_validation_keys()
+        print(experiment_keys)
+        self.assertEqual(experiment_keys['report2'], 'Experiment_1')
+
+    def test_get_experiment_keys2(self):
+        experiment_keys = self.PE._get_experiment_keys()
+        print(experiment_keys)
+        self.assertEqual(len(experiment_keys), 3)
+
+    def test_write_config_file(self):
+        """
+        A test that PE writes the config file to the
+        right place
+        :return:
+        """
+        self.PE.write_config_file()
+        self.assertTrue(os.path.isfile(self.PE.config_filename))
+
 
     def test_affected_experiments(self):
         # self.PE.write_config_file()
@@ -732,30 +775,6 @@ class ParameterEstimationTests(_test_base._BaseTest):
 
         ## only 1 of 3 experiment datasets has affected validation experiments
         self.assertEqual(count, 1)
-
-    def test_get_experiment_keys1(self):
-        experiment_keys = self.PE._get_experiment_keys()
-        print(experiment_keys)
-        self.assertEqual(experiment_keys['report1'], 'Experiment_0')
-
-    def test_get_validation_keys1(self):
-        experiment_keys = self.PE._get_validation_keys()
-        print(experiment_keys)
-        self.assertEqual(experiment_keys['report2'], 'Experiment_1')
-
-    def test_get_experiment_keys2(self):
-        experiment_keys = self.PE._get_experiment_keys()
-        print(experiment_keys)
-        self.assertEqual(len(experiment_keys), 3)
-
-    def test_write_config_file(self):
-        """
-        A test that PE writes the config file to the
-        right place
-        :return:
-        """
-        self.PE.write_config_file()
-        self.assertTrue(os.path.isfile(self.PE.config_filename))
 
     # def test_read_config_file(self):
     #     """
@@ -1064,81 +1083,61 @@ class ExperimentMapperTests(_test_base._BaseTest):
 
         ss_df.to_csv(self.report4, sep='\t', index=False)
 
-        self.PE = pycotools3.tasks.ParameterEstimation(
-            self.model,
-            [self.TC1.report_name,
-             self.TC2.report_name,
-             self.report3,
-             self.report4],
-            metabolites=['A', 'B'],
-            global_quantities=['A2B', 'B2C', 'B2C_0_k2', 'C2A_k1'],
-            experiment_type=['timecourse', 'timecourse',
-                             'timecourse', 'steadystate'],
-            validation=[False, True, True, False],
-            validation_weight=2,
-            validation_thershold=6,
-            overwrite_config_file=True,
-            weight_method=['value_scaling'] * 4,
-            upper_bound=500000,
-            lower_bound=0.001,
-            upper_bound_dct={'A': 39486, 'A2B': 98647},
-            lower_bound_dct={'B2C': 72414}
+        self.conf_dct = dict(
+            models=dict(
+                model1=dict(
+                    copasi_file=self.model.copasi_file,
+                    results_directory=os.path.join(self.model.root, 'ParameterEstimationResults'))
+            ),
+            datasets=dict(
+                experiments=dict(
+                    weight_method='value_scaling',
+                    report1=dict(
+                        filename=self.TC1.report_name,
+                    ),
+                    report2=dict(
+                        filename=self.TC2.report_name
+                    ),
+                    ss=dict(
+                        filename=self.report4
+                    )
+                ),
+                validations=dict(
+                    weight=2.5,
+                    threshold=9,
+                    report3=dict(
+                        filename=self.report3
+                    ),
+                )
+            ),
+            items=dict(
+                fit_items=dict(
+                    A=dict(
+                        affected_experiments=['report1', 'report4']
+                    ),
+                    B=dict(
+                        affected_validation_experiments=['report2']
+                    ),
+                    C={},
+                    A2B={},
+                    B2C={},
+                    B2C_0_k2={},
+                    C2A_k1={},
+                    ADeg_k1={},
+                )
+            ),
+            settings=dict(
+                method='genetic_algorithm_sr',
+                population_size=10,
+                number_of_generations=10,
+            )
         )
-        self.PE.write_config_file()
-        self.PE.setup()
+        self.conf = ParameterEstimation.Config(**self.conf_dct)
+        self.PE = pycotools3.tasks.ParameterEstimation(self.conf)
+        # self.PE.write_config_file()
+        # self.PE.setup()
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
 
-    def test_lower_bound_dct(self):
-        ref = r'CN=Root,Model=New_Model,Vector=Values[B2C],Reference=InitialValue'
-        query = '//*[@name="FitItem"]'
-        for i in self.PE.model.xml.xpath(query):
-            for j in i:
-                if j.attrib['name'] == 'ObjectCN':
-                    if j.attrib['value'] == ref:
-                        for k in j.getparent():
-                            if k.attrib['name'] == 'LowerBound':
-                                lower_bound_value = k.attrib['value']
-        self.assertEqual(float(self.PE.lower_bound_dct['B2C']),
-                         float(lower_bound_value))
-
-    def test_lower_bound_dct2(self):
-        ref = r'CN=Root,Model=New_Model,Vector=Values[B2C],Reference=InitialValue'
-        query = '//*[@name="FitItem"]'
-        for i in self.PE.model.xml.xpath(query):
-            for j in i:
-                if j.attrib['name'] == 'ObjectCN':
-                    if j.attrib['value'] == ref:
-                        for k in j.getparent():
-                            if k.attrib['name'] == 'UpperBound':
-                                upper_bound_value = k.attrib['value']
-        self.assertEqual(float(self.PE.upper_bound),
-                         float(upper_bound_value))
-
-    def test_upper_bound_dct(self):
-        ref = r'CN=Root,Model=New_Model,Vector=Values[A2B],Reference=InitialValue'
-        query = '//*[@name="FitItem"]'
-        for i in self.PE.model.xml.xpath(query):
-            for j in i:
-                if j.attrib['name'] == 'ObjectCN':
-                    if j.attrib['value'] == ref:
-                        for k in j.getparent():
-                            if k.attrib['name'] == 'UpperBound':
-                                upper_bound_value = k.attrib['value']
-        self.assertEqual(float(self.PE.upper_bound_dct['A2B']),
-                         float(upper_bound_value))
-
-    def test_upper_bound_dct2(self):
-        ref = r'CN=Root,Model=New_Model,Vector=Values[A2B],Reference=InitialValue'
-        query = '//*[@name="FitItem"]'
-        for i in self.PE.model.xml.xpath(query):
-            for j in i:
-                if j.attrib['name'] == 'ObjectCN':
-                    if j.attrib['value'] == ref:
-                        for k in j.getparent():
-                            if k.attrib['name'] == 'LowerBound':
-                                lower_bound_value = k.attrib['value']
-        self.assertEqual(float(self.PE.lower_bound),
-                         float(lower_bound_value))
 
     def test_metabolite_entries(self):
         """
@@ -1160,6 +1159,9 @@ class ExperimentMapperTests(_test_base._BaseTest):
             if 'ADeg_k1' == i:
                 bool = True
         self.assertFalse(bool)
+
+    def test(self):
+        self.PE._map_experiments()
 
     def test_experiment(self):
         """
@@ -1352,6 +1354,12 @@ class ExperimentMapperTests(_test_base._BaseTest):
                         count += 1
         self.assertEqual(count, 2)
 
+    def test_experiments_property(self):
+        self.assertListEqual(self.PE._experiments['model1'], [])
+
+    def test_validation_property(self):
+        self.assertListEqual(self.PE._validations['model1'], [])
+
     def test_experiment_correct_number_of_validation_obj_maps(self):
         """
         First row of experiment_0==1
@@ -1367,6 +1375,69 @@ class ExperimentMapperTests(_test_base._BaseTest):
                         count += 1
         self.assertEqual(count, 2)
 
+    def test_get_experiment_keys(self):
+        dct = self.PE._get_experiment_keys()
+        self.assertEqual(dct['model1']['report1'], 'Experiment_report1')
+
+    def test_get_validation_keys(self):
+        dct = self.PE._get_validation_keys()
+        print(dct)
+        self.assertEqual(dct['model1']['report3'], 'Experiment_report3')
+
+    def test_create_experiment(self):
+        self.PE._create_experiment(0)
+
+    # def test_lower_bound_dct(self):
+    #     ref = r'CN=Root,Model=New_Model,Vector=Values[B2C],Reference=InitialValue'
+    #     query = '//*[@name="FitItem"]'
+    #     for i in self.PE.model.xml.xpath(query):
+    #         for j in i:
+    #             if j.attrib['name'] == 'ObjectCN':
+    #                 if j.attrib['value'] == ref:
+    #                     for k in j.getparent():
+    #                         if k.attrib['name'] == 'LowerBound':
+    #                             lower_bound_value = k.attrib['value']
+    #     self.assertEqual(float(self.PE.lower_bound_dct['B2C']),
+    #                      float(lower_bound_value))
+    #
+    # def test_lower_bound_dct2(self):
+    #     ref = r'CN=Root,Model=New_Model,Vector=Values[B2C],Reference=InitialValue'
+    #     query = '//*[@name="FitItem"]'
+    #     for i in self.PE.model.xml.xpath(query):
+    #         for j in i:
+    #             if j.attrib['name'] == 'ObjectCN':
+    #                 if j.attrib['value'] == ref:
+    #                     for k in j.getparent():
+    #                         if k.attrib['name'] == 'UpperBound':
+    #                             upper_bound_value = k.attrib['value']
+    #     self.assertEqual(float(self.PE.upper_bound),
+    #                      float(upper_bound_value))
+    #
+    # def test_upper_bound_dct(self):
+    #     ref = r'CN=Root,Model=New_Model,Vector=Values[A2B],Reference=InitialValue'
+    #     query = '//*[@name="FitItem"]'
+    #     for i in self.PE.model.xml.xpath(query):
+    #         for j in i:
+    #             if j.attrib['name'] == 'ObjectCN':
+    #                 if j.attrib['value'] == ref:
+    #                     for k in j.getparent():
+    #                         if k.attrib['name'] == 'UpperBound':
+    #                             upper_bound_value = k.attrib['value']
+    #     self.assertEqual(float(self.PE.upper_bound_dct['A2B']),
+    #                      float(upper_bound_value))
+    #
+    # def test_upper_bound_dct2(self):
+    #     ref = r'CN=Root,Model=New_Model,Vector=Values[A2B],Reference=InitialValue'
+    #     query = '//*[@name="FitItem"]'
+    #     for i in self.PE.model.xml.xpath(query):
+    #         for j in i:
+    #             if j.attrib['name'] == 'ObjectCN':
+    #                 if j.attrib['value'] == ref:
+    #                     for k in j.getparent():
+    #                         if k.attrib['name'] == 'LowerBound':
+    #                             lower_bound_value = k.attrib['value']
+    #     self.assertEqual(float(self.PE.lower_bound),
+    #                      float(lower_bound_value))
 
 if __name__ == '__main__':
     unittest.main()

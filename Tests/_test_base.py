@@ -44,9 +44,9 @@ class _BaseTest(unittest.TestCase):
                           ADeg: A => ; nuc*ADeg_k1*A;
                         
                           // Species initializations:
-                          A = 0.999999999999998;
-                          B = 0.999999999999998;
-                          C = 0.999999999999998;
+                          A = 1
+                          B = 1
+                          C = 1
                         
                           // Compartment initializations:
                           nuc = 1;

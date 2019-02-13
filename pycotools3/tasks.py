@@ -2316,8 +2316,6 @@ class _ConfigBase:
     def __repr__(self):
         return self.__str__()
 
-
-
     # def __next__(self):
     #     return self.kwargs.__next__()
 
@@ -2461,9 +2459,8 @@ class ParameterEstimation(_Task):
                 if experiment_dataset.mappings == {}:
                     experiment_dataset.mappings = DotDict(self.mappings_defaults(
                         experiment_dataset.filename, experiment_dataset.separator
-                        ), recursive=True
+                    ), recursive=True
                     )
-
 
                 for mapping in experiment_dataset.mappings:
                     mapp = experiment_dataset.mappings.get(mapping)
@@ -2472,7 +2469,8 @@ class ParameterEstimation(_Task):
                         model_keys = list(self.models.keys())
                         mod = self.models[model_keys[0]].model
                         model_obj = self.get_variable_from_string(
-                            mod, mapp.model_object
+                            mod,
+                            mapp.model_object[:-6] if mapp.model_object[-6:] == '_indep' else mapp.model_object
                         )
                         if mapp == {}:
                             mapp = {
@@ -2483,9 +2481,6 @@ class ParameterEstimation(_Task):
                         else:
                             mapp.update({'object_type': type(model_obj).__name__})
                     self.datasets.experiments[experiment].mappings[mapping] = mapp
-
-
-
 
             validations = self.datasets.validations
             if 'weight' not in validations:
@@ -2501,13 +2496,11 @@ class ParameterEstimation(_Task):
                     if default_kwarg not in validation_dataset:
                         validation_dataset[default_kwarg] = validation_defaults[default_kwarg]
 
-
                 if validation_dataset.mappings == {}:
                     validation_dataset.mappings = DotDict(self.mappings_defaults(
                         validation_dataset.filename, validation_dataset.separator
-                        ), recursive=True
+                    ), recursive=True
                     )
-
 
                 for mapping in validation_dataset.mappings:
                     mapp = validation_dataset.mappings.get(mapping)
@@ -2515,7 +2508,9 @@ class ParameterEstimation(_Task):
                         model_keys = list(self.models.keys())
                         mod = self.models[model_keys[0]].model
                         model_obj = self.get_variable_from_string(
-                            mod, mapp.model_object
+                            mod,
+                            mapp.model_object[:-6] if mapp.model_object[-6:] == '_indep' else mapp.model_object
+
                         )
                         if mapp == {}:
                             mapp = {
@@ -2526,7 +2521,6 @@ class ParameterEstimation(_Task):
                         else:
                             mapp.update({'object_type': type(model_obj).__name__})
                     self.datasets.validations[validation_experiment].mappings[mapping] = mapp
-
 
             for fit_item in self.items.fit_items:
                 item = self.items.fit_items.get(fit_item)
@@ -2540,7 +2534,7 @@ class ParameterEstimation(_Task):
                             item[i] = self.fit_item_defaults[i]
                 self.items.fit_items[fit_item] = DotDict(item)
 
-            if self.items.constraint_items is not None:
+            if 'constraint_items' in self.items:
 
                 for constraint_item in self.items.constraint_items:
                     item = self.items.constraint_items.get(constraint_item)
@@ -2612,7 +2606,6 @@ class ParameterEstimation(_Task):
                     'role': roles[i]
                 } for i in list(df.columns)
             }
-
 
         @property
         def experiment_defaults(self):
@@ -2709,7 +2702,9 @@ class ParameterEstimation(_Task):
                 'start_value': 0.1,
                 'save': False,
                 'run_mode': True,
-                'working_directory': ''
+                'working_directory': '',
+                'quantity_type': 'concentration',
+                'report_name': 'PEData.txt'
             }
 
         @settings_defaults.setter
@@ -2762,7 +2757,6 @@ class ParameterEstimation(_Task):
             for i in self.experiment_names:
                 print(self.experiments[i].mappings)
 
-
         @property
         def model_objects(self):
             model_obj = []
@@ -2776,10 +2770,7 @@ class ParameterEstimation(_Task):
                     if self.validations[i].mappings[j] is not None:
                         model_obj.append(self.validations[i].mappings[j].model_object)
 
-
             return list(set(model_obj))
-
-
 
     def __init__(self, config):
         """
@@ -2797,6 +2788,11 @@ class ParameterEstimation(_Task):
         """
         # self.model = self.read_model(model)
         self.config = config
+
+        self.do_checks()
+
+        self.config.models = self._define_report()
+
 
 
         '''
@@ -2853,7 +2849,15 @@ class ParameterEstimation(_Task):
                 return models
         '''
 
-    def _do_checks(self):
+    def do_checks(self):
+        if not isinstance(self.config, self.Config):
+            raise errors.InputError(
+                f'config argument is of type {type(self.config)} '
+                f'but was expecting an instance of '
+                f'ParameterEstimation.Config'
+            )
+
+    def _do_checks_old(self):
         """
 
         """
@@ -2903,15 +2907,15 @@ class ParameterEstimation(_Task):
                     'Cannot run current solution statistics with \'randomize_start_values\' set to \'true\'.')
 
         ## ensure metabolties are a list (even if only 1 element)
-        if isinstance(self.metabolites, list) != True:
+        if isinstance(self.metabolites, list):
             self.metabolites = [self.metabolites]
 
         ## ensure global_quantities are a list (even if only 1 element)
-        if isinstance(self.global_quantities, list) != True:
+        if isinstance(self.global_quantities, list):
             self.global_quantities = [self.global_quantities]
 
         # ensure local_parameters are a list (even if only 1 element)
-        if isinstance(self.local_parameters, list) != True:
+        if isinstance(self.local_parameters, list):
             self.local_parameters = [self.local_parameters]
 
         ## ensure arguments to local parameters exist
@@ -2990,116 +2994,137 @@ class ParameterEstimation(_Task):
     #     """
     #
     #     print(self.config.datasets.experiments)
-        # for conf in self.config:
-        #     print(conf)
+    # for conf in self.config:
+    #     print(conf)
 
-        #     with open(self.config_filename, 'r') as f:
-        #         dct = yaml.load(f)
-        #         mappings = OrderedDict()
-        #         for k in dct:
-        #             if k == 'ParameterEstimationSettings':
-        #                 for setting, value in dct[k].items():
-        #                     setattr(self, setting, value)
-        #
-        #             elif k == 'ExperimentSetMapping':
-        #                 experiment_mapping_args = dct[k]
-        #                 experiment_files = []
-        #                 experiment_type = []
-        #                 experiment_keys = []
-        #                 first_row = []
-        #                 last_row = []
-        #                 normalize_weights_per_experiment = []
-        #                 weight_method = []
-        #                 row_containing_names = []
-        #                 separator = []
-        #                 validation = []
-        #
-        #                 for experiment_name in experiment_mapping_args:
-        #                     experiment_files.append(experiment_mapping_args[experiment_name]['filename'])
-        #                     experiment_type.append(experiment_mapping_args[experiment_name]['experiment_type'])
-        #                     experiment_keys.append(experiment_mapping_args[experiment_name]['key'])
-        #                     first_row.append(experiment_mapping_args[experiment_name]['first_row'])
-        #                     last_row.append(experiment_mapping_args[experiment_name]['last_row'])
-        #                     normalize_weights_per_experiment.append(
-        #                         experiment_mapping_args[experiment_name]['normalize_weights_per_experiment'])
-        #                     weight_method.append(experiment_mapping_args[experiment_name]['weight_method'])
-        #                     row_containing_names.append(
-        #                         experiment_mapping_args[experiment_name]['row_containing_names'])
-        #                     separator.append(experiment_mapping_args[experiment_name]['separator'])
-        #                     validation.append(experiment_mapping_args[experiment_name]['validation'])
-        #                     mappings[experiment_name] = experiment_mapping_args[experiment_name]['mappings']
-        #
-        #                 ## convert weight method to numerical values that are
-        #                 ## interpreted by COAPSI - with some input checking
-        #                 weight_method_strings = ['mean_squared', 'stardard_deviation',
-        #                                          'value_scaling', 'mean']  # line 2144
-        #                 for i in weight_method:
-        #                     if i not in weight_method_strings:
-        #                         raise errors.InputError(
-        #                             '"{}" is not a valid weight method. Please choose '
-        #                             'on of "{}"'.format(i, weight_method_strings)
-        #                         )
-        #
-        #                 weight_method_numbers = [str(i) for i in [1, 2, 3, 4]]
-        #                 weight_method_dict = dict(list(zip(weight_method_strings, weight_method_numbers)))
-        #                 weight_method = [weight_method_dict[i] for i in weight_method]
-        #
-        #                 ## convert experiment type to numerical values that are
-        #                 ## interpreted by COAPSI - with some input checking
-        #                 experiment_type_strings = ['steadystate', 'timecourse']
-        #
-        #                 for i in experiment_type:
-        #                     if i not in experiment_type_strings:
-        #                         raise errors.InputError(
-        #                             '"{}" is not a valid experiment type. Please choose '
-        #                             'on of "{}"'.format(i, experiment_type_strings)
-        #                         )
-        #
-        #                 experiment_type_numbers = [str(i) for i in [0, 1]]
-        #                 experiment_type_dict = dict(list(zip(experiment_type_strings, experiment_type_numbers)))
-        #                 experiment_type = [experiment_type_dict[i] for i in experiment_type]
-        #
-        #                 setattr(self, 'experiment_type', experiment_type)
-        #                 setattr(self, 'experiment_keys', experiment_keys)
-        #                 setattr(self, 'first_row', first_row)
-        #                 setattr(self, 'last_row', last_row)
-        #                 setattr(self, 'normalize_weights_per_experiment', normalize_weights_per_experiment)
-        #                 setattr(self, 'weight_method', weight_method)
-        #                 setattr(self, 'row_containing_names', row_containing_names)
-        #                 setattr(self, 'separator', separator)
-        #                 setattr(self, 'validation', validation)
-        #                 setattr(self, 'mappings', mappings)
-        #
-        #
-        #             elif k == 'OptimizationItemList':
-        #                 opt = pandas.DataFrame(dct[k]).transpose()
-        #                 setattr(self, 'optimization_item_list', opt)
-        #
-        #             elif k == 'OptimizationConstraintList':
-        #                 constr = pandas.DataFrame(dct[k]).transpose()
-        #                 setattr(self, 'optimization_constraint_list', constr)
-        #
-        #                 print('Warning: OptimizationConstraintList is not yet implemented. Entried are being'
-        #                       ' ignored. ')
-        #
-        # else:
-        #     raise ValueError('Config filename is not of a supported file type. Please ensure the config file '
-        #                      'was generated with write config file')
+    #     with open(self.config_filename, 'r') as f:
+    #         dct = yaml.load(f)
+    #         mappings = OrderedDict()
+    #         for k in dct:
+    #             if k == 'ParameterEstimationSettings':
+    #                 for setting, value in dct[k].items():
+    #                     setattr(self, setting, value)
+    #
+    #             elif k == 'ExperimentSetMapping':
+    #                 experiment_mapping_args = dct[k]
+    #                 experiment_files = []
+    #                 experiment_type = []
+    #                 experiment_keys = []
+    #                 first_row = []
+    #                 last_row = []
+    #                 normalize_weights_per_experiment = []
+    #                 weight_method = []
+    #                 row_containing_names = []
+    #                 separator = []
+    #                 validation = []
+    #
+    #                 for experiment_name in experiment_mapping_args:
+    #                     experiment_files.append(experiment_mapping_args[experiment_name]['filename'])
+    #                     experiment_type.append(experiment_mapping_args[experiment_name]['experiment_type'])
+    #                     experiment_keys.append(experiment_mapping_args[experiment_name]['key'])
+    #                     first_row.append(experiment_mapping_args[experiment_name]['first_row'])
+    #                     last_row.append(experiment_mapping_args[experiment_name]['last_row'])
+    #                     normalize_weights_per_experiment.append(
+    #                         experiment_mapping_args[experiment_name]['normalize_weights_per_experiment'])
+    #                     weight_method.append(experiment_mapping_args[experiment_name]['weight_method'])
+    #                     row_containing_names.append(
+    #                         experiment_mapping_args[experiment_name]['row_containing_names'])
+    #                     separator.append(experiment_mapping_args[experiment_name]['separator'])
+    #                     validation.append(experiment_mapping_args[experiment_name]['validation'])
+    #                     mappings[experiment_name] = experiment_mapping_args[experiment_name]['mappings']
+    #
+    #                 ## convert weight method to numerical values that are
+    #                 ## interpreted by COAPSI - with some input checking
+    #                 weight_method_strings = ['mean_squared', 'stardard_deviation',
+    #                                          'value_scaling', 'mean']  # line 2144
+    #                 for i in weight_method:
+    #                     if i not in weight_method_strings:
+    #                         raise errors.InputError(
+    #                             '"{}" is not a valid weight method. Please choose '
+    #                             'on of "{}"'.format(i, weight_method_strings)
+    #                         )
+    #
+    #                 weight_method_numbers = [str(i) for i in [1, 2, 3, 4]]
+    #                 weight_method_dict = dict(list(zip(weight_method_strings, weight_method_numbers)))
+    #                 weight_method = [weight_method_dict[i] for i in weight_method]
+    #
+    #                 ## convert experiment type to numerical values that are
+    #                 ## interpreted by COAPSI - with some input checking
+    #                 experiment_type_strings = ['steadystate', 'timecourse']
+    #
+    #                 for i in experiment_type:
+    #                     if i not in experiment_type_strings:
+    #                         raise errors.InputError(
+    #                             '"{}" is not a valid experiment type. Please choose '
+    #                             'on of "{}"'.format(i, experiment_type_strings)
+    #                         )
+    #
+    #                 experiment_type_numbers = [str(i) for i in [0, 1]]
+    #                 experiment_type_dict = dict(list(zip(experiment_type_strings, experiment_type_numbers)))
+    #                 experiment_type = [experiment_type_dict[i] for i in experiment_type]
+    #
+    #                 setattr(self, 'experiment_type', experiment_type)
+    #                 setattr(self, 'experiment_keys', experiment_keys)
+    #                 setattr(self, 'first_row', first_row)
+    #                 setattr(self, 'last_row', last_row)
+    #                 setattr(self, 'normalize_weights_per_experiment', normalize_weights_per_experiment)
+    #                 setattr(self, 'weight_method', weight_method)
+    #                 setattr(self, 'row_containing_names', row_containing_names)
+    #                 setattr(self, 'separator', separator)
+    #                 setattr(self, 'validation', validation)
+    #                 setattr(self, 'mappings', mappings)
+    #
+    #
+    #             elif k == 'OptimizationItemList':
+    #                 opt = pandas.DataFrame(dct[k]).transpose()
+    #                 setattr(self, 'optimization_item_list', opt)
+    #
+    #             elif k == 'OptimizationConstraintList':
+    #                 constr = pandas.DataFrame(dct[k]).transpose()
+    #                 setattr(self, 'optimization_constraint_list', constr)
+    #
+    #                 print('Warning: OptimizationConstraintList is not yet implemented. Entried are being'
+    #                       ' ignored. ')
+    #
+    # else:
+    #     raise ValueError('Config filename is not of a supported file type. Please ensure the config file '
+    #                      'was generated with write config file')
+
+    def get_model_objects_from_strings(self):
+        """
+        Get model objects from the strings
+        provided by the user in the Config class
+        :return: list of `model.Model` objects
+        """
+        number_of_model_objects_in_parameter_estimation = len(self.config.model_objects)
+        model_objs = []
+        for mod in self.config.models:
+            for obj in self.config.model_objects:
+                current_model = self.config.models[mod].model
+                try:
+                    model_objs.append(
+                        self.get_variable_from_string(current_model, obj)
+                    )
+                    number_of_model_objects_in_parameter_estimation -= 1
+                    if number_of_model_objects_in_parameter_estimation == 0:
+                        break
+                ## allow a mechanism for iterating over models that
+                ## do not all have the same variables
+                except errors.InputError:
+                    continue
+        return model_objs
 
     @property
     def metabolites(self):
-        metab = []
-        local = []
-        glo = []
-        for experiment_name in self.config.datasets.experiments:
-            experiment = self.config.datasets.experiments.get(experiment_name)
+        return [i.name for i in self.get_model_objects_from_strings() if isinstance(i, model.Metabolite)]
 
-            print(experiment)
-            for mapping in experiment.mappings:
-                if mappings[mapping]['object_type'] == 'Metabolite':
-                    metab.append(mappings.mapping)
-        return metab
+    @property
+    def local_parameters(self):
+        return [i.name for i in self.get_model_objects_from_strings() if isinstance(i, model.LocalParameter)]
 
+    @property
+    def global_quantities(self):
+        return [i.name for i in self.get_model_objects_from_strings() if isinstance(i, model.GlobalQuantity)]
 
     @property
     def _report_arguments(self):
@@ -3112,10 +3137,10 @@ class ParameterEstimation(_Task):
         report_dict['metabolites'] = self.metabolites
         report_dict['global_quantities'] = self.global_quantities
         report_dict['local_parameters'] = self.local_parameters
-        report_dict['quantity_type'] = self.quantity_type
-        report_dict['report_name'] = self.report_name
-        report_dict['append'] = self.append
-        report_dict['confirm_overwrite'] = self.confirm_overwrite
+        report_dict['quantity_type'] = self.config.settings.quantity_type
+        report_dict['report_name'] = self.config.settings.report_name
+        report_dict['append'] = False
+        report_dict['confirm_overwrite'] = False
         report_dict['report_type'] = 'multi_parameter_estimation'
         return report_dict
 
@@ -3125,7 +3150,23 @@ class ParameterEstimation(_Task):
         for result collection
         :return: pycotools3.model.Model
         """
-        return Reports(self.model, **self._report_arguments).model
+        for model_name in self.models:
+            mod = self.models[model_name].model
+            for glo in self._report_arguments['global_quantities']:
+                if glo not in [i.name for i in mod.global_quantities]:
+                    del self._report_arguments['global_quantities'][glo]
+
+            for loc in self._report_arguments['global_quantities']:
+                if loc not in [i.name for i in mod.global_quantities]:
+                    del self._report_arguments['global_quantities'][loc]
+
+            for met in self._report_arguments['metabolites']:
+                if met not in [i.name for i in mod.metabolites]:
+                    del self._report_arguments['metabolites'][met]
+
+            self.models[model_name].model = Reports(mod, **self._report_arguments).model
+
+        return self.models
 
     def _get_report_key(self):
         """
@@ -3135,11 +3176,16 @@ class ParameterEstimation(_Task):
         but this works...
         :return:
         """
-        for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
-            if i.attrib['name'].lower() == 'multi_parameter_estimation':
-                key = i.attrib['key']
-        assert key != None
-        return key
+        keys = {}
+        for model_name in self.models:
+            mod = self.models[model_name].model
+            for i in mod.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
+                if i.attrib['name'].lower() == 'multi_parameter_estimation':
+                    key = i.attrib['key']
+            assert key is not None
+            keys[model_name] = key
+
+        return keys
 
     @property
     def models(self):
@@ -3147,23 +3193,30 @@ class ParameterEstimation(_Task):
 
     @property
     def _experiments(self):
-        existing_experiment_list = []
+        existing_experiment_list_dct = {}
         query = '//*[@name="Experiment Set"]'
-
-        for i in self.model.xml.xpath(query):
-            for j in list(i):
-                existing_experiment_list.append(j)
-        return existing_experiment_list
+        for mod in self.models:
+            existing_experiment_list = []
+            m = self.models[mod].model
+            for i in m.xml.xpath(query):
+                for j in list(i):
+                    existing_experiment_list.append(j)
+            existing_experiment_list_dct[mod] = existing_experiment_list
+        return existing_experiment_list_dct
 
     @property
     def _validations(self):
-        existing_validation_list = []
-        query = '//*[@name="Validation Set"]'
+        existing_validation_list_dct = {}
+        query = '//*[@name="Experiment Set"]'
+        for mod in self.models:
+            existing_validation_list = []
+            m = self.models[mod].model
+            for i in m.xml.xpath(query):
+                for j in list(i):
+                    existing_validation_list.append(j)
+            existing_validation_list_dct[mod] = existing_validation_list
+        return existing_validation_list_dct
 
-        for i in self.model.xml.xpath(query):
-            for j in list(i):
-                existing_validation_list.append(j)
-        return existing_validation_list
 
     def _create_metabolite_reference(self, parent, metabolite, role):
         if not isinstance(metabolite, model.Metabolite):
@@ -3288,177 +3341,154 @@ class ParameterEstimation(_Task):
 
         i is the exeriment_file index
         """
-        assert isinstance(index, int)
-        data = pandas.read_csv(
-            self.experiment_files[index],
-            sep=self.separator[index])
-        obs = list(data.columns)
-        num_rows = str(data.shape[0])
-        num_columns = str(data.shape[1])
+        # for mod in self.models:
+        for model_name in self.models:
+            mod = self.models[model_name].model
+            for experiment_name in self.config.experiment_names:
+                experiment = self.config.datasets.experiments[experiment_name]
+                data = pandas.read_csv(
+                    experiment.filename,
+                    sep=experiment.separator
+                )
+                experiment_type = 'steadystate'
 
-        # if exp_file is in the same directory as copasi_file only use relative path
-        if os.path.dirname(self.model.copasi_file) == os.path.dirname(self.experiment_files[index]):
-            exp = os.path.split(self.experiment_files[index])[1]
-        else:
-            exp = self.experiment_files[index]
+                if 'time' in [i.lower() for i in data.columns]:
+                    experiment_type = 'timecourse'
 
-        experiment_file = {'type': 'file',
-                           'name': 'File Name',
-                           'value': exp}
-        key = {'type': 'key',
-               'name': 'Key',
-               'value': self.experiment_keys[index]
-               }
+                obs = list(data.columns)
+                num_rows = str(data.shape[0])
+                num_columns = str(data.shape[1])
 
-        # necessary XML attributes
-        experiment_group = etree.Element('ParameterGroup',
-                                         attrib={
-                                             'name': os.path.split(self.experiment_files[index])[1][:-4]
-                                         })
+                # if exp_file is in the same directory as copasi_file only use relative path
+                if os.path.dirname(mod.copasi_file) == os.path.dirname(experiment.filename):
+                    experiment.filename = os.path.split(experiment.filename)[1]
 
-        row_orientation = {'type': 'bool',
-                           'name': 'Data is Row Oriented',
-                           'value': self.row_orientation[index]}
+                experiment_file = {'type': 'file',
+                                   'name': 'File Name',
+                                   'value': experiment.filename}
+                key = {'type': 'key',
+                       'name': 'Key',
+                       'value': self._get_experiment_keys()[model_name]
+                       }
 
-        experiment_type = {'type': 'unsignedInteger',
-                           'name': 'Experiment Type',
-                           'value': self.experiment_type[index]}
+                # necessary XML attributes
+                experiment_group = etree.Element('ParameterGroup',
+                                                 attrib={
+                                                     'name': experiment_name
+                                                 })
 
-        first_row = {'type': 'unsignedInteger',
-                     'name': 'First Row',
-                     'value': str(self.first_row[index])}
+                row_orientation = {'type': 'bool',
+                                   'name': 'Data is Row Oriented',
+                                   'value': True}
 
-        last_row = {'type': 'unsignedInteger',
-                    'name': 'Last Row',
-                    'value': str(int(num_rows) + 1)}  # add 1 to account for 0 indexed python
+                experiment_type = {'type': 'unsignedInteger',
+                                   'name': 'Experiment Type',
+                                   'value': experiment_type}
 
-        normalize_weights_per_experiment = {'type': 'bool',
-                                            'name': 'Normalize Weights per Experiment',
-                                            'value': self.normalize_weights_per_experiment[index]}
+                first_row = {'type': 'unsignedInteger',
+                             'name': 'First Row',
+                             'value': str(0)}
 
-        number_of_columns = {'type': 'unsignedInteger',
-                             'name': 'Number of Columns',
-                             'value': num_columns}
+                last_row = {'type': 'unsignedInteger',
+                            'name': 'Last Row',
+                            'value': str(int(num_rows) + 1)}  # add 1 to account for 0 indexed python
 
-        object_map = {'name': 'Object Map'}
+                normalize_weights_per_experiment = {'type': 'bool',
+                                                    'name': 'Normalize Weights per Experiment',
+                                                    'value': experiment.normalize_weights_per_experiment}
 
-        row_containing_names = {'type': 'unsignedInteger',
-                                'name': 'Row containing Names',
-                                'value': str(self.row_containing_names[index])}
+                number_of_columns = {'type': 'unsignedInteger',
+                                     'name': 'Number of Columns',
+                                     'value': num_columns}
 
-        separator = {'type': 'string',
-                     'name': 'Separator',
-                     'value': self.separator[index]}
+                object_map = {'name': 'Object Map'}
 
-        weight_method = {'type': 'unsignedInteger',
-                         'name': 'Weight Method',
-                         'value': self.weight_method[index]}
-        etree.SubElement(experiment_group, 'Parameter', attrib=key)
-        etree.SubElement(experiment_group, 'Parameter', attrib=experiment_file)
-        etree.SubElement(experiment_group, 'Parameter', attrib=row_orientation)
-        etree.SubElement(experiment_group, 'Parameter', attrib=first_row)
-        etree.SubElement(experiment_group, 'Parameter', attrib=last_row)
-        etree.SubElement(experiment_group, 'Parameter', attrib=experiment_type)
-        etree.SubElement(experiment_group, 'Parameter', attrib=normalize_weights_per_experiment)
-        etree.SubElement(experiment_group, 'Parameter', attrib=separator)
-        etree.SubElement(experiment_group, 'Parameter', attrib=weight_method)
-        etree.SubElement(experiment_group, 'Parameter', attrib=row_containing_names)
-        etree.SubElement(experiment_group, 'Parameter', attrib=number_of_columns)
-        map = etree.SubElement(experiment_group, 'ParameterGroup', attrib=object_map)
+                row_containing_names = {'type': 'unsignedInteger',
+                                        'name': 'Row containing Names',
+                                        'value': str(0)}
 
-        experiment_name = os.path.split(self.experiment_files[index])[1][:-4]
+                separator = {'type': 'string',
+                             'name': 'Separator',
+                             'value': experiment.separator}
 
-        for i in self.mappings:
-            if i == experiment_name:
-                data_column_number = 0
-                for data_column_name in self.mappings[i]:
-                    if data_column_name not in obs:
-                        raise errors.InputError('Incorrect Mapping. In your config file you have '
-                                                'specified a column ({}) that is not present '
-                                                'in your experiment ("{}"). These are variables '
-                                                'in your data file: "{}"'.format(
-                            data_column_name, experiment_name, obs
-                        ))
-                    column_mapping = self.mappings[i][data_column_name]['model_object']
+                weight_method = {'type': 'unsignedInteger',
+                                 'name': 'Weight Method',
+                                 'value': experiment.weight_method}
 
-                    # if column_mapping[-6:] == '_indep':
-                    #     column_mapping = column_mapping[:-6]
+                for i in [
+                    'key',
+                    'experiment_file',
+                    'row_orientation',
+                    'first_row',
+                    'last_row',
+                    'experiment_type',
+                    'normalize_weights_per_experiment',
+                    'separator',
+                    'weight_method',
+                    'row_containing_names',
+                    'number_of_columns',
+                ]:
+                    etree.SubElement(experiment_group, 'Parameter', attrib=i)
+                map = etree.SubElement(experiment_group, 'ParameterGroup', attrib=object_map)
 
-                    ## use data column number for column name
-                    map_group = etree.SubElement(map, 'ParameterGroup', attrib={'name': str(data_column_number)})
-                    data_column_number += 1
-
-                    # if self.experiment_type[index] == str(1): ##str(1) is code for timecourse
-                    #     if current_col == 0:
-                    #         etree.SubElement(map_group, 'Parameter', attrib=time_role)
-
-                    if column_mapping.lower() == 'time':
-                        self._assign_role(map_group, self.mappings[i][data_column_name]['role'])
-                        # map_group = etree.SubElement(map_group, 'Parameter', attrib=time_role)
-
-                    elif column_mapping in [j.name for j in self.model.metabolites]:
-                        metab = [j for j in self.model.metabolites if j.name == column_mapping]
-                        assert len(metab) == 1
-
-                        ## create appropriate reference for metabolite
-                        self._create_metabolite_reference(
-                            map_group,
-                            metab[0],
-                            self.mappings[i][data_column_name]['role'])
-                        self._assign_role(map_group, self.mappings[i][data_column_name]['role'])
-
-                    elif column_mapping in [j.name for j in self.model.global_quantities]:
-                        global_quantity = [j for j in self.model.global_quantities if j.name == column_mapping]
-                        assert len(global_quantity) == 1
-                        map_group = self._create_global_quantity_reference(
-                            map_group,
-                            global_quantity[0],
-                            self.mappings[i][data_column_name]['role']
-                        )
-
-                        self._assign_role(map_group, self.mappings[i][data_column_name]['role'])
-
-
-                    else:
-                        LOG.warning('data_column_name "{}" is not in your model '
-                                    'metabolites, local_parameters or global_quantities and '
-                                    'therefore is being ignored in your estimation. Please '
-                                    'review. '.format(column_mapping))
-        return experiment_group
-
-    def _remove_experiment(self, experiment_name):
-        """
-        name attribute of experiment. usually Experiment_1 or something
-        """
-        query = '//*[@name="Experiment Set"]'
-        for i in self.model.xml.xpath(query):
-            for j in list(i):
-                if j.attrib['name'] == experiment_name:
-                    j.getparent().remove(j)
-        return self.model
-
-    def _remove_all_experiments(self):
-        for i in self._experiments:
-            experiment_name = i.attrib['name']
-            self._remove_experiment(experiment_name)
-        return self.model
-
-    def _remove_validation_experiment(self, validation_experiment_name):
-        """
-        name attribute of experiment. usually Experiment_1 or something
-        """
-        query = '//*[@name="Validation Set"]'
-        for i in self.model.xml.xpath(query):
-            for j in list(i):
-                if j.attrib['name'] == validation_experiment_name:
-                    j.getparent().remove(j)
-        return self.model
-
-    def _remove_all_validation_experiments(self):
-        for i in self._validations:
-            validation_experiment_name = i.attrib['name']
-            self._remove_experiment(validation_experiment_name)
-        return self.model
+                for mapping in experiment.mappings:
+                    print(mapping)
+                #     if i == experiment_name:
+                #         data_column_number = 0
+                #         for data_column_name in self.mappings[i]:
+                #             if data_column_name not in obs:
+                #                 raise errors.InputError('Incorrect Mapping. In your config file you have '
+                #                                         'specified a column ({}) that is not present '
+                #                                         'in your experiment ("{}"). These are variables '
+                #                                         'in your data file: "{}"'.format(
+                #                     data_column_name, experiment_name, obs
+                #                 ))
+                #             column_mapping = self.mappings[i][data_column_name]['model_object']
+                #
+                #             # if column_mapping[-6:] == '_indep':
+                #             #     column_mapping = column_mapping[:-6]
+                #
+                #             ## use data column number for column name
+                #             map_group = etree.SubElement(map, 'ParameterGroup', attrib={'name': str(data_column_number)})
+                #             data_column_number += 1
+                #
+                #             # if self.experiment_type[index] == str(1): ##str(1) is code for timecourse
+                #             #     if current_col == 0:
+                #             #         etree.SubElement(map_group, 'Parameter', attrib=time_role)
+                #
+                #             if column_mapping.lower() == 'time':
+                #                 self._assign_role(map_group, self.mappings[i][data_column_name]['role'])
+                #                 # map_group = etree.SubElement(map_group, 'Parameter', attrib=time_role)
+                #
+                #             elif column_mapping in [j.name for j in self.model.metabolites]:
+                #                 metab = [j for j in self.model.metabolites if j.name == column_mapping]
+                #                 assert len(metab) == 1
+                #
+                #                 ## create appropriate reference for metabolite
+                #                 self._create_metabolite_reference(
+                #                     map_group,
+                #                     metab[0],
+                #                     self.mappings[i][data_column_name]['role'])
+                #                 self._assign_role(map_group, self.mappings[i][data_column_name]['role'])
+                #
+                #             elif column_mapping in [j.name for j in self.model.global_quantities]:
+                #                 global_quantity = [j for j in self.model.global_quantities if j.name == column_mapping]
+                #                 assert len(global_quantity) == 1
+                #                 map_group = self._create_global_quantity_reference(
+                #                     map_group,
+                #                     global_quantity[0],
+                #                     self.mappings[i][data_column_name]['role']
+                #                 )
+                #
+                #                 self._assign_role(map_group, self.mappings[i][data_column_name]['role'])
+                #
+                #
+                #             else:
+                #                 LOG.warning('data_column_name "{}" is not in your model '
+                #                             'metabolites, local_parameters or global_quantities and '
+                #                             'therefore is being ignored in your estimation. Please '
+                #                             'review. '.format(column_mapping))
+                # return experiment_group
 
     def _map_experiments(self):
         """
@@ -3518,6 +3548,41 @@ class ParameterEstimation(_Task):
                         if k.attrib['name'] == 'Threshold':
                             k.attrib['value'] = str(self.validation_threshold)
 
+        return self.model
+
+
+    def _remove_experiment(self, experiment_name):
+        """
+        name attribute of experiment. usually Experiment_1 or something
+        """
+        query = '//*[@name="Experiment Set"]'
+        for i in self.model.xml.xpath(query):
+            for j in list(i):
+                if j.attrib['name'] == experiment_name:
+                    j.getparent().remove(j)
+        return self.model
+
+    def _remove_all_experiments(self):
+        for i in self._experiments:
+            experiment_name = i.attrib['name']
+            self._remove_experiment(experiment_name)
+        return self.model
+
+    def _remove_validation_experiment(self, validation_experiment_name):
+        """
+        name attribute of experiment. usually Experiment_1 or something
+        """
+        query = '//*[@name="Validation Set"]'
+        for i in self.model.xml.xpath(query):
+            for j in list(i):
+                if j.attrib['name'] == validation_experiment_name:
+                    j.getparent().remove(j)
+        return self.model
+
+    def _remove_all_validation_experiments(self):
+        for i in self._validations:
+            validation_experiment_name = i.attrib['name']
+            self._remove_experiment(validation_experiment_name)
         return self.model
 
     def _select_method(self):
@@ -3813,11 +3878,15 @@ class ParameterEstimation(_Task):
         :return:
         """
         dct = OrderedDict()
-        for i in range(len(self.experiment_files)):
-            if not self.validation[i]:
-                key = "Experiment_{}".format(i)
-                name = os.path.split(self.experiment_files[i])[1][:-4]
-                dct[name] = key
+
+        for model_name in self.models:
+            # model_name = self.models[model_name].model
+            dct[model_name] = OrderedDict()
+
+            for experiment_name in self.config.experiment_names:
+                # experiment = self.config.datasets.experiments[experiment_name]
+                key = "Experiment_{}".format(experiment_name)
+                dct[model_name][experiment_name] = key
         return dct
 
     def _get_validation_keys(self):
@@ -3829,11 +3898,15 @@ class ParameterEstimation(_Task):
         :return:
         """
         dct = OrderedDict()
-        for i in range(len(self.experiment_files)):
-            if self.validation[i]:
-                key = "Experiment_{}".format(i)
-                name = os.path.split(self.experiment_files[i])[1][:-4]
-                dct[name] = key
+
+        for model_name in self.models:
+            # model_name = self.models[model_name].model
+            dct[model_name] = OrderedDict()
+
+            for validation_name in self.config.validation_names:
+                # experiment = self.config.datasets.experiments[experiment_name]
+                key = "Experiment_{}".format(validation_name)
+                dct[model_name][validation_name] = key
         return dct
 
     @property
