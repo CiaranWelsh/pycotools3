@@ -3217,17 +3217,17 @@ class ParameterEstimation(_Task):
             existing_validation_list_dct[mod] = existing_validation_list
         return existing_validation_list_dct
 
-
-    def _create_metabolite_reference(self, parent, metabolite, role):
+    @staticmethod
+    def _create_metabolite_reference(mod, parent, metabolite, role):
         if not isinstance(metabolite, model.Metabolite):
             raise ValueError('Input should be "model.Metabolite" class. Got "{}"'.format(type(metabolite)))
 
         if role == 'independent':
-            cn = '{},{},{}'.format(self.model.reference,
+            cn = '{},{},{}'.format(mod.reference,
                                    metabolite.compartment.reference,
                                    metabolite.initial_reference)
         elif role == 'dependent':
-            cn = '{},{},{}'.format(self.model.reference,
+            cn = '{},{},{}'.format(mod.reference,
                                    metabolite.compartment.reference,
                                    metabolite.transient_reference)
         else:
@@ -3240,7 +3240,8 @@ class ParameterEstimation(_Task):
         }
         return etree.SubElement(parent, 'Parameter', attrib=ics_attrs)
 
-    def _create_local_parameter_reference(self, parent, local_parameter, role):
+    @staticmethod
+    def _create_local_parameter_reference(mod, parent, local_parameter, role):
         """
         Not used because local parameters are not usually mapped to experimental
         variables. However, this method will be kept until the next release
@@ -3255,11 +3256,11 @@ class ParameterEstimation(_Task):
             raise ValueError('Input should be "model.LocalParameter" class. Got "{}"'.format(type(metabolite)))
 
         if role == 'independent':
-            cn = '{},{},{}'.format(self.model.reference,
+            cn = '{},{},{}'.format(mod.reference,
                                    local_parameter.compartment.reference,
                                    local_parameter.initial_reference)
         elif role == 'dependent':
-            cn = '{},{},{}'.format(self.model.reference,
+            cn = '{},{},{}'.format(mod.reference,
                                    local_parameter.compartment.reference,
                                    local_parameter.transient_reference)
         else:
@@ -3273,16 +3274,17 @@ class ParameterEstimation(_Task):
         parent = etree.SubElement(parent, 'Parameter', attrib=local_attrs)
         return parent
 
-    def _create_global_quantity_reference(self, parent, global_quantity, role):
+    @staticmethod
+    def _create_global_quantity_reference(mod, parent, global_quantity, role):
         if not isinstance(global_quantity, model.GlobalQuantity):
             raise ValueError('Input should be "model.GlobalQuantity" class. Got "{}"'.format(type(global_quantity)))
 
         if role == 'independent':
-            cn = '{},{}'.format(self.model.reference,
+            cn = '{},{}'.format(mod.reference,
                                 global_quantity.initial_reference)
 
         elif role == 'dependent':
-            cn = '{},{}'.format(self.model.reference,
+            cn = '{},{}'.format(mod.reference,
                                 global_quantity.initial_reference)
         else:
             raise ValueError
@@ -3332,7 +3334,7 @@ class ParameterEstimation(_Task):
 
         return parent
 
-    def _create_experiment(self, index):
+    def _create_experiment(self, validation=False):
         """
         Adds a single experiment set to the parameter estimation task
         exp_file is an experiment filename with exactly matching headers (independent variablies need '_indep' appended to the end)
@@ -3342,10 +3344,32 @@ class ParameterEstimation(_Task):
         i is the exeriment_file index
         """
         # for mod in self.models:
+        model_dct = {}
         for model_name in self.models:
+
+
+            model_dct[model_name] = {}
             mod = self.models[model_name].model
-            for experiment_name in self.config.experiment_names:
-                experiment = self.config.datasets.experiments[experiment_name]
+            weight_method_str = self.config.experiments.weight_method
+            validation_weight = self.config.validations.weight
+            validation_threshold = self.config.validations.threshold
+
+            if validation:
+                query = '//*[@name="Validation Set"]'
+                experiment_names = self.config.validation_names
+                experiments = self.config.datasets.validations
+                keys_function = self._get_validation_keys
+                self._remove_all_validation_experiments()
+
+            else:
+                query = '//*[@name="Experiment Set"]'
+                experiment_names = self.config.experiment_names
+                experiments = self.config.datasets.experiments
+                keys_function = self._get_experiment_keys
+                self._remove_all_experiments()
+
+            for experiment_name in experiment_names:
+                experiment = experiments[experiment_name]
                 data = pandas.read_csv(
                     experiment.filename,
                     sep=experiment.separator
@@ -3355,7 +3379,6 @@ class ParameterEstimation(_Task):
                 if 'time' in [i.lower() for i in data.columns]:
                     experiment_type = 'timecourse'
 
-                obs = list(data.columns)
                 num_rows = str(data.shape[0])
                 num_columns = str(data.shape[1])
 
@@ -3368,7 +3391,7 @@ class ParameterEstimation(_Task):
                                    'value': experiment.filename}
                 key = {'type': 'key',
                        'name': 'Key',
-                       'value': self._get_experiment_keys()[model_name]
+                       'value': keys_function()[model_name][experiment_name]
                        }
 
                 # necessary XML attributes
@@ -3381,7 +3404,7 @@ class ParameterEstimation(_Task):
                                    'name': 'Data is Row Oriented',
                                    'value': True}
 
-                experiment_type = {'type': 'unsignedInteger',
+                experiment_type_dct = {'type': 'unsignedInteger',
                                    'name': 'Experiment Type',
                                    'value': experiment_type}
 
@@ -3413,244 +3436,180 @@ class ParameterEstimation(_Task):
 
                 weight_method = {'type': 'unsignedInteger',
                                  'name': 'Weight Method',
-                                 'value': experiment.weight_method}
+                                 'value': weight_method_str}
 
                 for i in [
-                    'key',
-                    'experiment_file',
-                    'row_orientation',
-                    'first_row',
-                    'last_row',
-                    'experiment_type',
-                    'normalize_weights_per_experiment',
-                    'separator',
-                    'weight_method',
-                    'row_containing_names',
-                    'number_of_columns',
+                    key,
+                    experiment_file,
+                    row_orientation,
+                    first_row,
+                    last_row,
+                    experiment_type_dct,
+                    normalize_weights_per_experiment,
+                    separator,
+                    weight_method,
+                    row_containing_names,
+                    number_of_columns,
                 ]:
+                    for j, k in i.items():
+                        if isinstance(k, bool):
+                            i[j] = str(int(k))
+                        elif isinstance(k, int):
+                            i[j] = str(k)
                     etree.SubElement(experiment_group, 'Parameter', attrib=i)
                 map = etree.SubElement(experiment_group, 'ParameterGroup', attrib=object_map)
 
-                for mapping in experiment.mappings:
-                    print(mapping)
-                #     if i == experiment_name:
-                #         data_column_number = 0
-                #         for data_column_name in self.mappings[i]:
-                #             if data_column_name not in obs:
-                #                 raise errors.InputError('Incorrect Mapping. In your config file you have '
-                #                                         'specified a column ({}) that is not present '
-                #                                         'in your experiment ("{}"). These are variables '
-                #                                         'in your data file: "{}"'.format(
-                #                     data_column_name, experiment_name, obs
-                #                 ))
-                #             column_mapping = self.mappings[i][data_column_name]['model_object']
-                #
-                #             # if column_mapping[-6:] == '_indep':
-                #             #     column_mapping = column_mapping[:-6]
-                #
-                #             ## use data column number for column name
-                #             map_group = etree.SubElement(map, 'ParameterGroup', attrib={'name': str(data_column_number)})
-                #             data_column_number += 1
-                #
-                #             # if self.experiment_type[index] == str(1): ##str(1) is code for timecourse
-                #             #     if current_col == 0:
-                #             #         etree.SubElement(map_group, 'Parameter', attrib=time_role)
-                #
-                #             if column_mapping.lower() == 'time':
-                #                 self._assign_role(map_group, self.mappings[i][data_column_name]['role'])
-                #                 # map_group = etree.SubElement(map_group, 'Parameter', attrib=time_role)
-                #
-                #             elif column_mapping in [j.name for j in self.model.metabolites]:
-                #                 metab = [j for j in self.model.metabolites if j.name == column_mapping]
-                #                 assert len(metab) == 1
-                #
-                #                 ## create appropriate reference for metabolite
-                #                 self._create_metabolite_reference(
-                #                     map_group,
-                #                     metab[0],
-                #                     self.mappings[i][data_column_name]['role'])
-                #                 self._assign_role(map_group, self.mappings[i][data_column_name]['role'])
-                #
-                #             elif column_mapping in [j.name for j in self.model.global_quantities]:
-                #                 global_quantity = [j for j in self.model.global_quantities if j.name == column_mapping]
-                #                 assert len(global_quantity) == 1
-                #                 map_group = self._create_global_quantity_reference(
-                #                     map_group,
-                #                     global_quantity[0],
-                #                     self.mappings[i][data_column_name]['role']
-                #                 )
-                #
-                #                 self._assign_role(map_group, self.mappings[i][data_column_name]['role'])
-                #
-                #
-                #             else:
-                #                 LOG.warning('data_column_name "{}" is not in your model '
-                #                             'metabolites, local_parameters or global_quantities and '
-                #                             'therefore is being ignored in your estimation. Please '
-                #                             'review. '.format(column_mapping))
-                # return experiment_group
+                data_column_number = 0
+                for data_name in experiment.mappings:
 
-    def _map_experiments(self):
-        """
-        map all experiment sets
-        :return:
-        """
+                    map_group = etree.SubElement(map, 'ParameterGroup', attrib={'name': str(data_column_number)})
+                    data_column_number += 1
 
-        self._remove_all_experiments()
-        self._remove_all_validation_experiments()
-        for index in range(len(self.experiment_files)):
+                    if experiment.mappings[data_name].model_object.lower() == 'time':
+                        self._assign_role(map_group, experiment.mappings[data_name].role)
 
-            ## read data to get headers.
-            ## read in such a way that duplicate columns are not mangled
-            data = pandas.read_csv(self.experiment_files[index], sep=self.separator[index], skip_blank_lines=False,
-                                   header=None)
-            data = data.rename(columns=data.iloc[0], copy=False).iloc[1:].reset_index(drop=True)
+                    elif experiment.mappings[data_name].object_type == 'Metabolite':
+                        metab = [i for i in mod.metabolites if i.name == experiment.mappings[data_name].model_object or i.name == experiment.mappings[data_name].model_object[:-6]]
+                        assert len(metab) == 1
+                        self._create_metabolite_reference(
+                            mod,
+                            map_group,
+                            metab[0],
+                            experiment.mappings[data_name].role
+                        )
+                        self._assign_role(map_group, experiment.mappings[data_name].role)
 
-            ## if none of the variables in the experiment file exist then skip
-            variable_exists_list = []
-            for i in data.columns:
-                if i not in self.model.all_variable_names:
-                    variable_exists_list.append(False)
-                else:
-                    variable_exists_list.append(True)
+                    elif experiment.mappings[data_name].object_type == 'GlobalQuantity':
+                        glo = [i for i in mod.global_quantities if i.name == experiment.mappings[data_name].model_object or i.name == experiment.mappings[data_name].model_object[:-6]]
+                        assert len(metab) == 1
+                        self._create_global_quantity_reference(
+                            mod,
+                            map_group,
+                            glo[0],
+                            experiment.mappings[data_name].role
+                        )
 
-            ## if variable exists list ends up being False, we know
-            ## that none of the data in the datafile have
-            ## variables correlating to model components. In this case,
-            ## pycotools3 skips mapping this file and sends a warning
+                    self._assign_role(map_group, experiment.mappings[data_name].role)
 
-            if (list(set(variable_exists_list))[0] == False) and (len(list(set(variable_exists_list))) == 1):
-                LOG.warning('None of the column headers in your experimental '
-                            'data file ("{}") match any model variable in model "{}". If '
-                            'this is intentional, you can ignore this warning. This '
-                            'most commonly occurs when using MultiModelFit. In this case '
-                            'the data file is intended for an alternative model which is '
-                            'why the variable is not in the model. If this is not the case, '
-                            'please check your experimental data variable names to ensure they exactly match '
-                            'corresponding model variable names. For convenience here is a list of '
-                            'variables in your model: \n "{}"'.format(self.experiment_files[index],
-                                                                      self.model.name,
-                                                                      self.model.all_variable_names))
-                continue
-            experiment_element = self._create_experiment(index)
+                model_dct[model_name][experiment_name] = experiment_group
 
-            if self.validation[index]:
-                query = '//*[@name="Validation Set"]'
-            else:
-                query = '//*[@name="Experiment Set"]'
 
-            for j in self.model.xml.xpath(query):
-                j.insert(0, experiment_element)
-                if self.validation[index]:
+            for j in mod.xml.xpath(query):
+                j.insert(0, model_dct[model_name][experiment_name])
+                if validation:
                     for k in list(j):
                         if k.attrib['name'] == 'Weight':
-                            k.attrib['value'] = str(self.validation_weight)
+                            k.attrib['value'] = str(validation_weight)
                         if k.attrib['name'] == 'Threshold':
-                            k.attrib['value'] = str(self.validation_threshold)
+                            k.attrib['value'] = str(validation_threshold)
 
-        return self.model
 
+            return model_dct
 
     def _remove_experiment(self, experiment_name):
         """
         name attribute of experiment. usually Experiment_1 or something
         """
         query = '//*[@name="Experiment Set"]'
-        for i in self.model.xml.xpath(query):
-            for j in list(i):
-                if j.attrib['name'] == experiment_name:
-                    j.getparent().remove(j)
-        return self.model
+        for model_name in self.models:
+            mod = self.models[model_name].model
+            for i in mod.xml.xpath(query):
+                for j in list(i):
+                    if j.attrib['name'] == experiment_name:
+                        j.getparent().remove(j)
+            self.models[model_name].model = mod
+        return self.models
 
     def _remove_all_experiments(self):
-        for i in self._experiments:
-            experiment_name = i.attrib['name']
+        for experiment_name in self.config.experiment_names:
             self._remove_experiment(experiment_name)
-        return self.model
+        # return self.model
 
     def _remove_validation_experiment(self, validation_experiment_name):
         """
         name attribute of experiment. usually Experiment_1 or something
         """
         query = '//*[@name="Validation Set"]'
-        for i in self.model.xml.xpath(query):
-            for j in list(i):
-                if j.attrib['name'] == validation_experiment_name:
-                    j.getparent().remove(j)
-        return self.model
+        for model_name in self.models:
+            mod = self.models[model_name].model
+            for i in mod.xml.xpath(query):
+                for j in list(i):
+                    if j.attrib['name'] == validation_experiment_name:
+                        j.getparent().remove(j)
+            self.models[model_name].model = mod
+        return self.models
 
     def _remove_all_validation_experiments(self):
-        for i in self._validations:
-            validation_experiment_name = i.attrib['name']
-            self._remove_experiment(validation_experiment_name)
-        return self.model
+        for validation_name in self.config.validation_names:
+            self._remove_experiment(validation_name)
+        # return self.model
 
     def _select_method(self):
         """
         #determine which method to use
         :return: tuple. (str, str), (method_name, method_type)
         """
-        if self.method == 'current_solution_statistics'.lower():
+        if self.config.settings.method == 'current_solution_statistics'.lower():
             method_name = 'Current Solution Statistics'
             method_type = 'CurrentSolutionStatistics'
 
-        if self.method == 'differential_evolution'.lower():
+        if self.config.settings.method == 'differential_evolution'.lower():
             method_name = 'Differential Evolution'
             method_type = 'DifferentialEvolution'
 
-        if self.method == 'evolutionary_strategy_sr'.lower():
+        if self.config.settings.method == 'evolutionary_strategy_sr'.lower():
             method_name = 'Evolution Strategy (SRES)'
             method_type = 'EvolutionaryStrategySR'
 
-        if self.method == 'evolutionary_program'.lower():
+        if self.config.settings.method == 'evolutionary_program'.lower():
             method_name = 'Evolutionary Programming'
             method_type = 'EvolutionaryProgram'
 
-        if self.method == 'hooke_jeeves'.lower():
+        if self.config.settings.method == 'hooke_jeeves'.lower():
             method_name = 'Hooke &amp; Jeeves'
             method_type = 'HookeJeeves'
 
-        if self.method == 'levenberg_marquardt'.lower():
+        if self.config.settings.method == 'levenberg_marquardt'.lower():
             method_name = 'Levenberg - Marquardt'
             method_type = 'LevenbergMarquardt'
 
-        if self.method == 'nelder_mead'.lower():
+        if self.config.settings.method == 'nelder_mead'.lower():
             method_name = 'Nelder - Mead'
             method_type = 'NelderMead'
 
-        if self.method == 'particle_swarm'.lower():
+        if self.config.settings.method == 'particle_swarm'.lower():
             method_name = 'Particle Swarm'
             method_type = 'ParticleSwarm'
 
-        if self.method == 'praxis'.lower():
+        if self.config.settings.method == 'praxis'.lower():
             method_name = 'Praxis'
             method_type = 'Praxis'
 
-        if self.method == 'random_search'.lower():
+        if self.config.settings.method == 'random_search'.lower():
             method_name = 'Random Search'
             method_type = 'RandomSearch'
 
-        if self.method == 'simulated_annealing'.lower():
+        if self.config.settings.method == 'simulated_annealing'.lower():
             method_name = 'Simulated Annealing'
             method_type = 'SimulatedAnnealing'
 
-        if self.method == 'steepest_descent'.lower():
+        if self.config.settings.method == 'steepest_descent'.lower():
             method_name = 'Steepest Descent'
             method_type = 'SteepestDescent'
 
-        if self.method == 'truncated_newton'.lower():
+        if self.config.settings.method == 'truncated_newton'.lower():
             method_name = 'Truncated Newton'
             method_type = 'TruncatedNewton'
 
-        if self.method == 'scatter_search'.lower():
+        if self.config.settings.method == 'scatter_search'.lower():
             method_name = 'Scatter Search'
             method_type = 'ScatterSearch'
 
-        if self.method == 'genetic_algorithm'.lower():
+        if self.config.settings.method == 'genetic_algorithm'.lower():
             method_name = 'Genetic Algorithm'
             method_type = 'GeneticAlgorithm'
 
-        if self.method == 'genetic_algorithm_sr'.lower():
+        if self.config.settings.method == 'genetic_algorithm_sr'.lower():
             method_name = 'Genetic Algorithm SR'
             method_type = 'GeneticAlgorithmSR'
 
@@ -3662,24 +3621,24 @@ class ParameterEstimation(_Task):
         This method makes this conversion
         :return: void
         """
-        self.number_of_generations = str(self.number_of_generations)
-        self.population_size = str(self.population_size)
-        self.random_number_generator = str(self.random_number_generator)
-        self.seed = str(self.seed)
-        self.pf = str(self.pf)
-        self.iteration_limit = str(self.iteration_limit)
-        self.tolerance = str(self.tolerance)
-        self.rho = str(self.rho)
-        self.scale = str(self.scale)
-        self.swarm_size = str(self.swarm_size)
-        self.std_deviation = str(self.std_deviation)
-        self.number_of_iterations = str(self.number_of_iterations)
-        self.start_temperature = str(self.start_temperature)
-        self.cooling_factor = str(self.cooling_factor)
-        self.lower_bound = str(self.lower_bound)
+        self.config.settings.number_of_generations = str(self.config.settings.number_of_generations)
+        self.config.settings.population_size = str(self.config.settings.population_size)
+        self.config.settings.random_number_generator = str(self.config.settings.random_number_generator)
+        self.config.settings.seed = str(self.config.settings.seed)
+        self.config.settings.pf = str(self.config.settings.pf)
+        self.config.settings.iteration_limit = str(self.config.settings.iteration_limit)
+        self.config.settings.tolerance = str(self.config.settings.tolerance)
+        self.config.settings.rho = str(self.config.settings.rho)
+        self.config.settings.scale = str(self.config.settings.scale)
+        self.config.settings.swarm_size = str(self.config.settings.swarm_size)
+        self.config.settings.std_deviation = str(self.config.settings.std_deviation)
+        self.config.settings.number_of_iterations = str(self.config.settings.number_of_iterations)
+        self.config.settings.start_temperature = str(self.config.settings.start_temperature)
+        self.config.settings.cooling_factor = str(self.config.settings.cooling_factor)
+        self.config.settings.lower_bound = str(self.config.settings.lower_bound)
         if isinstance(self.start_value, (float, int)):
-            self.start_value = str(self.start_value)
-        self.upper_bound = str(self.upper_bound)
+            self.config.settings.start_value = str(self.config.settings.start_value)
+        self.config.settings.upper_bound = str(self.config.settings.upper_bound)
 
     @property
     def _fit_items(self):

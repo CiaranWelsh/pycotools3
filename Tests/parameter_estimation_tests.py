@@ -292,17 +292,6 @@ class DotDictTests(unittest.TestCase):
         dct = DotDict(dct, recursive=True)
         self.assertEqual(dct.d.c.b, 7)
 
-    def test4(self):
-        dct = {
-            'd': {
-                'c': {
-                    'b': 7
-                }
-            }
-        }
-        dct = DotDict(dct, recursive=True)
-        self.assertListEqual(dct.lev(0), ['d'])
-
 
 class ParameterEstimationTestsConfig2(_test_base._BaseTest):
     def setUp(self):
@@ -422,9 +411,9 @@ class ParameterEstimationTestsConfig2(_test_base._BaseTest):
         )
         self.PE = ParameterEstimation(self.config)
 
-    def test___str__(self):
-        string = "{'model1': Model(name=New_Model, time_unit=s, volume_unit=ml, quantity_unit=mmol)}"
-        self.assertEqual(str(self.config.models), string)
+    # def test___str__(self):
+    #     string = "{'model1': Model(name=New_Model, time_unit=s, volume_unit=ml, quantity_unit=mmol)}"
+    #     self.assertEqual(str(self.config.models), string)
 
     def test_update_defaults_and_run_code(self):
         """
@@ -445,8 +434,7 @@ class ParameterEstimationTestsConfig2(_test_base._BaseTest):
         self.assertEqual(self.PE.config.datasets.experiments.report2.separator, '\t')
 
     def test_experiment_kw4(self):
-        print(self.PE.config.datasets.experiments.report2.mappings)
-        # self.assertEqual(self.PE.config.datasets.experiments.report2.mappings, '\t')
+        self.assertEqual(self.PE.config.datasets.experiments.weight_method, 'mean_squared')
 
     def test_validation_kw1(self):
         self.assertEqual(self.PE.config.datasets.validations.report3.filename, self.TC3.report_name)
@@ -550,7 +538,6 @@ class ParameterEstimationConfigDefaultsTests(_test_base._BaseTest):
         conf = self.PE._config()
         print(conf)
         # self.assertEqual(conf.datasets.experiments.ds1.separator, '\t')
-
 
 
 class ParameterEstimationTests(_test_base._BaseTest):
@@ -1384,8 +1371,15 @@ class ExperimentMapperTests(_test_base._BaseTest):
         print(dct)
         self.assertEqual(dct['model1']['report3'], 'Experiment_report3')
 
-    def test_create_experiment(self):
-        self.PE._create_experiment(0)
+    def test_create_experiments(self):
+        from lxml import etree
+        elements = self.PE._create_experiment(validation=False)
+        self.assertIsInstance(elements['model1']['report1'], etree._Element)
+
+    def test_create_validation_experiments(self):
+        from lxml import etree
+        elements = self.PE._create_experiment(validation=True)
+        self.assertIsInstance(elements['model1']['report3'], etree._Element)
 
     # def test_lower_bound_dct(self):
     #     ref = r'CN=Root,Model=New_Model,Vector=Values[B2C],Reference=InitialValue'

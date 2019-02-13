@@ -364,22 +364,6 @@ class DotDict(dict):
 
         return ans
 
-    def lev(self, level):
-        """
-        an indexer for DotDict that enables the user to get the keys of the DotDict
-        by level
-        :return:
-        """
-        def count_levels(dct):
-            total_levels = 0
-            for i, j in dct.items():
-                if isinstance(j, dict):
-                    total_levels +=1
-                    count_levels(dct)
-            return total_levels
-        print( count_levels(self))
-
-
 
 
     @staticmethod
