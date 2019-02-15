@@ -160,29 +160,29 @@ class TestParse(unittest.TestCase):
     #     self.assertEqual(data.shape[0], 2)
 
 
-
-    def test_from_folder_generated_with_chaser_estimations(self):
-        MPE = tasks.MultiParameterEstimation(
-            self.mod, self.TC.report_name,
-            method='genetic_algorithm',
-            population_size=5,
-            number_of_generations=5,
-            run_mode=True,
-            copy_number=self.copy_number,
-            pe_number=self.pe_number
-        )
-        MPE.write_config_file()
-        MPE.setup()
-        MPE.run()
-
-        CPE = tasks.ChaserParameterEstimations(
-            MPE, truncate_mode='ranks', theta=list(range(2)),
-            tolerance=1e-2, iteration_limit=5,
-            run_mode=True
-        )
-        data = viz.Parse(CPE.results_directory, copasi_file=CPE.model.copasi_file).data
-        print(data)
-        self.assertEqual(data.shape[0], 2)
+    #
+    # def test_from_folder_generated_with_chaser_estimations(self):
+    #     MPE = tasks.MultiParameterEstimation(
+    #         self.mod, self.TC.report_name,
+    #         method='genetic_algorithm',
+    #         population_size=5,
+    #         number_of_generations=5,
+    #         run_mode=True,
+    #         copy_number=self.copy_number,
+    #         pe_number=self.pe_number
+    #     )
+    #     MPE.write_config_file()
+    #     MPE.setup()
+    #     MPE.run()
+    #
+    #     CPE = tasks.ChaserParameterEstimations(
+    #         MPE, truncate_mode='ranks', theta=list(range(2)),
+    #         tolerance=1e-2, iteration_limit=5,
+    #         run_mode=True
+    #     )
+    #     data = viz.Parse(CPE.results_directory, copasi_file=CPE.model.copasi_file).data
+    #     print(data)
+    #     self.assertEqual(data.shape[0], 2)
 
 
 

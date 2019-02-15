@@ -8,4 +8,4 @@ script:
   - nosetests 
 branches:
   only:
-    - feature
+    - develop
