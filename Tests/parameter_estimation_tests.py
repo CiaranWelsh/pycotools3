@@ -346,7 +346,6 @@ class ParameterEstimationTestsConfig2(_test_base._BaseTest):
                 },
             },
             datasets={
-                'weight_method': 'value_scaling',
                 'experiments': {
                     'report1': {
                         'filename': self.TC1.report_name,
@@ -368,8 +367,6 @@ class ParameterEstimationTestsConfig2(_test_base._BaseTest):
                     }
                 },
                 'validations': {
-                    'weight': 4,
-                    'threshold': 8.5,
                     'report3': {
                         'filename': self.TC3.report_name,
                         'affected_models': 'model1',
@@ -406,6 +403,10 @@ class ParameterEstimationTestsConfig2(_test_base._BaseTest):
                 'number_of_generations': 100,
                 'copy_number': 1,
                 'pe_number': 1,
+                'weight_method': 'value_scaling',
+                'validation_weight': 4,
+                'validation_threshold': 8.5,
+                'working_directory': os.path.dirname(__file__)
             }
 
         )
@@ -434,13 +435,19 @@ class ParameterEstimationTestsConfig2(_test_base._BaseTest):
         self.assertEqual(self.PE.config.datasets.experiments.report2.separator, '\t')
 
     def test_experiment_kw4(self):
-        self.assertEqual(self.PE.config.datasets.experiments.weight_method, 'mean_squared')
+        self.assertEqual(self.PE.config.settings.weight_method, 'value_scaling')
 
     def test_validation_kw1(self):
         self.assertEqual(self.PE.config.datasets.validations.report3.filename, self.TC3.report_name)
 
     def test_validation_kw2(self):
-        self.assertEqual(self.PE.config.datasets.validations.weight, 4)
+        self.assertEqual(self.PE.config.settings.validation_weight, 4)
+
+    def test_validation_threshold(self):
+        self.assertEqual(self.config.settings.validation_threshold, self.PE.config.settings.validation_threshold)
+
+    def test_validation_weight(self):
+        self.assertEqual(self.config.settings.validation_weight, self.PE.config.settings.validation_weight)
 
     def test_validation_mapppings1(self):
         # self.PE.config
@@ -496,48 +503,30 @@ class ParameterEstimationTestsConfig2(_test_base._BaseTest):
         ]
         self.assertListEqual(sorted(expected), sorted(l))
 
+    def test_affected_experiments_keyword_all_resolves1(self):
+        """
+        Ensure that the keyword 'all' is resolved for affected_experiments
+        :return:
+        """
+        self.assertEqual(self.config.items.fit_items.A.affected_experiments, 'report1')
 
-class ParameterEstimationConfigDefaultsTests(_test_base._BaseTest):
-    def setUp(self):
-        super(ParameterEstimationConfigDefaultsTests, self).setUp()
+    def test_affected_experiments_keyword_all_resolves3(self):
+        """
+        Ensure that the keyword 'all' is resolved for affected_experiments
+        :return:
+        """
+        self.assertListEqual(self.config.items.fit_items.C.affected_validation_experiments,
+                             ['report3']
+                             )
 
-        self.TC1 = pycotools3.tasks.TimeCourse(self.model, end=1000, step_size=100,
-                                               intervals=10, report_name='report1.txt')
-
-        ## add some noise
-        data1 = pycotools3.misc.add_noise(self.TC1.report_name)
-
-        ## remove the data
-        os.remove(self.TC1.report_name)
-
-        ## rewrite the data with noise
-        data1.to_csv(self.TC1.report_name, sep='\t')
-
-        pycotools3.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
-
-        self.PE = pycotools3.tasks.ParameterEstimation(
-            self.model,
-            datasets=dict(
-                experiments=dict(
-                    ds1=dict(
-                        filename=self.TC1.report_name
-                    )
-                )
-            )
-           )
-
-        ## test the various ways that you want to instantiate the ParameterEstiamtion class
-
-    def test_default_separator(self):
-
-        conf = self.PE.config
-        self.assertEqual(conf.datasets.experiments.ds1.separator, '\t')
-
-    def test_default_(self):
-
-        conf = self.PE._config()
-        print(conf)
-        # self.assertEqual(conf.datasets.experiments.ds1.separator, '\t')
+    def test_affected_experiments_keyword_all_resolves4(self):
+        """
+        Ensure that the keyword 'all' is resolved for affected_experiments
+        :return:
+        """
+        self.assertListEqual(self.config.items.fit_items.C.affected_models,
+                             ['model1']
+                             )
 
 
 class ParameterEstimationTests(_test_base._BaseTest):
@@ -586,29 +575,13 @@ class ParameterEstimationTests(_test_base._BaseTest):
         pycotools3.misc.correct_copasi_timecourse_headers(self.TC4.report_name)
         pycotools3.misc.correct_copasi_timecourse_headers(self.TC5.report_name)
 
-        self.affected_experiments = {
-            'A': ['report1', 'report4']
-        }
-
-        self.affected_validation_experiments = {
-            'B': ['report2', 'report3']
-        }
-
-
-        experiment_args = {
-            'report1': {
-                'filename': self.TC1.report_name,
-
-            }
-
-        }
 
         self.conf_dct = dict(
             models=dict(
                 model1=dict(
-                    copasi_file=self.model.copasi_file,
-                    results_directory=os.path.join(self.model.root, 'ParameterEstimationResults'))
-                ),
+                    copasi_file=self.model.copasi_file
+                    )
+            ),
             datasets=dict(
                 experiments=dict(
                     weight_method='value_scaling',
@@ -653,6 +626,7 @@ class ParameterEstimationTests(_test_base._BaseTest):
                 method='genetic_algorithm_sr',
                 population_size=10,
                 number_of_generations=10,
+                working_directory=os.path.dirname(__file__)
             )
         )
         self.conf = ParameterEstimation.Config(**self.conf_dct)
@@ -664,9 +638,13 @@ class ParameterEstimationTests(_test_base._BaseTest):
     def test_load_model(self):
         self.assertIsInstance(self.PE.config.models.model1.model, pycotools3.model.Model)
 
+    def test_output_directory_id(self):
+        results_directory = '/home/ncw135/Documents/pycotools3/Tests/Problem1/Fit1/model1/'
+        self.assertEqual(self.PE.results_directory['model1'], results_directory)
+
     def test_create_output_directory(self):
-        results_directory = os.path.join(self.model.root, 'ParameterEstimationResults')
-        self.assertEqual(self.PE.config.models.model1.results_directory, results_directory)
+        results_directory = '/home/ncw135/Documents/pycotools3/Tests/Problem1/Fit1/model1/'
+        self.assertTrue(os.path.isdir(results_directory))
 
     def test_get_model_obj_from_strings(self):
         self.assertEqual(len(self.PE.get_model_objects_from_strings()), 9)
@@ -708,334 +686,159 @@ class ParameterEstimationTests(_test_base._BaseTest):
         self.assertEqual(self.PE.config.settings.report_name, 'PEData.txt')
 
     def test_get_report_key(self):
+        self.PE.setup()
         keys = self.PE._get_report_key()
         expected = {'model1': 'Report_32'}
         self.assertEqual(expected, keys)
 
     def test_get_experiment_keys1(self):
+        self.PE.setup()
         experiment_keys = self.PE._get_experiment_keys()
-        print(experiment_keys)
-        self.assertEqual(experiment_keys['report1'], 'Experiment_0')
+        self.assertEqual(experiment_keys['model1']['report1'], 'Experiment_report1')
 
     def test_get_validation_keys1(self):
         experiment_keys = self.PE._get_validation_keys()
-        print(experiment_keys)
-        self.assertEqual(experiment_keys['report2'], 'Experiment_1')
+        self.assertEqual(experiment_keys['model1']['report2'], 'Experiment_report2')
 
     def test_get_experiment_keys2(self):
-        experiment_keys = self.PE._get_experiment_keys()
-        print(experiment_keys)
-        self.assertEqual(len(experiment_keys), 3)
+        experiment_keys = self.PE._get_experiment_keys()['model1']
+        self.assertEqual(3, len(experiment_keys))
 
-    def test_write_config_file(self):
-        """
-        A test that PE writes the config file to the
-        right place
-        :return:
-        """
-        self.PE.write_config_file()
-        self.assertTrue(os.path.isfile(self.PE.config_filename))
-
-
-    def test_affected_experiments(self):
-        # self.PE.write_config_file()
-        self.PE.setup()
-        xml = self.PE.model.xml
-        count = 0
-        for i in xml.findall('.//*[@name="Affected Experiments"]'):
-            ## returns True of element has children
-            if len(i) != 0:
-                count += 1
-
-        ## only 1 of 3 experiment datasets has affected_experiments
-        self.assertEqual(count, 1)
-
-    def test_affected_validation_experiments(self):
-        self.PE.write_config_file()
-        self.PE.setup()
-        xml = self.PE.model.xml
-        count = 0
-        for i in xml.findall('.//*[@name="Affected Cross Validation Experiments"]'):
-            ## returns True of element has children
-            if len(i) != 0:
-                count += 1
-
-        ## only 1 of 3 experiment datasets has affected validation experiments
-        self.assertEqual(count, 1)
-
-    # def test_read_config_file(self):
+    # def test_write_config_file(self):
     #     """
     #     A test that PE writes the config file to the
     #     right place
     #     :return:
     #     """
-    #     from collections import OrderedDict
-    #     self.PE._read_config_file()
-    #     self.assertIsInstance(self.PE.mappings, OrderedDict)
-    #     self.assertIsInstance(self.PE.optimization_item_list, pandas.DataFrame)
+    #     self.PE.write_config_file()
+    #     self.assertTrue(os.path.isfile(self.PE.config_filename))
+
+
+    def test_number_of_affected_experiments_is_correct(self):
+        # self.PE.write_config_file()
+        self.PE.setup()
+        count = 0
+        for i in self.PE.models.model1.model.xml.findall('.//*[@name="Affected Experiments"]'):
+            for j in i:
+                count += 1
+
+        ## only 1 of 3 experiment datasets has affected_experiments
+        self.assertEqual(23, count)
+
+    def test_number_of_affected_validation_experiments_is_correct(self):
+        # self.PE.write_config_file()
+        self.PE.setup()
+        count = 0
+        for i in self.PE.models.model1.model.xml.findall('.//*[@name="Affected Cross Validation Experiments"]'):
+            for j in i:
+                count += 1
+
+        ## only 1 of 3 experiment datasets has affected_experiments
+        self.assertEqual(15, count)
+
+    def test_affected_experiments_for_global_quantity_A2B(self):
+        # self.PE.write_config_file()
+        self.PE.setup()
+        # self.PE.models.model1.model.open()
+        count = 0
+        experiment_keys = []
+        for i in self.PE.models.model1.model.xml.findall('.//*[@name="ObjectCN"]'):
+            if i.attrib['value'] == 'CN=Root,Model=New_Model,Vector=Values[A2B],Reference=InitialValue':
+                for j in i.getparent():
+                    if j.attrib['name'] == 'Affected Experiments':
+                        for k in j:
+                            experiment_keys.append(k.attrib['value'])
+
+        self.assertListEqual(sorted(['Experiment_report1', 'Experiment_report4', 'Experiment_report5']),
+                             sorted(experiment_keys))
+
+    def test_affected_validation_experiments_for_global_quantity_A2B(self):
+        # self.PE.write_config_file()
+        self.PE.setup()
+        # self.PE.models.model1.model.open()
+        count = 0
+        valiadtion_keys = []
+        for i in self.PE.models.model1.model.xml.findall('.//*[@name="ObjectCN"]'):
+            if i.attrib['value'] == 'CN=Root,Model=New_Model,Vector=Values[A2B],Reference=InitialValue':
+                for j in i.getparent():
+                    if j.attrib['name'] == 'Affected Cross Validation Experiments':
+                        for k in j:
+                            valiadtion_keys.append(k.attrib['value'])
+
+        self.assertListEqual(sorted(['Experiment_report2', 'Experiment_report3']),
+                             sorted(valiadtion_keys))
+
 
     def test_insert_fit_items(self):
         '''
         Tests that there are the same number of rows in the template file
         as there are fit items inserted into copasi
         '''
-        self.PE.write_config_file()
         self.PE.setup()
-        self.model = self.PE.model.save()
-        new_xml = pycotools3.tasks.CopasiMLParser(self.model.copasi_file).xml
-        list_of_tasks = new_xml.find(self.list_of_tasks)
+        mod = self.PE.models.model1.model
+        list_of_tasks = mod.xml.find(self.list_of_tasks)
         ## [5][1][3] indexes the parameter estimation item list
         optimization_item_list = list_of_tasks[5][1][3]
-        self.assertEqual(len(optimization_item_list), 9)
+        self.assertEqual(8, len(optimization_item_list))
 
     def test_set_PE_method(self):
         '''
         test to see if method has been properly inserted into the copasi file
         '''
-        self.PE.write_config_file()
         self.PE.setup()
-
-        tasks = self.PE.model.xml.find('{http://www.copasi.org/static/schema}ListOfTasks')
+        mod = self.PE.models.model1.model
+        tasks = mod.xml.find('{http://www.copasi.org/static/schema}ListOfTasks')
         for i in tasks:
             if i.attrib['name'] == 'Parameter Estimation':
-                self.assertEqual(i[-1].attrib['type'].lower(), self.PE.method.lower().replace('_', ''))
+                self.assertEqual(i[-1].attrib['type'].lower(), self.PE.config.settings.method.lower().replace('_', ''))
 
-    def test_run(self):
-        self.PE.write_config_file()
-        self.model = self.PE.setup()
-        self.PE.run()
-        f = os.path.join(self.PE.results_directory, self.PE.report_name) + '_0.txt'
-        self.assertTrue(os.path.isfile(f))
-
-    # def test_viz_param_est_parser(self):
+    # def test_run(self):
+    #     self.PE.write_config_file()
+    #     self.model = self.PE.setup()
+    #     self.PE.run()
+    #     f = os.path.join(self.PE.results_directory, self.PE.report_name) + '_0.txt'
+    #     self.assertTrue(os.path.isfile(f))
+    #
+    # # def test_viz_param_est_parser(self):
+    # #     """
+    # #     test that viz.Parser correctly formats the
+    # #     parameter estimation data
+    # #     :return:
+    # #     """
+    # #     self.PE.write_config_file()
+    # #     self.PE.setup()
+    # #     self.PE.run()
+    # #     p = pycotools3.viz.Parse(self.PE)
+    # #     order = ['A', 'B', 'C', 'A2B', 'ADeg_k1', 'B2C', 'B2C_0_k2', 'C2A_k1', 'ThisIsAssignment', 'RSS']
+    # #     df = p.from_parameter_estimation(self.PE)
+    # #     self.assertListEqual(sorted(order), sorted(list(df.columns)))
+    #
+    # def test_viz_param_est_parser_len(self):
     #     """
-    #     test that viz.Parser correctly formats the
-    #     parameter estimation data
+    #     outputs only one row for parameter estimation
+    #     results
     #     :return:
     #     """
     #     self.PE.write_config_file()
-    #     self.PE.setup()
+    #     self.model = self.PE.setup()
     #     self.PE.run()
+    #     import time
+    #     time.sleep(2)
     #     p = pycotools3.viz.Parse(self.PE)
-    #     order = ['A', 'B', 'C', 'A2B', 'ADeg_k1', 'B2C', 'B2C_0_k2', 'C2A_k1', 'ThisIsAssignment', 'RSS']
-    #     df = p.from_parameter_estimation(self.PE)
-    #     self.assertListEqual(sorted(order), sorted(list(df.columns)))
-
-    def test_viz_param_est_parser_len(self):
-        """
-        outputs only one row for parameter estimation
-        results
-        :return:
-        """
-        self.PE.write_config_file()
-        self.model = self.PE.setup()
-        self.PE.run()
-        import time
-        time.sleep(2)
-        p = pycotools3.viz.Parse(self.PE)
-        df = p.from_multi_parameter_estimation(self.PE)
-        self.assertEqual(df.shape[0], 1)
-
+    #     df = p.from_multi_parameter_estimation(self.PE)
+    #     self.assertEqual(df.shape[0], 1)
     #
-    def test_c(self):
-        if os.path.isfile(self.PE.config_filename):
-            os.remove(self.PE.config_filename)
-        self.PE.write_config_file()
-        self.models_dct = self.PE.setup()
-        keys = list(self.models_dct.keys())
-        # self.models_dct[keys[0]].open()
-
-    def test_that_error_on_line3539_is_raised(self):
-        pass
-
-
-class ParameterEstimationConfigFileTests(_test_base._BaseTest):
-    def setUp(self):
-        super(ParameterEstimationConfigFileTests, self).setUp()
-
-        self.TC1 = pycotools3.tasks.TimeCourse(self.model, end=1000, step_size=100,
-                                               intervals=10, report_name='report1.txt')
-
-        ## add some noise
-        data1 = pycotools3.misc.add_noise(self.TC1.report_name)
-
-        ## remove the data
-        os.remove(self.TC1.report_name)
-
-        ## rewrite the data with noise
-        data1.to_csv(self.TC1.report_name, sep='\t')
-
-        pycotools3.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
-
-    def test_config_file_locals2(self):
-        """
-
-        :return:
-        """
-        PE = pycotools3.tasks.ParameterEstimation(self.model,
-                                                  self.TC1.report_name,
-                                                  method='genetic_algorithm',
-                                                  population_size=10,
-                                                  number_of_generations=10,
-                                                  report_name='PE_report_name.csv')
-        item_template = PE._item_template
-        boolean = False
-        locs = ['(ADeg).k1', '(B2C).k2', '(C2A).k1']
-        for i in locs:
-            if i not in list(item_template.index):
-                print(('{} not in template'.format(i)))
-                boolean = True
-        # self.assertFalse(boolean)
-
-    def test_config_file_metabs1(self):
-        """
-
-        :return:
-        """
-        PE = pycotools3.tasks.ParameterEstimation(self.model,
-                                                  self.TC1.report_name,
-                                                  method='genetic_algorithm',
-                                                  population_size=10,
-                                                  number_of_generations=10,
-                                                  report_name='PE_report_name.csv')
-        item_template = PE._item_template
-        boolean = False
-        locs = ['A', 'B', 'C']
-        for i in locs:
-            if i not in list(item_template.index):
-                print(('{} not in template'.format(i)))
-                boolean = True
-        self.assertFalse(boolean)
-
-    def test_config_file_metabs2(self):
-        """
-
-        :return:
-        """
-        PE = pycotools3.tasks.ParameterEstimation(self.model,
-                                                  self.TC1.report_name,
-                                                  method='genetic_algorithm',
-                                                  population_size=10,
-                                                  number_of_generations=10,
-                                                  report_name='PE_report_name.csv',
-                                                  metabolites=[])
-        item_template = PE._item_template
-        boolean = False
-        metabs = []
-        for i in metabs:
-            if i not in list(item_template.index):
-                print(('{} not in template'.format(i)))
-                boolean = True
-        self.assertFalse(boolean)
-
-    def test_config_file_metabs3(self):
-        """
-
-        :return:
-        """
-        PE = pycotools3.tasks.ParameterEstimation(self.model,
-                                                  self.TC1.report_name,
-                                                  method='genetic_algorithm',
-                                                  population_size=10,
-                                                  number_of_generations=10,
-                                                  report_name='PE_report_name.csv',
-                                                  metabolites=['A'])
-        item_template = PE._item_template
-        boolean = False
-        metabs = ['A']
-        for i in metabs:
-            if i not in list(item_template.index):
-                print(('{} not in template'.format(i)))
-                boolean = True
-        self.assertFalse(boolean)
-
-    def test_config_file_globs1(self):
-        """
-
-        :return:
-        """
-        PE = pycotools3.tasks.ParameterEstimation(self.model,
-                                                  self.TC1.report_name,
-                                                  method='genetic_algorithm',
-                                                  population_size=10,
-                                                  number_of_generations=10,
-                                                  report_name='PE_report_name.csv',
-                                                  global_quantities=['A2B'])
-        item_template = PE._item_template
-        boolean = False
-        globs = ['A2B']
-        for i in globs:
-            if i not in list(item_template.index):
-                print(('{} not in template'.format(i)))
-                boolean = True
-        self.assertFalse(boolean)
-
-    def test_config_file_globs2(self):
-        """
-
-        :return:
-        """
-        PE = pycotools3.tasks.ParameterEstimation(self.model,
-                                                  self.TC1.report_name,
-                                                  method='genetic_algorithm',
-                                                  population_size=10,
-                                                  number_of_generations=10,
-                                                  report_name='PE_report_name.csv',
-                                                  )
-        item_template = PE._item_template
-        boolean = False
-        globs = ['ThisIsAssignment', 'B2C', 'A2B']
-        for i in globs:
-            if i not in list(item_template.index):
-                print(('{} not in template'.format(i)))
-                boolean = True
-        self.assertFalse(boolean)
-
-
-class TwoParameterEstimationTests(_test_base._BaseTest):
-    def setUp(self):
-        super(TwoParameterEstimationTests, self).setUp()
-
-        self.TC1 = pycotools3.tasks.TimeCourse(self.model, end=1000, step_size=100,
-                                               intervals=10, report_name='report1.txt')
-
-        self.model.set('metabolite', 'A', 150, match_field='name', change_field='concentration')
-
-        self.TC2 = pycotools3.tasks.TimeCourse(self.model, end=1000, step_size=100,
-                                               intervals=10, report_name='report2.txt')
-
-        ## add some noise
-        data1 = pycotools3.misc.add_noise(self.TC1.report_name)
-        data2 = pycotools3.misc.add_noise(self.TC2.report_name)
-
-        ## remove the data
-        os.remove(self.TC1.report_name)
-        os.remove(self.TC2.report_name)
-
-        ## rewrite the data with noise
-        data1.to_csv(self.TC1.report_name, sep='\t')
-        data2.to_csv(self.TC2.report_name, sep='\t')
-
-        pycotools3.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
-        pycotools3.misc.correct_copasi_timecourse_headers(self.TC2.report_name)
-
-    def test_setup_has_two_data_files(self):
-        PE = pycotools3.tasks.ParameterEstimation(
-            self.model, [self.TC1.report_name, self.TC2.report_name], method='genetic_algorithm',
-            population_size=5, number_of_generations=20,
-            metabolites=[], local_parameters=[], lower_bound=0.1,
-            upper_bound=100)
-        if os.path.isfile(PE.config_filename):
-            os.remove(PE.config_filename)
-
-        PE.write_config_file()
-        PE.setup()
-
-        query = '//*[@name="File Name"]'
-        count = 0
-        for i in PE.model.xml.xpath(query):
-            count += 1
-        self.assertEqual(count, 2)
+    # #
+    # def test_c(self):
+    #     if os.path.isfile(self.PE.config_filename):
+    #         os.remove(self.PE.config_filename)
+    #     self.PE.write_config_file()
+    #     self.models_dct = self.PE.setup()
+    #     keys = list(self.models_dct.keys())
+    #     # self.models_dct[keys[0]].open()
+    #
+    # def test_that_error_on_line3539_is_raised(self):
+    #     pass
 
 
 class ExperimentMapperTests(_test_base._BaseTest):
@@ -1078,7 +881,6 @@ class ExperimentMapperTests(_test_base._BaseTest):
             ),
             datasets=dict(
                 experiments=dict(
-                    weight_method='value_scaling',
                     report1=dict(
                         filename=self.TC1.report_name,
                     ),
@@ -1100,10 +902,10 @@ class ExperimentMapperTests(_test_base._BaseTest):
             items=dict(
                 fit_items=dict(
                     A=dict(
-                        affected_experiments=['report1', 'report4']
+                        affected_experiments=['report1', 'ss']
                     ),
                     B=dict(
-                        affected_validation_experiments=['report2']
+                        affected_validation_experiments=['report3']
                     ),
                     C={},
                     A2B={},
@@ -1117,7 +919,10 @@ class ExperimentMapperTests(_test_base._BaseTest):
                 method='genetic_algorithm_sr',
                 population_size=10,
                 number_of_generations=10,
-            )
+                working_directory=os.path.dirname(__file__),
+                weight_method = 'value_scaling',
+
+        )
         )
         self.conf = ParameterEstimation.Config(**self.conf_dct)
         self.PE = pycotools3.tasks.ParameterEstimation(self.conf)
@@ -1150,109 +955,150 @@ class ExperimentMapperTests(_test_base._BaseTest):
     def test(self):
         self.PE._map_experiments()
 
-    def test_experiment(self):
+    def test_correct_number_of_experiments(self):
         """
         Test that four  _experiments have been set up
         :return:
         """
+        self.PE.setup()
+        mod = self.PE.models['model1'].model
         count = 0
         query = '//*[@name="Experiment Set"]'
-        for i in self.PE.model.xml.xpath(query):
-            print(i.attrib)
+        for i in mod.xml.xpath(query):
             for j in i:
                 count += 1
-        self.assertEqual(count, 2)
+        self.assertEqual(count, 3)
+
+    def test_correct_number_of_validation_experiments(self):
+        """
+        Test that four  _experiments have been set up
+        :return:
+        """
+        self.PE.setup()
+        mod = self.PE.models['model1'].model
+        count = 0
+        query = '//*[@name="Validation Set"]'
+        for i in mod.xml.xpath(query):
+            for j in i:
+                if j.attrib['name'] == 'report3':
+                    count += 1
+
+        self.assertEqual(count, 1)
 
     def test_validation_weight(self):
         """
         Test that 2 _experiments have been set up
         :return:
         """
+        self.PE.setup()
+        mod = self.PE.models['model1'].model
+
         ans = None
 
         query = '//*[@name="Validation Set"]'
 
-        for j in self.PE.model.xml.xpath(query):
+        for j in mod.xml.xpath(query):
             for k in list(j):
                 if k.attrib['name'] == 'Weight':
                     ans = k.attrib['value']
-        self.assertEqual(ans, str(self.PE.validation_weight))
+        self.assertEqual(ans, str(self.PE.config.settings.validation_weight))
 
     def test_validation_threshold(self):
         """
         Test that 2 _experiments have been set up
         :return:
         """
+        self.PE.setup()
+        mod = self.PE.models['model1'].model
+
         ans = None
         query = '//*[@name="Validation Set"]'
 
-        for j in self.PE.model.xml.xpath(query):
+        for j in mod.xml.xpath(query):
             for k in list(j):
                 if k.attrib['name'] == 'Threshold':
                     ans = k.attrib['value']
-        self.assertEqual(ans, str(self.PE.validation_threshold))
+        self.assertEqual(ans, str(self.PE.config.settings.validation_threshold))
 
     def test_validation(self):
         """
         Test that 2 validation _experiments have been set up
         :return:
         """
+        self.PE.setup()
+        mod = self.PE.models['model1'].model
+
         count = 0
         query = '//*[@name="Validation Set"]'
-        for i in self.PE.model.xml.xpath(query):
+        for i in mod.xml.xpath(query):
             for j in i:
                 if j.attrib['name'] not in ['Weight', 'Threshold']:
                     count += 1
-        self.assertEqual(2, count)
+        self.assertEqual(1, count)
 
-    def test_experiment2(self):
-        """
-        First row of experiment_0==1
-        :return:
-        """
+    def experiment_test(self, expected_value, attribute):
+        self.PE.setup()
+        mod = self.PE.config.models.model1.model
         ans = None
         query = '//*[@name="Experiment Set"]'
-        for i in self.PE.model.xml.xpath(query):
+        for i in mod.xml.xpath(query):
             for j in i:
                 if j.attrib['name'] == 'report1':
                     for k in j:
-                        if k.attrib['name'] == 'First Row':
+                        print(k, k.attrib)
+                        if k.attrib['name'] == attribute:
                             ans = k.attrib['value']
-        self.assertEqual(ans, '1')
+        self.assertEqual(expected_value, ans)
 
-    def test_experiment_correct_weighting_method(self):
+    def test_experiment_first_row(self):
         """
         First row of experiment_0==1
         :return:
         """
-        ans = None
-        query = '//*[@name="Experiment Set"]'
-        for i in self.PE.model.xml.xpath(query):
-            for j in i:
-                if j.attrib['name'] == 'report4':
-                    for k in j:
-                        if k.attrib['name'] == 'Weight Method':
-                            ans = k.attrib['value']
-        self.assertEqual(ans, '3')
+        self.experiment_test('1', 'First Row')
+
+    def test_experiment_weighting_method(self):
+        """
+        First row of experiment_0==1
+        :return:
+        """
+        self.experiment_test('3', 'Weight Method')
+
+    def test_experiment_file_name(self):
+        """
+        First row of experiment_0==1
+        :return:
+        """
+        self.experiment_test('report1.txt', 'File Name')
+
+    def test_experiment_number_of_columns(self):
+        """
+        First row of experiment_0==1
+        :return:
+        """
+        self.experiment_test('10', 'Number of Columns')
 
     def test_experiment_correct_reference1(self):
         """
         First row of experiment_0==1
         :return:
         """
+        self.PE.setup()
+        mod = self.PE.config.models.model1.model
+
         ans = None
         query = '//*[@name="Experiment Set"]'
-        for i in self.PE.model.xml.xpath(query):
+        for i in mod.xml.xpath(query):
             for j in i:
-                if j.attrib['name'] == 'Experiment_0':
+                if j.attrib['name'] == 'report2':
                     for k in j:
                         if k.attrib['name'] == 'Object Map':
                             for l in k:
                                 if l.attrib['name'] == '1':
                                     ans = l[0].attrib['value']
         self.assertEqual(
-            ans,
-            'CN=Root,Model=New_Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration'
+            'CN=Root,Model=New_Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration',
+            ans
         )
 
     def test_experiment_correct_reference2(self):
@@ -1260,19 +1106,21 @@ class ExperimentMapperTests(_test_base._BaseTest):
         First row of experiment_0==1
         :return:
         """
+        self.PE.setup()
+        mod = self.PE.config.models.model1.model
         ans = None
         query = '//*[@name="Experiment Set"]'
-        for i in self.PE.model.xml.xpath(query):
+        for i in mod.xml.xpath(query):
             for j in i:
-                if j.attrib['name'] == 'Experiment_3':
+                if j.attrib['name'] == 'report1':
                     for k in j:
                         if k.attrib['name'] == 'Object Map':
                             for l in k:
                                 if l.attrib['name'] == '1':
                                     ans = l[0].attrib['value']
         self.assertEqual(
+            'CN=Root,Model=New_Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration',
             ans,
-            'CN=Root,Model=New_Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=InitialConcentration',
         )
 
     def test_validation_map1(self):
@@ -1280,9 +1128,12 @@ class ExperimentMapperTests(_test_base._BaseTest):
         First row of experiment_0==1
         :return:
         """
+        self.PE.setup()
+        mod = self.PE.config.models.model1.model
+
         ans = None
         query = '//*[@name="Validation Set"]'
-        for i in self.PE.model.xml.xpath(query):
+        for i in mod.xml.xpath(query):
             for j in i:
                 if j.attrib['name'] == 'report3':
                     for k in j:
@@ -1300,27 +1151,33 @@ class ExperimentMapperTests(_test_base._BaseTest):
         First row of experiment_0==1
         :return:
         """
+        self.PE.setup()
+        mod = self.PE.config.models.model1.model
         ans = None
         query = '//*[@name="Experiment Set"]'
-        for i in self.PE.model.xml.xpath(query):
+        for i in mod.xml.xpath(query):
             for j in i:
-                if j.attrib['name'] == 'Experiment_3':
+                if j.attrib['name'] == 'ss':
                     for k in j:
                         if k.attrib['name'] == 'Experiment Type':
                             ## code for steady state is '0'
                             ans = k.attrib['value']
-        self.assertEqual(ans, str('0'))
+        self.assertEqual(str(0), ans)
 
     def test_experiment_time_course(self):
         """
         First row of experiment_0==1
         :return:
         """
+
+        self.PE.setup()
+        mod = self.PE.config.models.model1.model
+
         ans = None
         query = '//*[@name="Experiment Set"]'
-        for i in self.PE.model.xml.xpath(query):
+        for i in mod.xml.xpath(query):
             for j in i:
-                if j.attrib['name'] == 'Experiment_0':
+                if j.attrib['name'] == 'report1':
                     for k in j:
                         if k.attrib['name'] == 'Experiment Type':
                             ## code for steady state is '0'
@@ -1332,35 +1189,36 @@ class ExperimentMapperTests(_test_base._BaseTest):
         First row of experiment_0==1
         :return:
         """
+
+        self.PE.setup()
+        mod = self.PE.config.models.model1.model
+
         count = 0
         query = '//*[@name="Experiment Set"]'
-        for i in self.PE.model.xml.xpath(query):
+        for i in mod.xml.xpath(query):
             for j in i:
                 for k in j:
                     if k.attrib['name'] == 'Object Map':
                         count += 1
-        self.assertEqual(count, 2)
-
-    def test_experiments_property(self):
-        self.assertListEqual(self.PE._experiments['model1'], [])
-
-    def test_validation_property(self):
-        self.assertListEqual(self.PE._validations['model1'], [])
+        self.assertEqual(3, count)
 
     def test_experiment_correct_number_of_validation_obj_maps(self):
         """
         First row of experiment_0==1
         :return:
         """
+        self.PE.setup()
+        mod = self.PE.config.models.model1.model
+
         count = 0
 
         query = '//*[@name="Validation Set"]'
-        for i in self.PE.model.xml.xpath(query):
+        for i in mod.xml.xpath(query):
             for j in i:
                 for k in j:
                     if k.attrib['name'] == 'Object Map':
                         count += 1
-        self.assertEqual(count, 2)
+        self.assertEqual(1, count)
 
     def test_get_experiment_keys(self):
         dct = self.PE._get_experiment_keys()
@@ -1373,65 +1231,72 @@ class ExperimentMapperTests(_test_base._BaseTest):
 
     def test_create_experiments(self):
         from lxml import etree
-        elements = self.PE._create_experiment(validation=False)
+        elements = self.PE._map_experiments(validation=False)
         self.assertIsInstance(elements['model1']['report1'], etree._Element)
 
     def test_create_validation_experiments(self):
         from lxml import etree
-        elements = self.PE._create_experiment(validation=True)
+        elements = self.PE._map_experiments(validation=True)
         self.assertIsInstance(elements['model1']['report3'], etree._Element)
 
-    # def test_lower_bound_dct(self):
-    #     ref = r'CN=Root,Model=New_Model,Vector=Values[B2C],Reference=InitialValue'
-    #     query = '//*[@name="FitItem"]'
-    #     for i in self.PE.model.xml.xpath(query):
-    #         for j in i:
-    #             if j.attrib['name'] == 'ObjectCN':
-    #                 if j.attrib['value'] == ref:
-    #                     for k in j.getparent():
-    #                         if k.attrib['name'] == 'LowerBound':
-    #                             lower_bound_value = k.attrib['value']
-    #     self.assertEqual(float(self.PE.lower_bound_dct['B2C']),
-    #                      float(lower_bound_value))
-    #
-    # def test_lower_bound_dct2(self):
-    #     ref = r'CN=Root,Model=New_Model,Vector=Values[B2C],Reference=InitialValue'
-    #     query = '//*[@name="FitItem"]'
-    #     for i in self.PE.model.xml.xpath(query):
-    #         for j in i:
-    #             if j.attrib['name'] == 'ObjectCN':
-    #                 if j.attrib['value'] == ref:
-    #                     for k in j.getparent():
-    #                         if k.attrib['name'] == 'UpperBound':
-    #                             upper_bound_value = k.attrib['value']
-    #     self.assertEqual(float(self.PE.upper_bound),
-    #                      float(upper_bound_value))
-    #
-    # def test_upper_bound_dct(self):
-    #     ref = r'CN=Root,Model=New_Model,Vector=Values[A2B],Reference=InitialValue'
-    #     query = '//*[@name="FitItem"]'
-    #     for i in self.PE.model.xml.xpath(query):
-    #         for j in i:
-    #             if j.attrib['name'] == 'ObjectCN':
-    #                 if j.attrib['value'] == ref:
-    #                     for k in j.getparent():
-    #                         if k.attrib['name'] == 'UpperBound':
-    #                             upper_bound_value = k.attrib['value']
-    #     self.assertEqual(float(self.PE.upper_bound_dct['A2B']),
-    #                      float(upper_bound_value))
-    #
-    # def test_upper_bound_dct2(self):
-    #     ref = r'CN=Root,Model=New_Model,Vector=Values[A2B],Reference=InitialValue'
-    #     query = '//*[@name="FitItem"]'
-    #     for i in self.PE.model.xml.xpath(query):
-    #         for j in i:
-    #             if j.attrib['name'] == 'ObjectCN':
-    #                 if j.attrib['value'] == ref:
-    #                     for k in j.getparent():
-    #                         if k.attrib['name'] == 'LowerBound':
-    #                             lower_bound_value = k.attrib['value']
-    #     self.assertEqual(float(self.PE.lower_bound),
-    #                      float(lower_bound_value))
+    def test_fit_items_property(self):
+        lst = ['A', 'B', 'C', 'A2B', 'B2C', 'B2C_0_k2', 'C2A_k1', 'ADeg_k1']
+        self.assertListEqual(sorted(lst), sorted(list(self.PE.config.items.fit_items.keys())))
+
+    def test_remove_fit_item(self):
+        self.PE
+
+    def test_correct_number_of_fit_items(self):
+        self.PE.setup()
+        query = '//*[@name="FitItem"]'
+        count = 0
+        for i in self.PE.models.model1.model.xml.xpath(query):
+            if i.attrib['name'] == 'FitItem':
+                count += 1
+        self.assertEqual(count, 8)
+
+
+    def test_set_PE_method(self):
+        self.PE.setup()
+        mod = self.PE.models.model1.model
+
+        query = '//*[@name="Parameter Estimation"]'
+        ans = None
+        for i in mod.xml.xpath(query):
+            if i.tag == '{http://www.copasi.org/static/schema}Task':
+                for j in i:
+                    print(j.tag)
+                    if j.tag == 'Method':
+                        ans = j.attrib['name']
+        self.assertEqual('Genetic Algorithm SR', ans)
+
+
+
+
 
 if __name__ == '__main__':
     unittest.main()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

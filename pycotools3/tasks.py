@@ -2342,35 +2342,6 @@ class ParameterEstimation(_Task):
             self.items = items
             self.settings = settings
 
-            if not isinstance(self.models, dict):
-                raise errors.InputError(
-                    'The "models" argument should be a dict containing'
-                    ' model names as keys and "model.Model" object or "copasi file"'
-                )
-
-            if not isinstance(self.datasets, dict):
-                raise TypeError(
-                    'The "datasets" argument should be a nested dict containing'
-                    ' "experiments" and/or "validations" dicts'
-                )
-            if not isinstance(self.items, dict):
-                raise TypeError(
-                    'The "items" argument should be a nested dict containing'
-                    ' "fit_items" and/or "constraint_items" dicts'
-                )
-
-            if not isinstance(self.settings, dict):
-                raise TypeError(
-                    'The "settings" argument should be a dict containing'
-                    ' arguments to valid settings.'
-                )
-
-            for i in self.settings:
-                if i not in self.settings_defaults.keys():
-                    raise errors.InputError(
-                        '"{}" is an invalid argument for "settings". These are valid '
-                        'arguments: "{}"'.format(i, list(self.settings_defaults.keys()))
-                    )
 
             self.kwargs = {
                 'models': self.models,
@@ -2386,6 +2357,8 @@ class ParameterEstimation(_Task):
 
             self._load_models()
             self.set_defaults()
+            self._validate_integrity_of_user_input()
+
 
         def __enter__(self):
             """
@@ -2419,8 +2392,43 @@ class ParameterEstimation(_Task):
                     dct[k] = defaults[k]
             return dct
 
-        def validate_integrity_of_user_input(self):
-            pass
+        def _validate_integrity_of_user_input(self):
+            for i in self.settings:
+                if i not in self.settings_defaults.keys():
+                    raise errors.InputError(
+                        '"{}" is an invalid argument for "settings". These are valid '
+                        'arguments: "{}"'.format(i, list(self.settings_defaults.keys()))
+                    )
+
+            if not isinstance(self.models, dict):
+                raise errors.InputError(
+                    'The "models" argument should be a dict containing'
+                    ' model names as keys and "model.Model" object or "copasi file"'
+                )
+
+            if not isinstance(self.datasets, dict):
+                raise TypeError(
+                    'The "datasets" argument should be a nested dict containing'
+                    ' "experiments" and/or "validations" dicts'
+                )
+            if not isinstance(self.items, dict):
+                raise TypeError(
+                    'The "items" argument should be a nested dict containing'
+                    ' "fit_items" and/or "constraint_items" dicts'
+                )
+
+            if not isinstance(self.settings, dict):
+                raise TypeError(
+                    'The "settings" argument should be a dict containing'
+                    ' arguments to valid settings.'
+                )
+
+            if self.settings.working_directory in ['', False, None] or not os.path.isdir(
+                    self.settings.working_directory):
+                raise errors.InputError(
+                    'A valid argument must be given to config.settings.working_directory. Got "{}"'.format(
+                        self.settings.working_directory
+                    ))
 
         def _load_models(self):
             for mod in self.models:
@@ -2441,16 +2449,11 @@ class ParameterEstimation(_Task):
             ## information to the dict
 
             experiments = self.datasets.experiments
-            if 'weight_method' not in experiments:
-                experiments['weight_method'] = self.experiment_defaults['weight_method']
 
             for experiment in self.experiment_names:
                 experiment_dataset = experiments.get(experiment)
 
                 experiment_defaults = self.experiment_defaults
-                if 'weight_method' in experiment_dataset:
-                    pass
-                del experiment_defaults['weight_method']
 
                 for default_kwarg in experiment_defaults:
                     if default_kwarg not in experiment_dataset:
@@ -2464,7 +2467,6 @@ class ParameterEstimation(_Task):
 
                 for mapping in experiment_dataset.mappings:
                     mapp = experiment_dataset.mappings.get(mapping)
-                    # print('mapp', mapp)
                     if mapp.role != 'time':
                         model_keys = list(self.models.keys())
                         mod = self.models[model_keys[0]].model
@@ -2483,10 +2485,6 @@ class ParameterEstimation(_Task):
                     self.datasets.experiments[experiment].mappings[mapping] = mapp
 
             validations = self.datasets.validations
-            if 'weight' not in validations:
-                validations['weight'] = self.validation_defaults.weight
-            if 'threshold' not in validations:
-                validations['threshold'] = self.validation_defaults.threshold
 
             for validation_experiment in self.validation_names:
                 validation_dataset = validations.get(validation_experiment)
@@ -2532,6 +2530,22 @@ class ParameterEstimation(_Task):
                     for i in self.fit_item_defaults:
                         if i not in item:
                             item[i] = self.fit_item_defaults[i]
+
+                if item['affected_experiments'] == 'all':
+                    if isinstance(self.experiment_names, str):
+                        item['affected_experiments'] = [self.experiment_names]
+                    else:
+                        item['affected_experiments'] = self.experiment_names
+
+                if item['affected_validation_experiments'] == 'all':
+                    if isinstance(self.validation_names, str):
+                        item['affected_validation_experiments'] = [self.validation_names]
+                    else:
+                        item['affected_validation_experiments'] = self.validation_names
+
+                if item['affected_models'] == 'all':
+                    item['affected_models'] = list(self.models.keys())
+
                 self.items.fit_items[fit_item] = DotDict(item)
 
             if 'constraint_items' in self.items:
@@ -2546,6 +2560,22 @@ class ParameterEstimation(_Task):
                         for i in self.constraint_item_defaults:
                             if i not in item:
                                 item[i] = self.constraint_item_defaults[i]
+
+                    if item.affected_experiments == 'all':
+                        if isinstance(self.experiment_names, str):
+                            item.affected_experiments = [self.experiment_names]
+                        else:
+                            item.affected_experiments = self.experiment_names
+
+                    if item.affected_validation_experiments == 'all':
+                        if isinstance(self.validation_names, str):
+                            item.affected_validation_experiments = [self.validation_names]
+                        else:
+                            item.affected_validation_experiments = self.validation_names
+
+                    if item.affected_models == 'all':
+                        item.affected_models = list(self.models.keys())
+
                 self.items.constraint_items[constraint_item] = DotDict(item)
 
         @staticmethod
@@ -2579,8 +2609,6 @@ class ParameterEstimation(_Task):
         @property
         def dataset_defaults(self):
             return {
-                'weight_method': 'mean_squared',
-                'normalize_weights_per_experiment': True,
                 'validations': {}
             }
 
@@ -2612,7 +2640,6 @@ class ParameterEstimation(_Task):
             return {
                 'filename': '',
                 'normalize_weights_per_experiment': True,
-                'weight_method': 'mean_squared',
                 'separator': '\t',
                 'affected_models': 'all',
                 'mappings': {},
@@ -2631,8 +2658,6 @@ class ParameterEstimation(_Task):
                 'normalize_weights_per_experiment': True,
                 'weight_method': 'mean_squared',
                 'separator': '\t',
-                'weight': 1,
-                'threshold': 5,
                 'mappings': {},
             }
 
@@ -2663,6 +2688,7 @@ class ParameterEstimation(_Task):
                 'start_value': 'model_value',
                 'affected_experiments': 'all',
                 'affected_validation_experiments': 'all',
+                'affected_models': 'all',
             }
 
         @constraint_item_defaults.setter
@@ -2704,7 +2730,12 @@ class ParameterEstimation(_Task):
                 'run_mode': True,
                 'working_directory': '',
                 'quantity_type': 'concentration',
-                'report_name': 'PEData.txt'
+                'report_name': 'PEData.txt',
+                'problem': 1,
+                'fit': 1,
+                'weight_method': 'mean_squared',
+                'validation_weight': 1,
+                'validation_threshold': 5
             }
 
         @settings_defaults.setter
@@ -2752,12 +2783,6 @@ class ParameterEstimation(_Task):
             return validation_names
 
         @property
-        def experiment_mappings(self):
-            mappings = []
-            for i in self.experiment_names:
-                print(self.experiments[i].mappings)
-
-        @property
         def model_objects(self):
             model_obj = []
             for i in self.experiment_names:
@@ -2771,6 +2796,14 @@ class ParameterEstimation(_Task):
                         model_obj.append(self.validations[i].mappings[j].model_object)
 
             return list(set(model_obj))
+
+        @property
+        def fit_items(self):
+            return self.items.fit_items
+
+        @property
+        def constraint_items(self):
+            return self.items.constraint_items
 
     def __init__(self, config):
         """
@@ -2790,64 +2823,6 @@ class ParameterEstimation(_Task):
         self.config = config
 
         self.do_checks()
-
-        self.config.models = self._define_report()
-
-
-
-        '''
-        
-            def setup(self):
-                """
-                :return:
-                """
-                ## read config file
-                self._read_config_file()
-        
-                ## make appropriate changes to arguments to make them compatible
-                ## with the copasi xml
-                self.convert_bool_to_numeric2()
-                # self.default_properties = self.convert_bool_to_numeric(self.default_properties)
-                self._convert_numeric_arguments_to_string()
-                # Try moving the above two lines to the constructor
-                ## create output directory
-                self._create_output_directory()
-        
-                ## create a report for PE results collection
-                self.model = self._define_report()
-        
-                ## map _experiments
-                # EM = ExperimentMapper(self.model, self.experiment_files, **self._experiment_mapping_args)
-        
-                ## get model from ExperimentMapper
-                self.model = self._map_experiments()
-        
-                ## get rid of existing parameter estimation definition
-                self.model = self._remove_all_fit_items()
-        
-                # self.convert_bool_to_numeric()
-        
-                ## create new parameter estimation
-                self.model = self._set_PE_method()
-                self.model = self._set_PE_options()
-                self.model = self._insert_all_fit_items()
-        
-                ## ensure we have model
-                assert self.model != None
-                assert isinstance(self.model, model.Model)
-        
-                ##copy the number `copy_number` times
-                models = self._copy_model()
-        
-                ## ensure we have dict of models
-                assert isinstance(models, dict)
-                assert len(models) == self.copy_number
-        
-                ##create a scan per model (again models is dict of model.Model's
-                self.models = self._setup_scan(models)
-                assert isinstance(models[0], model.Model)
-                return models
-        '''
 
     def do_checks(self):
         if not isinstance(self.config, self.Config):
@@ -2975,120 +2950,35 @@ class ParameterEstimation(_Task):
     #     return "ParameterEstimation(method='{}', config_filename='{}', report_name='{}')".format(
     #         self.method, self.config_filename, self.report_name)
 
-    def _create_output_directory(self):
-        """
-        Create directory for estimation results
-        :return:
-        """
-        for mod in self.models:
-            if not os.path.isdir(self.models[mod].results_directory):
-                os.mkdir(self.models[mod].results_directory)
+    @property
+    def problem_dir(self):
+        dire = os.path.join(self.config.settings.working_directory, f'Problem{self.config.settings.problem}')
+        if not os.path.isdir(dire):
+            os.makedirs(dire)
+        return dire
 
-            if not os.path.isdir(self.models[mod].results_directory):
-                raise ValueError
+    @property
+    def fit_dir(self):
+        dire = os.path.join(self.problem_dir, f'Fit{self.config.settings.fit}')
+        if not os.path.isdir(dire):
+            os.makedirs(dire)
+        return dire
 
-    # def _read_config_file(self):
-    #     """
-    #
-    #     :return:
-    #     """
-    #
-    #     print(self.config.datasets.experiments)
-    # for conf in self.config:
-    #     print(conf)
+    @property
+    def models_dir(self):
+        dct = {}
+        for model_name in self.models:
+            dct[model_name] = os.path.join(self.fit_dir, model_name)
+            if not os.path.isdir(dct[model_name]):
+                os.makedirs(dct[model_name])
+        return dct
 
-    #     with open(self.config_filename, 'r') as f:
-    #         dct = yaml.load(f)
-    #         mappings = OrderedDict()
-    #         for k in dct:
-    #             if k == 'ParameterEstimationSettings':
-    #                 for setting, value in dct[k].items():
-    #                     setattr(self, setting, value)
-    #
-    #             elif k == 'ExperimentSetMapping':
-    #                 experiment_mapping_args = dct[k]
-    #                 experiment_files = []
-    #                 experiment_type = []
-    #                 experiment_keys = []
-    #                 first_row = []
-    #                 last_row = []
-    #                 normalize_weights_per_experiment = []
-    #                 weight_method = []
-    #                 row_containing_names = []
-    #                 separator = []
-    #                 validation = []
-    #
-    #                 for experiment_name in experiment_mapping_args:
-    #                     experiment_files.append(experiment_mapping_args[experiment_name]['filename'])
-    #                     experiment_type.append(experiment_mapping_args[experiment_name]['experiment_type'])
-    #                     experiment_keys.append(experiment_mapping_args[experiment_name]['key'])
-    #                     first_row.append(experiment_mapping_args[experiment_name]['first_row'])
-    #                     last_row.append(experiment_mapping_args[experiment_name]['last_row'])
-    #                     normalize_weights_per_experiment.append(
-    #                         experiment_mapping_args[experiment_name]['normalize_weights_per_experiment'])
-    #                     weight_method.append(experiment_mapping_args[experiment_name]['weight_method'])
-    #                     row_containing_names.append(
-    #                         experiment_mapping_args[experiment_name]['row_containing_names'])
-    #                     separator.append(experiment_mapping_args[experiment_name]['separator'])
-    #                     validation.append(experiment_mapping_args[experiment_name]['validation'])
-    #                     mappings[experiment_name] = experiment_mapping_args[experiment_name]['mappings']
-    #
-    #                 ## convert weight method to numerical values that are
-    #                 ## interpreted by COAPSI - with some input checking
-    #                 weight_method_strings = ['mean_squared', 'stardard_deviation',
-    #                                          'value_scaling', 'mean']  # line 2144
-    #                 for i in weight_method:
-    #                     if i not in weight_method_strings:
-    #                         raise errors.InputError(
-    #                             '"{}" is not a valid weight method. Please choose '
-    #                             'on of "{}"'.format(i, weight_method_strings)
-    #                         )
-    #
-    #                 weight_method_numbers = [str(i) for i in [1, 2, 3, 4]]
-    #                 weight_method_dict = dict(list(zip(weight_method_strings, weight_method_numbers)))
-    #                 weight_method = [weight_method_dict[i] for i in weight_method]
-    #
-    #                 ## convert experiment type to numerical values that are
-    #                 ## interpreted by COAPSI - with some input checking
-    #                 experiment_type_strings = ['steadystate', 'timecourse']
-    #
-    #                 for i in experiment_type:
-    #                     if i not in experiment_type_strings:
-    #                         raise errors.InputError(
-    #                             '"{}" is not a valid experiment type. Please choose '
-    #                             'on of "{}"'.format(i, experiment_type_strings)
-    #                         )
-    #
-    #                 experiment_type_numbers = [str(i) for i in [0, 1]]
-    #                 experiment_type_dict = dict(list(zip(experiment_type_strings, experiment_type_numbers)))
-    #                 experiment_type = [experiment_type_dict[i] for i in experiment_type]
-    #
-    #                 setattr(self, 'experiment_type', experiment_type)
-    #                 setattr(self, 'experiment_keys', experiment_keys)
-    #                 setattr(self, 'first_row', first_row)
-    #                 setattr(self, 'last_row', last_row)
-    #                 setattr(self, 'normalize_weights_per_experiment', normalize_weights_per_experiment)
-    #                 setattr(self, 'weight_method', weight_method)
-    #                 setattr(self, 'row_containing_names', row_containing_names)
-    #                 setattr(self, 'separator', separator)
-    #                 setattr(self, 'validation', validation)
-    #                 setattr(self, 'mappings', mappings)
-    #
-    #
-    #             elif k == 'OptimizationItemList':
-    #                 opt = pandas.DataFrame(dct[k]).transpose()
-    #                 setattr(self, 'optimization_item_list', opt)
-    #
-    #             elif k == 'OptimizationConstraintList':
-    #                 constr = pandas.DataFrame(dct[k]).transpose()
-    #                 setattr(self, 'optimization_constraint_list', constr)
-    #
-    #                 print('Warning: OptimizationConstraintList is not yet implemented. Entried are being'
-    #                       ' ignored. ')
-    #
-    # else:
-    #     raise ValueError('Config filename is not of a supported file type. Please ensure the config file '
-    #                      'was generated with write config file')
+    @property
+    def results_directory(self):
+        dct = {}
+        for model_name in self.models:
+            dct[model_name] = os.path.join(self.models_dir[model_name], self.config.settings.results_directory)
+        return dct
 
     def get_model_objects_from_strings(self):
         """
@@ -3190,6 +3080,10 @@ class ParameterEstimation(_Task):
     @property
     def models(self):
         return self.config.models
+
+    @models.setter
+    def models(self, models):
+        self.config.models = models
 
     @property
     def _experiments(self):
@@ -3334,7 +3228,7 @@ class ParameterEstimation(_Task):
 
         return parent
 
-    def _create_experiment(self, validation=False):
+    def _map_experiments(self, validation=False):
         """
         Adds a single experiment set to the parameter estimation task
         exp_file is an experiment filename with exactly matching headers (independent variablies need '_indep' appended to the end)
@@ -3344,15 +3238,22 @@ class ParameterEstimation(_Task):
         i is the exeriment_file index
         """
         # for mod in self.models:
-        model_dct = {}
+        # model_dct = {}
+
+        ## build a reference dct for weight method numbers
+        weight_method_string = ['mean_squared', 'stardard_deviation', 'value_scaling',
+                                'mean']  # line 2144
+        weight_method_numbers = [str(i) for i in [1, 2, 3, 4]]
+        weight_method_lookup_dct = dict(list(zip(weight_method_string, weight_method_numbers)))
+
+
         for model_name in self.models:
 
-
-            model_dct[model_name] = {}
+            # model_dct[model_name] = {}
             mod = self.models[model_name].model
-            weight_method_str = self.config.experiments.weight_method
-            validation_weight = self.config.validations.weight
-            validation_threshold = self.config.validations.threshold
+            weight_method_str = self.config.settings.weight_method
+            validation_weight = self.config.settings.validation_weight
+            validation_threshold = self.config.settings.validation_threshold
 
             if validation:
                 query = '//*[@name="Validation Set"]'
@@ -3368,6 +3269,8 @@ class ParameterEstimation(_Task):
                 keys_function = self._get_experiment_keys
                 self._remove_all_experiments()
 
+
+
             for experiment_name in experiment_names:
                 experiment = experiments[experiment_name]
                 data = pandas.read_csv(
@@ -3378,6 +3281,8 @@ class ParameterEstimation(_Task):
 
                 if 'time' in [i.lower() for i in data.columns]:
                     experiment_type = 'timecourse'
+
+                experiment_type = str(1) if experiment_type == 'timecourse' else str(0)
 
                 num_rows = str(data.shape[0])
                 num_columns = str(data.shape[1])
@@ -3405,12 +3310,12 @@ class ParameterEstimation(_Task):
                                    'value': True}
 
                 experiment_type_dct = {'type': 'unsignedInteger',
-                                   'name': 'Experiment Type',
-                                   'value': experiment_type}
+                                       'name': 'Experiment Type',
+                                       'value': experiment_type}
 
                 first_row = {'type': 'unsignedInteger',
                              'name': 'First Row',
-                             'value': str(0)}
+                             'value': str(1)}
 
                 last_row = {'type': 'unsignedInteger',
                             'name': 'Last Row',
@@ -3428,15 +3333,16 @@ class ParameterEstimation(_Task):
 
                 row_containing_names = {'type': 'unsignedInteger',
                                         'name': 'Row containing Names',
-                                        'value': str(0)}
+                                        'value': str(1)}
 
                 separator = {'type': 'string',
                              'name': 'Separator',
                              'value': experiment.separator}
 
+
                 weight_method = {'type': 'unsignedInteger',
                                  'name': 'Weight Method',
-                                 'value': weight_method_str}
+                                 'value': weight_method_lookup_dct[weight_method_str]}
 
                 for i in [
                     key,
@@ -3469,7 +3375,10 @@ class ParameterEstimation(_Task):
                         self._assign_role(map_group, experiment.mappings[data_name].role)
 
                     elif experiment.mappings[data_name].object_type == 'Metabolite':
-                        metab = [i for i in mod.metabolites if i.name == experiment.mappings[data_name].model_object or i.name == experiment.mappings[data_name].model_object[:-6]]
+                        metab = [i for i in mod.metabolites if
+                                 i.name == experiment.mappings[data_name].model_object or i.name == experiment.mappings[
+                                                                                                        data_name].model_object[
+                                                                                                    :-6]]
                         assert len(metab) == 1
                         self._create_metabolite_reference(
                             mod,
@@ -3480,7 +3389,10 @@ class ParameterEstimation(_Task):
                         self._assign_role(map_group, experiment.mappings[data_name].role)
 
                     elif experiment.mappings[data_name].object_type == 'GlobalQuantity':
-                        glo = [i for i in mod.global_quantities if i.name == experiment.mappings[data_name].model_object or i.name == experiment.mappings[data_name].model_object[:-6]]
+                        glo = [i for i in mod.global_quantities if
+                               i.name == experiment.mappings[data_name].model_object or i.name == experiment.mappings[
+                                                                                                      data_name].model_object[
+                                                                                                  :-6]]
                         assert len(metab) == 1
                         self._create_global_quantity_reference(
                             mod,
@@ -3489,22 +3401,20 @@ class ParameterEstimation(_Task):
                             experiment.mappings[data_name].role
                         )
 
-                    self._assign_role(map_group, experiment.mappings[data_name].role)
+                        self._assign_role(map_group, experiment.mappings[data_name].role)
 
-                model_dct[model_name][experiment_name] = experiment_group
+                self.models[model_name][experiment_name] = experiment_group
 
+                for j in mod.xml.xpath(query):
+                    j.insert(0, self.models[model_name][experiment_name])
+                    if validation:
+                        for k in list(j):
+                            if k.attrib['name'] == 'Weight':
+                                k.attrib['value'] = str(validation_weight)
+                            if k.attrib['name'] == 'Threshold':
+                                k.attrib['value'] = str(validation_threshold)
 
-            for j in mod.xml.xpath(query):
-                j.insert(0, model_dct[model_name][experiment_name])
-                if validation:
-                    for k in list(j):
-                        if k.attrib['name'] == 'Weight':
-                            k.attrib['value'] = str(validation_weight)
-                        if k.attrib['name'] == 'Threshold':
-                            k.attrib['value'] = str(validation_threshold)
-
-
-            return model_dct
+            return self.models
 
     def _remove_experiment(self, experiment_name):
         """
@@ -3646,42 +3556,50 @@ class ParameterEstimation(_Task):
         Get existing fit items
         :return: dict
         """
-        d = {}
-        query = '//*[@name="FitItem"]'
-        for i in self.model.xml.xpath(query):
-            for j in list(i):
-                if j.attrib['name'] == 'ObjectCN':
-                    match = re.findall('Reference=(.*)', j.attrib['value'])[0]
+        models_dct = {}
+        for model_name in self.models:
+            mod = self.models[model_name].model
+            models_dct[model_name] = {}
+            # d = {}
+            query = '//*[@name="FitItem"]'
+            for i in mod.xml.xpath(query):
+                for j in list(i):
+                    if j.attrib['name'] == 'ObjectCN':
+                        match = re.findall('Reference=(.*)', j.attrib['value'])[0]
 
-                    if match == 'Value':
-                        match2 = re.findall('Reactions\[(.*)\].*Parameter=(.*),', j.attrib['value'])
+                        if match == 'Value':
+                            match2 = re.findall('Reactions\[(.*)\].*Parameter=(.*),', j.attrib['value'])
+                            if match2 != []:
+                                match2 = '({}).{}'.format(match2[0][0], match2[0][1])
+
+                        elif match == 'InitialValue':
+                            match2 = re.findall('Values\[(.*)\]', j.attrib['value'])
+                            if match2 != []:
+                                match2 = match2[0]
+                        elif match == 'InitialConcentration':
+
+                            match2 = re.findall('Metabolites\[(.*)\]', j.attrib['value'])
+                            if match2 != []:
+                                match2 = match2[0]
                         if match2 != []:
-                            match2 = '({}).{}'.format(match2[0][0], match2[0][1])
+                            models_dct[model_name][match2] = j.attrib
 
-                    elif match == 'InitialValue':
-                        match2 = re.findall('Values\[(.*)\]', j.attrib['value'])
-                        if match2 != []:
-                            match2 = match2[0]
-                    elif match == 'InitialConcentration':
+        return models_dct
 
-                        match2 = re.findall('Metabolites\[(.*)\]', j.attrib['value'])
-                        if match2 != []:
-                            match2 = match2[0]
-                    if match2 != []:
-                        d[match2] = j.attrib
-        return d
-
-    def _remove_fit_item(self, item):
+    def _remove_fit_item(self, model_name, item):
         """
         Remove item from parameter estimation
         :param item:
         :return: pycotools3.model.Model
         """
-        all_items = list(self._fit_items.keys())
+
+        mod = self.models[model_name].model
+        all_items = list(self._fit_items[model_name].keys())
+
         query = '//*[@name="FitItem"]'
         assert item in all_items, '{} is not a fit item. These are the fit items: {}'.format(item, all_items)
-        item = self._fit_items[item]
-        for i in self.model.xml.xpath(query):
+        item = self._fit_items[model_name][item]
+        for i in mod.xml.xpath(query):
             for j in list(i):
                 if j.attrib['name'] == 'ObjectCN':
                     # locate references
@@ -3720,7 +3638,7 @@ class ParameterEstimation(_Task):
                         raise TypeError(
                             'Parameter {} is not a local parameter, initial concentration parameter or a global parameter.initial_value'.format(
                                 match2_item))
-        return self.model
+        return mod
 
     def _remove_all_fit_items(self):
         """
@@ -3728,9 +3646,10 @@ class ParameterEstimation(_Task):
         from the parameter estimation task
         :return: pycotools3.model.Model
         """
-        for i in self._fit_items:
-            self.model = self._remove_fit_item(i)
-        return self.model
+        for model_name in self.models:
+            for i in self._fit_items[model_name]:
+                self.models[model_name] = self._remove_fit_item(model_name, i)
+        return self.models
 
     def write_config_file(self):
         """
@@ -4020,208 +3939,211 @@ class ParameterEstimation(_Task):
 
         return df
 
-    def _add_fit_item(self, item, constraint=False):
+    def _add_fit_items(self, constraint=False):
         """
         Add fit item to model
         :param item: a row from the config template as pandas series
         :return: pycotools3.model.Model
         """
-        ## figure out what type of variable item is and assign to component
-        if item.name in [i.name for i in self.metabolites]:
-            component = [i for i in self.metabolites if i.name == item.name][0]
-
-        elif item.name in [i.global_name for i in self.local_parameters]:
-            component = [i for i in self.local_parameters if i.global_name == item.name][0]
-
-        elif item.name in [i.name for i in self.global_quantities]:
-            component = [i for i in self.global_quantities if i.name == item.name][0]
-        else:
-            raise errors.SomethingWentHorriblyWrongError(
-                '"{}" is not a metabolite,'
-                ' local_parameter or '
-                'global_quantity. These are your'
-                ' model variables: {}'.format(
-                    item.name,
-                    str(self.model.all_variable_names))
-            )
-
-        # initialize new element
-        fit_item_element = etree.Element('ParameterGroup', attrib={'name': 'FitItem'})
-
-        affected_experiments = {'name': 'Affected Experiments'}
-        ## read affected _experiments from config file.yaml
-        affected_experiments_attr = OrderedDict()
-        ## when affected _experiments is 'all', the affected experiment element is empty
-        if item['affected_experiments'] != 'all':
-            ## convert a string to a list of 1 so we can cater for the case
-            ## where we have a list of strings with the same code
-            if isinstance(item['affected_experiments'], str):
-                item['affected_experiments'] = [item['affected_experiments']]
-
-            ## iterate over list. Raise ValueError is can't find experiment name
-            ## otherwise add the corresponding experiment key to the affected _experiments attr dict
-            for affected_experiment in item['affected_experiments']:  ## iterate over the list
-                if affected_experiment in self._get_validation_keys():
-                    raise ValueError('"{}" has been given as a validation experiment and therefore '
-                                     'I cannot add this experiment to the list of _experiments that '
-                                     'affect the {} parameter'.format(
-                        affected_experiment, component.name
-                    ))
-
-                if affected_experiment not in self._get_experiment_keys():
-                    raise ValueError('"{}" is not one of your _experiments. These are '
-                                     'your valid experimments: "{}"'.format(
-                        affected_experiment, self._get_experiment_keys().keys()
-                    ))
-
-                affected_experiments_attr[affected_experiment] = {}
-                affected_experiments_attr[affected_experiment]['name'] = 'Experiment Key'
-                affected_experiments_attr[affected_experiment]['type'] = 'key'
-                affected_experiments_attr[affected_experiment]['value'] = self._get_experiment_keys()[
-                    affected_experiment]
-
-        ## add affected _experiments to element
-        affected_experiments_element = etree.SubElement(fit_item_element, 'ParameterGroup', attrib=affected_experiments)
-
-        ## now add the attributes to the affected _experiments element
-        for affected_experiment in affected_experiments_attr:
-            etree.SubElement(
-                affected_experiments_element, 'Parameter', attrib=affected_experiments_attr[affected_experiment]
-            )
-
-        ## read affected validation _experiments from config file.yaml
-        affected_validation_experiments_attr = OrderedDict()
-        ## when affected _experiments is 'all', the affected experiment element is empty
-        if item['affected_validation_experiments'] != 'all':
-            ## convert a string to a list of 1 so we can cater for the case
-            ## where we have a list of strings with the same code
-            if isinstance(item['affected_validation_experiments'], str):
-                item['affected_validation_experiments'] = [item['affected_validation_experiments']]
-
-            ## iterate over list. Raise ValueError is can't find experiment name
-            ## otherwise add the corresponding experiment key to the affected _experiments attr dict
-            for affected_validation_experiment in item['affected_validation_experiments']:  ## iterate over the list
-                if affected_validation_experiment in self._get_experiment_keys():
-                    raise ValueError('"{}" has been given as an experiment and therefore '
-                                     'I cannot add this experiment to the list of validation _experiments that '
-                                     'affect the {} parameter'.format(
-                        affected_validation_experiment, component.name
-                    ))
-
-                if affected_validation_experiment not in self._get_validation_keys():
-                    raise ValueError('"{}" is not one of your _experiments. These are '
-                                     'your valid experimments: "{}"'.format(
-                        affected_validation_experiment, self._get_validation_keys().keys()
-                    ))
-
-                affected_validation_experiments_attr[affected_validation_experiment] = {}
-                affected_validation_experiments_attr[affected_validation_experiment]['name'] = 'Experiment Key'
-                affected_validation_experiments_attr[affected_validation_experiment]['type'] = 'key'
-                affected_validation_experiments_attr[affected_validation_experiment]['value'] = \
-                    self._get_validation_keys()[
-                        affected_validation_experiment]
-
-        affected_cross_validation_experiments = {'name': 'Affected Cross Validation Experiments'}
-
-        affected_cross_validation_experiments_element = etree.SubElement(fit_item_element, 'ParameterGroup',
-                                                                         attrib=affected_cross_validation_experiments)
-
-        ## now add the attributes to the affected _experiments element
-        for affected_validation_experiment_attr in affected_validation_experiments_attr:
-            etree.SubElement(
-                affected_cross_validation_experiments_element, 'Parameter',
-                attrib=affected_validation_experiments_attr[affected_validation_experiment_attr]
-            )
-
-        ## get lower bound from config file and add to element
-        lower_bound_element = {'type': 'cn', 'name': 'LowerBound', 'value': str(item['lower_bound'])}
-        etree.SubElement(fit_item_element, 'Parameter', attrib=lower_bound_element)
-
-        if self.use_config_start_values == True:
-            start_value_element = {'type': 'float', 'name': 'StartValue', 'value': str(item['start_value'])}
-
-        ## get upper bound from config file and add to element
-        upper_bound_element = {'type': 'cn', 'name': 'UpperBound', 'value': str(item['upper_bound'])}
-        etree.SubElement(fit_item_element, 'Parameter', attrib=upper_bound_element)
-
-        if self.use_config_start_values == True:
-            etree.SubElement(fit_item_element, 'Parameter', attrib=start_value_element)
-
-        ## Now begin creating the object map.
-        # for IC parameters
-        if isinstance(component, model.Metabolite):
-            if self.quantity_type == 'concentration':
-                subA4 = {'type': 'cn', 'name': 'ObjectCN', 'value': '{},{},{}'.format(self.model.reference,
-                                                                                      component.compartment.reference,
-                                                                                      component.initial_reference)}
+        for model_name in self.models:
+            mod = self.models[model_name].model
+            if constraint:
+                items = self.config.items.constraint_items
             else:
-                subA4 = {'type': 'cn', 'name': 'ObjectCN', 'value': '{},{},{}'.format(
-                    self.model.reference,
-                    component.compartment.reference,
-                    component.initial_particle_reference
-                )}
+                items = self.config.items.fit_items
 
-        elif isinstance(component, model.LocalParameter):
-            subA4 = {'type': 'cn', 'name': 'ObjectCN', 'value': '{},{},{}'.format(
-                self.model.reference,
-                self.model.get('reaction', component.reaction_name, by='name').reference,
-                component.value_reference)}
+            for item_name in items:
+                item = items[item_name]
+                ## figure out what type of variable item is and assign to component
+                if item_name in [i.name for i in mod.metabolites]:
+                    component = [i for i in mod.metabolites if i.name == item_name][0]
 
-        elif isinstance(component, model.GlobalQuantity):
-            subA4 = {'type': 'cn', 'name': 'ObjectCN', 'value': '{},{}'.format(self.model.reference,
-                                                                               component.initial_reference)}
+                elif item_name in [i.global_name for i in mod.local_parameters]:
+                    component = [i for i in mod.local_parameters if i.global_name == item_name][0]
 
-        elif isinstance(component, model.Compartment):
-            subA4 = {'type': 'cn',
-                     'name': 'ObjectCN',
-                     'value': '{},{}'.format(self.model.reference,
-                                             component.initial_value_reference)}
+                elif item_name in [i.name for i in mod.global_quantities]:
+                    component = [i for i in mod.global_quantities if i.name == item_name][0]
+                else:
+                    raise errors.SomethingWentHorriblyWrongError(
+                        '"{}" is not a metabolite,'
+                        ' local_parameter or '
+                        'global_quantity. These are your'
+                        ' model variables: {}'.format(
+                            item_name,
+                            str(self.model.all_variable_names))
+                    )
 
-        else:
-            raise errors.InputError('{} is not a valid parameter for estimation'.format(list(item)))
+                # initialize new element
+                fit_item_element = etree.Element('ParameterGroup', attrib={'name': 'FitItem'})
 
-        ## add element
-        etree.SubElement(fit_item_element, 'Parameter', attrib=subA4)
+                affected_experiments = {'name': 'Affected Experiments'}
+                ## read affected _experiments from config file.yaml
+                affected_experiments_attr = OrderedDict()
 
-        ##insert fit item
+                ## the 'all' keyword argument for affected_experiments, affected_validations_Experiments
+                ## and affected models needs resolving to lists of appropriate values
 
-        list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
-        parameter_est = self.model.xml.find(list_of_tasks)[5]
-        problem = parameter_est[1]
-        assert problem.tag == '{http://www.copasi.org/static/schema}Problem'
+                ## when affected _experiments is 'all', the affected experiment element is empty
+                if item['affected_experiments'] != 'all':
+                    ## convert a string to a list of 1 so we can cater for the case
+                    ## where we have a list of strings with the same code
+                    if isinstance(item['affected_experiments'], str):
+                        item['affected_experiments'] = [item['affected_experiments']]
 
-        if constraint:
-            item_list = problem[4]
-            assert list(item_list.attrib.values())[0] == 'OptimizationConstraintList'
-        else:
-            item_list = problem[3]
-            assert list(item_list.attrib.values())[0] == 'OptimizationItemList'
-        item_list.append(fit_item_element)
-        return self.model
+                    ## iterate over list. Raise ValueError is can't find experiment name
+                    ## otherwise add the corresponding experiment key to the affected _experiments attr dict
+                    for affected_experiment in item['affected_experiments']:  ## iterate over the list
+                        if affected_experiment in self._get_validation_keys()[model_name]:
+                            raise ValueError('"{}" has been given as a validation experiment and therefore '
+                                             'I cannot add this experiment to the list of _experiments that '
+                                             'affect the {} parameter'.format(
+                                affected_experiment, component.name
+                            ))
 
-    def _insert_all_fit_items(self):
-        """
-        insert all fit items defined in config file
-        into the model
-        :return:
-        """
+                        if affected_experiment not in self._get_experiment_keys()[model_name]:
+                            raise ValueError('"{}" is not one of your _experiments. These are '
+                                             'your valid experimments: "{}"'.format(
+                                affected_experiment, self._get_experiment_keys()[model_name].keys()
+                            ))
 
-        ## for optimization items
-        for row in range(self.optimization_item_list.shape[0]):
-            assert row != 'nan'
-            ## feed each item from the config file into _add_fit_item
-            self.model = self._add_fit_item(self.optimization_item_list.iloc[row])
+                        affected_experiments_attr[affected_experiment] = {}
+                        affected_experiments_attr[affected_experiment]['name'] = 'Experiment Key'
+                        affected_experiments_attr[affected_experiment]['type'] = 'key'
+                        affected_experiments_attr[affected_experiment]['value'] = \
+                            self._get_experiment_keys()[model_name][affected_experiment]
 
-        ## for constraints
-        for row in range(self.optimization_constraint_list.shape[0]):
-            assert row != 'nan'
-            self.model = self._add_fit_item(self.optimization_constraint_list.iloc[row], constraint=True)
-        return self.model
+                ## add affected _experiments to element
+                affected_experiments_element = etree.SubElement(fit_item_element, 'ParameterGroup',
+                                                                attrib=affected_experiments)
+
+                ## now add the attributes to the affected _experiments element
+                for affected_experiment in affected_experiments_attr:
+                    etree.SubElement(
+                        affected_experiments_element, 'Parameter', attrib=affected_experiments_attr[affected_experiment]
+                    )
+
+                ## read affected validation _experiments from config file.yaml
+                affected_validation_experiments_attr = OrderedDict()
+                ## when affected _experiments is 'all', the affected experiment element is empty
+                if item['affected_validation_experiments'] != 'all':
+                    ## convert a string to a list of 1 so we can cater for the case
+                    ## where we have a list of strings with the same code
+                    if isinstance(item['affected_validation_experiments'], str):
+                        item['affected_validation_experiments'] = [item['affected_validation_experiments']]
+
+                    ## iterate over list. Raise ValueError is can't find experiment name
+                    ## otherwise add the corresponding experiment key to the affected _experiments attr dict
+                    for affected_validation_experiment in item[
+                        'affected_validation_experiments']:  ## iterate over the list
+                        if affected_validation_experiment in self._get_experiment_keys()[model_name]:
+                            raise ValueError('"{}" has been given as an experiment and therefore '
+                                             'I cannot add this experiment to the list of validation _experiments that '
+                                             'affect the {} parameter'.format(
+                                affected_validation_experiment, component.name
+                            ))
+
+                        if affected_validation_experiment not in self._get_validation_keys()[model_name]:
+                            raise ValueError('"{}" is not one of your _experiments. These are '
+                                             'your valid experimments: "{}"'.format(
+                                affected_validation_experiment, self._get_validation_keys()[model_name].keys()
+                            ))
+
+                        affected_validation_experiments_attr[affected_validation_experiment] = {}
+                        affected_validation_experiments_attr[affected_validation_experiment]['name'] = 'Experiment Key'
+                        affected_validation_experiments_attr[affected_validation_experiment]['type'] = 'key'
+                        affected_validation_experiments_attr[affected_validation_experiment]['value'] = \
+                            self._get_validation_keys()[model_name][affected_validation_experiment]
+
+                affected_cross_validation_experiments = {'name': 'Affected Cross Validation Experiments'}
+
+                affected_cross_validation_experiments_element = etree.SubElement(fit_item_element, 'ParameterGroup',
+                                                                                 attrib=affected_cross_validation_experiments)
+
+                ## now add the attributes to the affected _experiments element
+                for affected_validation_experiment_attr in affected_validation_experiments_attr:
+                    pass
+                    etree.SubElement(
+                        affected_cross_validation_experiments_element, 'Parameter',
+                        attrib=affected_validation_experiments_attr[affected_validation_experiment_attr]
+                    )
+
+                ## do some in put checking on affected models
+
+                ## get lower bound from config file and add to element
+                lower_bound_element = {'type': 'cn', 'name': 'LowerBound', 'value': str(item['lower_bound'])}
+                etree.SubElement(fit_item_element, 'Parameter', attrib=lower_bound_element)
+
+                start_value_element = {'type': 'float', 'name': 'StartValue', 'value': str(item['start_value'])}
+
+                ## get upper bound from config file and add to element
+                upper_bound_element = {'type': 'cn', 'name': 'UpperBound', 'value': str(item['upper_bound'])}
+                etree.SubElement(fit_item_element, 'Parameter', attrib=upper_bound_element)
+
+                etree.SubElement(fit_item_element, 'Parameter', attrib=start_value_element)
+
+                ## Now begin creating the object map.
+                # for IC parameters
+                if isinstance(component, model.Metabolite):
+                    if self.config.settings.quantity_type == 'concentration':
+                        subA4 = {'type': 'cn', 'name': 'ObjectCN', 'value': '{},{},{}'.format(mod.reference,
+                                                                                              component.compartment.reference,
+                                                                                              component.initial_reference)}
+                    else:
+                        subA4 = {'type': 'cn', 'name': 'ObjectCN', 'value': '{},{},{}'.format(
+                            mod.reference,
+                            component.compartment.reference,
+                            component.initial_particle_reference
+                        )}
+
+                elif isinstance(component, model.LocalParameter):
+                    subA4 = {'type': 'cn', 'name': 'ObjectCN', 'value': '{},{},{}'.format(
+                        mod.reference,
+                        mod.get('reaction', component.reaction_name, by='name').reference,
+                        component.value_reference)}
+
+                elif isinstance(component, model.GlobalQuantity):
+                    subA4 = {'type': 'cn', 'name': 'ObjectCN', 'value': '{},{}'.format(mod.reference,
+                                                                                       component.initial_reference)}
+
+                elif isinstance(component, model.Compartment):
+                    subA4 = {'type': 'cn',
+                             'name': 'ObjectCN',
+                             'value': '{},{}'.format(mod.reference,
+                                                     component.initial_value_reference)}
+
+                else:
+                    raise errors.InputError('{} is not a valid parameter for estimation'.format(list(item)))
+
+                ## add element
+                etree.SubElement(fit_item_element, 'Parameter', attrib=subA4)
+
+                ##insert fit item
+
+                list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
+                parameter_est = mod.xml.find(list_of_tasks)[5]
+                problem = parameter_est[1]
+                assert problem.tag == '{http://www.copasi.org/static/schema}Problem'
+
+                if constraint:
+                    item_list = problem[4]
+                    assert list(item_list.attrib.values())[0] == 'OptimizationConstraintList'
+                else:
+                    item_list = problem[3]
+                    assert list(item_list.attrib.values())[0] == 'OptimizationItemList'
+                item_list.append(fit_item_element)
+                self.models[model_name].model = mod
+        return self.models
+
 
     def _set_PE_method(self):
         '''
         Choose PE algorithm and set algorithm specific parameters
         '''
+
+        settings = self.config.settings
+        for k, v in settings.items():
+            if isinstance(v, (int, float)):
+                settings[k] = str(v)
         # Build xml for method.
         method_name, method_type = self._select_method()
         method_params = {'name': method_name, 'type': method_type}
@@ -4230,155 +4152,178 @@ class ParameterEstimation(_Task):
         # list of attribute dictionaries
         # Evolutionary strategy parametery
         number_of_generations = {'type': 'unsignedInteger', 'name': 'Number of Generations',
-                                 'value': self.number_of_generations}
-        population_size = {'type': 'unsignedInteger', 'name': 'Population Size', 'value': self.population_size}
+                                 'value': self.config.settings.number_of_generations}
+        population_size = {'type': 'unsignedInteger', 'name': 'Population Size',
+                           'value': self.config.settings.population_size}
         random_number_generator = {'type': 'unsignedInteger', 'name': 'Random Number Generator',
-                                   'value': self.random_number_generator}
-        seed = {'type': 'unsignedInteger', 'name': 'Seed', 'value': self.seed}
-        pf = {'type': 'float', 'name': 'Pf', 'value': self.pf}
+                                   'value': self.config.settings.random_number_generator}
+        seed = {'type': 'unsignedInteger', 'name': 'Seed', 'value': self.config.settings.seed}
+        pf = {'type': 'float', 'name': 'Pf', 'value': self.config.settings.pf}
         # local method parameters
-        iteration_limit = {'type': 'unsignedInteger', 'name': 'Iteration Limit', 'value': self.iteration_limit}
-        tolerance = {'type': 'float', 'name': 'Tolerance', 'value': self.tolerance}
-        rho = {'type': 'float', 'name': 'Rho', 'value': self.rho}
-        scale = {'type': 'unsignedFloat', 'name': 'Scale', 'value': self.scale}
+        iteration_limit = {'type': 'unsignedInteger', 'name': 'Iteration Limit',
+                           'value': self.config.settings.iteration_limit}
+        tolerance = {'type': 'float', 'name': 'Tolerance', 'value': self.config.settings.tolerance}
+        rho = {'type': 'float', 'name': 'Rho', 'value': self.config.settings.rho}
+        scale = {'type': 'unsignedFloat', 'name': 'Scale', 'value': self.config.settings.scale}
         # Particle Swarm parmeters
-        swarm_size = {'type': 'unsignedInteger', 'name': 'Swarm Size', 'value': self.swarm_size}
-        std_deviation = {'type': 'unsignedFloat', 'name': 'Std. Deviation', 'value': self.std_deviation}
+        swarm_size = {'type': 'unsignedInteger', 'name': 'Swarm Size', 'value': self.config.settings.swarm_size}
+        std_deviation = {'type': 'unsignedFloat', 'name': 'Std. Deviation', 'value': self.config.settings.std_deviation}
         # Random Search parameters
         number_of_iterations = {'type': 'unsignedInteger', 'name': 'Number of Iterations',
-                                'value': self.number_of_iterations}
+                                'value': self.config.settings.number_of_iterations}
         # Simulated Annealing parameters
-        start_temperature = {'type': 'unsignedFloat', 'name': 'Start Temperature', 'value': self.start_temperature}
-        cooling_factor = {'type': 'unsignedFloat', 'name': 'Cooling Factor', 'value': self.cooling_factor}
+        start_temperature = {'type': 'unsignedFloat', 'name': 'Start Temperature',
+                             'value': self.config.settings.start_temperature}
+        cooling_factor = {'type': 'unsignedFloat', 'name': 'Cooling Factor',
+                          'value': self.config.settings.cooling_factor}
 
         # build the appropiate xML, with method at root (for now)
-        if self.method == 'current_solution_statistics':
+        if self.config.settings.method == 'current_solution_statistics':
             pass  # no additional parameter elements required
 
-        if self.method == 'differential_evolution'.lower():
+        if self.config.settings.method == 'differential_evolution'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
             etree.SubElement(method_element, 'Parameter', attrib=population_size)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
 
-        if self.method == 'evolutionary_strategy_sr'.lower():
+        if self.config.settings.method == 'evolutionary_strategy_sr'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
             etree.SubElement(method_element, 'Parameter', attrib=population_size)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
             etree.SubElement(method_element, 'Parameter', attrib=pf)
 
-        if self.method == 'evolutionary_program'.lower():
+        if self.config.settings.method == 'evolutionary_program'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
             etree.SubElement(method_element, 'Parameter', attrib=population_size)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
 
-        if self.method == 'hooke_jeeves'.lower():
+        if self.config.settings.method == 'hooke_jeeves'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
             etree.SubElement(method_element, 'Parameter', attrib=tolerance)
             etree.SubElement(method_element, 'Parameter', attrib=rho)
 
-        if self.method == 'levenberg_marquardt'.lower():
+        if self.config.settings.method == 'levenberg_marquardt'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
             etree.SubElement(method_element, 'Parameter', attrib=tolerance)
         #
-        if self.method == 'nelder_mead'.lower():
+        if self.config.settings.method == 'nelder_mead'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
             etree.SubElement(method_element, 'Parameter', attrib=tolerance)
             etree.SubElement(method_element, 'Parameter', attrib=scale)
 
-        if self.method == 'particle_swarm'.lower():
+        if self.config.settings.method == 'particle_swarm'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
             etree.SubElement(method_element, 'Parameter', attrib=swarm_size)
             etree.SubElement(method_element, 'Parameter', attrib=std_deviation)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
 
-        if self.method == 'praxis'.lower():
+        if self.config.settings.method == 'praxis'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=tolerance)
 
-        if self.method == 'random_search'.lower():
+        if self.config.settings.method == 'random_search'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_iterations)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
 
-        if self.method == 'simulated_annealing'.lower():
+        if self.config.settings.method == 'simulated_annealing'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=start_temperature)
             etree.SubElement(method_element, 'Parameter', attrib=cooling_factor)
             etree.SubElement(method_element, 'Parameter', attrib=tolerance)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
         #
-        if self.method == 'steepest_descent'.lower():
+        if self.config.settings.method == 'steepest_descent'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
             etree.SubElement(method_element, 'Parameter', attrib=tolerance)
         #
-        if self.method == 'truncated_newton'.lower():
+        if self.config.settings.method == 'truncated_newton'.lower():
             # required no additonal paraemters
             pass
         #
-        if self.method == 'scatter_search'.lower():
+        if self.config.settings.method == 'scatter_search'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_iterations)
 
-        if self.method == 'genetic_algorithm'.lower():
+        if self.config.settings.method == 'genetic_algorithm'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
             etree.SubElement(method_element, 'Parameter', attrib=population_size)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
 
-        if self.method == 'genetic_algorithm_sr'.lower():
+        if self.config.settings.method == 'genetic_algorithm_sr'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
             etree.SubElement(method_element, 'Parameter', attrib=population_size)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
             etree.SubElement(method_element, 'Parameter', attrib=pf)
 
-        tasks = self.model.xml.find('{http://www.copasi.org/static/schema}ListOfTasks')
+        for model_name in self.models:
+            mod = self.models[model_name].model
+            tasks = mod.xml.find('{http://www.copasi.org/static/schema}ListOfTasks')
 
-        method = tasks[5][-1]
-        parent = method.getparent()
-        parent.remove(method)
-        parent.insert(2, method_element)
-        return self.model
+            method = tasks[5][-1]
+            parent = method.getparent()
+            parent.remove(method)
+            parent.insert(2, method_element)
+        return self.models
 
     def _set_PE_options(self):
         """
         Set parameter estimation sepcific arguments
         :return: pycotools3.model.Model
         """
+        models_dct = {}
+        for model_name in self.models:
+            mod = self.models[model_name].model
 
-        scheluled_attrib = {'scheduled': self.scheduled,
-                            'updateModel': self.update_model}
+            scheluled_attrib = {'scheduled': False,
+                                'updateModel': self.config.settings.update_model}
 
-        report_attrib = {'append': self.append,
-                         'reference': self._get_report_key(),
-                         'target': self.report_name,
-                         'confirmOverwrite': self.confirm_overwrite}
+            report_attrib = {'append': False,
+                             'reference': self._get_report_key()[model_name],
+                             'target': self.config.settings.report_name,
+                             'confirmOverwrite': False}
 
-        randomize_start_values = {'type': 'bool',
-                                  'name': 'Randomize Start Values',
-                                  'value': self.randomize_start_values}
+            randomize_start_values = {'type': 'bool',
+                                      'name': 'Randomize Start Values',
+                                      'value': self.config.settings.randomize_start_values}
 
-        calculate_stats = {'type': 'bool', 'name': 'Calculate Statistics', 'value': self.calculate_statistics}
-        create_parameter_sets = {'type': 'bool', 'name': 'Create Parameter Sets', 'value': self.create_parameter_sets}
+            calculate_stats = {'type': 'bool', 'name': 'Calculate Statistics',
+                               'value': self.config.settings.calculate_statistics}
+            create_parameter_sets = {'type': 'bool', 'name': 'Create Parameter Sets',
+                                     'value': self.config.settings.create_parameter_sets}
 
-        query = '//*[@name="Parameter Estimation"]' and '//*[@type="parameterFitting"]'
-        for i in self.model.xml.xpath(query):
-            i.attrib.update(scheluled_attrib)
-            for j in list(i):
-                if self.report_name != None:
-                    if 'append' in list(j.attrib.keys()):
-                        j.attrib.update(report_attrib)
-                if list(j) != []:
-                    for k in list(j):
-                        if k.attrib['name'] == 'Randomize Start Values':
-                            k.attrib.update(randomize_start_values)
-                        elif k.attrib['name'] == 'Calculate Statistics':
-                            k.attrib.update(calculate_stats)
-                        elif k.attrib['name'] == 'Create Parameter Sets':
-                            k.attrib.update(create_parameter_sets)
-        return self.model
+            for i in [
+                scheluled_attrib,
+                report_attrib,
+                randomize_start_values,
+                calculate_stats,
+                create_parameter_sets]:
+
+                for k, v in i.items():
+                    i[k] = str(v)
+
+
+            query = '//*[@name="Parameter Estimation"]' and '//*[@type="parameterFitting"]'
+            for i in mod.xml.xpath(query):
+                i.attrib.update(scheluled_attrib)
+                for j in list(i):
+                    if self.config.settings.report_name != None:
+                        if 'append' in list(j.attrib.keys()):
+                            j.attrib.update(report_attrib)
+                    if list(j) != []:
+                        for k in list(j):
+                            if k.attrib['name'] == 'Randomize Start Values':
+                                k.attrib.update(randomize_start_values)
+                            elif k.attrib['name'] == 'Calculate Statistics':
+                                k.attrib.update(calculate_stats)
+                            elif k.attrib['name'] == 'Create Parameter Sets':
+                                k.attrib.update(create_parameter_sets)
+            self.models[model_name].model = mod
+        return self.models
 
     def _enumerate_PE_output(self):
         """
@@ -4387,12 +4332,13 @@ class ParameterEstimation(_Task):
         """
 
         dct = {}
-        for i in range(self.copy_number):
-            new_file = os.path.join(
-                self.results_directory, '{}_{}.txt'.format(self.report_name, i)
-            )
-
-            dct[i] = new_file
+        for model_name in self.models:
+            dct[model_name] = {}
+            for i in range(self.config.settings.copy_number):
+                new_file = os.path.join(
+                    self.results_directory[model_name], '{}_{}.txt'.format(self.config.settings.report_name, i)
+                )
+                dct[model_name][i] = new_file
         return dct
 
     def _copy_model(self):
@@ -4402,14 +4348,17 @@ class ParameterEstimation(_Task):
         :return: dict[index] = model copy
         """
         dct = {}
-        dct[0] = deepcopy(self.model)
-        for i in range(1, self.copy_number):
-            dire, fle = os.path.split(self.model.copasi_file)
-            new_cps = os.path.join(dire, fle[:-4] + '_{}.cps'.format(i))
-            model = deepcopy(self.model)
-            model.copasi_file = new_cps
-            model.save()
-            dct[i] = model
+        for model_name in self.models:
+            mod = self.models[model_name].model
+            dct[model_name] = {}
+            dct[model_name][0] = deepcopy(mod)
+            for i in range(1, self.config.settings.copy_number):
+                dire, fle = os.path.split(mod.copasi_file)
+                new_cps = os.path.join(dire, fle[:-4] + '_{}.cps'.format(i))
+                model = deepcopy(mod)
+                model.copasi_file = new_cps
+                model.save()
+                dct[model_name][i] = model
         return dct
 
     def _setup1scan(self, q, model, report):
@@ -4423,13 +4372,13 @@ class ParameterEstimation(_Task):
         start = time.time()
         models = q.put(Scan(model,
                             scan_type='repeat',
-                            number_of_steps=self.pe_number,
+                            number_of_steps=self.config.settings.pe_number,
                             subtask='parameter_estimation',
                             report_type='multi_parameter_estimation',
                             report_name=report,
                             run=False,
-                            append=self.append,
-                            confirm_overwrite=self.confirm_overwrite,
+                            append=self.config.settings.append,
+                            confirm_overwrite=self.config.settings.confirm_overwrite,
                             output_in_subtask=False,
                             save=True))
 
@@ -4441,9 +4390,10 @@ class ParameterEstimation(_Task):
         to process all files at once in CopasiSE
         :return:
         """
+
         number_of_cpu = cpu_count()
         q = queue.Queue(maxsize=number_of_cpu)
-        report_files = self._enumerate_PE_output()
+        report_files = self._enumerate_PE_output()[model_name]
         res = {}
         for copy_number, model in list(models.items()):
             t = threading.Thread(target=self._setup1scan,
@@ -4466,11 +4416,11 @@ class ParameterEstimation(_Task):
         :param models: dict of models. Output from setup()
         """
         ##load cps from pickle in case run not being use straignt after set_up
-        try:
-            self.models
-        except AttributeError:
-            raise errors.IncorrectUsageError('You must use the setup method before the run method')
-
+        # try:
+        #     self.models
+        # except AttributeError:
+        #     raise errors.IncorrectUsageError('You must use the setup method before the run method')
+        NotImplementedError
         if self.run_mode == 'sge':
             try:
                 check_call('qhost')
@@ -4479,8 +4429,9 @@ class ParameterEstimation(_Task):
                     'Attempting to run in SGE mode but SGE specific commands are unavailable. Switching to \'parallel\' mode')
                 self.run_mode = 'parallel'
         if self.run_mode == 'parallel':
-            RunParallel(list(self.models.values()), mode=self.run_mode, max_active=self.max_active,
-                        task='scan')
+            for model_name in self.models:
+                RunParallel(list(self.models.values()), mode=self.run_mode, max_active=self.max_active,
+                            task='scan')
         elif self.run_mode:
             for copy_number, model in list(self.models.items()):
                 LOG.info('running model: {}'.format(copy_number))
@@ -4492,6 +4443,28 @@ class ParameterEstimation(_Task):
             raise ValueError('"{}" is not a valid argument'.format(self.run_mode))
 
     def setup(self):
+
+        self.config.models = self._define_report()
+
+        self.models = self._map_experiments(validation=False)
+        self.models = self._map_experiments(validation=True)
+
+
+        ## get rid of existing parameter estimation definition
+        self.models = self._remove_all_fit_items()
+
+        # self.convert_bool_to_numeric()
+
+        ## create new parameter estimation
+        self.models = self._set_PE_method()
+        self.models = self._set_PE_options()
+        self.models = self._add_fit_items(constraint=False)
+
+        # self.config.models.model1.model.open()
+
+
+
+    def setup_old(self):
         """
         :return:
         """

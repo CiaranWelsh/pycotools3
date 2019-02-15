@@ -3365,7 +3365,7 @@ class ParameterEstimation(_Task):
         """
         for row in range(self.read_config_file().shape[0]):
             assert row != 'nan'
-            ## feed each item from the config file into _add_fit_item
+            ## feed each item from the config file into _add_fit_items
             self.model = self.add_fit_item(self.read_config_file().iloc[row])
         return self.model
 
