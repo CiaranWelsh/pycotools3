@@ -639,7 +639,7 @@ class ParameterEstimationTests(_test_base._BaseTest):
         self.assertIsInstance(self.PE.config.models.model1.model, pycotools3.model.Model)
 
     def test_output_directory_id(self):
-        results_directory = '/home/ncw135/Documents/pycotools3/Tests/Problem1/Fit1/model1/'
+        results_directory = os.path.join(os.path.dirname(__file__), 'Problem1/Fit1/model1/')
         self.assertEqual(self.PE.results_directory['model1'], results_directory)
 
     def test_get_model_obj_from_strings(self):
@@ -1032,7 +1032,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
                     count += 1
         self.assertEqual(1, count)
 
-    def experiment_test(self, expected_value, attribute):
+    def experiment_checker_function(self, expected_value, attribute):
         self.PE.setup()
         mod = self.PE.config.models.model1.model
         ans = None
@@ -1051,28 +1051,28 @@ class ExperimentMapperTests(_test_base._BaseTest):
         First row of experiment_0==1
         :return:
         """
-        self.experiment_test('1', 'First Row')
+        self.experiment_checker_function('1', 'First Row')
 
     def test_experiment_weighting_method(self):
         """
         First row of experiment_0==1
         :return:
         """
-        self.experiment_test('3', 'Weight Method')
+        self.experiment_checker_function('3', 'Weight Method')
 
     def test_experiment_file_name(self):
         """
         First row of experiment_0==1
         :return:
         """
-        self.experiment_test('report1.txt', 'File Name')
+        self.experiment_checker_function('report1.txt', 'File Name')
 
     def test_experiment_number_of_columns(self):
         """
         First row of experiment_0==1
         :return:
         """
-        self.experiment_test('10', 'Number of Columns')
+        self.experiment_checker_function('10', 'Number of Columns')
 
     def test_experiment_correct_reference1(self):
         """

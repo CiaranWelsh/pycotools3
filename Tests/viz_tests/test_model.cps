@@ -24,116 +24,51 @@ Reaction scheme where the products are created from the reactants and the change
         <ParameterDescription key="FunctionParameter_81" name="substrate" order="1" role="substrate"/>
       </ListOfParameterDescriptions>
     </Function>
-    <Function key="Function_14" name="Mass action (reversible)" type="MassAction" reversible="true">
-      <MiriamAnnotation>
-        <rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-          <rdf:Description rdf:about="#Function_14">
-            <CopasiMT:is rdf:resource="urn:miriam:obo.sbo:SBO:0000042"/>
-          </rdf:Description>
-        </rdf:RDF>
-      </MiriamAnnotation>
-      <Comment>
-        <body xmlns="http://www.w3.org/1999/xhtml">
-          <b>Mass action rate law for reversible reactions</b>
-          <p>
-Reaction scheme where the products are created from the reactants and the change of a product quantity is proportional to the product of reactant activities. The reaction scheme does include a reverse process that creates the reactants from the products.
-</p>
-        </body>
-      </Comment>
+    <Function key="Function_39" name="Function for ADeg" type="UserDefined" reversible="false">
       <Expression>
-        k1*PRODUCT&lt;substrate_i&gt;-k2*PRODUCT&lt;product_j&gt;
+        kADeg*A*B
       </Expression>
       <ListOfParameterDescriptions>
-        <ParameterDescription key="FunctionParameter_69" name="k1" order="0" role="constant"/>
-        <ParameterDescription key="FunctionParameter_68" name="substrate" order="1" role="substrate"/>
-        <ParameterDescription key="FunctionParameter_78" name="k2" order="2" role="constant"/>
-        <ParameterDescription key="FunctionParameter_79" name="product" order="3" role="product"/>
+        <ParameterDescription key="FunctionParameter_265" name="A" order="0" role="substrate"/>
+        <ParameterDescription key="FunctionParameter_266" name="B" order="1" role="modifier"/>
+        <ParameterDescription key="FunctionParameter_267" name="kADeg" order="2" role="constant"/>
+      </ListOfParameterDescriptions>
+    </Function>
+    <Function key="Function_40" name="Function for BProd" type="UserDefined" reversible="false">
+      <Expression>
+        kBProd*A
+      </Expression>
+      <ListOfParameterDescriptions>
+        <ParameterDescription key="FunctionParameter_261" name="A" order="0" role="modifier"/>
+        <ParameterDescription key="FunctionParameter_271" name="kBProd" order="1" role="constant"/>
       </ListOfParameterDescriptions>
     </Function>
   </ListOfFunctions>
-  <Model key="Model_1" name="New_Model" simulationType="time" timeUnit="s" volumeUnit="ml" areaUnit="m&#178;" lengthUnit="m" quantityUnit="mmol" type="deterministic" avogadroConstant="6.0221417899999999e+23">
+  <Model key="Model_1" name="negative_feedback" simulationType="time" timeUnit="s" volumeUnit="l" areaUnit="m&#178;" lengthUnit="m" quantityUnit="mol" type="deterministic" avogadroConstant="6.0221417899999999e+23">
     <ListOfCompartments>
-      <Compartment key="Compartment_0" name="nuc" simulationType="fixed" dimensionality="3" addNoise="false">
-      </Compartment>
-      <Compartment key="Compartment_1" name="cyt" simulationType="fixed" dimensionality="3" addNoise="false">
+      <Compartment key="Compartment_0" name="cell" simulationType="fixed" dimensionality="3" addNoise="false">
       </Compartment>
     </ListOfCompartments>
     <ListOfMetabolites>
-      <Metabolite key="Metabolite_0" name="A" simulationType="reactions" compartment="Compartment_0" addNoise="false" particle_numbers="6.02214179e+20">
+      <Metabolite key="Metabolite_0" name="A" simulationType="reactions" compartment="Compartment_0" addNoise="false" particle_numbers="0.0">
       </Metabolite>
-      <Metabolite key="Metabolite_1" name="B" simulationType="reactions" compartment="Compartment_0" addNoise="false" particle_numbers="6.02214179e+20">
+      <Metabolite key="Metabolite_1" name="B" simulationType="reactions" compartment="Compartment_0" addNoise="false" particle_numbers="0.0">
       </Metabolite>
-      <Metabolite key="Metabolite_2" name="C" simulationType="reactions" compartment="Compartment_0" addNoise="false" particle_numbers="6.02214179e+20">
+      <Metabolite key="Metabolite_2" name="Signal" simulationType="fixed" compartment="Compartment_0" addNoise="false" particle_numbers="6.02214179e+24">
       </Metabolite>
     </ListOfMetabolites>
     <ListOfModelValues>
-      <ModelValue key="ModelValue_0" name="ThisIsAssignment" simulationType="assignment" addNoise="false" initial_value="13.0">
-        <Expression>
-          &lt;CN=Root,Model=New_Model,Vector=Values[A2B],Reference=Value&gt;+&lt;CN=Root,Model=New_Model,Vector=Values[B2C],Reference=Value&gt;
-        </Expression>
+      <ModelValue key="ModelValue_0" name="vAProd" simulationType="fixed" addNoise="false" initial_value="0.1">
       </ModelValue>
-      <ModelValue key="ModelValue_1" name="A2B" simulationType="fixed" addNoise="false" initial_value="4.0">
+      <ModelValue key="ModelValue_1" name="kADeg" simulationType="fixed" addNoise="false" initial_value="0.2">
       </ModelValue>
-      <ModelValue key="ModelValue_2" name="B2C" simulationType="fixed" addNoise="false" initial_value="9.0">
+      <ModelValue key="ModelValue_2" name="kBProd" simulationType="fixed" addNoise="false" initial_value="0.3">
       </ModelValue>
-      <ModelValue key="ModelValue_3" name="B2C_0_k2" simulationType="fixed" addNoise="false" initial_value="0.1">
-      </ModelValue>
-      <ModelValue key="ModelValue_4" name="C2A_k1" simulationType="fixed" addNoise="false" initial_value="0.1">
-      </ModelValue>
-      <ModelValue key="ModelValue_5" name="ADeg_k1" simulationType="fixed" addNoise="false" initial_value="0.1">
+      <ModelValue key="ModelValue_3" name="kBDeg" simulationType="fixed" addNoise="false" initial_value="0.4">
       </ModelValue>
     </ListOfModelValues>
     <ListOfReactions>
-      <Reaction key="Reaction_0" name="A2B" reversible="false" fast="false" addNoise="false">
-        <ListOfSubstrates>
-          <Substrate metabolite="Metabolite_0" stoichiometry="1"/>
-        </ListOfSubstrates>
-        <ListOfProducts>
-          <Product metabolite="Metabolite_1" stoichiometry="1"/>
-        </ListOfProducts>
-        <ListOfConstants>
-          <Constant key="Parameter_5013" name="k1" value="4"/>
-        </ListOfConstants>
-        <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=New_Model,Vector=Compartments[nuc]">
-          <ListOfCallParameters>
-            <CallParameter functionParameter="FunctionParameter_80">
-              <SourceParameter reference="ModelValue_1"/>
-            </CallParameter>
-            <CallParameter functionParameter="FunctionParameter_81">
-              <SourceParameter reference="Metabolite_0"/>
-            </CallParameter>
-          </ListOfCallParameters>
-        </KineticLaw>
-      </Reaction>
-      <Reaction key="Reaction_1" name="B2C" reversible="true" fast="false" addNoise="false">
-        <ListOfSubstrates>
-          <Substrate metabolite="Metabolite_1" stoichiometry="1"/>
-        </ListOfSubstrates>
-        <ListOfProducts>
-          <Product metabolite="Metabolite_2" stoichiometry="1"/>
-        </ListOfProducts>
-        <ListOfConstants>
-          <Constant key="Parameter_5012" name="k1" value="9"/>
-          <Constant key="Parameter_5011" name="k2" value="0.1"/>
-        </ListOfConstants>
-        <KineticLaw function="Function_14" unitType="Default" scalingCompartment="CN=Root,Model=New_Model,Vector=Compartments[nuc]">
-          <ListOfCallParameters>
-            <CallParameter functionParameter="FunctionParameter_69">
-              <SourceParameter reference="ModelValue_2"/>
-            </CallParameter>
-            <CallParameter functionParameter="FunctionParameter_68">
-              <SourceParameter reference="Metabolite_1"/>
-            </CallParameter>
-            <CallParameter functionParameter="FunctionParameter_78">
-              <SourceParameter reference="ModelValue_3"/>
-            </CallParameter>
-            <CallParameter functionParameter="FunctionParameter_79">
-              <SourceParameter reference="Metabolite_2"/>
-            </CallParameter>
-          </ListOfCallParameters>
-        </KineticLaw>
-      </Reaction>
-      <Reaction key="Reaction_2" name="C2A" reversible="false" fast="false" addNoise="false">
+      <Reaction key="Reaction_0" name="AProd" reversible="false" fast="false" addNoise="false">
         <ListOfSubstrates>
           <Substrate metabolite="Metabolite_2" stoichiometry="1"/>
         </ListOfSubstrates>
@@ -141,12 +76,12 @@ Reaction scheme where the products are created from the reactants and the change
           <Product metabolite="Metabolite_0" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_5010" name="k1" value="0.1"/>
+          <Constant key="Parameter_5013" name="k1" value="0.1"/>
         </ListOfConstants>
-        <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=New_Model,Vector=Compartments[nuc]">
+        <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=negative_feedback,Vector=Compartments[cell]">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_80">
-              <SourceParameter reference="ModelValue_4"/>
+              <SourceParameter reference="ModelValue_0"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_81">
               <SourceParameter reference="Metabolite_2"/>
@@ -154,20 +89,65 @@ Reaction scheme where the products are created from the reactants and the change
           </ListOfCallParameters>
         </KineticLaw>
       </Reaction>
-      <Reaction key="Reaction_3" name="ADeg" reversible="false" fast="false" addNoise="false">
+      <Reaction key="Reaction_1" name="ADeg" reversible="false" fast="false" addNoise="false">
         <ListOfSubstrates>
           <Substrate metabolite="Metabolite_0" stoichiometry="1"/>
         </ListOfSubstrates>
+        <ListOfModifiers>
+          <Modifier metabolite="Metabolite_1" stoichiometry="1"/>
+        </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_5009" name="k1" value="0.1"/>
+          <Constant key="Parameter_5012" name="kADeg" value="0.2"/>
         </ListOfConstants>
-        <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=New_Model,Vector=Compartments[nuc]">
+        <KineticLaw function="Function_39" unitType="Default" scalingCompartment="CN=Root,Model=negative_feedback,Vector=Compartments[cell]">
+          <ListOfCallParameters>
+            <CallParameter functionParameter="FunctionParameter_265">
+              <SourceParameter reference="Metabolite_0"/>
+            </CallParameter>
+            <CallParameter functionParameter="FunctionParameter_266">
+              <SourceParameter reference="Metabolite_1"/>
+            </CallParameter>
+            <CallParameter functionParameter="FunctionParameter_267">
+              <SourceParameter reference="ModelValue_1"/>
+            </CallParameter>
+          </ListOfCallParameters>
+        </KineticLaw>
+      </Reaction>
+      <Reaction key="Reaction_2" name="BProd" reversible="false" fast="false" addNoise="false">
+        <ListOfProducts>
+          <Product metabolite="Metabolite_1" stoichiometry="1"/>
+        </ListOfProducts>
+        <ListOfModifiers>
+          <Modifier metabolite="Metabolite_0" stoichiometry="1"/>
+        </ListOfModifiers>
+        <ListOfConstants>
+          <Constant key="Parameter_5011" name="kBProd" value="0.3"/>
+        </ListOfConstants>
+        <KineticLaw function="Function_40" unitType="Default" scalingCompartment="CN=Root,Model=negative_feedback,Vector=Compartments[cell]">
+          <ListOfCallParameters>
+            <CallParameter functionParameter="FunctionParameter_261">
+              <SourceParameter reference="Metabolite_0"/>
+            </CallParameter>
+            <CallParameter functionParameter="FunctionParameter_271">
+              <SourceParameter reference="ModelValue_2"/>
+            </CallParameter>
+          </ListOfCallParameters>
+        </KineticLaw>
+      </Reaction>
+      <Reaction key="Reaction_3" name="BDeg" reversible="false" fast="false" addNoise="false">
+        <ListOfSubstrates>
+          <Substrate metabolite="Metabolite_1" stoichiometry="1"/>
+        </ListOfSubstrates>
+        <ListOfConstants>
+          <Constant key="Parameter_5010" name="k1" value="0.4"/>
+        </ListOfConstants>
+        <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=negative_feedback,Vector=Compartments[cell]">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_80">
-              <SourceParameter reference="ModelValue_5"/>
+              <SourceParameter reference="ModelValue_3"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_81">
-              <SourceParameter reference="Metabolite_0"/>
+              <SourceParameter reference="Metabolite_1"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -176,56 +156,48 @@ Reaction scheme where the products are created from the reactants and the change
     <ListOfModelParameterSets activeSet="ModelParameterSet_1">
       <ModelParameterSet key="ModelParameterSet_1" name="Initial State">
         <ModelParameterGroup cn="String=Initial Time" type="Group">
-          <ModelParameter cn="CN=Root,Model=New_Model" value="0" type="Model" simulationType="time"/>
+          <ModelParameter cn="CN=Root,Model=negative_feedback" value="0" type="Model" simulationType="time"/>
         </ModelParameterGroup>
         <ModelParameterGroup cn="String=Initial Compartment Sizes" type="Group">
-          <ModelParameter cn="CN=Root,Model=New_Model,Vector=Compartments[nuc]" value="1" type="Compartment" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=New_Model,Vector=Compartments[cyt]" value="3" type="Compartment" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=negative_feedback,Vector=Compartments[cell]" value="1" type="Compartment" simulationType="fixed"/>
         </ModelParameterGroup>
         <ModelParameterGroup cn="String=Initial Species Values" type="Group">
-          <ModelParameter cn="CN=Root,Model=New_Model,Vector=Compartments[nuc],Vector=Metabolites[A]" value="6.0221417900000005e+20" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=New_Model,Vector=Compartments[nuc],Vector=Metabolites[B]" value="6.0221417900000005e+20" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=New_Model,Vector=Compartments[nuc],Vector=Metabolites[C]" value="6.0221417900000005e+20" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=negative_feedback,Vector=Compartments[cell],Vector=Metabolites[A]" value="0" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=negative_feedback,Vector=Compartments[cell],Vector=Metabolites[B]" value="0" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=negative_feedback,Vector=Compartments[cell],Vector=Metabolites[Signal]" value="6.0221417899999996e+24" type="Species" simulationType="fixed"/>
         </ModelParameterGroup>
         <ModelParameterGroup cn="String=Initial Global Quantities" type="Group">
-          <ModelParameter cn="CN=Root,Model=New_Model,Vector=Values[ThisIsAssignment]" value="13" type="ModelValue" simulationType="assignment"/>
-          <ModelParameter cn="CN=Root,Model=New_Model,Vector=Values[A2B]" value="4" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=New_Model,Vector=Values[B2C]" value="9" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=New_Model,Vector=Values[B2C_0_k2]" value="0.10000000000000001" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=New_Model,Vector=Values[C2A_k1]" value="0.10000000000000001" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=New_Model,Vector=Values[ADeg_k1]" value="0.10000000000000001" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=negative_feedback,Vector=Values[vAProd]" value="0.10000000000000001" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=negative_feedback,Vector=Values[kADeg]" value="0.20000000000000001" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=negative_feedback,Vector=Values[kBProd]" value="0.29999999999999999" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=negative_feedback,Vector=Values[kBDeg]" value="0.40000000000000002" type="ModelValue" simulationType="fixed"/>
         </ModelParameterGroup>
         <ModelParameterGroup cn="String=Kinetic Parameters" type="Group">
-          <ModelParameterGroup cn="CN=Root,Model=New_Model,Vector=Reactions[A2B]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=New_Model,Vector=Reactions[A2B],ParameterGroup=Parameters,Parameter=k1" value="4" type="ReactionParameter" simulationType="assignment">
+          <ModelParameterGroup cn="CN=Root,Model=negative_feedback,Vector=Reactions[AProd]" type="Reaction">
+            <ModelParameter cn="CN=Root,Model=negative_feedback,Vector=Reactions[AProd],ParameterGroup=Parameters,Parameter=k1" value="0.10000000000000001" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
-                &lt;CN=Root,Model=New_Model,Vector=Values[A2B],Reference=InitialValue&gt;
+                &lt;CN=Root,Model=negative_feedback,Vector=Values[vAProd],Reference=InitialValue&gt;
               </InitialExpression>
             </ModelParameter>
           </ModelParameterGroup>
-          <ModelParameterGroup cn="CN=Root,Model=New_Model,Vector=Reactions[B2C]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=New_Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k1" value="9" type="ReactionParameter" simulationType="assignment">
+          <ModelParameterGroup cn="CN=Root,Model=negative_feedback,Vector=Reactions[ADeg]" type="Reaction">
+            <ModelParameter cn="CN=Root,Model=negative_feedback,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=kADeg" value="0.20000000000000001" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
-                &lt;CN=Root,Model=New_Model,Vector=Values[B2C],Reference=InitialValue&gt;
-              </InitialExpression>
-            </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=New_Model,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2" value="0.10000000000000001" type="ReactionParameter" simulationType="assignment">
-              <InitialExpression>
-                &lt;CN=Root,Model=New_Model,Vector=Values[B2C_0_k2],Reference=InitialValue&gt;
+                &lt;CN=Root,Model=negative_feedback,Vector=Values[kADeg],Reference=InitialValue&gt;
               </InitialExpression>
             </ModelParameter>
           </ModelParameterGroup>
-          <ModelParameterGroup cn="CN=Root,Model=New_Model,Vector=Reactions[C2A]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=New_Model,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1" value="0.10000000000000001" type="ReactionParameter" simulationType="assignment">
+          <ModelParameterGroup cn="CN=Root,Model=negative_feedback,Vector=Reactions[BProd]" type="Reaction">
+            <ModelParameter cn="CN=Root,Model=negative_feedback,Vector=Reactions[BProd],ParameterGroup=Parameters,Parameter=kBProd" value="0.29999999999999999" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
-                &lt;CN=Root,Model=New_Model,Vector=Values[C2A_k1],Reference=InitialValue&gt;
+                &lt;CN=Root,Model=negative_feedback,Vector=Values[kBProd],Reference=InitialValue&gt;
               </InitialExpression>
             </ModelParameter>
           </ModelParameterGroup>
-          <ModelParameterGroup cn="CN=Root,Model=New_Model,Vector=Reactions[ADeg]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=New_Model,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1" value="0.10000000000000001" type="ReactionParameter" simulationType="assignment">
+          <ModelParameterGroup cn="CN=Root,Model=negative_feedback,Vector=Reactions[BDeg]" type="Reaction">
+            <ModelParameter cn="CN=Root,Model=negative_feedback,Vector=Reactions[BDeg],ParameterGroup=Parameters,Parameter=k1" value="0.40000000000000002" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
-                &lt;CN=Root,Model=New_Model,Vector=Values[ADeg_k1],Reference=InitialValue&gt;
+                &lt;CN=Root,Model=negative_feedback,Vector=Values[kBDeg],Reference=InitialValue&gt;
               </InitialExpression>
             </ModelParameter>
           </ModelParameterGroup>
@@ -237,17 +209,14 @@ Reaction scheme where the products are created from the reactants and the change
       <StateTemplateVariable objectReference="Metabolite_0"/>
       <StateTemplateVariable objectReference="Metabolite_1"/>
       <StateTemplateVariable objectReference="Metabolite_2"/>
-      <StateTemplateVariable objectReference="ModelValue_0"/>
       <StateTemplateVariable objectReference="Compartment_0"/>
-      <StateTemplateVariable objectReference="Compartment_1"/>
+      <StateTemplateVariable objectReference="ModelValue_0"/>
       <StateTemplateVariable objectReference="ModelValue_1"/>
       <StateTemplateVariable objectReference="ModelValue_2"/>
       <StateTemplateVariable objectReference="ModelValue_3"/>
-      <StateTemplateVariable objectReference="ModelValue_4"/>
-      <StateTemplateVariable objectReference="ModelValue_5"/>
     </StateTemplate>
     <InitialState type="initialState">
-      0 6.0221417900000005e+20 6.0221417900000005e+20 6.0221417900000005e+20 13 1 3 4 9 0.10000000000000001 0.10000000000000001 0.10000000000000001 
+      0 0 0 6.0221417899999996e+24 1 0.10000000000000001 0.20000000000000001 0.29999999999999999 0.40000000000000002 
     </InitialState>
   </Model>
   <ListOfTasks>
@@ -270,11 +239,11 @@ Reaction scheme where the products are created from the reactants and the change
       </Method>
     </Task>
     <Task key="Task_100" name="Time-Course" scheduled="true" type="timeCourse" update_model="false">
-      <Report append="0" confirmOverwrite="0" reference="Report_30" target="/home/ncw135/Documents/pycotools3/Tests/viz_tests/report1.txt"/>
+      <Report append="0" confirmOverwrite="0" reference="Report_30" target="/home/ncw135/Documents/pycotools3/Tests/viz_tests/TimeCourseData.txt"/>
       <Problem>
         <Parameter name="AutomaticStepSize" type="bool" value="0"/>
-        <Parameter name="StepNumber" type="unsignedInteger" value="50"/>
-        <Parameter name="StepSize" type="float" value="0.1"/>
+        <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+        <Parameter name="StepSize" type="float" value="1"/>
         <Parameter name="Duration" type="float" value="10"/>
         <Parameter name="TimeSeriesRequested" type="float" value="1"/>
         <Parameter name="OutputStartTime" type="float" value="0"/>
@@ -598,35 +567,26 @@ Reaction scheme where the products are created from the reactants and the change
     <Report key="Report_30" name="Time-Course" precision="6" separator="&#9;" taskType="Time-Course">
       <Comment/>
       <Table printTitle="1">
-        <Object cn="CN=Root,Model=New_Model,Reference=Time"/>
-        <Object cn="CN=Root,Model=New_Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=New_Model,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=New_Model,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=New_Model,Vector=Values[ThisIsAssignment],Reference=Value"/>
-        <Object cn="CN=Root,Model=New_Model,Vector=Values[A2B],Reference=Value"/>
-        <Object cn="CN=Root,Model=New_Model,Vector=Values[B2C],Reference=Value"/>
-        <Object cn="CN=Root,Model=New_Model,Vector=Values[B2C_0_k2],Reference=Value"/>
-        <Object cn="CN=Root,Model=New_Model,Vector=Values[C2A_k1],Reference=Value"/>
-        <Object cn="CN=Root,Model=New_Model,Vector=Values[ADeg_k1],Reference=Value"/>
+        <Object cn="CN=Root,Model=negative_feedback,Reference=Time"/>
+        <Object cn="CN=Root,Model=negative_feedback,Vector=Compartments[cell],Vector=Metabolites[A],Reference=Concentration"/>
+        <Object cn="CN=Root,Model=negative_feedback,Vector=Compartments[cell],Vector=Metabolites[B],Reference=Concentration"/>
+        <Object cn="CN=Root,Model=negative_feedback,Vector=Compartments[cell],Vector=Metabolites[Signal],Reference=Concentration"/>
       </Table>
     </Report>
   </ListOfReports>
   <SBMLReference file="test_model.sbml">
     <SBMLMap SBMLid="A" COPASIkey="Metabolite_0"/>
-    <SBMLMap SBMLid="A2B" COPASIkey="ModelValue_1"/>
-    <SBMLMap SBMLid="A2B_0" COPASIkey="Reaction_0"/>
-    <SBMLMap SBMLid="ADeg" COPASIkey="Reaction_3"/>
-    <SBMLMap SBMLid="ADeg_k1" COPASIkey="ModelValue_5"/>
+    <SBMLMap SBMLid="ADeg" COPASIkey="Reaction_1"/>
+    <SBMLMap SBMLid="AProd" COPASIkey="Reaction_0"/>
     <SBMLMap SBMLid="B" COPASIkey="Metabolite_1"/>
-    <SBMLMap SBMLid="B2C" COPASIkey="ModelValue_2"/>
-    <SBMLMap SBMLid="B2C_0" COPASIkey="Reaction_1"/>
-    <SBMLMap SBMLid="B2C_0_k2" COPASIkey="ModelValue_3"/>
-    <SBMLMap SBMLid="C" COPASIkey="Metabolite_2"/>
-    <SBMLMap SBMLid="C2A" COPASIkey="Reaction_2"/>
-    <SBMLMap SBMLid="C2A_k1" COPASIkey="ModelValue_4"/>
-    <SBMLMap SBMLid="ThisIsAssignment" COPASIkey="ModelValue_0"/>
-    <SBMLMap SBMLid="cyt" COPASIkey="Compartment_1"/>
-    <SBMLMap SBMLid="nuc" COPASIkey="Compartment_0"/>
+    <SBMLMap SBMLid="BDeg" COPASIkey="Reaction_3"/>
+    <SBMLMap SBMLid="BProd" COPASIkey="Reaction_2"/>
+    <SBMLMap SBMLid="Signal" COPASIkey="Metabolite_2"/>
+    <SBMLMap SBMLid="cell" COPASIkey="Compartment_0"/>
+    <SBMLMap SBMLid="kADeg" COPASIkey="ModelValue_1"/>
+    <SBMLMap SBMLid="kBDeg" COPASIkey="ModelValue_3"/>
+    <SBMLMap SBMLid="kBProd" COPASIkey="ModelValue_2"/>
+    <SBMLMap SBMLid="vAProd" COPASIkey="ModelValue_0"/>
   </SBMLReference>
   <ListOfUnitDefinitions>
     <UnitDefinition key="Unit_0" name="meter" symbol="m">
