@@ -84,24 +84,42 @@ class ChaserParameterEstimationTests(unittest.TestCase):
         self.copy_number = 2
         self.pe_number = 3
 
-        self.MPE = tasks.ParameterEstimation(
-            self.mod,
-            self.TC1.report_name,
-            copy_number=self.copy_number,
-            pe_number=self.pe_number,
-            method='genetic_algorithm',
-            population_size=10,
-            number_of_generations=10,
-            overwrite_config_file=True,
-            results_directory='test_mpe',
-            run_mode=True
+        self.config = tasks.ParameterEstimation.Config(
+            **{
+                'models': {
+                    'copasi_file': self.mod.copasi_file
+                },
+                'datasets': {
+                    'experiments': {
+                        'report1': self.TC1.report_name
+                    },
+                },
+                'items': {
+
+                },
+                'settings': {
+                    'copy_number': self.copy_number,
+                    'pe_number': self.pe_number,
+                    'method': 'genetic_algorithm',
+                    'population_size': 10,
+                    'number_of_generations': 10,
+                    'overwrite_config_file': True,
+                    'results_directory': 'test_mpe',
+                    'working_directory': os.path.dirname(__file__),
+                    'run_mode': True,
+                },
+            }
+        )
+
+        self.PE = tasks.ParameterEstimation(
+            self.config
         )
 
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
 
-        self.MPE.write_config_file()
-        self.MPE.setup()
-        self.MPE.run()
+        self.PE.write_config_file()
+        self.PE.setup()
+        self.PE.run()
 
     def tearDown(self):
         """
@@ -113,7 +131,7 @@ class ChaserParameterEstimationTests(unittest.TestCase):
         pass
 
     def test_MPE_worked(self):
-        data = viz.Parse(self.MPE).data
+        data = viz.Parse(self.PE).data
         self.assertEqual(data.shape[0], self.copy_number*self.pe_number)
 
     def test_pe_dict_is_created(self):
@@ -123,14 +141,14 @@ class ChaserParameterEstimationTests(unittest.TestCase):
         is correctly created. 
         :return: 
         """
-        CPE = tasks.ChaserParameterEstimations(self.MPE, truncate_mode='ranks',
+        CPE = tasks.ChaserParameterEstimations(self.PE, truncate_mode='ranks',
                                                theta=list(range(2)), run_mode=False,
                                                tolerance=1e-1, iteration_limit=5)
         # print viz.Parse(CPE).data
         self.assertTrue(len(list(CPE.pe_dct.items())) == self.copy_number)
 
     def test_run_true(self):
-        CPE = tasks.ChaserParameterEstimations(self.MPE, truncate_mode='ranks',
+        CPE = tasks.ChaserParameterEstimations(self.PE, truncate_mode='ranks',
                                                theta=list(range(2)), run_mode=True,
                                                tolerance=1e-1, iteration_limit=5)
         results = viz.Parse(CPE).data
@@ -153,12 +171,12 @@ class ChaserParameterEstimationTests(unittest.TestCase):
         :return:
         """
 
-        CPE = tasks.ChaserParameterEstimations(self.MPE, truncate_mode='ranks',
+        CPE = tasks.ChaserParameterEstimations(self.PE, truncate_mode='ranks',
                                                theta=list(range(2)), run_mode=True,
                                                tolerance=1e-1, iteration_limit=5)
 
         ## get parameters that were estimated in MPE
-        pe_data = viz.Parse(self.MPE).data
+        pe_data = viz.Parse(self.PE).data
 
         ## get keys to ordered dict
         keys = list(CPE.pe_dct.keys())

@@ -642,10 +642,6 @@ class ParameterEstimationTests(_test_base._BaseTest):
         results_directory = '/home/ncw135/Documents/pycotools3/Tests/Problem1/Fit1/model1/'
         self.assertEqual(self.PE.results_directory['model1'], results_directory)
 
-    def test_create_output_directory(self):
-        results_directory = '/home/ncw135/Documents/pycotools3/Tests/Problem1/Fit1/model1/'
-        self.assertTrue(os.path.isdir(results_directory))
-
     def test_get_model_obj_from_strings(self):
         self.assertEqual(len(self.PE.get_model_objects_from_strings()), 9)
 
