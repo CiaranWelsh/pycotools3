@@ -3840,13 +3840,12 @@ class ParameterEstimation(_Task):
         for model_name in self.models:
             mod = self.models[model_name].model
             if constraint:
-                print(constraint)
                 ## Constraint items are not obligatory so skip if there
                 ## are none.
-                # if 'constraint_items' not in self.config.items.keys():
-                #     return self.models
-                # else:
-                items = self.config.items.constraint_items
+                if 'constraint_items' not in self.config.items.keys():
+                    return self.models
+                else:
+                    items = self.config.items.constraint_items
             else:
                 items = self.config.items.fit_items
 
@@ -4331,7 +4330,7 @@ class ParameterEstimation(_Task):
         self.models = self._set_PE_method()
         self.models = self._set_PE_options()
         self.models = self._add_fit_items(constraint=False)
-        # self.models = self._add_fit_items(constraint=True)
+        self.models = self._add_fit_items(constraint=True)
 
         ##todo self.models has experiments as keys for some reason. fix
 
