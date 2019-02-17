@@ -118,7 +118,7 @@ class ChaserParameterEstimationTests(unittest.TestCase):
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
 
         self.PE.write_config_file()
-        self.PE.setup()
+        self.PE._setup()
         self.PE.run()
 
     def tearDown(self):

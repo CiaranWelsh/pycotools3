@@ -239,7 +239,7 @@ def parse_timecourse(self):
     copasi generated square brackets around the variables
     :return: pandas.DataFrame
     """
-
+    time.sleep(0.1)
     df = pandas.read_csv(self.cls_instance.report_name, sep='\t')
     headers = [re.findall('(Time)|\[(.*)\]', i)[0] for i in list(df.columns)]
     time = headers[0][0]
@@ -407,6 +407,9 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
     #     string = "{'model1': Model(name=New_Model, time_unit=s, volume_unit=ml, quantity_unit=mmol)}"
     #     self.assertEqual(str(self.config.models), string)
 
+    # def test_A(self):
+    #     print(self.PE.config)
+    #
     def test_experiment_kw1(self):
         self.assertEqual(
             os.path.join(os.path.dirname(__file__), self.TC1.report_name),
@@ -466,7 +469,12 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
         self.assertEqual(self.PE.config.items.fit_items.B.lower_bound, 1e-6)
 
     def test_constraint_items1(self):
-        self.assertEqual(self.PE.config.items.constraint_items.C.lower_bound, 16)
+        self.assertEqual(
+            self.PE.config.items.constraint_items.C.lower_bound, 16
+        )
+
+    def test_constraint_items2(self):
+        print(self.PE.config.items.constraint_items)
 
     def test_settings1(self):
         self.assertEqual(self.PE.config.settings.method, 'genetic_algorithm_sr')
@@ -515,7 +523,6 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
         self.assertListEqual(self.config.items.fit_items.C.affected_models,
                              ['model1']
                              )
-
 
 class ExperimentMapperTests(_test_base._BaseTest):
 
@@ -1044,7 +1051,14 @@ class ParameterEstimationTests(_test_base._BaseTest):
                     C2A_k1={},
                     ADeg_k1={},
 
+                ),
+                constraint_items=dict(
+                    B2C=dict(
+                        lower_bound=1e-1,
+                        upper_bound=100
+                    )
                 )
+
             ),
             settings=dict(
                 method='genetic_algorithm_sr',
@@ -1204,6 +1218,13 @@ class ParameterEstimationTests(_test_base._BaseTest):
         ## [5][1][3] indexes the parameter estimation item list
         optimization_item_list = list_of_tasks[5][1][3]
         self.assertEqual(8, len(optimization_item_list))
+
+    def test_constraint_items(self):
+        mod = self.PE.models.model1.model
+        list_of_tasks = mod.xml.find(self.list_of_tasks)
+        ## [5][1][3] indexes the parameter estimation item list
+        constraint_item_list = list_of_tasks[5][1][4]
+        self.assertEqual(1, len(constraint_item_list))
 
     def test_set_PE_method(self):
         '''

@@ -67,11 +67,11 @@ class MultiParameterEstimationTests(_test_base._BaseTest):
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
 
         self.MPE.write_config_file()
-        self.MPE.setup()
+        self.MPE._setup()
 
     def test(self):
         self.MPE.write_config_file()
-        self.MPE.setup()
+        self.MPE._setup()
         self.MPE.run()
 
     def test_output_directory(self):
@@ -148,7 +148,7 @@ class MultiParameterEstimationTests(_test_base._BaseTest):
     #         overwrite_config_file=True,
     #     )
     #     PE.write_config_file()
-    #     PE.setup()
+    #     PE._setup()
     #
     #     ## No time to finish the test but opening
     #     ## the model shows that parameter have been inserted

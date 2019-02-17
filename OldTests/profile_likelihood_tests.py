@@ -60,7 +60,7 @@ class ProfileLikelihoodTests(_test_base._BaseTest):
         self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
 
         self.MPE.write_config_file()
-        self.MPE.setup()
+        self.MPE._setup()
         self.MPE.run()
         os.chdir(self.root)
         import time

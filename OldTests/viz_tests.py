@@ -122,7 +122,7 @@ class PlotParameterEstimationTests(_test_base._BaseTest):
         if os.path.isfile(self.PE.config_filename):
             os.remove(self.PE.config_filename)
         self.PE.write_config_file()
-        self.PE.setup()
+        self.PE._setup()
         # # print model.local_parameters
         self.PE.run()
         # # PE.model.open()
@@ -227,7 +227,7 @@ class BoxPlotTests(_test_base._BaseTest):
         # if os.path.isfile(self.MPE.config_filename):
         #     os.remove(self.MPE.config_filename)
         self.MPE.write_config_file()
-        self.MPE.setup()
+        self.MPE._setup()
         self.MPE.run()
 
     def test_boxplot_is_saved(self):
@@ -280,7 +280,7 @@ class PlotPLTests(_test_base._BaseTest):
                 population_size=1, overwrite_config_file=True,
             )
             PE.write_config_file()
-            PE.setup()
+            PE._setup()
             df = pandas.read_pickle(pe_data_file)
         except IOError:
             PE = pycotools3.tasks.MultiParameterEstimation(
@@ -290,7 +290,7 @@ class PlotPLTests(_test_base._BaseTest):
                 population_size=1, overwrite_config_file=True
             )
             PE.write_config_file()
-            PE.setup()
+            PE._setup()
             PE.run()
             time.sleep(10)
             p = pycotools3.viz.Parse(PE)

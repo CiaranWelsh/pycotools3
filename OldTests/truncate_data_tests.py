@@ -29,7 +29,7 @@ import os
 
 class TestTruncateData(unittest.TestCase):
     """
-    In the model defined in setup, the species $Signal is fixed.
+    In the model defined in _setup, the species $Signal is fixed.
     When you change a fixed species using InsertParameters
     """
 
@@ -84,7 +84,7 @@ class TestTruncateData(unittest.TestCase):
                                                   overwrite_config_file=True
                                                   )
         self.MPE.write_config_file()
-        self.MPE.setup()
+        self.MPE._setup()
         self.MPE.run()
 
     def tearDown(self):

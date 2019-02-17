@@ -30,7 +30,7 @@ Setup tools for PyCoTools
 
 """
 
-# from distutils.core import setup
+# from distutils.core import _setup
 from setuptools import setup
 from sys import platform
 global __version__

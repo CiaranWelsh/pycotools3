@@ -28,7 +28,7 @@ import re
 from collections import OrderedDict, Mapping
 import json
 import sys
-
+from . import model
 LOG = logging.getLogger(__name__)
 
 
@@ -360,7 +360,7 @@ class DotDict(dict):
     def __getattr__(self, item):
         ans = self.get(item)
         if ans is None:
-            raise ValueError(f'"{item}" is not a valid attribute of this DotDict')
+            raise ValueError(f'"{item}" is not a valid attribute of this DotDict "{self}"')
 
         return ans
 
@@ -387,7 +387,8 @@ class DotDict(dict):
                 if isinstance(v, dict):
                     stringify(dct[k])
                 else:
-                    dct[k] = str(v)
+                    if isinstance(v, model.Model):
+                        dct[k] = str(v)
             return dct
 
         return json.dumps(stringify(dct), indent=4, sort_keys=sort_keys)

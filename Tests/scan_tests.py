@@ -109,13 +109,13 @@ class ScanTests(_test_base._BaseTest):
 class ScanVizTests(_test_base._BaseTest):
     def setUp(self):
         super(ScanVizTests, self).setUp()
-        ## setup time course. Don't run
+        ## _setup time course. Don't run
         self.model = pycotools3.tasks.TimeCourse(
             self.model, end=1000, step_size=100, intervals=10,
             run=False
         ).model
 
-        ##setup scan for time course
+        ##_setup scan for time course
         self.scan = pycotools3.tasks.Scan(self.model,
                                           report_type='time_course',
                                           variable='A',

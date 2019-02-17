@@ -80,7 +80,7 @@ class PearsonsHeatMapTests(unittest.TestCase):
         )
 
         fit1.write_config_file()
-        fit1.setup()
+        fit1._setup()
         fit1.run()
         self.fit1 = fit1
         self.model = michaelis_menten

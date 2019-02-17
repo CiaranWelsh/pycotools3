@@ -2830,9 +2830,9 @@ class ParameterEstimation(_Task):
         # self.model = self.read_model(model)
         self.config = config
         self.do_checks()
-        self.copied_models = self.setup()
+        self.copied_models = self._setup()
 
-        ##after setup, config has changed to include filename that doesn't work
+        ##after _setup, config has changed to include filename that doesn't work
 
         if self.config.settings.run_mode is not False:
             self.run(self.copied_models)
@@ -3840,6 +3840,12 @@ class ParameterEstimation(_Task):
         for model_name in self.models:
             mod = self.models[model_name].model
             if constraint:
+                print(constraint)
+                ## Constraint items are not obligatory so skip if there
+                ## are none.
+                # if 'constraint_items' not in self.config.items.keys():
+                #     return self.models
+                # else:
                 items = self.config.items.constraint_items
             else:
                 items = self.config.items.fit_items
@@ -3893,9 +3899,9 @@ class ParameterEstimation(_Task):
                             ))
 
                         if affected_experiment not in self._get_experiment_keys()[model_name]:
-                            raise ValueError('"{}" is not one of your _experiments. These are '
+                            raise ValueError('"{}" (type({}))is not one of your _experiments. These are '
                                              'your valid experimments: "{}"'.format(
-                                affected_experiment, self._get_experiment_keys()[model_name].keys()
+                                affected_experiment, type(affected_experiment), self._get_experiment_keys()[model_name].keys()
                             ))
 
                         affected_experiments_attr[affected_experiment] = {}
@@ -4309,7 +4315,7 @@ class ParameterEstimation(_Task):
             time.sleep(0.1)
         return res
 
-    def setup(self):
+    def _setup(self):
 
         self.config.models = self._define_report()
 
@@ -4325,6 +4331,7 @@ class ParameterEstimation(_Task):
         self.models = self._set_PE_method()
         self.models = self._set_PE_options()
         self.models = self._add_fit_items(constraint=False)
+        # self.models = self._add_fit_items(constraint=True)
 
         ##todo self.models has experiments as keys for some reason. fix
 
@@ -4340,7 +4347,7 @@ class ParameterEstimation(_Task):
         """
 
         :return:
-        :param models: dict of models. Output from setup()
+        :param models: dict of models. Output from _setup()
         """
         self.results_directory
         if self.config.settings.run_mode == 'sge':
@@ -4580,7 +4587,7 @@ class ChaserParameterEstimations(_Task):
     #                              iteration_limit=self.iteration_limit,
     #                              run_mode=False,
     #                              **self.kwargs)
-    #     PE.setup()
+    #     PE._setup()
     #     self.pe_dct[mod.copasi_file] = PE
     #
     #     return PE
@@ -4615,7 +4622,7 @@ class ChaserParameterEstimations(_Task):
                 pe_number=1,
                 **self.kwargs
             )
-            PE.setup()
+            PE._setup()
             pe_dct[new_cps] = PE
 
         return pe_dct
@@ -4626,7 +4633,7 @@ class ChaserParameterEstimations(_Task):
         :return:
         """
         for pe in self.pe_dct:
-            self.pe_dct[pe].setup()
+            self.pe_dct[pe]._setup()
             self.pe_dct[pe].model.save()
 
     def run(self):
@@ -4661,7 +4668,7 @@ class MultiModelFit(_Task):
     Usage:
         # Setup a new folder containing all models that you would like to fit
           and all data you would like to fit to the model.
-          Do not have any other text or csv files in this folder as python will try and setup
+          Do not have any other text or csv files in this folder as python will try and _setup
           fits for them.
 
                 i.e.:
@@ -4786,11 +4793,11 @@ class MultiModelFit(_Task):
     def setup(self):
         """
         A user interface class which calls the corresponding
-        method (setup) from the runMultiplePEs class per model.
-        Perform the ParameterEstimation.setup() method on each model.
+        method (_setup) from the runMultiplePEs class per model.
+        Perform the ParameterEstimation._setup() method on each model.
         """
         for MPE in self.MPE_dct:
-            self.MPE_dct[MPE].setup()
+            self.MPE_dct[MPE]._setup()
 
     def run(self):
         """
@@ -5378,7 +5385,7 @@ class ProfileLikelihood(_Task):
 
         if count == 0:
             raise errors.NoFitItemsError(
-                'Model does not contain any fit items. Please setup a parameter estimation and try again')
+                'Model does not contain any fit items. Please _setup a parameter estimation and try again')
         ##save is needed
         self.to_file()
 

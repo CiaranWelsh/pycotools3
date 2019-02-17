@@ -99,7 +99,7 @@ class TestParse(unittest.TestCase):
     #         pe_number=self.pe_number
     #     )
     #     MPE.write_config_file()
-    #     MPE.setup()
+    #     MPE._setup()
     #     MPE.run()
     #     data = viz.Parse(MPE).data
     #     self.assertEqual(data.shape[0], self.copy_number*self.pe_number)
@@ -111,7 +111,7 @@ class TestParse(unittest.TestCase):
     #                                    number_of_generations=5,
     #                                    run_mode=True)
     #     PE.write_config_file()
-    #     PE.setup()
+    #     PE._setup()
     #     PE.run()
     #
     #     data = viz.Parse(PE).data
@@ -129,7 +129,7 @@ class TestParse(unittest.TestCase):
     #         pe_number=self.pe_number
     #     )
     #     MPE.write_config_file()
-    #     MPE.setup()
+    #     MPE._setup()
     #     MPE.run()
     #
     #     data = viz.Parse(MPE.results_directory, copasi_file=MPE.model.copasi_file).data
@@ -147,7 +147,7 @@ class TestParse(unittest.TestCase):
     #         pe_number=self.pe_number
     #     )
     #     MPE.write_config_file()
-    #     MPE.setup()
+    #     MPE._setup()
     #     MPE.run()
     #
     #     CPE = tasks.ChaserParameterEstimations(
@@ -172,7 +172,7 @@ class TestParse(unittest.TestCase):
     #         pe_number=self.pe_number
     #     )
     #     MPE.write_config_file()
-    #     MPE.setup()
+    #     MPE._setup()
     #     MPE.run()
     #
     #     CPE = tasks.ChaserParameterEstimations(
