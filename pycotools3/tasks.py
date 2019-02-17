@@ -447,7 +447,7 @@ class Run(_Task):
         self.model = self.set_task()
         self.model.save()
 
-        if self.mode is True:
+        if self.mode is True or self.model == 'True':
             try:
                 self.run()
             except errors.CopasiError:
@@ -477,7 +477,8 @@ class Run(_Task):
         if self.task not in tasks:
             raise errors.InputError('{} not in list of tasks. List of tasks are: {}'.format(self.task, tasks))
 
-        modes = [True, False, 'multiprocess', 'parallel', 'sge', 'slurm']
+        modes = [True, False, 'multiprocess', 'parallel', 'sge', 'slurm',
+                 'True', 'False']
         if self.mode not in modes:
             raise errors.InputError('{} not in {}'.format(self.mode, modes))
 
@@ -2359,7 +2360,6 @@ class ParameterEstimation(_Task):
             self.set_defaults()
             self._validate_integrity_of_user_input()
 
-
         def __enter__(self):
             """
             Use the enter protocol to set all defaults, and
@@ -2411,6 +2411,13 @@ class ParameterEstimation(_Task):
                     'The "datasets" argument should be a nested dict containing'
                     ' "experiments" and/or "validations" dicts'
                 )
+
+            # for i in self.datasets:
+            #     for j in self.datasets[i]:
+            #         report = self.datasets[i][j].filename
+            #         if not os.path.isabs(report):
+            #             self.datasets[i][j].filename = os.path.abspath(report)
+
             if not isinstance(self.items, dict):
                 raise TypeError(
                     'The "items" argument should be a nested dict containing'
@@ -2430,6 +2437,10 @@ class ParameterEstimation(_Task):
                         self.settings.working_directory
                     ))
 
+            # print(self.datasets)
+
+
+
         def _load_models(self):
             for mod in self.models:
                 if 'model' not in self.models[mod].keys():
@@ -2442,7 +2453,9 @@ class ParameterEstimation(_Task):
 
         def set_defaults(self):
             ## update datasets defaults
+
             self._add_defaults_to_dict(self.settings, self.settings_defaults)
+
             self._add_defaults_to_dict(self.datasets, self.dataset_defaults)
 
             ## isolate experiment names and add any missing
@@ -2455,6 +2468,7 @@ class ParameterEstimation(_Task):
 
                 experiment_defaults = self.experiment_defaults
 
+                print(experiment, self.experiment_names)
                 for default_kwarg in experiment_defaults:
                     if default_kwarg not in experiment_dataset:
                         experiment_dataset[default_kwarg] = experiment_defaults[default_kwarg]
@@ -2486,11 +2500,14 @@ class ParameterEstimation(_Task):
 
             validations = self.datasets.validations
 
+            print(validations)
+
             for validation_experiment in self.validation_names:
                 validation_dataset = validations.get(validation_experiment)
                 validation_defaults = self.validation_defaults
 
                 for default_kwarg in validation_defaults:
+                    print(default_kwarg)
                     if default_kwarg not in validation_dataset:
                         validation_dataset[default_kwarg] = validation_defaults[default_kwarg]
 
@@ -2656,7 +2673,6 @@ class ParameterEstimation(_Task):
                 'filename': '',
                 'affected_models': 'all',
                 'normalize_weights_per_experiment': True,
-                'weight_method': 'mean_squared',
                 'separator': '\t',
                 'mappings': {},
             }
@@ -2700,8 +2716,8 @@ class ParameterEstimation(_Task):
             return {
                 'copy_number': 1,
                 'pe_number': 1,
-                'results_directory': '',  # os.path.join(self.model.root, 'ParameterEstimationResults'),
-                'config_filename': '',  # os.path.join(self.model.root, 'config_file.yaml'),
+                'results_directory': 'ParameterEstimationData',  # os.path.join(self.model.root, 'ParameterEstimationResults'),
+                'config_filename': 'config.yml',  # os.path.join(self.model.root, 'config_file.yaml'),
                 'overwrite_config_file': False,
                 'update_model': False,
                 'randomize_start_values': False,
@@ -2727,7 +2743,7 @@ class ParameterEstimation(_Task):
                 'upper_bound': 1000000,
                 'start_value': 0.1,
                 'save': False,
-                'run_mode': True,
+                'run_mode': False,
                 'working_directory': '',
                 'quantity_type': 'concentration',
                 'report_name': 'PEData.txt',
@@ -2768,8 +2784,7 @@ class ParameterEstimation(_Task):
         def experiment_names(self):
             experiment_names = []
             for i in self.experiments:
-                if i != 'weight_method':
-                    experiment_names.append(i)
+                experiment_names.append(i)
 
             return experiment_names
 
@@ -2777,8 +2792,7 @@ class ParameterEstimation(_Task):
         def validation_names(self):
             validation_names = []
             for i in self.validations:
-                if i not in ['weight_method', 'weight', 'threshold']:
-                    validation_names.append(i)
+                validation_names.append(i)
 
             return validation_names
 
@@ -2807,6 +2821,7 @@ class ParameterEstimation(_Task):
 
     def __init__(self, config):
         """
+        todo: Write new doc strings for ParameterEstimation and Config class
 
         :param model:
             :py:class:`model.Model`
@@ -2821,8 +2836,13 @@ class ParameterEstimation(_Task):
         """
         # self.model = self.read_model(model)
         self.config = config
-
         self.do_checks()
+        self.copied_models = self.setup()
+
+        ##after setup, config has changed to include filename that doesn't work
+
+        if self.config.settings.run_mode is not False:
+            self.run(self.copied_models)
 
     def do_checks(self):
         if not isinstance(self.config, self.Config):
@@ -2832,123 +2852,8 @@ class ParameterEstimation(_Task):
                 f'ParameterEstimation.Config'
             )
 
-    def _do_checks_old(self):
-        """
-
-        """
-        for i in self.validation:
-            if not isinstance(i, bool):
-                raise errors.InputError('"validation" should be of type bool. Got "{}"'.format(
-                    type(i)))
-
-        for i in range(len(self.experiment_files)):
-            if os.path.isabs(self.experiment_files[i]) != True:
-                self.experiment_files[i] = os.path.abspath(self.experiment_files[i])
-
-        assert isinstance(self.separator, list)
-        for i in self.separator:
-            assert isinstance(i, str), 'separator should be given asa python list'
-
-        ## Allow acceptance of strings as arguments to metabolites, local_parameters
-        ## and global_quantities
-        for attr in ['metabolites', 'local_parameters', 'global_quantities']:
-            getattribute = getattr(self, attr)
-            new_attr = []
-            for i in range(len(getattribute)):
-                if isinstance(getattribute[i], str):
-                    new_attr.append(self.get_variable_from_string(self.model, getattribute[i]))
-                    setattr(self, attr, new_attr)
-
-        ## ensure experiment files exist
-        for fle in self.experiment_files:
-            if os.path.isfile(fle) != True:
-                raise errors.InputError('{} does not exist'.format(fle))
-
-        ## ensure method exists
-        self.method_list = ['current_solution_statistics', 'differential_evolution',
-                            'evolutionary_strategy_sr', 'evolutionary_program',
-                            'hooke_jeeves', 'levenberg_marquardt', 'nelder_mead',
-                            'particle_swarm', 'praxis', 'random_search', 'scatter_search',
-                            'simulated_annealing', 'steepest_descent', 'truncated_newton',
-                            'genetic_algorithm', 'genetic_algorithm_sr']
-        if self.method not in self.method_list:
-            raise errors.InputError(
-                '{} not a valid method. These are valid methods: {}'.format(self.method, self.method_list))
-
-        ## Do not randomize start values if using current solution statistics
-        if self.method == 'current_solution_statistics':
-            if self.randomize_start_values == True:
-                raise errors.InputError(
-                    'Cannot run current solution statistics with \'randomize_start_values\' set to \'true\'.')
-
-        ## ensure metabolties are a list (even if only 1 element)
-        if isinstance(self.metabolites, list):
-            self.metabolites = [self.metabolites]
-
-        ## ensure global_quantities are a list (even if only 1 element)
-        if isinstance(self.global_quantities, list):
-            self.global_quantities = [self.global_quantities]
-
-        # ensure local_parameters are a list (even if only 1 element)
-        if isinstance(self.local_parameters, list):
-            self.local_parameters = [self.local_parameters]
-
-        ## ensure arguments to local parameters exist
-        for i in [j.name for j in self.local_parameters]:
-            if i not in [j.name for j in self.model.local_parameters]:
-                raise errors.InputError(
-                    '"{}" not a local_parameter. These are your local parameters: {}'.format(
-                        i, self.model.local_parameters))
-
-        ## ensure arguments to metabolites exist
-        for i in [j.name for j in self.metabolites]:
-            if i not in [j.name for j in self.model.metabolites]:
-                raise errors.InputError(
-                    '"{}" not a metabolite. These are your local parameters: {}'.format(
-                        i, self.model.metabolites))
-
-        ## ensure arguments to global_quantities exist
-        for i in [j.name for j in self.global_quantities]:
-            if i not in [j.name for j in self.model.global_quantities]:
-                raise errors.InputError(
-                    '"{}" not a global_quantity. These are your local parameters: {}'.format(
-                        i, self.model.global_quantities))
-
-        if self.use_config_start_values not in [True, False]:
-            raise errors.InputError(
-                ''' Argument to the use_config_start_values must be \'True\' or \'False\' not {}'''.format(
-                    self.use_config_start_values))
-            if self.randomize_start_values in ['true', 1, '1', True]:
-                LOG.warning('using config start values but randomize start '
-                            'values is set to True. ')
-
-        ## if start_value is series make it a df
-        if type(self.start_value) is pandas.Series:
-            self.start_value = pandas.DataFrame(self.start_value)
-
-        ## if start_value is is pandas dataframe set randomize start values to false
-        ## and use_config_start_values to True
-        if type(self.start_value) is pandas.DataFrame:
-            LOG.info('using user specified starting parameters so setting '
-                     'randomize_start_values to False')
-
-            self.randomize_start_values = '0'
-            self.use_config_start_values = True
-
-        run_arg_list = [False, True, 'parallel', 'sge']
-
-        if self.run_mode not in run_arg_list:
-            raise errors.InputError('run_mode needs to be one of {}'.format(run_arg_list))
-
-        if isinstance(self.copy_number, int) != True:
-            raise errors.InputError('copy_number argument is of type int')
-
-        if isinstance(self.pe_number, int) != True:
-            raise errors.InputError('pe_number argument is of type int')
-
-    # def __str__(self):
-    #     return "ParameterEstimation(method='{}', config_filename='{}', report_name='{}')".format(
-    #         self.method, self.config_filename, self.report_name)
+    def __str__(self):
+        return f"ParameterEstimation(\n\t{self.config}\n)"
 
     @property
     def problem_dir(self):
@@ -2977,7 +2882,12 @@ class ParameterEstimation(_Task):
     def results_directory(self):
         dct = {}
         for model_name in self.models:
-            dct[model_name] = os.path.join(self.models_dir[model_name], self.config.settings.results_directory)
+            dct[model_name] = os.path.join(
+                self.models_dir[model_name],
+                self.config.settings.results_directory
+            )
+            if not os.path.isdir(dct[model_name]):
+                os.makedirs(dct[model_name])
         return dct
 
     def get_model_objects_from_strings(self):
@@ -3251,9 +3161,6 @@ class ParameterEstimation(_Task):
 
             # model_dct[model_name] = {}
             mod = self.models[model_name].model
-            weight_method_str = self.config.settings.weight_method
-            validation_weight = self.config.settings.validation_weight
-            validation_threshold = self.config.settings.validation_threshold
 
             if validation:
                 query = '//*[@name="Validation Set"]'
@@ -3261,7 +3168,6 @@ class ParameterEstimation(_Task):
                 experiments = self.config.datasets.validations
                 keys_function = self._get_validation_keys
                 self._remove_all_validation_experiments()
-
             else:
                 query = '//*[@name="Experiment Set"]'
                 experiment_names = self.config.experiment_names
@@ -3269,10 +3175,11 @@ class ParameterEstimation(_Task):
                 keys_function = self._get_experiment_keys
                 self._remove_all_experiments()
 
-
-
             for experiment_name in experiment_names:
+                # print(experiment_name, experiment_names, os.getcwd())
                 experiment = experiments[experiment_name]
+
+                # print(validation, 'fname', experiment.filename)
                 data = pandas.read_csv(
                     experiment.filename,
                     sep=experiment.separator
@@ -3286,10 +3193,6 @@ class ParameterEstimation(_Task):
 
                 num_rows = str(data.shape[0])
                 num_columns = str(data.shape[1])
-
-                # if exp_file is in the same directory as copasi_file only use relative path
-                if os.path.dirname(mod.copasi_file) == os.path.dirname(experiment.filename):
-                    experiment.filename = os.path.split(experiment.filename)[1]
 
                 experiment_file = {'type': 'file',
                                    'name': 'File Name',
@@ -3342,7 +3245,9 @@ class ParameterEstimation(_Task):
 
                 weight_method = {'type': 'unsignedInteger',
                                  'name': 'Weight Method',
-                                 'value': weight_method_lookup_dct[weight_method_str]}
+                                 'value': weight_method_lookup_dct[
+                                     self.config.settings.weight_method
+                                 ]}
 
                 for i in [
                     key,
@@ -3403,18 +3308,17 @@ class ParameterEstimation(_Task):
 
                         self._assign_role(map_group, experiment.mappings[data_name].role)
 
-                self.models[model_name][experiment_name] = experiment_group
 
-                for j in mod.xml.xpath(query):
-                    j.insert(0, self.models[model_name][experiment_name])
-                    if validation:
-                        for k in list(j):
-                            if k.attrib['name'] == 'Weight':
-                                k.attrib['value'] = str(validation_weight)
-                            if k.attrib['name'] == 'Threshold':
-                                k.attrib['value'] = str(validation_threshold)
+                    for j in mod.xml.xpath(query):
+                        j.insert(0, experiment_group)
+                        if validation:
+                            for k in list(j):
+                                if k.attrib['name'] == 'Weight':
+                                    k.attrib['value'] = str(self.config.settings.validation_weight)
+                                if k.attrib['name'] == 'Threshold':
+                                    k.attrib['value'] = str(self.config.settings.validation_threshold)
 
-            return self.models
+        return self.models
 
     def _remove_experiment(self, experiment_name):
         """
@@ -4332,11 +4236,15 @@ class ParameterEstimation(_Task):
         """
 
         dct = {}
+        report_name = self.config.settings.report_name
         for model_name in self.models:
             dct[model_name] = {}
-            for i in range(self.config.settings.copy_number):
+            for i in range(int(self.config.settings.copy_number)):
                 new_file = os.path.join(
-                    self.results_directory[model_name], '{}_{}.txt'.format(self.config.settings.report_name, i)
+                    self.results_directory[model_name],
+                    f'{report_name}{i}.txt' \
+                        if report_name[-4:] != \
+                           '.txt' else f'{report_name[:-4]}{i}.txt'
                 )
                 dct[model_name][i] = new_file
         return dct
@@ -4350,15 +4258,19 @@ class ParameterEstimation(_Task):
         dct = {}
         for model_name in self.models:
             mod = self.models[model_name].model
+            ## a save is required here to 'commit' changed to xml before copying
+            mod.save()
+            ## copy model into fit problem dir
+            fle = os.path.split(mod.copasi_file)[1]
+            fname = os.path.join(self.models_dir[model_name], fle)
+            shutil.copy(mod.copasi_file, fname)
             dct[model_name] = {}
-            dct[model_name][0] = deepcopy(mod)
-            for i in range(1, self.config.settings.copy_number):
-                dire, fle = os.path.split(mod.copasi_file)
-                new_cps = os.path.join(dire, fle[:-4] + '_{}.cps'.format(i))
-                model = deepcopy(mod)
-                model.copasi_file = new_cps
-                model.save()
-                dct[model_name][i] = model
+            dct[model_name][0] = model.Model(fname)
+            for i in range(1, int(self.config.settings.copy_number)):
+                # dire, fle = os.path.split(fname)
+                new_cps = os.path.join(self.models_dir[model_name], fle[:-4] + f'_{i}.cps')
+                shutil.copy(fname, new_cps)
+                dct[model_name][i] = model.Model(new_cps)
         return dct
 
     def _setup1scan(self, q, model, report):
@@ -4377,8 +4289,8 @@ class ParameterEstimation(_Task):
                             report_type='multi_parameter_estimation',
                             report_name=report,
                             run=False,
-                            append=self.config.settings.append,
-                            confirm_overwrite=self.config.settings.confirm_overwrite,
+                            append=False,
+                            confirm_overwrite=False,
                             output_in_subtask=False,
                             save=True))
 
@@ -4390,57 +4302,26 @@ class ParameterEstimation(_Task):
         to process all files at once in CopasiSE
         :return:
         """
-
-        number_of_cpu = cpu_count()
-        q = queue.Queue(maxsize=number_of_cpu)
-        report_files = self._enumerate_PE_output()[model_name]
         res = {}
-        for copy_number, model in list(models.items()):
-            t = threading.Thread(target=self._setup1scan,
-                                 args=(q, model, report_files[copy_number]))
-            t.daemon = True
-            t.start()
+        for model_name in models:
+            res[model_name] = {}
+            # for model_i in self.models[model_name]:
+            number_of_cpu = cpu_count()
+            q = queue.Queue(maxsize=number_of_cpu)
+            report_files = self._enumerate_PE_output()[model_name]
+            for copy_number, mod in list(models[model_name].items()):
+                t = threading.Thread(target=self._setup1scan,
+                                     args=(q, mod, report_files[copy_number]))
+                t.daemon = True
+                t.start()
+                time.sleep(0.1)
+
+                res[model_name][copy_number] = q.get().model
+            ## Since this is being executed in parallel sometimes
+            ## we get process clashes. Not sure exactly whats going on
+            ## but introducing a small delay seems to fix
             time.sleep(0.1)
-
-            res[copy_number] = q.get().model
-        ## Since this is being executed in parallel sometimes
-        ## we get process clashes. Not sure exactly whats going on
-        ## but introducing a small delay seems to fix
-        time.sleep(0.1)
         return res
-
-    def run(self):
-        """
-
-        :return:
-        :param models: dict of models. Output from setup()
-        """
-        ##load cps from pickle in case run not being use straignt after set_up
-        # try:
-        #     self.models
-        # except AttributeError:
-        #     raise errors.IncorrectUsageError('You must use the setup method before the run method')
-        NotImplementedError
-        if self.run_mode == 'sge':
-            try:
-                check_call('qhost')
-            except errors.NotImplementedError:
-                LOG.warning(
-                    'Attempting to run in SGE mode but SGE specific commands are unavailable. Switching to \'parallel\' mode')
-                self.run_mode = 'parallel'
-        if self.run_mode == 'parallel':
-            for model_name in self.models:
-                RunParallel(list(self.models.values()), mode=self.run_mode, max_active=self.max_active,
-                            task='scan')
-        elif self.run_mode:
-            for copy_number, model in list(self.models.items()):
-                LOG.info('running model: {}'.format(copy_number))
-                Run(model, mode=self.run_mode, task='scan')
-        elif not self.run_mode:
-            pass
-
-        else:
-            raise ValueError('"{}" is not a valid argument'.format(self.run_mode))
 
     def setup(self):
 
@@ -4460,60 +4341,55 @@ class ParameterEstimation(_Task):
         self.models = self._set_PE_options()
         self.models = self._add_fit_items(constraint=False)
 
-        # self.config.models.model1.model.open()
 
 
+        ##todo self.models has experiments as keys for some reason. fix
 
-    def setup_old(self):
+        ##copy
+        copied_models = self._copy_model()
+
+        ##configure scan task
+        copied_models = self._setup_scan(copied_models)
+
+        return copied_models
+
+    def run(self, models):
         """
+
         :return:
+        :param models: dict of models. Output from setup()
         """
-        ## read config file
-        self._read_config_file()
+        self.results_directory
+        if self.config.settings.run_mode == 'sge':
+            try:
+                check_call('qhost')
+            except errors.NotImplementedError:
+                LOG.warning(
+                    'Attempting to run in SGE mode but SGE specific commands are unavailable. Switching to \'parallel\' mode')
+                self.config.settings.run_mode = 'parallel'
 
-        ## make appropriate changes to arguments to make them compatible
-        ## with the copasi xml
-        self.convert_bool_to_numeric2()
-        # self.default_properties = self.convert_bool_to_numeric(self.default_properties)
-        self._convert_numeric_arguments_to_string()
-        # Try moving the above two lines to the constructor
-        ## create output directory
-        self._create_output_directory()
+        if self.config.settings.run_mode == 'parallel':
+            for model_name in models:
+                RunParallel(
+                    list(models[model_name].values()),
+                    mode=self.config.settings.run_mode,
+                    max_active=self.config.settings.max_active,
+                    task='scan')
 
-        ## create a report for PE results collection
-        self.model = self._define_report()
+        elif self.config.settings.run_mode is True or self.config.settings.run_mode == 'True':
+            for model_name in models:
+                for copy_number, mod in list(models[model_name].items()):
+                    LOG.info(f'running model {model_name}: {copy_number}')
+                    Run(mod, mode=self.config.settings.run_mode, task='scan')
 
-        ## map _experiments
-        # EM = ExperimentMapper(self.model, self.experiment_files, **self._experiment_mapping_args)
+        elif not self.config.settings.run_mode or self.config.settings.run_mode == 'False':
+            pass
 
-        ## get model from ExperimentMapper
-        self.model = self._map_experiments()
+        else:
+            raise ValueError('"{}" is not a valid argument'.format(self.config.settings.run_mode))
 
-        ## get rid of existing parameter estimation definition
-        self.model = self._remove_all_fit_items()
 
-        # self.convert_bool_to_numeric()
 
-        ## create new parameter estimation
-        self.model = self._set_PE_method()
-        self.model = self._set_PE_options()
-        self.model = self._insert_all_fit_items()
-
-        ## ensure we have model
-        assert self.model != None
-        assert isinstance(self.model, model.Model)
-
-        ##copy the number `copy_number` times
-        models = self._copy_model()
-
-        ## ensure we have dict of models
-        assert isinstance(models, dict)
-        assert len(models) == self.copy_number
-
-        ##create a scan per model (again models is dict of model.Model's
-        self.models = self._setup_scan(models)
-        assert isinstance(models[0], model.Model)
-        return models
 
 
 class ChaserParameterEstimations(_Task):

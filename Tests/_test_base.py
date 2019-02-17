@@ -23,9 +23,8 @@ class _BaseTest(unittest.TestCase):
         -> Take string model from TestModels and write to file
         -> Initiate model
     """
-
     def setUp(self, test_model='test_model1'):
-        self.copasi_file = os.path.join(os.getcwd(), 'test_model.cps')
+        self.copasi_file = os.path.join(os.path.dirname(__file__), 'test_model.cps')
 
         self.ant = """// Created by libAntimony v2.9.4
                         model *New_Model()
@@ -75,18 +74,19 @@ class _BaseTest(unittest.TestCase):
         with pycotools3.model.BuildAntimony(self.copasi_file) as loader:
             self.model = loader.load(self.ant)
 
-    def tearDown(self):
+    @classmethod
+    def tearDownClass(cls):
         tear_down = False
         delete_dirs = False
 
         if tear_down:
-            dire = os.path.dirname(self.copasi_file)
+            dire = os.path.dirname(__file__)
             subdirs = ['Boxplots', 'TimeCourseGraphs',
                        'ParameterEstimationPlots', 'test_mpe',
                        'EnsembleTimeCourse', 'Histograms',
                        'LinearRegression', 'MultipleParameterEstimationResults',
                        'PCA', 'Scatters', 'ProfileLikelihoods',
-                       'ParameterEstimationResults']
+                       'ParameterEstimationResults', 'Problem1']
             if delete_dirs:
                 for i in subdirs:
                     d = os.path.join(dire, i)
@@ -97,6 +97,9 @@ class _BaseTest(unittest.TestCase):
                             print('failed with windows error')
 
             for i in glob.glob(os.path.join(dire, '*.xlsx')):
+                os.remove(i)
+
+            for i in glob.glob(os.path.join(dire, '*.log')):
                 os.remove(i)
 
             for i in glob.glob(os.path.join(dire, '*.cps')):
