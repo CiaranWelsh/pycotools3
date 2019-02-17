@@ -1162,7 +1162,7 @@ class ParameterEstimationTests(_test_base._BaseTest):
                 count += 1
 
         ## only 1 of 3 experiment datasets has affected_experiments
-        self.assertEqual(23, count)
+        self.assertEqual(26, count)
 
     def test_number_of_affected_validation_experiments_is_correct(self):
         # self.PE.write_config_file()
@@ -1173,7 +1173,7 @@ class ParameterEstimationTests(_test_base._BaseTest):
                 count += 1
 
         ## only 1 of 3 experiment datasets has affected_experiments
-        self.assertEqual(15, count)
+        self.assertEqual(17, count)
 
     def test_affected_experiments_for_global_quantity_A2B(self):
         # self.PE.write_config_file()
@@ -1236,12 +1236,6 @@ class ParameterEstimationTests(_test_base._BaseTest):
         for i in tasks:
             if i.attrib['name'] == 'Parameter Estimation':
                 self.assertEqual(i[-1].attrib['type'].lower(), self.PE.config.settings.method.lower().replace('_', ''))
-
-    # def test_run(self):
-    #     mod = self.PE.config.models.model1.model
-    #     self.PE.run()
-    # f = os.path.join(self.PE.results_directory, self.PE.report_name) + '_0.txt'
-    # self.assertTrue(os.path.isfile(f))
 
     def test_that_error_on_line3539_is_raised(self):
         pass
