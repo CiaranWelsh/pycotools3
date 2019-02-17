@@ -678,7 +678,7 @@ class RunParallel(_Task):
 
             # for copy_number, model in self.models.items():
             model = self.models[num_models_to_process - 1]
-            if len(pids) < self.max_active:
+            if len(pids) < int(self.max_active):
                 num_models_to_process -= 1
                 subp = subprocess.Popen(['CopasiSE', model.copasi_file])
                 pids.append(subp.pid)
@@ -2343,7 +2343,6 @@ class ParameterEstimation(_Task):
             self.items = items
             self.settings = settings
 
-
             self.kwargs = {
                 'models': self.models,
                 'datasets': self.datasets,
@@ -2437,10 +2436,6 @@ class ParameterEstimation(_Task):
                         self.settings.working_directory
                     ))
 
-            # print(self.datasets)
-
-
-
         def _load_models(self):
             for mod in self.models:
                 if 'model' not in self.models[mod].keys():
@@ -2468,7 +2463,6 @@ class ParameterEstimation(_Task):
 
                 experiment_defaults = self.experiment_defaults
 
-                print(experiment, self.experiment_names)
                 for default_kwarg in experiment_defaults:
                     if default_kwarg not in experiment_dataset:
                         experiment_dataset[default_kwarg] = experiment_defaults[default_kwarg]
@@ -2500,14 +2494,11 @@ class ParameterEstimation(_Task):
 
             validations = self.datasets.validations
 
-            print(validations)
-
             for validation_experiment in self.validation_names:
                 validation_dataset = validations.get(validation_experiment)
                 validation_defaults = self.validation_defaults
 
                 for default_kwarg in validation_defaults:
-                    print(default_kwarg)
                     if default_kwarg not in validation_dataset:
                         validation_dataset[default_kwarg] = validation_defaults[default_kwarg]
 
@@ -2716,7 +2707,8 @@ class ParameterEstimation(_Task):
             return {
                 'copy_number': 1,
                 'pe_number': 1,
-                'results_directory': 'ParameterEstimationData',  # os.path.join(self.model.root, 'ParameterEstimationResults'),
+                'results_directory': 'ParameterEstimationData',
+            # os.path.join(self.model.root, 'ParameterEstimationResults'),
                 'config_filename': 'config.yml',  # os.path.join(self.model.root, 'config_file.yaml'),
                 'overwrite_config_file': False,
                 'update_model': False,
@@ -2751,7 +2743,8 @@ class ParameterEstimation(_Task):
                 'fit': 1,
                 'weight_method': 'mean_squared',
                 'validation_weight': 1,
-                'validation_threshold': 5
+                'validation_threshold': 5,
+                'max_active': 3,
             }
 
         @settings_defaults.setter
@@ -3156,7 +3149,6 @@ class ParameterEstimation(_Task):
         weight_method_numbers = [str(i) for i in [1, 2, 3, 4]]
         weight_method_lookup_dct = dict(list(zip(weight_method_string, weight_method_numbers)))
 
-
         for model_name in self.models:
 
             # model_dct[model_name] = {}
@@ -3176,10 +3168,8 @@ class ParameterEstimation(_Task):
                 self._remove_all_experiments()
 
             for experiment_name in experiment_names:
-                # print(experiment_name, experiment_names, os.getcwd())
                 experiment = experiments[experiment_name]
 
-                # print(validation, 'fname', experiment.filename)
                 data = pandas.read_csv(
                     experiment.filename,
                     sep=experiment.separator
@@ -3241,7 +3231,6 @@ class ParameterEstimation(_Task):
                 separator = {'type': 'string',
                              'name': 'Separator',
                              'value': experiment.separator}
-
 
                 weight_method = {'type': 'unsignedInteger',
                                  'name': 'Weight Method',
@@ -3307,7 +3296,6 @@ class ParameterEstimation(_Task):
                         )
 
                         self._assign_role(map_group, experiment.mappings[data_name].role)
-
 
                     for j in mod.xml.xpath(query):
                         j.insert(0, experiment_group)
@@ -4038,7 +4026,6 @@ class ParameterEstimation(_Task):
                 self.models[model_name].model = mod
         return self.models
 
-
     def _set_PE_method(self):
         '''
         Choose PE algorithm and set algorithm specific parameters
@@ -4210,7 +4197,6 @@ class ParameterEstimation(_Task):
                 for k, v in i.items():
                     i[k] = str(v)
 
-
             query = '//*[@name="Parameter Estimation"]' and '//*[@type="parameterFitting"]'
             for i in mod.xml.xpath(query):
                 i.attrib.update(scheluled_attrib)
@@ -4330,7 +4316,6 @@ class ParameterEstimation(_Task):
         self.models = self._map_experiments(validation=False)
         self.models = self._map_experiments(validation=True)
 
-
         ## get rid of existing parameter estimation definition
         self.models = self._remove_all_fit_items()
 
@@ -4340,8 +4325,6 @@ class ParameterEstimation(_Task):
         self.models = self._set_PE_method()
         self.models = self._set_PE_options()
         self.models = self._add_fit_items(constraint=False)
-
-
 
         ##todo self.models has experiments as keys for some reason. fix
 
@@ -4387,9 +4370,6 @@ class ParameterEstimation(_Task):
 
         else:
             raise ValueError('"{}" is not a valid argument'.format(self.config.settings.run_mode))
-
-
-
 
 
 class ChaserParameterEstimations(_Task):

@@ -1048,8 +1048,8 @@ class ParameterEstimationTests(_test_base._BaseTest):
             ),
             settings=dict(
                 method='genetic_algorithm_sr',
-                population_size=10,
-                number_of_generations=10,
+                population_size=2,
+                number_of_generations=2,
                 working_directory=os.path.dirname(__file__),
                 copy_number=4,
                 pe_number=2,
@@ -1243,7 +1243,7 @@ class ParameterEstimationTests(_test_base._BaseTest):
                             for m in l:
                                 if m.attrib['name'] == 'Number of steps':
                                     actual = m.attrib['value']
-        self.assertEqual(srt(expected), str(actual))
+        self.assertEqual(str(expected), str(actual))
 
     def test_setup_scan_type(self):
         """
@@ -1296,12 +1296,12 @@ class ParameterEstimationTests(_test_base._BaseTest):
         self.PE.config.settings.run_mode = True
         self.PE.run(self.PE.copied_models)
 
-        expected = 8
+        expected = 4
         results_dir = self.PE.results_directory['model1']
         files = glob.glob(os.path.join(
             results_dir, '*.txt')
         )
-        # self.assertEqual(expected, len(files))
+        self.assertEqual(expected, len(files))
 
 
 if __name__ == '__main__':
