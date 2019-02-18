@@ -96,27 +96,21 @@ class _BaseTest(unittest.TestCase):
                         except WindowsError:
                             print('failed with windows error')
 
-            for i in glob.glob(os.path.join(dire, '*.xlsx')):
-                os.remove(i)
+            file_types_to_remove = [
+                '*.xlsx',
+                '*.log',
+                '*.cps',
+                '*.txt',
+                '*.csv',
+                '*.pickle',
+                '*.json',
+                '*.yaml',
+                '*.yml'
+            ]
+            for i in file_types_to_remove:
+                for j in glob.glob(os.path.join(dire, i)):
+                    os.remove(j)
 
-            for i in glob.glob(os.path.join(dire, '*.log')):
-                os.remove(i)
-
-            for i in glob.glob(os.path.join(dire, '*.cps')):
-                os.remove(i)
-
-            for i in glob.glob(os.path.join(dire, '*.txt')):
-                os.remove(i)
-
-            for i in glob.glob(os.path.join(dire, '*.csv')):
-                os.remove(i)
-
-            for i in glob.glob(os.path.join(dire, '*.pickle')):
-                dire, fle = os.path.split(i)
-                ## keep until I know keep list is not needed.
-                keep_list = []
-                if fle not in keep_list:
-                    os.remove(i)
 
 
 if __name__ == '__main__':

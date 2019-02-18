@@ -86,7 +86,6 @@ class DotDictTests(unittest.TestCase):
         dct = DotDict(dct, recursive=True)
         self.assertEqual(dct.d.c.b, 7)
 
-
     def test4(self):
         from pycotools3.utils import DotDict
         dct = {
@@ -344,8 +343,49 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
 
     def test_write_config_file(self):
         fname = os.path.join(os.path.dirname(__file__), 'config_file.yml')
-        print(fname)
         self.PE.config.to_yaml(fname)
+        self.assertTrue(os.path.isfile(fname))
+
+
+class ParameterEstimationConfigResolveSpecialArgsTests(_test_base._BaseTest):
+    def setUp(self):
+        super(ParameterEstimationConfigResolveSpecialArgsTests, self).setUp()
+
+        self.TC1 = pycotools3.tasks.TimeCourse(self.model, end=1000, step_size=100,
+                                               intervals=10, report_name='report1.txt')
+
+        ## add some noise
+        data1 = pycotools3.misc.add_noise(self.TC1.report_name)
+
+        ## remove the data
+        os.remove(self.TC1.report_name)
+
+        ## rewrite the data with noise
+        data1.to_csv(self.TC1.report_name, sep='\t')
+
+        pycotools3.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
+        self.config = ParameterEstimation.Config(
+            models={
+                'model1': {
+                    'copasi_file': self.model.copasi_file,
+                },
+            },
+            datasets={
+                'experiments': {
+                    'report1': {
+                        'filename': self.TC1.report_name,
+                    },
+                },
+            },
+
+            items={
+                'fit_items': 'a',
+            },
+        )
+        self.PE = ParameterEstimation(self.config)
+
+    def test(self):
+        print(self.PE)
 
 
 class ExperimentMapperTests(_test_base._BaseTest):
@@ -1141,9 +1181,9 @@ class ParameterEstimationTests(_test_base._BaseTest):
         self.assertEqual(expected, len(files))
 
 
-class ParameterEstimationContextManagerTests(unittest.TestCase):
+class ParameterEstimationContextTests(_test_base._BaseTest):
     def setUp(self):
-        super(ParameterEstimationContextManagerTests, self).setUp()
+        super(ParameterEstimationContextTests, self).setUp()
 
         self.TC1 = pycotools3.tasks.TimeCourse(self.model,
                                                end=1000,
@@ -1173,63 +1213,85 @@ class ParameterEstimationContextManagerTests(unittest.TestCase):
 
         ss_df.to_csv(self.report4, sep='\t', index=False)
 
-        self.conf_dct = dict(
-            models=dict(
-                model1=dict(
-                    copasi_file=self.model.copasi_file,
-                    results_directory=os.path.join(self.model.root, 'ParameterEstimationResults'))
-            ),
-            datasets=dict(
-                experiments=dict(
-                    report1=dict(
-                        filename=self.TC1.report_name,
-                    ),
-                    report2=dict(
-                        filename=self.TC2.report_name
-                    ),
-                    ss=dict(
-                        filename=self.report4
-                    )
-                ),
-                validations=dict(
-                    report3=dict(
-                        filename=self.report3
-                    ),
-                )
-            ),
-            items=dict(
-                fit_items=dict(
-                    A=dict(
-                        affected_experiments=['report1', 'ss']
-                    ),
-                    B=dict(
-                        affected_validation_experiments=['report3']
-                    ),
-                    C={},
-                    A2B={},
-                    B2C={},
-                    B2C_0_k2={},
-                    C2A_k1={},
-                    ADeg_k1={},
-                )
-            ),
-            settings=dict(
-                method='genetic_algorithm_sr',
-                population_size=10,
-                number_of_generations=10,
-                working_directory=os.path.dirname(__file__),
-                weight_method='value_scaling',
-                validation_weight=2.5,
-                validation_threshold=9,
-            )
-        )
-        self.conf = ParameterEstimation.Config(**self.conf_dct)
-        self.PE = pycotools3.tasks.ParameterEstimation(self.conf)
+        # self.conf = ParameterEstimation.Config(**self.conf_dct)
+        # self.PE = pycotools3.tasks.ParameterEstimation(self.conf)
 
         # print(self.TC1.report_name)
 
+    def test(self):
+        # x = ParameterEstimation.Context()
+        # print(x)
 
+        dct = {
+            'models': {
+                'model1': {
+                    'copasi_file': self.model.copasi_file,
+                },
+            },
+            'datasets': {
+                'experiments': {
+                    'report1': {
+                        'filename': self.TC1.report_name,
+                        'affected_models': 'all',
+                        'mappings': {
+                            'Time': {
+                                'model_object': 'Time',
+                                'role': 'time'
+                            },
+                            'A': {
+                                'model_object': 'A',
+                                'role': 'dependent',
+                            },
+                        }
+                    },
+                    'report2': {
+                        'filename': self.TC2.report_name,
+                        'separator': '\t'
+                    }
+                },
+            },
+            'items': {
+                'fit_items': {
 
+                    'A': {
+                        'lower_bound': 15,
+                        'upper_bound': 35,
+                        'affected_experiments': 'report1',
+                        'affected_validation_experiments': 'report3',
+                        'affected_models': 'all',
+                        'start_value': 17.5
+                    },
+                    'B': {},
+                    'C': {}
+                },
+                'constraint_items': {
+                    'C': {
+                        'upper_bound': 26,
+                        'lower_bound': 16
+                    }
+                },
+            },
+            'settings': {
+                'method': 'genetic_algorithm_sr',
+                'population_size': 38,
+                'number_of_generations': 100,
+                'copy_number': 1,
+                'pe_number': 1,
+                'weight_method': 'value_scaling',
+                'validation_weight': 4,
+                'validation_threshold': 8.5,
+                'working_directory': os.path.dirname(__file__),
+                'run_mode': False
+
+            },
+        }
+        with ParameterEstimation.Context(context='s', parameters='a') as context:
+            context.add_models([self.model.copasi_file])
+            context.add_experiments(
+                [self.TC1.report_name, self.TC2.report_name,
+                 self.report3, self.report4])
+            config = context.create_config()
+            # context.fit_items = 'all'
 
 
 if __name__ == '__main__':

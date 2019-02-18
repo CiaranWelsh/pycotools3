@@ -50,11 +50,9 @@ from subprocess import check_call, call
 from shutil import copy
 from functools import reduce
 
-
 import sys
 
 COPASISE, COPASIUI = load_copasi()
-
 
 LOG = logging.getLogger(__name__)
 
@@ -66,7 +64,6 @@ except ImportError:
                 'or if its already installed there could be a problem with tellurium '
                 'and the tellurium functions of PyCoTools will be temporarile unavailable')
     pass
-
 
 
 ## TODO add list of reports property to model
@@ -223,9 +220,8 @@ class BuildAntimony(object):
         if os.path.isfile(self.sbml_file):
             os.remove(self.sbml_file)
 
-
         if isinstance(exc_type, type):
-            raise exc_type(exc_val)#.with_traceback(exc_tb)
+            raise exc_type(exc_val)  # .with_traceback(exc_tb)
 
     def load(self, antimony_str):
         """
@@ -248,7 +244,6 @@ class BuildAntimony(object):
 
         ## Perform conversion wtih CopasiSE
         os.system(f"{COPASISE} -i {self.sbml_file}")
-
 
         ## copy from temporary copasiSE output name to user specified name
         copy(self.copasiSE_output_file, self.copasi_file)
@@ -413,6 +408,10 @@ class Model(_base._Base):
 
     def __repr__(self):
         return self.__str__()
+
+    def __contains__(self, item):
+        return item in self.all_variable_names
+
 
     def reset_cache(self, prop):
         """
@@ -890,6 +889,50 @@ class Model(_base._Base):
         l = [i.global_name for i in self.local_parameters]
         c = [i.name for i in self.compartments]
         return m + g + l + c
+
+    def get_variable_names(self, which='a', include_assignments=True):
+        """
+        The names of all compartments, metabolites, global quantities,
+        reactions and local parameters in the model.
+
+        :return:
+            `list`. Each element is `str`
+        """
+
+        if not isinstance(include_assignments, bool):
+            raise errors.InputError(
+                f"include_assignment arg should be of type bool. Got {type(include_assignments)}"
+            )
+
+        m = [i.name for i in self.metabolites]
+        if include_assignments:
+            g = [i.name for i in self.global_quantities]
+        else:
+            g = [i.name for i in self.global_quantities if i.simulation_type != 'assignment']
+
+        l = [i.global_name for i in self.local_parameters]
+        c = [i.name for i in self.compartments]
+
+        d = {
+            'm': m,
+            'g': g,
+            'l': l,
+            'c': c,
+            'a': self.all_variable_names
+        }
+        which = sorted(list(which))
+        names = []
+        for i in which:
+            if i in d:
+                names += d[i]
+            else:
+                raise errors.InputError(
+                    f'"{i} is not a valid input to get_variable_names. '
+                    f'These are valid inputs: "{d.keys()}"'
+                )
+
+        return sorted(names)
+
 
     @cached_property
     def local_parameters(self):
@@ -2343,7 +2386,8 @@ class Metabolite(object):
                 if isinstance(self.compartment, Compartment) != True:
                     raise errors.InputError('compartment argument should be of type PyCoTools.tasks.Compartment')
 
-        if ('particle_numbers' not in list(self.__dict__.keys())) and ('concentration' not in list(self.__dict__.keys())):
+        if ('particle_numbers' not in list(self.__dict__.keys())) and (
+                'concentration' not in list(self.__dict__.keys())):
             raise errors.InputError('Must specify either concentration or particle numbers')
 
         if self.simulation_type == None:
@@ -4374,7 +4418,8 @@ class InsertParameters(object):
         """
         # print self.parameters
 
-        locals = [j for i in self.model.reactions for j in i.parameters if j.global_name in list(self.parameters.keys())]
+        locals = [j for i in self.model.reactions for j in i.parameters if
+                  j.global_name in list(self.parameters.keys())]
         if locals == []:
             return self.model
         else:

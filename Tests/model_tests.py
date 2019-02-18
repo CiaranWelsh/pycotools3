@@ -46,7 +46,7 @@ class ModelLevelAttributeTests(_test_base._BaseTest):
         self.assertEqual(self.model.time_unit, 's')
 
     def test_model_name(self):
-        self.assertEqual(self.model.name, 'New_Model')
+        self.assertEqual(self.model.name, 'TestModel1')
 
     def test_volume(self):
         self.assertEqual(self.model.volume_unit, 'ml')
@@ -149,6 +149,37 @@ class ModelComponentAttributeTests(_test_base._BaseTest):
     def setUp(self):
         super(ModelComponentAttributeTests, self).setUp()
         self.model = pycotools3.model.Model(self.copasi_file)
+
+    def test_get_variable_names_all(self):
+        expected = ['A', 'A2B', 'ADeg_k1', 'B', 'B2C', 'B2C_0_k2', 'C', 'C2A_k1', 'ThisIsAssignment', 'cyt', 'nuc']
+        self.assertListEqual(expected, self.model.get_variable_names('a'))
+
+    def test_get_variable_names_local(self):
+        expected = []
+        self.assertListEqual(expected, self.model.get_variable_names('l'))
+
+    def test_get_variable_names_global(self):
+        expected = ['A2B', 'ADeg_k1', 'B2C', 'B2C_0_k2', 'C2A_k1', 'ThisIsAssignment']
+        self.assertListEqual(expected, self.model.get_variable_names('g'))
+
+    def test_get_variable_names_global_and_compartment(self):
+        expected = ['A2B', 'ADeg_k1', 'B2C', 'B2C_0_k2', 'C2A_k1', 'ThisIsAssignment', 'cyt', 'nuc']
+        actual = self.model.get_variable_names('gc')
+        self.assertListEqual(expected, actual)
+
+    def test_get_variable_names_global_and_metabolite(self):
+        expected = ['A', 'A2B', 'ADeg_k1', 'B', 'B2C', 'B2C_0_k2', 'C', 'C2A_k1', 'ThisIsAssignment']
+        actual = self.model.get_variable_names('mg')
+        self.assertListEqual(expected, actual)
+
+    def test_get_variable_names_global_without_assignments_and_metabolite(self):
+        expected = ['A', 'A2B', 'ADeg_k1', 'B', 'B2C', 'B2C_0_k2', 'C', 'C2A_k1']
+        actual = self.model.get_variable_names('mg', include_assignments=False)
+        self.assertListEqual(expected, actual)
+
+
+    def test_contains_protocol(self):
+        self.assertTrue('A' in self.model)
 
     def test_metabolites(self):
         self.assertEqual(len(self.model.metabolites), 3)

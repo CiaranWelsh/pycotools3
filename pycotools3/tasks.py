@@ -2196,8 +2196,7 @@ class ParameterEstimation(_Task):
     """
 
     @staticmethod
-    class Config(_Task):
-        yaml_tag = '!Config'
+    class Config(_Task, munch.Munch):
 
         def __init__(self, models, datasets, items, settings={}):
             self.models = models
@@ -2205,14 +2204,14 @@ class ParameterEstimation(_Task):
             self.items = items
             self.settings = settings
 
-            self.kwargs = {
+            self.kwargs = munch.Munch.fromDict({
                 'models': self.models,
                 'datasets': self.datasets,
                 'items': self.items,
                 'settings': self.settings
-            }
-            self.kwargs = munch.Munch.fromDict(self.kwargs)
+            })
 
+            # self.kwargs = munch.Munch.fromDict(self.kwargs)
 
             for kw in self.kwargs:
                 setattr(self, kw, self.kwargs[kw])
@@ -2226,39 +2225,47 @@ class ParameterEstimation(_Task):
                 yield attr
 
         def __str__(self):
-            return self.kwargs.__str__()
+            return self.to_json()
+
+        def __repr__(self):
+            return self.__str__()
 
         def to_json(self):
-            print(self)
+            kwargs = deepcopy(self.kwargs)
+            for k, v in kwargs.models.items():
+                for k2, v2 in kwargs.models[k].items():
+                    if k2 == 'model':
+                        kwargs.models[k][k2] = str(kwargs.models[k][k2])
 
-        def from_json(self):
-            pass
-
-        def to_yaml(self, fname):
-            # print(yaml.dump(dict(self.kwargs)))
-
-            # with open(fname, 'w') as f:
-            #     yaml.dump(self, stream=f, default_flow_style=False)
+            return json.dumps(kwargs, indent=4)
 
 
+        def from_json(self, string):
+            raise NotImplementedError('Do this when needed')
 
-            yaml.add_representer(self,
-                                 lambda dumper, data: dumper.represent_mapping(
-                                     'tag:yaml.org,2002:map', data.items()))
+        def to_yaml(self, filename=None):
+            kwargs = deepcopy(self.kwargs)
+            for k, v in kwargs.models.items():
+                for k2, v2 in kwargs.models[k].items():
+                    if k2 == 'model':
+                        kwargs.models[k][k2] = str(kwargs.models[k][k2])
 
-            ## modify dumper class so that we do not write aliases for variables
-            ## yaml have seen before.
-            # noalias_dumper = yaml.dumper.Dumper
-            # noalias_dumper.ignore_aliases = lambda self, data: True
-            #
-            # if (os.path.isfile(self.settings.config_filename) == False) or (self.settings.overwrite_config_file == True):
-            #     with open(self.settings.config_filename, 'w') as f:
-            #         yaml.dump(self, stream=f, default_flow_style=False)
-            # return self.settings.config_filename
+            yml =  munch.toYAML(kwargs)
+
+            if filename is not None:
+                with open(filename, 'w') as f:
+                    f.write(yml)
+            return yml
 
 
-        def from_yaml(self):
-            pass
+        def from_yaml(self, yml):
+            if os.path.isfile(yml):
+                with open(yml, 'r') as f:
+                    yml_string = f.read()
+            else:
+                yml_string = yml
+            raise NotImplementedError('Do this when needed')
+
 
         @staticmethod
         def _add_defaults_to_dict(dct, defaults):
@@ -2329,9 +2336,16 @@ class ParameterEstimation(_Task):
 
             self._add_defaults_to_dict(self.datasets, self.dataset_defaults)
 
-            ## isolate experiment names and add any missing
-            ## information to the dict
+            self.set_default_experiments()
 
+            self.set_default_validation_experiments()
+
+            self.set_default_fit_items()
+
+            self.set_default_constraint_items()
+
+
+        def set_default_experiments(self):
             experiments = self.datasets.experiments
 
             for experiment in self.experiment_names:
@@ -2366,6 +2380,8 @@ class ParameterEstimation(_Task):
                         else:
                             mapp.update({'object_type': type(model_obj).__name__})
                     self.datasets.experiments[experiment].mappings[mapping] = mapp
+
+        def set_default_validation_experiments(self):
 
             validations = self.datasets.validations
 
@@ -2402,7 +2418,28 @@ class ParameterEstimation(_Task):
                             mapp.update({'object_type': type(model_obj).__name__})
                     self.datasets.validations[validation_experiment].mappings[mapping] = mapp
 
-            for fit_item in self.items.fit_items:
+        def set_default_fit_items(self):
+            if isinstance(self.items.fit_items, str):
+                estimated_variables = False
+                if self.items.fit_items == 'a':
+                    for model_name in self.models:
+                        mod = self.models[model_name].model
+                        estimated_variables = mod.all_variable_names
+
+                elif self.items.fit_items == '':
+                    pass
+
+                else:
+                    raise errors.InputError(
+                        f'"{self.items.fit_items}" is not a valid argument for fit_items'
+                    )
+                ## now take the list and create a
+                estimated_variables = {i: {} for i in estimated_variables}
+
+            else:
+                estimated_variables = self.items.fit_items
+
+            for fit_item in estimated_variables:
                 item = self.items.fit_items.get(fit_item)
 
                 if item == {}:
@@ -2430,6 +2467,7 @@ class ParameterEstimation(_Task):
 
                 self.items.fit_items[fit_item] = munch.Munch.fromDict(item)
 
+        def set_default_constraint_items(self):
             if 'constraint_items' in self.items:
 
                 for constraint_item in self.items.constraint_items:
@@ -3417,27 +3455,6 @@ class ParameterEstimation(_Task):
                 self.models[model_name] = self._remove_fit_item(model_name, i)
         return self.models
 
-    def write_config_file(self):
-        """
-        write a parameter estimation config file to
-        self.config_filename.
-        :return: str. Path to config file
-        """
-        config = deepcopy(self.config)
-        print(config)
-        # yaml.add_representer(config,
-        #                      lambda dumper, data: dumper.represent_mapping('tag:yaml.org,2002:map', data.items()))
-        #
-        # ## modify dumper class so that we do not write aliases for variables
-        # ## yaml have seen before.
-        # noalias_dumper = yaml.dumper.Dumper
-        # noalias_dumper.ignore_aliases = lambda self, data: True
-        #
-        # if (os.path.isfile(self.config_filename) == False) or (self.overwrite_config_file == True):
-        #     with open(self.config_filename, 'w') as f:
-        #         yaml.dump(config, stream=f, default_flow_style=False)
-        # return self.config_filename
-
     def _get_experiment_keys(self):
         """
         Experiment keys are always 'Experiment_i' where 'i' indexes
@@ -3477,157 +3494,6 @@ class ParameterEstimation(_Task):
                 dct[model_name][validation_name] = key
         return dct
 
-    @property
-    def _item_template(self):
-        """
-        Collect information about the model in order to
-        create a config file template.
-        :return: pandas.DataFrame
-        """
-
-        keep_metabs = []
-        keep_globs = []
-        keep_locs = []
-        for model_metab in self.model.metabolites:
-            for PE_metab in self.metabolites:
-                if PE_metab.name == model_metab.name:
-                    keep_metabs.append(PE_metab)
-
-        for model_glob in self.model.global_quantities:
-            for PE_glob in self.global_quantities:
-                if PE_glob.name == model_glob.name:
-                    keep_globs.append(PE_glob)
-
-        for model_loc in self.model.local_parameters:
-            for PE_loc in self.local_parameters:
-                if PE_loc.global_name == model_loc.global_name:
-                    keep_locs.append(PE_loc)
-
-        keep_metabs = [i.to_df() for i in keep_metabs]
-        keep_globs = [i.to_df() for i in keep_globs]
-        keep_locs = [i.to_df() for i in keep_locs]
-
-        metabs = pandas.DataFrame()
-        if keep_metabs != []:
-            metab = pandas.concat(keep_metabs, axis=1).transpose()
-            metab.drop('compartment', inplace=True, axis=1)
-            metab.drop('key', inplace=True, axis=1)
-            metab.drop('simulation_type', inplace=True, axis=1)
-            metab = metab.rename(columns={'value': 'start_value'})
-
-            if self.quantity_type == 'concentration':
-                metab.drop('particle_numbers', axis=1, inplace=True)
-                metab = metab.rename(columns={'concentration': 'start_value'})
-
-            elif self.quantity_type == 'particle_numbers':
-                metab.drop('concentration', axis=1, inplace=True)
-                metab = metab.rename(columns={'particle_numbers': 'start_value'})
-                metab = metab[['name', 'start_value']]
-            metabs = metabs.append(metab)
-
-        if not metabs.empty:
-            metabs = metabs.sort_values(by='name')
-
-        los = pandas.DataFrame()
-        if keep_locs != []:
-            lo = pandas.concat(keep_locs, axis=1).transpose()
-            lo = lo.rename(columns={'value': 'start_value'})
-            lo = lo[['global_name', 'start_value']]
-            lo = lo.rename(columns={'global_name': 'name'})
-            los = los.append(lo)
-
-        if not los.empty:
-            los = los.sort_values(by='name')
-
-        gls = pandas.DataFrame()
-        if keep_globs != []:
-            gl = pandas.concat(keep_globs, axis=1).transpose()
-            gl = gl.rename(columns={'initial_value': 'start_value'})
-            gl = gl[['name', 'start_value']]
-            gls = gls.append(gl)
-
-        if not gls.empty:
-            gls = gls.sort_values(by='name')
-
-        df = pandas.concat([metabs, gls, los], axis=0)
-        df = df.set_index('name')
-        if isinstance(self.lower_bound, (float, int)):
-            df['lower_bound'] = [self.lower_bound] * df.shape[0]
-        else:
-            raise ValueError
-
-        for i in [self.lower_bound_dct, self.upper_bound_dct]:
-            if not isinstance(i, dict):
-                raise errors.InputError('{} argument must be a '
-                                        'dict mapping parameter estimation boundaries '
-                                        'to integers. Got "{}"'.format(i, type(self.lower_bound_dct)))
-
-        for k, v in self.lower_bound_dct.items():
-            if k not in df.index:
-                raise IndexError('The key "{0}" is not available. These are available: "{1}. Check for typo\'s '
-                                 'and check that you have included "{0}" in your '
-                                 'estimation by adding it as argument to "metabolites" '
-                                 '"local_parameters" or "global_quantities" argument'.format(k, df.index))
-            df.loc[k, 'lower_bound'] = v
-
-        if isinstance(self.upper_bound, (float, int)):
-            df['upper_bound'] = [self.upper_bound] * df.shape[0]
-        else:
-            raise ValueError
-
-        for k, v in self.upper_bound_dct.items():
-            if k not in df.index:
-                raise IndexError('The key "{0}" is not available. These are available: "{1}. Check for typo\'s '
-                                 'and check that you have included "{0}" in your '
-                                 'estimation by adding it as argument to "metabolites" '
-                                 '"local_parameters" or "global_quantities" argument'.format(k, df.index))
-            df.loc[k, 'upper_bound'] = v
-
-        if isinstance(self.affected_experiments, str):
-            df['affected_experiments'] = ['all'] * df.shape[0]
-        elif isinstance(self.affected_experiments, dict):
-            df['affected_experiments'] = ['all'] * df.shape[0]
-            for k, v in self.affected_experiments.items():
-                if k not in df.index:
-                    raise IndexError('The key "{0}" is not available. These are available: "{1}. Check for typo\'s '
-                                     'and check that you have included "{0}" in your '
-                                     'estimation by adding it as argument to "metabolites" '
-                                     '"local_parameters" or "global_quantities" argument'.format(k, df.index))
-                df.at[k, 'affected_experiments'] = v
-        else:
-            raise errors.InputError('affected_experiments argument must be "all" '
-                                    'or dict mapping estimated parameters '
-                                    'to a list of experiment names')
-
-        if isinstance(self.affected_validation_experiments, str):
-            df['affected_validation_experiments'] = ['all'] * df.shape[0]
-        elif isinstance(self.affected_validation_experiments, dict):
-            df['affected_validation_experiments'] = ['all'] * df.shape[0]
-            for k, v in self.affected_validation_experiments.items():
-                if k not in df.index:
-                    raise IndexError('The key "{0}" is not available. These are available: "{1}. Check for typo\'s '
-                                     'and check that you have included "{0}" in your '
-                                     'estimation by adding it as argument to "metabolites" '
-                                     '"local_parameters" or "global_quantities" argument'.format(k, df.index))
-                df.at[k, 'affected_validation_experiments'] = v
-        else:
-            raise errors.InputError('"affected_validation_experiments" argument must be "all" '
-                                    'or dict mapping estimated parameters '
-                                    'to a list of experiment names')
-
-        if isinstance(self.start_value, pandas.core.frame.DataFrame):
-            if len(self.start_value.columns) != 1:
-                raise errors.InputError('start values should have only one column. Got \n\n{}'.format(self.start_value))
-            self.start_value.columns = ['start_value']
-            for i in list(self.start_value.index):
-                if i != 'RSS':
-                    if i not in self.model.all_variable_names:
-                        raise errors.InputError('"{}" not in model. '
-                                                'These are in your model "{}"'.format(i, self.model.all_variable_names))
-
-                    df.loc[i]['start_value'] = float(self.start_value.loc[i])
-
-        return df
 
     def _add_fit_items(self, constraint=False):
         """
@@ -4176,20 +4042,171 @@ class ParameterEstimation(_Task):
             raise ValueError('"{}" is not a valid argument'.format(self.config.settings.run_mode))
 
 
-class ParameterEstimationContext:
+    class Context:
 
-    def __init__(self, models, context='custom', parameters='all'):
-        self.models = models
-        self.context =  context
-        self.parameters = parameters
+        acceptable_context_args = {
+            'm': 'model_selection',
+            's': 'single_parameter_estimation',
+            'r': 'repeat_parameter_estimation',
+            'c': 'chaser_estimations',
+        }
 
-    def __enter__(self):
-        print('entering the context manager')
+        acceptable_parameters_args = {
+            'a': 'all',
+            'g': 'global_quantities',
+            'l': 'local_parameters',
+            'c': 'initial_concentrations',
+            'gl': 'global_quantities_and_local_parameters',
+            'gc': 'global_quantities_and_initial_concentrations',
+            'lc': 'local_parameters_and_initial_concentrations',
+            '_': 'prefixed_with_underscore'
+        }
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        print('exiting the context manager')
+        experiment_filetypes = ['.txt', '.csv']
+
+        def __init__(self, context='custom', parameters=None):
+            self.context = context
+            self.parameters = parameters
+
+            required_attributes = []
+            ## should I have a required attributes list to check
+            ## the shape of the parameter estimation problem
+            if context == 's':
+                required_attributes = []
+
+            # if not hasattr(self, 'models'):
+            #     raise ValueError('An argument to the "models" '
+            #                      'attribute is required.')
+            #
+            #
+            # models = {os.path.split(i)[1][:-4]: {
+            #     'model': model.Model(i),
+            #     'copasi_file': i} for i in self.models}
+            #
+            #
+            # print(self.models)
+            #
+            # print(self.experiments)
 
 
+        def __enter__(self):
+            print('entering the context manager')
+
+            # if self.context == 's':
+
+
+            ## use the context keyword to build a stensil that
+            ## can be filled out later
+
+            return self
+
+        def __exit__(self, exc_type, exc_value, exc_traceback):
+            print('__exit__ called')
+
+            print(self.models)
+            print(self.experiments)
+
+
+            if exc_type:
+                print(f'exc_type: {exc_type}')
+                print(f'exc_value: {exc_value}')
+                print(f'exc_traceback: {exc_traceback}')
+
+
+        def add_models(self, models):
+            ## if models passed as a string
+            if isinstance(models, str):
+                ## if this is an existing file with .cps extension
+                if os.path.isfile(models) and os.path.splitext(models)[1] == '.cps':
+                    ## and convert to a list of 1
+                    models = [models]
+                else:
+                    raise errors.InputError(f'"{models}" does not exist')
+            elif isinstance(models, list):
+                for i in models:
+                    if not os.path.isfile(i):
+                        raise errors.InputError(
+                            f'"{i}" does not an existing file'
+                        )
+            setattr(self, 'models', models)
+
+        def add_experiments(self, experiments):
+            if isinstance(experiments, str):
+                ## if this is an existing file with .cps extension
+                if os.path.isfile(experiments):
+                    if os.path.splitext(experiments)[1] in self.experiment_filetypes:
+                        ## and convert to a list of 1
+                        models = [experiments]
+                    else:
+                        raise errors.InputError(
+                            f'File with "{os.path.splitext(experiments)[1]}" is not supported'
+                        )
+
+                else:
+                    raise errors.InputError(f'"{experiments}" does not exist')
+
+            elif isinstance(experiments, list):
+                for i in experiments:
+                    if not os.path.isfile(i):
+                        raise errors.InputError(
+                            f'"{i}" does not an existing file'
+                        )
+                    if os.path.splitext(i)[1] not in self.experiment_filetypes:
+                        raise errors.InputError(
+                            f'File with "{os.path.splitext(i)[1]}" is not supported'
+                        )
+            setattr(self, 'experiments', experiments)
+
+        def add_validation_experiments(self, experiments):
+            if isinstance(experiments, str):
+                ## if this is an existing file with .cps extension
+                if os.path.isfile(experiments):
+                    if os.path.splitext(experiments)[1] in self.experiment_filetypes:
+                        ## and convert to a list of 1
+                        models = [experiments]
+                    else:
+                        raise errors.InputError(
+                            f'File with "{os.path.splitext(experiments)[1]}" is not supported'
+                        )
+
+                else:
+                    raise errors.InputError(f'"{experiments}" does not exist')
+
+            elif isinstance(experiments, list):
+                for i in experiments:
+                    if not os.path.isfile(i):
+                        raise errors.InputError(
+                            f'"{i}" does not an existing file'
+                        )
+                    if os.path.splitext(i)[1] not in self.experiment_filetypes:
+                        raise errors.InputError(
+                            f'File with "{os.path.splitext(i)[1]}" is not supported'
+                        )
+            setattr(self, 'add_validation_experiments', experiments)
+
+        def create_config(self):
+
+            models = {os.path.split(i)[1][:-4]: {
+                'model': model.Model(i),
+                'copasi_file': i} for i in self.models}
+
+            experiments = {os.path.split(i)[1][:-4]: {
+                'filename': i,
+            } for i in self.experiments}
+
+            if self.parameters == 'a':
+                fit_items = []
+
+            config = ParameterEstimation.Config(
+                models=models,
+                datasets=dict(
+                    experiments=experiments
+                ),
+                items=dict(
+                    fit_items='a'
+                )
+            )
+            return config
 
 class ChaserParameterEstimations(_Task):
     """
