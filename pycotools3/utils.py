@@ -29,6 +29,7 @@ from collections import OrderedDict, Mapping
 import json
 import sys
 from . import model
+import yaml, json
 LOG = logging.getLogger(__name__)
 
 
@@ -344,8 +345,7 @@ class ParameterEstimationConfiguration:
 
 class DotDict(dict):
     """dot.notation access to dictionary attributes"""
-
-    # __getattr__ = dict.get
+    # yaml_tag = '!DotDict'
     __setattr__ = dict.__setitem__
     __delattr__ = dict.__delitem__
 
@@ -398,5 +398,6 @@ class DotDict(dict):
 
     def __repr__(self):
         return self.__str__()
+
 
 

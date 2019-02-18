@@ -53,7 +53,7 @@ from .mixin import mixin
 from functools import reduce
 import yaml, json
 import sys
-
+import munch
 COPASISE, COPASIUI = load_copasi()
 
 ## TODO use generators when iterating over a function with another function. i.e. plotting
@@ -2188,145 +2188,6 @@ class Scan(_Task):
         R = Run(self.model, task='scan', mode=self.run)
 
 
-class _ConfigBase:
-    def __init__(self, **kwargs):
-        self.kwargs = kwargs
-
-    def update_recursive(self, orig_dict, new_dict):
-        """
-        recursively update nested dictionaries
-        :param orig_dict: Dict containing original values
-        :param new_dict: Dict containing values you want to be updated
-        :return: OrderedDict
-        """
-        for key, val in new_dict.items():
-            if isinstance(val, Mapping):
-                tmp = self.update(orig_dict.get(key, {}), val)
-                orig_dict[key] = tmp
-            elif isinstance(val, list):
-                orig_dict[key] = (orig_dict.get(key, []) + val)
-            else:
-                orig_dict[key] = new_dict[key]
-        return orig_dict
-
-    @staticmethod
-    def pretty_print(dct, sort_keys=False):
-        """
-        Use json to pretty print a nested dictionary
-        :param sort_keys:
-        :return:
-        """
-        return json.dumps(dct, indent=4, sort_keys=sort_keys)
-
-    def validate_kwargs(self, dct, valid_kwargs):
-        """
-        Ensure the dict `dct` has valid entries
-        :param dct: A `dict` to validate
-        :param valid_kwargs: list of valid kwards
-        :return: None
-        """
-        for k in dct:
-            if k not in self.valid_kwargs:
-                raise ValueError(
-                    '"{}" is not a valid key. '
-                    'Valid kwargs are "{}"'.format(
-                        k, valid_kwargs))
-
-    def set_defaults(self):
-        """
-        user property.setter on defaults property to update the default dict
-        :return:
-        """
-        pass
-
-    def set_kwargs(self):
-        """
-        A contraption for adding experiments to the parameter estimation
-        configuration object. Used to create both experiment and validation sets.
-
-        :return:
-        """
-
-        for parameter in self.kwargs:
-            if not isinstance(self.kwargs[parameter], dict):
-                setattr(self, parameter, self.kwargs[parameter])
-            else:
-                user_specified_kwargs = list(self.kwargs[parameter].keys())
-                for kw in self.kwargs[parameter]:
-                    if kw not in self.defaults.keys():
-                        raise ValueError('"{}" is not a valid keyword argument. '
-                                         'These are valid: "{}"'.format(kw, list(self.defaults.keys())))
-
-                ## these kwargs are those not specified by user and need to take on the default value
-                unspecified_kwargs = set(user_specified_kwargs).symmetric_difference(set(self.defaults.keys()))
-                ## if all necessary kwargs are specified then we have the empty set
-                ## and do not need to update with defaults
-                if unspecified_kwargs == set():
-                    setattr(self, parameter, DotDict(self.kwargs[parameter], recursive=True))
-
-                ## otherwise, update kwargs with defaults.
-                for unspecified_kwarg in unspecified_kwargs:
-                    for default_kwarg in self.defaults:
-                        if unspecified_kwarg == default_kwarg:
-                            self.kwargs[parameter][default_kwarg] = self.defaults[default_kwarg]
-                    self.kwargs[parameter] = DotDict(self.kwargs[parameter], recursive=True)
-                    setattr(self, parameter, self.kwargs[parameter])
-
-        if self.kwargs == {}:
-            self.kwargs = self.defaults
-            self.set_kwargs()
-
-    def set_default_experiment_mappings(self):
-        """
-
-        :return:
-        """
-        for experiment_name in self.keys():
-            if isinstance(self[experiment_name], dict) and 'filename' in self[experiment_name].keys():
-                if self[experiment_name].filename != '':
-                    df = pandas.read_csv(self[experiment_name].filename, sep='\t')
-                    column_names = list(df.columns)
-                    default_mappings_dct = {
-                        i: {
-                            'model_object': i,
-                            'role': 'dependent'
-                        } for i in column_names
-                    }
-
-                    default_mappings_dct.update(
-                        self[experiment_name].mappings
-                    )
-                    self[experiment_name].mappings = DotDict(default_mappings_dct, recursive=True)
-
-    @property
-    def defaults(self):
-        return {}
-
-    def keys(self):
-        return self.kwargs.keys()
-
-    def items(self):
-        return self.kwargs.items()
-
-    def values(self):
-        return self.kwargs.values()
-
-    def __str__(self):
-        return self.pretty_print(self.kwargs)
-
-    def __repr__(self):
-        return self.__str__()
-
-    # def __next__(self):
-    #     return self.kwargs.__next__()
-
-    def __getitem__(self, item):
-        return self.kwargs.__getitem__(item)
-
-    def __setitem__(self, key, value):
-        self.kwargs[key] = value
-
-
 @mixin(model.GetModelComponentFromStringMixin)
 @mixin(model.ReadModelMixin)
 class ParameterEstimation(_Task):
@@ -2336,6 +2197,7 @@ class ParameterEstimation(_Task):
 
     @staticmethod
     class Config(_Task):
+        yaml_tag = '!Config'
 
         def __init__(self, models, datasets, items, settings={}):
             self.models = models
@@ -2349,8 +2211,8 @@ class ParameterEstimation(_Task):
                 'items': self.items,
                 'settings': self.settings
             }
+            self.kwargs = munch.Munch.fromDict(self.kwargs)
 
-            self.kwargs = DotDict(self.kwargs, recursive=True)
 
             for kw in self.kwargs:
                 setattr(self, kw, self.kwargs[kw])
@@ -2359,30 +2221,44 @@ class ParameterEstimation(_Task):
             self.set_defaults()
             self._validate_integrity_of_user_input()
 
-        def __enter__(self):
-            """
-            Use the enter protocol to set all defaults, and
-            then overwrite them with any new arguments the user
-            specifies
-            :return:
-            """
-            print('entering the context manager')
-            return self
-
-        def __exit__(self, exc_type, exc_val, exc_tb):
-            print('exiting the context manager')
-
-            if exc_type:
-                print(f'exc_type: {exc_type}')
-                print(f'exc_value: {exc_val}')
-                print(f'exc_traceback: {exc_tb}')
-
         def __iter__(self):
             for attr in self.kwargs.keys():
                 yield attr
 
         def __str__(self):
             return self.kwargs.__str__()
+
+        def to_json(self):
+            print(self)
+
+        def from_json(self):
+            pass
+
+        def to_yaml(self, fname):
+            # print(yaml.dump(dict(self.kwargs)))
+
+            # with open(fname, 'w') as f:
+            #     yaml.dump(self, stream=f, default_flow_style=False)
+
+
+
+            yaml.add_representer(self,
+                                 lambda dumper, data: dumper.represent_mapping(
+                                     'tag:yaml.org,2002:map', data.items()))
+
+            ## modify dumper class so that we do not write aliases for variables
+            ## yaml have seen before.
+            # noalias_dumper = yaml.dumper.Dumper
+            # noalias_dumper.ignore_aliases = lambda self, data: True
+            #
+            # if (os.path.isfile(self.settings.config_filename) == False) or (self.settings.overwrite_config_file == True):
+            #     with open(self.settings.config_filename, 'w') as f:
+            #         yaml.dump(self, stream=f, default_flow_style=False)
+            # return self.settings.config_filename
+
+
+        def from_yaml(self):
+            pass
 
         @staticmethod
         def _add_defaults_to_dict(dct, defaults):
@@ -2468,9 +2344,8 @@ class ParameterEstimation(_Task):
                         experiment_dataset[default_kwarg] = experiment_defaults[default_kwarg]
 
                 if experiment_dataset.mappings == {}:
-                    experiment_dataset.mappings = DotDict(self.mappings_defaults(
-                        experiment_dataset.filename, experiment_dataset.separator
-                    ), recursive=True
+                    experiment_dataset.mappings = munch.Munch.fromDict(self.mappings_defaults(
+                        experiment_dataset.filename, experiment_dataset.separator)
                     )
 
                 for mapping in experiment_dataset.mappings:
@@ -2503,9 +2378,8 @@ class ParameterEstimation(_Task):
                         validation_dataset[default_kwarg] = validation_defaults[default_kwarg]
 
                 if validation_dataset.mappings == {}:
-                    validation_dataset.mappings = DotDict(self.mappings_defaults(
-                        validation_dataset.filename, validation_dataset.separator
-                    ), recursive=True
+                    validation_dataset.mappings = munch.Munch.fromDict(self.mappings_defaults(
+                        validation_dataset.filename, validation_dataset.separator)
                     )
 
                 for mapping in validation_dataset.mappings:
@@ -2554,7 +2428,7 @@ class ParameterEstimation(_Task):
                 if item['affected_models'] == 'all':
                     item['affected_models'] = list(self.models.keys())
 
-                self.items.fit_items[fit_item] = DotDict(item)
+                self.items.fit_items[fit_item] = munch.Munch.fromDict(item)
 
             if 'constraint_items' in self.items:
 
@@ -2584,7 +2458,7 @@ class ParameterEstimation(_Task):
                     if item.affected_models == 'all':
                         item.affected_models = list(self.models.keys())
 
-                self.items.constraint_items[constraint_item] = DotDict(item)
+                self.items.constraint_items[constraint_item] = munch.Munch.fromDict(item)
 
         @staticmethod
         def validate_kwargs(dct, valid_kwargs):
@@ -3549,96 +3423,20 @@ class ParameterEstimation(_Task):
         self.config_filename.
         :return: str. Path to config file
         """
-        exp_kwargs = {}
-        exp_kwargs['row_orientation'] = self.row_orientation
-        exp_kwargs['experiment_type'] = self.experiment_type
-        exp_kwargs['experiment_keys'] = self.experiment_keys
-        exp_kwargs['first_row'] = self.first_row
-        exp_kwargs['normalize_weights_per_experiment'] = self.normalize_weights_per_experiment
-        exp_kwargs['row_containing_names'] = self.row_containing_names
-        exp_kwargs['separator'] = self.separator
-        exp_kwargs['weight_method'] = self.weight_method
-        exp_kwargs['validation'] = self.validation
-        exp_kwargs['validation_weight'] = self.validation_weight
-        exp_kwargs['validation_threshold'] = self.validation_threshold
-        exp_kwargs['mappings'] = self.mappings
-
-        settings_dct = OrderedDict()
-        settings_dct['randomize_start_values'] = self.randomize_start_values
-        settings_dct['run_mode'] = self.run_mode
-        settings_dct['method'] = self.method
-        settings_dct['copy_number'] = self.copy_number
-        settings_dct['pe_number'] = self.pe_number
-        settings_dct['results_directory'] = self.results_directory
-        settings_dct['quantity_type'] = self.quantity_type
-        settings_dct['report_name'] = self.report_name
-        settings_dct['update_model'] = self.update_model
-        settings_dct['create_parameter_sets'] = self.create_parameter_sets
-        settings_dct['calculate_statistics'] = self.calculate_statistics
-
-        experiment_set_mapping_dct = OrderedDict()
-
-        for i in range(len(self.experiment_files)):
-            df = pandas.read_csv(self.experiment_files[i], sep=exp_kwargs['separator'][i])
-            name = os.path.split(self.experiment_files[i])[1][:-4]
-            experiment_set_mapping_dct[name] = OrderedDict()
-            experiment_set_mapping_dct[name]['filename'] = self.experiment_files[i]
-            experiment_set_mapping_dct[name]['key'] = 'Experiment_{}'.format(i)
-            experiment_set_mapping_dct[name]['experiment_type'] = exp_kwargs['experiment_type'][i]
-            experiment_set_mapping_dct[name]['first_row'] = int(exp_kwargs['first_row'][i])
-            experiment_set_mapping_dct[name]['last_row'] = int(df.shape[0])
-            experiment_set_mapping_dct[name]['normalize_weights_per_experiment'] = \
-                exp_kwargs['normalize_weights_per_experiment'][i]
-            experiment_set_mapping_dct[name]['weight_method'] = exp_kwargs['weight_method'][i]
-            experiment_set_mapping_dct[name]['row_containing_names'] = exp_kwargs['row_containing_names'][i]
-            experiment_set_mapping_dct[name]['separator'] = exp_kwargs['separator'][i]
-            experiment_set_mapping_dct[name]['validation'] = exp_kwargs['validation'][i]
-
-            experiment_set_mapping_dct[name]['mappings'] = OrderedDict()
-            for item in range(df.shape[1]):
-                model_obj = df.columns[item]
-
-                role = 'ignored'
-                if df.columns[item][-6:] == '_indep':
-                    role = 'independent'
-                    model_obj = df.columns[item][:-6]
-                elif df.columns[item] in self.model.all_variable_names:
-                    role = 'dependent'
-                elif df.columns[item].lower() == 'time':
-                    role = 'time'
-                elif role == 'ignored':
-                    pass
-                else:
-                    raise ValueError('role cannot be "{}". Must be one of "ignored", "dependent", '
-                                     '"independent" or "time"'.format(df.columns[item]))
-
-                experiment_set_mapping_dct[name]['mappings'][df.columns[item]] = OrderedDict()
-                experiment_set_mapping_dct[name]['mappings'][df.columns[item]]['model_object'] = model_obj
-                experiment_set_mapping_dct[name]['mappings'][df.columns[item]]['role'] = role
-
-        ## convert start_value to numeric to keep yaml file consistent
-        item_template = self._item_template.transpose()
-        item_template.loc['start_value'] = pandas.to_numeric(item_template.loc['start_value'])
-        item_template = item_template.to_dict()
-
-        dct = OrderedDict(
-            ParameterEstimationSettings=settings_dct,
-            ExperimentSetMapping=experiment_set_mapping_dct,
-            OptimizationItemList=item_template,
-            OptimizationConstraintList=OrderedDict()
-        )
-        yaml.add_representer(OrderedDict,
-                             lambda dumper, data: dumper.represent_mapping('tag:yaml.org,2002:map', data.items()))
-
-        ## modify dumper class so that we do not write aliases for variables
-        ## yaml have seen before.
-        noalias_dumper = yaml.dumper.Dumper
-        noalias_dumper.ignore_aliases = lambda self, data: True
-
-        if (os.path.isfile(self.config_filename) == False) or (self.overwrite_config_file == True):
-            with open(self.config_filename, 'w') as f:
-                yaml.dump(dct, stream=f, default_flow_style=False)
-        return self.config_filename
+        config = deepcopy(self.config)
+        print(config)
+        # yaml.add_representer(config,
+        #                      lambda dumper, data: dumper.represent_mapping('tag:yaml.org,2002:map', data.items()))
+        #
+        # ## modify dumper class so that we do not write aliases for variables
+        # ## yaml have seen before.
+        # noalias_dumper = yaml.dumper.Dumper
+        # noalias_dumper.ignore_aliases = lambda self, data: True
+        #
+        # if (os.path.isfile(self.config_filename) == False) or (self.overwrite_config_file == True):
+        #     with open(self.config_filename, 'w') as f:
+        #         yaml.dump(config, stream=f, default_flow_style=False)
+        # return self.config_filename
 
     def _get_experiment_keys(self):
         """
@@ -4376,6 +4174,21 @@ class ParameterEstimation(_Task):
 
         else:
             raise ValueError('"{}" is not a valid argument'.format(self.config.settings.run_mode))
+
+
+class ParameterEstimationContext:
+
+    def __init__(self, models, context='custom', parameters='all'):
+        self.models = models
+        self.context =  context
+        self.parameters = parameters
+
+    def __enter__(self):
+        print('entering the context manager')
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        print('exiting the context manager')
+
 
 
 class ChaserParameterEstimations(_Task):

@@ -26,202 +26,6 @@ Date:
  
 '''
 
-'''
-
-    class _Config(_ConfigBase):
-
-        def __init__(self, datasets, **kwargs):
-            self.kwargs = kwargs
-            self.datasets = self._DataSets(**datasets)
-            self.items = self._Items(**self.kwargs.get('items', {}))
-            self.settings = self._Settings(**self.kwargs.get('settings', {}))
-
-
-        def __str__(self):
-            return self.pretty_print({
-                'settings': self.settings.kwargs,
-                'datasets': self.datasets.kwargs,
-                'items': self.items.kwargs,
-                }
-            )
-
-
-        class _DataSets(_ConfigBase):
-            """
-            enforce the requirement for at least one experimental dataset
-            but validation data sets are optional
-            """
-
-            def __init__(self, **kwargs):
-                self.kwargs = kwargs
-                # self.set_kwargs()
-                try:
-                    experiments = self.kwargs['experiments']
-                except KeyError as e:
-                    raise errors.InputError(
-                        'The "experiments" keyword argument must be supplied.'
-                    ) from e
-
-                validations = self.kwargs.get('validations', {})
-
-                self.experiments = self._ExperimentSet(**experiments)
-                self.validations = self._ValidationSet(**validations)
-
-
-
-            # @property
-            # def defaults(self):
-            #     return {
-            #         'validations': self._ValidationSet(**{}).kwargs
-            #     }
-            #
-            def __str__(self):
-                return self.pretty_print(
-                    {
-                        'experiments': self.experiments.kwargs,
-                        'validations': self.validations.kwargs,
-                    }
-                )
-
-            def __repr__(self):
-                return self.__str__()
-
-            class _ExperimentSet(_ConfigBase):
-                """
-
-                If a valid argument is present, accept it. Otherwise
-                add the default to the dict.
-
-                """
-
-                def __init__(self, **kwargs):
-                    self.kwargs = kwargs
-                    self.set_kwargs()
-                    self.set_default_experiment_mappings()
-
-
-                @property
-                def defaults(self):
-                    defaults = {
-                        'filename': '',
-                        'normalize_weights_per_experiment': True,
-                        'weight_method': 'mean_squared',
-                        'separator': '\t',
-                        'mappings': {}
-                    }
-                    return defaults
-
-            class _ValidationSet(_ConfigBase):
-                def __init__(self, **kwargs):
-                    self.kwargs = kwargs
-                    self.set_kwargs()
-                    self.set_default_experiment_mappings()
-
-                @property
-                def defaults(self):
-                    return {
-                        'filename': '',
-                        'normalize_weights_per_experiment': True,
-                        'weight_method': 'mean_squared',
-                        'separator': '\t',
-                        'weight': 1,
-                        'threshold': 5,
-                        'mappings': {},
-                    }
-
-        class _Items(_ConfigBase):
-            def __init__(self, **kwargs):
-                self.kwargs = kwargs
-
-                fit_items = self.kwargs.get('fit_items', {})
-                constraint_items = self.kwargs.get('constraint_items', {})
-
-                self.fit_items = self._FitItems(**fit_items)
-                self.constraint_items = self._ConstraintItems(**constraint_items)
-
-            def __str__(self):
-                return self.pretty_print({
-                    'fit_items': self.fit_items.kwargs.__str__(),
-                    'constraint_items': self.constraint_items.kwargs.__str__(),
-                })
-
-            def __repr__(self):
-                return self.__str__()
-
-
-            class _FitItems(_ConfigBase):
-                def __init__(self, **kwargs):
-                    self.kwargs = kwargs
-                    self.set_kwargs()
-
-                @property
-                def defaults(self):
-                    return {
-                        'lower_bound': 1e-6,
-                        'upper_bound': 1e6,
-                        'start_value': 'model_value',
-                        'affected_experiments': 'all',
-                        'affected_validation_experiments': 'all',
-                    }
-
-
-
-            class _ConstraintItems(_ConfigBase):
-                def __init__(self, **kwargs):
-                    self.kwargs = kwargs
-                    self.set_kwargs()
-
-                @property
-                def defaults(self):
-                    return {
-                        'lower_bound': 1e-6,
-                        'upper_bound': 1e6,
-                        'start_value': 'model_value',
-                        'affected_experiments': 'all',
-                        'affected_validation_experiments': 'all',
-                    }
-
-        class _Settings(_ConfigBase):
-            def __init__(self, **kwargs):
-                self.kwargs = kwargs
-                self.set_kwargs()
-
-            @property
-            def defaults(self):
-                return {
-                    'copy_number': 1,
-                    'pe_number': 1,
-                    'results_directory': '', #os.path.join(self.model.root, 'ParameterEstimationResults'),
-                    'config_filename': '', #os.path.join(self.model.root, 'config_file.yaml'),
-                    'overwrite_config_file': False,
-                    'update_model': False,
-                    'randomize_start_values': True,
-                    'create_parameter_sets': False,
-                    'calculate_statistics': False,
-                    'use_config_start_values': False,
-                    'method': 'genetic_algorithm',
-                    'number_of_generations': 200,
-                    'population_size': 50,
-                    'random_number_generator': 1,
-                    'seed': 0,
-                    'pf': 0.475,
-                    'iteration_limit': 50,
-                    'tolerance': 0.00001,
-                    'rho': 0.2,
-                    'scale': 10,
-                    'swarm_size': 50,
-                    'std_deviation': 0.000001,
-                    'number_of_iterations': 100000,
-                    'start_temperature': 1,
-                    'cooling_factor': 0.85,
-                    'lower_bound': 0.000001,
-                    'upper_bound': 1000000,
-                    'start_value': 0.1,
-                    'save': False,
-                    'run_mode': True,
-                }
-'''
-
 import pycotools3
 import unittest
 import os
@@ -232,6 +36,7 @@ from pycotools3.tasks import ParameterEstimation
 from pycotools3.utils import DotDict
 import glob
 import time
+
 
 def parse_timecourse(self):
     """
@@ -280,6 +85,20 @@ class DotDictTests(unittest.TestCase):
         }
         dct = DotDict(dct, recursive=True)
         self.assertEqual(dct.d.c.b, 7)
+
+
+    def test4(self):
+        from pycotools3.utils import DotDict
+        dct = {
+            'd': {
+                'c': {
+                    'b': 7
+                }
+            }
+        }
+        dct = DotDict(dct, recursive=True)
+
+        # self.assertEqual(dct.d.c.b, 7)
 
 
 class ParameterEstimationTestsConfig(_test_base._BaseTest):
@@ -331,7 +150,6 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
             models={
                 'model1': {
                     'copasi_file': self.model.copasi_file,
-                    'results_directory': os.path.join(self.model.root, 'ParameterEstimationResults')
                 },
             },
             datasets={
@@ -404,7 +222,7 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
         self.PE = ParameterEstimation(self.config)
 
     # def test___str__(self):
-    #     string = "{'model1': Model(name=New_Model, time_unit=s, volume_unit=ml, quantity_unit=mmol)}"
+    #     string = "{'model1': Model(name=TestModel1, time_unit=s, volume_unit=ml, quantity_unit=mmol)}"
     #     self.assertEqual(str(self.config.models), string)
 
     # def test_A(self):
@@ -524,6 +342,12 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
                              ['model1']
                              )
 
+    def test_write_config_file(self):
+        fname = os.path.join(os.path.dirname(__file__), 'config_file.yml')
+        print(fname)
+        self.PE.config.to_yaml(fname)
+
+
 class ExperimentMapperTests(_test_base._BaseTest):
 
     def setUp(self):
@@ -556,7 +380,6 @@ class ExperimentMapperTests(_test_base._BaseTest):
         self.report4 = os.path.join(os.path.dirname(self.TC2.report_name), 'report4.txt')
 
         ss_df.to_csv(self.report4, sep='\t', index=False)
-
 
         self.conf_dct = dict(
             models=dict(
@@ -612,7 +435,6 @@ class ExperimentMapperTests(_test_base._BaseTest):
         self.PE = pycotools3.tasks.ParameterEstimation(self.conf)
 
         # print(self.TC1.report_name)
-
 
     def test_metabolite_entries(self):
         """
@@ -754,7 +576,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
         """
         self.experiment_checker_function(
             os.path.join(
-                os.path.dirname(__file__),'report1.txt'), 'File Name')
+                os.path.dirname(__file__), 'report1.txt'), 'File Name')
 
     def test_experiment_number_of_columns(self):
         """
@@ -782,7 +604,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
                                 if l.attrib['name'] == '1':
                                     ans = l[0].attrib['value']
         self.assertEqual(
-            'CN=Root,Model=New_Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration',
+            'CN=Root,Model=TestModel1,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration',
             ans
         )
 
@@ -804,7 +626,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
                                 if l.attrib['name'] == '1':
                                     ans = l[0].attrib['value']
         self.assertEqual(
-            'CN=Root,Model=New_Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration',
+            'CN=Root,Model=TestModel1,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration',
             ans,
         )
 
@@ -828,7 +650,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
                                     ans = l[0].attrib['value']
         self.assertEqual(
             ans,
-            'CN=Root,Model=New_Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration'
+            'CN=Root,Model=TestModel1,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration'
         )
 
     def test_experiment_steady_state(self):
@@ -1182,7 +1004,7 @@ class ParameterEstimationTests(_test_base._BaseTest):
         count = 0
         experiment_keys = []
         for i in self.PE.models.model1.model.xml.findall('.//*[@name="ObjectCN"]'):
-            if i.attrib['value'] == 'CN=Root,Model=New_Model,Vector=Values[A2B],Reference=InitialValue':
+            if i.attrib['value'] == 'CN=Root,Model=TestModel1,Vector=Values[A2B],Reference=InitialValue':
                 for j in i.getparent():
                     if j.attrib['name'] == 'Affected Experiments':
                         for k in j:
@@ -1198,7 +1020,7 @@ class ParameterEstimationTests(_test_base._BaseTest):
         count = 0
         valiadtion_keys = []
         for i in self.PE.models.model1.model.xml.findall('.//*[@name="ObjectCN"]'):
-            if i.attrib['value'] == 'CN=Root,Model=New_Model,Vector=Values[A2B],Reference=InitialValue':
+            if i.attrib['value'] == 'CN=Root,Model=TestModel1,Vector=Values[A2B],Reference=InitialValue':
                 for j in i.getparent():
                     if j.attrib['name'] == 'Affected Cross Validation Experiments':
                         for k in j:
@@ -1317,6 +1139,97 @@ class ParameterEstimationTests(_test_base._BaseTest):
             results_dir, '*.txt')
         )
         self.assertEqual(expected, len(files))
+
+
+class ParameterEstimationContextManagerTests(unittest.TestCase):
+    def setUp(self):
+        super(ParameterEstimationContextManagerTests, self).setUp()
+
+        self.TC1 = pycotools3.tasks.TimeCourse(self.model,
+                                               end=1000,
+                                               step_size=100,
+                                               intervals=10,
+                                               report_name='report1.txt')
+        self.TC2 = pycotools3.tasks.TimeCourse(self.model,
+                                               end=1000,
+                                               step_size=100,
+                                               intervals=10,
+                                               report_name='report2.txt')
+
+        pycotools3.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
+        pycotools3.misc.correct_copasi_timecourse_headers(self.TC2.report_name)
+
+        df = pandas.read_csv(self.TC2.report_name, sep='\t')
+        ## remove square brackets around species
+        df = df.rename(columns={list(df.keys())[2]: list(df.keys())[2] + str('_indep')})
+        self.report3 = os.path.join(os.path.dirname(self.TC2.report_name), 'report3.txt')
+        df.to_csv(self.report3, sep='\t', index=False)
+        assert os.path.isfile(self.report3)
+
+        ## create some SS data for fitting
+        ss_df = df.drop('Time', axis=1)
+        ss_df = pandas.DataFrame(ss_df.iloc[0].transpose(), index=list(ss_df.keys())).transpose()
+        self.report4 = os.path.join(os.path.dirname(self.TC2.report_name), 'report4.txt')
+
+        ss_df.to_csv(self.report4, sep='\t', index=False)
+
+        self.conf_dct = dict(
+            models=dict(
+                model1=dict(
+                    copasi_file=self.model.copasi_file,
+                    results_directory=os.path.join(self.model.root, 'ParameterEstimationResults'))
+            ),
+            datasets=dict(
+                experiments=dict(
+                    report1=dict(
+                        filename=self.TC1.report_name,
+                    ),
+                    report2=dict(
+                        filename=self.TC2.report_name
+                    ),
+                    ss=dict(
+                        filename=self.report4
+                    )
+                ),
+                validations=dict(
+                    report3=dict(
+                        filename=self.report3
+                    ),
+                )
+            ),
+            items=dict(
+                fit_items=dict(
+                    A=dict(
+                        affected_experiments=['report1', 'ss']
+                    ),
+                    B=dict(
+                        affected_validation_experiments=['report3']
+                    ),
+                    C={},
+                    A2B={},
+                    B2C={},
+                    B2C_0_k2={},
+                    C2A_k1={},
+                    ADeg_k1={},
+                )
+            ),
+            settings=dict(
+                method='genetic_algorithm_sr',
+                population_size=10,
+                number_of_generations=10,
+                working_directory=os.path.dirname(__file__),
+                weight_method='value_scaling',
+                validation_weight=2.5,
+                validation_threshold=9,
+            )
+        )
+        self.conf = ParameterEstimation.Config(**self.conf_dct)
+        self.PE = pycotools3.tasks.ParameterEstimation(self.conf)
+
+        # print(self.TC1.report_name)
+
+
+
 
 
 if __name__ == '__main__':

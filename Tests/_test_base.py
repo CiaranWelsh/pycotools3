@@ -27,7 +27,7 @@ class _BaseTest(unittest.TestCase):
         self.copasi_file = os.path.join(os.path.dirname(__file__), 'test_model.cps')
 
         self.ant = """// Created by libAntimony v2.9.4
-                        model *New_Model()
+                        model *TestModel1()
                         
                           // Compartments and Species:
                           compartment nuc, cyt;
