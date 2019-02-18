@@ -2419,6 +2419,8 @@ class ParameterEstimation(_Task):
                     self.datasets.validations[validation_experiment].mappings[mapping] = mapp
 
         def set_default_fit_items(self):
+
+
             if isinstance(self.items.fit_items, str):
                 estimated_variables = False
                 if self.items.fit_items == 'a':
