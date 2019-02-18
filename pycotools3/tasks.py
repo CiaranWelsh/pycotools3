@@ -2419,29 +2419,66 @@ class ParameterEstimation(_Task):
                     self.datasets.validations[validation_experiment].mappings[mapping] = mapp
 
         def set_default_fit_items(self):
-
-
             if isinstance(self.items.fit_items, str):
-                estimated_variables = False
-                if self.items.fit_items == 'a':
-                    for model_name in self.models:
-                        mod = self.models[model_name].model
-                        estimated_variables = mod.all_variable_names
-
-                elif self.items.fit_items == '':
-                    pass
-
-                else:
-                    raise errors.InputError(
-                        f'"{self.items.fit_items}" is not a valid argument for fit_items'
-                    )
-                ## now take the list and create a
-                estimated_variables = {i: {} for i in estimated_variables}
-
+                self.set_default_fit_items_str()
             else:
-                estimated_variables = self.items.fit_items
+                self.set_default_fit_items_dct()
 
-            for fit_item in estimated_variables:
+        def set_default_fit_items_str(self):
+
+            if not isinstance(self.items.fit_items, str):
+                raise TypeError
+
+            estimated_variables = {}
+            for model_name in self.models:
+                mod = self.models[model_name].model
+                estimated_variables[model_name] = mod.get_variable_names(
+                    self.items.fit_items, include_assignments=False
+                )
+            dct = {}
+            for model_name in estimated_variables:
+                dct[model_name] = {}
+                for parameter in estimated_variables[model_name]:
+                    dct[model_name][parameter] = {}
+
+            estimated_variables = dct
+
+            for model_name in self.models:
+                dct = {}
+
+                for fit_item in estimated_variables[model_name]:
+                    item = estimated_variables[model_name][fit_item]
+                    if item == {}:
+                        item = self.fit_item_defaults
+
+                    else:
+                        for i in self.fit_item_defaults:
+                            if i not in item:
+                                item[i] = self.fit_item_defaults[i]
+
+                    if item['affected_experiments'] == 'all':
+                        if isinstance(self.experiment_names, str):
+                            item['affected_experiments'] = [self.experiment_names]
+                        else:
+                            item['affected_experiments'] = self.experiment_names
+
+                    if item['affected_validation_experiments'] == 'all':
+                        if isinstance(self.validation_names, str):
+                            item['affected_validation_experiments'] = [self.validation_names]
+                        else:
+                            item['affected_validation_experiments'] = self.validation_names
+
+                    if item['affected_models'] == 'all':
+                        item['affected_models'] = [
+                            i for i in self.models if fit_item in self.models[model_name].model
+                        ]
+
+                    dct[fit_item] = item
+
+            self.items.fit_items = munch.Munch.fromDict(dct)
+
+        def set_default_fit_items_dct(self):
+            for fit_item in self.items.fit_items:
                 item = self.items.fit_items.get(fit_item)
 
                 if item == {}:
@@ -2588,6 +2625,7 @@ class ParameterEstimation(_Task):
 
         @property
         def fit_item_defaults(self):
+
             return {
                 'lower_bound': 1e-6,
                 'upper_bound': 1e6,
@@ -3514,18 +3552,22 @@ class ParameterEstimation(_Task):
                     items = self.config.items.constraint_items
             else:
                 items = self.config.items.fit_items
-
             for item_name in items:
+
                 item = items[item_name]
                 ## figure out what type of variable item is and assign to component
-                if item_name in [i.name for i in mod.metabolites]:
+                if item_name in mod.get_variable_names('m'):
                     component = [i for i in mod.metabolites if i.name == item_name][0]
 
-                elif item_name in [i.global_name for i in mod.local_parameters]:
+                elif item_name in mod.get_variable_names('l'):
                     component = [i for i in mod.local_parameters if i.global_name == item_name][0]
 
-                elif item_name in [i.name for i in mod.global_quantities]:
+                elif item_name in mod.get_variable_names('g'):
                     component = [i for i in mod.global_quantities if i.name == item_name][0]
+
+                elif item_name in mod.get_variable_names('c'):
+                    component = [i for i in mod.compartments if i.name == item_name][0]
+
                 else:
                     raise errors.SomethingWentHorriblyWrongError(
                         '"{}" is not a metabolite,'
@@ -3533,7 +3575,7 @@ class ParameterEstimation(_Task):
                         'global_quantity. These are your'
                         ' model variables: {}'.format(
                             item_name,
-                            str(self.model.all_variable_names))
+                            str(mod.get_variable_names('a', include_assignments=False)))
                     )
 
                 # initialize new element
@@ -3672,7 +3714,7 @@ class ParameterEstimation(_Task):
                     subA4 = {'type': 'cn',
                              'name': 'ObjectCN',
                              'value': '{},{}'.format(mod.reference,
-                                                     component.initial_value_reference)}
+                                                     component.initial_volume_reference)}
 
                 else:
                     raise errors.InputError('{} is not a valid parameter for estimation'.format(list(item)))
@@ -4105,8 +4147,8 @@ class ParameterEstimation(_Task):
         def __exit__(self, exc_type, exc_value, exc_traceback):
             print('__exit__ called')
 
-            print(self.models)
-            print(self.experiments)
+            # print(self.models)
+            # print(self.experiments)
 
 
             if exc_type:

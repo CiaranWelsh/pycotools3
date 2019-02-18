@@ -918,7 +918,7 @@ class Model(_base._Base):
             'g': g,
             'l': l,
             'c': c,
-            'a': self.all_variable_names
+            'a': m + g + l + c,
         }
         which = sorted(list(which))
         names = []
