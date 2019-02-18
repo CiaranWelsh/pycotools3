@@ -1244,80 +1244,80 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
 
         # print(self.TC1.report_name)
 
-    # def test(self):
-    #     # x = ParameterEstimation.Context()
-    #     # print(x)
-    #
-    #     dct = {
-    #         'models': {
-    #             'model1': {
-    #                 'copasi_file': self.model.copasi_file,
-    #             },
-    #         },
-    #         'datasets': {
-    #             'experiments': {
-    #                 'report1': {
-    #                     'filename': self.TC1.report_name,
-    #                     'affected_models': 'all',
-    #                     'mappings': {
-    #                         'Time': {
-    #                             'model_object': 'Time',
-    #                             'role': 'time'
-    #                         },
-    #                         'A': {
-    #                             'model_object': 'A',
-    #                             'role': 'dependent',
-    #                         },
-    #                     }
-    #                 },
-    #                 'report2': {
-    #                     'filename': self.TC2.report_name,
-    #                     'separator': '\t'
-    #                 }
-    #             },
-    #         },
-    #         'items': {
-    #             'fit_items': {
-    #
-    #                 'A': {
-    #                     'lower_bound': 15,
-    #                     'upper_bound': 35,
-    #                     'affected_experiments': 'report1',
-    #                     'affected_validation_experiments': 'report3',
-    #                     'affected_models': 'all',
-    #                     'start_value': 17.5
-    #                 },
-    #                 'B': {},
-    #                 'C': {}
-    #             },
-    #             'constraint_items': {
-    #                 'C': {
-    #                     'upper_bound': 26,
-    #                     'lower_bound': 16
-    #                 }
-    #             },
-    #         },
-    #         'settings': {
-    #             'method': 'genetic_algorithm_sr',
-    #             'population_size': 38,
-    #             'number_of_generations': 100,
-    #             'copy_number': 1,
-    #             'pe_number': 1,
-    #             'weight_method': 'value_scaling',
-    #             'validation_weight': 4,
-    #             'validation_threshold': 8.5,
-    #             'working_directory': os.path.dirname(__file__),
-    #             'run_mode': False
-    #
-    #         },
-    #     }
-    #     with ParameterEstimation.Context(context='s', parameters='a') as context:
-    #         context.add_models([self.model.copasi_file])
-    #         context.add_experiments(
-    #             [self.TC1.report_name, self.TC2.report_name,
-    #              self.report3, self.report4])
-    #         config = context.create_config()
-    #         # context.fit_items = 'all'
+    def test(self):
+        # x = ParameterEstimation.Context()
+        # print(x)
+
+        dct = {
+            'models': {
+                'model1': {
+                    'copasi_file': self.model.copasi_file,
+                },
+            },
+            'datasets': {
+                'experiments': {
+                    'report1': {
+                        'filename': self.TC1.report_name,
+                        'affected_models': 'all',
+                        'mappings': {
+                            'Time': {
+                                'model_object': 'Time',
+                                'role': 'time'
+                            },
+                            'A': {
+                                'model_object': 'A',
+                                'role': 'dependent',
+                            },
+                        }
+                    },
+                    'report2': {
+                        'filename': self.TC2.report_name,
+                        'separator': '\t'
+                    }
+                },
+            },
+            'items': {
+                'fit_items': {
+
+                    'A': {
+                        'lower_bound': 15,
+                        'upper_bound': 35,
+                        'affected_experiments': 'report1',
+                        'affected_validation_experiments': 'report3',
+                        'affected_models': 'all',
+                        'start_value': 17.5
+                    },
+                    'B': {},
+                    'C': {}
+                },
+                'constraint_items': {
+                    'C': {
+                        'upper_bound': 26,
+                        'lower_bound': 16
+                    }
+                },
+            },
+            'settings': {
+                'method': 'genetic_algorithm_sr',
+                'population_size': 38,
+                'number_of_generations': 100,
+                'copy_number': 1,
+                'pe_number': 1,
+                'weight_method': 'value_scaling',
+                'validation_weight': 4,
+                'validation_threshold': 8.5,
+                'working_directory': os.path.dirname(__file__),
+                'run_mode': False
+
+            },
+        }
+        with ParameterEstimation.Context(context='s', parameters='a') as context:
+            context.add_models([self.model.copasi_file])
+            context.add_experiments(
+                [self.TC1.report_name, self.TC2.report_name,
+                 self.report3, self.report4])
+            config = context.create_config()
+            # context.fit_items = 'all'
 
 
 if __name__ == '__main__':
