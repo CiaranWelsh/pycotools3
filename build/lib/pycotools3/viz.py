@@ -746,7 +746,7 @@ class Parse(object):
                                     ' not given the copasi file that was used to generate this'
                                     ' parameter estimation data. This is a common error when '
                                     'shifting data to and from a cluster. In this case, set '
-                                    '"run_mode" to False and use the setup method of '
+                                    '"run_mode" to False and use the _setup method of '
                                     'ParameterEstimation, MultiParameterEstimation or '
                                     'MultiModelFit classes. ')
 
@@ -950,7 +950,7 @@ class Parse(object):
                                         'fresh copy of the model. Try redefining the '
                                         'same parameter estimation problem that you '
                                         'used in the profile likelihood, using the '
-                                        'setup method but not running the '
+                                        '_setup method but not running the '
                                         'parameter estimation before trying again.')
             return s
 
