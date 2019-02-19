@@ -177,6 +177,11 @@ class ModelComponentAttributeTests(_test_base._BaseTest):
         actual = self.model.get_variable_names('mg', include_assignments=False)
         self.assertListEqual(expected, actual)
 
+    def test_get_variable_names_Use_of_prefix(self):
+        expected = [ 'B', 'B2C', 'B2C_0_k2']
+        ##get all model vairables begining with 'B'
+        actual = self.model.get_variable_names('a', prefix='B')
+        self.assertListEqual(expected, actual)
 
     def test_contains_protocol(self):
         self.assertTrue('A' in self.model)

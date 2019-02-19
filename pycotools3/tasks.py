@@ -53,10 +53,10 @@ from functools import reduce
 import yaml, json
 import sys
 import munch
+
 COPASISE, COPASIUI = load_copasi()
 
 LOG = logging.getLogger(__name__)
-
 
 sns.set_context(context='poster',
                 font_scale=3)
@@ -2237,7 +2237,6 @@ class ParameterEstimation(_Task):
 
             return json.dumps(kwargs, indent=4)
 
-
         def from_json(self, string):
             raise NotImplementedError('Do this when needed')
 
@@ -2248,13 +2247,12 @@ class ParameterEstimation(_Task):
                     if k2 == 'model':
                         kwargs.models[k][k2] = str(kwargs.models[k][k2])
 
-            yml =  munch.toYAML(kwargs)
+            yml = munch.toYAML(kwargs)
 
             if filename is not None:
                 with open(filename, 'w') as f:
                     f.write(yml)
             return yml
-
 
         def from_yaml(self, yml):
             if os.path.isfile(yml):
@@ -2263,7 +2261,6 @@ class ParameterEstimation(_Task):
             else:
                 yml_string = yml
             raise NotImplementedError('Do this when needed')
-
 
         @staticmethod
         def _add_defaults_to_dict(dct, defaults):
@@ -2341,7 +2338,6 @@ class ParameterEstimation(_Task):
             self.set_default_fit_items()
 
             self.set_default_constraint_items()
-
 
         def set_default_experiments(self):
             experiments = self.datasets.experiments
@@ -2658,7 +2654,7 @@ class ParameterEstimation(_Task):
                 'copy_number': 1,
                 'pe_number': 1,
                 'results_directory': 'ParameterEstimationData',
-            # os.path.join(self.model.root, 'ParameterEstimationResults'),
+                # os.path.join(self.model.root, 'ParameterEstimationResults'),
                 'config_filename': 'config.yml',  # os.path.join(self.model.root, 'config_file.yaml'),
                 'overwrite_config_file': False,
                 'update_model': False,
@@ -3532,7 +3528,6 @@ class ParameterEstimation(_Task):
                 dct[model_name][validation_name] = key
         return dct
 
-
     def _add_fit_items(self, constraint=False):
         """
         Add fit item to model
@@ -3606,7 +3601,8 @@ class ParameterEstimation(_Task):
                         if affected_experiment not in self._get_experiment_keys()[model_name]:
                             raise ValueError('"{}" (type({}))is not one of your _experiments. These are '
                                              'your valid experimments: "{}"'.format(
-                                affected_experiment, type(affected_experiment), self._get_experiment_keys()[model_name].keys()
+                                affected_experiment, type(affected_experiment),
+                                self._get_experiment_keys()[model_name].keys()
                             ))
 
                         affected_experiments_attr[affected_experiment] = {}
@@ -4110,6 +4106,13 @@ class ParameterEstimation(_Task):
             self.parameters = parameters
             self.filename = filename
 
+            if self.parameters not in self.acceptable_parameters_args:
+                raise errors.InputError(
+                    f'"{self.parameters}" is an invalid argument. Please '
+                    f'choose from the following \n'
+                    f'{munch.Munch.fromDict(self.acceptable_parameters_args).toJSON()}'
+                )
+
         def __enter__(self):
             return self
 
@@ -4118,7 +4121,6 @@ class ParameterEstimation(_Task):
                 print(f'exc_type: {exc_type}')
                 print(f'exc_value: {exc_value}')
                 print(f'exc_traceback: {exc_traceback}')
-
 
         def add_models(self, models):
             ## if models passed as a string
@@ -4213,14 +4215,13 @@ class ParameterEstimation(_Task):
                 'filename': i,
             } for i in self.experiments}
 
-
             config = ParameterEstimation.Config(
                 models=models,
                 datasets=dict(
                     experiments=experiments
                 ),
                 items=dict(
-                    fit_items='a'
+                    fit_items=self.parameters
                 ),
                 settings=self.settings
 
@@ -4229,7 +4230,7 @@ class ParameterEstimation(_Task):
             if self.filename is not None:
                 if os.path.isfile(self.filename) and not config.settings.overwrite_config_file:
                     LOG.critical(f'"{self.filename}" already exists. To force an overwrite, '
-                                f'set `settings.overwrite_config_file` to True')
+                                 f'set `settings.overwrite_config_file` to True')
                 elif os.path.isfile(self.filename) and config.settings.overwrite_config_file:
                     config.to_yaml(self.filename)
 
@@ -4241,8 +4242,8 @@ class ParameterEstimation(_Task):
                         'Something weird happened.'
                     )
 
-
             return config
+
 
 class ChaserParameterEstimations(_Task):
     """

@@ -1282,7 +1282,17 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
 
         self.assertTrue(os.path.isfile(fname))
 
+    def test_create_config_file_with_parameter_underscore(self):
+        fname = os.path.join(os.path.dirname(__file__), 'config_file.yaml')
+        with ParameterEstimation.Context(context='s', parameters='_', filename=fname) as context:
+            context.add_models([self.model.copasi_file])
+            context.add_experiments(
+                [self.TC1.report_name, self.TC2.report_name,
+                 self.report3, self.report4])
+            context.add_setting('working_directory', os.path.dirname(__file__))
+            config = context.create_config()
 
+        self.assertTrue(os.path.isfile(fname))
 
 if __name__ == '__main__':
     unittest.main()

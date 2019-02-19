@@ -890,15 +890,20 @@ class Model(_base._Base):
         c = [i.name for i in self.compartments]
         return m + g + l + c
 
-    def get_variable_names(self, which='a', include_assignments=True):
+    def get_variable_names(self, which='a', include_assignments=True, prefix=None):
         """
-        The names of all compartments, metabolites, global quantities,
-        reactions and local parameters in the model.
+        Get the names of variables in the model. If include_assignments is off
+        these are ommited from the results (this is useful for ParameterEstimation) as
+        they are not generally estimated. Prefix provides a way of filtering the
+        returned list
+        :param which: string. Default='a'. A string containing any or all of characters 'a', 'm', 'g', 'l', 'c'
+        for all, metabolites, global_quantities, local_parameters and compartments respectively
 
+        :param include_assignments: Boolean. Default=True. If True, return global variables with assignments
+        :param prefix: str. Default=None. If given, returned parameter names are filtered to only include parameter
+        with `prerfix` at the begining.
         :return:
-            `list`. Each element is `str`
         """
-
         if not isinstance(include_assignments, bool):
             raise errors.InputError(
                 f"include_assignment arg should be of type bool. Got {type(include_assignments)}"
@@ -930,7 +935,9 @@ class Model(_base._Base):
                     f'"{i} is not a valid input to get_variable_names. '
                     f'These are valid inputs: "{d.keys()}"'
                 )
-
+        names = sorted(names)
+        if prefix is not None:
+            names = [name for name in names if name.startswith(prefix)]
         return sorted(names)
 
 
