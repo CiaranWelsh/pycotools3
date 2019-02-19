@@ -17,14 +17,17 @@
 
 
  $Author: Ciaran Welsh
- $Date: 12-09-2016 
+ $Date: 12-09-2016
  Time:  13:33
 
 
 
 
 '''
-# from pycotools3 import COPASI_DIR
+from . import viz
+from . import errors
+from . import misc
+from . import model
 import time
 import threading
 import queue as queue
@@ -38,10 +41,6 @@ import logging
 import os
 import subprocess
 import re
-from . import viz
-from . import errors
-from . import misc
-from . import model
 from .utils import DotDict, load_copasi
 from multiprocessing import Process, cpu_count
 import glob
@@ -56,10 +55,9 @@ import sys
 import munch
 COPASISE, COPASIUI = load_copasi()
 
-## TODO use generators when iterating over a function with another function. i.e. plotting
-## TODO: create a base class called Task instead of all of these mixin functions.
-
 LOG = logging.getLogger(__name__)
+
+
 sns.set_context(context='poster',
                 font_scale=3)
 
@@ -4085,7 +4083,6 @@ class ParameterEstimation(_Task):
         else:
             raise ValueError('"{}" is not a valid argument'.format(self.config.settings.run_mode))
 
-
     class Context:
 
         acceptable_context_args = {
@@ -4108,49 +4105,15 @@ class ParameterEstimation(_Task):
 
         experiment_filetypes = ['.txt', '.csv']
 
-        def __init__(self, context='custom', parameters=None):
+        def __init__(self, context='custom', parameters=None, filename=None):
             self.context = context
             self.parameters = parameters
-
-            required_attributes = []
-            ## should I have a required attributes list to check
-            ## the shape of the parameter estimation problem
-            if context == 's':
-                required_attributes = []
-
-            # if not hasattr(self, 'models'):
-            #     raise ValueError('An argument to the "models" '
-            #                      'attribute is required.')
-            #
-            #
-            # models = {os.path.split(i)[1][:-4]: {
-            #     'model': model.Model(i),
-            #     'copasi_file': i} for i in self.models}
-            #
-            #
-            # print(self.models)
-            #
-            # print(self.experiments)
-
+            self.filename = filename
 
         def __enter__(self):
-            print('entering the context manager')
-
-            # if self.context == 's':
-
-
-            ## use the context keyword to build a stensil that
-            ## can be filled out later
-
             return self
 
         def __exit__(self, exc_type, exc_value, exc_traceback):
-            print('__exit__ called')
-
-            # print(self.models)
-            # print(self.experiments)
-
-
             if exc_type:
                 print(f'exc_type: {exc_type}')
                 print(f'exc_value: {exc_value}')
@@ -4226,7 +4189,19 @@ class ParameterEstimation(_Task):
                         raise errors.InputError(
                             f'File with "{os.path.splitext(i)[1]}" is not supported'
                         )
-            setattr(self, 'add_validation_experiments', experiments)
+            setattr(self, 'validation_experiments', experiments)
+
+        def add_setting(self, setting, value):
+            if not hasattr(self, 'settings'):
+                setattr(self, 'settings', {})
+            self.settings[setting] = value
+
+        def add_settings(self, settings):
+            if not hasattr(self, 'settings'):
+                setattr(self, 'settings', {})
+            if not isinstance(settings, dict):
+                raise TypeError(f'add_settings expects a dict as argument. Got "{type(settings)}"')
+            self.settings.update(settings)
 
         def create_config(self):
 
@@ -4238,8 +4213,6 @@ class ParameterEstimation(_Task):
                 'filename': i,
             } for i in self.experiments}
 
-            if self.parameters == 'a':
-                fit_items = []
 
             config = ParameterEstimation.Config(
                 models=models,
@@ -4248,8 +4221,27 @@ class ParameterEstimation(_Task):
                 ),
                 items=dict(
                     fit_items='a'
-                )
+                ),
+                settings=self.settings
+
             )
+
+            if self.filename is not None:
+                if os.path.isfile(self.filename) and not config.settings.overwrite_config_file:
+                    LOG.critical(f'"{self.filename}" already exists. To force an overwrite, '
+                                f'set `settings.overwrite_config_file` to True')
+                elif os.path.isfile(self.filename) and config.settings.overwrite_config_file:
+                    config.to_yaml(self.filename)
+
+                elif not os.path.isfile(self.filename):
+                    config.to_yaml(self.filename)
+
+                else:
+                    raise errors.SomethingWentHorriblyWrongError(
+                        'Something weird happened.'
+                    )
+
+
             return config
 
 class ChaserParameterEstimations(_Task):
