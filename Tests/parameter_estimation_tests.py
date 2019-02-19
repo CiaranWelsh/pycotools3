@@ -1239,10 +1239,6 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
 
         ss_df.to_csv(self.report4, sep='\t', index=False)
 
-        # self.conf = ParameterEstimation.Config(**self.conf_dct)
-        # self.PE = pycotools3.tasks.ParameterEstimation(self.conf)
-
-        # print(self.TC1.report_name)
 
     def test_create_config(self):
 
