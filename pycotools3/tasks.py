@@ -2427,7 +2427,7 @@ class ParameterEstimation(_Task):
             for model_name in self.models:
                 mod = self.models[model_name].model
                 estimated_variables[model_name] = mod.get_variable_names(
-                    self.items.fit_items, include_assignments=False
+                    self.items.fit_items, include_assignments=False, prefix=self.settings.prefix
                 )
             dct = {}
             for model_name in estimated_variables:
@@ -2691,6 +2691,7 @@ class ParameterEstimation(_Task):
                 'validation_weight': 1,
                 'validation_threshold': 5,
                 'max_active': 3,
+                'prefix': None
             }
 
         @settings_defaults.setter
