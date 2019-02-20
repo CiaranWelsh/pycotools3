@@ -34,11 +34,16 @@ LOG = logging.getLogger(__name__)
 
 
 def format_timecourse_data(report_name):
-    """
-    read time course data into pandas dataframe. Remove
+    """read time course data into pandas dataframe. Remove
     copasi generated square brackets around the variables
     and write to file again.
     :return: pandas.DataFrame
+
+    Args:
+      report_name: 
+
+    Returns:
+
     """
 
     df = pandas.read_csv(report_name, sep='\t')
@@ -54,6 +59,7 @@ def format_timecourse_data(report_name):
 
 
 def load_copasi():
+    """ """
     COPASI_DIR = os.path.join(os.path.dirname(__file__), 'COPASI')
     assert os.path.isdir(COPASI_DIR)
 
@@ -89,10 +95,7 @@ def load_copasi():
 
 
 class ParameterEstimationConfiguration:
-    """
-
-
-    """
+    """ """
 
     def __init__(self,
                  experiment_files=[],
@@ -152,10 +155,20 @@ class ParameterEstimationConfiguration:
         self.report = self._ReportKW(**self.report_kw)
 
     class _KW:
+        """ """
         def __init__(self, **kwargs):
             self.kwargs = kwargs
 
         def update_recursive(self, orig_dict, new_dict):
+            """
+
+            Args:
+              orig_dict: 
+              new_dict: 
+
+            Returns:
+
+            """
             for key, val in new_dict.items():
                 if isinstance(val, Mapping):
                     tmp = self.update(orig_dict.get(key, {}), val)
@@ -167,9 +180,26 @@ class ParameterEstimationConfiguration:
             return orig_dict
 
         def pretty_print(self, sort_keys=False):
+            """
+
+            Args:
+              sort_keys:  (Default value = False)
+
+            Returns:
+
+            """
             return json.dumps(self.kwargs, indent=4, sort_keys=sort_keys)
 
         def validate_kwargs(self, dct, valid_kwargs):
+            """
+
+            Args:
+              dct: 
+              valid_kwargs: 
+
+            Returns:
+
+            """
             for k in dct:
                 if k not in self.valid_kwargs:
                     raise ValueError(
@@ -181,6 +211,7 @@ class ParameterEstimationConfiguration:
             return self.pretty_print()
 
     class _ExperimentsKW(_KW):
+        """ """
         valid_kwargs = ['filename', 'normalize_weights_per_experiment',
                         'weight_method', 'separator']
 
@@ -212,6 +243,7 @@ class ParameterEstimationConfiguration:
         #     return self.pretty_print()
 
     class _ValidationKW(_KW):
+        """ """
         valid_kwargs = [
             'filename',
             'normalize_weights_per_experiment',
@@ -249,6 +281,7 @@ class ParameterEstimationConfiguration:
             return len(self.kwargs)
 
     class _FitItemKW(_KW):
+        """ """
         valid_kwargs = [
             'lower_bound',
             'upper_bound',
@@ -283,6 +316,7 @@ class ParameterEstimationConfiguration:
             setattr(self, 'fit_items', list(self.kwargs.keys()))
 
     class _ConstraintItemKW(_KW):
+        """ """
         valid_kwargs = [
             'lower_bound',
             'upper_bound',
@@ -318,6 +352,7 @@ class ParameterEstimationConfiguration:
             setattr(self, 'constraint_items', list(self.kwargs.keys()))
 
     class _ReportKW(_KW):
+        """ """
         valid_kwargs = [
             'report_name',
             'append',
@@ -368,20 +403,27 @@ class DotDict(dict):
 
     @staticmethod
     def pretty_print(dct, sort_keys=False):
-        """
-        Use json to pretty print a nested dictionary
-        :param sort_keys:
-        :return:
+        """Use json to pretty print a nested dictionary
+
+        Args:
+          sort_keys: return: (Default value = False)
+          dct: 
+
+        Returns:
+
         """
         if dct is None:
             raise ValueError('Cannot pretty print Null')
 
         def stringify(dct):
-            """
-            recursively convert all objects of nested dct
+            """recursively convert all objects of nested dct
             to strings before printing
-            :param dct:
-            :return:
+
+            Args:
+              dct: return:
+
+            Returns:
+
             """
             for k, v in dct.items():
                 if isinstance(v, dict):

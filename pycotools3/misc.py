@@ -40,6 +40,14 @@ import logging
 LOG=logging.getLogger(__name__)
 
 def run_parallel(commands):
+    """
+
+    Args:
+      commands: 
+
+    Returns:
+
+    """
     length = len(commands)
     x = 0
     while x < length:
@@ -49,12 +57,14 @@ def run_parallel(commands):
 
     
 class RemoveNonAscii():
+    """ """
     def __init__(self,non_ascii_str):
         self.non_ascii_str=non_ascii_str
         self.filter=self.remove_non_ascii()
         
         
     def remove_non_ascii(self):
+        """ """
         for i in self.non_ascii_str:
             if i not in string.ascii_letters+string.digits+r'[]-_().\:/ ':
                 self.non_ascii_str=self.non_ascii_str.replace(i,'_')
@@ -62,20 +72,25 @@ class RemoveNonAscii():
 
 
 def add_noise(f, noise_factor=0.05):
-    '''
-    Add noise to time course data
+    """Add noise to time course data
     
     f:
         Single experiment file to add noise too
     
     noise_factor:
         limits the amount of noise to add. Must be float between 0 and 1
-        . default is 0.05 for 5% 
-        
-    ==========
-    Returns: pandas.DataFrame containing noisy data 
+        . default is 0.05 for 5%
     
-    '''
+    ==========
+    Returns: pandas.DataFrame containing noisy data
+
+    Args:
+      f: 
+      noise_factor:  (Default value = 0.05)
+
+    Returns:
+
+    """
     ## check file is real file
     assert os.path.isfile(f),'{} is not a file'.format(f)
     ## read into pandas
@@ -107,13 +122,16 @@ def add_noise(f, noise_factor=0.05):
 
 
 def download_models(directory,percent=100,SKIP_ALREADY_DOWNLOADED=True):
-    """
-    download curated models from biomodels curated section
+    """download curated models from biomodels curated section
 
-    :param directory: Name of directory to download models too
-    :param percent:
-    :param SKIP_ALREADY_DOWNLOADED:
-    :return: df and pickle
+    Args:
+      directory: Name of directory to download models too
+      percent: param SKIP_ALREADY_DOWNLOADED: (Default value = 100)
+      SKIP_ALREADY_DOWNLOADED:  (Default value = True)
+
+    Returns:
+      df and pickle
+
     """
 
     if percent>100 or percent < 0:
@@ -189,14 +207,27 @@ def download_models(directory,percent=100,SKIP_ALREADY_DOWNLOADED=True):
     return df
 
 def xml2cps(paths):
-    '''
-    use CopasiSE to convert the xml into copasi files
+    """use CopasiSE to convert the xml into copasi files
     
     paths:
         dictionary dict[sbml filename]=copasi filename
-    '''
+
+    Args:
+      paths: 
+
+    Returns:
+
+    """
     
     def worker(path):
+        """
+
+        Args:
+          path: 
+
+        Returns:
+
+        """
         return subprocess.check_call('CopasiSE -i "{}"'.format(path),shell=True)
         
     start=time.time()
@@ -212,11 +243,16 @@ def xml2cps(paths):
 
 
 def correct_copasi_timecourse_headers(report_name):
-    """
-    read time course data into pandas dataframe. Remove
+    """read time course data into pandas dataframe. Remove
     copasi generated square brackets around the variables
     and write to file again.
     :return: pandas.DataFrame
+
+    Args:
+      report_name: 
+
+    Returns:
+
     """
 
     df = pandas.read_csv(report_name, sep='\t')
@@ -230,11 +266,16 @@ def correct_copasi_timecourse_headers(report_name):
     return df
 
 def format_timecourse_data(report_name):
-    """
-    read time course data into pandas dataframe. Remove
+    """read time course data into pandas dataframe. Remove
     copasi generated square brackets around the variables
     and write to file again.
     :return: pandas.DataFrame
+
+    Args:
+      report_name: 
+
+    Returns:
+
     """
 
     df = pandas.read_csv(report_name, sep='\t')
@@ -251,23 +292,23 @@ def format_timecourse_data(report_name):
 
 def new_model(path):
     new_model_str = """<?xml version="1.0" encoding="UTF-8"?>
-<!-- generated with COPASI 4.24 (Build 197) (http://www.copasi.org) at 2019-01-12 11:06:38 UTC -->
-<?oxygen RNGSchema="http://www.copasi.org/static/schema/CopasiML.rng" type="xml"?>
-<COPASI xmlns="http://www.copasi.org/static/schema" versionMajor="4" versionMinor="24" versionDevel="197" copasiSourcesModified="0">
-  <Model key="Model_1" name="New Model" simulationType="time" timeUnit="s" volumeUnit="ml" areaUnit="m²" lengthUnit="m" quantityUnit="mmol" type="deterministic" avogadroConstant="6.0221408570000002e+23">
+    <!-- generated with COPASI 4.24 (Build 197) (http://www.copasi.org) at 2019-01-12 11:06:38 UTC -->
+    <?oxygen RNGSchema="http://www.copasi.org/static/schema/CopasiML.rng" type="xml"?>
+    <COPASI xmlns="http://www.copasi.org/static/schema" versionMajor="4" versionMinor="24" versionDevel="197" copasiSourcesModified="0">
+      <Model key="Model_1" name="New Model" simulationType="time" timeUnit="s" volumeUnit="ml" areaUnit="m²" lengthUnit="m" quantityUnit="mmol" type="deterministic" avogadroConstant="6.0221408570000002e+23">
     <MiriamAnnotation>
-<rdf:RDF
-   xmlns:dcterms="http://purl.org/dc/terms/"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-  <rdf:Description rdf:about="#Model_1">
+    <rdf:RDF
+       xmlns:dcterms="http://purl.org/dc/terms/"
+       xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#Model_1">
     <dcterms:created>
       <rdf:Description>
         <dcterms:W3CDTF>2019-01-12T11:06:16Z</dcterms:W3CDTF>
       </rdf:Description>
     </dcterms:created>
-  </rdf:Description>
-</rdf:RDF>
-
+      </rdf:Description>
+    </rdf:RDF>
+    
     </MiriamAnnotation>
     <ListOfModelParameterSets activeSet="ModelParameterSet_1">
       <ModelParameterSet key="ModelParameterSet_1" name="Initial State">
@@ -288,10 +329,10 @@ def new_model(path):
       <StateTemplateVariable objectReference="Model_1"/>
     </StateTemplate>
     <InitialState type="initialState">
-      0 
+      0
     </InitialState>
-  </Model>
-  <ListOfTasks>
+      </Model>
+      <ListOfTasks>
     <Task key="Task_14" name="Steady-State" type="steadyState" scheduled="false" updateModel="false">
       <Report reference="Report_9" target="" append="1" confirmOverwrite="1"/>
       <Problem>
@@ -352,7 +393,7 @@ def new_model(path):
       <Problem>
         <Parameter name="Subtask" type="cn" value="CN=Root,Vector=TaskList[Steady-State]"/>
         <ParameterText name="ObjectiveExpression" type="expression">
-          
+    
         </ParameterText>
         <Parameter name="Maximize" type="bool" value="0"/>
         <Parameter name="Randomize Start Values" type="bool" value="0"/>
@@ -489,7 +530,7 @@ def new_model(path):
         <Parameter name="DelayOutputUntilConvergence" type="bool" value="0"/>
         <Parameter name="OutputConvergenceTolerance" type="float" value="9.9999999999999995e-07"/>
         <ParameterText name="TriggerExpression" type="expression">
-          
+    
         </ParameterText>
         <Parameter name="SingleVariable" type="cn" value=""/>
       </Problem>
@@ -509,8 +550,8 @@ def new_model(path):
       <Method name="Linear Noise Approximation" type="LinearNoiseApproximation">
       </Method>
     </Task>
-  </ListOfTasks>
-  <ListOfReports>
+      </ListOfTasks>
+      <ListOfReports>
     <Report key="Report_9" name="Steady-State" taskType="steadyState" separator="&#x09;" precision="6">
       <Comment>
         Automatically generated report.
@@ -635,10 +676,10 @@ def new_model(path):
         <Object cn="CN=Root,Vector=TaskList[Linear Noise Approximation],Object=Result"/>
       </Footer>
     </Report>
-  </ListOfReports>
-  <GUI>
-  </GUI>
-  <ListOfUnitDefinitions>
+      </ListOfReports>
+      <GUI>
+      </GUI>
+      <ListOfUnitDefinitions>
     <UnitDefinition key="Unit_0" name="meter" symbol="m">
       <Expression>
         m
@@ -669,9 +710,9 @@ def new_model(path):
         Avogadro*#
       </Expression>
     </UnitDefinition>
-  </ListOfUnitDefinitions>
-</COPASI>
-""".encode('utf-8')
+      </ListOfUnitDefinitions>
+    </COPASI>
+    """.encode('utf-8')
 
     if os.path.splitext(path)[1] != '.cps':
         raise Exception

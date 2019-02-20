@@ -63,24 +63,22 @@ sns.set_context(context='poster',
 
 
 class _Task(object):
-    """
-    base class for tasks
-    """
+    """base class for tasks"""
     schema = '{http://www.copasi.org/static/schema}'
 
     @staticmethod
     def get_variable_from_string(m, v, glob=False):
-        """
-        Use model entity name to get the
+        """Use model entity name to get the
         pycotools3 variable
-        :param m:
-            :py:class:`model`
 
-        :param v:
-            `str` variable in model
+        Args:
+          m: py:class:`model`
+          v: str` variable in model
+          glob:  (Default value = False)
 
-        :return:
-            variable as a model component
+        Returns:
+          variable as a model component
+
         """
         if not isinstance(m, model.Model):
             raise errors.InputError('expected model.Model but got "{}" instance'.format(
@@ -116,11 +114,14 @@ class _Task(object):
         return v
 
     def update_properties(self, kwargs):
-        """
-        method for updating properties from kwargs
+        """method for updating properties from kwargs
 
-        :param kwargs: dict of options for subclass
-        :return: void
+        Args:
+          kwargs: dict of options for subclass
+
+        Returns:
+          void
+
         """
         for k in kwargs:
             try:
@@ -131,19 +132,20 @@ class _Task(object):
 
     @staticmethod
     def convert_bool_to_numeric(dct):
-        """
-        CopasiML uses 1's and 0's for True or False in some
+        """CopasiML uses 1's and 0's for True or False in some
         but not all places. When one of these options
         is required by the user and is specified as bool,
         this class converts them into 1's or 0's.
-
+        
         Use this method in early on in constructor for
         all subclasses where this applies.
-        :param:
-            `dict`.  __dict__ or kwargs or options
 
-        :return:
-            `dict` with certain boolean args as 1's and 0's
+        Args:
+          dct: 
+
+        Returns:
+          dict` with certain boolean args as 1's and 0's
+
         """
         lst = ['append',
                'confirm_overwrite',
@@ -179,14 +181,17 @@ class _Task(object):
         return dct
 
     def convert_bool_to_numeric2(self):
-        """
-        CopasiML uses 1's and 0's for True or False in some
+        """CopasiML uses 1's and 0's for True or False in some
         but not all places. When one of these options
         is required by the user and is specified as bool,
         this class converts them into 1's or 0's.
-
+        
         This is like convert_bool_to_numeric but
         uses setattr
+
+        Args:
+
+        Returns:
 
         """
         lst = ['append',
@@ -239,16 +244,16 @@ class _Task(object):
 
     @staticmethod
     def check_integrity(allowed, given):
-        """
-        Method to raise an error when a wrong
+        """Method to raise an error when a wrong
         kwarg is passed to a subclass
-        :param allowed:
-            `list`. List of allowed kwargs
 
-        :param given: List of kwargs given by user or default
+        Args:
+          allowed: list`. List of allowed kwargs
+          given: List of kwargs given by user or default
 
-        :return:
-            None
+        Returns:
+          None
+
         """
         for key in given:
             if key not in allowed:
@@ -256,10 +261,14 @@ class _Task(object):
 
 
 class Bool2Str(object):
-    """
-    copasiML expects strings and we pythoners
+    """copasiML expects strings and we pythoners
     want to use python booleans not strings
     This class quickly converts between them
+
+    Args:
+
+    Returns:
+
     """
 
     def __init__(self, dct):
@@ -279,6 +288,14 @@ class Bool2Str(object):
         ]
 
     def convert(self, boolean):
+        """
+
+        Args:
+          boolean: 
+
+        Returns:
+
+        """
         if boolean == True:
             return "true"
         elif boolean == False:
@@ -287,11 +304,7 @@ class Bool2Str(object):
             raise errors.InputError('Input should be boolean not {}'.format(isinstance(boolean)))
 
     def convert_dct(self):
-        """
-
-        ----
-        return
-        """
+        """----"""
         for kwarg in list(self.dct.keys()):
             if kwarg in self.acceptable_kwargs:
                 if self.dct[kwarg] == True:
@@ -303,12 +316,15 @@ class Bool2Str(object):
 
 
 class CopasiMLParser(_Task):
-    """
-    Parse a copasi file into xml.etree.
-
+    """Parse a copasi file into xml.etree.
+    
     .. highlight::
 
-        >>> model_path = r'/full/path/to/model.cps'
+    Args:
+
+    Returns:
+
+    >>> model_path = r'/full/path/to/model.cps'
         >>> xml = CopasiMLParser(model_path).xml
     """
 
@@ -328,9 +344,13 @@ class CopasiMLParser(_Task):
         os.chdir(os.path.dirname(self.copasi_file))
 
     def _parse_copasiML(self):
-        """
-        Parse xml doc with lxml
+        """Parse xml doc with lxml
         :return:
+
+        Args:
+
+        Returns:
+
         """
         parser = etree.XMLParser(remove_blank_text=True)
         tree = etree.parse(self.copasi_file, parser)
@@ -338,8 +358,14 @@ class CopasiMLParser(_Task):
 
     @staticmethod
     def write_copasi_file(copasi_filename, xml):
-        """
-        write to file with lxml write function
+        """write to file with lxml write function
+
+        Args:
+          copasi_filename: 
+          xml: 
+
+        Returns:
+
         """
         # first convert the copasiML to a root element tree
         root = etree.ElementTree(xml)
@@ -348,33 +374,26 @@ class CopasiMLParser(_Task):
 
 @mixin(model.ReadModelMixin)
 class Run(_Task):
-    """
-    Execute a copasi model using CopasiSE. To
+    """Execute a copasi model using CopasiSE. To
     be operational the environment variable CopasiSE
     must be set to point towards the location of
     your CopasiSE executable. This is usually
     done automatically.
-
+    
     .. highlight::
-
+    
         ## First get a model object
-        >>> model_path = r'/full/path/to/model.cps'
-        >>> model = model.Model(model_path)
-
+    
     To run a time_course task
-        >>> Run(model, task='time_course', mode=True)
-
+    
     To run the parameter estimation task:
-        >>> Run(model, task='parameter_estimation', mode=True)
-
+    
     To run the parameter estimation task with :py:mod:`multiprocessing`
-        >>> Run(model, task='parameter_estimation', mode='multiprocess')
-
+    
     To run the scan task but have python write a .sh script for submission to sun grid engine:
-        >>> Run(model, task='scan', mode='sge')
-
+    
     Properties
-
+    
     ==========          ===================
     Property            Description
     ==========          ===================
@@ -383,7 +402,7 @@ class Run(_Task):
     sge_job_filename    Optional name of sh file
                         generated for running sge
     ==========          ===================
-
+    
     =============
     task options
     =============
@@ -401,7 +420,7 @@ class Run(_Task):
     cross_section
     linear_noise_approximation
     =============
-
+    
     ==============          ==============
     Modes                   Description
     =============           ==============
@@ -411,6 +430,21 @@ class Run(_Task):
     sge                     Run on sun grid engine
     slurm                   Run on Slurm
     =============           ==============
+
+    Args:
+
+    Returns:
+
+    >>> model_path = r'/full/path/to/model.cps'
+        >>> model = model.Model(model_path)
+    
+        >>> Run(model, task='time_course', mode=True)
+    
+        >>> Run(model, task='parameter_estimation', mode=True)
+    
+        >>> Run(model, task='parameter_estimation', mode='multiprocess')
+    
+        >>> Run(model, task='scan', mode='sge')
     """
 
     def __init__(self, model, **kwargs):
@@ -458,9 +492,13 @@ class Run(_Task):
             self.submit_copasi_job_slurm()
 
     def _do_checks(self):
-        """
-        Varify integrity of user input
+        """Varify integrity of user input
         :return:
+
+        Args:
+
+        Returns:
+
         """
         tasks = ['steady_state', 'time_course',
                  'scan', 'flux_mode', 'optimization',
@@ -479,10 +517,19 @@ class Run(_Task):
         return 'Run({})'.format(self.to_string())
 
     def multi_run(self):
+        """ """
         pids = []
 
         ##TODO build Queue.Queue system for multi running.
         def run(x):
+            """
+
+            Args:
+              x: 
+
+            Returns:
+
+            """
             if os.path.isfile(x) != True:
                 raise errors.FileDoesNotExistError('{} is not a file'.format(self.copasi_file))
             p = subprocess.Popen(
@@ -495,10 +542,7 @@ class Run(_Task):
         Process(run(self.model.copasi_file))
 
     def set_task(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         task = self.task.replace(' ', '_').lower()
 
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfTasks'):
@@ -509,9 +553,13 @@ class Run(_Task):
         return self.model
 
     def run(self):
-        """
-        Run copasi model with CopasiSE distributed with pycotools
+        """Run copasi model with CopasiSE distributed with pycotools
         :return:
+
+        Args:
+
+        Returns:
+
         """
         p = subprocess.Popen(f'{COPASISE} "{self.model.copasi_file}"', stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         output, err = p.communicate()
@@ -526,25 +574,30 @@ class Run(_Task):
         return d['output']
 
     def run_linux(self):
-        """
-        Linux systems do not respond to the run function
+        """Linux systems do not respond to the run function
         in the same way as windows. This ffunction
         uses basic os.system instead, which linux systems
         do respond to. This solution is less than elegant.
         Look into it further.
         :return:
+
+        Args:
+
+        Returns:
+
         """
         ##TODO find better solution for running copasi files on linux
         os.system(f'{COPASISE} {self.model.copasi_file}')
 
     def submit_copasi_job_SGE(self):
-        """
-        Submit copasi file as job to SGE based job scheduler.
-        :param copasi_location:
-            Location to copasi on the sge cluster. Gets passed to `module add` to load copasi
+        """Submit copasi file as job to SGE based job scheduler.
 
-        :return:
-            None
+        Args:
+          copasi_location: Location to copasi on the sge cluster. Gets passed to `module add` to load copasi
+
+        Returns:
+          None
+
         """
         self.sge_job_filename = self.sge_job_filename.replace('/', '_')
         with open(self.sge_job_filename, 'w') as f:
@@ -558,13 +611,14 @@ class Run(_Task):
         os.remove(self.sge_job_filename)
 
     def submit_copasi_job_slurm(self):
-        """
-        Submit copasi file as job to SGE based job scheduler.
-        :param copasi_location:
-            Location to copasi on the sge cluster. Gets passed to `module add` to load copasi
+        """Submit copasi file as job to SGE based job scheduler.
 
-        :return:
-            None
+        Args:
+          copasi_location: Location to copasi on the sge cluster. Gets passed to `module add` to load copasi
+
+        Returns:
+          None
+
         """
         self.sge_job_filename = self.sge_job_filename.replace('/', '_')
         with open(self.sge_job_filename, 'w') as f:
@@ -582,10 +636,7 @@ class Run(_Task):
 @mixin(model.GetModelComponentFromStringMixin)
 @mixin(model.ReadModelMixin)
 class RunParallel(_Task):
-    """
-
-
-    """
+    """ """
 
     def __init__(self, models, **kwargs):
         self.models = models
@@ -609,9 +660,13 @@ class RunParallel(_Task):
         self.run_parallel()
 
     def _do_checks(self):
-        """
-        Varify integrity of user input
+        """Varify integrity of user input
         :return:
+
+        Args:
+
+        Returns:
+
         """
         tasks = ['steady_state', 'time_course',
                  'scan', 'flux_mode', 'optimization',
@@ -639,10 +694,7 @@ class RunParallel(_Task):
     #     return 'RunParallel({})'.format()
 
     def set_task(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         task = self.task.replace(' ', '_').lower()
         model_list = []
         for model in self.models:
@@ -656,11 +708,15 @@ class RunParallel(_Task):
         return model_list
 
     def run_parallel(self):
-        """
-        Run models in parallel. Only have self.max_active
+        """Run models in parallel. Only have self.max_active
         models running at once
         :return:
             None
+
+        Args:
+
+        Returns:
+
         """
         pids = []
         num_models_to_process = len(self.models)
@@ -697,14 +753,13 @@ class RunParallel(_Task):
 @mixin(model.GetModelComponentFromStringMixin)
 @mixin(model.ReadModelMixin)
 class Reports(_Task):
-    """
-    Creates reports in copasi output specification section. Which report is
+    """Creates reports in copasi output specification section. Which report is
     controlled by the report_type key word. The following are valid types of
     report:
-
+    
     .. _report_kwargs:
     ------------------
-
+    
     ===========================     ==============================================
     Report Types                    Description
     ===========================     ==============================================
@@ -719,9 +774,9 @@ class Reports(_Task):
     profile_likelihood              Collect both the parameter being scanned
                                     value and the parameter estimates
     ===========================     ==============================================
-
+    
     Here are the keyword arguments accepted by the Reports class.
-
+    
     ===========================     ==============================================
     Report options                  Description
     ===========================     ==============================================
@@ -736,10 +791,15 @@ class Reports(_Task):
     append                          `bool`. Passed onto to copasi report options
     confirm_overwrite               `bool`. Passed onto to copasi report options
     update_model                    `bool`. Passed onto to copasi report options
-
+    
     variable                        `str` which variable scanned in profile likelihood
     directory                       `str` directory to save report in
     ===========================     ==============================================
+
+    Args:
+
+    Returns:
+
     """
 
     def __init__(self, model, **kwargs):
@@ -829,14 +889,18 @@ class Reports(_Task):
         return 'Report({})'.format(self.to_string())
 
     def timecourse(self):
-        '''
-        creates a report to collect time course results.
-
+        """creates a report to collect time course results.
+        
         By default all species and all global quantities are used with
         Time on the left most column. This behavior can be overwritten by passing
         lists of metabolites to the metabolites keyword or global quantities to the
         global quantities keyword
-        '''
+
+        Args:
+
+        Returns:
+
+        """
         # get existing report keys
         keys = []
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
@@ -903,14 +967,18 @@ class Reports(_Task):
         return self.model
 
     def scan(self):
-        '''
-        creates a report to collect scan time course results.
-
+        """creates a report to collect scan time course results.
+        
         By default all species and all global quantities are used with
         Time on the left most column. This behavior can be overwritten by passing
         lists of metabolites to the metabolites keyword or global quantities to the
         global quantities keyword
-        '''
+
+        Args:
+
+        Returns:
+
+        """
         # get existing report keys
 
         ##TODO implement self.variable as column in scan
@@ -975,10 +1043,14 @@ class Reports(_Task):
         return self.model
 
     def profile_likelihood(self):
-        '''
-        Create report of a parameter and best value for a parameter estimation
+        """Create report of a parameter and best value for a parameter estimation
         for profile likelihoods
-        '''
+
+        Args:
+
+        Returns:
+
+        """
         # get existing report keys
         keys = []
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
@@ -1023,14 +1095,18 @@ class Reports(_Task):
         return self.model
 
     def parameter_estimation(self):
-        '''
-        Define a parameter estimation report and include the progression
+        """Define a parameter estimation report and include the progression
         of the parameter estimation (function evaluations).
         Defaults to including all
         metabolites, global variables and local variables with the RSS best value
         These can be over-ridden with the global_quantities, LocalParameters and metabolites
         keywords.
-        '''
+
+        Args:
+
+        Returns:
+
+        """
         # get existing report keys
         keys = []
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
@@ -1061,14 +1137,18 @@ class Reports(_Task):
         return self.model
 
     def multi_parameter_estimation(self):
-        '''
-        Define a parameter estimation report and include the progression
+        """Define a parameter estimation report and include the progression
         of the parameter estimation (function evaluations).
         Defaults to including all
         metabolites, global variables and local variables with the RSS best value
         These can be over-ridden with the global_quantities, LocalParameters and metabolites
         keywords.
-        '''
+
+        Args:
+
+        Returns:
+
+        """
         # get existing report keys
         keys = []
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
@@ -1098,6 +1178,7 @@ class Reports(_Task):
         return self.model
 
     def sensitivity(self):
+        """ """
         # get existing report keys
         keys = []
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
@@ -1128,9 +1209,7 @@ class Reports(_Task):
         return self.model
 
     def run(self):
-        '''
-        Execute code that builds the report defined by the kwargs
-        '''
+        """Execute code that builds the report defined by the kwargs"""
         if self.report_type == 'parameter_estimation':
             self.model = self.parameter_estimation()
 
@@ -1155,11 +1234,14 @@ class Reports(_Task):
         return self.model
 
     def remove_report(self, report_name):
-        """
+        """remove report called report_name
 
-        remove report called report_name
-        :param report_name:
-        :return: pycotools3.model.Model
+        Args:
+          report_name: return: pycotools3.model.Model
+
+        Returns:
+          pycotools3.model.Model
+
         """
         assert report_name in self.report_types, '{} not a valid report type. These are valid report types: {}'.format(
             report_name, self.report_types)
@@ -1171,11 +1253,15 @@ class Reports(_Task):
         return self.model
 
     def clear_all_reports(self):
-        """
-        Having multile reports defined at once can be really annoying
+        """Having multile reports defined at once can be really annoying
         and give you unexpected results. Use this function to remove all reports
         before defining a new one to ensure you only have one active report any once.
         :return:
+
+        Args:
+
+        Returns:
+
         """
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfTasks'):
             for j in list(i):
@@ -1186,17 +1272,16 @@ class Reports(_Task):
 
 @mixin(model.ReadModelMixin)
 class TimeCourse(_Task):
-    """
-    ##todo implement arguments that get passed on to report
+    """##todo implement arguments that get passed on to report
     as **report_kwargs
-
+    
     .. _timecourse_kwargs:
-
+    
     =================
     TimeCourse Kwargs
     =================
     
-    These kwargs are directly passed on to copasi in the right situations. 
+    These kwargs are directly passed on to copasi in the right situations.
     See copasi documentation for mode details.
     
     ===========================     ==============================================
@@ -1231,6 +1316,11 @@ class TimeCourse(_Task):
     <report_kwargs>                 Arguments for :ref:`_report_kwargs` are also
                                     accepted here
     ===========================     ==============================================
+
+    Args:
+
+    Returns:
+
     """
 
     def __init__(self, model, **kwargs):
@@ -1288,9 +1378,13 @@ class TimeCourse(_Task):
             self.model.save()
 
     def _do_checks(self):
-        """
-        method for checking user input
+        """method for checking user input
         :return: void
+
+        Args:
+
+        Returns:
+
         """
         method_list = ['deterministic',
                        'direct',
@@ -1337,16 +1431,21 @@ class TimeCourse(_Task):
         )
 
     def run_task(self):
+        """ """
         R = Run(self.model, task='time_course', mode=self.run)
         return R.model
 
     def create_task(self):
-        """
-        Begin creating the segment of xml needed
+        """Begin creating the segment of xml needed
         for a time course. Define task and problem
         definition. This section of xml is common to all
         methods
         :return: lxml.etree._Element
+
+        Args:
+
+        Returns:
+
         """
 
         task = etree.Element('Task', attrib={'key': 'Task_100',
@@ -1407,12 +1506,16 @@ class TimeCourse(_Task):
         return task
 
     def set_timecourse(self):
-        """
-        Set method specific sections of xml. This
+        """Set method specific sections of xml. This
         is a method element after the problem element
         that looks like this:
-
+        
         :return: lxml.etree._Element
+
+        Args:
+
+        Returns:
+
         """
         if self.method == 'deterministic':
             timecourse = self.deterministic()
@@ -1449,9 +1552,7 @@ class TimeCourse(_Task):
         return self.model
 
     def deterministic(self):
-        """
-        :return:lxml.etree._Element
-        """
+        """:return:lxml.etree._Element"""
         method = etree.Element('Method', attrib={'name': 'Deterministic (LSODA)',
                                                  'type': 'Deterministic(LSODA)'})
 
@@ -1485,9 +1586,7 @@ class TimeCourse(_Task):
         return task
 
     def gibson_bruck(self):
-        """
-        :return:
-        """
+        """:return:"""
         method = etree.Element('Method', attrib={'name': 'Stochastic (Gibson + Bruck)',
                                                  'type': 'DirectMethod'})
 
@@ -1516,9 +1615,7 @@ class TimeCourse(_Task):
         return task
 
     def direct(self):
-        """
-        :return:
-        """
+        """:return:"""
         method = etree.Element('Method', attrib={'name': 'Stochastic (Direct method)',
                                                  'type': 'Stochastic'})
 
@@ -1542,9 +1639,7 @@ class TimeCourse(_Task):
         return task
 
     def tau_leap(self):
-        """
-        :return:
-        """
+        """:return:"""
         method = etree.Element('Method', attrib={'name': 'Stochastic (τ-Leap)',
                                                  'type': 'TauLeap'})
 
@@ -1573,9 +1668,7 @@ class TimeCourse(_Task):
         return task
 
     def adaptive_tau_leap(self):
-        """
-        :return:
-        """
+        """:return:"""
         method = etree.Element('Method', attrib={'name': 'Stochastic (Adaptive SSA/τ-Leap)',
                                                  'type': 'AdaptiveSA'})
 
@@ -1604,9 +1697,7 @@ class TimeCourse(_Task):
         return task
 
     def hybrid_runge_kutta(self):
-        """
-        :return:
-        """
+        """:return:"""
         method = etree.Element('Method', attrib={'name': 'Hybrid (Runge-Kutta)',
                                                  'type': 'Hybrid'})
 
@@ -1649,9 +1740,7 @@ class TimeCourse(_Task):
         return task
 
     def hybrid_lsoda(self):
-        """
-        :return:
-        """
+        """:return:"""
         method = etree.Element('Method', attrib={'name': 'Hybrid (LSODA)',
                                                  'type': 'Hybrid (LSODA)'})
         dct = {'name': 'Max Internal Steps',
@@ -1709,17 +1798,19 @@ class TimeCourse(_Task):
         return task
 
     def hybrid_rk45(self):
-        """
-        :return:
-        """
+        """:return:"""
         raise errors.NotImplementedError('The hybrid-RK-45 method is not yet implemented')
 
     def set_report(self):
-        """
-        ser a time course report containing time
+        """ser a time course report containing time
         and all species or global quantities defined by the user.
-
+        
         :return: pycotools3.model.Model
+
+        Args:
+
+        Returns:
+
         """
         report_options = {'metabolites': self.metabolites,
                           'global_quantities': self.global_quantities,
@@ -1752,9 +1843,13 @@ class TimeCourse(_Task):
         return self.model
 
     def get_report_key(self):
-        """
-        cross reference the timecourse task with the newly created
+        """cross reference the timecourse task with the newly created
         time course reort to get the key
+
+        Args:
+
+        Returns:
+
         """
         all_reports = []
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
@@ -1769,14 +1864,13 @@ class TimeCourse(_Task):
 
 @mixin(model.ReadModelMixin)
 class Scan(_Task):
-    """
-    Interface to COPASI scan task
-
+    """Interface to COPASI scan task
+    
     .. _scan_kwargs:
-
+    
     Scan Kwargs
     ===========
-
+    
     ===========================     ==============================================
     Scan Kwargs               Description
     ===========================     ==============================================
@@ -1800,6 +1894,11 @@ class Scan(_Task):
     <report_kwargs>                 Arguments for :ref:`_report_kwargs` are also
                                     accepted here
     ===========================     ==============================================
+
+    Args:
+
+    Returns:
+
     """
 
     def __init__(self, model, **kwargs):
@@ -1872,9 +1971,13 @@ class Scan(_Task):
         )
 
     def _do_checks(self):
-        """
-        Varify integrity of user input
+        """Varify integrity of user input
         :return:
+
+        Args:
+
+        Returns:
+
         """
         if isinstance(self.variable, str):
             self.variable = self.get_variable_from_string(self.model, self.variable)
@@ -1965,9 +2068,13 @@ class Scan(_Task):
                 self.variable = self.model.get('local_parameter', self.variable, by='global_name')
 
     def define_report(self):
-        """
-        Use Report class to create report
+        """Use Report class to create report
         :return:
+
+        Args:
+
+        Returns:
+
         """
         self.report_dict = {}
         self.report_dict['metabolites'] = self.metabolites
@@ -1982,9 +2089,7 @@ class Scan(_Task):
         return R.model
 
     def get_report_key(self):
-        '''
-
-        '''
+        """ """
         # ammend the time course option
         if self.report_type.lower() == 'time_course':
             self.report_type = 'time-course'
@@ -1998,11 +2103,15 @@ class Scan(_Task):
         return key
 
     def create_scan(self):
-        """
-        metabolite cn:
+        """metabolite cn:
             CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=InitialConcentration"/>
-
+        
         :return:
+
+        Args:
+
+        Returns:
+
         """
         ## get model entity if variable is a string
         if isinstance(self.variable, str):
@@ -2120,6 +2229,7 @@ class Scan(_Task):
 
     #
     def set_scan_options(self):
+        """ """
         report_attrib = {'append': self.append,
                          'target': self.report_name,
                          'reference': self.get_report_key(),
@@ -2163,10 +2273,14 @@ class Scan(_Task):
         return self.model
 
     def remove_scans(self):
-        """
-        Remove all scans that have been defined.
-
+        """Remove all scans that have been defined.
+        
         :return:
+
+        Args:
+
+        Returns:
+
         """
         query = '//*[@name="ScanItems"]'
         for i in self.model.xml.xpath(query):
@@ -2176,18 +2290,18 @@ class Scan(_Task):
         return self.model
 
     def execute(self):
+        """ """
         R = Run(self.model, task='scan', mode=self.run)
 
 
 @mixin(model.GetModelComponentFromStringMixin)
 @mixin(model.ReadModelMixin)
 class ParameterEstimation(_Task):
-    """
-
-    """
+    """ """
 
     @staticmethod
     class Config(_Task, munch.Munch):
+        """ """
 
         def __init__(self, models, datasets, items, settings={}):
             self.models = models
@@ -2222,6 +2336,7 @@ class ParameterEstimation(_Task):
             return self.__str__()
 
         def to_json(self):
+            """ """
             kwargs = deepcopy(self.kwargs)
             for k, v in kwargs.models.items():
                 for k2, v2 in kwargs.models[k].items():
@@ -2231,9 +2346,25 @@ class ParameterEstimation(_Task):
             return json.dumps(kwargs, indent=4)
 
         def from_json(self, string):
+            """
+
+            Args:
+              string: 
+
+            Returns:
+
+            """
             raise NotImplementedError('Do this when needed')
 
         def to_yaml(self, filename=None):
+            """
+
+            Args:
+              filename:  (Default value = None)
+
+            Returns:
+
+            """
             kwargs = deepcopy(self.kwargs)
             for k, v in kwargs.models.items():
                 for k2, v2 in kwargs.models[k].items():
@@ -2248,6 +2379,14 @@ class ParameterEstimation(_Task):
             return yml
 
         def from_yaml(self, yml):
+            """
+
+            Args:
+              yml: 
+
+            Returns:
+
+            """
             if os.path.isfile(yml):
                 with open(yml, 'r') as f:
                     yml_string = f.read()
@@ -2257,12 +2396,22 @@ class ParameterEstimation(_Task):
 
         @staticmethod
         def _add_defaults_to_dict(dct, defaults):
+            """
+
+            Args:
+              dct: 
+              defaults: 
+
+            Returns:
+
+            """
             for k in defaults:
                 if k not in dct:
                     dct[k] = defaults[k]
             return dct
 
         def _validate_integrity_of_user_input(self):
+            """ """
             for i in self.settings:
                 if i not in self.settings_defaults.keys():
                     raise errors.InputError(
@@ -2308,6 +2457,7 @@ class ParameterEstimation(_Task):
                     ))
 
         def _load_models(self):
+            """ """
             for mod in self.models:
                 if 'model' not in self.models[mod].keys():
                     if 'copasi_file' not in self.models[mod].keys():
@@ -2318,6 +2468,7 @@ class ParameterEstimation(_Task):
                     self.models[mod]['model'] = model.Model(self.models[mod].copasi_file)
 
         def set_defaults(self):
+            """ """
             ## update datasets defaults
 
             self._add_defaults_to_dict(self.settings, self.settings_defaults)
@@ -2333,6 +2484,7 @@ class ParameterEstimation(_Task):
             self.set_default_constraint_items()
 
         def set_default_experiments(self):
+            """ """
             experiments = self.datasets.experiments
 
             for experiment in self.experiment_names:
@@ -2369,6 +2521,7 @@ class ParameterEstimation(_Task):
                     self.datasets.experiments[experiment].mappings[mapping] = mapp
 
         def set_default_validation_experiments(self):
+            """ """
 
             validations = self.datasets.validations
 
@@ -2406,12 +2559,14 @@ class ParameterEstimation(_Task):
                     self.datasets.validations[validation_experiment].mappings[mapping] = mapp
 
         def set_default_fit_items(self):
+            """ """
             if isinstance(self.items.fit_items, str):
                 self.set_default_fit_items_str()
             else:
                 self.set_default_fit_items_dct()
 
         def set_default_fit_items_str(self):
+            """ """
 
             if not isinstance(self.items.fit_items, str):
                 raise TypeError
@@ -2465,6 +2620,7 @@ class ParameterEstimation(_Task):
             self.items.fit_items = munch.Munch.fromDict(dct)
 
         def set_default_fit_items_dct(self):
+            """ """
             for fit_item in self.items.fit_items:
                 item = self.items.fit_items.get(fit_item)
 
@@ -2494,6 +2650,7 @@ class ParameterEstimation(_Task):
                 self.items.fit_items[fit_item] = munch.Munch.fromDict(item)
 
         def set_default_constraint_items(self):
+            """ """
             if 'constraint_items' in self.items:
 
                 for constraint_item in self.items.constraint_items:
@@ -2526,11 +2683,15 @@ class ParameterEstimation(_Task):
 
         @staticmethod
         def validate_kwargs(dct, valid_kwargs):
-            """
-            Ensure the dict `dct` has valid entries
-            :param dct: A `dict` to validate
-            :param valid_kwargs: list of valid kwards
-            :return: None
+            """Ensure the dict `dct` has valid entries
+
+            Args:
+              dct: A `dict` to validate
+              valid_kwargs: list of valid kwards
+
+            Returns:
+              None
+
             """
             for k in dct:
                 if k not in valid_kwargs:
@@ -2541,6 +2702,15 @@ class ParameterEstimation(_Task):
 
         @staticmethod
         def default_argument_updater(default_dict, update_dict):
+            """
+
+            Args:
+              default_dict: 
+              update_dict: 
+
+            Returns:
+
+            """
             if not isinstance(update_dict, dict):
                 raise ValueError(f'expected a dict but got a {type(update_dict)}')
 
@@ -2554,16 +2724,34 @@ class ParameterEstimation(_Task):
 
         @property
         def dataset_defaults(self):
+            """ """
             return {
                 'validations': {}
             }
 
         @dataset_defaults.setter
         def dataset_defaults(self, update_dict):
+            """
+
+            Args:
+              update_dict: 
+
+            Returns:
+
+            """
             return self.default_argument_updater(self.dataset_defaults, update_dict)
 
         @staticmethod
         def mappings_defaults(filename, sep):
+            """
+
+            Args:
+              filename: 
+              sep: 
+
+            Returns:
+
+            """
             df = pandas.read_csv(filename, sep=sep)
             roles = {}
             for i in df.columns:
@@ -2583,6 +2771,7 @@ class ParameterEstimation(_Task):
 
         @property
         def experiment_defaults(self):
+            """ """
             return {
                 'filename': '',
                 'normalize_weights_per_experiment': True,
@@ -2594,10 +2783,19 @@ class ParameterEstimation(_Task):
 
         @experiment_defaults.setter
         def experiment_defaults(self, update_dict):
+            """
+
+            Args:
+              update_dict: 
+
+            Returns:
+
+            """
             self.default_argument_updater(self.experiment_defaults, update_dict)
 
         @property
         def validation_defaults(self):
+            """ """
             return {
                 'filename': '',
                 'affected_models': 'all',
@@ -2608,10 +2806,19 @@ class ParameterEstimation(_Task):
 
         @validation_defaults.setter
         def validation_defaults(self, update_dict):
+            """
+
+            Args:
+              update_dict: 
+
+            Returns:
+
+            """
             self.default_argument_updater(self.validation_defaults, update_dict)
 
         @property
         def fit_item_defaults(self):
+            """ """
 
             return {
                 'lower_bound': 1e-6,
@@ -2624,10 +2831,19 @@ class ParameterEstimation(_Task):
 
         @fit_item_defaults.setter
         def fit_item_defaults(self, update_dict):
+            """
+
+            Args:
+              update_dict: 
+
+            Returns:
+
+            """
             self.default_argument_updater(self.fit_item_defaults, update_dict)
 
         @property
         def constraint_item_defaults(self):
+            """ """
             return {
                 'lower_bound': 1e-6,
                 'upper_bound': 1e6,
@@ -2639,10 +2855,19 @@ class ParameterEstimation(_Task):
 
         @constraint_item_defaults.setter
         def constraint_item_defaults(self, update_dict):
+            """
+
+            Args:
+              update_dict: 
+
+            Returns:
+
+            """
             self.default_argument_updater(self.fit_item_defaults, update_dict)
 
         @property
         def settings_defaults(self):
+            """ """
             return {
                 'copy_number': 1,
                 'pe_number': 1,
@@ -2689,18 +2914,29 @@ class ParameterEstimation(_Task):
 
         @settings_defaults.setter
         def settings_defaults(self, update_dict):
+            """
+
+            Args:
+              update_dict: 
+
+            Returns:
+
+            """
             self._add_defaults_to_dict(self.settings_defaults, update_dict)
 
         @property
         def experiments(self):
+            """ """
             return self.datasets.experiments
 
         @property
         def validations(self):
+            """ """
             return self.datasets.validations
 
         @property
         def experiment_filenames(self):
+            """ """
             filenames = []
             for i in self.experiments:
                 filenames.append(self.experiments[i].filename)
@@ -2708,6 +2944,7 @@ class ParameterEstimation(_Task):
 
         @property
         def validation_filenames(self):
+            """ """
             filenames = []
             for i in self.validations:
                 filenames.append(self.validations[i].filename)
@@ -2715,6 +2952,7 @@ class ParameterEstimation(_Task):
 
         @property
         def experiment_names(self):
+            """ """
             experiment_names = []
             for i in self.experiments:
                 experiment_names.append(i)
@@ -2723,6 +2961,7 @@ class ParameterEstimation(_Task):
 
         @property
         def validation_names(self):
+            """ """
             validation_names = []
             for i in self.validations:
                 validation_names.append(i)
@@ -2731,6 +2970,7 @@ class ParameterEstimation(_Task):
 
         @property
         def model_objects(self):
+            """ """
             model_obj = []
             for i in self.experiment_names:
                 for j in self.experiments[i].mappings:
@@ -2746,10 +2986,12 @@ class ParameterEstimation(_Task):
 
         @property
         def fit_items(self):
+            """ """
             return self.items.fit_items
 
         @property
         def constraint_items(self):
+            """ """
             return self.items.constraint_items
 
     def __init__(self, config):
@@ -2782,11 +3024,16 @@ class ParameterEstimation(_Task):
 
     @staticmethod
     def copy_config(config):
-        """
-        deepcopy doesn't work on Munch object. Create new version
+        """deepcopy doesn't work on Munch object. Create new version
         of config so that the original is not modified within the
         class
         :return:
+
+        Args:
+          config: 
+
+        Returns:
+
         """
         if not isinstance(config, ParameterEstimation.Config):
             raise TypeError
@@ -2800,6 +3047,7 @@ class ParameterEstimation(_Task):
         return config
 
     def do_checks(self):
+        """ """
         if not isinstance(self.config, self.Config):
             raise errors.InputError(
                 f'config argument is of type {type(self.config)} '
@@ -2812,6 +3060,7 @@ class ParameterEstimation(_Task):
 
     @property
     def problem_dir(self):
+        """ """
         dire = os.path.join(self.config.settings.working_directory, f'Problem{self.config.settings.problem}')
         if not os.path.isdir(dire):
             os.makedirs(dire)
@@ -2819,6 +3068,7 @@ class ParameterEstimation(_Task):
 
     @property
     def fit_dir(self):
+        """ """
         dire = os.path.join(self.problem_dir, f'Fit{self.config.settings.fit}')
         if not os.path.isdir(dire):
             os.makedirs(dire)
@@ -2826,6 +3076,7 @@ class ParameterEstimation(_Task):
 
     @property
     def models_dir(self):
+        """ """
         dct = {}
         for model_name in self.models:
             dct[model_name] = os.path.join(self.fit_dir, model_name)
@@ -2835,6 +3086,7 @@ class ParameterEstimation(_Task):
 
     @property
     def results_directory(self):
+        """ """
         dct = {}
         for model_name in self.models:
             dct[model_name] = os.path.join(
@@ -2846,10 +3098,14 @@ class ParameterEstimation(_Task):
         return dct
 
     def get_model_objects_from_strings(self):
-        """
-        Get model objects from the strings
+        """Get model objects from the strings
         provided by the user in the Config class
         :return: list of `model.Model` objects
+
+        Args:
+
+        Returns:
+
         """
         number_of_model_objects_in_parameter_estimation = len(self.config.model_objects)
         model_objs = []
@@ -2871,21 +3127,28 @@ class ParameterEstimation(_Task):
 
     @property
     def metabolites(self):
+        """ """
         return [i.name for i in self.get_model_objects_from_strings() if isinstance(i, model.Metabolite)]
 
     @property
     def local_parameters(self):
+        """ """
         return [i.name for i in self.get_model_objects_from_strings() if isinstance(i, model.LocalParameter)]
 
     @property
     def global_quantities(self):
+        """ """
         return [i.name for i in self.get_model_objects_from_strings() if isinstance(i, model.GlobalQuantity)]
 
     @property
     def _report_arguments(self):
-        """
-        collect report specific arguments in a dict
+        """collect report specific arguments in a dict
         :return: dict
+
+        Args:
+
+        Returns:
+
         """
         # report specific arguments
         report_dict = {}
@@ -2900,10 +3163,14 @@ class ParameterEstimation(_Task):
         return report_dict
 
     def _define_report(self):
-        """
-        create parameter estimation report
+        """create parameter estimation report
         for result collection
         :return: pycotools3.model.Model
+
+        Args:
+
+        Returns:
+
         """
         for model_name in self.models:
             mod = self.models[model_name].model
@@ -2924,12 +3191,16 @@ class ParameterEstimation(_Task):
         return self.models
 
     def _get_report_key(self):
-        """
-        After creating the report to collect
+        """After creating the report to collect
         results, this method gets the corresponding key
         There is probably a more efficient way to do this
         but this works...
         :return:
+
+        Args:
+
+        Returns:
+
         """
         keys = {}
         for model_name in self.models:
@@ -2944,14 +3215,24 @@ class ParameterEstimation(_Task):
 
     @property
     def models(self):
+        """ """
         return self.config.models
 
     @models.setter
     def models(self, models):
+        """
+
+        Args:
+          models: 
+
+        Returns:
+
+        """
         self.config.models = models
 
     @property
     def _experiments(self):
+        """ """
         existing_experiment_list_dct = {}
         query = '//*[@name="Experiment Set"]'
         for mod in self.models:
@@ -2965,6 +3246,7 @@ class ParameterEstimation(_Task):
 
     @property
     def _validations(self):
+        """ """
         existing_validation_list_dct = {}
         query = '//*[@name="Experiment Set"]'
         for mod in self.models:
@@ -2978,6 +3260,17 @@ class ParameterEstimation(_Task):
 
     @staticmethod
     def _create_metabolite_reference(mod, parent, metabolite, role):
+        """
+
+        Args:
+          mod: 
+          parent: 
+          metabolite: 
+          role: 
+
+        Returns:
+
+        """
         if not isinstance(metabolite, model.Metabolite):
             raise ValueError('Input should be "model.Metabolite" class. Got "{}"'.format(type(metabolite)))
 
@@ -3001,15 +3294,18 @@ class ParameterEstimation(_Task):
 
     @staticmethod
     def _create_local_parameter_reference(mod, parent, local_parameter, role):
-        """
-        Not used because local parameters are not usually mapped to experimental
+        """Not used because local parameters are not usually mapped to experimental
         variables. However, this method will be kept until the next release
         to ensure no bugs arise because of a lack of local parameter reference
 
-        :param parent:
-        :param local_parameter:
-        :param role:
-        :return:
+        Args:
+          parent: param local_parameter:
+          role: return:
+          mod: 
+          local_parameter: 
+
+        Returns:
+
         """
         if not isinstance(local_parameter, model.LocalParameter):
             raise ValueError('Input should be "model.LocalParameter" class. Got "{}"'.format(type(metabolite)))
@@ -3035,6 +3331,17 @@ class ParameterEstimation(_Task):
 
     @staticmethod
     def _create_global_quantity_reference(mod, parent, global_quantity, role):
+        """
+
+        Args:
+          mod: 
+          parent: 
+          global_quantity: 
+          role: 
+
+        Returns:
+
+        """
         if not isinstance(global_quantity, model.GlobalQuantity):
             raise ValueError('Input should be "model.GlobalQuantity" class. Got "{}"'.format(type(global_quantity)))
 
@@ -3057,10 +3364,16 @@ class ParameterEstimation(_Task):
         return parent
 
     def _assign_role(self, parent, role):
-        """
-        Used in create experiment to correctly map the role of each variable in
+        """Used in create experiment to correctly map the role of each variable in
         experiemtnal data columns
         :return:
+
+        Args:
+          parent: 
+          role: 
+
+        Returns:
+
         """
         # define object role attributes
         time_role = {'type': 'unsignedInteger',
@@ -3094,13 +3407,18 @@ class ParameterEstimation(_Task):
         return parent
 
     def _map_experiments(self, validation=False):
-        """
-        Adds a single experiment set to the parameter estimation task
+        """Adds a single experiment set to the parameter estimation task
         exp_file is an experiment filename with exactly matching headers (independent variablies need '_indep' appended to the end)
         since this method is intended to be used in a loop in another function to
         deal with all experiment sets, the second argument 'i' is the index for the current experiment
-
+        
         i is the exeriment_file index
+
+        Args:
+          validation:  (Default value = False)
+
+        Returns:
+
         """
         # for mod in self.models:
         # model_dct = {}
@@ -3271,8 +3589,13 @@ class ParameterEstimation(_Task):
         return self.models
 
     def _remove_experiment(self, experiment_name):
-        """
-        name attribute of experiment. usually Experiment_1 or something
+        """name attribute of experiment. usually Experiment_1 or something
+
+        Args:
+          experiment_name: 
+
+        Returns:
+
         """
         query = '//*[@name="Experiment Set"]'
         for model_name in self.models:
@@ -3285,13 +3608,19 @@ class ParameterEstimation(_Task):
         return self.models
 
     def _remove_all_experiments(self):
+        """ """
         for experiment_name in self.config.experiment_names:
             self._remove_experiment(experiment_name)
         # return self.model
 
     def _remove_validation_experiment(self, validation_experiment_name):
-        """
-        name attribute of experiment. usually Experiment_1 or something
+        """name attribute of experiment. usually Experiment_1 or something
+
+        Args:
+          validation_experiment_name: 
+
+        Returns:
+
         """
         query = '//*[@name="Validation Set"]'
         for model_name in self.models:
@@ -3304,14 +3633,19 @@ class ParameterEstimation(_Task):
         return self.models
 
     def _remove_all_validation_experiments(self):
+        """ """
         for validation_name in self.config.validation_names:
             self._remove_experiment(validation_name)
         # return self.model
 
     def _select_method(self):
-        """
-        #determine which method to use
+        """#determine which method to use
         :return: tuple. (str, str), (method_name, method_type)
+
+        Args:
+
+        Returns:
+
         """
         if self.config.settings.method == 'current_solution_statistics'.lower():
             method_name = 'Current Solution Statistics'
@@ -3380,10 +3714,14 @@ class ParameterEstimation(_Task):
         return method_name, method_type
 
     def _convert_numeric_arguments_to_string(self):
-        """
-        xml requires all numbers to be strings.
+        """xml requires all numbers to be strings.
         This method makes this conversion
         :return: void
+
+        Args:
+
+        Returns:
+
         """
         self.config.settings.number_of_generations = str(self.config.settings.number_of_generations)
         self.config.settings.population_size = str(self.config.settings.population_size)
@@ -3406,9 +3744,13 @@ class ParameterEstimation(_Task):
 
     @property
     def _fit_items(self):
-        """
-        Get existing fit items
+        """Get existing fit items
         :return: dict
+
+        Args:
+
+        Returns:
+
         """
         models_dct = {}
         for model_name in self.models:
@@ -3441,10 +3783,14 @@ class ParameterEstimation(_Task):
         return models_dct
 
     def _remove_all_fit_items(self):
-        """
-        Remove item from parameter estimation
-        :param item:
-        :return: pycotools3.model.Model
+        """Remove item from parameter estimation
+
+        Args:
+          item: return: pycotools3.model.Model
+
+        Returns:
+          pycotools3.model.Model
+
         """
 
         for model_name in self.models:
@@ -3499,11 +3845,15 @@ class ParameterEstimation(_Task):
         return self.models
 
     def _get_experiment_keys(self):
-        """
-        Experiment keys are always 'Experiment_i' where 'i' indexes
+        """Experiment keys are always 'Experiment_i' where 'i' indexes
         the experiment in the order they are given in the experiment
         list. This method extracts the _experiments that are not for validation
         :return:
+
+        Args:
+
+        Returns:
+
         """
         dct = OrderedDict()
 
@@ -3518,12 +3868,16 @@ class ParameterEstimation(_Task):
         return dct
 
     def _get_validation_keys(self):
-        """
-        Experiment keys are always 'Experiment_i' where 'i' indexes
+        """Experiment keys are always 'Experiment_i' where 'i' indexes
         the experiment in the order they are given in the experiment
         list. This method extracts the _experiments that are for validation
-
+        
         :return:
+
+        Args:
+
+        Returns:
+
         """
         dct = OrderedDict()
 
@@ -3538,10 +3892,15 @@ class ParameterEstimation(_Task):
         return dct
 
     def _add_fit_items(self, constraint=False):
-        """
-        Add fit item to model
-        :param item: a row from the config template as pandas series
-        :return: pycotools3.model.Model
+        """Add fit item to model
+
+        Args:
+          item: a row from the config template as pandas series
+          constraint:  (Default value = False)
+
+        Returns:
+          pycotools3.model.Model
+
         """
         for model_name in self.models:
             mod = self.models[model_name].model
@@ -3743,9 +4102,7 @@ class ParameterEstimation(_Task):
         return self.models
 
     def _set_PE_method(self):
-        '''
-        Choose PE algorithm and set algorithm specific parameters
-        '''
+        """Choose PE algorithm and set algorithm specific parameters"""
 
         # Build xml for method.
         method_name, method_type = self._select_method()
@@ -3874,9 +4231,13 @@ class ParameterEstimation(_Task):
         return self.models
 
     def _set_PE_options(self):
-        """
-        Set parameter estimation sepcific arguments
+        """Set parameter estimation sepcific arguments
         :return: pycotools3.model.Model
+
+        Args:
+
+        Returns:
+
         """
         models_dct = {}
         for model_name in self.models:
@@ -3928,9 +4289,13 @@ class ParameterEstimation(_Task):
         return self.models
 
     def _enumerate_PE_output(self):
-        """
-        Create a filename for each file to collect PE results
+        """Create a filename for each file to collect PE results
         :return: dict['model_copy_number]=enumerated_report_name
+
+        Args:
+
+        Returns:
+
         """
 
         dct = {}
@@ -3948,10 +4313,14 @@ class ParameterEstimation(_Task):
         return dct
 
     def _copy_model(self):
-        """
-        Copy the model n times
+        """Copy the model n times
         Uses deep copy to ensure separate models
         :return: dict[index] = model copy
+
+        Args:
+
+        Returns:
+
         """
         dct = {}
         for model_name in self.models:
@@ -3972,12 +4341,15 @@ class ParameterEstimation(_Task):
         return dct
 
     def _setup1scan(self, q, model, report):
-        """
-        Setup a single scan.
-        :param q: queue from multiprocessing
-        :param model: pycotools3.model.Model
-        :param report: str.
-        :return:
+        """Setup a single scan.
+
+        Args:
+          q: queue from multiprocessing
+          model: pycotools3.model.Model
+          report: str.
+
+        Returns:
+
         """
         start = time.time()
         models = q.put(Scan(model,
@@ -3993,12 +4365,17 @@ class ParameterEstimation(_Task):
                             save=True))
 
     def _setup_scan(self, models):
-        """
-        Set up `copy_number` repeat items with `pe_number`
+        """Set up `copy_number` repeat items with `pe_number`
         repeats of parameter estimation. Set run_mode to false
         as we want to use the multiprocess mode of the run_mode class
         to process all files at once in CopasiSE
         :return:
+
+        Args:
+          models: 
+
+        Returns:
+
         """
         res = {}
         for model_name in models:
@@ -4022,6 +4399,7 @@ class ParameterEstimation(_Task):
         return res
 
     def _setup(self):
+        """ """
 
         self.config.models = self._define_report()
 
@@ -4055,8 +4433,12 @@ class ParameterEstimation(_Task):
     def run(self, models):
         """
 
-        :return:
-        :param models: dict of models. Output from _setup()
+        Args:
+          models: dict of models. Output from _setup()
+
+        Returns:
+          param models: dict of models. Output from _setup()
+
         """
 
         if self.config.settings.run_mode == 'sge':
@@ -4088,6 +4470,7 @@ class ParameterEstimation(_Task):
             raise ValueError('"{}" is not a valid argument'.format(self.config.settings.run_mode))
 
     class Context:
+        """ """
 
         acceptable_context_args = {
             'm': 'model_selection',
@@ -4131,6 +4514,14 @@ class ParameterEstimation(_Task):
                 print(f'exc_traceback: {exc_traceback}')
 
         def add_models(self, models):
+            """
+
+            Args:
+              models: 
+
+            Returns:
+
+            """
             ## if models passed as a string
             if isinstance(models, str):
                 ## if this is an existing file with .cps extension
@@ -4148,6 +4539,14 @@ class ParameterEstimation(_Task):
             setattr(self, 'models', models)
 
         def add_experiments(self, experiments):
+            """
+
+            Args:
+              experiments: 
+
+            Returns:
+
+            """
             if isinstance(experiments, str):
                 ## if this is an existing file with .cps extension
                 if os.path.isfile(experiments):
@@ -4175,6 +4574,14 @@ class ParameterEstimation(_Task):
             setattr(self, 'experiments', experiments)
 
         def add_validation_experiments(self, experiments):
+            """
+
+            Args:
+              experiments: 
+
+            Returns:
+
+            """
             if isinstance(experiments, str):
                 ## if this is an existing file with .cps extension
                 if os.path.isfile(experiments):
@@ -4202,11 +4609,28 @@ class ParameterEstimation(_Task):
             setattr(self, 'validation_experiments', experiments)
 
         def add_setting(self, setting, value):
+            """
+
+            Args:
+              setting: 
+              value: 
+
+            Returns:
+
+            """
             if not hasattr(self, 'settings'):
                 setattr(self, 'settings', {})
             self.settings[setting] = value
 
         def add_settings(self, settings):
+            """
+
+            Args:
+              settings: 
+
+            Returns:
+
+            """
             if not hasattr(self, 'settings'):
                 setattr(self, 'settings', {})
             if not isinstance(settings, dict):
@@ -4214,6 +4638,7 @@ class ParameterEstimation(_Task):
             self.settings.update(settings)
 
         def create_config(self):
+            """ """
 
             models = {os.path.split(i)[1][:-4]: {
                 'model': model.Model(i),
@@ -4254,12 +4679,16 @@ class ParameterEstimation(_Task):
 
 
 class ChaserParameterEstimations(_Task):
-    """
-    Perform secondary hook and jeeves parameter estimations
+    """Perform secondary hook and jeeves parameter estimations
     starting from the best values of a primary global estimator.
-
+    
     #todo: This class performs slowly in serial. Parallelize the configuration
     of the parameter estimation class in each model.
+
+    Args:
+
+    Returns:
+
     """
 
     def __init__(self, cls=None, model=None, parameter_path=None, truncate_mode='percent',
@@ -4355,10 +4784,7 @@ class ChaserParameterEstimations(_Task):
         self.run()
 
     def do_checks(self):
-        """
-
-        :return:
-        """
+        """:return:"""
 
         if self.model is None and self.cls is None and self.parameter_path is None:
             raise errors.InputError('Please give argument to either "cls" which '
@@ -4387,10 +4813,14 @@ class ChaserParameterEstimations(_Task):
                                         'got "{}" instead'.format(type(self.cls)))
 
     def _assign_model_and_pe_data_arguments_from_cls(self):
-        """
-        if argument to cls is not none, assign the model and pe_data
+        """if argument to cls is not none, assign the model and pe_data
         from cls (which is of type MultiParameterEstimation)
         :return:
+
+        Args:
+
+        Returns:
+
         """
         if self.cls is not None:
             self.model = self.cls.model
@@ -4398,10 +4828,7 @@ class ChaserParameterEstimations(_Task):
             self.experiment_files = self.cls.experiment_files
 
     def parse_pe_data(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         ## if pe_data is string it shuold be path to folder of pe_data
         if type(self.parameter_path) == str:
 
@@ -4467,9 +4894,13 @@ class ChaserParameterEstimations(_Task):
     #     return PE
 
     def configure(self):
-        """
-        Iterate over parameter sets.
+        """Iterate over parameter sets.
         :return:
+
+        Args:
+
+        Returns:
+
         """
         pe_dct = OrderedDict()
         original_cps_filename = self.model.copasi_file
@@ -4502,19 +4933,13 @@ class ChaserParameterEstimations(_Task):
         return pe_dct
 
     def setup(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         for pe in self.pe_dct:
             self.pe_dct[pe]._setup()
             self.pe_dct[pe].model.save()
 
     def run(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         mod_dct = OrderedDict()
         for cps, pe in list(self.pe_dct.items()):
             mod_dct[cps] = self.pe_dct[cps].model
@@ -4535,23 +4960,22 @@ class ChaserParameterEstimations(_Task):
 
 @mixin(model.ReadModelMixin)
 class MultiModelFit(_Task):
-    """
-    Coordinate a systematic multi model fitting parameter estimation and
+    """Coordinate a systematic multi model fitting parameter estimation and
     compare results using :py:class:`viz.ModelSelection`
-
+    
     Usage:
         # Setup a new folder containing all models that you would like to fit
           and all data you would like to fit to the model.
           Do not have any other text or csv files in this folder as python will try and _setup
           fits for them.
-
+    
                 i.e.:
                     ./project_dir
                         --Exp_data_1.csv
                         --Exp_data_n.csv
                         --model1.cps
                         --model2.cps
-
+    
         # Instantiate instance of the MultimodelFit class with all relevant
           keywords. Python automatically creates subdirectories  for each model in your
           model selection problem and maps all data files in the main directory
@@ -4559,12 +4983,15 @@ class MultiModelFit(_Task):
         # Use the write_config_file() method to create a spreadsheet containing
           a config file per model. See :py:meth:`ParameterEstimation.write_config_file`.
         # use run() method to run all models simultaneously.
-
+    
     .. _multi_model_fit_kwargs:
-
+    
     MultiModelFit Kwargs
     ====================
 
+    Args:
+
+    Returns:
 
     """
 
@@ -4593,6 +5020,7 @@ class MultiModelFit(_Task):
         self.results_folder_dct = self.get_output_directories()
 
     def _do_checks(self):
+        """ """
         pass
 
     def __iter__(self):
@@ -4609,20 +5037,27 @@ class MultiModelFit(_Task):
         del self.MPE_dct[key]
 
     def keys(self):
+        """ """
         return list(self.MPE_dct.keys())
 
     def values(self):
+        """ """
         return list(self.MPE_dct.values())
 
     def items(self):
+        """ """
         return list(self.MPE_dct.items())
 
     def instantiate_parameter_estimation_classes(self):
-        """
-        pass correct arguments to the runMultiplePEs class in order
+        """pass correct arguments to the runMultiplePEs class in order
         to instantiate a runMultiplePEs instance for each model.
-
+        
         :Returns: dict[model_filename]=runMultiplePEs_instance
+
+        Args:
+
+        Returns:
+
         """
         dct = {}
 
@@ -4643,7 +5078,12 @@ class MultiModelFit(_Task):
 
     def get_output_directories(self):
         """
-        :returns:Dict. Location of parameter estimation output files
+
+        Args:
+
+        Returns:
+          Dict. Location of parameter estimation output files
+
         """
         output_dct = {}
         for MPE in self.MPE_dct:
@@ -4652,11 +5092,15 @@ class MultiModelFit(_Task):
 
     # void
     def write_config_file(self):
-        """
-        A class to write a config file template for each
+        """A class to write a config file template for each
         model in the analysis. Calls the corresponding
         write_config_file from the runMultiplePEs class
-        :returns: list. config file paths
+
+        Args:
+
+        Returns:
+          list. config file paths
+
         """
         conf_list = []
         for MPE in self.MPE_dct:
@@ -4665,29 +5109,36 @@ class MultiModelFit(_Task):
         return conf_list
 
     def setup(self):
-        """
-        A user interface class which calls the corresponding
+        """A user interface class which calls the corresponding
         method (_setup) from the runMultiplePEs class per model.
         Perform the ParameterEstimation._setup() method on each model.
+
+        Args:
+
+        Returns:
+
         """
         for MPE in self.MPE_dct:
             self.MPE_dct[MPE]._setup()
 
     def run(self):
-        """
-        A user interface class which calls the corresponding
+        """A user interface class which calls the corresponding
         method (run) from the runMultiplePEs class per model.
         Perform the ParameterEstimation.run() method on each model.
         :return:
+
+        Args:
+
+        Returns:
+
         """
         for MPE in self.MPE_dct:
             LOG.info('Running models from {}'.format(self.MPE_dct[MPE].results_directory))
             self.MPE_dct[MPE].run()
 
     def create_workspace(self):
-        """
-        Creates a workspace from cps and experiment files in self.project_dir
-
+        """Creates a workspace from cps and experiment files in self.project_dir
+        
         i.e.
             --project_dir
             ----model1_dir
@@ -4697,7 +5148,11 @@ class MultiModelFit(_Task):
             ------model2.cps
             ------exp_data.txt
 
-        :returns: Dictionary[cps_filename]= Directory for model fit
+        Args:
+
+        Returns:
+          Dictionary[cps_filename]= Directory for model fit
+
         """
         LOG.info('Creating workspace from project_dir')
         ## Create entire working directory for analysis
@@ -4721,15 +5176,19 @@ class MultiModelFit(_Task):
         return cps_dirs
 
     def read_fit_config(self):
-        '''
-        The recommed way to use this class:
+        """The recommed way to use this class:
             Put all .cps files you want to fit in a folder with meaningful names (pref with no spaces)
             Put all data files for fitting in the same folder.
                 Make sure all data files have left most column as Time (with consistent units)
                 and all other columns corresponding exactly (no trailing white spaces) to model variables.
                 Any independent variables should have the '_indep' suffix
         This function will read this multifit config and produce a directory tree for subsequent analysis
-        '''
+
+        Args:
+
+        Returns:
+
+        """
         if self.project_dir == None:
             raise errors.InputError('Cannot read multifit confuration as no Project kwarg is provided')
         ##make sure we're in the right directory
@@ -4754,9 +5213,7 @@ class MultiModelFit(_Task):
         return cps_list, exp_list
 
     def format_data(self):
-        """
-        Method for giving appropiate headers to parameter estimation data
-        """
+        """Method for giving appropiate headers to parameter estimation data"""
         for MPE in self.MPE_dct:
             self.MPE_dct[MPE].format_results()
 
@@ -4772,14 +5229,11 @@ class MultiModelFit(_Task):
 @mixin(model.GetModelComponentFromStringMixin)
 @mixin(model.ReadModelMixin)
 class ProfileLikelihood(_Task):
-    """
-
-
-    .. _profile_likelihood_kwargs:
-
+    """.. _profile_likelihood_kwargs:
+    
     ProfileLikelihood Kwargs
     ========================
-
+    
     ===========================     ==================================================
     ProfileLikelihood  Kwargs       Description
     ===========================     ==================================================
@@ -4818,6 +5272,9 @@ class ProfileLikelihood(_Task):
     <Report kwargs>                 Arguments to :py:class:`Reports` are accepted here
     ===========================     ==================================================
 
+    Args:
+
+    Returns:
 
     """
 
@@ -4888,10 +5345,7 @@ class ProfileLikelihood(_Task):
             self.run_analysis()
 
     def _do_checks(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         if isinstance(self.index, int):
             self.index = [self.index]
         if self.df is None:
@@ -4910,10 +5364,14 @@ class ProfileLikelihood(_Task):
             self.results_directory = os.path.join(self.model.root, self.results_directory)
 
     def _convert_numeric_arguments_to_string(self):
-        """
-        xml requires all numbers to be strings.
+        """xml requires all numbers to be strings.
         This method makes this conversion
         :return: void
+
+        Args:
+
+        Returns:
+
         """
         self.number_of_generations = str(self.number_of_generations)
         self.population_size = str(self.population_size)
@@ -4931,10 +5389,14 @@ class ProfileLikelihood(_Task):
         self.cooling_factor = str(self.cooling_factor)
 
     def uncheck_randomize_start_values(self):
-        """
-        Untick the randomize_start_values box
+        """Untick the randomize_start_values box
         :return:
             :py:class:`model.Model`
+
+        Args:
+
+        Returns:
+
         """
         query = '//*[@name="Parameter Estimation"]'
         for i in self.model.xml.xpath(query):
@@ -4955,9 +5417,13 @@ class ProfileLikelihood(_Task):
         return self.model
 
     def _select_method(self):
-        """
-        copied from Parameter estimation class
+        """copied from Parameter estimation class
         :return:
+
+        Args:
+
+        Returns:
+
         """
         if self.method == 'current_solution_statistics'.lower():
             method_name = 'Current Solution Statistics'
@@ -5026,10 +5492,14 @@ class ProfileLikelihood(_Task):
         return method_name, method_type
 
     def set_PE_method(self):
-        """
-        This method is copied from the parameter estimation
+        """This method is copied from the parameter estimation
         class.
         :return: model
+
+        Args:
+
+        Returns:
+
         """
 
         # Build xml for method.
@@ -5153,15 +5623,19 @@ class ProfileLikelihood(_Task):
         return self.model
 
     def insert_parameters(self):
-        """
-        If index keyword is 'current_parameters', do nothing but collect
+        """If index keyword is 'current_parameters', do nothing but collect
         parameter values which are defined in parameter estimation task.
         If index keyword specified, get the corresponding best parameter
         set from df or parameter_path arguments and insert into the model.
-
+        
         :return:
             `tuple`. (`dict[index] = model with parameter set`,
                       `dict[index] = estimated parameter values)
+
+        Args:
+
+        Returns:
+
         """
         dct = {}
         parameters = {}
@@ -5184,9 +5658,13 @@ class ProfileLikelihood(_Task):
         return dct, parameters
 
     def copy_model(self):
-        """
-        copy for each member of x
+        """copy for each member of x
         :return:
+
+        Args:
+
+        Returns:
+
         """
         dct = {}
         for model in self.index_dct:
@@ -5201,10 +5679,14 @@ class ProfileLikelihood(_Task):
         return dct
 
     def make_experiment_files_absolute(self):
-        """
-        copy data files that are mapped to model
+        """copy data files that are mapped to model
         variables into the profile likelihood directories
         :return:
+
+        Args:
+
+        Returns:
+
         """
         query = '//*[@name="File Name"]'
         for i in self.model.xml.xpath(query):
@@ -5213,9 +5695,13 @@ class ProfileLikelihood(_Task):
         return self.model
 
     def undefine_other_reports(self):
-        """
-        remove reports defined elsewhere, i.e. the parameter estimation task
+        """remove reports defined elsewhere, i.e. the parameter estimation task
         :return:
+
+        Args:
+
+        Returns:
+
         """
         query = '//*[@target]'
         for i in self.model.xml.xpath(query):
@@ -5224,10 +5710,14 @@ class ProfileLikelihood(_Task):
         return self.model
 
     def setup_parameter_estimation(self):
-        """
-        for each model, remove the x parameter from
+        """for each model, remove the x parameter from
         the parameter estimation task
         :return:
+
+        Args:
+
+        Returns:
+
         """
         query = "//*[@name='FitItem']"  # query="//*[@name='FitItem']"
         for model in self.model_dct:
@@ -5266,10 +5756,14 @@ class ProfileLikelihood(_Task):
         return self.model_dct
 
     def to_file(self):
-        """
-        create and write our profile likelihood
+        """create and write our profile likelihood
         analysis to file
         :return:
+
+        Args:
+
+        Returns:
+
         """
         dct = {}
         for model in self.model_dct:
@@ -5280,12 +5774,17 @@ class ProfileLikelihood(_Task):
         return dct
 
     def setup1scan(self, q, model, report, parameter, parameter_value):
-        """
-        Setup a single scan.
-        :param q: queue from multiprocessing
-        :param model: pycotools3.model.Model
-        :param report: str.
-        :return:
+        """Setup a single scan.
+
+        Args:
+          q: queue from multiprocessing
+          model: pycotools3.model.Model
+          report: str.
+          parameter: 
+          parameter_value: 
+
+        Returns:
+
         """
         start = time.time()
         models = q.put(Scan(
@@ -5307,12 +5806,16 @@ class ProfileLikelihood(_Task):
         )
 
     def setup_scan(self):
-        """
-        Set up `copy_number` repeat items with `pe_number`
+        """Set up `copy_number` repeat items with `pe_number`
         repeats of parameter estimation. Set run_mode to false
         as we want to use the multiprocess mode of the run_mode class
         to process all files at once in CopasiSE
         :return:
+
+        Args:
+
+        Returns:
+
         """
         number_of_cpu = cpu_count()
         q = queue.Queue(maxsize=number_of_cpu)
@@ -5353,10 +5856,7 @@ class ProfileLikelihood(_Task):
         return res
 
     def run_analysis(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         model_list = []
         if self.run is 'parallel':
             for i in self.model_dct:
@@ -5375,10 +5875,7 @@ class ProfileLikelihood(_Task):
 @mixin(model.GetModelComponentFromStringMixin)
 @mixin(model.ReadModelMixin)
 class Sensitivities(_Task):
-    """
-    Interface to COPASI sensitivity task
-
-    """
+    """Interface to COPASI sensitivity task"""
 
     ## subtasks
     subtasks = {
@@ -5520,6 +6017,7 @@ class Sensitivities(_Task):
         self.sensitivities.to_csv(self.report_name, sep='\t')
 
     def _do_checks(self):
+        """ """
         if self.subtask == 'evaluation':
             if self.cause not in self.evaluation_cause:
                 raise errors.InputError('cause "{}" not in "{}"'.format(self.cause, self.evaluation_cause))
@@ -5644,6 +6142,7 @@ class Sensitivities(_Task):
                                                                         self.model.all_variable_names))
 
     def get_single_object_references(self):
+        """ """
         if self.cause_single_object is not None:
             self.cause_single_object = self.get_variable_from_string(self.model, self.cause_single_object)
 
@@ -5654,10 +6153,14 @@ class Sensitivities(_Task):
             self.cause_single_object = self.get_variable_from_string(self.model, self.secondary_cause_single_object)
 
     def sensitivity_task_key(self):
-        """
-        Get the sensitivity task as it currently is
+        """Get the sensitivity task as it currently is
         in the model as etree.Element
         :return:
+
+        Args:
+
+        Returns:
+
         """
         # query = './/Task/*[@name="Sensitivities"]'
         tasks = self.model.xml.findall(self.schema + 'ListOfTasks')[0]
@@ -5666,6 +6169,7 @@ class Sensitivities(_Task):
                 return i.attrib['key']
 
     def create_sensitivity_task(self):
+        """ """
         return etree.Element('Task', attrib=OrderedDict({
             'key': self.sensitivity_task_key(),
             'name': 'Sensitivities',
@@ -5675,6 +6179,7 @@ class Sensitivities(_Task):
         }))
 
     def create_new_report(self):
+        """ """
         report_options = OrderedDict({
             'report_name': self.report_name,
             'append': self.append,
@@ -5686,6 +6191,7 @@ class Sensitivities(_Task):
         return report.model
 
     def get_report_key(self):
+        """ """
         ## get the report key
         for i in self.model.xml:
             if i.tag == self.schema + 'ListOfReports':
@@ -5694,6 +6200,7 @@ class Sensitivities(_Task):
                         return j.attrib['key']
 
     def set_report(self):
+        """ """
         attrib = OrderedDict({
             'reference': self.get_report_key(),
             'target': self.report_name,
@@ -5704,10 +6211,12 @@ class Sensitivities(_Task):
         return self.task
 
     def create_problem(self):
+        """ """
         etree.SubElement(self.task, 'Problem')
         return self.task
 
     def set_subtask(self):
+        """ """
         assert self.task[1].tag == 'Problem'
         attrib = OrderedDict({
             'name': 'SubtaskType',
@@ -5718,6 +6227,7 @@ class Sensitivities(_Task):
         return self.task
 
     def set_effect(self):
+        """ """
         assert self.task[1].tag == 'Problem'
         parameter_group = etree.SubElement(self.task[-1], 'ParameterGroup',
                                            attrib={'name': 'TargetFunctions'})
@@ -5736,12 +6246,14 @@ class Sensitivities(_Task):
         return self.task
 
     def add_list_of_variables_element(self):
+        """ """
         assert self.task[1].tag == 'Problem'
         parameter_group = etree.SubElement(self.task[-1], 'ParameterGroup',
                                            attrib={'name': 'ListOfVariables'})
         return self.task
 
     def set_cause(self):
+        """ """
         assert self.task[1].tag == 'Problem'
         assert self.task[1][2].attrib['name'] == 'ListOfVariables'
         parameter_group = etree.SubElement(
@@ -5763,6 +6275,7 @@ class Sensitivities(_Task):
         return self.task
 
     def set_secondary_cause(self):
+        """ """
         pass
         assert self.task[1].tag == 'Problem'
         assert self.task[1][2].attrib['name'] == 'ListOfVariables'
@@ -5784,6 +6297,7 @@ class Sensitivities(_Task):
         return self.task
 
     def set_method(self):
+        """ """
         method_attrib = OrderedDict({
             'name': 'Sensitivities Method',
             'type': 'SensitivitiesMethod',
@@ -5803,6 +6317,7 @@ class Sensitivities(_Task):
         return self.task
 
     def replace_sensitivities_task(self):
+        """ """
         task_list = self.model.xml.findall(self.schema + 'ListOfTasks')[0]
         for i in task_list:
             if i.attrib['name'] == 'Sensitivities':
@@ -5811,10 +6326,12 @@ class Sensitivities(_Task):
         return self.model
 
     def run_task(self):
+        """ """
         r = Run(self.model, task='sensitivities', mode=self.run)
         return r.model
 
     def process_data(self):
+        """ """
         if not os.path.isfile(self.report_name):
             raise ValueError('Sensitivity report missing. Please ensure you have '
                              'executed the sensitivity task and the report exists. '
@@ -5854,12 +6371,13 @@ class Sensitivities(_Task):
 
 
 class FIM(Sensitivities):
-    """
-    Let S = matrix of partial derivatives of metabolites with respect to
+    """Let S = matrix of partial derivatives of metabolites with respect to
     kinetic parameters. Then the fisher information matrix (FIM) is:
         FIM = S^TS
 
+    Args:
 
+    Returns:
 
     """
     subtask = 'time_series'
@@ -5876,17 +6394,17 @@ class FIM(Sensitivities):
 
     @property
     def fim(self):
+        """ """
         return self.sensitivities.transpose().dot(self.sensitivities)
 
 
 class Hessian(Sensitivities):
+    """ """
     pass
 
 
 class GlobalSensitivities(Sensitivities):
-    """
-    Sensitivity around parameter estimates
-    """
+    """Sensitivity around parameter estimates"""
     pass
 
 

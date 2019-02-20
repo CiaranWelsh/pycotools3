@@ -37,8 +37,16 @@ else:
     class_types = (type, type)
 
 def add_metaclass(metaclass):
-    """Class decorator for creating a class with a metaclass."""
+    """Class decorator for creating a class with a metaclass.
+
+    Args:
+      metaclass: 
+
+    Returns:
+
+    """
     def wrapper(cls):
+        """ """
         orig_vars = cls.__dict__.copy()
         slots = orig_vars.get('__slots__')
         if slots is not None:
@@ -52,19 +60,32 @@ def add_metaclass(metaclass):
     return wrapper
 
 class InstantiationMixinError(Exception):
+    """ """
     pass
 
 class InvalidMixinError(Exception):
+    """ """
     pass
 
 class InheritMixinError(Exception):
+    """ """
     pass
 
 def mixin_new(cls, *args, **kwargs):
+    """
+
+    Args:
+      *args: 
+      **kwargs: 
+
+    Returns:
+
+    """
     raise InstantiationMixinError(cls)
 
 MIXIN_CLASS = None
 class MixinMeta(type):
+    """ """
     def __new__(cls, clsname, bases, dct):
         valid_mixin = False
         if MIXIN_CLASS == None and clsname == 'Mixin' and bases == (object,):
@@ -85,6 +106,7 @@ class Mixin(object): pass
 MIXIN_CLASS = Mixin
 
 def copy_cls_vars(cls):
+    """ """
     cls_vars = cls.__dict__.copy()
     slots = cls_vars.get('__slots__')
     if slots is not None:
@@ -97,6 +119,7 @@ def copy_cls_vars(cls):
     return cls_vars
 
 def copy_mixin(cls):
+    """ """
     cls_vars = copy_cls_vars(cls)
     cls_vars.pop('__new__')
     cls_bases = list(cls.__bases__)
@@ -106,6 +129,14 @@ def copy_mixin(cls):
     return type(cls.__name__, tuple(cls_bases), cls_vars)
 
 def mixin(*clses):
+    """
+
+    Args:
+      *clses: 
+
+    Returns:
+
+    """
     copied_clses = []
     for cls in clses:
         if type(cls) != MixinMeta:
@@ -113,6 +144,14 @@ def mixin(*clses):
         copied_cls = copy_mixin(cls)
         copied_clses.append(copied_cls)
     def generate_mixin(orig_cls):
+        """
+
+        Args:
+          orig_cls: 
+
+        Returns:
+
+        """
         orig_vars = copy_cls_vars(orig_cls)
         orig_bases = list(orig_cls.__bases__)
         orig_type = type(orig_cls)
