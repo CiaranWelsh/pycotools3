@@ -36,6 +36,7 @@ from pycotools3.tasks import ParameterEstimation
 from pycotools3.utils import DotDict
 import glob
 import time
+from io import StringIO
 
 
 def parse_timecourse(self):
@@ -249,7 +250,7 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
         )
 
     def test_validation_kw2(self):
-        self.assertEqual(self.PE.config.settings.validation_weight, str(4))
+        self.assertEqual(self.PE.config.settings.validation_weight, 4)
 
     def test_validation_threshold(self):
         self.assertEqual(self.config.settings.validation_threshold, self.PE.config.settings.validation_threshold)
@@ -297,7 +298,10 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
         self.assertEqual(self.PE.config.settings.method, 'genetic_algorithm_sr')
 
     def test_settings2(self):
-        self.assertEqual(self.PE.config.settings.population_size, str(38))
+        self.assertEqual(self.PE.config.settings.population_size, 38)
+
+    def test_settings3(self):
+        self.assertTrue(isinstance(self.PE.config.settings.run_mode, bool))
 
     def test_iteration(self):
         """
@@ -1131,7 +1135,7 @@ class ParameterEstimationTests(_test_base._BaseTest):
     def test_copy_models(self):
         files = glob.glob(os.path.join(
             self.PE.models_dir['model1'], '*.cps'))
-        self.assertEqual(self.PE.config.settings.copy_number, str(len(files)))
+        self.assertEqual(self.PE.config.settings.copy_number, len(files))
 
     def test_setup_scan_pe_number(self):
         mod = self.PE.copied_models['model1'][3]
@@ -1206,6 +1210,14 @@ class ParameterEstimationTests(_test_base._BaseTest):
         )
         self.assertEqual(expected, len(files))
 
+    def test_parse_pe_data(self):
+        self.PE.config.settings.run_mode = True
+        self.PE.run(self.PE.copied_models)
+
+        data = pycotools3.viz.Parse(self.PE).data
+        expected = 8
+        self.assertEqual(expected, data['model1'].shape[0])
+
 
 class ParameterEstimationContextTests(_test_base._BaseTest):
     def setUp(self):
@@ -1239,9 +1251,7 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
 
         ss_df.to_csv(self.report4, sep='\t', index=False)
 
-
     def test_create_config(self):
-
         with ParameterEstimation.Context(context='s', parameters='a') as context:
             context.add_models([self.model.copasi_file])
             context.add_experiments(
@@ -1294,6 +1304,112 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
         expected = sorted(['B', 'B2C', 'B2C_0_k2'])
         actual = sorted(list(config.items.fit_items.keys()))
         self.assertListEqual(expected, actual)
+
+
+class ParameterEstimationTestsWithDifferentModel(unittest.TestCase):
+    def setUp(self):
+        self.antimony_string = """
+        model negative_feedback
+            compartment cell = 1.0
+            var A in cell
+            var B in cell
+
+            vAProd = 0.1
+            kADeg = 0.2
+            kBProd = 0.3
+            kBDeg = 0.4
+            A = 0
+            B = 0
+
+            AProd: => A; cell*vAProd
+            ADeg: A =>; cell*kADeg*A*B
+            BProd: => B; cell*kBProd*A
+            BDeg: B => ; cell*kBDeg*B
+        end
+        """
+
+        self.experimental_data = StringIO(
+            """
+            Time,A,B
+             0, 0.000000, 0.000000
+             1, 0.099932, 0.013181
+             2, 0.199023, 0.046643
+             3, 0.295526, 0.093275
+             4, 0.387233, 0.147810
+             5, 0.471935, 0.206160
+             6, 0.547789, 0.265083
+             7, 0.613554, 0.322023
+             8, 0.668702, 0.375056
+             9, 0.713393, 0.422852
+            10, 0.748359, 0.464639
+            """.strip()
+        )
+
+        self.df = pandas.read_csv(self.experimental_data, index_col=0)
+
+        self.fname = os.path.join(os.path.dirname(__file__), 'experimental_data.csv')
+        self.df.to_csv(self.fname)
+
+        self.working_directory = os.path.abspath('')
+
+        self.copasi_file = os.path.join(self.working_directory, 'negative_feedback.cps')
+
+        with pycotools3.model.BuildAntimony(self.copasi_file) as loader:
+            mod = loader.load(self.antimony_string)
+
+        self.config_dct = dict(
+            models=dict(
+                model_name=dict(
+                    copasi_file=self.copasi_file
+                )
+            ),
+            datasets=dict(
+                experiments=dict(
+                    first_dataset=dict(
+                        filename=self.fname,
+                        separator=','
+                    )
+                )
+            ),
+            items=dict(
+                fit_items=dict(
+                    A={},
+                    B={},
+                )
+            ),
+            settings=dict(
+                working_directory=self.working_directory
+            )
+        )
+
+    def test_use_config_twice(self):
+        """
+        :return:
+        """
+        conf = ParameterEstimation.Config(**self.config_dct)
+        ParameterEstimation(conf)
+        conf.settings.run_mode = True
+        PE = ParameterEstimation(conf)
+        self.assertTrue(PE.config.settings.run_mode)
+
+    def test_run(self):
+        """
+
+        I should go and figure out why run mode is
+        being coerced into string from boolean
+        :return:
+        """
+        conf = ParameterEstimation.Config(**self.config_dct)
+        conf.settings.run_mode = True
+        PE = ParameterEstimation(conf)
+        fname = glob.glob(os.path.join(
+            PE.results_directory['model_name'],
+            '*.txt'
+        ))[0]
+
+        time.sleep(1)
+        self.assertTrue(os.path.isfile(fname))
+
 
 if __name__ == '__main__':
     unittest.main()

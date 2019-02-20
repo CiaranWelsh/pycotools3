@@ -445,7 +445,7 @@ class Run(_Task):
         self.model = self.set_task()
         self.model.save()
 
-        if self.mode is True or self.model == 'True':
+        if self.mode is True:
             try:
                 self.run()
             except errors.CopasiError:
@@ -453,10 +453,6 @@ class Run(_Task):
 
         elif self.mode == 'sge':
             self.submit_copasi_job_SGE()
-
-        elif self.mode == 'multiprocess':
-            raise ValueError('"multiprocess" has been deprecated. Please'
-                             'use mode="parallel" instead')
 
         elif self.mode == 'slurm':
             self.submit_copasi_job_slurm()
@@ -475,8 +471,7 @@ class Run(_Task):
         if self.task not in tasks:
             raise errors.InputError('{} not in list of tasks. List of tasks are: {}'.format(self.task, tasks))
 
-        modes = [True, False, 'multiprocess', 'parallel', 'sge', 'slurm',
-                 'True', 'False']
+        modes = [True, False, 'multiprocess', 'parallel', 'sge', 'slurm']
         if self.mode not in modes:
             raise errors.InputError('{} not in {}'.format(self.mode, modes))
 
@@ -514,13 +509,11 @@ class Run(_Task):
         return self.model
 
     def run(self):
-        '''
-        Process the copasi file using CopasiSE
-        '''
-        args = [
-            f'{COPASISE}', f"{self.model.copasi_file}"
-        ]
-        p = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        """
+        Run copasi model with CopasiSE distributed with pycotools
+        :return:
+        """
+        p = subprocess.Popen(f'{COPASISE} "{self.model.copasi_file}"', stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         output, err = p.communicate()
         d = {}
         d['output'] = output
@@ -2223,7 +2216,7 @@ class ParameterEstimation(_Task):
                 yield attr
 
         def __str__(self):
-            return self.to_json()
+            return self.to_yaml()
 
         def __repr__(self):
             return self.__str__()
@@ -2776,6 +2769,7 @@ class ParameterEstimation(_Task):
         """
         # self.model = self.read_model(model)
         self.config = config
+        # self.config = self.copy_config(config)
         self.do_checks()
         self.copied_models = self._setup()
 
@@ -2783,6 +2777,27 @@ class ParameterEstimation(_Task):
 
         if self.config.settings.run_mode is not False:
             self.run(self.copied_models)
+
+        LOG.debug('init2', self.models)
+
+    @staticmethod
+    def copy_config(config):
+        """
+        deepcopy doesn't work on Munch object. Create new version
+        of config so that the original is not modified within the
+        class
+        :return:
+        """
+        if not isinstance(config, ParameterEstimation.Config):
+            raise TypeError
+
+        config = ParameterEstimation.Config(
+            models=config.models,
+            datasets=config.datasets,
+            items=config.items,
+            settings=config.settings
+        )
+        return config
 
     def do_checks(self):
         if not isinstance(self.config, self.Config):
@@ -3425,69 +3440,62 @@ class ParameterEstimation(_Task):
 
         return models_dct
 
-    def _remove_fit_item(self, model_name, item):
+    def _remove_all_fit_items(self):
         """
         Remove item from parameter estimation
         :param item:
         :return: pycotools3.model.Model
         """
 
-        mod = self.models[model_name].model
-        all_items = list(self._fit_items[model_name].keys())
+        for model_name in self.models:
+            mod = self.models[model_name].model
+            for item in self._fit_items[model_name]:
 
-        query = '//*[@name="FitItem"]'
-        assert item in all_items, '{} is not a fit item. These are the fit items: {}'.format(item, all_items)
-        item = self._fit_items[model_name][item]
-        for i in mod.xml.xpath(query):
-            for j in list(i):
-                if j.attrib['name'] == 'ObjectCN':
-                    # locate references
-                    # remove local parameters from PE task
-                    match = re.findall('Reference=(.*)', j.attrib['value'])[0]
-                    if match == 'Value':
-                        pattern = 'Reactions\[(.*)\].*Parameter=(.*),Reference=(.*)'
-                        match2_copasiML = re.findall(pattern, j.attrib['value'])
-                        if match2_copasiML != []:
-                            match2_item = re.findall(pattern, item['value'])
-                            if match2_item != []:
-                                if match2_item == match2_copasiML:
-                                    i.getparent().remove(i)
+                all_items = list(self._fit_items[model_name].keys())
 
-                    # rempve global parameters from PE task
-                    elif match == 'InitialValue':
-                        pattern = 'Values\[(.*)\].*Reference=(.*)'
-                        match2_copasiML = re.findall(pattern, j.attrib['value'])
-                        if match2_copasiML != []:
-                            match2_item = re.findall(pattern, item['value'])
-                            if match2_item == match2_copasiML:
-                                i.getparent().remove(i)
+                query = '//*[@name="FitItem"]'
+                assert item in all_items, '{} is not a fit item. These are the fit items: {}'.format(item, all_items)
+                item = self._fit_items[model_name][item]
+                for i in mod.xml.xpath(query):
+                    for j in list(i):
+                        if j.attrib['name'] == 'ObjectCN':
+                            # locate references
+                            # remove local parameters from PE task
+                            match = re.findall('Reference=(.*)', j.attrib['value'])[0]
+                            if match == 'Value':
+                                pattern = 'Reactions\[(.*)\].*Parameter=(.*),Reference=(.*)'
+                                match2_copasiML = re.findall(pattern, j.attrib['value'])
+                                if match2_copasiML != []:
+                                    match2_item = re.findall(pattern, item['value'])
+                                    if match2_item != []:
+                                        if match2_item == match2_copasiML:
+                                            i.getparent().remove(i)
 
-                    # remove IC parameters from PE task
-                    elif match == 'InitialConcentration' or match == 'InitialParticleNumber':
-                        pattern = 'Metabolites\[(.*)\],Reference=(.*)'
-                        match2_copasiML = re.findall(pattern, j.attrib['value'])
-                        if match2_copasiML != []:
-                            if match2_copasiML[0][1] == 'InitialConcentration' or match2_copasiML[0][
-                                1] == 'InitialParticleNumber':
-                                match2_item = re.findall(pattern, item['value'])
-                                if match2_item != []:
+                            # rempve global parameters from PE task
+                            elif match == 'InitialValue':
+                                pattern = 'Values\[(.*)\].*Reference=(.*)'
+                                match2_copasiML = re.findall(pattern, j.attrib['value'])
+                                if match2_copasiML != []:
+                                    match2_item = re.findall(pattern, item['value'])
                                     if match2_item == match2_copasiML:
                                         i.getparent().remove(i)
-                    else:
-                        raise TypeError(
-                            'Parameter {} is not a local parameter, initial concentration parameter or a global parameter.initial_value'.format(
-                                match2_item))
-        return mod
 
-    def _remove_all_fit_items(self):
-        """
-        Iterate over all fit items and remove them
-        from the parameter estimation task
-        :return: pycotools3.model.Model
-        """
-        for model_name in self.models:
-            for i in self._fit_items[model_name]:
-                self.models[model_name] = self._remove_fit_item(model_name, i)
+                            # remove IC parameters from PE task
+                            elif match == 'InitialConcentration' or match == 'InitialParticleNumber':
+                                pattern = 'Metabolites\[(.*)\],Reference=(.*)'
+                                match2_copasiML = re.findall(pattern, j.attrib['value'])
+                                if match2_copasiML != []:
+                                    if match2_copasiML[0][1] == 'InitialConcentration' or match2_copasiML[0][
+                                        1] == 'InitialParticleNumber':
+                                        match2_item = re.findall(pattern, item['value'])
+                                        if match2_item != []:
+                                            if match2_item == match2_copasiML:
+                                                i.getparent().remove(i)
+                            else:
+                                raise TypeError(
+                                    'Parameter {} is not a local parameter, initial concentration parameter or a global parameter.initial_value'.format(
+                                        match2_item))
+            self.models[model_name].model = mod
         return self.models
 
     def _get_experiment_keys(self):
@@ -3739,10 +3747,6 @@ class ParameterEstimation(_Task):
         Choose PE algorithm and set algorithm specific parameters
         '''
 
-        settings = self.config.settings
-        for k, v in settings.items():
-            if isinstance(v, (int, float)):
-                settings[k] = str(v)
         # Build xml for method.
         method_name, method_type = self._select_method()
         method_params = {'name': method_name, 'type': method_type}
@@ -3751,30 +3755,30 @@ class ParameterEstimation(_Task):
         # list of attribute dictionaries
         # Evolutionary strategy parametery
         number_of_generations = {'type': 'unsignedInteger', 'name': 'Number of Generations',
-                                 'value': self.config.settings.number_of_generations}
+                                 'value': str(self.config.settings.number_of_generations)}
         population_size = {'type': 'unsignedInteger', 'name': 'Population Size',
-                           'value': self.config.settings.population_size}
+                           'value': str(self.config.settings.population_size)}
         random_number_generator = {'type': 'unsignedInteger', 'name': 'Random Number Generator',
-                                   'value': self.config.settings.random_number_generator}
-        seed = {'type': 'unsignedInteger', 'name': 'Seed', 'value': self.config.settings.seed}
-        pf = {'type': 'float', 'name': 'Pf', 'value': self.config.settings.pf}
+                                   'value': str(self.config.settings.random_number_generator)}
+        seed = {'type': 'unsignedInteger', 'name': 'Seed', 'value': str(self.config.settings.seed)}
+        pf = {'type': 'float', 'name': 'Pf', 'value': str(self.config.settings.pf)}
         # local method parameters
         iteration_limit = {'type': 'unsignedInteger', 'name': 'Iteration Limit',
-                           'value': self.config.settings.iteration_limit}
-        tolerance = {'type': 'float', 'name': 'Tolerance', 'value': self.config.settings.tolerance}
-        rho = {'type': 'float', 'name': 'Rho', 'value': self.config.settings.rho}
-        scale = {'type': 'unsignedFloat', 'name': 'Scale', 'value': self.config.settings.scale}
+                           'value': str(self.config.settings.iteration_limit)}
+        tolerance = {'type': 'float', 'name': 'Tolerance', 'value': str(self.config.settings.tolerance)}
+        rho = {'type': 'float', 'name': 'Rho', 'value': str(self.config.settings.rho)}
+        scale = {'type': 'unsignedFloat', 'name': 'Scale', 'value': str(self.config.settings.scale)}
         # Particle Swarm parmeters
-        swarm_size = {'type': 'unsignedInteger', 'name': 'Swarm Size', 'value': self.config.settings.swarm_size}
-        std_deviation = {'type': 'unsignedFloat', 'name': 'Std. Deviation', 'value': self.config.settings.std_deviation}
+        swarm_size = {'type': 'unsignedInteger', 'name': 'Swarm Size', 'value': str(self.config.settings.swarm_size)}
+        std_deviation = {'type': 'unsignedFloat', 'name': 'Std. Deviation', 'value': str(self.config.settings.std_deviation)}
         # Random Search parameters
         number_of_iterations = {'type': 'unsignedInteger', 'name': 'Number of Iterations',
-                                'value': self.config.settings.number_of_iterations}
+                                'value': str(self.config.settings.number_of_iterations)}
         # Simulated Annealing parameters
         start_temperature = {'type': 'unsignedFloat', 'name': 'Start Temperature',
-                             'value': self.config.settings.start_temperature}
+                             'value': str(self.config.settings.start_temperature)}
         cooling_factor = {'type': 'unsignedFloat', 'name': 'Cooling Factor',
-                          'value': self.config.settings.cooling_factor}
+                          'value': str(self.config.settings.cooling_factor)}
 
         # build the appropiate xML, with method at root (for now)
         if self.config.settings.method == 'current_solution_statistics':
@@ -4021,6 +4025,8 @@ class ParameterEstimation(_Task):
 
         self.config.models = self._define_report()
 
+
+
         self.models = self._map_experiments(validation=False)
         self.models = self._map_experiments(validation=True)
 
@@ -4034,6 +4040,7 @@ class ParameterEstimation(_Task):
         self.models = self._set_PE_options()
         self.models = self._add_fit_items(constraint=False)
         self.models = self._add_fit_items(constraint=True)
+
 
         ##todo self.models has experiments as keys for some reason. fix
 
@@ -4051,7 +4058,7 @@ class ParameterEstimation(_Task):
         :return:
         :param models: dict of models. Output from _setup()
         """
-        self.results_directory
+
         if self.config.settings.run_mode == 'sge':
             try:
                 check_call('qhost')
@@ -4068,13 +4075,13 @@ class ParameterEstimation(_Task):
                     max_active=self.config.settings.max_active,
                     task='scan')
 
-        elif self.config.settings.run_mode is True or self.config.settings.run_mode == 'True':
+        elif self.config.settings.run_mode is True:
             for model_name in models:
                 for copy_number, mod in list(models[model_name].items()):
                     LOG.info(f'running model {model_name}: {copy_number}')
                     Run(mod, mode=self.config.settings.run_mode, task='scan')
 
-        elif not self.config.settings.run_mode or self.config.settings.run_mode == 'False':
+        elif not self.config.settings.run_mode:
             pass
 
         else:

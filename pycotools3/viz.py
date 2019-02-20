@@ -607,58 +607,60 @@ class Parse(object):
         :param folder: afternative folder to parse from. Useful for tests
         :return:
         """
-        ##set default
-        if folder == None:
-            folder = cls_instance.results_directory
-        d = {}
+        dct = {}
+        for model_name in cls_instance.models:
+            mod = cls_instance.models[model_name].model
+            ##set default
+            if folder == None:
+                folder = cls_instance.results_directory[model_name]
+            tmp_dct = {}
+            for report_name in glob.glob(folder+r'/*.txt'):
+                report_name = os.path.abspath(report_name)
+                if os.path.isfile(report_name) != True:
+                    raise errors.FileDoesNotExistError('"{}" does not exist'.format(report_name))
 
-        for report_name in glob.glob(folder+r'/*.txt'):
-            report_name = os.path.abspath(report_name)
-            if os.path.isfile(report_name) != True:
-                raise errors.FileDoesNotExistError('"{}" does not exist'.format(report_name))
+                try:
+                    data = pandas.read_csv(report_name,
+                                           sep='\t', header=None, skiprows=[0])
+                except:
+                    LOG.warning('No Columns to parse from file. {} is empty. Skipping this file'.format(
+                        report_name))
+                    continue
+                try:
+                    bracket_columns = data[data.columns[[0, -2]]]
 
-            try:
-                data = pandas.read_csv(report_name,
-                                       sep='\t', header=None, skiprows=[0])
-            except:
-                LOG.warning('No Columns to parse from file. {} is empty. Skipping this file'.format(
-                    report_name))
-                continue
-            try:
-                bracket_columns = data[data.columns[[0, -2]]]
+                except IndexError:
+                    raise errors.SomethingWentHorriblyWrongError(
+                        'Rare problem with data file : "{}". Check it manually'
+                        ' and remove if it is corrupt'.format(report_name)
+                    )
 
-            except IndexError:
-                raise errors.SomethingWentHorriblyWrongError(
-                    'Rare problem with data file : "{}". Check it manually'
-                    ' and remove if it is corrupt'.format(report_name)
-                )
+                if bracket_columns.iloc[0].iloc[0] != '(':
+                    data = pandas.read_csv(report_name, sep='\t')
+                    tmp_dct[report_name] = data
+                else:
+                    data = data.drop(data.columns[[0, -2]], axis=1)
+                    data.columns = list(range(data.shape[1]))
+                    ### parameter of interest has been removed.
+                    names = mod.fit_item_order+['RSS']
+                    if mod.fit_item_order == []:
+                        raise errors.SomethingWentHorriblyWrongError('Parameter Estimation task is empty')
 
-            if bracket_columns.iloc[0].iloc[0] != '(':
-                data = pandas.read_csv(report_name, sep='\t')
-                d[report_name] = data
-            else:
-                data = data.drop(data.columns[[0, -2]], axis=1)
-                data.columns = list(range(data.shape[1]))
-                ### parameter of interest has been removed.
-                names = cls_instance.model.fit_item_order+['RSS']
-                if cls_instance.model.fit_item_order == []:
-                    raise errors.SomethingWentHorriblyWrongError('Parameter Estimation task is empty')
+                    if len(names) != data.shape[1]:
+                        raise errors.SomethingWentHorriblyWrongError('length of parameter estimation data does not equal number of parameters estimated')
 
-                if len(names) != data.shape[1]:
-                    raise errors.SomethingWentHorriblyWrongError('length of parameter estimation data does not equal number of parameters estimated')
+                    if os.path.isfile(report_name):
+                        os.remove(report_name)
+                    data.columns = names
+                    data.to_csv(report_name, sep='\t', index=False)
+                    tmp_dct[report_name] = data
+            df = pandas.concat(tmp_dct)
+            columns = df.columns
+            ## reindex, drop and sort by RSS
+            df = df.reset_index().drop(['level_0', 'level_1'], axis=1).sort_values(by='RSS')
 
-                if os.path.isfile(report_name):
-                    os.remove(report_name)
-                data.columns = names
-                data.to_csv(report_name, sep='\t', index=False)
-                d[report_name] = data
-        df = pandas.concat(d)
-        columns = df.columns
-        ## reindex, drop and sort by RSS
-        df = df.reset_index().drop(['level_0', 'level_1'], axis=1).sort_values(by='RSS')
-
-        return df.reset_index(drop=True)
-
+            dct[model_name] = df.reset_index(drop=True)
+        return dct
     # @cached_property
     def from_chaser_estimations(self, cls_instance, folder=None):
         """
