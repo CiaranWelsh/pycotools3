@@ -241,11 +241,6 @@ class BuildAntimony(object):
                     end
                     '''
                 )
-
-    Args:
-
-    Returns:
-
     """
 
     def __init__(self, copasi_file: str):
