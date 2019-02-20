@@ -197,13 +197,49 @@ class Build(object):
 
 
 class BuildAntimony(object):
-    """
-    Context manager around telluriums antimony to SBML conversion.
-    Builds an sbml from antimony code, converts it to a copasi
-    file which is then coerced into a pycotools3 model.
+    """A context manager to create a copasi file in :code:`copasi_file` from the antimony
+    string and return a :class:`Model' object. The :method:`BuildAntimony.load` method takes
+    an antimony string as argument and returns a :class:`Models` object.
+
+    Examples:
+
+        .. code-block:: python
+
+            working_directory = os.path.dirname(__file__)
+            copasi_filename = os.path.join(working_directory, 'NegativeFeedbackModel.cps')
+            with model.BuildAntimony(copasi_filename) as loader:
+                negative_feedback = loader.load(
+                    '''
+                    model negative_feedback()
+                        // define compartments
+                        compartment cell = 1.0
+                        //define species
+                        var A in cell
+                        var B in cell
+                        //define some global parameter for use in reactions
+                        vAProd = 0.1
+                        kADeg = 0.2
+                        kBProd = 0.3
+                        kBDeg = 0.4
+                        //define initial conditions
+                        A = 0
+                        B = 0
+                        //define reactions
+                        AProd: => A; cell*vAProd
+                        ADeg: A =>; cell*kADeg*A*B
+                        BProd: => B; cell*kBProd*A
+                        BDeg: B => ; cell*kBDeg*B
+                    end
+                    '''
+                )
     """
 
-    def __init__(self, copasi_file):
+    def __init__(self, copasi_file: str):
+        """
+
+        Args:
+            copasi_file (str): Path to a valid location on disk to store the copasi file
+        """
         self.copasi_file = copasi_file
         self.copasiSE_output_file = self.copasi_file[:-4] + '.sbml.cps'
         self.sbml_file = os.path.splitext(self.copasi_file)[0] + '.sbml'
@@ -225,8 +261,15 @@ class BuildAntimony(object):
 
     def load(self, antimony_str):
         """
-        :param antimony_str:
-        :return:
+        Load the antimony string :code:`antimony_str` into
+        a :code:`copasi_file` and :class:`Model`.
+
+        Args
+            antimony_str (str): A valid antimony string encoding a model
+
+        return
+            model (:class:`Model`)
+                A PyCoTools model containing the model defined in the :parameter:`antiomny_str`.
         """
         ## wrap conversion function in try block
         ## so we can store the exception
@@ -411,7 +454,6 @@ class Model(_base._Base):
 
     def __contains__(self, item):
         return item in self.all_variable_names
-
 
     def reset_cache(self, prop):
         """
@@ -939,7 +981,6 @@ class Model(_base._Base):
         if prefix is not None:
             names = [name for name in names if name.startswith(prefix)]
         return sorted(names)
-
 
     @cached_property
     def local_parameters(self):

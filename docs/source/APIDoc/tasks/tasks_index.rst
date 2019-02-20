@@ -4,7 +4,7 @@ tasks
 .. toctree::
    :caption: tasks
 
-.. automodule:: pycotools.tasks
+.. automodule:: pycotools3.tasks
     :members:
 
 
