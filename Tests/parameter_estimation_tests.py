@@ -181,7 +181,6 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
                     }
                 }
             },
-
             items={
                 'fit_items': {
 
@@ -203,7 +202,6 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
                     }
                 },
             },
-
             settings={
                 'method': 'genetic_algorithm_sr',
                 'population_size': 38,
@@ -217,17 +215,9 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
                 'run_mode': False
 
             }
-
         )
         self.PE = ParameterEstimation(self.config)
 
-    # def test___str__(self):
-    #     string = "{'model1': Model(name=TestModel1, time_unit=s, volume_unit=ml, quantity_unit=mmol)}"
-    #     self.assertEqual(str(self.config.models), string)
-
-    # def test_A(self):
-    #     print(self.PE.config)
-    #
     def test_experiment_kw1(self):
         self.assertEqual(
             os.path.join(os.path.dirname(__file__), self.TC1.report_name),
@@ -349,6 +339,13 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
         fname = os.path.join(os.path.dirname(__file__), 'config_file.yml')
         self.PE.config.to_yaml(fname)
         self.assertTrue(os.path.isfile(fname))
+
+    def test_create_config_without_prefix_then_add_prefix(self):
+        self.config.settings.prefix = 'B'
+        self.config.configure()
+        actual = list(self.config.items.fit_items.keys())
+        expected = ['B']
+        self.assertListEqual(expected, actual)
 
 
 class ParameterEstimationConfigResolveSpecialArgsTests(_test_base._BaseTest):
@@ -1252,25 +1249,25 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
         ss_df.to_csv(self.report4, sep='\t', index=False)
 
     def test_create_config(self):
-        with ParameterEstimation.Context(context='s', parameters='a') as context:
-            context.add_models([self.model.copasi_file])
-            context.add_experiments(
+        with ParameterEstimation.Context(
+                self.model.copasi_file,
                 [self.TC1.report_name, self.TC2.report_name,
-                 self.report3, self.report4])
-            context.add_setting('working_directory', os.path.dirname(__file__))
-            config = context.create_config()
+                 self.report3, self.report4], context='s', parameters='a') as config:
+            config.settings.method = 'genetic_algorithm_sr'
+            config.settings.number_of_generations = 25
+            config.settings.population_size = 10
         self.assertTrue(isinstance(config, ParameterEstimation.Config))
 
     def test_create_config_file(self):
         fname = os.path.join(os.path.dirname(__file__), 'config_file.yaml')
-        with ParameterEstimation.Context(context='s', parameters='a', filename=fname) as context:
-            context.add_models([self.model.copasi_file])
-            context.add_experiments(
+        with ParameterEstimation.Context(
+                self.model.copasi_file,
                 [self.TC1.report_name, self.TC2.report_name,
-                 self.report3, self.report4])
-            context.add_setting('working_directory', os.path.dirname(__file__))
-            config = context.create_config()
-
+                 self.report3, self.report4],
+                context='s', parameters='a', filename=fname) as config:
+            config.settings.method = 'genetic_algorithm_sr'
+            config.settings.number_of_generations = 25
+            config.settings.population_size = 10
         self.assertTrue(os.path.isfile(fname))
 
     def test_create_config_file_when_already_exists(self):
@@ -1281,29 +1278,59 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
 
         assert os.path.isfile(fname)
 
-        with ParameterEstimation.Context(context='s', parameters='a', filename=fname) as context:
-            context.add_models([self.model.copasi_file])
-            context.add_experiments(
+        with ParameterEstimation.Context(
+                self.model.copasi_file,
                 [self.TC1.report_name, self.TC2.report_name,
-                 self.report3, self.report4])
-            context.add_settings({'working_directory': os.path.dirname(__file__),
-                                  'overwrite_config_file': True})
-            config = context.create_config()
+                 self.report3, self.report4],
+                context='s', parameters='a', filename=fname) as config:
+            config.settings.method = 'genetic_algorithm_sr'
+            config.settings.number_of_generations = 25
+            config.settings.population_size = 10
 
         self.assertTrue(os.path.isfile(fname))
 
     def test_create_config_file_with_prefix(self):
-        with ParameterEstimation.Context(context='s', parameters='a') as context:
-            context.add_models([self.model.copasi_file])
-            context.add_experiments(
+        ## means set_Default_fit_items_str isn't working properly
+        with ParameterEstimation.Context(
+                self.model.copasi_file,
                 [self.TC1.report_name, self.TC2.report_name,
-                 self.report3, self.report4])
-            context.add_setting('working_directory', os.path.dirname(__file__))
-            context.add_setting('prefix', 'B')
-            config = context.create_config()
+                 self.report3, self.report4],
+                context='s', parameters='a') as config:
+            config.settings.method = 'genetic_algorithm_sr'
+            config.settings.number_of_generations = 25
+            config.settings.population_size = 10
+            config.settings.prefix = 'B'
         expected = sorted(['B', 'B2C', 'B2C_0_k2'])
         actual = sorted(list(config.items.fit_items.keys()))
         self.assertListEqual(expected, actual)
+
+    def test_settings_get_updated(self):
+        with ParameterEstimation.Context(
+                self.model.copasi_file,
+                [self.TC1.report_name, self.TC2.report_name,
+                 self.report3, self.report4],
+                context='s', parameters='a') as config:
+            config.settings.method = 'genetic_algorithm_sr'
+            config.settings.number_of_generations = 25
+            config.settings.population_size = 14
+            config.settings.prefix = 'B'
+        expected = 'genetic_alogrithm_sr'
+        actual = config.settings.method
+        self.assertEqual(expected, actual)
+
+    def test_settings_get_updated2(self):
+        with ParameterEstimation.Context(
+                self.model.copasi_file,
+                [self.TC1.report_name, self.TC2.report_name,
+                 self.report3, self.report4],
+                context='s', parameters='a') as config:
+            config.settings.method = 'genetic_algorithm_sr'
+            config.settings.number_of_generations = 25
+            config.settings.population_size = 14
+            config.settings.prefix = 'B'
+        expected = 14
+        actual = config.settings.population_size
+        self.assertEqual(expected, actual)
 
 
 class ParameterEstimationTestsWithDifferentModel(unittest.TestCase):

@@ -561,7 +561,8 @@ class Run(_Task):
         Returns:
 
         """
-        p = subprocess.Popen(f'{COPASISE} "{self.model.copasi_file}"', stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        p = subprocess.Popen(f'{COPASISE} "{self.model.copasi_file}"', stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE, shell=True)
         output, err = p.communicate()
         d = {}
         d['output'] = output
@@ -2322,7 +2323,7 @@ class ParameterEstimation(_Task):
                 setattr(self, kw, self.kwargs[kw])
 
             self._load_models()
-            self.set_defaults()
+            self.configure()
             self._validate_integrity_of_user_input()
 
         def __iter__(self):
@@ -2467,10 +2468,9 @@ class ParameterEstimation(_Task):
                 if 'copasi_file' in self.models[mod].keys():
                     self.models[mod]['model'] = model.Model(self.models[mod].copasi_file)
 
-        def set_defaults(self):
+        def configure(self):
             """ """
             ## update datasets defaults
-
             self._add_defaults_to_dict(self.settings, self.settings_defaults)
 
             self._add_defaults_to_dict(self.datasets, self.dataset_defaults)
@@ -2567,7 +2567,6 @@ class ParameterEstimation(_Task):
 
         def set_default_fit_items_str(self):
             """ """
-
             if not isinstance(self.items.fit_items, str):
                 raise TypeError
 
@@ -2621,6 +2620,7 @@ class ParameterEstimation(_Task):
 
         def set_default_fit_items_dct(self):
             """ """
+            ## remove fit items if prefix condition is not satisified
             for fit_item in self.items.fit_items:
                 item = self.items.fit_items.get(fit_item)
 
@@ -2647,7 +2647,16 @@ class ParameterEstimation(_Task):
                 if item['affected_models'] == 'all':
                     item['affected_models'] = list(self.models.keys())
 
-                self.items.fit_items[fit_item] = munch.Munch.fromDict(item)
+                self.items.fit_items[fit_item] = munch.Munch.fromDict(item)#
+
+            ## caters for the situation where we define a config file but
+            ## need to update it due to a change in prefix argument
+            tmp_dct = {}
+            if self.settings.prefix is not None:
+                if not isinstance(self.settings.prefix, str):
+                    raise TypeError(f'config.settings.prefix argument should be of type "str"')
+                tmp =  {fit_item: self.items.fit_items[fit_item] for fit_item in self.items.fit_items if fit_item.startswith(self.settings.prefix)}
+                self.items.fit_items = munch.Munch.fromDict(tmp)
 
         def set_default_constraint_items(self):
             """ """
@@ -2994,6 +3003,7 @@ class ParameterEstimation(_Task):
             """ """
             return self.items.constraint_items
 
+    ##todo implement a way of preventing users from adding an incorrect argument to config once config is created
     def __init__(self, config):
         """
         todo: Write new doc strings for ParameterEstimation and Config class
@@ -4127,7 +4137,8 @@ class ParameterEstimation(_Task):
         scale = {'type': 'unsignedFloat', 'name': 'Scale', 'value': str(self.config.settings.scale)}
         # Particle Swarm parmeters
         swarm_size = {'type': 'unsignedInteger', 'name': 'Swarm Size', 'value': str(self.config.settings.swarm_size)}
-        std_deviation = {'type': 'unsignedFloat', 'name': 'Std. Deviation', 'value': str(self.config.settings.std_deviation)}
+        std_deviation = {'type': 'unsignedFloat', 'name': 'Std. Deviation',
+                         'value': str(self.config.settings.std_deviation)}
         # Random Search parameters
         number_of_iterations = {'type': 'unsignedInteger', 'name': 'Number of Iterations',
                                 'value': str(self.config.settings.number_of_iterations)}
@@ -4403,8 +4414,6 @@ class ParameterEstimation(_Task):
 
         self.config.models = self._define_report()
 
-
-
         self.models = self._map_experiments(validation=False)
         self.models = self._map_experiments(validation=True)
 
@@ -4418,7 +4427,6 @@ class ParameterEstimation(_Task):
         self.models = self._set_PE_options()
         self.models = self._add_fit_items(constraint=False)
         self.models = self._add_fit_items(constraint=True)
-
 
         ##todo self.models has experiments as keys for some reason. fix
 
@@ -4492,10 +4500,17 @@ class ParameterEstimation(_Task):
 
         experiment_filetypes = ['.txt', '.csv']
 
-        def __init__(self, context='custom', parameters=None, filename=None):
+        def __init__(self, models, experiments, working_directory=None,
+                     context='s', parameters=None, filename=None,
+                     validation_experiments=None, settings={}):
+            self.models = models
+            self.experiments = experiments
+            self.working_directory = working_directory
             self.context = context
             self.parameters = parameters
             self.filename = filename
+            self.validation_experiments = validation_experiments
+            self.settings = settings
 
             if self.parameters not in self.acceptable_parameters_args:
                 raise errors.InputError(
@@ -4505,31 +4520,33 @@ class ParameterEstimation(_Task):
                 )
 
         def __enter__(self):
-            return self
+            self.config = self.setup()
+            return self.config
 
         def __exit__(self, exc_type, exc_value, exc_traceback):
+            ## update the config
+            print('runnint __Exit__')
+            self.config.configure()
+
+
             if exc_type:
                 print(f'exc_type: {exc_type}')
                 print(f'exc_value: {exc_value}')
                 print(f'exc_traceback: {exc_traceback}')
 
-        def add_models(self, models):
+        def add_models(self, models: (str, list)):
             """
+            Add models to class attributes
 
             Args:
-              models: 
+              models (str, list): Path to copasi file or list of paths to copasi files
 
             Returns:
-
+                None
             """
             ## if models passed as a string
             if isinstance(models, str):
-                ## if this is an existing file with .cps extension
-                if os.path.isfile(models) and os.path.splitext(models)[1] == '.cps':
-                    ## and convert to a list of 1
-                    models = [models]
-                else:
-                    raise errors.InputError(f'"{models}" does not exist')
+                models = [models]
             elif isinstance(models, list):
                 for i in models:
                     if not os.path.isfile(i):
@@ -4538,30 +4555,20 @@ class ParameterEstimation(_Task):
                         )
             setattr(self, 'models', models)
 
-        def add_experiments(self, experiments):
+        def add_experiments(self, experiments: (str, list)):
             """
-
+            Add list of experiments to class attributes
             Args:
-              experiments: 
+                experiments (str, list): Path pointing to experimental data file or list of paths pointing to experimental data files
 
             Returns:
-
+                None
             """
+
             if isinstance(experiments, str):
-                ## if this is an existing file with .cps extension
-                if os.path.isfile(experiments):
-                    if os.path.splitext(experiments)[1] in self.experiment_filetypes:
-                        ## and convert to a list of 1
-                        models = [experiments]
-                    else:
-                        raise errors.InputError(
-                            f'File with "{os.path.splitext(experiments)[1]}" is not supported'
-                        )
+                experiments = [experiments]
 
-                else:
-                    raise errors.InputError(f'"{experiments}" does not exist')
-
-            elif isinstance(experiments, list):
+            if isinstance(experiments, list):
                 for i in experiments:
                     if not os.path.isfile(i):
                         raise errors.InputError(
@@ -4573,28 +4580,17 @@ class ParameterEstimation(_Task):
                         )
             setattr(self, 'experiments', experiments)
 
-        def add_validation_experiments(self, experiments):
-            """
+        def add_validation_experiments(self, experiments: (str, list)):
+            """Add experiments to validation_experiments attribute
 
             Args:
-              experiments: 
+              experiments (str, list): path to validation data or list of paths to validation data
 
             Returns:
-
+                None
             """
             if isinstance(experiments, str):
-                ## if this is an existing file with .cps extension
-                if os.path.isfile(experiments):
-                    if os.path.splitext(experiments)[1] in self.experiment_filetypes:
-                        ## and convert to a list of 1
-                        models = [experiments]
-                    else:
-                        raise errors.InputError(
-                            f'File with "{os.path.splitext(experiments)[1]}" is not supported'
-                        )
-
-                else:
-                    raise errors.InputError(f'"{experiments}" does not exist')
+                experiments = [experiments]
 
             elif isinstance(experiments, list):
                 for i in experiments:
@@ -4607,6 +4603,24 @@ class ParameterEstimation(_Task):
                             f'File with "{os.path.splitext(i)[1]}" is not supported'
                         )
             setattr(self, 'validation_experiments', experiments)
+
+        def add_working_directory(self, working_directory: str):
+            """
+            Add working_directory to class attributes. Put in same path
+            as first copasi model if argument not specified.
+            Args:
+                working_directory (str): Path to location on the system to store analysis
+
+            Returns:
+                None
+            """
+            if working_directory is None or working_directory == '':
+                working_directory = os.path.dirname(self.models[0])
+
+            if not os.path.isdir(working_directory):
+                raise errors.InputError(f'"{working_directory}" does not exist')
+
+            self.settings['working_directory'] = working_directory
 
         def add_setting(self, setting, value):
             """
@@ -4631,14 +4645,16 @@ class ParameterEstimation(_Task):
             Returns:
 
             """
-            if not hasattr(self, 'settings'):
-                setattr(self, 'settings', {})
             if not isinstance(settings, dict):
                 raise TypeError(f'add_settings expects a dict as argument. Got "{type(settings)}"')
             self.settings.update(settings)
 
-        def create_config(self):
-            """ """
+        def setup(self):
+            self.add_models(self.models)
+            self.add_experiments(self.experiments)
+            self.add_validation_experiments(self.validation_experiments)
+            self.add_settings(self.settings)
+            self.add_working_directory(self.working_directory)
 
             models = {os.path.split(i)[1][:-4]: {
                 'model': model.Model(i),
@@ -4674,9 +4690,7 @@ class ParameterEstimation(_Task):
                     raise errors.SomethingWentHorriblyWrongError(
                         'Something weird happened.'
                     )
-
             return config
-
 
 class ChaserParameterEstimations(_Task):
     """Perform secondary hook and jeeves parameter estimations
