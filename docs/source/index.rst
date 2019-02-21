@@ -46,7 +46,7 @@ This is a guide to PyCoTools version >2.0.1. The links below provide a tutorial 
    :glob:
 
    getting_started.ipynb
-   Tutorials/Timecourse.ipynb
+   Tutorials/*.ipynb
 
 
 
