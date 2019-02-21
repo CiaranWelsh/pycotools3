@@ -41,9 +41,12 @@ Documentation
 This is a guide to PyCoTools version >2.0.1. The links below provide a tutorial style documentation on how to use pycotools. For example style documentation, please navigate to the :ref:`examples-index` page.
 
 .. toctree::
-   :max-depth: 1
+   :maxdepth: 1
+   :name: master-toc
+   :glob:
 
-   getting-started
+   getting_started.ipynb
+   Tutorials/Timecourse.ipynb
 
 
 
@@ -79,6 +82,19 @@ Support
 -------
 Users can post a question on stack-overflow using the :code:`pycotools` tag. I get email notifications for these questions and will respond.
 
+
+People
+------
+PyCoTools has been developed by Ciaran Welsh in Daryl Shanley's lab at Newcastle University.
+
+Caveats
+=======
+* Non-ascii characters are minimally supported and can break PyCoTools
+* Do not use unusual characters or naming systems (i.e. A reaction name called "A -> B" will break pycotools)
+* In COPASI we can have (say) a global quantity and a metaboltie
+with the same name because they are different entities. This is not
+supported in Pycotools and you must use unique names for every model
+component
 
 
 Citing PyCoTools

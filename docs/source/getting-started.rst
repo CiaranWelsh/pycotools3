@@ -17,43 +17,63 @@ Since antimony is described `elsewhere <http://tellurium.analogmachine.org/antim
 Build a model with antimony
 ---------------------------
 
-.. doctest::
+.. testcode::
 
+    from pycotools3 import model
     working_directory = os.path.dirname(__file__)
     copasi_filename = os.path.join(working_directory, 'NegativeFeedbackModel.cps')
     antimony_string =  '''
-            model negative_feedback()
-                // define compartments
-                compartment cell = 1.0
-                //define species
-                var A in cell
-                var B in cell
-                //define some global parameter for use in reactions
-                vAProd = 0.1
-                kADeg = 0.2
-                kBProd = 0.3
-                kBDeg = 0.4
-                //define initial conditions
-                A = 0
-                B = 0
-                //define reactions
-                AProd: => A; cell*vAProd
-                ADeg: A =>; cell*kADeg*A*B
-                BProd: => B; cell*kBProd*A
-                BDeg: B => ; cell*kBDeg*B
-            end
-            '''
+        model negative_feedback()
+            // define compartments
+            compartment cell = 1.0
+            //define species
+            var A in cell
+            var B in cell
+            //define some global parameter for use in reactions
+            vAProd = 0.1
+            kADeg = 0.2
+            kBProd = 0.3
+            kBDeg = 0.4
+            //define initial conditions
+            A = 0
+            B = 0
+            //define reactions
+            AProd: => A; cell*vAProd
+            ADeg: A =>; cell*kADeg*A*B
+            BProd: => B; cell*kBProd*A
+            BDeg: B => ; cell*kBDeg*B
+        end
+        '''
     with model.BuildAntimony(copasi_filename) as loader:
         negative_feedback = loader.load(antimony_string)
     print(negative_feedback)
     assert os.path.isfile(copasi_filename)
 
+.. testoutput::
+
+    print('output')
+
+Create an antmiony string from an existing model
+------------------------------------------------
+The Copasi user interface is an excellant way of constructing a model and it is easy to convert this model into an antimony string that can be pasted into a document.
+
+.. testcode:: python
+
+   >>> negative_feedback.to_antimony()
+
+.. testoutput::
+
+One paradigm of model development is to use antimony to 'hard code' perminent changes to the model.
+
+
+
 Simulate a time course
 ----------------------
 Since we have used an antimony string, we can simulate this model with either tellurium or Copasi. Simulating with tellurium uses a library called roadrunner which is described in detail `elsewhere <https://libroadrunner.readthedocs.io/en/latest/integration.html>`_. To run a simulation with Copasi we need to configure the time course task, make the task executable (i.e. tick the check box in the top right of the time course task) and run the simulation with CopasiSE. This is all taken care of by the :class:`tasks.TimeCourse` class.
 
-.. doctest::
+.. code-block:: python
 
+    >>> from pycotools3 import tasks
     >>> time_course = tasks.TimeCourse(negative_feedback, end=100, step_size=1, intervals=100)
 
 The results are saved in a file defined by the :code:`report_name` option, which defaults to :code:`timecourse.txt` in the same directory as the copasi model.
@@ -62,15 +82,17 @@ Visualise a time course
 -----------------------
 PyCoTools also provides facilities for visualising simulation output. To plot a timecourse, pass the :class:`task.TimeCourse` object to the :class:`viz.PlotTimeCourse` object.
 
-.. doctest::
+.. code-block:: python
 
+    >>> from pycotools3 import viz
     >>> viz.PlotTimeCourse(time_course, savefig=True)
 
 
-More information about running time courses with PyCoTools and Copasi can be found in the `time course tutorial <>`_
+More information about running time courses with PyCoTools and Copasi can be found in the `time course tutorial <./Tutorials/Timecourse.ipynb>`_
 
 
-
+Running a simple parameter estimation
+-------------------------------------
 
 
 

@@ -1313,7 +1313,7 @@ class TimeCourse(_Task):
     run                             Default: True
     correct_headers                 Default: True
     save                            Default: False
-    <report_kwargs>                 Arguments for :ref:`_report_kwargs` are also
+    <report_kwargs>                 Arguments for :ref:`report_kwargs` are also
                                     accepted here
     ===========================     ==============================================
 
@@ -1370,7 +1370,7 @@ class TimeCourse(_Task):
         self.set_timecourse()
         self.set_report()
 
-        self.run_task()
+        self.simulate()
 
         ## self.correct_output_headers()
 
@@ -1430,7 +1430,7 @@ class TimeCourse(_Task):
             self.method, self.end, self.intervals, self.step_size
         )
 
-    def run_task(self):
+    def simulate(self):
         """ """
         R = Run(self.model, task='time_course', mode=self.run)
         return R.model
