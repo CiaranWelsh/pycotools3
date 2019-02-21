@@ -37,12 +37,14 @@ def format_timecourse_data(report_name):
     """read time course data into pandas dataframe. Remove
     copasi generated square brackets around the variables
     and write to file again.
-    :return: pandas.DataFrame
+
+    Modifies the file inplace
 
     Args:
-      report_name: 
+      report_name (str): path to a copasi time course simulation results file
 
     Returns:
+        pandas.DataFrame
 
     """
 

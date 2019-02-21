@@ -37,7 +37,7 @@ from . import misc
 # import errors, misc, viz
 from . import _base
 from . import tasks
-from .utils import load_copasi
+from .utils import load_copasi, format_timecourse_data
 
 import pandas
 import re
@@ -2348,6 +2348,30 @@ class Model(_base._Base):
         I = InsertParameters(self, **kwargs)
         if kwargs.get('show_parameters'):
             LOG.info('Parameter set that was inserted: \n\n{}'.format(I.parameters.transpose()))
+
+    def simulate(self, start, stop, by, species='m', **kwargs):
+        for i in [start, stop, by]:
+            if not isinstance(i, (float, int)):
+                raise TypeError(f'\"{i}" must be of type int or float. Got "{type(i)}"')
+
+        TC = tasks.TimeCourse(self, start=start,
+                              end=stop, step_size=by,
+                              intervals=stop*by-start,
+                              **kwargs)
+
+        variables = self.get_variable_names(which=species, include_assignments=True)
+
+        if not os.path.isfile(TC.report_name):
+            raise RuntimeError('Time course did not simulate')
+
+        format_timecourse_data(TC.report_name)
+
+        df = pandas.read_csv(TC.report_name, sep='\t', index_col=0)
+
+        return df[variables]
+
+
+
 
     def to_antimony(self):
         """Returns antimony string of model. Wrapper around tellurium

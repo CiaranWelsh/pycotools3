@@ -2299,6 +2299,22 @@ class Scan(_Task):
 @mixin(model.ReadModelMixin)
 class ParameterEstimation(_Task):
     """ """
+    valid_methods = ['current_solution_statistics',
+                     'differential_evolution',
+                     'evolutionary_strategy_sr',
+                     'evolutionary_program',
+                     'hooke_jeeves',
+                     'levenberg_marquardt',
+                     'nelder_mead',
+                     'particle_swarm',
+                     'praxis',
+                     'random_search',
+                     'simulated_annealing',
+                     'steepest_descent',
+                     'truncated_newton',
+                     'scatter_search',
+                     'genetic_algorithm',
+                     'genetic_algorithm_sr']
 
     @staticmethod
     class Config(_Task, munch.Munch):
@@ -2647,7 +2663,7 @@ class ParameterEstimation(_Task):
                 if item['affected_models'] == 'all':
                     item['affected_models'] = list(self.models.keys())
 
-                self.items.fit_items[fit_item] = munch.Munch.fromDict(item)#
+                self.items.fit_items[fit_item] = munch.Munch.fromDict(item)  #
 
             ## caters for the situation where we define a config file but
             ## need to update it due to a change in prefix argument
@@ -2655,7 +2671,8 @@ class ParameterEstimation(_Task):
             if self.settings.prefix is not None:
                 if not isinstance(self.settings.prefix, str):
                     raise TypeError(f'config.settings.prefix argument should be of type "str"')
-                tmp =  {fit_item: self.items.fit_items[fit_item] for fit_item in self.items.fit_items if fit_item.startswith(self.settings.prefix)}
+                tmp = {fit_item: self.items.fit_items[fit_item] for fit_item in self.items.fit_items if
+                       fit_item.startswith(self.settings.prefix)}
                 self.items.fit_items = munch.Munch.fromDict(tmp)
 
         def set_default_constraint_items(self):
@@ -3441,7 +3458,6 @@ class ParameterEstimation(_Task):
 
         for model_name in self.models:
 
-            # model_dct[model_name] = {}
             mod = self.models[model_name].model
 
             if validation:
@@ -3449,13 +3465,13 @@ class ParameterEstimation(_Task):
                 experiment_names = self.config.validation_names
                 experiments = self.config.datasets.validations
                 keys_function = self._get_validation_keys
-                self._remove_all_validation_experiments()
+                # self._remove_all_validation_experiments()
             else:
                 query = '//*[@name="Experiment Set"]'
                 experiment_names = self.config.experiment_names
                 experiments = self.config.datasets.experiments
                 keys_function = self._get_experiment_keys
-                self._remove_all_experiments()
+                # self._remove_all_experiments()
 
             for experiment_name in experiment_names:
                 experiment = experiments[experiment_name]
@@ -3661,65 +3677,70 @@ class ParameterEstimation(_Task):
             method_name = 'Current Solution Statistics'
             method_type = 'CurrentSolutionStatistics'
 
-        if self.config.settings.method == 'differential_evolution'.lower():
+        elif self.config.settings.method == 'differential_evolution'.lower():
             method_name = 'Differential Evolution'
             method_type = 'DifferentialEvolution'
 
-        if self.config.settings.method == 'evolutionary_strategy_sr'.lower():
+        elif self.config.settings.method == 'evolutionary_strategy_sr'.lower():
             method_name = 'Evolution Strategy (SRES)'
             method_type = 'EvolutionaryStrategySR'
 
-        if self.config.settings.method == 'evolutionary_program'.lower():
+        elif self.config.settings.method == 'evolutionary_program'.lower():
             method_name = 'Evolutionary Programming'
             method_type = 'EvolutionaryProgram'
 
-        if self.config.settings.method == 'hooke_jeeves'.lower():
+        elif self.config.settings.method == 'hooke_jeeves'.lower():
             method_name = 'Hooke &amp; Jeeves'
             method_type = 'HookeJeeves'
 
-        if self.config.settings.method == 'levenberg_marquardt'.lower():
+        elif self.config.settings.method == 'levenberg_marquardt'.lower():
             method_name = 'Levenberg - Marquardt'
             method_type = 'LevenbergMarquardt'
 
-        if self.config.settings.method == 'nelder_mead'.lower():
+        elif self.config.settings.method == 'nelder_mead'.lower():
             method_name = 'Nelder - Mead'
             method_type = 'NelderMead'
 
-        if self.config.settings.method == 'particle_swarm'.lower():
+        elif self.config.settings.method == 'particle_swarm'.lower():
             method_name = 'Particle Swarm'
             method_type = 'ParticleSwarm'
 
-        if self.config.settings.method == 'praxis'.lower():
+        elif self.config.settings.method == 'praxis'.lower():
             method_name = 'Praxis'
             method_type = 'Praxis'
 
-        if self.config.settings.method == 'random_search'.lower():
+        elif self.config.settings.method == 'random_search'.lower():
             method_name = 'Random Search'
             method_type = 'RandomSearch'
 
-        if self.config.settings.method == 'simulated_annealing'.lower():
+        elif self.config.settings.method == 'simulated_annealing'.lower():
             method_name = 'Simulated Annealing'
             method_type = 'SimulatedAnnealing'
 
-        if self.config.settings.method == 'steepest_descent'.lower():
+        elif self.config.settings.method == 'steepest_descent'.lower():
             method_name = 'Steepest Descent'
             method_type = 'SteepestDescent'
 
-        if self.config.settings.method == 'truncated_newton'.lower():
+        elif self.config.settings.method == 'truncated_newton'.lower():
             method_name = 'Truncated Newton'
             method_type = 'TruncatedNewton'
 
-        if self.config.settings.method == 'scatter_search'.lower():
+        elif self.config.settings.method == 'scatter_search'.lower():
             method_name = 'Scatter Search'
             method_type = 'ScatterSearch'
 
-        if self.config.settings.method == 'genetic_algorithm'.lower():
+        elif self.config.settings.method == 'genetic_algorithm'.lower():
             method_name = 'Genetic Algorithm'
             method_type = 'GeneticAlgorithm'
 
-        if self.config.settings.method == 'genetic_algorithm_sr'.lower():
+        elif self.config.settings.method == 'genetic_algorithm_sr'.lower():
             method_name = 'Genetic Algorithm SR'
             method_type = 'GeneticAlgorithmSR'
+
+        else:
+            raise errors.InputError(
+                f'"{self.config.settings.method}" is an invalid method argument. Please choose from "{sorted(self.valid_methods)}"'
+            )
 
         return method_name, method_type
 
@@ -4108,10 +4129,9 @@ class ParameterEstimation(_Task):
                     item_list = problem[3]
                     assert list(item_list.attrib.values())[0] == 'OptimizationItemList'
                 item_list.append(fit_item_element)
-                self.models[model_name].model = mod
         return self.models
 
-    def _set_PE_method(self):
+    def _set_method(self):
         """Choose PE algorithm and set algorithm specific parameters"""
 
         # Build xml for method.
@@ -4233,15 +4253,17 @@ class ParameterEstimation(_Task):
 
         for model_name in self.models:
             mod = self.models[model_name].model
+            print('name', mod.name)
             tasks = mod.xml.find('{http://www.copasi.org/static/schema}ListOfTasks')
-
+            print(tasks.tag)
             method = tasks[5][-1]
             parent = method.getparent()
             parent.remove(method)
             parent.insert(2, method_element)
+            self.models[model_name].model = mod
         return self.models
 
-    def _set_PE_options(self):
+    def _set_options(self):
         """Set parameter estimation sepcific arguments
         :return: pycotools3.model.Model
 
@@ -4299,7 +4321,7 @@ class ParameterEstimation(_Task):
             self.models[model_name].model = mod
         return self.models
 
-    def _enumerate_PE_output(self):
+    def _enumerate_output(self):
         """Create a filename for each file to collect PE results
         :return: dict['model_copy_number]=enumerated_report_name
 
@@ -4394,7 +4416,7 @@ class ParameterEstimation(_Task):
             # for model_i in self.models[model_name]:
             number_of_cpu = cpu_count()
             q = queue.Queue(maxsize=number_of_cpu)
-            report_files = self._enumerate_PE_output()[model_name]
+            report_files = self._enumerate_output()[model_name]
             for copy_number, mod in list(models[model_name].items()):
                 t = threading.Thread(target=self._setup1scan,
                                      args=(q, mod, report_files[copy_number]))
@@ -4412,23 +4434,35 @@ class ParameterEstimation(_Task):
     def _setup(self):
         """ """
 
-        self.config.models = self._define_report()
+        query = '//*[@name="Genetic Algorithm SR"]'
+
+
+
+        self.models = self._define_report()
 
         self.models = self._map_experiments(validation=False)
         self.models = self._map_experiments(validation=True)
 
         ## get rid of existing parameter estimation definition
         self.models = self._remove_all_fit_items()
+        self.models = self._add_fit_items(constraint=False)
+        self.models = self._add_fit_items(constraint=True)
 
         # self.convert_bool_to_numeric()
 
         ## create new parameter estimation
-        self.models = self._set_PE_method()
-        self.models = self._set_PE_options()
-        self.models = self._add_fit_items(constraint=False)
-        self.models = self._add_fit_items(constraint=True)
+        self.models = self._set_options()
+        print(self.models)
+        self.models.first.model.open()
+        self.models.second.model.open()
+        self.models = self._set_method()
 
-        ##todo self.models has experiments as keys for some reason. fix
+        for model_name in self.models:
+            print(model_name)
+            mod = self.models[model_name].model
+            for i in mod.xml.xpath(query):
+                print(i.tag, i.attrib)
+
 
         ##copy
         copied_models = self._copy_model()
@@ -4501,7 +4535,7 @@ class ParameterEstimation(_Task):
         experiment_filetypes = ['.txt', '.csv']
 
         def __init__(self, models, experiments, working_directory=None,
-                     context='s', parameters=None, filename=None,
+                     context='s', parameters='mg', filename=None,
                      validation_experiments=None, settings={}):
             self.models = models
             self.experiments = experiments
@@ -4525,14 +4559,18 @@ class ParameterEstimation(_Task):
 
         def __exit__(self, exc_type, exc_value, exc_traceback):
             ## update the config
-            print('runnint __Exit__')
             self.config.configure()
-
 
             if exc_type:
                 print(f'exc_type: {exc_type}')
                 print(f'exc_value: {exc_value}')
                 print(f'exc_traceback: {exc_traceback}')
+
+        def get_config(self):
+            if hasattr(self, 'config'):
+                return self.config
+
+            return self.setup()
 
         def add_models(self, models: (str, list)):
             """
@@ -4691,6 +4729,7 @@ class ParameterEstimation(_Task):
                         'Something weird happened.'
                     )
             return config
+
 
 class ChaserParameterEstimations(_Task):
     """Perform secondary hook and jeeves parameter estimations
@@ -5353,7 +5392,6 @@ class ProfileLikelihood(_Task):
 
         self.model_dct = self.setup_scan()
         self.to_file()
-        # self.model_dct['current_parameters'][r'Ski'].open()
 
         if self.run is not False:
             self.run_analysis()
@@ -5555,86 +5593,90 @@ class ProfileLikelihood(_Task):
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
 
-        if self.method == 'evolutionary_strategy_sr'.lower():
+        elif self.method == 'evolutionary_strategy_sr'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
             etree.SubElement(method_element, 'Parameter', attrib=population_size)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
             etree.SubElement(method_element, 'Parameter', attrib=pf)
 
-        if self.method == 'evolutionary_program'.lower():
+        elif self.method == 'evolutionary_program'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
             etree.SubElement(method_element, 'Parameter', attrib=population_size)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
 
-        if self.method == 'hooke_jeeves'.lower():
+        elif self.method == 'hooke_jeeves'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
             etree.SubElement(method_element, 'Parameter', attrib=tolerance)
             etree.SubElement(method_element, 'Parameter', attrib=rho)
 
-        if self.method == 'levenberg_marquardt'.lower():
+        elif self.method == 'levenberg_marquardt'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
             etree.SubElement(method_element, 'Parameter', attrib=tolerance)
         #
-        if self.method == 'nelder_mead'.lower():
+        elif self.method == 'nelder_mead'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
             etree.SubElement(method_element, 'Parameter', attrib=tolerance)
             etree.SubElement(method_element, 'Parameter', attrib=scale)
 
-        if self.method == 'particle_swarm'.lower():
+        elif self.method == 'particle_swarm'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
             etree.SubElement(method_element, 'Parameter', attrib=swarm_size)
             etree.SubElement(method_element, 'Parameter', attrib=std_deviation)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
 
-        if self.method == 'praxis'.lower():
+        elif self.method == 'praxis'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=tolerance)
 
-        if self.method == 'random_search'.lower():
+        elif self.method == 'random_search'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_iterations)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
 
-        if self.method == 'simulated_annealing'.lower():
+        elif self.method == 'simulated_annealing'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=start_temperature)
             etree.SubElement(method_element, 'Parameter', attrib=cooling_factor)
             etree.SubElement(method_element, 'Parameter', attrib=tolerance)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
         #
-        if self.method == 'steepest_descent'.lower():
+        elif self.method == 'steepest_descent'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
             etree.SubElement(method_element, 'Parameter', attrib=tolerance)
         #
-        if self.method == 'truncated_newton'.lower():
+        elif self.method == 'truncated_newton'.lower():
             # required no additonal paraemters
             pass
         #
-        if self.method == 'scatter_search'.lower():
+        elif self.method == 'scatter_search'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_iterations)
 
-        if self.method == 'genetic_algorithm'.lower():
+        elif self.method == 'genetic_algorithm'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
             etree.SubElement(method_element, 'Parameter', attrib=population_size)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
 
-        if self.method == 'genetic_algorithm_sr'.lower():
+        elif self.method == 'genetic_algorithm_sr'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
             etree.SubElement(method_element, 'Parameter', attrib=population_size)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
             etree.SubElement(method_element, 'Parameter', attrib=pf)
+        else:
+            raise TypeError
 
-        tasks = self.model.xml.find('{http://www.copasi.org/static/schema}ListOfTasks')
+        for model_name in self.models:
+            mod = self.models[model_name].model
+            tasks = mod.xml.find('{http://www.copasi.org/static/schema}ListOfTasks')
+            method = tasks[5][-1]
+            parent = method.getparent()
+            parent.remove(method)
+            parent.insert(2, method_element)
 
-        method = tasks[5][-1]
-        parent = method.getparent()
-        parent.remove(method)
-        parent.insert(2, method_element)
-        return self.model
+        return self.models
 
     def insert_parameters(self):
         """If index keyword is 'current_parameters', do nothing but collect
@@ -5737,7 +5779,6 @@ class ProfileLikelihood(_Task):
         for model in self.model_dct:
             count = 0
             for param in self.model_dct[model]:
-                # self.model_dct[model][param].open()
                 ##ascertain which parameter this is
                 for i in self.model_dct[model][param].xml.xpath(query):
                     count = count + 1

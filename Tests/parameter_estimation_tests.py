@@ -38,6 +38,7 @@ import glob
 import time
 from io import StringIO
 
+#todo test model_value for start values are being resolved (there not)
 
 def parse_timecourse(self):
     """
@@ -255,8 +256,8 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
     def test_mappings1(self):
         self.assertEqual(self.PE.config.datasets.experiments.report1.mappings.A.model_object, 'A')
 
-    def test_mappings2(self):
-        print(self.PE.config.model_objects)
+    # def test_mappings2(self):
+    #     print(self.PE.config.model_objects)
         # self.assertEqual(self.PE.config.datasets.experiments.report1.mappings.B.model_object, 'B')
 
     def test_mappings3(self):
@@ -281,8 +282,8 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
             self.PE.config.items.constraint_items.C.lower_bound, 16
         )
 
-    def test_constraint_items2(self):
-        print(self.PE.config.items.constraint_items)
+    # def test_constraint_items2(self):
+    #     print(self.PE.config.items.constraint_items)
 
     def test_settings1(self):
         self.assertEqual(self.PE.config.settings.method, 'genetic_algorithm_sr')
@@ -617,7 +618,6 @@ class ExperimentMapperTests(_test_base._BaseTest):
             for j in i:
                 if j.attrib['name'] == 'report1':
                     for k in j:
-                        print(k, k.attrib)
                         if k.attrib['name'] == attribute:
                             ans = k.attrib['value']
         self.assertEqual(expected_value, ans)
@@ -798,7 +798,6 @@ class ExperimentMapperTests(_test_base._BaseTest):
 
     def test_get_validation_keys(self):
         dct = self.PE._get_validation_keys()
-        print(dct)
         self.assertEqual(dct['model1']['report3'], 'Experiment_report3')
 
     def test_create_correct_number_of_experiments(self):
@@ -846,7 +845,6 @@ class ExperimentMapperTests(_test_base._BaseTest):
         for i in mod.xml.xpath(query):
             if i.tag == '{http://www.copasi.org/static/schema}Task':
                 for j in i:
-                    print(j.tag)
                     if j.tag == 'Method':
                         ans = j.attrib['name']
         self.assertEqual('Genetic Algorithm SR', ans)
@@ -1314,7 +1312,7 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
             config.settings.number_of_generations = 25
             config.settings.population_size = 14
             config.settings.prefix = 'B'
-        expected = 'genetic_alogrithm_sr'
+        expected = 'genetic_algorithm_sr'
         actual = config.settings.method
         self.assertEqual(expected, actual)
 
@@ -1331,6 +1329,15 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
         expected = 14
         actual = config.settings.population_size
         self.assertEqual(expected, actual)
+
+    def test_get_config(self):
+        context = ParameterEstimation.Context(
+            self.model.copasi_file,
+            [self.TC1.report_name, self.TC2.report_name,
+             self.report3, self.report4],
+            context='s', parameters='a')
+        config = context.get_config()
+        self.assertTrue(isinstance(config, ParameterEstimation.Config))
 
 
 class ParameterEstimationTestsWithDifferentModel(unittest.TestCase):
@@ -1436,6 +1443,118 @@ class ParameterEstimationTestsWithDifferentModel(unittest.TestCase):
 
         time.sleep(1)
         self.assertTrue(os.path.isfile(fname))
+
+
+class ParameterEstimationTestsMoreThanOneModel(unittest.TestCase):
+    def setUp(self):
+        ant1 = """
+        
+        model first()
+            compartment Cell = 1;
+            
+            R1: A => B ; Cell * k1 * A;
+            R2: B => C ; Cell * k2 * B;
+            R3: C => A ; Cell * k3 * C;
+            
+            k1 = 0.1;
+            k2 = 0.1;
+            k3 = 0.1;
+            
+            A = 100;
+            B = 0;
+            C = 0;
+        end
+        """
+
+        ant2 = """
+        
+        model second()
+            compartment Cell = 1;
+            
+            R1: A => B ; Cell * k1 * A;
+            R2: B => C ; Cell * k2 * B;
+            R3: B => A ; Cell * k3 * B;
+            
+            k1 = 0.1;
+            k2 = 0.1;
+            k3 = 0.1;
+            
+            A = 100;
+            B = 0;
+            C = 0;
+        end
+        """
+        self.fname1 = os.path.join(os.path.dirname(__file__), 'first.cps')
+        self.fname2 = os.path.join(os.path.dirname(__file__), 'second.cps')
+
+        with pycotools3.model.BuildAntimony(self.fname1) as loader:
+            self.mod1 = loader.load(ant1)
+
+        with pycotools3.model.BuildAntimony(self.fname2) as loader:
+            self.mod2 = loader.load(ant2)
+
+        self.experiment = os.path.join(os.path.dirname(__file__), 'dataset.txt')
+
+        self.mod1.simulate(0, 9, 1, report_name=self.experiment)
+        time.sleep(0.2)
+
+    def get_population_size(self, xml):
+        query = '//*[@name="Population Size"]'
+        value = False
+        for i in xml.xpath(query):
+            value = i.attrib['value']
+        return value
+
+    def test_two_models_first(self):
+        with ParameterEstimation.Context(
+                models=[self.mod1.copasi_file, self.mod2.copasi_file],
+                experiments=self.experiment, context='s', parameters='g') as config:
+            config.settings.method = 'genetic_algorithm_sr'
+            config.settings.population_size = 49
+        PE = ParameterEstimation(config)
+        time.sleep(0.2)
+        actual = self.get_population_size(PE.config.models.first.model.xml)
+        # PE.config.models.second.model.open()
+        # self.assertEqual(49, actual)
+
+    def test_two_models_second(self):
+        with ParameterEstimation.Context(
+                models=[self.mod1.copasi_file, self.mod2.copasi_file],
+                experiments=self.experiment, context='s', parameters='g') as config:
+            config.settings.method = 'genetic_algorithm_sr'
+            config.settings.population_size = 84
+        PE = ParameterEstimation(config)
+        time.sleep(0.2)
+        actual = self.get_population_size(PE.config.models.second.model.xml)
+        self.assertEqual(str(84), actual)
+
+    def test_two_models_experiments(self):
+        with ParameterEstimation.Context(
+                models=[self.mod1.copasi_file, self.mod2.copasi_file],
+                experiments=self.experiment, context='s', parameters='g') as config:
+            config.settings.method = 'genetic_algorithm_sr'
+            config.settings.population_size = 84
+        PE = ParameterEstimation(config)
+        query = '//*[@name="dataset"]'
+        first = False
+        second = False
+        for i in PE.models.first.model.xml.xpath(query):
+            if i.attrib['name'] == 'dataset':
+                first = True
+        for i in PE.models.second.model.xml.xpath(query):
+            if i.attrib['name'] == 'dataset':
+                second = True
+
+        self.assertTrue(first is True and second is True)
+
+
+
+    def tearDown(self):
+        pass
+
+        # os.remove(self.experiment)
+        # os.remove(self.fname1)
+        # os.remove(self.fname2)
 
 
 if __name__ == '__main__':
