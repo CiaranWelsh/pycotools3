@@ -4289,7 +4289,7 @@ class ParameterEstimation(_Task):
             mod = self.models[model_name].model
 
             scheluled_attrib = {'scheduled': False,
-                                'updateModel': self.config.settings.update_model}
+                                'updateModel': str(int(self.config.settings.update_model))}
 
             report_attrib = {'append': False,
                              'reference': self._get_report_key()[model_name],
@@ -4298,12 +4298,12 @@ class ParameterEstimation(_Task):
 
             randomize_start_values = {'type': 'bool',
                                       'name': 'Randomize Start Values',
-                                      'value': self.config.settings.randomize_start_values}
+                                      'value': str(int(self.config.settings.randomize_start_values))}
 
             calculate_stats = {'type': 'bool', 'name': 'Calculate Statistics',
-                               'value': self.config.settings.calculate_statistics}
+                               'value': str(int(self.config.settings.calculate_statistics))}
             create_parameter_sets = {'type': 'bool', 'name': 'Create Parameter Sets',
-                                     'value': self.config.settings.create_parameter_sets}
+                                     'value': str(int(self.config.settings.create_parameter_sets))}
 
             for i in [
                 scheluled_attrib,

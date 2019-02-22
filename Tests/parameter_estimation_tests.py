@@ -965,6 +965,9 @@ class ParameterEstimationTests(_test_base._BaseTest):
                 weight_method='value_scaling',
                 validation_weight=2.5,
                 validation_threshold=9,
+                randomize_start_values=True,
+                calculate_statistics=False,
+                create_parameter_sets=False
             )
         )
         self.conf = ParameterEstimation.Config(**self.conf_dct)
@@ -1220,6 +1223,37 @@ class ParameterEstimationTests(_test_base._BaseTest):
         data = pycotools3.viz.Parse(self.PE).data
         expected = 8
         self.assertEqual(expected, data['model1'].shape[0])
+
+    def test_randomize_start_values(self):
+        # self.PE.config.models.model1.model.open()
+        query = '//*[@name="Randomize Start Values"]'
+        expected = '1'
+        actual = None
+        for i in self.PE.config.models.model1.model.xml.xpath(query):
+            if i.getparent().getparent().attrib['name'] == 'Parameter Estimation':
+                actual = i.attrib['value']
+
+        self.assertEqual(expected, actual)
+
+    def test_calculate_statistics(self):
+        query = '//*[@name="Calculate Statistics"]'
+        expected = '0'
+        actual = None
+        for i in self.PE.config.models.model1.model.xml.xpath(query):
+            if i.getparent().getparent().attrib['name'] == 'Parameter Estimation':
+                actual = i.attrib['value']
+
+        self.assertEqual(expected, actual)
+
+    def test_create_parameter_sets(self):
+        query = '//*[@name="Create Parameter Sets"]'
+        expected = '0'
+        actual = None
+        for i in self.PE.config.models.model1.model.xml.xpath(query):
+            if i.getparent().getparent().attrib['name'] == 'Parameter Estimation':
+                actual = i.attrib['value']
+
+        self.assertEqual(expected, actual)
 
 
 class ParameterEstimationContextTests(_test_base._BaseTest):
