@@ -336,6 +336,12 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
                              ['model1']
                              )
 
+    def test_affected_models_keyword_resolves_in_experiments(self):
+        self.assertEqual(
+            self.config.experiments.report1.affected_models,
+            'model1'
+        )
+
     def test_write_config_file(self):
         fname = os.path.join(os.path.dirname(__file__), 'config_file.yml')
         self.PE.config.to_yaml(fname)
@@ -347,6 +353,8 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
         actual = list(self.config.items.fit_items.keys())
         expected = ['B']
         self.assertListEqual(expected, actual)
+
+
 
 
 class ParameterEstimationConfigResolveSpecialArgsTests(_test_base._BaseTest):
@@ -1443,7 +1451,7 @@ class ParameterEstimationTestsWithDifferentModel(unittest.TestCase):
 
         time.sleep(1)
         self.assertTrue(os.path.isfile(fname))
-
+##todo make the affected_models keyword resolve for datasets
 
 class ParameterEstimationTestsMoreThanOneModel(unittest.TestCase):
     def setUp(self):
@@ -1512,10 +1520,11 @@ class ParameterEstimationTestsMoreThanOneModel(unittest.TestCase):
             config.settings.method = 'genetic_algorithm_sr'
             config.settings.population_size = 49
         PE = ParameterEstimation(config)
+
         time.sleep(0.2)
         actual = self.get_population_size(PE.config.models.first.model.xml)
         # PE.config.models.second.model.open()
-        # self.assertEqual(49, actual)
+        self.assertEqual(str(49), actual)
 
     def test_two_models_second(self):
         with ParameterEstimation.Context(

@@ -2512,6 +2512,9 @@ class ParameterEstimation(_Task):
                     if default_kwarg not in experiment_dataset:
                         experiment_dataset[default_kwarg] = experiment_defaults[default_kwarg]
 
+                if experiment_dataset.affected_models == 'all':
+                    experiment_dataset.affected_models = list(self.models.keys())[0] if len(self.models.keys()) == 1 else list(self.models.keys())
+
                 if experiment_dataset.mappings == {}:
                     experiment_dataset.mappings = munch.Munch.fromDict(self.mappings_defaults(
                         experiment_dataset.filename, experiment_dataset.separator)
@@ -2549,10 +2552,16 @@ class ParameterEstimation(_Task):
                     if default_kwarg not in validation_dataset:
                         validation_dataset[default_kwarg] = validation_defaults[default_kwarg]
 
+
+                if validation_dataset.affected_models == 'all':
+                    validation_dataset.affected_models = list(self.models.keys())[0] if len(self.models.keys()) == 1 else list(self.models.keys())
+
+
                 if validation_dataset.mappings == {}:
                     validation_dataset.mappings = munch.Munch.fromDict(self.mappings_defaults(
                         validation_dataset.filename, validation_dataset.separator)
                     )
+
 
                 for mapping in validation_dataset.mappings:
                     mapp = validation_dataset.mappings.get(mapping)
@@ -4136,6 +4145,7 @@ class ParameterEstimation(_Task):
 
         # Build xml for method.
         method_name, method_type = self._select_method()
+        print('method_name', method_name, 'method_type', method_type)
         method_params = {'name': method_name, 'type': method_type}
         method_element = etree.Element('Method', attrib=method_params)
 
@@ -4250,17 +4260,19 @@ class ParameterEstimation(_Task):
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
             etree.SubElement(method_element, 'Parameter', attrib=pf)
+        models = {}
 
         for model_name in self.models:
+            ## You must deep copy the method element or
+            ## when dealing with multiple models only the last
+            ## model will contain the method element.
+            method_element = deepcopy(method_element)
             mod = self.models[model_name].model
-            print('name', mod.name)
             tasks = mod.xml.find('{http://www.copasi.org/static/schema}ListOfTasks')
-            print(tasks.tag)
             method = tasks[5][-1]
             parent = method.getparent()
             parent.remove(method)
             parent.insert(2, method_element)
-            self.models[model_name].model = mod
         return self.models
 
     def _set_options(self):
@@ -4437,25 +4449,26 @@ class ParameterEstimation(_Task):
         query = '//*[@name="Genetic Algorithm SR"]'
 
 
-
         self.models = self._define_report()
 
-        self.models = self._map_experiments(validation=False)
-        self.models = self._map_experiments(validation=True)
+        self._map_experiments(validation=False)
+        self._map_experiments(validation=True)
 
         ## get rid of existing parameter estimation definition
-        self.models = self._remove_all_fit_items()
-        self.models = self._add_fit_items(constraint=False)
-        self.models = self._add_fit_items(constraint=True)
+        self._remove_all_fit_items()
+        self._add_fit_items(constraint=False)
+        self._add_fit_items(constraint=True)
 
         # self.convert_bool_to_numeric()
 
         ## create new parameter estimation
-        self.models = self._set_options()
-        print(self.models)
-        self.models.first.model.open()
-        self.models.second.model.open()
-        self.models = self._set_method()
+        self._set_options()
+        self._set_method()
+
+        # print(self.config.models.first.model.open())
+        # print(self.models)
+        # self.models.first.model.open()
+        # self.models.second.model.open()
 
         for model_name in self.models:
             print(model_name)
