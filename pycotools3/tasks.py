@@ -4465,18 +4465,6 @@ class ParameterEstimation(_Task):
         self._set_options()
         self._set_method()
 
-        # print(self.config.models.first.model.open())
-        # print(self.models)
-        # self.models.first.model.open()
-        # self.models.second.model.open()
-
-        for model_name in self.models:
-            print(model_name)
-            mod = self.models[model_name].model
-            for i in mod.xml.xpath(query):
-                print(i.tag, i.attrib)
-
-
         ##copy
         copied_models = self._copy_model()
 

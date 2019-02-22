@@ -1556,15 +1556,41 @@ class ParameterEstimationTestsMoreThanOneModel(unittest.TestCase):
 
         self.assertTrue(first is True and second is True)
 
+    def test_two_models_fit_items(self):
+        with ParameterEstimation.Context(
+                models=[self.mod1.copasi_file, self.mod2.copasi_file],
+                experiments=self.experiment, context='s', parameters='g') as config:
+            config.settings.method = 'genetic_algorithm_sr'
+            config.settings.population_size = 84
+        PE = ParameterEstimation(config)
+        query = '//*[@name="FitItem"]'
+        import re
+        first = []
+        second = []
+        for i in PE.models.first.model.xml.xpath(query):
+            for j in i:
+                if j.attrib['name'] == 'ObjectCN':
+                    cn_ref = j.attrib['value']
+                    cn_ref = re.findall('.*\[(.*)\].*', cn_ref)
+                    assert len(cn_ref) != 0
+                    first.append(cn_ref[0])
+
+        for i in PE.models.second.model.xml.xpath(query):
+            for j in i:
+                if j.attrib['name'] == 'ObjectCN':
+                    cn_ref = j.attrib['value']
+                    cn_ref = re.findall('.*\[(.*)\].*', cn_ref)
+                    assert len(cn_ref) != 0
+                    second.append(cn_ref[0])
+
+        self.assertListEqual(first, second)
+
 
 
     def tearDown(self):
-        pass
-
-        # os.remove(self.experiment)
-        # os.remove(self.fname1)
-        # os.remove(self.fname2)
-
+        os.remove(self.experiment)
+        os.remove(self.fname1)
+        os.remove(self.fname2)
 
 if __name__ == '__main__':
     unittest.main()
