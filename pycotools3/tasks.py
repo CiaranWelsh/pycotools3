@@ -2411,6 +2411,44 @@ class ParameterEstimation(_Task):
                 yml_string = yml
             raise NotImplementedError('Do this when needed')
 
+        def set(self, parameter, value, recursive=False):
+            """
+            Set the value of :code:`parameter` to :code:`value`.
+
+            Looks for the first instance of :code:`parameter` and sets its value to :code:`value`.
+            To set all values of a parameter, see :py:meth:`ParameterEstimation.Config.set_all`
+
+
+            Args:
+                parameter: A key somewhere in the nested structure of the config object
+                value: A value to replace the current value with
+
+            Returns:
+                None
+
+            """
+            def find_parameter(dct, parameter, value):
+                for k, v in dct.items():
+                    if isinstance(v, dict):
+                        if k == parameter:
+                            raise ValueError(
+                                f'cannot set value of {parameter} as it is '
+                                f'a dict')
+                        find_parameter(v, parameter, value)
+                    else:
+                        if k == parameter:
+                            dct[parameter] = value
+                            if not recursive:
+                                break
+                return dct
+
+            updated_kwargs = find_parameter(self.kwargs, parameter, value)
+            if updated_kwargs is None:
+                raise ValueError(f'Parameter "{parameter}" cannot be found')
+            print('models', updated_kwargs['models'])
+            new_conf = ParameterEstimation.Config(**updated_kwargs)
+            self.__dict__ = new_conf.__dict__
+
         @staticmethod
         def _add_defaults_to_dict(dct, defaults):
             """
@@ -4584,14 +4622,24 @@ class ParameterEstimation(_Task):
                 None
             """
             ## if models passed as a string
-            if isinstance(models, str):
+            if not isinstance(models, list):
                 models = [models]
-            elif isinstance(models, list):
-                for i in models:
+
+            cps_file_list = []
+            for i in models:
+                if isinstance(i, model.Model):
+                    cps_file_list.append(i.copasi_file)
+                elif isinstance(i, str):
                     if not os.path.isfile(i):
                         raise errors.InputError(
                             f'"{i}" does not an existing file'
                         )
+                    cps_file_list.append(i)
+
+            models = {os.path.split(i)[1][:-4]: {
+                'copasi_file': i
+            } for i in cps_file_list}
+
             setattr(self, 'models', models)
 
         def add_experiments(self, experiments: (str, list)):
@@ -4604,7 +4652,40 @@ class ParameterEstimation(_Task):
                 None
             """
 
-            if isinstance(experiments, str):
+            if not isinstance(experiments, list):
+                experiments = [experiments]
+
+            for i in experiments:
+                ## todo support for dataframes, dict and other
+                ## python objects as arguments
+
+                if not os.path.isfile(i):
+                    raise errors.InputError(
+                        f'"{i}" does not an existing file'
+                    )
+                if os.path.splitext(i)[1] not in self.experiment_filetypes:
+                    raise errors.InputError(
+                        f'File with "{os.path.splitext(i)[1]}" is not supported'
+                    )
+
+            experiments = {os.path.split(i)[1][:-4]: {
+                'filename': i
+            } for i in experiments}
+
+            setattr(self, 'experiments', experiments)
+
+        def add_validation_experiments(self, experiments: (str, list)):
+            """Add experiments to validation_experiments attribute
+
+            Args:
+              experiments (str, list): path to validation data or list of paths to validation data
+
+            Returns:
+                None
+            """
+            if experiments is None:
+                return None
+            if not isinstance(experiments, list):
                 experiments = [experiments]
 
             if isinstance(experiments, list):
@@ -4617,30 +4698,11 @@ class ParameterEstimation(_Task):
                         raise errors.InputError(
                             f'File with "{os.path.splitext(i)[1]}" is not supported'
                         )
-            setattr(self, 'experiments', experiments)
 
-        def add_validation_experiments(self, experiments: (str, list)):
-            """Add experiments to validation_experiments attribute
+            experiments = {os.path.split(i)[1][:-4]: {
+                'filename': i
+            } for i in experiments}
 
-            Args:
-              experiments (str, list): path to validation data or list of paths to validation data
-
-            Returns:
-                None
-            """
-            if isinstance(experiments, str):
-                experiments = [experiments]
-
-            elif isinstance(experiments, list):
-                for i in experiments:
-                    if not os.path.isfile(i):
-                        raise errors.InputError(
-                            f'"{i}" does not an existing file'
-                        )
-                    if os.path.splitext(i)[1] not in self.experiment_filetypes:
-                        raise errors.InputError(
-                            f'File with "{os.path.splitext(i)[1]}" is not supported'
-                        )
             setattr(self, 'validation_experiments', experiments)
 
         def add_working_directory(self, working_directory: str):
@@ -4654,7 +4716,10 @@ class ParameterEstimation(_Task):
                 None
             """
             if working_directory is None or working_directory == '':
-                working_directory = os.path.dirname(self.models[0])
+                model_keys = list(self.models.keys())
+                print('mk', model_keys)
+                print(self.models[model_keys[0]])
+                working_directory = os.path.dirname(self.models[model_keys[0]]['copasi_file'])
 
             if not os.path.isdir(working_directory):
                 raise errors.InputError(f'"{working_directory}" does not exist')
@@ -4695,13 +4760,19 @@ class ParameterEstimation(_Task):
             self.add_settings(self.settings)
             self.add_working_directory(self.working_directory)
 
-            models = {os.path.split(i)[1][:-4]: {
+            print('m', self.models)
+
+            models = {
+                os.path.split(i)[1][:-4]: {
                 'model': model.Model(i),
                 'copasi_file': i} for i in self.models}
 
             experiments = {os.path.split(i)[1][:-4]: {
                 'filename': i,
             } for i in self.experiments}
+
+            ## I need to convert these objects into nested dict form
+            ## here
 
             config = ParameterEstimation.Config(
                 models=models,

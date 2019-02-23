@@ -38,7 +38,8 @@ import glob
 import time
 from io import StringIO
 
-#todo test model_value for start values are being resolved (there not)
+
+# todo test model_value for start values are being resolved (there not)
 
 def parse_timecourse(self):
     """
@@ -258,7 +259,7 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
 
     # def test_mappings2(self):
     #     print(self.PE.config.model_objects)
-        # self.assertEqual(self.PE.config.datasets.experiments.report1.mappings.B.model_object, 'B')
+    # self.assertEqual(self.PE.config.datasets.experiments.report1.mappings.B.model_object, 'B')
 
     def test_mappings3(self):
         self.assertEqual(
@@ -354,8 +355,15 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
         expected = ['B']
         self.assertListEqual(expected, actual)
 
+    def test_set(self):
+        self.PE.config.set('method', 'simulated_annaeling')
+        self.assertEqual('simulated_annaeling',
+                         self.PE.config.settings.method)
 
-
+    def test_set_all(self):
+        self.PE.config.set('affected_models', 'fake_affected_model', recursive=True)
+        self.assertEqual('fake_affected_model',
+                         self.PE.config.datasets.experiments.report1.affected_models)
 
 class ParameterEstimationConfigResolveSpecialArgsTests(_test_base._BaseTest):
     def setUp(self):
@@ -1485,6 +1493,8 @@ class ParameterEstimationTestsWithDifferentModel(unittest.TestCase):
 
         time.sleep(1)
         self.assertTrue(os.path.isfile(fname))
+
+
 ##todo make the affected_models keyword resolve for datasets
 
 class ParameterEstimationTestsMoreThanOneModel(unittest.TestCase):
@@ -1619,12 +1629,11 @@ class ParameterEstimationTestsMoreThanOneModel(unittest.TestCase):
 
         self.assertListEqual(first, second)
 
-
-
     def tearDown(self):
         os.remove(self.experiment)
         os.remove(self.fname1)
         os.remove(self.fname2)
+
 
 if __name__ == '__main__':
     unittest.main()
