@@ -49,7 +49,7 @@ def format_timecourse_data(report_name):
     """
 
     df = pandas.read_csv(report_name, sep='\t')
-    headers = [re.findall('(Time)|\[(.*)\]', i)[0] for i in list(df.columns)]
+    headers = [re.findall('([tT]ime)|\[(.*)\]', i)[0] for i in list(df.columns)]
     time = headers[0][0]
     headers = [i[1] for i in headers]
     headers[0] = time

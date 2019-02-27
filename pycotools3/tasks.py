@@ -2445,7 +2445,6 @@ class ParameterEstimation(_Task):
             updated_kwargs = find_parameter(self.kwargs, parameter, value)
             if updated_kwargs is None:
                 raise ValueError(f'Parameter "{parameter}" cannot be found')
-            print('models', updated_kwargs['models'])
             new_conf = ParameterEstimation.Config(**updated_kwargs)
             self.__dict__ = new_conf.__dict__
 
@@ -2528,7 +2527,6 @@ class ParameterEstimation(_Task):
             self._add_defaults_to_dict(self.settings, self.settings_defaults)
 
             self._add_defaults_to_dict(self.datasets, self.dataset_defaults)
-
             self.set_default_experiments()
 
             self.set_default_validation_experiments()
@@ -2539,34 +2537,34 @@ class ParameterEstimation(_Task):
 
         def set_default_experiments(self):
             """ """
-            experiments = self.datasets.experiments
+            for experiment_name in self.experiment_names:
+                for default_kwarg in self.experiment_defaults:
+                    if default_kwarg not in self.datasets.experiments[experiment_name]:
+                        self.datasets.experiments[experiment_name][default_kwarg] = self.experiment_defaults[default_kwarg]
 
-            for experiment in self.experiment_names:
-                experiment_dataset = experiments.get(experiment)
+                if self.datasets.experiments[experiment_name].affected_models == 'all':
+                    self.datasets.experiments[experiment_name].affected_models = list(self.models.keys())[0] if len(self.models.keys()) == 1 else list(self.models.keys())
 
-                experiment_defaults = self.experiment_defaults
-
-                for default_kwarg in experiment_defaults:
-                    if default_kwarg not in experiment_dataset:
-                        experiment_dataset[default_kwarg] = experiment_defaults[default_kwarg]
-
-                if experiment_dataset.affected_models == 'all':
-                    experiment_dataset.affected_models = list(self.models.keys())[0] if len(self.models.keys()) == 1 else list(self.models.keys())
-
-                if experiment_dataset.mappings == {}:
-                    experiment_dataset.mappings = munch.Munch.fromDict(self.mappings_defaults(
-                        experiment_dataset.filename, experiment_dataset.separator)
+                if self.datasets.experiments[experiment_name].mappings == {}:
+                    self.datasets.experiments[experiment_name].mappings = munch.Munch.fromDict(self.mappings_defaults(
+                        self.datasets.experiments[experiment_name].filename, self.datasets.experiments[experiment_name].separator)
                     )
 
-                for mapping in experiment_dataset.mappings:
-                    mapp = experiment_dataset.mappings.get(mapping)
+                for mapping in self.datasets.experiments[experiment_name].mappings:
+                    mapp = self.datasets.experiments[experiment_name].mappings.get(mapping)
                     if mapp.role != 'time':
                         model_keys = list(self.models.keys())
                         mod = self.models[model_keys[0]].model
-                        model_obj = self.get_variable_from_string(
-                            mod,
-                            mapp.model_object[:-6] if mapp.model_object[-6:] == '_indep' else mapp.model_object
-                        )
+                        model_obj = []
+                        try:
+                            model_obj = self.get_variable_from_string(
+                                mod,
+                                mapp.model_object[:-6] if mapp.model_object[-6:] == '_indep' else mapp.model_object
+                            )
+                        except errors.InputError:
+                            LOG.warning(f'skipping variable "{mapp.model_object}" as it was not found in '
+                                  f'model "{mod}"')
+
                         if mapp == {}:
                             mapp = {
                                 'model_object': mapping,
@@ -2575,10 +2573,13 @@ class ParameterEstimation(_Task):
                             }
                         else:
                             mapp.update({'object_type': type(model_obj).__name__})
-                    self.datasets.experiments[experiment].mappings[mapping] = mapp
+                    # self.datasets.experiments[experiment_name].mappings[mapping] = mapp
+                # self.experiments[experiment_name] = deepcopy()
 
         def set_default_validation_experiments(self):
             """ """
+            if self.datasets.validations is None:
+                return {}
 
             validations = self.datasets.validations
 
@@ -2825,6 +2826,11 @@ class ParameterEstimation(_Task):
             Returns:
 
             """
+            if not isinstance(filename, str):
+                raise ValueError
+
+            if not isinstance(sep, str):
+                raise ValueError
             df = pandas.read_csv(filename, sep=sep)
             roles = {}
             for i in df.columns:
@@ -3522,7 +3528,6 @@ class ParameterEstimation(_Task):
 
             for experiment_name in experiment_names:
                 experiment = experiments[experiment_name]
-
                 data = pandas.read_csv(
                     experiment.filename,
                     sep=experiment.separator
@@ -4183,7 +4188,6 @@ class ParameterEstimation(_Task):
 
         # Build xml for method.
         method_name, method_type = self._select_method()
-        print('method_name', method_name, 'method_type', method_type)
         method_params = {'name': method_name, 'type': method_type}
         method_element = etree.Element('Method', attrib=method_params)
 
@@ -4575,7 +4579,7 @@ class ParameterEstimation(_Task):
 
         def __init__(self, models, experiments, working_directory=None,
                      context='s', parameters='mg', filename=None,
-                     validation_experiments=None, settings={}):
+                     validation_experiments={}, settings={}):
             self.models = models
             self.experiments = experiments
             self.working_directory = working_directory
@@ -4601,9 +4605,9 @@ class ParameterEstimation(_Task):
             self.config.configure()
 
             if exc_type:
-                print(f'exc_type: {exc_type}')
-                print(f'exc_value: {exc_value}')
-                print(f'exc_traceback: {exc_traceback}')
+                LOG.critical(f'exc_type: {exc_type}')
+                LOG.critical(f'exc_value: {exc_value}')
+                LOG.critical(f'exc_traceback: {exc_traceback}')
 
         def get_config(self):
             if hasattr(self, 'config'):
@@ -4683,7 +4687,7 @@ class ParameterEstimation(_Task):
             Returns:
                 None
             """
-            if experiments is None:
+            if experiments is None or experiments == {}:
                 return None
             if not isinstance(experiments, list):
                 experiments = [experiments]
@@ -4717,8 +4721,6 @@ class ParameterEstimation(_Task):
             """
             if working_directory is None or working_directory == '':
                 model_keys = list(self.models.keys())
-                print('mk', model_keys)
-                print(self.models[model_keys[0]])
                 working_directory = os.path.dirname(self.models[model_keys[0]]['copasi_file'])
 
             if not os.path.isdir(working_directory):
@@ -4760,31 +4762,22 @@ class ParameterEstimation(_Task):
             self.add_settings(self.settings)
             self.add_working_directory(self.working_directory)
 
-            print('m', self.models)
-
-            models = {
-                os.path.split(i)[1][:-4]: {
-                'model': model.Model(i),
-                'copasi_file': i} for i in self.models}
-
-            experiments = {os.path.split(i)[1][:-4]: {
-                'filename': i,
-            } for i in self.experiments}
-
             ## I need to convert these objects into nested dict form
             ## here
 
-            config = ParameterEstimation.Config(
-                models=models,
+            dct = dict(
+                models=self.models,
                 datasets=dict(
-                    experiments=experiments
+                    experiments=self.experiments,
+                    validations=self.validation_experiments
                 ),
                 items=dict(
                     fit_items=self.parameters
                 ),
                 settings=self.settings
-
             )
+
+            config = ParameterEstimation.Config(**dct)
 
             if self.filename is not None:
                 if os.path.isfile(self.filename) and not config.settings.overwrite_config_file:
