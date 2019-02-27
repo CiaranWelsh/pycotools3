@@ -257,10 +257,6 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
     def test_mappings1(self):
         self.assertEqual(self.PE.config.datasets.experiments.report1.mappings.A.model_object, 'A')
 
-    # def test_mappings2(self):
-    #     print(self.PE.config.model_objects)
-    # self.assertEqual(self.PE.config.datasets.experiments.report1.mappings.B.model_object, 'B')
-
     def test_mappings3(self):
         self.assertEqual(
             self.PE.config.datasets.experiments.report2.
@@ -282,9 +278,6 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
         self.assertEqual(
             self.PE.config.items.constraint_items.C.lower_bound, 16
         )
-
-    # def test_constraint_items2(self):
-    #     print(self.PE.config.items.constraint_items)
 
     def test_settings1(self):
         self.assertEqual(self.PE.config.settings.method, 'genetic_algorithm_sr')
@@ -364,6 +357,11 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
         self.PE.config.set('affected_models', 'fake_affected_model', recursive=True)
         self.assertEqual('fake_affected_model',
                          self.PE.config.datasets.experiments.report1.affected_models)
+
+    def test_set_all_separators(self):
+        self.PE.config.set('separator', ',', recursive=True)
+        self.assertTrue(',', self.PE.config.experiments.report1.separator)
+
 
 class ParameterEstimationConfigResolveSpecialArgsTests(_test_base._BaseTest):
     def setUp(self):
@@ -448,8 +446,8 @@ class ExperimentMapperTests(_test_base._BaseTest):
                                                intervals=10,
                                                report_name='report2.txt')
 
-        pycotools3.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
-        pycotools3.misc.correct_copasi_timecourse_headers(self.TC2.report_name)
+        pycotools3.utils.format_timecourse_data(self.TC1.report_name)
+        pycotools3.utils.format_timecourse_data(self.TC2.report_name)
 
         df = pandas.read_csv(self.TC2.report_name, sep='\t')
         ## remove square brackets around species
@@ -556,6 +554,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
         for i in mod.xml.xpath(query):
             for j in i:
                 count += 1
+        mod.open()
         self.assertEqual(count, 3)
 
     def test_correct_number_of_validation_experiments(self):
@@ -823,7 +822,9 @@ class ExperimentMapperTests(_test_base._BaseTest):
         count = 0
         for i in mod.xml.xpath(query):
             for j in i:
+                print(j, j.attrib)
                 count += 1
+        mod.open()
         self.assertEqual(3, count)
 
     def test_fit_items_property(self):
@@ -1389,6 +1390,62 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
         config = context.get_config()
         self.assertTrue(isinstance(config, ParameterEstimation.Config))
 
+    def test_context_set(self):
+        with ParameterEstimation.Context(
+                self.model.copasi_file,
+                [self.TC1.report_name, self.TC2.report_name,
+                 self.report3, self.report4],
+                context='s', parameters='a') as config:
+            config.settings.method = 'genetic_algorithm_sr'
+            config.settings.number_of_generations = 25
+            config.settings.population_size = 14
+            config.settings.prefix = 'B'
+            config.set('separator', ',', recursive=True)
+            pe = ParameterEstimation(config)
+
+        query = '//*[@name="Separator"]'
+        actual = []
+        for i in pe.config.models.test_model.model.xml.xpath(query):
+            actual.append(i.attrib['value'])
+
+        expected = [',', ',', ',', ',']
+        self.assertListEqual(expected, actual)
+
+    def test_default_mappings(self):
+        with ParameterEstimation.Context(
+                self.model.copasi_file,
+                [self.TC1.report_name, self.TC2.report_name,
+                 self.report3, self.report4],
+                context='s', parameters='a') as config:
+            config.settings.method = 'genetic_algorithm_sr'
+            config.settings.number_of_generations = 25
+            config.settings.population_size = 14
+        pe = ParameterEstimation(config)
+        query = '//*[@name="Object Map"]'
+        expected = 4
+        actual = 0
+        for i in pe.models.test_model.model.xml.xpath(query):
+            actual += 1
+        self.assertEqual(expected, actual)
+
+    def test_default_mapping_when_using_set(self):
+        with ParameterEstimation.Context(
+                self.model.copasi_file,
+                [self.TC1.report_name, self.TC2.report_name,
+                 self.report3, self.report4],
+                context='s', parameters='a') as config:
+            config.set('method', 'genetic_algorithm_sr')
+            config.set('number_of_generations', 25)
+            config.set('population_size', 14)
+        pe = ParameterEstimation(config)
+        query = '//*[@name="Object Map"]'
+        expected = 4
+        actual = 0
+        for i in pe.models.test_model.model.xml.xpath(query):
+            actual += 1
+        self.assertEqual(expected, actual)
+
+
 
 class ParameterEstimationTestsWithDifferentModel(unittest.TestCase):
     def setUp(self):
@@ -1494,8 +1551,6 @@ class ParameterEstimationTestsWithDifferentModel(unittest.TestCase):
         time.sleep(1)
         self.assertTrue(os.path.isfile(fname))
 
-
-##todo make the affected_models keyword resolve for datasets
 
 class ParameterEstimationTestsMoreThanOneModel(unittest.TestCase):
     def setUp(self):
