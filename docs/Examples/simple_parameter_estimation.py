@@ -86,8 +86,8 @@ instances of parameter to value
 # numpy arrays and normal dict etc.
 
 with tasks.ParameterEstimation.Context(mod, experiment_filename, context='s', parameters='g') as config:
-    # config.set('separator', ',', recursive=True)]
-    pass
+    config.set('separator', ',', recursive=True)
+    # pass
 
 print(config)
 

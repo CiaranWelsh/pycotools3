@@ -2326,6 +2326,13 @@ class ParameterEstimation(_Task):
             self.items = items
             self.settings = settings
 
+            self.experiment_defaults = self._experiment_defaults()
+            self.validation_defaults = self._validation_defaults()
+            self.dataset_defaults = self._dataset_defaults()
+            self.fit_item_defaults = self._fit_item_defaults()
+            self.constraint_item_defaults = self._constraint_item_defaults()
+            self.settings_defaults = self._settings_defaults()
+
             self.kwargs = munch.Munch.fromDict({
                 'models': self.models,
                 'datasets': self.datasets,
@@ -2441,11 +2448,32 @@ class ParameterEstimation(_Task):
                             if not recursive:
                                 break
                 return dct
+            # print(self.kwargs.datasets)
+            # self.experiment_defaults['separator'] = ','
+            # if parameter == 'separator':
+            #     self.datasets.experiments.mappings = munch.Munch({})
 
+
+            print('exp def', self.experiment_defaults)
             updated_kwargs = find_parameter(self.kwargs, parameter, value)
             if updated_kwargs is None:
                 raise ValueError(f'Parameter "{parameter}" cannot be found')
+
+            ##how should i update default kwargs
+            print('exp', self.datasets.experiments)
+
+            self.configure()
+            # self.dataset_defaults
+            ## what if we dont use defaults for mappings?
+            ## or restart all config from begining
+            ## or just mappings?
+            ## hard code special case for mappings?
+            ## i.e. if parameter == 'separator' - change mappings
+
+            ##we need set to also update default kwargs
+            # print(updated_kwargs.datasets.experiments)
             new_conf = ParameterEstimation.Config(**updated_kwargs)
+            print('new', new_conf.datasets.experiments)
             self.__dict__ = new_conf.__dict__
 
         @staticmethod
@@ -2453,8 +2481,8 @@ class ParameterEstimation(_Task):
             """
 
             Args:
-              dct: 
-              defaults: 
+              dct:
+              defaults:
 
             Returns:
 
@@ -2527,6 +2555,7 @@ class ParameterEstimation(_Task):
             self._add_defaults_to_dict(self.settings, self.settings_defaults)
 
             self._add_defaults_to_dict(self.datasets, self.dataset_defaults)
+
             self.set_default_experiments()
 
             self.set_default_validation_experiments()
@@ -2544,14 +2573,17 @@ class ParameterEstimation(_Task):
 
                 if self.datasets.experiments[experiment_name].affected_models == 'all':
                     self.datasets.experiments[experiment_name].affected_models = list(self.models.keys())[0] if len(self.models.keys()) == 1 else list(self.models.keys())
-
+                print('mappings', self.datasets.experiments[experiment_name].mappings)
+                ## shouldn't be empty since we've added separator arg
                 if self.datasets.experiments[experiment_name].mappings == {}:
+                    ##were being overridden by defaults here!
                     self.datasets.experiments[experiment_name].mappings = munch.Munch.fromDict(self.mappings_defaults(
                         self.datasets.experiments[experiment_name].filename, self.datasets.experiments[experiment_name].separator)
                     )
 
                 for mapping in self.datasets.experiments[experiment_name].mappings:
                     mapp = self.datasets.experiments[experiment_name].mappings.get(mapping)
+                    print(mapp)
                     if mapp.role != 'time':
                         model_keys = list(self.models.keys())
                         mod = self.models[model_keys[0]].model
@@ -2796,32 +2828,19 @@ class ParameterEstimation(_Task):
                     )
             default_dict.update(update_dict)
 
-        @property
-        def dataset_defaults(self):
+        def _dataset_defaults(self):
             """ """
             return {
                 'validations': {}
             }
-
-        @dataset_defaults.setter
-        def dataset_defaults(self, update_dict):
-            """
-
-            Args:
-              update_dict: 
-
-            Returns:
-
-            """
-            return self.default_argument_updater(self.dataset_defaults, update_dict)
 
         @staticmethod
         def mappings_defaults(filename, sep):
             """
 
             Args:
-              filename: 
-              sep: 
+              filename:
+              sep:
 
             Returns:
 
@@ -2831,6 +2850,7 @@ class ParameterEstimation(_Task):
 
             if not isinstance(sep, str):
                 raise ValueError
+            print('sep', sep)
             df = pandas.read_csv(filename, sep=sep)
             roles = {}
             for i in df.columns:
@@ -2848,8 +2868,7 @@ class ParameterEstimation(_Task):
                 } for i in list(df.columns)
             }
 
-        @property
-        def experiment_defaults(self):
+        def _experiment_defaults(self):
             """ """
             return {
                 'filename': '',
@@ -2860,20 +2879,7 @@ class ParameterEstimation(_Task):
 
             }
 
-        @experiment_defaults.setter
-        def experiment_defaults(self, update_dict):
-            """
-
-            Args:
-              update_dict: 
-
-            Returns:
-
-            """
-            self.default_argument_updater(self.experiment_defaults, update_dict)
-
-        @property
-        def validation_defaults(self):
+        def _validation_defaults(self):
             """ """
             return {
                 'filename': '',
@@ -2883,20 +2889,7 @@ class ParameterEstimation(_Task):
                 'mappings': {},
             }
 
-        @validation_defaults.setter
-        def validation_defaults(self, update_dict):
-            """
-
-            Args:
-              update_dict: 
-
-            Returns:
-
-            """
-            self.default_argument_updater(self.validation_defaults, update_dict)
-
-        @property
-        def fit_item_defaults(self):
+        def _fit_item_defaults(self):
             """ """
 
             return {
@@ -2908,20 +2901,8 @@ class ParameterEstimation(_Task):
                 'affected_models': 'all'
             }
 
-        @fit_item_defaults.setter
-        def fit_item_defaults(self, update_dict):
-            """
 
-            Args:
-              update_dict: 
-
-            Returns:
-
-            """
-            self.default_argument_updater(self.fit_item_defaults, update_dict)
-
-        @property
-        def constraint_item_defaults(self):
+        def _constraint_item_defaults(self):
             """ """
             return {
                 'lower_bound': 1e-6,
@@ -2932,20 +2913,7 @@ class ParameterEstimation(_Task):
                 'affected_models': 'all',
             }
 
-        @constraint_item_defaults.setter
-        def constraint_item_defaults(self, update_dict):
-            """
-
-            Args:
-              update_dict: 
-
-            Returns:
-
-            """
-            self.default_argument_updater(self.fit_item_defaults, update_dict)
-
-        @property
-        def settings_defaults(self):
+        def _settings_defaults(self):
             """ """
             return {
                 'copy_number': 1,
@@ -2990,18 +2958,6 @@ class ParameterEstimation(_Task):
                 'max_active': 3,
                 'prefix': None
             }
-
-        @settings_defaults.setter
-        def settings_defaults(self, update_dict):
-            """
-
-            Args:
-              update_dict: 
-
-            Returns:
-
-            """
-            self._add_defaults_to_dict(self.settings_defaults, update_dict)
 
         @property
         def experiments(self):

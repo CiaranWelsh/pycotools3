@@ -1411,6 +1411,37 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
         expected = [',', ',', ',', ',']
         self.assertListEqual(expected, actual)
 
+    def test_context_mappings_after_use_of_set(self):
+        fname = os.path.join(os.path.dirname(__file__), 'timeseries.txt')
+        data = self.model.simulate(0, 10, 11)
+        data.to_csv(fname)
+
+        # this method of using a config manager to return config class
+        #     is not working because we have to build the obj prior to making
+        #     the changes we want to change. This is a problem. I need to
+        #     reinstate the context manager returning itself  - maybe a subclass
+        #     of config where we can change the defaults using set prior to
+        #     instantiating the classmethod
+
+        with ParameterEstimation.Context(
+                self.model.copasi_file, fname,
+                context='s', parameters='a') as config:
+
+            config.set('separator', ',', recursive=True)
+            pe = ParameterEstimation(config)
+
+        ## obj map is not being correctly configured. why?
+        ## its because the config is not being set up correctly
+        # print(pe.models.test_model.model.open())
+
+        # query = '//*[@name="Separator"]'
+        # actual = []
+        # for i in pe.config.models.test_model.model.xml.xpath(query):
+        #     actual.append(i.attrib['value'])
+        #
+        # expected = [',', ',', ',', ',']
+        # self.assertListEqual(expected, actual)
+
     def test_default_mappings(self):
         with ParameterEstimation.Context(
                 self.model.copasi_file,
