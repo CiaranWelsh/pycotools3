@@ -348,20 +348,6 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
         expected = ['B']
         self.assertListEqual(expected, actual)
 
-    def test_set(self):
-        self.PE.config.set('method', 'simulated_annaeling')
-        self.assertEqual('simulated_annaeling',
-                         self.PE.config.settings.method)
-
-    def test_set_all(self):
-        self.PE.config.set('affected_models', 'fake_affected_model', recursive=True)
-        self.assertEqual('fake_affected_model',
-                         self.PE.config.datasets.experiments.report1.affected_models)
-
-    def test_set_all_separators(self):
-        self.PE.config.set('separator', ',', recursive=True)
-        self.assertTrue(',', self.PE.config.experiments.report1.separator)
-
 
 class ParameterEstimationConfigResolveSpecialArgsTests(_test_base._BaseTest):
     def setUp(self):
