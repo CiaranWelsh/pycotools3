@@ -815,13 +815,11 @@ class ExperimentMapperTests(_test_base._BaseTest):
         self.assertEqual(dct['model1']['report3'], 'Experiment_report3')
 
     def test_create_correct_number_of_experiments(self):
-        models = self.PE._map_experiments(validation=False)
-        mod = models.model1.model
+        mod = self.PE.models.model1.model
         query = '//*[@name="Experiment Set"]'
         count = 0
         for i in mod.xml.xpath(query):
             for j in i:
-                print(j, j.attrib)
                 count += 1
         self.assertEqual(3, count)
 
@@ -1641,10 +1639,10 @@ class ParameterEstimationTestsMoreThanOneModel(unittest.TestCase):
         with ParameterEstimation.Context(
                 models=[self.mod1.copasi_file, self.mod2.copasi_file],
                 experiments=self.experiment, context='s', parameters='g') as context:
-            config.settings.method = 'genetic_algorithm_sr'
-            config.settings.population_size = 49
+            context.set('method', 'genetic_algorithm_sr')
+            context.set('population_size', 49)
+            config = context.get_config()
         PE = ParameterEstimation(config)
-
         time.sleep(0.2)
         actual = self.get_population_size(PE.config.models.first.model.xml)
         self.assertEqual(str(49), actual)
@@ -1653,8 +1651,9 @@ class ParameterEstimationTestsMoreThanOneModel(unittest.TestCase):
         with ParameterEstimation.Context(
                 models=[self.mod1.copasi_file, self.mod2.copasi_file],
                 experiments=self.experiment, context='s', parameters='g') as context:
-            config.settings.method = 'genetic_algorithm_sr'
-            config.settings.population_size = 84
+            context.set('method', 'genetic_algorithm_sr')
+            context.set('population_size', 84)
+            config = context.get_config()
         PE = ParameterEstimation(config)
         time.sleep(0.2)
         actual = self.get_population_size(PE.config.models.second.model.xml)
@@ -1664,8 +1663,9 @@ class ParameterEstimationTestsMoreThanOneModel(unittest.TestCase):
         with ParameterEstimation.Context(
                 models=[self.mod1.copasi_file, self.mod2.copasi_file],
                 experiments=self.experiment, context='s', parameters='g') as context:
-            config.settings.method = 'genetic_algorithm_sr'
-            config.settings.population_size = 84
+            context.set('method', 'genetic_algorithm_sr')
+            context.set('population_size', 84)
+            config = context.get_config()
         PE = ParameterEstimation(config)
         query = '//*[@name="dataset"]'
         first = False
@@ -1683,8 +1683,9 @@ class ParameterEstimationTestsMoreThanOneModel(unittest.TestCase):
         with ParameterEstimation.Context(
                 models=[self.mod1.copasi_file, self.mod2.copasi_file],
                 experiments=self.experiment, context='s', parameters='g') as context:
-            config.settings.method = 'genetic_algorithm_sr'
-            config.settings.population_size = 84
+            context.set('method', 'genetic_algorithm_sr')
+            context.set('population_size', 84)
+            config = context.get_config()
         PE = ParameterEstimation(config)
         query = '//*[@name="FitItem"]'
         import re

@@ -2321,6 +2321,7 @@ class ParameterEstimation(_Task):
         """
         Class holding the defaults arguments for ParameterEstimation
         """
+
         def __init__(self):
             """
             Calls all the methods in the class which are essentially
@@ -2406,7 +2407,6 @@ class ParameterEstimation(_Task):
                 'affected_models': 'all'
             }
 
-
         def _constraint_items(self):
             """ Stores default constraint item kwargs for parameter estimation class """
             return {
@@ -2462,7 +2462,6 @@ class ParameterEstimation(_Task):
                 'max_active': 3,
                 'prefix': None
             }
-
 
     @staticmethod
     class Config(_Task, munch.Munch):
@@ -2786,13 +2785,16 @@ class ParameterEstimation(_Task):
             for experiment_name in self.experiment_names:
                 for default_kwarg in self.defaults.experiments:
                     if default_kwarg not in self.datasets.experiments[experiment_name]:
-                        self.datasets.experiments[experiment_name][default_kwarg] = self.defaults.experiments[default_kwarg]
+                        self.datasets.experiments[experiment_name][default_kwarg] = self.defaults.experiments[
+                            default_kwarg]
 
                 if self.datasets.experiments[experiment_name].affected_models == 'all':
-                    self.datasets.experiments[experiment_name].affected_models = list(self.models.keys())[0] if len(self.models.keys()) == 1 else list(self.models.keys())
+                    self.datasets.experiments[experiment_name].affected_models = list(self.models.keys())[0] if len(
+                        self.models.keys()) == 1 else list(self.models.keys())
                 if self.datasets.experiments[experiment_name].mappings == {}:
                     self.datasets.experiments[experiment_name].mappings = munch.Munch.fromDict(self.defaults.mappings(
-                        self.datasets.experiments[experiment_name].filename, self.datasets.experiments[experiment_name].separator)
+                        self.datasets.experiments[experiment_name].filename,
+                        self.datasets.experiments[experiment_name].separator)
                     )
 
                 for mapping in self.datasets.experiments[experiment_name].mappings:
@@ -2808,7 +2810,7 @@ class ParameterEstimation(_Task):
                             )
                         except errors.InputError:
                             LOG.warning(f'skipping variable "{mapp.model_object}" as it was not found in '
-                                  f'model "{mod}"')
+                                        f'model "{mod}"')
 
                         if mapp == {}:
                             mapp = {
@@ -2840,16 +2842,14 @@ class ParameterEstimation(_Task):
                     if default_kwarg not in validation_dataset:
                         validation_dataset[default_kwarg] = validation_defaults[default_kwarg]
 
-
                 if validation_dataset.affected_models == 'all':
-                    validation_dataset.affected_models = list(self.models.keys())[0] if len(self.models.keys()) == 1 else list(self.models.keys())
-
+                    validation_dataset.affected_models = list(self.models.keys())[0] if len(
+                        self.models.keys()) == 1 else list(self.models.keys())
 
                 if validation_dataset.mappings == {}:
                     validation_dataset.mappings = munch.Munch.fromDict(self.defaults.mappings(
                         validation_dataset.filename, validation_dataset.separator)
                     )
-
 
                 for mapping in validation_dataset.mappings:
                     mapp = validation_dataset.mappings.get(mapping)
@@ -3172,7 +3172,6 @@ class ParameterEstimation(_Task):
         if self.config.settings.run_mode is not False:
             self.run(self.copied_models)
 
-
     def do_checks(self):
         """ validate integrity of user input"""
         if not isinstance(self.config, self.Config):
@@ -3487,7 +3486,7 @@ class ParameterEstimation(_Task):
 
         """
         if not isinstance(local_parameter, model.LocalParameter):
-            raise ValueError('Input should be "model.LocalParameter" class. Got "{}"'.format(type(metabolite)))
+            raise ValueError('Input should be "model.LocalParameter" class. Got "{}"'.format(type(local_parameter)))
 
         if role == 'independent':
             cn = '{},{},{}'.format(mod.reference,
@@ -3612,7 +3611,7 @@ class ParameterEstimation(_Task):
         """
         ## build a reference dct for weight method numbers
         weight_method_string = ['mean_squared', 'stardard_deviation', 'value_scaling',
-                                'mean']  # line 2144
+                                'mean']
         weight_method_numbers = [str(i) for i in [1, 2, 3, 4]]
         weight_method_lookup_dct = dict(list(zip(weight_method_string, weight_method_numbers)))
 
@@ -3907,7 +3906,8 @@ class ParameterEstimation(_Task):
 
         else:
             raise errors.InputError(
-                f'"{self.config.settings.method}" is an invalid method argument. Please choose from "{sorted(self.valid_methods)}"'
+                f'"{self.config.settings.method}" is an invalid '
+                f'method argument. Please choose from "{sorted(self.valid_methods)}"'
             )
 
         return method_name, method_type
@@ -4755,7 +4755,6 @@ class ParameterEstimation(_Task):
                     f'"{parameter}" is not a valid argument'
                 )
 
-
         def get_config(self):
             ## update the config
             self.add_models(self.models)
@@ -4932,8 +4931,6 @@ class ParameterEstimation(_Task):
             if not isinstance(settings, dict):
                 raise TypeError(f'add_settings expects a dict as argument. Got "{type(settings)}"')
             self.settings.update(settings)
-
-
 
 
 class ChaserParameterEstimations(_Task):
