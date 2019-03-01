@@ -3204,7 +3204,8 @@ class ParameterEstimation(_Task):
         be enumerated under a single problem directory to group similar parameter estimations
         Returns:
             str. A directory.
-        """        dire = os.path.join(self.problem_dir, f'Fit{self.config.settings.fit}')
+        """
+        dire = os.path.join(self.problem_dir, f'Fit{self.config.settings.fit}')
         if not os.path.isdir(dire):
             os.makedirs(dire)
         return dire
@@ -3378,12 +3379,25 @@ class ParameterEstimation(_Task):
     @property
     def models(self):
         """
+        Get models
 
         Returns:
             the models entry of the :py:class:`ParameterEstimation.Config` object
 
         """
         return self.config.models
+
+    @models.setter
+    def models(self, models):
+        """
+        Set models attribute
+        Args:
+          models:
+            dict
+        Returns:
+            None
+        """
+        self.config.models = models
 
     @property
     def _experiments(self):
