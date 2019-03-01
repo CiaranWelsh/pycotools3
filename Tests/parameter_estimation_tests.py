@@ -1302,10 +1302,10 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
                 self.model.copasi_file,
                 [self.TC1.report_name, self.TC2.report_name,
                  self.report3, self.report4], context='s', parameters='a') as context:
+            context.set('method', 'genetic_algorithm_sr')
+            context.set('number_of_generations', 25)
+            context.set('population_size', 10)
             config = context.get_config()
-            config.settings.method = 'genetic_algorithm_sr'
-            config.settings.number_of_generations = 25
-            config.settings.population_size = 10
         self.assertTrue(isinstance(config, ParameterEstimation.Config))
 
     def test_create_config_file(self):
@@ -1315,10 +1315,10 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
                 [self.TC1.report_name, self.TC2.report_name,
                  self.report3, self.report4],
                 context='s', parameters='a', filename=fname) as context:
+            context.set('method', 'genetic_algorithm_sr')
+            context.set('number_of_generations', 25)
+            context.set('population_size', 10)
             config = context.get_config()
-            config.settings.method = 'genetic_algorithm_sr'
-            config.settings.number_of_generations = 25
-            config.settings.population_size = 10
         self.assertTrue(os.path.isfile(fname))
 
     def test_create_config_file_when_already_exists(self):
@@ -1334,10 +1334,10 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
                 [self.TC1.report_name, self.TC2.report_name,
                  self.report3, self.report4],
                 context='s', parameters='a', filename=fname) as context:
+            context.set('method', 'genetic_algorithm_sr')
+            context.set('number_of_generations', 25)
+            context.set('population_size', 10)
             config = context.get_config()
-            config.settings.method = 'genetic_algorithm_sr'
-            config.settings.number_of_generations = 25
-            config.settings.population_size = 10
 
         self.assertTrue(os.path.isfile(fname))
 
@@ -1348,11 +1348,11 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
                 [self.TC1.report_name, self.TC2.report_name,
                  self.report3, self.report4],
                 context='s', parameters='a') as context:
+            context.set('method', 'genetic_algorithm_sr')
+            context.set('prefix', 'B')
+            context.set('number_of_generations', 25)
+            context.set('population_size', 10)
             config = context.get_config()
-            config.settings.method = 'genetic_algorithm_sr'
-            config.settings.number_of_generations = 25
-            config.settings.population_size = 10
-            config.settings.prefix = 'B'
         expected = sorted(['B', 'B2C', 'B2C_0_k2'])
         actual = sorted(list(config.items.fit_items.keys()))
         self.assertListEqual(expected, actual)
@@ -1363,11 +1363,11 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
                 [self.TC1.report_name, self.TC2.report_name,
                  self.report3, self.report4],
                 context='s', parameters='a') as context:
+            context.set('method', 'genetic_algorithm_sr')
+            context.set('number_of_generations', 25)
+            context.set('population_size', 14)
+            context.set('prefix', 'B')
             config = context.get_config()
-            config.settings.method = 'genetic_algorithm_sr'
-            config.settings.number_of_generations = 25
-            config.settings.population_size = 14
-            config.settings.prefix = 'B'
         expected = 'genetic_algorithm_sr'
         actual = config.settings.method
         self.assertEqual(expected, actual)
@@ -1378,11 +1378,11 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
                 [self.TC1.report_name, self.TC2.report_name,
                  self.report3, self.report4],
                 context='s', parameters='a') as context:
+            context.set('method', 'genetic_algorithm_sr')
+            context.set('number_of_generations', 25)
+            context.set('population_size', 14)
+            context.set('prefix', 'B')
             config = context.get_config()
-            config.settings.method = 'genetic_algorithm_sr'
-            config.settings.number_of_generations = 25
-            config.settings.population_size = 14
-            config.settings.prefix = 'B'
         expected = 14
         actual = config.settings.population_size
         self.assertEqual(expected, actual)
@@ -1403,13 +1403,13 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
                 [self.TC1.report_name, self.TC2.report_name,
                  self.report3, self.report4],
                 context='s', parameters='a') as context:
+            context.set('method', 'genetic_algorithm_sr')
+            context.set('number_of_generations', 25)
+            context.set('population_size', 14)
+            context.set('prefix', 'B')
+            context.set('separator', ',')
             config = context.get_config()
-            config.settings.method = 'genetic_algorithm_sr'
-            config.settings.number_of_generations = 25
-            config.settings.population_size = 14
-            config.settings.prefix = 'B'
-            config.set('separator', ',', recursive=True)
-            pe = ParameterEstimation(config)
+        pe = ParameterEstimation(config)
 
         query = '//*[@name="Separator"]'
         actual = []
@@ -1418,11 +1418,6 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
 
         expected = [',', ',', ',', ',']
         self.assertListEqual(expected, actual)
-
-
-
-    # should i pull default args into a superclass of context and
-    # config so they can booth inherit from and modify defaults
 
     def test_context_mappings_after_use_of_set(self):
         fname = os.path.join(os.path.dirname(__file__), 'timeseries.txt')
@@ -1435,22 +1430,16 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
             context.set('separator', ',')
             config = context.get_config()
 
-        # print(config)
+        pe = ParameterEstimation(config)
+        query = '//*[@name="Object Map"]'
+        expected = 4
+        count = 0
+        for i in pe.models.test_model.model.xml.xpath(query):
+            for j in i:
+                count += 1
+        self.assertEqual(expected, count)
 
-        # pe = ParameterEstimation(config)
         # pe.models.test_model.model.open()
-
-        ## obj map is not being correctly configured. why?
-        ## its because the config is not being set up correctly
-        # print(pe.models.test_model.model.open())
-
-        # query = '//*[@name="Separator"]'
-        # actual = []
-        # for i in pe.config.models.test_model.model.xml.xpath(query):
-        #     actual.append(i.attrib['value'])
-        #
-        # expected = [',', ',', ',', ',']
-        # self.assertListEqual(expected, actual)
 
     def test_default_mappings(self):
         with ParameterEstimation.Context(
@@ -1458,10 +1447,10 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
                 [self.TC1.report_name, self.TC2.report_name,
                  self.report3, self.report4],
                 context='s', parameters='a') as context:
+            context.set('method', 'genetic_algorithm_sr')
+            context.set('number_of_generations', 25)
+            context.set('population_size', 14)
             config = context.get_config()
-            config.settings.method = 'genetic_algorithm_sr'
-            config.settings.number_of_generations = 25
-            config.settings.population_size = 14
         pe = ParameterEstimation(config)
         query = '//*[@name="Object Map"]'
         expected = 4
@@ -1476,10 +1465,10 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
                 [self.TC1.report_name, self.TC2.report_name,
                  self.report3, self.report4],
                 context='s', parameters='a') as context:
+            context.set('method', 'genetic_algorithm_sr')
+            context.set('number_of_generations', 25)
+            context.set('population_size', 14)
             config = context.get_config()
-            config.set('method', 'genetic_algorithm_sr')
-            config.set('number_of_generations', 25)
-            config.set('population_size', 14)
         pe = ParameterEstimation(config)
         query = '//*[@name="Object Map"]'
         expected = 4

@@ -2318,9 +2318,13 @@ class ParameterEstimation(_Task):
 
     @staticmethod
     class _Defaults:
+        """
+        Class holding the defaults arguments for ParameterEstimation
+        """
         def __init__(self):
             """
-            Class holding the defaults arguments for ParameterEstimation
+            Calls all the methods in the class which are essentially
+            organised sets of default parameters
             """
             self.experiments = self._experiments()
             self.validations = self._validations()
@@ -2329,33 +2333,29 @@ class ParameterEstimation(_Task):
             self.constraint_items = self._constraint_items()
             self.settings = self._settings()
 
-        def to_list(self):
-            return [self.experiments, self.validations, self.datasets,
-                    self.fit_items, self.constraint_items, self.settings]
-
         def _datasets(self):
-            """ """
+            """ store default datasets argument"""
             return {
                 'validations': {}
             }
 
         @staticmethod
-        def mappings(filename, sep):
+        def mappings(filename: str, sep: str):
             """
 
             Args:
-              filename:
-              sep:
+              filename (str): the filename of the data file to be mapped
+              sep (str): separator argument
 
-            Returns:
-
+            Returns: dict
+                Object map dict for configuration
+                of parameter estimation class
             """
             if not isinstance(filename, str):
                 raise ValueError
 
             if not isinstance(sep, str):
                 raise ValueError
-            print('sep', sep)
             df = pandas.read_csv(filename, sep=sep)
             roles = {}
             for i in df.columns:
@@ -2374,7 +2374,7 @@ class ParameterEstimation(_Task):
             }
 
         def _experiments(self):
-            """ """
+            """ Stores default experiment kwargs for parameter estimation class"""
             return {
                 'filename': '',
                 'normalize_weights_per_experiment': True,
@@ -2385,7 +2385,7 @@ class ParameterEstimation(_Task):
             }
 
         def _validations(self):
-            """ """
+            """ Stores default validation kwargs for parameter estimation class """
             return {
                 'filename': '',
                 'affected_models': 'all',
@@ -2395,7 +2395,7 @@ class ParameterEstimation(_Task):
             }
 
         def _fit_items(self):
-            """ """
+            """ Stores default fit_item kwargs for parameter estimation class """
 
             return {
                 'lower_bound': 1e-6,
@@ -2408,7 +2408,7 @@ class ParameterEstimation(_Task):
 
 
         def _constraint_items(self):
-            """ """
+            """ Stores default constraint item kwargs for parameter estimation class """
             return {
                 'lower_bound': 1e-6,
                 'upper_bound': 1e6,
@@ -2419,13 +2419,12 @@ class ParameterEstimation(_Task):
             }
 
         def _settings(self):
-            """ """
+            """ Stores default setting kwargs for parameter estimation class"""
             return {
                 'copy_number': 1,
                 'pe_number': 1,
                 'results_directory': 'ParameterEstimationData',
-                # os.path.join(self.model.root, 'ParameterEstimationResults'),
-                'config_filename': 'config.yml',  # os.path.join(self.model.root, 'config_file.yaml'),
+                'config_filename': 'config.yml',
                 'overwrite_config_file': False,
                 'update_model': False,
                 'randomize_start_values': False,
@@ -2467,15 +2466,115 @@ class ParameterEstimation(_Task):
 
     @staticmethod
     class Config(_Task, munch.Munch):
-        """ """
+        """
+        A class for holding a parameter estimation configuration
 
-        def __init__(self, models, datasets, items, settings={}):
+        Stores all the settings needed for configuration of a parameter estimation
+        using COPASI.
+
+        .. _ParameterEstimation.Config::
+
+        Examples:
+            >>> ## create a model
+            >>> antimony_string = '''
+            ...             model TestModel1()
+            ...                 R1: A => B; k1*A;
+            ...                 R2: B => A; k2*B
+            ...                 A = 1
+            ...                 B = 0
+            ...                 k1 = 4;
+            ...                 k2 = 9;
+            ...             end
+            ...             '''
+            >>> copasi_filename = os.path.join(os.path.dirname(__file__), 'example_model.cps')
+            >>> with model.BuildAntimony(copasi_filename) as loader:
+            ...     mod = loader.load(antimony_string)
+            >>> ## Simulate some data from the model and write to file
+            >>> fname = os.path.join(os.path.dirname(__file__), 'timeseries.txt')
+            >>> data = self.model.simulate(0, 10, 11)
+            >>> data.to_csv(fname)
+            >>> ## create nested dict containing all the relevant arguments for your configuration
+            >>> config_dict = dict(
+            ...        models=dict(
+            ...             ## model name is the users choice here
+            ...            example1=dict(
+            ...                copasi_file=copasi_filename
+            ...            )
+            ...        ),
+            ...        datasets=dict(
+            ...            experiments=dict(
+            ...                 ## experiment names are the users choice
+            ...                report1=dict(
+            ...                    filename=self.TC1.report_name,
+            ...                ),
+            ...            ),
+            ...            ## our validations entry is empty here
+            ...            ## but if you have validation data this should
+            ...            ## be the same as the experiments section
+            ...            validations=dict(),
+            ...        ),
+            ...        items=dict(
+            ...            fit_items=dict(
+            ...                A=dict(
+            ...                    affected_experiments='report1'
+            ...                ),
+            ...                B=dict(
+            ...                    affected_validation_experiments=['report2']
+            ...                ),
+            ...            k1={},
+            ...            k2={},
+            ...            ),
+            ...            constraint_items=dict(
+            ...                k1=dict(
+            ...                    lower_bound=1e-2,
+            ...                    upper_bound=10
+            ...                )
+            ...            )
+            ...        ),
+            ...        settings=dict(
+            ...            method='genetic_algorithm_sr',
+            ...            population_size=2,
+            ...            number_of_generations=2,
+            ...            working_directory=os.path.dirname(__file__),
+            ...            copy_number=4,
+            ...            pe_number=2,
+            ...            weight_method='value_scaling',
+            ...            validation_weight=2.5,
+            ...            validation_threshold=9,
+            ...            randomize_start_values=True,
+            ...            calculate_statistics=False,
+            ...            create_parameter_sets=False
+            ...        )
+            ...    )
+            >>> config = ParameterEstimation.Config(**config_dict)
+        """
+
+        def __init__(self, models, datasets, items, settings={}, defaults=None):
+            """
+            Initialisation method for Config class
+            Args:
+                models (dict):
+                    Dict containing model names and paths to copasi files
+                datasets(dict):
+                    Dict containing experiments and validation experiments
+                items(dict):
+                    Dict containing fit items and constraint items
+                settings(dict):
+                    Dict containing all other settings for parameter estimation
+                defaults(ParameterEstimation._Defaults):
+                    Custom set of Defaults to use for unspecified arguments
+            """
             self.models = models
             self.datasets = datasets
             self.items = items
             self.settings = settings
+            self.defaults = defaults
 
-            self.defaults = ParameterEstimation._Defaults()
+            if self.defaults is None:
+                self.defaults = ParameterEstimation._Defaults()
+
+            if not isinstance(self.defaults, ParameterEstimation._Defaults):
+                raise TypeError('incorrect defaults argument')
 
             self.kwargs = munch.Munch.fromDict({
                 'models': self.models,
@@ -2483,8 +2582,6 @@ class ParameterEstimation(_Task):
                 'items': self.items,
                 'settings': self.settings
             })
-
-            # self.kwargs = munch.Munch.fromDict(self.kwargs)
 
             for kw in self.kwargs:
                 setattr(self, kw, self.kwargs[kw])
@@ -2504,7 +2601,13 @@ class ParameterEstimation(_Task):
             return self.__str__()
 
         def to_json(self):
-            """ """
+            """
+            Output arguments as json
+
+            Returns: str
+                All arguments in json format
+
+            """
             kwargs = deepcopy(self.kwargs)
             for k, v in kwargs.models.items():
                 for k2, v2 in kwargs.models[k].items():
@@ -2515,22 +2618,27 @@ class ParameterEstimation(_Task):
 
         def from_json(self, string):
             """
-
+            Create config object from json format
             Args:
-              string: 
+              string (Str):
+                a valid json string
 
             Returns:
-
+                ParameterEstimation.Config
             """
             raise NotImplementedError('Do this when needed')
 
         def to_yaml(self, filename=None):
             """
 
+            Output arguments as yaml
+
             Args:
-              filename:  (Default value = None)
+                filename (str, None):
+                    If not None (default), path to write yaml configuration to
 
             Returns:
+                Config object as string in yaml format
 
             """
             kwargs = deepcopy(self.kwargs)
@@ -2548,11 +2656,13 @@ class ParameterEstimation(_Task):
 
         def from_yaml(self, yml):
             """
-
+            Read config object from yaml file
             Args:
-              yml: 
+              yml (str):
+                full path to text file containing configuration arguments in yaml format
 
             Returns:
+                ParameterEstimation.Config
 
             """
             if os.path.isfile(yml):
@@ -2561,64 +2671,6 @@ class ParameterEstimation(_Task):
             else:
                 yml_string = yml
             raise NotImplementedError('Do this when needed')
-
-        def set(self, parameter, value, recursive=False):
-            """
-            Set the value of :code:`parameter` to :code:`value`.
-
-            Looks for the first instance of :code:`parameter` and sets its value to :code:`value`.
-            To set all values of a parameter, see :py:meth:`ParameterEstimation.Config.set_all`
-
-
-            Args:
-                parameter: A key somewhere in the nested structure of the config object
-                value: A value to replace the current value with
-
-            Returns:
-                None
-
-            """
-            def find_parameter(dct, parameter, value):
-                for k, v in dct.items():
-                    if isinstance(v, dict):
-                        if k == parameter:
-                            raise ValueError(
-                                f'cannot set value of {parameter} as it is '
-                                f'a dict')
-                        find_parameter(v, parameter, value)
-                    else:
-                        if k == parameter:
-                            dct[parameter] = value
-                            if not recursive:
-                                break
-                return dct
-            # print(self.kwargs.datasets)
-            # self.experiment_defaults['separator'] = ','
-            # if parameter == 'separator':
-            #     self.datasets.experiments.mappings = munch.Munch({})
-
-
-            print('exp def', self.defaults.experiments)
-            updated_kwargs = find_parameter(self.kwargs, parameter, value)
-            if updated_kwargs is None:
-                raise ValueError(f'Parameter "{parameter}" cannot be found')
-
-            ##how should i update default kwargs
-            print('exp', self.datasets.experiments)
-
-            self.configure()
-            # self.defaults.datasets
-            ## what if we dont use defaults for mappings?
-            ## or restart all config from begining
-            ## or just mappings?
-            ## hard code special case for mappings?
-            ## i.e. if parameter == 'separator' - change mappings
-
-            ##we need set to also update default kwargs
-            # print(updated_kwargs.datasets.experiments)
-            new_conf = ParameterEstimation.Config(**updated_kwargs)
-            print('new', new_conf.datasets.experiments)
-            self.__dict__ = new_conf.__dict__
 
         @staticmethod
         def _add_defaults_to_dict(dct, defaults):
@@ -2637,7 +2689,12 @@ class ParameterEstimation(_Task):
             return dct
 
         def _validate_integrity_of_user_input(self):
-            """ """
+            """
+            Ensure user input is accurate
+            Returns:
+                None
+
+            """
             for i in self.settings:
                 if i not in self.defaults.settings.keys():
                     raise errors.InputError(
@@ -2656,12 +2713,6 @@ class ParameterEstimation(_Task):
                     'The "datasets" argument should be a nested dict containing'
                     ' "experiments" and/or "validations" dicts'
                 )
-
-            # for i in self.datasets:
-            #     for j in self.datasets[i]:
-            #         report = self.datasets[i][j].filename
-            #         if not os.path.isabs(report):
-            #             self.datasets[i][j].filename = os.path.abspath(report)
 
             if not isinstance(self.items, dict):
                 raise TypeError(
@@ -2683,7 +2734,17 @@ class ParameterEstimation(_Task):
                     ))
 
         def _load_models(self):
-            """ """
+            """
+            Load models from disk
+
+            User usually specifies a copasi_file as argument. This method loads
+            the copasi file into a :py:class:`model.Model` object and stores a
+            reference to the model under the `model` entry of the `models` tag.
+
+            Returns:
+                This method operates inplace and returns None
+
+            """
             for mod in self.models:
                 if 'model' not in self.models[mod].keys():
                     if 'copasi_file' not in self.models[mod].keys():
@@ -2694,22 +2755,34 @@ class ParameterEstimation(_Task):
                     self.models[mod]['model'] = model.Model(self.models[mod].copasi_file)
 
         def configure(self):
-            """ """
-            ## update datasets defaults
+            """
+            Configure the class for production of parameter estimation config
+
+            Like a main method for this class. Uses the other methods in the class
+            to configure a :py:class:`ParameterEstimation.Config object`
+
+            Returns:
+                Operates inplace and returns None
+            """
             self._add_defaults_to_dict(self.settings, self.defaults.settings)
 
             self._add_defaults_to_dict(self.datasets, self.defaults.datasets)
 
-            self.set_default_experiments()
+            self._set_default_experiments()
 
-            self.set_default_validation_experiments()
+            self._set_default_validation_experiments()
 
-            self.set_default_fit_items()
+            self._set_default_fit_items()
 
-            self.set_default_constraint_items()
+            self._set_default_constraint_items()
 
-        def set_default_experiments(self):
-            """ """
+        def _set_default_experiments(self):
+            """
+            Configure missing entries for datasets.experiments with defaults
+
+            Returns:
+                None, the method operates on class attributes inplace
+            """
             for experiment_name in self.experiment_names:
                 for default_kwarg in self.defaults.experiments:
                     if default_kwarg not in self.datasets.experiments[experiment_name]:
@@ -2717,17 +2790,13 @@ class ParameterEstimation(_Task):
 
                 if self.datasets.experiments[experiment_name].affected_models == 'all':
                     self.datasets.experiments[experiment_name].affected_models = list(self.models.keys())[0] if len(self.models.keys()) == 1 else list(self.models.keys())
-                print('mappings', self.datasets.experiments[experiment_name].mappings)
-                ## shouldn't be empty since we've added separator arg
                 if self.datasets.experiments[experiment_name].mappings == {}:
-                    ##were being overridden by defaults here!
                     self.datasets.experiments[experiment_name].mappings = munch.Munch.fromDict(self.defaults.mappings(
                         self.datasets.experiments[experiment_name].filename, self.datasets.experiments[experiment_name].separator)
                     )
 
                 for mapping in self.datasets.experiments[experiment_name].mappings:
                     mapp = self.datasets.experiments[experiment_name].mappings.get(mapping)
-                    print(mapp)
                     if mapp.role != 'time':
                         model_keys = list(self.models.keys())
                         mod = self.models[model_keys[0]].model
@@ -2749,11 +2818,15 @@ class ParameterEstimation(_Task):
                             }
                         else:
                             mapp.update({'object_type': type(model_obj).__name__})
-                    # self.datasets.experiments[experiment_name].mappings[mapping] = mapp
-                # self.experiments[experiment_name] = deepcopy()
 
-        def set_default_validation_experiments(self):
-            """ """
+        def _set_default_validation_experiments(self):
+            """
+            Configure missing entries for datasets.validations with defaults
+
+            Returns:
+                None, the method operates on class attributes inplace
+
+            """
             if self.datasets.validations is None:
                 return {}
 
@@ -2798,15 +2871,29 @@ class ParameterEstimation(_Task):
                             mapp.update({'object_type': type(model_obj).__name__})
                     self.datasets.validations[validation_experiment].mappings[mapping] = mapp
 
-        def set_default_fit_items(self):
-            """ """
+        def _set_default_fit_items(self):
+            """
+            Configure missing entries for items.fit_items with defaults
+
+            Returns:
+                None. Method operates inplace on class attributes
+
+            """
             if isinstance(self.items.fit_items, str):
                 self.set_default_fit_items_str()
             else:
                 self.set_default_fit_items_dct()
 
         def set_default_fit_items_str(self):
-            """ """
+            """
+
+            Configure missing entries for items.fit_items when they are
+            strings pointing towards model variables
+
+            Returns:
+                None. Method operates inplace on class attributes
+
+            """
             if not isinstance(self.items.fit_items, str):
                 raise TypeError
 
@@ -2859,7 +2946,15 @@ class ParameterEstimation(_Task):
             self.items.fit_items = munch.Munch.fromDict(dct)
 
         def set_default_fit_items_dct(self):
-            """ """
+            """
+
+            Configure missing entries for items.fit_items when they are
+            in nested dict format
+
+            Returns:
+                None. Method operates inplace on class attributes
+
+            """
             ## remove fit items if prefix condition is not satisified
             for fit_item in self.items.fit_items:
                 item = self.items.fit_items.get(fit_item)
@@ -2899,8 +2994,16 @@ class ParameterEstimation(_Task):
                        fit_item.startswith(self.settings.prefix)}
                 self.items.fit_items = munch.Munch.fromDict(tmp)
 
-        def set_default_constraint_items(self):
-            """ """
+        def _set_default_constraint_items(self):
+            """ 
+            
+            Configure missing entries for items.constraint_items when they are
+            strings pointing towards model variables
+
+            Returns:
+                None. Method operates inplace on class attributes
+
+            """
             if 'constraint_items' in self.items:
 
                 for constraint_item in self.items.constraint_items:
@@ -2931,60 +3034,30 @@ class ParameterEstimation(_Task):
 
                 self.items.constraint_items[constraint_item] = munch.Munch.fromDict(item)
 
-        @staticmethod
-        def validate_kwargs(dct, valid_kwargs):
-            """Ensure the dict `dct` has valid entries
-
-            Args:
-              dct: A `dict` to validate
-              valid_kwargs: list of valid kwards
-
-            Returns:
-              None
-
-            """
-            for k in dct:
-                if k not in valid_kwargs:
-                    raise ValueError(
-                        '"{}" is not a valid key. '
-                        'Valid kwargs are "{}"'.format(
-                            k, valid_kwargs))
-
-        @staticmethod
-        def default_argument_updater(default_dict, update_dict):
-            """
-
-            Args:
-              default_dict: 
-              update_dict: 
-
-            Returns:
-
-            """
-            if not isinstance(update_dict, dict):
-                raise ValueError(f'expected a dict but got a {type(update_dict)}')
-
-            for i in update_dict:
-                if i not in default_dict.keys():
-                    raise errors.InputError(
-                        f"{i} is not valid input for dataset_defaults. These "
-                        f"are valid inputs: {default_dict.keys()}"
-                    )
-            default_dict.update(update_dict)
-
         @property
         def experiments(self):
-            """ """
+            """
+            The experiments property
+            Returns:
+                datasets.experiments as dict
+            """
             return self.datasets.experiments
 
         @property
         def validations(self):
-            """ """
+            """
+            The validations property
+            Returns:
+                datasets.validations as dict
+            """
             return self.datasets.validations
 
         @property
         def experiment_filenames(self):
-            """ """
+            """
+            Returns:
+                A list of experiment filesnames
+            """
             filenames = []
             for i in self.experiments:
                 filenames.append(self.experiments[i].filename)
@@ -2992,7 +3065,12 @@ class ParameterEstimation(_Task):
 
         @property
         def validation_filenames(self):
-            """ """
+            """
+
+            Returns:
+                a list of validation filenames
+
+            """
             filenames = []
             for i in self.validations:
                 filenames.append(self.validations[i].filename)
@@ -3000,7 +3078,12 @@ class ParameterEstimation(_Task):
 
         @property
         def experiment_names(self):
-            """ """
+            """
+
+            Returns:
+                A list of experiment names
+
+            """
             experiment_names = []
             for i in self.experiments:
                 experiment_names.append(i)
@@ -3009,7 +3092,12 @@ class ParameterEstimation(_Task):
 
         @property
         def validation_names(self):
-            """ """
+            """
+            
+            Returns:
+                A list of validation names
+
+            """
             validation_names = []
             for i in self.validations:
                 validation_names.append(i)
@@ -3018,7 +3106,12 @@ class ParameterEstimation(_Task):
 
         @property
         def model_objects(self):
-            """ """
+            """
+
+            Returns:
+                A list of model objects for mapping
+
+            """
             model_obj = []
             for i in self.experiment_names:
                 for j in self.experiments[i].mappings:
@@ -3034,69 +3127,54 @@ class ParameterEstimation(_Task):
 
         @property
         def fit_items(self):
-            """ """
+            """
+
+            Returns:
+                The fit items as nested dict
+            """
             return self.items.fit_items
 
         @property
         def constraint_items(self):
-            """ """
+            """
+
+            Returns:
+                The constraint items as nested dict
+
+            """
             return self.items.constraint_items
 
-    ##todo implement a way of preventing users from adding an incorrect argument to config once config is created
     def __init__(self, config):
         """
-        todo: Write new doc strings for ParameterEstimation and Config class
+        Configure a the parameter estimation task in copasi
 
-        :param model:
-            :py:class:`model.Model`
+        Pycotools supports all the features of parameter estimation configuration
+        as copasi, plus a few additional ones (such as the affected models setting).
 
-        :param experiment_files:
-            `list` Each element a string to an appropriately
-            configured data file.
+        Args:
+            config (ParameterEstimation.Config):
+                An appropriately configured :py:class:`ParameterEstimation.Config` class
 
-        :param kwargs:
-            :ref:`parameter_estimation_kwargs`
+        Examples:
+            See :ref:`ParameterEstimation.Config` or :ref:`ParameterEstimation.Context`
+            for detailed information on how to produce a :py:class:`ParameterEstimation.Config` object.
+            Note that the :ref:`ParameterEstimation.Context` class is higher level and should be the preferred way of
+            constructing a :ref:`ParameterEstimation.Config` object while the :ref:`ParameterEstimation.Config` class
+            gives you the same level of control as copasi but is bulkier to write.
 
+            Assuming the :ref:`ParameterEstimation.Config` class has already been created
+            >>> pe = ParameterEstimation(config)
         """
-        # self.model = self.read_model(model)
         self.config = config
-        # self.config = self.copy_config(config)
         self.do_checks()
         self.copied_models = self._setup()
-
-        ##after _setup, config has changed to include filename that doesn't work
 
         if self.config.settings.run_mode is not False:
             self.run(self.copied_models)
 
-        LOG.debug('init2', self.models)
-
-    @staticmethod
-    def copy_config(config):
-        """deepcopy doesn't work on Munch object. Create new version
-        of config so that the original is not modified within the
-        class
-        :return:
-
-        Args:
-          config: 
-
-        Returns:
-
-        """
-        if not isinstance(config, ParameterEstimation.Config):
-            raise TypeError
-
-        config = ParameterEstimation.Config(
-            models=config.models,
-            datasets=config.datasets,
-            items=config.items,
-            settings=config.settings
-        )
-        return config
 
     def do_checks(self):
-        """ """
+        """ validate integrity of user input"""
         if not isinstance(self.config, self.Config):
             raise errors.InputError(
                 f'config argument is of type {type(self.config)} '
@@ -3109,7 +3187,11 @@ class ParameterEstimation(_Task):
 
     @property
     def problem_dir(self):
-        """ """
+        """
+        Property holding the directory where the parameter estimation problem is stored
+        Returns:
+            str. A directory.
+        """
         dire = os.path.join(self.config.settings.working_directory, f'Problem{self.config.settings.problem}')
         if not os.path.isdir(dire):
             os.makedirs(dire)
@@ -3117,15 +3199,26 @@ class ParameterEstimation(_Task):
 
     @property
     def fit_dir(self):
-        """ """
-        dire = os.path.join(self.problem_dir, f'Fit{self.config.settings.fit}')
+        """
+        Property holding the directory where the parameter estimation fitting occurs. This can
+        be enumerated under a single problem directory to group similar parameter estimations
+        Returns:
+            str. A directory.
+        """        dire = os.path.join(self.problem_dir, f'Fit{self.config.settings.fit}')
         if not os.path.isdir(dire):
             os.makedirs(dire)
         return dire
 
     @property
     def models_dir(self):
-        """ """
+        """
+        A directory containing models
+
+        Each model will be configured in a different directory when multiple models are being configured simultaneously
+        Returns:
+            dct. Location of models directories
+
+        """
         dct = {}
         for model_name in self.models:
             dct[model_name] = os.path.join(self.fit_dir, model_name)
@@ -3135,7 +3228,14 @@ class ParameterEstimation(_Task):
 
     @property
     def results_directory(self):
-        """ """
+        """
+        A directory containing results, parameter estimation report files
+        from copasi
+
+        Each model configured will have their own results directory
+        Returns:
+            dict[model] = results_directory
+        """
         dct = {}
         for model_name in self.models:
             dct[model_name] = os.path.join(
@@ -3147,13 +3247,13 @@ class ParameterEstimation(_Task):
         return dct
 
     def get_model_objects_from_strings(self):
-        """Get model objects from the strings
+        """
+        Get model objects from the strings
         provided by the user in the Config class
         :return: list of `model.Model` objects
 
-        Args:
-
         Returns:
+            list of model objects
 
         """
         number_of_model_objects_in_parameter_estimation = len(self.config.model_objects)
@@ -3176,17 +3276,32 @@ class ParameterEstimation(_Task):
 
     @property
     def metabolites(self):
-        """ """
+        """
+
+        Returns:
+            list of strings of metabolites in the model
+
+        """
         return [i.name for i in self.get_model_objects_from_strings() if isinstance(i, model.Metabolite)]
 
     @property
     def local_parameters(self):
-        """ """
+        """
+
+        Returns:
+            list of strings of local parameters in the model
+
+        """
         return [i.name for i in self.get_model_objects_from_strings() if isinstance(i, model.LocalParameter)]
 
     @property
     def global_quantities(self):
-        """ """
+        """
+
+        Returns:
+            list of strings of global quantities present in the models
+
+        """
         return [i.name for i in self.get_model_objects_from_strings() if isinstance(i, model.GlobalQuantity)]
 
     @property
@@ -3194,9 +3309,8 @@ class ParameterEstimation(_Task):
         """collect report specific arguments in a dict
         :return: dict
 
-        Args:
-
         Returns:
+            dict[arg] = value
 
         """
         # report specific arguments
@@ -3216,9 +3330,8 @@ class ParameterEstimation(_Task):
         for result collection
         :return: pycotools3.model.Model
 
-        Args:
-
         Returns:
+            the models attribute
 
         """
         for model_name in self.models:
@@ -3264,24 +3377,23 @@ class ParameterEstimation(_Task):
 
     @property
     def models(self):
-        """ """
-        return self.config.models
-
-    @models.setter
-    def models(self, models):
         """
-
-        Args:
-          models: 
 
         Returns:
+            the models entry of the :py:class:`ParameterEstimation.Config` object
 
         """
-        self.config.models = models
+        return self.config.models
 
     @property
     def _experiments(self):
-        """ """
+        """
+
+        Returns:
+            A dict containing a list of experiments pertinent for each
+            model being configured
+
+        """
         existing_experiment_list_dct = {}
         query = '//*[@name="Experiment Set"]'
         for mod in self.models:
@@ -3295,7 +3407,12 @@ class ParameterEstimation(_Task):
 
     @property
     def _validations(self):
-        """ """
+        """
+
+        Returns:
+            A dict containing a list of validation experiments pertinent for each
+            model being configured
+        """
         existing_validation_list_dct = {}
         query = '//*[@name="Experiment Set"]'
         for mod in self.models:
@@ -3310,15 +3427,20 @@ class ParameterEstimation(_Task):
     @staticmethod
     def _create_metabolite_reference(mod, parent, metabolite, role):
         """
+        Build a xml entry from :py:class:`model.Metabolite`
 
         Args:
-          mod: 
+          mod (model.Model): 
+            The model being configured 
           parent: 
+            The parent xml element 
           metabolite: 
+            a :py:class:`model.Metabolite` object
           role: 
+            role of metabolite ('dependent' or 'independent')
 
         Returns:
-
+            etree.Element containing COAPSI reference to metabolite
         """
         if not isinstance(metabolite, model.Metabolite):
             raise ValueError('Input should be "model.Metabolite" class. Got "{}"'.format(type(metabolite)))
@@ -3347,12 +3469,6 @@ class ParameterEstimation(_Task):
         variables. However, this method will be kept until the next release
         to ensure no bugs arise because of a lack of local parameter reference
 
-        Args:
-          parent: param local_parameter:
-          role: return:
-          mod: 
-          local_parameter: 
-
         Returns:
 
         """
@@ -3380,16 +3496,22 @@ class ParameterEstimation(_Task):
 
     @staticmethod
     def _create_global_quantity_reference(mod, parent, global_quantity, role):
+
         """
+        Build a xml entry from :py:class:`model.GlobalQuantitt`
 
         Args:
-          mod: 
-          parent: 
-          global_quantity: 
-          role: 
+          mod (model.Model):
+            The model being configured
+          parent:
+            The parent xml element
+          global_quantity:
+            a :py:class:`model.GlobalQuantity` object
+          role:
+            role of metabolite ('dependent' or 'independent')
 
         Returns:
-
+            etree.Element containing COAPSI reference to metabolite
         """
         if not isinstance(global_quantity, model.GlobalQuantity):
             raise ValueError('Input should be "model.GlobalQuantity" class. Got "{}"'.format(type(global_quantity)))
@@ -3418,10 +3540,13 @@ class ParameterEstimation(_Task):
         :return:
 
         Args:
-          parent: 
-          role: 
+          parent:
+            The parent xml object
+          role:
+            'ignored' (default), 'dependent', 'independent', 'time' or
 
         Returns:
+            etree.lxml object
 
         """
         # define object role attributes
@@ -3456,7 +3581,7 @@ class ParameterEstimation(_Task):
         return parent
 
     def _map_experiments(self, validation=False):
-        """Adds a single experiment set to the parameter estimation task
+        """Adds experiment sets to the parameter estimation task
         exp_file is an experiment filename with exactly matching headers (independent variablies need '_indep' appended to the end)
         since this method is intended to be used in a loop in another function to
         deal with all experiment sets, the second argument 'i' is the index for the current experiment
@@ -3464,14 +3589,13 @@ class ParameterEstimation(_Task):
         i is the exeriment_file index
 
         Args:
-          validation:  (Default value = False)
+          validation (bool):
+            Set to True for configuring a validation experiment, False (default) otherwise
 
         Returns:
+            :py:attr:`ParameterEstimation.models`
 
         """
-        # for mod in self.models:
-        # model_dct = {}
-
         ## build a reference dct for weight method numbers
         weight_method_string = ['mean_squared', 'stardard_deviation', 'value_scaling',
                                 'mean']  # line 2144
@@ -3636,12 +3760,14 @@ class ParameterEstimation(_Task):
         return self.models
 
     def _remove_experiment(self, experiment_name):
-        """name attribute of experiment. usually Experiment_1 or something
+        """
+        Remove experiment from COAPSI parameter estimation task
 
         Args:
-          experiment_name: 
-
+          experiment_name (str):
+            name of experiment to remove
         Returns:
+            :py:attr:`ParameterEstimation.models`
 
         """
         query = '//*[@name="Experiment Set"]'
@@ -3655,18 +3781,23 @@ class ParameterEstimation(_Task):
         return self.models
 
     def _remove_all_experiments(self):
-        """ """
+        """
+        Removes all experiments from parameter estimation task
+        Returns:
+            None
+        """
         for experiment_name in self.config.experiment_names:
             self._remove_experiment(experiment_name)
-        # return self.model
 
     def _remove_validation_experiment(self, validation_experiment_name):
-        """name attribute of experiment. usually Experiment_1 or something
+        """
+        Remove validation experiment from COAPSI parameter estimation task
 
         Args:
-          validation_experiment_name: 
-
+          validation_experiment_name (str):
+            name of validation experiment to remove
         Returns:
+            :py:attr:`ParameterEstimation.models`
 
         """
         query = '//*[@name="Validation Set"]'
@@ -3680,18 +3811,20 @@ class ParameterEstimation(_Task):
         return self.models
 
     def _remove_all_validation_experiments(self):
-        """ """
+        """
+        Removates all validation experiments from parameter estimation task
+        Returns:
+                None
+        """
         for validation_name in self.config.validation_names:
             self._remove_experiment(validation_name)
-        # return self.model
 
     def _select_method(self):
-        """#determine which method to use
-        :return: tuple. (str, str), (method_name, method_type)
-
-        Args:
+        """
+        Converts user input into the form required by the COPASI xml.
 
         Returns:
+            tuple. (method_name, method_type)
 
         """
         if self.config.settings.method == 'current_solution_statistics'.lower():
@@ -3766,13 +3899,11 @@ class ParameterEstimation(_Task):
         return method_name, method_type
 
     def _convert_numeric_arguments_to_string(self):
-        """xml requires all numbers to be strings.
-        This method makes this conversion
-        :return: void
-
-        Args:
+        """
+        xml requires all numbers to be strings. This method makes this conversion
 
         Returns:
+            None
 
         """
         self.config.settings.number_of_generations = str(self.config.settings.number_of_generations)
@@ -3796,12 +3927,10 @@ class ParameterEstimation(_Task):
 
     @property
     def _fit_items(self):
-        """Get existing fit items
-        :return: dict
-
-        Args:
-
+        """
+        Get existing fit items
         Returns:
+            dict containing models with fit_items
 
         """
         models_dct = {}
@@ -3835,13 +3964,11 @@ class ParameterEstimation(_Task):
         return models_dct
 
     def _remove_all_fit_items(self):
-        """Remove item from parameter estimation
-
-        Args:
-          item: return: pycotools3.model.Model
+        """
+        Remove item from parameter estimation
 
         Returns:
-          pycotools3.model.Model
+            :py:attr:`ParameterEstimation.models`
 
         """
 
@@ -3920,15 +4047,11 @@ class ParameterEstimation(_Task):
         return dct
 
     def _get_validation_keys(self):
-        """Experiment keys are always 'Experiment_i' where 'i' indexes
-        the experiment in the order they are given in the experiment
-        list. This method extracts the _experiments that are for validation
-        
-        :return:
-
-        Args:
+        """
+        Get keys for validation experiments
 
         Returns:
+            dict[model] = list(validation_keys)
 
         """
         dct = OrderedDict()
@@ -3944,14 +4067,13 @@ class ParameterEstimation(_Task):
         return dct
 
     def _add_fit_items(self, constraint=False):
-        """Add fit item to model
-
+        """
+        Add a fit item to the model
         Args:
-          item: a row from the config template as pandas series
-          constraint:  (Default value = False)
+            constraint (bool): Set to True to configure fit item for constraints
 
         Returns:
-          pycotools3.model.Model
+            :py:attr:`ParameterEstimation.models`
 
         """
         for model_name in self.models:
@@ -4153,7 +4275,13 @@ class ParameterEstimation(_Task):
         return self.models
 
     def _set_method(self):
-        """Choose PE algorithm and set algorithm specific parameters"""
+        """
+        Choose algorithm and set algorithm specific parameters
+
+        Returns:
+            :py:attr:`ParameterEstimation.models`
+
+        """
 
         # Build xml for method.
         method_name, method_type = self._select_method()
@@ -4287,15 +4415,12 @@ class ParameterEstimation(_Task):
         return self.models
 
     def _set_options(self):
-        """Set parameter estimation sepcific arguments
-        :return: pycotools3.model.Model
-
-        Args:
+        """
+        Set parameter estimation sepcific arguments
 
         Returns:
-
+            :py:attr:ParameterEstimation.models
         """
-        models_dct = {}
         for model_name in self.models:
             mod = self.models[model_name].model
 
@@ -4345,12 +4470,11 @@ class ParameterEstimation(_Task):
         return self.models
 
     def _enumerate_output(self):
-        """Create a filename for each file to collect PE results
-        :return: dict['model_copy_number]=enumerated_report_name
-
-        Args:
+        """
+        Enumerates parameter estimation output files for each model
 
         Returns:
+            dict[model_name][copy_number] = filename
 
         """
 
@@ -4369,14 +4493,10 @@ class ParameterEstimation(_Task):
         return dct
 
     def _copy_model(self):
-        """Copy the model n times
-        Uses deep copy to ensure separate models
-        :return: dict[index] = model copy
-
-        Args:
-
+        """
+        Copy the model n times Uses deep copy to ensure separate models
         Returns:
-
+            dict[index] = model copy
         """
         dct = {}
         for model_name in self.models:
@@ -4405,6 +4525,7 @@ class ParameterEstimation(_Task):
           report: str.
 
         Returns:
+            None
 
         """
         start = time.time()
@@ -4431,6 +4552,7 @@ class ParameterEstimation(_Task):
           models: 
 
         Returns:
+            result dict
 
         """
         res = {}
@@ -4455,10 +4577,15 @@ class ParameterEstimation(_Task):
         return res
 
     def _setup(self):
-        """ """
+        """
+        Setup the copasi parameter estimation task
 
-        query = '//*[@name="Genetic Algorithm SR"]'
+        Uses the other methods in this class to configure the parameter estimation
+        according to the :py:class:`ParameterEstimation.Config`
+        Returns:
+            dict[model_name][sub_model_index] = :py:class:`model.Model` object
 
+        """
 
         self.models = self._define_report()
 
@@ -4486,6 +4613,7 @@ class ParameterEstimation(_Task):
 
     def run(self, models):
         """
+        Run a parameter estimation using command line copasi.
 
         Args:
           models: dict of models. Output from _setup()
@@ -4633,7 +4761,7 @@ class ParameterEstimation(_Task):
                 settings=self.settings
             )
 
-            config = ParameterEstimation.Config(**dct)
+            config = ParameterEstimation.Config(**dct, defaults=self.defaults)
 
             if self.filename is not None:
                 if os.path.isfile(self.filename) and not config.settings.overwrite_config_file:
@@ -4680,7 +4808,7 @@ class ParameterEstimation(_Task):
                 'copasi_file': i
             } for i in cps_file_list}
 
-            return models
+            setattr(self, 'models', models)
 
         def add_experiments(self, experiments: (str, list)):
             """
