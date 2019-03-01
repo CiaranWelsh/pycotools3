@@ -1301,7 +1301,8 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
         with ParameterEstimation.Context(
                 self.model.copasi_file,
                 [self.TC1.report_name, self.TC2.report_name,
-                 self.report3, self.report4], context='s', parameters='a') as config:
+                 self.report3, self.report4], context='s', parameters='a') as context:
+            config = context.get_config()
             config.settings.method = 'genetic_algorithm_sr'
             config.settings.number_of_generations = 25
             config.settings.population_size = 10
@@ -1313,7 +1314,8 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
                 self.model.copasi_file,
                 [self.TC1.report_name, self.TC2.report_name,
                  self.report3, self.report4],
-                context='s', parameters='a', filename=fname) as config:
+                context='s', parameters='a', filename=fname) as context:
+            config = context.get_config()
             config.settings.method = 'genetic_algorithm_sr'
             config.settings.number_of_generations = 25
             config.settings.population_size = 10
@@ -1331,7 +1333,8 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
                 self.model.copasi_file,
                 [self.TC1.report_name, self.TC2.report_name,
                  self.report3, self.report4],
-                context='s', parameters='a', filename=fname) as config:
+                context='s', parameters='a', filename=fname) as context:
+            config = context.get_config()
             config.settings.method = 'genetic_algorithm_sr'
             config.settings.number_of_generations = 25
             config.settings.population_size = 10
@@ -1344,7 +1347,8 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
                 self.model.copasi_file,
                 [self.TC1.report_name, self.TC2.report_name,
                  self.report3, self.report4],
-                context='s', parameters='a') as config:
+                context='s', parameters='a') as context:
+            config = context.get_config()
             config.settings.method = 'genetic_algorithm_sr'
             config.settings.number_of_generations = 25
             config.settings.population_size = 10
@@ -1358,7 +1362,8 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
                 self.model.copasi_file,
                 [self.TC1.report_name, self.TC2.report_name,
                  self.report3, self.report4],
-                context='s', parameters='a') as config:
+                context='s', parameters='a') as context:
+            config = context.get_config()
             config.settings.method = 'genetic_algorithm_sr'
             config.settings.number_of_generations = 25
             config.settings.population_size = 14
@@ -1372,7 +1377,8 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
                 self.model.copasi_file,
                 [self.TC1.report_name, self.TC2.report_name,
                  self.report3, self.report4],
-                context='s', parameters='a') as config:
+                context='s', parameters='a') as context:
+            config = context.get_config()
             config.settings.method = 'genetic_algorithm_sr'
             config.settings.number_of_generations = 25
             config.settings.population_size = 14
@@ -1388,6 +1394,7 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
              self.report3, self.report4],
             context='s', parameters='a')
         config = context.get_config()
+        # print(config.toDict())
         self.assertTrue(isinstance(config, ParameterEstimation.Config))
 
     def test_context_set(self):
@@ -1395,7 +1402,8 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
                 self.model.copasi_file,
                 [self.TC1.report_name, self.TC2.report_name,
                  self.report3, self.report4],
-                context='s', parameters='a') as config:
+                context='s', parameters='a') as context:
+            config = context.get_config()
             config.settings.method = 'genetic_algorithm_sr'
             config.settings.number_of_generations = 25
             config.settings.population_size = 14
@@ -1411,24 +1419,26 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
         expected = [',', ',', ',', ',']
         self.assertListEqual(expected, actual)
 
+
+
+    # should i pull default args into a superclass of context and
+    # config so they can booth inherit from and modify defaults
+
     def test_context_mappings_after_use_of_set(self):
         fname = os.path.join(os.path.dirname(__file__), 'timeseries.txt')
         data = self.model.simulate(0, 10, 11)
         data.to_csv(fname)
 
-        # this method of using a config manager to return config class
-        #     is not working because we have to build the obj prior to making
-        #     the changes we want to change. This is a problem. I need to
-        #     reinstate the context manager returning itself  - maybe a subclass
-        #     of config where we can change the defaults using set prior to
-        #     instantiating the classmethod
-
         with ParameterEstimation.Context(
                 self.model.copasi_file, fname,
-                context='s', parameters='a') as config:
+                context='s', parameters='a') as context:
+            context.set('separator', ',')
+            config = context.get_config()
 
-            config.set('separator', ',', recursive=True)
-            pe = ParameterEstimation(config)
+        # print(config)
+
+        # pe = ParameterEstimation(config)
+        # pe.models.test_model.model.open()
 
         ## obj map is not being correctly configured. why?
         ## its because the config is not being set up correctly
@@ -1447,7 +1457,8 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
                 self.model.copasi_file,
                 [self.TC1.report_name, self.TC2.report_name,
                  self.report3, self.report4],
-                context='s', parameters='a') as config:
+                context='s', parameters='a') as context:
+            config = context.get_config()
             config.settings.method = 'genetic_algorithm_sr'
             config.settings.number_of_generations = 25
             config.settings.population_size = 14
@@ -1464,7 +1475,8 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
                 self.model.copasi_file,
                 [self.TC1.report_name, self.TC2.report_name,
                  self.report3, self.report4],
-                context='s', parameters='a') as config:
+                context='s', parameters='a') as context:
+            config = context.get_config()
             config.set('method', 'genetic_algorithm_sr')
             config.set('number_of_generations', 25)
             config.set('population_size', 14)
@@ -1646,7 +1658,7 @@ class ParameterEstimationTestsMoreThanOneModel(unittest.TestCase):
     def test_two_models_first(self):
         with ParameterEstimation.Context(
                 models=[self.mod1.copasi_file, self.mod2.copasi_file],
-                experiments=self.experiment, context='s', parameters='g') as config:
+                experiments=self.experiment, context='s', parameters='g') as context:
             config.settings.method = 'genetic_algorithm_sr'
             config.settings.population_size = 49
         PE = ParameterEstimation(config)
@@ -1659,7 +1671,7 @@ class ParameterEstimationTestsMoreThanOneModel(unittest.TestCase):
     def test_two_models_second(self):
         with ParameterEstimation.Context(
                 models=[self.mod1.copasi_file, self.mod2.copasi_file],
-                experiments=self.experiment, context='s', parameters='g') as config:
+                experiments=self.experiment, context='s', parameters='g') as context:
             config.settings.method = 'genetic_algorithm_sr'
             config.settings.population_size = 84
         PE = ParameterEstimation(config)
@@ -1670,7 +1682,7 @@ class ParameterEstimationTestsMoreThanOneModel(unittest.TestCase):
     def test_two_models_experiments(self):
         with ParameterEstimation.Context(
                 models=[self.mod1.copasi_file, self.mod2.copasi_file],
-                experiments=self.experiment, context='s', parameters='g') as config:
+                experiments=self.experiment, context='s', parameters='g') as context:
             config.settings.method = 'genetic_algorithm_sr'
             config.settings.population_size = 84
         PE = ParameterEstimation(config)
@@ -1689,7 +1701,7 @@ class ParameterEstimationTestsMoreThanOneModel(unittest.TestCase):
     def test_two_models_fit_items(self):
         with ParameterEstimation.Context(
                 models=[self.mod1.copasi_file, self.mod2.copasi_file],
-                experiments=self.experiment, context='s', parameters='g') as config:
+                experiments=self.experiment, context='s', parameters='g') as context:
             config.settings.method = 'genetic_algorithm_sr'
             config.settings.population_size = 84
         PE = ParameterEstimation(config)

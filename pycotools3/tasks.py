@@ -2317,6 +2317,155 @@ class ParameterEstimation(_Task):
                      'genetic_algorithm_sr']
 
     @staticmethod
+    class _Defaults:
+        def __init__(self):
+            """
+            Class holding the defaults arguments for ParameterEstimation
+            """
+            self.experiments = self._experiments()
+            self.validations = self._validations()
+            self.datasets = self._datasets()
+            self.fit_items = self._fit_items()
+            self.constraint_items = self._constraint_items()
+            self.settings = self._settings()
+
+        def to_list(self):
+            return [self.experiments, self.validations, self.datasets,
+                    self.fit_items, self.constraint_items, self.settings]
+
+        def _datasets(self):
+            """ """
+            return {
+                'validations': {}
+            }
+
+        @staticmethod
+        def mappings(filename, sep):
+            """
+
+            Args:
+              filename:
+              sep:
+
+            Returns:
+
+            """
+            if not isinstance(filename, str):
+                raise ValueError
+
+            if not isinstance(sep, str):
+                raise ValueError
+            print('sep', sep)
+            df = pandas.read_csv(filename, sep=sep)
+            roles = {}
+            for i in df.columns:
+                if i.lower() == 'time':
+                    roles[i] = 'time'
+                elif i[:-6] == '_indep':
+                    roles[i] = 'independent'
+                else:
+                    roles[i] = 'dependent'
+
+            return {
+                i: {
+                    'model_object': i,
+                    'role': roles[i]
+                } for i in list(df.columns)
+            }
+
+        def _experiments(self):
+            """ """
+            return {
+                'filename': '',
+                'normalize_weights_per_experiment': True,
+                'separator': '\t',
+                'affected_models': 'all',
+                'mappings': {},
+
+            }
+
+        def _validations(self):
+            """ """
+            return {
+                'filename': '',
+                'affected_models': 'all',
+                'normalize_weights_per_experiment': True,
+                'separator': '\t',
+                'mappings': {},
+            }
+
+        def _fit_items(self):
+            """ """
+
+            return {
+                'lower_bound': 1e-6,
+                'upper_bound': 1e6,
+                'start_value': 'model_value',
+                'affected_experiments': 'all',
+                'affected_validation_experiments': 'all',
+                'affected_models': 'all'
+            }
+
+
+        def _constraint_items(self):
+            """ """
+            return {
+                'lower_bound': 1e-6,
+                'upper_bound': 1e6,
+                'start_value': 'model_value',
+                'affected_experiments': 'all',
+                'affected_validation_experiments': 'all',
+                'affected_models': 'all',
+            }
+
+        def _settings(self):
+            """ """
+            return {
+                'copy_number': 1,
+                'pe_number': 1,
+                'results_directory': 'ParameterEstimationData',
+                # os.path.join(self.model.root, 'ParameterEstimationResults'),
+                'config_filename': 'config.yml',  # os.path.join(self.model.root, 'config_file.yaml'),
+                'overwrite_config_file': False,
+                'update_model': False,
+                'randomize_start_values': False,
+                'create_parameter_sets': False,
+                'calculate_statistics': False,
+                'use_config_start_values': False,
+                'method': 'genetic_algorithm',
+                'number_of_generations': 200,
+                'population_size': 50,
+                'random_number_generator': 1,
+                'seed': 0,
+                'pf': 0.475,
+                'iteration_limit': 50,
+                'tolerance': 0.00001,
+                'rho': 0.2,
+                'scale': 10,
+                'swarm_size': 50,
+                'std_deviation': 0.000001,
+                'number_of_iterations': 100000,
+                'start_temperature': 1,
+                'cooling_factor': 0.85,
+                'lower_bound': 0.000001,
+                'upper_bound': 1000000,
+                'start_value': 0.1,
+                'save': False,
+                'run_mode': False,
+                'working_directory': '',
+                'quantity_type': 'concentration',
+                'report_name': 'PEData.txt',
+                'problem': 1,
+                'fit': 1,
+                'weight_method': 'mean_squared',
+                'validation_weight': 1,
+                'validation_threshold': 5,
+                'max_active': 3,
+                'prefix': None
+            }
+
+
+    @staticmethod
     class Config(_Task, munch.Munch):
         """ """
 
@@ -2326,12 +2475,7 @@ class ParameterEstimation(_Task):
             self.items = items
             self.settings = settings
 
-            self.experiment_defaults = self._experiment_defaults()
-            self.validation_defaults = self._validation_defaults()
-            self.dataset_defaults = self._dataset_defaults()
-            self.fit_item_defaults = self._fit_item_defaults()
-            self.constraint_item_defaults = self._constraint_item_defaults()
-            self.settings_defaults = self._settings_defaults()
+            self.defaults = ParameterEstimation._Defaults()
 
             self.kwargs = munch.Munch.fromDict({
                 'models': self.models,
@@ -2454,7 +2598,7 @@ class ParameterEstimation(_Task):
             #     self.datasets.experiments.mappings = munch.Munch({})
 
 
-            print('exp def', self.experiment_defaults)
+            print('exp def', self.defaults.experiments)
             updated_kwargs = find_parameter(self.kwargs, parameter, value)
             if updated_kwargs is None:
                 raise ValueError(f'Parameter "{parameter}" cannot be found')
@@ -2463,7 +2607,7 @@ class ParameterEstimation(_Task):
             print('exp', self.datasets.experiments)
 
             self.configure()
-            # self.dataset_defaults
+            # self.defaults.datasets
             ## what if we dont use defaults for mappings?
             ## or restart all config from begining
             ## or just mappings?
@@ -2495,10 +2639,10 @@ class ParameterEstimation(_Task):
         def _validate_integrity_of_user_input(self):
             """ """
             for i in self.settings:
-                if i not in self.settings_defaults.keys():
+                if i not in self.defaults.settings.keys():
                     raise errors.InputError(
                         '"{}" is an invalid argument for "settings". These are valid '
-                        'arguments: "{}"'.format(i, list(self.settings_defaults.keys()))
+                        'arguments: "{}"'.format(i, list(self.defaults.settings.keys()))
                     )
 
             if not isinstance(self.models, dict):
@@ -2552,9 +2696,9 @@ class ParameterEstimation(_Task):
         def configure(self):
             """ """
             ## update datasets defaults
-            self._add_defaults_to_dict(self.settings, self.settings_defaults)
+            self._add_defaults_to_dict(self.settings, self.defaults.settings)
 
-            self._add_defaults_to_dict(self.datasets, self.dataset_defaults)
+            self._add_defaults_to_dict(self.datasets, self.defaults.datasets)
 
             self.set_default_experiments()
 
@@ -2567,9 +2711,9 @@ class ParameterEstimation(_Task):
         def set_default_experiments(self):
             """ """
             for experiment_name in self.experiment_names:
-                for default_kwarg in self.experiment_defaults:
+                for default_kwarg in self.defaults.experiments:
                     if default_kwarg not in self.datasets.experiments[experiment_name]:
-                        self.datasets.experiments[experiment_name][default_kwarg] = self.experiment_defaults[default_kwarg]
+                        self.datasets.experiments[experiment_name][default_kwarg] = self.defaults.experiments[default_kwarg]
 
                 if self.datasets.experiments[experiment_name].affected_models == 'all':
                     self.datasets.experiments[experiment_name].affected_models = list(self.models.keys())[0] if len(self.models.keys()) == 1 else list(self.models.keys())
@@ -2577,7 +2721,7 @@ class ParameterEstimation(_Task):
                 ## shouldn't be empty since we've added separator arg
                 if self.datasets.experiments[experiment_name].mappings == {}:
                     ##were being overridden by defaults here!
-                    self.datasets.experiments[experiment_name].mappings = munch.Munch.fromDict(self.mappings_defaults(
+                    self.datasets.experiments[experiment_name].mappings = munch.Munch.fromDict(self.defaults.mappings(
                         self.datasets.experiments[experiment_name].filename, self.datasets.experiments[experiment_name].separator)
                     )
 
@@ -2617,7 +2761,7 @@ class ParameterEstimation(_Task):
 
             for validation_experiment in self.validation_names:
                 validation_dataset = validations.get(validation_experiment)
-                validation_defaults = self.validation_defaults
+                validation_defaults = self.defaults.validations
 
                 for default_kwarg in validation_defaults:
                     if default_kwarg not in validation_dataset:
@@ -2629,7 +2773,7 @@ class ParameterEstimation(_Task):
 
 
                 if validation_dataset.mappings == {}:
-                    validation_dataset.mappings = munch.Munch.fromDict(self.mappings_defaults(
+                    validation_dataset.mappings = munch.Munch.fromDict(self.defaults.mappings(
                         validation_dataset.filename, validation_dataset.separator)
                     )
 
@@ -2686,12 +2830,12 @@ class ParameterEstimation(_Task):
                 for fit_item in estimated_variables[model_name]:
                     item = estimated_variables[model_name][fit_item]
                     if item == {}:
-                        item = self.fit_item_defaults
+                        item = self.defaults.fit_items
 
                     else:
-                        for i in self.fit_item_defaults:
+                        for i in self.defaults.fit_items:
                             if i not in item:
-                                item[i] = self.fit_item_defaults[i]
+                                item[i] = self.defaults.fit_items[i]
 
                     if item['affected_experiments'] == 'all':
                         if isinstance(self.experiment_names, str):
@@ -2721,12 +2865,12 @@ class ParameterEstimation(_Task):
                 item = self.items.fit_items.get(fit_item)
 
                 if item == {}:
-                    item = self.fit_item_defaults
+                    item = self.defaults.fit_items
 
                 else:
-                    for i in self.fit_item_defaults:
+                    for i in self.defaults.fit_items:
                         if i not in item:
-                            item[i] = self.fit_item_defaults[i]
+                            item[i] = self.defaults.fit_items[i]
 
                 if item['affected_experiments'] == 'all':
                     if isinstance(self.experiment_names, str):
@@ -2763,12 +2907,12 @@ class ParameterEstimation(_Task):
                     item = self.items.constraint_items.get(constraint_item)
 
                     if item == {}:
-                        item = self.constraint_item_defaults
+                        item = self.defaults.constraint_items
 
                     else:
-                        for i in self.constraint_item_defaults:
+                        for i in self.defaults.constraint_items:
                             if i not in item:
-                                item[i] = self.constraint_item_defaults[i]
+                                item[i] = self.defaults.constraint_items[i]
 
                     if item.affected_experiments == 'all':
                         if isinstance(self.experiment_names, str):
@@ -2827,137 +2971,6 @@ class ParameterEstimation(_Task):
                         f"are valid inputs: {default_dict.keys()}"
                     )
             default_dict.update(update_dict)
-
-        def _dataset_defaults(self):
-            """ """
-            return {
-                'validations': {}
-            }
-
-        @staticmethod
-        def mappings_defaults(filename, sep):
-            """
-
-            Args:
-              filename:
-              sep:
-
-            Returns:
-
-            """
-            if not isinstance(filename, str):
-                raise ValueError
-
-            if not isinstance(sep, str):
-                raise ValueError
-            print('sep', sep)
-            df = pandas.read_csv(filename, sep=sep)
-            roles = {}
-            for i in df.columns:
-                if i.lower() == 'time':
-                    roles[i] = 'time'
-                elif i[:-6] == '_indep':
-                    roles[i] = 'independent'
-                else:
-                    roles[i] = 'dependent'
-
-            return {
-                i: {
-                    'model_object': i,
-                    'role': roles[i]
-                } for i in list(df.columns)
-            }
-
-        def _experiment_defaults(self):
-            """ """
-            return {
-                'filename': '',
-                'normalize_weights_per_experiment': True,
-                'separator': '\t',
-                'affected_models': 'all',
-                'mappings': {},
-
-            }
-
-        def _validation_defaults(self):
-            """ """
-            return {
-                'filename': '',
-                'affected_models': 'all',
-                'normalize_weights_per_experiment': True,
-                'separator': '\t',
-                'mappings': {},
-            }
-
-        def _fit_item_defaults(self):
-            """ """
-
-            return {
-                'lower_bound': 1e-6,
-                'upper_bound': 1e6,
-                'start_value': 'model_value',
-                'affected_experiments': 'all',
-                'affected_validation_experiments': 'all',
-                'affected_models': 'all'
-            }
-
-
-        def _constraint_item_defaults(self):
-            """ """
-            return {
-                'lower_bound': 1e-6,
-                'upper_bound': 1e6,
-                'start_value': 'model_value',
-                'affected_experiments': 'all',
-                'affected_validation_experiments': 'all',
-                'affected_models': 'all',
-            }
-
-        def _settings_defaults(self):
-            """ """
-            return {
-                'copy_number': 1,
-                'pe_number': 1,
-                'results_directory': 'ParameterEstimationData',
-                # os.path.join(self.model.root, 'ParameterEstimationResults'),
-                'config_filename': 'config.yml',  # os.path.join(self.model.root, 'config_file.yaml'),
-                'overwrite_config_file': False,
-                'update_model': False,
-                'randomize_start_values': False,
-                'create_parameter_sets': False,
-                'calculate_statistics': False,
-                'use_config_start_values': False,
-                'method': 'genetic_algorithm',
-                'number_of_generations': 200,
-                'population_size': 50,
-                'random_number_generator': 1,
-                'seed': 0,
-                'pf': 0.475,
-                'iteration_limit': 50,
-                'tolerance': 0.00001,
-                'rho': 0.2,
-                'scale': 10,
-                'swarm_size': 50,
-                'std_deviation': 0.000001,
-                'number_of_iterations': 100000,
-                'start_temperature': 1,
-                'cooling_factor': 0.85,
-                'lower_bound': 0.000001,
-                'upper_bound': 1000000,
-                'start_value': 0.1,
-                'save': False,
-                'run_mode': False,
-                'working_directory': '',
-                'quantity_type': 'concentration',
-                'report_name': 'PEData.txt',
-                'problem': 1,
-                'fit': 1,
-                'weight_method': 'mean_squared',
-                'validation_weight': 1,
-                'validation_threshold': 5,
-                'max_active': 3,
-                'prefix': None
-            }
 
         @property
         def experiments(self):
@@ -4552,24 +4565,91 @@ class ParameterEstimation(_Task):
                     f'{munch.Munch.fromDict(self.acceptable_parameters_args).toJSON()}'
                 )
 
+            self.defaults = ParameterEstimation._Defaults()
+
         def __enter__(self):
-            self.config = self.setup()
-            return self.config
+            return self
 
         def __exit__(self, exc_type, exc_value, exc_traceback):
-            ## update the config
-            self.config.configure()
-
             if exc_type:
                 LOG.critical(f'exc_type: {exc_type}')
                 LOG.critical(f'exc_value: {exc_value}')
                 LOG.critical(f'exc_traceback: {exc_traceback}')
 
-        def get_config(self):
-            if hasattr(self, 'config'):
-                return self.config
+        def set(self, parameter, value):
+            """
+            Set the value of :code:`parameter` to :code:`value`.
 
-            return self.setup()
+            Looks for the first instance of :code:`parameter` and sets its value to :code:`value`.
+            To set all values of a parameter, see :py:meth:`ParameterEstimation.Config.set_all`
+
+
+            Args:
+                parameter: A key somewhere in the nested structure of the config object
+                value: A value to replace the current value with
+
+            Returns:
+                None
+
+            """
+
+            if parameter in self.defaults.settings:
+                self.defaults.settings[parameter] = value
+
+            elif parameter in self.defaults.constraint_items:
+                self.defaults.constraint_items[parameter] = value
+
+            elif parameter in self.defaults.fit_items:
+                self.defaults.fit_items[parameter] = value
+
+            elif parameter in self.defaults.experiments:
+                self.defaults.experiments[parameter] = value
+
+            elif parameter in self.defaults.validations:
+                self.defaults.validations[parameter] = value
+
+            else:
+                raise errors.InputError(
+                    f'"{parameter}" is not a valid argument'
+                )
+
+
+        def get_config(self):
+            ## update the config
+            self.add_models(self.models)
+            self.add_experiments(self.experiments)
+            self.add_validation_experiments(self.validation_experiments)
+            self.add_settings(self.settings)
+            self.add_working_directory(self.working_directory)
+            dct = dict(
+                models=self.models,
+                datasets=dict(
+                    experiments=self.experiments,
+                    validations=self.validation_experiments
+                ),
+                items=dict(
+                    fit_items=self.parameters
+                ),
+                settings=self.settings
+            )
+
+            config = ParameterEstimation.Config(**dct)
+
+            if self.filename is not None:
+                if os.path.isfile(self.filename) and not config.settings.overwrite_config_file:
+                    LOG.critical(f'"{self.filename}" already exists. To force an overwrite, '
+                                 f'set `settings.overwrite_config_file` to True')
+                elif os.path.isfile(self.filename) and config.settings.overwrite_config_file:
+                    config.to_yaml(self.filename)
+
+                elif not os.path.isfile(self.filename):
+                    config.to_yaml(self.filename)
+
+                else:
+                    raise errors.SomethingWentHorriblyWrongError(
+                        'Something weird happened.'
+                    )
+            return config
 
         def add_models(self, models: (str, list)):
             """
@@ -4600,7 +4680,7 @@ class ParameterEstimation(_Task):
                 'copasi_file': i
             } for i in cps_file_list}
 
-            setattr(self, 'models', models)
+            return models
 
         def add_experiments(self, experiments: (str, list)):
             """
@@ -4688,8 +4768,8 @@ class ParameterEstimation(_Task):
             """
 
             Args:
-              setting: 
-              value: 
+              setting:
+              value:
 
             Returns:
 
@@ -4702,7 +4782,7 @@ class ParameterEstimation(_Task):
             """
 
             Args:
-              settings: 
+              settings:
 
             Returns:
 
@@ -4711,45 +4791,7 @@ class ParameterEstimation(_Task):
                 raise TypeError(f'add_settings expects a dict as argument. Got "{type(settings)}"')
             self.settings.update(settings)
 
-        def setup(self):
-            self.add_models(self.models)
-            self.add_experiments(self.experiments)
-            self.add_validation_experiments(self.validation_experiments)
-            self.add_settings(self.settings)
-            self.add_working_directory(self.working_directory)
 
-            ## I need to convert these objects into nested dict form
-            ## here
-
-            dct = dict(
-                models=self.models,
-                datasets=dict(
-                    experiments=self.experiments,
-                    validations=self.validation_experiments
-                ),
-                items=dict(
-                    fit_items=self.parameters
-                ),
-                settings=self.settings
-            )
-
-            config = ParameterEstimation.Config(**dct)
-
-            if self.filename is not None:
-                if os.path.isfile(self.filename) and not config.settings.overwrite_config_file:
-                    LOG.critical(f'"{self.filename}" already exists. To force an overwrite, '
-                                 f'set `settings.overwrite_config_file` to True')
-                elif os.path.isfile(self.filename) and config.settings.overwrite_config_file:
-                    config.to_yaml(self.filename)
-
-                elif not os.path.isfile(self.filename):
-                    config.to_yaml(self.filename)
-
-                else:
-                    raise errors.SomethingWentHorriblyWrongError(
-                        'Something weird happened.'
-                    )
-            return config
 
 
 class ChaserParameterEstimations(_Task):
