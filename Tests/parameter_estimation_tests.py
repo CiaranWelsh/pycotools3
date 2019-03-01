@@ -39,24 +39,13 @@ import time
 from io import StringIO
 
 
-# todo test model_value for start values are being resolved (there not)
-
-def parse_timecourse(self):
-    """
-    read time course data into pandas dataframe. Remove
-    copasi generated square brackets around the variables
-    :return: pandas.DataFrame
-    """
-    time.sleep(0.1)
-    df = pandas.read_csv(self.cls_instance.report_name, sep='\t')
-    headers = [re.findall('(Time)|\[(.*)\]', i)[0] for i in list(df.columns)]
-    time = headers[0][0]
-    headers = [i[1] for i in headers]
-    headers[0] = time
-    df.columns = headers
-    return df
-
-
+## todo test model_value for start values are being resolved (there not)
+## todo: go through other classes that depend on parameter estiomation and ensure a context manager works for them
+## todo make sure viz works with new parameter estimation
+## todo modify other class arguments if necessary to be like the parameter estimation class
+## todo documentation needs to be better
+## todo examples, tutorials, html etc.
+##todo clean up repository of old and unused code, objects files etc
 class DotDictTests(unittest.TestCase):
     def setUp(self):
         pass
@@ -1177,18 +1166,6 @@ class ParameterEstimationTests(_test_base._BaseTest):
                 if j.tag == 'Report':
                     actual = j.attrib['target']
         self.assertEqual(expected_report_name, actual)
-
-    def test_run_mode_is_false(self):
-        """
-        false by default
-        :return:
-        """
-        expected = 0
-        results_dir = self.PE.results_directory['model1']
-        files = glob.glob(os.path.join(
-            results_dir, '*.txt')
-        )
-        self.assertEqual(expected, len(files))
 
     def test_run_mode_is_true(self):
         """
