@@ -85,9 +85,12 @@ instances of parameter to value
 # Support the input of data using python structures such as pandas.DataFrame
 # numpy arrays and normal dict etc.
 
-with tasks.ParameterEstimation.Context(mod, experiment_filename, context='s', parameters='g') as config:
-    config.set('separator', ',', recursive=True)
-    # pass
+with tasks.ParameterEstimation.Context(mod, experiment_filename, context='s', parameters='g') as context:
+    context.set('separator', ',')
+    context.set('run_mode', True)
+    config = context.get_config()
+
+pe = tasks.ParameterEstimation(config)
 
 print(config)
 

@@ -520,7 +520,6 @@ class Run(_Task):
         """ """
         pids = []
 
-        ##TODO build Queue.Queue system for multi running.
         def run(x):
             """
 
@@ -655,9 +654,6 @@ class RunParallel(_Task):
 
         self.models = self.set_task()
         [i.save() for i in self.models]
-
-        ##TODO put Try except block here once you remember which error
-        ##is being raised
         self.run_parallel()
 
     def _do_checks(self):
@@ -982,7 +978,6 @@ class Reports(_Task):
         """
         # get existing report keys
 
-        ##TODO implement self.variable as column in scan
         keys = []
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
             keys.append(i.attrib['key'])
@@ -1076,7 +1071,6 @@ class Reports(_Task):
         table = etree.SubElement(report, 'Table')
         table.attrib['printTitle'] = str(1)
 
-        ##TODO cater for particle numbers
         if self.variable.name in [i.name for i in self.metabolites]:
             cn = '{},{},{}'.format(self.model.reference, self.variable.compartment.reference,
                                    self.variable.initial_reference)
@@ -1273,9 +1267,7 @@ class Reports(_Task):
 
 @mixin(model.ReadModelMixin)
 class TimeCourse(_Task):
-    """##todo implement arguments that get passed on to report
-    as **report_kwargs
-    
+    """
     .. _timecourse_kwargs:
     
     =================
@@ -2236,7 +2228,6 @@ class Scan(_Task):
                          'reference': self.get_report_key(),
                          'confirmOverwrite': self.confirm_overwrite}
 
-        ##TODO fix output in subtask temp fix
         if self.output_in_subtask == True:
             self.output_in_subtask = 'true'
         elif self.output_in_subtask == False:
@@ -4937,7 +4928,6 @@ class ChaserParameterEstimations(_Task):
     """Perform secondary hook and jeeves parameter estimations
     starting from the best values of a primary global estimator.
     
-    #todo: This class performs slowly in serial. Parallelize the configuration
     of the parameter estimation class in each model.
 
     Args:
