@@ -21,8 +21,9 @@ antimony_string = """
 model simple_parameter_estimation()
     compartment Cell = 1;
     
-    A in Cell; B in Cell;
-    C in Cell; D in Cell;
+    A in Cell; 
+    B in Cell;
+    C in Cell; 
     
     // reactions
     R1: A => B ; Cell * k1 * A;
@@ -40,8 +41,6 @@ model simple_parameter_estimation()
     k2 = 0.1;
     k3 = 0.1;
     k4 = 0.1;
-    
-    
 end 
 
 """
@@ -73,14 +72,20 @@ data.to_csv(experiment_filename)
 ## simplifying the construction of a Config object.
 
 
-
 with tasks.ParameterEstimation.Context(mod, experiment_filename, context='s', parameters='g') as context:
     context.set('separator', ',')
     context.set('run_mode', True)
+    context.set('randomize_start_values', True)
+    context.set('method', 'genetic_algorithm')
+    context.set('population_size', 100)
+    context.set('lower_bound', 1e-1)
+    context.set('upper_bound', 1e1)
+
     config = context.get_config()
 
 pe = tasks.ParameterEstimation(config)
 
+data = viz.Parse(pe).data
 
 
 
