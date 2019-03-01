@@ -73,17 +73,6 @@ data.to_csv(experiment_filename)
 ## simplifying the construction of a Config object.
 
 
-'''
-Do I need a general 'set' method for config. First argument is the 
-thing you want to set. second argument is the value. 
-
-A set_all method, would be like set. But recursively convert all 
-instances of parameter to value
-'''
-
-
-# Support the input of data using python structures such as pandas.DataFrame
-# numpy arrays and normal dict etc.
 
 with tasks.ParameterEstimation.Context(mod, experiment_filename, context='s', parameters='g') as context:
     context.set('separator', ',')
@@ -92,7 +81,6 @@ with tasks.ParameterEstimation.Context(mod, experiment_filename, context='s', pa
 
 pe = tasks.ParameterEstimation(config)
 
-print(config)
 
 
 
