@@ -26,12 +26,10 @@ import threading
 
 
 class cached_property(object):
-    """
-    A property that is only computed once per instance and then replaces itself
+    """A property that is only computed once per instance and then replaces itself
     with an ordinary attribute. Deleting the attribute resets the property.
     Source: https://github.com/bottlepy/bottle/commit/fa7733e075da0d790d809aa3d2f53071897e6f76
-    """  # noqa
-
+    """
     def __init__(self, func):
         self.__doc__ = getattr(func, '__doc__')
         self.func = func
@@ -44,9 +42,13 @@ class cached_property(object):
 
 
 class threaded_cached_property(object):
-    """
-    A cached_property version for use in environments where multiple threads
+    """A cached_property version for use in environments where multiple threads
     might concurrently try to access the property.
+
+    Args:
+
+    Returns:
+
     """
 
     def __init__(self, func):
@@ -70,10 +72,14 @@ class threaded_cached_property(object):
 
 
 class cached_property_with_ttl(object):
-    """
-    A property that is only computed once per instance and then replaces itself
+    """A property that is only computed once per instance and then replaces itself
     with an ordinary attribute. Setting the ttl to a number expresses how long
     the property will last before being timed out.
+
+    Args:
+
+    Returns:
+
     """
 
     def __init__(self, ttl=None):
@@ -116,6 +122,14 @@ class cached_property_with_ttl(object):
         obj.__dict__[self.__name__] = (value, time())
 
     def _prepare_func(self, func):
+        """
+
+        Args:
+          func: 
+
+        Returns:
+
+        """
         self.func = func
         if func:
             self.__doc__ = func.__doc__
@@ -128,9 +142,13 @@ timed_cached_property = cached_property_with_ttl
 
 
 class threaded_cached_property_with_ttl(cached_property_with_ttl):
-    """
-    A cached_property version for use in environments where multiple threads
+    """A cached_property version for use in environments where multiple threads
     might concurrently try to access the property.
+
+    Args:
+
+    Returns:
+
     """
 
     def __init__(self, ttl=None):

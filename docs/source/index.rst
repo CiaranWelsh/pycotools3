@@ -3,135 +3,115 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Pycotools's Documentation
-==========================
+.. role:: bash(code)
+   :language: bash
 
+.. role:: python(code)
+   :language: python
 
-QuickStart
-==========
+.. _home-page:
 
-.. toctree::
-   :maxdepth: 1
-
-   QuickStart
-   
-Tutorials
+PyCoTools
 =========
+PyCoTools is a python package that was developed as an alternative interface into `COPASI <http://copasi.org/>`_, simulation software for modelling biochemical systems. The PyCoTools paper can be found `here <https://academic.oup.com/bioinformatics/article/34/21/3702/5001390>`_ and describes in detail the intentions and functionality of PyCoTools. There are some important differences  between the PyCoTools version that is described in the publication and the current version. The first and most important is that PyCoTools is now a python 3 only package. If using Python 2.7 you should create a virtual Python 3.6 environment using `conda <https://salishsea-meopar-docs.readthedocs.io/en/latest/work_env/python3_conda_environment.html>`_ or `virtualenv <https://virtualenv.pypa.io/en/latest/>`_. My preference is conda. The other major difference is the interface into COPASI's parameter estimation task which has a new interface and has been enhanced to support all features of COPASI's parameter estimation task.
 
-Tutorial 0: Installation and Configuration
-------------------------------------------
 
-.. toctree::
-   :maxdepth: 1
-   
-   Tutorials/Tutorial0InstallationAndConfiguration
-   
-   
-Tutorial 1: The Model
----------------------
-.. toctree::
-   :maxdepth: 1
-   
-   Tutorials/Tutorial1TheModel
+Installation
+------------
+Use:
 
-Tutorial 2: Build Model with Antimony
--------------------------------------
-.. toctree::
-   :maxdepth: 1
-   
-   Tutorials/Tutorial2BuildModelsWithAntimony
-   
-Tutorial 3: Time Course
------------------------
-.. toctree::
-   :maxdepth: 1
-   
-   Tutorials/Tutorial3Timecourse
-   
-Tutorial 4: Scan
-----------------
+.. code-block:: bash
+
+   $ pip install pycotools3
+
+Remember to :bash:`source activate` your python 3.6 environment if you need to.
+
+To install from `source <https://github.com/CiaranWelsh/pycotools3.git>`_:
+
+.. code-block:: bash
+
+  $ git clone https://github.com/CiaranWelsh/pycotools3.git
+  $ cd pycotools3
+  $ python setup.py install
+
+The procedure is the same in linux, mac and windows.
+
+Documentation
+-------------
+This is a guide to PyCoTools version >2.0.1. The links below provide a tutorial style documentation on how to use pycotools. For example style documentation, please navigate to the :ref:`examples-index` page.
 
 .. toctree::
-   :maxdepth: 1
-   
-   Tutorials/Tutorial4Scan
-   
+   :maxdepth: 2
+   :name: master-toc
+   :glob:
 
-Tutorial 5: Single Parameter Estimations
-----------------------------------------
-
-.. toctree::
-   :maxdepth: 1
-   
-   Tutorials/Tutorial5ParameterEstimation
+   self
+   getting_started
+   Tutorials/tutorials.rst
 
 
-Tutorial 6: Parameter Estimation Workflow
------------------------------------------
-
-.. toctree::
-   :maxdepth: 1
-   
-   Tutorials/Tutorial6ParameterEstimationWorkflow
-
-Tutorial 7: Insert Parameters
------------------------------
-
-.. toctree::
-   :maxdepth: 1
-   
-   Tutorials/Tutorial7InsertParameters
 
 
-Tutorial 8: Model Selection Demo
---------------------------------
-
-.. toctree::
-   :maxdepth: 1
-   
-   Tutorials/Tutorial8ModelSelectionDemo
+sec
+---
 
 
-Tutorial 9: Profile Likelihoods
--------------------------------
+    - Running a time course
 
-.. toctree::
-   :maxdepth: 1
-   
-   Tutorials/Tutorial9ProfileLikelihoods
+    - Running a parameter scan
+
+    - Running a simple parameter estimation
+
+    - visualisation
+
+  - More advanced
+
+    - more advanced parameter estimations
+
+    - profile likelihoods
 
 
-Examples
-========
-
-.. toctree::
-   :maxdepth: 1
-   
-   Examples/ExamplesIndex
-   
-
-API
-===
-
-.. toctree:: 
-   :maxdepth: 1
-   
-   APIDoc/APIIndex.rst
-   
- 
-Caveats
+Support
 -------
-
-.. toctree::
-   :maxdepth: 1
-   
-   Caveats.rst
+Users can post a question on stack-overflow using the :code:`pycotools` tag. I get email notifications for these questions and will respond.
 
 
+People
+------
+PyCoTools has been developed by Ciaran Welsh in Daryl Shanley's lab at Newcastle University.
 
-Indices and tables
-==================
+Caveats
+=======
+* Non-ascii characters are minimally supported and can break PyCoTools
+* Do not use unusual characters or naming systems (i.e. A reaction name called "A -> B" will break pycotools)
+* In COPASI we can have (say) a global quantity and a metaboltie with the same name because they are different entities. This is not supported in Pycotools and you must use unique names for every model component
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+
+Citing PyCoTools
+----------------
+If you made use of PyCoTools, please cite `this <https://academic.oup.com/bioinformatics/article/34/21/3702/5001390>`_ article using:
+
+  - Welsh, C.M., Fullard, N., Proctor, C.J., Martinez-Guimera, A., Isfort, R.J., Bascom, C.C., Tasseff, R., Przyborski, S.A. and Shanley, D.P., 2018. PyCoTools: a Python toolbox for COPASI. Bioinformatics, 34(21), pp.3702-3710.
+
+And also please remember to cite `COPASI <http://copasi.org/>`_:
+
+  - Hoops, S., Sahle, S., Gauges, R., Lee, C., Pahle, J., Simus, N., Singhal, M., Xu, L., Mendes, P. and Kummer, U., 2006. COPASI—a complex pathway simulator. Bioinformatics, 22(24), pp.3067-3074.
+
+and `tellurium <http://tellurium.analogmachine.org/>`_:
+
+  - Medley, J.K., Choi, K., König, M., Smith, L., Gu, S., Hellerstein, J., Sealfon, S.C. and Sauro, H.M., 2018. Tellurium notebooks—An environment for reproducible dynamical modeling in systems biology. PLoS computational biology, 14(6), p.e1006220.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

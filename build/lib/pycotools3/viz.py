@@ -746,7 +746,7 @@ class Parse(object):
                                     ' not given the copasi file that was used to generate this'
                                     ' parameter estimation data. This is a common error when '
                                     'shifting data to and from a cluster. In this case, set '
-                                    '"run_mode" to False and use the setup method of '
+                                    '"run_mode" to False and use the _setup method of '
                                     'ParameterEstimation, MultiParameterEstimation or '
                                     'MultiModelFit classes. ')
 
@@ -950,7 +950,7 @@ class Parse(object):
                                         'fresh copy of the model. Try redefining the '
                                         'same parameter estimation problem that you '
                                         'used in the profile likelihood, using the '
-                                        'setup method but not running the '
+                                        '_setup method but not running the '
                                         'parameter estimation before trying again.')
             return s
 
@@ -1334,7 +1334,7 @@ class PlotTimeCourseEnsemble(_Viz):
     this is not being captured in the ensemble time course.
 
     Therefore, modify to follow directions in data files from independent data. Also run
-    multiple times if you have multiple experiments measuring the same varibale.
+    multiple times if you have multiple _experiments measuring the same varibale.
     """
 
     def __init__(self, cls, **kwargs):
@@ -1613,7 +1613,7 @@ class PlotTimeCourseEnsemble(_Viz):
 
     def plot_per_observable(self):
         """
-        Plot observables with experiments on same graph.
+        Plot observables with _experiments on same graph.
         i.e. variable x in treated and control conditions
         will be plotted together.
         """
@@ -1886,7 +1886,7 @@ class PlotParameterEstimation(_Viz, PlotKwargs):
     def create_directories(self):
         """
         create a directory in project root called result_directory
-        create subfolders with name of experiments
+        create subfolders with name of _experiments
         :return: dict
         """
         directories = {}
@@ -1911,7 +1911,7 @@ class PlotParameterEstimation(_Viz, PlotKwargs):
 
     def get_time(self):
         """
-        get dict of experiments and max time
+        get dict of _experiments and max time
         :return:
         """
         dct = {}

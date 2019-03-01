@@ -30,14 +30,19 @@ Setup tools for PyCoTools
 
 """
 
-# from distutils.core import setup
+# from distutils.core import _setup
 from setuptools import setup
-
+from sys import platform
 global __version__
+
+
+
+
+
 # version
-MAJOR = 1
+MAJOR = 2
 MINOR = 0
-MICRO = 13
+MICRO = 1
 
 __version__ = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
@@ -49,12 +54,8 @@ setup(
     author='Ciaran Welsh',
     requires=['lxml', 'argparse', 'pandas', 'numpy', 'scipy',
               'matplotlib', 'scipy', 'seaborn', 'sklearn',
-              'retrying', 'psutil', 'tellurium'],
-    package_data={'pycotools3': ['*.py',
-                                 'Licence.txt',
-                                 'Tests/*.py',
-                                 'logging_config.conf'],
-                  },
+              'retrying', 'psutil', 'tellurium', 'pyyaml', 'munch', 'json'
+              ],
     author_email='ciaran.welsh@newcastle.ac.uk',
     url='https://github.com/CiaranWelsh/pycotools3',
 
@@ -64,10 +65,13 @@ setup(
     license='GPL4',
     install_requires=['pandas', 'numpy', 'scipy', 'matplotlib',
                       'lxml', 'seaborn', 'sklearn', 'psutil',
-                      'tellurium'],
+                      'tellurium', 'pyyaml', 'munch'],
 
     long_description='A python package for enhancing mathematical'
-                     ' modelling using COPASI. This package supports Python 3',
+                     ' modelling using COPASI and Python 3',
+
+    include_package_data=True,
+
     extras_require={
         'docs': [
             'sphinx >= 1.4',

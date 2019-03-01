@@ -1,0 +1,3 @@
+include ReadMe.md
+include docs
+include pycotools3/COPASI

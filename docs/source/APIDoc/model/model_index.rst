@@ -4,7 +4,7 @@ model
 .. toctree::
    :caption: model
 
-.. automodule:: pycotools.model
+.. automodule:: pycotools3.model
     :members:
 
 

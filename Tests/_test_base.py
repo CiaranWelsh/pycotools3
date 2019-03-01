@@ -23,12 +23,11 @@ class _BaseTest(unittest.TestCase):
         -> Take string model from TestModels and write to file
         -> Initiate model
     """
-
     def setUp(self, test_model='test_model1'):
-        self.copasi_file = os.path.join(os.getcwd(), 'test_model.cps')
+        self.copasi_file = os.path.join(os.path.dirname(__file__), 'test_model.cps')
 
         self.ant = """// Created by libAntimony v2.9.4
-                        model *New_Model()
+                        model *TestModel1()
                         
                           // Compartments and Species:
                           compartment nuc, cyt;
@@ -44,9 +43,9 @@ class _BaseTest(unittest.TestCase):
                           ADeg: A => ; nuc*ADeg_k1*A;
                         
                           // Species initializations:
-                          A = 0.999999999999998;
-                          B = 0.999999999999998;
-                          C = 0.999999999999998;
+                          A = 1
+                          B = 1
+                          C = 1
                         
                           // Compartment initializations:
                           nuc = 1;
@@ -75,18 +74,19 @@ class _BaseTest(unittest.TestCase):
         with pycotools3.model.BuildAntimony(self.copasi_file) as loader:
             self.model = loader.load(self.ant)
 
-    def tearDown(self):
+    @classmethod
+    def tearDownClass(cls):
         tear_down = True
         delete_dirs = True
 
         if tear_down:
-            dire = os.path.dirname(self.copasi_file)
+            dire = os.path.dirname(__file__)
             subdirs = ['Boxplots', 'TimeCourseGraphs',
                        'ParameterEstimationPlots', 'test_mpe',
                        'EnsembleTimeCourse', 'Histograms',
                        'LinearRegression', 'MultipleParameterEstimationResults',
                        'PCA', 'Scatters', 'ProfileLikelihoods',
-                       'ParameterEstimationResults']
+                       'ParameterEstimationResults', 'Problem1']
             if delete_dirs:
                 for i in subdirs:
                     d = os.path.join(dire, i)
@@ -96,24 +96,22 @@ class _BaseTest(unittest.TestCase):
                         except WindowsError:
                             print('failed with windows error')
 
-            for i in glob.glob(os.path.join(dire, '*.xlsx')):
-                os.remove(i)
+            file_types_to_remove = [
+                '*.xlsx',
+                '*.log',
+                '*.cps',
+                '*.txt',
+                '*.csv',
+                '*.pickle',
+                '*.json',
+                '*.yaml',
+                '*.yml',
+                '*.yaml'
+            ]
+            for i in file_types_to_remove:
+                for j in glob.glob(os.path.join(dire, i)):
+                    os.remove(j)
 
-            for i in glob.glob(os.path.join(dire, '*.cps')):
-                os.remove(i)
-
-            for i in glob.glob(os.path.join(dire, '*.txt')):
-                os.remove(i)
-
-            for i in glob.glob(os.path.join(dire, '*.csv')):
-                os.remove(i)
-
-            for i in glob.glob(os.path.join(dire, '*.pickle')):
-                dire, fle = os.path.split(i)
-                ## keep until I know keep list is not needed.
-                keep_list = []
-                if fle not in keep_list:
-                    os.remove(i)
 
 
 if __name__ == '__main__':

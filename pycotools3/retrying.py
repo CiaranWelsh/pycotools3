@@ -251,17 +251,38 @@ MAX_WAIT = 1073741823
 
 
 def retry(*dargs, **dkw):
-    """
-    Decorator function that instantiates the Retrying object
-    @param *dargs: positional arguments passed to Retrying object
-    @param **dkw: keyword arguments passed to the Retrying object
+    """Decorator function that instantiates the Retrying object
+
+    Args:
+      *dargs: 
+      **dkw: 
+
+    Returns:
+
     """
     # support both @retry and @retry() as valid syntax
     if len(dargs) == 1 and callable(dargs[0]):
         def wrap_simple(f):
+            """
+
+            Args:
+              f: 
+
+            Returns:
+
+            """
 
             @six.wraps(f)
             def wrapped_f(*args, **kw):
+                """
+
+                Args:
+                  *args: 
+                  **kw: 
+
+                Returns:
+
+                """
                 return Retrying().call(f, *args, **kw)
 
             return wrapped_f
@@ -270,9 +291,26 @@ def retry(*dargs, **dkw):
 
     else:
         def wrap(f):
+            """
+
+            Args:
+              f: 
+
+            Returns:
+
+            """
 
             @six.wraps(f)
             def wrapped_f(*args, **kw):
+                """
+
+                Args:
+                  *args: 
+                  **kw: 
+
+                Returns:
+
+                """
                 return Retrying(*dargs, **dkw).call(f, *args, **kw)
 
             return wrapped_f
@@ -281,6 +319,7 @@ def retry(*dargs, **dkw):
 
 
 class Retrying(object):
+    """ """
 
     def __init__(self,
                  stop=None, wait=None,
@@ -366,29 +405,75 @@ class Retrying(object):
         self._wrap_exception = wrap_exception
 
     def stop_after_attempt(self, previous_attempt_number, delay_since_first_attempt_ms):
-        """Stop after the previous attempt >= stop_max_attempt_number."""
+        """Stop after the previous attempt >= stop_max_attempt_number.
+
+        Args:
+          previous_attempt_number: 
+          delay_since_first_attempt_ms: 
+
+        Returns:
+
+        """
         return previous_attempt_number >= self._stop_max_attempt_number
 
     def stop_after_delay(self, previous_attempt_number, delay_since_first_attempt_ms):
-        """Stop after the time from the first attempt >= stop_max_delay."""
+        """Stop after the time from the first attempt >= stop_max_delay.
+
+        Args:
+          previous_attempt_number: 
+          delay_since_first_attempt_ms: 
+
+        Returns:
+
+        """
         return delay_since_first_attempt_ms >= self._stop_max_delay
 
     def no_sleep(self, previous_attempt_number, delay_since_first_attempt_ms):
-        """Don't sleep at all before retrying."""
+        """Don't sleep at all before retrying.
+
+        Args:
+          previous_attempt_number: 
+          delay_since_first_attempt_ms: 
+
+        Returns:
+
+        """
         return 0
 
     def fixed_sleep(self, previous_attempt_number, delay_since_first_attempt_ms):
-        """Sleep a fixed amount of time between each retry."""
+        """Sleep a fixed amount of time between each retry.
+
+        Args:
+          previous_attempt_number: 
+          delay_since_first_attempt_ms: 
+
+        Returns:
+
+        """
         return self._wait_fixed
 
     def random_sleep(self, previous_attempt_number, delay_since_first_attempt_ms):
-        """Sleep a random amount of time between wait_random_min and wait_random_max"""
+        """Sleep a random amount of time between wait_random_min and wait_random_max
+
+        Args:
+          previous_attempt_number: 
+          delay_since_first_attempt_ms: 
+
+        Returns:
+
+        """
         return random.randint(self._wait_random_min, self._wait_random_max)
 
     def incrementing_sleep(self, previous_attempt_number, delay_since_first_attempt_ms):
-        """
-        Sleep an incremental amount of time after each attempt, starting at
+        """Sleep an incremental amount of time after each attempt, starting at
         wait_incrementing_start and incrementing by wait_incrementing_increment
+
+        Args:
+          previous_attempt_number: 
+          delay_since_first_attempt_ms: 
+
+        Returns:
+
         """
         result = self._wait_incrementing_start + (self._wait_incrementing_increment * (previous_attempt_number - 1))
         if result < 0:
@@ -396,6 +481,15 @@ class Retrying(object):
         return result
 
     def exponential_sleep(self, previous_attempt_number, delay_since_first_attempt_ms):
+        """
+
+        Args:
+          previous_attempt_number: 
+          delay_since_first_attempt_ms: 
+
+        Returns:
+
+        """
         exp = 2 ** previous_attempt_number
         result = self._wait_exponential_multiplier * exp
         if result > self._wait_exponential_max:
@@ -405,12 +499,36 @@ class Retrying(object):
         return result
 
     def never_reject(self, result):
+        """
+
+        Args:
+          result: 
+
+        Returns:
+
+        """
         return False
 
     def always_reject(self, result):
+        """
+
+        Args:
+          result: 
+
+        Returns:
+
+        """
         return True
 
     def should_reject(self, attempt):
+        """
+
+        Args:
+          attempt: 
+
+        Returns:
+
+        """
         reject = False
         if attempt.has_exception:
             reject |= self._retry_on_exception(attempt.value[1])
@@ -420,6 +538,16 @@ class Retrying(object):
         return reject
 
     def call(self, fn, *args, **kwargs):
+        """
+
+        Args:
+          fn: 
+          *args: 
+          **kwargs: 
+
+        Returns:
+
+        """
         start_time = int(round(time.time() * 1000))
         attempt_number = 1
         while True:
@@ -450,10 +578,14 @@ class Retrying(object):
 
 
 class Attempt(object):
-    """
-    An Attempt encapsulates a call to a target function that may end as a
+    """An Attempt encapsulates a call to a target function that may end as a
     normal return value from the function or an Exception depending on what
     occurred during the execution.
+
+    Args:
+
+    Returns:
+
     """
 
     def __init__(self, value, attempt_number, has_exception):
@@ -463,9 +595,14 @@ class Attempt(object):
 
     def get(self, wrap_exception=False):
         """
-        Return the return value of this Attempt instance or raise an Exception.
-        If wrap_exception is true, this Attempt is wrapped inside of a
-        RetryError before being raised.
+
+        Args:
+          wrap_exception:  (Default value = False)
+
+        Returns:
+          If wrap_exception is true, this Attempt is wrapped inside of a
+          RetryError before being raised.
+
         """
         if self.has_exception:
             if wrap_exception:
@@ -483,9 +620,7 @@ class Attempt(object):
 
 
 class RetryError(Exception):
-    """
-    A RetryError encapsulates the last Attempt instance right before giving up.
-    """
+    """A RetryError encapsulates the last Attempt instance right before giving up."""
 
     def __init__(self, last_attempt):
         self.last_attempt = last_attempt

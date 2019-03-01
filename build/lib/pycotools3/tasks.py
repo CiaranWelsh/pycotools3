@@ -2603,7 +2603,7 @@ class ParameterEstimation(_Task):
     """
     Set up and run a parameter estimation in copasi.
 
-    To setup:
+    To _setup:
 
         # Make text or csv files containing experimental data. This is the
         same as you would using the COPASI GUI except column headers **MUST**
@@ -2616,7 +2616,7 @@ class ParameterEstimation(_Task):
         in point 1 then skip this point. If you are manually defining which
         parameters you want to estimate, open the config file and
         modify as you see fit.
-        # Use the setup() method
+        # Use the _setup() method
         # use the run method
 
     .. _parameter_estimation_kwargs:
@@ -3156,7 +3156,7 @@ class ParameterEstimation(_Task):
         """
         if os.path.isfile(self.config_filename) != True:
             raise errors.InputError(
-                'ConfigFile does not exist. run \'write_config_file\' method and modify it how you like then run the setup()  method again.')
+                'ConfigFile does not exist. run \'write_config_file\' method and modify it how you like then run the _setup()  method again.')
         df = pandas.read_csv(self.config_filename)
         parameter_names = list(df[df.columns[0]])
 
@@ -3365,7 +3365,7 @@ class ParameterEstimation(_Task):
         """
         for row in range(self.read_config_file().shape[0]):
             assert row != 'nan'
-            ## feed each item from the config file into add_fit_item
+            ## feed each item from the config file into _add_fit_items
             self.model = self.add_fit_item(self.read_config_file().iloc[row])
         return self.model
 
@@ -3720,13 +3720,13 @@ class MultiParameterEstimation(ParameterEstimation):
         """
 
         :return:
-        :param models: dict of models. Output from setup()
+        :param models: dict of models. Output from _setup()
         """
         ##load cps from pickle in case run not being use straignt after set_up
         try:
             self.models
         except AttributeError:
-            raise errors.IncorrectUsageError('You must use the setup method before the run method')
+            raise errors.IncorrectUsageError('You must use the _setup method before the run method')
 
         if self.run_mode == 'sge':
             try:
@@ -3750,7 +3750,7 @@ class MultiParameterEstimation(ParameterEstimation):
 
     def setup(self):
         """
-        Over-ride the setup method from parameter estimation.
+        Over-ride the _setup method from parameter estimation.
         Basically do the same thing but add a few methods.
 
         :return:
@@ -3763,7 +3763,7 @@ class MultiParameterEstimation(ParameterEstimation):
 
         ## If skip_config then do not configure the parameter estimation task
         if not self.skip_config:
-            ## map experiments
+            ## map _experiments
             EM = ExperimentMapper(self.model, self.experiment_files, **self._experiment_mapper_args)
 
             ## get model from ExperimentMapper
@@ -4018,7 +4018,7 @@ class ChaserParameterEstimations(_Task):
     #                              iteration_limit=self.iteration_limit,
     #                              run_mode=False,
     #                              **self.kwargs)
-    #     PE.setup()
+    #     PE._setup()
     #     self.pe_dct[mod.copasi_file] = PE
     #
     #     return PE
@@ -4099,7 +4099,7 @@ class MultiModelFit(_Task):
     Usage:
         # Setup a new folder containing all models that you would like to fit
           and all data you would like to fit to the model.
-          Do not have any other text or csv files in this folder as python will try and setup
+          Do not have any other text or csv files in this folder as python will try and _setup
           fits for them.
 
                 i.e.:
@@ -4224,8 +4224,8 @@ class MultiModelFit(_Task):
     def setup(self):
         """
         A user interface class which calls the corresponding
-        method (setup) from the runMultiplePEs class per model.
-        Perform the ParameterEstimation.setup() method on each model.
+        method (_setup) from the runMultiplePEs class per model.
+        Perform the ParameterEstimation._setup() method on each model.
         """
         for MPE in self.MPE_dct:
             self.MPE_dct[MPE].setup()
@@ -4816,7 +4816,7 @@ class ProfileLikelihood(_Task):
 
         if count == 0:
             raise errors.NoFitItemsError(
-                'Model does not contain any fit items. Please setup a parameter estimation and try again')
+                'Model does not contain any fit items. Please _setup a parameter estimation and try again')
         # print count
         ##save is needed
         self.to_file()
@@ -4886,7 +4886,7 @@ class ProfileLikelihood(_Task):
         """
         number_of_cpu = cpu_count()
         q = queue.Queue(maxsize=number_of_cpu)
-        # report_files = self.enumerate_PE_output()
+        # report_files = self._enumerate_PE_output()
         res = {}
         res = {}
         for model in self.model_dct:

@@ -1,4 +1,4 @@
-#-*-coding: utf-8 -*-
+# -*-coding: utf-8 -*-
 """
 
  This file is part of pycotools3.
@@ -34,10 +34,12 @@ import unittest
 from lxml import etree
 from collections import OrderedDict
 
+
 class ModelLevelAttributeTests(_test_base._BaseTest):
     """
     Test things like volume and mole units
     """
+
     def setUp(self):
         super(ModelLevelAttributeTests, self).setUp()
         self.model = pycotools3.model.Model(self.copasi_file)
@@ -46,14 +48,10 @@ class ModelLevelAttributeTests(_test_base._BaseTest):
         self.assertEqual(self.model.time_unit, 's')
 
     def test_model_name(self):
-        self.assertEqual(self.model.name, 'New_Model')
+        self.assertEqual(self.model.name, 'TestModel1')
 
     def test_volume(self):
         self.assertEqual(self.model.volume_unit, 'ml')
-
-    def test_quantity(self):
-        self.assertEqual(str(self.model.area_unit), 'm\xb2'.encode('utf-8'))
-        self.assertEqual(str(self.model.area_unit), 'm\xb2'.encode('utf-8'))
 
     def test_length(self):
         self.assertEqual(self.model.length_unit, 'm')
@@ -69,7 +67,6 @@ class ModelLevelAttributeTests(_test_base._BaseTest):
 
     def test_xml(self):
         self.assertTrue(isinstance(self.model.xml, etree._Element))
-
 
     def test_convert_particles_to_molar(self):
         """
@@ -102,7 +99,7 @@ class ModelLevelAttributeTests(_test_base._BaseTest):
 
         :return:
         """
-        new_filename = os.path.join(self.model.root+'/test', 'CopasiModel2.cps')
+        new_filename = os.path.join(self.model.root + '/test', 'CopasiModel2.cps')
         self.model.copasi_file = new_filename
         self.assertEqual(new_filename, self.model.copasi_file)
 
@@ -111,7 +108,7 @@ class ModelLevelAttributeTests(_test_base._BaseTest):
 
         :return:
         """
-        new_root = self.model.root+'/test'
+        new_root = self.model.root + '/test'
         new_file_name = os.path.join(new_root, 'CopasiModel2.cps')
         self.model.copasi_file = new_file_name
         self.assertEqual(new_root, self.model.root)
@@ -144,6 +141,7 @@ class ModelLevelAttributeTests(_test_base._BaseTest):
         m = pycotools3.model.Model(new_filename, new=True)
         self.assertTrue(isinstance(m, pycotools3.model.Model))
 
+
 class ModelComponentAttributeTests(_test_base._BaseTest):
     """
     Test aspects of model components, such as metbaolite or
@@ -153,6 +151,42 @@ class ModelComponentAttributeTests(_test_base._BaseTest):
     def setUp(self):
         super(ModelComponentAttributeTests, self).setUp()
         self.model = pycotools3.model.Model(self.copasi_file)
+
+    def test_get_variable_names_all(self):
+        expected = ['A', 'A2B', 'ADeg_k1', 'B', 'B2C', 'B2C_0_k2', 'C', 'C2A_k1', 'ThisIsAssignment', 'cyt', 'nuc']
+        self.assertListEqual(expected, self.model.get_variable_names('a'))
+
+    def test_get_variable_names_local(self):
+        expected = []
+        self.assertListEqual(expected, self.model.get_variable_names('l'))
+
+    def test_get_variable_names_global(self):
+        expected = ['A2B', 'ADeg_k1', 'B2C', 'B2C_0_k2', 'C2A_k1', 'ThisIsAssignment']
+        self.assertListEqual(expected, self.model.get_variable_names('g'))
+
+    def test_get_variable_names_global_and_compartment(self):
+        expected = ['A2B', 'ADeg_k1', 'B2C', 'B2C_0_k2', 'C2A_k1', 'ThisIsAssignment', 'cyt', 'nuc']
+        actual = self.model.get_variable_names('gc')
+        self.assertListEqual(expected, actual)
+
+    def test_get_variable_names_global_and_metabolite(self):
+        expected = ['A', 'A2B', 'ADeg_k1', 'B', 'B2C', 'B2C_0_k2', 'C', 'C2A_k1', 'ThisIsAssignment']
+        actual = self.model.get_variable_names('mg')
+        self.assertListEqual(expected, actual)
+
+    def test_get_variable_names_global_without_assignments_and_metabolite(self):
+        expected = ['A', 'A2B', 'ADeg_k1', 'B', 'B2C', 'B2C_0_k2', 'C', 'C2A_k1']
+        actual = self.model.get_variable_names('mg', include_assignments=False)
+        self.assertListEqual(expected, actual)
+
+    def test_get_variable_names_Use_of_prefix(self):
+        expected = ['B', 'B2C', 'B2C_0_k2']
+        ##get all model vairables begining with 'B'
+        actual = self.model.get_variable_names('a', prefix='B')
+        self.assertListEqual(expected, actual)
+
+    def test_contains_protocol(self):
+        self.assertTrue('A' in self.model)
 
     def test_metabolites(self):
         self.assertEqual(len(self.model.metabolites), 3)
@@ -171,7 +205,7 @@ class ModelComponentAttributeTests(_test_base._BaseTest):
         self.assertTrue(check)
 
     def test_compartments(self):
-        self.assertEqual(len(self.model.compartments ),2)
+        self.assertEqual(len(self.model.compartments), 2)
 
     def test_global_quantities(self):
         # print self.model.global_quantities()
@@ -192,6 +226,7 @@ class ModelComponentAttributeTests(_test_base._BaseTest):
         :return:
         '''
         self.assertEqual(len(self.model.local_parameters), 0)
+
     #
     def test_local_parameters2(self):
         for i in self.model.constants:
@@ -212,18 +247,18 @@ class ModelComponentAttributeTests(_test_base._BaseTest):
         :return:
         """
         k = pycotools3.model.KeyFactory(self.model, type='constant').generate()
-        L= pycotools3.model.LocalParameter(self.model,
-                                           key=k,
-                                           name='k1', reaction_name='v1',
-                                           global_name='(v1).k1')
+        L = pycotools3.model.LocalParameter(self.model,
+                                            key=k,
+                                            name='k1', reaction_name='v1',
+                                            global_name='(v1).k1')
         self.assertEqual(L.global_name, '(v1).k1')
 
     def test_local_parameters5(self):
         k = pycotools3.model.KeyFactory(self.model, type='constant').generate()
-        L= pycotools3.model.LocalParameter(self.model,
-                                           key=k,
-                                           name='k1',
-                                           reaction_name='v1')
+        L = pycotools3.model.LocalParameter(self.model,
+                                            key=k,
+                                            name='k1',
+                                            reaction_name='v1')
         self.assertTrue('global_name' in list(L.__dict__.keys()))
 
     def test_functions(self):
@@ -235,10 +270,8 @@ class ModelComponentAttributeTests(_test_base._BaseTest):
     def test_number_of_reactions(self):
         self.assertEqual(self.model.number_of_reactions, 4)
 
-
     def test_reactions(self):
-        self.assertEqual(len( self.model.reactions), 4)
-
+        self.assertEqual(len(self.model.reactions), 4)
 
     def test_metabolite_concentration2(self):
         """
@@ -261,7 +294,6 @@ class ModelComponentAttributeTests(_test_base._BaseTest):
         self.assertEqual(str(metab.particle_numbers), str(3.3121774713500003e+22))
 
 
-
 class SetTests(_test_base._BaseTest):
     """
     Test setting of existing model variables
@@ -278,7 +310,6 @@ class SetTests(_test_base._BaseTest):
         """
         self.model.name = 'new_name'
         self.assertEqual(self.model.name, 'new_name')
-
 
     def test_create_metabolite(self):
         """
@@ -328,8 +359,6 @@ class SetTests(_test_base._BaseTest):
         model = self.model.set('metabolite', 'X', 1234, 'name', 'particle_numbers')
         metab = self.model.get('metabolite', 'X', by='name')
         self.assertEqual(metab.particle_numbers, str(1234.0))
-
-
 
     def test_change_metab_concentration(self):
         """
@@ -430,7 +459,7 @@ class SetTests(_test_base._BaseTest):
         glob = self.model.get('global_quantity', 'IveBeenChanged')
         self.assertEqual(glob.name, 'IveBeenChanged')
 
-            # def test_change_reaction_name(self):
+        # def test_change_reaction_name(self):
     #     """
     #     At present this test fails.
     #     Not high enough priority to fix now.
@@ -443,6 +472,7 @@ class SetTests(_test_base._BaseTest):
     #     self.model.save()
     #     changed =  self.model.get('reaction', 'changed_name')
     #     self.assertEqual(changed.name, 'changed_name')
+
 
 class GetTests(_test_base._BaseTest):
     """
@@ -460,7 +490,6 @@ class GetTests(_test_base._BaseTest):
         """
         metab = self.model.get('metabolite', 'Metabolite_1', by='key')
         self.assertEqual(metab.name, 'B')
-
 
     def test_get_metbolite_by_name(self):
         """
@@ -484,7 +513,6 @@ class GetTests(_test_base._BaseTest):
         :return:
         """
         self.assertEqual(self.model.parameters.shape[1], 9)
-
 
     def test_number_of_local_parameters(self):
         """
@@ -513,7 +541,6 @@ class RemoveTests(_test_base._BaseTest):
     def setUp(self):
         super(RemoveTests, self).setUp()
         self.model = pycotools3.model.Model(self.copasi_file)
-
 
     # # def test_remove_metabolite(self):
     # #     """
@@ -557,8 +584,8 @@ class RemoveTests(_test_base._BaseTest):
         fun = pycotools3.model.Function(self.model, name='new_funct',
                                         expression='K*M*S',
                                         roles={'K': 'parameter',
-                                              'M': 'modifier',
-                                              'S': 'substrate'})
+                                               'M': 'modifier',
+                                               'S': 'substrate'})
         self.model = self.model.add_function(fun)
         self.model.save()
         self.model = self.model.remove_function('new_funct', by='name')
@@ -629,7 +656,6 @@ class AddTests(_test_base._BaseTest):
         super(AddTests, self).setUp()
         self.model = pycotools3.model.Model(self.copasi_file)
 
-
     def test_add_compartment(self):
         """
 
@@ -653,7 +679,6 @@ class AddTests(_test_base._BaseTest):
         comp2 = self.model.get('compartment', 'Medium')
         self.assertEqual(comp2.name, 'Medium')
         self.assertEqual(comp2.initial_value, 154)
-
 
     def test_add_compartment2(self):
         """
@@ -694,7 +719,6 @@ class AddTests(_test_base._BaseTest):
                                    by='name')
         self.assertEqual(new_global.name, 'NewGlobal')
 
-
     def test_remove_global_quantities(self):
         """
 
@@ -713,17 +737,16 @@ class AddTests(_test_base._BaseTest):
         for i in self.model.parameter_descriptions:
             self.assertTrue(isinstance(i, pycotools3.model.ParameterDescription))
 
-
     def test_mass_action_class(self):
         ma = pycotools3.model.MassAction(self.model, reversible=True)
         self.assertEqual(ma.expression, 'k1*PRODUCT&lt;substrate_i>-k2*PRODUCT&lt;product_j>')
+
     #
 
     def test_add_mass_action(self):
         ma = pycotools3.model.MassAction(self.model, reversible=False)
         self.model = self.model.add_function(ma)
         ##todo find better test condition
-
 
     def test_create_parameter_description_key(self):
         KF = pycotools3.model.KeyFactory(self.model, type='function_parameter')
@@ -738,8 +761,8 @@ class AddTests(_test_base._BaseTest):
         fun = pycotools3.model.Function(self.model, name='new_funct',
                                         expression='K*M*S',
                                         roles={'K': 'parameter',
-                                              'M': 'modifier',
-                                              'S': 'substrate'})
+                                               'M': 'modifier',
+                                               'S': 'substrate'})
 
         for i in fun.list_of_parameter_descriptions:
             self.assertTrue(isinstance(i, pycotools3.model.ParameterDescription))
@@ -752,9 +775,9 @@ class AddTests(_test_base._BaseTest):
         fun = pycotools3.model.Function(self.model, name='new_funct',
                                         expression='K*M*S',
                                         roles={'K': 'parameter',
-                                              'M': 'modifier',
-                                              'S': 'substrate'})
-        self.model =  self.model.add_function(fun)
+                                               'M': 'modifier',
+                                               'S': 'substrate'})
+        self.model = self.model.add_function(fun)
         self.model.save()
         for i in self.model.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfFunctions':
@@ -805,7 +828,7 @@ class AddTests(_test_base._BaseTest):
                     if j.attrib['name'] == 'fake_reaction':
                         for k in j:
                             if k.tag == '{http://www.copasi.org/static/schema}ListOfSubstrates':
-                                self.assertTrue(len(k)==4)
+                                self.assertTrue(len(k) == 4)
 
     def test_add_reaction3(self):
         """
@@ -982,18 +1005,15 @@ class TranslatorTests(_test_base._BaseTest):
         trans = pycotools3.model.Translator(self.model, 'B ->')
         self.assertTrue(isinstance(trans.all_components, list))
 
-
     def test_local_parameters(self):
         self.assertEqual(len(self.model.constants), 5)
-
-
 
     def test_key_factory_constant(self):
         """
 
         :return:
         """
-        p =pycotools3.model.KeyFactory(self.model, type='constant').generate(2)
+        p = pycotools3.model.KeyFactory(self.model, type='constant').generate(2)
         self.assertEqual(len(p), 2)
 
     def test_translater_again(self):
@@ -1008,17 +1028,14 @@ class TranslatorTests(_test_base._BaseTest):
         trans = pycotools3.model.Translator(self.model, 'A -> B; C ')
         self.assertEqual(trans.modifiers[0].name, 'C')
 
-
     def test_metabolite_concentration(self):
         """
 
         :return:
         """
-        metab =  pycotools3.model.Metabolite(self.model,
-                                             name='X')
+        metab = pycotools3.model.Metabolite(self.model,
+                                            name='X')
         self.assertEqual(str(metab.concentration), str(float(1)))
-
-
 
 
 class InsertParameterTests(_test_base._BaseTest):
@@ -1030,33 +1047,31 @@ class InsertParameterTests(_test_base._BaseTest):
         super(InsertParameterTests, self).setUp()
         self.model = pycotools3.model.Model(self.copasi_file)
 
-
     def test_insert_parameters_metabolite(self):
         """
 
         :return:
         """
-        I= pycotools3.model.InsertParameters(self.model, parameter_dict={'B': 35,
-                                                                        'B2C_0_k2': 45,
-                                                                        'A2B':55})
+        I = pycotools3.model.InsertParameters(self.model, parameter_dict={'B': 35,
+                                                                          'B2C_0_k2': 45,
+                                                                          'A2B': 55})
         self.model = I.insert()
 
         conc = [i.concentration for i in self.model.metabolites if i.name == 'B']
         self.assertAlmostEqual(float(conc[0]), float(35))
-
 
     def test_insert_parameters_metabolite_particles(self):
         """
 
         :return:
         """
-        I= pycotools3.model.InsertParameters(
+        I = pycotools3.model.InsertParameters(
             self.model,
             parameter_dict={
                 # 'nuc': 85,
                 'B': 78,
                 'B2C_0_k2': 96,
-                'A2B':55
+                'A2B': 55
             }, quantity_type='particle_numbers')
         self.model = I.insert()
         part = [i.particle_numbers for i in self.model.metabolites if i.name == 'B']
@@ -1067,7 +1082,7 @@ class InsertParameterTests(_test_base._BaseTest):
 
         :return:
         """
-        I= pycotools3.model.InsertParameters(
+        I = pycotools3.model.InsertParameters(
             self.model,
             parameter_dict={
                 # 'nuc': 85,
@@ -1084,7 +1099,7 @@ class InsertParameterTests(_test_base._BaseTest):
 
         :return:
         """
-        I= pycotools3.model.InsertParameters(
+        I = pycotools3.model.InsertParameters(
             self.model,
             parameter_dict={
                 # 'nuc': 85,
@@ -1105,7 +1120,7 @@ class InsertParameterTests(_test_base._BaseTest):
                           'A2B': 597}
 
         df = pandas.DataFrame(parameter_dict, index=[0])
-        I= pycotools3.model.InsertParameters(
+        I = pycotools3.model.InsertParameters(
             self.model, df=df, inplace=True).model
         val = [i.initial_value for i in self.model.global_quantities if i.name == 'A2B']
         self.assertAlmostEqual(float(val[0]), float(597))
@@ -1158,7 +1173,6 @@ class InsertParameterTestsWithAssignments(unittest.TestCase):
         with pycotools3.model.BuildAntimony(self.cps_file) as loader:
             self.mod = loader.load(self.ant_str)
 
-
     def test_model_builds(self):
         """
         ensure antimony builds
@@ -1189,8 +1203,16 @@ class InsertParameterTestsWithAssignments(unittest.TestCase):
         # self.assertEqual(self.mod.get('global_quantity', 'k1').initial_value, str(60.0))
 
 
+class RunningTimeCourseFroModelTests(_test_base._BaseTest):
+    def setUp(self):
+        super(RunningTimeCourseFroModelTests, self).setUp()
+        self.model = pycotools3.model.Model(self.copasi_file)
 
-
+    def test_model_simulates(self):
+        df = self.model.simulate(0, 9, 1)
+        expected = ['A', 'B', 'C']
+        actual = df.columns
+        self.assertListEqual(sorted(expected), sorted(list(actual)))
 
 
 class NewModelTests(unittest.TestCase):
@@ -1198,11 +1220,12 @@ class NewModelTests(unittest.TestCase):
     tests relating to the development of new models from
     nothing.
     """
+
     def setUp(self):
         self.cps_file = os.path.join(os.path.dirname(__file__), 'NewModelTest.cps')
         self.cps_file2 = os.path.join(os.path.dirname(__file__), 'NewModelTest2.cps')
 
-    def test_new_model_saves(self):#
+    def test_new_model_saves(self):  #
         """
         Test that a new model is created and saved.
         :return:
@@ -1262,13 +1285,12 @@ class TestReactionStuff(unittest.TestCase):
         self.X = pycotools3.model.Reaction(self.mod, 'X', '-> X; Y', 'sigma*(Y-X)')
         self.Z = pycotools3.model.Reaction(self.mod, 'Z', '-> Z; X Y', 'X*Y - b*Z ')
 
-
     def test_expression1(self):
         expr = 'sigma*(Y-X)'
         E = pycotools3.model.Expression(expr)
         self.assertListEqual(
             E.to_list(), sorted(['sigma', 'Y', 'X']
-        ))
+                                ))
 
     def test_expression2(self):
         expr = '-X*Z + r*X -Y'
@@ -1294,14 +1316,14 @@ class TestReactionStuff(unittest.TestCase):
 
     # def test_add_x_alternative(self):
     #     print self.mod.add('metabolite', name='A')
-        # r_kwargs = {'name': 'X', 'expression': '-> X', 'rate_law': 'k'}
-        # self.mod.add2('reaction', reaction_kwargs=r_kwargs)
-        # self.mod.add('reaction', name='X', '-> X', '-X*Z + r*X - Y')
-        # self.mod.save()
-        # mod_tag = '{http://www.copasi.org/static/schema}Model'
-        # reactions_tag = '{http://www.copasi.org/static/schema}ListOfReactions'
-        # for i in self.mod.xml.find(mod_tag).find(reactions_tag):
-        #     self.assertEqual(i.attrib['name'], 'X')
+    # r_kwargs = {'name': 'X', 'expression': '-> X', 'rate_law': 'k'}
+    # self.mod.add2('reaction', reaction_kwargs=r_kwargs)
+    # self.mod.add('reaction', name='X', '-> X', '-X*Z + r*X - Y')
+    # self.mod.save()
+    # mod_tag = '{http://www.copasi.org/static/schema}Model'
+    # reactions_tag = '{http://www.copasi.org/static/schema}ListOfReactions'
+    # for i in self.mod.xml.find(mod_tag).find(reactions_tag):
+    #     self.assertEqual(i.attrib['name'], 'X')
 
     def test_add_y(self):
         self.mod.add_reaction(self.Y)
@@ -1342,7 +1364,6 @@ class TestReactionStuff(unittest.TestCase):
             os.remove(self.cps)
 
 
-
 class BuildWithAntimony(unittest.TestCase):
 
     def setUp(self):
@@ -1363,7 +1384,6 @@ class BuildWithAntimony(unittest.TestCase):
             )
         self.assertTrue(type(mod), pycotools3.model.Model)
         # print pycotools3.viz.PlotTimeCourse(tasks.timecourse(end=100, intervals=100, step_size=1), savefig=True)
-
 
 
 # class FitItemOrderWithConstraingsTests(unittest.TestCase):
@@ -1395,6 +1415,3 @@ class BuildWithAntimony(unittest.TestCase):
 if __name__ == '__main__':
     # pass
     unittest.main()
-
-
-

@@ -148,7 +148,9 @@ LOG=logging.getLogger(__name__)
 
 
 class PlotKwargs(object):
+    """ """
     def plot_kwargs(self):
+        """ """
         plot_kwargs = {
             'linestyle': '-',
             'marker': 'o',
@@ -160,26 +162,47 @@ class PlotKwargs(object):
 
 
 class _Viz(PlotKwargs):
-    """
-    base class for viz
-    """
+    """base class for viz"""
     def context(context='poster', font_scale=3, rc=None):
+        """
+
+        Args:
+          context:  (Default value = 'poster')
+          font_scale:  (Default value = 3)
+          rc:  (Default value = None)
+
+        Returns:
+
+        """
         seaborn.set_context(
             context=context, font_scale=font_scale, rc=rc
         )
 
     @staticmethod
     def save_figure(directory, filename, dpi=300):
+        """
+
+        Args:
+          directory: 
+          filename: 
+          dpi:  (Default value = 300)
+
+        Returns:
+
+        """
         if not os.path.isdir(directory):
             os.mkdir(directory)
         plt.savefig(filename, dpi=dpi, bbox_inches='tight')
 
     def update_properties(self, kwargs):
-        """
-        method for updating properties from kwargs
+        """method for updating properties from kwargs
 
-        :param kwargs: dict of options for subclass
-        :return: void
+        Args:
+          kwargs: dict of options for subclass
+
+        Returns:
+          void
+
         """
         for k in kwargs:
             try:
@@ -190,9 +213,15 @@ class _Viz(PlotKwargs):
 
     @staticmethod
     def parse(cls, log10, copasi_file=None):
-        """
-        Mixin method interface to parse class
+        """Mixin method interface to parse class
         :return:
+
+        Args:
+          log10: 
+          copasi_file:  (Default value = None)
+
+        Returns:
+
         """
         if type(cls) == Parse:
 
@@ -206,8 +235,15 @@ class _Viz(PlotKwargs):
 
     @staticmethod
     def truncate(data, mode, theta):
-        """
-        mixin method interface to truncate data
+        """mixin method interface to truncate data
+
+        Args:
+          data: 
+          mode: 
+          theta: 
+
+        Returns:
+
         """
         df = TruncateData(data,
                             mode=mode,
@@ -216,10 +252,13 @@ class _Viz(PlotKwargs):
 
     @staticmethod
     def create_directory(results_directory):
-        """
-        create directory for results and switch to it
-        :param results_directory:
-        :return:
+        """create directory for results and switch to it
+
+        Args:
+          results_directory: return:
+
+        Returns:
+
         """
         if not os.path.isdir(results_directory):
             os.makedirs(results_directory)
@@ -228,26 +267,31 @@ class _Viz(PlotKwargs):
 
 
 class TruncateData(_Viz):
-    """
-    Parameter estimation data in systems biology usually have runs which fall
+    """Parameter estimation data in systems biology usually have runs which fall
     into a local minima. This class removes these runs from further
     analysis.
-
+    
     See :ref:`truncate-kwargs` for keyword arguments
-
+    
     Examples assuming `df` is a `pandas.DataFrame` retuned from
     the `Parse` class:
-
+    
     Analyze the top 10 percent of parameter fits. Conduct analysis on linear scale.
-
-        >>> data = TruncateData(data, mode=percent, theta=10, log10=False)
-
+    
+    
     Analyze top 10 best parameter sets on a log10 scale
-
-        >>> data = TruncateData(data, mode='ranks', theta=range(10), log10=True)
-
+    
+    
     Analyze parameter sets with a RSS value below 10^3.5 (because log10 is set to True)
 
+    Args:
+
+    Returns:
+
+    >>> data = TruncateData(data, mode=percent, theta=10, log10=False)
+    
+        >>> data = TruncateData(data, mode='ranks', theta=range(10), log10=True)
+    
         >>> data = TruncateData(data, mode='below_x', theta=3.5, log10=True)
     """
 
@@ -276,19 +320,27 @@ class TruncateData(_Viz):
         self.data = self.truncate()
 
     def below_theta(self):
-        """
-        remove data which is not below theta
+        """remove data which is not below theta
         :return:
             :py:class:'pandas.DataFrame`
+
+        Args:
+
+        Returns:
+
         """
         assert self.data.shape[0] != 0, 'There are no data with RSS below {}. Choose a higher number'.format(self.theta)
         return self.data[self.data['RSS'] < self.theta]
 
     def top_theta_percent(self):
-        """
-        Remove data not in top theta percent
+        """Remove data not in top theta percent
         :return:
             :py:class:'pandas.DataFrame`
+
+        Args:
+
+        Returns:
+
         """
         if self.theta > 100 or self.theta < 1:
             raise errors.InputError('{} should be between 0 and 100')
@@ -296,11 +348,15 @@ class TruncateData(_Viz):
         return self.data.iloc[:theta_quantile]
 
     def ranks(self):
-        """
-        Remove data which is not in the top ranks
+        """Remove data which is not in the top ranks
         parameter estimation data
         :return:
             :py:class:'pandas.DataFrame`
+
+        Args:
+
+        Returns:
+
         """
         ## need to reset the index after sorting just in case some of the RSS
         ## values are identical. In this case there is no guarentee that
@@ -309,10 +365,7 @@ class TruncateData(_Viz):
         return self.data.iloc[self.theta]
 
     def truncate(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         if self.mode == 'below_theta':
             return self.below_theta()  # self.data
         elif self.mode == 'percent':
@@ -321,6 +374,7 @@ class TruncateData(_Viz):
             return self.ranks()
 
 class ChiSquaredStatistics(object):
+    """ """
     def __init__(self, rss, dof, num_data_points, alpha,
                  plot_chi2=False, show=False):
         self.alpha = alpha
@@ -339,12 +393,17 @@ class ChiSquaredStatistics(object):
             self.plot_chi2_CL()
 
     def chi2_lookup_table(self, alpha):
-        """
-        Looks at the cdf of a chi2 distribution at incriments of
+        """Looks at the cdf of a chi2 distribution at incriments of
         0.1 between 0 and 100.
-
+        
         Returns the x axis value at which the alpha interval has been crossed,
         i.e. gets the cut off point for chi2 dist with dof and alpha .
+
+        Args:
+          alpha: 
+
+        Returns:
+
         """
         nums = numpy.arange(0, 100, 0.1)
         table = list(zip(nums, scipy.stats.chi2.cdf(nums, self.dof)))
@@ -354,9 +413,7 @@ class ChiSquaredStatistics(object):
         return chi2_df_alpha
 
     def get_chi2_alpha(self):
-        """
-        return the chi2 threshold for cut off point alpha and dof degrees of freedom
-        """
+        """ """
         dct = {}
         alphas = numpy.arange(0, 1, 0.01)
         for i in alphas:
@@ -364,9 +421,7 @@ class ChiSquaredStatistics(object):
         return dct[self.alpha]
 
     def plot_chi2_CL(self):
-        """
-        Visualize where the alpha cut off is on the chi2 distribution
-        """
+        """Visualize where the alpha cut off is on the chi2 distribution"""
         x = numpy.linspace(scipy.stats.chi2.ppf(0.01, self.dof), scipy.stats.chi2.ppf(0.99, self.dof), 100)
 
         plt.figure()
@@ -383,19 +438,15 @@ class ChiSquaredStatistics(object):
             plt.show()
 
     def calc_chi2_CL(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         return self.rss * exponential_function((self.get_chi2_alpha() / self.num_data_points))
 
 ##TODO use cached property
 class Parse(object):
-    """
-    General class for parsing copasi output into Python.
-
+    """General class for parsing copasi output into Python.
+    
     First argument is an instance of a pycotools3 class.
-
+    
     ==================================          ===========================
     instance                                       Description
     ==================================          ===========================
@@ -413,6 +464,11 @@ class Parse(object):
                                                 estimation data into pandas.df. Requires
                                                 the copasi file argument.
     ==================================          ===========================
+
+    Args:
+
+    Returns:
+
     """
     def __init__(self, cls_instance, log10=False, copasi_file=None, alpha=0.95,
                  rss_value=None, num_data_points=None):
@@ -491,11 +547,15 @@ class Parse(object):
         self.data = self.parse()
 
     def parse(self):
-        """
-        determine class type of self.cls_instance
+        """determine class type of self.cls_instance
         and call the appropirate method for
         parsing the data type
         :return:
+
+        Args:
+
+        Returns:
+
         """
         data = None
 
@@ -538,10 +598,14 @@ class Parse(object):
             return data
 
     def from_timecourse(self):
-        """
-        read time course data into pandas dataframe. Remove
+        """read time course data into pandas dataframe. Remove
         copasi generated square brackets around the variables
         :return: pandas.DataFrame
+
+        Args:
+
+        Returns:
+
         """
 
         df = pandas.read_csv(self.cls_instance.report_name, sep='\t')
@@ -557,9 +621,13 @@ class Parse(object):
         return df
 
     def parse_scan(self):
-        """
-        read scan data into pandas Dataframe.
+        """read scan data into pandas Dataframe.
         :return: pandas.DataFrame
+
+        Args:
+
+        Returns:
+
         """
         df = pandas.read_csv(
             self.cls_instance.report_name,
@@ -570,10 +638,14 @@ class Parse(object):
 
     @cached_property
     def from_parameter_estimation(self):
-        """
-        Parse parameter estimation data. Store the data in
+        """Parse parameter estimation data. Store the data in
         a cache.
         :return:
+
+        Args:
+
+        Returns:
+
         """
         try:
             df = pandas.read_csv(self.cls_instance.report_name, sep='\t', header=None)
@@ -600,69 +672,80 @@ class Parse(object):
 
     @staticmethod
     def from_multi_parameter_estimation(cls_instance, folder=None):
-        """
-        Results come without headers - parse the results
+        """Results come without headers - parse the results
         give them the proper headers then overwrite the file again
-        :param cls_instance: instance of MultiParameterEstiamtion
-        :param folder: afternative folder to parse from. Useful for tests
-        :return:
+
+        Args:
+          cls_instance: instance of MultiParameterEstiamtion
+          folder: afternative folder to parse from. Useful for tests (Default value = None)
+
+        Returns:
+
         """
-        ##set default
-        if folder == None:
-            folder = cls_instance.results_directory
-        d = {}
+        dct = {}
+        for model_name in cls_instance.models:
+            mod = cls_instance.models[model_name].model
+            ##set default
+            if folder == None:
+                folder = cls_instance.results_directory[model_name]
+            tmp_dct = {}
+            for report_name in glob.glob(folder+r'/*.txt'):
+                report_name = os.path.abspath(report_name)
+                if os.path.isfile(report_name) != True:
+                    raise errors.FileDoesNotExistError('"{}" does not exist'.format(report_name))
 
-        for report_name in glob.glob(folder+r'/*.txt'):
-            report_name = os.path.abspath(report_name)
-            if os.path.isfile(report_name) != True:
-                raise errors.FileDoesNotExistError('"{}" does not exist'.format(report_name))
+                try:
+                    data = pandas.read_csv(report_name,
+                                           sep='\t', header=None, skiprows=[0])
+                except:
+                    LOG.warning('No Columns to parse from file. {} is empty. Skipping this file'.format(
+                        report_name))
+                    continue
+                try:
+                    bracket_columns = data[data.columns[[0, -2]]]
 
-            try:
-                data = pandas.read_csv(report_name,
-                                       sep='\t', header=None, skiprows=[0])
-            except:
-                LOG.warning('No Columns to parse from file. {} is empty. Skipping this file'.format(
-                    report_name))
-                continue
-            try:
-                bracket_columns = data[data.columns[[0, -2]]]
+                except IndexError:
+                    raise errors.SomethingWentHorriblyWrongError(
+                        'Rare problem with data file : "{}". Check it manually'
+                        ' and remove if it is corrupt'.format(report_name)
+                    )
 
-            except IndexError:
-                raise errors.SomethingWentHorriblyWrongError(
-                    'Rare problem with data file : "{}". Check it manually'
-                    ' and remove if it is corrupt'.format(report_name)
-                )
+                if bracket_columns.iloc[0].iloc[0] != '(':
+                    data = pandas.read_csv(report_name, sep='\t')
+                    tmp_dct[report_name] = data
+                else:
+                    data = data.drop(data.columns[[0, -2]], axis=1)
+                    data.columns = list(range(data.shape[1]))
+                    ### parameter of interest has been removed.
+                    names = mod.fit_item_order+['RSS']
+                    if mod.fit_item_order == []:
+                        raise errors.SomethingWentHorriblyWrongError('Parameter Estimation task is empty')
 
-            if bracket_columns.iloc[0].iloc[0] != '(':
-                data = pandas.read_csv(report_name, sep='\t')
-                d[report_name] = data
-            else:
-                data = data.drop(data.columns[[0, -2]], axis=1)
-                data.columns = list(range(data.shape[1]))
-                ### parameter of interest has been removed.
-                names = cls_instance.model.fit_item_order+['RSS']
-                if cls_instance.model.fit_item_order == []:
-                    raise errors.SomethingWentHorriblyWrongError('Parameter Estimation task is empty')
+                    if len(names) != data.shape[1]:
+                        raise errors.SomethingWentHorriblyWrongError('length of parameter estimation data does not equal number of parameters estimated')
 
-                if len(names) != data.shape[1]:
-                    raise errors.SomethingWentHorriblyWrongError('length of parameter estimation data does not equal number of parameters estimated')
+                    if os.path.isfile(report_name):
+                        os.remove(report_name)
+                    data.columns = names
+                    data.to_csv(report_name, sep='\t', index=False)
+                    tmp_dct[report_name] = data
+            df = pandas.concat(tmp_dct)
+            columns = df.columns
+            ## reindex, drop and sort by RSS
+            df = df.reset_index().drop(['level_0', 'level_1'], axis=1).sort_values(by='RSS')
 
-                if os.path.isfile(report_name):
-                    os.remove(report_name)
-                data.columns = names
-                data.to_csv(report_name, sep='\t', index=False)
-                d[report_name] = data
-        df = pandas.concat(d)
-        columns = df.columns
-        ## reindex, drop and sort by RSS
-        df = df.reset_index().drop(['level_0', 'level_1'], axis=1).sort_values(by='RSS')
-
-        return df.reset_index(drop=True)
-
+            dct[model_name] = df.reset_index(drop=True)
+        return dct
     # @cached_property
     def from_chaser_estimations(self, cls_instance, folder=None):
-        """
-        :return:
+        """:return:
+
+        Args:
+          cls_instance: 
+          folder:  (Default value = None)
+
+        Returns:
+
         """
 
         if folder == None:
@@ -722,9 +805,12 @@ class Parse(object):
 
     def from_folder(self):
         """
-        
-        :param folder: 
-        :return: 
+
+        Args:
+          folder: return:
+
+        Returns:
+
         """
         if self.copasi_file is None:
             raise errors.InputError('To read data from a folder of'
@@ -741,7 +827,7 @@ class Parse(object):
                                     ' not given the copasi file that was used to generate this'
                                     ' parameter estimation data. This is a common error when '
                                     'shifting data to and from a cluster. In this case, set '
-                                    '"run_mode" to False and use the setup method of '
+                                    '"run_mode" to False and use the _setup method of '
                                     'ParameterEstimation, MultiParameterEstimation or '
                                     'MultiModelFit classes. ')
 
@@ -834,21 +920,29 @@ class Parse(object):
         return df.reset_index(drop=True)
 
     def from_profile_likelihood(self):
-        """
-        Parse data from :py:class:`tasks.ProfileLikelihood`
+        """Parse data from :py:class:`tasks.ProfileLikelihood`
         :return:
             :py:class:`pandas.DataFrame`
+
+        Args:
+
+        Returns:
+
         """
         def get_results():
-            """
-            Get results files as dict
+            """Get results files as dict
             :return:
                 2 element `tuple`.
                 First element:
                     dict[model_number][parameter] = path/to/results.csv
-
+            
                 Second element:
                     dict[model_number][parameter] = fit item order for that model
+
+            Args:
+
+            Returns:
+
             """
             results_dirs = {}
             fit_item_order_dirs = {}
@@ -884,17 +978,17 @@ class Parse(object):
             return results_dirs, fit_item_order_dirs
 
         def experiment_files_in_use(mod):
-            """
-            Search the model specified by mod for experiment
+            """Search the model specified by mod for experiment
             files defined in the parameter estimation task
 
-            :param mod:
-                :py:class:`model.Model`. The
-                still configured model that was used
-                to generate parameter estimation data
+            Args:
+              mod: py:class:`model.Model`. The
+            still configured model that was used
+            to generate parameter estimation data
 
-            :return:
-                `list` of experiment files
+            Returns:
+              list` of experiment files
+
             """
             query = '//*[@name="File Name"]'
             l = []
@@ -909,27 +1003,31 @@ class Parse(object):
             return l
 
         def dof(mod):
-            """
-            Return degrees of freedom. This is the
+            """Return degrees of freedom. This is the
             number of estimated parameters minus 1
 
-            :param mod:
-                :py:class:`model.Model`. The
-                still configured model that was used
-                to generate parameter estimation data
+            Args:
+              mod: py:class:`model.Model`. The
+            still configured model that was used
+            to generate parameter estimation data
 
-            :return:
+            Returns:
+
             """
             return len(mod.fit_item_order) - 1
 
         def num_data_points(experiment_files):
-            """
-            number of data points in your data files. Relies on
+            """number of data points in your data files. Relies on
             being able to locate the experiment files from the
             copasi file
-
+            
             :return:
                 `int`.
+
+            Args:
+              experiment_files: 
+
+            Returns:
 
             """
             experimental_data = [pandas.read_csv(i, sep='\t') for i in experiment_files]
@@ -945,16 +1043,20 @@ class Parse(object):
                                         'fresh copy of the model. Try redefining the '
                                         'same parameter estimation problem that you '
                                         'used in the profile likelihood, using the '
-                                        'setup method but not running the '
+                                        '_setup method but not running the '
                                         'parameter estimation before trying again.')
             return s
 
         def confidence_level(cls):
-            """
-            Get confidence level using ChiSquaredStatistics
-
+            """Get confidence level using ChiSquaredStatistics
+            
             :return:
                 dict[index][confidence_level]
+
+            Args:
+
+            Returns:
+
             """
             CL_dct = {}
             if cls.index == 'current_parameters':
@@ -971,21 +1073,19 @@ class Parse(object):
             return CL_dct
 
         def parse_data(results_dict, fit_item_order_dict):
-            """
-            Parse data from profile likelihood analysis
+            """Parse data from profile likelihood analysis
             into :py:class`pandas.DataFrame`
 
-            :param results_dict:
-                dict[model][param] = path/to/csv.
-                First element of output from get_results
+            Args:
+              results_dict: dict[model][param] = path/to/csv.
+            First element of output from get_results
+              fit_item_order_dict: dict[model][param] = model.fit_item_order.
+            second element from output of get_results
 
-            :param fit_item_order_dict:
-                dict[model][param] = model.fit_item_order.
-                second element from output of get_results
+            Returns:
+              py:class:`pandas.DataFrame`. Results in
+              formatted pandas Dataframe
 
-            :return:
-                :py:class:`pandas.DataFrame`. Results in
-                formatted pandas Dataframe
             """
             res = {}
             df_list = []
@@ -1060,11 +1160,10 @@ class Parse(object):
 
 
 class PlotTimeCourse(_Viz):
-    """
-    Plot time course data
-
+    """Plot time course data
+    
     Time course kwargs:
-
+    
     ================    ======================================
     kwarg               Description
     ================    ======================================
@@ -1078,6 +1177,11 @@ class PlotTimeCourse(_Viz):
                         different axes. Default: True
     **kwargs            See :ref:`kwargs` for more options
     ================    ======================================
+
+    Args:
+
+    Returns:
+
     """
     def __init__(self, cls, **kwargs):
         """
@@ -1144,10 +1248,7 @@ class PlotTimeCourse(_Viz):
         )
 
     def _do_checks(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         if not isinstance(self.cls, tasks.TimeCourse):
             raise errors.InputError(
                 'PlotTimeCourse class expects an instance of'
@@ -1189,10 +1290,7 @@ class PlotTimeCourse(_Viz):
             LOG.warning('filename is None. Setting default filename to {}'.format(self.filename))
 
     def plot(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         if self.y == None:
             self.y = [i.name for i in self.cls.model.metabolites]
             self.y = [i for i in self.y if i.lower() != 'time']
@@ -1263,24 +1361,23 @@ class PlotTimeCourse(_Viz):
 
 
 class PlotTimeCourseEnsemble(_Viz):
-    """
-    Plot a time course ensemble from a model and
+    """Plot a time course ensemble from a model and
     parameter ensemble. If `cls` argument is a
     MultiParameterEstimation instance then the results
     and copasi file are automatically extracted. If cls
     is a string, then it must point to a folder of parameter
     estimation data and a copasi file must be specified.
-
+    
     One by one the parameter sets are inserted into the copasi
     model and a time course is simulated. The data is aggregated
     using a :py:class:`seaborn.tsplot` using a statistic of
     the users choice (default is :py:meth:`numpy.mean`). Confidence
     intervals are estimated using a bootstrapping method which is
     built-in to :py:class:`seaborn.tsplot`
-
-
+    
+    
     kwargs
-
+    
     ================    ==========================================================
     kwarg               Description
     ================    ==========================================================
@@ -1320,16 +1417,21 @@ class PlotTimeCourseEnsemble(_Viz):
                         parameter estimation in order to extract parameter headers
     **kwargs            see :ref:`kwargs` for savefig options
     ================    ==========================================================
-
-
+    
+    
     #todo
     =====
     Currently initial values are used as starting conditions but in some situations
     like when independent variables are used to set starting parameters for an experiment
     this is not being captured in the ensemble time course.
-
+    
     Therefore, modify to follow directions in data files from independent data. Also run
-    multiple times if you have multiple experiments measuring the same varibale.
+    multiple times if you have multiple _experiments measuring the same varibale.
+
+    Args:
+
+    Returns:
+
     """
 
     def __init__(self, cls, **kwargs):
@@ -1424,9 +1526,13 @@ class PlotTimeCourseEnsemble(_Viz):
         self.plot_per_observable()
 
     def create_directory(self):
-        """
-        create a directory for the results
+        """create a directory for the results
         :return:
+
+        Args:
+
+        Returns:
+
         """
         if self.results_directory is None:
             if type(self.cls) == Parse:
@@ -1441,10 +1547,7 @@ class PlotTimeCourseEnsemble(_Viz):
         return self.results_directory
 
     def _do_checks(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         if type(self.cls) == Parse:
             if self.experiment_files is None:
                 raise errors.InputError('If parsing estimation data from '
@@ -1463,10 +1566,7 @@ class PlotTimeCourseEnsemble(_Viz):
 
     @property
     def parse_experimental_files(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         df_dct = OrderedDict()
         if type(self.cls) == Parse:
             exp_files = self.experiment_files
@@ -1508,6 +1608,7 @@ class PlotTimeCourseEnsemble(_Viz):
 
     @property
     def get_experiment_times(self):
+        """ """
         d = OrderedDict()
         time_marker = False
         for i in sorted(self.experimental_data):
@@ -1535,9 +1636,13 @@ class PlotTimeCourseEnsemble(_Viz):
         return times
 
     def collect_independent_vars(self):
-        """
-        If experiment file has independant vars (_indep) defined, go and get them
+        """If experiment file has independant vars (_indep) defined, go and get them
         :return:
+
+        Args:
+
+        Returns:
+
         """
         d = OrderedDict()
         for i in sorted(self.experimental_data):
@@ -1555,9 +1660,7 @@ class PlotTimeCourseEnsemble(_Viz):
         return d
 
     def simulate_ensemble(self):
-        """
-
-        """
+        """ """
         ## collect end times for each experiment
         ##in order to find the biggest
         end_times = []
@@ -1597,8 +1700,12 @@ class PlotTimeCourseEnsemble(_Viz):
     @property
     def observables(self):
         """
-        return list of observables
-        :return:
+
+        Args:
+
+        Returns:
+          :return:
+
         """
         obs = []
         for i in self.experimental_data:
@@ -1607,10 +1714,14 @@ class PlotTimeCourseEnsemble(_Viz):
 
 
     def plot_per_observable(self):
-        """
-        Plot observables with experiments on same graph.
+        """Plot observables with _experiments on same graph.
         i.e. variable x in treated and control conditions
         will be plotted together.
+
+        Args:
+
+        Returns:
+
         """
         if self.y == None:
             self.y = [i for i in list(self.observables) if i in list(self.ensemble_data.keys())]
@@ -1729,9 +1840,7 @@ class PlotTimeCourseEnsemble(_Viz):
 
 
 class PlotScan(_Viz):
-    """
-    TODO: Create visualization facilities for parameter scans.
-    """
+    """TODO: Create visualization facilities for parameter scans."""
     def __init__(self, cls, **kwargs):
         self.cls = cls
         self.kwargs = kwargs
@@ -1780,13 +1889,12 @@ class PlotScan(_Viz):
         )
 
 class PlotParameterEstimation(_Viz, PlotKwargs):
-    """
-    Visualize parameter estimation runs against a single
+    """Visualize parameter estimation runs against a single
     parameter estimation. Similar to PlotTimeCourseEnsemble
     but for a single parameter estimation run.
-
-
-
+    
+    
+    
     =========================================       =========================================
     kwarg                                           Description
     =========================================       =========================================
@@ -1794,6 +1902,10 @@ class PlotParameterEstimation(_Viz, PlotKwargs):
                                                     on y axis. Defaults to all estimated parameters.
     **savefig_kwargs                                see savefig_kwargs for savefig options
     =========================================       =========================================
+
+    Args:
+
+    Returns:
 
     """
     def __init__(self, cls, **kwargs):
@@ -1858,6 +1970,7 @@ class PlotParameterEstimation(_Viz, PlotKwargs):
         )
 
     def _do_checks(self):
+        """ """
 
 
         if not isinstance(self.cls, tasks.ParameterEstimation):
@@ -1870,19 +1983,26 @@ class PlotParameterEstimation(_Viz, PlotKwargs):
             self.y = [self.y]
 
     def update_parameters(self):
-        """
-        Use the InsertParameters class to insert estimated
-        parameters into the model
-        :return: Model
+        """Use the InsertParameters class to insert estimated
+
+        Args:
+          return: Model
+
+        Returns:
+
         """
         I = model.InsertParameters(self.cls.model, df=self.data)
         return I.model
 
     def create_directories(self):
-        """
-        create a directory in project root called result_directory
-        create subfolders with name of experiments
+        """create a directory in project root called result_directory
+        create subfolders with name of _experiments
         :return: dict
+
+        Args:
+
+        Returns:
+
         """
         directories = {}
         for fle in self.cls.experiment_files:
@@ -1893,11 +2013,15 @@ class PlotParameterEstimation(_Viz, PlotKwargs):
         return directories
 
     def read_experimental_data(self):
-        """
-        read the experimental data in order to figure
+        """read the experimental data in order to figure
         out how long a time course we need to simulate
         with the new parameters
         :return:
+
+        Args:
+
+        Returns:
+
         """
         dct = {}
         for i in self.cls.experiment_files:
@@ -1905,9 +2029,13 @@ class PlotParameterEstimation(_Viz, PlotKwargs):
         return dct
 
     def get_time(self):
-        """
-        get dict of experiments and max time
+        """get dict of _experiments and max time
         :return:
+
+        Args:
+
+        Returns:
+
         """
         dct = {}
 
@@ -1916,10 +2044,14 @@ class PlotParameterEstimation(_Viz, PlotKwargs):
         return dct
 
     def simulate_time_course(self):
-        """
-        simulate a timecourse for each experiment
+        """simulate a timecourse for each experiment
         which may have different simulation lengths
         :return:
+
+        Args:
+
+        Returns:
+
         """
         time_dct = self.get_time()
         d = {}
@@ -1943,9 +2075,13 @@ class PlotParameterEstimation(_Viz, PlotKwargs):
         return d
 
     def plot(self):
-        """
-        plot experimental data versus best parameter sets
+        """plot experimental data versus best parameter sets
         :return:
+
+        Args:
+
+        Returns:
+
         """
         ## filter out y values which are not in the data file
         newy = []
@@ -1995,9 +2131,8 @@ class PlotParameterEstimation(_Viz, PlotKwargs):
 
 
 class Boxplots(_Viz, PlotKwargs):
-    """
-    Plot a boxplot for multi parameter estimation data.
-
+    """Plot a boxplot for multi parameter estimation data.
+    
     ============    =================================================
     kwarg           Description
     ============    =================================================
@@ -2005,6 +2140,11 @@ class Boxplots(_Viz, PlotKwargs):
                     fills up another plot.
     **kwargs        see :ref:`kwargs`  options
     ============    =================================================
+
+    Args:
+
+    Returns:
+
     """
     def __init__(self, cls, **kwargs):
         """
@@ -2058,13 +2198,11 @@ class Boxplots(_Viz, PlotKwargs):
         self.plot()
 
     def _do_checks(self):
+        """ """
         pass
 
     def create_directory(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         if self.results_directory is None:
             if type(self.cls) == Parse:
                 self.results_directory = os.path.join(os.path.dirname(
@@ -2076,9 +2214,13 @@ class Boxplots(_Viz, PlotKwargs):
         return self.results_directory
 
     def plot(self):
-        """
-        Plot multiple parameter estimation data as boxplot
+        """Plot multiple parameter estimation data as boxplot
         :return:
+
+        Args:
+
+        Returns:
+
         """
 
         labels = self.divide_data()
@@ -2101,9 +2243,13 @@ class Boxplots(_Viz, PlotKwargs):
             plt.show()
 
     def divide_data(self):
-        """
-        split data into multi plot
+        """split data into multi plot
         :return:
+
+        Args:
+
+        Returns:
+
         """
         n_vars = len(list(self.data.keys()))
         n_per_plot = self.num_per_plot
@@ -2120,11 +2266,14 @@ class Boxplots(_Viz, PlotKwargs):
 
 
 class LikelihoodRanks(_Viz, PlotKwargs):
-    """
-
-    Plot the ordered residual sum of squares (RSS) objective
+    """Plot the ordered residual sum of squares (RSS) objective
     function value against the RSS's rank of best fit.
     See :ref:`kwargs` for list of keyword arguments.
+
+    Args:
+
+    Returns:
+
     """
 
     def __init__(self, cls, **kwargs):
@@ -2183,10 +2332,7 @@ class LikelihoodRanks(_Viz, PlotKwargs):
         self.fig = self.plot()
 
     def _do_checks(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         if self.log10:
             self.ylabel = 'log$_{10}$ RSS'
             self.xlabel = 'log$_{10}$ Rank of Best Fit'
@@ -2198,9 +2344,13 @@ class LikelihoodRanks(_Viz, PlotKwargs):
 
 
     def create_directory(self):
-        """
-        create a directory for the results
+        """create a directory for the results
         :return:
+
+        Args:
+
+        Returns:
+
         """
         if self.results_directory is None:
             if type(self.cls) == Parse:
@@ -2215,10 +2365,14 @@ class LikelihoodRanks(_Viz, PlotKwargs):
         return self.results_directory
 
     def plot(self):
-        """
-        Plot Rss Vs rank of best fit
+        """Plot Rss Vs rank of best fit
         :return:
             None
+
+        Args:
+
+        Returns:
+
         """
             
         fig = plt.figure()
@@ -2258,11 +2412,10 @@ class LikelihoodRanks(_Viz, PlotKwargs):
 
 
 class Pca(_Viz, PlotKwargs):
-    """
-    Use the :py:class:`PCA` function to conduct
+    """Use the :py:class:`PCA` function to conduct
     a principle component analysis on the parameter
     estimation data.
-
+    
     ===================   ====================
     kwargs                Description
     ===================   ====================
@@ -2278,6 +2431,11 @@ class Pca(_Viz, PlotKwargs):
     annotation_fontsize   `int` or `float`. fontsize for annotation
     **kwargs              See :ref:`kwargs for more options
     ===================   ====================
+
+    Args:
+
+    Returns:
+
     """
 
     def __init__(self, cls, **kwargs):
@@ -2328,9 +2486,13 @@ class Pca(_Viz, PlotKwargs):
 
 
     def create_directory(self):
-        """
-        create a directory for the results
+        """create a directory for the results
         :return:
+
+        Args:
+
+        Returns:
+
         """
         if self.results_directory is None:
             if type(self.cls) == Parse:
@@ -2345,9 +2507,13 @@ class Pca(_Viz, PlotKwargs):
         return self.results_directory
 
     def _do_checks(self):
-        """
-        varify integrity of user input
+        """varify integrity of user input
         :return:
+
+        Args:
+
+        Returns:
+
         """
         # if self.title is None:
         #     if self.by is 'parameters':
@@ -2394,6 +2560,7 @@ class Pca(_Viz, PlotKwargs):
             self.legend_position = (1, 1, 0.5) ##horizontal, verticle, linespacing
 
     def pca(self):
+        """ """
         pca = PCA(n_components=self.n_components)
         rss = self.data.RSS
         self.data = self.data.drop('RSS',axis=1)
@@ -2440,10 +2607,14 @@ class Pca(_Viz, PlotKwargs):
             plt.show()
 
 class Histograms(_Viz, PlotKwargs):
-    """
-    Plot a Histograms for multi parameter estimation data.
-
+    """Plot a Histograms for multi parameter estimation data.
+    
     See :ref:`kwargs` for more options.
+
+    Args:
+
+    Returns:
+
     """
 
     def __init__(self, cls, **kwargs):
@@ -2503,10 +2674,7 @@ class Histograms(_Viz, PlotKwargs):
 
 
     def _do_checks(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         if self.results_directory is None:
             if type(self.cls) == Parse:
                 self.results_directory = os.path.join(os.path.dirname(self.cls.copasi_file), 'Histograms')
@@ -2515,9 +2683,7 @@ class Histograms(_Viz, PlotKwargs):
 
 
     def plot(self):
-        """
-        
-        """
+        """ """
         for parameter in list(self.data.keys()):
             fig = plt.figure()
             seaborn.distplot(
@@ -2546,10 +2712,7 @@ class Histograms(_Viz, PlotKwargs):
                 LOG.info('plot save to "{}"'.format(fname))
 
     def coloured_plot(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         # for parameter in self.data.keys():
         raise NotImplementedError('this is an attempt to colour bars '
                                   'of histogram by RSS but the code does not '
@@ -2595,12 +2758,11 @@ class Histograms(_Viz, PlotKwargs):
 
 
 class Scatters(_Viz, PlotKwargs):
-    """
-    Plot scatter graphs. When 'x' and 'y' are lists, 2 way
+    """Plot scatter graphs. When 'x' and 'y' are lists, 2 way
     combinations are automatically plotted and organized into
     folders (when ``savefig=True``). Data is automatically
     coloured by RSS.
-
+    
     ========        =================================================
     kwarg           Description
     ========        =================================================
@@ -2612,6 +2774,11 @@ class Scatters(_Viz, PlotKwargs):
     colorbar_pad    Default=0.2. Distance of color bar from plot.
     **kwargs        see :ref:`kwargs` for more options
     ========        =================================================
+
+    Args:
+
+    Returns:
+
     """
 
     def __init__(self, cls, **kwargs):
@@ -2668,10 +2835,7 @@ class Scatters(_Viz, PlotKwargs):
         self.plot()
 
     def _do_checks(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         if isinstance(self.x, str):
             self.x = [self.x]
 
@@ -2681,10 +2845,7 @@ class Scatters(_Viz, PlotKwargs):
 
 
     def plot(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         if self.y is None:
             self.y = list(self.data.keys())
 
@@ -2745,22 +2906,25 @@ class Scatters(_Viz, PlotKwargs):
             plt.show()
 
 class LinearRegression(_Viz, PlotKwargs):
-    """
-    Perform multiple linear regression using
+    """Perform multiple linear regression using
     :py:module:`sklearn.linear_model`.
-
+    
     ========    =================================================
     kwarg       Description
     ========    =================================================
     lin_model   `func`. default=LassoCV. Any linear model supported
                 by :py:module:`sklearn.linear_model`. see `here`
-
+    
                 .. _here: http://scikit-learn.org/stable/modules/linear_model.html
-
+    
     n_alphas    `int` number of alphas
     max_iter    `int`. Number of iterations.
     **kwargs    see :ref:`kwargs` for more options
     ========    =================================================
+
+    Args:
+
+    Returns:
 
     """
 
@@ -2822,10 +2986,7 @@ class LinearRegression(_Viz, PlotKwargs):
         self.plot_coef()
 
     def _do_checks(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         if self.results_directory is None:
             self.results_directory = os.path.join(self.cls.model.root, 'LinearRegression')
 
@@ -2847,9 +3008,14 @@ class LinearRegression(_Viz, PlotKwargs):
 
 
     def compute1coef(self, parameter):
-        """
-        Compute coefficients for a single parameter
+        """Compute coefficients for a single parameter
         using self['lin_model'] from sklearn
+
+        Args:
+          parameter: 
+
+        Returns:
+
         """
         y = numpy.array(self.data[parameter])
         X = self.data.drop(parameter, axis=1)
@@ -2871,6 +3037,7 @@ class LinearRegression(_Viz, PlotKwargs):
         return scores, df
 
     def compute_coefficients(self):
+        """ """
         parameters = list(self.data.columns)
         df_dct = {}
         score_dct={}
@@ -2883,9 +3050,7 @@ class LinearRegression(_Viz, PlotKwargs):
         return df1, df2
 
     def plot_scores(self):
-        """
-
-        """
+        """ """
         fig = plt.figure()
         seaborn.heatmap(self.scores)
         if self.despine:
@@ -2899,6 +3064,7 @@ class LinearRegression(_Viz, PlotKwargs):
 
 
     def plot_rss(self):
+        """ """
         fig = plt.figure()
         seaborn.heatmap(self.coef.RSS.sort_values(by='RSS', ascending=False))
         plt.title('Lasso Regression \n(Y=RSS) (n={})'.format(self.data.shape[0]), fontsize=self.title_fontsize)
@@ -2911,10 +3077,7 @@ class LinearRegression(_Viz, PlotKwargs):
 
 
     def plot_coef(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         self.coef.columns = self.coef.columns.droplevel(0)
         self.coef = self.coef.drop('RSS', axis=1)
         self.coef = self.coef.drop('RSS', axis=0)
@@ -2932,11 +3095,15 @@ class LinearRegression(_Viz, PlotKwargs):
 
 
 class ModelSelectionOld(_Viz):
-    """
-    Calculate model selection criteria AIC (corrected) and
+    """Calculate model selection criteria AIC (corrected) and
     BIC for a selection of models that have undergone fitting
     using the :py:class:`tasks.MultiModelFit` class. Plot as
     boxplots and histograms.
+
+    Args:
+
+    Returns:
+
     """
 
     def __init__(self, multi_model_fit, **kwargs):
@@ -3047,19 +3214,19 @@ class ModelSelectionOld(_Viz):
         del self.multi_model_fit[key]
 
     def keys(self):
+        """ """
         return list(self.multi_model_fit.keys())
 
     def values(self):
+        """ """
         return list(self.multi_model_fit.values())
 
     def items(self):
+        """ """
         return list(self.multi_model_fit.items())
 
     def _do_checks(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         if self.results_directory is None:
             self.results_directory = self.multi_model_fit.project_dir
 
@@ -3069,27 +3236,56 @@ class ModelSelectionOld(_Viz):
             self.filename = os.path.join(save_dir, 'ModelSelectionCriteria.csv')
 
     def _get_results_directories(self):
-        '''
-        Find the results directories embedded within MultimodelFit
+        """Find the results directories embedded within MultimodelFit
         and RunMutliplePEs.
-        '''
+
+        Args:
+
+        Returns:
+
+        """
         return self.multi_model_fit.results_folder_dct
 
     def get_num_models(self):
+        """ """
         return len(self.multi_model_fit.cps_files)
 
     def to_excel(self, filename=None):
+        """
+
+        Args:
+          filename:  (Default value = None)
+
+        Returns:
+
+        """
         if filename is None:
             filename = self.filename[:-4]+'.xlsx'
         self.model_selection_data.to_excel(filename)
 
     def to_csv(self, filename=None):
+        """
+
+        Args:
+          filename:  (Default value = None)
+
+        Returns:
+
+        """
         if filename is None:
             filename = self.filename
         LOG.info('model selection data saved to {}'.format(filename))
         self.model_selection_data.to_csv(filename)
 
     def to_pickle(self, filename=None):
+        """
+
+        Args:
+          filename:  (Default value = None)
+
+        Returns:
+
+        """
         if filename is None:
             filename = os.path.splitext(self.filename)[0]+'.pickle'
 
@@ -3097,10 +3293,14 @@ class ModelSelectionOld(_Viz):
         self.model_selection_data.to_pickle(filename)
 
     def _get_model_dct(self):
-        """
-        Get a model dct. The model must be a configured model
+        """Get a model dct. The model must be a configured model
         (i.e. not the original and with a number after it)
         :return:
+
+        Args:
+
+        Returns:
+
         """
         dct = {}
         for MPE in self.multi_model_fit:
@@ -3115,6 +3315,7 @@ class ModelSelectionOld(_Viz):
         return dct
 
     def _parse_data(self):
+        """ """
         if self.pickle is not None:
             #     self.pickle = os.path.splitext(self.filename)[0]+'.pickle'
             return pandas.read_pickle(self.pickle)
@@ -3126,15 +3327,14 @@ class ModelSelectionOld(_Viz):
             return dct
 
     def _get_number_estimated_model_parameters(self):
+        """ """
         k_dct={}
         for mod in list(self.model_dct.values()):
             k_dct[mod.copasi_file] = len(mod.fit_item_order)
         return k_dct
 
     def _get_n(self):
-        '''
-        get number of observed data points for AIC calculation
-        '''
+        """get number of observed data points for AIC calculation"""
         n={}
         for exp in self.multi_model_fit.exp_files:
             data=pandas.read_csv(exp,sep='\t')
@@ -3148,43 +3348,61 @@ class ModelSelectionOld(_Viz):
         return n
 
     def calculate1AIC(self,RSS,K,n):
-        """
-        Calculate the corrected AIC:
-
+        """Calculate the corrected AIC:
+        
             AICc = -2*ln(RSS/n) + 2*K + (2*K*(K+1))/(n-K-1)
-
+        
             or if likelihood function used instead of RSS
-
+        
             AICc = -2*ln(likelihood) + 2*K + (2*K*(K+1))/(n-K-1)
-
+        
         Where:
             RSS:
                 Residual sum of squares for model fit
             n:
                 Number of observations collectively in all data files
-
+        
             K:
                 Number of model parameters
+
+        Args:
+          RSS: 
+          K: 
+          n: 
+
+        Returns:
+
         """
         return n*numpy.log((RSS/n)) + 2*K + (2*K*(K+1))/(n-K-1)
 
 
     def calculate1BIC(self,RSS,K,n):
-        '''
-        Calculate the bayesian information criteria
+        """Calculate the bayesian information criteria
             BIC = -2*ln(likelihood) + k*ln(n)
-
+        
                 Does this then go to:
-
+        
             BIC = -2*ln(RSS/n) + k*ln(n)
-        '''
+
+        Args:
+          RSS: 
+          K: 
+          n: 
+
+        Returns:
+
+        """
         return  (n*numpy.log(RSS/n) ) + K*numpy.log(n)
 
     def calculate_model_selection_criteria(self):
-        """
-        Calculate AIC corrected and BIC
+        """Calculate AIC corrected and BIC
         :return:
             pandas.DataFrame
+
+        Args:
+
+        Returns:
+
         """
         df_dct = {}
         for model_num in range(len(self.model_dct)):
@@ -3212,10 +3430,7 @@ class ModelSelectionOld(_Viz):
         return df
 
     def boxplot(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         seaborn.set_context(context='poster')
         data = self.model_selection_data
 
@@ -3246,10 +3461,7 @@ class ModelSelectionOld(_Viz):
 
 
     def histogram(self):
-        """
-
-        :return:
-        """
+        """:return:"""
 
 
         seaborn.set_context(context='poster')
@@ -3296,6 +3508,7 @@ class ModelSelectionOld(_Viz):
                 plt.show()
 
     def violin(self):
+        """ """
         seaborn.set_context(context='poster')
         data = self.model_selection_data
 
@@ -3331,13 +3544,18 @@ class ModelSelectionOld(_Viz):
                 LOG.info('Violin plot saved to : "{}"'.format(fname))
 
     def chi2_lookup_table(self, alpha):
-        '''
-        Looks at the cdf of a chi2 distribution at incriments of
+        """Looks at the cdf of a chi2 distribution at incriments of
         0.1 between 0 and 100.
-
+        
         Returns the x axis value at which the alpha interval has been crossed,
         i.e. gets the cut off point for chi2 dist with DOF and alpha .
-        '''
+
+        Args:
+          alpha: 
+
+        Returns:
+
+        """
         nums = numpy.arange(0,100,0.1)
         table=list(zip(nums, scipy.stats.chi2.cdf(nums,self.kwargs.get('DOF')) ))
         for i in table:
@@ -3346,9 +3564,7 @@ class ModelSelectionOld(_Viz):
         return chi2_df_alpha
 
     def get_chi2_alpha(self):
-        '''
-        return the chi2 threshold for cut off point alpha and DOF degrees of freedom
-        '''
+        """ """
         dct={}
         alphas=numpy.arange(0,1,0.01)
         for i in alphas:
@@ -3356,9 +3572,7 @@ class ModelSelectionOld(_Viz):
         return dct[0.05]
 
     def compare_sim_vs_exp(self):
-        '''
-
-        '''
+        """ """
         LOG.info('Visually comparing simulated Versus Experiemntal data.')
 
         for cps, res in list(self.multi_model_fit.results_folder_dct.items()):
@@ -3374,9 +3588,14 @@ class ModelSelectionOld(_Viz):
 
 
     def get_best_parameters(self,filename=None):
-        '''
+        """
 
-        '''
+        Args:
+          filename:  (Default value = None)
+
+        Returns:
+
+        """
         df=pandas.DataFrame()
         for cps, res in list(self.multi_model_fit.results_folder_dct.items()):
             df[os.path.split(cps)[1]]= ParsePEData(res).data.iloc[0]
@@ -3390,14 +3609,19 @@ class ModelSelectionOld(_Viz):
 
 
     def compare_model_parameters(self,parameter_list,filename=None):
-        '''
-        Compare all the parameters accross multiple models
+        """Compare all the parameters accross multiple models
         in a bar chart averaging and STD for a parameter accross
         all models.
-
+        
         May have a problem with different models have different
-        parameters as they are not directly comparible
-        '''
+
+        Args:
+          parameter_list: 
+          filename:  (Default value = None)
+
+        Returns:
+
+        """
         best_parameters=self.get_best_parameters()
         data= best_parameters.loc[parameter_list].transpose()
         f=seaborn.barplot(data=numpy.log10(data))
@@ -3410,11 +3634,15 @@ class ModelSelectionOld(_Viz):
 
 
 class ModelSelection(_Viz):
-    """
-    Calculate model selection criteria AIC (corrected) and
+    """Calculate model selection criteria AIC (corrected) and
     BIC for a selection of models that have undergone fitting
     using the :py:class:`tasks.MultiModelFit` class. Plot as
     boxplots and histograms.
+
+    Args:
+
+    Returns:
+
     """
 
     def __init__(self, multi_model_fit, **kwargs):
@@ -3513,19 +3741,19 @@ class ModelSelection(_Viz):
         del self.multi_model_fit[key]
 
     def keys(self):
+        """ """
         return list(self.multi_model_fit.keys())
 
     def values(self):
+        """ """
         return list(self.multi_model_fit.values())
 
     def items(self):
+        """ """
         return list(self.multi_model_fit.items())
 
     def _do_checks(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         if self.results_directory is None:
             self.results_directory = self.multi_model_fit.project_dir
 
@@ -3535,27 +3763,56 @@ class ModelSelection(_Viz):
             self.filename = os.path.join(save_dir, 'ModelSelectionCriteria.csv')
 
     def _get_results_directories(self):
-        '''
-        Find the results directories embedded within MultimodelFit
+        """Find the results directories embedded within MultimodelFit
         and RunMutliplePEs.
-        '''
+
+        Args:
+
+        Returns:
+
+        """
         return self.multi_model_fit.results_folder_dct
 
     def get_num_models(self):
+        """ """
         return len(self.multi_model_fit.cps_files)
 
     def to_excel(self, filename=None):
+        """
+
+        Args:
+          filename:  (Default value = None)
+
+        Returns:
+
+        """
         if filename is None:
             filename = self.filename[:-4]+'.xlsx'
         self.model_selection_data.to_excel(filename)
 
     def to_csv(self, filename=None):
+        """
+
+        Args:
+          filename:  (Default value = None)
+
+        Returns:
+
+        """
         if filename is None:
             filename = self.filename
         LOG.info('model selection data saved to {}'.format(filename))
         self.model_selection_data.to_csv(filename)
 
     def to_pickle(self, filename=None):
+        """
+
+        Args:
+          filename:  (Default value = None)
+
+        Returns:
+
+        """
         if filename is None:
             filename = os.path.splitext(self.filename)[0]+'.pickle'
 
@@ -3563,10 +3820,14 @@ class ModelSelection(_Viz):
         self.model_selection_data.to_pickle(filename)
 
     def _get_model_dct(self):
-        """
-        Get a model dct. The model must be a configured model
+        """Get a model dct. The model must be a configured model
         (i.e. not the original and with a number after it)
         :return:
+
+        Args:
+
+        Returns:
+
         """
         dct = {}
         for MPE in self.multi_model_fit:
@@ -3581,6 +3842,7 @@ class ModelSelection(_Viz):
         return dct
 
     def _parse_data(self):
+        """ """
         if self.pickle is not None:
             #     self.pickle = os.path.splitext(self.filename)[0]+'.pickle'
             return pandas.read_pickle(self.pickle)
@@ -3592,15 +3854,14 @@ class ModelSelection(_Viz):
             return dct
 
     def _get_number_estimated_model_parameters(self):
+        """ """
         k_dct={}
         for mod in list(self.model_dct.values()):
             k_dct[mod.copasi_file] = len(mod.fit_item_order)
         return k_dct
 
     def _get_n(self):
-        '''
-        get number of observed data points for AIC calculation
-        '''
+        """get number of observed data points for AIC calculation"""
         n={}
         for exp in self.multi_model_fit.exp_files:
             data=pandas.read_csv(exp,sep='\t')
@@ -3614,43 +3875,61 @@ class ModelSelection(_Viz):
         return n
 
     def calculate1AIC(self,RSS,K,n):
-        """
-        Calculate the corrected AIC:
-
+        """Calculate the corrected AIC:
+        
             AICc = -2*ln(RSS/n) + 2*K + (2*K*(K+1))/(n-K-1)
-
+        
             or if likelihood function used instead of RSS
-
+        
             AICc = -2*ln(likelihood) + 2*K + (2*K*(K+1))/(n-K-1)
-
+        
         Where:
             RSS:
                 Residual sum of squares for model fit
             n:
                 Number of observations collectively in all data files
-
+        
             K:
                 Number of model parameters
+
+        Args:
+          RSS: 
+          K: 
+          n: 
+
+        Returns:
+
         """
         return n*numpy.log((RSS/n)) + 2*K + (2*K*(K+1))/(n-K-1)
 
 
     def calculate1BIC(self,RSS,K,n):
-        '''
-        Calculate the bayesian information criteria
+        """Calculate the bayesian information criteria
             BIC = -2*ln(likelihood) + k*ln(n)
-
+        
                 Does this then go to:
-
+        
             BIC = -2*ln(RSS/n) + k*ln(n)
-        '''
+
+        Args:
+          RSS: 
+          K: 
+          n: 
+
+        Returns:
+
+        """
         return  (n*numpy.log(RSS/n) ) + K*numpy.log(n)
 
     def calculate_model_selection_criteria(self):
-        """
-        Calculate AIC corrected and BIC
+        """Calculate AIC corrected and BIC
         :return:
             pandas.DataFrame
+
+        Args:
+
+        Returns:
+
         """
         df_dct = {}
         for model_num in range(len(self.model_dct)):
@@ -3679,6 +3958,7 @@ class ModelSelection(_Viz):
         return df
 
     def violin(self):
+        """ """
         # seaborn.set_context(context='poster')
         data = self.model_selection_data
 
@@ -3728,13 +4008,18 @@ class ModelSelection(_Viz):
         return figs
 
     def chi2_lookup_table(self, alpha):
-        '''
-        Looks at the cdf of a chi2 distribution at incriments of
+        """Looks at the cdf of a chi2 distribution at incriments of
         0.1 between 0 and 100.
-
+        
         Returns the x axis value at which the alpha interval has been crossed,
         i.e. gets the cut off point for chi2 dist with DOF and alpha .
-        '''
+
+        Args:
+          alpha: 
+
+        Returns:
+
+        """
         nums = numpy.arange(0,100,0.1)
         table=list(zip(nums, scipy.stats.chi2.cdf(nums,self.kwargs.get('DOF')) ))
         for i in table:
@@ -3743,9 +4028,7 @@ class ModelSelection(_Viz):
         return chi2_df_alpha
 
     def get_chi2_alpha(self):
-        '''
-        return the chi2 threshold for cut off point alpha and DOF degrees of freedom
-        '''
+        """ """
         dct={}
         alphas=numpy.arange(0,1,0.01)
         for i in alphas:
@@ -3753,9 +4036,7 @@ class ModelSelection(_Viz):
         return dct[0.05]
 
     def compare_sim_vs_exp(self):
-        '''
-
-        '''
+        """ """
         LOG.info('Visually comparing simulated Versus Experiemntal data.')
 
         for cps, res in list(self.multi_model_fit.results_folder_dct.items()):
@@ -3771,9 +4052,14 @@ class ModelSelection(_Viz):
 
 
     def get_best_parameters(self,filename=None):
-        '''
+        """
 
-        '''
+        Args:
+          filename:  (Default value = None)
+
+        Returns:
+
+        """
         df=pandas.DataFrame()
         for cps, res in list(self.multi_model_fit.results_folder_dct.items()):
             df[os.path.split(cps)[1]]= ParsePEData(res).data.iloc[0]
@@ -3787,14 +4073,19 @@ class ModelSelection(_Viz):
 
 
     def compare_model_parameters(self,parameter_list,filename=None):
-        '''
-        Compare all the parameters accross multiple models
+        """Compare all the parameters accross multiple models
         in a bar chart averaging and STD for a parameter accross
         all models.
-
+        
         May have a problem with different models have different
-        parameters as they are not directly comparible
-        '''
+
+        Args:
+          parameter_list: 
+          filename:  (Default value = None)
+
+        Returns:
+
+        """
         best_parameters=self.get_best_parameters()
         data= best_parameters.loc[parameter_list].transpose()
         f=seaborn.barplot(data=numpy.log10(data))
@@ -3806,9 +4097,7 @@ class ModelSelection(_Viz):
             plt.savefig(filename,dpi=200,bbox_inches='tight')
 
 class PlotProfileLikelihood(_Viz):
-    """
-
-    """
+    """ """
     def __init__(self, cls, data=None, **kwargs):
         """
         Plot profile likelihoods
@@ -3877,10 +4166,7 @@ class PlotProfileLikelihood(_Viz):
         ##at the moment the CL is conputer by Parse. This is not optimal
 
     def _do_checks(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         ## todo put original estimatd values on non rss graphs as well
         if self.ylim is not None:
             if not isinstance(self.ylim, tuple):
@@ -3969,10 +4255,7 @@ class PlotProfileLikelihood(_Viz):
             LOG.info('Profile likelihood data saved to "{}"'.format(self.filename))
 
     def plot_same_axis(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         fig = plt.figure()
         for x in self.x:
             for y in self.y:
@@ -4075,10 +4358,7 @@ class PlotProfileLikelihood(_Viz):
                         plt.show()
 
     def plot(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         for x in self.x:
             for y in self.y:
                 ##indicator var for colorbar
@@ -4188,10 +4468,7 @@ class PlotProfileLikelihood(_Viz):
                         plt.show()
 
     def plot_pdf(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         raise NotImplementedError
         # with PdfPages()
         for x in self.x:
@@ -4280,9 +4557,7 @@ class PlotProfileLikelihood(_Viz):
                         plt.show()
 
 class PlotProfileLikelihood3d(_Viz):
-    """
-
-    """
+    """ """
     def __init__(self, cls, data=None, **kwargs):
         """
         Plot profile likelihoods
@@ -4349,10 +4624,7 @@ class PlotProfileLikelihood3d(_Viz):
         ##at the moment the CL is conputer by Parse. This is not optimal
 
     def _do_checks(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         ## todo put original estimatd values on non rss graphs as well
         if self.ylim is not None:
             if not isinstance(self.ylim, tuple):
@@ -4441,10 +4713,7 @@ class PlotProfileLikelihood3d(_Viz):
             LOG.info('Profile likelihood data saved to "{}"'.format(self.filename))
 
     def plot_same_axis(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         fig = plt.figure()
         for x in self.x:
             for y in self.y:
@@ -4525,10 +4794,7 @@ class PlotProfileLikelihood3d(_Viz):
                         plt.show()
 
     def plot(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         for x in self.x:
             for y in self.y:
                 if self.multiplot:
@@ -4613,10 +4879,7 @@ class PlotProfileLikelihood3d(_Viz):
                         plt.show()
 
     def plot_pdf(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         raise NotImplementedError
         # with PdfPages()
         for x in self.x:
@@ -4706,13 +4969,16 @@ class PlotProfileLikelihood3d(_Viz):
 
 
 class PearsonsCorrelation(_Viz):
-    """
-
-    ========    =================================================
+    """========    =================================================
     kwarg       Description
     ========    =================================================
     **kwargs    see :ref:`kwargs` for more options
     ========    =================================================
+
+    Args:
+
+    Returns:
+
     """
 
     def __init__(self, cls, **kwargs):
@@ -4788,10 +5054,7 @@ class PearsonsCorrelation(_Viz):
         self.heatmap()
 
     def _do_checks(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         if isinstance(self.cls, str):
             if self.copasi_file is None:
                 raise ValueError('When first argument is a string '
@@ -4806,13 +5069,11 @@ class PearsonsCorrelation(_Viz):
                 )
 
     def get_combinations(self):
+        """ """
         return permutations(list(self.data.keys()), 2)
 
     def do_pearsons(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         dct = {}
         for x, y in self.combinations:
             dct[(x, y)] = pearsonr(self.data[x], self.data[y])
@@ -4825,6 +5086,7 @@ class PearsonsCorrelation(_Viz):
         return df['r2'], df['p-val']
 
     def heatmap(self):
+        """ """
         seaborn.set_context(context=self.context, font_scale=self.font_scale)
         data = self.pearsons
 

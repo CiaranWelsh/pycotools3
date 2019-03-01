@@ -4,7 +4,7 @@ Viz
 .. toctree::
    :caption: viz
 
-.. automodule:: pycotools.viz
+.. automodule:: pycotools3.viz
     :members:
 
 

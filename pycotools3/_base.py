@@ -32,9 +32,7 @@ from copy import deepcopy
 LOG = logging.getLogger(__name__)
 
 class _Base(object):
-    """
-    Base class for setting class attributes
-    """
+    """Base class for setting class attributes"""
     def __init__(self, **kwargs):
         self.kwargs = kwargs
 
@@ -48,16 +46,18 @@ class _Base(object):
         return self.__str__()
 
     def to_string(self):
-        """
-        Produce kwargs as string format for using in __str__ methods
+        """Produce kwargs as string format for using in __str__ methods
         in subclasses.
-
+        
         Useage in subclass:
-
+        
             def __str__(self):
-                return 'SubClassName({})'.format(self.as_string)
 
-        :return: str
+        Args:
+
+        Returns:
+          :return: str
+
         """
         prop = deepcopy(self.__dict__)
         del prop['kwargs']
@@ -74,9 +74,13 @@ class _Base(object):
         return string.replace(',', ', ')
 
     def to_df(self):
-        """
-        Convert kwargs to 1D df
+        """Convert kwargs to 1D df
         :return: pandas.DataFrame
+
+        Args:
+
+        Returns:
+
         """
         df = pandas.DataFrame(self.kwargs, index=['Value']).transpose()
         df.index.name = 'Property'
@@ -84,9 +88,13 @@ class _Base(object):
         return df
 
     def to_dict(self):
-        """
-        get kwargs as dictionary
+        """get kwargs as dictionary
         :return: dict
+
+        Args:
+
+        Returns:
+
         """
         return self.kwargs
 

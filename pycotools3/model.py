@@ -37,6 +37,7 @@ from . import misc
 # import errors, misc, viz
 from . import _base
 from . import tasks
+from .utils import load_copasi, format_timecourse_data
 
 import pandas
 import re
@@ -48,6 +49,10 @@ from .cached_property import cached_property_with_ttl, cached_property
 from subprocess import check_call, call
 from shutil import copy
 from functools import reduce
+
+import sys
+
+COPASISE, COPASIUI = load_copasi()
 
 LOG = logging.getLogger(__name__)
 
@@ -68,40 +73,44 @@ except ImportError:
 ## todo investigate use of official copasi api
 
 class GetModelComponentFromStringMixin(Mixin):
-    """
-    For Developers
-
+    """For Developers
+    
     Take a :py:class:`Model`, a component type and a string giving
     the name of that component and return the pycotools3 object
     for that component. Uses :py:meth:`Model.get`. Implemented as
     :py:mod:`mixin` to facilitate reuse across all necessary classes.
-
+    
     .. highlight::
-
+    
         @mixin(GetModelComponentFromStringMixin)
         class NewClass(object):
             def __init__(self, model, component, string):
                 self.model = model
                 self.component = component
                 self.string = string
-
+    
             def use_get_component(self):
-                \"""
+                '''
                 Demonstration of how to use
                 GetModelComponentFromStringMixin
                 :return: model component
-                \"""
-                return self.get_component(
-                    self.model, self.component, self.string
-                )
-        ## Get global quantity called 'A'
-        >>> new_class = NewClass(model, 'global_quantity', 'A')
-        >>> A = new_class.use_get_component()
+                '''
 
-        ## Get metabolite called B
+    Args:
+
+    Returns:
+      self.model, self.component, self.string
+      )
+      ## Get global quantity called 'A'
+      
+      ## Get metabolite called B
+
+    >>> new_class = NewClass(model, 'global_quantity', 'A')
+        >>> A = new_class.use_get_component()
+    
         >>> new_class = NewClass(model, 'metabolite', 'B')
         >>> b = new_class.use_get_component()
-
+    
         >>> ## Get reaction called A2B
         >>> new_class = NewClass(model, 'reaction', 'A2B')
         >>> c = new_class.use_get_component()
@@ -109,19 +118,16 @@ class GetModelComponentFromStringMixin(Mixin):
 
     @staticmethod
     def get_component(model, component, string):
-        """
-        Get component called string from model
+        """Get component called string from model
 
-        :param model:
-            a pytocools :py:class:`Model`
+        Args:
+          model: a pytocools :py:class:`Model`
+          component: a :py:mod:`model` component
+          string: str`. name of model component
 
-        :param component:
-            a :py:mod:`model` component
+        Returns:
+          model.<component>`
 
-        :param string:
-            `str`. name of model component
-
-        :return: `model.<component>`
         """
         if isinstance(component, LocalParameter):
             return model.get(component, string, by='global_name')
@@ -130,28 +136,32 @@ class GetModelComponentFromStringMixin(Mixin):
 
 
 class ComparisonMethodsMixin(Mixin):
-    """
-    For Developers.
-
+    """For Developers.
+    
     Not presently used in any object
     but ready for future implementation.
-
+    
     Over ride the magic methods `__eq__`,
     `__ne__` and `__hash__`.  This code comes from directly from
     [Stack overflow](https://stackoverflow.com/questions/390250/elegant-ways-to-support-equivalence-equality-in-python-classes
-) and enables the of `==` and `!=`  for comparisons.
-
+    ) and enables the of `==` and `!=`  for comparisons.
+    
     This is implemented as a Mixin since its general
     code which can be used for multiple classes
-
+    
     Usage:
         @mixin(ComparisonMethodsMixin)
         class NewClass(object):
             def __init__(self):
-                \"""
+                '''
                 Cool new code here
-                \"""
+                '''
                  pass
+
+    Args:
+
+    Returns:
+
     """
 
     def __eq__(self, other):
@@ -172,11 +182,15 @@ class ComparisonMethodsMixin(Mixin):
 
 
 class Build(object):
-    """
-    Context manager for building a copasi model with
+    """Context manager for building a copasi model with
     only PyCoTools Functions.
-
+    
     Users should also see :py:class:`BuildAntimony'
+
+    Args:
+
+    Returns:
+
     """
 
     def __init__(self, copasi_file):
@@ -192,13 +206,49 @@ class Build(object):
 
 
 class BuildAntimony(object):
-    """
-    Context manager around telluriums antimony to SBML conversion.
-    Builds an sbml from antimony code, converts it to a copasi
-    file which is then coerced into a pycotools3 model.
+    """A context manager to create a copasi file in :code:`copasi_file` from the antimony
+    string and return a :class:`Model' object. The :method:`BuildAntimony.load` method takes
+    an antimony string as argument and returns a :class:`Models` object.
+    
+    Examples:
+    
+        .. code-block:: python
+    
+            working_directory = os.path.dirname(__file__)
+            copasi_filename = os.path.join(working_directory, 'NegativeFeedbackModel.cps')
+            with model.BuildAntimony(copasi_filename) as loader:
+                negative_feedback = loader.load(
+                    '''
+                    model negative_feedback()
+                        // define compartments
+                        compartment cell = 1.0
+                        //define species
+                        var A in cell
+                        var B in cell
+                        //define some global parameter for use in reactions
+                        vAProd = 0.1
+                        kADeg = 0.2
+                        kBProd = 0.3
+                        kBDeg = 0.4
+                        //define initial conditions
+                        A = 0
+                        B = 0
+                        //define reactions
+                        AProd: => A; cell*vAProd
+                        ADeg: A =>; cell*kADeg*A*B
+                        BProd: => B; cell*kBProd*A
+                        BDeg: B => ; cell*kBDeg*B
+                    end
+                    '''
+                )
     """
 
-    def __init__(self, copasi_file):
+    def __init__(self, copasi_file: str):
+        """
+
+        Args:
+            copasi_file (str): Path to a valid location on disk to store the copasi file
+        """
         self.copasi_file = copasi_file
         self.copasiSE_output_file = self.copasi_file[:-4] + '.sbml.cps'
         self.sbml_file = os.path.splitext(self.copasi_file)[0] + '.sbml'
@@ -216,12 +266,24 @@ class BuildAntimony(object):
             os.remove(self.sbml_file)
 
         if isinstance(exc_type, type):
-            raise exc_type(exc_val)#.with_traceback(exc_tb)
+            raise exc_type(exc_val)  # .with_traceback(exc_tb)
 
     def load(self, antimony_str):
-        """
-        :param antimony_str:
-        :return:
+        """Load the antimony string :code:`antimony_str` into
+        a :code:`copasi_file` and :class:`Model`.
+        
+        Args
+            antimony_str (str): A valid antimony string encoding a model
+        
+        return
+            model (:class:`Model`)
+                A PyCoTools model containing the model defined in the :parameter:`antiomny_str`.
+
+        Args:
+          antimony_str: 
+
+        Returns:
+
         """
         ## wrap conversion function in try block
         ## so we can store the exception
@@ -238,7 +300,7 @@ class BuildAntimony(object):
             raise errors.FileDoesNotExistError('Sbml file does not exist')
 
         ## Perform conversion wtih CopasiSE
-        check_call(['CopasiSE', '-i', self.sbml_file])
+        os.system(f"{COPASISE} -i {self.sbml_file}")
 
         ## copy from temporary copasiSE output name to user specified name
         copy(self.copasiSE_output_file, self.copasi_file)
@@ -252,9 +314,13 @@ class BuildAntimony(object):
 
 
 class ImportSBML(object):
-    """
-    Accepts an SBML file, converts it to copasi
+    """Accepts an SBML file, converts it to copasi
     format and reads it into a Model object
+
+    Args:
+
+    Returns:
+
     """
 
     def __init__(self, sbml_file, copasi_file=None):
@@ -280,14 +346,19 @@ class ImportSBML(object):
         self.model = self.load_model()
 
     def copasi_filename(self):
+        """ """
         return os.path.splitext(self.sbml_file)[0] + '.cps'
 
     def convert(self):
+        """Perform conversion using CopasiSE
+        :return:
+
+        Args:
+
+        Returns:
+
         """
-        Perform conversion using CopasiSE
-        :return: 
-        """
-        check_call(['CopasiSE', '-i', self.sbml_file])
+        check_call([f'{COPASISE}', '-i', self.sbml_file])
         temp_copasi_file = self.sbml_file + '.cps'
         if not os.path.isfile(temp_copasi_file):
             raise errors.FileDoesNotExistError('SBML file has not been translated. '
@@ -304,17 +375,17 @@ class ImportSBML(object):
         return self.copasi_file
 
     def load_model(self):
+        """ """
         return Model(self.copasi_file)
 
 
 class Model(_base._Base):
-    """
-    The Model object is of central importance in pycotools as
+    """The Model object is of central importance in pycotools as
     it extracts relevant information from a copasi definition
     file into python objects.
-
+    
     These are :py:class:`Model` properties:
-
+    
     =======================     =======================
     Property                    Description
     =======================     =======================
@@ -336,15 +407,15 @@ class Model(_base._Base):
                                 local_parameters, compartment names as string
     number_of_reactions         Number of reactions in :py:class:`model.Model`
     =======================     =======================
-
-
+    
+    
     Properties get re-evaluate each time they are called which
     is expensive due to re-reading the xml and unnecessary.
     The :py:mod:`cached_property` module written by Daniel Greenfeld and redistributed
     in pycotools enables these components to be read once and cached for later use. This
     cache set on instantiation is reset each time a new component is added or changed.
     The following components are cached_properties:
-
+    
     =======================     =======================
     Cached Property                    Description
     =======================     =======================
@@ -355,15 +426,16 @@ class Model(_base._Base):
     parameter_descriptions      List of :py:class:'model.ParameterDescription`
     constants                   List of :py:class:`LocalParameter`
     reactions                   List of :py:class:`Reaction`
-    parameters                  List of :py:class:'LocalParameter`
-    =======================     =======================
 
-    Usage:
-        >>> from pycotools3.model import Model
+    Args:
+      Usage: 
+
+    Returns:
+
+    >>> from pycotools3.model import Model
         >>> model_path = r'/full/path/to/model.cps'
         >>> model = Model(model_path) ##work in concentration units
         >>> model = Model(model_path, quantity_type='particle_numbers') ## work in particle numbers
-
     """
 
     def __init__(self, copasi_file, quantity_type='concentration',
@@ -404,16 +476,19 @@ class Model(_base._Base):
     def __repr__(self):
         return self.__str__()
 
+    def __contains__(self, item):
+        return item in self.all_variable_names
+
     def reset_cache(self, prop):
-        """
-        Delete property from cache then
+        """Delete property from cache then
         reset it
 
-        :param prop:
-            `str`. property to reset
+        Args:
+          prop: str`. property to reset
 
-        :return:
-            :py:class:`Model`
+        Returns:
+          py:class:`Model`
+
         """
         if prop not in self.__dict__:
             raise errors.InputError('Property "{}" does not '
@@ -425,23 +500,28 @@ class Model(_base._Base):
     @property
     def copasi_file(self):
         """
-        Return the copasi file from which the
-        :py:class:`Model` was built
 
-        :return:
-            str.
+        Args:
+
+        Returns:
+          :py:class:`Model` was built
+          
+          :return:
+          str.
+
         """
         return self._copasi_file
 
     @copasi_file.setter
     def copasi_file(self, filename):
-        """
-        Set the copasi file
+        """Set the copasi file
 
-        :param filename:
-            str. Different path.
+        Args:
+          filename: str. Different path.
 
-        :return: None
+        Returns:
+          None
+
         """
         fle, ext = os.path.splitext(filename)
         if ext != '.cps':
@@ -449,11 +529,15 @@ class Model(_base._Base):
         self._copasi_file = filename
 
     def copy(self, filename):
-        """
-        Copy the model to `filename`
-
+        """Copy the model to `filename`
+        
         :return:
             :py:class:`Model`
+
+        Args:
+          filename: 
+
+        Returns:
 
         """
         model = deepcopy(self)
@@ -462,8 +546,12 @@ class Model(_base._Base):
 
     def to_antimony(self):
         """
-        Return model as Antimony model string
-        :return:
+
+        Args:
+
+        Returns:
+          :return:
+
         """
         sbml_file = self.to_sbml()
         assert os.path.isfile(sbml_file)
@@ -474,58 +562,72 @@ class Model(_base._Base):
 
     @property
     def root(self):
-        """
-        Root directory for model. The directory
+        """Root directory for model. The directory
         where copasi_file is saved.
-
+        
         Does not need a setter since root is derived from
         copasi_file property
-
+        
         :return:
             `str`
+
+        Args:
+
+        Returns:
+
         """
         return os.path.dirname(self.copasi_file)
 
     @property
     def reference(self):
-        """
-        Get model reference from xml
-
+        """Get model reference from xml
+        
         :return:
             `str`
+
+        Args:
+
+        Returns:
+
         """
         return "CN=Root,Model={}".format(self.name)
 
     @property
     def time_unit(self):
-        """
-
-        :return:
+        """:return:
             `str` current time unit defined by copasi
+
+        Args:
+
+        Returns:
+
         """
         query = '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
         return self.xml.xpath(query)[0].attrib['timeUnit']
 
     @property
     def name(self):
-        """
-
-        :return:
+        """:return:
             `str`. The model name
+
+        Args:
+
+        Returns:
+
         """
         query = '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
         return self.xml.xpath(query)[0].attrib['name']
 
     @name.setter
     def name(self, name):
-        """
+        """name setter
 
-        name setter
+        Args:
+          name: str`
 
-        :param name:
-            `str`
+        Returns:
+          py:class:`Model`
 
-        :return: :py:class:`Model`
         """
         query = '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
         self.xml.xpath(query)[0].attrib['name'] = str(name)
@@ -533,53 +635,69 @@ class Model(_base._Base):
 
     @property
     def volume_unit(self):
-        """
-
-        :return:
+        """:return:
             `str`. The currently defined volume unit
+
+        Args:
+
+        Returns:
+
         """
         query = '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
         return self.xml.xpath(query)[0].attrib['volumeUnit']
 
     @property
     def quantity_unit(self):
-        """
-
-        :return:
+        """:return:
             `str`. The currently defined quantity unit
+
+        Args:
+
+        Returns:
+
         """
         query = '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
         return self.xml.xpath(query)[0].attrib['quantityUnit']
 
     @property
     def area_unit(self):
-        """
-
-        :return:
+        """:return:
             `str`. The currently defined area unit.
+
+        Args:
+
+        Returns:
+
         """
         query = '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
         return self.xml.xpath(query)[0].attrib['areaUnit']
 
     @property
     def length_unit(self):
-        """
-
-        :return:
+        """:return:
             `str`
+
+        Args:
+
+        Returns:
+
         """
         query = '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
         return self.xml.xpath(query)[0].attrib['lengthUnit']
 
     @property
     def avagadro(self):
-        """
-        Not really needed but good to check
+        """Not really needed but good to check
         consistancy of avagadros number.
         **This number was updated between between version 16 and 19 and messed with things
-
+        
         :return:
             `int`
+
+        Args:
+
+        Returns:
+
         """
         query = '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
         avagadro_from_model = float(self.xml.xpath(query)[0].attrib['avogadroConstant'])
@@ -593,23 +711,31 @@ class Model(_base._Base):
 
     @property
     def key(self):
-        """
-        Get the model reference - the 'key' from self.get_model_units
-
+        """Get the model reference - the 'key' from self.get_model_units
+        
         :return:
             `str`
+
+        Args:
+
+        Returns:
+
         """
         query = '//*[@timeUnit]' and '//*[@volumeUnit]' and '//*[@areaUnit]'
         return self.xml.xpath(query)[0].attrib['key']
 
     @property
     def states(self):
-        """
-        The states (metabolites, globals, compartments) in the order they
+        """The states (metabolites, globals, compartments) in the order they
         are read by Copasi from the StateTemplate element.
-
+        
         :return:
             `OrderedDict`
+
+        Args:
+
+        Returns:
+
         """
         collection = []
         for i in self.xml.iter():
@@ -630,11 +756,13 @@ class Model(_base._Base):
     @states.setter
     def states(self, states):
         """
-        :param states:
-            `list`. list of `int` of len(self.states)
 
-        :return:
-            :py:class:`Model`
+        Args:
+          states: list`. list of `int` of len(self.states)
+
+        Returns:
+          py:class:`Model`
+
         """
         ## first check what data type states is
         if not isinstance(states, str):
@@ -658,12 +786,16 @@ class Model(_base._Base):
 
     @property
     def fit_item_order(self):
-        """
-        Get names of parameters being fitted in the
+        """Get names of parameters being fitted in the
         order they appear
-
+        
         :return:
             `list`
+
+        Args:
+
+        Returns:
+
         """
         lst = []
         query = '//*[@name="FitItem"]'
@@ -691,18 +823,16 @@ class Model(_base._Base):
         return lst
 
     def add_state(self, state, value):
-        """
-        Append state on to end of state template.
+        """Append state on to end of state template.
         Used within add_metabolite and add_global_quantity. Shouldn't
         need to use manually
 
-        :param state:
-            `str`. A valid key
+        Args:
+          state: str`. A valid key
+          value: int`, `float`. Value for state
 
-        :param value:
-            `int`, `float`. Value for state
+        Returns:
 
-        :return:
         """
         element = etree.Element('{http://www.copasi.org/static/schema}StateTemplateVariable',
                                 attrib={'objectReference': state})
@@ -715,16 +845,16 @@ class Model(_base._Base):
         return self
 
     def remove_state(self, state):
-        """
-        Remove state from StateTemplate and
+        """Remove state from StateTemplate and
         InitialState fields. USed for deleting metabolites
         and global quantities.
 
-        :param state:
-            `str`. key of state to remove (i.e. Metabolite_1)
+        Args:
+          state: str`. key of state to remove (i.e. Metabolite_1)
 
-        :return:
-            :py:class:`Model`
+        Returns:
+          py:class:`Model`
+
         """
         ##count the number of states
         count = -1  # 0 indexed python
@@ -750,11 +880,15 @@ class Model(_base._Base):
     # @property
     @cached_property
     def compartments(self):
-        """
-        Get list of model compartments
-
+        """Get list of model compartments
+        
         :return:
             `list`. Each element is :py:class:`Compartment`
+
+        Args:
+
+        Returns:
+
         """
         collection = {}
         lst = []
@@ -773,14 +907,14 @@ class Model(_base._Base):
         return lst
 
     def add_compartment(self, compartment):
-        """
-        Add compartment to model
+        """Add compartment to model
 
-        :param compartment:
-            :py:class:`Compartment`
+        Args:
+          compartment: py:class:`Compartment`
 
-        :return:
-            :py:class:`Model`
+        Returns:
+          py:class:`Model`
+
         """
         if isinstance(compartment, str):
             compartment = Compartment(self, compartment)
@@ -833,18 +967,16 @@ class Model(_base._Base):
         return self
 
     def remove_compartment(self, value, by='name'):
-        """
-        Remove a compartment with the attribute given
+        """Remove a compartment with the attribute given
         as the 'by' and value arguments
 
-        :param value:
-            `str`. Value of attribute to match i.e. 'Nucleus'
+        Args:
+          value: str`. Value of attribute to match i.e. 'Nucleus'
+          by: str` which attribute to match i.e. 'name' or 'key' (Default value = 'name')
 
-        :param by:
-            `str` which attribute to match i.e. 'name' or 'key'
+        Returns:
+          py:class:`Model`
 
-        :return:
-            :py:class:`Model`
         """
         ## get the compartment
         comp = self.get('compartment', value, by=by)
@@ -867,12 +999,16 @@ class Model(_base._Base):
 
     @property
     def all_variable_names(self):
-        """
-        The names of all compartments, metabolites, global quantities,
+        """The names of all compartments, metabolites, global quantities,
         reactions and local parameters in the model.
-
+        
         :return:
             `list`. Each element is `str`
+
+        Args:
+
+        Returns:
+
         """
         ##first delete from cache
         m = [i.name for i in self.metabolites]
@@ -881,17 +1017,73 @@ class Model(_base._Base):
         c = [i.name for i in self.compartments]
         return m + g + l + c
 
+    def get_variable_names(self, which='a', include_assignments=True, prefix=None):
+        """Get the names of variables in the model. If include_assignments is off
+        these are ommited from the results (this is useful for ParameterEstimation) as
+        they are not generally estimated. Prefix provides a way of filtering the
+        returned list
+
+        Args:
+          which: string. Default='a'. A string containing any or all of characters 'a', 'm', 'g', 'l', 'c'
+        for all, metabolites, global_quantities, local_parameters and compartments respectively
+          include_assignments: Boolean. Default=True. If True, return global variables with assignments
+          prefix: str. Default=None. If given, returned parameter names are filtered to only include parameter
+        with `prerfix` at the begining.
+
+        Returns:
+
+        """
+        if not isinstance(include_assignments, bool):
+            raise errors.InputError(
+                f"include_assignment arg should be of type bool. Got {type(include_assignments)}"
+            )
+
+        m = [i.name for i in self.metabolites]
+        if include_assignments:
+            g = [i.name for i in self.global_quantities]
+        else:
+            g = [i.name for i in self.global_quantities if i.simulation_type != 'assignment']
+
+        l = [i.global_name for i in self.local_parameters]
+        c = [i.name for i in self.compartments]
+
+        d = {
+            'm': m,
+            'g': g,
+            'l': l,
+            'c': c,
+            'a': m + g + l + c,
+        }
+        which = sorted(list(which))
+        names = []
+        for i in which:
+            if i in d:
+                names += d[i]
+            else:
+                raise errors.InputError(
+                    f'"{i} is not a valid input to get_variable_names. '
+                    f'These are valid inputs: "{d.keys()}"'
+                )
+        names = sorted(names)
+        if prefix is not None:
+            names = [name for name in names if name.startswith(prefix)]
+        return sorted(names)
+
     @cached_property
     def local_parameters(self):
-        """
-        Get local parameters in model. local_parameters are
+        """Get local parameters in model. local_parameters are
         those which are actively used in reactions and do not have
         a global variable assigned to them. The constant property
         returns all local parameters regardless of simulation type
         (fixed or assignment)
-
+        
         :return:
             `list`. Each element is :py:class:`LocalParameter`
+
+        Args:
+
+        Returns:
+
         """
         # if 'local_parameters' in self.__dict__:
         #     del self.__dict__['local_parameters']
@@ -905,15 +1097,15 @@ class Model(_base._Base):
         return loc
 
     def add_local_parameter(self, local_parameter):
-        """
-        Add a local parameter to the model, specifically into
+        """Add a local parameter to the model, specifically into
         the String='kinetic Parameters' section of parameter sets
 
-        :param local_parameter:
-            :py:class:`LocalParameter`
+        Args:
+          local_parameter: py:class:`LocalParameter`
 
-        :return:
-            :py:class:`Model`
+        Returns:
+          py:class:`Model`
+
         """
         ## remove frome cache
         if 'local_parameters' in self.__dict__:
@@ -933,23 +1125,19 @@ class Model(_base._Base):
 
     @staticmethod
     def convert_particles_to_molar(particles, mol_unit, compartment_volume):
-        """
-        Converts particle numbers to Molarity.
-
+        """Converts particle numbers to Molarity.
+        
         ##TODO build support for copasi's newest units
 
-        :param particles:
-            `int` Number of particles to convert
+        Args:
+          particles: int` Number of particles to convert
+          mol_unit: str`. The quantity unit, i.e:
+        fmol, pmol, nmol, umol, mmol or mol
+          compartment_volume: int`, `float`. Volume of compartment containing specie to convert
 
-        :param mol_unit:
-            `str`. The quantity unit, i.e:
-                fmol, pmol, nmol, umol, mmol or mol
+        Returns:
+          float`. Molarity
 
-        :param compartment_volume:
-            `int`, `float`. Volume of compartment containing specie to convert
-
-        :return:
-            `float`. Molarity
         """
         mol_dct = {
             'fmol': 1e-15,
@@ -982,21 +1170,17 @@ class Model(_base._Base):
 
     @staticmethod
     def convert_molar_to_particles(moles, mol_unit, compartment_volume):
-        """
-        Convert molarity to particle numbers
+        """Convert molarity to particle numbers
 
-        :param moles:
-            `int` or `float`. Number of moles in mol_unit to convert
+        Args:
+          moles: int` or `float`. Number of moles in mol_unit to convert
+          mol_unit: str`. Mole unit to convert from.
+        suppoerted: fmol, pmol, nmol, umol, mmol or mol
+          compartment_volume: int` or `float`. Volume of compartment containing specie to convert
 
-        :param mol_unit:
-            `str`. Mole unit to convert from.
-            suppoerted: fmol, pmol, nmol, umol, mmol or mol
+        Returns:
+          int`. number of particles
 
-        :param compartment_volume:
-            `int` or `float`. Volume of compartment containing specie to convert
-
-        :return:
-            `int`. number of particles
         """
         '''
         Converts particle numbers to Molarity.
@@ -1036,9 +1220,13 @@ class Model(_base._Base):
 
     @cached_property
     def metabolites(self):
-        """
-        :return:
+        """:return:
             `list`. Each element is :py:class:`Metabolite`
+
+        Args:
+
+        Returns:
+
         """
         metabs = {}
         for i in self.xml.iter():
@@ -1064,18 +1252,18 @@ class Model(_base._Base):
         return lst
 
     def add_metabolite(self, metab):
-        """
-        Add a metabolite to the model xml
+        """Add a metabolite to the model xml
 
-        :param metab:
-            `str` or :py:class:`Metabolite`. If str
-            is the name of metabolite to add and default
-            :py:class:`Metabolite` properties are adopted.
-            If :py:class:`Metabolite`, a :py:class:`Metabolite`
-            instance must be prebuilt and passes as arg.
+        Args:
+          metab: str` or :py:class:`Metabolite`. If str
+        is the name of metabolite to add and default
+        :py:class:`Metabolite` properties are adopted.
+        If :py:class:`Metabolite`, a :py:class:`Metabolite`
+        instance must be prebuilt and passes as arg.
 
-        :return:
-            :py:class:`Model`
+        Returns:
+          py:class:`Model`
+
         """
         ## if no compartments exist, make one
         if self.compartments == []:
@@ -1124,23 +1312,22 @@ class Model(_base._Base):
         return self
 
     def remove_metabolite(self, value, by='name'):
-        """
-        Remove metabolite from model.
+        """Remove metabolite from model.
 
-        :param value:
-            `str`. Attribute value to remove
+        Args:
+          value: str`. Attribute value to remove
+          by: str` Any metabolite attribute type to match (Default value = 'name')
 
-        :param by:
-            `str` Any metabolite attribute type to match
+        Returns:
+          py:class:`Model`
+          
+          Usage:
+          ## Remove attribute called 'A'
+          
+          ## Remove metabolites with initial concentration of 0
 
-        :return:
-            :py:class:`Model`
-
-        Usage:
-            ## Remove attribute called 'A'
-            >>> model.remove_metabolite('A', by='name')
-
-            ## Remove metabolites with initial concentration of 0
+        >>> model.remove_metabolite('A', by='name')
+        
             >>> model.remove_metabolite(0, by='concentration')
         """
         list_of_metabolites = '{http://www.copasi.org/static/schema}ListOfMetabolites'
@@ -1161,18 +1348,18 @@ class Model(_base._Base):
         return self
 
     def add_global_quantity(self, global_quantity):
-        """
-        Add global quantity to model
+        """Add global quantity to model
 
-        :param global_quantity:
-            `str` or :py:class:`GlobalQuantity`. If str
-            is the name of global_quantity to add and default
-            :py:class:`GlobalQuantity` properties are adopted.
-            If :py:class:`GlobalQuantity`, a :py:class:`GlobalQuantity`
-            instance must be prebuilt and passes as arg.
+        Args:
+          global_quantity: str` or :py:class:`GlobalQuantity`. If str
+        is the name of global_quantity to add and default
+        :py:class:`GlobalQuantity` properties are adopted.
+        If :py:class:`GlobalQuantity`, a :py:class:`GlobalQuantity`
+        instance must be prebuilt and passes as arg.
 
-        :return:
-            :py:class:`Model`
+        Returns:
+          py:class:`Model`
+
         """
 
         ## accept str arguments
@@ -1219,10 +1406,13 @@ class Model(_base._Base):
 
     @cached_property
     def global_quantities(self):
-        """
-
-        :return:
+        """:return:
             `list` each element is :py:class:`GlobalQuantity`
+
+        Args:
+
+        Returns:
+
         """
         model_values = {}
         for i in self.xml.iter():
@@ -1243,17 +1433,15 @@ class Model(_base._Base):
         return lst
 
     def remove_global_quantity(self, value, by='name'):
-        """
-        Remove a global quantity from your model
+        """Remove a global quantity from your model
 
-        :param value:
-            value to match by (i.e. ProteinA or ProteinB)
+        Args:
+          value: value to match by (i.e. ProteinA or ProteinB)
+          by: attribute to match (i.e. name or key) (Default value = 'name')
 
-        :param by:
-            attribute to match (i.e. name or key)
+        Returns:
+          py:class:`model.Model`
 
-        :return:
-            :py:class:`model.Model`
         """
 
         global_value = self.get('global_quantity',
@@ -1274,10 +1462,14 @@ class Model(_base._Base):
 
     @cached_property
     def functions(self):
-        """
-        get model functions
+        """get model functions
         :return:
             `list` each element a `py:class:`Function`
+
+        Args:
+
+        Returns:
+
         """
         lst = []
         for element in self.xml.iter():
@@ -1311,10 +1503,13 @@ class Model(_base._Base):
 
     @property
     def parameter_descriptions(self):
-        """
-
-        :return:
+        """:return:
             `list`. Each element a :py:class:`ParameterDescription`
+
+        Args:
+
+        Returns:
+
         """
         lst = []
         for i in self.xml.iter():
@@ -1327,14 +1522,14 @@ class Model(_base._Base):
         return lst
 
     def add_function(self, function):
-        """
-        Add function to model
+        """Add function to model
 
-        :param function:
-            :py:class:`Function`.
+        Args:
+          function: py:class:`Function`.
 
-        :return:
-            :py:class:`Model`
+        Returns:
+          py:class:`Model`
+
         """
         ##commented below bit out. Might still need
         # if function.key == None:
@@ -1364,17 +1559,15 @@ class Model(_base._Base):
         return self
 
     def remove_function(self, value, by='name'):
-        """
-        remove a function from model
+        """remove a function from model
 
-        :param value:
-            `str` value of attribute to match (i.e the functions name)
+        Args:
+          value: str` value of attribute to match (i.e the functions name)
+          by: str` which attribute to match by. default='name'
 
-        :param by:
-            `str` which attribute to match by. default='name'
+        Returns:
+          py:class:`model.Model`
 
-        :return:
-            :py:class:`model.Model`
         """
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfFunctions':
@@ -1385,9 +1578,13 @@ class Model(_base._Base):
 
     @property
     def number_of_reactions(self):
-        """
-        :return:
+        """:return:
             `int` number of reactions
+
+        Args:
+
+        Returns:
+
         """
         count = 0
         for i in self.xml.iter():
@@ -1398,11 +1595,15 @@ class Model(_base._Base):
 
     @cached_property
     def constants(self):
-        """
-        Get list of constants from xml attribute
+        """Get list of constants from xml attribute
         `cn="String=Kinetic Parameters"
         :return:
             `list` each element :py:class:`LocalParameter`
+
+        Args:
+
+        Returns:
+
         """
         if 'constants' in self.__dict__:
             del self.__dict__['keys']
@@ -1446,10 +1647,14 @@ class Model(_base._Base):
 
     @cached_property
     def reactions(self):
-        """
-        assemble a list of reactions
+        """assemble a list of reactions
         :return:
             `list` each element a :py:class:`Reaction`
+
+        Args:
+
+        Returns:
+
         """
         ## make sure list of reaction tag exists befor continuing
         exist = False
@@ -1593,12 +1798,16 @@ class Model(_base._Base):
     def add_reaction(self, reaction, expression=None,
                      rate_law=None):
         """
-        :param reaction:
-            :py:class:`Reaction` or `str`. If `str` then
-            must be the name of the reaction.
 
-        :return:
-            :py:class:`Model`
+        Args:
+          reaction: py:class:`Reaction` or `str`. If `str` then
+        must be the name of the reaction.
+          expression:  (Default value = None)
+          rate_law:  (Default value = None)
+
+        Returns:
+          py:class:`Model`
+
         """
         if not isinstance(reaction, Reaction):
             if not isinstance(reaction, str):
@@ -1678,16 +1887,16 @@ class Model(_base._Base):
         return self.refresh()
 
     def remove_reaction(self, value, by='name'):
-        """
-        Remove reaction
-        :param value:
-            `str`. Value of attibute
+        """Remove reaction
 
-        :param by: attribute of reaction to match default='name
-            `str` which :py:class`Reaction` atrribute to match
+        Args:
+          value: str`. Value of attibute
+          by: attribute of reaction to match default='name
+        `str` which :py:class`Reaction` atrribute to match
 
-        :return:
-            :py:class:`Model`
+        Returns:
+          py:class:`Model`
+
         """
 
         ##Now because of what I've done with
@@ -1709,11 +1918,15 @@ class Model(_base._Base):
         return self
 
     def refresh(self):
-        """
-        Save the file then reload the Model. Can't use the
+        """Save the file then reload the Model. Can't use the
         save method though because the save method uses
         the refresh method.
         :return:
+
+        Args:
+
+        Returns:
+
         """
         with open(self.copasi_file, 'wb') as f:
             f.write(etree.tostring(self.xml, pretty_print=True))
@@ -1721,16 +1934,17 @@ class Model(_base._Base):
         return Model(self.copasi_file)
 
     def save(self, copasi_file=None):
-        """
-        Save copasiML to copasi_filename.
+        """Save copasiML to copasi_filename.
 
-        :param copasi_filename:
-            `str` or `None`. Deafult is `None`. When `None`
-            defaults to same filepath the model came from.
-            If another path, saves to that path.
+        Args:
+          copasi_filename: str` or `None`. Deafult is `None`. When `None`
+        defaults to same filepath the model came from.
+        If another path, saves to that path.
+          copasi_file:  (Default value = None)
 
-        :return:
-            :py:class:`Model`
+        Returns:
+          py:class:`Model`
+
         """
         if copasi_file == None:
             copasi_file = self.copasi_file
@@ -1752,79 +1966,83 @@ class Model(_base._Base):
         return self
 
     def open(self, copasi_file=None, as_temp=False):
-        """
-        Open model with the gui. In order to work
+        """Open model with the gui. In order to work
         the environment variables must be properly set
         so that the command `CopasiUI` in the terminal
         or command prompt opens the model.
-
+        
         First :py:meth:`Model.save` the model to copasi_file
         then open with CopasiUI. Optionally open with a temporary
         filename.
 
-        :param copasi_file:
-            `str` or `None`. Same as :py:meth:`model.Save`
+        Args:
+          copasi_file: str` or `None`. Same as :py:meth:`model.Save` (Default value = None)
+          as_temp: bool`. Use temp file to open the model and remove
+        afterwards (Default value = False)
 
-        :param as_temp:
-            `bool`. Use temp file to open the model and remove
-            afterwards
-        :return:
-            `None`
+        Returns:
+          None`
+
         """
         if copasi_file == None:
             copasi_file = self.copasi_file
         if as_temp:
             copasi_temp = os.path.join(self.root, os.path.split(self.copasi_file)[1][:-4] + '_1.cps')
         self.save(copasi_file)
-        os.system('CopasiUI "{}"'.format(copasi_file))
+        cmd = '{} "{}"'.format(COPASIUI, copasi_file)
+        print('cmd', cmd)
+        os.system(cmd)
         if as_temp:
             os.remove(copasi_temp)
 
     def _model_components(self):
-        """
-        list of model components that
+        """list of model components that
         are changable
         :return:
+
+        Args:
+
+        Returns:
+
         """
         return ['metabolite', 'compartment', 'reaction',
                 'local_parameter', 'global_quantity',
                 'function']
 
     def get(self, component, value, by='name'):
-        """
-        Factory method for getting a model component by a value of a certain type
+        """Factory method for getting a model component by a value of a certain type
 
-        :param component:
-            `str`. The component i.e. `metabolite` or `local_parameter`
+        Args:
+          component: str`. The component i.e. `metabolite` or `local_parameter`
+          value: str`. Value of the attribute to match by i.e. metabolite called A
+          by: str`. Which attribute to search by. i.e. name or key or value (Default value = 'name')
 
-        :param value:
-            `str`. Value of the attribute to match by i.e. metabolite called A
+        Returns:
+          Instance of `:py:class:Model.<component>`
+          
+          Get reaction called A2B:
+          
+          
+          Get metabolite called A:
+          
+          
+          Get all reactions which have a fixed simulation_type:
+          
+          
+          Get all compartments with an initial value of 15
+          (concentration or particles depending on quantity_type):
+          
+          
+          Get metabolites in the nucleus compartment:
 
-        :param by:
-            `str`. Which attribute to search by. i.e. name or key or value
-
-        :return:
-            Instance of `:py:class:Model.<component>`
-
-        Get reaction called A2B:
-
-            >>> model.get('reaction', 'A2B', by='name')
-
-        Get metabolite called A:
-
+        >>> model.get('reaction', 'A2B', by='name')
+        
             >>> model.get('metabolite', 'A', by='name')
-
-        Get all reactions which have a fixed simulation_type:
-
+        
             >>> model.get('global_quantity', 'fixed', by='simulation_type')
-
-        Get all compartments with an initial value of 15
-        (concentration or particles depending on quantity_type):
-
+        
             >>> model.get('compartment', 15, by='initial_value')
-
-        Get metabolites in the nucleus compartment:
-
+        
             >>> model.get('metabolite', 'nuc', by='compartment')
         """
         if component not in self._model_components():
@@ -1854,33 +2072,26 @@ class Model(_base._Base):
 
     def set(self, component, match_value, new_value,
             match_field='name', change_field='name'):
-        """
-        Set a model components attribute to a new value
+        """Set a model components attribute to a new value
 
-        :param component:
-            `str` type of component to change (i.e. metbaolite)
+        Args:
+          component: str` type of component to change (i.e. metbaolite)
+          match_value: str`, `int`, `float` depending on value of `match_field`.
+        The value to match.
+          new_value: str`, `int` or `float` depending on value of `match_field`
+        new value for component attribute
+          match_field: str`. The attribute of component to match by. (Default value = 'name')
+          change_field: str` The attribute of the component matched that you want to change? (Default value = 'name')
 
-        :param match_value:
-            `str`, `int`, `float` depending on value of `match_field`.
-            The value to match.
+        Returns:
+          py:class:`Model`
+          
+          Set initial concentration of metabolite called 'X' to 50:
+          
+          Set name of global quantity called 'G' to 'H':
 
-        :param new_value:
-            `str`, `int` or `float` depending on value of `match_field`
-            new value for component attribute
-
-        :param match_field:
-            `str`. The attribute of component to match by.
-
-        :param change_field:
-            `str` The attribute of the component matched that you want to change?
-
-        :return:
-            :py:class:`Model`
-
-        Set initial concentration of metabolite called 'X' to 50:
-            >>> model.set('metabolite', 'X', 50, match_field='name', change_field='concentration')
-
-        Set name of global quantity called 'G' to 'H':
+        >>> model.set('metabolite', 'X', 50, match_field='name', change_field='concentration')
+        
             >>> model.set('global_quantity', 'G', 'H', match_field='name', change_field='name')
         """
         if component not in self._model_components():
@@ -1922,23 +2133,19 @@ class Model(_base._Base):
 
     def add_component(self, component_name, component,
                       reaction_expression=None, reaction_rate_law=None):
-        """
-        add a model component to the model
-        :param component_name:
-            `str`. i.e. 'reaction', 'function', 'metabolite
+        """add a model component to the model
 
-        :param component:
-            :py:class:`model.<component>`. The component class to add i.e. Metabolite
+        Args:
+          component_name: str`. i.e. 'reaction', 'function', 'metabolite
+          component: py:class:`model.<component>`. The component class to add i.e. Metabolite
+          reaction_expression: When adding reaction using string as first arg,
+        this argument takes the reaction expression (i.e. A -> B) (Default value = None)
+          reaction_rate_law: When adding reaction using string as first argument
+        this argument takes the reaction rate law (i.e. k*A) (Default value = None)
 
-        :param reaction_expression:
-            When adding reaction using string as first arg,
-            this argument takes the reaction expression (i.e. A -> B)
+        Returns:
+          py:class:`Model
 
-        :param reaction_rate_law:
-            When adding reaction using string as first argument
-            this argument takes the reaction rate law (i.e. k*A)
-
-        :return: :py:class:`Model
         """
         if component_name not in self._model_components():
             raise errors.InputError(
@@ -1960,23 +2167,20 @@ class Model(_base._Base):
             return self.add_compartment(component)
 
     def add(self, component_name, **kwargs):
-        """
-        add a model component to the model
-        :param component_name:
-            `str`. i.e. 'reaction', 'function', 'metabolite
+        """add a model component to the model
 
-        :param component:
-            :py:class:`model.<component>`. The component class to add i.e. Metabolite
+        Args:
+          component_name: str`. i.e. 'reaction', 'function', 'metabolite
+          component: py:class:`model.<component>`. The component class to add i.e. Metabolite
+          reaction_expression: When adding reaction using string as first arg,
+        this argument takes the reaction expression (i.e. A -> B)
+          reaction_rate_law: When adding reaction using string as first argument
+        this argument takes the reaction rate law (i.e. k*A)
+          **kwargs: 
 
-        :param reaction_expression:
-            When adding reaction using string as first arg,
-            this argument takes the reaction expression (i.e. A -> B)
+        Returns:
+          py:class:`Model
 
-        :param reaction_rate_law:
-            When adding reaction using string as first argument
-            this argument takes the reaction rate law (i.e. k*A)
-
-        :return: :py:class:`Model
         """
         if component_name not in self._model_components():
             raise errors.InputError(
@@ -2003,17 +2207,15 @@ class Model(_base._Base):
             return self.add_compartment(comp)
 
     def remove(self, component, name):
-        """
-        General factor method for removing model components
+        """General factor method for removing model components
 
-        :param component:
-            `str` which component to remove (i.e. metabolite)
+        Args:
+          component: str` which component to remove (i.e. metabolite)
+          name: str` name of component to remove
 
-        :param name:
-            `str` name of component to remove
+        Returns:
+          py:class:`Model`
 
-        :return:
-            :py:class:`Model`
         """
         if component in self._model_components() == False:
             raise errors.InputError('{} not in list of components'.format(component))
@@ -2038,13 +2240,17 @@ class Model(_base._Base):
 
     @property
     def active_parameter_set(self):
-        """
-        get active parameter set
-
+        """get active parameter set
+        
         **Not really in use**
-
+        
         :return:
             :py:class:`etree.Element`
+
+        Args:
+
+        Returns:
+
         """
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfModelParameterSets':
@@ -2052,13 +2258,18 @@ class Model(_base._Base):
 
     @active_parameter_set.setter
     def active_parameter_set(self, parameter_set):
-        """
-        set the active parameter set.
-
+        """set the active parameter set.
+        
         **not really in use**
-
+        
         :return:
             :py:class:`Model`
+
+        Args:
+          parameter_set: 
+
+        Returns:
+
         """
         if parameter_set not in self.active_parameter_set:
             raise errors.InputError('{} not in available parameter sets'.format(parameter_set))
@@ -2070,20 +2281,28 @@ class Model(_base._Base):
 
     @property
     def parameter_sets(self):
-        """
-        Here for potential future implementation of easy switching between parameter
+        """Here for potential future implementation of easy switching between parameter
         sets
         :return:
+
+        Args:
+
+        Returns:
+
         """
         return NotImplementedError
 
     @property
     def parameters(self):
-        """
-        get all locals, globals and metabs as pandas dataframe
-
+        """get all locals, globals and metabs as pandas dataframe
+        
         :return:
             :py:class:`pandas.DataFrame`
+
+        Args:
+
+        Returns:
+
         """
         if self.quantity_type == 'concentration':
             metabs = {i.name: i.concentration for i in self.metabolites}
@@ -2100,38 +2319,69 @@ class Model(_base._Base):
         return d
 
     def to_sbml(self, sbml_file=None):
-        """
-        convert model to sbml
+        """convert model to sbml
 
-        :param sbml_file:
-            `str`. Path for SBML. Defaults to same as copasi filename
+        Args:
+          sbml_file: str`. Path for SBML. Defaults to same as copasi filename
 
-        :return:
-            `str`. Path to smbl file
+        Returns:
+          str`. Path to smbl file
+
         """
         if sbml_file is None:
             sbml_file = os.path.join(self.root, self.copasi_file[:-4] + '.sbml')
 
-        os.system('CopasiSE {} -e {}'.format(self.copasi_file, sbml_file))
+        os.system(f'{COPASISE} {self.copasi_file} -e {sbml_file}')
         return sbml_file
 
     def insert_parameters(self, **kwargs):
-        """
-        Wrapper around the InsetParameters class
-        :param kwargs:
-            Arguments for InsertParameters
-        :return:
-            :py:class:`Model`
+        """Wrapper around the InsetParameters class
+
+        Args:
+          kwargs: Arguments for InsertParameters
+          **kwargs: 
+
+        Returns:
+          py:class:`Model`
+
         """
         I = InsertParameters(self, **kwargs)
         if kwargs.get('show_parameters'):
             LOG.info('Parameter set that was inserted: \n\n{}'.format(I.parameters.transpose()))
 
+    def simulate(self, start, stop, by, species='m', **kwargs):
+        for i in [start, stop, by]:
+            if not isinstance(i, (float, int)):
+                raise TypeError(f'\"{i}" must be of type int or float. Got "{type(i)}"')
+
+        TC = tasks.TimeCourse(self, start=start,
+                              end=stop, step_size=by,
+                              intervals=stop*by-start,
+                              **kwargs)
+
+        variables = self.get_variable_names(which=species, include_assignments=True)
+
+        if not os.path.isfile(TC.report_name):
+            raise RuntimeError('Time course did not simulate')
+
+        format_timecourse_data(TC.report_name)
+
+        df = pandas.read_csv(TC.report_name, sep='\t', index_col=0)
+
+        return df[variables]
+
+
+
+
     def to_antimony(self):
-        """
-        Returns antimony string of model. Wrapper around tellurium
+        """Returns antimony string of model. Wrapper around tellurium
         functions
         :return:
+
+        Args:
+
+        Returns:
+
         """
         sbml_file = self.to_sbml()
         with open(sbml_file) as f:
@@ -2141,14 +2391,25 @@ class Model(_base._Base):
 
 
 class ReadModelMixin(Mixin):
-    """
-    if self.model is str (path to copasi file)
-    return the xml. If already a model, do nothing.
-    :return: model.Model
+    """if self.model is str (path to copasi file)
+
+    Args:
+
+    Returns:
+      :return: model.Model
+
     """
 
     @staticmethod
     def read_model(m):
+        """
+
+        Args:
+          m: 
+
+        Returns:
+
+        """
         if isinstance(m, str):
             ## import here due to namespace conflict. Do not change
             # from model import Model
@@ -2161,6 +2422,7 @@ class ReadModelMixin(Mixin):
 @mixin(ReadModelMixin)
 @mixin(ComparisonMethodsMixin)
 class Compartment(object):
+    """ """
 
     def __init__(self, model, name=None, initial_value=None,
                  key=None, simulation_type='fixed'):
@@ -2182,9 +2444,13 @@ class Compartment(object):
         return self.__str__()
 
     def _do_checks(self):
-        """
-        Make sure none of the arguments are empty
+        """Make sure none of the arguments are empty
         :return: void
+
+        Args:
+
+        Returns:
+
         """
         if self.key is None:
             self.key = KeyFactory(self.model, type='compartment').generate()
@@ -2201,20 +2467,15 @@ class Compartment(object):
 
     @property
     def reference(self):
+        """ """
         return 'Vector=Compartments[{}]'.format(self.name)
 
     def initial_volume_reference(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         return "Vector=Compartments[{}],Reference=InitialVolume".format(self.name)
 
     def to_xml(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         if self.key == None:
             self.key = KeyFactory(self.model, type='compartment').generate()
 
@@ -2233,9 +2494,7 @@ class Compartment(object):
 @mixin(ComparisonMethodsMixin)
 @mixin(ComparisonMethodsMixin)
 class Metabolite(object):
-    """
-
-    """
+    """ """
 
     def __init__(self, model, name='new_metabolite', particle_numbers=None,
                  concentration=None, compartment=None, simulation_type=None,
@@ -2288,10 +2547,7 @@ class Metabolite(object):
         return self.__str__()
 
     def to_df(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         dict_of_properties = {
             'name': self.name,
             'particle_numbers': self.particle_numbers,
@@ -2305,10 +2561,7 @@ class Metabolite(object):
         return df
 
     def _do_checks(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         if self.compartment == None:
             try:
                 self.compartment = self.model.compartments[0]
@@ -2331,7 +2584,8 @@ class Metabolite(object):
                 if isinstance(self.compartment, Compartment) != True:
                     raise errors.InputError('compartment argument should be of type PyCoTools.tasks.Compartment')
 
-        if ('particle_numbers' not in list(self.__dict__.keys())) and ('concentration' not in list(self.__dict__.keys())):
+        if ('particle_numbers' not in list(self.__dict__.keys())) and (
+                'concentration' not in list(self.__dict__.keys())):
             raise errors.InputError('Must specify either concentration or particle numbers')
 
         if self.simulation_type == None:
@@ -2365,59 +2619,83 @@ class Metabolite(object):
 
     @property
     def initial_reference(self):
-        """
-        The copasi object reference for
+        """The copasi object reference for
         transient metabolite
         :return:
             `str`
+
+        Args:
+
+        Returns:
+
         """
         return 'Vector=Metabolites[{}],Reference=InitialConcentration'.format(self.name)
 
     @property
     def transient_reference(self):
-        """
-        The copasi object reference for
+        """The copasi object reference for
         transient metabolite
         :return:
             `str`
+
+        Args:
+
+        Returns:
+
         """
         return 'Vector=Metabolites[{}],Reference=Concentration'.format(self.name)
 
     @property
     def initial_particle_reference(self):
-        """
-        The copasi object reference for
+        """The copasi object reference for
         initial  metabolite particle numbers
         :return:
             `str`
+
+        Args:
+
+        Returns:
+
         """
         return 'Vector=Metabolites[{}],Reference=InitialParticleNumber'.format(self.name)
 
     @property
     def transient_particle_reference(self):
-        """
-        The copasi object reference for
+        """The copasi object reference for
         transient metabolite particle numbers
         :return:
             `str`
+
+        Args:
+
+        Returns:
+
         """
         return 'Vector=Metabolites[{}],Reference=ParticleNumber'.format(self.name)
 
     @property
     def reference(self):
-        """
-        The copasi object reference for
+        """The copasi object reference for
         transient metabolite particle numbers
         :return:
             `str`
+
+        Args:
+
+        Returns:
+
         """
         return 'Vector=Metabolites[{}]'.format(self.name)
 
     def to_substrate(self):
-        """
-        Create :py:class:`Substrate' from Metabolite
+        """Create :py:class:`Substrate' from Metabolite
         :return:
             :py:class:`Substrate`
+
+        Args:
+
+        Returns:
+
         """
         return Substrate(
             self.model, name=self.name,
@@ -2429,10 +2707,14 @@ class Metabolite(object):
         )
 
     def to_product(self):
-        """
-        Create :py:class:`Product' from Metabolite
+        """Create :py:class:`Product' from Metabolite
         :return:
             :py:class:`Product`
+
+        Args:
+
+        Returns:
+
         """
         return Product(
             self.model, name=self.name,
@@ -2444,10 +2726,14 @@ class Metabolite(object):
         )
 
     def to_modifier(self):
-        """
-        Create :py:class:`Modifier' from Metabolite
+        """Create :py:class:`Modifier' from Metabolite
         :return:
             :py:class:`Modifier`
+
+        Args:
+
+        Returns:
+
         """
         return Modifier(
             self.model, name=self.name,
@@ -2459,11 +2745,15 @@ class Metabolite(object):
         )
 
     def to_xml(self):
-        """
-        Product the xml needed to represent a Metabolite
+        """Product the xml needed to represent a Metabolite
         in the Copasi xml
         :return:
             `str`
+
+        Args:
+
+        Returns:
+
         """
         metabolite_element = etree.Element('{http://www.copasi.org/static/schema}Metabolite', attrib={'key': self.key,
                                                                                                       'name': self.name,
@@ -2473,18 +2763,20 @@ class Metabolite(object):
         return metabolite_element
 
     def get_compartment(self):
-        """
-        Get compartment which the metabolite belongs to
+        """Get compartment which the metabolite belongs to
         :return:
             :py:class:`Compartment`
+
+        Args:
+
+        Returns:
+
         """
         return self.compartment
 
 
 class Substrate(Metabolite):
-    """
-    Inherits from Metabolite. Takes the same argument as Metabolite.
-    """
+    """Inherits from Metabolite. Takes the same argument as Metabolite."""
 
     def __init__(self, model, name='new_metabolite', particle_numbers=None,
                  concentration=None, compartment=None, simulation_type=None,
@@ -2514,9 +2806,7 @@ class Substrate(Metabolite):
 
 
 class Product(Metabolite):
-    """
-    Inherits from Metabolite. Takes the same argument as Metabolite.
-    """
+    """Inherits from Metabolite. Takes the same argument as Metabolite."""
 
     def __init__(self, model, name='new_metabolite', particle_numbers=None,
                  concentration=None, compartment=None, simulation_type=None,
@@ -2546,9 +2836,7 @@ class Product(Metabolite):
 
 
 class Modifier(Metabolite):
-    """
-    Inherits from Metabolite. Takes the same argument as Metabolite.
-    """
+    """Inherits from Metabolite. Takes the same argument as Metabolite."""
 
     def __init__(self, model, name='new_metabolite', particle_numbers=None,
                  concentration=None, compartment=None, simulation_type=None,
@@ -2580,11 +2868,15 @@ class Modifier(Metabolite):
 @mixin(ComparisonMethodsMixin)
 @mixin(ReadModelMixin)
 class GlobalQuantity(object):
-    """
-    Create a global quantity.
-
+    """Create a global quantity.
+    
     ##TODO:
         Build support for assignments
+
+    Args:
+
+    Returns:
+
     """
 
     def __init__(self, model, name='global_quantity', initial_value=None,
@@ -2615,6 +2907,7 @@ class GlobalQuantity(object):
         self._do_checks()
 
     def _do_checks(self):
+        """ """
         if self.simulation_type != None:
             if self.simulation_type not in ['fixed', 'assignment']:
                 raise errors.InputError(
@@ -2648,8 +2941,12 @@ class GlobalQuantity(object):
 
     def to_df(self):
         """
-        Return pandas.DataFrame with GlobalQuntity Attributes
-        :return:
+
+        Args:
+
+        Returns:
+          :return:
+
         """
         dict_of_properties = {
             'name': self.name,
@@ -2663,37 +2960,53 @@ class GlobalQuantity(object):
 
     @property
     def transient_reference(self):
-        """
-        compose the transient reference for the global quantity.
+        """compose the transient reference for the global quantity.
             i.e. not initial concentration
         :return: string
+
+        Args:
+
+        Returns:
+
         """
         return "Vector=Values[{}],Reference=Value".format(self.name)
 
     @property
     def initial_reference(self):
-        """
-        compose the transient reference for the global quantity.
+        """compose the transient reference for the global quantity.
             i.e. not initial concentration
         :return: string
+
+        Args:
+
+        Returns:
+
         """
         return "Vector=Values[{}],Reference=InitialValue".format(self.name)
 
     @property
     def reference(self):
-        """
-        compose the transient reference for the global quantity.
+        """compose the transient reference for the global quantity.
             i.e. not initial concentration
         :return: string
+
+        Args:
+
+        Returns:
+
         """
         return "Vector=Values[{}]".format(self.name)
 
     def to_xml(self):
-        """
-        Build xml element needed to represent a global quantity in
+        """Build xml element needed to represent a global quantity in
         copasi xml
         :return:
             :py:class:`etree.Element`
+
+        Args:
+
+        Returns:
+
         """
         if self.key == None:
             self.key = KeyFactory(self.model, type='global_quantity').generate()
@@ -2713,12 +3026,16 @@ class GlobalQuantity(object):
 @mixin(ReadModelMixin)
 @mixin(ComparisonMethodsMixin)
 class Reaction(object):
-    """
-    Build a copasi reaction.
-
+    """Build a copasi reaction.
+    
     ##TODO remove parameters, parameters_dict, substrate, products
     and modifiers from the constructor of this class. They are not
     needed.
+
+    Args:
+
+    Returns:
+
     """
 
     def __init__(self, model, name='reaction_1', expression=None,
@@ -2784,17 +3101,19 @@ class Reaction(object):
 
     @property
     def reference(self):
-        """
-        Get reaction reference
+        """Get reaction reference
         :return:
             `str`
+
+        Args:
+
+        Returns:
+
         """
         return "Vector=Reactions[{}]".format(self.name)
 
     def _do_checks(self):
-        """
-        :return:
-        """
+        """:return:"""
         if not isinstance(self.fast, bool):
             raise errors.InputError('fast argument is boolean')
 
@@ -2828,12 +3147,16 @@ class Reaction(object):
             self.name = self.key
 
     def translate_reaction(self):
-        """
-        convert the reaction string (self.expression)
+        """convert the reaction string (self.expression)
         into lists of substrate, product, modifiers, constants.
         Assign reversible.
         :return:
             None
+
+        Args:
+
+        Returns:
+
         """
 
         trans = Translator(self.model, self.expression)
@@ -2909,10 +3232,14 @@ class Reaction(object):
         self.parameters_dict = parameter_collection_dct
 
     def create_rate_law_function(self):
-        """
-        interpret the exression given for rate law
+        """interpret the exression given for rate law
         and produce a pycotools3 function object
         :return:
+
+        Args:
+
+        Returns:
+
         """
 
         ##todo check if ratelaw exists
@@ -2954,9 +3281,7 @@ class Reaction(object):
         return function
 
     def create(self):
-        """
-        :return:
-        """
+        """:return:"""
         ## get lists of substrate, products, modifiers and constants
         self.translate_reaction()
 
@@ -2964,10 +3289,14 @@ class Reaction(object):
         self.rate_law = self.create_rate_law_function()
 
     def to_xml(self):
-        """
-        Create necessary xml Elements required to represent a
+        """Create necessary xml Elements required to represent a
         reaction in COPASI
         :return:
+
+        Args:
+
+        Returns:
+
         """
         if self.fast:
             self.fast = 'true'
@@ -3052,9 +3381,7 @@ class Reaction(object):
 @mixin(ReadModelMixin)
 @mixin(ComparisonMethodsMixin)
 class Function(object):
-    """
-    Class to hold copasi function definitions for rate laws
-    """
+    """Class to hold copasi function definitions for rate laws"""
 
     def __init__(self, model, name='function_1', expression=None,
                  type=None, key=None, reversible=None,
@@ -3111,6 +3438,7 @@ class Function(object):
         return self.__str__()
 
     def _do_checks(self):
+        """ """
         if self.reversible == None:
             self.reversible = 'false'
 
@@ -3129,9 +3457,13 @@ class Function(object):
             self.name = self.key
 
     def create_parameter_descriptions_from_roles(self):
-        """
-        Use roles dict to create parameter descriptions
+        """Use roles dict to create parameter descriptions
         :return:
+
+        Args:
+
+        Returns:
+
         """
         ## If list of parameter descriptions already
         ## contains content keep it.
@@ -3164,10 +3496,7 @@ class Function(object):
             return self.list_of_parameter_descriptions
 
     def to_xml(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         if self.reversible == None:
             raise errors.SomethingWentHorriblyWrongError('reversible argument is None')
 
@@ -3210,9 +3539,13 @@ class Function(object):
 @mixin(ReadModelMixin)
 @mixin(ComparisonMethodsMixin)
 class ParameterDescription(object):
-    """
-    ParameterDescription objects are part of a function which in turn
+    """ParameterDescription objects are part of a function which in turn
     are used as rate laws.
+
+    Args:
+
+    Returns:
+
     """
 
     def __init__(self, model, name='parameter_description',
@@ -3247,9 +3580,13 @@ class ParameterDescription(object):
         )
 
     def _do_checks(self):
-        """
-        verify integrity of user input
+        """verify integrity of user input
         :return:
+
+        Args:
+
+        Returns:
+
         """
         if self.role == 'parameter':
             self.role = 'constant'
@@ -3265,9 +3602,7 @@ class ParameterDescription(object):
 @mixin(ReadModelMixin)
 @mixin(ComparisonMethodsMixin)
 class LocalParameter(object):
-    """
-    A Parameter within the scope of a reaction
-    """
+    """A Parameter within the scope of a reaction"""
 
     def __init__(self, model, name='local_parameter', value=None,
                  parameter_type=None, reaction_name=None,
@@ -3324,10 +3659,7 @@ class LocalParameter(object):
         return self.__str__()
 
     def to_df(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         dict_of_properties = {
             'name': self.name,
             'value': self.value,
@@ -3343,17 +3675,23 @@ class LocalParameter(object):
 
     @property
     def reference(self):
+        """ """
         return "ParameterGroup=Parameters,Parameter={}".format(self.name)
 
     @property
     def value_reference(self):
+        """ """
         return "ParameterGroup=Parameters,Parameter={},Reference=Value".format(self.name)
 
     def to_xml(self):
-        """
-        Create xml to go in the string=kinetic parameters
+        """Create xml to go in the string=kinetic parameters
         section of parameter set
         :return: xml element
+
+        Args:
+
+        Returns:
+
         """
         reaction = self.model.get('reaction', self.reaction_name, 'name')
         # self.model.open()
@@ -3392,11 +3730,15 @@ class LocalParameter(object):
         return model_parameter_group
 
     def get_reaction(self):
-        """
-        get the reaction object from which
+        """get the reaction object from which
         parameter comes from
         :return:
             :py:class:`Reaction`
+
+        Args:
+
+        Returns:
+
         """
         reaction = self.model.get('reaction', self.reaction_name, 'name')
         if reaction == []:
@@ -3406,9 +3748,7 @@ class LocalParameter(object):
 
 @mixin(ReadModelMixin)
 class KeyFactory(object):
-    """
-    Class for generating all keys required by COPASI components
-    """
+    """Class for generating all keys required by COPASI components"""
 
     def __init__(self, model, type='metabolite'):
         """
@@ -3433,10 +3773,7 @@ class KeyFactory(object):
         return "KeyFactory({})".format(self.to_string())
 
     def _do_checks(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         type_list = ['metabolite',
                      'compartment',
                      'global_quantity',
@@ -3451,9 +3788,13 @@ class KeyFactory(object):
             raise errors.InputError('{} not a valid type. {}'.format(self.type, type_list))
 
     def generate(self, n=1):
-        """
+        """:return:
 
-        :return:
+        Args:
+          n:  (Default value = 1)
+
+        Returns:
+
         """
         if self.type == 'metabolite':
             return next(self.create_key(self.model.metabolites))
@@ -3488,9 +3829,13 @@ class KeyFactory(object):
             return self.create_function_parameter_key(n)
 
     def create_key(self, model_component):
-        """
+        """:return:
 
-        :return:
+        Args:
+          model_component: 
+
+        Returns:
+
         """
         ##TODO fix bug where create key only works for generating single key at a time.
         ##be consistent with the rest of copasi
@@ -3518,11 +3863,16 @@ class KeyFactory(object):
             count += 1
 
     def create_reaction_key(self, n=1):
-        """
-        create_key only works for generating a single key at a time.
+        """create_key only works for generating a single key at a time.
         When creating ParameterDescriptions, we often need several keys
         generated at a time. This method generates these unique keys.
         :return:
+
+        Args:
+          n:  (Default value = 1)
+
+        Returns:
+
         """
         ## get keys
         existing = [i.key for i in self.model.reactions]
@@ -3548,11 +3898,16 @@ class KeyFactory(object):
             return keys
 
     def create_function_parameter_key(self, n=1):
-        """
-        create_key only works for generating a single key at a time.
+        """create_key only works for generating a single key at a time.
         When creating ParameterDescriptions, we often need several keys
         generated at a time. This method generates these unique keys.
         :return:
+
+        Args:
+          n:  (Default value = 1)
+
+        Returns:
+
         """
         ## get keys
         existing = [i.key for i in self.model.parameter_descriptions]
@@ -3577,11 +3932,16 @@ class KeyFactory(object):
             return keys
 
     def create_constant_key(self, n=1):
-        """
-        create_key only works for generating a single key at a time.
+        """create_key only works for generating a single key at a time.
         When creating ParameterDescriptions, we often need several keys
         generated at a time. This method generates these unique keys.
         :return:
+
+        Args:
+          n:  (Default value = 1)
+
+        Returns:
+
         """
         ## get keys
         existing = [i.key for i in self.model.constants]
@@ -3605,11 +3965,16 @@ class KeyFactory(object):
             return keys
 
     def create_function_key(self, n=1):
-        """
-        create_key only works for generating a single key at a time.
+        """create_key only works for generating a single key at a time.
         When creating ParameterDescriptions, we often need several keys
         generated at a time. This method generates these unique keys.
         :return:
+
+        Args:
+          n:  (Default value = 1)
+
+        Returns:
+
         """
         ## get keys
         existing = [i.key for i in self.model.functions]
@@ -3635,19 +4000,18 @@ class KeyFactory(object):
 
 @mixin(ComparisonMethodsMixin)
 class Expression(object):
-    """
-    Convert a expression (i.e. rate law expression) into
+    """Convert a expression (i.e. rate law expression) into
     Expression object such that we can split by existing copasi
     operators.
-
+    
     .. _expression_operators:
-
+    
     Operators
     =========
-
+    
     These can be used anywhere and do not need to be enclosed
     by <>
-
+    
     =============   ===================
     Operator List   Description
     =============   ===================
@@ -3658,11 +4022,11 @@ class Expression(object):
     %               Modulus
     ^               Power
     =============   ===================
-
+    
     The following operators can be used but must be enclosed by an
     `<>` in the expression string. See the `copasi documentation <http://copasi.org/Support/User_Manual/Model_Creation/User_Defined_Functions/>`_
     for more details.
-
+    
     =============   ===================
     Operator List   Description
     =============   ===================
@@ -3710,6 +4074,10 @@ class Expression(object):
     if              if statement
     =============   ===================
 
+    Args:
+
+    Returns:
+
     """
 
     def __init__(self, expression):
@@ -3732,10 +4100,14 @@ class Expression(object):
                                  'and', 'or', 'xor', 'not', 'if']
 
     def to_list(self):
-        """
-        convert a mathematical expression into a list of elements
+        """convert a mathematical expression into a list of elements
         in the equation
         :return:
+
+        Args:
+
+        Returns:
+
         """
         for i in ['<{}>'.format(op) for op in self.letter_operators] + self.operator_list:
             if i in self.expression:
@@ -3753,9 +4125,13 @@ class Expression(object):
 
 @mixin(ReadModelMixin)
 class Translator(object):
-    """
-    Translate a copasi style reaction into
+    """Translate a copasi style reaction into
     lists of substrates, products and modifiers.
+
+    Args:
+
+    Returns:
+
     """
 
     def __init__(self, model, reaction, reversible=False):
@@ -3804,10 +4180,14 @@ class Translator(object):
         return "Translator({})".format(self.to_string())
 
     def split_reaction(self):
-        """
-        split the reaction into reactants, products
+        """split the reaction into reactants, products
         and modifiers
         :return:
+
+        Args:
+
+        Returns:
+
         """
         list_of_substrates = []
         list_of_products = []
@@ -3849,11 +4229,15 @@ class Translator(object):
         return list_of_substrates, list_of_products, list_of_modifiers
 
     def split_reaction_components(self, component, type='substrate'):
-        """
-        split a reaction or product component by + operator and
+        """split a reaction or product component by + operator and
         modifier by empty spaces
-        :param component: one of substrate, product or modifier
-        :return:
+
+        Args:
+          component: one of substrate, product or modifier
+          type:  (Default value = 'substrate')
+
+        Returns:
+
         """
         component_options = ['substrate', 'product', 'modifier']
         if type not in component_options:
@@ -3869,12 +4253,16 @@ class Translator(object):
             return [i.replace(' ', '').strip() for i in self.modifiers.split(' ') if i != '']
 
     def determine_stoichiometry(self, component):
-        """
-        determine the reaction stoichiometry for a reaction component.
+        """determine the reaction stoichiometry for a reaction component.
         Converts syntax such as 'X + X -> Y + Y' into 2*X for substrates
         and 2*Y for products.
-        :param component: either substrate or product side of the ->. Modifiers are 1
-        :return: list
+
+        Args:
+          component: either substrate or product side of the ->. Modifiers are 1
+
+        Returns:
+          list
+
         """
 
         count = Counter(component)
@@ -3885,9 +4273,14 @@ class Translator(object):
         return list(count.keys())
 
     def get_components(self, component='substrate'):
-        """
-        create or get substrates, products or modifiers
+        """create or get substrates, products or modifiers
         :return: list
+
+        Args:
+          component:  (Default value = 'substrate')
+
+        Returns:
+
         """
 
         if component == 'substrate':
@@ -3950,9 +4343,13 @@ class Translator(object):
 
 
 class MassAction(Function):
-    """
-    Recreates the COPASI MassAction rate law but didn't get used
+    """Recreates the COPASI MassAction rate law but didn't get used
     in main code.
+
+    Args:
+
+    Returns:
+
     """
 
     def __init__(self, model, **kwargs):
@@ -3969,10 +4366,7 @@ class MassAction(Function):
         return "MassAction(reversible={})".format(self.reversible)
 
     def get_mass_action(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         if self.reversible == 'false':
             ma = [i for i in self.model.functions if i.name == 'Mass action (reversible)']
         elif self.reversible == 'true':
@@ -3982,9 +4376,13 @@ class MassAction(Function):
         return ma
 
     def create_mass_action(self):
-        """
-        if name == mass_action, create the mass action function
+        """if name == mass_action, create the mass action function
         :return:
+
+        Args:
+
+        Returns:
+
         """
 
         self.key = KeyFactory(self.model, type='function').generate()
@@ -4017,9 +4415,13 @@ class MassAction(Function):
         return self
 
     def to_xml(self):
-        """
-        write mass action function as xml element
+        """write mass action function as xml element
         :return:
+
+        Args:
+
+        Returns:
+
         """
         mass_action = etree.Element('{http://www.copasi.org/static/schema}Function',
                                     attrib=OrderedDict({'key': self.key,
@@ -4049,8 +4451,7 @@ class MassAction(Function):
 @mixin(ReadModelMixin)
 @mixin(ComparisonMethodsMixin)
 class ParameterSet(object):
-    """
-    """
+    """ """
 
     def __init__(self, model, name='Initial State', initial_time=0,
                  compartments=[], metabolites=[], global_quantities=[],
@@ -4068,10 +4469,7 @@ class ParameterSet(object):
         self._do_checks()
 
     def _do_checks(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         if self.key is None:
             pass
             # self.key = KeyFactory(self.model, type='parameter_set').generate()
@@ -4107,6 +4505,7 @@ class ParameterSet(object):
     #                             pass
 
     def to_xml(self):
+        """ """
 
         ## top element
         parameter_set = etree.Element('{http://www.copasi.org/static/schema}ModelParameterSet', attrib={'key': self.key,
@@ -4223,9 +4622,13 @@ class ParameterSet(object):
 
 @mixin(ReadModelMixin)
 class InsertParameters(object):
-    """
-    Insert parameters from a file, dictionary or a pandas dataframe into a copasi
+    """Insert parameters from a file, dictionary or a pandas dataframe into a copasi
     file.
+
+    Args:
+
+    Returns:
+
     """
 
     def __init__(self, model, parameter_dict=None, df=None,
@@ -4278,9 +4681,13 @@ class InsertParameters(object):
     #     return "InsertParameters({})".format(self.to_string())
 
     def _do_checks(self):
-        """
-        Verity user input
+        """Verity user input
         :return:
+
+        Args:
+
+        Returns:
+
         """
         assert self.quantity_type in ['concentration', 'particle_numbers']
         if self.parameter_dict != None:
@@ -4317,8 +4724,12 @@ class InsertParameters(object):
 
     def to_dict(self):
         """
-        return parameters as dict
-        :return:
+
+        Args:
+
+        Returns:
+          :return:
+
         """
         if isinstance(self.parameters, dict):
             return self.parameters
@@ -4328,13 +4739,16 @@ class InsertParameters(object):
 
     @cached_property
     def parameters(self):
-        """
-        Get parameters depending on the type of input.
+        """Get parameters depending on the type of input.
         Converge on a pandas dataframe.
         Columns = parameters, rows = parameter sets
-
+        
         Use check parameter consistency to see
         whether headers have been pruned or not. If not try pruning them
+
+        Args:
+
+        Returns:
 
         """
         if self.parameter_dict != None:
@@ -4356,13 +4770,11 @@ class InsertParameters(object):
         return df
 
     def insert_locals(self):
-        """
-
-        :return:
-        """
+        """:return:"""
         # print self.parameters
 
-        locals = [j for i in self.model.reactions for j in i.parameters if j.global_name in list(self.parameters.keys())]
+        locals = [j for i in self.model.reactions for j in i.parameters if
+                  j.global_name in list(self.parameters.keys())]
         if locals == []:
             return self.model
         else:
@@ -4380,9 +4792,13 @@ class InsertParameters(object):
         return self.model
 
     def insert_compartments(self):
-        """
-        insert new parameters into compartment
+        """insert new parameters into compartment
         :return:
+
+        Args:
+
+        Returns:
+
         """
         compartments = [i for i in self.model.compartments if i.name in self.parameters]
         if compartments == []:
@@ -4397,9 +4813,13 @@ class InsertParameters(object):
             return self.model
 
     def insert_metabolites(self):
-        """
-        insert new parameters into compartment
+        """insert new parameters into compartment
         :return:
+
+        Args:
+
+        Returns:
+
         """
         metabolites = [i for i in self.model.metabolites if i.name in self.parameters]
         if metabolites == []:
@@ -4413,9 +4833,13 @@ class InsertParameters(object):
             return self.model
 
     def insert_global_quantities(self):
-        """
-        insert new parameters into compartment
+        """insert new parameters into compartment
         :return:
+
+        Args:
+
+        Returns:
+
         """
         global_quantities = [i for i in self.model.global_quantities if i.name in self.parameters]
         if global_quantities == []:
@@ -4433,10 +4857,14 @@ class InsertParameters(object):
             return self.model
 
     def insert(self):
-        """
-        User other methods defined in this class to insert parameters
+        """User other methods defined in this class to insert parameters
         into the model
         :return:
+
+        Args:
+
+        Returns:
+
         """
         self.model = self.insert_locals()
         self.model = self.insert_compartments()
