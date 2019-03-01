@@ -554,7 +554,6 @@ class ExperimentMapperTests(_test_base._BaseTest):
         for i in mod.xml.xpath(query):
             for j in i:
                 count += 1
-        mod.open()
         self.assertEqual(count, 3)
 
     def test_correct_number_of_validation_experiments(self):
@@ -824,7 +823,6 @@ class ExperimentMapperTests(_test_base._BaseTest):
             for j in i:
                 print(j, j.attrib)
                 count += 1
-        mod.open()
         self.assertEqual(3, count)
 
     def test_fit_items_property(self):
@@ -1085,7 +1083,6 @@ class ParameterEstimationTests(_test_base._BaseTest):
     def test_affected_experiments_for_global_quantity_A2B(self):
         # self.PE.write_config_file()
 
-        # self.PE.models.model1.model.open()
         count = 0
         experiment_keys = []
         for i in self.PE.models.model1.model.xml.findall('.//*[@name="ObjectCN"]'):
@@ -1101,7 +1098,6 @@ class ParameterEstimationTests(_test_base._BaseTest):
     def test_affected_validation_experiments_for_global_quantity_A2B(self):
         # self.PE.write_config_file()
 
-        # self.PE.models.model1.model.open()
         count = 0
         valiadtion_keys = []
         for i in self.PE.models.model1.model.xml.findall('.//*[@name="ObjectCN"]'):
@@ -1234,7 +1230,6 @@ class ParameterEstimationTests(_test_base._BaseTest):
         self.assertEqual(expected, data['model1'].shape[0])
 
     def test_randomize_start_values(self):
-        # self.PE.config.models.model1.model.open()
         query = '//*[@name="Randomize Start Values"]'
         expected = '1'
         actual = None
@@ -1438,8 +1433,6 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
             for j in i:
                 count += 1
         self.assertEqual(expected, count)
-
-        # pe.models.test_model.model.open()
 
     def test_default_mappings(self):
         with ParameterEstimation.Context(
@@ -1654,7 +1647,6 @@ class ParameterEstimationTestsMoreThanOneModel(unittest.TestCase):
 
         time.sleep(0.2)
         actual = self.get_population_size(PE.config.models.first.model.xml)
-        # PE.config.models.second.model.open()
         self.assertEqual(str(49), actual)
 
     def test_two_models_second(self):
