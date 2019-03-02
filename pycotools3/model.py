@@ -2356,7 +2356,7 @@ class Model(_base._Base):
 
         TC = tasks.TimeCourse(self, start=start,
                               end=stop, step_size=by,
-                              intervals=stop*by-start,
+                              intervals=stop * by - start,
                               **kwargs)
 
         variables = self.get_variable_names(which=species, include_assignments=True)
@@ -2369,9 +2369,6 @@ class Model(_base._Base):
         df = pandas.read_csv(TC.report_name, sep='\t', index_col=0)
 
         return df[variables]
-
-
-
 
     def to_antimony(self):
         """Returns antimony string of model. Wrapper around tellurium

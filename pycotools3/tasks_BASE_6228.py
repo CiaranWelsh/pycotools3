@@ -17,17 +17,13 @@
 
 
  $Author: Ciaran Welsh
- $Date: 12-09-2016
+ $Date: 12-09-2016 
  Time:  13:33
 
 
 
 
 '''
-from . import viz
-from . import errors
-from . import misc
-from . import model
 import time
 import threading
 import queue as queue
@@ -35,50 +31,54 @@ import psutil
 import shutil
 import numpy
 import pandas
+import scipy
+import os
 from lxml import etree
 from io import StringIO
 import logging
 import os
 import subprocess
 import re
-from .utils import DotDict, load_copasi
+from . import viz
+from . import errors
+from . import misc
+from . import _base
+from . import model
 from multiprocessing import Process, cpu_count
 import glob
 import seaborn as sns
 from copy import deepcopy
 from subprocess import check_call
-from collections import OrderedDict, Mapping
-from .mixin import mixin
+from collections import OrderedDict
+from .mixin import Mixin, mixin
 from functools import reduce
-import yaml, json
-import sys
-import munch
 
-COPASISE, COPASIUI = load_copasi()
+## TODO use generators when iterating over a function with another function. i.e. plotting
+## TODO: create a base class called Task instead of all of these mixin functions.
 
 LOG = logging.getLogger(__name__)
-
 sns.set_context(context='poster',
                 font_scale=3)
 
 
 class _Task(object):
-    """base class for tasks"""
+    """
+    base class for tasks
+    """
     schema = '{http://www.copasi.org/static/schema}'
-
     @staticmethod
     def get_variable_from_string(m, v, glob=False):
-        """Use model entity name to get the
+        """
+        Use model entity name to get the
         pycotools3 variable
+        :param m:
+            :py:class:`model`
 
-        Args:
-          m: py:class:`model`
-          v: str` variable in model
-          glob:  (Default value = False)
+        :param v:
+            `str` variable in model
 
-        Returns:
-          variable as a model component
-
+        :return:
+            variable as a model component
         """
         if not isinstance(m, model.Model):
             raise errors.InputError('expected model.Model but got "{}" instance'.format(
@@ -114,14 +114,11 @@ class _Task(object):
         return v
 
     def update_properties(self, kwargs):
-        """method for updating properties from kwargs
+        """
+        method for updating properties from kwargs
 
-        Args:
-          kwargs: dict of options for subclass
-
-        Returns:
-          void
-
+        :param kwargs: dict of options for subclass
+        :return: void
         """
         for k in kwargs:
             try:
@@ -132,20 +129,19 @@ class _Task(object):
 
     @staticmethod
     def convert_bool_to_numeric(dct):
-        """CopasiML uses 1's and 0's for True or False in some
+        """
+        CopasiML uses 1's and 0's for True or False in some
         but not all places. When one of these options
         is required by the user and is specified as bool,
         this class converts them into 1's or 0's.
-        
+
         Use this method in early on in constructor for
         all subclasses where this applies.
+        :param:
+            `dict`.  __dict__ or kwargs or options
 
-        Args:
-          dct: 
-
-        Returns:
-          dict` with certain boolean args as 1's and 0's
-
+        :return:
+            `dict` with certain boolean args as 1's and 0's
         """
         lst = ['append',
                'confirm_overwrite',
@@ -180,80 +176,18 @@ class _Task(object):
                     raise Exception('{} is not True or False'.format(v))
         return dct
 
-    def convert_bool_to_numeric2(self):
-        """CopasiML uses 1's and 0's for True or False in some
-        but not all places. When one of these options
-        is required by the user and is specified as bool,
-        this class converts them into 1's or 0's.
-        
-        This is like convert_bool_to_numeric but
-        uses setattr
-
-        Args:
-
-        Returns:
-
-        """
-        lst = ['append',
-               'confirm_overwrite',
-               'output_event',
-               'scheduled',
-               'automatic_step_size',
-               'start_in_steady_state',
-               'output_event',
-               'start_in_steady_state',
-               'integrate_reduced_model',
-               'use_random_seed',
-               'output_in_subtask',
-               'adjust_initial_conditions',
-               'update_model',
-               'output_in_subtask',
-               'adjust_initial_conditions',
-               'create_parameter_sets',
-               'calculate_statistics',
-               'randomize_start_values',
-               'row_orientation',
-               'normalize_weights_per_experiment',
-               ]
-        for attr in lst:
-            try:
-                ans = getattr(self, attr)
-                if isinstance(ans, bool):
-                    if ans:
-                        setattr(self, attr, '1')
-                    elif not ans:
-                        setattr(self, attr, '0')
-                    else:
-                        if ans not in [True, False, '0', '1']:
-                            raise ValueError
-                elif isinstance(ans, list):
-                    new_list = []
-                    for b in ans:
-                        if not isinstance(b, bool):
-                            raise TypeError
-                        if b:
-                            new_list.append('1')
-                        elif not b:
-                            new_list.append('0')
-                        else:
-                            if b not in [True, False, '0', '1']:
-                                raise ValueError
-                    setattr(self, attr, new_list)
-            except AttributeError:
-                continue
-
     @staticmethod
     def check_integrity(allowed, given):
-        """Method to raise an error when a wrong
+        """
+        Method to raise an error when a wrong
         kwarg is passed to a subclass
+        :param allowed:
+            `list`. List of allowed kwargs
 
-        Args:
-          allowed: list`. List of allowed kwargs
-          given: List of kwargs given by user or default
+        :param given: List of kwargs given by user or default
 
-        Returns:
-          None
-
+        :return:
+            None
         """
         for key in given:
             if key not in allowed:
@@ -261,14 +195,10 @@ class _Task(object):
 
 
 class Bool2Str(object):
-    """copasiML expects strings and we pythoners
+    """
+    copasiML expects strings and we pythoners
     want to use python booleans not strings
     This class quickly converts between them
-
-    Args:
-
-    Returns:
-
     """
 
     def __init__(self, dct):
@@ -280,22 +210,11 @@ class Bool2Str(object):
         if isinstance(self.dct, dict) != True:
             raise errors.InputError('Input must be dict')
 
-        self.acceptable_kwargs = [
-            'append', 'confirm_overwrite', 'update_model',
-            'output_in_subtask', 'adjust_initial_conditions',
-            'randomize_start_values', 'log10',
-            'scheduled', 'output_event',
-        ]
+        self.acceptable_kwargs = ['append', 'confirm_overwrite', 'update_model',
+                                  'output_in_subtask', 'adjust_initial_conditions',
+                                  'randomize_start_values', 'log10', 'scheduled', 'output_event']
 
     def convert(self, boolean):
-        """
-
-        Args:
-          boolean: 
-
-        Returns:
-
-        """
         if boolean == True:
             return "true"
         elif boolean == False:
@@ -304,7 +223,11 @@ class Bool2Str(object):
             raise errors.InputError('Input should be boolean not {}'.format(isinstance(boolean)))
 
     def convert_dct(self):
-        """----"""
+        """
+
+        ----
+        return
+        """
         for kwarg in list(self.dct.keys()):
             if kwarg in self.acceptable_kwargs:
                 if self.dct[kwarg] == True:
@@ -316,15 +239,12 @@ class Bool2Str(object):
 
 
 class CopasiMLParser(_Task):
-    """Parse a copasi file into xml.etree.
-    
+    """
+    Parse a copasi file into xml.etree.
+
     .. highlight::
 
-    Args:
-
-    Returns:
-
-    >>> model_path = r'/full/path/to/model.cps'
+        >>> model_path = r'/full/path/to/model.cps'
         >>> xml = CopasiMLParser(model_path).xml
     """
 
@@ -344,13 +264,9 @@ class CopasiMLParser(_Task):
         os.chdir(os.path.dirname(self.copasi_file))
 
     def _parse_copasiML(self):
-        """Parse xml doc with lxml
+        """
+        Parse xml doc with lxml
         :return:
-
-        Args:
-
-        Returns:
-
         """
         parser = etree.XMLParser(remove_blank_text=True)
         tree = etree.parse(self.copasi_file, parser)
@@ -358,14 +274,8 @@ class CopasiMLParser(_Task):
 
     @staticmethod
     def write_copasi_file(copasi_filename, xml):
-        """write to file with lxml write function
-
-        Args:
-          copasi_filename: 
-          xml: 
-
-        Returns:
-
+        """
+        write to file with lxml write function
         """
         # first convert the copasiML to a root element tree
         root = etree.ElementTree(xml)
@@ -374,26 +284,33 @@ class CopasiMLParser(_Task):
 
 @mixin(model.ReadModelMixin)
 class Run(_Task):
-    """Execute a copasi model using CopasiSE. To
+    """
+    Execute a copasi model using CopasiSE. To
     be operational the environment variable CopasiSE
     must be set to point towards the location of
     your CopasiSE executable. This is usually
     done automatically.
-    
+
     .. highlight::
-    
+
         ## First get a model object
-    
+        >>> model_path = r'/full/path/to/model.cps'
+        >>> model = model.Model(model_path)
+
     To run a time_course task
-    
+        >>> Run(model, task='time_course', mode=True)
+
     To run the parameter estimation task:
-    
+        >>> Run(model, task='parameter_estimation', mode=True)
+
     To run the parameter estimation task with :py:mod:`multiprocessing`
-    
+        >>> Run(model, task='parameter_estimation', mode='multiprocess')
+
     To run the scan task but have python write a .sh script for submission to sun grid engine:
-    
+        >>> Run(model, task='scan', mode='sge')
+
     Properties
-    
+
     ==========          ===================
     Property            Description
     ==========          ===================
@@ -402,7 +319,7 @@ class Run(_Task):
     sge_job_filename    Optional name of sh file
                         generated for running sge
     ==========          ===================
-    
+
     =============
     task options
     =============
@@ -420,7 +337,7 @@ class Run(_Task):
     cross_section
     linear_noise_approximation
     =============
-    
+
     ==============          ==============
     Modes                   Description
     =============           ==============
@@ -430,21 +347,6 @@ class Run(_Task):
     sge                     Run on sun grid engine
     slurm                   Run on Slurm
     =============           ==============
-
-    Args:
-
-    Returns:
-
-    >>> model_path = r'/full/path/to/model.cps'
-        >>> model = model.Model(model_path)
-    
-        >>> Run(model, task='time_course', mode=True)
-    
-        >>> Run(model, task='parameter_estimation', mode=True)
-    
-        >>> Run(model, task='parameter_estimation', mode='multiprocess')
-    
-        >>> Run(model, task='scan', mode='sge')
     """
 
     def __init__(self, model, **kwargs):
@@ -454,14 +356,12 @@ class Run(_Task):
 
         """
         self.model = self.read_model(model)
-
         self.kwargs = kwargs
 
         self.default_properties = {'task': 'time_course',
                                    'mode': True,
                                    'sge_job_filename': None,
-                                   # 'copasi_location': COPASI_DIR
-                                   # 'copasi_location': 'apps/COPASI/4.21.166-Linux-64bit',  # for sge mode
+                                   'copasi_location': 'apps/COPASI/4.21.166-Linux-64bit',  # for sge mode
                                    }
 
         self.default_properties.update(self.kwargs)
@@ -470,16 +370,16 @@ class Run(_Task):
         self.check_integrity(list(self.default_properties.keys()), list(self.kwargs.keys()))
         self._do_checks()
 
-        if self.sge_job_filename is None:
+        if self.sge_job_filename == None:
             self.sge_job_filename = os.path.join(os.getcwd(), 'sge_job_file.sh')
 
-        # if self.mode is 'slurm':
-        #     self.copasi_location = r'COPASI/4.22.170'
+        if self.mode is 'slurm':
+            self.copasi_location = r'COPASI/4.22.170'
 
         self.model = self.set_task()
         self.model.save()
 
-        if self.mode is True:
+        if self.mode == True:
             try:
                 self.run()
             except errors.CopasiError:
@@ -488,17 +388,17 @@ class Run(_Task):
         elif self.mode == 'sge':
             self.submit_copasi_job_SGE()
 
+        elif self.mode == 'multiprocess':
+            raise ValueError('"multiprocess" has been deprecated. Please'
+                             'use mode="parallel" instead')
+
         elif self.mode == 'slurm':
             self.submit_copasi_job_slurm()
 
     def _do_checks(self):
-        """Varify integrity of user input
+        """
+        Varify integrity of user input
         :return:
-
-        Args:
-
-        Returns:
-
         """
         tasks = ['steady_state', 'time_course',
                  'scan', 'flux_mode', 'optimization',
@@ -517,31 +417,22 @@ class Run(_Task):
         return 'Run({})'.format(self.to_string())
 
     def multi_run(self):
-        """ """
         pids = []
 
+        ##TODO build Queue.Queue system for multi running.
         def run(x):
-            """
-
-            Args:
-              x: 
-
-            Returns:
-
-            """
             if os.path.isfile(x) != True:
                 raise errors.FileDoesNotExistError('{} is not a file'.format(self.copasi_file))
-            p = subprocess.Popen(
-                [
-                    f'{COPASISE}', self.model.copasi_file
-                ], shell=True
-            )
+            p = subprocess.Popen(['CopasiSE', self.model.copasi_file])
             return p.pid
 
         Process(run(self.model.copasi_file))
 
     def set_task(self):
-        """:return:"""
+        """
+
+        :return:
+        """
         task = self.task.replace(' ', '_').lower()
 
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfTasks'):
@@ -552,16 +443,11 @@ class Run(_Task):
         return self.model
 
     def run(self):
-        """Run copasi model with CopasiSE distributed with pycotools
-        :return:
-
-        Args:
-
-        Returns:
-
-        """
-        p = subprocess.Popen(f'{COPASISE} "{self.model.copasi_file}"', stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE, shell=True)
+        '''
+        Process the copasi file using CopasiSE
+        '''
+        args = ['CopasiSE', "{}".format(self.model.copasi_file)]
+        p = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         output, err = p.communicate()
         d = {}
         d['output'] = output
@@ -574,30 +460,25 @@ class Run(_Task):
         return d['output']
 
     def run_linux(self):
-        """Linux systems do not respond to the run function
+        """
+        Linux systems do not respond to the run function
         in the same way as windows. This ffunction
         uses basic os.system instead, which linux systems
         do respond to. This solution is less than elegant.
         Look into it further.
         :return:
-
-        Args:
-
-        Returns:
-
         """
         ##TODO find better solution for running copasi files on linux
-        os.system(f'{COPASISE} {self.model.copasi_file}')
+        os.system('CopasiSE "{}"'.format(self.model.copasi_file))
 
     def submit_copasi_job_SGE(self):
-        """Submit copasi file as job to SGE based job scheduler.
+        """
+        Submit copasi file as job to SGE based job scheduler.
+        :param copasi_location:
+            Location to copasi on the sge cluster. Gets passed to `module add` to load copasi
 
-        Args:
-          copasi_location: Location to copasi on the sge cluster. Gets passed to `module add` to load copasi
-
-        Returns:
-          None
-
+        :return:
+            None
         """
         self.sge_job_filename = self.sge_job_filename.replace('/', '_')
         with open(self.sge_job_filename, 'w') as f:
@@ -610,15 +491,15 @@ class Run(_Task):
         os.system('qsub "{}" -N "{}" '.format(self.sge_job_filename, self.sge_job_filename))
         os.remove(self.sge_job_filename)
 
+
     def submit_copasi_job_slurm(self):
-        """Submit copasi file as job to SGE based job scheduler.
+        """
+        Submit copasi file as job to SGE based job scheduler.
+        :param copasi_location:
+            Location to copasi on the sge cluster. Gets passed to `module add` to load copasi
 
-        Args:
-          copasi_location: Location to copasi on the sge cluster. Gets passed to `module add` to load copasi
-
-        Returns:
-          None
-
+        :return:
+            None
         """
         self.sge_job_filename = self.sge_job_filename.replace('/', '_')
         with open(self.sge_job_filename, 'w') as f:
@@ -636,7 +517,10 @@ class Run(_Task):
 @mixin(model.GetModelComponentFromStringMixin)
 @mixin(model.ReadModelMixin)
 class RunParallel(_Task):
-    """ """
+    """
+
+
+    """
 
     def __init__(self, models, **kwargs):
         self.models = models
@@ -654,16 +538,15 @@ class RunParallel(_Task):
 
         self.models = self.set_task()
         [i.save() for i in self.models]
+
+        ##TODO put Try except block here once you remember which error
+        ##is being raised
         self.run_parallel()
 
     def _do_checks(self):
-        """Varify integrity of user input
+        """
+        Varify integrity of user input
         :return:
-
-        Args:
-
-        Returns:
-
         """
         tasks = ['steady_state', 'time_course',
                  'scan', 'flux_mode', 'optimization',
@@ -691,7 +574,10 @@ class RunParallel(_Task):
     #     return 'RunParallel({})'.format()
 
     def set_task(self):
-        """:return:"""
+        """
+
+        :return:
+        """
         task = self.task.replace(' ', '_').lower()
         model_list = []
         for model in self.models:
@@ -705,15 +591,11 @@ class RunParallel(_Task):
         return model_list
 
     def run_parallel(self):
-        """Run models in parallel. Only have self.max_active
+        """
+        Run models in parallel. Only have self.max_active
         models running at once
         :return:
             None
-
-        Args:
-
-        Returns:
-
         """
         pids = []
         num_models_to_process = len(self.models)
@@ -722,7 +604,7 @@ class RunParallel(_Task):
 
             # for copy_number, model in self.models.items():
             model = self.models[num_models_to_process - 1]
-            if len(pids) < int(self.max_active):
+            if len(pids) < self.max_active:
                 num_models_to_process -= 1
                 subp = subprocess.Popen(['CopasiSE', model.copasi_file])
                 pids.append(subp.pid)
@@ -750,13 +632,14 @@ class RunParallel(_Task):
 @mixin(model.GetModelComponentFromStringMixin)
 @mixin(model.ReadModelMixin)
 class Reports(_Task):
-    """Creates reports in copasi output specification section. Which report is
+    """
+    Creates reports in copasi output specification section. Which report is
     controlled by the report_type key word. The following are valid types of
     report:
-    
+
     .. _report_kwargs:
     ------------------
-    
+
     ===========================     ==============================================
     Report Types                    Description
     ===========================     ==============================================
@@ -771,9 +654,9 @@ class Reports(_Task):
     profile_likelihood              Collect both the parameter being scanned
                                     value and the parameter estimates
     ===========================     ==============================================
-    
+
     Here are the keyword arguments accepted by the Reports class.
-    
+
     ===========================     ==============================================
     Report options                  Description
     ===========================     ==============================================
@@ -788,15 +671,10 @@ class Reports(_Task):
     append                          `bool`. Passed onto to copasi report options
     confirm_overwrite               `bool`. Passed onto to copasi report options
     update_model                    `bool`. Passed onto to copasi report options
-    
+
     variable                        `str` which variable scanned in profile likelihood
     directory                       `str` directory to save report in
     ===========================     ==============================================
-
-    Args:
-
-    Returns:
-
     """
 
     def __init__(self, model, **kwargs):
@@ -886,18 +764,14 @@ class Reports(_Task):
         return 'Report({})'.format(self.to_string())
 
     def timecourse(self):
-        """creates a report to collect time course results.
-        
+        '''
+        creates a report to collect time course results.
+
         By default all species and all global quantities are used with
         Time on the left most column. This behavior can be overwritten by passing
         lists of metabolites to the metabolites keyword or global quantities to the
         global quantities keyword
-
-        Args:
-
-        Returns:
-
-        """
+        '''
         # get existing report keys
         keys = []
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
@@ -938,6 +812,8 @@ class Reports(_Task):
                     looks like this:
                         "CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration"
                     '''
+                    # cn= self.model.metabolites[i].reference
+                    # print self.model.reference
                     cn = '{},{},{}'.format(self.model.reference,
                                            i.compartment.reference,
                                            i.transient_reference)
@@ -964,20 +840,17 @@ class Reports(_Task):
         return self.model
 
     def scan(self):
-        """creates a report to collect scan time course results.
-        
+        '''
+        creates a report to collect scan time course results.
+
         By default all species and all global quantities are used with
         Time on the left most column. This behavior can be overwritten by passing
         lists of metabolites to the metabolites keyword or global quantities to the
         global quantities keyword
-
-        Args:
-
-        Returns:
-
-        """
+        '''
         # get existing report keys
 
+        ##TODO implement self.variable as column in scan
         keys = []
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
             keys.append(i.attrib['key'])
@@ -1013,6 +886,8 @@ class Reports(_Task):
                     looks like this:
                         "CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration"
                     '''
+                    # cn= self.model.metabolites[i].reference
+                    # print self.model.reference
                     cn = '{},{},{}'.format(self.model.reference,
                                            i.compartment.reference,
                                            i.transient_reference)
@@ -1039,14 +914,10 @@ class Reports(_Task):
         return self.model
 
     def profile_likelihood(self):
-        """Create report of a parameter and best value for a parameter estimation
+        '''
+        Create report of a parameter and best value for a parameter estimation
         for profile likelihoods
-
-        Args:
-
-        Returns:
-
-        """
+        '''
         # get existing report keys
         keys = []
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
@@ -1071,6 +942,7 @@ class Reports(_Task):
         table = etree.SubElement(report, 'Table')
         table.attrib['printTitle'] = str(1)
 
+        ##TODO cater for particle numbers
         if self.variable.name in [i.name for i in self.metabolites]:
             cn = '{},{},{}'.format(self.model.reference, self.variable.compartment.reference,
                                    self.variable.initial_reference)
@@ -1090,18 +962,14 @@ class Reports(_Task):
         return self.model
 
     def parameter_estimation(self):
-        """Define a parameter estimation report and include the progression
+        '''
+        Define a parameter estimation report and include the progression
         of the parameter estimation (function evaluations).
         Defaults to including all
         metabolites, global variables and local variables with the RSS best value
         These can be over-ridden with the global_quantities, LocalParameters and metabolites
         keywords.
-
-        Args:
-
-        Returns:
-
-        """
+        '''
         # get existing report keys
         keys = []
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
@@ -1118,6 +986,7 @@ class Reports(_Task):
                              'key': new_key,
                              'taskType': 'parameterFitting'}
 
+        # print self.model, type(self.model)
         ListOfReports = self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports')
         report = etree.SubElement(ListOfReports, 'Report')
         report.attrib.update(report_attributes)
@@ -1132,18 +1001,14 @@ class Reports(_Task):
         return self.model
 
     def multi_parameter_estimation(self):
-        """Define a parameter estimation report and include the progression
+        '''
+        Define a parameter estimation report and include the progression
         of the parameter estimation (function evaluations).
         Defaults to including all
         metabolites, global variables and local variables with the RSS best value
         These can be over-ridden with the global_quantities, LocalParameters and metabolites
         keywords.
-
-        Args:
-
-        Returns:
-
-        """
+        '''
         # get existing report keys
         keys = []
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
@@ -1173,7 +1038,6 @@ class Reports(_Task):
         return self.model
 
     def sensitivity(self):
-        """ """
         # get existing report keys
         keys = []
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
@@ -1204,7 +1068,9 @@ class Reports(_Task):
         return self.model
 
     def run(self):
-        """Execute code that builds the report defined by the kwargs"""
+        '''
+        Execute code that builds the report defined by the kwargs
+        '''
         if self.report_type == 'parameter_estimation':
             self.model = self.parameter_estimation()
 
@@ -1229,14 +1095,11 @@ class Reports(_Task):
         return self.model
 
     def remove_report(self, report_name):
-        """remove report called report_name
+        """
 
-        Args:
-          report_name: return: pycotools3.model.Model
-
-        Returns:
-          pycotools3.model.Model
-
+        remove report called report_name
+        :param report_name:
+        :return: pycotools3.model.Model
         """
         assert report_name in self.report_types, '{} not a valid report type. These are valid report types: {}'.format(
             report_name, self.report_types)
@@ -1248,15 +1111,11 @@ class Reports(_Task):
         return self.model
 
     def clear_all_reports(self):
-        """Having multile reports defined at once can be really annoying
+        """
+        Having multile reports defined at once can be really annoying
         and give you unexpected results. Use this function to remove all reports
         before defining a new one to ensure you only have one active report any once.
         :return:
-
-        Args:
-
-        Returns:
-
         """
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfTasks'):
             for j in list(i):
@@ -1268,13 +1127,16 @@ class Reports(_Task):
 @mixin(model.ReadModelMixin)
 class TimeCourse(_Task):
     """
+    ##todo implement arguments that get passed on to report
+    as **report_kwargs
+
     .. _timecourse_kwargs:
-    
+
     =================
     TimeCourse Kwargs
     =================
     
-    These kwargs are directly passed on to copasi in the right situations.
+    These kwargs are directly passed on to copasi in the right situations. 
     See copasi documentation for mode details.
     
     ===========================     ==============================================
@@ -1306,14 +1168,9 @@ class TimeCourse(_Task):
     run                             Default: True
     correct_headers                 Default: True
     save                            Default: False
-    <report_kwargs>                 Arguments for :ref:`report_kwargs` are also
+    <report_kwargs>                 Arguments for :ref:`_report_kwargs` are also
                                     accepted here
     ===========================     ==============================================
-
-    Args:
-
-    Returns:
-
     """
 
     def __init__(self, model, **kwargs):
@@ -1363,7 +1220,7 @@ class TimeCourse(_Task):
         self.set_timecourse()
         self.set_report()
 
-        self.simulate()
+        self.run_task()
 
         ## self.correct_output_headers()
 
@@ -1371,13 +1228,9 @@ class TimeCourse(_Task):
             self.model.save()
 
     def _do_checks(self):
-        """method for checking user input
+        """
+        method for checking user input
         :return: void
-
-        Args:
-
-        Returns:
-
         """
         method_list = ['deterministic',
                        'direct',
@@ -1423,22 +1276,17 @@ class TimeCourse(_Task):
             self.method, self.end, self.intervals, self.step_size
         )
 
-    def simulate(self):
-        """ """
+    def run_task(self):
         R = Run(self.model, task='time_course', mode=self.run)
         return R.model
 
     def create_task(self):
-        """Begin creating the segment of xml needed
+        """
+        Begin creating the segment of xml needed
         for a time course. Define task and problem
         definition. This section of xml is common to all
         methods
         :return: lxml.etree._Element
-
-        Args:
-
-        Returns:
-
         """
 
         task = etree.Element('Task', attrib={'key': 'Task_100',
@@ -1499,16 +1347,12 @@ class TimeCourse(_Task):
         return task
 
     def set_timecourse(self):
-        """Set method specific sections of xml. This
+        """
+        Set method specific sections of xml. This
         is a method element after the problem element
         that looks like this:
-        
+
         :return: lxml.etree._Element
-
-        Args:
-
-        Returns:
-
         """
         if self.method == 'deterministic':
             timecourse = self.deterministic()
@@ -1545,7 +1389,9 @@ class TimeCourse(_Task):
         return self.model
 
     def deterministic(self):
-        """:return:lxml.etree._Element"""
+        """
+        :return:lxml.etree._Element
+        """
         method = etree.Element('Method', attrib={'name': 'Deterministic (LSODA)',
                                                  'type': 'Deterministic(LSODA)'})
 
@@ -1579,7 +1425,9 @@ class TimeCourse(_Task):
         return task
 
     def gibson_bruck(self):
-        """:return:"""
+        """
+        :return:
+        """
         method = etree.Element('Method', attrib={'name': 'Stochastic (Gibson + Bruck)',
                                                  'type': 'DirectMethod'})
 
@@ -1608,7 +1456,9 @@ class TimeCourse(_Task):
         return task
 
     def direct(self):
-        """:return:"""
+        """
+        :return:
+        """
         method = etree.Element('Method', attrib={'name': 'Stochastic (Direct method)',
                                                  'type': 'Stochastic'})
 
@@ -1632,7 +1482,9 @@ class TimeCourse(_Task):
         return task
 
     def tau_leap(self):
-        """:return:"""
+        """
+        :return:
+        """
         method = etree.Element('Method', attrib={'name': 'Stochastic (τ-Leap)',
                                                  'type': 'TauLeap'})
 
@@ -1661,7 +1513,9 @@ class TimeCourse(_Task):
         return task
 
     def adaptive_tau_leap(self):
-        """:return:"""
+        """
+        :return:
+        """
         method = etree.Element('Method', attrib={'name': 'Stochastic (Adaptive SSA/τ-Leap)',
                                                  'type': 'AdaptiveSA'})
 
@@ -1690,7 +1544,9 @@ class TimeCourse(_Task):
         return task
 
     def hybrid_runge_kutta(self):
-        """:return:"""
+        """
+        :return:
+        """
         method = etree.Element('Method', attrib={'name': 'Hybrid (Runge-Kutta)',
                                                  'type': 'Hybrid'})
 
@@ -1733,7 +1589,9 @@ class TimeCourse(_Task):
         return task
 
     def hybrid_lsoda(self):
-        """:return:"""
+        """
+        :return:
+        """
         method = etree.Element('Method', attrib={'name': 'Hybrid (LSODA)',
                                                  'type': 'Hybrid (LSODA)'})
         dct = {'name': 'Max Internal Steps',
@@ -1791,19 +1649,17 @@ class TimeCourse(_Task):
         return task
 
     def hybrid_rk45(self):
-        """:return:"""
+        """
+        :return:
+        """
         raise errors.NotImplementedError('The hybrid-RK-45 method is not yet implemented')
 
     def set_report(self):
-        """ser a time course report containing time
+        """
+        ser a time course report containing time
         and all species or global quantities defined by the user.
-        
+
         :return: pycotools3.model.Model
-
-        Args:
-
-        Returns:
-
         """
         report_options = {'metabolites': self.metabolites,
                           'global_quantities': self.global_quantities,
@@ -1836,13 +1692,9 @@ class TimeCourse(_Task):
         return self.model
 
     def get_report_key(self):
-        """cross reference the timecourse task with the newly created
+        """
+        cross reference the timecourse task with the newly created
         time course reort to get the key
-
-        Args:
-
-        Returns:
-
         """
         all_reports = []
         for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
@@ -1857,13 +1709,14 @@ class TimeCourse(_Task):
 
 @mixin(model.ReadModelMixin)
 class Scan(_Task):
-    """Interface to COPASI scan task
-    
+    """
+    Interface to COPASI scan task
+
     .. _scan_kwargs:
-    
+
     Scan Kwargs
     ===========
-    
+
     ===========================     ==============================================
     Scan Kwargs               Description
     ===========================     ==============================================
@@ -1887,11 +1740,6 @@ class Scan(_Task):
     <report_kwargs>                 Arguments for :ref:`_report_kwargs` are also
                                     accepted here
     ===========================     ==============================================
-
-    Args:
-
-    Returns:
-
     """
 
     def __init__(self, model, **kwargs):
@@ -1964,13 +1812,9 @@ class Scan(_Task):
         )
 
     def _do_checks(self):
-        """Varify integrity of user input
+        """
+        Varify integrity of user input
         :return:
-
-        Args:
-
-        Returns:
-
         """
         if isinstance(self.variable, str):
             self.variable = self.get_variable_from_string(self.model, self.variable)
@@ -2061,13 +1905,9 @@ class Scan(_Task):
                 self.variable = self.model.get('local_parameter', self.variable, by='global_name')
 
     def define_report(self):
-        """Use Report class to create report
+        """
+        Use Report class to create report
         :return:
-
-        Args:
-
-        Returns:
-
         """
         self.report_dict = {}
         self.report_dict['metabolites'] = self.metabolites
@@ -2082,7 +1922,9 @@ class Scan(_Task):
         return R.model
 
     def get_report_key(self):
-        """ """
+        '''
+
+        '''
         # ammend the time course option
         if self.report_type.lower() == 'time_course':
             self.report_type = 'time-course'
@@ -2096,15 +1938,11 @@ class Scan(_Task):
         return key
 
     def create_scan(self):
-        """metabolite cn:
+        """
+        metabolite cn:
             CN=Root,Model=New Model,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=InitialConcentration"/>
-        
+
         :return:
-
-        Args:
-
-        Returns:
-
         """
         ## get model entity if variable is a string
         if isinstance(self.variable, str):
@@ -2216,18 +2054,19 @@ class Scan(_Task):
             etree.SubElement(scanItem_element, 'Parameter', attrib=log_attrib)
             etree.SubElement(scanItem_element, 'Parameter', attrib=dist_type_attrib)
         query = '//*[@name="ScanItems"]'
+        # print etree.tostring(scanItem_element, pretty_print=True)
         for i in self.model.xml.xpath(query):
             i.append(scanItem_element)
         return self.model
 
     #
     def set_scan_options(self):
-        """ """
         report_attrib = {'append': self.append,
                          'target': self.report_name,
                          'reference': self.get_report_key(),
                          'confirmOverwrite': self.confirm_overwrite}
 
+        ##TODO fix output in subtask temp fix
         if self.output_in_subtask == True:
             self.output_in_subtask = 'true'
         elif self.output_in_subtask == False:
@@ -2265,14 +2104,10 @@ class Scan(_Task):
         return self.model
 
     def remove_scans(self):
-        """Remove all scans that have been defined.
-        
+        """
+        Remove all scans that have been defined.
+
         :return:
-
-        Args:
-
-        Returns:
-
         """
         query = '//*[@name="ScanItems"]'
         for i in self.model.xml.xpath(query):
@@ -2282,1290 +2117,244 @@ class Scan(_Task):
         return self.model
 
     def execute(self):
-        """ """
         R = Run(self.model, task='scan', mode=self.run)
 
 
 @mixin(model.GetModelComponentFromStringMixin)
 @mixin(model.ReadModelMixin)
-class ParameterEstimation(_Task):
-    """ """
-    valid_methods = ['current_solution_statistics',
-                     'differential_evolution',
-                     'evolutionary_strategy_sr',
-                     'evolutionary_program',
-                     'hooke_jeeves',
-                     'levenberg_marquardt',
-                     'nelder_mead',
-                     'particle_swarm',
-                     'praxis',
-                     'random_search',
-                     'simulated_annealing',
-                     'steepest_descent',
-                     'truncated_newton',
-                     'scatter_search',
-                     'genetic_algorithm',
-                     'genetic_algorithm_sr']
+class ExperimentMapper(_Task):
+    """
+    Class for mapping variables from file to cps
 
-    @staticmethod
-    class _Defaults:
-        """
-        Class holding the defaults arguments for ParameterEstimation
-        """
 
-        def __init__(self):
-            """
-            Calls all the methods in the class which are essentially
-            organised sets of default parameters
-            """
-            self.experiments = self._experiments()
-            self.validations = self._validations()
-            self.datasets = self._datasets()
-            self.fit_items = self._fit_items()
-            self.constraint_items = self._constraint_items()
-            self.settings = self._settings()
+    .. _scan_kwargs:
 
-        def _datasets(self):
-            """ store default datasets argument"""
-            return {
-                'validations': {}
-            }
+    Scan Kwargs
+    ===========
 
-        @staticmethod
-        def mappings(filename: str, sep: str):
-            """
+    These kwargs are passed on to the COPASI experiment mapping window
 
-            Args:
-              filename (str): the filename of the data file to be mapped
-              sep (str): separator argument
+    =================================   ================================================================
+    ExperimentMapper Kwargs             Description
+    =================================         ==========================================================
+    type                                Default: 'experiment'. Alternative: 'validation_data'
+    row_orientation                     Default: [True]*len(self.experiment_files)
+    experiment_type                     Default: ['timecourse']*len(self.experiment_files)
+    first_row                           Default: [1]*len(self.experiment_files)
+    normalize_weights_per_experiment    Default: [True]*len(self.experiment_files)
+    row_containing_names                Default: [1]*len(self.experiment_files)
+    separator                           Default: ['\t']*len(self.experiment_files)
+    weight_method                       Default: ['mean_squared']*len(self.experiment_files)
+    threshold                           Default: [5]*len(self.experiment_files)
+    weight                              Default: [1]*len(self.experiment_files)
+    save                                Default: False. Save the model
+    =================================   =================================================================
+    """
 
-            Returns: dict
-                Object map dict for configuration
-                of parameter estimation class
-            """
-            if not isinstance(filename, str):
-                raise ValueError
+    def __init__(self, model, experiment_files, **kwargs):
+        self.model = self.read_model(model)
+        self.kwargs = kwargs
+        self.experiment_files = experiment_files
+        if isinstance(self.experiment_files, list) != True:
+            self.experiment_files = [self.experiment_files]
 
-            if not isinstance(sep, str):
-                raise ValueError
-            df = pandas.read_csv(filename, sep=sep)
-            roles = {}
-            for i in df.columns:
-                if i.lower() == 'time':
-                    roles[i] = 'time'
-                elif i[:-6] == '_indep':
-                    roles[i] = 'independent'
-                else:
-                    roles[i] = 'dependent'
+        self.default_properties = {'type': 'experiment',  # or 'validation_data
+                                   'row_orientation': [True] * len(self.experiment_files),
+                                   'experiment_type': ['timecourse'] * len(self.experiment_files),
+                                   'first_row': [1] * len(self.experiment_files),
+                                   'normalize_weights_per_experiment': [True] * len(self.experiment_files),
+                                   'row_containing_names': [1] * len(self.experiment_files),
+                                   'separator': ['\t'] * len(self.experiment_files),
+                                   'weight_method': ['mean_squared'] * len(self.experiment_files),
+                                   'threshold': [5] * len(self.experiment_files),
+                                   'weight': [1] * len(self.experiment_files),
+                                   'save': False}
+        self.default_properties.update(self.kwargs)
+        self.convert_bool_to_numeric(self.default_properties)
+        self.update_properties(self.default_properties)
+        self.check_integrity(list(self.default_properties.keys()), list(self.kwargs.keys()))
+        self._do_checks()
 
-            return {
-                i: {
-                    'model_object': i,
-                    'role': roles[i]
-                } for i in list(df.columns)
-            }
+        # run the experiment mapper
+        self.model = self.map_experiments()
 
-        def _experiments(self):
-            """ Stores default experiment kwargs for parameter estimation class"""
-            return {
-                'filename': '',
-                'normalize_weights_per_experiment': True,
-                'separator': '\t',
-                'affected_models': 'all',
-                'mappings': {},
+        if self.save:
+            self.model.save()
 
-            }
-
-        def _validations(self):
-            """ Stores default validation kwargs for parameter estimation class """
-            return {
-                'filename': '',
-                'affected_models': 'all',
-                'normalize_weights_per_experiment': True,
-                'separator': '\t',
-                'mappings': {},
-            }
-
-        def _fit_items(self):
-            """ Stores default fit_item kwargs for parameter estimation class """
-
-            return {
-                'lower_bound': 1e-6,
-                'upper_bound': 1e6,
-                'start_value': 'model_value',
-                'affected_experiments': 'all',
-                'affected_validation_experiments': 'all',
-                'affected_models': 'all'
-            }
-
-        def _constraint_items(self):
-            """ Stores default constraint item kwargs for parameter estimation class """
-            return {
-                'lower_bound': 1e-6,
-                'upper_bound': 1e6,
-                'start_value': 'model_value',
-                'affected_experiments': 'all',
-                'affected_validation_experiments': 'all',
-                'affected_models': 'all',
-            }
-
-        def _settings(self):
-            """ Stores default setting kwargs for parameter estimation class"""
-            return {
-                'copy_number': 1,
-                'pe_number': 1,
-                'results_directory': 'ParameterEstimationData',
-                'config_filename': 'config.yml',
-                'overwrite_config_file': False,
-                'update_model': False,
-                'randomize_start_values': False,
-                'create_parameter_sets': False,
-                'calculate_statistics': False,
-                'use_config_start_values': False,
-                'method': 'genetic_algorithm',
-                'number_of_generations': 200,
-                'population_size': 50,
-                'random_number_generator': 1,
-                'seed': 0,
-                'pf': 0.475,
-                'iteration_limit': 50,
-                'tolerance': 0.00001,
-                'rho': 0.2,
-                'scale': 10,
-                'swarm_size': 50,
-                'std_deviation': 0.000001,
-                'number_of_iterations': 100000,
-                'start_temperature': 1,
-                'cooling_factor': 0.85,
-                'lower_bound': 0.000001,
-                'upper_bound': 1000000,
-                'start_value': 0.1,
-                'save': False,
-                'run_mode': False,
-                'working_directory': '',
-                'quantity_type': 'concentration',
-                'report_name': 'PEData.txt',
-                'problem': 1,
-                'fit': 1,
-                'weight_method': 'mean_squared',
-                'validation_weight': 1,
-                'validation_threshold': 5,
-                'max_active': 3,
-                'prefix': None
-            }
-
-    @staticmethod
-    class Config(_Task, munch.Munch):
-        """
-        A class for holding a parameter estimation configuration
-
-        Stores all the settings needed for configuration of a parameter estimation
-        using COPASI.
-
-        .. _ParameterEstimation.Config::
-
-        Examples:
-            >>> ## create a model
-            >>> antimony_string = '''
-            ...             model TestModel1()
-            ...                 R1: A => B; k1*A;
-            ...                 R2: B => A; k2*B
-            ...                 A = 1
-            ...                 B = 0
-            ...                 k1 = 4;
-            ...                 k2 = 9;
-            ...             end
-            ...             '''
-            >>> copasi_filename = os.path.join(os.path.dirname(__file__), 'example_model.cps')
-            >>> with model.BuildAntimony(copasi_filename) as loader:
-            ...     mod = loader.load(antimony_string)
-            >>> ## Simulate some data from the model and write to file
-            >>> fname = os.path.join(os.path.dirname(__file__), 'timeseries.txt')
-            >>> data = self.model.simulate(0, 10, 11)
-            >>> data.to_csv(fname)
-            >>> ## create nested dict containing all the relevant arguments for your configuration
-            >>> config_dict = dict(
-            ...        models=dict(
-            ...             ## model name is the users choice here
-            ...            example1=dict(
-            ...                copasi_file=copasi_filename
-            ...            )
-            ...        ),
-            ...        datasets=dict(
-            ...            experiments=dict(
-            ...                 ## experiment names are the users choice
-            ...                report1=dict(
-            ...                    filename=self.TC1.report_name,
-            ...                ),
-            ...            ),
-            ...            ## our validations entry is empty here
-            ...            ## but if you have validation data this should
-            ...            ## be the same as the experiments section
-            ...            validations=dict(),
-            ...        ),
-            ...        items=dict(
-            ...            fit_items=dict(
-            ...                A=dict(
-            ...                    affected_experiments='report1'
-            ...                ),
-            ...                B=dict(
-            ...                    affected_validation_experiments=['report2']
-            ...                ),
-            ...            k1={},
-            ...            k2={},
-            ...            ),
-            ...            constraint_items=dict(
-            ...                k1=dict(
-            ...                    lower_bound=1e-2,
-            ...                    upper_bound=10
-            ...                )
-            ...            )
-            ...        ),
-            ...        settings=dict(
-            ...            method='genetic_algorithm_sr',
-            ...            population_size=2,
-            ...            number_of_generations=2,
-            ...            working_directory=os.path.dirname(__file__),
-            ...            copy_number=4,
-            ...            pe_number=2,
-            ...            weight_method='value_scaling',
-            ...            validation_weight=2.5,
-            ...            validation_threshold=9,
-            ...            randomize_start_values=True,
-            ...            calculate_statistics=False,
-            ...            create_parameter_sets=False
-            ...        )
-            ...    )
-            >>> config = ParameterEstimation.Config(**config_dict)
+    def _do_checks(self):
         """
 
-        def __init__(self, models, datasets, items, settings={}, defaults=None):
-            """
-            Initialisation method for Config class
-            Args:
-                models (dict):
-                    Dict containing model names and paths to copasi files
-                datasets(dict):
-                    Dict containing experiments and validation experiments
-                items(dict):
-                    Dict containing fit items and constraint items
-                settings(dict):
-                    Dict containing all other settings for parameter estimation
-                defaults(ParameterEstimation._Defaults):
-                    Custom set of Defaults to use for unspecified arguments
-            """
-            self.models = models
-            self.datasets = datasets
-            self.items = items
-            self.settings = settings
-            self.defaults = defaults
+        """
+        data_types = ['experiment', 'validation']
+        if self.type not in data_types:
+            raise errors.InputError('{} not in {}'.format(self.type, data_types))
 
-            if self.defaults is None:
-                self.defaults = ParameterEstimation._Defaults()
+        for i in range(len(self.experiment_files)):
+            if os.path.isabs(self.experiment_files[i]) != True:
+                self.experiment_files[i] = os.path.abspath(self.experiment_files[i])
 
-            if not isinstance(self.defaults, ParameterEstimation._Defaults):
-                raise TypeError('incorrect defaults argument')
+        weight_method_string = ['mean_squared', 'stardard_deviation', 'value_scaling',
+                                'mean']  # line 2144
+        weight_method_numbers = [str(i) for i in [1, 2, 3, 4]]
+        weight_method_dict = dict(list(zip(weight_method_string, weight_method_numbers)))
+        self.weight_method = [weight_method_dict[i] for i in self.weight_method]
 
-            self.kwargs = munch.Munch.fromDict({
-                'models': self.models,
-                'datasets': self.datasets,
-                'items': self.items,
-                'settings': self.settings
-            })
+        experiment_type_string = ['steadystate', 'timecourse']
+        experiment_type_numbers = [str(i) for i in [0, 1]]
+        experiment_type_dict = dict(list(zip(experiment_type_string, experiment_type_numbers)))
+        self.experiment_type = [experiment_type_dict[i] for i in self.experiment_type]
 
-            for kw in self.kwargs:
-                setattr(self, kw, self.kwargs[kw])
-
-            self._load_models()
-            self.configure()
-            self._validate_integrity_of_user_input()
-
-        def __iter__(self):
-            for attr in self.kwargs.keys():
-                yield attr
-
-        def __str__(self):
-            return self.to_yaml()
-
-        def __repr__(self):
-            return self.__str__()
-
-        def to_json(self):
-            """
-            Output arguments as json
-
-            Returns: str
-                All arguments in json format
-
-            """
-            kwargs = deepcopy(self.kwargs)
-            for k, v in kwargs.models.items():
-                for k2, v2 in kwargs.models[k].items():
-                    if k2 == 'model':
-                        kwargs.models[k][k2] = str(kwargs.models[k][k2])
-
-            return json.dumps(kwargs, indent=4)
-
-        def from_json(self, string):
-            """
-            Create config object from json format
-            Args:
-              string (Str):
-                a valid json string
-
-            Returns:
-                ParameterEstimation.Config
-            """
-            raise NotImplementedError('Do this when needed')
-
-        def to_yaml(self, filename=None):
-            """
-
-            Output arguments as yaml
-
-            Args:
-                filename (str, None):
-                    If not None (default), path to write yaml configuration to
-
-            Returns:
-                Config object as string in yaml format
-
-            """
-            kwargs = deepcopy(self.kwargs)
-            for k, v in kwargs.models.items():
-                for k2, v2 in kwargs.models[k].items():
-                    if k2 == 'model':
-                        kwargs.models[k][k2] = str(kwargs.models[k][k2])
-
-            yml = munch.toYAML(kwargs)
-
-            if filename is not None:
-                with open(filename, 'w') as f:
-                    f.write(yml)
-            return yml
-
-        def from_yaml(self, yml):
-            """
-            Read config object from yaml file
-            Args:
-              yml (str):
-                full path to text file containing configuration arguments in yaml format
-
-            Returns:
-                ParameterEstimation.Config
-
-            """
-            if os.path.isfile(yml):
-                with open(yml, 'r') as f:
-                    yml_string = f.read()
+        l = []
+        assert isinstance(self.row_orientation, list)
+        for i in self.row_orientation:
+            assert i in [True, False]
+            if i == True:
+                l.append(str(1))
             else:
-                yml_string = yml
-            raise NotImplementedError('Do this when needed')
+                l.append(str(0))
+        self.row_orientation = l
 
-        @staticmethod
-        def _add_defaults_to_dict(dct, defaults):
-            """
+        assert isinstance(self.first_row, list)
+        l = []
+        for i in self.first_row:
+            assert i != 0
+            assert i != str(0)
+            l.append(str(i))
+        self.first_row = l
 
-            Args:
-              dct:
-              defaults:
-
-            Returns:
-
-            """
-            for k in defaults:
-                if k not in dct:
-                    dct[k] = defaults[k]
-            return dct
-
-        def _validate_integrity_of_user_input(self):
-            """
-            Ensure user input is accurate
-            Returns:
-                None
-
-            """
-            for i in self.settings:
-                if i not in self.defaults.settings.keys():
-                    raise errors.InputError(
-                        '"{}" is an invalid argument for "settings". These are valid '
-                        'arguments: "{}"'.format(i, list(self.defaults.settings.keys()))
-                    )
-
-            if not isinstance(self.models, dict):
-                raise errors.InputError(
-                    'The "models" argument should be a dict containing'
-                    ' model names as keys and "model.Model" object or "copasi file"'
-                )
-
-            if not isinstance(self.datasets, dict):
-                raise TypeError(
-                    'The "datasets" argument should be a nested dict containing'
-                    ' "experiments" and/or "validations" dicts'
-                )
-
-            if not isinstance(self.items, dict):
-                raise TypeError(
-                    'The "items" argument should be a nested dict containing'
-                    ' "fit_items" and/or "constraint_items" dicts'
-                )
-
-            if not isinstance(self.settings, dict):
-                raise TypeError(
-                    'The "settings" argument should be a dict containing'
-                    ' arguments to valid settings.'
-                )
-
-            if self.settings.working_directory in ['', False, None] or not os.path.isdir(
-                    self.settings.working_directory):
-                raise errors.InputError(
-                    'A valid argument must be given to config.settings.working_directory. Got "{}"'.format(
-                        self.settings.working_directory
-                    ))
-
-        def _load_models(self):
-            """
-            Load models from disk
-
-            User usually specifies a copasi_file as argument. This method loads
-            the copasi file into a :py:class:`model.Model` object and stores a
-            reference to the model under the `model` entry of the `models` tag.
-
-            Returns:
-                This method operates inplace and returns None
-
-            """
-            for mod in self.models:
-                if 'model' not in self.models[mod].keys():
-                    if 'copasi_file' not in self.models[mod].keys():
-                        raise errors.InputError('Config object is ill informed. Please specify '
-                                                'either a string argument to the copasi_file keyword '
-                                                'or a pycotools3.model.Model object to the model keyword')
-                if 'copasi_file' in self.models[mod].keys():
-                    self.models[mod]['model'] = model.Model(self.models[mod].copasi_file)
-
-        def configure(self):
-            """
-            Configure the class for production of parameter estimation config
-
-            Like a main method for this class. Uses the other methods in the class
-            to configure a :py:class:`ParameterEstimation.Config object`
-
-            Returns:
-                Operates inplace and returns None
-            """
-            ## adds any settings that are missing from defaults.
-            for k in self.defaults.settings:
-                if k not in self.settings:
-                    self.settings[k] = self.defaults.settings[k]
-
-            for k in self.defaults.datasets:
-                if k not in self.datasets:
-                    self.datasets[k] = self.defaults.datasets[k]
-
-            self._set_default_experiments()
-
-            self._set_default_validation_experiments()
-
-            self._set_default_fit_items()
-
-            self._set_default_constraint_items()
-
-        def _set_default_experiments(self):
-            """
-            Configure missing entries for datasets.experiments with defaults
-
-            Returns:
-                None, the method operates on class attributes inplace
-            """
-            for experiment_name in self.experiment_names:
-                for default_kwarg in self.defaults.experiments:
-                    if default_kwarg not in self.datasets.experiments[experiment_name]:
-                        self.datasets.experiments[experiment_name][default_kwarg] = self.defaults.experiments[
-                            default_kwarg]
-
-                if self.datasets.experiments[experiment_name].affected_models == 'all':
-                    self.datasets.experiments[experiment_name].affected_models = list(self.models.keys())[0] if len(
-                        self.models.keys()) == 1 else list(self.models.keys())
-                if self.datasets.experiments[experiment_name].mappings == {}:
-                    self.datasets.experiments[experiment_name].mappings = munch.Munch.fromDict(self.defaults.mappings(
-                        self.datasets.experiments[experiment_name].filename,
-                        self.datasets.experiments[experiment_name].separator)
-                    )
-
-                for mapping in self.datasets.experiments[experiment_name].mappings:
-                    mapp = self.datasets.experiments[experiment_name].mappings.get(mapping)
-                    if mapp.role != 'time':
-                        model_keys = list(self.models.keys())
-                        mod = self.models[model_keys[0]].model
-                        model_obj = []
-                        try:
-                            model_obj = self.get_variable_from_string(
-                                mod,
-                                mapp.model_object[:-6] if mapp.model_object[-6:] == '_indep' else mapp.model_object
-                            )
-                        except errors.InputError:
-                            LOG.warning(f'skipping variable "{mapp.model_object}" as it was not found in '
-                                        f'model "{mod}"')
-
-                        if mapp == {}:
-                            mapp = {
-                                'model_object': mapping,
-                                'role': 'dependent',
-                                'object_type': type(model_obj).__name__
-                            }
-                        else:
-                            mapp.update({'object_type': type(model_obj).__name__})
-
-        def _set_default_validation_experiments(self):
-            """
-            Configure missing entries for datasets.validations with defaults
-
-            Returns:
-                None, the method operates on class attributes inplace
-
-            """
-            if self.datasets.validations is None:
-                return {}
-
-            validations = self.datasets.validations
-
-            for validation_experiment in self.validation_names:
-                validation_dataset = validations.get(validation_experiment)
-                validation_defaults = self.defaults.validations
-
-                for default_kwarg in validation_defaults:
-                    if default_kwarg not in validation_dataset:
-                        validation_dataset[default_kwarg] = validation_defaults[default_kwarg]
-
-                if validation_dataset.affected_models == 'all':
-                    validation_dataset.affected_models = list(self.models.keys())[0] if len(
-                        self.models.keys()) == 1 else list(self.models.keys())
-
-                if validation_dataset.mappings == {}:
-                    validation_dataset.mappings = munch.Munch.fromDict(self.defaults.mappings(
-                        validation_dataset.filename, validation_dataset.separator)
-                    )
-
-                for mapping in validation_dataset.mappings:
-                    mapp = validation_dataset.mappings.get(mapping)
-                    if mapp.role != 'time':
-                        model_keys = list(self.models.keys())
-                        mod = self.models[model_keys[0]].model
-                        model_obj = self.get_variable_from_string(
-                            mod,
-                            mapp.model_object[:-6] if mapp.model_object[-6:] == '_indep' else mapp.model_object
-
-                        )
-                        if mapp == {}:
-                            mapp = {
-                                'model_object': mapping,
-                                'role': 'dependent',
-                                'object_type': type(model_obj).__name__
-                            }
-                        else:
-                            mapp.update({'object_type': type(model_obj).__name__})
-                    self.datasets.validations[validation_experiment].mappings[mapping] = mapp
-
-        def _set_default_fit_items(self):
-            """
-            Configure missing entries for items.fit_items with defaults
-
-            Returns:
-                None. Method operates inplace on class attributes
-
-            """
-            if isinstance(self.items.fit_items, str):
-                self.set_default_fit_items_str()
+        l = []
+        assert isinstance(self.normalize_weights_per_experiment, list)
+        for i in self.normalize_weights_per_experiment:
+            assert i in [True, False], '{} should be true or false'.format(i)
+            if i == True:
+                l.append(str(1))
             else:
-                self.set_default_fit_items_dct()
-
-        def set_default_fit_items_str(self):
-            """
-
-            Configure missing entries for items.fit_items when they are
-            strings pointing towards model variables
-
-            Returns:
-                None. Method operates inplace on class attributes
-
-            """
-            if not isinstance(self.items.fit_items, str):
-                raise TypeError
-
-            estimated_variables = {}
-            for model_name in self.models:
-                mod = self.models[model_name].model
-                estimated_variables[model_name] = mod.get_variable_names(
-                    self.items.fit_items, include_assignments=False, prefix=self.settings.prefix
-                )
-            dct = {}
-            for model_name in estimated_variables:
-                dct[model_name] = {}
-                for parameter in estimated_variables[model_name]:
-                    dct[model_name][parameter] = {}
-
-            estimated_variables = dct
-
-            for model_name in self.models:
-                dct = {}
-
-                for fit_item in estimated_variables[model_name]:
-                    item = estimated_variables[model_name][fit_item]
-                    print('item', item)
-                    if item == {}:
-                        item = self.defaults.fit_items
-
-                    else:
-                        for i in self.defaults.fit_items:
-                            if i not in item:
-                                item[i] = self.defaults.fit_items[i]
-
-                    if item['affected_experiments'] == 'all':
-                        if isinstance(self.experiment_names, str):
-                            item['affected_experiments'] = [self.experiment_names]
-                        else:
-                            item['affected_experiments'] = self.experiment_names
-
-                    if item['affected_validation_experiments'] == 'all':
-                        if isinstance(self.validation_names, str):
-                            item['affected_validation_experiments'] = [self.validation_names]
-                        else:
-                            item['affected_validation_experiments'] = self.validation_names
-
-                    if item['affected_models'] == 'all':
-                        item['affected_models'] = [
-                            i for i in self.models if fit_item in self.models[model_name].model
-                        ]
-
-                    dct[fit_item] = item
-
-            self.items.fit_items = munch.Munch.fromDict(dct)
-
-        def set_default_fit_items_dct(self):
-            """
-
-            Configure missing entries for items.fit_items when they are
-            in nested dict format
-
-            Returns:
-                None. Method operates inplace on class attributes
-
-            """
-            ## remove fit items if prefix condition is not satisified
-            for fit_item in self.items.fit_items:
-                item = self.items.fit_items.get(fit_item)
-
-                if item == {}:
-                    item = self.defaults.fit_items
-                else:
-                    for i in self.defaults.fit_items:
-                        if i not in item:
-                            item[i] = self.defaults.fit_items[i]
-                ## set lower bound, upper bound and model value
-                item['lower_bound'] = self.settings.lower_bound
-                item['upper_bound'] = self.settings.upper_bound
-
-                ## if start_value is model_value, we cannot resolve here as
-                ## we need the model to get the value. This is resolved in the main class
-                if item['start_value'] != 'model_value':
-                    item['start_value'] = self.settings.model_value
-
-                if item['affected_experiments'] == 'all':
-                    if isinstance(self.experiment_names, str):
-                        item['affected_experiments'] = [self.experiment_names]
-                    else:
-                        item['affected_experiments'] = self.experiment_names
-
-                if item['affected_validation_experiments'] == 'all':
-                    if isinstance(self.validation_names, str):
-                        item['affected_validation_experiments'] = [self.validation_names]
-                    else:
-                        item['affected_validation_experiments'] = self.validation_names
-
-                if item['affected_models'] == 'all':
-                    item['affected_models'] = list(self.models.keys())
-
-                self.items.fit_items[fit_item] = munch.Munch.fromDict(item)  #
-
-            ## caters for the situation where we define a config file but
-            ## need to update it due to a change in prefix argument
-            tmp_dct = {}
-            if self.settings.prefix is not None:
-                if not isinstance(self.settings.prefix, str):
-                    raise TypeError(f'config.settings.prefix argument should be of type "str"')
-                tmp = {fit_item: self.items.fit_items[fit_item] for fit_item in self.items.fit_items if
-                       fit_item.startswith(self.settings.prefix)}
-                self.items.fit_items = munch.Munch.fromDict(tmp)
-
-        def _set_default_constraint_items(self):
-            """ 
-            
-            Configure missing entries for items.constraint_items when they are
-            strings pointing towards model variables
-
-            Returns:
-                None. Method operates inplace on class attributes
-
-            """
-            if 'constraint_items' in self.items:
-
-                for constraint_item in self.items.constraint_items:
-                    item = self.items.constraint_items.get(constraint_item)
-
-                    if item == {}:
-                        item = self.defaults.constraint_items
-
-                    else:
-                        for i in self.defaults.constraint_items:
-                            if i not in item:
-                                item[i] = self.defaults.constraint_items[i]
-
-                    if item.affected_experiments == 'all':
-                        if isinstance(self.experiment_names, str):
-                            item.affected_experiments = [self.experiment_names]
-                        else:
-                            item.affected_experiments = self.experiment_names
-
-                    if item.affected_validation_experiments == 'all':
-                        if isinstance(self.validation_names, str):
-                            item.affected_validation_experiments = [self.validation_names]
-                        else:
-                            item.affected_validation_experiments = self.validation_names
-
-                    if item.affected_models == 'all':
-                        item.affected_models = list(self.models.keys())
-
-                self.items.constraint_items[constraint_item] = munch.Munch.fromDict(item)
-
-        @property
-        def experiments(self):
-            """
-            The experiments property
-            Returns:
-                datasets.experiments as dict
-            """
-            return self.datasets.experiments
-
-        @property
-        def validations(self):
-            """
-            The validations property
-            Returns:
-                datasets.validations as dict
-            """
-            return self.datasets.validations
-
-        @property
-        def experiment_filenames(self):
-            """
-            Returns:
-                A list of experiment filesnames
-            """
-            filenames = []
-            for i in self.experiments:
-                filenames.append(self.experiments[i].filename)
-            return filenames
-
-        @property
-        def validation_filenames(self):
-            """
-
-            Returns:
-                a list of validation filenames
-
-            """
-            filenames = []
-            for i in self.validations:
-                filenames.append(self.validations[i].filename)
-            return filenames
-
-        @property
-        def experiment_names(self):
-            """
-
-            Returns:
-                A list of experiment names
-
-            """
-            experiment_names = []
-            for i in self.experiments:
-                experiment_names.append(i)
-
-            return experiment_names
-
-        @property
-        def validation_names(self):
-            """
-            
-            Returns:
-                A list of validation names
-
-            """
-            validation_names = []
-            for i in self.validations:
-                validation_names.append(i)
-
-            return validation_names
-
-        @property
-        def model_objects(self):
-            """
-
-            Returns:
-                A list of model objects for mapping
-
-            """
-            model_obj = []
-            for i in self.experiment_names:
-                for j in self.experiments[i].mappings:
-                    if self.experiments[i].mappings[j] is not None:
-                        model_obj.append(self.experiments[i].mappings[j].model_object)
-
-            for i in self.validation_names:
-                for j in self.validations[i].mappings:
-                    if self.validations[i].mappings[j] is not None:
-                        model_obj.append(self.validations[i].mappings[j].model_object)
-
-            return list(set(model_obj))
-
-        @property
-        def fit_items(self):
-            """
-
-            Returns:
-                The fit items as nested dict
-            """
-            return self.items.fit_items
-
-        @property
-        def constraint_items(self):
-            """
-
-            Returns:
-                The constraint items as nested dict
-
-            """
-            return self.items.constraint_items
-
-    def __init__(self, config):
-        """
-        Configure a the parameter estimation task in copasi
-
-        Pycotools supports all the features of parameter estimation configuration
-        as copasi, plus a few additional ones (such as the affected models setting).
-
-        Args:
-            config (ParameterEstimation.Config):
-                An appropriately configured :py:class:`ParameterEstimation.Config` class
-
-        Examples:
-            See :ref:`ParameterEstimation.Config` or :ref:`ParameterEstimation.Context`
-            for detailed information on how to produce a :py:class:`ParameterEstimation.Config` object.
-            Note that the :ref:`ParameterEstimation.Context` class is higher level and should be the preferred way of
-            constructing a :ref:`ParameterEstimation.Config` object while the :ref:`ParameterEstimation.Config` class
-            gives you the same level of control as copasi but is bulkier to write.
-
-            Assuming the :ref:`ParameterEstimation.Config` class has already been created
-            >>> pe = ParameterEstimation(config)
-        """
-        self.config = config
-        self.do_checks()
-        self.copied_models = self._setup()
-
-        if self.config.settings.run_mode is not False:
-            self.run(self.copied_models)
-
-    def do_checks(self):
-        """ validate integrity of user input"""
-        if not isinstance(self.config, self.Config):
-            raise errors.InputError(
-                f'config argument is of type {type(self.config)} '
-                f'but was expecting an instance of '
-                f'ParameterEstimation.Config'
-            )
+                l.append(str(0))
+        self.normalize_weights_per_experiment = l
+
+        l = []
+        assert isinstance(self.row_orientation, list)
+        for i in self.row_orientation:
+            l.append(str(i))
+        self.row_orientation = l
+
+        l = []
+        assert isinstance(self.row_containing_names, list)
+        for i in self.row_containing_names:
+            l.append(str(i))
+        self.row_containing_names = l
+
+        assert isinstance(self.separator, list)
+        for i in self.separator:
+            assert isinstance(i, str), 'separator should be given asa python list'
 
     def __str__(self):
-        return f"ParameterEstimation(\n\t{self.config}\n)"
+        return 'ExperimentMapper({})'.format(self.to_string())
 
     @property
-    def problem_dir(self):
+    def experiments(self):
+        existing_experiment_list = []
+        if self.type == 'experiment':
+            query = '//*[@name="Experiment Set"]'
+        elif self.type == 'validation':
+            query = '//*[@name="Validation Set"]'
+
+        for i in self.model.xml.xpath(query):
+            for j in list(i):
+                existing_experiment_list.append(j)
+        return existing_experiment_list
+
+    def create_experiment(self, index):
         """
-        Property holding the directory where the parameter estimation problem is stored
-        Returns:
-            str. A directory.
+        Adds a single experiment set to the parameter estimation task
+        exp_file is an experiment filename with exactly matching headers (independent variablies need '_indep' appended to the end)
+        since this method is intended to be used in a loop in another function to
+        deal with all experiment sets, the second argument 'i' is the index for the current experiment
+
+        i is the exeriment_file index
         """
-        dire = os.path.join(self.config.settings.working_directory, f'Problem{self.config.settings.problem}')
-        if not os.path.isdir(dire):
-            os.makedirs(dire)
-        return dire
+        assert isinstance(index, int)
+        data = pandas.read_csv(
+            self.experiment_files[index],
+            sep=self.separator[index])
 
-    @property
-    def fit_dir(self):
-        """
-        Property holding the directory where the parameter estimation fitting occurs. This can
-        be enumerated under a single problem directory to group similar parameter estimations
-        Returns:
-            str. A directory.
-        """
-        dire = os.path.join(self.problem_dir, f'Fit{self.config.settings.fit}')
-        if not os.path.isdir(dire):
-            os.makedirs(dire)
-        return dire
+        obs = list(data.columns)
+        num_rows = str(data.shape[0])
+        num_columns = str(data.shape[1])  # plus 1 to account for 0 indexed
 
-    @property
-    def models_dir(self):
-        """
-        A directory containing models
-
-        Each model will be configured in a different directory when multiple models are being configured simultaneously
-        Returns:
-            dct. Location of models directories
-
-        """
-        dct = {}
-        for model_name in self.models:
-            dct[model_name] = os.path.join(self.fit_dir, model_name)
-            if not os.path.isdir(dct[model_name]):
-                os.makedirs(dct[model_name])
-        return dct
-
-    @property
-    def results_directory(self):
-        """
-        A directory containing results, parameter estimation report files
-        from copasi
-
-        Each model configured will have their own results directory
-        Returns:
-            dict[model] = results_directory
-        """
-        dct = {}
-        for model_name in self.models:
-            dct[model_name] = os.path.join(
-                self.models_dir[model_name],
-                self.config.settings.results_directory
-            )
-            if not os.path.isdir(dct[model_name]):
-                os.makedirs(dct[model_name])
-        return dct
-
-    def get_model_objects_from_strings(self):
-        """
-        Get model objects from the strings
-        provided by the user in the Config class
-        :return: list of `model.Model` objects
-
-        Returns:
-            list of model objects
-
-        """
-        number_of_model_objects_in_parameter_estimation = len(self.config.model_objects)
-        model_objs = []
-        for mod in self.config.models:
-            for obj in self.config.model_objects:
-                current_model = self.config.models[mod].model
-                try:
-                    model_objs.append(
-                        self.get_variable_from_string(current_model, obj)
-                    )
-                    number_of_model_objects_in_parameter_estimation -= 1
-                    if number_of_model_objects_in_parameter_estimation == 0:
-                        break
-                ## allow a mechanism for iterating over models that
-                ## do not all have the same variables
-                except errors.InputError:
-                    continue
-        return model_objs
-
-    @property
-    def metabolites(self):
-        """
-
-        Returns:
-            list of strings of metabolites in the model
-
-        """
-        return [i.name for i in self.get_model_objects_from_strings() if isinstance(i, model.Metabolite)]
-
-    @property
-    def local_parameters(self):
-        """
-
-        Returns:
-            list of strings of local parameters in the model
-
-        """
-        return [i.name for i in self.get_model_objects_from_strings() if isinstance(i, model.LocalParameter)]
-
-    @property
-    def global_quantities(self):
-        """
-
-        Returns:
-            list of strings of global quantities present in the models
-
-        """
-        return [i.name for i in self.get_model_objects_from_strings() if isinstance(i, model.GlobalQuantity)]
-
-    @property
-    def _report_arguments(self):
-        """collect report specific arguments in a dict
-        :return: dict
-
-        Returns:
-            dict[arg] = value
-
-        """
-        # report specific arguments
-        report_dict = {}
-        report_dict['metabolites'] = self.metabolites
-        report_dict['global_quantities'] = self.global_quantities
-        report_dict['local_parameters'] = self.local_parameters
-        report_dict['quantity_type'] = self.config.settings.quantity_type
-        report_dict['report_name'] = self.config.settings.report_name
-        report_dict['append'] = False
-        report_dict['confirm_overwrite'] = False
-        report_dict['report_type'] = 'multi_parameter_estimation'
-        return report_dict
-
-    def _define_report(self):
-        """create parameter estimation report
-        for result collection
-        :return: pycotools3.model.Model
-
-        Returns:
-            the models attribute
-
-        """
-        for model_name in self.models:
-            mod = self.models[model_name].model
-            for glo in self._report_arguments['global_quantities']:
-                if glo not in [i.name for i in mod.global_quantities]:
-                    del self._report_arguments['global_quantities'][glo]
-
-            for loc in self._report_arguments['global_quantities']:
-                if loc not in [i.name for i in mod.global_quantities]:
-                    del self._report_arguments['global_quantities'][loc]
-
-            for met in self._report_arguments['metabolites']:
-                if met not in [i.name for i in mod.metabolites]:
-                    del self._report_arguments['metabolites'][met]
-
-            self.models[model_name].model = Reports(mod, **self._report_arguments).model
-
-        return self.models
-
-    def _get_report_key(self):
-        """After creating the report to collect
-        results, this method gets the corresponding key
-        There is probably a more efficient way to do this
-        but this works...
-        :return:
-
-        Args:
-
-        Returns:
-
-        """
-        keys = {}
-        for model_name in self.models:
-            mod = self.models[model_name].model
-            for i in mod.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
-                if i.attrib['name'].lower() == 'multi_parameter_estimation':
-                    key = i.attrib['key']
-            assert key is not None
-            keys[model_name] = key
-
-        return keys
-
-    @property
-    def models(self):
-        """
-        Get models
-
-        Returns:
-            the models entry of the :py:class:`ParameterEstimation.Config` object
-
-        """
-        return self.config.models
-
-    @models.setter
-    def models(self, models):
-        """
-        Set models attribute
-        Args:
-          models:
-            dict
-        Returns:
-            None
-        """
-        self.config.models = models
-
-    @property
-    def _experiments(self):
-        """
-
-        Returns:
-            A dict containing a list of experiments pertinent for each
-            model being configured
-
-        """
-        existing_experiment_list_dct = {}
-        query = '//*[@name="Experiment Set"]'
-        for mod in self.models:
-            existing_experiment_list = []
-            m = self.models[mod].model
-            for i in m.xml.xpath(query):
-                for j in list(i):
-                    existing_experiment_list.append(j)
-            existing_experiment_list_dct[mod] = existing_experiment_list
-        return existing_experiment_list_dct
-
-    @property
-    def _validations(self):
-        """
-
-        Returns:
-            A dict containing a list of validation experiments pertinent for each
-            model being configured
-        """
-        existing_validation_list_dct = {}
-        query = '//*[@name="Experiment Set"]'
-        for mod in self.models:
-            existing_validation_list = []
-            m = self.models[mod].model
-            for i in m.xml.xpath(query):
-                for j in list(i):
-                    existing_validation_list.append(j)
-            existing_validation_list_dct[mod] = existing_validation_list
-        return existing_validation_list_dct
-
-    @staticmethod
-    def _create_metabolite_reference(mod, parent, metabolite, role):
-        """
-        Build a xml entry from :py:class:`model.Metabolite`
-
-        Args:
-          mod (model.Model): 
-            The model being configured 
-          parent: 
-            The parent xml element 
-          metabolite: 
-            a :py:class:`model.Metabolite` object
-          role: 
-            role of metabolite ('dependent' or 'independent')
-
-        Returns:
-            etree.Element containing COAPSI reference to metabolite
-        """
-        if not isinstance(metabolite, model.Metabolite):
-            raise ValueError('Input should be "model.Metabolite" class. Got "{}"'.format(type(metabolite)))
-
-        if role == 'independent':
-            cn = '{},{},{}'.format(mod.reference,
-                                   metabolite.compartment.reference,
-                                   metabolite.initial_reference)
-        elif role == 'dependent':
-            cn = '{},{},{}'.format(mod.reference,
-                                   metabolite.compartment.reference,
-                                   metabolite.transient_reference)
+        # if exp_file is in the same directory as copasi_file only use relative path
+        if os.path.dirname(self.model.copasi_file) == os.path.dirname(self.experiment_files[index]):
+            exp = os.path.split(self.experiment_files[index])[1]
         else:
-            raise ValueError
+            exp = self.experiment_files[index]
 
-        ics_attrs = {
-            'type': 'cn',
-            'name': 'Object CN',
-            'value': cn
-        }
-        return etree.SubElement(parent, 'Parameter', attrib=ics_attrs)
+        # self.key = 'Experiment_{}'.format(index)
+        self.key = os.path.split(self.experiment_files[index])[1][:-4]
+        # necessary XML attributes
+        Exp = etree.Element('ParameterGroup', attrib={'name': self.key})
 
-    @staticmethod
-    def _create_local_parameter_reference(mod, parent, local_parameter, role):
-        """Not used because local parameters are not usually mapped to experimental
-        variables. However, this method will be kept until the next release
-        to ensure no bugs arise because of a lack of local parameter reference
+        # Exp = etree.Element('ParameterGroup', attrib={'name': self.experiment_files[index]})
 
-        Returns:
+        row_orientation = {'type': 'bool',
+                           'name': 'Data is Row Oriented',
+                           'value': self.row_orientation[index]}
 
-        """
-        if not isinstance(local_parameter, model.LocalParameter):
-            raise ValueError('Input should be "model.LocalParameter" class. Got "{}"'.format(type(local_parameter)))
+        experiment_type = {'type': 'unsignedInteger',
+                           'name': 'Experiment Type',
+                           'value': self.experiment_type[index]}
 
-        if role == 'independent':
-            cn = '{},{},{}'.format(mod.reference,
-                                   local_parameter.compartment.reference,
-                                   local_parameter.initial_reference)
-        elif role == 'dependent':
-            cn = '{},{},{}'.format(mod.reference,
-                                   local_parameter.compartment.reference,
-                                   local_parameter.transient_reference)
-        else:
-            raise ValueError
+        ExpFile = {'type': 'file',
+                   'name': 'File Name',
+                   'value': exp}
 
-        local_attrs = {
-            'type': 'cn',
-            'name': 'Object CN',
-            'value': cn
-        }
-        parent = etree.SubElement(parent, 'Parameter', attrib=local_attrs)
-        return parent
+        first_row = {'type': 'unsignedInteger',
+                     'name': 'First Row',
+                     'value': str(self.first_row[index])}
 
-    @staticmethod
-    def _create_global_quantity_reference(mod, parent, global_quantity, role):
+        Key = {'type': 'key',
+               'name': 'Key',
+               'value': self.key}
 
-        """
-        Build a xml entry from :py:class:`model.GlobalQuantitt`
+        LastRow = {'type': 'unsignedInteger',
+                   'name': 'Last Row',
+                   'value': str(int(num_rows) + 1)}  # add 1 to account for 0 indexed python
 
-        Args:
-          mod (model.Model):
-            The model being configured
-          parent:
-            The parent xml element
-          global_quantity:
-            a :py:class:`model.GlobalQuantity` object
-          role:
-            role of metabolite ('dependent' or 'independent')
+        normalize_weights_per_experiment = {'type': 'bool',
+                                            'name': 'Normalize Weights per Experiment',
+                                            'value': self.normalize_weights_per_experiment[index]}
 
-        Returns:
-            etree.Element containing COAPSI reference to metabolite
-        """
-        if not isinstance(global_quantity, model.GlobalQuantity):
-            raise ValueError('Input should be "model.GlobalQuantity" class. Got "{}"'.format(type(global_quantity)))
+        NumberOfColumns = {'type': 'unsignedInteger',
+                           'name': 'Number of Columns',
+                           'value': num_columns}
 
-        if role == 'independent':
-            cn = '{},{}'.format(mod.reference,
-                                global_quantity.initial_reference)
+        ObjectMap = {'name': 'Object Map'}
 
-        elif role == 'dependent':
-            cn = '{},{}'.format(mod.reference,
-                                global_quantity.initial_reference)
-        else:
-            raise ValueError
+        row_containing_names = {'type': 'unsignedInteger',
+                                'name': 'Row containing Names',
+                                'value': str(self.row_containing_names[index])}
 
-        global_attrs = {
-            'type': 'cn',
-            'name': 'Object CN',
-            'value': cn
-        }
-        etree.SubElement(parent, 'Parameter', attrib=global_attrs)
-        return parent
+        separator = {'type': 'string',
+                     'name': 'Separator',
+                     'value': self.separator[index]}
 
-    def _assign_role(self, parent, role):
-        """Used in create experiment to correctly map the role of each variable in
-        experiemtnal data columns
-        :return:
+        weight_method = {'type': 'unsignedInteger',
+                         'name': 'Weight Method',
+                         'value': self.weight_method[index]}
 
-        Args:
-          parent:
-            The parent xml object
-          role:
-            'ignored' (default), 'dependent', 'independent', 'time' or
+        etree.SubElement(Exp, 'Parameter', attrib=row_orientation)
+        etree.SubElement(Exp, 'Parameter', attrib=experiment_type)
+        etree.SubElement(Exp, 'Parameter', attrib=ExpFile)
+        etree.SubElement(Exp, 'Parameter', attrib=first_row)
+        etree.SubElement(Exp, 'Parameter', attrib=Key)
+        etree.SubElement(Exp, 'Parameter', attrib=LastRow)
+        etree.SubElement(Exp, 'Parameter', attrib=normalize_weights_per_experiment)
+        etree.SubElement(Exp, 'Parameter', attrib=NumberOfColumns)
+        ## Map looks out of place but this order must be maintained
+        Map = etree.SubElement(Exp, 'ParameterGroup', attrib=ObjectMap)
+        etree.SubElement(Exp, 'Parameter', attrib=row_containing_names)
+        etree.SubElement(Exp, 'Parameter', attrib=separator)
+        etree.SubElement(Exp, 'Parameter', attrib=weight_method)
 
-        Returns:
-            etree.lxml object
-
-        """
         # define object role attributes
         time_role = {'type': 'unsignedInteger',
                      'name': 'Role',
@@ -3583,743 +2372,1040 @@ class ParameterEstimation(_Task):
                         'name': 'Role',
                         'value': '0'}
 
-        ## assign the correct role
-        if role == 'dependent':
-            parent = etree.SubElement(parent, 'Parameter', attrib=dependent_variable_role)
-        elif role == 'independent':
-            parent = etree.SubElement(parent, 'Parameter', attrib=independent_variable_role)
-        elif role == 'time':
-            parent = etree.SubElement(parent, 'Parameter', attrib=time_role)
-        elif role == 'ignored':
-            parent = etree.SubElement(parent, 'Parameter', attrib=ignored_role)
-        else:
-            raise ValueError('"{}" is not a valid role'.format(role))
+        for i in range(int(num_columns)):
+            map_group = etree.SubElement(Map, 'ParameterGroup', attrib={'name': (str(i))})
+            if self.experiment_type[index] == str(1):  # when Experiment type is set to time course it should be 1
+                ## first column is time
+                if i == 0:
+                    etree.SubElement(map_group, 'Parameter', attrib=time_role)
+                else:
+                    ## map independent variables
+                    if obs[i][-6:] == '_indep':
+                        if obs[i][:-6] in [j.name for j in self.model.metabolites]:
+                            metab = [j for j in self.model.metabolites if j.name == obs[i][:-6]][0]
+                            cn = '{},{},{}'.format(self.model.reference,
+                                                   metab.compartment.reference,
+                                                   metab.initial_reference)
+                            independent_ICs = {'type': 'cn',
+                                               'name': 'Object CN',
+                                               'value': cn}
+                            etree.SubElement(map_group, 'Parameter', attrib=independent_ICs)
 
-        return parent
+                        elif obs[i][:-6] in [j.name for j in self.model.global_quantities]:
+                            glob = [j for j in self.model.global_quantities if j.name == obs[i][:-6]][0]
+                            cn = '{},{}'.format(self.model.reference,
+                                                glob.initial_reference)
 
-    def _map_experiments(self, validation=False):
-        """Adds experiment sets to the parameter estimation task
-        exp_file is an experiment filename with exactly matching headers (independent variablies need '_indep' appended to the end)
-        since this method is intended to be used in a loop in another function to
-        deal with all experiment sets, the second argument 'i' is the index for the current experiment
-        
-        i is the exeriment_file index
+                            independent_globs = {'type': 'cn',
+                                                 'name': 'Object CN',
+                                                 'value': cn}
 
-        Args:
-          validation (bool):
-            Set to True for configuring a validation experiment, False (default) otherwise
+                            etree.SubElement(map_group,
+                                             'Parameter',
+                                             attrib=independent_globs)
+                        else:
+                            continue
+                            ##etree.SubElement(map_group, 'Parameter', attrib=ignored_role)
+                            LOG.warning('{} not found. Set to ignore'.format(obs[i]))
+                        etree.SubElement(map_group, 'Parameter', attrib=independent_variable_role)
 
-        Returns:
-            :py:attr:`ParameterEstimation.models`
+                    ## now do dependent variables
+                    elif obs[i][:-6] != '_indep':
+                        ## metabolites
+                        if obs[i] in [j.name for j in self.model.metabolites]:
+                            metab = [j for j in self.model.metabolites if j.name == obs[i]][0]
+                            cn = '{},{},{}'.format(self.model.reference,
+                                                   metab.compartment.reference,
+                                                   metab.transient_reference)
 
-        """
-        ## build a reference dct for weight method numbers
-        weight_method_string = ['mean_squared', 'stardard_deviation', 'value_scaling',
-                                'mean']
-        weight_method_numbers = [str(i) for i in [1, 2, 3, 4]]
-        weight_method_lookup_dct = dict(list(zip(weight_method_string, weight_method_numbers)))
+                            dependent_ICs = {'type': 'cn',
+                                             'name': 'Object CN',
+                                             'value': cn}
 
-        for model_name in self.models:
+                            etree.SubElement(map_group, 'Parameter', attrib=dependent_ICs)
 
-            mod = self.models[model_name].model
+                        ## global quantities
+                        elif obs[i] in [j.name for j in self.model.global_quantities]:
+                            glob = [j for j in self.model.global_quantities if j.name == obs[i]][0]
+                            cn = '{},{}'.format(self.model.reference,
+                                                glob.transient_reference)
+                            dependent_globs = {'type': 'cn',
+                                               'name': 'Object CN',
+                                               'value': cn}
+                            etree.SubElement(map_group,
+                                             'Parameter',
+                                             attrib=dependent_globs)
+                        ## remember that local parameters are not mapped to experimental
+                        ## data
+                        else:
+                            continue
+                            ##etree.SubElement(map_group, 'Parameter', attrib=ignored_role)
+                            LOG.warning('{} not found. Set to ignore'.format(obs[i]))
+                        ## map for time course dependent variable
+                        etree.SubElement(map_group, 'Parameter', attrib=dependent_variable_role)
 
-            if validation:
-                query = '//*[@name="Validation Set"]'
-                experiment_names = self.config.validation_names
-                experiments = self.config.datasets.validations
-                keys_function = self._get_validation_keys
-                # self._remove_all_validation_experiments()
+            ## and now for steady state data
             else:
-                query = '//*[@name="Experiment Set"]'
-                experiment_names = self.config.experiment_names
-                experiments = self.config.datasets.experiments
-                keys_function = self._get_experiment_keys
-                # self._remove_all_experiments()
 
-            for experiment_name in experiment_names:
-                experiment = experiments[experiment_name]
-                data = pandas.read_csv(
-                    experiment.filename,
-                    sep=experiment.separator
-                )
-                experiment_type = 'steadystate'
+                ## do independent variables first
+                if obs[i][-6:] == '_indep':
 
-                if 'time' in [i.lower() for i in data.columns]:
-                    experiment_type = 'timecourse'
+                    ## for metabolites
+                    if obs[i][:-6] in [j.name for j in self.model.metabolites]:
+                        metab = [j for j in self.model.metabolites if j.name == obs[i][:-6]][0]
+                        cn = '{},{},{}'.format(self.model.reference,
+                                               metab.compartment.reference,
+                                               metab.initial_reference)
 
-                experiment_type = str(1) if experiment_type == 'timecourse' else str(0)
+                        independent_ICs = {'type': 'cn',
+                                           'name': 'Object CN',
+                                           'value': cn}
+                        x = etree.SubElement(map_group, 'Parameter', attrib=independent_ICs)
 
-                num_rows = str(data.shape[0])
-                num_columns = str(data.shape[1])
+                    ## now for global quantities
+                    elif obs[i][:-6] in [j.name for j in self.model.global_quantities]:
+                        glob = [j for j in self.model.global_quantities if j.name == obs[i]][0]
+                        cn = '{},{}'.format(self.model.reference,
+                                            glob.initial_reference)
 
-                experiment_file = {'type': 'file',
-                                   'name': 'File Name',
-                                   'value': experiment.filename}
-                key = {'type': 'key',
-                       'name': 'Key',
-                       'value': keys_function()[model_name][experiment_name]
-                       }
+                        independent_globs = {'type': 'cn',
+                                             'name': 'Object CN',
+                                             'value': cn}
 
-                # necessary XML attributes
-                experiment_group = etree.Element('ParameterGroup',
-                                                 attrib={
-                                                     'name': experiment_name
-                                                 })
+                        etree.SubElement(map_group,
+                                         'Parameter',
+                                         attrib=independent_globs)
+                    ## local parameters are never mapped
+                    else:
+                        continue
+                        #etree.SubElement(map_group, 'Parameter', attrib=ignored_role)
+                        LOG.warning('{} not found. Set to ignore'.format(obs[i]))
+                    etree.SubElement(map_group, 'Parameter', attrib=independent_variable_role)
 
-                row_orientation = {'type': 'bool',
-                                   'name': 'Data is Row Oriented',
-                                   'value': True}
 
-                experiment_type_dct = {'type': 'unsignedInteger',
-                                       'name': 'Experiment Type',
-                                       'value': experiment_type}
+                elif obs[i][-6:] != '_indep':
+                    ## for metabolites
+                    if obs[i] in [j.name for j in self.model.metabolites]:
+                        metab = [j for j in self.model.metabolites if j.name == obs[i]][0]
+                        cn = '{},{},{}'.format(self.model.reference,
+                                               metab.compartment.reference,
+                                               metab.transient_reference)
+                        independent_ICs = {'type': 'cn',
+                                           'name': 'Object CN',
+                                           'value': cn}
+                        etree.SubElement(map_group, 'Parameter', attrib=independent_ICs)
 
-                first_row = {'type': 'unsignedInteger',
-                             'name': 'First Row',
-                             'value': str(1)}
+                    ## now for global quantities
+                    elif obs[i] in [j.name for j in self.model.global_quantities]:
+                        glob = [j for j in self.model.global_quantities if j.name == obs[i]][0]
+                        cn = '{},{}'.format(self.model.reference,
+                                            glob.transient_reference)
 
-                last_row = {'type': 'unsignedInteger',
-                            'name': 'Last Row',
-                            'value': str(int(num_rows) + 1)}  # add 1 to account for 0 indexed python
+                        independent_globs = {'type': 'cn',
+                                             'name': 'Object CN',
+                                             'value': cn}
 
-                normalize_weights_per_experiment = {'type': 'bool',
-                                                    'name': 'Normalize Weights per Experiment',
-                                                    'value': experiment.normalize_weights_per_experiment}
+                        etree.SubElement(map_group,
+                                         'Parameter',
+                                         attrib=independent_globs)
+                    ## local parameters are never mapped
+                    else:
+                        continue
+                        ##etree.SubElement(map_group, 'Parameter', attrib=ignored_role)
+                        LOG.warning('{} not found. Set to ignore'.format(obs[i]))
+                    etree.SubElement(map_group, 'Parameter', attrib=dependent_variable_role)
+        return Exp
 
-                number_of_columns = {'type': 'unsignedInteger',
-                                     'name': 'Number of Columns',
-                                     'value': num_columns}
-
-                object_map = {'name': 'Object Map'}
-
-                row_containing_names = {'type': 'unsignedInteger',
-                                        'name': 'Row containing Names',
-                                        'value': str(1)}
-
-                separator = {'type': 'string',
-                             'name': 'Separator',
-                             'value': experiment.separator}
-
-                weight_method = {'type': 'unsignedInteger',
-                                 'name': 'Weight Method',
-                                 'value': weight_method_lookup_dct[
-                                     self.config.settings.weight_method
-                                 ]}
-
-                for i in [
-                    key,
-                    experiment_file,
-                    row_orientation,
-                    first_row,
-                    last_row,
-                    experiment_type_dct,
-                    normalize_weights_per_experiment,
-                    separator,
-                    weight_method,
-                    row_containing_names,
-                    number_of_columns,
-                ]:
-                    for j, k in i.items():
-                        if isinstance(k, bool):
-                            i[j] = str(int(k))
-                        elif isinstance(k, int):
-                            i[j] = str(k)
-                    etree.SubElement(experiment_group, 'Parameter', attrib=i)
-                map = etree.SubElement(experiment_group, 'ParameterGroup', attrib=object_map)
-
-                data_column_number = 0
-                for data_name in experiment.mappings:
-
-                    map_group = etree.SubElement(map, 'ParameterGroup', attrib={'name': str(data_column_number)})
-                    data_column_number += 1
-
-                    if experiment.mappings[data_name].model_object.lower() == 'time':
-                        self._assign_role(map_group, experiment.mappings[data_name].role)
-
-                    elif experiment.mappings[data_name].object_type == 'Metabolite':
-                        metab = [i for i in mod.metabolites if
-                                 i.name == experiment.mappings[data_name].model_object or i.name == experiment.mappings[
-                                                                                                        data_name].model_object[
-                                                                                                    :-6]]
-                        assert len(metab) == 1
-                        self._create_metabolite_reference(
-                            mod,
-                            map_group,
-                            metab[0],
-                            experiment.mappings[data_name].role
-                        )
-                        self._assign_role(map_group, experiment.mappings[data_name].role)
-
-                    elif experiment.mappings[data_name].object_type == 'GlobalQuantity':
-                        glo = [i for i in mod.global_quantities if
-                               i.name == experiment.mappings[data_name].model_object or i.name == experiment.mappings[
-                                                                                                      data_name].model_object[
-                                                                                                  :-6]]
-                        assert len(metab) == 1
-                        self._create_global_quantity_reference(
-                            mod,
-                            map_group,
-                            glo[0],
-                            experiment.mappings[data_name].role
-                        )
-
-                        self._assign_role(map_group, experiment.mappings[data_name].role)
-
-                    for j in mod.xml.xpath(query):
-                        j.insert(0, experiment_group)
-                        if validation:
-                            for k in list(j):
-                                if k.attrib['name'] == 'Weight':
-                                    k.attrib['value'] = str(self.config.settings.validation_weight)
-                                if k.attrib['name'] == 'Threshold':
-                                    k.attrib['value'] = str(self.config.settings.validation_threshold)
-
-        return self.models
-
-    def _remove_experiment(self, experiment_name):
+    def remove_experiment(self, experiment_name):
         """
-        Remove experiment from COAPSI parameter estimation task
+        name attribute of experiment. usually Experiment_1 or something
+        """
+        if self.type == 'experiment':
+            query = '//*[@name="Experiment Set"]'
+        elif self.type == 'validation':
+            query = '//*[@name="Validation Set"]'
+        for i in self.model.xml.xpath(query):
+            for j in list(i):
+                if j.attrib['name'] == experiment_name:
+                    j.getparent().remove(j)
+        return self.model
 
-        Args:
-          experiment_name (str):
-            name of experiment to remove
-        Returns:
-            :py:attr:`ParameterEstimation.models`
+    def remove_all_experiments(self):
+
+        for i in self.experiments:
+            experiment_name = i.attrib['name']
+            self.remove_experiment(experiment_name)
+        return self.model
+
+    def add_experiment_set(self, experiment_element):
+        """
+        Map a single experiment set
+        :param experiment_element:
+        :return:
+        """
+        if self.type == 'experiment':
+            query = '//*[@name="Experiment Set"]'
+        elif self.type == 'validation':
+            query = '//*[@name="Validation Set"]'
+            raise errors.NotImplementedError('Validation data sets are currently not supported')
+
+        for j in self.model.xml.xpath(query):
+            j.insert(0, experiment_element)
+        return self.model
+
+    def map_experiments(self):
+        """
+        map all experiment sets
+        :return:
+        """
+
+        self.remove_all_experiments()
+        for index in range(len(self.experiment_files)):
+            ## read data to get headers.
+            ## read in such a way that duplicate columns are not mangled
+            data = pandas.read_csv(self.experiment_files[index], sep=self.separator[index], skip_blank_lines=False,
+                                   header=None)
+            data = data.rename(columns=data.iloc[0], copy=False).iloc[1:].reset_index(drop=True)
+
+            ## if none of the variables in the experiment file exist then skip
+            variable_exists_list = []
+            for i in data.columns:
+                if i not in self.model.all_variable_names:
+                    variable_exists_list.append(False)
+                else:
+                    variable_exists_list.append(True)
+
+            ## if variable exists list ends up being False, we know
+            ## that none of the data in the datafile have
+            ## variables correlating to model components. In this case,
+            ## pycotools3 skips mapping this file and sends a warning
+
+            if (list(set(variable_exists_list))[0] == False) and (len(list(set(variable_exists_list))) == 1):
+                LOG.warning('None of the column headers in your experimental '
+                            'data file ("{}") match any model variable in model "{}". If '
+                            'this is intentional, you can ignore this warning. This '
+                            'most commonly occurs when using MultiModelFit. In this case '
+                            'the data file is intended for an alternative model which is '
+                            'why the variable is not in the model. If this is not the case, '
+                            'please check your experimental data variable names to ensure they exactly match '
+                            'corresponding model variable names. For convenience here is a list of '
+                            'variables in your model: \n "{}"'.format(self.experiment_files[index],
+                                                                      self.model.name,
+                                                                      self.model.all_variable_names))
+                continue
+
+            Experiment = self.create_experiment(index)
+            self.model = self.add_experiment_set(Experiment)
+            # self.save() ## Note sure whether this save is needed. Keep commented until you're sure
+        return self.model
+
+
+@mixin(model.GetModelComponentFromStringMixin)
+@mixin(model.ReadModelMixin)
+class ParameterEstimation(_Task):
+    """
+    Set up and run a parameter estimation in copasi.
+
+    To setup:
+
+        # Make text or csv files containing experimental data. This is the
+        same as you would using the COPASI GUI except column headers **MUST**
+        be identical to the model component. For this reason, all model
+        components must have unique names. See Caveats in documentation.
+        # instantiate the ParameterEstimation class with all the
+          options that you want.
+        # run the write_config_file() method
+        # If options for which model components you want to include are
+        in point 1 then skip this point. If you are manually defining which
+        parameters you want to estimate, open the config file and
+        modify as you see fit.
+        # Use the setup() method
+        # use the run method
+
+    .. _parameter_estimation_kwargs:
+
+    ParameterEstimation kwargs
+    ==========================
+
+    ===========================     ==================================================
+    ParameterEstimation Kwargs               Description
+    ===========================     ==================================================
+    update_model                    Default: False
+    randomize_start_values          Default: True
+    create_parameter_sets           Default: False
+    calculate_statistics            Default: False
+    use_config_start_values         Default: False. Use starting values from config file
+                                    Set randomize_start_values to False
+    method                          Default: 'genetic_algorithm'
+    number_of_generations           Default: 200
+    population_size                 Default: 50
+    random_number_generator         Default: 1
+    seed                            Default: 0
+    pf                              Default: 0.475
+    iteration_limit                 Default: 50
+    tolerance                       Default: 0.00001
+    rho                             Default: 0.2
+    scale                           Default: 10
+    swarm_size                      Default: 50
+    std_deviation                   Default: 0.000001
+    number_of_iterations            Default: 100000
+    start_temperature               Default: 1
+    cooling_factor                  Default: 0.85
+    scheduled                       Default: False
+    lower_bound                     Default: 0.000001
+    upper_bound                     Default: 1000000
+    start_value                     Default: 0.1
+    save                            Default: False
+    run_mode                        Default: True. Passed on to :ref:`run`
+    max_active                      Default: None. Max number of models to run at once.
+    metabolites                     Default: All metabolites. Metabolites to
+                                    include in the config file
+    global_quantities               Default: All global_quantities. Global quantities
+                                    to include in the config file
+    local_parameters                Default: All local_parameters. local parameters
+                                    to include in the config file
+    <report_kwargs>                 Arguments for :ref:`_report_kwargs` are also
+                                    accepted here and passed on
+    <experiment_mapper_kwargs>      Arguments for :ref:`_experiment_mapper_kwargs` are
+                                    accepted here and passed on
+    ===========================     ==================================================
+
+
+
+     ===========================     ==================================================
+     ParameterEstimation Kwargs               Description
+     ===========================     ==================================================
+     copy_number                     default: 1. Number of model copies to configure
+     pe_number                       default: 1. Number of parameter estimations per
+                                     model
+     run_mode                        default: True
+     results_directory               default: MultiParameterEstimationResults in
+                                     same directory as :py:attr:`coapsi_file`
+     max_active                      default: None. Number of models to run
+                                     simultaneously. If None then run all.
+     ===========================     ==================================================
+
+    """
+
+    def __init__(self, model, experiment_files, **kwargs):
+        """
+
+        :param model:
+            :py:class:`model.Model`
+
+        :param experiment_files:
+            `list` Each element a string to an appropriately
+            configured data file.
+
+        :param kwargs:
+            :ref:`parameter_estimation_kwargs`
 
         """
-        query = '//*[@name="Experiment Set"]'
-        for model_name in self.models:
-            mod = self.models[model_name].model
-            for i in mod.xml.xpath(query):
-                for j in list(i):
-                    if j.attrib['name'] == experiment_name:
-                        j.getparent().remove(j)
-            self.models[model_name].model = mod
-        return self.models
+        self.model = self.read_model(model)
+        self.kwargs = kwargs
+        # super(ParameterEstimation, self).__init__(model, **kwargs)
+        self.experiment_files = experiment_files
+        if isinstance(self.experiment_files, list) != True:
+            self.experiment_files = [self.experiment_files]
 
-    def _remove_all_experiments(self):
-        """
-        Removes all experiments from parameter estimation task
-        Returns:
-            None
-        """
-        for experiment_name in self.config.experiment_names:
-            self._remove_experiment(experiment_name)
+        # default_report_name = os.path.join(os.path.dirname(self.model.copasi_file), 'PEData.txt')
+        config_file = os.path.join(os.path.dirname(self.model.copasi_file), 'config_file.csv')
 
-    def _remove_validation_experiment(self, validation_experiment_name):
-        """
-        Remove validation experiment from COAPSI parameter estimation task
+        self.default_properties = {
+            'metabolites': self.model.metabolites,
+            'global_quantities': self.model.global_quantities,
+            'local_parameters': self.model.local_parameters,
+            'copy_number': 1,
+            'pe_number': 1,
+            'results_directory': os.path.join(self.model.root, 'ParameterEstimationResults'),
+            'quantity_type': 'concentration',
+            'report_name': 'PEData.txt',
+            'append': False,
+            'confirm_overwrite': False,
+            'config_filename': config_file,
+            'overwrite_config_file': False,
+            'update_model': False,
+            'randomize_start_values': True,
+            'create_parameter_sets': False,
+            'calculate_statistics': False,
+            'use_config_start_values': False,
+            # method options
+            'method': 'genetic_algorithm',
+            # 'DifferentialEvolution',
+            'number_of_generations': 200,
+            'population_size': 50,
+            'random_number_generator': 1,
+            'seed': 0,
+            'pf': 0.475,
+            'iteration_limit': 50,
+            'tolerance': 0.00001,
+            'rho': 0.2,
+            'scale': 10,
+            'swarm_size': 50,
+            'std_deviation': 0.000001,
+            'number_of_iterations': 100000,
+            'start_temperature': 1,
+            'cooling_factor': 0.85,
+            # experiment definition options
+            # need to include options for defining multiple experimental files at once
+            'row_orientation': [True] * len(self.experiment_files),
+            'experiment_type': ['timecourse'] * len(self.experiment_files),
+            'first_row': [str(1)] * len(self.experiment_files),
+            'normalize_weights_per_experiment': [True] * len(self.experiment_files),
+            'row_containing_names': [str(1)] * len(self.experiment_files),
+            'separator': ['\t'] * len(self.experiment_files),
+            'weight_method': ['mean_squared'] * len(self.experiment_files),
+            'scheduled': False,
+            'lower_bound': 0.000001,
+            'upper_bound': 1000000,
+            'start_value': 0.1,
+            'save': False,
+            'run_mode': True,
+            'max_active': None
+        }
 
-        Args:
-          validation_experiment_name (str):
-            name of validation experiment to remove
-        Returns:
-            :py:attr:`ParameterEstimation.models`
+        self.default_properties.update(self.kwargs)
+        self.default_properties = self.convert_bool_to_numeric(self.default_properties)
+        self.update_properties(self.default_properties)
+        # self._remove_multiparameter_estimation_arg()
+        self.check_integrity(list(self.default_properties.keys()), list(self.kwargs.keys()))
 
-        """
-        query = '//*[@name="Validation Set"]'
-        for model_name in self.models:
-            mod = self.models[model_name].model
-            for i in mod.xml.xpath(query):
-                for j in list(i):
-                    if j.attrib['name'] == validation_experiment_name:
-                        j.getparent().remove(j)
-            self.models[model_name].model = mod
-        return self.models
+        self._do_checks()
 
-    def _remove_all_validation_experiments(self):
+        self._convert_numeric_arguments_to_string()
+
+        if self.save:
+            self.model.save()
+
+    def __str__(self):
+        return "ParameterEstimation(method='{}', config_filename='{}', report_name='{}')".format(
+            self.method, self.config_filename, self.report_name)
+
+    def get_default_properties(self):
+        return self.default_properties
+
+    # def _remove_multiparameter_estimation_arg(self):
+    #     """
+    #     MultiParameterEstimation inherits from ParameterEstimation
+    #     and passes new arguments to the ParameterEstimation class
+    #     which get fed into self.check_integrity causing Exception.
+    #     This method removes those arguments
+    #     :return:
+    #     """
+    #     lst = ['copy_number',
+    #            'pe_number',
+    #            'results_directory']
+    #     for i in lst:
+    #         if i in list(self.kwargs.keys()):
+    #             del self.kwargs[i]
+
+    def _do_checks(self):
         """
-        Removates all validation experiments from parameter estimation task
-        Returns:
-                None
+        Validate integrity of user input
+        :return:
         """
-        for validation_name in self.config.validation_names:
-            self._remove_experiment(validation_name)
+        ## Allow acceptance of strings as arguments to metabolites, local_parameters
+        ## and global_quantities
+        for attr in ['metabolites', 'local_parameters', 'global_quantities']:
+            getattribute = getattr(self, attr)
+            new_attr = []
+            for i in range(len(getattribute)):
+                if isinstance(getattribute[i], str):
+                    new_attr.append(self.get_variable_from_string(self.model, getattribute[i]))
+                    setattr(self, attr, new_attr)
+
+        # if os.path.isabs(self.report_name) != True:
+        #     self.report_name = os.path.join(os.path.dirname(self.model.copasi_file),
+        #                                     self.report_name)
+
+        ## ensure experiment files exist
+        for fle in self.experiment_files:
+            if os.path.isfile(fle) != True:
+                raise errors.InputError('{} does not exist'.format(fle))
+
+        ## ensure method exists
+        self.method_list = ['current_solution_statistics', 'differential_evolution',
+                            'evolutionary_strategy_sr', 'evolutionary_program',
+                            'hooke_jeeves', 'levenberg_marquardt', 'nelder_mead',
+                            'particle_swarm', 'praxis', 'random_search', 'scatter_search',
+                            'simulated_annealing', 'steepest_descent', 'truncated_newton',
+                            'genetic_algorithm', 'genetic_algorithm_sr']
+        if self.method not in self.method_list:
+            raise errors.InputError(
+                '{} not a valid method. These are valid methods: {}'.format(self.method, self.method_list))
+
+        ## Do not randomize start values if using current solution statistics
+        if self.method == 'current_solution_statistics':
+            if self.randomize_start_values == True:
+                raise errors.InputError(
+                    'Cannot run current solution statistics with \'randomize_start_values\' set to \'true\'.')
+
+        ## ensure metabolties are a list (even if only 1 element)
+        if isinstance(self.metabolites, list) != True:
+            self.metabolites = [self.metabolites]
+
+        ## ensure global_quantities are a list (even if only 1 element)
+        if isinstance(self.global_quantities, list) != True:
+            self.global_quantities = [self.global_quantities]
+
+        # ensure local_parameters are a list (even if only 1 element)
+        if isinstance(self.local_parameters, list) != True:
+            self.local_parameters = [self.local_parameters]
+
+        ## ensure arguments to local parameters exist
+        for i in [j.name for j in self.local_parameters]:
+            if i not in [j.name for j in self.model.local_parameters]:
+                raise errors.InputError(
+                    '"{}" not a local_parameter. These are your local parameters: {}'.format(
+                        i, self.model.local_parameters))
+
+        ## ensure arguments to metabolites exist
+        for i in [j.name for j in self.metabolites]:
+            if i not in [j.name for j in self.model.metabolites]:
+                raise errors.InputError(
+                    '"{}" not a metabolite. These are your local parameters: {}'.format(
+                        i, self.model.metabolites))
+
+        ## ensure arguments to global_quantities exist
+        for i in [j.name for j in self.global_quantities]:
+            if i not in [j.name for j in self.model.global_quantities]:
+                raise errors.InputError(
+                    '"{}" not a global_quantity. These are your local parameters: {}'.format(
+                        i, self.model.global_quantities))
+
+        if self.use_config_start_values not in [True, False]:
+            raise errors.InputError(
+                ''' Argument to the use_config_start_values must be \'True\' or \'False\' not {}'''.format(
+                    self.use_config_start_values))
+            if self.randomize_start_values in ['true', 1, '1', True]:
+                LOG.warning('using config start values but randomize start '
+                            'values is set to True. ')
+
+        ## if start_value is series make it a df
+        if type(self.start_value) is pandas.Series:
+            self.start_value = pandas.DataFrame(self.start_value)
+
+        ## if start_value is is pandas dataframe set randomize start values to false
+        ## and use_config_start_values to True
+        if type(self.start_value) is pandas.DataFrame:
+            LOG.info('using user specified starting parameters so setting '
+                     'randomize_start_values to False')
+
+            self.randomize_start_values = '0'
+            self.use_config_start_values = True
+
+
+        # if self.output_in_subtask:
+        #     LOG.warning(
+        #         'output_in_subtask has been turned on. This means that you\'ll get function evaluations with the best parameter set that the algorithm finds')
+
+        run_arg_list = [False, True, 'parallel', 'sge']
+
+        if self.run_mode not in run_arg_list:
+            raise errors.InputError('run_mode needs to be one of {}'.format(run_arg_list))
+
+        if isinstance(self.copy_number, int) != True:
+            raise errors.InputError('copy_number argument is of type int')
+
+        if isinstance(self.pe_number, int) != True:
+            raise errors.InputError('pe_number argument is of type int')
+
+    @property
+    def _experiment_mapper_args(self):
+        """
+        method to construct a dictionary to pass to ExperimentMapper
+        :return:
+        """
+        kwargs_experiment = {}
+        kwargs_experiment['row_orientation'] = self.row_orientation
+        kwargs_experiment['experiment_type'] = self.experiment_type
+        kwargs_experiment['first_row'] = self.first_row
+        kwargs_experiment['normalize_weights_per_experiment'] = self.normalize_weights_per_experiment
+        kwargs_experiment['row_containing_names'] = self.row_containing_names
+        kwargs_experiment['separator'] = self.separator
+        kwargs_experiment['weight_method'] = self.weight_method
+        return kwargs_experiment
+
+    # def setup(self):
+    #     """
+    #     Setup a parameter estimation
+    #     :return:
+    #     """
+    #     EM = ExperimentMapper(self.model, self.experiment_files, **self._experiment_mapper_args)
+    #     self.model = EM.model
+    #     self.model = self.define_report()
+    #     self.model = self.remove_all_fit_items()
+    #     self.model = self.set_PE_method()
+    #     self.model = self.set_PE_options()
+    #     self.model = self.insert_all_fit_items()
+    #     assert self.model != None
+    #     assert isinstance(self.model, model.Model)
+    #     self.model.save()
+    #     return self.model
 
     def _select_method(self):
         """
-        Converts user input into the form required by the COPASI xml.
-
-        Returns:
-            tuple. (method_name, method_type)
-
+        #determine which method to use
+        :return: tuple. (str, str), (method_name, method_type)
         """
-        if self.config.settings.method == 'current_solution_statistics'.lower():
+        if self.method == 'current_solution_statistics'.lower():
             method_name = 'Current Solution Statistics'
             method_type = 'CurrentSolutionStatistics'
 
-        elif self.config.settings.method == 'differential_evolution'.lower():
+        if self.method == 'differential_evolution'.lower():
             method_name = 'Differential Evolution'
             method_type = 'DifferentialEvolution'
 
-        elif self.config.settings.method == 'evolutionary_strategy_sr'.lower():
+        if self.method == 'evolutionary_strategy_sr'.lower():
             method_name = 'Evolution Strategy (SRES)'
             method_type = 'EvolutionaryStrategySR'
 
-        elif self.config.settings.method == 'evolutionary_program'.lower():
+        if self.method == 'evolutionary_program'.lower():
             method_name = 'Evolutionary Programming'
             method_type = 'EvolutionaryProgram'
 
-        elif self.config.settings.method == 'hooke_jeeves'.lower():
+        if self.method == 'hooke_jeeves'.lower():
             method_name = 'Hooke &amp; Jeeves'
             method_type = 'HookeJeeves'
 
-        elif self.config.settings.method == 'levenberg_marquardt'.lower():
+        if self.method == 'levenberg_marquardt'.lower():
             method_name = 'Levenberg - Marquardt'
             method_type = 'LevenbergMarquardt'
 
-        elif self.config.settings.method == 'nelder_mead'.lower():
+        if self.method == 'nelder_mead'.lower():
             method_name = 'Nelder - Mead'
             method_type = 'NelderMead'
 
-        elif self.config.settings.method == 'particle_swarm'.lower():
+        if self.method == 'particle_swarm'.lower():
             method_name = 'Particle Swarm'
             method_type = 'ParticleSwarm'
 
-        elif self.config.settings.method == 'praxis'.lower():
+        if self.method == 'praxis'.lower():
             method_name = 'Praxis'
             method_type = 'Praxis'
 
-        elif self.config.settings.method == 'random_search'.lower():
+        if self.method == 'random_search'.lower():
             method_name = 'Random Search'
             method_type = 'RandomSearch'
 
-        elif self.config.settings.method == 'simulated_annealing'.lower():
+        if self.method == 'simulated_annealing'.lower():
             method_name = 'Simulated Annealing'
             method_type = 'SimulatedAnnealing'
 
-        elif self.config.settings.method == 'steepest_descent'.lower():
+        if self.method == 'steepest_descent'.lower():
             method_name = 'Steepest Descent'
             method_type = 'SteepestDescent'
 
-        elif self.config.settings.method == 'truncated_newton'.lower():
+        if self.method == 'truncated_newton'.lower():
             method_name = 'Truncated Newton'
             method_type = 'TruncatedNewton'
 
-        elif self.config.settings.method == 'scatter_search'.lower():
+        if self.method == 'scatter_search'.lower():
             method_name = 'Scatter Search'
             method_type = 'ScatterSearch'
 
-        elif self.config.settings.method == 'genetic_algorithm'.lower():
+        if self.method == 'genetic_algorithm'.lower():
             method_name = 'Genetic Algorithm'
             method_type = 'GeneticAlgorithm'
 
-        elif self.config.settings.method == 'genetic_algorithm_sr'.lower():
+        if self.method == 'genetic_algorithm_sr'.lower():
             method_name = 'Genetic Algorithm SR'
             method_type = 'GeneticAlgorithmSR'
-
-        else:
-            raise errors.InputError(
-                f'"{self.config.settings.method}" is an invalid '
-                f'method argument. Please choose from "{sorted(self.valid_methods)}"'
-            )
 
         return method_name, method_type
 
     def _convert_numeric_arguments_to_string(self):
         """
-        xml requires all numbers to be strings. This method makes this conversion
-
-        Returns:
-            None
-
+        xml requires all numbers to be strings.
+        This method makes this conversion
+        :return: void
         """
-        self.config.settings.number_of_generations = str(self.config.settings.number_of_generations)
-        self.config.settings.population_size = str(self.config.settings.population_size)
-        self.config.settings.random_number_generator = str(self.config.settings.random_number_generator)
-        self.config.settings.seed = str(self.config.settings.seed)
-        self.config.settings.pf = str(self.config.settings.pf)
-        self.config.settings.iteration_limit = str(self.config.settings.iteration_limit)
-        self.config.settings.tolerance = str(self.config.settings.tolerance)
-        self.config.settings.rho = str(self.config.settings.rho)
-        self.config.settings.scale = str(self.config.settings.scale)
-        self.config.settings.swarm_size = str(self.config.settings.swarm_size)
-        self.config.settings.std_deviation = str(self.config.settings.std_deviation)
-        self.config.settings.number_of_iterations = str(self.config.settings.number_of_iterations)
-        self.config.settings.start_temperature = str(self.config.settings.start_temperature)
-        self.config.settings.cooling_factor = str(self.config.settings.cooling_factor)
-        self.config.settings.lower_bound = str(self.config.settings.lower_bound)
+        self.number_of_generations = str(self.number_of_generations)
+        self.population_size = str(self.population_size)
+        self.random_number_generator = str(self.random_number_generator)
+        self.seed = str(self.seed)
+        self.pf = str(self.pf)
+        self.iteration_limit = str(self.iteration_limit)
+        self.tolerance = str(self.tolerance)
+        self.rho = str(self.rho)
+        self.scale = str(self.scale)
+        self.swarm_size = str(self.swarm_size)
+        self.std_deviation = str(self.std_deviation)
+        self.number_of_iterations = str(self.number_of_iterations)
+        self.start_temperature = str(self.start_temperature)
+        self.cooling_factor = str(self.cooling_factor)
+        self.lower_bound = str(self.lower_bound)
         if isinstance(self.start_value, (float, int)):
-            self.config.settings.start_value = str(self.config.settings.start_value)
-        self.config.settings.upper_bound = str(self.config.settings.upper_bound)
+            self.start_value = str(self.start_value)
+        self.upper_bound = str(self.upper_bound)
+
+    @property
+    def _report_arguments(self):
+        """
+        collect report specific arguments in a dict
+        :return: dict
+        """
+        # report specific arguments
+        report_dict = {}
+        report_dict['metabolites'] = self.metabolites
+        report_dict['global_quantities'] = self.global_quantities
+        report_dict['local_parameters'] = self.local_parameters
+        report_dict['quantity_type'] = self.quantity_type
+        report_dict['report_name'] = self.report_name
+        report_dict['append'] = self.append
+        report_dict['confirm_overwrite'] = self.confirm_overwrite
+        report_dict['report_type'] = 'multi_parameter_estimation'
+        return report_dict
+
+    def define_report(self):
+        """
+        create parameter estimation report
+        for result collection
+        :return: pycotools3.model.Model
+        """
+        return Reports(self.model, **self._report_arguments).model
+
+
+    def get_report_key(self):
+        """
+        After creating the report to collect
+        results, this method gets the corresponding key
+        There is probably a more efficient way to do this
+        but this works...
+        :return:
+        """
+        for i in self.model.xml.find('{http://www.copasi.org/static/schema}ListOfReports'):
+            if i.attrib['name'].lower() == 'multi_parameter_estimation':
+                key = i.attrib['key']
+        assert key != None
+        return key
 
     @property
     def _fit_items(self):
         """
         Get existing fit items
-        Returns:
-            dict containing models with fit_items
-
+        :return: dict
         """
-        models_dct = {}
-        for model_name in self.models:
-            mod = self.models[model_name].model
-            models_dct[model_name] = {}
-            # d = {}
-            query = '//*[@name="FitItem"]'
-            for i in mod.xml.xpath(query):
-                for j in list(i):
-                    if j.attrib['name'] == 'ObjectCN':
-                        match = re.findall('Reference=(.*)', j.attrib['value'])[0]
+        d = {}
+        query = '//*[@name="FitItem"]'
+        for i in self.model.xml.xpath(query):
+            for j in list(i):
+                if j.attrib['name'] == 'ObjectCN':
+                    match = re.findall('Reference=(.*)', j.attrib['value'])[0]
 
-                        if match == 'Value':
-                            match2 = re.findall('Reactions\[(.*)\].*Parameter=(.*),', j.attrib['value'])
-                            if match2 != []:
-                                match2 = '({}).{}'.format(match2[0][0], match2[0][1])
-
-                        elif match == 'InitialValue':
-                            match2 = re.findall('Values\[(.*)\]', j.attrib['value'])
-                            if match2 != []:
-                                match2 = match2[0]
-                        elif match == 'InitialConcentration':
-
-                            match2 = re.findall('Metabolites\[(.*)\]', j.attrib['value'])
-                            if match2 != []:
-                                match2 = match2[0]
+                    if match == 'Value':
+                        match2 = re.findall('Reactions\[(.*)\].*Parameter=(.*),', j.attrib['value'])
                         if match2 != []:
-                            models_dct[model_name][match2] = j.attrib
+                            match2 = '({}).{}'.format(match2[0][0], match2[0][1])
 
-        return models_dct
+                    elif match == 'InitialValue':
+                        match2 = re.findall('Values\[(.*)\]', j.attrib['value'])
+                        if match2 != []:
+                            match2 = match2[0]
+                    elif match == 'InitialConcentration':
 
-    def _remove_all_fit_items(self):
+                        match2 = re.findall('Metabolites\[(.*)\]', j.attrib['value'])
+                        if match2 != []:
+                            match2 = match2[0]
+                    if match2 != []:
+                        d[match2] = j.attrib
+        return d
+
+    def remove_fit_item(self, item):
         """
         Remove item from parameter estimation
-
-        Returns:
-            :py:attr:`ParameterEstimation.models`
-
+        :param item:
+        :return: pycotools3.model.Model
         """
+        all_items = list(self._fit_items.keys())
+        query = '//*[@name="FitItem"]'
+        assert item in all_items, '{} is not a fit item. These are the fit items: {}'.format(item, all_items)
+        item = self._fit_items[item]
+        for i in self.model.xml.xpath(query):
+            for j in list(i):
+                if j.attrib['name'] == 'ObjectCN':
+                    # locate references
+                    # remove local parameters from PE task
+                    match = re.findall('Reference=(.*)', j.attrib['value'])[0]
+                    if match == 'Value':
+                        pattern = 'Reactions\[(.*)\].*Parameter=(.*),Reference=(.*)'
+                        match2_copasiML = re.findall(pattern, j.attrib['value'])
+                        if match2_copasiML != []:
+                            match2_item = re.findall(pattern, item['value'])
+                            if match2_item != []:
+                                if match2_item == match2_copasiML:
+                                    i.getparent().remove(i)
 
-        for model_name in self.models:
-            mod = self.models[model_name].model
-            for item in self._fit_items[model_name]:
+                    # rempve global parameters from PE task
+                    elif match == 'InitialValue':
+                        pattern = 'Values\[(.*)\].*Reference=(.*)'
+                        match2_copasiML = re.findall(pattern, j.attrib['value'])
+                        if match2_copasiML != []:
+                            match2_item = re.findall(pattern, item['value'])
+                            if match2_item == match2_copasiML:
+                                i.getparent().remove(i)
 
-                all_items = list(self._fit_items[model_name].keys())
-
-                query = '//*[@name="FitItem"]'
-                assert item in all_items, '{} is not a fit item. These are the fit items: {}'.format(item, all_items)
-                item = self._fit_items[model_name][item]
-                for i in mod.xml.xpath(query):
-                    for j in list(i):
-                        if j.attrib['name'] == 'ObjectCN':
-                            # locate references
-                            # remove local parameters from PE task
-                            match = re.findall('Reference=(.*)', j.attrib['value'])[0]
-                            if match == 'Value':
-                                pattern = 'Reactions\[(.*)\].*Parameter=(.*),Reference=(.*)'
-                                match2_copasiML = re.findall(pattern, j.attrib['value'])
-                                if match2_copasiML != []:
-                                    match2_item = re.findall(pattern, item['value'])
-                                    if match2_item != []:
-                                        if match2_item == match2_copasiML:
-                                            i.getparent().remove(i)
-
-                            # rempve global parameters from PE task
-                            elif match == 'InitialValue':
-                                pattern = 'Values\[(.*)\].*Reference=(.*)'
-                                match2_copasiML = re.findall(pattern, j.attrib['value'])
-                                if match2_copasiML != []:
-                                    match2_item = re.findall(pattern, item['value'])
+                    # remove IC parameters from PE task
+                    elif match == 'InitialConcentration' or match == 'InitialParticleNumber':
+                        pattern = 'Metabolites\[(.*)\],Reference=(.*)'
+                        match2_copasiML = re.findall(pattern, j.attrib['value'])
+                        if match2_copasiML != []:
+                            if match2_copasiML[0][1] == 'InitialConcentration' or match2_copasiML[0][
+                                1] == 'InitialParticleNumber':
+                                match2_item = re.findall(pattern, item['value'])
+                                if match2_item != []:
                                     if match2_item == match2_copasiML:
                                         i.getparent().remove(i)
+                    else:
+                        raise TypeError(
+                            'Parameter {} is not a local parameter, initial concentration parameter or a global parameter.initial_value'.format(
+                                match2_item))
+        return self.model
 
-                            # remove IC parameters from PE task
-                            elif match == 'InitialConcentration' or match == 'InitialParticleNumber':
-                                pattern = 'Metabolites\[(.*)\],Reference=(.*)'
-                                match2_copasiML = re.findall(pattern, j.attrib['value'])
-                                if match2_copasiML != []:
-                                    if match2_copasiML[0][1] == 'InitialConcentration' or match2_copasiML[0][
-                                        1] == 'InitialParticleNumber':
-                                        match2_item = re.findall(pattern, item['value'])
-                                        if match2_item != []:
-                                            if match2_item == match2_copasiML:
-                                                i.getparent().remove(i)
-                            else:
-                                raise TypeError(
-                                    'Parameter {} is not a local parameter, initial concentration parameter or a global parameter.initial_value'.format(
-                                        match2_item))
-            self.models[model_name].model = mod
-        return self.models
+    def remove_all_fit_items(self):
+        """
+        Iterate over all fit items and remove them
+        from the parameter estimation task
+        :return: pycotools3.model.Model
+        """
+        for i in self._fit_items:
+            self.model = self.remove_fit_item(i)
+        return self.model
 
-    def _get_experiment_keys(self):
-        """Experiment keys are always 'Experiment_i' where 'i' indexes
-        the experiment in the order they are given in the experiment
-        list. This method extracts the _experiments that are not for validation
+    def write_config_file(self):
+        """
+        write a parameter estimation config file to
+        self.config_filename.
+        :return: str. Path to config file
+        """
+        if (os.path.isfile(self.config_filename) == False) or (self.overwrite_config_file == True):
+            self.item_template.to_csv(self.config_filename)
+        return self.config_filename
+
+    def read_config_file(self):
+        """
+
         :return:
-
-        Args:
-
-        Returns:
-
         """
-        dct = OrderedDict()
+        if os.path.isfile(self.config_filename) != True:
+            raise errors.InputError(
+                'ConfigFile does not exist. run \'write_config_file\' method and modify it how you like then run the setup()  method again.')
+        df = pandas.read_csv(self.config_filename)
+        parameter_names = list(df[df.columns[0]])
 
-        for model_name in self.models:
-            # model_name = self.models[model_name].model
-            dct[model_name] = OrderedDict()
+        model_parameters = self.model.all_variable_names
+        for parameter in parameter_names:
+            if parameter not in model_parameters:
+                raise errors.InputError(
+                    '{} not in {}\n\n Ensure you are using the correct PE config file!'.format(parameter,
+                                                                                               model_parameters))
+        return df
 
-            for experiment_name in self.config.experiment_names:
-                # experiment = self.config.datasets.experiments[experiment_name]
-                key = "Experiment_{}".format(experiment_name)
-                dct[model_name][experiment_name] = key
-        return dct
-
-    def _get_validation_keys(self):
+    @property
+    def item_template(self):
         """
-        Get keys for validation experiments
-
-        Returns:
-            dict[model] = list(validation_keys)
-
+        Collect information about the model in order to
+        create a config file template.
+        :return: pandas.DataFrame
         """
-        dct = OrderedDict()
 
-        for model_name in self.models:
-            # model_name = self.models[model_name].model
-            dct[model_name] = OrderedDict()
+        keep_metabs = []
+        keep_globs = []
+        keep_locs = []
+        for model_metab in self.model.metabolites:
+            for PE_metab in self.metabolites:
+                if PE_metab.name == model_metab.name:
+                    keep_metabs.append(PE_metab)
 
-            for validation_name in self.config.validation_names:
-                # experiment = self.config.datasets.experiments[experiment_name]
-                key = "Experiment_{}".format(validation_name)
-                dct[model_name][validation_name] = key
-        return dct
+        for model_glob in self.model.global_quantities:
+            for PE_glob in self.global_quantities:
+                if PE_glob.name == model_glob.name:
+                    keep_globs.append(PE_glob)
 
-    def _add_fit_items(self, constraint=False):
+        for model_loc in self.model.local_parameters:
+            for PE_loc in self.local_parameters:
+                if PE_loc.global_name == model_loc.global_name:
+                    keep_locs.append(PE_loc)
+
+        keep_metabs = [i.to_df() for i in keep_metabs]
+        keep_globs = [i.to_df() for i in keep_globs]
+        keep_locs = [i.to_df() for i in keep_locs]
+
+        metabs = pandas.DataFrame()
+        if keep_metabs != []:
+            metab = pandas.concat(keep_metabs, axis=1).transpose()
+            metab.drop('compartment', inplace=True, axis=1)
+            metab.drop('key', inplace=True, axis=1)
+            metab.drop('simulation_type', inplace=True, axis=1)
+            metab = metab.rename(columns={'value': 'start_value'})
+
+            if self.quantity_type == 'concentration':
+                metab.drop('particle_numbers', axis=1, inplace=True)
+                metab = metab.rename(columns={'concentration': 'start_value'})
+
+            elif self.quantity_type == 'particle_numbers':
+                metab.drop('concentration', axis=1, inplace=True)
+                metab = metab.rename(columns={'particle_numbers': 'start_value'})
+                metab = metab[['name', 'start_value']]
+            metabs = metabs.append(metab)
+
+        if not metabs.empty:
+            metabs = metabs.sort_values(by='name')
+
+        los = pandas.DataFrame()
+        if keep_locs != []:
+            lo = pandas.concat(keep_locs, axis=1).transpose()
+            lo = lo.rename(columns={'value': 'start_value'})
+            lo = lo[['global_name', 'start_value']]
+            lo = lo.rename(columns={'global_name': 'name'})
+            los = los.append(lo)
+
+        if not los.empty:
+            los = los.sort_values(by='name')
+
+        gls = pandas.DataFrame()
+        if keep_globs != []:
+            gl = pandas.concat(keep_globs, axis=1).transpose()
+            gl = gl.rename(columns={'initial_value': 'start_value'})
+            gl = gl[['name', 'start_value']]
+            gls = gls.append(gl)
+
+        if not gls.empty:
+            gls = gls.sort_values(by='name')
+
+        df = pandas.concat([metabs, gls, los], axis=0)
+
+        df['lower_bound'] = [self.lower_bound] * df.shape[0]
+        df['upper_bound'] = [self.upper_bound] * df.shape[0]
+
+        df = df.set_index('name')
+
+        if isinstance(self.start_value, pandas.core.frame.DataFrame):
+            if len(self.start_value.columns) != 1:
+                raise errors.InputError('start values should have only one column. Got \n\n{}'.format(self.start_value))
+            self.start_value.columns = ['start_value']
+            for i in list(self.start_value.index):
+                if i != 'RSS':
+                    if i not in self.model.all_variable_names:
+                        raise errors.InputError('"{}" not in model. '
+                                                'These are in your model "{}"'.format(i, self.model.all_variable_names))
+
+                    df.loc[i]['start_value'] = float(self.start_value.loc[i])
+
+        return df
+
+    def add_fit_item(self, item):
         """
-        Add a fit item to the model
-        Args:
-            constraint (bool): Set to True to configure fit item for constraints
-
-        Returns:
-            :py:attr:`ParameterEstimation.models`
-
+        Add fit item to model
+        :param item: a row from the config template as pandas series
+        :return: pycotools3.model.Model
         """
-        for model_name in self.models:
-            mod = self.models[model_name].model
-            if constraint:
-                ## Constraint items are not obligatory so skip if there
-                ## are none.
-                if 'constraint_items' not in self.config.items.keys():
-                    return self.models
-                else:
-                    items = self.config.items.constraint_items
+        ## figure out what type of variable item is and assign to component
+        if item['name'] in [i.name for i in self.metabolites]:
+            component = [i for i in self.metabolites if i.name == item['name']][0]
+
+        elif item['name'] in [i.global_name for i in self.local_parameters]:
+            component = [i for i in self.local_parameters if i.global_name == item['name']][0]
+
+        elif item['name'] in [i.name for i in self.global_quantities]:
+            component = [i for i in self.global_quantities if i.name == item['name']][0]
+        else:
+            raise errors.SomethingWentHorriblyWrongError(
+                '"{}" is not a metabolite,'
+                ' local_parameter or '
+                'global_quantity. These are your'
+                ' model variables: {}'.format(
+                    item['name'],
+                    str(self.model.all_variable_names))
+            )
+
+        # initialize new element
+        new_element = etree.Element('ParameterGroup', attrib={'name': 'FitItem'})
+        all_items = self.read_config_file()
+        # assert item in list(all_items['name']), '{} is not in your ItemTemplate. You item template contains: {}'.format(item, list(all_items.index))
+        # item= all_items.loc[item]
+
+        ##TODO include affected Cross Validation Experiments
+        ##TODO include Affected Experiment options
+        subA1 = {'name': 'Affected Cross Validation Experiments'}
+        subA2 = {'name': 'Affected Experiments'}
+        subA3 = {'type': 'cn', 'name': 'LowerBound', 'value': str(item['lower_bound'])}
+
+        if self.use_config_start_values == True:
+            subA5 = {'type': 'float', 'name': 'StartValue', 'value': str(item['start_value'])}
+
+        subA6 = {'type': 'cn', 'name': 'UpperBound', 'value': str(item['upper_bound'])}
+        etree.SubElement(new_element, 'ParameterGroup', attrib=subA1)
+        etree.SubElement(new_element, 'ParameterGroup', attrib=subA2)
+        etree.SubElement(new_element, 'Parameter', attrib=subA3)
+
+        if self.use_config_start_values == True:
+            etree.SubElement(new_element, 'Parameter', attrib=subA5)
+        etree.SubElement(new_element, 'Parameter', attrib=subA6)
+
+        # for IC parameters
+        if isinstance(component, model.Metabolite):
+            if self.quantity_type == 'concentration':
+                subA4 = {'type': 'cn', 'name': 'ObjectCN', 'value': '{},{},{}'.format(self.model.reference,
+                                                                                      component.compartment.reference,
+                                                                                      component.initial_reference)}
             else:
-                items = self.config.items.fit_items
+                subA4 = {'type': 'cn', 'name': 'ObjectCN', 'value': '{},{},{}'.format(
+                    self.model.reference,
+                    component.compartment.reference,
+                    component.initial_particle_reference
+                )}
 
-            for item_name in items:
-                item = items[item_name]
-                ## figure out what type of variable item is and assign to component
-                item_type = None
-                ## while we are distinguishing between component type we retrieve its
-                ## model value so if the user specifies that the start value should be the
-                ## model value, we can use the model_value that is collected here
-                if item_name in mod.get_variable_names('m'):
-                    component = [i for i in mod.metabolites if i.name == item_name][0]
-                    item_type = 'metabolite'
-                    if self.config.settings.quantity_type == 'concentration':
-                        model_value = mod.get(item_type, item_name, by='name').concentration
-                    elif self.config.settings.quantity_type == 'particle_numbers':
-                        model_value = mod.get(item_type, item_name, by='name').particle_numbers
-                    else:
-                        raise errors.InputError(f'settings.quantity_type option must be'
-                                                f' either "concentration" or "particle_numbers" '
-                                                f'Got {self.config.settings.quantity_type}')
+        elif isinstance(component, model.LocalParameter):
+            subA4 = {'type': 'cn', 'name': 'ObjectCN', 'value': '{},{},{}'.format(
+                self.model.reference,
+                self.model.get('reaction', component.reaction_name, by='name').reference,
+                component.value_reference)}
 
-                elif item_name in mod.get_variable_names('l'):
-                    component = [i for i in mod.local_parameters if i.global_name == item_name][0]
-                    item_type = 'local_parameter'
-                    model_value = mod.get(item_type, item_name, by='name').value
+        elif isinstance(component, model.GlobalQuantity):
+            subA4 = {'type': 'cn', 'name': 'ObjectCN', 'value': '{},{}'.format(self.model.reference,
+                                                                               component.initial_reference)}
 
-                elif item_name in mod.get_variable_names('g'):
-                    component = [i for i in mod.global_quantities if i.name == item_name][0]
-                    item_type = 'global_quantity'
-                    model_value = mod.get(item_type, item_name, by='name').initial_value
+        elif isinstance(component, model.Compartment):
+            subA4 = {'type': 'cn',
+                     'name': 'ObjectCN',
+                     'value': '{},{}'.format(self.model.reference,
+                                             component.initial_value_reference)}
 
-                elif item_name in mod.get_variable_names('c'):
-                    component = [i for i in mod.compartments if i.name == item_name][0]
-                    item_type = 'compartment'
-                    model_value = mod.get(item_type, item_name, by='name').initial_value
+        else:
+            raise errors.InputError('{} is not a valid parameter for estimation'.format(list(item)))
 
-                else:
-                    raise errors.SomethingWentHorriblyWrongError(
-                        '"{}" is not a metabolite,'
-                        ' local_parameter or '
-                        'global_quantity. These are your'
-                        ' model variables: {}'.format(
-                            item_name,
-                            str(mod.get_variable_names('a', include_assignments=False)))
-                    )
+        ## add element
+        etree.SubElement(new_element, 'Parameter', attrib=subA4)
 
-                assert item_type is not None
-                if item['start_value'] == 'model_value':
-                    item['start_value'] = model_value
+        ##insert fit item
 
-                # initialize new element
-                fit_item_element = etree.Element('ParameterGroup', attrib={'name': 'FitItem'})
+        list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
+        parameter_est = self.model.xml.find(list_of_tasks)[5]
+        problem = parameter_est[1]
+        ## TODO add support for OptimizationConstraintList --> problem[4]
+        assert problem.tag == '{http://www.copasi.org/static/schema}Problem'
+        optimization_item_list = problem[3]
+        assert list(optimization_item_list.attrib.values())[0] == 'OptimizationItemList'
+        optimization_item_list.append(new_element)
+        return self.model
 
-                affected_experiments = {'name': 'Affected Experiments'}
-                ## read affected _experiments from config file.yaml
-                affected_experiments_attr = OrderedDict()
-
-                ## the 'all' keyword argument for affected_experiments, affected_validations_Experiments
-                ## and affected models needs resolving to lists of appropriate values
-
-                ## when affected _experiments is 'all', the affected experiment element is empty
-                if item['affected_experiments'] != 'all':
-                    ## convert a string to a list of 1 so we can cater for the case
-                    ## where we have a list of strings with the same code
-                    if isinstance(item['affected_experiments'], str):
-                        item['affected_experiments'] = [item['affected_experiments']]
-
-                    ## iterate over list. Raise ValueError is can't find experiment name
-                    ## otherwise add the corresponding experiment key to the affected _experiments attr dict
-                    for affected_experiment in item['affected_experiments']:  ## iterate over the list
-                        if affected_experiment in self._get_validation_keys()[model_name]:
-                            raise ValueError('"{}" has been given as a validation experiment and therefore '
-                                             'I cannot add this experiment to the list of _experiments that '
-                                             'affect the {} parameter'.format(
-                                affected_experiment, component.name
-                            ))
-
-                        if affected_experiment not in self._get_experiment_keys()[model_name]:
-                            raise ValueError('"{}" (type({}))is not one of your _experiments. These are '
-                                             'your valid experimments: "{}"'.format(
-                                affected_experiment, type(affected_experiment),
-                                self._get_experiment_keys()[model_name].keys()
-                            ))
-
-                        affected_experiments_attr[affected_experiment] = {}
-                        affected_experiments_attr[affected_experiment]['name'] = 'Experiment Key'
-                        affected_experiments_attr[affected_experiment]['type'] = 'key'
-                        affected_experiments_attr[affected_experiment]['value'] = \
-                            self._get_experiment_keys()[model_name][affected_experiment]
-
-                ## add affected _experiments to element
-                affected_experiments_element = etree.SubElement(fit_item_element, 'ParameterGroup',
-                                                                attrib=affected_experiments)
-
-                ## now add the attributes to the affected _experiments element
-                for affected_experiment in affected_experiments_attr:
-                    etree.SubElement(
-                        affected_experiments_element, 'Parameter', attrib=affected_experiments_attr[affected_experiment]
-                    )
-
-                ## read affected validation _experiments from config file.yaml
-                affected_validation_experiments_attr = OrderedDict()
-                ## when affected _experiments is 'all', the affected experiment element is empty
-                if item['affected_validation_experiments'] != 'all':
-                    ## convert a string to a list of 1 so we can cater for the case
-                    ## where we have a list of strings with the same code
-                    if isinstance(item['affected_validation_experiments'], str):
-                        item['affected_validation_experiments'] = [item['affected_validation_experiments']]
-
-                    ## iterate over list. Raise ValueError is can't find experiment name
-                    ## otherwise add the corresponding experiment key to the affected _experiments attr dict
-                    for affected_validation_experiment in item[
-                        'affected_validation_experiments']:  ## iterate over the list
-                        if affected_validation_experiment in self._get_experiment_keys()[model_name]:
-                            raise ValueError('"{}" has been given as an experiment and therefore '
-                                             'I cannot add this experiment to the list of validation _experiments that '
-                                             'affect the {} parameter'.format(
-                                affected_validation_experiment, component.name
-                            ))
-
-                        if affected_validation_experiment not in self._get_validation_keys()[model_name]:
-                            raise ValueError('"{}" is not one of your _experiments. These are '
-                                             'your valid experimments: "{}"'.format(
-                                affected_validation_experiment, self._get_validation_keys()[model_name].keys()
-                            ))
-
-                        affected_validation_experiments_attr[affected_validation_experiment] = {}
-                        affected_validation_experiments_attr[affected_validation_experiment]['name'] = 'Experiment Key'
-                        affected_validation_experiments_attr[affected_validation_experiment]['type'] = 'key'
-                        affected_validation_experiments_attr[affected_validation_experiment]['value'] = \
-                            self._get_validation_keys()[model_name][affected_validation_experiment]
-
-                affected_cross_validation_experiments = {'name': 'Affected Cross Validation Experiments'}
-
-                affected_cross_validation_experiments_element = etree.SubElement(fit_item_element, 'ParameterGroup',
-                                                                                 attrib=affected_cross_validation_experiments)
-
-                ## now add the attributes to the affected _experiments element
-                for affected_validation_experiment_attr in affected_validation_experiments_attr:
-                    etree.SubElement(
-                        affected_cross_validation_experiments_element, 'Parameter',
-                        attrib=affected_validation_experiments_attr[affected_validation_experiment_attr]
-                    )
-
-                ## get lower bound from config file and add to element
-                lower_bound_element = {'type': 'cn', 'name': 'LowerBound', 'value': str(item['lower_bound'])}
-                etree.SubElement(fit_item_element, 'Parameter', attrib=lower_bound_element)
-                start_value_element = {'type': 'float', 'name': 'StartValue', 'value': str(item['start_value'])}
-
-                ## get upper bound from config file and add to element
-                upper_bound_element = {'type': 'cn', 'name': 'UpperBound', 'value': str(item['upper_bound'])}
-                etree.SubElement(fit_item_element, 'Parameter', attrib=upper_bound_element)
-
-                etree.SubElement(fit_item_element, 'Parameter', attrib=start_value_element)
-
-                ## Now begin creating the object map.
-                # for IC parameters
-                if isinstance(component, model.Metabolite):
-                    if self.config.settings.quantity_type == 'concentration':
-                        subA4 = {'type': 'cn', 'name': 'ObjectCN', 'value': '{},{},{}'.format(mod.reference,
-                                                                                              component.compartment.reference,
-                                                                                              component.initial_reference)}
-                    else:
-                        subA4 = {'type': 'cn', 'name': 'ObjectCN', 'value': '{},{},{}'.format(
-                            mod.reference,
-                            component.compartment.reference,
-                            component.initial_particle_reference
-                        )}
-
-                elif isinstance(component, model.LocalParameter):
-                    subA4 = {'type': 'cn', 'name': 'ObjectCN', 'value': '{},{},{}'.format(
-                        mod.reference,
-                        mod.get('reaction', component.reaction_name, by='name').reference,
-                        component.value_reference)}
-
-                elif isinstance(component, model.GlobalQuantity):
-                    subA4 = {'type': 'cn', 'name': 'ObjectCN', 'value': '{},{}'.format(mod.reference,
-                                                                                       component.initial_reference)}
-
-                elif isinstance(component, model.Compartment):
-                    subA4 = {'type': 'cn',
-                             'name': 'ObjectCN',
-                             'value': '{},{}'.format(mod.reference,
-                                                     component.initial_volume_reference)}
-
-                else:
-                    raise errors.InputError('{} is not a valid parameter for estimation'.format(list(item)))
-
-                ## add element
-                etree.SubElement(fit_item_element, 'Parameter', attrib=subA4)
-
-                ##insert fit item
-
-                list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
-                parameter_est = mod.xml.find(list_of_tasks)[5]
-                problem = parameter_est[1]
-                assert problem.tag == '{http://www.copasi.org/static/schema}Problem'
-
-                if constraint:
-                    item_list = problem[4]
-                    assert list(item_list.attrib.values())[0] == 'OptimizationConstraintList'
-                else:
-                    item_list = problem[3]
-                    assert list(item_list.attrib.values())[0] == 'OptimizationItemList'
-                item_list.append(fit_item_element)
-        return self.models
-
-    def _set_method(self):
+    def insert_all_fit_items(self):
         """
-        Choose algorithm and set algorithm specific parameters
-
-        Returns:
-            :py:attr:`ParameterEstimation.models`
-
+        insert all fit items defined in config file
+        into the model
+        :return:
         """
+        for row in range(self.read_config_file().shape[0]):
+            assert row != 'nan'
+            ## feed each item from the config file into add_fit_item
+            self.model = self.add_fit_item(self.read_config_file().iloc[row])
+        return self.model
 
+    def set_PE_method(self):
+        '''
+        Choose PE algorithm and set algorithm specific parameters
+        '''
         # Build xml for method.
         method_name, method_type = self._select_method()
         method_params = {'name': method_name, 'type': method_type}
@@ -4328,641 +3414,358 @@ class ParameterEstimation(_Task):
         # list of attribute dictionaries
         # Evolutionary strategy parametery
         number_of_generations = {'type': 'unsignedInteger', 'name': 'Number of Generations',
-                                 'value': str(self.config.settings.number_of_generations)}
-        population_size = {'type': 'unsignedInteger', 'name': 'Population Size',
-                           'value': str(self.config.settings.population_size)}
+                                 'value': self.number_of_generations}
+        population_size = {'type': 'unsignedInteger', 'name': 'Population Size', 'value': self.population_size}
         random_number_generator = {'type': 'unsignedInteger', 'name': 'Random Number Generator',
-                                   'value': str(self.config.settings.random_number_generator)}
-        seed = {'type': 'unsignedInteger', 'name': 'Seed', 'value': str(self.config.settings.seed)}
-        pf = {'type': 'float', 'name': 'Pf', 'value': str(self.config.settings.pf)}
+                                   'value': self.random_number_generator}
+        seed = {'type': 'unsignedInteger', 'name': 'Seed', 'value': self.seed}
+        pf = {'type': 'float', 'name': 'Pf', 'value': self.pf}
         # local method parameters
-        iteration_limit = {'type': 'unsignedInteger', 'name': 'Iteration Limit',
-                           'value': str(self.config.settings.iteration_limit)}
-        tolerance = {'type': 'float', 'name': 'Tolerance', 'value': str(self.config.settings.tolerance)}
-        rho = {'type': 'float', 'name': 'Rho', 'value': str(self.config.settings.rho)}
-        scale = {'type': 'unsignedFloat', 'name': 'Scale', 'value': str(self.config.settings.scale)}
+        iteration_limit = {'type': 'unsignedInteger', 'name': 'Iteration Limit', 'value': self.iteration_limit}
+        tolerance = {'type': 'float', 'name': 'Tolerance', 'value': self.tolerance}
+        rho = {'type': 'float', 'name': 'Rho', 'value': self.rho}
+        scale = {'type': 'unsignedFloat', 'name': 'Scale', 'value': self.scale}
         # Particle Swarm parmeters
-        swarm_size = {'type': 'unsignedInteger', 'name': 'Swarm Size', 'value': str(self.config.settings.swarm_size)}
-        std_deviation = {'type': 'unsignedFloat', 'name': 'Std. Deviation',
-                         'value': str(self.config.settings.std_deviation)}
+        swarm_size = {'type': 'unsignedInteger', 'name': 'Swarm Size', 'value': self.swarm_size}
+        std_deviation = {'type': 'unsignedFloat', 'name': 'Std. Deviation', 'value': self.std_deviation}
         # Random Search parameters
         number_of_iterations = {'type': 'unsignedInteger', 'name': 'Number of Iterations',
-                                'value': str(self.config.settings.number_of_iterations)}
+                                'value': self.number_of_iterations}
         # Simulated Annealing parameters
-        start_temperature = {'type': 'unsignedFloat', 'name': 'Start Temperature',
-                             'value': str(self.config.settings.start_temperature)}
-        cooling_factor = {'type': 'unsignedFloat', 'name': 'Cooling Factor',
-                          'value': str(self.config.settings.cooling_factor)}
+        start_temperature = {'type': 'unsignedFloat', 'name': 'Start Temperature', 'value': self.start_temperature}
+        cooling_factor = {'type': 'unsignedFloat', 'name': 'Cooling Factor', 'value': self.cooling_factor}
 
         # build the appropiate xML, with method at root (for now)
-        if self.config.settings.method == 'current_solution_statistics':
+        if self.method == 'current_solution_statistics':
             pass  # no additional parameter elements required
 
-        if self.config.settings.method == 'differential_evolution'.lower():
+        if self.method == 'differential_evolution'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
             etree.SubElement(method_element, 'Parameter', attrib=population_size)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
 
-        if self.config.settings.method == 'evolutionary_strategy_sr'.lower():
+        if self.method == 'evolutionary_strategy_sr'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
             etree.SubElement(method_element, 'Parameter', attrib=population_size)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
             etree.SubElement(method_element, 'Parameter', attrib=pf)
 
-        if self.config.settings.method == 'evolutionary_program'.lower():
+        if self.method == 'evolutionary_program'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
             etree.SubElement(method_element, 'Parameter', attrib=population_size)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
 
-        if self.config.settings.method == 'hooke_jeeves'.lower():
+        if self.method == 'hooke_jeeves'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
             etree.SubElement(method_element, 'Parameter', attrib=tolerance)
             etree.SubElement(method_element, 'Parameter', attrib=rho)
 
-        if self.config.settings.method == 'levenberg_marquardt'.lower():
+        if self.method == 'levenberg_marquardt'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
             etree.SubElement(method_element, 'Parameter', attrib=tolerance)
         #
-        if self.config.settings.method == 'nelder_mead'.lower():
+        if self.method == 'nelder_mead'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
             etree.SubElement(method_element, 'Parameter', attrib=tolerance)
             etree.SubElement(method_element, 'Parameter', attrib=scale)
 
-        if self.config.settings.method == 'particle_swarm'.lower():
+        if self.method == 'particle_swarm'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
             etree.SubElement(method_element, 'Parameter', attrib=swarm_size)
             etree.SubElement(method_element, 'Parameter', attrib=std_deviation)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
 
-        if self.config.settings.method == 'praxis'.lower():
+        if self.method == 'praxis'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=tolerance)
 
-        if self.config.settings.method == 'random_search'.lower():
+        if self.method == 'random_search'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_iterations)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
 
-        if self.config.settings.method == 'simulated_annealing'.lower():
+        if self.method == 'simulated_annealing'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=start_temperature)
             etree.SubElement(method_element, 'Parameter', attrib=cooling_factor)
             etree.SubElement(method_element, 'Parameter', attrib=tolerance)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
         #
-        if self.config.settings.method == 'steepest_descent'.lower():
+        if self.method == 'steepest_descent'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
             etree.SubElement(method_element, 'Parameter', attrib=tolerance)
         #
-        if self.config.settings.method == 'truncated_newton'.lower():
+        if self.method == 'truncated_newton'.lower():
             # required no additonal paraemters
             pass
         #
-        if self.config.settings.method == 'scatter_search'.lower():
+        if self.method == 'scatter_search'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_iterations)
 
-        if self.config.settings.method == 'genetic_algorithm'.lower():
+        if self.method == 'genetic_algorithm'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
             etree.SubElement(method_element, 'Parameter', attrib=population_size)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
 
-        if self.config.settings.method == 'genetic_algorithm_sr'.lower():
+        if self.method == 'genetic_algorithm_sr'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
             etree.SubElement(method_element, 'Parameter', attrib=population_size)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
             etree.SubElement(method_element, 'Parameter', attrib=pf)
-        models = {}
 
-        for model_name in self.models:
-            ## You must deep copy the method element or
-            ## when dealing with multiple models only the last
-            ## model will contain the method element.
-            method_element = deepcopy(method_element)
-            mod = self.models[model_name].model
-            tasks = mod.xml.find('{http://www.copasi.org/static/schema}ListOfTasks')
-            method = tasks[5][-1]
-            parent = method.getparent()
-            parent.remove(method)
-            parent.insert(2, method_element)
-        return self.models
+        tasks = self.model.xml.find('{http://www.copasi.org/static/schema}ListOfTasks')
 
-    def _set_options(self):
+        method = tasks[5][-1]
+        parent = method.getparent()
+        parent.remove(method)
+        parent.insert(2, method_element)
+        return self.model
+
+    def set_PE_options(self):
         """
         Set parameter estimation sepcific arguments
-
-        Returns:
-            :py:attr:ParameterEstimation.models
+        :return: pycotools3.model.Model
         """
-        for model_name in self.models:
-            mod = self.models[model_name].model
 
-            scheluled_attrib = {'scheduled': False,
-                                'updateModel': str(int(self.config.settings.update_model))}
+        scheluled_attrib = {'scheduled': self.scheduled,
+                            'updateModel': self.update_model}
 
-            report_attrib = {'append': False,
-                             'reference': self._get_report_key()[model_name],
-                             'target': self.config.settings.report_name,
-                             'confirmOverwrite': False}
+        report_attrib = {'append': self.append,
+                         'reference': self.get_report_key(),
+                         'target': self.report_name,
+                         'confirmOverwrite': self.confirm_overwrite}
 
-            randomize_start_values = {'type': 'bool',
-                                      'name': 'Randomize Start Values',
-                                      'value': str(int(self.config.settings.randomize_start_values))}
+        randomize_start_values = {'type': 'bool',
+                                  'name': 'Randomize Start Values',
+                                  'value': self.randomize_start_values}
 
-            calculate_stats = {'type': 'bool', 'name': 'Calculate Statistics',
-                               'value': str(int(self.config.settings.calculate_statistics))}
-            create_parameter_sets = {'type': 'bool', 'name': 'Create Parameter Sets',
-                                     'value': str(int(self.config.settings.create_parameter_sets))}
+        calculate_stats = {'type': 'bool', 'name': 'Calculate Statistics', 'value': self.calculate_statistics}
+        create_parameter_sets = {'type': 'bool', 'name': 'Create Parameter Sets', 'value': self.create_parameter_sets}
 
-            for i in [
-                scheluled_attrib,
-                report_attrib,
-                randomize_start_values,
-                calculate_stats,
-                create_parameter_sets]:
+        query = '//*[@name="Parameter Estimation"]' and '//*[@type="parameterFitting"]'
+        for i in self.model.xml.xpath(query):
+            i.attrib.update(scheluled_attrib)
+            for j in list(i):
+                if self.report_name != None:
+                    if 'append' in list(j.attrib.keys()):
+                        j.attrib.update(report_attrib)
+                if list(j) != []:
+                    for k in list(j):
+                        if k.attrib['name'] == 'Randomize Start Values':
+                            k.attrib.update(randomize_start_values)
+                        elif k.attrib['name'] == 'Calculate Statistics':
+                            k.attrib.update(calculate_stats)
+                        elif k.attrib['name'] == 'Create Parameter Sets':
+                            k.attrib.update(create_parameter_sets)
+        return self.model
 
-                for k, v in i.items():
-                    i[k] = str(v)
+    # def run(self):
+    #     """
+    #     Run the parameter estimation using the Run class
+    #     :return:
+    #     """
+    #     if self.run_mode is 'multiprocess':
+    #         RunParallel(self.model, task='parameter_estimation', max_active=self.max_active)
+    #     else:
+    #         Run(self.model, mode=self.run_mode, task='parameter_estimation')
 
-            query = '//*[@name="Parameter Estimation"]' and '//*[@type="parameterFitting"]'
-            for i in mod.xml.xpath(query):
-                i.attrib.update(scheluled_attrib)
-                for j in list(i):
-                    if self.config.settings.report_name != None:
-                        if 'append' in list(j.attrib.keys()):
-                            j.attrib.update(report_attrib)
-                    if list(j) != []:
-                        for k in list(j):
-                            if k.attrib['name'] == 'Randomize Start Values':
-                                k.attrib.update(randomize_start_values)
-                            elif k.attrib['name'] == 'Calculate Statistics':
-                                k.attrib.update(calculate_stats)
-                            elif k.attrib['name'] == 'Create Parameter Sets':
-                                k.attrib.update(create_parameter_sets)
-            self.models[model_name].model = mod
-        return self.models
 
-    def _enumerate_output(self):
+
+    def _create_output_directory(self):
         """
-        Enumerates parameter estimation output files for each model
+        Create directory for estimation results
+        :return:
+        """
+        if os.path.isdir(self.results_directory) != True:
+            os.mkdir(self.results_directory)
 
-        Returns:
-            dict[model_name][copy_number] = filename
-
+    def enumerate_PE_output(self):
+        """
+        Create a filename for each file to collect PE results
+        :return: dict['model_copy_number]=enumerated_report_name
         """
 
         dct = {}
-        report_name = self.config.settings.report_name
-        for model_name in self.models:
-            dct[model_name] = {}
-            for i in range(int(self.config.settings.copy_number)):
-                new_file = os.path.join(
-                    self.results_directory[model_name],
-                    f'{report_name}{i}.txt' \
-                        if report_name[-4:] != \
-                           '.txt' else f'{report_name[:-4]}{i}.txt'
-                )
-                dct[model_name][i] = new_file
+        for i in range(self.copy_number):
+            new_file = os.path.join(
+                self.results_directory, '{}_{}.txt'.format(self.report_name, i)
+            )
+
+
+            dct[i] = new_file
         return dct
 
-    def _copy_model(self):
+    ##TODO work out whether parameter_estimation report shuold be multi_parameter_estimation
+
+    def copy_model(self):
         """
-        Copy the model n times Uses deep copy to ensure separate models
-        Returns:
-            dict[index] = model copy
+        Copy the model n times
+        Uses deep copy to ensure separate models
+        :return: dict[index] = model copy
         """
         dct = {}
-        for model_name in self.models:
-            mod = self.models[model_name].model
-            ## a save is required here to 'commit' changed to xml before copying
-            mod.save()
-            ## copy model into fit problem dir
-            fle = os.path.split(mod.copasi_file)[1]
-            fname = os.path.join(self.models_dir[model_name], fle)
-            shutil.copy(mod.copasi_file, fname)
-            dct[model_name] = {}
-            dct[model_name][0] = model.Model(fname)
-            for i in range(1, int(self.config.settings.copy_number)):
-                # dire, fle = os.path.split(fname)
-                new_cps = os.path.join(self.models_dir[model_name], fle[:-4] + f'_{i}.cps')
-                shutil.copy(fname, new_cps)
-                dct[model_name][i] = model.Model(new_cps)
+        dct[0] = deepcopy(self.model)
+        for i in range(1, self.copy_number):
+            dire, fle = os.path.split(self.model.copasi_file)
+            new_cps = os.path.join(dire, fle[:-4] + '_{}.cps'.format(i))
+            model = deepcopy(self.model)
+            model.copasi_file = new_cps
+            model.save()
+            dct[i] = model
         return dct
 
     def _setup1scan(self, q, model, report):
-        """Setup a single scan.
-
-        Args:
-          q: queue from multiprocessing
-          model: pycotools3.model.Model
-          report: str.
-
-        Returns:
-            None
-
+        """
+        Setup a single scan.
+        :param q: queue from multiprocessing
+        :param model: pycotools3.model.Model
+        :param report: str.
+        :return:
         """
         start = time.time()
         models = q.put(Scan(model,
                             scan_type='repeat',
-                            number_of_steps=self.config.settings.pe_number,
+                            number_of_steps=self.pe_number,
                             subtask='parameter_estimation',
                             report_type='multi_parameter_estimation',
                             report_name=report,
                             run=False,
-                            append=False,
-                            confirm_overwrite=False,
+                            append=self.append,
+                            confirm_overwrite=self.confirm_overwrite,
                             output_in_subtask=False,
                             save=True))
 
     def _setup_scan(self, models):
-        """Set up `copy_number` repeat items with `pe_number`
+        """
+        Set up `copy_number` repeat items with `pe_number`
         repeats of parameter estimation. Set run_mode to false
         as we want to use the multiprocess mode of the run_mode class
         to process all files at once in CopasiSE
         :return:
-
-        Args:
-          models: 
-
-        Returns:
-            result dict
-
         """
+        number_of_cpu = cpu_count()
+        q = queue.Queue(maxsize=number_of_cpu)
+        report_files = self.enumerate_PE_output()
         res = {}
-        for model_name in models:
-            res[model_name] = {}
-            # for model_i in self.models[model_name]:
-            number_of_cpu = cpu_count()
-            q = queue.Queue(maxsize=number_of_cpu)
-            report_files = self._enumerate_output()[model_name]
-            for copy_number, mod in list(models[model_name].items()):
-                t = threading.Thread(target=self._setup1scan,
-                                     args=(q, mod, report_files[copy_number]))
-                t.daemon = True
-                t.start()
-                time.sleep(0.1)
-
-                res[model_name][copy_number] = q.get().model
-            ## Since this is being executed in parallel sometimes
-            ## we get process clashes. Not sure exactly whats going on
-            ## but introducing a small delay seems to fix
+        for copy_number, model in list(models.items()):
+            t = threading.Thread(target=self._setup1scan,
+                                 args=(q, model, report_files[copy_number]))
+            t.daemon = True
+            t.start()
             time.sleep(0.1)
+
+            res[copy_number] = q.get().model
+        ## Since this is being executed in parallel sometimes
+        ## we get process clashes. Not sure exactly whats going on
+        ## but introducing a small delay seems to fix
+        time.sleep(0.1)
         return res
 
-    def _setup(self):
-        """
-        Setup the copasi parameter estimation task
-
-        Uses the other methods in this class to configure the parameter estimation
-        according to the :py:class:`ParameterEstimation.Config`
-        Returns:
-            dict[model_name][sub_model_index] = :py:class:`model.Model` object
-
+    def run(self):
         """
 
-        self.models = self._define_report()
-
-        self._map_experiments(validation=False)
-        self._map_experiments(validation=True)
-
-        ## get rid of existing parameter estimation definition
-        self._remove_all_fit_items()
-        self._add_fit_items(constraint=False)
-        self._add_fit_items(constraint=True)
-
-        self._set_options()
-        self._set_method()
-
-        ##copy
-        copied_models = self._copy_model()
-
-        ##configure scan task
-        copied_models = self._setup_scan(copied_models)
-
-        return copied_models
-
-    def run(self, models):
+        :return:
+        :param models: dict of models. Output from setup()
         """
-        Run a parameter estimation using command line copasi.
+        ##load cps from pickle in case run not being use straignt after set_up
+        try:
+            self.models
+        except AttributeError:
+            raise errors.IncorrectUsageError('You must use the setup method before the run method')
 
-        Args:
-          models: dict of models. Output from _setup()
-
-        Returns:
-          param models: dict of models. Output from _setup()
-
-        """
-
-        if self.config.settings.run_mode == 'sge':
+        if self.run_mode == 'sge':
             try:
                 check_call('qhost')
             except errors.NotImplementedError:
                 LOG.warning(
                     'Attempting to run in SGE mode but SGE specific commands are unavailable. Switching to \'parallel\' mode')
-                self.config.settings.run_mode = 'parallel'
-
-        if self.config.settings.run_mode == 'parallel':
-            for model_name in models:
-                RunParallel(
-                    list(models[model_name].values()),
-                    mode=self.config.settings.run_mode,
-                    max_active=self.config.settings.max_active,
-                    task='scan')
-
-        elif self.config.settings.run_mode is True:
-            for model_name in models:
-                for copy_number, mod in list(models[model_name].items()):
-                    LOG.info(f'running model {model_name}: {copy_number}')
-                    Run(mod, mode=self.config.settings.run_mode, task='scan')
-
-        elif not self.config.settings.run_mode:
+                self.run_mode = 'parallel'
+        if self.run_mode == 'parallel':
+            RunParallel(list(self.models.values()), mode=self.run_mode, max_active=self.max_active,
+                        task='scan')
+        elif self.run_mode:
+            for copy_number, model in list(self.models.items()):
+                LOG.info('running model: {}'.format(copy_number))
+                Run(model, mode=self.run_mode, task='scan')
+        elif not self.run_mode:
             pass
 
         else:
-            raise ValueError('"{}" is not a valid argument'.format(self.config.settings.run_mode))
+            raise ValueError('"{}" is not a valid argument'.format(self.run_mode))
 
-    class Context:
-        """ """
+    # def setup(self):
+    #     """
+    #     Setup a parameter estimation
+    #     :return:
+    #     """
+    #     EM = ExperimentMapper(self.model, self.experiment_files, **self._experiment_mapper_args)
+    #     self.model = EM.model
+    #     self.model = self.define_report()
+    #     self.model = self.remove_all_fit_items()
+    #     self.model = self.set_PE_method()
+    #     self.model = self.set_PE_options()
+    #     self.model = self.insert_all_fit_items()
+    #     assert self.model != None
+    #     assert isinstance(self.model, model.Model)
+    #     self.model.save()
+    #     return self.model
 
-        acceptable_context_args = {
-            'm': 'model_selection',
-            's': 'single_parameter_estimation',
-            'r': 'repeat_parameter_estimation',
-            'c': 'chaser_estimations',
-        }
+    def setup(self):
+        """
+        Over-ride the setup method from parameter estimation.
+        Basically do the same thing but add a few methods.
 
-        acceptable_parameters_args = {
-            'a': 'all',
-            'g': 'global_quantities',
-            'l': 'local_parameters',
-            'c': 'initial_concentrations',
-            'gl': 'global_quantities_and_local_parameters',
-            'gc': 'global_quantities_and_initial_concentrations',
-            'lc': 'local_parameters_and_initial_concentrations',
-            '_': 'prefixed_with_underscore'
-        }
+        :return:
+        """
+        ## create output directory
+        self._create_output_directory()
 
-        experiment_filetypes = ['.txt', '.csv']
+        ## create a report for PE results collection
+        self.model = self.define_report()
 
-        def __init__(self, models, experiments, working_directory=None,
-                     context='s', parameters='mg', filename=None,
-                     validation_experiments={}, settings={}):
-            self.models = models
-            self.experiments = experiments
-            self.working_directory = working_directory
-            self.context = context
-            self.parameters = parameters
-            self.filename = filename
-            self.validation_experiments = validation_experiments
-            self.settings = settings
+        ## map experiments
+        EM = ExperimentMapper(self.model, self.experiment_files, **self._experiment_mapper_args)
 
-            if self.parameters not in self.acceptable_parameters_args:
-                raise errors.InputError(
-                    f'"{self.parameters}" is an invalid argument. Please '
-                    f'choose from the following \n'
-                    f'{munch.Munch.fromDict(self.acceptable_parameters_args).toJSON()}'
-                )
+        ## get model from ExperimentMapper
+        self.model = EM.model
 
-            self.defaults = ParameterEstimation._Defaults()
+        ## get rid of existing parameter estimation definition
+        self.model = self.remove_all_fit_items()
 
-        def __enter__(self):
-            return self
+        ## create new parameter estimation
+        self.model = self.set_PE_method()
+        self.model = self.set_PE_options()
+        self.model = self.insert_all_fit_items()
 
-        def __exit__(self, exc_type, exc_value, exc_traceback):
-            if exc_type:
-                LOG.critical(f'exc_type: {exc_type}')
-                LOG.critical(f'exc_value: {exc_value}')
-                LOG.critical(f'exc_traceback: {exc_traceback}')
+        ## ensure we have model
+        assert self.model != None
+        assert isinstance(self.model, model.Model)
 
-        def set(self, parameter, value):
-            """
-            Set the value of :code:`parameter` to :code:`value`.
+        ##copy the number `copy_number` times
+        models = self.copy_model()
 
-            Looks for the first instance of :code:`parameter` and sets its value to :code:`value`.
-            To set all values of a parameter, see :py:meth:`ParameterEstimation.Config.set_all`
+        ## ensure we have dict of models
+        assert isinstance(models, dict)
+        assert len(models) == self.copy_number
 
-
-            Args:
-                parameter: A key somewhere in the nested structure of the config object
-                value: A value to replace the current value with
-
-            Returns:
-                None
-
-            """
-
-            if parameter in self.defaults.settings:
-                self.defaults.settings[parameter] = value
-
-            elif parameter in self.defaults.constraint_items:
-                self.defaults.constraint_items[parameter] = value
-
-            elif parameter in self.defaults.fit_items:
-                self.defaults.fit_items[parameter] = value
-
-            elif parameter in self.defaults.experiments:
-                self.defaults.experiments[parameter] = value
-
-            elif parameter in self.defaults.validations:
-                self.defaults.validations[parameter] = value
-
-            else:
-                raise errors.InputError(
-                    f'"{parameter}" is not a valid argument'
-                )
-
-        def get_config(self):
-            ## update the config
-            self.add_models(self.models)
-            self.add_settings(self.settings)
-            self.add_experiments(self.experiments)
-            self.add_validation_experiments(self.validation_experiments)
-            self.add_working_directory(self.working_directory)
-            dct = dict(
-                models=self.models,
-                datasets=dict(
-                    experiments=self.experiments,
-                    validations=self.validation_experiments
-                ),
-                items=dict(
-                    fit_items=self.parameters
-                ),
-                settings=self.settings
-            )
-
-            config = ParameterEstimation.Config(**dct, defaults=self.defaults)
-
-            if self.filename is not None:
-                if os.path.isfile(self.filename) and not config.settings.overwrite_config_file:
-                    LOG.critical(f'"{self.filename}" already exists. To force an overwrite, '
-                                 f'set `settings.overwrite_config_file` to True')
-                elif os.path.isfile(self.filename) and config.settings.overwrite_config_file:
-                    config.to_yaml(self.filename)
-
-                elif not os.path.isfile(self.filename):
-                    config.to_yaml(self.filename)
-
-                else:
-                    raise errors.SomethingWentHorriblyWrongError(
-                        'Something weird happened.'
-                    )
-            return config
-
-        def add_models(self, models: (str, list)):
-            """
-            Add models to class attributes
-
-            Args:
-              models (str, list): Path to copasi file or list of paths to copasi files
-
-            Returns:
-                None
-            """
-            ## if models passed as a string
-            if not isinstance(models, list):
-                models = [models]
-
-            cps_file_list = []
-            for i in models:
-                if isinstance(i, model.Model):
-                    cps_file_list.append(i.copasi_file)
-                elif isinstance(i, str):
-                    if not os.path.isfile(i):
-                        raise errors.InputError(
-                            f'"{i}" does not an existing file'
-                        )
-                    cps_file_list.append(i)
-
-            models = {os.path.split(i)[1][:-4]: {
-                'copasi_file': i
-            } for i in cps_file_list}
-
-            setattr(self, 'models', models)
-
-        def add_experiments(self, experiments: (str, list)):
-            """
-            Add list of experiments to class attributes
-            Args:
-                experiments (str, list): Path pointing to experimental data file or list of paths pointing to experimental data files
-
-            Returns:
-                None
-            """
-
-            if not isinstance(experiments, list):
-                experiments = [experiments]
-
-            for i in experiments:
-                ## todo support for dataframes, dict and other
-                ## python objects as arguments
-
-                if not os.path.isfile(i):
-                    raise errors.InputError(
-                        f'"{i}" does not an existing file'
-                    )
-                if os.path.splitext(i)[1] not in self.experiment_filetypes:
-                    raise errors.InputError(
-                        f'File with "{os.path.splitext(i)[1]}" is not supported'
-                    )
-
-            experiments = {os.path.split(i)[1][:-4]: {
-                'filename': i
-            } for i in experiments}
-
-            setattr(self, 'experiments', experiments)
-
-        def add_validation_experiments(self, experiments: (str, list)):
-            """Add experiments to validation_experiments attribute
-
-            Args:
-              experiments (str, list): path to validation data or list of paths to validation data
-
-            Returns:
-                None
-            """
-            if experiments is None or experiments == {}:
-                return None
-            if not isinstance(experiments, list):
-                experiments = [experiments]
-
-            if isinstance(experiments, list):
-                for i in experiments:
-                    if not os.path.isfile(i):
-                        raise errors.InputError(
-                            f'"{i}" does not an existing file'
-                        )
-                    if os.path.splitext(i)[1] not in self.experiment_filetypes:
-                        raise errors.InputError(
-                            f'File with "{os.path.splitext(i)[1]}" is not supported'
-                        )
-
-            experiments = {os.path.split(i)[1][:-4]: {
-                'filename': i
-            } for i in experiments}
-
-            setattr(self, 'validation_experiments', experiments)
-
-        def add_working_directory(self, working_directory: str):
-            """
-            Add working_directory to class attributes. Put in same path
-            as first copasi model if argument not specified.
-            Args:
-                working_directory (str): Path to location on the system to store analysis
-
-            Returns:
-                None
-            """
-            if working_directory is None or working_directory == '':
-                model_keys = list(self.models.keys())
-                working_directory = os.path.dirname(self.models[model_keys[0]]['copasi_file'])
-
-            if not os.path.isdir(working_directory):
-                raise errors.InputError(f'"{working_directory}" does not exist')
-
-            self.settings['working_directory'] = working_directory
-
-        def add_setting(self, setting, value):
-            """
-
-            Args:
-              setting:
-              value:
-
-            Returns:
-
-            """
-            if not hasattr(self, 'settings'):
-                setattr(self, 'settings', {})
-            self.settings[setting] = value
-
-        def add_settings(self, settings):
-            """
-
-            Args:
-              settings:
-
-            Returns:
-
-            """
-            if not isinstance(settings, dict):
-                raise TypeError(f'add_settings expects a dict as argument. Got "{type(settings)}"')
-            self.settings.update(settings)
+        ##create a scan per model (again models is dict of model.Model's
+        self.models = self._setup_scan(models)
+        assert isinstance(models[0], model.Model)
+        return models
 
 
 class ChaserParameterEstimations(_Task):
-    """Perform secondary hook and jeeves parameter estimations
+    """
+    Perform secondary hook and jeeves parameter estimations
     starting from the best values of a primary global estimator.
-    
+
+    #todo: This class performs slowly in serial. Parallelize the configuration
     of the parameter estimation class in each model.
-
-    Args:
-
-    Returns:
-
     """
 
     def __init__(self, cls=None, model=None, parameter_path=None, truncate_mode='percent',
@@ -5058,7 +3861,10 @@ class ChaserParameterEstimations(_Task):
         self.run()
 
     def do_checks(self):
-        """:return:"""
+        """
+
+        :return:
+        """
 
         if self.model is None and self.cls is None and self.parameter_path is None:
             raise errors.InputError('Please give argument to either "cls" which '
@@ -5087,14 +3893,10 @@ class ChaserParameterEstimations(_Task):
                                         'got "{}" instead'.format(type(self.cls)))
 
     def _assign_model_and_pe_data_arguments_from_cls(self):
-        """if argument to cls is not none, assign the model and pe_data
+        """
+        if argument to cls is not none, assign the model and pe_data
         from cls (which is of type MultiParameterEstimation)
         :return:
-
-        Args:
-
-        Returns:
-
         """
         if self.cls is not None:
             self.model = self.cls.model
@@ -5102,7 +3904,10 @@ class ChaserParameterEstimations(_Task):
             self.experiment_files = self.cls.experiment_files
 
     def parse_pe_data(self):
-        """:return:"""
+        """
+
+        :return:
+        """
         ## if pe_data is string it shuold be path to folder of pe_data
         if type(self.parameter_path) == str:
 
@@ -5162,19 +3967,15 @@ class ChaserParameterEstimations(_Task):
     #                              iteration_limit=self.iteration_limit,
     #                              run_mode=False,
     #                              **self.kwargs)
-    #     PE._setup()
+    #     PE.setup()
     #     self.pe_dct[mod.copasi_file] = PE
     #
     #     return PE
 
     def configure(self):
-        """Iterate over parameter sets.
+        """
+        Iterate over parameter sets.
         :return:
-
-        Args:
-
-        Returns:
-
         """
         pe_dct = OrderedDict()
         original_cps_filename = self.model.copasi_file
@@ -5201,19 +4002,25 @@ class ChaserParameterEstimations(_Task):
                 pe_number=1,
                 **self.kwargs
             )
-            PE._setup()
+            PE.setup()
             pe_dct[new_cps] = PE
 
         return pe_dct
 
     def setup(self):
-        """:return:"""
+        """
+
+        :return:
+        """
         for pe in self.pe_dct:
-            self.pe_dct[pe]._setup()
+            self.pe_dct[pe].setup()
             self.pe_dct[pe].model.save()
 
     def run(self):
-        """:return:"""
+        """
+
+        :return:
+        """
         mod_dct = OrderedDict()
         for cps, pe in list(self.pe_dct.items()):
             mod_dct[cps] = self.pe_dct[cps].model
@@ -5234,22 +4041,23 @@ class ChaserParameterEstimations(_Task):
 
 @mixin(model.ReadModelMixin)
 class MultiModelFit(_Task):
-    """Coordinate a systematic multi model fitting parameter estimation and
+    """
+    Coordinate a systematic multi model fitting parameter estimation and
     compare results using :py:class:`viz.ModelSelection`
-    
+
     Usage:
         # Setup a new folder containing all models that you would like to fit
           and all data you would like to fit to the model.
-          Do not have any other text or csv files in this folder as python will try and _setup
+          Do not have any other text or csv files in this folder as python will try and setup
           fits for them.
-    
+
                 i.e.:
                     ./project_dir
                         --Exp_data_1.csv
                         --Exp_data_n.csv
                         --model1.cps
                         --model2.cps
-    
+
         # Instantiate instance of the MultimodelFit class with all relevant
           keywords. Python automatically creates subdirectories  for each model in your
           model selection problem and maps all data files in the main directory
@@ -5257,15 +4065,12 @@ class MultiModelFit(_Task):
         # Use the write_config_file() method to create a spreadsheet containing
           a config file per model. See :py:meth:`ParameterEstimation.write_config_file`.
         # use run() method to run all models simultaneously.
-    
+
     .. _multi_model_fit_kwargs:
-    
+
     MultiModelFit Kwargs
     ====================
 
-    Args:
-
-    Returns:
 
     """
 
@@ -5294,7 +4099,6 @@ class MultiModelFit(_Task):
         self.results_folder_dct = self.get_output_directories()
 
     def _do_checks(self):
-        """ """
         pass
 
     def __iter__(self):
@@ -5311,27 +4115,20 @@ class MultiModelFit(_Task):
         del self.MPE_dct[key]
 
     def keys(self):
-        """ """
         return list(self.MPE_dct.keys())
 
     def values(self):
-        """ """
         return list(self.MPE_dct.values())
 
     def items(self):
-        """ """
         return list(self.MPE_dct.items())
 
     def instantiate_parameter_estimation_classes(self):
-        """pass correct arguments to the runMultiplePEs class in order
+        """
+        pass correct arguments to the runMultiplePEs class in order
         to instantiate a runMultiplePEs instance for each model.
-        
+
         :Returns: dict[model_filename]=runMultiplePEs_instance
-
-        Args:
-
-        Returns:
-
         """
         dct = {}
 
@@ -5352,12 +4149,7 @@ class MultiModelFit(_Task):
 
     def get_output_directories(self):
         """
-
-        Args:
-
-        Returns:
-          Dict. Location of parameter estimation output files
-
+        :returns:Dict. Location of parameter estimation output files
         """
         output_dct = {}
         for MPE in self.MPE_dct:
@@ -5366,15 +4158,11 @@ class MultiModelFit(_Task):
 
     # void
     def write_config_file(self):
-        """A class to write a config file template for each
+        """
+        A class to write a config file template for each
         model in the analysis. Calls the corresponding
         write_config_file from the runMultiplePEs class
-
-        Args:
-
-        Returns:
-          list. config file paths
-
+        :returns: list. config file paths
         """
         conf_list = []
         for MPE in self.MPE_dct:
@@ -5383,36 +4171,29 @@ class MultiModelFit(_Task):
         return conf_list
 
     def setup(self):
-        """A user interface class which calls the corresponding
-        method (_setup) from the runMultiplePEs class per model.
-        Perform the ParameterEstimation._setup() method on each model.
-
-        Args:
-
-        Returns:
-
+        """
+        A user interface class which calls the corresponding
+        method (setup) from the runMultiplePEs class per model.
+        Perform the ParameterEstimation.setup() method on each model.
         """
         for MPE in self.MPE_dct:
-            self.MPE_dct[MPE]._setup()
+            self.MPE_dct[MPE].setup()
 
     def run(self):
-        """A user interface class which calls the corresponding
+        """
+        A user interface class which calls the corresponding
         method (run) from the runMultiplePEs class per model.
         Perform the ParameterEstimation.run() method on each model.
         :return:
-
-        Args:
-
-        Returns:
-
         """
         for MPE in self.MPE_dct:
             LOG.info('Running models from {}'.format(self.MPE_dct[MPE].results_directory))
             self.MPE_dct[MPE].run()
 
     def create_workspace(self):
-        """Creates a workspace from cps and experiment files in self.project_dir
-        
+        """
+        Creates a workspace from cps and experiment files in self.project_dir
+
         i.e.
             --project_dir
             ----model1_dir
@@ -5422,11 +4203,7 @@ class MultiModelFit(_Task):
             ------model2.cps
             ------exp_data.txt
 
-        Args:
-
-        Returns:
-          Dictionary[cps_filename]= Directory for model fit
-
+        :returns: Dictionary[cps_filename]= Directory for model fit
         """
         LOG.info('Creating workspace from project_dir')
         ## Create entire working directory for analysis
@@ -5450,19 +4227,15 @@ class MultiModelFit(_Task):
         return cps_dirs
 
     def read_fit_config(self):
-        """The recommed way to use this class:
+        '''
+        The recommed way to use this class:
             Put all .cps files you want to fit in a folder with meaningful names (pref with no spaces)
             Put all data files for fitting in the same folder.
                 Make sure all data files have left most column as Time (with consistent units)
                 and all other columns corresponding exactly (no trailing white spaces) to model variables.
                 Any independent variables should have the '_indep' suffix
         This function will read this multifit config and produce a directory tree for subsequent analysis
-
-        Args:
-
-        Returns:
-
-        """
+        '''
         if self.project_dir == None:
             raise errors.InputError('Cannot read multifit confuration as no Project kwarg is provided')
         ##make sure we're in the right directory
@@ -5487,7 +4260,9 @@ class MultiModelFit(_Task):
         return cps_list, exp_list
 
     def format_data(self):
-        """Method for giving appropiate headers to parameter estimation data"""
+        """
+        Method for giving appropiate headers to parameter estimation data
+        """
         for MPE in self.MPE_dct:
             self.MPE_dct[MPE].format_results()
 
@@ -5503,11 +4278,14 @@ class MultiModelFit(_Task):
 @mixin(model.GetModelComponentFromStringMixin)
 @mixin(model.ReadModelMixin)
 class ProfileLikelihood(_Task):
-    """.. _profile_likelihood_kwargs:
-    
+    """
+
+
+    .. _profile_likelihood_kwargs:
+
     ProfileLikelihood Kwargs
     ========================
-    
+
     ===========================     ==================================================
     ProfileLikelihood  Kwargs       Description
     ===========================     ==================================================
@@ -5546,9 +4324,6 @@ class ProfileLikelihood(_Task):
     <Report kwargs>                 Arguments to :py:class:`Reports` are accepted here
     ===========================     ==================================================
 
-    Args:
-
-    Returns:
 
     """
 
@@ -5613,12 +4388,16 @@ class ProfileLikelihood(_Task):
 
         self.model_dct = self.setup_scan()
         self.to_file()
+        # self.model_dct['current_parameters'][r'Ski'].open()
 
         if self.run is not False:
             self.run_analysis()
 
     def _do_checks(self):
-        """:return:"""
+        """
+
+        :return:
+        """
         if isinstance(self.index, int):
             self.index = [self.index]
         if self.df is None:
@@ -5637,14 +4416,10 @@ class ProfileLikelihood(_Task):
             self.results_directory = os.path.join(self.model.root, self.results_directory)
 
     def _convert_numeric_arguments_to_string(self):
-        """xml requires all numbers to be strings.
+        """
+        xml requires all numbers to be strings.
         This method makes this conversion
         :return: void
-
-        Args:
-
-        Returns:
-
         """
         self.number_of_generations = str(self.number_of_generations)
         self.population_size = str(self.population_size)
@@ -5662,14 +4437,10 @@ class ProfileLikelihood(_Task):
         self.cooling_factor = str(self.cooling_factor)
 
     def uncheck_randomize_start_values(self):
-        """Untick the randomize_start_values box
+        """
+        Untick the randomize_start_values box
         :return:
             :py:class:`model.Model`
-
-        Args:
-
-        Returns:
-
         """
         query = '//*[@name="Parameter Estimation"]'
         for i in self.model.xml.xpath(query):
@@ -5690,13 +4461,9 @@ class ProfileLikelihood(_Task):
         return self.model
 
     def _select_method(self):
-        """copied from Parameter estimation class
+        """
+        copied from Parameter estimation class
         :return:
-
-        Args:
-
-        Returns:
-
         """
         if self.method == 'current_solution_statistics'.lower():
             method_name = 'Current Solution Statistics'
@@ -5765,14 +4532,10 @@ class ProfileLikelihood(_Task):
         return method_name, method_type
 
     def set_PE_method(self):
-        """This method is copied from the parameter estimation
+        """
+        This method is copied from the parameter estimation
         class.
         :return: model
-
-        Args:
-
-        Returns:
-
         """
 
         # Build xml for method.
@@ -5814,105 +4577,97 @@ class ProfileLikelihood(_Task):
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
 
-        elif self.method == 'evolutionary_strategy_sr'.lower():
+        if self.method == 'evolutionary_strategy_sr'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
             etree.SubElement(method_element, 'Parameter', attrib=population_size)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
             etree.SubElement(method_element, 'Parameter', attrib=pf)
 
-        elif self.method == 'evolutionary_program'.lower():
+        if self.method == 'evolutionary_program'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
             etree.SubElement(method_element, 'Parameter', attrib=population_size)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
 
-        elif self.method == 'hooke_jeeves'.lower():
+        if self.method == 'hooke_jeeves'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
             etree.SubElement(method_element, 'Parameter', attrib=tolerance)
             etree.SubElement(method_element, 'Parameter', attrib=rho)
 
-        elif self.method == 'levenberg_marquardt'.lower():
+        if self.method == 'levenberg_marquardt'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
             etree.SubElement(method_element, 'Parameter', attrib=tolerance)
         #
-        elif self.method == 'nelder_mead'.lower():
+        if self.method == 'nelder_mead'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
             etree.SubElement(method_element, 'Parameter', attrib=tolerance)
             etree.SubElement(method_element, 'Parameter', attrib=scale)
 
-        elif self.method == 'particle_swarm'.lower():
+        if self.method == 'particle_swarm'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
             etree.SubElement(method_element, 'Parameter', attrib=swarm_size)
             etree.SubElement(method_element, 'Parameter', attrib=std_deviation)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
 
-        elif self.method == 'praxis'.lower():
+        if self.method == 'praxis'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=tolerance)
 
-        elif self.method == 'random_search'.lower():
+        if self.method == 'random_search'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_iterations)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
 
-        elif self.method == 'simulated_annealing'.lower():
+        if self.method == 'simulated_annealing'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=start_temperature)
             etree.SubElement(method_element, 'Parameter', attrib=cooling_factor)
             etree.SubElement(method_element, 'Parameter', attrib=tolerance)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
         #
-        elif self.method == 'steepest_descent'.lower():
+        if self.method == 'steepest_descent'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=iteration_limit)
             etree.SubElement(method_element, 'Parameter', attrib=tolerance)
         #
-        elif self.method == 'truncated_newton'.lower():
+        if self.method == 'truncated_newton'.lower():
             # required no additonal paraemters
             pass
         #
-        elif self.method == 'scatter_search'.lower():
+        if self.method == 'scatter_search'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_iterations)
 
-        elif self.method == 'genetic_algorithm'.lower():
+        if self.method == 'genetic_algorithm'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
             etree.SubElement(method_element, 'Parameter', attrib=population_size)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
 
-        elif self.method == 'genetic_algorithm_sr'.lower():
+        if self.method == 'genetic_algorithm_sr'.lower():
             etree.SubElement(method_element, 'Parameter', attrib=number_of_generations)
             etree.SubElement(method_element, 'Parameter', attrib=population_size)
             etree.SubElement(method_element, 'Parameter', attrib=random_number_generator)
             etree.SubElement(method_element, 'Parameter', attrib=seed)
             etree.SubElement(method_element, 'Parameter', attrib=pf)
-        else:
-            raise TypeError
 
-        for model_name in self.models:
-            mod = self.models[model_name].model
-            tasks = mod.xml.find('{http://www.copasi.org/static/schema}ListOfTasks')
-            method = tasks[5][-1]
-            parent = method.getparent()
-            parent.remove(method)
-            parent.insert(2, method_element)
+        tasks = self.model.xml.find('{http://www.copasi.org/static/schema}ListOfTasks')
 
-        return self.models
+        method = tasks[5][-1]
+        parent = method.getparent()
+        parent.remove(method)
+        parent.insert(2, method_element)
+        return self.model
 
     def insert_parameters(self):
-        """If index keyword is 'current_parameters', do nothing but collect
+        """
+        If index keyword is 'current_parameters', do nothing but collect
         parameter values which are defined in parameter estimation task.
         If index keyword specified, get the corresponding best parameter
         set from df or parameter_path arguments and insert into the model.
-        
+
         :return:
             `tuple`. (`dict[index] = model with parameter set`,
                       `dict[index] = estimated parameter values)
-
-        Args:
-
-        Returns:
-
         """
         dct = {}
         parameters = {}
@@ -5935,13 +4690,9 @@ class ProfileLikelihood(_Task):
         return dct, parameters
 
     def copy_model(self):
-        """copy for each member of x
+        """
+        copy for each member of x
         :return:
-
-        Args:
-
-        Returns:
-
         """
         dct = {}
         for model in self.index_dct:
@@ -5956,14 +4707,10 @@ class ProfileLikelihood(_Task):
         return dct
 
     def make_experiment_files_absolute(self):
-        """copy data files that are mapped to model
+        """
+        copy data files that are mapped to model
         variables into the profile likelihood directories
         :return:
-
-        Args:
-
-        Returns:
-
         """
         query = '//*[@name="File Name"]'
         for i in self.model.xml.xpath(query):
@@ -5972,13 +4719,9 @@ class ProfileLikelihood(_Task):
         return self.model
 
     def undefine_other_reports(self):
-        """remove reports defined elsewhere, i.e. the parameter estimation task
+        """
+        remove reports defined elsewhere, i.e. the parameter estimation task
         :return:
-
-        Args:
-
-        Returns:
-
         """
         query = '//*[@target]'
         for i in self.model.xml.xpath(query):
@@ -5987,19 +4730,16 @@ class ProfileLikelihood(_Task):
         return self.model
 
     def setup_parameter_estimation(self):
-        """for each model, remove the x parameter from
+        """
+        for each model, remove the x parameter from
         the parameter estimation task
         :return:
-
-        Args:
-
-        Returns:
-
         """
         query = "//*[@name='FitItem']"  # query="//*[@name='FitItem']"
         for model in self.model_dct:
             count = 0
             for param in self.model_dct[model]:
+                # self.model_dct[model][param].open()
                 ##ascertain which parameter this is
                 for i in self.model_dct[model][param].xml.xpath(query):
                     count = count + 1
@@ -6025,21 +4765,18 @@ class ProfileLikelihood(_Task):
 
         if count == 0:
             raise errors.NoFitItemsError(
-                'Model does not contain any fit items. Please _setup a parameter estimation and try again')
+                'Model does not contain any fit items. Please setup a parameter estimation and try again')
+        # print count
         ##save is needed
         self.to_file()
 
         return self.model_dct
 
     def to_file(self):
-        """create and write our profile likelihood
+        """
+        create and write our profile likelihood
         analysis to file
         :return:
-
-        Args:
-
-        Returns:
-
         """
         dct = {}
         for model in self.model_dct:
@@ -6050,17 +4787,12 @@ class ProfileLikelihood(_Task):
         return dct
 
     def setup1scan(self, q, model, report, parameter, parameter_value):
-        """Setup a single scan.
-
-        Args:
-          q: queue from multiprocessing
-          model: pycotools3.model.Model
-          report: str.
-          parameter: 
-          parameter_value: 
-
-        Returns:
-
+        """
+        Setup a single scan.
+        :param q: queue from multiprocessing
+        :param model: pycotools3.model.Model
+        :param report: str.
+        :return:
         """
         start = time.time()
         models = q.put(Scan(
@@ -6082,16 +4814,12 @@ class ProfileLikelihood(_Task):
         )
 
     def setup_scan(self):
-        """Set up `copy_number` repeat items with `pe_number`
+        """
+        Set up `copy_number` repeat items with `pe_number`
         repeats of parameter estimation. Set run_mode to false
         as we want to use the multiprocess mode of the run_mode class
         to process all files at once in CopasiSE
         :return:
-
-        Args:
-
-        Returns:
-
         """
         number_of_cpu = cpu_count()
         q = queue.Queue(maxsize=number_of_cpu)
@@ -6113,7 +4841,7 @@ class ProfileLikelihood(_Task):
 
                 ## then all other situations
                 else:
-                    parameter_value = float(self.parameters[model][param])  # if self.parallel_scan:
+                    parameter_value = float(self.parameters[model][param])                # if self.parallel_scan:
                 t = threading.Thread(
                     target=self.setup1scan,
                     args=(
@@ -6132,7 +4860,10 @@ class ProfileLikelihood(_Task):
         return res
 
     def run_analysis(self):
-        """:return:"""
+        """
+
+        :return:
+        """
         model_list = []
         if self.run is 'parallel':
             for i in self.model_dct:
@@ -6151,7 +4882,10 @@ class ProfileLikelihood(_Task):
 @mixin(model.GetModelComponentFromStringMixin)
 @mixin(model.ReadModelMixin)
 class Sensitivities(_Task):
-    """Interface to COPASI sensitivity task"""
+    """
+    Interface to COPASI sensitivity task
+
+    """
 
     ## subtasks
     subtasks = {
@@ -6293,7 +5027,6 @@ class Sensitivities(_Task):
         self.sensitivities.to_csv(self.report_name, sep='\t')
 
     def _do_checks(self):
-        """ """
         if self.subtask == 'evaluation':
             if self.cause not in self.evaluation_cause:
                 raise errors.InputError('cause "{}" not in "{}"'.format(self.cause, self.evaluation_cause))
@@ -6302,14 +5035,12 @@ class Sensitivities(_Task):
                 raise errors.InputError('effect  "{}" not in "{}"'.format(self.effect, self.evaluation_effect))
 
             if self.secondary_cause not in self.evaluation_cause:
-                raise errors.InputError(
-                    'secondary cause "{}" not in "{}"'.format(self.secondary_cause, self.evaluation_cause))
+                raise errors.InputError('secondary cause "{}" not in "{}"'.format(self.secondary_cause, self.evaluation_cause))
 
         elif self.subtask == 'steady_state':
             if self.cause not in self.steady_state_cause:
                 raise errors.InputError('cause "{}" not in available for "{}" '
-                                        'subtask. These are available: "{}"'.format(self.cause, self.subtask,
-                                                                                    self.steady_state_cause))
+                                        'subtask. These are available: "{}"'.format(self.cause, self.subtask, self.steady_state_cause))
 
             if self.effect not in self.steady_state_effect:
                 raise errors.InputError('effect "{}" not in available for "{}" '
@@ -6318,14 +5049,12 @@ class Sensitivities(_Task):
 
             if self.secondary_cause not in self.steady_state_cause:
                 raise errors.InputError('Secondary cause "{}" not in available for "{}" '
-                                        'subtask. These are available: "{}"'.format(self.cause, self.subtask,
-                                                                                    self.steady_state_cause))
+                                        'subtask. These are available: "{}"'.format(self.cause, self.subtask, self.steady_state_cause))
 
         elif self.subtask == 'time_series':
             if self.cause not in self.time_series_cause:
                 raise errors.InputError('cause "{}" not in available for "{}" '
-                                        'subtask. These are available: "{}"'.format(self.cause, self.subtask,
-                                                                                    self.time_series_cause))
+                                        'subtask. These are available: "{}"'.format(self.cause, self.subtask, self.time_series_cause))
 
             if self.effect not in self.time_series_effect:
                 raise errors.InputError('effect "{}" not in available for "{}" '
@@ -6390,7 +5119,7 @@ class Sensitivities(_Task):
         if self.effect_single_object is not None:
             if not isinstance(self.effect_single_object, str):
                 raise errors.TypeError("effect_single_object parameter should be of type str. "
-                                       "Got '{}' instead".format(type(self.effect_single_object)))
+                                        "Got '{}' instead".format(type(self.effect_single_object)))
 
             if self.effect_single_object not in self.model.all_variable_names:
                 raise errors.InputError('Variable "{}" is not in model. These '
@@ -6398,9 +5127,9 @@ class Sensitivities(_Task):
                                                                         self.model.all_variable_names))
 
         if self.cause_single_object is not None:
-            if not isinstance(self.cause_single_object, str):
+            if not isinstance(self.cause_single_object , str):
                 raise errors.TypeError("cause_single_object parameter should be of type str. "
-                                       "Got '{}' instead".format(type(self.cause_single_object)))
+                                        "Got '{}' instead".format(type(self.cause_single_object)))
 
             if self.cause_single_object not in self.model.all_variable_names:
                 raise errors.InputError('Variable "{}" is not in model. These '
@@ -6408,9 +5137,9 @@ class Sensitivities(_Task):
                                                                         self.model.all_variable_names))
 
         if self.secondary_cause_single_object is not None:
-            if not isinstance(self.secondary_cause_single_object, str):
+            if not isinstance(self.secondary_cause_single_object , str):
                 raise errors.TypeError("secondary_cause_single_object  parameter should be of type str. "
-                                       "Got '{}' instead".format(type(self.secondary_cause_single_object)))
+                                        "Got '{}' instead".format(type(self.secondary_cause_single_object )))
 
             if self.secondary_cause_single_object not in self.model.all_variable_names:
                 raise errors.InputError('Variable "{}" is not in model. These '
@@ -6418,7 +5147,6 @@ class Sensitivities(_Task):
                                                                         self.model.all_variable_names))
 
     def get_single_object_references(self):
-        """ """
         if self.cause_single_object is not None:
             self.cause_single_object = self.get_variable_from_string(self.model, self.cause_single_object)
 
@@ -6429,14 +5157,10 @@ class Sensitivities(_Task):
             self.cause_single_object = self.get_variable_from_string(self.model, self.secondary_cause_single_object)
 
     def sensitivity_task_key(self):
-        """Get the sensitivity task as it currently is
+        """
+        Get the sensitivity task as it currently is
         in the model as etree.Element
         :return:
-
-        Args:
-
-        Returns:
-
         """
         # query = './/Task/*[@name="Sensitivities"]'
         tasks = self.model.xml.findall(self.schema + 'ListOfTasks')[0]
@@ -6445,7 +5169,6 @@ class Sensitivities(_Task):
                 return i.attrib['key']
 
     def create_sensitivity_task(self):
-        """ """
         return etree.Element('Task', attrib=OrderedDict({
             'key': self.sensitivity_task_key(),
             'name': 'Sensitivities',
@@ -6455,7 +5178,6 @@ class Sensitivities(_Task):
         }))
 
     def create_new_report(self):
-        """ """
         report_options = OrderedDict({
             'report_name': self.report_name,
             'append': self.append,
@@ -6467,7 +5189,6 @@ class Sensitivities(_Task):
         return report.model
 
     def get_report_key(self):
-        """ """
         ## get the report key
         for i in self.model.xml:
             if i.tag == self.schema + 'ListOfReports':
@@ -6476,7 +5197,6 @@ class Sensitivities(_Task):
                         return j.attrib['key']
 
     def set_report(self):
-        """ """
         attrib = OrderedDict({
             'reference': self.get_report_key(),
             'target': self.report_name,
@@ -6487,12 +5207,10 @@ class Sensitivities(_Task):
         return self.task
 
     def create_problem(self):
-        """ """
         etree.SubElement(self.task, 'Problem')
         return self.task
 
     def set_subtask(self):
-        """ """
         assert self.task[1].tag == 'Problem'
         attrib = OrderedDict({
             'name': 'SubtaskType',
@@ -6503,10 +5221,9 @@ class Sensitivities(_Task):
         return self.task
 
     def set_effect(self):
-        """ """
         assert self.task[1].tag == 'Problem'
         parameter_group = etree.SubElement(self.task[-1], 'ParameterGroup',
-                                           attrib={'name': 'TargetFunctions'})
+                                attrib={'name': 'TargetFunctions'})
         single_object_attrib = OrderedDict({
             'name': 'SingleObject',
             'type': 'cn',
@@ -6522,14 +5239,12 @@ class Sensitivities(_Task):
         return self.task
 
     def add_list_of_variables_element(self):
-        """ """
         assert self.task[1].tag == 'Problem'
         parameter_group = etree.SubElement(self.task[-1], 'ParameterGroup',
                                            attrib={'name': 'ListOfVariables'})
         return self.task
 
     def set_cause(self):
-        """ """
         assert self.task[1].tag == 'Problem'
         assert self.task[1][2].attrib['name'] == 'ListOfVariables'
         parameter_group = etree.SubElement(
@@ -6551,7 +5266,6 @@ class Sensitivities(_Task):
         return self.task
 
     def set_secondary_cause(self):
-        """ """
         pass
         assert self.task[1].tag == 'Problem'
         assert self.task[1][2].attrib['name'] == 'ListOfVariables'
@@ -6573,7 +5287,6 @@ class Sensitivities(_Task):
         return self.task
 
     def set_method(self):
-        """ """
         method_attrib = OrderedDict({
             'name': 'Sensitivities Method',
             'type': 'SensitivitiesMethod',
@@ -6593,7 +5306,6 @@ class Sensitivities(_Task):
         return self.task
 
     def replace_sensitivities_task(self):
-        """ """
         task_list = self.model.xml.findall(self.schema + 'ListOfTasks')[0]
         for i in task_list:
             if i.attrib['name'] == 'Sensitivities':
@@ -6602,12 +5314,10 @@ class Sensitivities(_Task):
         return self.model
 
     def run_task(self):
-        """ """
         r = Run(self.model, task='sensitivities', mode=self.run)
         return r.model
 
     def process_data(self):
-        """ """
         if not os.path.isfile(self.report_name):
             raise ValueError('Sensitivity report missing. Please ensure you have '
                              'executed the sensitivity task and the report exists. '
@@ -6616,7 +5326,7 @@ class Sensitivities(_Task):
         with open(self.report_name, 'r') as f:
             data = f.read()
 
-        pattern = 'Sensitivities array(.*)Scaled sensitivities array'
+        pattern='Sensitivities array(.*)Scaled sensitivities array'
         data = re.findall(pattern, data, re.DOTALL)
         data = [i.strip() for i in data]
         assert data[0][:4] == 'Rows'
@@ -6647,13 +5357,12 @@ class Sensitivities(_Task):
 
 
 class FIM(Sensitivities):
-    """Let S = matrix of partial derivatives of metabolites with respect to
+    """
+    Let S = matrix of partial derivatives of metabolites with respect to
     kinetic parameters. Then the fisher information matrix (FIM) is:
         FIM = S^TS
 
-    Args:
 
-    Returns:
 
     """
     subtask = 'time_series'
@@ -6670,18 +5379,24 @@ class FIM(Sensitivities):
 
     @property
     def fim(self):
-        """ """
         return self.sensitivities.transpose().dot(self.sensitivities)
 
-
 class Hessian(Sensitivities):
-    """ """
     pass
-
 
 class GlobalSensitivities(Sensitivities):
-    """Sensitivity around parameter estimates"""
+    """
+    Sensitivity around parameter estimates
+    """
     pass
+
+
+
+
+
+
+
+
 
 
 if __name__ == '__main__':

@@ -33,6 +33,7 @@ import pandas
 import unittest
 from lxml import etree
 from collections import OrderedDict
+##todo build tests for inserting parameters from parameter estimation file. It may be best to not
 
 
 class ModelLevelAttributeTests(_test_base._BaseTest):
@@ -1126,6 +1127,46 @@ class InsertParameterTests(_test_base._BaseTest):
         self.assertAlmostEqual(float(val[0]), float(597))
 
     def test_insert_parameters_metabolite_df(self):
+        """
+
+        :return:
+        """
+        parameter_dict = {'B': 35,
+                          'B2C_0_k2': 64,
+                          'A2B': 597}
+
+        df = pandas.DataFrame(parameter_dict, index=[0])
+        self.model = pycotools3.model.InsertParameters(self.model, df=df, inplace=True).model
+        conc = [i.concentration for i in self.model.metabolites if i.name == 'B']
+        self.assertAlmostEqual(float(conc[0]), float(35))
+
+    def test_insert_parameters_global_file(self):
+        """
+
+        :return:
+        """
+        fname = os.path.join(os.path.dirname(__file__), 'data.txt')
+        df = self.model.simulate(0, 10, 1)
+        df.to_csv(fname, sep='\t', index=False)
+        with pycotools3.tasks.ParameterEstimation.Context(
+                self.model, fname, context='s', parameters='g') as context:
+            context.set('run_mode', True)
+            context.set('upper_bound', 34)
+            context.set('lower_bound', 34)
+            config = context.get_config()
+
+        pe = pycotools3.tasks.ParameterEstimation(config)
+        mod = pe.models.test_model.model
+        mod.insert_parameters(parameter_path=pe.results_directory['test_model'], inplace=True)
+        v = [i.initial_value for i in pe.models.test_model.model.global_quantities]
+        print(v)
+        mod.open()
+        # I = pycotools3.model.InsertParameters(
+        #     self.model, df=df, inplace=True).model
+        # val = [i.initial_value for i in self.model.global_quantities if i.name == 'A2B']
+        # self.assertAlmostEqual(float(val[0]), float(597))
+
+    def test_insert_parameters_metabolite_file(self):
         """
 
         :return:

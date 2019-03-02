@@ -947,7 +947,9 @@ class ParameterEstimationTests(_test_base._BaseTest):
                 validation_threshold=9,
                 randomize_start_values=True,
                 calculate_statistics=False,
-                create_parameter_sets=False
+                create_parameter_sets=False,
+                upper_bound=50,
+                lower_bound=0.1,
             )
         )
         self.conf = ParameterEstimation.Config(**self.conf_dct)
@@ -1220,6 +1222,43 @@ class ParameterEstimationTests(_test_base._BaseTest):
 
         self.assertEqual(expected, actual)
 
+    def test_upper_bound(self):
+        mod = self.PE.config.models.model1.model
+        query = '//*[@name="FitItem"]'
+        ## note the 100 at the end is from constraint_items
+        expected = ['50', '50', '50', '50', '50', '50', '50', '50', '100']
+        actual = []
+        for i in mod.xml.xpath(query):
+            for j in i:
+                if j.attrib['name'] == 'UpperBound':
+                    actual.append(j.attrib['value'])
+        self.assertListEqual(expected, actual)
+
+    def test_lower_bound(self):
+        mod = self.PE.config.models.model1.model
+        query = '//*[@name="FitItem"]'
+        ## note the 100 at the end is from constraint_items
+        expected = ['0.1', '0.1', '0.1', '0.1', '0.1', '0.1', '0.1', '0.1', '0.1']
+        actual = []
+        for i in mod.xml.xpath(query):
+            for j in i:
+                if j.attrib['name'] == 'LowerBound':
+                    actual.append(j.attrib['value'])
+        self.assertListEqual(expected, actual)
+
+    def test_model_value_start_value_resolves(self):
+        mod = self.PE.config.models.model1.model
+        query = '//*[@name="FitItem"]'
+        ## note the 100 at the end is from constraint_items
+        expected = ['1.0000001549282924', '1.0000001549282924', '1.0000001549282924', '4.0', '9.0', '0.1', '0.1', '0.1',
+                    '9.0']
+        actual = []
+        for i in mod.xml.xpath(query):
+            for j in i:
+                if j.attrib['name'] == 'StartValue':
+                    actual.append(j.attrib['value'])
+        self.assertListEqual(expected, actual)
+
 
 class ParameterEstimationContextTests(_test_base._BaseTest):
     def setUp(self):
@@ -1430,7 +1469,6 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
         for i in pe.models.test_model.model.xml.xpath(query):
             actual += 1
         self.assertEqual(expected, actual)
-
 
 
 class ParameterEstimationTestsWithDifferentModel(unittest.TestCase):
