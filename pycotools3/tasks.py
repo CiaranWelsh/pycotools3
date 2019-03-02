@@ -2936,7 +2936,6 @@ class ParameterEstimation(_Task):
                         item['affected_models'] = [
                             i for i in self.models if fit_item in self.models[model_name].model
                         ]
-
                     dct[fit_item] = item
 
             self.items.fit_items = munch.Munch.fromDict(dct)
@@ -2955,6 +2954,9 @@ class ParameterEstimation(_Task):
             for fit_item in self.items.fit_items:
                 item = self.items.fit_items.get(fit_item)
 
+                self.defaults.fit_items['upper_bound'] = self.settings.upper_bound
+                self.defaults.fit_items['lower_bound'] = self.settings.lower_bound
+
                 if item == {}:
                     item = self.defaults.fit_items
                 else:
@@ -2962,13 +2964,11 @@ class ParameterEstimation(_Task):
                         if i not in item:
                             item[i] = self.defaults.fit_items[i]
                 ## set lower bound, upper bound and model value
-                item['lower_bound'] = self.settings.lower_bound
-                item['upper_bound'] = self.settings.upper_bound
 
                 ## if start_value is model_value, we cannot resolve here as
                 ## we need the model to get the value. This is resolved in the main class
                 if item['start_value'] != 'model_value':
-                    item['start_value'] = self.settings.model_value
+                    item['start_value'] = self.settings.start_value
 
                 if item['affected_experiments'] == 'all':
                     if isinstance(self.experiment_names, str):

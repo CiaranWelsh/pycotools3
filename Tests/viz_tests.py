@@ -117,7 +117,7 @@ class TruncateDataTests(_test_base._BaseTest):
         ##get best rank returns a series, not a dataframe
         data = viz.TruncateData(self.data, mode='ranks', theta=1)
         expected = 6
-        actual = data['test_model'].shape
+        actual = data['test_model'].shape[0]
         self.assertEqual(expected, actual)
 
     def test_below_theta_truncate_mode_using_below(self):
@@ -159,14 +159,6 @@ class BoxPlotTests(_test_base._BaseTest):
         """
         b = pycotools3.viz.Boxplots(self.pe, savefig=True, num_per_plot=2)
         self.assertEqual(len(glob.glob(b.results_directory['test_model'] + '/*')), 3)
-
-    def test_amount_of_data(self):
-        """
-
-        :return:
-        """
-        b = pycotools3.viz.Boxplots(self.pe, savefig=True, num_per_plot=3)
-        self.assertEqual(b.data.shape[0], 4)
 
 
 # class VizTests(_test_base._BaseTest):

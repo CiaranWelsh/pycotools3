@@ -204,8 +204,9 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
                 'validation_weight': 4,
                 'validation_threshold': 8.5,
                 'working_directory': os.path.dirname(__file__),
-                'run_mode': False
-
+                'run_mode': False,
+                'lower_bound': 0.05,
+                'upper_bound': 36
             }
         )
         self.PE = ParameterEstimation(self.config)
@@ -252,17 +253,31 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
             self.PE.config.datasets.experiments.report2.
                 mappings.B.model_object, 'B')
 
-    def test_weight_method_updates(self):
-        pass
+    def test_fit_items_A_lower_bound(self):
+        ## now I've broken the use of lower and upper bounds in
+        ## individual fit items
+        ## line 2965 commented out. This is where I set default boundaries
+        ## instead the boundary assignment should occur in the config class
+        ## instead of assigning boundaries again, set the defaults prior to
+        ## qhen needed
+        expected = 15
+        actual = self.PE.config.items.fit_items.A.lower_bound
+        self.assertEqual(expected, actual)
 
-    def test_fit_items1(self):
-        self.assertEqual(self.PE.config.items.fit_items.A.lower_bound, 15)
+    def test_fit_items_A_upper_bound(self):
+        ## now I've broken the use of lower and upper bounds in
+        ## individual fit items
+        expected = 35
+        actual = self.PE.config.items.fit_items.A.upper_bound
+        self.assertEqual(expected, actual)
 
     def test_fit_items2(self):
         self.assertEqual(self.PE.config.items.fit_items.A.affected_experiments[0], 'report1')
 
     def test_fit_items3(self):
-        self.assertEqual(self.PE.config.items.fit_items.B.lower_bound, 1e-6)
+        expected = 0.05
+        actual = self.PE.config.items.fit_items.B.lower_bound
+        self.assertEqual(expected, actual)
 
     def test_constraint_items1(self):
         self.assertEqual(
@@ -963,7 +978,12 @@ class ParameterEstimationTests(_test_base._BaseTest):
         self.assertIsInstance(self.PE.config.models.model1.model, pycotools3.model.Model)
 
     def test_output_directory_id(self):
-        results_directory = os.path.join(os.path.dirname(__file__), 'Problem1/Fit1/model1/ParameterEstimationData')
+        ## build the results directory gradually so that it works on windows and linus
+        results_directory = os.path.join(os.path.dirname(__file__), 'Problem1')
+        # results_directory = os.path.join(results_directory, 'res')
+        results_directory = os.path.join(results_directory, 'Fit1')
+        results_directory = os.path.join(results_directory, 'model1')
+        results_directory = os.path.join(results_directory, 'ParameterEstimationData')
         self.assertEqual(self.PE.results_directory['model1'], results_directory)
 
     def test_get_model_obj_from_strings(self):
