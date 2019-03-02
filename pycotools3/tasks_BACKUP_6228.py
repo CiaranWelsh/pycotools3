@@ -2755,14 +2755,9 @@ class ParameterEstimation(_Task):
             Returns:
                 Operates inplace and returns None
             """
-            ## adds any settings that are missing from defaults.
-            for k in self.defaults.settings:
-                if k not in self.settings:
-                    self.settings[k] = self.defaults.settings[k]
+            self._add_defaults_to_dict(self.settings, self.defaults.settings)
 
-            for k in self.defaults.datasets:
-                if k not in self.datasets:
-                    self.datasets[k] = self.defaults.datasets[k]
+            self._add_defaults_to_dict(self.datasets, self.defaults.datasets)
 
             self._set_default_experiments()
 
@@ -2913,7 +2908,6 @@ class ParameterEstimation(_Task):
 
                 for fit_item in estimated_variables[model_name]:
                     item = estimated_variables[model_name][fit_item]
-                    print('item', item)
                     if item == {}:
                         item = self.defaults.fit_items
 
@@ -2959,18 +2953,11 @@ class ParameterEstimation(_Task):
 
                 if item == {}:
                     item = self.defaults.fit_items
+
                 else:
                     for i in self.defaults.fit_items:
                         if i not in item:
                             item[i] = self.defaults.fit_items[i]
-                ## set lower bound, upper bound and model value
-                item['lower_bound'] = self.settings.lower_bound
-                item['upper_bound'] = self.settings.upper_bound
-
-                ## if start_value is model_value, we cannot resolve here as
-                ## we need the model to get the value. This is resolved in the main class
-                if item['start_value'] != 'model_value':
-                    item['start_value'] = self.settings.model_value
 
                 if item['affected_experiments'] == 'all':
                     if isinstance(self.experiment_names, str):
@@ -4106,40 +4093,21 @@ class ParameterEstimation(_Task):
                     items = self.config.items.constraint_items
             else:
                 items = self.config.items.fit_items
-
             for item_name in items:
+
                 item = items[item_name]
                 ## figure out what type of variable item is and assign to component
-                item_type = None
-                ## while we are distinguishing between component type we retrieve its
-                ## model value so if the user specifies that the start value should be the
-                ## model value, we can use the model_value that is collected here
                 if item_name in mod.get_variable_names('m'):
                     component = [i for i in mod.metabolites if i.name == item_name][0]
-                    item_type = 'metabolite'
-                    if self.config.settings.quantity_type == 'concentration':
-                        model_value = mod.get(item_type, item_name, by='name').concentration
-                    elif self.config.settings.quantity_type == 'particle_numbers':
-                        model_value = mod.get(item_type, item_name, by='name').particle_numbers
-                    else:
-                        raise errors.InputError(f'settings.quantity_type option must be'
-                                                f' either "concentration" or "particle_numbers" '
-                                                f'Got {self.config.settings.quantity_type}')
 
                 elif item_name in mod.get_variable_names('l'):
                     component = [i for i in mod.local_parameters if i.global_name == item_name][0]
-                    item_type = 'local_parameter'
-                    model_value = mod.get(item_type, item_name, by='name').value
 
                 elif item_name in mod.get_variable_names('g'):
                     component = [i for i in mod.global_quantities if i.name == item_name][0]
-                    item_type = 'global_quantity'
-                    model_value = mod.get(item_type, item_name, by='name').initial_value
 
                 elif item_name in mod.get_variable_names('c'):
                     component = [i for i in mod.compartments if i.name == item_name][0]
-                    item_type = 'compartment'
-                    model_value = mod.get(item_type, item_name, by='name').initial_value
 
                 else:
                     raise errors.SomethingWentHorriblyWrongError(
@@ -4150,10 +4118,6 @@ class ParameterEstimation(_Task):
                             item_name,
                             str(mod.get_variable_names('a', include_assignments=False)))
                     )
-
-                assert item_type is not None
-                if item['start_value'] == 'model_value':
-                    item['start_value'] = model_value
 
                 # initialize new element
                 fit_item_element = etree.Element('ParameterGroup', attrib={'name': 'FitItem'})
@@ -4244,14 +4208,18 @@ class ParameterEstimation(_Task):
 
                 ## now add the attributes to the affected _experiments element
                 for affected_validation_experiment_attr in affected_validation_experiments_attr:
+                    pass
                     etree.SubElement(
                         affected_cross_validation_experiments_element, 'Parameter',
                         attrib=affected_validation_experiments_attr[affected_validation_experiment_attr]
                     )
 
+                ## do some in put checking on affected models
+
                 ## get lower bound from config file and add to element
                 lower_bound_element = {'type': 'cn', 'name': 'LowerBound', 'value': str(item['lower_bound'])}
                 etree.SubElement(fit_item_element, 'Parameter', attrib=lower_bound_element)
+
                 start_value_element = {'type': 'float', 'name': 'StartValue', 'value': str(item['start_value'])}
 
                 ## get upper bound from config file and add to element
@@ -4635,6 +4603,9 @@ class ParameterEstimation(_Task):
         self._add_fit_items(constraint=False)
         self._add_fit_items(constraint=True)
 
+        # self.convert_bool_to_numeric()
+
+        ## create new parameter estimation
         self._set_options()
         self._set_method()
 
@@ -4779,9 +4750,9 @@ class ParameterEstimation(_Task):
         def get_config(self):
             ## update the config
             self.add_models(self.models)
-            self.add_settings(self.settings)
             self.add_experiments(self.experiments)
             self.add_validation_experiments(self.validation_experiments)
+            self.add_settings(self.settings)
             self.add_working_directory(self.working_directory)
             dct = dict(
                 models=self.models,

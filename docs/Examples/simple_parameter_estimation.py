@@ -4,6 +4,7 @@ This is an example of how to configure a simple parameter estimation using pycot
 We first create a toy model for demonstration, then simulate some experimental data from it and fit it back to the model, using pycotools for configuration.
 
 """
+##todo include example of how to use lower bounds, upper bounds and model value
 import os, glob
 import pandas, numpy
 import matplotlib.pyplot as plt
