@@ -45,7 +45,8 @@ from io import StringIO
 ## todo modify other class arguments if necessary to be like the parameter estimation class
 ## todo documentation needs to be better
 ## todo examples, tutorials, html etc.
-##todo clean up repository of old and unused code, objects files etc
+## todo clean up repository of old and unused code, objects files etc
+## todo remove Models folder
 class DotDictTests(unittest.TestCase):
     def setUp(self):
         pass
