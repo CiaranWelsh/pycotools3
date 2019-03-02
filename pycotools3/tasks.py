@@ -56,7 +56,6 @@ import munch
 
 COPASISE, COPASIUI = load_copasi()
 
-
 LOG = logging.getLogger(__name__)
 
 sns.set_context(context='poster',
@@ -2913,7 +2912,6 @@ class ParameterEstimation(_Task):
 
                 for fit_item in estimated_variables[model_name]:
                     item = estimated_variables[model_name][fit_item]
-                    print('item', item)
                     if item == {}:
                         item = self.defaults.fit_items
 
@@ -5505,7 +5503,13 @@ class MultiModelFit(_Task):
 @mixin(model.ReadModelMixin)
 class ProfileLikelihood(_Task):
     """.. _profile_likelihood_kwargs:
-    
+
+    ##todo use mpi like programming to split a profile likelihood computation into a set of arrays
+    ## i.e. have multiple processes executing a single profile likelihood using multiple
+    ## instances of COPASI but coordinately
+
+    ## todo configure a Profile likelihood context
+
     ProfileLikelihood Kwargs
     ========================
     

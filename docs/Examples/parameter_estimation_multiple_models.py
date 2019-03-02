@@ -83,8 +83,10 @@ with tasks.ParameterEstimation.Context(model_list, experiment_filename, context=
 
 pe = tasks.ParameterEstimation(config)
 
-# data = viz.Parse(pe).data
+data = viz.Parse(pe).data
 
+
+## then do likelihood ratio test
 
 
 

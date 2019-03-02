@@ -108,7 +108,6 @@ ranks                   `list` of integers
 
 """
 
-
 ##TODO Fix plot_kwargs
 ##TODO fix parameter estimation ensembles
 import contextlib
@@ -117,14 +116,14 @@ import pandas
 # from pandas.parser import CParserError
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
-import scipy 
+import scipy
 import os
 import matplotlib
 import itertools
-from . import tasks,errors, misc, model
-import seaborn 
+from . import tasks, errors, misc, model
+import seaborn
 import logging
-from subprocess import check_call,Popen
+from subprocess import check_call, Popen
 import glob
 import re
 import numpy
@@ -144,11 +143,13 @@ from scipy.stats.mstats import pearsonr
 from cycler import cycler
 from collections import OrderedDict
 from itertools import combinations, combinations_with_replacement, permutations
-LOG=logging.getLogger(__name__)
+
+LOG = logging.getLogger(__name__)
 
 
 class PlotKwargs(object):
     """ """
+
     def plot_kwargs(self):
         """ """
         plot_kwargs = {
@@ -163,6 +164,7 @@ class PlotKwargs(object):
 
 class _Viz(PlotKwargs):
     """base class for viz"""
+
     def context(context='poster', font_scale=3, rc=None):
         """
 
@@ -232,7 +234,6 @@ class _Viz(PlotKwargs):
         else:
             return Parse(cls, log10=log10, copasi_file=copasi_file).data
 
-
     @staticmethod
     def truncate(data, mode, theta):
         """mixin method interface to truncate data
@@ -246,8 +247,8 @@ class _Viz(PlotKwargs):
 
         """
         df = TruncateData(data,
-                            mode=mode,
-                            theta=theta).data
+                          mode=mode,
+                          theta=theta).data
         return df
 
     @staticmethod
@@ -267,57 +268,58 @@ class _Viz(PlotKwargs):
 
 
 class TruncateData(_Viz):
-    """Parameter estimation data in systems biology usually have runs which fall
-    into a local minima. This class removes these runs from further
-    analysis.
-    
-    See :ref:`truncate-kwargs` for keyword arguments
-    
-    Examples assuming `df` is a `pandas.DataFrame` retuned from
-    the `Parse` class:
-    
-    Analyze the top 10 percent of parameter fits. Conduct analysis on linear scale.
-    
-    
-    Analyze top 10 best parameter sets on a log10 scale
-    
-    
-    Analyze parameter sets with a RSS value below 10^3.5 (because log10 is set to True)
+    """
+    Truncates a parameter estimation dataset for a model
 
-    Args:
+    A dict like object containing model names as keys and
+    dataframes of truncated parameter estimation data as values.
 
-    Returns:
+    Examples:
+        Truncate the data to get the top 50% and do not convert to logspace
+        >>> data = TruncateData(data, mode='percent', theta=50, log10=False)
 
-    >>> data = TruncateData(data, mode=percent, theta=10, log10=False)
-    
+        ## truncate using ranks of best fit. Get top 10 and convert to log space
         >>> data = TruncateData(data, mode='ranks', theta=range(10), log10=True)
-    
-        >>> data = TruncateData(data, mode='below_x', theta=3.5, log10=True)
+
+        ## Choose a number, in log10 space and return all data below thie value
+        >>> data = TruncateData(data, mode='below_theta', theta=3.5, log10=True)
     """
 
     def __init__(self, data, mode='percent', theta=100, log10=False):
         """
-        :param data:
-            `pandas.DataFrame`. Data to truncate
 
-        :param mode:
-            `str`. Mode to use for truncation
-
-        :param theta:
-            `int` or `float`. Percentage, cut-off point or ranks
-
-        :param log10:
-            `bool` whether to truncate on log10 scale and return log10 scale data
+        Args:
+            data(pandas.DataFrame):
+                A dataframe to truncate
+            mode (str):
+                Either 'percent', 'ranks' or 'below_theta'
+            theta (numeric):
+                Numeric. A percentage (i.e. 50), the number of ranks or a number
+            log10 (bool):
+                Whether to return data in log10 space
         """
-
         self.data = data
         self.mode = mode
         self.theta = theta
         self.log10 = log10
         assert self.mode in ['below_theta', 'percent', 'ranks']
 
-
         self.data = self.truncate()
+
+    def __str__(self):
+        return self.data.__str__()
+
+    def __repr__(self):
+        return self.data.__repr__()
+
+    def __getitem__(self, item):
+        return self.data[item]
+
+    def __setitem__(self, key, value):
+        self.data[key] = value
+
+    def __delitem__(self, key):
+        del self.data[key]
 
     def below_theta(self):
         """remove data which is not below theta
@@ -329,8 +331,11 @@ class TruncateData(_Viz):
         Returns:
 
         """
-        assert self.data.shape[0] != 0, 'There are no data with RSS below {}. Choose a higher number'.format(self.theta)
-        return self.data[self.data['RSS'] < self.theta]
+        for model_name in self.data:
+            data = self.data[model_name]
+            assert data.shape[0] != 0, 'There are no data with RSS below {}. Choose a higher number'.format(self.theta)
+            self.data[model_name] = self.data[model_name][self.data[model_name]['RSS'] < self.theta]
+        return self.data
 
     def top_theta_percent(self):
         """Remove data not in top theta percent
@@ -344,8 +349,15 @@ class TruncateData(_Viz):
         """
         if self.theta > 100 or self.theta < 1:
             raise errors.InputError('{} should be between 0 and 100')
-        theta_quantile = int(numpy.round(self.data.shape[0] * (float(self.theta) / 100.0)))
-        return self.data.iloc[:theta_quantile]
+        for model_name in self.data:
+            theta_quantile = int(numpy.round(self.data[model_name].shape[0] * \
+                                             (float(self.theta) / 100.0)))
+            if theta_quantile == 0:
+                raise ValueError(
+                    f'Cannot get the {self.theta} quantile of this dataset as it is 0. Choose another quantile'
+                )
+            self.data[model_name] = self.data[model_name].iloc[:theta_quantile]
+        return self.data
 
     def ranks(self):
         """Remove data which is not in the top ranks
@@ -361,8 +373,10 @@ class TruncateData(_Viz):
         ## need to reset the index after sorting just in case some of the RSS
         ## values are identical. In this case there is no guarentee that
         ## self.data is in ascending order and breaks with .iloc[0].
-        self.data = self.data.sort_values(by='RSS').reset_index(drop=True)
-        return self.data.iloc[self.theta]
+        for model_name in self.data:
+            self.data[model_name] = self.data[model_name].sort_values(by='RSS').reset_index(drop=True)
+            self.data[model_name] = self.data[model_name].iloc[self.theta]
+        return self.data
 
     def truncate(self):
         """:return:"""
@@ -373,8 +387,10 @@ class TruncateData(_Viz):
         elif self.mode == 'ranks':
             return self.ranks()
 
+
 class ChiSquaredStatistics(object):
     """ """
+
     def __init__(self, rss, dof, num_data_points, alpha,
                  plot_chi2=False, show=False):
         self.alpha = alpha
@@ -387,7 +403,6 @@ class ChiSquaredStatistics(object):
         if self.alpha > 1 or self.alpha < 0 or len(str(self.alpha)) > 4:
             raise errors.InputError('alpha parameter should be between 0 and 1 and be '
                                     'to 2 decimal places. I.e. 0.95')
-
 
         if plot_chi2:
             self.plot_chi2_CL()
@@ -441,6 +456,7 @@ class ChiSquaredStatistics(object):
         """:return:"""
         return self.rss * exponential_function((self.get_chi2_alpha() / self.num_data_points))
 
+
 ##TODO use cached property
 class Parse(object):
     """General class for parsing copasi output into Python.
@@ -470,6 +486,7 @@ class Parse(object):
     Returns:
 
     """
+
     def __init__(self, cls_instance, log10=False, copasi_file=None, alpha=0.95,
                  rss_value=None, num_data_points=None):
         """
@@ -545,6 +562,12 @@ class Parse(object):
                 #     )
 
         self.data = self.parse()
+
+    def __str__(self):
+        return self.data.__str__()
+
+    def __repr__(self):
+        return self.data.__repr__()
 
     def parse(self):
         """determine class type of self.cls_instance
@@ -662,7 +685,7 @@ class Parse(object):
             width = data.shape[1]
             # remove the extra bracket
             data[width] = data[width].str[1:]
-            names = self.cls_instance.model.fit_item_order+['RSS']
+            names = self.cls_instance.model.fit_item_order + ['RSS']
             data.columns = names
             os.remove(self.cls_instance.report_name)
             data.to_csv(self.cls_instance.report_name,
@@ -689,7 +712,7 @@ class Parse(object):
             if folder == None:
                 folder = cls_instance.results_directory[model_name]
             tmp_dct = {}
-            for report_name in glob.glob(folder+r'/*.txt'):
+            for report_name in glob.glob(folder + r'/*.txt'):
                 report_name = os.path.abspath(report_name)
                 if os.path.isfile(report_name) != True:
                     raise errors.FileDoesNotExistError('"{}" does not exist'.format(report_name))
@@ -717,12 +740,13 @@ class Parse(object):
                     data = data.drop(data.columns[[0, -2]], axis=1)
                     data.columns = list(range(data.shape[1]))
                     ### parameter of interest has been removed.
-                    names = mod.fit_item_order+['RSS']
+                    names = mod.fit_item_order + ['RSS']
                     if mod.fit_item_order == []:
                         raise errors.SomethingWentHorriblyWrongError('Parameter Estimation task is empty')
 
                     if len(names) != data.shape[1]:
-                        raise errors.SomethingWentHorriblyWrongError('length of parameter estimation data does not equal number of parameters estimated')
+                        raise errors.SomethingWentHorriblyWrongError(
+                            'length of parameter estimation data does not equal number of parameters estimated')
 
                     if os.path.isfile(report_name):
                         os.remove(report_name)
@@ -736,6 +760,7 @@ class Parse(object):
 
             dct[model_name] = df.reset_index(drop=True)
         return dct
+
     # @cached_property
     def from_chaser_estimations(self, cls_instance, folder=None):
         """:return:
@@ -784,7 +809,7 @@ class Parse(object):
 
                 data = df.drop(df.columns[0], axis=1)
                 width = data.shape[1]
-            #     # remove the extra bracket
+                #     # remove the extra bracket
                 data[width] = data[width].str[1:]
                 names = self.cls_instance.model.fit_item_order + ['RSS']
                 data.columns = names
@@ -792,7 +817,7 @@ class Parse(object):
                 # data.to_csv(report_name,
                 #             sep='\t',
                 #             index=False)
-            #     # d[report_name] = data
+                #     # d[report_name] = data
                 d.append(data)
 
             except ValueError as e:
@@ -801,7 +826,7 @@ class Parse(object):
 
         df = pandas.concat(d)
         df = df.sort_values(by='RSS').reset_index(drop=True)
-        return df.apply(pandas.to_numeric)#astype('float')
+        return df.apply(pandas.to_numeric)  # astype('float')
 
     def from_folder(self):
         """
@@ -929,6 +954,7 @@ class Parse(object):
         Returns:
 
         """
+
         def get_results():
             """Get results files as dict
             :return:
@@ -963,7 +989,7 @@ class Parse(object):
                     copasi_file = self.cls_instance.model_dct[model][param].copasi_file
 
                     ## infer the results file from copasi file
-                    results_file = os.path.splitext(copasi_file)[0]+'.csv'
+                    results_file = os.path.splitext(copasi_file)[0] + '.csv'
 
                     ## ensure it exists
                     if not os.path.isfile(results_file):
@@ -1063,7 +1089,7 @@ class Parse(object):
                 rss_value = self.rss_value
                 experiment_files = experiment_files_in_use(cls.model)
                 CL_dct[0] = float(ChiSquaredStatistics(rss_value, dof(cls.model),
-                                                           num_data_points(experiment_files), self.alpha).CL)
+                                                       num_data_points(experiment_files), self.alpha).CL)
             else:
                 for index in cls.parameters:
                     rss_value = cls.parameters[index]['RSS']
@@ -1120,17 +1146,16 @@ class Parse(object):
 
                         if self.log10:
                             ## get best parameters
-                            df['Best Parameter Value'] = math.log10(float(self.cls_instance.parameters.loc[index][param]))
+                            df['Best Parameter Value'] = math.log10(
+                                float(self.cls_instance.parameters.loc[index][param]))
                             df['Best RSS Value'] = math.log10(float(self.rss_value))
                             ## This is the old version::
                             # CL[index] = math.log10(CL[index])
-                            print(('index', index, CL))
                             CL[index] = math.log10(CL[index])
                         else:
                             df['Best Parameter Value'] = float(self.cls_instance.parameters.loc[index][param])
                             df['Best RSS Value'] = float(self.rss_value)
                     else:
-                    # print self.cls_instance.parameters
                         if self.log10:
                             df['Best Parameter Value'] = math.log10(float(self.cls_instance.parameters[index][param]))
                             df['Best RSS Value'] = math.log10(float(self.cls_instance.parameters[index]['RSS']))
@@ -1141,7 +1166,6 @@ class Parse(object):
                             df['Best RSS Value'] = float(self.cls_instance.parameters[index]['RSS'])
 
                     ## end of patch
-                    # print(CL)
                     ## with index works with from file but not from current_parameters
                     df['Confidence Level'] = CL[index]
                     # df['Confidence Level'] = CL[param]
@@ -1183,6 +1207,7 @@ class PlotTimeCourse(_Viz):
     Returns:
 
     """
+
     def __init__(self, cls, **kwargs):
         """
 
@@ -1195,7 +1220,7 @@ class PlotTimeCourse(_Viz):
         self.cls = cls
         self.kwargs = kwargs
 
-        #TODO implement `separate` keyword as `share` insteady
+        # TODO implement `separate` keyword as `share` insteady
 
         self.default_properties = {
             'x': 'time',
@@ -1223,8 +1248,8 @@ class PlotTimeCourse(_Viz):
         }
         self.default_properties.update(self.plot_kwargs())
         for i in list(kwargs.keys()):
-            assert i in list(self.default_properties.keys()),'{} is not a keyword ' \
-                                                       'argument for PlotTimeCourse'.format(i)
+            assert i in list(self.default_properties.keys()), '{} is not a keyword ' \
+                                                              'argument for PlotTimeCourse'.format(i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
         self.default_properties.update(self.plot_kwargs())
@@ -1307,7 +1332,6 @@ class PlotTimeCourse(_Viz):
         if isinstance(self.y, str):
             self.y = [self.y]
 
-
         for i in self.y:
             if i not in list(self.data.keys()):
                 raise errors.InputError('{} not in {}'.format(i, list(self.data.keys())))
@@ -1344,7 +1368,6 @@ class PlotTimeCourse(_Viz):
 
             if self.despine:
                 seaborn.despine(fig=fig, top=True, right=True)
-
 
             if self.savefig:
                 dirs = self.create_directory(self.results_directory)
@@ -1563,7 +1586,6 @@ class PlotTimeCourseEnsemble(_Viz):
 
             self.experiment_files = sorted(self.experiment_files)
 
-
     @property
     def parse_experimental_files(self):
         """:return:"""
@@ -1601,7 +1623,7 @@ class PlotTimeCourseEnsemble(_Viz):
                         raise ValueError('Empty parameter set. ')
 
                     else:
-                        df_dct[exp_files[i]+str(j)] = df_list[j]
+                        df_dct[exp_files[i] + str(j)] = df_list[j]
             else:
                 df_dct[exp_files[i]] = df
         return df_dct
@@ -1622,7 +1644,7 @@ class PlotTimeCourseEnsemble(_Viz):
         if not time_marker:
             raise errors.InputError('Column in data file called \'time\' or \'Time\' not '
                                     ' detected. Please check your experiment file. The first '
-                                    'column should be labelled Time for time course.' )
+                                    'column should be labelled Time for time course.')
         times = OrderedDict()
         for i in d:
             times[i] = {}
@@ -1652,7 +1674,6 @@ class PlotTimeCourseEnsemble(_Viz):
 
                     val = list(set(self.experimental_data[i][j]))
                     if len(val) is not 1:
-
                         raise ValueError('Independant values should be unique in a single data column, '
                                          'i.e. the column should be a single number. '
                                          'Found "{}" distinct numbers. Please amend input data file'.format(len(val)))
@@ -1675,7 +1696,6 @@ class PlotTimeCourseEnsemble(_Viz):
             ## indep_vars now contains a list of indep vars in the file
             ## I need to change all of the independent values per file at once
             indep_vars = {i[:-6]: v for i, v in list(indep_vars.items())}
-
 
             I = model.InsertParameters(self.cls.model, parameter_dict=indep_vars, inplace=True)
             d[exp_file] = OrderedDict()
@@ -1712,7 +1732,6 @@ class PlotTimeCourseEnsemble(_Viz):
             obs += list(self.experimental_data[i].keys())
         return sorted(list(set([i for i in obs if str(i).lower() != 'time'])))
 
-
     def plot_per_observable(self):
         """Plot observables with _experiments on same graph.
         i.e. variable x in treated and control conditions
@@ -1734,7 +1753,7 @@ class PlotTimeCourseEnsemble(_Viz):
                 raise errors.InputError('{} not in your data set. {}'.format(param, sorted(self.ensemble_data.keys())))
 
         # data = {i.reset_index(level=1, drop=True) for i in self.ensemble_data}
-        data = self.ensemble_data[sorted(self.ensemble_data.keys())]#.reset_index()
+        data = self.ensemble_data[sorted(self.ensemble_data.keys())]  # .reset_index()
         ## remove the existing time column so we can get it back again by resetting index
         data = data.drop('Time', axis=1)
         data = data.reset_index(level=[1, 2])
@@ -1765,10 +1784,6 @@ class PlotTimeCourseEnsemble(_Viz):
                 for exp in sorted(self.experimental_data):
                     df = self.experimental_data[exp]
                     exp = os.path.split(exp)[1][:-4]
-                    # print('experiment', exp)
-                    # print('parameter', parameter)
-                    # print('df.kays()', df.keys())
-                    # print(parameter in list(df.keys()))
                     if parameter in list(df.keys()):
                         if df.columns[0] == 'time':
                             df = df.rename(columns={'time': 'Time'})
@@ -1790,7 +1805,6 @@ class PlotTimeCourseEnsemble(_Viz):
                     if self.legend_labels is not None:
                         handle, labels = ax1.get_legend_handles_labels()
                         new_labels = []
-                        print(labels)
                         for lab in labels:
                             if lab in self.legend_labels:
                                 new_labels.append(self.legend_labels[lab])
@@ -1812,7 +1826,7 @@ class PlotTimeCourseEnsemble(_Viz):
 
             if self.ylabel is None:
                 plt.ylabel('{}/{}'.format(self.cls.model.quantity_unit,
-                                          self.cls.model.volume_unit)+'$^{-1}$')
+                                          self.cls.model.volume_unit) + '$^{-1}$')
 
             else:
                 plt.ylabel(self.ylabel)
@@ -1838,9 +1852,9 @@ class PlotTimeCourseEnsemble(_Viz):
                 plt.show()
 
 
-
 class PlotScan(_Viz):
     """TODO: Create visualization facilities for parameter scans."""
+
     def __init__(self, cls, **kwargs):
         self.cls = cls
         self.kwargs = kwargs
@@ -1876,7 +1890,6 @@ class PlotScan(_Viz):
 
         self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
 
-
     def __str__(self):
         """
 
@@ -1887,6 +1900,7 @@ class PlotScan(_Viz):
             self.separate, self.savefig,
             self.results_directory
         )
+
 
 class PlotParameterEstimation(_Viz, PlotKwargs):
     """Visualize parameter estimation runs against a single
@@ -1908,6 +1922,7 @@ class PlotParameterEstimation(_Viz, PlotKwargs):
     Returns:
 
     """
+
     def __init__(self, cls, **kwargs):
         """
         :param cls:
@@ -1921,7 +1936,8 @@ class PlotParameterEstimation(_Viz, PlotKwargs):
         self.plot_kwargs = self.plot_kwargs()
 
         ## defaults to metabolites andglobal quantities with assignments
-        default_y = [i.name for i in self.cls.model.metabolites] + [i.name for i in self.cls.model.global_quantities if i.simulation_type == 'Assignment']
+        default_y = [i.name for i in self.cls.model.metabolites] + [i.name for i in self.cls.model.global_quantities if
+                                                                    i.simulation_type == 'Assignment']
         self.default_properties = {
             'y': default_y,
             'savefig': False,
@@ -1940,7 +1956,8 @@ class PlotParameterEstimation(_Viz, PlotKwargs):
         }
         self.default_properties.update(self.plot_kwargs)
         for i in list(kwargs.keys()):
-            assert i in list(self.default_properties.keys()),'{} is not a keyword argument for "PlotParameterEstimation"'.format(i)
+            assert i in list(
+                self.default_properties.keys()), '{} is not a keyword argument for "PlotParameterEstimation"'.format(i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
         self.default_properties.update(self.plot_kwargs)
@@ -1949,7 +1966,6 @@ class PlotParameterEstimation(_Viz, PlotKwargs):
 
         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
 
-
         self.data = self.parse(self.cls, self.log10, copasi_file=self.copasi_file)
 
         self.exp_data = self.read_experimental_data()
@@ -1957,7 +1973,6 @@ class PlotParameterEstimation(_Viz, PlotKwargs):
 
         self.cls.model = self.update_parameters()
         self.plot()
-
 
     def __str__(self):
         """
@@ -1971,7 +1986,6 @@ class PlotParameterEstimation(_Viz, PlotKwargs):
 
     def _do_checks(self):
         """ """
-
 
         if not isinstance(self.cls, tasks.ParameterEstimation):
             raise errors.InputError('first argument should be ParameterEstimation calss. Got {}'.format(type(self.cls)))
@@ -2065,10 +2079,9 @@ class PlotParameterEstimation(_Viz, PlotKwargs):
                 ## Insert independent vars
                 model.InsertParameters(self.cls.model, parameter_dict=indep_dct, inplace=True)
 
-
             TC = tasks.TimeCourse(
                 self.cls.model, end=time_dct[exp], step_size=step_size,
-                intervals=time_dct[exp]/step_size,
+                intervals=time_dct[exp] / step_size,
             )
             d[exp] = self.parse(TC, self.log10, copasi_file=self.copasi_file)
 
@@ -2087,7 +2100,6 @@ class PlotParameterEstimation(_Viz, PlotKwargs):
         newy = []
         for y in self.y:
             if y in list(list(self.read_experimental_data().values())[0].keys()):
-                # print '"{0}" not in "{1}". "{0}" is being ignored'.format(y, self.read_experimental_data().values()[0].keys())
                 newy.append(y)
 
         self.y = newy
@@ -2146,6 +2158,7 @@ class Boxplots(_Viz, PlotKwargs):
     Returns:
 
     """
+
     def __init__(self, cls, **kwargs):
         """
 
@@ -2159,7 +2172,6 @@ class Boxplots(_Viz, PlotKwargs):
         self.cls = cls
         self.kwargs = kwargs
         self.plot_kwargs = self.plot_kwargs()
-
 
         self.default_properties = {'log10': False,
                                    'truncate_mode': 'percent',
@@ -2182,7 +2194,7 @@ class Boxplots(_Viz, PlotKwargs):
                                    }
         self.default_properties.update(self.plot_kwargs)
         for i in list(kwargs.keys()):
-            assert i in list(self.default_properties.keys()),'{} is not a keyword argument for Boxplot'.format(i)
+            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for Boxplot'.format(i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
         self.default_properties.update(self.plot_kwargs)
@@ -2195,6 +2207,8 @@ class Boxplots(_Viz, PlotKwargs):
 
         self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
         self.divide_data()
+        if self.savefig:
+            self.results_directory = self.create_directory()
         self.plot()
 
     def _do_checks(self):
@@ -2203,15 +2217,20 @@ class Boxplots(_Viz, PlotKwargs):
 
     def create_directory(self):
         """:return:"""
-        if self.results_directory is None:
-            if type(self.cls) == Parse:
-                self.results_directory = os.path.join(os.path.dirname(
-                    self.cls.copasi_file), 'Boxplots')
-            else:
-                self.results_directory = os.path.join(self.cls.model.root, 'Boxplots')
-            if os.path.isdir(self.results_directory) != True:
-                os.makedirs(self.results_directory)
-        return self.results_directory
+        dct = {}
+        for model_name in self.data:
+            if self.results_directory is None:
+                if type(self.cls) == Parse:
+                    dct[model_name] = os.path.join(
+                        os.path.dirname(
+                            self.cls.config.models[model_name].model.copasi_file
+                        ), 'Boxplots')
+                else:
+                    dct[model_name] = os.path.join(
+                        self.cls.models[model_name].model.root, 'Boxplots')
+                if not os.path.isdir(dct[model_name]):
+                    os.makedirs(dct[model_name])
+        return dct
 
     def plot(self):
         """Plot multiple parameter estimation data as boxplot
@@ -2222,23 +2241,23 @@ class Boxplots(_Viz, PlotKwargs):
         Returns:
 
         """
-
-        labels = self.divide_data()
-        for label_set in range(len(labels)):
-            fig = plt.figure()#
-            data = self.data[labels[label_set]]
-            seaborn.boxplot(data=data )
-            plt.xticks(rotation=self.xtick_rotation)
-            if self.despine:
-                seaborn.despine(fig=fig, top=True, right=True)
-            if self.title is not None:
-                plt.title(self.title+'(n={})'.format(data.shape[0]))
-            plt.ylabel(self.ylabel)
-            if self.savefig:
-                self.results_directory = self.create_directory()
-                fle = os.path.join(self.results_directory,
-                                   '{}{}.{}'.format(self.filename, label_set, self.ext))
-                plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
+        for model_name in self.data:
+            data = self.data[model_name]
+            labels = self.divide_data()[model_name]
+            for label_set in range(len(labels)):
+                fig = plt.figure()  #
+                plot_data = data[labels[label_set]]
+                seaborn.boxplot(data=plot_data)
+                plt.xticks(rotation=self.xtick_rotation)
+                if self.despine:
+                    seaborn.despine(fig=fig, top=True, right=True)
+                if self.title is not None:
+                    plt.title(self.title + '(n={})'.format(data.shape[0]))
+                plt.ylabel(self.ylabel)
+                if self.savefig:
+                    fle = os.path.join(self.results_directory[model_name],
+                                       '{}{}.{}'.format(self.filename, label_set, self.ext))
+                    plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
         if self.show:
             plt.show()
 
@@ -2251,18 +2270,22 @@ class Boxplots(_Viz, PlotKwargs):
         Returns:
 
         """
-        n_vars = len(list(self.data.keys()))
-        n_per_plot = self.num_per_plot
-#        assert n_per_plot<n_vars,'number of variables per plot must be smaller than the number of variables'
-        int_division = n_vars//n_per_plot
-        remainder = n_vars-(n_per_plot*int_division)
+        dct = {}
+        for model_name in self.data:
+            data = self.data[model_name]
+            n_vars = len(list(data.keys()))
+            n_per_plot = self.num_per_plot
+            #        assert n_per_plot<n_vars,'number of variables per plot must be smaller than the number of variables'
+            int_division = n_vars // n_per_plot
+            remainder = n_vars - (n_per_plot * int_division)
 
-        l = []
-        for i in range(int_division):
-            l.append(list(list(self.data.keys())[i*n_per_plot:(i+1)*n_per_plot]))
-        if remainder is not 0:
-            l.append(list(list(self.data.keys())[-remainder:]))
-        return l
+            l = []
+            for i in range(int_division):
+                l.append(list(list(data.keys())[i * n_per_plot:(i + 1) * n_per_plot]))
+            if remainder is not 0:
+                l.append(list(list(data.keys())[-remainder:]))
+            dct[model_name] = l
+        return dct
 
 
 class LikelihoodRanks(_Viz, PlotKwargs):
@@ -2290,7 +2313,6 @@ class LikelihoodRanks(_Viz, PlotKwargs):
         self.kwargs = kwargs
         # self.plot_kwargs = self.plot_kwargs()
 
-
         self.default_properties = {'log10': False,
                                    'truncate_mode': 'percent',
                                    'theta': 100,
@@ -2304,7 +2326,7 @@ class LikelihoodRanks(_Viz, PlotKwargs):
                                    'filename': 'LikelihoodRanks',
                                    'despine': True,
                                    'ext': 'png',
-                                   'line_transparency': 1, ##passed to matplotlib alpha parameter
+                                   'line_transparency': 1,  ##passed to matplotlib alpha parameter
                                    'marker_transparency': 0.7,
                                    'color': '#004ADF',
                                    'markercolor': '#FF9709',
@@ -2318,7 +2340,8 @@ class LikelihoodRanks(_Viz, PlotKwargs):
 
         # self.default_properties.update(self.plot_kwargs)
         for i in list(kwargs.keys()):
-            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for RssVsIterations'.format(i)
+            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for RssVsIterations'.format(
+                i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
         # self.default_properties.update(self.plot_kwargs)
@@ -2339,9 +2362,6 @@ class LikelihoodRanks(_Viz, PlotKwargs):
         else:
             self.ylabel = 'RSS'
             self.xlabel = 'Rank of Best Fit'
-
-
-
 
     def create_directory(self):
         """create a directory for the results
@@ -2374,7 +2394,7 @@ class LikelihoodRanks(_Viz, PlotKwargs):
         Returns:
 
         """
-            
+
         fig = plt.figure()
         if self.log10:
             x = numpy.log10(list(range(self.data['RSS'].shape[0])))
@@ -2395,7 +2415,7 @@ class LikelihoodRanks(_Viz, PlotKwargs):
 
         plt.xticks(rotation=self.xtick_rotation)
         if self.title is not None:
-            plt.title(self.title+'(n={})'.format(self.data.shape[0]))
+            plt.title(self.title + '(n={})'.format(self.data.shape[0]))
         plt.ylabel(self.ylabel)
         plt.xlabel('Rank of Best Fit')
         if self.despine:
@@ -2443,32 +2463,31 @@ class Pca(_Viz, PlotKwargs):
         self.kwargs = kwargs
         self.plot_kwargs = self.plot_kwargs()
 
-        self.default_properties={'sep': '\t',
-                                 'truncate_mode': 'percent',
-                                 'theta': 100,
-                                 'log10': False,
-                                 'ylabel': None,
-                                 'xlabel': None,
-                                 'title': None,
-                                 'savefig': False,
-                                 'results_directory': None,
-                                 'dpi': 400,
-                                 'n_components': 2,
-                                 'by': 'iterations', ##iterations or parameters
-                                 'legend_position': None, ##Horizontal, verticle, line spacing
-                                 'legend_fontsize': 25,
-                                 'cmap': 'viridis',
-                                 'annotate': False,
-                                 'annotation_fontsize': 25,
-                                 'show': False,
-                                 'despine': True,
-                                 'ext': 'png',
-                                 'context': 'talk',
-                                 'font_scale': 1.5,
-                                 'rc': None,
-                                 'copasi_file': None,
-                                 }
-
+        self.default_properties = {'sep': '\t',
+                                   'truncate_mode': 'percent',
+                                   'theta': 100,
+                                   'log10': False,
+                                   'ylabel': None,
+                                   'xlabel': None,
+                                   'title': None,
+                                   'savefig': False,
+                                   'results_directory': None,
+                                   'dpi': 400,
+                                   'n_components': 2,
+                                   'by': 'iterations',  ##iterations or parameters
+                                   'legend_position': None,  ##Horizontal, verticle, line spacing
+                                   'legend_fontsize': 25,
+                                   'cmap': 'viridis',
+                                   'annotate': False,
+                                   'annotation_fontsize': 25,
+                                   'show': False,
+                                   'despine': True,
+                                   'ext': 'png',
+                                   'context': 'talk',
+                                   'font_scale': 1.5,
+                                   'rc': None,
+                                   'copasi_file': None,
+                                   }
 
         self.default_properties.update(self.plot_kwargs)
         for i in list(kwargs.keys()):
@@ -2483,7 +2502,6 @@ class Pca(_Viz, PlotKwargs):
         self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
         self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
         self.pca()
-
 
     def create_directory(self):
         """create a directory for the results
@@ -2500,7 +2518,7 @@ class Pca(_Viz, PlotKwargs):
                                                       'PCA')
             else:
                 self.results_directory = os.path.join(self.cls.model.root,
-                                                  'PCA')
+                                                      'PCA')
 
         if not os.path.isdir(self.results_directory):
             os.makedirs(self.results_directory)
@@ -2521,49 +2539,47 @@ class Pca(_Viz, PlotKwargs):
         #     elif self.by is 'iterations':
         #         title = 'PCA by Iterations (n={})'.format(len(labels))
 
-        if self.by not in ['parameters','iterations']:
+        if self.by not in ['parameters', 'iterations']:
             raise errors.InputError('{} not in {}'.format(
-                self.by, ['parameters','iterations']))
+                self.by, ['parameters', 'iterations']))
 
         # if self.results_directory is None:
         #     self.results_directory = self.create_directory()
 
-        if self.ylabel==None:
-            if self.log10==False:
+        if self.ylabel == None:
+            if self.log10 == False:
                 self.ylabel = 'PC2'
-            elif self.log10==True:
+            elif self.log10 == True:
                 self.ylabel = 'log10 PC2'
             else:
                 raise errors.SomethingWentHorriblyWrongError('{} not in {}'.format(
                     self.ylabel, [True, False]))
-        
-        if self.xlabel==None:
-            if self.log10==False:
+
+        if self.xlabel == None:
+            if self.log10 == False:
                 self.xlabel = 'PC1'
-            elif self.log10==True:
+            elif self.log10 == True:
                 self.xlabel = 'log10 PC1'
             else:
                 raise errors.SomethingWentHorriblyWrongError(
                     '{} not in {}'.format(self.ylabel, [True, False]))
- 
-        
+
         LOG.info('plotting PCA {}'.format(self.by))
-        
+
         if self.by == 'parameters':
             self.annotate = True
-            if self.legend_position==None:
+            if self.legend_position == None:
                 LOG.critical(
                     'When data reduction is by \'parameters\' you should specify an argument to legend_position. i.e. legend_position=(10,10,1.5) for horizontal, vertical and linespacing')
 
-
         if self.legend_position is None:
-            self.legend_position = (1, 1, 0.5) ##horizontal, verticle, linespacing
+            self.legend_position = (1, 1, 0.5)  ##horizontal, verticle, linespacing
 
     def pca(self):
         """ """
         pca = PCA(n_components=self.n_components)
         rss = self.data.RSS
-        self.data = self.data.drop('RSS',axis=1)
+        self.data = self.data.drop('RSS', axis=1)
         fig, ax = plt.subplots()
         if self.by == 'parameters':
             projected = pca.fit(self.data.transpose()).transform(self.data.transpose())
@@ -2583,21 +2599,21 @@ class Pca(_Viz, PlotKwargs):
 
         if self.despine:
             seaborn.despine(fig=fig, top=True, right=True)
-            
+
         plt.ylabel(self.ylabel)
         plt.xlabel(self.xlabel)
         plt.title(self.title)
-        #TODO connect copasi with the python community
-        #TODO mjor selling point for pycoools.
-        #TODO interafce with pysces, pyDStools and sloppycell
+        # TODO connect copasi with the python community
+        # TODO mjor selling point for pycoools.
+        # TODO interafce with pysces, pyDStools and sloppycell
         for i, txt in enumerate(labels):
             if self.annotate:
                 ax.annotate(str(i), (projected[0][i], projected[1][i]),
                             fontsize=self.annotation_fontsize)
             if self.by == 'parameters':
                 ax.text(self.legend_position[0],
-                        self.legend_position[1]-i*self.legend_position[2],
-                    '{}: {}'.format(i,txt),fontsize=self.legend_fontsize)
+                        self.legend_position[1] - i * self.legend_position[2],
+                        '{}: {}'.format(i, txt), fontsize=self.legend_fontsize)
         if self.savefig:
             self.create_directory()
             fle = os.path.join(self.results_directory, 'Pca_by_{}.{}'.format(self.by, self.ext))
@@ -2605,6 +2621,7 @@ class Pca(_Viz, PlotKwargs):
 
         if self.show:
             plt.show()
+
 
 class Histograms(_Viz, PlotKwargs):
     """Plot a Histograms for multi parameter estimation data.
@@ -2636,7 +2653,7 @@ class Histograms(_Viz, PlotKwargs):
                                    'theta': 100,
                                    'xtick_rotation': 'horizontal',
                                    'ylabel': 'Frequency',
-                                   'title': True, ##boolean here as title is inferred from parameter
+                                   'title': True,  ##boolean here as title is inferred from parameter
                                    'savefig': False,
                                    'results_directory': None,
                                    'dpi': 400,
@@ -2672,7 +2689,6 @@ class Histograms(_Viz, PlotKwargs):
         self.plot()
         # self.coloured_plot()
 
-
     def _do_checks(self):
         """:return:"""
         if self.results_directory is None:
@@ -2680,7 +2696,6 @@ class Histograms(_Viz, PlotKwargs):
                 self.results_directory = os.path.join(os.path.dirname(self.cls.copasi_file), 'Histograms')
             else:
                 self.results_directory = os.path.join(self.cls.model.root, 'Histograms')
-
 
     def plot(self):
         """ """
@@ -2690,16 +2705,16 @@ class Histograms(_Viz, PlotKwargs):
                 self.data[parameter], color=self.color, kde=self.kde, rug=self.rug,
                 hist=self.hist,
                 bins=self.bins
-                )
+            )
             if self.log10:
                 plt.ylabel("{}".format(self.ylabel))
-                plt.xlabel("log$_{10}$"+"[{}]".format(parameter))
+                plt.xlabel("log$_{10}$" + "[{}]".format(parameter))
             else:
                 plt.ylabel(self.ylabel)
                 plt.xlabel(parameter)
             if self.title is True:
                 plt.title('{},n={}'.format(parameter, self.data[parameter].shape[0]),
-                      fontsize=self.title_fontsize)
+                          fontsize=self.title_fontsize)
 
             if self.despine:
                 seaborn.despine(fig=fig, top=True, right=True)
@@ -2707,7 +2722,7 @@ class Histograms(_Viz, PlotKwargs):
             if self.savefig:
                 self.create_directory(self.results_directory)
                 fname = os.path.join(self.results_directory,
-                                     misc.RemoveNonAscii(parameter).filter+'.{}'.format(self.ext))
+                                     misc.RemoveNonAscii(parameter).filter + '.{}'.format(self.ext))
                 plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
                 LOG.info('plot save to "{}"'.format(fname))
 
@@ -2721,21 +2736,18 @@ class Histograms(_Viz, PlotKwargs):
         num_bins = 10
         width = self.data[parameter].max() - self.data[parameter].min()
         iqr = scipy.stats.iqr(self.data[parameter])
-        bins_size = 2 * (iqr/(self.data[parameter].shape[0]**1.0/3.0))
+        bins_size = 2 * (iqr / (self.data[parameter].shape[0] ** 1.0 / 3.0))
 
         bins = numpy.arange(self.data[parameter].min(), self.data[parameter].max(),
-                            bins_size)#width/num_bins
+                            bins_size)  # width/num_bins
         ## calculate the density of RSS
 
         groups = self.data.groupby([pandas.cut(self.data[parameter], bins), 'RSS'])
         data = groups.size().reset_index([parameter, 'RSS'])
         data2 = data.groupby(parameter)[0].sum()
-        # print data2
         data3 = data.groupby(parameter)['RSS'].mean()
-        # print data3
         data5 = pandas.concat([data2, data3], axis=1)
-        data5['Density'] = data5[0]/(numpy.sum(data5[0].fillna(0).values * numpy.diff(bins)))
-
+        data5['Density'] = data5[0] / (numpy.sum(data5[0].fillna(0).values * numpy.diff(bins)))
 
         ## colours
         norm = plt.Normalize(numpy.nanmin(data5['RSS'].values),
@@ -2754,7 +2766,6 @@ class Histograms(_Viz, PlotKwargs):
         ax.set_ylabel('Density')
         ax.set_xlabel(parameter)
         plt.show()
-
 
 
 class Scatters(_Viz, PlotKwargs):
@@ -2808,11 +2819,11 @@ class Scatters(_Viz, PlotKwargs):
             'results_directory': None,
             'dpi': 400,
             'title_fontsize': 35,
-            'title': True,  #Either True or None/False
+            'title': True,  # Either True or None/False
             'show': False,
             'ext': 'png',
             'despine': True,
-            'colorbar_pad': 0.2,   #padding for color bar. Dist between bar and axes
+            'colorbar_pad': 0.2,  # padding for color bar. Dist between bar and axes
             'context': 'talk',
             'font_scale': 1.5,
             'rc': None,
@@ -2829,7 +2840,6 @@ class Scatters(_Viz, PlotKwargs):
         self._do_checks()
         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
 
-
         self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
         self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
         self.plot()
@@ -2842,8 +2852,6 @@ class Scatters(_Viz, PlotKwargs):
         if self.results_directory is None:
             self.results_directory = os.path.join(self.cls.model.root, 'Scatters')
 
-
-
     def plot(self):
         """:return:"""
         if self.y is None:
@@ -2854,7 +2862,6 @@ class Scatters(_Viz, PlotKwargs):
 
         if self.x == 'all' or self.x == ['all']:
             self.x = list(self.data.keys())
-
 
         for x_var in self.x:
             if x_var not in sorted(list(self.data.keys())):
@@ -2886,8 +2893,8 @@ class Scatters(_Viz, PlotKwargs):
 
                 if self.log10:
                     cb.set_label('log10 RSS')
-                    plt.xlabel('log$_{10}$'+'[{}]'.format(x_var))
-                    plt.ylabel('log$_{10}$'+'[{}]'.format(y_var))
+                    plt.xlabel('log$_{10}$' + '[{}]'.format(x_var))
+                    plt.ylabel('log$_{10}$' + '[{}]'.format(y_var))
                 else:
                     cb.set_label('RSS')
                     plt.xlabel(x_var)
@@ -2904,6 +2911,7 @@ class Scatters(_Viz, PlotKwargs):
 
         if self.show:
             plt.show()
+
 
 class LinearRegression(_Viz, PlotKwargs):
     """Perform multiple linear regression using
@@ -2967,7 +2975,8 @@ class LinearRegression(_Viz, PlotKwargs):
 
         self.default_properties.update(self.plot_kwargs)
         for i in list(kwargs.keys()):
-            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for LinearRegression'.format(i)
+            assert i in list(
+                self.default_properties.keys()), '{} is not a keyword argument for LinearRegression'.format(i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
         self.default_properties.update(self.plot_kwargs)
@@ -2980,7 +2989,7 @@ class LinearRegression(_Viz, PlotKwargs):
 
         self.scores, self.coef = self.compute_coefficients()
         self.coef = self.coef.fillna(value=0)
-        
+
         self.plot_rss()
         self.plot_scores()
         self.plot_coef()
@@ -2998,14 +3007,11 @@ class LinearRegression(_Viz, PlotKwargs):
         else:
             self.scores_title = 'Model Fitting Test and Train Scores'
 
-
         if self.coef_title is None:
             if self.log10:
                 self.coef_title = 'Coefficients (Log10)'
             else:
                 self.coef_title = 'Coefficients'
-
-
 
     def compute1coef(self, parameter):
         """Compute coefficients for a single parameter
@@ -3023,12 +3029,12 @@ class LinearRegression(_Viz, PlotKwargs):
 
         try:
             lin_model = self.lin_model(fit_intercept=True, n_alphas=self.n_alphas,
-                    max_iter=self.max_iter)
+                                       max_iter=self.max_iter)
         except TypeError:
             lin_model = self.lin_model(fit_intercept=True)
 
         lin_model.fit(X_train, y_train)
-        df = pandas.DataFrame(lin_model.coef_, index=X.columns, columns=[parameter])#.sort_values(by='Coefficients')
+        df = pandas.DataFrame(lin_model.coef_, index=X.columns, columns=[parameter])  # .sort_values(by='Coefficients')
         df['abs_values'] = numpy.absolute(df[parameter])
         df = df.sort_values(by='abs_values', ascending=False)
         df = df.drop('abs_values', axis=1)
@@ -3040,13 +3046,13 @@ class LinearRegression(_Viz, PlotKwargs):
         """ """
         parameters = list(self.data.columns)
         df_dct = {}
-        score_dct={}
+        score_dct = {}
         for y in parameters:
             score_dct[y], df_dct[y] = self.compute1coef(y)
 
-        df1 = pandas.concat(score_dct,axis=1).transpose().sort_values(by='TestScore',
-                           ascending=False)
-        df2 = pandas.concat(df_dct,axis=1)
+        df1 = pandas.concat(score_dct, axis=1).transpose().sort_values(by='TestScore',
+                                                                       ascending=False)
+        df2 = pandas.concat(df_dct, axis=1)
         return df1, df2
 
     def plot_scores(self):
@@ -3062,7 +3068,6 @@ class LinearRegression(_Viz, PlotKwargs):
             fname = os.path.join(self.results_directory, 'linregress_scores.{}'.format(self.ext))
             plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
 
-
     def plot_rss(self):
         """ """
         fig = plt.figure()
@@ -3074,7 +3079,6 @@ class LinearRegression(_Viz, PlotKwargs):
             self.create_directory(self.results_directory)
             fname = os.path.join(self.results_directory, 'linregress_RSS.{}'.format(self.ext))
             plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
-
 
     def plot_coef(self):
         """:return:"""
@@ -3121,7 +3125,6 @@ class ModelSelectionOld(_Viz):
         self.multi_model_fit = multi_model_fit
         self.number_models = self.get_num_models()
 
-
         self.default_properties = {
             'lin_model': linear_model.LinearRegression,
             'savefig': False,
@@ -3159,7 +3162,8 @@ class ModelSelectionOld(_Viz):
         }
 
         for i in list(kwargs.keys()):
-            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for ModelSelection'.format(i)
+            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for ModelSelection'.format(
+                i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
         self.update_properties(self.default_properties)
@@ -3170,10 +3174,9 @@ class ModelSelectionOld(_Viz):
         self.results_folder_dct = self._get_results_directories()
         self.model_dct = self._get_model_dct()
 
-
         ## code for having default legend labels
-        self.default_model_labels = {os.path.split(i)[1][:-6]: os.path.split(i)[1][:-6] for i in [j.copasi_file for j in list(self.model_dct.values())]}
-
+        self.default_model_labels = {os.path.split(i)[1][:-6]: os.path.split(i)[1][:-6] for i in
+                                     [j.copasi_file for j in list(self.model_dct.values())]}
 
         if self.model_labels is not None:
             if type(self.model_labels) is not dict:
@@ -3192,13 +3195,10 @@ class ModelSelectionOld(_Viz):
         self.model_selection_data = self.calculate_model_selection_criteria()
         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
 
-
-
         # self.boxplot()
         # self.histogram()
         self.violin()
         self.to_csv()
-
 
     def __iter__(self):
         for MPE in self.multi_model_fit:
@@ -3230,7 +3230,6 @@ class ModelSelectionOld(_Viz):
         if self.results_directory is None:
             self.results_directory = self.multi_model_fit.project_dir
 
-
         if self.filename is None:
             save_dir = os.path.join(self.results_directory, 'ModelSelectionGraphs')
             self.filename = os.path.join(save_dir, 'ModelSelectionCriteria.csv')
@@ -3260,7 +3259,7 @@ class ModelSelectionOld(_Viz):
 
         """
         if filename is None:
-            filename = self.filename[:-4]+'.xlsx'
+            filename = self.filename[:-4] + '.xlsx'
         self.model_selection_data.to_excel(filename)
 
     def to_csv(self, filename=None):
@@ -3287,7 +3286,7 @@ class ModelSelectionOld(_Viz):
 
         """
         if filename is None:
-            filename = os.path.splitext(self.filename)[0]+'.pickle'
+            filename = os.path.splitext(self.filename)[0] + '.pickle'
 
         LOG.info('model selection pickle saved to {}'.format(filename))
         self.model_selection_data.to_pickle(filename)
@@ -3304,7 +3303,6 @@ class ModelSelectionOld(_Viz):
         """
         dct = {}
         for MPE in self.multi_model_fit:
-
             ## get the first cps file configured for eastimation in each MMF obj
             cps_1 = glob.glob(
                 os.path.join(
@@ -3320,34 +3318,34 @@ class ModelSelectionOld(_Viz):
             #     self.pickle = os.path.splitext(self.filename)[0]+'.pickle'
             return pandas.read_pickle(self.pickle)
         else:
-            dct={}
+            dct = {}
             for cps, MPE in list(self.multi_model_fit.items()):
-                cps_0 = cps[:-4]+'_0.cps'
+                cps_0 = cps[:-4] + '_0.cps'
                 dct[cps_0] = Parse(MPE.results_directory, copasi_file=cps_0, log10=self.log10)
             return dct
 
     def _get_number_estimated_model_parameters(self):
         """ """
-        k_dct={}
+        k_dct = {}
         for mod in list(self.model_dct.values()):
             k_dct[mod.copasi_file] = len(mod.fit_item_order)
         return k_dct
 
     def _get_n(self):
         """get number of observed data points for AIC calculation"""
-        n={}
+        n = {}
         for exp in self.multi_model_fit.exp_files:
-            data=pandas.read_csv(exp,sep='\t')
-            l=[]
-            for key in list(data.keys()) :
-                if key.lower()!='time':
-                    if key[-6:]!='_indep':
+            data = pandas.read_csv(exp, sep='\t')
+            l = []
+            for key in list(data.keys()):
+                if key.lower() != 'time':
+                    if key[-6:] != '_indep':
                         l.append(int(data[key].shape[0]))
-            n[exp]=sum(l)
-        n=sum(n.values())
+            n[exp] = sum(l)
+        n = sum(n.values())
         return n
 
-    def calculate1AIC(self,RSS,K,n):
+    def calculate1AIC(self, RSS, K, n):
         """Calculate the corrected AIC:
         
             AICc = -2*ln(RSS/n) + 2*K + (2*K*(K+1))/(n-K-1)
@@ -3373,10 +3371,9 @@ class ModelSelectionOld(_Viz):
         Returns:
 
         """
-        return n*numpy.log((RSS/n)) + 2*K + (2*K*(K+1))/(n-K-1)
+        return n * numpy.log((RSS / n)) + 2 * K + (2 * K * (K + 1)) / (n - K - 1)
 
-
-    def calculate1BIC(self,RSS,K,n):
+    def calculate1BIC(self, RSS, K, n):
         """Calculate the bayesian information criteria
             BIC = -2*ln(likelihood) + k*ln(n)
         
@@ -3392,7 +3389,7 @@ class ModelSelectionOld(_Viz):
         Returns:
 
         """
-        return  (n*numpy.log(RSS/n) ) + K*numpy.log(n)
+        return (n * numpy.log(RSS / n)) + K * numpy.log(n)
 
     def calculate_model_selection_criteria(self):
         """Calculate AIC corrected and BIC
@@ -3410,7 +3407,7 @@ class ModelSelectionOld(_Viz):
             cps_key = self.model_dct[keys[model_num]].copasi_file
 
             k = self.number_model_parameters[cps_key]
-            n = self.number_observations #constant throughout analysis
+            n = self.number_observations  # constant throughout analysis
             rss = self.data_dct[cps_key].data.RSS
             aic_dct = {}
             bic_dct = {}
@@ -3459,10 +3456,8 @@ class ModelSelectionOld(_Viz):
                 plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
                 LOG.info('boxplot saved to : "{}"'.format(fname))
 
-
     def histogram(self):
         """:return:"""
-
 
         seaborn.set_context(context='poster')
         data = self.model_selection_data
@@ -3556,19 +3551,19 @@ class ModelSelectionOld(_Viz):
         Returns:
 
         """
-        nums = numpy.arange(0,100,0.1)
-        table=list(zip(nums, scipy.stats.chi2.cdf(nums,self.kwargs.get('DOF')) ))
+        nums = numpy.arange(0, 100, 0.1)
+        table = list(zip(nums, scipy.stats.chi2.cdf(nums, self.kwargs.get('DOF'))))
         for i in table:
-            if i[1]<=alpha:
-                chi2_df_alpha=i[0]
+            if i[1] <= alpha:
+                chi2_df_alpha = i[0]
         return chi2_df_alpha
 
     def get_chi2_alpha(self):
         """ """
-        dct={}
-        alphas=numpy.arange(0,1,0.01)
+        dct = {}
+        alphas = numpy.arange(0, 1, 0.01)
         for i in alphas:
-            dct[round(i,3)]=self.chi2_lookup_table(i)
+            dct[round(i, 3)] = self.chi2_lookup_table(i)
         return dct[0.05]
 
     def compare_sim_vs_exp(self):
@@ -3576,18 +3571,17 @@ class ModelSelectionOld(_Viz):
         LOG.info('Visually comparing simulated Versus Experiemntal data.')
 
         for cps, res in list(self.multi_model_fit.results_folder_dct.items()):
-            tasks.InsertParameters(cps,parameter_path=res, index=0)
-            PE=tasks.ParameterEstimation(cps,self.multi_model_fit.exp_files,
-                                       randomize_start_values=False,
-                                       method='CurrentSolutionStatistics',
-                                       plot=True,savefig=True,
-                                       )
+            tasks.InsertParameters(cps, parameter_path=res, index=0)
+            PE = tasks.ParameterEstimation(cps, self.multi_model_fit.exp_files,
+                                           randomize_start_values=False,
+                                           method='CurrentSolutionStatistics',
+                                           plot=True, savefig=True,
+                                           )
             PE.set_up()
             PE.run()
             PE.format_results()
 
-
-    def get_best_parameters(self,filename=None):
+    def get_best_parameters(self, filename=None):
         """
 
         Args:
@@ -3596,19 +3590,17 @@ class ModelSelectionOld(_Viz):
         Returns:
 
         """
-        df=pandas.DataFrame()
+        df = pandas.DataFrame()
         for cps, res in list(self.multi_model_fit.results_folder_dct.items()):
-            df[os.path.split(cps)[1]]= ParsePEData(res).data.iloc[0]
+            df[os.path.split(cps)[1]] = ParsePEData(res).data.iloc[0]
 
-        if filename==None:
+        if filename == None:
             return df
         else:
             df.to_excel(filename)
             return df
 
-
-
-    def compare_model_parameters(self,parameter_list,filename=None):
+    def compare_model_parameters(self, parameter_list, filename=None):
         """Compare all the parameters accross multiple models
         in a bar chart averaging and STD for a parameter accross
         all models.
@@ -3622,15 +3614,15 @@ class ModelSelectionOld(_Viz):
         Returns:
 
         """
-        best_parameters=self.get_best_parameters()
-        data= best_parameters.loc[parameter_list].transpose()
-        f=seaborn.barplot(data=numpy.log10(data))
-        f.set_xticklabels(parameter_list,rotation=90)
-        plt.legend(loc=(1,1))
+        best_parameters = self.get_best_parameters()
+        data = best_parameters.loc[parameter_list].transpose()
+        f = seaborn.barplot(data=numpy.log10(data))
+        f.set_xticklabels(parameter_list, rotation=90)
+        plt.legend(loc=(1, 1))
         plt.title('Barplot Comparing Parameter Estimation Results for specific\nParameters accross all models')
         plt.ylabel('log10 parameter_value,Err=SEM')
-        if filename!=None:
-            plt.savefig(filename,dpi=200,bbox_inches='tight')
+        if filename != None:
+            plt.savefig(filename, dpi=200, bbox_inches='tight')
 
 
 class ModelSelection(_Viz):
@@ -3660,7 +3652,6 @@ class ModelSelection(_Viz):
         self.multi_model_fit = multi_model_fit
         self.number_models = self.get_num_models()
 
-
         self.default_properties = {
             'savefig': False,
             'results_directory': None,
@@ -3687,7 +3678,8 @@ class ModelSelection(_Viz):
         }
 
         for i in list(kwargs.keys()):
-            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for ModelSelection'.format(i)
+            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for ModelSelection'.format(
+                i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
         self.update_properties(self.default_properties)
@@ -3697,7 +3689,6 @@ class ModelSelection(_Viz):
         ## do model selection stuff
         self.results_folder_dct = self._get_results_directories()
         self.model_dct = self._get_model_dct()
-
 
         ## code for having default legend labels
         self.default_model_labels = {i.name: i.name for i in list(self.model_dct.values())}
@@ -3719,13 +3710,10 @@ class ModelSelection(_Viz):
         self.model_selection_data = self.calculate_model_selection_criteria()
         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
 
-
-
         # self.boxplot()
         # self.histogram()
         self.fig = self.violin()
         self.to_csv()
-
 
     def __iter__(self):
         for MPE in self.multi_model_fit:
@@ -3757,7 +3745,6 @@ class ModelSelection(_Viz):
         if self.results_directory is None:
             self.results_directory = self.multi_model_fit.project_dir
 
-
         if self.filename is None:
             save_dir = os.path.join(self.results_directory, 'ModelSelectionGraphs')
             self.filename = os.path.join(save_dir, 'ModelSelectionCriteria.csv')
@@ -3787,7 +3774,7 @@ class ModelSelection(_Viz):
 
         """
         if filename is None:
-            filename = self.filename[:-4]+'.xlsx'
+            filename = self.filename[:-4] + '.xlsx'
         self.model_selection_data.to_excel(filename)
 
     def to_csv(self, filename=None):
@@ -3814,7 +3801,7 @@ class ModelSelection(_Viz):
 
         """
         if filename is None:
-            filename = os.path.splitext(self.filename)[0]+'.pickle'
+            filename = os.path.splitext(self.filename)[0] + '.pickle'
 
         LOG.info('model selection pickle saved to {}'.format(filename))
         self.model_selection_data.to_pickle(filename)
@@ -3831,7 +3818,6 @@ class ModelSelection(_Viz):
         """
         dct = {}
         for MPE in self.multi_model_fit:
-
             ## get the first cps file configured for eastimation in each MMF obj
             cps_1 = sorted(glob.glob(
                 os.path.join(
@@ -3847,34 +3833,34 @@ class ModelSelection(_Viz):
             #     self.pickle = os.path.splitext(self.filename)[0]+'.pickle'
             return pandas.read_pickle(self.pickle)
         else:
-            dct={}
+            dct = {}
             for cps, MPE in list(self.multi_model_fit.items()):
-                cps_0 = cps[:-4]+'.cps'
+                cps_0 = cps[:-4] + '.cps'
                 dct[cps_0] = Parse(MPE.results_directory, copasi_file=cps_0, log10=self.log10)
             return dct
 
     def _get_number_estimated_model_parameters(self):
         """ """
-        k_dct={}
+        k_dct = {}
         for mod in list(self.model_dct.values()):
             k_dct[mod.copasi_file] = len(mod.fit_item_order)
         return k_dct
 
     def _get_n(self):
         """get number of observed data points for AIC calculation"""
-        n={}
+        n = {}
         for exp in self.multi_model_fit.exp_files:
-            data=pandas.read_csv(exp,sep='\t')
-            l=[]
-            for key in list(data.keys()) :
-                if key.lower()!='time':
-                    if key[-6:]!='_indep':
+            data = pandas.read_csv(exp, sep='\t')
+            l = []
+            for key in list(data.keys()):
+                if key.lower() != 'time':
+                    if key[-6:] != '_indep':
                         l.append(int(data[key].shape[0]))
-            n[exp]=sum(l)
-        n=sum(n.values())
+            n[exp] = sum(l)
+        n = sum(n.values())
         return n
 
-    def calculate1AIC(self,RSS,K,n):
+    def calculate1AIC(self, RSS, K, n):
         """Calculate the corrected AIC:
         
             AICc = -2*ln(RSS/n) + 2*K + (2*K*(K+1))/(n-K-1)
@@ -3900,10 +3886,9 @@ class ModelSelection(_Viz):
         Returns:
 
         """
-        return n*numpy.log((RSS/n)) + 2*K + (2*K*(K+1))/(n-K-1)
+        return n * numpy.log((RSS / n)) + 2 * K + (2 * K * (K + 1)) / (n - K - 1)
 
-
-    def calculate1BIC(self,RSS,K,n):
+    def calculate1BIC(self, RSS, K, n):
         """Calculate the bayesian information criteria
             BIC = -2*ln(likelihood) + k*ln(n)
         
@@ -3919,7 +3904,7 @@ class ModelSelection(_Viz):
         Returns:
 
         """
-        return  (n*numpy.log(RSS/n) ) + K*numpy.log(n)
+        return (n * numpy.log(RSS / n)) + K * numpy.log(n)
 
     def calculate_model_selection_criteria(self):
         """Calculate AIC corrected and BIC
@@ -3937,7 +3922,7 @@ class ModelSelection(_Viz):
             cps_key = self.model_dct[keys[model_num]].copasi_file
 
             k = self.number_model_parameters[cps_key]
-            n = self.number_observations #constant throughout analysis
+            n = self.number_observations  # constant throughout analysis
             rss = self.data_dct[cps_key].data.RSS
             aic_dct = {}
             bic_dct = {}
@@ -3987,7 +3972,7 @@ class ModelSelection(_Viz):
                                ax=self.ax,
                                order=self.order,
                                **self.violin_kwargs
-            )
+                               )
             plt.xticks(rotation='vertical')
             if self.title:
                 plt.title('{} Scores'.format(metric))
@@ -4020,19 +4005,19 @@ class ModelSelection(_Viz):
         Returns:
 
         """
-        nums = numpy.arange(0,100,0.1)
-        table=list(zip(nums, scipy.stats.chi2.cdf(nums,self.kwargs.get('DOF')) ))
+        nums = numpy.arange(0, 100, 0.1)
+        table = list(zip(nums, scipy.stats.chi2.cdf(nums, self.kwargs.get('DOF'))))
         for i in table:
-            if i[1]<=alpha:
-                chi2_df_alpha=i[0]
+            if i[1] <= alpha:
+                chi2_df_alpha = i[0]
         return chi2_df_alpha
 
     def get_chi2_alpha(self):
         """ """
-        dct={}
-        alphas=numpy.arange(0,1,0.01)
+        dct = {}
+        alphas = numpy.arange(0, 1, 0.01)
         for i in alphas:
-            dct[round(i,3)]=self.chi2_lookup_table(i)
+            dct[round(i, 3)] = self.chi2_lookup_table(i)
         return dct[0.05]
 
     def compare_sim_vs_exp(self):
@@ -4040,18 +4025,17 @@ class ModelSelection(_Viz):
         LOG.info('Visually comparing simulated Versus Experiemntal data.')
 
         for cps, res in list(self.multi_model_fit.results_folder_dct.items()):
-            tasks.InsertParameters(cps,parameter_path=res, index=0)
-            PE=tasks.ParameterEstimation(cps,self.multi_model_fit.exp_files,
-                                       randomize_start_values=False,
-                                       method='CurrentSolutionStatistics',
-                                       plot=True,savefig=True,
-                                       )
+            tasks.InsertParameters(cps, parameter_path=res, index=0)
+            PE = tasks.ParameterEstimation(cps, self.multi_model_fit.exp_files,
+                                           randomize_start_values=False,
+                                           method='CurrentSolutionStatistics',
+                                           plot=True, savefig=True,
+                                           )
             PE.set_up()
             PE.run()
             PE.format_results()
 
-
-    def get_best_parameters(self,filename=None):
+    def get_best_parameters(self, filename=None):
         """
 
         Args:
@@ -4060,19 +4044,17 @@ class ModelSelection(_Viz):
         Returns:
 
         """
-        df=pandas.DataFrame()
+        df = pandas.DataFrame()
         for cps, res in list(self.multi_model_fit.results_folder_dct.items()):
-            df[os.path.split(cps)[1]]= ParsePEData(res).data.iloc[0]
+            df[os.path.split(cps)[1]] = ParsePEData(res).data.iloc[0]
 
-        if filename==None:
+        if filename == None:
             return df
         else:
             df.to_excel(filename)
             return df
 
-
-
-    def compare_model_parameters(self,parameter_list,filename=None):
+    def compare_model_parameters(self, parameter_list, filename=None):
         """Compare all the parameters accross multiple models
         in a bar chart averaging and STD for a parameter accross
         all models.
@@ -4086,18 +4068,20 @@ class ModelSelection(_Viz):
         Returns:
 
         """
-        best_parameters=self.get_best_parameters()
-        data= best_parameters.loc[parameter_list].transpose()
-        f=seaborn.barplot(data=numpy.log10(data))
-        f.set_xticklabels(parameter_list,rotation=90)
-        plt.legend(loc=(1,1))
+        best_parameters = self.get_best_parameters()
+        data = best_parameters.loc[parameter_list].transpose()
+        f = seaborn.barplot(data=numpy.log10(data))
+        f.set_xticklabels(parameter_list, rotation=90)
+        plt.legend(loc=(1, 1))
         plt.title('Barplot Comparing Parameter Estimation Results for specific\nParameters accross all models')
         plt.ylabel('log10 parameter_value,Err=SEM')
-        if filename!=None:
-            plt.savefig(filename,dpi=200,bbox_inches='tight')
+        if filename != None:
+            plt.savefig(filename, dpi=200, bbox_inches='tight')
+
 
 class PlotProfileLikelihood(_Viz):
     """ """
+
     def __init__(self, cls, data=None, **kwargs):
         """
         Plot profile likelihoods
@@ -4106,9 +4090,8 @@ class PlotProfileLikelihood(_Viz):
         """
         self.cls = cls
 
-
         self.default_properties = {'x': None,
-                                   'y': None, #can equal all
+                                   'y': None,  # can equal all
                                    'index': None,
                                    'rss_value': None,
                                    'log10': True,
@@ -4120,7 +4103,7 @@ class PlotProfileLikelihood(_Viz):
                                    'title': None,
                                    'xlabel': None,
                                    'ylabel': None,
-                                   'color': None, #if RSS, colour plots by RSS
+                                   'color': None,  # if RSS, colour plots by RSS
                                    'cmap': 'jet_r',
                                    'legend': False,
                                    'legend_loc': None,
@@ -4130,11 +4113,11 @@ class PlotProfileLikelihood(_Viz):
                                    'despine': True,
                                    'ext': 'png',
                                    'show_best_rss': True,
-                                   'best_rss_marker': 'k*', ##Any matplotlib marker
+                                   'best_rss_marker': 'k*',  ##Any matplotlib marker
                                    'ylim': None,
                                    'xlim': None,
                                    'interpolation': None,
-                                   'interpolation_resolution': 1000, #number of steps to interpolate
+                                   'interpolation_resolution': 1000,  # number of steps to interpolate
                                    'context': 'talk',
                                    'font_scale': 1,
                                    'rc': None,
@@ -4144,7 +4127,8 @@ class PlotProfileLikelihood(_Viz):
                                    }
 
         for i in list(kwargs.keys()):
-            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for PlotProfileLikelihood'.format(i)
+            assert i in list(
+                self.default_properties.keys()), '{} is not a keyword argument for PlotProfileLikelihood'.format(i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
         self.update_properties(self.default_properties)
@@ -4206,7 +4190,6 @@ class PlotProfileLikelihood(_Viz):
         self.parameter_list = sorted(list(self.data.columns))
 
         if self.separate == False:
-
             self.legend = True
 
         if self.index is None:
@@ -4299,8 +4282,8 @@ class PlotProfileLikelihood(_Viz):
 
                     if y is 'RSS':
                         plt.plot(plot_data['Parameter Of Interest Value'],
-                             plot_data['Confidence Level'], linewidth=3,
-                             linestyle='--', color='green', label='CL')
+                                 plot_data['Confidence Level'], linewidth=3,
+                                 linestyle='--', color='green', label='CL')
 
                     if self.show_best_rss:
                         if y is 'RSS':
@@ -4411,7 +4394,6 @@ class PlotProfileLikelihood(_Viz):
                                  plot_data['Confidence Level'], linewidth=3,
                                  linestyle='--', color='green', label='CL')
 
-
                     if self.show_best_rss:
                         if y == 'RSS':
                             best_rss = list(set(plot_data['Best RSS Value']))
@@ -4432,15 +4414,14 @@ class PlotProfileLikelihood(_Viz):
                         self.title = 'Profile Likelihoods for\n{} ' \
                                      'against {} (index={})'.format(x, y, i)
 
-
                     # elif self.title is 'profile':
                     #     self.title = x
 
                     # plt.title(self.title)
 
                     if self.log10:
-                        plt.ylabel(r'log$_{10}$' +'[{}]'.format(y))
-                        plt.xlabel(r'log$_{10}$'+'[{}]'.format(x))
+                        plt.ylabel(r'log$_{10}$' + '[{}]'.format(y))
+                        plt.xlabel(r'log$_{10}$' + '[{}]'.format(x))
                         if self.color == 'RSS':
                             cb.set_label('log$_{10}$[RSS]')
                     else:
@@ -4502,9 +4483,8 @@ class PlotProfileLikelihood(_Viz):
 
                     if y is 'RSS':
                         plt.plot(plot_data['Parameter Of Interest Value'],
-                             plot_data['Confidence Level'], linewidth=3,
-                             linestyle='--', color='green', label='CL')
-
+                                 plot_data['Confidence Level'], linewidth=3,
+                                 linestyle='--', color='green', label='CL')
 
                     if self.show_best_rss:
                         best_rss = list(set(plot_data['Best RSS Value']))
@@ -4556,8 +4536,10 @@ class PlotProfileLikelihood(_Viz):
                     if self.show:
                         plt.show()
 
+
 class PlotProfileLikelihood3d(_Viz):
     """ """
+
     def __init__(self, cls, data=None, **kwargs):
         """
         Plot profile likelihoods
@@ -4566,9 +4548,8 @@ class PlotProfileLikelihood3d(_Viz):
         """
         self.cls = cls
 
-
         self.default_properties = {'x': None,
-                                   'y': None, #can equal all
+                                   'y': None,  # can equal all
                                    'z': None,
                                    'index': None,
                                    'log10': True,
@@ -4588,11 +4569,11 @@ class PlotProfileLikelihood3d(_Viz):
                                    'despine': True,
                                    'ext': 'png',
                                    'show_best_rss': True,
-                                   'best_rss_marker': 'k*', ##Any matplotlib marker
+                                   'best_rss_marker': 'k*',  ##Any matplotlib marker
                                    'ylim': None,
                                    'xlim': None,
                                    'interpolation': None,
-                                   'interpolation_resolution': 1000, #number of steps to interpolate
+                                   'interpolation_resolution': 1000,  # number of steps to interpolate
                                    'context': 'talk',
                                    'font_scale': 1,
                                    'rc': None,
@@ -4603,7 +4584,8 @@ class PlotProfileLikelihood3d(_Viz):
 
         ## todo - colour plots by RSS
         for i in list(kwargs.keys()):
-            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for PlotProfileLikelihood'.format(i)
+            assert i in list(
+                self.default_properties.keys()), '{} is not a keyword argument for PlotProfileLikelihood'.format(i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
         self.update_properties(self.default_properties)
@@ -4664,7 +4646,6 @@ class PlotProfileLikelihood3d(_Viz):
         self.parameter_list = sorted(list(self.data.columns))
 
         if self.separate == False:
-
             self.legend = True
 
         if self.index is None:
@@ -4741,8 +4722,8 @@ class PlotProfileLikelihood3d(_Viz):
 
                     if y is 'RSS':
                         plt.plot(plot_data['Parameter Of Interest Value'],
-                             plot_data['Confidence Level'], linewidth=3,
-                             linestyle='--', color='green', label='CL')
+                                 plot_data['Confidence Level'], linewidth=3,
+                                 linestyle='--', color='green', label='CL')
 
                     if self.show_best_rss:
                         best_rss = list(set(plot_data['Best RSS Value']))
@@ -4826,9 +4807,8 @@ class PlotProfileLikelihood3d(_Viz):
 
                     if y is 'RSS':
                         plt.plot(plot_data['Parameter Of Interest Value'],
-                             plot_data['Confidence Level'], linewidth=3,
-                             linestyle='--', color='green', label='CL')
-
+                                 plot_data['Confidence Level'], linewidth=3,
+                                 linestyle='--', color='green', label='CL')
 
                     if self.show_best_rss:
                         best_rss = list(set(plot_data['Best RSS Value']))
@@ -4913,9 +4893,8 @@ class PlotProfileLikelihood3d(_Viz):
 
                     if y is 'RSS':
                         plt.plot(plot_data['Parameter Of Interest Value'],
-                             plot_data['Confidence Level'], linewidth=3,
-                             linestyle='--', color='green', label='CL')
-
+                                 plot_data['Confidence Level'], linewidth=3,
+                                 linestyle='--', color='green', label='CL')
 
                     if self.show_best_rss:
                         best_rss = list(set(plot_data['Best RSS Value']))
@@ -5007,10 +4986,10 @@ class PearsonsCorrelation(_Viz):
             'results_directory': None,
             'dpi': 400,
             'title_fontsize': 35,
-            'title': True,  #Either True or None/False
+            'title': True,  # Either True or None/False
             'show': False,
             'ext': 'png',
-            'colorbar_pad': 0.1,   #padding for color bar. Dist between bar and axes
+            'colorbar_pad': 0.1,  # padding for color bar. Dist between bar and axes
             'context': 'talk',
             'font_scale': 1.5,
             'rc': None,
@@ -5021,12 +5000,12 @@ class PearsonsCorrelation(_Viz):
             'annot': None,
             'fmt': '.2g',
             'annot_kws': None,
-            'linewidths':0,
+            'linewidths': 0,
             'linecolor': 'white',
             'cbar': True,
             'cbar_kws': None,
             'cbar_ax': None,
-            'square' : False,
+            'square': False,
             'xticklabels': 'auto',
             'yticklabels': 'auto',
             'mask': None,
@@ -5035,7 +5014,8 @@ class PearsonsCorrelation(_Viz):
 
         self.default_properties.update(self.plot_kwargs)
         for i in list(kwargs.keys()):
-            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for PearsonsHeatMap'.format(i)
+            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for PearsonsHeatMap'.format(
+                i)
         self.kwargs = self.default_properties
         self.default_properties.update(kwargs)
         self.default_properties.update(self.plot_kwargs)
@@ -5043,9 +5023,7 @@ class PearsonsCorrelation(_Viz):
         self._do_checks()
         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
 
-
         self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
-
 
         self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
 
@@ -5078,7 +5056,7 @@ class PearsonsCorrelation(_Viz):
         for x, y in self.combinations:
             dct[(x, y)] = pearsonr(self.data[x], self.data[y])
 
-        df = pandas.DataFrame(dct).transpose()#, index=['r2', 'p-val']).transpose()
+        df = pandas.DataFrame(dct).transpose()  # , index=['r2', 'p-val']).transpose()
         df.columns = ['r2', 'p-val']
         df.index.name = ['x', 'y']
         df = df.unstack()
@@ -5135,57 +5113,6 @@ class PearsonsCorrelation(_Viz):
             plt.show()
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     pass
 #    execfile('/home/b3053674/Documents/pycotools3/pycotools3/pycotoolsTutorial/Test/testing_kholodenko_manually.py')
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
