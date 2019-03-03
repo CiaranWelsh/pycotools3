@@ -38,16 +38,19 @@ The procedure is the same in linux, mac and windows.
 
 Documentation
 -------------
-This is a guide to PyCoTools version >2.0.1. The links below provide a tutorial style documentation on how to use pycotools. For example style documentation, please navigate to the :ref:`examples-index` page.
+This is a guide to PyCoTools version >2.0.1.
 
 .. toctree::
    :maxdepth: 2
    :name: master-toc
-   :glob:
+   :hidden:
 
    self
    getting_started
-   Tutorials/tutorials.rst
+   Tutorials/tutorials
+   Examples/examples
+   API/modules
+
 
 Support
 -------

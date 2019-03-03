@@ -20,9 +20,6 @@
  $Date: 12-09-2016
  Time:  13:33
 
-
-
-
 '''
 from . import viz
 from . import errors
@@ -756,7 +753,6 @@ class Reports(_Task):
     report:
     
     .. _report_kwargs:
-    ------------------
     
     ===========================     ==============================================
     Report Types                    Description
@@ -1266,14 +1262,15 @@ class Reports(_Task):
 @mixin(model.ReadModelMixin)
 class TimeCourse(_Task):
     """
+    Simulate a time course
+
+    A class for running a time course from python using a copasi model. All but one
+    of copasi's solvers are supported and available via the `method` kwarg.
+
     .. _timecourse_kwargs:
     
-    =================
     TimeCourse Kwargs
-    =================
-    
-    These kwargs are directly passed on to copasi in the right situations.
-    See copasi documentation for mode details.
+    -----------------
     
     ===========================     ==============================================
     TimeCourse Kwargs               Description
@@ -1882,7 +1879,7 @@ class Scan(_Task):
     clear_scans                     Default: True.  If true, will remove all scans
                                     present then add new scan
     run                             Default: False
-    <report_kwargs>                 Arguments for :ref:`_report_kwargs` are also
+    <report_kwargs>                 Arguments for :ref:`report_kwargs` are also
                                     accepted here
     ===========================     ==============================================
 
@@ -2286,7 +2283,16 @@ class Scan(_Task):
 @mixin(model.GetModelComponentFromStringMixin)
 @mixin(model.ReadModelMixin)
 class ParameterEstimation(_Task):
-    """ """
+    """
+    Interface to COPASI's parameter estimation task
+
+    Examples:
+        Assuming a :py:class:`ParameterEstimation.Config` object has been
+        configured and is called `config`
+        >>> pe = ParameterEstimation(config)
+
+    """
+
     valid_methods = ['current_solution_statistics',
                      'differential_evolution',
                      'evolutionary_strategy_sr',
@@ -3171,13 +3177,13 @@ class ParameterEstimation(_Task):
                 An appropriately configured :py:class:`ParameterEstimation.Config` class
 
         Examples:
-            See :ref:`ParameterEstimation.Config` or :ref:`ParameterEstimation.Context`
+            See :py:class:`ParameterEstimation.Config` or :py:class:`ParameterEstimation.Context`
             for detailed information on how to produce a :py:class:`ParameterEstimation.Config` object.
-            Note that the :ref:`ParameterEstimation.Context` class is higher level and should be the preferred way of
-            constructing a :ref:`ParameterEstimation.Config` object while the :ref:`ParameterEstimation.Config` class
+            Note that the :py:class:`ParameterEstimation.Context` class is higher level and should be the preferred way of
+            constructing a :py:class:`ParameterEstimation.Config` object while the :py:class:`ParameterEstimation.Config` class
             gives you the same level of control as copasi but is bulkier to write.
 
-            Assuming the :ref:`ParameterEstimation.Config` class has already been created
+            Assuming the :py:class:`ParameterEstimation.Config` class has already been created
             >>> pe = ParameterEstimation(config)
         """
         self.config = config
@@ -3807,7 +3813,6 @@ class ParameterEstimation(_Task):
                         for k in j:
                             k.getparent().remove(k)
 
-
     def _remove_all_validation_experiments(self):
         """
         Removates all validation experiments from parameter estimation task
@@ -3827,7 +3832,6 @@ class ParameterEstimation(_Task):
                     if j.attrib['name'] == 'Affected Cross Validation Experiments':
                         for k in j:
                             k.getparent().remove(k)
-
 
     def _select_method(self):
         """
@@ -4684,7 +4688,31 @@ class ParameterEstimation(_Task):
             raise ValueError('"{}" is not a valid argument'.format(self.config.settings.run_mode))
 
     class Context:
-        """ """
+        """
+        High level interface to create a :py:class:`ParameterEstimation.Config` object.
+
+        Enables the construction of a :py:class:`ParameterEstimation.Config` object
+        assuming one of several common patterns of usage.
+
+        Examples:
+            Assuming that we have two copasi models (`mod1` and `mod2`) and
+            two experimental data files (`fname1`, `fname2`), correctly formatted according
+            to the copasi specification. We can generate a config object that specifies
+            the fitting of both experiments to both models and to fit all global and
+            local parameters `parameters='gl'` in each.
+
+            .. code-block:: python
+
+                with ParameterEstimation.Context(
+                    [mod1, mod2], [fname1, fname2],
+                    context='s', parameters='gl') as context:
+                    context.set('method', 'genetic_algorithm_sr')
+                    context.set('number_of_generations', 25)
+                    context.set('population_size', 10)
+                    config = context.get_config()
+
+                pe = ParameterEstimation(config)
+        """
 
         acceptable_context_args = {
             'm': 'model_selection',
@@ -5955,7 +5983,7 @@ class ProfileLikelihood(_Task):
                 param_name = misc.RemoveNonAscii(param).filter + '.cps'
 
                 new_copasi_filename = os.path.join(new_dir, param_name)
-                dct[model][param] = self.index_dct[model].copy(new_copasi_filename)
+                dct[model][param] = self.index_dct[model]._copy(new_copasi_filename)
                 dct[model][param].save()
         return dct
 

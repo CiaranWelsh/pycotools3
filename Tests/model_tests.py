@@ -120,7 +120,7 @@ class ModelLevelAttributeTests(_test_base._BaseTest):
         :return:
         """
         new_filename = os.path.join(self.model.root, 'CopasiModel2.cps')
-        new_model = self.model.copy(new_filename)
+        new_model = self.model._copy(new_filename)
         new_model.save()
         self.assertTrue(os.path.isfile(new_filename))
 

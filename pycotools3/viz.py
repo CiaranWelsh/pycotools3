@@ -761,7 +761,7 @@ class Parse(object):
                     data.columns = names
                     data.to_csv(report_name, sep='\t', index=False)
                     tmp_dct[report_name] = data
-            df = pandas.concat(tmp_dct)
+            df = pandas.concat(tmp_dct, sort=True)
             columns = df.columns
             ## reindex, drop and sort by RSS
             df = df.reset_index().drop(['level_0', 'level_1'], axis=1).sort_values(by='RSS')
