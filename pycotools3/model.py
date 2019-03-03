@@ -72,6 +72,35 @@ except ImportError:
 ## todo convert to python 3
 ## todo investigate use of official copasi api
 
+class ReadModelMixin(Mixin):
+    """if self.model is str (path to copasi file)
+
+    Args:
+
+    Returns:
+      :return: model.Model
+
+    """
+
+    @staticmethod
+    def read_model(m):
+        """
+
+        Args:
+          m:
+
+        Returns:
+
+        """
+        if isinstance(m, str):
+            ## import here due to namespace conflict. Do not change
+            # from model import Model
+            return Model(m)
+        else:
+            ## should be model.Model or etree._Element
+            return m
+
+
 class GetModelComponentFromStringMixin(Mixin):
     """For Developers
     
@@ -182,15 +211,13 @@ class ComparisonMethodsMixin(Mixin):
 
 
 class Build(object):
-    """Context manager for building a copasi model with
+    """
+    Build a copasi model.
+
+    Context manager for building a copasi model with
     only PyCoTools Functions.
     
-    Users should also see :py:class:`BuildAntimony'
-
-    Args:
-
-    Returns:
-
+    Users should also see :py:class:`BuildAntimony`
     """
 
     def __init__(self, copasi_file):
@@ -206,10 +233,12 @@ class Build(object):
 
 
 class BuildAntimony(object):
-    """A context manager to create a copasi file in :code:`copasi_file` from the antimony
-    string and return a :class:`Model' object. The :method:`BuildAntimony.load` method takes
-    an antimony string as argument and returns a :class:`Models` object.
-    
+    """
+    Build a copasi model using antimony
+
+    A context manager to create a copasi model `copasi_file` using the
+    [antimony language](http://tellurium.analogmachine.org/antimony-tutorial/).
+
     Examples:
     
         .. code-block:: python
@@ -241,6 +270,7 @@ class BuildAntimony(object):
                     end
                     '''
                 )
+            print(negative_feedback)
     """
 
     def __init__(self, copasi_file: str):
@@ -314,22 +344,21 @@ class BuildAntimony(object):
 
 
 class ImportSBML(object):
-    """Accepts an SBML file, converts it to copasi
+    """
+    Import from sbml file
+
+    Accepts an SBML file, converts it to copasi
     format and reads it into a Model object
-
-    Args:
-
-    Returns:
 
     """
 
     def __init__(self, sbml_file, copasi_file=None):
         """
 
-        :param sbml_file:
-        :param copasi_file: Defaults is None. If left None,
-                            copasi filename is the same as
-                            sbml_file with cps extension.
+        Args:
+            sbml_file (str): path to sbml
+            copasi_file (None, str): Default is None and pycotools automatically creates a copasi model
+                                     with the same name as the sbml file. Otherwise, a path to copasi_file.
         """
         self.sbml_file = sbml_file
         self.copasi_file = copasi_file
@@ -380,11 +409,21 @@ class ImportSBML(object):
 
 
 class Model(_base._Base):
-    """The Model object is of central importance in pycotools as
-    it extracts relevant information from a copasi definition
-    file into python objects.
+    """
+    Construct a pycotools3 model from a copasi file
+
+    The Model object is of central importance in pycotools as
+    it extracts relevant information from a copasi file
+    file into python.
     
-    These are :py:class:`Model` properties:
+    These are :py:class:`Model` attributes and properties:
+
+
+    Examples:
+        >>> from pycotools3.model import Model
+        >>> model_path = r'/full/path/to/model.cps'
+        >>> model = Model(model_path) ##work in concentration units
+        >>> model = Model(model_path, quantity_type='particle_numbers') ## work in particle numbers
     
     =======================     =======================
     Property                    Description
@@ -407,51 +446,16 @@ class Model(_base._Base):
                                 local_parameters, compartment names as string
     number_of_reactions         Number of reactions in :py:class:`model.Model`
     =======================     =======================
-    
-    
-    Properties get re-evaluate each time they are called which
-    is expensive due to re-reading the xml and unnecessary.
-    The :py:mod:`cached_property` module written by Daniel Greenfeld and redistributed
-    in pycotools enables these components to be read once and cached for later use. This
-    cache set on instantiation is reset each time a new component is added or changed.
-    The following components are cached_properties:
-    
-    =======================     =======================
-    Cached Property                    Description
-    =======================     =======================
-    compartments                List of :py:class:`model.Compartment`
-    metabolites                 List of :py:class:`model.Metabolite`
-    global_quantities           List of :py:class:`model.GlobalQuantity`
-    functions                   List of :py:class:`model.Function`
-    parameter_descriptions      List of :py:class:'model.ParameterDescription`
-    constants                   List of :py:class:`LocalParameter`
-    reactions                   List of :py:class:`Reaction`
 
-    Args:
-      Usage: 
-
-    Returns:
-
-    >>> from pycotools3.model import Model
-        >>> model_path = r'/full/path/to/model.cps'
-        >>> model = Model(model_path) ##work in concentration units
-        >>> model = Model(model_path, quantity_type='particle_numbers') ## work in particle numbers
     """
-
     def __init__(self, copasi_file, quantity_type='concentration',
                  new=False, **kwargs):
         """
-        :param copasi_file:
-            `str`. Full path to a copasi file
 
-        :param quantity_type:
-            `str`. 'concentration' or 'particle_numbers'
-
-        :param new:
-            `bool`. Begin new empty model.
-
-        :param kwargs:
-            Unused.
+        Args:
+            copasi_file(str): full path to a copasi file
+            quantity_type (str): either 'concentration' (default) or 'particle_numbers'
+            new (bool): True when constructing a new model
         """
         super(Model, self).__init__(**kwargs)
         self._copasi_file = copasi_file
@@ -528,7 +532,7 @@ class Model(_base._Base):
             raise errors.InputError('expected a .cps file. Got {} instead'.format(ext))
         self._copasi_file = filename
 
-    def copy(self, filename):
+    def _copy(self, filename):
         """Copy the model to `filename`
         
         :return:
@@ -2334,12 +2338,28 @@ class Model(_base._Base):
         os.system(f'{COPASISE} {self.copasi_file} -e {sbml_file}')
         return sbml_file
 
+    def to_antimony(self):
+        """Returns antimony string of model. Wrapper around tellurium
+        functions
+        :return:
+
+        Args:
+
+        Returns:
+
+        """
+        sbml_file = self.to_sbml()
+        with open(sbml_file) as f:
+            sbml = f.read()
+        antimony_str = te.sbmlToAntimony(sbml)
+        return antimony_str
+
     def insert_parameters(self, **kwargs):
         """Wrapper around the InsetParameters class
 
         Args:
           kwargs: Arguments for InsertParameters
-          **kwargs: 
+          **kwargs:
 
         Returns:
           py:class:`Model`
@@ -2370,9 +2390,63 @@ class Model(_base._Base):
 
         return df[variables]
 
-    def to_antimony(self):
-        """Returns antimony string of model. Wrapper around tellurium
-        functions
+    def scan(self, **kwargs):
+        """
+        Perform a parameter scan on model
+
+        This is a wrapper around :py:class:`tasks.Scan` and accepts all
+        of the same arguments, except the model which is already provided.
+
+        Args:
+            **kwargs:
+
+        Returns:
+
+        """
+        scan = tasks.Scan(**kwargs)
+
+
+@mixin(ReadModelMixin)
+class InsertParameters(object):
+    """
+    Parse parameters into a copasi model
+
+    Insert parameters from a file, dictionary or a pandas dataframe into a copasi
+    file.
+    """
+
+    def __init__(self, model, parameter_dict=None, df=None,
+                 parameter_path=None, index=0, quantity_type='concentration',
+                 inplace=False):
+        """
+
+        Args:
+            model (:py:class:`Model`): The model to parse parameters into
+            parameter_dict (dict): Default None. If not None, dict[parameter_name] = parameter_value
+            df (pandas.DataFrame): Default None. If not None, a dataframe containing parameters to insert
+            parameter_path (str): Default None. If not None a path to parameter estimation output file
+            index (int): Default 0 (best RSS). When multiple parameter sets available, rank of best fit you want to insert
+            quantity_type (str): concentration (default) or particle_numbers
+            inplace (bool): Whether to operate inplace or return a new model
+        """
+        self.model = self.read_model(model)
+        self.parameter_dict = parameter_dict
+        self.df = df
+        self.parameter_path = parameter_path
+        self.index = index
+        self.quantity_type = quantity_type
+        self.inplace = inplace
+        self._do_checks()
+
+        self.model = self.insert()
+        if self.inplace:
+            self.model.save()
+
+    # def __str__(self):
+    #     return "InsertParameters({})".format(self.to_string())
+
+    def _do_checks(self):
+        """Verity user input
         :return:
 
         Args:
@@ -2380,40 +2454,190 @@ class Model(_base._Base):
         Returns:
 
         """
-        sbml_file = self.to_sbml()
-        with open(sbml_file) as f:
-            sbml = f.read()
-        antimony_str = te.sbmlToAntimony(sbml)
-        return antimony_str
+        assert self.quantity_type in ['concentration', 'particle_numbers']
+        if self.parameter_dict != None:
+            if isinstance(self.parameter_dict, dict) != True:
+                raise errors.InputError('Argument to \'parameter_dict\' keyword needs to be of type dict')
 
+            for i in list(self.parameter_dict.keys()):
+                if i not in self.model.all_variable_names:
+                    raise errors.InputError(
+                        'Parameter \'{}\' is not in your model. \n\nThese are in your model:\n{}'.format(
+                            i, sorted(self.model.all_variable_names)
+                        )
+                    )
+        if (self.parameter_dict is None) and (self.parameter_path is None) and (self.df is None):
+            raise errors.InputError(
+                'You need to give at least one of parameter_dict,parameter_path or df keyword arguments')
 
-class ReadModelMixin(Mixin):
-    """if self.model is str (path to copasi file)
+        assert isinstance(self.index, int)
 
-    Args:
+        # make sure user gives the right number of arguments
+        num = 0
+        if self.parameter_dict != None:
+            num += 1
 
-    Returns:
-      :return: model.Model
+        if self.df is not None:
+            num += 1
 
-    """
+        if self.parameter_path != None:
+            num += 1
 
-    @staticmethod
-    def read_model(m):
+        if num != 1:
+            raise errors.InputError(
+                'You need to supply exactly one of parameter_dict,parameter_path or df keyord argument. You cannot give two or three.')
+
+    def to_dict(self):
         """
 
         Args:
-          m: 
+
+        Returns:
+          :return:
+
+        """
+        if isinstance(self.parameters, dict):
+            return self.parameters
+
+        elif isinstance(self.parameters, pandas.core.frame.DataFrame):
+            return self.parameters.to_dict()
+
+    @cached_property
+    def parameters(self):
+        """Get parameters depending on the type of input.
+        Converge on a pandas dataframe.
+        Columns = parameters, rows = parameter sets
+
+        Use check parameter consistency to see
+        whether headers have been pruned or not. If not try pruning them
+
+        Args:
 
         Returns:
 
         """
-        if isinstance(m, str):
-            ## import here due to namespace conflict. Do not change
-            # from model import Model
-            return Model(m)
+        if self.parameter_dict != None:
+            assert isinstance(self.parameter_dict, dict), 'The parameter_dict argument takes a Python dictionary'
+            for i in self.parameter_dict:
+                assert i in self.model.all_variable_names, '{} is not a parameter. These are your parameters:{}'.format(
+                    i, list(self.GMQ.get_all_model_variables().keys()))
+            return pandas.DataFrame(self.parameter_dict, index=[0])
+
+        if self.parameter_path != None:
+            P = viz.Parse(self.parameter_path, copasi_file=self.model.copasi_file)
+            if isinstance(self.index, int):
+                return pandas.DataFrame(P.data.iloc[self.index]).transpose()
+            else:
+                return P.data.iloc[self.index]
+
+        if self.df is not None:
+            df = pandas.DataFrame(self.df.iloc[self.index]).transpose()
+        return df
+
+    def insert_locals(self):
+        """:return:"""
+        # print self.parameters
+
+        locals = [j for i in self.model.reactions for j in i.parameters if
+                  j.global_name in list(self.parameters.keys())]
+        if locals == []:
+            return self.model
         else:
-            ## should be model.Model or etree._Element
-            return m
+            for loc in locals:
+                for element_tags in self.model.xml.iter():
+                    if element_tags.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
+                        for reaction in element_tags:
+                            if reaction.attrib['name'] == loc.reaction_name:
+                                for reaction_xml in reaction:
+                                    if reaction_xml.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
+                                        for constant_xml in reaction_xml:
+                                            if constant_xml.attrib['name'] == loc.name:
+                                                constant_xml.attrib['value'] = str(
+                                                    float(self.parameters[loc.global_name]))
+        return self.model
+
+    def insert_compartments(self):
+        """insert new parameters into compartment
+        :return:
+
+        Args:
+
+        Returns:
+
+        """
+        compartments = [i for i in self.model.compartments if i.name in self.parameters]
+        if compartments == []:
+            return self.model
+        else:
+
+            LOG.critical(
+                'Changing a compartment volume has consequences for the rest of the metabolites assigned to that compartment')
+            for i in compartments:
+                self.model = self.model.set('compartment', i.name, str(self.parameters[i.name][self.index]),
+                                            match_field='name', change_field='initial_value')
+            return self.model
+
+    def insert_metabolites(self):
+        """insert new parameters into compartment
+        :return:
+
+        Args:
+
+        Returns:
+
+        """
+        metabolites = [i for i in self.model.metabolites if i.name in self.parameters]
+        if metabolites == []:
+            return self.model
+        else:
+            for i in metabolites:
+                self.model = self.model.set('metabolite',
+                                            i.name,
+                                            str(self.parameters[i.name][self.index]),
+                                            match_field='name', change_field=self.quantity_type)
+            return self.model
+
+    def insert_global_quantities(self):
+        """insert new parameters into compartment
+        :return:
+
+        Args:
+
+        Returns:
+
+        """
+        global_quantities = [i for i in self.model.global_quantities if i.name in self.parameters]
+        if global_quantities == []:
+            return self.model
+        else:
+            for i in global_quantities:
+                if i.simulation_type == 'assignment':
+                    LOG.info('Global quantity "{}" skipped because it is set to assignment'.format(i.name))
+                    continue
+
+                self.model = self.model.set('global_quantity',
+                                            i.name,
+                                            str(self.parameters[i.name][self.index]),
+                                            match_field='name', change_field='initial_value')
+            return self.model
+
+    def insert(self):
+        """User other methods defined in this class to insert parameters
+        into the model
+        :return:
+
+        Args:
+
+        Returns:
+
+        """
+        self.model = self.insert_locals()
+        self.model = self.insert_compartments()
+        self.model = self.insert_global_quantities()
+        self.model = self.insert_metabolites()
+        return self.model
+
+
 
 
 @mixin(ReadModelMixin)
@@ -4617,254 +4841,3 @@ class ParameterSet(object):
 ## to each ompontnt
 
 
-@mixin(ReadModelMixin)
-class InsertParameters(object):
-    """Insert parameters from a file, dictionary or a pandas dataframe into a copasi
-    file.
-
-    Args:
-
-    Returns:
-
-    """
-
-    def __init__(self, model, parameter_dict=None, df=None,
-                 parameter_path=None, index=0, quantity_type='concentration',
-                 inplace=False):
-        """
-        :param model:
-            :py:class:`Model`
-
-        :param parameter_dict:
-            `dict`. dict[ParameterName] = new_value
-
-        :param df:
-            :py:class:`Pandas.DataFrame`. Column headings must equate to model components.
-            If more than 1 row then `index` agument is required to specify which row you
-            want to insert
-
-        :param parameter_path:
-            `str` Full path to a directory containing parameter estimation output
-            such as output from :py:class:`tasks.MultiParameterEstimation`. `index` argument
-            specified which row to insert. Data is automatically ordered in increasing RSS order.
-
-        :param index:
-            `int`. index of parameter_path or df to insert. Indexes the rank of best fit. 0 is best.
-
-
-        :param quantity_type:
-            `str`. default='concentration'. Can also be `particle_numbers`
-
-        :param inplace:
-            `bool` default=False. Change the model you're working with. If False,
-            the model with new parameters are in the `model` attribute. If True,
-            the parameters get inserted into the model you used as argument to the
-            InsertParameters class.
-        """
-        self.model = self.read_model(model)
-        self.parameter_dict = parameter_dict
-        self.df = df
-        self.parameter_path = parameter_path
-        self.index = index
-        self.quantity_type = quantity_type
-        self.inplace = inplace
-        self._do_checks()
-
-        self.model = self.insert()
-        if self.inplace:
-            self.model.save()
-
-    # def __str__(self):
-    #     return "InsertParameters({})".format(self.to_string())
-
-    def _do_checks(self):
-        """Verity user input
-        :return:
-
-        Args:
-
-        Returns:
-
-        """
-        assert self.quantity_type in ['concentration', 'particle_numbers']
-        if self.parameter_dict != None:
-            if isinstance(self.parameter_dict, dict) != True:
-                raise errors.InputError('Argument to \'parameter_dict\' keyword needs to be of type dict')
-
-            for i in list(self.parameter_dict.keys()):
-                if i not in self.model.all_variable_names:
-                    raise errors.InputError(
-                        'Parameter \'{}\' is not in your model. \n\nThese are in your model:\n{}'.format(
-                            i, sorted(self.model.all_variable_names)
-                        )
-                    )
-        if (self.parameter_dict is None) and (self.parameter_path is None) and (self.df is None):
-            raise errors.InputError(
-                'You need to give at least one of parameter_dict,parameter_path or df keyword arguments')
-
-        assert isinstance(self.index, int)
-
-        # make sure user gives the right number of arguments
-        num = 0
-        if self.parameter_dict != None:
-            num += 1
-
-        if self.df is not None:
-            num += 1
-
-        if self.parameter_path != None:
-            num += 1
-
-        if num != 1:
-            raise errors.InputError(
-                'You need to supply exactly one of parameter_dict,parameter_path or df keyord argument. You cannot give two or three.')
-
-    def to_dict(self):
-        """
-
-        Args:
-
-        Returns:
-          :return:
-
-        """
-        if isinstance(self.parameters, dict):
-            return self.parameters
-
-        elif isinstance(self.parameters, pandas.core.frame.DataFrame):
-            return self.parameters.to_dict()
-
-    @cached_property
-    def parameters(self):
-        """Get parameters depending on the type of input.
-        Converge on a pandas dataframe.
-        Columns = parameters, rows = parameter sets
-        
-        Use check parameter consistency to see
-        whether headers have been pruned or not. If not try pruning them
-
-        Args:
-
-        Returns:
-
-        """
-        if self.parameter_dict != None:
-            assert isinstance(self.parameter_dict, dict), 'The parameter_dict argument takes a Python dictionary'
-            for i in self.parameter_dict:
-                assert i in self.model.all_variable_names, '{} is not a parameter. These are your parameters:{}'.format(
-                    i, list(self.GMQ.get_all_model_variables().keys()))
-            return pandas.DataFrame(self.parameter_dict, index=[0])
-
-        if self.parameter_path != None:
-            P = viz.Parse(self.parameter_path, copasi_file=self.model.copasi_file)
-            if isinstance(self.index, int):
-                return pandas.DataFrame(P.data.iloc[self.index]).transpose()
-            else:
-                return P.data.iloc[self.index]
-
-        if self.df is not None:
-            df = pandas.DataFrame(self.df.iloc[self.index]).transpose()
-        return df
-
-    def insert_locals(self):
-        """:return:"""
-        # print self.parameters
-
-        locals = [j for i in self.model.reactions for j in i.parameters if
-                  j.global_name in list(self.parameters.keys())]
-        if locals == []:
-            return self.model
-        else:
-            for loc in locals:
-                for element_tags in self.model.xml.iter():
-                    if element_tags.tag == '{http://www.copasi.org/static/schema}ListOfReactions':
-                        for reaction in element_tags:
-                            if reaction.attrib['name'] == loc.reaction_name:
-                                for reaction_xml in reaction:
-                                    if reaction_xml.tag == '{http://www.copasi.org/static/schema}ListOfConstants':
-                                        for constant_xml in reaction_xml:
-                                            if constant_xml.attrib['name'] == loc.name:
-                                                constant_xml.attrib['value'] = str(
-                                                    float(self.parameters[loc.global_name]))
-        return self.model
-
-    def insert_compartments(self):
-        """insert new parameters into compartment
-        :return:
-
-        Args:
-
-        Returns:
-
-        """
-        compartments = [i for i in self.model.compartments if i.name in self.parameters]
-        if compartments == []:
-            return self.model
-        else:
-
-            LOG.critical(
-                'Changing a compartment volume has consequences for the rest of the metabolites assigned to that compartment')
-            for i in compartments:
-                self.model = self.model.set('compartment', i.name, str(self.parameters[i.name][self.index]),
-                                            match_field='name', change_field='initial_value')
-            return self.model
-
-    def insert_metabolites(self):
-        """insert new parameters into compartment
-        :return:
-
-        Args:
-
-        Returns:
-
-        """
-        metabolites = [i for i in self.model.metabolites if i.name in self.parameters]
-        if metabolites == []:
-            return self.model
-        else:
-            for i in metabolites:
-                self.model = self.model.set('metabolite',
-                                            i.name,
-                                            str(self.parameters[i.name][self.index]),
-                                            match_field='name', change_field=self.quantity_type)
-            return self.model
-
-    def insert_global_quantities(self):
-        """insert new parameters into compartment
-        :return:
-
-        Args:
-
-        Returns:
-
-        """
-        global_quantities = [i for i in self.model.global_quantities if i.name in self.parameters]
-        if global_quantities == []:
-            return self.model
-        else:
-            for i in global_quantities:
-                if i.simulation_type == 'assignment':
-                    LOG.info('Global quantity "{}" skipped because it is set to assignment'.format(i.name))
-                    continue
-
-                self.model = self.model.set('global_quantity',
-                                            i.name,
-                                            str(self.parameters[i.name][self.index]),
-                                            match_field='name', change_field='initial_value')
-            return self.model
-
-    def insert(self):
-        """User other methods defined in this class to insert parameters
-        into the model
-        :return:
-
-        Args:
-
-        Returns:
-
-        """
-        self.model = self.insert_locals()
-        self.model = self.insert_compartments()
-        self.model = self.insert_global_quantities()
-        self.model = self.insert_metabolites()
-        return self.model

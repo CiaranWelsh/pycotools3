@@ -127,44 +127,26 @@ class ScanVizTests(_test_base._BaseTest):
                                                  self.model.copasi_file),
                                              'scan_time_course.csv')
                                           )
-        '''
-        not yet implemented plotting scan features. 
-        TODO finish
-        '''
-    #
-    # def test_parser_in_viz(self):
-    #     """
-    #
-    #     :return:
-    #     """
-    #     if not os.path.isfile(self.scan.report_name):
-    #         raise Exception
-    #     p = pycotools3.viz.Parse(self.scan)
-    #
-    #     print self.scan.number_of_steps
-        # print p.parse_scan()
-        # self.model.open()
-        # import pandas
-        # import numpy
-        # names = ['a', 'b', 'c']
-        # df = pandas.DataFrame([1,2,3,numpy.nan, 4,5,6,numpy.nan, 7, 8,9])
-        # print df
 
+    def test_scan_is_created_with_correct_variable(self):
+        query = '//*[@name="Scan Framework"]'
 
+        for i in self.scan.model.xml.xpath(query):
+            print(i, i.attrib)
+            for j in i:
+                print(j.attrib)
 
-            # def test_parser_in_viz2(self):
-            #     """
-            #
-            #     :return:
-            #     """
-            #     p = pycotools3.viz.Parse(self.TC)
-            #     df = p.parse_timecourse()
-            #     boolean = True
-            #     ## set boolean to false if square brackets still in timecourse
-            #     for i in list(df.columns):
-            #         if '[' in i:
-            #             boolean = False
-            #     self.assertTrue(boolean)
+    def test_scan_subtask(self):
+        pass
+
+    def test_scan_report_name(self):
+        pass
+
+    def test_scan_output_data(self):
+        pass
+
+    def test_scan_parse_data(self):
+        pass
 
 
 class RepeatScanTests(_test_base._BaseTest):
@@ -287,6 +269,9 @@ class RandomDistributionScanTests(_test_base._BaseTest):
                     for k in j:
                         if k.attrib['name'] == 'Type':
                             self.assertEqual(self.scan.scan_type, k.attrib['value'])
+
+
+
 
 
 

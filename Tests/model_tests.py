@@ -120,7 +120,7 @@ class ModelLevelAttributeTests(_test_base._BaseTest):
         :return:
         """
         new_filename = os.path.join(self.model.root, 'CopasiModel2.cps')
-        new_model = self.model.copy(new_filename)
+        new_model = self.model._copy(new_filename)
         new_model.save()
         self.assertTrue(os.path.isfile(new_filename))
 
@@ -1425,6 +1425,7 @@ class BuildWithAntimony(unittest.TestCase):
             )
         self.assertTrue(type(mod), pycotools3.model.Model)
         # print pycotools3.viz.PlotTimeCourse(tasks.timecourse(end=100, intervals=100, step_size=1), savefig=True)
+
 
 
 # class FitItemOrderWithConstraingsTests(unittest.TestCase):

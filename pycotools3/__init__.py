@@ -3,6 +3,7 @@ from . import tasks
 from . import errors
 from . import misc
 from . import model
+from . import munch
 import os
 from sys import version_info, platform
 

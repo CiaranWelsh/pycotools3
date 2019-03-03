@@ -38,43 +38,23 @@ The procedure is the same in linux, mac and windows.
 
 Documentation
 -------------
-This is a guide to PyCoTools version >2.0.1. The links below provide a tutorial style documentation on how to use pycotools. For example style documentation, please navigate to the :ref:`examples-index` page.
+This is a guide to PyCoTools version >2.0.1.
 
 .. toctree::
    :maxdepth: 2
    :name: master-toc
-   :glob:
+   :hidden:
 
    self
    getting_started
-   Tutorials/tutorials.rst
-
-
-
-
-sec
----
-
-
-    - Running a time course
-
-    - Running a parameter scan
-
-    - Running a simple parameter estimation
-
-    - visualisation
-
-  - More advanced
-
-    - more advanced parameter estimations
-
-    - profile likelihoods
+   Tutorials/tutorials
+   Examples/examples
+   API/modules
 
 
 Support
 -------
 Users can post a question on stack-overflow using the :code:`pycotools` tag. I get email notifications for these questions and will respond.
-
 
 People
 ------
