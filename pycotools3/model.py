@@ -2334,12 +2334,28 @@ class Model(_base._Base):
         os.system(f'{COPASISE} {self.copasi_file} -e {sbml_file}')
         return sbml_file
 
+    def to_antimony(self):
+        """Returns antimony string of model. Wrapper around tellurium
+        functions
+        :return:
+
+        Args:
+
+        Returns:
+
+        """
+        sbml_file = self.to_sbml()
+        with open(sbml_file) as f:
+            sbml = f.read()
+        antimony_str = te.sbmlToAntimony(sbml)
+        return antimony_str
+
     def insert_parameters(self, **kwargs):
         """Wrapper around the InsetParameters class
 
         Args:
           kwargs: Arguments for InsertParameters
-          **kwargs: 
+          **kwargs:
 
         Returns:
           py:class:`Model`
@@ -2370,21 +2386,21 @@ class Model(_base._Base):
 
         return df[variables]
 
-    def to_antimony(self):
-        """Returns antimony string of model. Wrapper around tellurium
-        functions
-        :return:
+    def scan(self, **kwargs):
+        """
+        Perform a parameter scan on model
+
+        This is a wrapper around :py:class:`tasks.Scan` and accepts all
+        of the same arguments, except the model which is already provided.
 
         Args:
+            **kwargs:
 
         Returns:
 
         """
-        sbml_file = self.to_sbml()
-        with open(sbml_file) as f:
-            sbml = f.read()
-        antimony_str = te.sbmlToAntimony(sbml)
-        return antimony_str
+        scan = tasks.Scan(**kwargs)
+
 
 
 class ReadModelMixin(Mixin):

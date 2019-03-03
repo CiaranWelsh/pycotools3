@@ -1045,15 +1045,6 @@ class ParameterEstimationTests(_test_base._BaseTest):
         experiment_keys = self.PE._get_experiment_keys()['model1']
         self.assertEqual(3, len(experiment_keys))
 
-    # def test_write_config_file(self):
-    #     """
-    #     A test that PE writes the config file to the
-    #     right place
-    #     :return:
-    #     """
-    #     self.PE.write_config_file()
-    #     self.assertTrue(os.path.isfile(self.PE.config_filename))
-
     def test_number_of_affected_experiments_is_correct(self):
         # self.PE.write_config_file()
 
@@ -1145,7 +1136,7 @@ class ParameterEstimationTests(_test_base._BaseTest):
         self.assertEqual(self.PE.config.settings.copy_number, len(files))
 
     def test_setup_scan_pe_number(self):
-        mod = self.PE.copied_models['model1'][3]
+        mod = self.PE.model_copies['model1'][3]
         query = '//*[@name="Scan"]'
         expected = 2
         actual = 0
@@ -1164,7 +1155,7 @@ class ParameterEstimationTests(_test_base._BaseTest):
         repeat task has type code '0'
         :return:
         """
-        mod = self.PE.copied_models['model1'][3]
+        mod = self.PE.model_copies['model1'][3]
         query = '//*[@name="Scan"]'
         expected = str(0)
         actual = 0
@@ -1179,7 +1170,7 @@ class ParameterEstimationTests(_test_base._BaseTest):
         self.assertEqual(expected, actual)
 
     def test_setup_scan_report_name(self):
-        mod = self.PE.copied_models['model1'][3]
+        mod = self.PE.model_copies['model1'][3]
         expected_report_name = os.path.join(
             self.PE.results_directory['model1'], 'PEData3.txt')
         actual = ''
@@ -1196,7 +1187,7 @@ class ParameterEstimationTests(_test_base._BaseTest):
         :return:
         """
         self.PE.config.settings.run_mode = True
-        self.PE.run(self.PE.copied_models)
+        self.PE.run(self.PE.model_copies)
 
         expected = 4
         results_dir = self.PE.results_directory['model1']
@@ -1207,7 +1198,7 @@ class ParameterEstimationTests(_test_base._BaseTest):
 
     def test_parse_pe_data(self):
         self.PE.config.settings.run_mode = True
-        self.PE.run(self.PE.copied_models)
+        self.PE.run(self.PE.model_copies)
 
         data = pycotools3.viz.Parse(self.PE).data
         expected = 8
@@ -1279,7 +1270,6 @@ class ParameterEstimationTests(_test_base._BaseTest):
                 if j.attrib['name'] == 'StartValue':
                     actual.append(j.attrib['value'])
         self.assertListEqual(expected, actual)
-
 
 class ParameterEstimationContextTests(_test_base._BaseTest):
     def setUp(self):
@@ -1490,6 +1480,108 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
         for i in pe.models.test_model.model.xml.xpath(query):
             actual += 1
         self.assertEqual(expected, actual)
+
+    def test_setup_scan_pe_number(self):
+        with ParameterEstimation.Context(
+                self.model.copasi_file,
+                [self.TC1.report_name, self.TC2.report_name,
+                 self.report3, self.report4],
+                context='s', parameters='a') as context:
+            context.set('method', 'genetic_algorithm_sr')
+            context.set('number_of_generations', 25)
+            context.set('population_size', 14)
+            context.set('copy_number', 3)
+            context.set('pe_number', 2)
+            config = context.get_config()
+        pe = ParameterEstimation(config)
+
+        mod = pe.model_copies['test_model'][1]
+        query = '//*[@name="Scan"]'
+        expected = 2
+        actual = 0
+        for i in mod.xml.xpath(query):
+            for j in i:
+                for k in j:
+                    if k.attrib['name'] == 'ScanItems':
+                        for l in k:
+                            for m in l:
+                                if m.attrib['name'] == 'Number of steps':
+                                    actual = m.attrib['value']
+        self.assertEqual(str(expected), str(actual))
+
+    def test_setup_scan_type(self):
+        """
+        repeat task has type code '0'
+        :return:
+        """
+        with ParameterEstimation.Context(
+                self.model.copasi_file,
+                [self.TC1.report_name, self.TC2.report_name,
+                 self.report3, self.report4],
+                context='s', parameters='a') as context:
+            context.set('method', 'genetic_algorithm_sr')
+            context.set('number_of_generations', 25)
+            context.set('population_size', 14)
+            context.set('copy_number', 3)
+
+            config = context.get_config()
+        pe = ParameterEstimation(config)
+
+        mod = pe.model_copies['test_model'][0]
+        query = '//*[@name="Scan"]'
+        expected = str(0)
+        actual = 0
+        for i in mod.xml.xpath(query):
+            for j in i:
+                for k in j:
+                    if k.attrib['name'] == 'ScanItems':
+                        for l in k:
+                            for m in l:
+                                if m.attrib['name'] == 'Type':
+                                    actual = m.attrib['value']
+        self.assertEqual(expected, actual)
+
+    def test_setup_scan_report_name(self):
+        with ParameterEstimation.Context(
+                self.model.copasi_file,
+                [self.TC1.report_name, self.TC2.report_name,
+                 self.report3, self.report4],
+                context='s', parameters='a') as context:
+            context.set('method', 'genetic_algorithm_sr')
+            context.set('number_of_generations', 25)
+            context.set('population_size', 14)
+            context.set('copy_number', 3)
+
+            config = context.get_config()
+        pe = ParameterEstimation(config)
+        mod = pe.model_copies['test_model'][1]
+        expected_report_name = os.path.join(
+            pe.results_directory['test_model'], 'PEData1.txt')
+        actual = ''
+        query = '//*[@name="Scan"]'
+        for i in mod.xml.xpath(query):
+            for j in i:
+                if j.tag == 'Report':
+                    actual = j.attrib['target']
+        self.assertEqual(expected_report_name, actual)
+
+    def test_that_it_works(self):
+        with ParameterEstimation.Context(
+                self.model.copasi_file,
+                [self.TC1.report_name, self.TC2.report_name,
+                 self.report3, self.report4],
+                context='s', parameters='a') as context:
+            context.set('method', 'genetic_algorithm_sr')
+            context.set('number_of_generations', 25)
+            context.set('population_size', 14)
+            context.set('copy_number', 3)
+            context.set('run_mode', True)
+            config = context.get_config()
+
+        pe = ParameterEstimation(config)
+
+        # data = pycotools3.viz.Parse(pe)
+        # print(data)
 
 
 class ParameterEstimationTestsWithDifferentModel(unittest.TestCase):
@@ -1735,6 +1827,169 @@ class ParameterEstimationTestsMoreThanOneModel(unittest.TestCase):
         os.remove(self.experiment)
         os.remove(self.fname1)
         os.remove(self.fname2)
+
+
+class UseConfigMoreThanOnceTest(_test_base._BaseTest):
+    """
+    I noticed a bug where if you use a config object in
+    a parameter estimation, modify it and then use it again,
+    we get an error. This class reproduces this situation
+    and tests for it
+    """
+
+    def setUp(self):
+        super(UseConfigMoreThanOnceTest, self).setUp()
+
+        self.fname = os.path.join(os.path.dirname(__file__), 'timecourse.txt')
+        self.model.simulate(0, 10, 1, report_name=self.fname)
+
+        self.conf_dct = dict(
+            models=dict(
+                test_model=dict(
+                    copasi_file=self.model.copasi_file
+                )
+            ),
+            datasets=dict(
+                experiments=dict(
+                    timecourse=dict(
+                        filename=self.fname,
+                    ),
+                )
+            ),
+            items=dict(
+                fit_items='g',
+            ),
+            settings=dict(
+                method='genetic_algorithm_sr',
+                population_size=2,
+                number_of_generations=2,
+                working_directory=os.path.dirname(__file__),
+                copy_number=4,
+                pe_number=2,
+                weight_method='value_scaling',
+                validation_weight=2.5,
+                validation_threshold=9,
+                randomize_start_values=True,
+                calculate_statistics=False,
+                create_parameter_sets=False,
+                upper_bound=50,
+                lower_bound=0.1,
+                run_mode=True,
+            )
+        )
+        self.config = ParameterEstimation.Config(**self.conf_dct)
+
+    def test_runs_once(self):
+        PE = ParameterEstimation(self.config)
+        data = pycotools3.viz.Parse(PE)
+        expected = 8
+        actual = data['test_model'].shape[0]
+        self.assertEqual(expected, actual)
+
+    def test_runs_twice(self):
+        PE = ParameterEstimation(self.config)
+        PE = ParameterEstimation(self.config)
+        data = pycotools3.viz.Parse(PE)
+        expected = 8
+        actual = data['test_model'].shape[0]
+        self.assertEqual(expected, actual)
+
+    def test_runs_twice_different_method(self):
+        PE = ParameterEstimation(self.config)
+        self.config.settings.method = 'hooke_jeeves'
+        self.config.settings.iteration_limit = 10
+        self.config.settings.tolerance = 1e-2
+        PE = ParameterEstimation(self.config)
+        data = pycotools3.viz.Parse(PE)
+        expected = 8
+        actual = data['test_model'].shape[0]
+        self.assertEqual(expected, actual)
+
+    def test_runs_with_context_manager(self):
+        with ParameterEstimation.Context(
+                self.model, self.fname, context='s', parameters='g') as context:
+            context.set('method', 'genetic_algorithm')
+            context.set('population_size', 25)
+            context.set('copy_number', 4)
+            context.set('pe_number', 2)
+            context.set('run_mode', True)
+            config = context.get_config()
+        pe = ParameterEstimation(config)
+        data = pycotools3.viz.Parse(pe)
+        expected = 8
+        actual = data['test_model'].shape[0]
+        self.assertEqual(expected, actual)
+
+    def test_runs_first_without_then_with_context_manager(self):
+        pe = ParameterEstimation(self.config)
+        with ParameterEstimation.Context(
+                self.model, self.fname, context='s', parameters='g') as context:
+            context.set('method', 'genetic_algorithm')
+            context.set('population_size', 25)
+            context.set('copy_number', 4)
+            context.set('pe_number', 2)
+            context.set('run_mode', True)
+            config = context.get_config()
+        pe = ParameterEstimation(config)
+        data = pycotools3.viz.Parse(pe)
+        expected = 8
+        actual = data['test_model'].shape[0]
+        self.assertEqual(expected, actual)
+
+class TestThatRemoveExperimentsWorksCorrectly(_test_base._BaseTest):
+    def setUp(self):
+        super(TestThatRemoveExperimentsWorksCorrectly, self).setUp()
+
+        self.fname = os.path.join(os.path.dirname(__file__), 'timecourse.txt')
+        self.model.simulate(0, 10, 1, report_name=self.fname)
+
+        self.conf_dct = dict(
+            models=dict(
+                test_model=dict(
+                    copasi_file=self.model.copasi_file
+                )
+            ),
+            datasets=dict(
+                experiments=dict(
+                    data=dict( ## Note that the name of this dataset is different to timecourse.txt
+                        filename=self.fname,
+                    ),
+                )
+            ),
+            items=dict(
+                fit_items='g',
+            ),
+            settings=dict(
+                method='genetic_algorithm_sr',
+                population_size=2,
+                number_of_generations=2,
+                working_directory=os.path.dirname(__file__),
+                copy_number=4,
+                pe_number=2,
+                weight_method='value_scaling',
+                validation_weight=2.5,
+                validation_threshold=9,
+                randomize_start_values=True,
+                calculate_statistics=False,
+                create_parameter_sets=False,
+                upper_bound=50,
+                lower_bound=0.1,
+                run_mode=False,
+            )
+        )
+        self.config = ParameterEstimation.Config(**self.conf_dct)
+
+    def test_experiments_can_be_removed(self):
+        query = '//*[@name="Experiment Set"]'
+        pe = ParameterEstimation(self.config)
+        pe._remove_all_experiments()
+        expected = None
+        actual = None
+        for i in pe.models.test_model.model.xml.xpath(query):
+            for j in i:
+                if j.attrib['name'] == 'data':
+                    actual = True
+        self.assertEqual(expected, actual)
 
 
 ##todo use mocking for running tests.

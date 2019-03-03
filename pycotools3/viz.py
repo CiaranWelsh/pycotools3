@@ -457,7 +457,6 @@ class ChiSquaredStatistics(object):
         return self.rss * exponential_function((self.get_chi2_alpha() / self.num_data_points))
 
 
-##TODO use cached property
 class Parse(object):
     """General class for parsing copasi output into Python.
     
@@ -568,6 +567,15 @@ class Parse(object):
 
     def __repr__(self):
         return self.data.__repr__()
+
+    def __getitem__(self, item):
+        return self.data.__getitem__(item)
+
+    def __setitem__(self, key, value):
+        return self.data.__setitem__(key, value)
+
+    def __delitem__(self, key):
+        return self.data.__delitem__(key)
 
     def parse(self):
         """determine class type of self.cls_instance
@@ -1902,244 +1910,261 @@ class PlotScan(_Viz):
         )
 
 
-class PlotParameterEstimation(_Viz, PlotKwargs):
-    """Visualize parameter estimation runs against a single
-    parameter estimation. Similar to PlotTimeCourseEnsemble
-    but for a single parameter estimation run.
-    
-    
-    
-    =========================================       =========================================
-    kwarg                                           Description
-    =========================================       =========================================
-    y                                               `str` or list of `str`. Parameter for plotting
-                                                    on y axis. Defaults to all estimated parameters.
-    **savefig_kwargs                                see savefig_kwargs for savefig options
-    =========================================       =========================================
-
-    Args:
-
-    Returns:
-
-    """
-
-    def __init__(self, cls, **kwargs):
-        """
-        :param cls:
-            Instance of :py:class:`tasks.ParameterEstimation`
-
-        :param kwargs:
-
-        """
-        self.cls = cls
-        self.kwargs = kwargs
-        self.plot_kwargs = self.plot_kwargs()
-
-        ## defaults to metabolites andglobal quantities with assignments
-        default_y = [i.name for i in self.cls.model.metabolites] + [i.name for i in self.cls.model.global_quantities if
-                                                                    i.simulation_type == 'Assignment']
-        self.default_properties = {
-            'y': default_y,
-            'savefig': False,
-            'results_directory': None,
-            'title': 'TimeCourse',
-            'xlabel': None,
-            'ylabel': None,
-            'show': False,
-            'filename': None,
-            'dpi': 400,
-            'log10': False,
-            'context': 'talk',
-            'font_scale': 1.5,
-            'rc': None,
-            'copasi_file': None,
-        }
-        self.default_properties.update(self.plot_kwargs)
-        for i in list(kwargs.keys()):
-            assert i in list(
-                self.default_properties.keys()), '{} is not a keyword argument for "PlotParameterEstimation"'.format(i)
-        self.kwargs = self.default_properties
-        self.default_properties.update(kwargs)
-        self.default_properties.update(self.plot_kwargs)
-        self.update_properties(self.default_properties)
-        self._do_checks()
-
-        seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
-
-        self.data = self.parse(self.cls, self.log10, copasi_file=self.copasi_file)
-
-        self.exp_data = self.read_experimental_data()
-        self.sim_data = self.simulate_time_course()
-
-        self.cls.model = self.update_parameters()
-        self.plot()
-
-    def __str__(self):
-        """
-
-        :return:
-        """
-        return "PlotParameterEstimation(x='{}', y={}, savefig={}, results_directory='{}'".format(
-            self.x, self.y, self.savefig,
-            self.results_directory
-        )
-
-    def _do_checks(self):
-        """ """
-
-        if not isinstance(self.cls, tasks.ParameterEstimation):
-            raise errors.InputError('first argument should be ParameterEstimation calss. Got {}'.format(type(self.cls)))
-
-        if self.results_directory == None:
-            self.results_directory = os.path.join(self.cls.model.root,
-                                                  'ParameterEstimationPlots')
-        if not isinstance(self.y, list):
-            self.y = [self.y]
-
-    def update_parameters(self):
-        """Use the InsertParameters class to insert estimated
-
-        Args:
-          return: Model
-
-        Returns:
-
-        """
-        I = model.InsertParameters(self.cls.model, df=self.data)
-        return I.model
-
-    def create_directories(self):
-        """create a directory in project root called result_directory
-        create subfolders with name of _experiments
-        :return: dict
-
-        Args:
-
-        Returns:
-
-        """
-        directories = {}
-        for fle in self.cls.experiment_files:
-            _, fle = os.path.split(fle)
-            directories[fle] = os.path.join(self.results_directory, fle[:-4])
-            if not os.path.isdir(directories[fle]):
-                os.makedirs(directories[fle])
-        return directories
-
-    def read_experimental_data(self):
-        """read the experimental data in order to figure
-        out how long a time course we need to simulate
-        with the new parameters
-        :return:
-
-        Args:
-
-        Returns:
-
-        """
-        dct = {}
-        for i in self.cls.experiment_files:
-            dct[i] = pandas.read_csv(i, sep='\t')
-        return dct
-
-    def get_time(self):
-        """get dict of _experiments and max time
-        :return:
-
-        Args:
-
-        Returns:
-
-        """
-        dct = {}
-
-        for i in self.exp_data:
-            dct[i] = self.exp_data[i]['Time'].max()
-        return dct
-
-    def simulate_time_course(self):
-        """simulate a timecourse for each experiment
-        which may have different simulation lengths
-        :return:
-
-        Args:
-
-        Returns:
-
-        """
-        time_dct = self.get_time()
-        d = {}
-        step_size = 1
-        for exp in time_dct:
-            indep_dct = {}
-            for exp_key in list(self.exp_data[exp].keys()):
-                if exp_key[-6:] == '_indep':
-                    indep_dct[exp_key[:-6]] = self.exp_data[exp][exp_key].iloc[0]
-
-                ## Insert independent vars
-                model.InsertParameters(self.cls.model, parameter_dict=indep_dct, inplace=True)
-
-            TC = tasks.TimeCourse(
-                self.cls.model, end=time_dct[exp], step_size=step_size,
-                intervals=time_dct[exp] / step_size,
-            )
-            d[exp] = self.parse(TC, self.log10, copasi_file=self.copasi_file)
-
-        return d
-
-    def plot(self):
-        """plot experimental data versus best parameter sets
-        :return:
-
-        Args:
-
-        Returns:
-
-        """
-        ## filter out y values which are not in the data file
-        newy = []
-        for y in self.y:
-            if y in list(list(self.read_experimental_data().values())[0].keys()):
-                newy.append(y)
-
-        self.y = newy
-
-        for exp in self.exp_data:
-            for sim in self.sim_data:
-                if exp == sim:
-
-                    for key in self.y:
-
-                        plt.figure()
-                        plt.plot(
-                            self.exp_data[exp]['Time'], self.exp_data[exp][key],
-                            label='Exp', linestyle=self.linestyle,
-                            marker=self.marker, linewidth=self.linewidth,
-                            markersize=self.markersize,
-                            alpha=0.5,
-                            color='#0E00FA',
-                        )
-                        plt.plot(
-                            self.sim_data[sim]['Time'], self.sim_data[sim][key],
-                            label='Sim', linestyle=self.linestyle,
-                            marker=self.marker, linewidth=self.linewidth,
-                            markersize=self.markersize,
-                            alpha=0.5,
-                            color='#FC0077'
-                        )
-
-                        plt.legend(loc=(1, 0.5))
-                        plt.title(key)
-                        plt.xlabel('Time({})'.format(self.cls.model.time_unit))
-                        plt.ylabel('Abundance\n({})'.format(self.cls.model.quantity_unit))
-                        if self.savefig:
-                            dirs = self.create_directories()
-                            exp_key = os.path.split(exp)[1]
-                            fle = os.path.join(dirs[exp_key], '{}.png'.format(key))
-                            plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
-                            LOG.info('figure saved to "{}"'.format(fle))
-        if self.show:
-            plt.show()
+# class PlotParameterEstimation(_Viz, PlotKwargs):
+#     """Visualize parameter estimation runs against a single
+#     parameter estimation. Similar to PlotTimeCourseEnsemble
+#     but for a single parameter estimation run.
+#
+#
+#
+#     =========================================       =========================================
+#     kwarg                                           Description
+#     =========================================       =========================================
+#     y                                               `str` or list of `str`. Parameter for plotting
+#                                                     on y axis. Defaults to all estimated parameters.
+#     **savefig_kwargs                                see savefig_kwargs for savefig options
+#     =========================================       =========================================
+#
+#     Args:
+#
+#     Returns:
+#
+#     """
+#
+#     def __init__(self, cls, **kwargs):
+#         """
+#         :param cls:
+#             Instance of :py:class:`tasks.ParameterEstimation`
+#
+#         :param kwargs:
+#
+#         """
+#         self.cls = cls
+#         self.kwargs = kwargs
+#         self.plot_kwargs = self.plot_kwargs()
+#
+#         ## defaults to metabolites and global quantities with assignments
+#         default_y_dct = {}
+#         for model_name in self.cls.models:
+#             default_y_dct[model_name] = [i.name for i in self.cls.models[model_name].model.metabolites] + [i.name for i in self.cls.models[model_name].model.global_quantities if
+#                                                                     i.simulation_type == 'Assignment']
+#         self.default_properties = {
+#             'y': default_y_dct,
+#             'savefig': False,
+#             'results_directory': None,
+#             'title': 'TimeCourse',
+#             'xlabel': None,
+#             'ylabel': None,
+#             'show': False,
+#             'filename': None,
+#             'dpi': 400,
+#             'log10': False,
+#             'context': 'talk',
+#             'font_scale': 1.5,
+#             'rc': None,
+#             'copasi_file': None,
+#         }
+#         self.default_properties.update(self.plot_kwargs)
+#         for i in list(kwargs.keys()):
+#             assert i in list(
+#                 self.default_properties.keys()), '{} is not a keyword argument for "PlotParameterEstimation"'.format(i)
+#         self.kwargs = self.default_properties
+#         self.default_properties.update(kwargs)
+#         self.default_properties.update(self.plot_kwargs)
+#         self.update_properties(self.default_properties)
+#         self._do_checks()
+#
+#         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
+#
+#         self.data = self.parse(self.cls, self.log10, copasi_file=self.copasi_file)
+#
+#         self.exp_data = self.read_experimental_data()
+#         self.sim_data = self.simulate_time_course()
+#
+#         self.cls.model = self.update_parameters()
+#         self.plot()
+#
+#     def __str__(self):
+#         """
+#
+#         :return:
+#         """
+#         return "PlotParameterEstimation(x='{}', y={}, savefig={}, results_directory='{}'".format(
+#             self.x, self.y, self.savefig,
+#             self.results_directory
+#         )
+#
+#     def _do_checks(self):
+#         """ """
+#
+#         if not isinstance(self.cls, tasks.ParameterEstimation):
+#             raise errors.InputError('first argument should be ParameterEstimation calss. Got {}'.format(type(self.cls)))
+#
+#         if self.results_directory is None:
+#             dct = {}
+#             for model_name in self.cls.models:
+#                 dct[model_name] = os.path.join(
+#                     self.cls.models[model_name].model.root,
+#                     'ParameterEstimationPlots')
+#             self.results_directory = dct
+#         if not isinstance(self.y, list):
+#             self.y = [self.y]
+#
+#     def update_parameters(self):
+#         """Use the InsertParameters class to insert estimated
+#
+#         Args:
+#           return: Model
+#
+#         Returns:
+#
+#         """
+#         for model_name in self.cls.models:
+#             self.cls.models[model_name].insert_parameters(df=self.data, inplace=True)
+#         return self.cls.models
+#
+#     def create_directories(self):
+#         """
+#         create a place for parameter estiamtion plots on disk
+#
+#         """
+#         directories = {}
+#         for model_name in self.cls.models:
+#             directories[model_name] = {}
+#             for fle in self.cls.experiment_files:
+#                 _, fle = os.path.split(fle)
+#                 directories[model_name][fle] = os.path.join(self.results_directory[model_name], fle[:-4])
+#                 if not os.path.isdir(directories[model_name][fle]):
+#                     os.makedirs(directories[model_name][fle])
+#         return directories
+#
+#     def read_experimental_data(self):
+#         """read the experimental data in order to figure
+#         out how long a time course we need to simulate
+#         with the new parameters
+#         :return:
+#
+#         Args:
+#
+#         Returns:
+#
+#         """
+#
+#         dct = {}
+#         for model_name in self.cls.models:
+#             dct[model_name] = {}
+#             experiment_files = [self.cls.config.experiments[i].filename for i in self.cls.config.experiments]
+#             for i in experiment_files:
+#                 dct[model_name][i] = pandas.read_csv(i, sep='\t')
+#         return dct
+#
+#     def get_time(self):
+#         """get dict of _experiments and max time
+#         :return:
+#
+#         Args:
+#
+#         Returns:
+#
+#         """
+#         dct = {}
+#         for model_name in self.cls.models:
+#             dct[model_name] = {}
+#             for i in self.exp_data:
+#                 print('i is', self.exp_data[i])
+#                 for j in self.exp_data[i]:
+#
+#                 # print(i, self.exp_data[model_name])
+#                 # print(self.exp_data[i]['Time'])
+#                 dct[model_name][i] = self.exp_data[i]['Time'].max()
+#         return dct
+#
+#     def simulate_time_course(self):
+#         """simulate a timecourse for each experiment
+#         which may have different simulation lengths
+#         :return:
+#
+#         Args:
+#
+#         Returns:
+#
+#         """
+#         d = {}
+#         for model_name in self.cls.models:
+#             time_dct = self.get_time()
+#             step_size = 1
+#             d[model_name] = {}
+#             for exp in time_dct:
+#                 indep_dct = {}
+#                 for exp_key in list(self.exp_data[exp].keys()):
+#                     if exp_key[-6:] == '_indep':
+#                         indep_dct[exp_key[:-6]] = self.exp_data[exp][exp_key].iloc[0]
+#
+#                     ## Insert independent vars
+#                     model.InsertParameters(self.cls.model, parameter_dict=indep_dct, inplace=True)
+#
+#                 TC = tasks.TimeCourse(
+#                     self.cls.models[model_name], end=time_dct[exp], step_size=step_size,
+#                     intervals=time_dct[exp] / step_size,
+#                 )
+#                 d[exp] = self.parse(TC, self.log10, copasi_file=self.copasi_file)
+#
+#         return d
+#
+#     def plot(self):
+#         """plot experimental data versus best parameter sets
+#         :return:
+#
+#         Args:
+#
+#         Returns:
+#
+#         """
+#         ## filter out y values which are not in the data file
+#         for model_name in self.cls.models:
+#             newy = []
+#             for y in self.y:
+#                 if y in list(list(self.read_experimental_data().values())[0].keys()):
+#                     newy.append(y)
+#
+#             self.y = newy
+#
+#             for exp in self.exp_data:
+#                 for sim in self.sim_data[model_name]:
+#                     if exp == sim:
+#
+#                         for key in self.y:
+#
+#                             plt.figure()
+#                             plt.plot(
+#                                 self.exp_data[exp]['Time'], self.exp_data[exp][key],
+#                                 label='Exp', linestyle=self.linestyle,
+#                                 marker=self.marker, linewidth=self.linewidth,
+#                                 markersize=self.markersize,
+#                                 alpha=0.5,
+#                                 color='#0E00FA',
+#                             )
+#                             plt.plot(
+#                                 self.sim_data[model_name][sim]['Time'], self.sim_data[model_name][sim][key],
+#                                 label='Sim', linestyle=self.linestyle,
+#                                 marker=self.marker, linewidth=self.linewidth,
+#                                 markersize=self.markersize,
+#                                 alpha=0.5,
+#                                 color='#FC0077'
+#                             )
+#
+#                             plt.legend(loc=(1, 0.5))
+#                             plt.title(key)
+#                             plt.xlabel('Time({})'.format(self.cls.model.time_unit))
+#                             plt.ylabel('Abundance\n({})'.format(self.cls.model.quantity_unit))
+#                             if self.savefig:
+#                                 dirs = self.create_directories()
+#                                 exp_key = os.path.split(exp)[1]
+#                                 fle = os.path.join(dirs[exp_key], '{}.png'.format(key))
+#                                 plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
+#                                 LOG.info('figure saved to "{}"'.format(fle))
+#         if self.show:
+#             plt.show()
 
 
 class Boxplots(_Viz, PlotKwargs):
@@ -2288,2831 +2313,1890 @@ class Boxplots(_Viz, PlotKwargs):
         return dct
 
 
-class LikelihoodRanks(_Viz, PlotKwargs):
-    """Plot the ordered residual sum of squares (RSS) objective
-    function value against the RSS's rank of best fit.
-    See :ref:`kwargs` for list of keyword arguments.
-
-    Args:
-
-    Returns:
-
-    """
-
-    def __init__(self, cls, **kwargs):
-        """
-
-        :param cls:
-            Instance of :py:class:`tasks.MultiParameterEstimation`
-            Same as :py:class:`PlotTimeCourseEnsemble`
-
-        :param kwargs:
-            see :ref:`kwargs`
-        """
-        self.cls = cls
-        self.kwargs = kwargs
-        # self.plot_kwargs = self.plot_kwargs()
-
-        self.default_properties = {'log10': False,
-                                   'truncate_mode': 'percent',
-                                   'theta': 100,
-                                   'xtick_rotation': 'horizontal',
-                                   'ylabel': None,
-                                   'title': 'Likelihood-Ranks Plot',
-                                   'savefig': False,
-                                   'results_directory': None,
-                                   'dpi': 400,
-                                   'show': False,
-                                   'filename': 'LikelihoodRanks',
-                                   'despine': True,
-                                   'ext': 'png',
-                                   'line_transparency': 1,  ##passed to matplotlib alpha parameter
-                                   'marker_transparency': 0.7,
-                                   'color': '#004ADF',
-                                   'markercolor': '#FF9709',
-                                   'linewidth': 3,
-                                   'markersize': 10,
-                                   'context': 'talk',
-                                   'font_scale': 1.5,
-                                   'rc': None,
-                                   'copasi_file': None,
-                                   }
-
-        # self.default_properties.update(self.plot_kwargs)
-        for i in list(kwargs.keys()):
-            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for RssVsIterations'.format(
-                i)
-        self.kwargs = self.default_properties
-        self.default_properties.update(kwargs)
-        # self.default_properties.update(self.plot_kwargs)
-        self.update_properties(self.default_properties)
-        self._do_checks()
-        seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
-
-        self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
-        self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
-
-        self.fig = self.plot()
-
-    def _do_checks(self):
-        """:return:"""
-        if self.log10:
-            self.ylabel = 'log$_{10}$ RSS'
-            self.xlabel = 'log$_{10}$ Rank of Best Fit'
-        else:
-            self.ylabel = 'RSS'
-            self.xlabel = 'Rank of Best Fit'
-
-    def create_directory(self):
-        """create a directory for the results
-        :return:
-
-        Args:
-
-        Returns:
-
-        """
-        if self.results_directory is None:
-            if type(self.cls) == Parse:
-                self.results_directory = os.path.join(os.path.dirname(self.cls.copasi_file), 'RssVsIterations')
-            else:
-                self.results_directory = os.path.join(
-                    self.cls.model.root, 'LikelihoodRank'
-                )
-
-        if not os.path.isdir(self.results_directory):
-            os.makedirs(self.results_directory)
-        return self.results_directory
-
-    def plot(self):
-        """Plot Rss Vs rank of best fit
-        :return:
-            None
-
-        Args:
-
-        Returns:
-
-        """
-
-        fig = plt.figure()
-        if self.log10:
-            x = numpy.log10(list(range(self.data['RSS'].shape[0])))
-        else:
-            x = list(range(self.data['RSS'].shape[0]))
-
-        plt.plot(x,
-                 self.data['RSS'].sort_values(ascending=True),
-                 color=self.color, linewidth=self.linewidth,
-                 alpha=self.line_transparency,
-                 )
-
-        plt.plot(x,
-                 self.data['RSS'].sort_values(ascending=True), 'o',
-                 color=self.markercolor, markersize=self.markersize,
-                 alpha=self.marker_transparency
-                 )
-
-        plt.xticks(rotation=self.xtick_rotation)
-        if self.title is not None:
-            plt.title(self.title + '(n={})'.format(self.data.shape[0]))
-        plt.ylabel(self.ylabel)
-        plt.xlabel('Rank of Best Fit')
-        if self.despine:
-            seaborn.despine(fig=fig, top=True, right=True)
-        if self.savefig:
-            self.results_directory = self.create_directory()
-            fle = os.path.join(self.results_directory, '{}.{}'.format(self.filename, self.ext))
-            plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
-
-        if self.show:
-            plt.show()
-
-        return fig
-
-
-class Pca(_Viz, PlotKwargs):
-    """Use the :py:class:`PCA` function to conduct
-    a principle component analysis on the parameter
-    estimation data.
-    
-    ===================   ====================
-    kwargs                Description
-    ===================   ====================
-    by                    `str` either Determine which axes of parameter estimation
-                          data to undergoe data reduction. When ``by='iterations'``
-                          the data is reduced to one data point per parameter estimation
-                          run. When ``by='parameters'``, data is reduced to one data point
-                          per parameter.
-    legend_position       `tuple`. When ``by='parameters`` specify the (horizontal, verticle,
-                          line spacing) parameter for the legend location and formatting
-    cmap                  `str` a valid matplotlib colour map
-    annotate              `bool` annotate. Automatically on when ``by='parameters'``
-    annotation_fontsize   `int` or `float`. fontsize for annotation
-    **kwargs              See :ref:`kwargs for more options
-    ===================   ====================
-
-    Args:
-
-    Returns:
-
-    """
-
-    def __init__(self, cls, **kwargs):
-        self.cls = cls
-        self.kwargs = kwargs
-        self.plot_kwargs = self.plot_kwargs()
-
-        self.default_properties = {'sep': '\t',
-                                   'truncate_mode': 'percent',
-                                   'theta': 100,
-                                   'log10': False,
-                                   'ylabel': None,
-                                   'xlabel': None,
-                                   'title': None,
-                                   'savefig': False,
-                                   'results_directory': None,
-                                   'dpi': 400,
-                                   'n_components': 2,
-                                   'by': 'iterations',  ##iterations or parameters
-                                   'legend_position': None,  ##Horizontal, verticle, line spacing
-                                   'legend_fontsize': 25,
-                                   'cmap': 'viridis',
-                                   'annotate': False,
-                                   'annotation_fontsize': 25,
-                                   'show': False,
-                                   'despine': True,
-                                   'ext': 'png',
-                                   'context': 'talk',
-                                   'font_scale': 1.5,
-                                   'rc': None,
-                                   'copasi_file': None,
-                                   }
-
-        self.default_properties.update(self.plot_kwargs)
-        for i in list(kwargs.keys()):
-            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for Pca'.format(i)
-        self.kwargs = self.default_properties
-        self.default_properties.update(kwargs)
-        self.default_properties.update(self.plot_kwargs)
-        self.update_properties(self.default_properties)
-        self._do_checks()
-        seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
-
-        self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
-        self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
-        self.pca()
-
-    def create_directory(self):
-        """create a directory for the results
-        :return:
-
-        Args:
-
-        Returns:
-
-        """
-        if self.results_directory is None:
-            if type(self.cls) == Parse:
-                self.results_directory = os.path.join(os.path.dirname(self.cls.copasi_file),
-                                                      'PCA')
-            else:
-                self.results_directory = os.path.join(self.cls.model.root,
-                                                      'PCA')
-
-        if not os.path.isdir(self.results_directory):
-            os.makedirs(self.results_directory)
-        return self.results_directory
-
-    def _do_checks(self):
-        """varify integrity of user input
-        :return:
-
-        Args:
-
-        Returns:
-
-        """
-        # if self.title is None:
-        #     if self.by is 'parameters':
-        #         title = 'PCA by Parameters (n={})'.format(len(labels))
-        #     elif self.by is 'iterations':
-        #         title = 'PCA by Iterations (n={})'.format(len(labels))
-
-        if self.by not in ['parameters', 'iterations']:
-            raise errors.InputError('{} not in {}'.format(
-                self.by, ['parameters', 'iterations']))
-
-        # if self.results_directory is None:
-        #     self.results_directory = self.create_directory()
-
-        if self.ylabel == None:
-            if self.log10 == False:
-                self.ylabel = 'PC2'
-            elif self.log10 == True:
-                self.ylabel = 'log10 PC2'
-            else:
-                raise errors.SomethingWentHorriblyWrongError('{} not in {}'.format(
-                    self.ylabel, [True, False]))
-
-        if self.xlabel == None:
-            if self.log10 == False:
-                self.xlabel = 'PC1'
-            elif self.log10 == True:
-                self.xlabel = 'log10 PC1'
-            else:
-                raise errors.SomethingWentHorriblyWrongError(
-                    '{} not in {}'.format(self.ylabel, [True, False]))
-
-        LOG.info('plotting PCA {}'.format(self.by))
-
-        if self.by == 'parameters':
-            self.annotate = True
-            if self.legend_position == None:
-                LOG.critical(
-                    'When data reduction is by \'parameters\' you should specify an argument to legend_position. i.e. legend_position=(10,10,1.5) for horizontal, vertical and linespacing')
-
-        if self.legend_position is None:
-            self.legend_position = (1, 1, 0.5)  ##horizontal, verticle, linespacing
-
-    def pca(self):
-        """ """
-        pca = PCA(n_components=self.n_components)
-        rss = self.data.RSS
-        self.data = self.data.drop('RSS', axis=1)
-        fig, ax = plt.subplots()
-        if self.by == 'parameters':
-            projected = pca.fit(self.data.transpose()).transform(self.data.transpose())
-            projected = pandas.DataFrame(projected, index=self.data.columns)
-            labels = self.data.columns
-            sc = ax.scatter(projected[0], projected[1])
-
-
-        else:
-            projected = pca.fit(self.data).transform(self.data)
-            projected = pandas.DataFrame(projected, index=self.data.index)
-            labels = list(self.data.index)
-            projected = pandas.concat([rss, projected], axis=1)
-            sc = ax.scatter(projected[0], projected[1], c=projected['RSS'], cmap=self.cmap)
-            cb = plt.colorbar(sc)
-            cb.ax.set_title('RSS')
-
-        if self.despine:
-            seaborn.despine(fig=fig, top=True, right=True)
-
-        plt.ylabel(self.ylabel)
-        plt.xlabel(self.xlabel)
-        plt.title(self.title)
-        # TODO connect copasi with the python community
-        # TODO mjor selling point for pycoools.
-        # TODO interafce with pysces, pyDStools and sloppycell
-        for i, txt in enumerate(labels):
-            if self.annotate:
-                ax.annotate(str(i), (projected[0][i], projected[1][i]),
-                            fontsize=self.annotation_fontsize)
-            if self.by == 'parameters':
-                ax.text(self.legend_position[0],
-                        self.legend_position[1] - i * self.legend_position[2],
-                        '{}: {}'.format(i, txt), fontsize=self.legend_fontsize)
-        if self.savefig:
-            self.create_directory()
-            fle = os.path.join(self.results_directory, 'Pca_by_{}.{}'.format(self.by, self.ext))
-            plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
-
-        if self.show:
-            plt.show()
-
-
-class Histograms(_Viz, PlotKwargs):
-    """Plot a Histograms for multi parameter estimation data.
-    
-    See :ref:`kwargs` for more options.
-
-    Args:
-
-    Returns:
-
-    """
-
-    def __init__(self, cls, **kwargs):
-        """
-
-        :param cls:
-            Instance of :py:class:`tasks.MultiParameterEstimation`
-            Same as :py:class:`PlotTimeCourseEnsemble`
-
-        :param kwargs:
-        """
-        self.cls = cls
-        self.kwargs = kwargs
-        self.plot_kwargs = self.plot_kwargs()
-
-        self.default_properties = {'sep': '\t',
-                                   'log10': False,
-                                   'truncate_mode': 'percent',
-                                   'theta': 100,
-                                   'xtick_rotation': 'horizontal',
-                                   'ylabel': 'Frequency',
-                                   'title': True,  ##boolean here as title is inferred from parameter
-                                   'savefig': False,
-                                   'results_directory': None,
-                                   'dpi': 400,
-                                   'title_fontsize': 35,
-                                   'show': False,
-                                   'despine': True,
-                                   'ext': 'png',
-                                   'color': 'green',
-                                   'hist': True,
-                                   'kde': False,
-                                   'rug': False,
-                                   'context': 'talk',
-                                   'font_scale': 1.5,
-                                   'rc': None,
-                                   'bins': None,
-                                   'copasi_file': None,
-                                   }
-
-        self.default_properties.update(self.plot_kwargs)
-        for i in list(kwargs.keys()):
-            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for Histograms'.format(i)
-        self.kwargs = self.default_properties
-        self.default_properties.update(kwargs)
-        self.default_properties.update(self.plot_kwargs)
-        self.update_properties(self.default_properties)
-        self._do_checks()
-
-        self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
-        self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
-        LOG.info('plotting histograms')
-        seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
-
-        self.plot()
-        # self.coloured_plot()
-
-    def _do_checks(self):
-        """:return:"""
-        if self.results_directory is None:
-            if type(self.cls) == Parse:
-                self.results_directory = os.path.join(os.path.dirname(self.cls.copasi_file), 'Histograms')
-            else:
-                self.results_directory = os.path.join(self.cls.model.root, 'Histograms')
-
-    def plot(self):
-        """ """
-        for parameter in list(self.data.keys()):
-            fig = plt.figure()
-            seaborn.distplot(
-                self.data[parameter], color=self.color, kde=self.kde, rug=self.rug,
-                hist=self.hist,
-                bins=self.bins
-            )
-            if self.log10:
-                plt.ylabel("{}".format(self.ylabel))
-                plt.xlabel("log$_{10}$" + "[{}]".format(parameter))
-            else:
-                plt.ylabel(self.ylabel)
-                plt.xlabel(parameter)
-            if self.title is True:
-                plt.title('{},n={}'.format(parameter, self.data[parameter].shape[0]),
-                          fontsize=self.title_fontsize)
-
-            if self.despine:
-                seaborn.despine(fig=fig, top=True, right=True)
-
-            if self.savefig:
-                self.create_directory(self.results_directory)
-                fname = os.path.join(self.results_directory,
-                                     misc.RemoveNonAscii(parameter).filter + '.{}'.format(self.ext))
-                plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
-                LOG.info('plot save to "{}"'.format(fname))
-
-    def coloured_plot(self):
-        """:return:"""
-        # for parameter in self.data.keys():
-        raise NotImplementedError('this is an attempt to colour bars '
-                                  'of histogram by RSS but the code does not '
-                                  'work. ')
-        parameter = 'Ski'
-        num_bins = 10
-        width = self.data[parameter].max() - self.data[parameter].min()
-        iqr = scipy.stats.iqr(self.data[parameter])
-        bins_size = 2 * (iqr / (self.data[parameter].shape[0] ** 1.0 / 3.0))
-
-        bins = numpy.arange(self.data[parameter].min(), self.data[parameter].max(),
-                            bins_size)  # width/num_bins
-        ## calculate the density of RSS
-
-        groups = self.data.groupby([pandas.cut(self.data[parameter], bins), 'RSS'])
-        data = groups.size().reset_index([parameter, 'RSS'])
-        data2 = data.groupby(parameter)[0].sum()
-        data3 = data.groupby(parameter)['RSS'].mean()
-        data5 = pandas.concat([data2, data3], axis=1)
-        data5['Density'] = data5[0] / (numpy.sum(data5[0].fillna(0).values * numpy.diff(bins)))
-
-        ## colours
-        norm = plt.Normalize(numpy.nanmin(data5['RSS'].values),
-                             numpy.nanmax(data5['RSS'].values))
-        colours = plt.cm.plasma(norm(data5['RSS'].fillna(0).values))
-
-        fig, ax = plt.subplots()
-
-        ax.bar(bins[:-1], data5.fillna(0)['Density'], width=width, color=colours, align='edge')
-
-        # seaborn.kdeplot(data[parameter], ax=ax, color='k', lw=2)
-
-        sm = plt.cm.ScalarMappable(cmap='plasma', norm=norm)
-        sm.set_array([])
-        fig.colorbar(sm, ax=ax, label='RSS')
-        ax.set_ylabel('Density')
-        ax.set_xlabel(parameter)
-        plt.show()
-
-
-class Scatters(_Viz, PlotKwargs):
-    """Plot scatter graphs. When 'x' and 'y' are lists, 2 way
-    combinations are automatically plotted and organized into
-    folders (when ``savefig=True``). Data is automatically
-    coloured by RSS.
-    
-    ========        =================================================
-    kwarg           Description
-    ========        =================================================
-    x               `str` or `list` of `str`. Variable(s) to plot on x
-                    axis. Defaults to ``RSS``
-    y               `str` or `list` of `str`. Variable(s) to plot on
-                    y axis. Defaults to all parameters in data set.
-    cmap            `str` a valid matplotlib colour map
-    colorbar_pad    Default=0.2. Distance of color bar from plot.
-    **kwargs        see :ref:`kwargs` for more options
-    ========        =================================================
-
-    Args:
-
-    Returns:
-
-    """
-
-    def __init__(self, cls, **kwargs):
-        """
-
-        :param cls:
-            Instance of :py:class:`tasks.MultiParameterEstimation`
-            Same as :py:class:`PlotTimeCourseEnsemble`
-
-        :param kwargs:
-        """
-        self.cls = cls
-        self.kwargs = kwargs
-        self.plot_kwargs = self.plot_kwargs()
-
-        self.default_properties = {
-            'x': 'RSS',
-            'y': None,
-            'sep': '\t',
-            'log10': False,
-            'cmap': 'jet_r',
-            'truncate_mode': 'percent',
-            'theta': 100,
-            'xtick_rotation': 'horizontal',
-            'ylabel': 'Frequency',
-            'savefig': False,
-            'results_directory': None,
-            'dpi': 400,
-            'title_fontsize': 35,
-            'title': True,  # Either True or None/False
-            'show': False,
-            'ext': 'png',
-            'despine': True,
-            'colorbar_pad': 0.2,  # padding for color bar. Dist between bar and axes
-            'context': 'talk',
-            'font_scale': 1.5,
-            'rc': None,
-            'copasi_file': None,
-        }
-
-        self.default_properties.update(self.plot_kwargs)
-        for i in list(kwargs.keys()):
-            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for Scatters'.format(i)
-        self.kwargs = self.default_properties
-        self.default_properties.update(kwargs)
-        self.default_properties.update(self.plot_kwargs)
-        self.update_properties(self.default_properties)
-        self._do_checks()
-        seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
-
-        self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
-        self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
-        self.plot()
-
-    def _do_checks(self):
-        """:return:"""
-        if isinstance(self.x, str):
-            self.x = [self.x]
-
-        if self.results_directory is None:
-            self.results_directory = os.path.join(self.cls.model.root, 'Scatters')
-
-    def plot(self):
-        """:return:"""
-        if self.y is None:
-            self.y = list(self.data.keys())
-
-        if (self.y == 'all') or (self.y == ['all']):
-            self.y = list(self.data.keys())
-
-        if self.x == 'all' or self.x == ['all']:
-            self.x = list(self.data.keys())
-
-        for x_var in self.x:
-            if x_var not in sorted(list(self.data.keys())):
-                raise errors.InputError('"{}" invalid. These are valid: "{}"'.format(
-                    x_var, list(self.data.keys())
-                ))
-            for y_var in self.y:
-                if x_var not in sorted(list(self.data.keys())):
-                    raise errors.InputError('"{}" invalid. These are valid: "{}"'.format(
-                        y_var, list(self.data.keys())
-                    )
-                    )
-                LOG.info('Plotting "{}" Vs "{}"'.format(x_var, y_var))
-                fig = plt.figure()
-                plt.scatter(
-                    self.data[x_var], self.data[y_var],
-                    cmap=self.cmap, c=self.data['RSS'],
-                )
-                # c_ax = plt.subplot(199)
-                # cb = matplotlib.colorbar.ColorbarBase(c_ax, orientation='vertical')
-                # c_ax.yaxis.set_ticks_position('right')
-                cb = plt.colorbar(pad=self.colorbar_pad)
-                # cb.set_
-
-                if self.title:
-                    title = 'Scatter graph of\n {} Vs {}.(n={})'.format(
-                        x_var, y_var, self.data.shape[0]
-                    )
-
-                if self.log10:
-                    cb.set_label('log10 RSS')
-                    plt.xlabel('log$_{10}$' + '[{}]'.format(x_var))
-                    plt.ylabel('log$_{10}$' + '[{}]'.format(y_var))
-                else:
-                    cb.set_label('RSS')
-                    plt.xlabel(x_var)
-                    plt.ylabel(y_var)
-
-                if self.despine:
-                    seaborn.despine(fig=fig, top=True, right=True)
-
-                if self.savefig:
-                    x_dir = os.path.join(self.results_directory, x_var)
-                    self.create_directory(x_dir)
-                    fle = os.path.join(x_dir, '{}.{}'.format(y_var, self.ext))
-                    plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
-
-        if self.show:
-            plt.show()
-
-
-class LinearRegression(_Viz, PlotKwargs):
-    """Perform multiple linear regression using
-    :py:module:`sklearn.linear_model`.
-    
-    ========    =================================================
-    kwarg       Description
-    ========    =================================================
-    lin_model   `func`. default=LassoCV. Any linear model supported
-                by :py:module:`sklearn.linear_model`. see `here`
-    
-                .. _here: http://scikit-learn.org/stable/modules/linear_model.html
-    
-    n_alphas    `int` number of alphas
-    max_iter    `int`. Number of iterations.
-    **kwargs    see :ref:`kwargs` for more options
-    ========    =================================================
-
-    Args:
-
-    Returns:
-
-    """
-
-    def __init__(self, cls, **kwargs):
-        """
-
-        :param cls:
-            Instance of :py:class:`tasks.MultiParameterEstimation`
-            Same as :py:class:`PlotTimeCourseEnsemble`
-
-        :param kwargs:
-        """
-        self.cls = cls
-        self.kwargs = kwargs
-        self.plot_kwargs = self.plot_kwargs()
-
-        self.default_properties = {
-            'lin_model': linear_model.LassoCV,
-            'log10': False,
-            'truncate_mode': 'percent',
-            'theta': 100,
-            'xtick_rotation': 'horizontal',
-            'ylabel': 'Frequency',
-            'scores_title': None,
-            'coef_title': None,
-            'savefig': False,
-            'results_directory': None,
-            'dpi': 400,
-            'title_fontsize': 35,
-            'show': False,
-            'n_alphas': 100,
-            'max_iter': 20000,
-            'ext': 'png',
-            'despine': True,
-            'context': 'talk',
-            'font_scale': 1.5,
-            'rc': None,
-            'copasi_file': None,
-        }
-
-        self.default_properties.update(self.plot_kwargs)
-        for i in list(kwargs.keys()):
-            assert i in list(
-                self.default_properties.keys()), '{} is not a keyword argument for LinearRegression'.format(i)
-        self.kwargs = self.default_properties
-        self.default_properties.update(kwargs)
-        self.default_properties.update(self.plot_kwargs)
-        self.update_properties(self.default_properties)
-        self._do_checks()
-        seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
-
-        self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
-        self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
-
-        self.scores, self.coef = self.compute_coefficients()
-        self.coef = self.coef.fillna(value=0)
-
-        self.plot_rss()
-        self.plot_scores()
-        self.plot_coef()
-
-    def _do_checks(self):
-        """:return:"""
-        if self.results_directory is None:
-            self.results_directory = os.path.join(self.cls.model.root, 'LinearRegression')
-
-        if self.scores_title is None:
-            pass
-        if self.log10:
-            self.scores_title = 'Model Fitting Test and Train Scores (Log10)'
-
-        else:
-            self.scores_title = 'Model Fitting Test and Train Scores'
-
-        if self.coef_title is None:
-            if self.log10:
-                self.coef_title = 'Coefficients (Log10)'
-            else:
-                self.coef_title = 'Coefficients'
-
-    def compute1coef(self, parameter):
-        """Compute coefficients for a single parameter
-        using self['lin_model'] from sklearn
-
-        Args:
-          parameter: 
-
-        Returns:
-
-        """
-        y = numpy.array(self.data[parameter])
-        X = self.data.drop(parameter, axis=1)
-        X_train, X_test, y_train, y_test = model_selection.train_test_split(X, y)
-
-        try:
-            lin_model = self.lin_model(fit_intercept=True, n_alphas=self.n_alphas,
-                                       max_iter=self.max_iter)
-        except TypeError:
-            lin_model = self.lin_model(fit_intercept=True)
-
-        lin_model.fit(X_train, y_train)
-        df = pandas.DataFrame(lin_model.coef_, index=X.columns, columns=[parameter])  # .sort_values(by='Coefficients')
-        df['abs_values'] = numpy.absolute(df[parameter])
-        df = df.sort_values(by='abs_values', ascending=False)
-        df = df.drop('abs_values', axis=1)
-        scores = [lin_model.score(X_train, y_train), lin_model.score(X_test, y_test)]
-        scores = pandas.DataFrame(scores, index=['TrainScore', 'TestScore'])
-        return scores, df
-
-    def compute_coefficients(self):
-        """ """
-        parameters = list(self.data.columns)
-        df_dct = {}
-        score_dct = {}
-        for y in parameters:
-            score_dct[y], df_dct[y] = self.compute1coef(y)
-
-        df1 = pandas.concat(score_dct, axis=1).transpose().sort_values(by='TestScore',
-                                                                       ascending=False)
-        df2 = pandas.concat(df_dct, axis=1)
-        return df1, df2
-
-    def plot_scores(self):
-        """ """
-        fig = plt.figure()
-        seaborn.heatmap(self.scores)
-        if self.despine:
-            seaborn.despine(fig=fig, top=True, right=True)
-
-        plt.title(self.scores_title, fontsize=self.title_fontsize)
-        if self.savefig:
-            self.create_directory(self.results_directory)
-            fname = os.path.join(self.results_directory, 'linregress_scores.{}'.format(self.ext))
-            plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
-
-    def plot_rss(self):
-        """ """
-        fig = plt.figure()
-        seaborn.heatmap(self.coef.RSS.sort_values(by='RSS', ascending=False))
-        plt.title('Lasso Regression \n(Y=RSS) (n={})'.format(self.data.shape[0]), fontsize=self.title_fontsize)
-        if self.despine:
-            seaborn.despine(fig=fig, top=True, right=True)
-        if self.savefig:
-            self.create_directory(self.results_directory)
-            fname = os.path.join(self.results_directory, 'linregress_RSS.{}'.format(self.ext))
-            plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
-
-    def plot_coef(self):
-        """:return:"""
-        self.coef.columns = self.coef.columns.droplevel(0)
-        self.coef = self.coef.drop('RSS', axis=1)
-        self.coef = self.coef.drop('RSS', axis=0)
-        fig = plt.figure()
-        seaborn.heatmap(self.coef, cbar_kws={'pad': 0.2})
-        if self.despine:
-            seaborn.despine(fig=fig, top=True, right=True)
-
-        plt.title(self.coef_title)
-        plt.xlabel('')
-        if self.savefig:
-            self.create_directory(self.results_directory)
-            fname = os.path.join(self.results_directory, 'linregress_parameters.{}'.format(self.ext))
-            plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
-
-
-class ModelSelectionOld(_Viz):
-    """Calculate model selection criteria AIC (corrected) and
-    BIC for a selection of models that have undergone fitting
-    using the :py:class:`tasks.MultiModelFit` class. Plot as
-    boxplots and histograms.
-
-    Args:
-
-    Returns:
-
-    """
-
-    def __init__(self, multi_model_fit, **kwargs):
-        """
-
-        :param multi_model_fit:
-            a :py:class:`tasks.MultiModelFit` object
-
-        :param filename:
-            `str` file to save model selection data to
-
-        :param pickle:
-            `str` pickle path to save data too
-        """
-        self.multi_model_fit = multi_model_fit
-        self.number_models = self.get_num_models()
-
-        self.default_properties = {
-            'lin_model': linear_model.LinearRegression,
-            'savefig': False,
-            'results_directory': None,
-            'dpi': 400,
-            'log10': False,
-            'filename': None,
-            'pickle': None,
-            'despine': True,
-            'ext': 'png',
-            'title': True,
-            'context': 'poster',
-            'font_scale': 2,
-            'rc': None,
-            'bins': None,
-            'hist': True,
-            'kde': False,
-            'rug': False,
-            'fit': None,
-            'hist_kws': None,
-            'kde_kws': None,
-            'rug_kws': None,
-            'color': None,
-            'palette': None,
-            'saturation': 0.75,
-            'vertical': None,
-            'norm_hist': False,
-            'axlabel': None,
-            'model_labels': None,
-            'label': None,
-            'ax': None,
-            'legend': True,
-            'legend_loc': (0, -0.5),
-            'show': False
-        }
-
-        for i in list(kwargs.keys()):
-            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for ModelSelection'.format(
-                i)
-        self.kwargs = self.default_properties
-        self.default_properties.update(kwargs)
-        self.update_properties(self.default_properties)
-
-        self._do_checks()
-
-        ## do model selection stuff
-        self.results_folder_dct = self._get_results_directories()
-        self.model_dct = self._get_model_dct()
-
-        ## code for having default legend labels
-        self.default_model_labels = {os.path.split(i)[1][:-6]: os.path.split(i)[1][:-6] for i in
-                                     [j.copasi_file for j in list(self.model_dct.values())]}
-
-        if self.model_labels is not None:
-            if type(self.model_labels) is not dict:
-                raise errors.InputError('model labels should be a dict')
-
-            for label in self.model_labels:
-                if label not in self.default_model_labels:
-                    raise errors.InputError('keys of the model_labels dict should be one of '
-                                            '"{}"'.format(self.default_model_labels))
-        elif self.model_labels is None:
-            self.model_labels = self.default_model_labels
-
-        self.data_dct = self._parse_data()
-        self.number_model_parameters = self._get_number_estimated_model_parameters()
-        self.number_observations = self._get_n()
-        self.model_selection_data = self.calculate_model_selection_criteria()
-        seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
-
-        # self.boxplot()
-        # self.histogram()
-        self.violin()
-        self.to_csv()
-
-    def __iter__(self):
-        for MPE in self.multi_model_fit:
-            yield MPE
-
-    def __getitem__(self, item):
-        return self.multi_model_fit[item]
-
-    def __setitem__(self, key, value):
-        self.multi_model_fit[key] = value
-
-    def __delitem__(self, key):
-        del self.multi_model_fit[key]
-
-    def keys(self):
-        """ """
-        return list(self.multi_model_fit.keys())
-
-    def values(self):
-        """ """
-        return list(self.multi_model_fit.values())
-
-    def items(self):
-        """ """
-        return list(self.multi_model_fit.items())
-
-    def _do_checks(self):
-        """:return:"""
-        if self.results_directory is None:
-            self.results_directory = self.multi_model_fit.project_dir
-
-        if self.filename is None:
-            save_dir = os.path.join(self.results_directory, 'ModelSelectionGraphs')
-            self.filename = os.path.join(save_dir, 'ModelSelectionCriteria.csv')
-
-    def _get_results_directories(self):
-        """Find the results directories embedded within MultimodelFit
-        and RunMutliplePEs.
-
-        Args:
-
-        Returns:
-
-        """
-        return self.multi_model_fit.results_folder_dct
-
-    def get_num_models(self):
-        """ """
-        return len(self.multi_model_fit.cps_files)
-
-    def to_excel(self, filename=None):
-        """
-
-        Args:
-          filename:  (Default value = None)
-
-        Returns:
-
-        """
-        if filename is None:
-            filename = self.filename[:-4] + '.xlsx'
-        self.model_selection_data.to_excel(filename)
-
-    def to_csv(self, filename=None):
-        """
-
-        Args:
-          filename:  (Default value = None)
-
-        Returns:
-
-        """
-        if filename is None:
-            filename = self.filename
-        LOG.info('model selection data saved to {}'.format(filename))
-        self.model_selection_data.to_csv(filename)
-
-    def to_pickle(self, filename=None):
-        """
-
-        Args:
-          filename:  (Default value = None)
-
-        Returns:
-
-        """
-        if filename is None:
-            filename = os.path.splitext(self.filename)[0] + '.pickle'
-
-        LOG.info('model selection pickle saved to {}'.format(filename))
-        self.model_selection_data.to_pickle(filename)
-
-    def _get_model_dct(self):
-        """Get a model dct. The model must be a configured model
-        (i.e. not the original and with a number after it)
-        :return:
-
-        Args:
-
-        Returns:
-
-        """
-        dct = {}
-        for MPE in self.multi_model_fit:
-            ## get the first cps file configured for eastimation in each MMF obj
-            cps_1 = glob.glob(
-                os.path.join(
-                    os.path.dirname(MPE.results_directory),
-                    '*_0.cps')
-            )[0]
-            dct[MPE.results_directory] = model.Model(cps_1)
-        return dct
-
-    def _parse_data(self):
-        """ """
-        if self.pickle is not None:
-            #     self.pickle = os.path.splitext(self.filename)[0]+'.pickle'
-            return pandas.read_pickle(self.pickle)
-        else:
-            dct = {}
-            for cps, MPE in list(self.multi_model_fit.items()):
-                cps_0 = cps[:-4] + '_0.cps'
-                dct[cps_0] = Parse(MPE.results_directory, copasi_file=cps_0, log10=self.log10)
-            return dct
-
-    def _get_number_estimated_model_parameters(self):
-        """ """
-        k_dct = {}
-        for mod in list(self.model_dct.values()):
-            k_dct[mod.copasi_file] = len(mod.fit_item_order)
-        return k_dct
-
-    def _get_n(self):
-        """get number of observed data points for AIC calculation"""
-        n = {}
-        for exp in self.multi_model_fit.exp_files:
-            data = pandas.read_csv(exp, sep='\t')
-            l = []
-            for key in list(data.keys()):
-                if key.lower() != 'time':
-                    if key[-6:] != '_indep':
-                        l.append(int(data[key].shape[0]))
-            n[exp] = sum(l)
-        n = sum(n.values())
-        return n
-
-    def calculate1AIC(self, RSS, K, n):
-        """Calculate the corrected AIC:
-        
-            AICc = -2*ln(RSS/n) + 2*K + (2*K*(K+1))/(n-K-1)
-        
-            or if likelihood function used instead of RSS
-        
-            AICc = -2*ln(likelihood) + 2*K + (2*K*(K+1))/(n-K-1)
-        
-        Where:
-            RSS:
-                Residual sum of squares for model fit
-            n:
-                Number of observations collectively in all data files
-        
-            K:
-                Number of model parameters
-
-        Args:
-          RSS: 
-          K: 
-          n: 
-
-        Returns:
-
-        """
-        return n * numpy.log((RSS / n)) + 2 * K + (2 * K * (K + 1)) / (n - K - 1)
-
-    def calculate1BIC(self, RSS, K, n):
-        """Calculate the bayesian information criteria
-            BIC = -2*ln(likelihood) + k*ln(n)
-        
-                Does this then go to:
-        
-            BIC = -2*ln(RSS/n) + k*ln(n)
-
-        Args:
-          RSS: 
-          K: 
-          n: 
-
-        Returns:
-
-        """
-        return (n * numpy.log(RSS / n)) + K * numpy.log(n)
-
-    def calculate_model_selection_criteria(self):
-        """Calculate AIC corrected and BIC
-        :return:
-            pandas.DataFrame
-
-        Args:
-
-        Returns:
-
-        """
-        df_dct = {}
-        for model_num in range(len(self.model_dct)):
-            keys = list(self.model_dct.keys())
-            cps_key = self.model_dct[keys[model_num]].copasi_file
-
-            k = self.number_model_parameters[cps_key]
-            n = self.number_observations  # constant throughout analysis
-            rss = self.data_dct[cps_key].data.RSS
-            aic_dct = {}
-            bic_dct = {}
-            for i in range(len(rss)):
-                aic = self.calculate1AIC(rss.iloc[i], k, n)
-                bic = self.calculate1BIC(rss.iloc[i], k, n)
-                aic_dct[i] = aic
-                bic_dct[i] = bic
-            aic = pandas.DataFrame.from_dict(aic_dct, orient='index')
-            rss = pandas.DataFrame(rss)
-            bic = pandas.DataFrame.from_dict(bic_dct, orient='index')
-            df = pandas.concat([rss, aic, bic], axis=1)
-            df.columns = ['RSS', 'AICc', 'BIC']
-            df.index.name = 'RSS Rank'
-            df_dct[os.path.split(cps_key)[1][:-6]] = df
-        df = pandas.concat(df_dct, axis=1)
-        return df
-
-    def boxplot(self):
-        """:return:"""
-        seaborn.set_context(context='poster')
-        data = self.model_selection_data
-
-        data = data.unstack()
-        data = data.reset_index()
-        data = data.rename(columns={'level_0': 'Model',
-                                    'level_1': 'Metric',
-                                    0: 'Score'})
-        for metric in data['Metric'].unique():
-            fig = plt.figure()
-            seaborn.boxplot(data=data[data['Metric'] == metric],
-                            x='Model', y='Score')
-            plt.xticks(rotation='vertical')
-            if self.title:
-                plt.title('{} Scores'.format(metric))
-            plt.xlabel(' ')
-            if self.despine:
-                seaborn.despine(fig=fig, top=True, right=True)
-
-            if self.savefig:
-                save_dir = os.path.join(self.results_directory, 'ModelSelectionGraphs')
-                if os.path.isdir(save_dir) is not True:
-                    os.mkdir(save_dir)
-                os.chdir(save_dir)
-                fname = os.path.join(save_dir, 'boxplot_{}.{}'.format(metric, self.ext))
-                plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
-                LOG.info('boxplot saved to : "{}"'.format(fname))
-
-    def histogram(self):
-        """:return:"""
-
-        seaborn.set_context(context='poster')
-        data = self.model_selection_data
-
-        data = data.unstack()
-        data = data.reset_index()
-        data = data.rename(columns={'level_0': 'Model',
-                                    'level_1': 'Metric',
-                                    0: 'Score'})
-        for label, df in data.groupby(by=['Metric']):
-            fig = plt.figure()
-            for label2, df2 in df.groupby(by='Model'):
-
-                plot_data = df2['Score'].dropna()
-                ax = seaborn.distplot(
-                    plot_data,
-                    bins=self.bins,
-                    hist=self.hist, kde=self.kde, rug=self.rug, fit=None,
-                    hist_kws=self.hist_kws, kde_kws=self.kde_kws, rug_kws=self.rug_kws,
-                    color=self.color, vertical=self.vertical, norm_hist=self.norm_hist,
-                    axlabel=self.axlabel, label=self.model_labels[label2], ax=self.ax)
-                if self.title:
-                    plt.title("{} Score (n={})".format(label, plot_data.shape[0]))
-                plt.ylabel("Frequency")
-                plt.xlabel("Score".format(label, plot_data.shape[0]))
-                if self.despine:
-                    seaborn.despine(fig=fig, top=True, right=True)
-
-                if self.legend:
-                    plt.legend(loc=(self.legend_loc))
-
-            if self.savefig:
-                save_dir = os.path.join(self.results_directory, 'ModelSelectionGraphs')
-                if os.path.isdir(save_dir) != True:
-                    os.mkdir(save_dir)
-                os.chdir(save_dir)
-                fname = os.path.join(save_dir, 'Histogram_{}_{}.{}'.format(label2, label, self.ext))
-                plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
-                LOG.info('histograms saved to : "{}"'.format(fname))
-                self.to_csv(self.filename)
-
-            if self.show:
-                plt.show()
-
-    def violin(self):
-        """ """
-        seaborn.set_context(context='poster')
-        data = self.model_selection_data
-
-        data = data.unstack()
-        data = data.reset_index()
-        data = data.rename(columns={'level_0': 'Model',
-                                    'level_1': 'Metric',
-                                    0: 'Score'})
-        for metric in data['Metric'].unique():
-            fig = plt.figure()
-            seaborn.violinplot(data=data[data['Metric'] == metric],
-                               x='Model',
-                               y='Score',
-                               color=self.color,
-                               palette=self.palette,
-                               saturation=self.saturation,
-                               axlabel=self.axlabel,
-                               ax=self.ax)
-            plt.xticks(rotation='vertical')
-            if self.title:
-                plt.title('{} Scores'.format(metric))
-            plt.xlabel(' ')
-            if self.despine:
-                seaborn.despine(fig=fig, top=True, right=True)
-
-            if self.savefig:
-                save_dir = os.path.join(self.results_directory, 'ModelSelectionGraphs')
-                if os.path.isdir(save_dir) is not True:
-                    os.mkdir(save_dir)
-                os.chdir(save_dir)
-                fname = os.path.join(save_dir, 'ViolinPlot_{}.{}'.format(metric, self.ext))
-                plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
-                LOG.info('Violin plot saved to : "{}"'.format(fname))
-
-    def chi2_lookup_table(self, alpha):
-        """Looks at the cdf of a chi2 distribution at incriments of
-        0.1 between 0 and 100.
-        
-        Returns the x axis value at which the alpha interval has been crossed,
-        i.e. gets the cut off point for chi2 dist with DOF and alpha .
-
-        Args:
-          alpha: 
-
-        Returns:
-
-        """
-        nums = numpy.arange(0, 100, 0.1)
-        table = list(zip(nums, scipy.stats.chi2.cdf(nums, self.kwargs.get('DOF'))))
-        for i in table:
-            if i[1] <= alpha:
-                chi2_df_alpha = i[0]
-        return chi2_df_alpha
-
-    def get_chi2_alpha(self):
-        """ """
-        dct = {}
-        alphas = numpy.arange(0, 1, 0.01)
-        for i in alphas:
-            dct[round(i, 3)] = self.chi2_lookup_table(i)
-        return dct[0.05]
-
-    def compare_sim_vs_exp(self):
-        """ """
-        LOG.info('Visually comparing simulated Versus Experiemntal data.')
-
-        for cps, res in list(self.multi_model_fit.results_folder_dct.items()):
-            tasks.InsertParameters(cps, parameter_path=res, index=0)
-            PE = tasks.ParameterEstimation(cps, self.multi_model_fit.exp_files,
-                                           randomize_start_values=False,
-                                           method='CurrentSolutionStatistics',
-                                           plot=True, savefig=True,
-                                           )
-            PE.set_up()
-            PE.run()
-            PE.format_results()
-
-    def get_best_parameters(self, filename=None):
-        """
-
-        Args:
-          filename:  (Default value = None)
-
-        Returns:
-
-        """
-        df = pandas.DataFrame()
-        for cps, res in list(self.multi_model_fit.results_folder_dct.items()):
-            df[os.path.split(cps)[1]] = ParsePEData(res).data.iloc[0]
-
-        if filename == None:
-            return df
-        else:
-            df.to_excel(filename)
-            return df
-
-    def compare_model_parameters(self, parameter_list, filename=None):
-        """Compare all the parameters accross multiple models
-        in a bar chart averaging and STD for a parameter accross
-        all models.
-        
-        May have a problem with different models have different
-
-        Args:
-          parameter_list: 
-          filename:  (Default value = None)
-
-        Returns:
-
-        """
-        best_parameters = self.get_best_parameters()
-        data = best_parameters.loc[parameter_list].transpose()
-        f = seaborn.barplot(data=numpy.log10(data))
-        f.set_xticklabels(parameter_list, rotation=90)
-        plt.legend(loc=(1, 1))
-        plt.title('Barplot Comparing Parameter Estimation Results for specific\nParameters accross all models')
-        plt.ylabel('log10 parameter_value,Err=SEM')
-        if filename != None:
-            plt.savefig(filename, dpi=200, bbox_inches='tight')
-
-
-class ModelSelection(_Viz):
-    """Calculate model selection criteria AIC (corrected) and
-    BIC for a selection of models that have undergone fitting
-    using the :py:class:`tasks.MultiModelFit` class. Plot as
-    boxplots and histograms.
-
-    Args:
-
-    Returns:
-
-    """
-
-    def __init__(self, multi_model_fit, **kwargs):
-        """
-
-        :param multi_model_fit:
-            a :py:class:`tasks.MultiModelFit` object
-
-        :param filename:
-            `str` file to save model selection data to
-
-        :param pickle:
-            `str` pickle path to save data too
-        """
-        self.multi_model_fit = multi_model_fit
-        self.number_models = self.get_num_models()
-
-        self.default_properties = {
-            'savefig': False,
-            'results_directory': None,
-            'dpi': 400,
-            'log10': False,
-            'filename': None,
-            'pickle': None,
-            'despine': True,
-            'ext': 'png',
-            'title': True,
-            'context': 'poster',
-            'font_scale': 2,
-            'rc': None,
-            'color': None,
-            'palette': None,
-            'saturation': 0.75,
-            'model_labels': None,
-            'label': None,
-            'ax': None,
-            'show': False,
-            'order': None,
-            'figsize': (8, 6),
-            'violin_kwargs': {},
-        }
-
-        for i in list(kwargs.keys()):
-            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for ModelSelection'.format(
-                i)
-        self.kwargs = self.default_properties
-        self.default_properties.update(kwargs)
-        self.update_properties(self.default_properties)
-
-        self._do_checks()
-
-        ## do model selection stuff
-        self.results_folder_dct = self._get_results_directories()
-        self.model_dct = self._get_model_dct()
-
-        ## code for having default legend labels
-        self.default_model_labels = {i.name: i.name for i in list(self.model_dct.values())}
-
-        if self.model_labels is not None:
-            if type(self.model_labels) is not dict:
-                raise errors.InputError('model labels should be a dict')
-
-            for label in self.model_labels:
-                if label not in self.default_model_labels:
-                    raise errors.InputError('keys of the model_labels dict should be one of '
-                                            '"{}"'.format(list(self.default_model_labels.keys())))
-        elif self.model_labels is None:
-            self.model_labels = self.default_model_labels
-
-        self.data_dct = self._parse_data()
-        self.number_model_parameters = self._get_number_estimated_model_parameters()
-        self.number_observations = self._get_n()
-        self.model_selection_data = self.calculate_model_selection_criteria()
-        seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
-
-        # self.boxplot()
-        # self.histogram()
-        self.fig = self.violin()
-        self.to_csv()
-
-    def __iter__(self):
-        for MPE in self.multi_model_fit:
-            yield MPE
-
-    def __getitem__(self, item):
-        return self.multi_model_fit[item]
-
-    def __setitem__(self, key, value):
-        self.multi_model_fit[key] = value
-
-    def __delitem__(self, key):
-        del self.multi_model_fit[key]
-
-    def keys(self):
-        """ """
-        return list(self.multi_model_fit.keys())
-
-    def values(self):
-        """ """
-        return list(self.multi_model_fit.values())
-
-    def items(self):
-        """ """
-        return list(self.multi_model_fit.items())
-
-    def _do_checks(self):
-        """:return:"""
-        if self.results_directory is None:
-            self.results_directory = self.multi_model_fit.project_dir
-
-        if self.filename is None:
-            save_dir = os.path.join(self.results_directory, 'ModelSelectionGraphs')
-            self.filename = os.path.join(save_dir, 'ModelSelectionCriteria.csv')
-
-    def _get_results_directories(self):
-        """Find the results directories embedded within MultimodelFit
-        and RunMutliplePEs.
-
-        Args:
-
-        Returns:
-
-        """
-        return self.multi_model_fit.results_folder_dct
-
-    def get_num_models(self):
-        """ """
-        return len(self.multi_model_fit.cps_files)
-
-    def to_excel(self, filename=None):
-        """
-
-        Args:
-          filename:  (Default value = None)
-
-        Returns:
-
-        """
-        if filename is None:
-            filename = self.filename[:-4] + '.xlsx'
-        self.model_selection_data.to_excel(filename)
-
-    def to_csv(self, filename=None):
-        """
-
-        Args:
-          filename:  (Default value = None)
-
-        Returns:
-
-        """
-        if filename is None:
-            filename = self.filename
-        LOG.info('model selection data saved to {}'.format(filename))
-        self.model_selection_data.to_csv(filename)
-
-    def to_pickle(self, filename=None):
-        """
-
-        Args:
-          filename:  (Default value = None)
-
-        Returns:
-
-        """
-        if filename is None:
-            filename = os.path.splitext(self.filename)[0] + '.pickle'
-
-        LOG.info('model selection pickle saved to {}'.format(filename))
-        self.model_selection_data.to_pickle(filename)
-
-    def _get_model_dct(self):
-        """Get a model dct. The model must be a configured model
-        (i.e. not the original and with a number after it)
-        :return:
-
-        Args:
-
-        Returns:
-
-        """
-        dct = {}
-        for MPE in self.multi_model_fit:
-            ## get the first cps file configured for eastimation in each MMF obj
-            cps_1 = sorted(glob.glob(
-                os.path.join(
-                    os.path.dirname(MPE.results_directory),
-                    '*.cps')
-            ))[0]
-            dct[MPE.results_directory] = model.Model(cps_1)
-        return dct
-
-    def _parse_data(self):
-        """ """
-        if self.pickle is not None:
-            #     self.pickle = os.path.splitext(self.filename)[0]+'.pickle'
-            return pandas.read_pickle(self.pickle)
-        else:
-            dct = {}
-            for cps, MPE in list(self.multi_model_fit.items()):
-                cps_0 = cps[:-4] + '.cps'
-                dct[cps_0] = Parse(MPE.results_directory, copasi_file=cps_0, log10=self.log10)
-            return dct
-
-    def _get_number_estimated_model_parameters(self):
-        """ """
-        k_dct = {}
-        for mod in list(self.model_dct.values()):
-            k_dct[mod.copasi_file] = len(mod.fit_item_order)
-        return k_dct
-
-    def _get_n(self):
-        """get number of observed data points for AIC calculation"""
-        n = {}
-        for exp in self.multi_model_fit.exp_files:
-            data = pandas.read_csv(exp, sep='\t')
-            l = []
-            for key in list(data.keys()):
-                if key.lower() != 'time':
-                    if key[-6:] != '_indep':
-                        l.append(int(data[key].shape[0]))
-            n[exp] = sum(l)
-        n = sum(n.values())
-        return n
-
-    def calculate1AIC(self, RSS, K, n):
-        """Calculate the corrected AIC:
-        
-            AICc = -2*ln(RSS/n) + 2*K + (2*K*(K+1))/(n-K-1)
-        
-            or if likelihood function used instead of RSS
-        
-            AICc = -2*ln(likelihood) + 2*K + (2*K*(K+1))/(n-K-1)
-        
-        Where:
-            RSS:
-                Residual sum of squares for model fit
-            n:
-                Number of observations collectively in all data files
-        
-            K:
-                Number of model parameters
-
-        Args:
-          RSS: 
-          K: 
-          n: 
-
-        Returns:
-
-        """
-        return n * numpy.log((RSS / n)) + 2 * K + (2 * K * (K + 1)) / (n - K - 1)
-
-    def calculate1BIC(self, RSS, K, n):
-        """Calculate the bayesian information criteria
-            BIC = -2*ln(likelihood) + k*ln(n)
-        
-                Does this then go to:
-        
-            BIC = -2*ln(RSS/n) + k*ln(n)
-
-        Args:
-          RSS: 
-          K: 
-          n: 
-
-        Returns:
-
-        """
-        return (n * numpy.log(RSS / n)) + K * numpy.log(n)
-
-    def calculate_model_selection_criteria(self):
-        """Calculate AIC corrected and BIC
-        :return:
-            pandas.DataFrame
-
-        Args:
-
-        Returns:
-
-        """
-        df_dct = {}
-        for model_num in range(len(self.model_dct)):
-            keys = list(self.model_dct.keys())
-            cps_key = self.model_dct[keys[model_num]].copasi_file
-
-            k = self.number_model_parameters[cps_key]
-            n = self.number_observations  # constant throughout analysis
-            rss = self.data_dct[cps_key].data.RSS
-            aic_dct = {}
-            bic_dct = {}
-            for i in range(len(rss)):
-                aic = self.calculate1AIC(rss.iloc[i], k, n)
-                bic = self.calculate1BIC(rss.iloc[i], k, n)
-                aic_dct[i] = aic
-                bic_dct[i] = bic
-            aic = pandas.DataFrame.from_dict(aic_dct, orient='index')
-            rss = pandas.DataFrame(rss)
-            bic = pandas.DataFrame.from_dict(bic_dct, orient='index')
-            df = pandas.concat([rss, aic, bic], axis=1)
-            df.columns = ['RSS', 'AICc', 'BIC']
-            df.index.name = 'RSS Rank'
-            # df_dct[os.path.split(cps_key)[1][:-6]] = df
-            df_dct[self.model_dct[keys[model_num]].name] = df
-        df = pandas.concat(df_dct, axis=1)
-        return df
-
-    def violin(self):
-        """ """
-        # seaborn.set_context(context='poster')
-        data = self.model_selection_data
-
-        data = data.unstack()
-        data = data.reset_index()
-        data = data.rename(columns={'level_0': 'Model',
-                                    'level_1': 'Metric',
-                                    0: 'Score'})
-
-        new_names = []
-        for mod in data['Model']:
-            for j in self.model_labels:
-                if mod == j:
-                    new_names.append(self.model_labels[j])
-
-        figs = []
-        data['Model'] = new_names
-        for metric in data['Metric'].unique():
-            fig = plt.figure(figsize=self.figsize)
-            seaborn.violinplot(data=data[data['Metric'] == metric],
-                               x='Model',
-                               y='Score',
-                               color=self.color,
-                               palette=self.palette,
-                               saturation=self.saturation,
-                               ax=self.ax,
-                               order=self.order,
-                               **self.violin_kwargs
-                               )
-            plt.xticks(rotation='vertical')
-            if self.title:
-                plt.title('{} Scores'.format(metric))
-            plt.xlabel(' ')
-            if self.despine:
-                seaborn.despine(fig=fig, top=True, right=True)
-
-            if self.savefig:
-                save_dir = os.path.join(self.results_directory, 'ModelSelectionGraphs')
-                if os.path.isdir(save_dir) is not True:
-                    os.mkdir(save_dir)
-                os.chdir(save_dir)
-                fname = os.path.join(save_dir, 'ViolinPlot_{}.{}'.format(metric, self.ext))
-                plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
-                LOG.info('Violin plot saved to : "{}"'.format(fname))
-
-            figs.append(fig)
-        return figs
-
-    def chi2_lookup_table(self, alpha):
-        """Looks at the cdf of a chi2 distribution at incriments of
-        0.1 between 0 and 100.
-        
-        Returns the x axis value at which the alpha interval has been crossed,
-        i.e. gets the cut off point for chi2 dist with DOF and alpha .
-
-        Args:
-          alpha: 
-
-        Returns:
-
-        """
-        nums = numpy.arange(0, 100, 0.1)
-        table = list(zip(nums, scipy.stats.chi2.cdf(nums, self.kwargs.get('DOF'))))
-        for i in table:
-            if i[1] <= alpha:
-                chi2_df_alpha = i[0]
-        return chi2_df_alpha
-
-    def get_chi2_alpha(self):
-        """ """
-        dct = {}
-        alphas = numpy.arange(0, 1, 0.01)
-        for i in alphas:
-            dct[round(i, 3)] = self.chi2_lookup_table(i)
-        return dct[0.05]
-
-    def compare_sim_vs_exp(self):
-        """ """
-        LOG.info('Visually comparing simulated Versus Experiemntal data.')
-
-        for cps, res in list(self.multi_model_fit.results_folder_dct.items()):
-            tasks.InsertParameters(cps, parameter_path=res, index=0)
-            PE = tasks.ParameterEstimation(cps, self.multi_model_fit.exp_files,
-                                           randomize_start_values=False,
-                                           method='CurrentSolutionStatistics',
-                                           plot=True, savefig=True,
-                                           )
-            PE.set_up()
-            PE.run()
-            PE.format_results()
-
-    def get_best_parameters(self, filename=None):
-        """
-
-        Args:
-          filename:  (Default value = None)
-
-        Returns:
-
-        """
-        df = pandas.DataFrame()
-        for cps, res in list(self.multi_model_fit.results_folder_dct.items()):
-            df[os.path.split(cps)[1]] = ParsePEData(res).data.iloc[0]
-
-        if filename == None:
-            return df
-        else:
-            df.to_excel(filename)
-            return df
-
-    def compare_model_parameters(self, parameter_list, filename=None):
-        """Compare all the parameters accross multiple models
-        in a bar chart averaging and STD for a parameter accross
-        all models.
-        
-        May have a problem with different models have different
-
-        Args:
-          parameter_list: 
-          filename:  (Default value = None)
-
-        Returns:
-
-        """
-        best_parameters = self.get_best_parameters()
-        data = best_parameters.loc[parameter_list].transpose()
-        f = seaborn.barplot(data=numpy.log10(data))
-        f.set_xticklabels(parameter_list, rotation=90)
-        plt.legend(loc=(1, 1))
-        plt.title('Barplot Comparing Parameter Estimation Results for specific\nParameters accross all models')
-        plt.ylabel('log10 parameter_value,Err=SEM')
-        if filename != None:
-            plt.savefig(filename, dpi=200, bbox_inches='tight')
-
-
-class PlotProfileLikelihood(_Viz):
-    """ """
-
-    def __init__(self, cls, data=None, **kwargs):
-        """
-        Plot profile likelihoods
-        :param data:
-        :param kwargs:
-        """
-        self.cls = cls
-
-        self.default_properties = {'x': None,
-                                   'y': None,  # can equal all
-                                   'index': None,
-                                   'rss_value': None,
-                                   'log10': True,
-                                   'savefig': False,
-                                   'results_directory': None,
-                                   'dpi': 400,
-                                   'plot_cl': True,
-                                   'alpha': 0.95,
-                                   'title': None,
-                                   'xlabel': None,
-                                   'ylabel': None,
-                                   'color': None,  # if RSS, colour plots by RSS
-                                   'cmap': 'jet_r',
-                                   'legend': False,
-                                   'legend_loc': None,
-                                   'show': False,
-                                   'separate': True,
-                                   'filename': None,
-                                   'despine': True,
-                                   'ext': 'png',
-                                   'show_best_rss': True,
-                                   'best_rss_marker': 'k*',  ##Any matplotlib marker
-                                   'ylim': None,
-                                   'xlim': None,
-                                   'interpolation': None,
-                                   'interpolation_resolution': 1000,  # number of steps to interpolate
-                                   'context': 'talk',
-                                   'font_scale': 1,
-                                   'rc': None,
-                                   'multiplot': False,
-                                   'same_axis': False,
-                                   'colorbar_pad': 0.2,
-                                   }
-
-        for i in list(kwargs.keys()):
-            assert i in list(
-                self.default_properties.keys()), '{} is not a keyword argument for PlotProfileLikelihood'.format(i)
-        self.kwargs = self.default_properties
-        self.default_properties.update(kwargs)
-        self.update_properties(self.default_properties)
-        seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
-
-        ## parse data
-        self.data = Parse(self.cls, log10=self.log10,
-                          alpha=self.alpha, rss_value=self.rss_value).data
-
-        ## do some checks
-        self._do_checks()
-
-        ## do plotting
-        if self.same_axis:
-            self.plot_same_axis()
-        else:
-            self.plot()
-        ##todo implement ability to change confidence level from Plot.
-        ##at the moment the CL is conputer by Parse. This is not optimal
-
-    def _do_checks(self):
-        """:return:"""
-        ## todo put original estimatd values on non rss graphs as well
-        if self.ylim is not None:
-            if not isinstance(self.ylim, tuple):
-                raise errors.InputError('ylim arg should be tuple. Got "{}"'.format(type(self.ylim)))
-
-            if len(self.ylim) is not 2:
-                raise errors.InputError('ylim arg should be tuple of length 2. '
-                                        'See "https://matplotlib.org/devdocs/api/_as_gen/matplotlib.pyplot.ylim.html" '
-                                        'for details')
-
-        if self.xlim is not None:
-            if not isinstance(self.xlim, tuple):
-                raise errors.InputError('xlim arg should be tuple. Got "{}"'.format(type(self.xlim)))
-
-            if len(self.xlim) is not 2:
-                raise errors.InputError('xlim arg should be tuple of length 2. '
-                                        'See "https://matplotlib.org/devdocs/api/_as_gen/matplotlib.pyplot.xlim.html" '
-                                        'for details')
-
-        interpolation_kinds = ['linear', 'nearest', 'zero',
-                               'slinear', 'quadratic', 'cubic']
-
-        if self.interpolation is not None:
-            if self.interpolation not in interpolation_kinds:
-                raise errors.InputError('"{}" is not in "{}"'.format(
-                    self.interpolation, interpolation_kinds
-                ))
-
-        if type(self.cls) == tasks.ProfileLikelihood:
-            self.results_directory = self.cls.results_directory
-        else:
-            LOG.warning('cls not of type tasks.ProfileLikelihood')
-
-        if isinstance(self.data, pandas.core.frame.DataFrame) != True:
-            raise errors.InputError('"{}" should be a dataframe not "{}".'.format(self.data, type(self(data))))
-
-        self.parameter_list = sorted(list(self.data.columns))
-
-        if self.separate == False:
-            self.legend = True
-
-        if self.index is None:
-            self.index = 0
-
-        if not isinstance(self.index, list):
-            self.index = [self.index]
-
-        if self.x == None:
-            self.x = [i for i in self.parameter_list if i is not 'RSS']
-            # raise errors.InputError('x cannot be None')
-
-        if self.y == None:
-            self.y = 'RSS'
-
-        if self.y == 'all':
-            self.y = self.parameter_list
-
-        if self.x == 'all':
-            self.x = [i for i in self.parameter_list if i != 'RSS']
-
-        if self.y == None:
-            raise errors.InputError('y cannot be None')
-
-        if isinstance(self.y, str):
-            self.y = [self.y]
-
-        if isinstance(self.y, list):
-            for y_param in self.y:
-                if y_param not in self.parameter_list:
-                    raise errors.InputError('{} not in {}'.format(y_param, self.parameter_list))
-
-        if isinstance(self.x, str):
-            self.x = [self.x]
-
-        if isinstance(self.x, list):
-            for x_param in self.x:
-                if x_param not in self.parameter_list:
-                    raise errors.InputError('{} not in {}'.format(x_param, self.parameter_list))
-
-        if self.filename is not None:
-            if not os.path.isabs(self.filename):
-                self.filename = os.path.join(self.results_directory, self.filename)
-
-            self.data.to_csv(self.filename)
-            LOG.info('Profile likelihood data saved to "{}"'.format(self.filename))
-
-    def plot_same_axis(self):
-        """:return:"""
-        fig = plt.figure()
-        for x in self.x:
-            for y in self.y:
-                colorbar_present = False
-                for i in self.index:
-                    if y == 'RSS':
-                        plot_data = self.data.loc[x, i][y]
-                    else:
-                        plot_data = self.data.loc[x, i][[y, 'RSS']]
-                    if type(plot_data) == pandas.Series:
-                        plot_data = pandas.DataFrame(plot_data)
-
-                    plot_data = plot_data.reset_index()
-
-                    x_plot = plot_data['Parameter Of Interest Value']
-                    y_plot = plot_data[y]
-
-                    if self.color == 'RSS':
-                        c = plot_data['RSS']
-                    elif self.color is None:
-                        c = 'r'
-
-                    if self.interpolation is not None:
-                        f = interp1d(x_plot, y_plot, kind=self.interpolation)
-                        minimum = x_plot.min()
-                        maximum = x_plot.max()
-                        step = (maximum - minimum) / self.interpolation_resolution
-                        xnew = numpy.arange(start=minimum, stop=maximum, step=step)
-                        ynew = f(xnew)
-                        plt.plot(xnew, ynew, 'k')
-                        plt.scatter(x_plot, y_plot, c=c, cmap=self.cmap,
-                                    marker='o', label=y, linewidth=2)  # linestyle='o', color='red')
-                    else:
-                        plt.scatter(x_plot, y_plot, c=c, cmap=self.cmap,
-                                    marker='o', label=y, linewidth=2)
-
-                    if self.color == 'RSS':
-                        if not colorbar_present:
-                            cb = plt.colorbar(pad=self.colorbar_pad)
-                            colorbar_present = True
-
-                    if y is 'RSS':
-                        plt.plot(plot_data['Parameter Of Interest Value'],
-                                 plot_data['Confidence Level'], linewidth=3,
-                                 linestyle='--', color='green', label='CL')
-
-                    if self.show_best_rss:
-                        if y is 'RSS':
-                            best_rss = list(set(plot_data['Best RSS Value']))
-                            best_param_val = list(set(plot_data['Best Parameter Value']))
-                            plt.plot(best_param_val, best_rss, self.best_rss_marker, linewidth=5,
-                                     markersize=12)
-
-                    if self.legend:
-                        if self.legend_loc is not None:
-                            plt.legend(loc=self.legend_loc)
-                        else:
-                            plt.legend(loc='best')
-
-                    if self.despine:
-                        seaborn.despine(fig=fig, top=True, right=True)
-
-                    if self.title is None:
-                        self.title = 'Profile Likelihoods for\n{} ' \
-                                     'against {} (index={})'.format(x, y, i)
-
-                    elif self.title is 'profile':
-                        self.title = x
-
-                    if self.title is not False:
-                        plt.title(self.title)
-
-                    if self.log10:
-                        plt.ylabel(r'$log_{10}$[{}]'.format(y))
-                        plt.xlabel(r'$log_{10}$[{}]'.format(x))
-                        if self.color == 'RSS':
-                            cb.set_label('log_${10}$[RSS]')
-                    else:
-                        plt.ylabel(y)
-                        plt.xlabel(x)
-                        if self.color == 'RSS':
-                            cb.set_label('RSS')
-
-                    if self.ylim is not None:
-                        plt.ylim(self.ylim)
-
-                    if self.xlim is not None:
-                        plt.xlim(self.xlim)
-
-                    if self.savefig:
-                        d = os.path.join(self.results_directory, str(i))
-                        d = os.path.join(d, x)
-                        self.create_directory(d)
-                        fname = os.path.join(d, misc.RemoveNonAscii(y).filter + '.{}'.format(self.ext))
-
-                        plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
-                        LOG.info('saved to --> {}'.format(fname))
-
-                    if self.show:
-                        plt.show()
-
-    def plot(self):
-        """:return:"""
-        for x in self.x:
-            for y in self.y:
-                ##indicator var for colorbar
-                colorbar_present = False
-                if self.multiplot:
-                    fig = plt.figure()
-                for i in self.index:
-                    if y == 'RSS':
-                        plot_data = self.data.loc[x, i][y]
-                    else:
-                        plot_data = self.data.loc[x, i][[y, 'RSS']]
-                    if type(plot_data) == pandas.Series:
-                        plot_data = pandas.DataFrame(plot_data)
-
-                    if not self.multiplot:
-                        fig = plt.figure()
-
-                    plot_data = plot_data.reset_index()
-
-                    x_plot = plot_data['Parameter Of Interest Value']
-                    y_plot = plot_data[y]
-
-                    if self.color == 'RSS':
-                        c = plot_data['RSS']
-                    elif self.color is None:
-                        c = 'r'
-
-                    if self.interpolation is not None:
-                        f = interp1d(x_plot, y_plot, kind=self.interpolation)
-                        minimum = x_plot.min()
-                        maximum = x_plot.max()
-                        step = (maximum - minimum) / self.interpolation_resolution
-                        xnew = numpy.arange(start=minimum, stop=maximum, step=step)
-                        ynew = f(xnew)
-                        plt.plot(xnew, ynew, 'k')
-                        plt.scatter(x_plot, y_plot, c=c,
-                                    marker='o', label=y, linewidth=2,
-                                    )
-                    else:
-                        plt.scatter(x_plot, y_plot, c=c, cmap=self.cmap,
-                                    label=y, marker='o')
-
-                    if self.color == 'RSS':
-                        if not colorbar_present:
-                            cb = plt.colorbar(pad=self.colorbar_pad)
-                            colorbar_present = True
-
-                    if y is 'RSS':
-                        plt.plot(plot_data['Parameter Of Interest Value'],
-                                 plot_data['Confidence Level'], linewidth=3,
-                                 linestyle='--', color='green', label='CL')
-
-                    if self.show_best_rss:
-                        if y == 'RSS':
-                            best_rss = list(set(plot_data['Best RSS Value']))
-                            best_param_val = list(set(plot_data['Best Parameter Value']))
-                            plt.plot(best_param_val, best_rss, self.best_rss_marker, linewidth=5,
-                                     markersize=12)
-
-                    if self.legend:
-                        if self.legend_loc is not None:
-                            plt.legend(loc=self.legend_loc)
-                        else:
-                            plt.legend(loc='best')
-
-                    if self.despine:
-                        seaborn.despine(fig=fig, top=True, right=True)
-
-                    if self.title is None:
-                        self.title = 'Profile Likelihoods for\n{} ' \
-                                     'against {} (index={})'.format(x, y, i)
-
-                    # elif self.title is 'profile':
-                    #     self.title = x
-
-                    # plt.title(self.title)
-
-                    if self.log10:
-                        plt.ylabel(r'log$_{10}$' + '[{}]'.format(y))
-                        plt.xlabel(r'log$_{10}$' + '[{}]'.format(x))
-                        if self.color == 'RSS':
-                            cb.set_label('log$_{10}$[RSS]')
-                    else:
-                        plt.ylabel(y)
-                        plt.xlabel(x)
-                        if self.color == 'RSS':
-                            cb.set_label('RSS')
-
-                    if self.ylim is not None:
-                        plt.ylim(self.ylim)
-
-                    if self.xlim is not None:
-                        plt.xlim(self.xlim)
-
-                    if self.savefig:
-                        d = os.path.join(self.results_directory, str(i))
-                        d = os.path.join(d, x)
-                        self.create_directory(d)
-                        fname = os.path.join(d, misc.RemoveNonAscii(y).filter + '.{}'.format(self.ext))
-
-                        plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
-                        LOG.info('saved to --> {}'.format(fname))
-
-                    if self.show:
-                        plt.show()
-
-    def plot_pdf(self):
-        """:return:"""
-        raise NotImplementedError
-        # with PdfPages()
-        for x in self.x:
-            for y in self.y:
-                if self.multiplot:
-                    fig = plt.figure()
-                for i in self.index:
-                    plot_data = self.data.loc[x, i][y]
-                    if type(plot_data) == pandas.Series:
-                        plot_data = pandas.DataFrame(plot_data)
-
-                    if not self.multiplot:
-                        fig = plt.figure()
-
-                    plot_data = plot_data.reset_index()
-
-                    x_plot = plot_data['Parameter Of Interest Value']
-                    y_plot = plot_data[y]
-
-                    if self.interpolation is not None:
-                        f = interp1d(x_plot, y_plot, kind=self.interpolation)
-                        minimum = x_plot.min()
-                        maximum = x_plot.max()
-                        step = (maximum - minimum) / self.interpolation_resolution
-                        xnew = numpy.arange(start=minimum, stop=maximum, step=step)
-                        ynew = f(xnew)
-                        plt.plot(xnew, ynew, 'k')
-                        plt.plot(x_plot, y_plot, 'ro', label=y, linewidth=2)  # linestyle='o', color='red')
-                    else:
-                        plt.plot(x_plot, y_plot, label=y, marker='o')
-
-                    if y is 'RSS':
-                        plt.plot(plot_data['Parameter Of Interest Value'],
-                                 plot_data['Confidence Level'], linewidth=3,
-                                 linestyle='--', color='green', label='CL')
-
-                    if self.show_best_rss:
-                        best_rss = list(set(plot_data['Best RSS Value']))
-                        best_param_val = list(set(plot_data['Best Parameter Value']))
-                        plt.plot(best_param_val, best_rss, self.best_rss_marker, linewidth=5,
-                                 markersize=12)
-
-                    if self.legend:
-                        if self.legend_loc is not None:
-                            plt.legend(loc=self.legend_loc)
-                        else:
-                            plt.legend(loc='best')
-
-                    if self.despine:
-                        seaborn.despine(fig=fig, top=True, right=True)
-
-                    if self.title is None:
-                        self.title = 'Profile Likelihoods for\n{} ' \
-                                     'against {} (index={})'.format(x, y, i)
-
-                    elif self.title is 'profile':
-                        self.title = x
-
-                    else:
-                        plt.title(self.title)
-
-                    if self.log10:
-                        plt.ylabel('log10 {}'.format(y))
-                        plt.xlabel('log10 {}'.format(x))
-                    else:
-                        plt.ylabel(y)
-                        plt.xlabel(x)
-
-                    if self.ylim is not None:
-                        plt.ylim(self.ylim)
-
-                    if self.xlim is not None:
-                        plt.xlim(self.xlim)
-
-                    if self.savefig:
-                        d = os.path.join(self.results_directory, str(i))
-                        d = os.path.join(d, x)
-                        self.create_directory(d)
-                        fname = os.path.join(d, misc.RemoveNonAscii(y).filter + '.{}'.format(self.ext))
-
-                        plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
-                        LOG.info('saved to --> {}'.format(fname))
-
-                    if self.show:
-                        plt.show()
-
-
-class PlotProfileLikelihood3d(_Viz):
-    """ """
-
-    def __init__(self, cls, data=None, **kwargs):
-        """
-        Plot profile likelihoods
-        :param data:
-        :param kwargs:
-        """
-        self.cls = cls
-
-        self.default_properties = {'x': None,
-                                   'y': None,  # can equal all
-                                   'z': None,
-                                   'index': None,
-                                   'log10': True,
-                                   'savefig': False,
-                                   'results_directory': None,
-                                   'dpi': 400,
-                                   'plot_cl': True,
-                                   'alpha': 0.95,
-                                   'title': None,
-                                   'xlabel': None,
-                                   'ylabel': None,
-                                   'legend': False,
-                                   'legend_loc': None,
-                                   'show': False,
-                                   'separate': True,
-                                   'filename': None,
-                                   'despine': True,
-                                   'ext': 'png',
-                                   'show_best_rss': True,
-                                   'best_rss_marker': 'k*',  ##Any matplotlib marker
-                                   'ylim': None,
-                                   'xlim': None,
-                                   'interpolation': None,
-                                   'interpolation_resolution': 1000,  # number of steps to interpolate
-                                   'context': 'talk',
-                                   'font_scale': 1,
-                                   'rc': None,
-                                   'multiplot': False,
-                                   'same_axis': False,
-                                   }
-        # raise NotImplementedError('Not yet implemented')
-
-        ## todo - colour plots by RSS
-        for i in list(kwargs.keys()):
-            assert i in list(
-                self.default_properties.keys()), '{} is not a keyword argument for PlotProfileLikelihood'.format(i)
-        self.kwargs = self.default_properties
-        self.default_properties.update(kwargs)
-        self.update_properties(self.default_properties)
-        seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
-
-        ## parse data
-        self.data = Parse(self.cls, log10=self.log10, alpha=self.alpha).data
-
-        ## do some checks
-        self._do_checks()
-
-        ## do plotting
-        if self.same_axis:
-            self.plot_same_axis()
-        else:
-            self.plot()
-        ##todo implement ability to change confidence level from Plot.
-        ##at the moment the CL is conputer by Parse. This is not optimal
-
-    def _do_checks(self):
-        """:return:"""
-        ## todo put original estimatd values on non rss graphs as well
-        if self.ylim is not None:
-            if not isinstance(self.ylim, tuple):
-                raise errors.InputError('ylim arg should be tuple. Got "{}"'.format(type(self.ylim)))
-
-            if len(self.ylim) is not 2:
-                raise errors.InputError('ylim arg should be tuple of length 2. '
-                                        'See "https://matplotlib.org/devdocs/api/_as_gen/matplotlib.pyplot.ylim.html" '
-                                        'for details')
-
-        if self.xlim is not None:
-            if not isinstance(self.xlim, tuple):
-                raise errors.InputError('xlim arg should be tuple. Got "{}"'.format(type(self.xlim)))
-
-            if len(self.xlim) is not 2:
-                raise errors.InputError('xlim arg should be tuple of length 2. '
-                                        'See "https://matplotlib.org/devdocs/api/_as_gen/matplotlib.pyplot.xlim.html" '
-                                        'for details')
-
-        interpolation_kinds = ['linear', 'nearest', 'zero',
-                               'slinear', 'quadratic', 'cubic']
-
-        if self.interpolation is not None:
-            if self.interpolation not in interpolation_kinds:
-                raise errors.InputError('"{}" is not in "{}"'.format(
-                    self.interpolation, interpolation_kinds
-                ))
-
-        if type(self.cls) == tasks.ProfileLikelihood:
-            self.results_directory = self.cls.results_directory
-        else:
-            LOG.warning('cls not of type tasks.ProfileLikelihood')
-
-        if isinstance(self.data, pandas.core.frame.DataFrame) != True:
-            raise errors.InputError('"{}" should be a dataframe not "{}".'.format(self.data, type(self(data))))
-
-        self.parameter_list = sorted(list(self.data.columns))
-
-        if self.separate == False:
-            self.legend = True
-
-        if self.index is None:
-            self.index = 0
-
-        if not isinstance(self.index, list):
-            self.index = [self.index]
-
-        if self.x == None:
-            self.x = [i for i in self.parameter_list if i is not 'RSS']
-            # raise errors.InputError('x cannot be None')
-
-        if self.y == None:
-            self.y = 'RSS'
-
-        if self.y == 'all':
-            self.y = self.parameter_list
-
-        if self.x == 'all':
-            self.x = [i for i in self.parameter_list if i != 'RSS']
-
-        if self.y == None:
-            raise errors.InputError('y cannot be None')
-
-        if isinstance(self.y, str):
-            self.y = [self.y]
-
-        if isinstance(self.y, list):
-            for y_param in self.y:
-                if y_param not in self.parameter_list:
-                    raise errors.InputError('{} not in {}'.format(y_param, self.parameter_list))
-
-        if isinstance(self.x, str):
-            self.x = [self.x]
-
-        if isinstance(self.x, list):
-            for x_param in self.x:
-                if x_param not in self.parameter_list:
-                    raise errors.InputError('{} not in {}'.format(x_param, self.parameter_list))
-
-        if self.filename is not None:
-            if not os.path.isabs(self.filename):
-                self.filename = os.path.join(self.results_directory, self.filename)
-
-            self.data.to_csv(self.filename)
-            LOG.info('Profile likelihood data saved to "{}"'.format(self.filename))
-
-    def plot_same_axis(self):
-        """:return:"""
-        fig = plt.figure()
-        for x in self.x:
-            for y in self.y:
-                for i in self.index:
-                    plot_data = self.data.loc[x, i][y]
-                    if type(plot_data) == pandas.Series:
-                        plot_data = pandas.DataFrame(plot_data)
-
-                    plot_data = plot_data.reset_index()
-
-                    x_plot = plot_data['Parameter Of Interest Value']
-                    y_plot = plot_data[y]
-
-                    if self.interpolation is not None:
-                        f = interp1d(x_plot, y_plot, kind=self.interpolation)
-                        minimum = x_plot.min()
-                        maximum = x_plot.max()
-                        step = (maximum - minimum) / self.interpolation_resolution
-                        xnew = numpy.arange(start=minimum, stop=maximum, step=step)
-                        ynew = f(xnew)
-                        plt.plot(xnew, ynew, 'k')
-                        plt.plot(x_plot, y_plot, 'ro', label=y, linewidth=2)  # linestyle='o', color='red')
-                    else:
-                        plt.plot(x_plot, y_plot, label=y)
-
-                    if y is 'RSS':
-                        plt.plot(plot_data['Parameter Of Interest Value'],
-                                 plot_data['Confidence Level'], linewidth=3,
-                                 linestyle='--', color='green', label='CL')
-
-                    if self.show_best_rss:
-                        best_rss = list(set(plot_data['Best RSS Value']))
-                        best_param_val = list(set(plot_data['Best Parameter Value']))
-                        plt.plot(best_param_val, best_rss, self.best_rss_marker, linewidth=5,
-                                 markersize=12)
-
-                    if self.legend:
-                        if self.legend_loc is not None:
-                            plt.legend(loc=self.legend_loc)
-                        else:
-                            plt.legend(loc='best')
-
-                    if self.despine:
-                        seaborn.despine(fig=fig, top=True, right=True)
-
-                    if self.title is None:
-                        self.title = 'Profile Likelihoods for\n{} ' \
-                                     'against {} (index={})'.format(x, y, i)
-
-                    elif self.title is 'profile':
-                        self.title = x
-
-                    plt.title(self.title)
-
-                    if self.log10:
-                        plt.ylabel('log10 {}'.format(y))
-                        plt.xlabel('log10 {}'.format(x))
-                    else:
-                        plt.ylabel(y)
-                        plt.xlabel(x)
-
-                    if self.ylim is not None:
-                        plt.ylim(self.ylim)
-
-                    if self.xlim is not None:
-                        plt.xlim(self.xlim)
-
-                    if self.savefig:
-                        d = os.path.join(self.results_directory, str(i))
-                        d = os.path.join(d, x)
-                        self.create_directory(d)
-                        fname = os.path.join(d, misc.RemoveNonAscii(y).filter + '.{}'.format(self.ext))
-
-                        plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
-                        LOG.info('saved to --> {}'.format(fname))
-
-                    if self.show:
-                        plt.show()
-
-    def plot(self):
-        """:return:"""
-        for x in self.x:
-            for y in self.y:
-                if self.multiplot:
-                    fig = plt.figure()
-                for i in self.index:
-                    plot_data = self.data.loc[x, i][y]
-                    if type(plot_data) == pandas.Series:
-                        plot_data = pandas.DataFrame(plot_data)
-
-                    if not self.multiplot:
-                        fig = plt.figure()
-
-                    plot_data = plot_data.reset_index()
-
-                    x_plot = plot_data['Parameter Of Interest Value']
-                    y_plot = plot_data[y]
-
-                    if self.interpolation is not None:
-                        f = interp1d(x_plot, y_plot, kind=self.interpolation)
-                        minimum = x_plot.min()
-                        maximum = x_plot.max()
-                        step = (maximum - minimum) / self.interpolation_resolution
-                        xnew = numpy.arange(start=minimum, stop=maximum, step=step)
-                        ynew = f(xnew)
-                        plt.plot(xnew, ynew, 'k')
-                        plt.plot(x_plot, y_plot, 'ro', label=y, linewidth=2)  # linestyle='o', color='red')
-                    else:
-                        plt.plot(x_plot, y_plot, label=y, marker='o')
-
-                    if y is 'RSS':
-                        plt.plot(plot_data['Parameter Of Interest Value'],
-                                 plot_data['Confidence Level'], linewidth=3,
-                                 linestyle='--', color='green', label='CL')
-
-                    if self.show_best_rss:
-                        best_rss = list(set(plot_data['Best RSS Value']))
-                        best_param_val = list(set(plot_data['Best Parameter Value']))
-                        plt.plot(best_param_val, best_rss, self.best_rss_marker, linewidth=5,
-                                 markersize=12)
-
-                    if self.legend:
-                        if self.legend_loc is not None:
-                            plt.legend(loc=self.legend_loc)
-                        else:
-                            plt.legend(loc='best')
-
-                    if self.despine:
-                        seaborn.despine(fig=fig, top=True, right=True)
-
-                    self.title = 'Profile Likelihoods for\n{} ' \
-                                 'against {} (index={})'.format(x, y, i)
-
-                    # elif self.title is 'profile':
-                    #     self.title = x
-
-                    plt.title(self.title)
-
-                    if self.log10:
-                        plt.ylabel('log10 {}'.format(y))
-                        plt.xlabel('log10 {}'.format(x))
-                    else:
-                        plt.ylabel(y)
-                        plt.xlabel(x)
-
-                    if self.ylim is not None:
-                        plt.ylim(self.ylim)
-
-                    if self.xlim is not None:
-                        plt.xlim(self.xlim)
-
-                    if self.savefig:
-                        d = os.path.join(self.results_directory, str(i))
-                        d = os.path.join(d, x)
-                        self.create_directory(d)
-                        fname = os.path.join(d, misc.RemoveNonAscii(y).filter + '.{}'.format(self.ext))
-
-                        plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
-                        LOG.info('saved to --> {}'.format(fname))
-
-                    if self.show:
-                        plt.show()
-
-    def plot_pdf(self):
-        """:return:"""
-        raise NotImplementedError
-        # with PdfPages()
-        for x in self.x:
-            for y in self.y:
-                if self.multiplot:
-                    fig = plt.figure()
-                for i in self.index:
-                    plot_data = self.data.loc[x, i][y]
-                    if type(plot_data) == pandas.Series:
-                        plot_data = pandas.DataFrame(plot_data)
-
-                    if not self.multiplot:
-                        fig = plt.figure()
-
-                    plot_data = plot_data.reset_index()
-
-                    x_plot = plot_data['Parameter Of Interest Value']
-                    y_plot = plot_data[y]
-
-                    if self.interpolation is not None:
-                        f = interp1d(x_plot, y_plot, kind=self.interpolation)
-                        minimum = x_plot.min()
-                        maximum = x_plot.max()
-                        step = (maximum - minimum) / self.interpolation_resolution
-                        xnew = numpy.arange(start=minimum, stop=maximum, step=step)
-                        ynew = f(xnew)
-                        plt.plot(xnew, ynew, 'k')
-                        plt.plot(x_plot, y_plot, 'ro', label=y, linewidth=2)  # linestyle='o', color='red')
-                    else:
-                        plt.plot(x_plot, y_plot, label=y, marker='o')
-
-                    if y is 'RSS':
-                        plt.plot(plot_data['Parameter Of Interest Value'],
-                                 plot_data['Confidence Level'], linewidth=3,
-                                 linestyle='--', color='green', label='CL')
-
-                    if self.show_best_rss:
-                        best_rss = list(set(plot_data['Best RSS Value']))
-                        best_param_val = list(set(plot_data['Best Parameter Value']))
-                        plt.plot(best_param_val, best_rss, self.best_rss_marker, linewidth=5,
-                                 markersize=12)
-
-                    if self.legend:
-                        if self.legend_loc is not None:
-                            plt.legend(loc=self.legend_loc)
-                        else:
-                            plt.legend(loc='best')
-
-                    if self.despine:
-                        seaborn.despine(fig=fig, top=True, right=True)
-
-                    if self.title is None:
-                        self.title = 'Profile Likelihoods for\n{} ' \
-                                     'against {} (index={})'.format(x, y, i)
-
-                    elif self.title is 'profile':
-                        self.title = x
-
-                    else:
-                        plt.title(self.title)
-
-                    if self.log10:
-                        plt.ylabel('log10 {}'.format(y))
-                        plt.xlabel('log10 {}'.format(x))
-                    else:
-                        plt.ylabel(y)
-                        plt.xlabel(x)
-
-                    if self.ylim is not None:
-                        plt.ylim(self.ylim)
-
-                    if self.xlim is not None:
-                        plt.xlim(self.xlim)
-
-                    if self.savefig:
-                        d = os.path.join(self.results_directory, str(i))
-                        d = os.path.join(d, x)
-                        self.create_directory(d)
-                        fname = os.path.join(d, misc.RemoveNonAscii(y).filter + '.{}'.format(self.ext))
-
-                        plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
-                        LOG.info('saved to --> {}'.format(fname))
-
-                    if self.show:
-                        plt.show()
-
-
-class PearsonsCorrelation(_Viz):
-    """========    =================================================
-    kwarg       Description
-    ========    =================================================
-    **kwargs    see :ref:`kwargs` for more options
-    ========    =================================================
-
-    Args:
-
-    Returns:
-
-    """
-
-    def __init__(self, cls, **kwargs):
-        """
-
-        :param cls:
-            Instance of :py:class:`tasks.MultiParameterEstimation`
-            Same as :py:class:`PlotTimeCourseEnsemble`
-
-        :param kwargs:
-        """
-        self.cls = cls
-        self.kwargs = kwargs
-        self.plot_kwargs = self.plot_kwargs()
-
-        self.default_properties = {
-            'x': 'RSS',
-            'y': None,
-            'sep': '\t',
-            'log10': False,
-            'truncate_mode': 'percent',
-            'theta': 100,
-            'xtick_rotation': 'horizontal',
-            'ylabel': 'Frequency',
-            'savefig': False,
-            'results_directory': None,
-            'dpi': 400,
-            'title_fontsize': 35,
-            'title': True,  # Either True or None/False
-            'show': False,
-            'ext': 'png',
-            'colorbar_pad': 0.1,  # padding for color bar. Dist between bar and axes
-            'context': 'talk',
-            'font_scale': 1.5,
-            'rc': None,
-            'copasi_file': None,
-            'cmap': 'BrBG_r',
-            'center': None,
-            'robust': False,
-            'annot': None,
-            'fmt': '.2g',
-            'annot_kws': None,
-            'linewidths': 0,
-            'linecolor': 'white',
-            'cbar': True,
-            'cbar_kws': None,
-            'cbar_ax': None,
-            'square': False,
-            'xticklabels': 'auto',
-            'yticklabels': 'auto',
-            'mask': None,
-            'ax': None,
-        }
-
-        self.default_properties.update(self.plot_kwargs)
-        for i in list(kwargs.keys()):
-            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for PearsonsHeatMap'.format(
-                i)
-        self.kwargs = self.default_properties
-        self.default_properties.update(kwargs)
-        self.default_properties.update(self.plot_kwargs)
-        self.update_properties(self.default_properties)
-        self._do_checks()
-        seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
-
-        self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
-
-        self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
-
-        self.combinations = self.get_combinations()
-        self.pearsons, self.p_val = self.do_pearsons()
-        self.heatmap()
-
-    def _do_checks(self):
-        """:return:"""
-        if isinstance(self.cls, str):
-            if self.copasi_file is None:
-                raise ValueError('When first argument is a string '
-                                 'pointing to parameter estimation data '
-                                 'specify an argument to copasi_file')
-        if self.results_directory is None:
-            try:
-                self.results_directory = os.path.join(self.cls.model.root, 'PearsonsCorrelation')
-            except AttributeError as e:
-                self.results_directory = os.path.join(
-                    os.path.dirname(self.copasi_file), 'PearsonsCorrelation'
-                )
-
-    def get_combinations(self):
-        """ """
-        return permutations(list(self.data.keys()), 2)
-
-    def do_pearsons(self):
-        """:return:"""
-        dct = {}
-        for x, y in self.combinations:
-            dct[(x, y)] = pearsonr(self.data[x], self.data[y])
-
-        df = pandas.DataFrame(dct).transpose()  # , index=['r2', 'p-val']).transpose()
-        df.columns = ['r2', 'p-val']
-        df.index.name = ['x', 'y']
-        df = df.unstack()
-        df = df.fillna(value=numpy.nan)
-        return df['r2'], df['p-val']
-
-    def heatmap(self):
-        """ """
-        seaborn.set_context(context=self.context, font_scale=self.font_scale)
-        data = self.pearsons
-
-        data = data.drop('RSS', axis=0)
-        data = data.drop('RSS', axis=1)
-
-        plt.figure()
-        fig = seaborn.heatmap(data=data,
-                              cmap=self.cmap,
-                              vmin=-1, vmax=1,
-                              center=self.center,
-                              robust=self.robust,
-                              annot=self.annot,
-                              fmt=self.fmt,
-                              annot_kws=self.annot_kws,
-                              linewidths=self.linewidths,
-                              linecolor=self.linecolor,
-                              cbar=self.cbar,
-                              cbar_kws=self.cbar_kws,
-                              cbar_ax=self.cbar_ax,
-                              square=self.square,
-                              xticklabels=self.xticklabels,
-                              yticklabels=self.yticklabels,
-                              mask=self.mask,
-                              ax=self.ax,
-                              )
-
-        if self.log10:
-            plt.title('Pearsons Correlation (Log10)')
-
-        else:
-            plt.title('Pearsons Correlation')
-
-        if self.savefig:
-            self.create_directory(self.results_directory)
-            fname = os.path.join(self.results_directory, 'PearsonsHeatmap' + '.{}'.format(self.ext))
-
-            plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
-            LOG.info('saved to --> {}'.format(fname))
-            pearsons_data_file = os.path.join(self.results_directory, 'r2_data.csv')
-            p_val_file = os.path.join(self.results_directory, 'p_val_data.csv')
-            self.pearsons.to_csv(pearsons_data_file, sep='\t')
-            self.p_val.to_csv(p_val_file, sep='\t')
-
-        if self.show:
-            plt.show()
-
-
-if __name__ == '__main__':
-    pass
-#    execfile('/home/b3053674/Documents/pycotools3/pycotools3/pycotoolsTutorial/Test/testing_kholodenko_manually.py')
+# class LikelihoodRanks(_Viz, PlotKwargs):
+#     """Plot the ordered residual sum of squares (RSS) objective
+#     function value against the RSS's rank of best fit.
+#     See :ref:`kwargs` for list of keyword arguments.
+#
+#     Args:
+#
+#     Returns:
+#
+#     """
+#
+#     def __init__(self, cls, **kwargs):
+#         """
+#
+#         :param cls:
+#             Instance of :py:class:`tasks.MultiParameterEstimation`
+#             Same as :py:class:`PlotTimeCourseEnsemble`
+#
+#         :param kwargs:
+#             see :ref:`kwargs`
+#         """
+#         self.cls = cls
+#         self.kwargs = kwargs
+#         # self.plot_kwargs = self.plot_kwargs()
+#
+#         self.default_properties = {'log10': False,
+#                                    'truncate_mode': 'percent',
+#                                    'theta': 100,
+#                                    'xtick_rotation': 'horizontal',
+#                                    'ylabel': None,
+#                                    'title': 'Likelihood-Ranks Plot',
+#                                    'savefig': False,
+#                                    'results_directory': None,
+#                                    'dpi': 400,
+#                                    'show': False,
+#                                    'filename': 'LikelihoodRanks',
+#                                    'despine': True,
+#                                    'ext': 'png',
+#                                    'line_transparency': 1,  ##passed to matplotlib alpha parameter
+#                                    'marker_transparency': 0.7,
+#                                    'color': '#004ADF',
+#                                    'markercolor': '#FF9709',
+#                                    'linewidth': 3,
+#                                    'markersize': 10,
+#                                    'context': 'talk',
+#                                    'font_scale': 1.5,
+#                                    'rc': None,
+#                                    'copasi_file': None,
+#                                    }
+#
+#         # self.default_properties.update(self.plot_kwargs)
+#         for i in list(kwargs.keys()):
+#             assert i in list(self.default_properties.keys()), '{} is not a keyword argument for RssVsIterations'.format(
+#                 i)
+#         self.kwargs = self.default_properties
+#         self.default_properties.update(kwargs)
+#         # self.default_properties.update(self.plot_kwargs)
+#         self.update_properties(self.default_properties)
+#         self._do_checks()
+#         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
+#
+#         self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
+#         self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
+#
+#         self.fig = self.plot()
+#
+#     def _do_checks(self):
+#         """:return:"""
+#         if self.log10:
+#             self.ylabel = 'log$_{10}$ RSS'
+#             self.xlabel = 'log$_{10}$ Rank of Best Fit'
+#         else:
+#             self.ylabel = 'RSS'
+#             self.xlabel = 'Rank of Best Fit'
+#
+#     def create_directory(self):
+#         """create a directory for the results
+#         :return:
+#
+#         Args:
+#
+#         Returns:
+#
+#         """
+#         if self.results_directory is None:
+#             if type(self.cls) == Parse:
+#                 self.results_directory = os.path.join(os.path.dirname(self.cls.copasi_file), 'RssVsIterations')
+#             else:
+#                 self.results_directory = os.path.join(
+#                     self.cls.model.root, 'LikelihoodRank'
+#                 )
+#
+#         if not os.path.isdir(self.results_directory):
+#             os.makedirs(self.results_directory)
+#         return self.results_directory
+#
+#     def plot(self):
+#         """Plot Rss Vs rank of best fit
+#         :return:
+#             None
+#
+#         Args:
+#
+#         Returns:
+#
+#         """
+#
+#         fig = plt.figure()
+#         if self.log10:
+#             x = numpy.log10(list(range(self.data['RSS'].shape[0])))
+#         else:
+#             x = list(range(self.data['RSS'].shape[0]))
+#
+#         plt.plot(x,
+#                  self.data['RSS'].sort_values(ascending=True),
+#                  color=self.color, linewidth=self.linewidth,
+#                  alpha=self.line_transparency,
+#                  )
+#
+#         plt.plot(x,
+#                  self.data['RSS'].sort_values(ascending=True), 'o',
+#                  color=self.markercolor, markersize=self.markersize,
+#                  alpha=self.marker_transparency
+#                  )
+#
+#         plt.xticks(rotation=self.xtick_rotation)
+#         if self.title is not None:
+#             plt.title(self.title + '(n={})'.format(self.data.shape[0]))
+#         plt.ylabel(self.ylabel)
+#         plt.xlabel('Rank of Best Fit')
+#         if self.despine:
+#             seaborn.despine(fig=fig, top=True, right=True)
+#         if self.savefig:
+#             self.results_directory = self.create_directory()
+#             fle = os.path.join(self.results_directory, '{}.{}'.format(self.filename, self.ext))
+#             plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
+#
+#         if self.show:
+#             plt.show()
+#
+#         return fig
+
+
+# class Pca(_Viz, PlotKwargs):
+#     """Use the :py:class:`PCA` function to conduct
+#     a principle component analysis on the parameter
+#     estimation data.
+#
+#     ===================   ====================
+#     kwargs                Description
+#     ===================   ====================
+#     by                    `str` either Determine which axes of parameter estimation
+#                           data to undergoe data reduction. When ``by='iterations'``
+#                           the data is reduced to one data point per parameter estimation
+#                           run. When ``by='parameters'``, data is reduced to one data point
+#                           per parameter.
+#     legend_position       `tuple`. When ``by='parameters`` specify the (horizontal, verticle,
+#                           line spacing) parameter for the legend location and formatting
+#     cmap                  `str` a valid matplotlib colour map
+#     annotate              `bool` annotate. Automatically on when ``by='parameters'``
+#     annotation_fontsize   `int` or `float`. fontsize for annotation
+#     **kwargs              See :ref:`kwargs for more options
+#     ===================   ====================
+#
+#     Args:
+#
+#     Returns:
+#
+#     """
+#
+#     def __init__(self, cls, **kwargs):
+#         self.cls = cls
+#         self.kwargs = kwargs
+#         self.plot_kwargs = self.plot_kwargs()
+#
+#         self.default_properties = {'sep': '\t',
+#                                    'truncate_mode': 'percent',
+#                                    'theta': 100,
+#                                    'log10': False,
+#                                    'ylabel': None,
+#                                    'xlabel': None,
+#                                    'title': None,
+#                                    'savefig': False,
+#                                    'results_directory': None,
+#                                    'dpi': 400,
+#                                    'n_components': 2,
+#                                    'by': 'iterations',  ##iterations or parameters
+#                                    'legend_position': None,  ##Horizontal, verticle, line spacing
+#                                    'legend_fontsize': 25,
+#                                    'cmap': 'viridis',
+#                                    'annotate': False,
+#                                    'annotation_fontsize': 25,
+#                                    'show': False,
+#                                    'despine': True,
+#                                    'ext': 'png',
+#                                    'context': 'talk',
+#                                    'font_scale': 1.5,
+#                                    'rc': None,
+#                                    'copasi_file': None,
+#                                    }
+#
+#         self.default_properties.update(self.plot_kwargs)
+#         for i in list(kwargs.keys()):
+#             assert i in list(self.default_properties.keys()), '{} is not a keyword argument for Pca'.format(i)
+#         self.kwargs = self.default_properties
+#         self.default_properties.update(kwargs)
+#         self.default_properties.update(self.plot_kwargs)
+#         self.update_properties(self.default_properties)
+#         self._do_checks()
+#         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
+#
+#         self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
+#         self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
+#         self.pca()
+#
+#     def create_directory(self):
+#         """create a directory for the results
+#         :return:
+#
+#         Args:
+#
+#         Returns:
+#
+#         """
+#         if self.results_directory is None:
+#             if type(self.cls) == Parse:
+#                 self.results_directory = os.path.join(os.path.dirname(self.cls.copasi_file),
+#                                                       'PCA')
+#             else:
+#                 self.results_directory = os.path.join(self.cls.model.root,
+#                                                       'PCA')
+#
+#         if not os.path.isdir(self.results_directory):
+#             os.makedirs(self.results_directory)
+#         return self.results_directory
+#
+#     def _do_checks(self):
+#         """varify integrity of user input
+#         :return:
+#
+#         Args:
+#
+#         Returns:
+#
+#         """
+#         # if self.title is None:
+#         #     if self.by is 'parameters':
+#         #         title = 'PCA by Parameters (n={})'.format(len(labels))
+#         #     elif self.by is 'iterations':
+#         #         title = 'PCA by Iterations (n={})'.format(len(labels))
+#
+#         if self.by not in ['parameters', 'iterations']:
+#             raise errors.InputError('{} not in {}'.format(
+#                 self.by, ['parameters', 'iterations']))
+#
+#         # if self.results_directory is None:
+#         #     self.results_directory = self.create_directory()
+#
+#         if self.ylabel == None:
+#             if self.log10 == False:
+#                 self.ylabel = 'PC2'
+#             elif self.log10 == True:
+#                 self.ylabel = 'log10 PC2'
+#             else:
+#                 raise errors.SomethingWentHorriblyWrongError('{} not in {}'.format(
+#                     self.ylabel, [True, False]))
+#
+#         if self.xlabel == None:
+#             if self.log10 == False:
+#                 self.xlabel = 'PC1'
+#             elif self.log10 == True:
+#                 self.xlabel = 'log10 PC1'
+#             else:
+#                 raise errors.SomethingWentHorriblyWrongError(
+#                     '{} not in {}'.format(self.ylabel, [True, False]))
+#
+#         LOG.info('plotting PCA {}'.format(self.by))
+#
+#         if self.by == 'parameters':
+#             self.annotate = True
+#             if self.legend_position == None:
+#                 LOG.critical(
+#                     'When data reduction is by \'parameters\' you should specify an argument to legend_position. i.e. legend_position=(10,10,1.5) for horizontal, vertical and linespacing')
+#
+#         if self.legend_position is None:
+#             self.legend_position = (1, 1, 0.5)  ##horizontal, verticle, linespacing
+#
+#     def pca(self):
+#         """ """
+#         pca = PCA(n_components=self.n_components)
+#         rss = self.data.RSS
+#         self.data = self.data.drop('RSS', axis=1)
+#         fig, ax = plt.subplots()
+#         if self.by == 'parameters':
+#             projected = pca.fit(self.data.transpose()).transform(self.data.transpose())
+#             projected = pandas.DataFrame(projected, index=self.data.columns)
+#             labels = self.data.columns
+#             sc = ax.scatter(projected[0], projected[1])
+#
+#
+#         else:
+#             projected = pca.fit(self.data).transform(self.data)
+#             projected = pandas.DataFrame(projected, index=self.data.index)
+#             labels = list(self.data.index)
+#             projected = pandas.concat([rss, projected], axis=1)
+#             sc = ax.scatter(projected[0], projected[1], c=projected['RSS'], cmap=self.cmap)
+#             cb = plt.colorbar(sc)
+#             cb.ax.set_title('RSS')
+#
+#         if self.despine:
+#             seaborn.despine(fig=fig, top=True, right=True)
+#
+#         plt.ylabel(self.ylabel)
+#         plt.xlabel(self.xlabel)
+#         plt.title(self.title)
+#         # TODO connect copasi with the python community
+#         # TODO mjor selling point for pycoools.
+#         # TODO interafce with pysces, pyDStools and sloppycell
+#         for i, txt in enumerate(labels):
+#             if self.annotate:
+#                 ax.annotate(str(i), (projected[0][i], projected[1][i]),
+#                             fontsize=self.annotation_fontsize)
+#             if self.by == 'parameters':
+#                 ax.text(self.legend_position[0],
+#                         self.legend_position[1] - i * self.legend_position[2],
+#                         '{}: {}'.format(i, txt), fontsize=self.legend_fontsize)
+#         if self.savefig:
+#             self.create_directory()
+#             fle = os.path.join(self.results_directory, 'Pca_by_{}.{}'.format(self.by, self.ext))
+#             plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
+#
+#         if self.show:
+#             plt.show()
+#
+#
+# class Histograms(_Viz, PlotKwargs):
+#     """Plot a Histograms for multi parameter estimation data.
+#
+#     See :ref:`kwargs` for more options.
+#
+#     Args:
+#
+#     Returns:
+#
+#     """
+#
+#     def __init__(self, cls, **kwargs):
+#         """
+#
+#         :param cls:
+#             Instance of :py:class:`tasks.MultiParameterEstimation`
+#             Same as :py:class:`PlotTimeCourseEnsemble`
+#
+#         :param kwargs:
+#         """
+#         self.cls = cls
+#         self.kwargs = kwargs
+#         self.plot_kwargs = self.plot_kwargs()
+#
+#         self.default_properties = {'sep': '\t',
+#                                    'log10': False,
+#                                    'truncate_mode': 'percent',
+#                                    'theta': 100,
+#                                    'xtick_rotation': 'horizontal',
+#                                    'ylabel': 'Frequency',
+#                                    'title': True,  ##boolean here as title is inferred from parameter
+#                                    'savefig': False,
+#                                    'results_directory': None,
+#                                    'dpi': 400,
+#                                    'title_fontsize': 35,
+#                                    'show': False,
+#                                    'despine': True,
+#                                    'ext': 'png',
+#                                    'color': 'green',
+#                                    'hist': True,
+#                                    'kde': False,
+#                                    'rug': False,
+#                                    'context': 'talk',
+#                                    'font_scale': 1.5,
+#                                    'rc': None,
+#                                    'bins': None,
+#                                    'copasi_file': None,
+#                                    }
+#
+#         self.default_properties.update(self.plot_kwargs)
+#         for i in list(kwargs.keys()):
+#             assert i in list(self.default_properties.keys()), '{} is not a keyword argument for Histograms'.format(i)
+#         self.kwargs = self.default_properties
+#         self.default_properties.update(kwargs)
+#         self.default_properties.update(self.plot_kwargs)
+#         self.update_properties(self.default_properties)
+#         self._do_checks()
+#
+#         self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
+#         self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
+#         LOG.info('plotting histograms')
+#         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
+#
+#         self.plot()
+#         # self.coloured_plot()
+#
+#     def _do_checks(self):
+#         """:return:"""
+#         if self.results_directory is None:
+#             if type(self.cls) == Parse:
+#                 self.results_directory = os.path.join(os.path.dirname(self.cls.copasi_file), 'Histograms')
+#             else:
+#                 self.results_directory = os.path.join(self.cls.model.root, 'Histograms')
+#
+#     def plot(self):
+#         """ """
+#         for parameter in list(self.data.keys()):
+#             fig = plt.figure()
+#             seaborn.distplot(
+#                 self.data[parameter], color=self.color, kde=self.kde, rug=self.rug,
+#                 hist=self.hist,
+#                 bins=self.bins
+#             )
+#             if self.log10:
+#                 plt.ylabel("{}".format(self.ylabel))
+#                 plt.xlabel("log$_{10}$" + "[{}]".format(parameter))
+#             else:
+#                 plt.ylabel(self.ylabel)
+#                 plt.xlabel(parameter)
+#             if self.title is True:
+#                 plt.title('{},n={}'.format(parameter, self.data[parameter].shape[0]),
+#                           fontsize=self.title_fontsize)
+#
+#             if self.despine:
+#                 seaborn.despine(fig=fig, top=True, right=True)
+#
+#             if self.savefig:
+#                 self.create_directory(self.results_directory)
+#                 fname = os.path.join(self.results_directory,
+#                                      misc.RemoveNonAscii(parameter).filter + '.{}'.format(self.ext))
+#                 plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
+#                 LOG.info('plot save to "{}"'.format(fname))
+#
+#     def coloured_plot(self):
+#         """:return:"""
+#         # for parameter in self.data.keys():
+#         raise NotImplementedError('this is an attempt to colour bars '
+#                                   'of histogram by RSS but the code does not '
+#                                   'work. ')
+#         parameter = 'Ski'
+#         num_bins = 10
+#         width = self.data[parameter].max() - self.data[parameter].min()
+#         iqr = scipy.stats.iqr(self.data[parameter])
+#         bins_size = 2 * (iqr / (self.data[parameter].shape[0] ** 1.0 / 3.0))
+#
+#         bins = numpy.arange(self.data[parameter].min(), self.data[parameter].max(),
+#                             bins_size)  # width/num_bins
+#         ## calculate the density of RSS
+#
+#         groups = self.data.groupby([pandas.cut(self.data[parameter], bins), 'RSS'])
+#         data = groups.size().reset_index([parameter, 'RSS'])
+#         data2 = data.groupby(parameter)[0].sum()
+#         data3 = data.groupby(parameter)['RSS'].mean()
+#         data5 = pandas.concat([data2, data3], axis=1)
+#         data5['Density'] = data5[0] / (numpy.sum(data5[0].fillna(0).values * numpy.diff(bins)))
+#
+#         ## colours
+#         norm = plt.Normalize(numpy.nanmin(data5['RSS'].values),
+#                              numpy.nanmax(data5['RSS'].values))
+#         colours = plt.cm.plasma(norm(data5['RSS'].fillna(0).values))
+#
+#         fig, ax = plt.subplots()
+#
+#         ax.bar(bins[:-1], data5.fillna(0)['Density'], width=width, color=colours, align='edge')
+#
+#         # seaborn.kdeplot(data[parameter], ax=ax, color='k', lw=2)
+#
+#         sm = plt.cm.ScalarMappable(cmap='plasma', norm=norm)
+#         sm.set_array([])
+#         fig.colorbar(sm, ax=ax, label='RSS')
+#         ax.set_ylabel('Density')
+#         ax.set_xlabel(parameter)
+#         plt.show()
+#
+#
+# class Scatters(_Viz, PlotKwargs):
+#     """Plot scatter graphs. When 'x' and 'y' are lists, 2 way
+#     combinations are automatically plotted and organized into
+#     folders (when ``savefig=True``). Data is automatically
+#     coloured by RSS.
+#
+#     ========        =================================================
+#     kwarg           Description
+#     ========        =================================================
+#     x               `str` or `list` of `str`. Variable(s) to plot on x
+#                     axis. Defaults to ``RSS``
+#     y               `str` or `list` of `str`. Variable(s) to plot on
+#                     y axis. Defaults to all parameters in data set.
+#     cmap            `str` a valid matplotlib colour map
+#     colorbar_pad    Default=0.2. Distance of color bar from plot.
+#     **kwargs        see :ref:`kwargs` for more options
+#     ========        =================================================
+#
+#     Args:
+#
+#     Returns:
+#
+#     """
+#
+#     def __init__(self, cls, **kwargs):
+#         """
+#
+#         :param cls:
+#             Instance of :py:class:`tasks.MultiParameterEstimation`
+#             Same as :py:class:`PlotTimeCourseEnsemble`
+#
+#         :param kwargs:
+#         """
+#         self.cls = cls
+#         self.kwargs = kwargs
+#         self.plot_kwargs = self.plot_kwargs()
+#
+#         self.default_properties = {
+#             'x': 'RSS',
+#             'y': None,
+#             'sep': '\t',
+#             'log10': False,
+#             'cmap': 'jet_r',
+#             'truncate_mode': 'percent',
+#             'theta': 100,
+#             'xtick_rotation': 'horizontal',
+#             'ylabel': 'Frequency',
+#             'savefig': False,
+#             'results_directory': None,
+#             'dpi': 400,
+#             'title_fontsize': 35,
+#             'title': True,  # Either True or None/False
+#             'show': False,
+#             'ext': 'png',
+#             'despine': True,
+#             'colorbar_pad': 0.2,  # padding for color bar. Dist between bar and axes
+#             'context': 'talk',
+#             'font_scale': 1.5,
+#             'rc': None,
+#             'copasi_file': None,
+#         }
+#
+#         self.default_properties.update(self.plot_kwargs)
+#         for i in list(kwargs.keys()):
+#             assert i in list(self.default_properties.keys()), '{} is not a keyword argument for Scatters'.format(i)
+#         self.kwargs = self.default_properties
+#         self.default_properties.update(kwargs)
+#         self.default_properties.update(self.plot_kwargs)
+#         self.update_properties(self.default_properties)
+#         self._do_checks()
+#         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
+#
+#         self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
+#         self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
+#         self.plot()
+#
+#     def _do_checks(self):
+#         """:return:"""
+#         if isinstance(self.x, str):
+#             self.x = [self.x]
+#
+#         if self.results_directory is None:
+#             self.results_directory = os.path.join(self.cls.model.root, 'Scatters')
+#
+#     def plot(self):
+#         """:return:"""
+#         if self.y is None:
+#             self.y = list(self.data.keys())
+#
+#         if (self.y == 'all') or (self.y == ['all']):
+#             self.y = list(self.data.keys())
+#
+#         if self.x == 'all' or self.x == ['all']:
+#             self.x = list(self.data.keys())
+#
+#         for x_var in self.x:
+#             if x_var not in sorted(list(self.data.keys())):
+#                 raise errors.InputError('"{}" invalid. These are valid: "{}"'.format(
+#                     x_var, list(self.data.keys())
+#                 ))
+#             for y_var in self.y:
+#                 if x_var not in sorted(list(self.data.keys())):
+#                     raise errors.InputError('"{}" invalid. These are valid: "{}"'.format(
+#                         y_var, list(self.data.keys())
+#                     )
+#                     )
+#                 LOG.info('Plotting "{}" Vs "{}"'.format(x_var, y_var))
+#                 fig = plt.figure()
+#                 plt.scatter(
+#                     self.data[x_var], self.data[y_var],
+#                     cmap=self.cmap, c=self.data['RSS'],
+#                 )
+#                 # c_ax = plt.subplot(199)
+#                 # cb = matplotlib.colorbar.ColorbarBase(c_ax, orientation='vertical')
+#                 # c_ax.yaxis.set_ticks_position('right')
+#                 cb = plt.colorbar(pad=self.colorbar_pad)
+#                 # cb.set_
+#
+#                 if self.title:
+#                     title = 'Scatter graph of\n {} Vs {}.(n={})'.format(
+#                         x_var, y_var, self.data.shape[0]
+#                     )
+#
+#                 if self.log10:
+#                     cb.set_label('log10 RSS')
+#                     plt.xlabel('log$_{10}$' + '[{}]'.format(x_var))
+#                     plt.ylabel('log$_{10}$' + '[{}]'.format(y_var))
+#                 else:
+#                     cb.set_label('RSS')
+#                     plt.xlabel(x_var)
+#                     plt.ylabel(y_var)
+#
+#                 if self.despine:
+#                     seaborn.despine(fig=fig, top=True, right=True)
+#
+#                 if self.savefig:
+#                     x_dir = os.path.join(self.results_directory, x_var)
+#                     self.create_directory(x_dir)
+#                     fle = os.path.join(x_dir, '{}.{}'.format(y_var, self.ext))
+#                     plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
+#
+#         if self.show:
+#             plt.show()
+#
+#
+# class LinearRegression(_Viz, PlotKwargs):
+#     """Perform multiple linear regression using
+#     :py:module:`sklearn.linear_model`.
+#
+#     ========    =================================================
+#     kwarg       Description
+#     ========    =================================================
+#     lin_model   `func`. default=LassoCV. Any linear model supported
+#                 by :py:module:`sklearn.linear_model`. see `here`
+#
+#                 .. _here: http://scikit-learn.org/stable/modules/linear_model.html
+#
+#     n_alphas    `int` number of alphas
+#     max_iter    `int`. Number of iterations.
+#     **kwargs    see :ref:`kwargs` for more options
+#     ========    =================================================
+#
+#     Args:
+#
+#     Returns:
+#
+#     """
+#
+#     def __init__(self, cls, **kwargs):
+#         """
+#
+#         :param cls:
+#             Instance of :py:class:`tasks.MultiParameterEstimation`
+#             Same as :py:class:`PlotTimeCourseEnsemble`
+#
+#         :param kwargs:
+#         """
+#         self.cls = cls
+#         self.kwargs = kwargs
+#         self.plot_kwargs = self.plot_kwargs()
+#
+#         self.default_properties = {
+#             'lin_model': linear_model.LassoCV,
+#             'log10': False,
+#             'truncate_mode': 'percent',
+#             'theta': 100,
+#             'xtick_rotation': 'horizontal',
+#             'ylabel': 'Frequency',
+#             'scores_title': None,
+#             'coef_title': None,
+#             'savefig': False,
+#             'results_directory': None,
+#             'dpi': 400,
+#             'title_fontsize': 35,
+#             'show': False,
+#             'n_alphas': 100,
+#             'max_iter': 20000,
+#             'ext': 'png',
+#             'despine': True,
+#             'context': 'talk',
+#             'font_scale': 1.5,
+#             'rc': None,
+#             'copasi_file': None,
+#         }
+#
+#         self.default_properties.update(self.plot_kwargs)
+#         for i in list(kwargs.keys()):
+#             assert i in list(
+#                 self.default_properties.keys()), '{} is not a keyword argument for LinearRegression'.format(i)
+#         self.kwargs = self.default_properties
+#         self.default_properties.update(kwargs)
+#         self.default_properties.update(self.plot_kwargs)
+#         self.update_properties(self.default_properties)
+#         self._do_checks()
+#         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
+#
+#         self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
+#         self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
+#
+#         self.scores, self.coef = self.compute_coefficients()
+#         self.coef = self.coef.fillna(value=0)
+#
+#         self.plot_rss()
+#         self.plot_scores()
+#         self.plot_coef()
+#
+#     def _do_checks(self):
+#         """:return:"""
+#         if self.results_directory is None:
+#             self.results_directory = os.path.join(self.cls.model.root, 'LinearRegression')
+#
+#         if self.scores_title is None:
+#             pass
+#         if self.log10:
+#             self.scores_title = 'Model Fitting Test and Train Scores (Log10)'
+#
+#         else:
+#             self.scores_title = 'Model Fitting Test and Train Scores'
+#
+#         if self.coef_title is None:
+#             if self.log10:
+#                 self.coef_title = 'Coefficients (Log10)'
+#             else:
+#                 self.coef_title = 'Coefficients'
+#
+#     def compute1coef(self, parameter):
+#         """Compute coefficients for a single parameter
+#         using self['lin_model'] from sklearn
+#
+#         Args:
+#           parameter:
+#
+#         Returns:
+#
+#         """
+#         y = numpy.array(self.data[parameter])
+#         X = self.data.drop(parameter, axis=1)
+#         X_train, X_test, y_train, y_test = model_selection.train_test_split(X, y)
+#
+#         try:
+#             lin_model = self.lin_model(fit_intercept=True, n_alphas=self.n_alphas,
+#                                        max_iter=self.max_iter)
+#         except TypeError:
+#             lin_model = self.lin_model(fit_intercept=True)
+#
+#         lin_model.fit(X_train, y_train)
+#         df = pandas.DataFrame(lin_model.coef_, index=X.columns, columns=[parameter])  # .sort_values(by='Coefficients')
+#         df['abs_values'] = numpy.absolute(df[parameter])
+#         df = df.sort_values(by='abs_values', ascending=False)
+#         df = df.drop('abs_values', axis=1)
+#         scores = [lin_model.score(X_train, y_train), lin_model.score(X_test, y_test)]
+#         scores = pandas.DataFrame(scores, index=['TrainScore', 'TestScore'])
+#         return scores, df
+#
+#     def compute_coefficients(self):
+#         """ """
+#         parameters = list(self.data.columns)
+#         df_dct = {}
+#         score_dct = {}
+#         for y in parameters:
+#             score_dct[y], df_dct[y] = self.compute1coef(y)
+#
+#         df1 = pandas.concat(score_dct, axis=1).transpose().sort_values(by='TestScore',
+#                                                                        ascending=False)
+#         df2 = pandas.concat(df_dct, axis=1)
+#         return df1, df2
+#
+#     def plot_scores(self):
+#         """ """
+#         fig = plt.figure()
+#         seaborn.heatmap(self.scores)
+#         if self.despine:
+#             seaborn.despine(fig=fig, top=True, right=True)
+#
+#         plt.title(self.scores_title, fontsize=self.title_fontsize)
+#         if self.savefig:
+#             self.create_directory(self.results_directory)
+#             fname = os.path.join(self.results_directory, 'linregress_scores.{}'.format(self.ext))
+#             plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
+#
+#     def plot_rss(self):
+#         """ """
+#         fig = plt.figure()
+#         seaborn.heatmap(self.coef.RSS.sort_values(by='RSS', ascending=False))
+#         plt.title('Lasso Regression \n(Y=RSS) (n={})'.format(self.data.shape[0]), fontsize=self.title_fontsize)
+#         if self.despine:
+#             seaborn.despine(fig=fig, top=True, right=True)
+#         if self.savefig:
+#             self.create_directory(self.results_directory)
+#             fname = os.path.join(self.results_directory, 'linregress_RSS.{}'.format(self.ext))
+#             plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
+#
+#     def plot_coef(self):
+#         """:return:"""
+#         self.coef.columns = self.coef.columns.droplevel(0)
+#         self.coef = self.coef.drop('RSS', axis=1)
+#         self.coef = self.coef.drop('RSS', axis=0)
+#         fig = plt.figure()
+#         seaborn.heatmap(self.coef, cbar_kws={'pad': 0.2})
+#         if self.despine:
+#             seaborn.despine(fig=fig, top=True, right=True)
+#
+#         plt.title(self.coef_title)
+#         plt.xlabel('')
+#         if self.savefig:
+#             self.create_directory(self.results_directory)
+#             fname = os.path.join(self.results_directory, 'linregress_parameters.{}'.format(self.ext))
+#             plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
+#
+
+
+# class ModelSelection(_Viz):
+#     """Calculate model selection criteria AIC (corrected) and
+#     BIC for a selection of models that have undergone fitting
+#     using the :py:class:`tasks.MultiModelFit` class. Plot as
+#     boxplots and histograms.
+#
+#     Args:
+#
+#     Returns:
+#
+#     """
+#
+#     def __init__(self, multi_model_fit, **kwargs):
+#         """
+#
+#         :param multi_model_fit:
+#             a :py:class:`tasks.MultiModelFit` object
+#
+#         :param filename:
+#             `str` file to save model selection data to
+#
+#         :param pickle:
+#             `str` pickle path to save data too
+#         """
+#         self.multi_model_fit = multi_model_fit
+#         self.number_models = self.get_num_models()
+#
+#         self.default_properties = {
+#             'savefig': False,
+#             'results_directory': None,
+#             'dpi': 400,
+#             'log10': False,
+#             'filename': None,
+#             'pickle': None,
+#             'despine': True,
+#             'ext': 'png',
+#             'title': True,
+#             'context': 'poster',
+#             'font_scale': 2,
+#             'rc': None,
+#             'color': None,
+#             'palette': None,
+#             'saturation': 0.75,
+#             'model_labels': None,
+#             'label': None,
+#             'ax': None,
+#             'show': False,
+#             'order': None,
+#             'figsize': (8, 6),
+#             'violin_kwargs': {},
+#         }
+#
+#         for i in list(kwargs.keys()):
+#             assert i in list(self.default_properties.keys()), '{} is not a keyword argument for ModelSelection'.format(
+#                 i)
+#         self.kwargs = self.default_properties
+#         self.default_properties.update(kwargs)
+#         self.update_properties(self.default_properties)
+#
+#         self._do_checks()
+#
+#         ## do model selection stuff
+#         self.results_folder_dct = self._get_results_directories()
+#         self.model_dct = self._get_model_dct()
+#
+#         ## code for having default legend labels
+#         self.default_model_labels = {i.name: i.name for i in list(self.model_dct.values())}
+#
+#         if self.model_labels is not None:
+#             if type(self.model_labels) is not dict:
+#                 raise errors.InputError('model labels should be a dict')
+#
+#             for label in self.model_labels:
+#                 if label not in self.default_model_labels:
+#                     raise errors.InputError('keys of the model_labels dict should be one of '
+#                                             '"{}"'.format(list(self.default_model_labels.keys())))
+#         elif self.model_labels is None:
+#             self.model_labels = self.default_model_labels
+#
+#         self.data_dct = self._parse_data()
+#         self.number_model_parameters = self._get_number_estimated_model_parameters()
+#         self.number_observations = self._get_n()
+#         self.model_selection_data = self.calculate_model_selection_criteria()
+#         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
+#
+#         # self.boxplot()
+#         # self.histogram()
+#         self.fig = self.violin()
+#         self.to_csv()
+#
+#     def __iter__(self):
+#         for MPE in self.multi_model_fit:
+#             yield MPE
+#
+#     def __getitem__(self, item):
+#         return self.multi_model_fit[item]
+#
+#     def __setitem__(self, key, value):
+#         self.multi_model_fit[key] = value
+#
+#     def __delitem__(self, key):
+#         del self.multi_model_fit[key]
+#
+#     def keys(self):
+#         """ """
+#         return list(self.multi_model_fit.keys())
+#
+#     def values(self):
+#         """ """
+#         return list(self.multi_model_fit.values())
+#
+#     def items(self):
+#         """ """
+#         return list(self.multi_model_fit.items())
+#
+#     def _do_checks(self):
+#         """:return:"""
+#         if self.results_directory is None:
+#             self.results_directory = self.multi_model_fit.project_dir
+#
+#         if self.filename is None:
+#             save_dir = os.path.join(self.results_directory, 'ModelSelectionGraphs')
+#             self.filename = os.path.join(save_dir, 'ModelSelectionCriteria.csv')
+#
+#     def _get_results_directories(self):
+#         """Find the results directories embedded within MultimodelFit
+#         and RunMutliplePEs.
+#
+#         Args:
+#
+#         Returns:
+#
+#         """
+#         return self.multi_model_fit.results_folder_dct
+#
+#     def get_num_models(self):
+#         """ """
+#         return len(self.multi_model_fit.cps_files)
+#
+#     def to_excel(self, filename=None):
+#         """
+#
+#         Args:
+#           filename:  (Default value = None)
+#
+#         Returns:
+#
+#         """
+#         if filename is None:
+#             filename = self.filename[:-4] + '.xlsx'
+#         self.model_selection_data.to_excel(filename)
+#
+#     def to_csv(self, filename=None):
+#         """
+#
+#         Args:
+#           filename:  (Default value = None)
+#
+#         Returns:
+#
+#         """
+#         if filename is None:
+#             filename = self.filename
+#         LOG.info('model selection data saved to {}'.format(filename))
+#         self.model_selection_data.to_csv(filename)
+#
+#     def to_pickle(self, filename=None):
+#         """
+#
+#         Args:
+#           filename:  (Default value = None)
+#
+#         Returns:
+#
+#         """
+#         if filename is None:
+#             filename = os.path.splitext(self.filename)[0] + '.pickle'
+#
+#         LOG.info('model selection pickle saved to {}'.format(filename))
+#         self.model_selection_data.to_pickle(filename)
+#
+#     def _get_model_dct(self):
+#         """Get a model dct. The model must be a configured model
+#         (i.e. not the original and with a number after it)
+#         :return:
+#
+#         Args:
+#
+#         Returns:
+#
+#         """
+#         dct = {}
+#         for MPE in self.multi_model_fit:
+#             ## get the first cps file configured for eastimation in each MMF obj
+#             cps_1 = sorted(glob.glob(
+#                 os.path.join(
+#                     os.path.dirname(MPE.results_directory),
+#                     '*.cps')
+#             ))[0]
+#             dct[MPE.results_directory] = model.Model(cps_1)
+#         return dct
+#
+#     def _parse_data(self):
+#         """ """
+#         if self.pickle is not None:
+#             #     self.pickle = os.path.splitext(self.filename)[0]+'.pickle'
+#             return pandas.read_pickle(self.pickle)
+#         else:
+#             dct = {}
+#             for cps, MPE in list(self.multi_model_fit.items()):
+#                 cps_0 = cps[:-4] + '.cps'
+#                 dct[cps_0] = Parse(MPE.results_directory, copasi_file=cps_0, log10=self.log10)
+#             return dct
+#
+#     def _get_number_estimated_model_parameters(self):
+#         """ """
+#         k_dct = {}
+#         for mod in list(self.model_dct.values()):
+#             k_dct[mod.copasi_file] = len(mod.fit_item_order)
+#         return k_dct
+#
+#     def _get_n(self):
+#         """get number of observed data points for AIC calculation"""
+#         n = {}
+#         for exp in self.multi_model_fit.exp_files:
+#             data = pandas.read_csv(exp, sep='\t')
+#             l = []
+#             for key in list(data.keys()):
+#                 if key.lower() != 'time':
+#                     if key[-6:] != '_indep':
+#                         l.append(int(data[key].shape[0]))
+#             n[exp] = sum(l)
+#         n = sum(n.values())
+#         return n
+#
+#     def calculate1AIC(self, RSS, K, n):
+#         """Calculate the corrected AIC:
+#
+#             AICc = -2*ln(RSS/n) + 2*K + (2*K*(K+1))/(n-K-1)
+#
+#             or if likelihood function used instead of RSS
+#
+#             AICc = -2*ln(likelihood) + 2*K + (2*K*(K+1))/(n-K-1)
+#
+#         Where:
+#             RSS:
+#                 Residual sum of squares for model fit
+#             n:
+#                 Number of observations collectively in all data files
+#
+#             K:
+#                 Number of model parameters
+#
+#         Args:
+#           RSS:
+#           K:
+#           n:
+#
+#         Returns:
+#
+#         """
+#         return n * numpy.log((RSS / n)) + 2 * K + (2 * K * (K + 1)) / (n - K - 1)
+#
+#     def calculate1BIC(self, RSS, K, n):
+#         """Calculate the bayesian information criteria
+#             BIC = -2*ln(likelihood) + k*ln(n)
+#
+#                 Does this then go to:
+#
+#             BIC = -2*ln(RSS/n) + k*ln(n)
+#
+#         Args:
+#           RSS:
+#           K:
+#           n:
+#
+#         Returns:
+#
+#         """
+#         return (n * numpy.log(RSS / n)) + K * numpy.log(n)
+#
+#     def calculate_model_selection_criteria(self):
+#         """Calculate AIC corrected and BIC
+#         :return:
+#             pandas.DataFrame
+#
+#         Args:
+#
+#         Returns:
+#
+#         """
+#         df_dct = {}
+#         for model_num in range(len(self.model_dct)):
+#             keys = list(self.model_dct.keys())
+#             cps_key = self.model_dct[keys[model_num]].copasi_file
+#
+#             k = self.number_model_parameters[cps_key]
+#             n = self.number_observations  # constant throughout analysis
+#             rss = self.data_dct[cps_key].data.RSS
+#             aic_dct = {}
+#             bic_dct = {}
+#             for i in range(len(rss)):
+#                 aic = self.calculate1AIC(rss.iloc[i], k, n)
+#                 bic = self.calculate1BIC(rss.iloc[i], k, n)
+#                 aic_dct[i] = aic
+#                 bic_dct[i] = bic
+#             aic = pandas.DataFrame.from_dict(aic_dct, orient='index')
+#             rss = pandas.DataFrame(rss)
+#             bic = pandas.DataFrame.from_dict(bic_dct, orient='index')
+#             df = pandas.concat([rss, aic, bic], axis=1)
+#             df.columns = ['RSS', 'AICc', 'BIC']
+#             df.index.name = 'RSS Rank'
+#             # df_dct[os.path.split(cps_key)[1][:-6]] = df
+#             df_dct[self.model_dct[keys[model_num]].name] = df
+#         df = pandas.concat(df_dct, axis=1)
+#         return df
+#
+#     def violin(self):
+#         """ """
+#         # seaborn.set_context(context='poster')
+#         data = self.model_selection_data
+#
+#         data = data.unstack()
+#         data = data.reset_index()
+#         data = data.rename(columns={'level_0': 'Model',
+#                                     'level_1': 'Metric',
+#                                     0: 'Score'})
+#
+#         new_names = []
+#         for mod in data['Model']:
+#             for j in self.model_labels:
+#                 if mod == j:
+#                     new_names.append(self.model_labels[j])
+#
+#         figs = []
+#         data['Model'] = new_names
+#         for metric in data['Metric'].unique():
+#             fig = plt.figure(figsize=self.figsize)
+#             seaborn.violinplot(data=data[data['Metric'] == metric],
+#                                x='Model',
+#                                y='Score',
+#                                color=self.color,
+#                                palette=self.palette,
+#                                saturation=self.saturation,
+#                                ax=self.ax,
+#                                order=self.order,
+#                                **self.violin_kwargs
+#                                )
+#             plt.xticks(rotation='vertical')
+#             if self.title:
+#                 plt.title('{} Scores'.format(metric))
+#             plt.xlabel(' ')
+#             if self.despine:
+#                 seaborn.despine(fig=fig, top=True, right=True)
+#
+#             if self.savefig:
+#                 save_dir = os.path.join(self.results_directory, 'ModelSelectionGraphs')
+#                 if os.path.isdir(save_dir) is not True:
+#                     os.mkdir(save_dir)
+#                 os.chdir(save_dir)
+#                 fname = os.path.join(save_dir, 'ViolinPlot_{}.{}'.format(metric, self.ext))
+#                 plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
+#                 LOG.info('Violin plot saved to : "{}"'.format(fname))
+#
+#             figs.append(fig)
+#         return figs
+#
+#     def chi2_lookup_table(self, alpha):
+#         """Looks at the cdf of a chi2 distribution at incriments of
+#         0.1 between 0 and 100.
+#
+#         Returns the x axis value at which the alpha interval has been crossed,
+#         i.e. gets the cut off point for chi2 dist with DOF and alpha .
+#
+#         Args:
+#           alpha:
+#
+#         Returns:
+#
+#         """
+#         nums = numpy.arange(0, 100, 0.1)
+#         table = list(zip(nums, scipy.stats.chi2.cdf(nums, self.kwargs.get('DOF'))))
+#         for i in table:
+#             if i[1] <= alpha:
+#                 chi2_df_alpha = i[0]
+#         return chi2_df_alpha
+#
+#     def get_chi2_alpha(self):
+#         """ """
+#         dct = {}
+#         alphas = numpy.arange(0, 1, 0.01)
+#         for i in alphas:
+#             dct[round(i, 3)] = self.chi2_lookup_table(i)
+#         return dct[0.05]
+#
+#     def compare_sim_vs_exp(self):
+#         """ """
+#         LOG.info('Visually comparing simulated Versus Experiemntal data.')
+#
+#         for cps, res in list(self.multi_model_fit.results_folder_dct.items()):
+#             tasks.InsertParameters(cps, parameter_path=res, index=0)
+#             PE = tasks.ParameterEstimation(cps, self.multi_model_fit.exp_files,
+#                                            randomize_start_values=False,
+#                                            method='CurrentSolutionStatistics',
+#                                            plot=True, savefig=True,
+#                                            )
+#             PE.set_up()
+#             PE.run()
+#             PE.format_results()
+#
+#     def get_best_parameters(self, filename=None):
+#         """
+#
+#         Args:
+#           filename:  (Default value = None)
+#
+#         Returns:
+#
+#         """
+#         df = pandas.DataFrame()
+#         for cps, res in list(self.multi_model_fit.results_folder_dct.items()):
+#             df[os.path.split(cps)[1]] = ParsePEData(res).data.iloc[0]
+#
+#         if filename == None:
+#             return df
+#         else:
+#             df.to_excel(filename)
+#             return df
+#
+#     def compare_model_parameters(self, parameter_list, filename=None):
+#         """Compare all the parameters accross multiple models
+#         in a bar chart averaging and STD for a parameter accross
+#         all models.
+#
+#         May have a problem with different models have different
+#
+#         Args:
+#           parameter_list:
+#           filename:  (Default value = None)
+#
+#         Returns:
+#
+#         """
+#         best_parameters = self.get_best_parameters()
+#         data = best_parameters.loc[parameter_list].transpose()
+#         f = seaborn.barplot(data=numpy.log10(data))
+#         f.set_xticklabels(parameter_list, rotation=90)
+#         plt.legend(loc=(1, 1))
+#         plt.title('Barplot Comparing Parameter Estimation Results for specific\nParameters accross all models')
+#         plt.ylabel('log10 parameter_value,Err=SEM')
+#         if filename != None:
+#             plt.savefig(filename, dpi=200, bbox_inches='tight')
+
+
+# class PlotProfileLikelihood(_Viz):
+#     """ """
+#
+#     def __init__(self, cls, data=None, **kwargs):
+#         """
+#         Plot profile likelihoods
+#         :param data:
+#         :param kwargs:
+#         """
+#         self.cls = cls
+#
+#         self.default_properties = {'x': None,
+#                                    'y': None,  # can equal all
+#                                    'index': None,
+#                                    'rss_value': None,
+#                                    'log10': True,
+#                                    'savefig': False,
+#                                    'results_directory': None,
+#                                    'dpi': 400,
+#                                    'plot_cl': True,
+#                                    'alpha': 0.95,
+#                                    'title': None,
+#                                    'xlabel': None,
+#                                    'ylabel': None,
+#                                    'color': None,  # if RSS, colour plots by RSS
+#                                    'cmap': 'jet_r',
+#                                    'legend': False,
+#                                    'legend_loc': None,
+#                                    'show': False,
+#                                    'separate': True,
+#                                    'filename': None,
+#                                    'despine': True,
+#                                    'ext': 'png',
+#                                    'show_best_rss': True,
+#                                    'best_rss_marker': 'k*',  ##Any matplotlib marker
+#                                    'ylim': None,
+#                                    'xlim': None,
+#                                    'interpolation': None,
+#                                    'interpolation_resolution': 1000,  # number of steps to interpolate
+#                                    'context': 'talk',
+#                                    'font_scale': 1,
+#                                    'rc': None,
+#                                    'multiplot': False,
+#                                    'same_axis': False,
+#                                    'colorbar_pad': 0.2,
+#                                    }
+#
+#         for i in list(kwargs.keys()):
+#             assert i in list(
+#                 self.default_properties.keys()), '{} is not a keyword argument for PlotProfileLikelihood'.format(i)
+#         self.kwargs = self.default_properties
+#         self.default_properties.update(kwargs)
+#         self.update_properties(self.default_properties)
+#         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
+#
+#         ## parse data
+#         self.data = Parse(self.cls, log10=self.log10,
+#                           alpha=self.alpha, rss_value=self.rss_value).data
+#
+#         ## do some checks
+#         self._do_checks()
+#
+#         ## do plotting
+#         if self.same_axis:
+#             self.plot_same_axis()
+#         else:
+#             self.plot()
+#         ##todo implement ability to change confidence level from Plot.
+#         ##at the moment the CL is conputer by Parse. This is not optimal
+#
+#     def _do_checks(self):
+#         """:return:"""
+#         ## todo put original estimatd values on non rss graphs as well
+#         if self.ylim is not None:
+#             if not isinstance(self.ylim, tuple):
+#                 raise errors.InputError('ylim arg should be tuple. Got "{}"'.format(type(self.ylim)))
+#
+#             if len(self.ylim) is not 2:
+#                 raise errors.InputError('ylim arg should be tuple of length 2. '
+#                                         'See "https://matplotlib.org/devdocs/api/_as_gen/matplotlib.pyplot.ylim.html" '
+#                                         'for details')
+#
+#         if self.xlim is not None:
+#             if not isinstance(self.xlim, tuple):
+#                 raise errors.InputError('xlim arg should be tuple. Got "{}"'.format(type(self.xlim)))
+#
+#             if len(self.xlim) is not 2:
+#                 raise errors.InputError('xlim arg should be tuple of length 2. '
+#                                         'See "https://matplotlib.org/devdocs/api/_as_gen/matplotlib.pyplot.xlim.html" '
+#                                         'for details')
+#
+#         interpolation_kinds = ['linear', 'nearest', 'zero',
+#                                'slinear', 'quadratic', 'cubic']
+#
+#         if self.interpolation is not None:
+#             if self.interpolation not in interpolation_kinds:
+#                 raise errors.InputError('"{}" is not in "{}"'.format(
+#                     self.interpolation, interpolation_kinds
+#                 ))
+#
+#         if type(self.cls) == tasks.ProfileLikelihood:
+#             self.results_directory = self.cls.results_directory
+#         else:
+#             LOG.warning('cls not of type tasks.ProfileLikelihood')
+#
+#         if isinstance(self.data, pandas.core.frame.DataFrame) != True:
+#             raise errors.InputError('"{}" should be a dataframe not "{}".'.format(self.data, type(self(data))))
+#
+#         self.parameter_list = sorted(list(self.data.columns))
+#
+#         if self.separate == False:
+#             self.legend = True
+#
+#         if self.index is None:
+#             self.index = 0
+#
+#         if not isinstance(self.index, list):
+#             self.index = [self.index]
+#
+#         if self.x == None:
+#             self.x = [i for i in self.parameter_list if i is not 'RSS']
+#             # raise errors.InputError('x cannot be None')
+#
+#         if self.y == None:
+#             self.y = 'RSS'
+#
+#         if self.y == 'all':
+#             self.y = self.parameter_list
+#
+#         if self.x == 'all':
+#             self.x = [i for i in self.parameter_list if i != 'RSS']
+#
+#         if self.y == None:
+#             raise errors.InputError('y cannot be None')
+#
+#         if isinstance(self.y, str):
+#             self.y = [self.y]
+#
+#         if isinstance(self.y, list):
+#             for y_param in self.y:
+#                 if y_param not in self.parameter_list:
+#                     raise errors.InputError('{} not in {}'.format(y_param, self.parameter_list))
+#
+#         if isinstance(self.x, str):
+#             self.x = [self.x]
+#
+#         if isinstance(self.x, list):
+#             for x_param in self.x:
+#                 if x_param not in self.parameter_list:
+#                     raise errors.InputError('{} not in {}'.format(x_param, self.parameter_list))
+#
+#         if self.filename is not None:
+#             if not os.path.isabs(self.filename):
+#                 self.filename = os.path.join(self.results_directory, self.filename)
+#
+#             self.data.to_csv(self.filename)
+#             LOG.info('Profile likelihood data saved to "{}"'.format(self.filename))
+#
+#     def plot_same_axis(self):
+#         """:return:"""
+#         fig = plt.figure()
+#         for x in self.x:
+#             for y in self.y:
+#                 colorbar_present = False
+#                 for i in self.index:
+#                     if y == 'RSS':
+#                         plot_data = self.data.loc[x, i][y]
+#                     else:
+#                         plot_data = self.data.loc[x, i][[y, 'RSS']]
+#                     if type(plot_data) == pandas.Series:
+#                         plot_data = pandas.DataFrame(plot_data)
+#
+#                     plot_data = plot_data.reset_index()
+#
+#                     x_plot = plot_data['Parameter Of Interest Value']
+#                     y_plot = plot_data[y]
+#
+#                     if self.color == 'RSS':
+#                         c = plot_data['RSS']
+#                     elif self.color is None:
+#                         c = 'r'
+#
+#                     if self.interpolation is not None:
+#                         f = interp1d(x_plot, y_plot, kind=self.interpolation)
+#                         minimum = x_plot.min()
+#                         maximum = x_plot.max()
+#                         step = (maximum - minimum) / self.interpolation_resolution
+#                         xnew = numpy.arange(start=minimum, stop=maximum, step=step)
+#                         ynew = f(xnew)
+#                         plt.plot(xnew, ynew, 'k')
+#                         plt.scatter(x_plot, y_plot, c=c, cmap=self.cmap,
+#                                     marker='o', label=y, linewidth=2)  # linestyle='o', color='red')
+#                     else:
+#                         plt.scatter(x_plot, y_plot, c=c, cmap=self.cmap,
+#                                     marker='o', label=y, linewidth=2)
+#
+#                     if self.color == 'RSS':
+#                         if not colorbar_present:
+#                             cb = plt.colorbar(pad=self.colorbar_pad)
+#                             colorbar_present = True
+#
+#                     if y is 'RSS':
+#                         plt.plot(plot_data['Parameter Of Interest Value'],
+#                                  plot_data['Confidence Level'], linewidth=3,
+#                                  linestyle='--', color='green', label='CL')
+#
+#                     if self.show_best_rss:
+#                         if y is 'RSS':
+#                             best_rss = list(set(plot_data['Best RSS Value']))
+#                             best_param_val = list(set(plot_data['Best Parameter Value']))
+#                             plt.plot(best_param_val, best_rss, self.best_rss_marker, linewidth=5,
+#                                      markersize=12)
+#
+#                     if self.legend:
+#                         if self.legend_loc is not None:
+#                             plt.legend(loc=self.legend_loc)
+#                         else:
+#                             plt.legend(loc='best')
+#
+#                     if self.despine:
+#                         seaborn.despine(fig=fig, top=True, right=True)
+#
+#                     if self.title is None:
+#                         self.title = 'Profile Likelihoods for\n{} ' \
+#                                      'against {} (index={})'.format(x, y, i)
+#
+#                     elif self.title is 'profile':
+#                         self.title = x
+#
+#                     if self.title is not False:
+#                         plt.title(self.title)
+#
+#                     if self.log10:
+#                         plt.ylabel(r'$log_{10}$[{}]'.format(y))
+#                         plt.xlabel(r'$log_{10}$[{}]'.format(x))
+#                         if self.color == 'RSS':
+#                             cb.set_label('log_${10}$[RSS]')
+#                     else:
+#                         plt.ylabel(y)
+#                         plt.xlabel(x)
+#                         if self.color == 'RSS':
+#                             cb.set_label('RSS')
+#
+#                     if self.ylim is not None:
+#                         plt.ylim(self.ylim)
+#
+#                     if self.xlim is not None:
+#                         plt.xlim(self.xlim)
+#
+#                     if self.savefig:
+#                         d = os.path.join(self.results_directory, str(i))
+#                         d = os.path.join(d, x)
+#                         self.create_directory(d)
+#                         fname = os.path.join(d, misc.RemoveNonAscii(y).filter + '.{}'.format(self.ext))
+#
+#                         plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
+#                         LOG.info('saved to --> {}'.format(fname))
+#
+#                     if self.show:
+#                         plt.show()
+#
+#     def plot(self):
+#         """:return:"""
+#         for x in self.x:
+#             for y in self.y:
+#                 ##indicator var for colorbar
+#                 colorbar_present = False
+#                 if self.multiplot:
+#                     fig = plt.figure()
+#                 for i in self.index:
+#                     if y == 'RSS':
+#                         plot_data = self.data.loc[x, i][y]
+#                     else:
+#                         plot_data = self.data.loc[x, i][[y, 'RSS']]
+#                     if type(plot_data) == pandas.Series:
+#                         plot_data = pandas.DataFrame(plot_data)
+#
+#                     if not self.multiplot:
+#                         fig = plt.figure()
+#
+#                     plot_data = plot_data.reset_index()
+#
+#                     x_plot = plot_data['Parameter Of Interest Value']
+#                     y_plot = plot_data[y]
+#
+#                     if self.color == 'RSS':
+#                         c = plot_data['RSS']
+#                     elif self.color is None:
+#                         c = 'r'
+#
+#                     if self.interpolation is not None:
+#                         f = interp1d(x_plot, y_plot, kind=self.interpolation)
+#                         minimum = x_plot.min()
+#                         maximum = x_plot.max()
+#                         step = (maximum - minimum) / self.interpolation_resolution
+#                         xnew = numpy.arange(start=minimum, stop=maximum, step=step)
+#                         ynew = f(xnew)
+#                         plt.plot(xnew, ynew, 'k')
+#                         plt.scatter(x_plot, y_plot, c=c,
+#                                     marker='o', label=y, linewidth=2,
+#                                     )
+#                     else:
+#                         plt.scatter(x_plot, y_plot, c=c, cmap=self.cmap,
+#                                     label=y, marker='o')
+#
+#                     if self.color == 'RSS':
+#                         if not colorbar_present:
+#                             cb = plt.colorbar(pad=self.colorbar_pad)
+#                             colorbar_present = True
+#
+#                     if y is 'RSS':
+#                         plt.plot(plot_data['Parameter Of Interest Value'],
+#                                  plot_data['Confidence Level'], linewidth=3,
+#                                  linestyle='--', color='green', label='CL')
+#
+#                     if self.show_best_rss:
+#                         if y == 'RSS':
+#                             best_rss = list(set(plot_data['Best RSS Value']))
+#                             best_param_val = list(set(plot_data['Best Parameter Value']))
+#                             plt.plot(best_param_val, best_rss, self.best_rss_marker, linewidth=5,
+#                                      markersize=12)
+#
+#                     if self.legend:
+#                         if self.legend_loc is not None:
+#                             plt.legend(loc=self.legend_loc)
+#                         else:
+#                             plt.legend(loc='best')
+#
+#                     if self.despine:
+#                         seaborn.despine(fig=fig, top=True, right=True)
+#
+#                     if self.title is None:
+#                         self.title = 'Profile Likelihoods for\n{} ' \
+#                                      'against {} (index={})'.format(x, y, i)
+#
+#                     # elif self.title is 'profile':
+#                     #     self.title = x
+#
+#                     # plt.title(self.title)
+#
+#                     if self.log10:
+#                         plt.ylabel(r'log$_{10}$' + '[{}]'.format(y))
+#                         plt.xlabel(r'log$_{10}$' + '[{}]'.format(x))
+#                         if self.color == 'RSS':
+#                             cb.set_label('log$_{10}$[RSS]')
+#                     else:
+#                         plt.ylabel(y)
+#                         plt.xlabel(x)
+#                         if self.color == 'RSS':
+#                             cb.set_label('RSS')
+#
+#                     if self.ylim is not None:
+#                         plt.ylim(self.ylim)
+#
+#                     if self.xlim is not None:
+#                         plt.xlim(self.xlim)
+#
+#                     if self.savefig:
+#                         d = os.path.join(self.results_directory, str(i))
+#                         d = os.path.join(d, x)
+#                         self.create_directory(d)
+#                         fname = os.path.join(d, misc.RemoveNonAscii(y).filter + '.{}'.format(self.ext))
+#
+#                         plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
+#                         LOG.info('saved to --> {}'.format(fname))
+#
+#                     if self.show:
+#                         plt.show()
+#
+#     def plot_pdf(self):
+#         """:return:"""
+#         raise NotImplementedError
+#         # with PdfPages()
+#         for x in self.x:
+#             for y in self.y:
+#                 if self.multiplot:
+#                     fig = plt.figure()
+#                 for i in self.index:
+#                     plot_data = self.data.loc[x, i][y]
+#                     if type(plot_data) == pandas.Series:
+#                         plot_data = pandas.DataFrame(plot_data)
+#
+#                     if not self.multiplot:
+#                         fig = plt.figure()
+#
+#                     plot_data = plot_data.reset_index()
+#
+#                     x_plot = plot_data['Parameter Of Interest Value']
+#                     y_plot = plot_data[y]
+#
+#                     if self.interpolation is not None:
+#                         f = interp1d(x_plot, y_plot, kind=self.interpolation)
+#                         minimum = x_plot.min()
+#                         maximum = x_plot.max()
+#                         step = (maximum - minimum) / self.interpolation_resolution
+#                         xnew = numpy.arange(start=minimum, stop=maximum, step=step)
+#                         ynew = f(xnew)
+#                         plt.plot(xnew, ynew, 'k')
+#                         plt.plot(x_plot, y_plot, 'ro', label=y, linewidth=2)  # linestyle='o', color='red')
+#                     else:
+#                         plt.plot(x_plot, y_plot, label=y, marker='o')
+#
+#                     if y is 'RSS':
+#                         plt.plot(plot_data['Parameter Of Interest Value'],
+#                                  plot_data['Confidence Level'], linewidth=3,
+#                                  linestyle='--', color='green', label='CL')
+#
+#                     if self.show_best_rss:
+#                         best_rss = list(set(plot_data['Best RSS Value']))
+#                         best_param_val = list(set(plot_data['Best Parameter Value']))
+#                         plt.plot(best_param_val, best_rss, self.best_rss_marker, linewidth=5,
+#                                  markersize=12)
+#
+#                     if self.legend:
+#                         if self.legend_loc is not None:
+#                             plt.legend(loc=self.legend_loc)
+#                         else:
+#                             plt.legend(loc='best')
+#
+#                     if self.despine:
+#                         seaborn.despine(fig=fig, top=True, right=True)
+#
+#                     if self.title is None:
+#                         self.title = 'Profile Likelihoods for\n{} ' \
+#                                      'against {} (index={})'.format(x, y, i)
+#
+#                     elif self.title is 'profile':
+#                         self.title = x
+#
+#                     else:
+#                         plt.title(self.title)
+#
+#                     if self.log10:
+#                         plt.ylabel('log10 {}'.format(y))
+#                         plt.xlabel('log10 {}'.format(x))
+#                     else:
+#                         plt.ylabel(y)
+#                         plt.xlabel(x)
+#
+#                     if self.ylim is not None:
+#                         plt.ylim(self.ylim)
+#
+#                     if self.xlim is not None:
+#                         plt.xlim(self.xlim)
+#
+#                     if self.savefig:
+#                         d = os.path.join(self.results_directory, str(i))
+#                         d = os.path.join(d, x)
+#                         self.create_directory(d)
+#                         fname = os.path.join(d, misc.RemoveNonAscii(y).filter + '.{}'.format(self.ext))
+#
+#                         plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
+#                         LOG.info('saved to --> {}'.format(fname))
+#
+#                     if self.show:
+#                         plt.show()
+
+
+# class PearsonsCorrelation(_Viz):
+#     """========    =================================================
+#     kwarg       Description
+#     ========    =================================================
+#     **kwargs    see :ref:`kwargs` for more options
+#     ========    =================================================
+#
+#     Args:
+#
+#     Returns:
+#
+#     """
+#
+#     def __init__(self, cls, **kwargs):
+#         """
+#
+#         :param cls:
+#             Instance of :py:class:`tasks.MultiParameterEstimation`
+#             Same as :py:class:`PlotTimeCourseEnsemble`
+#
+#         :param kwargs:
+#         """
+#         self.cls = cls
+#         self.kwargs = kwargs
+#         self.plot_kwargs = self.plot_kwargs()
+#
+#         self.default_properties = {
+#             'x': 'RSS',
+#             'y': None,
+#             'sep': '\t',
+#             'log10': False,
+#             'truncate_mode': 'percent',
+#             'theta': 100,
+#             'xtick_rotation': 'horizontal',
+#             'ylabel': 'Frequency',
+#             'savefig': False,
+#             'results_directory': None,
+#             'dpi': 400,
+#             'title_fontsize': 35,
+#             'title': True,  # Either True or None/False
+#             'show': False,
+#             'ext': 'png',
+#             'colorbar_pad': 0.1,  # padding for color bar. Dist between bar and axes
+#             'context': 'talk',
+#             'font_scale': 1.5,
+#             'rc': None,
+#             'copasi_file': None,
+#             'cmap': 'BrBG_r',
+#             'center': None,
+#             'robust': False,
+#             'annot': None,
+#             'fmt': '.2g',
+#             'annot_kws': None,
+#             'linewidths': 0,
+#             'linecolor': 'white',
+#             'cbar': True,
+#             'cbar_kws': None,
+#             'cbar_ax': None,
+#             'square': False,
+#             'xticklabels': 'auto',
+#             'yticklabels': 'auto',
+#             'mask': None,
+#             'ax': None,
+#         }
+#
+#         self.default_properties.update(self.plot_kwargs)
+#         for i in list(kwargs.keys()):
+#             assert i in list(self.default_properties.keys()), '{} is not a keyword argument for PearsonsHeatMap'.format(
+#                 i)
+#         self.kwargs = self.default_properties
+#         self.default_properties.update(kwargs)
+#         self.default_properties.update(self.plot_kwargs)
+#         self.update_properties(self.default_properties)
+#         self._do_checks()
+#         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
+#
+#         self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
+#
+#         self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
+#
+#         self.combinations = self.get_combinations()
+#         self.pearsons, self.p_val = self.do_pearsons()
+#         self.heatmap()
+#
+#     def _do_checks(self):
+#         """:return:"""
+#         if isinstance(self.cls, str):
+#             if self.copasi_file is None:
+#                 raise ValueError('When first argument is a string '
+#                                  'pointing to parameter estimation data '
+#                                  'specify an argument to copasi_file')
+#         if self.results_directory is None:
+#             try:
+#                 self.results_directory = os.path.join(self.cls.model.root, 'PearsonsCorrelation')
+#             except AttributeError as e:
+#                 self.results_directory = os.path.join(
+#                     os.path.dirname(self.copasi_file), 'PearsonsCorrelation'
+#                 )
+#
+#     def get_combinations(self):
+#         """ """
+#         return permutations(list(self.data.keys()), 2)
+#
+#     def do_pearsons(self):
+#         """:return:"""
+#         dct = {}
+#         for x, y in self.combinations:
+#             dct[(x, y)] = pearsonr(self.data[x], self.data[y])
+#
+#         df = pandas.DataFrame(dct).transpose()  # , index=['r2', 'p-val']).transpose()
+#         df.columns = ['r2', 'p-val']
+#         df.index.name = ['x', 'y']
+#         df = df.unstack()
+#         df = df.fillna(value=numpy.nan)
+#         return df['r2'], df['p-val']
+#
+#     def heatmap(self):
+#         """ """
+#         seaborn.set_context(context=self.context, font_scale=self.font_scale)
+#         data = self.pearsons
+#
+#         data = data.drop('RSS', axis=0)
+#         data = data.drop('RSS', axis=1)
+#
+#         plt.figure()
+#         fig = seaborn.heatmap(data=data,
+#                               cmap=self.cmap,
+#                               vmin=-1, vmax=1,
+#                               center=self.center,
+#                               robust=self.robust,
+#                               annot=self.annot,
+#                               fmt=self.fmt,
+#                               annot_kws=self.annot_kws,
+#                               linewidths=self.linewidths,
+#                               linecolor=self.linecolor,
+#                               cbar=self.cbar,
+#                               cbar_kws=self.cbar_kws,
+#                               cbar_ax=self.cbar_ax,
+#                               square=self.square,
+#                               xticklabels=self.xticklabels,
+#                               yticklabels=self.yticklabels,
+#                               mask=self.mask,
+#                               ax=self.ax,
+#                               )
+#
+#         if self.log10:
+#             plt.title('Pearsons Correlation (Log10)')
+#
+#         else:
+#             plt.title('Pearsons Correlation')
+#
+#         if self.savefig:
+#             self.create_directory(self.results_directory)
+#             fname = os.path.join(self.results_directory, 'PearsonsHeatmap' + '.{}'.format(self.ext))
+#
+#             plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
+#             LOG.info('saved to --> {}'.format(fname))
+#             pearsons_data_file = os.path.join(self.results_directory, 'r2_data.csv')
+#             p_val_file = os.path.join(self.results_directory, 'p_val_data.csv')
+#             self.pearsons.to_csv(pearsons_data_file, sep='\t')
+#             self.p_val.to_csv(p_val_file, sep='\t')
+#
+#         if self.show:
+#             plt.show()

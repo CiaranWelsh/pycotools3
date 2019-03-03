@@ -28,6 +28,8 @@ from . import viz
 from . import errors
 from . import misc
 from . import model
+from .munch import Munch
+from . import munch
 import time
 import threading
 import queue as queue
@@ -52,7 +54,6 @@ from .mixin import mixin
 from functools import reduce
 import yaml, json
 import sys
-import munch
 
 COPASISE, COPASIUI = load_copasi()
 
@@ -926,9 +927,6 @@ class Reports(_Task):
         # first element always time.
         time.attrib['cn'] = 'CN=Root,Model={},Reference=Time'.format(self.model.name)
 
-        '''
-        generate more SubElements dynamically
-        '''
         # for metabolites
         if self.metabolites != None:
             for i in self.metabolites:
@@ -2220,7 +2218,6 @@ class Scan(_Task):
             i.append(scanItem_element)
         return self.model
 
-    #
     def set_scan_options(self):
         """ """
         report_attrib = {'append': self.append,
@@ -2455,7 +2452,7 @@ class ParameterEstimation(_Task):
             }
 
     @staticmethod
-    class Config(_Task, munch.Munch):
+    class Config(_Task, Munch):
         """
         A class for holding a parameter estimation configuration
 
@@ -2566,7 +2563,7 @@ class ParameterEstimation(_Task):
             if not isinstance(self.defaults, ParameterEstimation._Defaults):
                 raise TypeError('incorrect defaults argument')
 
-            self.kwargs = munch.Munch.fromDict({
+            self.kwargs = Munch.fromDict({
                 'models': self.models,
                 'datasets': self.datasets,
                 'items': self.items,
@@ -2723,6 +2720,21 @@ class ParameterEstimation(_Task):
                         self.settings.working_directory
                     ))
 
+            exp_names = list(self.datasets.experiments.keys())
+            exp_filenames = [self.datasets.experiments[i].filename for i in self.datasets.experiments]
+            if len(set(exp_names)) != len(set(exp_filenames)):
+                raise errors.InputError(
+                    f'Your experiment filenames are not unique. It is likely that you '
+                    f'have the same experiment file under multiple experiment names'
+                )
+            val_exp_names = list(self.datasets.validations.keys())
+            val_exp_filenames = [self.datasets.validations[i].filename for i in self.datasets.validations]
+            if len(set(val_exp_names)) != len(set(val_exp_filenames)):
+                raise errors.InputError(
+                    f'Your experiment filenames are not unique. It is likely that you '
+                    f'have the same experiment file under multiple experiment names'
+                )
+
         def _load_models(self):
             """
             Load models from disk
@@ -2788,7 +2800,7 @@ class ParameterEstimation(_Task):
                     self.datasets.experiments[experiment_name].affected_models = list(self.models.keys())[0] if len(
                         self.models.keys()) == 1 else list(self.models.keys())
                 if self.datasets.experiments[experiment_name].mappings == {}:
-                    self.datasets.experiments[experiment_name].mappings = munch.Munch.fromDict(self.defaults.mappings(
+                    self.datasets.experiments[experiment_name].mappings = Munch.fromDict(self.defaults.mappings(
                         self.datasets.experiments[experiment_name].filename,
                         self.datasets.experiments[experiment_name].separator)
                     )
@@ -2843,7 +2855,7 @@ class ParameterEstimation(_Task):
                         self.models.keys()) == 1 else list(self.models.keys())
 
                 if validation_dataset.mappings == {}:
-                    validation_dataset.mappings = munch.Munch.fromDict(self.defaults.mappings(
+                    validation_dataset.mappings = Munch.fromDict(self.defaults.mappings(
                         validation_dataset.filename, validation_dataset.separator)
                     )
 
@@ -2938,7 +2950,7 @@ class ParameterEstimation(_Task):
                         ]
                     dct[fit_item] = item
 
-            self.items.fit_items = munch.Munch.fromDict(dct)
+            self.items.fit_items = Munch.fromDict(dct)
 
         def set_default_fit_items_dct(self):
             """
@@ -2985,7 +2997,7 @@ class ParameterEstimation(_Task):
                 if item['affected_models'] == 'all':
                     item['affected_models'] = list(self.models.keys())
 
-                self.items.fit_items[fit_item] = munch.Munch.fromDict(item)  #
+                self.items.fit_items[fit_item] = Munch.fromDict(item)  #
 
             ## caters for the situation where we define a config file but
             ## need to update it due to a change in prefix argument
@@ -2995,7 +3007,7 @@ class ParameterEstimation(_Task):
                     raise TypeError(f'config.settings.prefix argument should be of type "str"')
                 tmp = {fit_item: self.items.fit_items[fit_item] for fit_item in self.items.fit_items if
                        fit_item.startswith(self.settings.prefix)}
-                self.items.fit_items = munch.Munch.fromDict(tmp)
+                self.items.fit_items = Munch.fromDict(tmp)
 
         def _set_default_constraint_items(self):
             """ 
@@ -3035,7 +3047,7 @@ class ParameterEstimation(_Task):
                     if item.affected_models == 'all':
                         item.affected_models = list(self.models.keys())
 
-                self.items.constraint_items[constraint_item] = munch.Munch.fromDict(item)
+                self.items.constraint_items[constraint_item] = Munch.fromDict(item)
 
         @property
         def experiments(self):
@@ -3170,10 +3182,10 @@ class ParameterEstimation(_Task):
         """
         self.config = config
         self.do_checks()
-        self.copied_models = self._setup()
+        self.model_copies = self._setup()
 
         if self.config.settings.run_mode is not False:
-            self.run(self.copied_models)
+            self.run(self.model_copies)
 
     def do_checks(self):
         """ validate integrity of user input"""
@@ -3636,6 +3648,7 @@ class ParameterEstimation(_Task):
                 # self._remove_all_experiments()
 
             for experiment_name in experiment_names:
+                ## if experiment_name exists, remove and reconfigure
                 experiment = experiments[experiment_name]
                 data = pandas.read_csv(
                     experiment.filename,
@@ -3775,56 +3788,25 @@ class ParameterEstimation(_Task):
 
         return self.models
 
-    def _remove_experiment(self, experiment_name):
-        """
-        Remove experiment from COAPSI parameter estimation task
-
-        Args:
-          experiment_name (str):
-            name of experiment to remove
-        Returns:
-            :py:attr:`ParameterEstimation.models`
-
-        """
-        query = '//*[@name="Experiment Set"]'
-        for model_name in self.models:
-            mod = self.models[model_name].model
-            for i in mod.xml.xpath(query):
-                for j in list(i):
-                    if j.attrib['name'] == experiment_name:
-                        j.getparent().remove(j)
-            self.models[model_name].model = mod
-        return self.models
-
     def _remove_all_experiments(self):
         """
         Removes all experiments from parameter estimation task
         Returns:
             None
         """
-        for experiment_name in self.config.experiment_names:
-            self._remove_experiment(experiment_name)
-
-    def _remove_validation_experiment(self, validation_experiment_name):
-        """
-        Remove validation experiment from COAPSI parameter estimation task
-
-        Args:
-          validation_experiment_name (str):
-            name of validation experiment to remove
-        Returns:
-            :py:attr:`ParameterEstimation.models`
-
-        """
-        query = '//*[@name="Validation Set"]'
+        query = '//*[@name="Experiment Set"]'
+        query2 = '//*[@name="FitItem"]'
         for model_name in self.models:
-            mod = self.models[model_name].model
-            for i in mod.xml.xpath(query):
-                for j in list(i):
-                    if j.attrib['name'] == validation_experiment_name:
-                        j.getparent().remove(j)
-            self.models[model_name].model = mod
-        return self.models
+            for i in self.models[model_name].model.xml.xpath(query):
+                for j in i:
+                    j.getparent().remove(j)
+
+            for i in self.models[model_name].model.xml.xpath(query2):
+                for j in i:
+                    if j.attrib['name'] == 'Affected Experiments':
+                        for k in j:
+                            k.getparent().remove(k)
+
 
     def _remove_all_validation_experiments(self):
         """
@@ -3832,8 +3814,20 @@ class ParameterEstimation(_Task):
         Returns:
                 None
         """
-        for validation_name in self.config.validation_names:
-            self._remove_experiment(validation_name)
+        query = '//*[@name="Validation Set"]'
+        query2 = '//*[@name="FitItem"]'
+        for model_name in self.models:
+            for i in self.models[model_name].model.xml.xpath(query):
+                for j in i:
+                    if j.attrib['name'] not in ['Weight', 'Threshold']:
+                        j.getparent().remove(j)
+
+            for i in self.models[model_name].model.xml.xpath(query2):
+                for j in i:
+                    if j.attrib['name'] == 'Affected Cross Validation Experiments':
+                        for k in j:
+                            k.getparent().remove(k)
+
 
     def _select_method(self):
         """
@@ -4625,6 +4619,11 @@ class ParameterEstimation(_Task):
 
         self.models = self._define_report()
 
+        ## we must remove existing experiments prior to reconfiguring
+        ## or invite a world of pain
+        self._remove_all_experiments()
+        self._remove_all_validation_experiments()
+
         self._map_experiments(validation=False)
         self._map_experiments(validation=True)
 
@@ -4638,9 +4637,9 @@ class ParameterEstimation(_Task):
 
         ##copy
         copied_models = self._copy_model()
-
         ##configure scan task
         copied_models = self._setup_scan(copied_models)
+        # print(copied_models['model1'][0].open())
 
         return copied_models
 
@@ -4723,7 +4722,7 @@ class ParameterEstimation(_Task):
                 raise errors.InputError(
                     f'"{self.parameters}" is an invalid argument. Please '
                     f'choose from the following \n'
-                    f'{munch.Munch.fromDict(self.acceptable_parameters_args).toJSON()}'
+                    f'{Munch.fromDict(self.acceptable_parameters_args).toJSON()}'
                 )
 
             self.defaults = ParameterEstimation._Defaults()

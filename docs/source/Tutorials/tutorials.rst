@@ -10,6 +10,7 @@ In this section of the documentation I provide detailed explainations of how PyC
    Timecourse.ipynb
    InsertParameters.ipynb
    Scan.ipynb
+   ParameterEstimations.ipynb
 
 
 

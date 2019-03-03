@@ -34,6 +34,7 @@ model model1()
     k6 = 0.1;
 end 
 """
+
 model2_string = """
 model model2()
     R1:   => A ; k1*S;
@@ -75,7 +76,7 @@ with tasks.ParameterEstimation.Context(model_list, experiment_filename, context=
     context.set('run_mode', True)
     context.set('randomize_start_values', True)
     context.set('method', 'genetic_algorithm')
-    context.set('population_size', 100)
+    context.set('population_size', 25)
     context.set('lower_bound', 1e-1)
     context.set('upper_bound', 1e1)
 
@@ -85,11 +86,7 @@ pe = tasks.ParameterEstimation(config)
 
 data = viz.Parse(pe).data
 
-
-## then do likelihood ratio test
-
-
-
+print(data)
 
 
 

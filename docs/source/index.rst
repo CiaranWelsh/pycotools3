@@ -49,32 +49,9 @@ This is a guide to PyCoTools version >2.0.1. The links below provide a tutorial 
    getting_started
    Tutorials/tutorials.rst
 
-
-
-
-sec
----
-
-
-    - Running a time course
-
-    - Running a parameter scan
-
-    - Running a simple parameter estimation
-
-    - visualisation
-
-  - More advanced
-
-    - more advanced parameter estimations
-
-    - profile likelihoods
-
-
 Support
 -------
 Users can post a question on stack-overflow using the :code:`pycotools` tag. I get email notifications for these questions and will respond.
-
 
 People
 ------

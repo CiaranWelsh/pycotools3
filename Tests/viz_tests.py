@@ -108,7 +108,6 @@ class TruncateDataTests(_test_base._BaseTest):
         actual = list(data['test_model'].shape)
         self.assertListEqual(expected, actual)
 
-
     def test_below_theta_truncate_mode_using_ranks(self):
         """
 
@@ -161,108 +160,35 @@ class BoxPlotTests(_test_base._BaseTest):
         self.assertEqual(len(glob.glob(b.results_directory['test_model'] + '/*')), 3)
 
 
-# class VizTests(_test_base._BaseTest):
-#     def setUp(self):
-#         """
-#         instead of generating data on the fly like
-#         I should do (for good testing practivce), I've pre-ran the parameter estimations
-#         and saved the data to pickle under the extra_data_for_tests
-#         file. Now I can read this pickle and not have to run the
-#         parameter estimations each time I run a test. I've also
-#         parsed the data into a pandas dataframe using viz.parse for ease
-#
-#         Data can be transformed into log10 scale with a keyword argument
-#         to any of the plotting functions. This cannot be tested here since
-#         i've simulated the data prior to running the tests
-#         :return:
-#         """
-#         super(VizTests, self).setUp()
-#         self.model = pycotools3.model.Model(self.copasi_file)
-#
-#         self.boxplot_dir = os.path.join(os.path.dirname(
-#             self.model.copasi_file), 'Boxplots')
-#
-#         self.histogram_dir = os.path.join(os.path.dirname(
-#             self.model.copasi_file), 'Histograms')
-#
-#         self.scatter_dir = os.path.join(os.path.dirname(
-#             self.model.copasi_file), 'scatter_dirs')
-#
-#         self.linregress_dir = os.path.join(os.path.dirname(
-#             self.model.copasi_file), 'LinearRegression')
-#
-#         self.pca_dir = os.path.join(os.path.dirname(
-#             self.model.copasi_file), 'PCA')
-#
-#         self.model_selection_dir = os.path.join(os.path.dirname(
-#             self.model.copasi_file), 'ModelSelection')
-#
-#         self.ensemble_tc_dir = os.path.join(os.path.dirname(
-#             self.model.copasi_file), 'EnsembleTimeCourse')
-#
-#         self.rss_vs_iteration = os.path.join(os.path.dirname(
-#             self.model.copasi_file), 'RssVsIteration')
-#
-#         self.data = pandas.read_pickle(
-#             pycotools3.Tests.test_data.Paths().pe_results_pickle)
-#
-#     def tearDown(self):
-#         dirs_to_delete = [self.boxplot_dir,
-#                           self.histogram_dir,
-#                           self.scatter_dir,
-#                           self.linregress_dir,
-#                           self.pca_dir,
-#                           self.model_selection_dir,
-#                           self.ensemble_tc_dir]
-#         for i in dirs_to_delete:
-#             if os.path.isdir(i):
-#                 pass
-#                 # shutil.rmtree(i)
-#
-#
 # class PlotParameterEstimationTests(_test_base._BaseTest):
-#
 #     def setUp(self):
 #         super(PlotParameterEstimationTests, self).setUp()
-#         self.model = pycotools3.model.Model(self.copasi_file)
-#         self.original_parameters = self.model.parameters
 #
-#         self.TC1 = pycotools3.tasks.TimeCourse(self.model, end=50, step_size=10,
-#                                                intervals=5, report_name='report1.txt')
-#         pycotools3.misc.add_noise(self.TC1.report_name)
-#         self.TC2 = pycotools3.tasks.TimeCourse(self.model, end=100, step_size=20,
-#                                                intervals=5, report_name='report2.txt')
-#         pycotools3.misc.add_noise(self.TC1.report_name)
-#         pycotools3.misc.add_noise(self.TC2.report_name)
+#         fname = os.path.join(os.path.dirname(__file__), 'report1.txt')
+#         data = self.model.simulate(0, 50, 1, report_name=fname)
 #
-#         pycotools3.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
-#         pycotools3.misc.correct_copasi_timecourse_headers(self.TC2.report_name)
+#         with pycotools3.tasks.ParameterEstimation.Context(
+#                 self.model, fname, context='s', parameters='g',
+#         ) as context:
+#             context.set('method', 'genetic_algorithm')
+#             context.set('population_size', 2)
+#             context.set('number_of_generations', 5)
+#             context.set('copy_number', 2)
+#             context.set('pe_number', 2)
+#             context.set('randomize_start_values', True)
+#             context.set('lower_bound', 0.01)
+#             context.set('upper_bound', 10)
+#             context.set('run_mode', True)
+#             config = context.get_config()
 #
-#         self.PE = pycotools3.tasks.ParameterEstimation(self.model,
-#                                                        [self.TC1.report_name,
-#                                                         self.TC2.report_name],
-#                                                        method='genetic_algorithm',
-#                                                        population_size=1,
-#                                                        number_of_generations=1)
-#         # # PE = pycotools3.tasks.ParameterEstimation(model,
-#         # #                                          TC1.report_name,
-#         # #                                          method='particle_swarm',
-#         # #                                          swarm_size=50,
-#         # #                                          iteration_limit=1000)
-#         if os.path.isfile(self.PE.config_filename):
-#             os.remove(self.PE.config_filename)
-#         self.PE.write_config_file()
-#         self.PE._setup()
-#         # # print model.local_parameters
-#         self.PE.run()
-#         # # PE.model.open()
+#         self.pe = pycotools3.tasks.ParameterEstimation(config)
 #
 #     def test_create_directory(self):
 #         """
 #
 #         :return:
 #         """
-#         pl = pycotools3.viz.PlotParameterEstimation(self.PE, savefig=False)
+#         pl = pycotools3.viz.PlotParameterEstimation(self.pe, savefig=False)
 #
 #         dire = pl.create_directories()
 #         for i in dire:
@@ -273,7 +199,7 @@ class BoxPlotTests(_test_base._BaseTest):
 #
 #         :return:
 #         """
-#         pl = pycotools3.viz.PlotParameterEstimation(self.PE, savefig=False)
+#         pl = pycotools3.viz.PlotParameterEstimation(self.pe, savefig=False)
 #         model = pl.update_parameters()
 #         lo = '(ADeg).k1'
 #         met = 'A'
@@ -287,7 +213,7 @@ class BoxPlotTests(_test_base._BaseTest):
 #         test plots are being generated in correct place
 #         :return:
 #         """
-#         pl = pycotools3.viz.PlotParameterEstimation(self.PE,
+#         pl = pycotools3.viz.PlotParameterEstimation(self.pe,
 #                                                     savefig=True,
 #                                                     show=False)
 #         pl.plot()
@@ -299,7 +225,7 @@ class BoxPlotTests(_test_base._BaseTest):
 #         test y argument works
 #         :return:
 #         """
-#         pl = pycotools3.viz.PlotParameterEstimation(self.PE,
+#         pl = pycotools3.viz.PlotParameterEstimation(self.pe,
 #                                                     savefig=True,
 #                                                     show=False,
 #                                                     y=['A', 'B'])
@@ -307,7 +233,7 @@ class BoxPlotTests(_test_base._BaseTest):
 #         for i in pl.create_directories():
 #             self.assertEqual(len(glob.glob(pl.create_directories()[i] + '/*')), 2)
 #
-#
+
 # class PlotTimeCourseTests(_test_base._BaseTest):
 #
 #     def setUp(self):
