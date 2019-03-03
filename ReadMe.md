@@ -5,7 +5,6 @@
 | Total downloads | [![Downloads](https://pepy.tech/badge/pycotools3)](https://pepy.tech/project/pycotools3)|
 | Downloads per month| [![Downloads](https://pepy.tech/badge/pycotools3/month)](https://pepy.tech/project/pycotools3)|
 | docs | [![Documentation Status](https://readthedocs.org/projects/pycotools3/badge/?version=latest)](https://pycotools3.readthedocs.io/en/latest/?badge=latest)|
-pycotools3 is in the process of development. The master branch is stable but experimental and the others should not be used. The next version of pycotools3 will be released in a few weeks. 
 
 # PyCoTools
 
