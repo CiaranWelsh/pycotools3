@@ -1,10 +1,10 @@
 | Title | Badge |
 |-------|-------|
-| master        | [![Build Status](https://travis-ci.org/CiaranWelsh/pycotools3.svg?branch=master)](https://travis-ci.org/CiaranWelsh/pycotools3)        | 
-| develop | [![Build Status](https://travis-ci.org/CiaranWelsh/pycotools3.svg?branch=develop)](https://travis-ci.org/CiaranWelsh/pycotools3)|
+| master        | [![Build Status](https://travis-ci.org/CiaranWelsh/pycotools3.svg?branch=master)](https://travis-ci.org/CiaranWelsh/pycotools3)   [![Documentation Status](https://readthedocs.org/projects/pycotools3/badge/?version=latest)](https://pycotools3.readthedocs.io/en/latest/?badge=master)| 
+| develop | [![Build Status](https://travis-ci.org/CiaranWelsh/pycotools3.svg?branch=develop)](https://travis-ci.org/CiaranWelsh/pycotools3) [![Documentation Status](https://readthedocs.org/projects/pycotools3/badge/?version=latest)](https://pycotools3.readthedocs.io/en/latest/?badge=develop)|
 | Total downloads | [![Downloads](https://pepy.tech/badge/pycotools3)](https://pepy.tech/project/pycotools3)|
 | Downloads per month| [![Downloads](https://pepy.tech/badge/pycotools3/month)](https://pepy.tech/project/pycotools3)|
-| docs | [![Documentation Status](https://readthedocs.org/projects/pycotools3/badge/?version=latest)](https://pycotools3.readthedocs.io/en/latest/?badge=latest)|
+
 
 # PyCoTools
 
