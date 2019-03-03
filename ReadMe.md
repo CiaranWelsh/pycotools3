@@ -1,7 +1,6 @@
-| Branch        | Status        | 
+| master        | develop        | 
 | ------------- |---------------|
-| master        | [![Build Status](https://travis-ci.org/CiaranWelsh/pycotools3.svg?branch=master)](https://travis-ci.org/CiaranWelsh/pycotools3) |
-| develop       | [![Build Status](https://travis-ci.org/CiaranWelsh/pycotools3.svg?branch=develop)](https://travis-ci.org/CiaranWelsh/pycotools3)      |
+| [![Build Status](https://travis-ci.org/CiaranWelsh/pycotools3.svg?branch=master)](https://travis-ci.org/CiaranWelsh/pycotools3) |[![Build Status](https://travis-ci.org/CiaranWelsh/pycotools3.svg?branch=develop)](https://travis-ci.org/CiaranWelsh/pycotools3)|
 
 | Total downloads | Downloads per month|
 | --------------- | ------------------ |
