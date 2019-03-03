@@ -1,3 +1,5 @@
+| Title | Badge |
+|-------|-------|
 | master        | [![Build Status](https://travis-ci.org/CiaranWelsh/pycotools3.svg?branch=master)](https://travis-ci.org/CiaranWelsh/pycotools3)        | 
 | develop | [![Build Status](https://travis-ci.org/CiaranWelsh/pycotools3.svg?branch=develop)](https://travis-ci.org/CiaranWelsh/pycotools3)|
 | Total downloads | [![Downloads](https://pepy.tech/badge/pycotools3)](https://pepy.tech/project/pycotools3)|
