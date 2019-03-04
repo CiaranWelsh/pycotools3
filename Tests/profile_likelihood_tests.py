@@ -23,7 +23,7 @@ Module that tests the operations of the _Base base test
 
 """
 
-import pycotools3
+from pycotools3 import viz, tasks, model
 from Tests import _test_base
 import unittest
 import os
@@ -31,46 +31,30 @@ import glob
 
 ## todo update profile likelihood test model
 class ProfileLikelihoodTests(_test_base._BaseTest):
+
     def setUp(self):
         super(ProfileLikelihoodTests, self).setUp()
-        self.root = self.model.root
-        self.TC1 = pycotools3.tasks.TimeCourse(self.model, end=1000, step_size=100,
-                                               intervals=10, report_name='report1.txt')
+        self.fname = os.path.join(os.path.dirname(__file__), 'timecourse.txt')
+        self.data = self.model.simulate(0, 10, 1, report_name=self.fname)
 
-        pycotools3.misc.correct_copasi_timecourse_headers(self.TC1.report_name)
-        ## add some noise
-        data1 = pycotools3.misc.add_noise(self.TC1.report_name)
+    def test(self):
+        """
+        what about changing the output of get config such that it
+        returns an instance of the parametre estimation class
+        or any other valid class. i.e. factory.
 
-        ## remove the data
-        os.remove(self.TC1.report_name)
+        context.run()???
+        Returns:
 
-        ## rewrite the data with noise
-        data1.to_csv(self.TC1.report_name, sep='\t')
-
-        self.MPE = pycotools3.tasks.MultiParameterEstimation(
-            self.model,
-            self.TC1.report_name,
-            copy_number=2,
-            pe_number=2,
-            method='genetic_algorithm',
-            population_size=1,
-            number_of_generations=1,
-            overwrite_config_file=True,
-            results_directory='test_mpe')
-        self.list_of_tasks = '{http://www.copasi.org/static/schema}ListOfTasks'
-
-        self.MPE.write_config_file()
-        self.MPE._setup()
-        self.MPE.run()
-        os.chdir(self.root)
-        import time
-        time.sleep(5)
-        self.PL = pycotools3.tasks.ProfileLikelihood(self.model, parameter_path=self.MPE.results_directory,
-                                                     method='hooke_jeeves', iteration_limit=1,
-                                                     log10=True, run=False, index=[0],
-                                                     output_in_subtask=False)  # , parameter_path=param)
-        # self.MPE.run()
-
+        """
+        with tasks.ParameterEstimation.Context(
+            self.model, self.fname, context='pl', parameters='g'
+        ) as context:
+            context.set('method', 'hooke_jeeves')
+            config = context.get_config()
+        print(config)
+        tasks.ParameterEstimation(config)
+        ## affected models attribute has no effect
 
     def test_undefine_other_reports(self):
         """
@@ -81,7 +65,7 @@ class ProfileLikelihoodTests(_test_base._BaseTest):
         os.chdir(self.root)
         import time
         time.sleep(1)
-        PL = pycotools3.tasks.ProfileLikelihood(self.model, parameter_path=self.MPE.results_directory,
+        PL = tasks.ProfileLikelihood(self.model, parameter_path=self.MPE.results_directory,
                                                 method='hooke_jeeves', iteration_limit=1,
                                                 log10=True, run=False, index=[0],
                                                 output_in_subtask=False)  # , parameter_path=param)

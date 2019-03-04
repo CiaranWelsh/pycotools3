@@ -243,15 +243,15 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
 
     def test_validation_mapppings1(self):
         # self.PE.config
-        self.assertEqual(self.PE.config.datasets.validations.report3.mappings.C.object_type, 'Metabolite')
+        self.assertEqual(self.PE.config.datasets.validations.report3._mappings.C.object_type, 'Metabolite')
 
     def test_mappings1(self):
-        self.assertEqual(self.PE.config.datasets.experiments.report1.mappings.A.model_object, 'A')
+        self.assertEqual(self.PE.config.datasets.experiments.report1._mappings.A.model_object, 'A')
 
     def test_mappings3(self):
         self.assertEqual(
             self.PE.config.datasets.experiments.report2.
-                mappings.B.model_object, 'B')
+                _mappings.B.model_object, 'B')
 
     def test_fit_items_A_lower_bound(self):
         ## now I've broken the use of lower and upper bounds in
@@ -1584,6 +1584,7 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
         # print(data)
 
 
+
 class ParameterEstimationTestsWithDifferentModel(unittest.TestCase):
     def setUp(self):
         self.antimony_string = """
@@ -1990,6 +1991,132 @@ class TestThatRemoveExperimentsWorksCorrectly(_test_base._BaseTest):
                 if j.attrib['name'] == 'data':
                     actual = True
         self.assertEqual(expected, actual)
+
+
+class ParameterEstimationTestsMoreThanOneModel(unittest.TestCase):
+    def setUp(self):
+        ant1 = """
+
+        model first()
+            compartment Cell = 1;
+
+            R1: A => B ; Cell * k1 * A;
+            R2: B => C ; Cell * k2 * B;
+            R3: C => A ; Cell * k3 * C;
+
+            k1 = 0.1;
+            k2 = 0.1;
+            k3 = 0.1;
+
+            A = 100;
+            B = 0;
+            C = 0;
+        end
+        """
+
+        ant2 = """
+
+        model second()
+            compartment Cell = 1;
+
+            R1: A => B ; Cell * k1 * A;
+            R2: B => C ; Cell * k2 * B;
+            R3: B => A ; Cell * k3 * B;
+
+            k1 = 0.1;
+            k2 = 0.1;
+            k3 = 0.1;
+
+            A = 100;
+            B = 0;
+            C = 0;
+        end
+        """
+        self.fname1 = os.path.join(os.path.dirname(__file__), 'first.cps')
+        self.fname2 = os.path.join(os.path.dirname(__file__), 'second.cps')
+
+        with pycotools3.model.BuildAntimony(self.fname1) as loader:
+            self.mod1 = loader.load(ant1)
+
+        with pycotools3.model.BuildAntimony(self.fname2) as loader:
+            self.mod2 = loader.load(ant2)
+
+        self.fname1 = os.path.join(os.path.dirname(__file__), 'dataset1.txt')
+        self.fname2 = os.path.join(os.path.dirname(__file__), 'dataset2.txt')
+
+        self.mod1.simulate(0, 9, 1, report_name=self.fname1)
+        self.mod2.simulate(0, 9, 1, report_name=self.fname2)
+
+        with ParameterEstimation.Context(
+            [self.mod1, self.mod2], [self.fname1, self.fname2],
+            context='s', parameters='g'
+        ) as context:
+            self.config = context.get_config()
+
+        config_dct = dict(
+            models=dict(
+                first=dict(
+                    copasi_file=self.mod1.copasi_file,
+                ),
+                second=dict(
+                    copasi_file=self.mod2.copasi_file
+                )
+            ),
+            datasets=dict(
+                experiments=dict(
+                    first_exp=dict(
+                        filename=self.fname1
+                    ),
+                    second_exp=dict(
+                        filename=self.fname2
+                    )
+                )
+            ),
+            items=dict(
+                fit_items='g'
+            ),
+            settings=dict(
+                working_directory=os.path.dirname(__file__)
+            )
+        )
+        self.config = ParameterEstimation.Config(**config_dct)
+
+    def test_experiments_obey_affected_models_list(self):
+        self.config.datasets.experiments.first_exp.affected_models = ['first']
+        self.config.datasets.experiments.second_exp.affected_models = ['second']
+        pe = ParameterEstimation(self.config)
+        query = '//*[@name="Experiment Set"]'
+        experiment_names = []
+        for i in pe.models.first.model.xml.xpath(query):
+            for j in i:
+                experiment_names.append(j.attrib['name'])
+
+    def test_experiments_obey_affected_models_list_affected_experiments_in_fit_items(self):
+        self.config.datasets.experiments.first_exp.affected_models = ['first']
+        self.config.datasets.experiments.second_exp.affected_models = ['second']
+        pe = ParameterEstimation(self.config)
+        query = '//*[@name="FitItem"]'
+        experiment_names = []
+        for i in pe.models.first.model.xml.xpath(query):
+            for j in i:
+                if j.attrib['name'] == 'Affected Experiments':
+                    for k in j:
+                        experiment_names.append(k.attrib['name'])
+        self.assertNotIn('second', experiment_names)
+
+    def test_fit_items_obey_affected_models(self):
+        self.config.items.fit_items.k1.affected_models = 'first'
+        self.config.items.fit_items.k2.affected_models = 'second'
+        pe = ParameterEstimation(self.config)
+        query = '//*[@name="FitItem"]'
+        fit_items = []
+        for i in pe.models.first.model.xml.xpath(query):
+            for j in i:
+                if j.attrib['name'] == 'ObjectCN':
+                    fit_items.append(j.attrib['value'])
+
+        [self.assertTrue('[k2]' not in i) for i in fit_items]
+
 
 
 ##todo use mocking for running tests.

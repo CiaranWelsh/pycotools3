@@ -130,7 +130,8 @@ class Munch(dict):
             try:
                 return self[k]
             except KeyError:
-                raise AttributeError(k)
+                raise AttributeError(f'"{k}" is not a valid attribute. '
+                                     f'These are valid attributes; "{self.keys()}"')
 
     def __setattr__(self, k, v):
         """ Sets attribute k if it exists, otherwise sets key k. A KeyError

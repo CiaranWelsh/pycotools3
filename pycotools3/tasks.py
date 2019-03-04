@@ -2335,7 +2335,7 @@ class ParameterEstimation(_Task):
             }
 
         @staticmethod
-        def mappings(filename: str, sep: str):
+        def _mappings(filename: str, sep: str):
             """
 
             Args:
@@ -2448,13 +2448,14 @@ class ParameterEstimation(_Task):
                 'working_directory': '',
                 'quantity_type': 'concentration',
                 'report_name': 'PEData.txt',
-                'problem': 1,
+                'problem': 'Problem1',
                 'fit': 1,
                 'weight_method': 'mean_squared',
                 'validation_weight': 1,
                 'validation_threshold': 5,
                 'max_active': 3,
-                'prefix': None
+                'prefix': None,
+                'context': 's',
             }
 
     @staticmethod
@@ -2806,7 +2807,7 @@ class ParameterEstimation(_Task):
                     self.datasets.experiments[experiment_name].affected_models = list(self.models.keys())[0] if len(
                         self.models.keys()) == 1 else list(self.models.keys())
                 if self.datasets.experiments[experiment_name].mappings == {}:
-                    self.datasets.experiments[experiment_name].mappings = Munch.fromDict(self.defaults.mappings(
+                    self.datasets.experiments[experiment_name].mappings = Munch.fromDict(self.defaults._mappings(
                         self.datasets.experiments[experiment_name].filename,
                         self.datasets.experiments[experiment_name].separator)
                     )
@@ -2861,7 +2862,7 @@ class ParameterEstimation(_Task):
                         self.models.keys()) == 1 else list(self.models.keys())
 
                 if validation_dataset.mappings == {}:
-                    validation_dataset.mappings = Munch.fromDict(self.defaults.mappings(
+                    validation_dataset.mappings = Munch.fromDict(self.defaults._mappings(
                         validation_dataset.filename, validation_dataset.separator)
                     )
 
@@ -3165,6 +3166,7 @@ class ParameterEstimation(_Task):
             """
             return self.items.constraint_items
 
+
     def __init__(self, config):
         """
         Configure a the parameter estimation task in copasi
@@ -3212,7 +3214,7 @@ class ParameterEstimation(_Task):
         Returns:
             str. A directory.
         """
-        dire = os.path.join(self.config.settings.working_directory, f'Problem{self.config.settings.problem}')
+        dire = os.path.join(self.config.settings.working_directory, f'{self.config.settings.problem}')
         if not os.path.isdir(dire):
             os.makedirs(dire)
         return dire
@@ -3656,6 +3658,14 @@ class ParameterEstimation(_Task):
             for experiment_name in experiment_names:
                 ## if experiment_name exists, remove and reconfigure
                 experiment = experiments[experiment_name]
+                if not isinstance(experiment.affected_models, list):
+                    experiment.affected_models = [experiment.affected_models]
+                ## This implements the affected_models aspect of configuration for experiments
+                if model_name not in experiment.affected_models:
+                    continue
+                ## also need to remove from affected_models attrib
+                ##todo if all remove affected experiments
+
                 data = pandas.read_csv(
                     experiment.filename,
                     sep=experiment.separator
@@ -4105,6 +4115,10 @@ class ParameterEstimation(_Task):
 
             for item_name in items:
                 item = items[item_name]
+                if not isinstance(item.affected_models, list):
+                    item.affected_models = [item.affected_models]
+                if model_name not in item.affected_models:
+                    continue
                 ## figure out what type of variable item is and assign to component
                 item_type = None
                 ## while we are distinguishing between component type we retrieve its
@@ -4154,6 +4168,20 @@ class ParameterEstimation(_Task):
                 # initialize new element
                 fit_item_element = etree.Element('ParameterGroup', attrib={'name': 'FitItem'})
 
+                '''
+                We have a problem here in that when we ignore an experiment for a model 
+                via the affected models arg, we also need to remove that experiment 
+                from any fit items which may depend on it. 
+                
+                solutions
+                ----------
+                1. If affected experiments is 'all' change it so that the Affected Experiments element 
+                   is blank, as it is when copasi configures the parameter estimation. 
+                2. Modify the below section of code such that if an experiment doesn't exist for a 
+                   model, we remove it from the affected experiments section. 
+                3. Remove experiment from experiment_keys
+                
+                '''
                 affected_experiments = {'name': 'Affected Experiments'}
                 ## read affected _experiments from config file.yaml
                 affected_experiments_attr = OrderedDict()
@@ -4171,6 +4199,11 @@ class ParameterEstimation(_Task):
                     ## iterate over list. Raise ValueError is can't find experiment name
                     ## otherwise add the corresponding experiment key to the affected _experiments attr dict
                     for affected_experiment in item['affected_experiments']:  ## iterate over the list
+                        ## When we explicitely tell pycotools not to configure a experiment for a model
+                        ## we also need to tell the affected experiment section of the mapping that
+                        ## it is not needed.
+                        if affected_experiment not in item.affected_models:
+                            continue
                         if affected_experiment in self._get_validation_keys()[model_name]:
                             raise ValueError('"{}" has been given as a validation experiment and therefore '
                                              'I cannot add this experiment to the list of _experiments that '
@@ -4214,6 +4247,10 @@ class ParameterEstimation(_Task):
                     ## otherwise add the corresponding experiment key to the affected _experiments attr dict
                     for affected_validation_experiment in item[
                         'affected_validation_experiments']:  ## iterate over the list
+
+                        if affected_validation_experiment not in item.affected_models:
+                            continue
+
                         if affected_validation_experiment in self._get_experiment_keys()[model_name]:
                             raise ValueError('"{}" has been given as an experiment and therefore '
                                              'I cannot add this experiment to the list of validation _experiments that '
@@ -4730,6 +4767,7 @@ class ParameterEstimation(_Task):
             'gc': 'global_quantities_and_initial_concentrations',
             'lc': 'local_parameters_and_initial_concentrations',
             '_': 'prefixed_with_underscore'
+        ##todo implement a means of including a list of parameters as sings to this class
         }
 
         experiment_filetypes = ['.txt', '.csv']
@@ -4759,6 +4797,8 @@ class ParameterEstimation(_Task):
             return self
 
         def __exit__(self, exc_type, exc_value, exc_traceback):
+            self.set('context', self.context)
+
             if exc_type:
                 LOG.critical(f'exc_type: {exc_type}')
                 LOG.critical(f'exc_value: {exc_value}')
@@ -4802,12 +4842,20 @@ class ParameterEstimation(_Task):
                 )
 
         def get_config(self):
+            if self.context == 's':
+                return self.get_config_simple()
+            elif self.context == 'pl':
+                return self.get_config_pl()
+            else:
+                raise ValueError
+
+        def get_config_simple(self):
             ## update the config
-            self.add_models(self.models)
-            self.add_settings(self.settings)
-            self.add_experiments(self.experiments)
-            self.add_validation_experiments(self.validation_experiments)
-            self.add_working_directory(self.working_directory)
+            self._add_models(self.models)
+            self._add_settings(self.settings)
+            self._add_experiments(self.experiments)
+            self._add_validation_experiments(self.validation_experiments)
+            self._add_working_directory(self.working_directory)
             dct = dict(
                 models=self.models,
                 datasets=dict(
@@ -4838,7 +4886,70 @@ class ParameterEstimation(_Task):
                     )
             return config
 
-        def add_models(self, models: (str, list)):
+        def get_config_pl(self):
+            """
+            configure for profile likelihoods
+            Returns:
+
+            """
+            ## change the results_directory settings
+            config = self.get_config_simple()
+            if len(config.models) != 1:
+                NotImplementedError(
+                    'Currently pycotools3 only supports the configuration of profile likelihoods'
+                    ' for a single model at a time'
+                )
+
+            config.settings['problem'] = 'ProfileLikelihoods'
+            config.settings['randomize_start_values'] = False
+
+            if not os.path.isdir(config.settings['problem']):
+                os.makedirs(config.settings['problem'])
+
+            parameters = list(config.items.fit_items.keys())
+
+            files = {}
+            for p in parameters:
+                new_file = os.path.join(config.settings['problem'], f'{p}.cps')
+                shutil.copy(config.models[list(config.models.keys())[0]].copasi_file,
+                            new_file)
+                files[p] = os.path.abspath(new_file)
+
+            assert len(glob.glob(os.path.join(config.settings['problem'], '*.cps'))) == len(parameters)
+
+            ##change the models which appear in the config
+            new_models_attr = {}
+            for p in files:
+                new_models_attr[p] = dict(
+                    copasi_file=files[p],
+                    model=model.Model(files[p])
+                )
+            # config.models = new_models_attr
+
+            ## now modify affected models attribute
+            for fit_item in config.items.fit_items:
+                model_list = [i for i in parameters if i != fit_item]
+                config.items.fit_items[fit_item].affected_models = model_list
+
+            ##todo change affect models for experiments as well
+            for experiment in config.experiments:
+                config.experiments[experiment].affected_models = parameters
+
+            for experiment in config.validations:
+                config.validations[experiment].affected_models = parameters
+
+            new_config = ParameterEstimation.Config(
+                models=new_models_attr,
+                datasets=config.datasets,
+                items=config.items,
+                settings=config.settings
+            )
+
+            return new_config
+
+
+
+        def _add_models(self, models: (str, list)):
             """
             Add models to class attributes
 
@@ -4869,7 +4980,7 @@ class ParameterEstimation(_Task):
 
             setattr(self, 'models', models)
 
-        def add_experiments(self, experiments: (str, list)):
+        def _add_experiments(self, experiments: (str, list)):
             """
             Add list of experiments to class attributes
             Args:
@@ -4901,7 +5012,7 @@ class ParameterEstimation(_Task):
 
             setattr(self, 'experiments', experiments)
 
-        def add_validation_experiments(self, experiments: (str, list)):
+        def _add_validation_experiments(self, experiments: (str, list)):
             """Add experiments to validation_experiments attribute
 
             Args:
@@ -4932,7 +5043,7 @@ class ParameterEstimation(_Task):
 
             setattr(self, 'validation_experiments', experiments)
 
-        def add_working_directory(self, working_directory: str):
+        def _add_working_directory(self, working_directory: str):
             """
             Add working_directory to class attributes. Put in same path
             as first copasi model if argument not specified.
@@ -4951,7 +5062,7 @@ class ParameterEstimation(_Task):
 
             self.settings['working_directory'] = working_directory
 
-        def add_setting(self, setting, value):
+        def _add_setting(self, setting, value):
             """
 
             Args:
@@ -4965,7 +5076,7 @@ class ParameterEstimation(_Task):
                 setattr(self, 'settings', {})
             self.settings[setting] = value
 
-        def add_settings(self, settings):
+        def _add_settings(self, settings):
             """
 
             Args:
@@ -5529,6 +5640,132 @@ class MultiModelFit(_Task):
 @mixin(model.GetModelComponentFromStringMixin)
 @mixin(model.ReadModelMixin)
 class ProfileLikelihood(_Task):
+    """.. _profile_likelihood_kwargs:
+
+    ##todo use mpi like programming to split a profile likelihood computation into a set of arrays
+    ## i.e. have multiple processes executing a single profile likelihood using multiple
+    ## instances of COPASI but coordinately
+
+    ## todo configure a Profile likelihood context
+
+    ProfileLikelihood Kwargs
+    ========================
+
+    ===========================     ==================================================
+    ProfileLikelihood  Kwargs       Description
+    ===========================     ==================================================
+    x                               default: All fit items configured in model.
+                                    This specifies which parameters to perform
+                                    a profile likelihood for. List or strings.
+    quantity_type                   default: 'concentration'. Alternative
+                                    'particle_numbers`
+    upper_bound_multiplier          default: 1000
+    lower_bound_multiplier          1000
+    intervals                       default: 10
+    log10                           default: True
+    run                             default: False. Passed on to Run or RunParallel
+    max_active                      default: None. number of models to run
+                                    simultaneously. None=all. For when run='parallel'
+    results_directory               default: ProfileLikelihoods in the
+                                    :py:attr:`model.root` directory
+    method                          default: 'hooke_jeeves'
+    number_of_generations           default: 200
+    population_size                 default: 50
+    random_number_generator         default: 1
+    seed                            default: 0
+    pf                              default: 0.475
+    iteration_limit                 default: 50
+    tolerance                       default: 0.00001
+    rho                             default: 0.2
+    scale                           default: 10
+    swarm_size                      default: 50
+    std_deviation                   default: 0.000001
+    number_of_iterations            default: 100000
+    start_temperature               default: 1
+    cooling_factor                  default: 0.85
+    <InsertParameters kwargs>       All parameters accepted in
+                                    :py:class:`model.InsertParameters` are accepted
+                                    here.
+    <Report kwargs>                 Arguments to :py:class:`Reports` are accepted here
+    ===========================     ==================================================
+
+    Args:
+
+    Returns:
+
+    """
+
+    def __init__(self, model, **kwargs):
+        self.model = self.read_model(model)
+        self.kwargs = kwargs
+
+        self.default_properties = {
+            'x': self.model.fit_item_order,
+            'df': None,
+            'index': 'current_parameters',
+            'parameter_path': None,
+            'quantity_type': 'concentration',
+            'upper_bound_multiplier': 1000,
+            'lower_bound_multiplier': 1000,
+            'intervals': 10,
+            'log10': True,
+            'append': False,
+            'output_in_subtask': False,
+            'run': False,
+            'processes': 1,
+            'results_directory': os.path.join(self.model.root,
+                                              'ProfileLikelihoods'),
+            'method': 'hooke_jeeves',
+            'number_of_generations': 200,
+            'population_size': 50,
+            'random_number_generator': 1,
+            'seed': 0,
+            'pf': 0.475,
+            'iteration_limit': 50,
+            'tolerance': 0.00001,
+            'rho': 0.2,
+            'scale': 10,
+            'swarm_size': 50,
+            'std_deviation': 0.000001,
+            'number_of_iterations': 100000,
+            'start_temperature': 1,
+            'cooling_factor': 0.85,
+            'max_active': 3,
+            'parallel_scan': True,
+        }
+        self.default_properties.update(self.kwargs)
+        if self.default_properties.get('run_mode') is not None:
+            raise errors.InputError('"run_mode" argument given but for ProfileLikelihood should be "run" instead')
+        self.convert_bool_to_numeric(self.default_properties)
+        self.update_properties(self.default_properties)
+        self.check_integrity(list(self.default_properties.keys()), list(self.kwargs.keys()))
+        self._do_checks()
+        self._convert_numeric_arguments_to_string()
+
+        ##protect against using run_mode instead of run
+
+        ##configures parameter estimation method parameters
+        self.model = self.undefine_other_reports()
+        self.model = self.uncheck_randomize_start_values()
+        self.model = self.make_experiment_files_absolute()
+        self.model = self.set_PE_method()
+        self.index_dct, self.parameters = self.insert_parameters()
+        self.model_dct = self.copy_model()
+        # self.model_dct = self.setup_report()
+        self.model_dct = self.setup_parameter_estimation()
+
+        self.model_dct = self.setup_scan()
+        self.to_file()
+
+        if self.run is not False:
+            self.run_analysis()
+
+
+
+
+@mixin(model.GetModelComponentFromStringMixin)
+@mixin(model.ReadModelMixin)
+class ProfileLikelihood2(_Task):
     """.. _profile_likelihood_kwargs:
 
     ##todo use mpi like programming to split a profile likelihood computation into a set of arrays
