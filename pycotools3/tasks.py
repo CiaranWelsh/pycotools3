@@ -40,7 +40,7 @@ import logging
 import os
 import subprocess
 import re
-from .utils import DotDict, load_copasi
+from .utils import load_copasi
 from multiprocessing import Process, cpu_count
 import glob
 import seaborn as sns

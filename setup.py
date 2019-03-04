@@ -38,11 +38,11 @@ global __version__
 
 
 
-
+## master: 2.0.1
 # version
 MAJOR = 2
 MINOR = 0
-MICRO = 1
+MICRO = 4
 
 __version__ = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
@@ -70,7 +70,9 @@ setup(
     long_description='A python package for enhancing mathematical'
                      ' modelling using COPASI and Python 3',
 
-    include_package_data=True,
+    # package_data={'pycotools3': ['COPASI', 'Licence.txt']},
+    #
+    # include_package_data=True,
 
     extras_require={
         'docs': [

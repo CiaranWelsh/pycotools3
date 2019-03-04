@@ -1,11 +1,67 @@
+import subprocess
+import os
+from sys import version_info, platform
+
+def download_copasi():
+    """
+    Download COPASI 4.24 from my github.
+
+    It is conventient for the user to not have to download
+    copasi themselves but it is not possible to include in pypi
+    because of file sizes. A workaround is to download the
+    COPASI folder manually, the first time pycotools3 is run. That
+    is what is function does.
+    """
+    # write some code to handle the case where copasi is not installed
+    try:
+        ## check whether there is a directory next to __init__.py called COAPSI
+        copasi_directory = os.path.join(os.path.dirname(__file__), 'COPASI')
+        ## if present, assume this function has been run before
+        assert os.path.isdir(copasi_directory)
+    except AssertionError:
+        import requests
+        import zipfile
+        import shutil
+
+        filename = os.path.join(os.path.dirname(__file__), 'pycotools.zip')
+
+        url = 'https://github.com/CiaranWelsh/pycotools3/archive/master.zip'
+
+        if not os.path.isfile(filename):
+            r = requests.get(url)
+            with open(filename, 'wb') as f:
+                f.write(r.content)
+
+        zip_ref = zipfile.ZipFile(filename, 'r')
+        zip_ref.extractall(os.path.dirname(__file__))
+        zip_ref.close()
+
+        extracted_dir = os.path.join(os.path.dirname(__file__), 'pycotools3-master')
+        if not os.path.isdir(extracted_dir):
+            raise NotADirectoryError(extracted_dir)
+
+        extracted_pycotools3_dir = os.path.join(extracted_dir, 'pycotools3')
+        extracted_copasi_dir = os.path.join(
+            extracted_pycotools3_dir, 'COPASI')
+
+        if not os.path.isdir(extracted_copasi_dir):
+            raise NotADirectoryError(extracted_copasi_dir)
+
+        shutil.copytree(extracted_copasi_dir, os.path.join(os.path.dirname(__file__), 'COPASI'))
+
+        shutil.rmtree(extracted_pycotools3_dir)
+        shutil.rmtree(extracted_dir)
+        os.remove(filename)
+
+
+download_copasi()
+
 from . import viz
 from . import tasks
 from . import errors
 from . import misc
 from . import model
 from . import munch
-import os
-from sys import version_info, platform
 
 if version_info[0] < 3:
     raise RuntimeError('On python version >3 you must use "import pycotools3" rather '
@@ -25,40 +81,5 @@ logging.basicConfig(level=logging.INFO, format='%(message)s')
 LOG = logging.getLogger(__name__)
 LOG.setLevel(logging.WARNING)
 
-# import logging
-#
-# logging.basicConfig()
-# logger = logging.getLogger(__name__)
-# logger.setLevel(logging.DEBUG)
-#
-# logger.debug('debug message')
-# logger.info('info message')
-# logger.warning('warn message')
-# logger.error('error message')
-# logger.critical('critical message')
-
-# global LOG_FILENAME
-# LOG_CONFIG_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-#                                'logging_config.conf')
-#
-# if os.path.isfile(LOG_CONFIG_FILE) is not True:
-#     raise Exception
-# logging.config.fileConfig(LOG_CONFIG_FILE,
-#                           disable_existing_loggers=False)
-
-# LOG = logging.getLogger(__name__)
-# LOG.setLevel(logging.WARNING)
-
 ## define the list of modules imported with the "from pycotools3 import *" statement
 __all__ = ['tasks', 'model', 'viz', 'utils']
-
-
-
-
-# global __version__
-# #version
-# MAJOR = 1
-# MINOR = 0
-# MICRO = 3
-#
-# __version__ = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
