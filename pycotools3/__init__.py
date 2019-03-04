@@ -19,6 +19,10 @@ def download_copasi():
         ## if present, assume this function has been run before
         assert os.path.isdir(copasi_directory)
     except AssertionError:
+        print('For convenience, COPASI is distributed with pycotools3 and sits '
+              'next to the pycotools installation. Please wait while we configure'
+              ' for you. This is only necessary the first time you use pycotools3 '
+              'after installing with pip.')
         import requests
         import zipfile
         import shutil
@@ -28,10 +32,13 @@ def download_copasi():
         url = 'https://github.com/CiaranWelsh/pycotools3/archive/master.zip'
 
         if not os.path.isfile(filename):
+            print('downloading the pycotools3 repository...')
             r = requests.get(url)
             with open(filename, 'wb') as f:
                 f.write(r.content)
 
+
+        print('decompressing pycotools3 repository...')
         zip_ref = zipfile.ZipFile(filename, 'r')
         zip_ref.extractall(os.path.dirname(__file__))
         zip_ref.close()
@@ -47,11 +54,14 @@ def download_copasi():
         if not os.path.isdir(extracted_copasi_dir):
             raise NotADirectoryError(extracted_copasi_dir)
 
+        print('copying COPASI files ...')
         shutil.copytree(extracted_copasi_dir, os.path.join(os.path.dirname(__file__), 'COPASI'))
 
+        print('Removing downloaded files..')
         shutil.rmtree(extracted_pycotools3_dir)
         shutil.rmtree(extracted_dir)
         os.remove(filename)
+        print('configuration complete.')
 
 
 download_copasi()
