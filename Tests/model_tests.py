@@ -1159,8 +1159,6 @@ class InsertParameterTests(_test_base._BaseTest):
         mod = pe.models.test_model.model
         mod.insert_parameters(parameter_path=pe.results_directory['test_model'], inplace=True)
         v = [i.initial_value for i in pe.models.test_model.model.global_quantities]
-        print(v)
-        mod.open()
         # I = pycotools3.model.InsertParameters(
         #     self.model, df=df, inplace=True).model
         # val = [i.initial_value for i in self.model.global_quantities if i.name == 'A2B']
