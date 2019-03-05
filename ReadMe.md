@@ -4,7 +4,7 @@
 | develop | [![Build Status](https://travis-ci.org/CiaranWelsh/pycotools3.svg?branch=develop)](https://travis-ci.org/CiaranWelsh/pycotools3) [![Documentation Status](https://readthedocs.org/projects/pycotools3/badge/?version=develop)](https://pycotools3.readthedocs.io/en/latest/?badge=develop)|
 | Total downloads | [![Downloads](https://pepy.tech/badge/pycotools3)](https://pepy.tech/project/pycotools3)|
 | Downloads per month| [![Downloads](https://pepy.tech/badge/pycotools3/month)](https://pepy.tech/project/pycotools3)|
-
+|version|[![PyPI version](https://badge.fury.io/py/pycotools3.svg)](https://badge.fury.io/py/pycotools3)|
 
 # Pycotools3
 
