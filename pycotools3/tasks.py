@@ -4175,6 +4175,7 @@ class ParameterEstimation(_Task):
                 ## while we are distinguishing between component type we retrieve its
                 ## model value so if the user specifies that the start value should be the
                 ## model value, we can use the model_value that is collected here
+
                 if item_name in mod.get_variable_names('m'):
                     component = [i for i in mod.metabolites if i.name == item_name][0]
                     item_type = 'metabolite'
@@ -4190,7 +4191,7 @@ class ParameterEstimation(_Task):
                 elif item_name in mod.get_variable_names('l'):
                     component = [i for i in mod.local_parameters if i.global_name == item_name][0]
                     item_type = 'local_parameter'
-                    model_value = mod.get(item_type, item_name, by='name').value
+                    model_value = mod.get(item_type, item_name, by='global_name').value
 
                 elif item_name in mod.get_variable_names('g'):
                     component = [i for i in mod.global_quantities if i.name == item_name][0]

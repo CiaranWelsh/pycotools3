@@ -13,8 +13,7 @@
 
 PyCoTools
 =========
-PyCoTools is a python package that was developed as an alternative interface into `COPASI <http://copasi.org/>`_, simulation software for modelling biochemical systems. The PyCoTools paper can be found `here <https://academic.oup.com/bioinformatics/article/34/21/3702/5001390>`_ and describes in detail the intentions and functionality of PyCoTools. There are some important differences  between the PyCoTools version that is described in the publication and the current version. The first and most important is that PyCoTools is now a python 3 only package. If using Python 2.7 you should create a virtual Python 3.6 environment using `conda <https://salishsea-meopar-docs.readthedocs.io/en/latest/work_env/python3_conda_environment.html>`_ or `virtualenv <https://virtualenv.pypa.io/en/latest/>`_. My preference is conda. The other major difference is the interface into COPASI's parameter estimation task which has a new interface and has been enhanced to support all features of COPASI's parameter estimation task.
-
+PyCoTools is a python package that was developed as an alternative interface into `COPASI <http://copasi.org/>`_, simulation software for modelling biochemical systems. The PyCoTools paper can be found `here <https://academic.oup.com/bioinformatics/article/34/21/3702/5001390>`_ and describes in detail the intentions and functionality of PyCoTools. There are some important differences between the PyCoTools version that is described in the publication and the current version. The first is that PyCoTools is now a python 3 only package. If using Python 2.7 you should create a virtual Python 3.6 environment using `conda <https://salishsea-meopar-docs.readthedocs.io/en/latest/work_env/python3_conda_environment.html>`_ or `virtualenv <https://virtualenv.pypa.io/en/latest/>`_. My preference is conda. The other major difference is the interface to COPASI's parameter estimation task which is described in the tutorials and examples.
 
 Installation
 ------------
@@ -25,6 +24,11 @@ Use:
    $ pip install pycotools3
 
 Remember to :bash:`source activate` your python 3.6 environment if you need to.
+
+.. note::
+
+   Copasi (currently version 4.24) is distributed with pycotools3. The first time you use `import pycotools3`, the import statement will take some time to execute. This is because there is a configuration step that takes place. This will only happen once and then its business as usual thereafter.
+
 
 To install from `source <https://github.com/CiaranWelsh/pycotools3.git>`_:
 
