@@ -1583,22 +1583,24 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
         self.assertEqual(expected_report_name, actual)
 
     def test_that_it_works(self):
+        ##compartments not being added to report?
         with ParameterEstimation.Context(
                 self.model.copasi_file,
                 [self.TC1.report_name, self.TC2.report_name,
                  self.report3, self.report4],
-                context='s', parameters='a') as context:
+                context='s', parameters='glm') as context:
             context.set('method', 'genetic_algorithm_sr')
             context.set('number_of_generations', 25)
             context.set('population_size', 14)
+            context.set('randomize_start_values', True)
             context.set('copy_number', 3)
             context.set('run_mode', True)
             config = context.get_config()
 
         pe = ParameterEstimation(config)
-
-        # data = pycotools3.viz.Parse(pe)
-        # print(data)
+        pe.config.models.test_model.model.open()
+        data = pycotools3.viz.Parse(pe)
+        self.assertEqual(3, data['test_model'])
 
 
 

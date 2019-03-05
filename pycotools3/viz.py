@@ -726,6 +726,7 @@ class Parse(object):
                     if mod.fit_item_order == []:
                         raise errors.SomethingWentHorriblyWrongError('Parameter Estimation task is empty')
 
+                    print('names', names, len(names), '\n', data, data.shape)
                     if len(names) != data.shape[1]:
                         raise errors.SomethingWentHorriblyWrongError(
                             'length of parameter estimation data does not equal number of parameters estimated')
@@ -918,7 +919,9 @@ class Parse(object):
                 data.columns = names
                 data.to_csv(report_name, sep='\t', index=False)
                 d[report_name] = data
-
+        if d == {}:
+            raise ValueError(f'There is no parameter '
+                             f'estimation data to read.')
         df = pandas.concat(d)
         columns = df.columns
         ## reindex, drop and sort by RSS

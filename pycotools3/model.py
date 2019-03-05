@@ -2429,7 +2429,22 @@ class Model(_base._Base):
         Returns:
 
         """
-        scan = tasks.Scan(**kwargs)
+        return tasks.Scan(**kwargs)
+
+    def sensitivities(self, **kwargs):
+        """
+        Perform a sensitivity analysis on model
+
+        This is a wrapper around :py:class:`tasks.Sensitivities` and accepts all
+        of the same arguments, except the model which is already provided.
+
+        Args:
+            **kwargs:
+
+        Returns:
+
+        """
+        return tasks.Sensitivities(**kwargs)
 
 
 @mixin(ReadModelMixin)
