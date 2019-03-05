@@ -585,12 +585,6 @@ class Parse(object):
         elif type(self.cls_instance) == Parse:
             data = self.cls_instance.data
 
-        elif type(self.cls_instance) == tasks.ProfileLikelihood:
-            data = self.from_profile_likelihood()
-
-        elif type(self.cls_instance) == tasks.ChaserParameterEstimations:
-            data = self.from_chaser_estimations(self.cls_instance)
-
         elif type(self.cls_instance) == pandas.core.frame.DataFrame:
             data = self.cls_instance
             if 'RSS' not in list(data.keys()):
@@ -603,11 +597,8 @@ class Parse(object):
             data = self.from_folder()
 
         if self.log10:
-            if not type(self.cls_instance) == tasks.ProfileLikelihood:
-                data = numpy.log10(data)
-                return data
-            else:
-                return data
+            data = numpy.log10(data)
+            return data
         else:
             return data
 
