@@ -1,274 +1,123 @@
-#-*-coding: utf-8 -*-
-'''
-
- This file is part of pycotools3.
-
- pycotools3 is free software: you can redistribute it and/or modify
- it under the terms of the GNU Lesser General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
-
- pycotools3 is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Lesser General Public License for more details.
-
- You should have received a copy of the GNU Lesser General Public License
- along with pycotools3.  If not, see <http://www.gnu.org/licenses/>.
-
-
-Author: 
-    Ciaran Welsh
-Date:
-    12/03/2017
-
- Object:
- 
-Miscellaneous bunch of useful classes and functions
-'''
-
-import os
-import string
-import pandas,numpy
-import re
-import time
-import subprocess
-import threading
-import pickle
-import logging
-
-LOG=logging.getLogger(__name__)
-
-def run_parallel(commands):
-    length = len(commands)
-    x = 0
-    while x < length:
-        exec("threading.Thread(target = "+commands[x]+").start()")
-        x = x+1
-    return True
-
-    
-class RemoveNonAscii():
-    def __init__(self,non_ascii_str):
-        self.non_ascii_str=non_ascii_str
-        self.filter=self.remove_non_ascii()
-        
-        
-    def remove_non_ascii(self):
-        for i in self.non_ascii_str:
-            if i not in string.ascii_letters+string.digits+r'[]-_().\:/ ':
-                self.non_ascii_str=self.non_ascii_str.replace(i,'_')
-        return self.non_ascii_str
-
-
-def add_noise(f, noise_factor=0.05):
-    '''
-    Add noise to time course data
-    
-    f:
-        Single experiment file to add noise too
-    
-    noise_factor:
-        limits the amount of noise to add. Must be float between 0 and 1
-        . default is 0.05 for 5% 
-        
-    ==========
-    Returns: pandas.DataFrame containing noisy data 
-    
-    '''
-    ## check file is real file
-    assert os.path.isfile(f),'{} is not a file'.format(f)
-    ## read into pandas
-    df=pandas.read_csv(f,sep='\t')
-    ## Count number of data points to add noise too
-    ## remember to account for the time varible by minus 1 from column dimension 
-    number_of_data_points= df.shape[0]*(df.shape[1]-1)
-    ## sample from uniform distribution 'number_of_data_points' times and assign to u vector
-    u= numpy.random.uniform(1-noise_factor,1+noise_factor,number_of_data_points)
-    ## reshape u vector
-    u_matrix= u.reshape(df.shape[0],df.shape[1]-1)
-    ## remove the time colum but save as 't' variable for later
-    try:
-        
-        t=df['Time']
-        df.drop('Time',axis=1,inplace=True)
-        df_noise=pandas.DataFrame(u_matrix,columns=df.columns)
-    except KeyError:
-        return None
-    ## Check we have the corect shape for matrix
-    assert df.shape==df_noise.shape
-    ## Perform dot multiplication on two matrices to get noisy matrix
-    noise= df_noise.rmul(df,axis=0)
-    ## change index to be time
-    noise.index=t
-    ## return noisy vector
-    return noise
-
-
-
-def download_models(directory,percent=100,SKIP_ALREADY_DOWNLOADED=True):
-    """
-    download curated models from biomodels curated section
-
-    :param directory: Name of directory to download models too
-    :param percent:
-    :param SKIP_ALREADY_DOWNLOADED:
-    :return: df and pickle
-    """
-
-    if percent>100 or percent < 0:
-        raise TypeError('percent should be between 0 and 100')
-    try:
-        import bioservices
-    except ImportError:
-        ## install bioservices if it doesn't already exist
-        ##May need to do this with admin rights
-        os.system('pip install bioservices')
-        import bioservices 
-    except WindowsError:
-        raise ImportError( 'Need bioservices module to download biomodels database. Use pip install bioservices with admin rights')
-
-        
-    ## create directory if not exist    
-    if os.path.isdir(directory)!=True:
-        os.makedirs(directory)
-    ## change to directory
-    os.chdir(directory)
-    ## get Biomodels service 
-    bio=BioModels()
-    print(('The number of models in biomodels right now is {}'.format(len(bio))))
-    model=bio.getAllCuratedmodelsId()
-    print(('The number of curated models in biomodels is: {}'.format(len(model))))
-    per=len(model)//100.0*percent
-    print(('You are about to download {} models'.format(per)))
-    model_dct={}
-    model_files=[]
-    skipped=0
-    if percent==100:
-        models=model
-    else:
-        models=model[:int(per)]
-    for i in enumerate(models):
-        os.chdir(directory)
-        author=bio.getAuthorsBymodelId(i[1])
-        author=RemoveNonAscii(author[0]).filter
-        dire=os.path.join(directory,i[1]+author)
-#        if SKIP_ALREADY_DOWNLOADED:
-        if os.path.isdir(dire)==False:
-            os.mkdir(dire)   
-        else:
-            if SKIP_ALREADY_DOWNLOADED:
-                skipped+=1
-                continue
-        models_to_skip=['BIOMD0000000241','BIOMD0000000148'] #these cause python to crash
-        if i[1] in models_to_skip:
-            '''
-            These file is broken and doesn't simulate with CopasiSE
-            '''
-            continue
-        try:
-
-            model_dct[author]=bio.getmodelSBMLById(i[1])
-            print(('downloading model {} of {}: {}:\t{}'.format(i[0],per,i[1],author.encode('utf8'))))
-            fle=os.path.join(dire,author+'.xml')
-            print(fle)
-            if os.path.isfile(fle)!=True:
-                with open(fle,'w') as f:
-                    f.write(model_dct[author].encode('utf8'))
-            time.sleep(0.25)
-            model_files.append(fle)
-            print(('saved to : {}'.format(fle)))
-        except UnicodeEncodeError:
-            print(('model with author {} skipped as the name contains non-ascii characters'.format(author)))
-            continue
-    print(('You have downloaded {} out of {} models'.format(len(list(model_dct.keys())),len(model))))
-    print(('you have skipped {} models because you already have a folder for them'.format(skipped)))
-    df=pandas.DataFrame(model_files)
-    pickle_file=os.path.join(directory,'BiomodelsFilesPickle.pickle')
-    df.to_pickle(pickle_file)    
-    return df
-
-def xml2cps(paths):
-    '''
-    use CopasiSE to convert the xml into copasi files
-    
-    paths:
-        dictionary dict[sbml filename]=copasi filename
-    '''
-    
-    def worker(path):
-        return subprocess.check_call('CopasiSE -i "{}"'.format(path),shell=True)
-        
-    start=time.time()
-    jobs=[]
-    for i in paths:
-        print(i)
-        p=threading.Thread(target=worker,args=(paths['successful'][i],))
-        jobs.append(p)
-        p.start()
-        p.join()
-#        subprocess.check_call('CopasiSE -i "{}"'.format(paths['successful'][i]))
-    return 'program took {}s'.format(time.time()-start)
-
-
-def correct_copasi_timecourse_headers(report_name):
-    """
-    read time course data into pandas dataframe. Remove
-    copasi generated square brackets around the variables
-    and write to file again.
-    :return: pandas.DataFrame
-    """
-
-    df = pandas.read_csv(report_name, sep='\t')
-    headers = [re.findall('(Time)|\[(.*)\]', i)[0] for i in list(df.columns)]
-    time = headers[0][0]
-    headers = [i[1] for i in headers]
-    headers[0] = time
-    df.columns = headers
-    os.remove(report_name)
-    df.to_csv(report_name, sep='\t', index=False)
-    return df
-
-def format_timecourse_data(report_name):
-    """
-    read time course data into pandas dataframe. Remove
-    copasi generated square brackets around the variables
-    and write to file again.
-    :return: pandas.DataFrame
-    """
-
-    df = pandas.read_csv(report_name, sep='\t')
-    headers = [re.findall('(Time)|\[(.*)\]', i)[0] for i in list(df.columns)]
-    time = headers[0][0]
-    headers = [i[1] for i in headers]
-    headers[0] = time
-    df.columns = headers
-    os.remove(report_name)
-    df.to_csv(report_name, sep='\t', index=False)
-    return df
-
-
-
-def new_model(path):
-    new_model_str = """<?xml version="1.0" encoding="UTF-8"?>
-<!-- generated with COPASI 4.24 (Build 197) (http://www.copasi.org) at 2019-01-12 11:06:38 UTC -->
-<?oxygen RNGSchema="http://www.copasi.org/static/schema/CopasiML.rng" type="xml"?>
 <COPASI xmlns="http://www.copasi.org/static/schema" versionMajor="4" versionMinor="24" versionDevel="197" copasiSourcesModified="0">
-  <Model key="Model_1" name="New Model" simulationType="time" timeUnit="s" volumeUnit="ml" areaUnit="m²" lengthUnit="m" quantityUnit="mmol" type="deterministic" avogadroConstant="6.0221408570000002e+23">
+  <ListOfFunctions>
+    <Function key="Function_22604748" name="(S bind E).kf*S*E" type="UserDefined" reversible="false">
+      <Expression>kf*S*E</Expression>
+      <ListOfParameterDescriptions>
+        <ParameterDescription key="FunctionParameter_91718458" name="E" order="0" role="substrate"/>
+        <ParameterDescription key="FunctionParameter_93591394" name="S" order="1" role="substrate"/>
+        <ParameterDescription key="FunctionParameter_10101474" name="kf" order="2" role="constant"/>
+      </ListOfParameterDescriptions>
+    </Function>
+    <Function key="Function_84248313" name="(S unbind E).kb*ES" type="UserDefined" reversible="false">
+      <Expression>kb*ES</Expression>
+      <ListOfParameterDescriptions>
+        <ParameterDescription key="FunctionParameter_5212627" name="ES" order="0" role="substrate"/>
+        <ParameterDescription key="FunctionParameter_9152948" name="kb" order="1" role="constant"/>
+      </ListOfParameterDescriptions>
+    </Function>
+    <Function key="Function_55596466" name="(ES produce P).kcat*ES" type="UserDefined" reversible="false">
+      <Expression>kcat*ES</Expression>
+      <ListOfParameterDescriptions>
+        <ParameterDescription key="FunctionParameter_65353264" name="ES" order="0" role="substrate"/>
+        <ParameterDescription key="FunctionParameter_62104244" name="kcat" order="1" role="constant"/>
+      </ListOfParameterDescriptions>
+    </Function>
+  </ListOfFunctions>
+  <Model key="Model_1" name="Michaelis-Menten" simulationType="time" timeUnit="s" volumeUnit="ml" areaUnit="m&#178;" lengthUnit="m" quantityUnit="mmol" type="deterministic" avogadroConstant="6.0221408570000002e+23">
     <MiriamAnnotation>
-<rdf:RDF
-   xmlns:dcterms="http://purl.org/dc/terms/"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-  <rdf:Description rdf:about="#Model_1">
-    <dcterms:created>
-      <rdf:Description>
-        <dcterms:W3CDTF>2019-01-12T11:06:16Z</dcterms:W3CDTF>
-      </rdf:Description>
-    </dcterms:created>
-  </rdf:Description>
-</rdf:RDF>
-
+      <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        <rdf:Description rdf:about="#Model_1">
+          <dcterms:created>
+            <rdf:Description>
+              <dcterms:W3CDTF>2019-01-12T11:06:16Z</dcterms:W3CDTF>
+            </rdf:Description>
+          </dcterms:created>
+        </rdf:Description>
+      </rdf:RDF>
     </MiriamAnnotation>
+    <ListOfCompartments>
+      <Compartment dimensionality="3" key="Compartment_10000" name="Cell" simulationType="fixed"/>
+    </ListOfCompartments>
+    <ListOfMetabolites>
+      <Metabolite compartment="Compartment_10000" key="Metabolite_10001" name="S" simulationType="reactions" particle_numbers="1.8066422571000001e+22"/>
+      <Metabolite compartment="Compartment_10000" key="Metabolite_10003" name="ES" simulationType="reactions" particle_numbers="0.0"/>
+      <Metabolite compartment="Compartment_10000" key="Metabolite_10000" name="P" simulationType="reactions" particle_numbers="9.0332112855e+22"/>
+      <Metabolite compartment="Compartment_10000" key="Metabolite_10002" name="E" simulationType="reactions" particle_numbers="6.022140857e+22"/>
+    </ListOfMetabolites>
+    <ListOfReactions>
+      <Reaction fast="false" key="Reaction_67230925" name="S bind E" reversible="false">
+        <ListOfSubstrates>
+          <Substrate metabolite="Metabolite_10001" stoichiometry="1"/>
+          <Substrate metabolite="Metabolite_10002" stoichiometry="1"/>
+        </ListOfSubstrates>
+        <ListOfProducts>
+          <Product metabolite="Metabolite_10003" stoichiometry="1"/>
+        </ListOfProducts>
+        <ListOfModifiers/>
+        <ListOfConstants>
+          <Constant key="Parameter_17677403" name="kf" value="50.0"/>
+        </ListOfConstants>
+        <KineticLaw function="Function_22604748" scalingCompartment="CN=Root,Model=Michaelis-Menten,Vector=Compartments[Cell]" unitType="Default">
+          <ListOfCallParameters>
+            <CallParameter functionParameter="FunctionParameter_91718458">
+              <SourceParameter reference="Metabolite_10002"/>
+            </CallParameter>
+            <CallParameter functionParameter="FunctionParameter_93591394">
+              <SourceParameter reference="Metabolite_10001"/>
+            </CallParameter>
+            <CallParameter functionParameter="FunctionParameter_10101474">
+              <SourceParameter reference="Parameter_17677403"/>
+            </CallParameter>
+          </ListOfCallParameters>
+        </KineticLaw>
+      </Reaction>
+      <Reaction fast="false" key="Reaction_57588685" name="S unbind E" reversible="false">
+        <ListOfSubstrates>
+          <Substrate metabolite="Metabolite_10003" stoichiometry="1"/>
+        </ListOfSubstrates>
+        <ListOfProducts>
+          <Product metabolite="Metabolite_10001" stoichiometry="1"/>
+          <Product metabolite="Metabolite_10002" stoichiometry="1"/>
+        </ListOfProducts>
+        <ListOfModifiers/>
+        <ListOfConstants>
+          <Constant key="Parameter_79294238" name="kb" value="96.0"/>
+        </ListOfConstants>
+        <KineticLaw function="Function_84248313" scalingCompartment="CN=Root,Model=Michaelis-Menten,Vector=Compartments[Cell]" unitType="Default">
+          <ListOfCallParameters>
+            <CallParameter functionParameter="FunctionParameter_5212627">
+              <SourceParameter reference="Metabolite_10003"/>
+            </CallParameter>
+            <CallParameter functionParameter="FunctionParameter_9152948">
+              <SourceParameter reference="Parameter_79294238"/>
+            </CallParameter>
+          </ListOfCallParameters>
+        </KineticLaw>
+      </Reaction>
+      <Reaction fast="false" key="Reaction_57378335" name="ES produce P" reversible="false">
+        <ListOfSubstrates>
+          <Substrate metabolite="Metabolite_10003" stoichiometry="1"/>
+        </ListOfSubstrates>
+        <ListOfProducts>
+          <Product metabolite="Metabolite_10000" stoichiometry="1"/>
+          <Product metabolite="Metabolite_10002" stoichiometry="1"/>
+        </ListOfProducts>
+        <ListOfModifiers/>
+        <ListOfConstants>
+          <Constant key="Parameter_96138318" name="kcat" value="0.05"/>
+        </ListOfConstants>
+        <KineticLaw function="Function_55596466" scalingCompartment="CN=Root,Model=Michaelis-Menten,Vector=Compartments[Cell]" unitType="Default">
+          <ListOfCallParameters>
+            <CallParameter functionParameter="FunctionParameter_65353264">
+              <SourceParameter reference="Metabolite_10003"/>
+            </CallParameter>
+            <CallParameter functionParameter="FunctionParameter_62104244">
+              <SourceParameter reference="Parameter_96138318"/>
+            </CallParameter>
+          </ListOfCallParameters>
+        </KineticLaw>
+      </Reaction>
+    </ListOfReactions>
     <ListOfModelParameterSets activeSet="ModelParameterSet_1">
       <ModelParameterSet key="ModelParameterSet_1" name="Initial State">
         <ModelParameterGroup cn="String=Initial Time" type="Group">
@@ -281,15 +130,28 @@ def new_model(path):
         <ModelParameterGroup cn="String=Initial Global Quantities" type="Group">
         </ModelParameterGroup>
         <ModelParameterGroup cn="String=Kinetic Parameters" type="Group">
+          <ModelParameterGroup cn="CN=Root,Model=Michaelis-Menten,Vector=Reactions[S bind E]" type="reaction">
+            <ModelParameter cn="CN=Root,Model=Michaelis-Menten,Vector=Reactions[S bind E],ParameterGroup=Parameters,Parameter=kf" simulationType="fixed" type="ReactionParameter" value="0.01"/>
+          </ModelParameterGroup>
+          <ModelParameterGroup cn="CN=Root,Model=Michaelis-Menten,Vector=Reactions[S unbind E]" type="reaction">
+            <ModelParameter cn="CN=Root,Model=Michaelis-Menten,Vector=Reactions[S unbind E],ParameterGroup=Parameters,Parameter=kb" simulationType="fixed" type="ReactionParameter" value="0.1"/>
+          </ModelParameterGroup>
+          <ModelParameterGroup cn="CN=Root,Model=Michaelis-Menten,Vector=Reactions[ES produce P]" type="reaction">
+            <ModelParameter cn="CN=Root,Model=Michaelis-Menten,Vector=Reactions[ES produce P],ParameterGroup=Parameters,Parameter=kcat" simulationType="fixed" type="ReactionParameter" value="0.05"/>
+          </ModelParameterGroup>
         </ModelParameterGroup>
       </ModelParameterSet>
     </ListOfModelParameterSets>
     <StateTemplate>
       <StateTemplateVariable objectReference="Model_1"/>
+      <StateTemplateVariable objectReference="Compartment_10000"/>
+      <StateTemplateVariable objectReference="Metabolite_10001"/>
+      <StateTemplateVariable objectReference="Metabolite_10003"/>
+      <StateTemplateVariable objectReference="Metabolite_10000"/>
+      <StateTemplateVariable objectReference="Metabolite_10002"/>
     </StateTemplate>
-    <InitialState type="initialState">
-      0 
-    </InitialState>
+    <InitialState type="initialState">0.0 1.0 1.8066422571000001e+22 0.0 9.0332112855e+22 6.022140857e+22 
+</InitialState>
   </Model>
   <ListOfTasks>
     <Task key="Task_14" name="Steady-State" type="steadyState" scheduled="false" updateModel="false">
@@ -310,21 +172,22 @@ def new_model(path):
         <Parameter name="Maximum duration for backward integration" type="unsignedFloat" value="1000000"/>
       </Method>
     </Task>
-    <Task key="Task_15" name="Time-Course" type="timeCourse" scheduled="false" updateModel="false">
+    <Task key="Task_100" name="Time-Course" scheduled="true" type="timeCourse" update_model="false">
+      <Report append="0" confirmOverwrite="0" reference="Report_30" target="D:\pycotools3\docs\source\Tutorials\timecourse.txt"/>
       <Problem>
         <Parameter name="AutomaticStepSize" type="bool" value="0"/>
-        <Parameter name="StepNumber" type="unsignedInteger" value="100"/>
-        <Parameter name="StepSize" type="float" value="0.01"/>
-        <Parameter name="Duration" type="float" value="1"/>
-        <Parameter name="TimeSeriesRequested" type="bool" value="1"/>
+        <Parameter name="StepNumber" type="unsignedInteger" value="50"/>
+        <Parameter name="StepSize" type="float" value="1"/>
+        <Parameter name="Duration" type="float" value="50"/>
+        <Parameter name="TimeSeriesRequested" type="float" value="1"/>
         <Parameter name="OutputStartTime" type="float" value="0"/>
         <Parameter name="Output Event" type="bool" value="0"/>
         <Parameter name="Start in Steady State" type="bool" value="0"/>
       </Problem>
       <Method name="Deterministic (LSODA)" type="Deterministic(LSODA)">
         <Parameter name="Integrate Reduced Model" type="bool" value="0"/>
-        <Parameter name="Relative Tolerance" type="unsignedFloat" value="9.9999999999999995e-07"/>
-        <Parameter name="Absolute Tolerance" type="unsignedFloat" value="9.9999999999999998e-13"/>
+        <Parameter name="Relative Tolerance" type="unsignedFloat" value="1e-06"/>
+        <Parameter name="Absolute Tolerance" type="unsignedFloat" value="1e-12"/>
         <Parameter name="Max Internal Steps" type="unsignedInteger" value="10000"/>
         <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
       </Method>
@@ -352,7 +215,7 @@ def new_model(path):
       <Problem>
         <Parameter name="Subtask" type="cn" value="CN=Root,Vector=TaskList[Steady-State]"/>
         <ParameterText name="ObjectiveExpression" type="expression">
-          
+    
         </ParameterText>
         <Parameter name="Maximize" type="bool" value="0"/>
         <Parameter name="Randomize Start Values" type="bool" value="0"/>
@@ -369,33 +232,31 @@ def new_model(path):
         <Parameter name="Seed" type="unsignedInteger" value="0"/>
       </Method>
     </Task>
-    <Task key="Task_19" name="Parameter Estimation" type="parameterFitting" scheduled="false" updateModel="false">
-      <Report reference="Report_12" target="" append="1" confirmOverwrite="1"/>
+    <Task key="Task_19" name="Parameter Estimation" type="parameterFitting" scheduled="False" updateModel="0">
+      <Report reference="Report_32" target="PEData.txt" append="False" confirmOverwrite="False"/>
       <Problem>
         <Parameter name="Maximize" type="bool" value="0"/>
         <Parameter name="Randomize Start Values" type="bool" value="0"/>
-        <Parameter name="Calculate Statistics" type="bool" value="1"/>
+        <Parameter name="Calculate Statistics" type="bool" value="0"/>
         <ParameterGroup name="OptimizationItemList">
-        </ParameterGroup>
+        <ParameterGroup name="FitItem"><ParameterGroup name="Affected Experiments"/><ParameterGroup name="Affected Cross Validation Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000.0"/><Parameter name="StartValue" type="float" value="0.05"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Michaelis-Menten,Vector=Reactions[ES produce P],ParameterGroup=Parameters,Parameter=kcat,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Experiments"/><ParameterGroup name="Affected Cross Validation Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000.0"/><Parameter name="StartValue" type="float" value="0.01"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Michaelis-Menten,Vector=Reactions[S bind E],ParameterGroup=Parameters,Parameter=kf,Reference=Value"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Experiments"/><ParameterGroup name="Affected Cross Validation Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000.0"/><Parameter name="StartValue" type="float" value="0.1"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=Michaelis-Menten,Vector=Reactions[S unbind E],ParameterGroup=Parameters,Parameter=kb,Reference=Value"/></ParameterGroup></ParameterGroup>
         <ParameterGroup name="OptimizationConstraintList">
         </ParameterGroup>
         <Parameter name="Steady-State" type="cn" value="CN=Root,Vector=TaskList[Steady-State]"/>
         <Parameter name="Time-Course" type="cn" value="CN=Root,Vector=TaskList[Time-Course]"/>
         <Parameter name="Create Parameter Sets" type="bool" value="0"/>
         <ParameterGroup name="Experiment Set">
-        </ParameterGroup>
+        <ParameterGroup name="timecourse"><Parameter name="Key" type="key" value="Experiment_timecourse"/><Parameter name="File Name" type="file" value="D:\pycotools3\docs\source\Tutorials\timecourse.txt"/><Parameter name="Data is Row Oriented" type="bool" value="1"/><Parameter name="First Row" type="unsignedInteger" value="1"/><Parameter name="Last Row" type="unsignedInteger" value="52"/><Parameter name="Experiment Type" type="unsignedInteger" value="1"/><Parameter name="Normalize Weights per Experiment" type="bool" value="1"/><Parameter name="Separator" type="string" value="&#9;"/><Parameter name="Weight Method" type="unsignedInteger" value="1"/><Parameter name="Row containing Names" type="unsignedInteger" value="1"/><Parameter name="Number of Columns" type="unsignedInteger" value="5"/><ParameterGroup name="Object Map"><ParameterGroup name="0"><Parameter name="Role" type="unsignedInteger" value="3"/></ParameterGroup><ParameterGroup name="1"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Michaelis-Menten,Vector=Compartments[Cell],Vector=Metabolites[S],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="2"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Michaelis-Menten,Vector=Compartments[Cell],Vector=Metabolites[ES],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="3"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Michaelis-Menten,Vector=Compartments[Cell],Vector=Metabolites[P],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="4"><Parameter name="Object CN" type="cn" value="CN=Root,Model=Michaelis-Menten,Vector=Compartments[Cell],Vector=Metabolites[E],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup></ParameterGroup></ParameterGroup></ParameterGroup>
         <ParameterGroup name="Validation Set">
           <Parameter name="Weight" type="unsignedFloat" value="1"/>
           <Parameter name="Threshold" type="unsignedInteger" value="5"/>
         </ParameterGroup>
       </Problem>
-      <Method name="Evolutionary Programming" type="EvolutionaryProgram">
-        <Parameter name="Log Verbosity" type="unsignedInteger" value="0"/>
+      <Method name="Genetic Algorithm" type="GeneticAlgorithm">
         <Parameter name="Number of Generations" type="unsignedInteger" value="200"/>
-        <Parameter name="Population Size" type="unsignedInteger" value="20"/>
+        <Parameter name="Population Size" type="unsignedInteger" value="50"/>
         <Parameter name="Random Number Generator" type="unsignedInteger" value="1"/>
         <Parameter name="Seed" type="unsignedInteger" value="0"/>
-        <Parameter name="Stop after # Stalled Generations" type="unsignedInteger" value="0"/>
       </Method>
     </Task>
     <Task key="Task_20" name="Metabolic Control Analysis" type="metabolicControlAnalysis" scheduled="false" updateModel="false">
@@ -489,7 +350,7 @@ def new_model(path):
         <Parameter name="DelayOutputUntilConvergence" type="bool" value="0"/>
         <Parameter name="OutputConvergenceTolerance" type="float" value="9.9999999999999995e-07"/>
         <ParameterText name="TriggerExpression" type="expression">
-          
+    
         </ParameterText>
         <Parameter name="SingleVariable" type="cn" value=""/>
       </Problem>
@@ -511,7 +372,7 @@ def new_model(path):
     </Task>
   </ListOfTasks>
   <ListOfReports>
-    <Report key="Report_9" name="Steady-State" taskType="steadyState" separator="&#x09;" precision="6">
+    <Report key="Report_9" name="Steady-State" taskType="steadyState" separator="&#9;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -519,7 +380,7 @@ def new_model(path):
         <Object cn="CN=Root,Vector=TaskList[Steady-State]"/>
       </Footer>
     </Report>
-    <Report key="Report_10" name="Elementary Flux Modes" taskType="fluxMode" separator="&#x09;" precision="6">
+    <Report key="Report_10" name="Elementary Flux Modes" taskType="fluxMode" separator="&#9;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -527,55 +388,55 @@ def new_model(path):
         <Object cn="CN=Root,Vector=TaskList[Elementary Flux Modes],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_11" name="Optimization" taskType="optimization" separator="&#x09;" precision="6">
+    <Report key="Report_11" name="Optimization" taskType="optimization" separator="&#9;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
       <Header>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Object=Description"/>
         <Object cn="String=\[Function Evaluations\]"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="Separator=&#9;"/>
         <Object cn="String=\[Best Value\]"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="Separator=&#9;"/>
         <Object cn="String=\[Best Parameters\]"/>
       </Header>
       <Body>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Problem=Optimization,Reference=Function Evaluations"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="Separator=&#9;"/>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Problem=Optimization,Reference=Best Value"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="Separator=&#9;"/>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Problem=Optimization,Reference=Best Parameters"/>
       </Body>
       <Footer>
-        <Object cn="String=&#x0a;"/>
+        <Object cn="String=&#10;"/>
         <Object cn="CN=Root,Vector=TaskList[Optimization],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_12" name="Parameter Estimation" taskType="parameterFitting" separator="&#x09;" precision="6">
+    <Report key="Report_12" name="Parameter Estimation" taskType="parameterFitting" separator="&#9;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
       <Header>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Object=Description"/>
         <Object cn="String=\[Function Evaluations\]"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="Separator=&#9;"/>
         <Object cn="String=\[Best Value\]"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="Separator=&#9;"/>
         <Object cn="String=\[Best Parameters\]"/>
       </Header>
       <Body>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Function Evaluations"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="Separator=&#9;"/>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/>
-        <Object cn="Separator=&#x09;"/>
+        <Object cn="Separator=&#9;"/>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"/>
       </Body>
       <Footer>
-        <Object cn="String=&#x0a;"/>
+        <Object cn="String=&#10;"/>
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_13" name="Metabolic Control Analysis" taskType="metabolicControlAnalysis" separator="&#x09;" precision="6">
+    <Report key="Report_13" name="Metabolic Control Analysis" taskType="metabolicControlAnalysis" separator="&#9;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -583,11 +444,11 @@ def new_model(path):
         <Object cn="CN=Root,Vector=TaskList[Metabolic Control Analysis],Object=Description"/>
       </Header>
       <Footer>
-        <Object cn="String=&#x0a;"/>
+        <Object cn="String=&#10;"/>
         <Object cn="CN=Root,Vector=TaskList[Metabolic Control Analysis],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_14" name="Lyapunov Exponents" taskType="lyapunovExponents" separator="&#x09;" precision="6">
+    <Report key="Report_14" name="Lyapunov Exponents" taskType="lyapunovExponents" separator="&#9;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -595,11 +456,11 @@ def new_model(path):
         <Object cn="CN=Root,Vector=TaskList[Lyapunov Exponents],Object=Description"/>
       </Header>
       <Footer>
-        <Object cn="String=&#x0a;"/>
+        <Object cn="String=&#10;"/>
         <Object cn="CN=Root,Vector=TaskList[Lyapunov Exponents],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_15" name="Time Scale Separation Analysis" taskType="timeScaleSeparationAnalysis" separator="&#x09;" precision="6">
+    <Report key="Report_15" name="Time Scale Separation Analysis" taskType="timeScaleSeparationAnalysis" separator="&#9;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -607,11 +468,11 @@ def new_model(path):
         <Object cn="CN=Root,Vector=TaskList[Time Scale Separation Analysis],Object=Description"/>
       </Header>
       <Footer>
-        <Object cn="String=&#x0a;"/>
+        <Object cn="String=&#10;"/>
         <Object cn="CN=Root,Vector=TaskList[Time Scale Separation Analysis],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_16" name="Sensitivities" taskType="sensitivities" separator="&#x09;" precision="6">
+    <Report key="Report_16" name="Sensitivities" taskType="sensitivities" separator="&#9;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -619,11 +480,11 @@ def new_model(path):
         <Object cn="CN=Root,Vector=TaskList[Sensitivities],Object=Description"/>
       </Header>
       <Footer>
-        <Object cn="String=&#x0a;"/>
+        <Object cn="String=&#10;"/>
         <Object cn="CN=Root,Vector=TaskList[Sensitivities],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_17" name="Linear Noise Approximation" taskType="linearNoiseApproximation" separator="&#x09;" precision="6">
+    <Report key="Report_17" name="Linear Noise Approximation" taskType="linearNoiseApproximation" separator="&#9;" precision="6">
       <Comment>
         Automatically generated report.
       </Comment>
@@ -631,13 +492,30 @@ def new_model(path):
         <Object cn="CN=Root,Vector=TaskList[Linear Noise Approximation],Object=Description"/>
       </Header>
       <Footer>
-        <Object cn="String=&#x0a;"/>
+        <Object cn="String=&#10;"/>
         <Object cn="CN=Root,Vector=TaskList[Linear Noise Approximation],Object=Result"/>
       </Footer>
     </Report>
+    <Report key="Report_30" name="Time-Course" precision="6" separator="&#9;" taskType="Time-Course">
+      <Comment/>
+      <Table printTitle="1">
+        <Object cn="CN=Root,Model=Michaelis-Menten,Reference=Time"/>
+        <Object cn="CN=Root,Model=Michaelis-Menten,Vector=Compartments[Cell],Vector=Metabolites[S],Reference=Concentration"/>
+        <Object cn="CN=Root,Model=Michaelis-Menten,Vector=Compartments[Cell],Vector=Metabolites[ES],Reference=Concentration"/>
+        <Object cn="CN=Root,Model=Michaelis-Menten,Vector=Compartments[Cell],Vector=Metabolites[P],Reference=Concentration"/>
+        <Object cn="CN=Root,Model=Michaelis-Menten,Vector=Compartments[Cell],Vector=Metabolites[E],Reference=Concentration"/>
+      </Table>
+    </Report>
+    <Report precision="6" separator="&#9;" name="multi_parameter_estimation" key="Report_32" taskType="parameterFitting">
+      <Comment/>
+      <Table printTitle="1">
+        <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"/>
+        <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/>
+      </Table>
+    </Report>
   </ListOfReports>
   <GUI>
-  </GUI>
+      </GUI>
   <ListOfUnitDefinitions>
     <UnitDefinition key="Unit_0" name="meter" symbol="m">
       <Expression>
@@ -671,29 +549,3 @@ def new_model(path):
     </UnitDefinition>
   </ListOfUnitDefinitions>
 </COPASI>
-""".encode('utf-8')
-
-    if os.path.splitext(path)[1] != '.cps':
-        raise Exception
-
-    if os.path.isfile(path):
-        return path
-
-    with open(path, 'wb') as f:
-        f.write(new_model_str)
-    return path
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

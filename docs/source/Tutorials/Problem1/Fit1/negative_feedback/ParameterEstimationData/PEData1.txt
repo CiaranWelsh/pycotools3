@@ -1,0 +1,3 @@
+kADeg	kBDeg	kBProd	vAProd	RSS
+0.2	0.4	0.3	0.1	8.85134e-13
+0.2	0.4	0.3	0.1	8.85134e-13
