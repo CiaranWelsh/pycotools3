@@ -1073,6 +1073,33 @@ class Model(_base._Base):
             names = [name for name in names if name.startswith(prefix)]
         return sorted(names)
 
+    def get_model_object(self, string):
+        """
+        Retrieve a model object, such as a parameter or metabolite
+        Args:
+            string (str): name of parameter
+
+        Returns:
+            correct model object
+        """
+        if string not in self.all_variable_names:
+            raise errors.InputError(f'"{string}" not in {self.all_variable_names}')
+
+        if string in [i.name for i in self.metabolites]:
+            return self.get('metabolite', string)
+
+        elif string in [i.name for i in self.local_parameters]:
+            return self.get('local_parameter', string)
+
+        elif string in [i.name for i in self.global_quantities]:
+            return self.get('global_quantity', string)
+
+        elif string in [i.name for i in self.compartments]:
+            return self.get('compartment', string)
+
+        else:
+            raise errors.SomethingWentHorriblyWrongError
+
     @cached_property
     def local_parameters(self):
         """Get local parameters in model. local_parameters are
@@ -1994,7 +2021,6 @@ class Model(_base._Base):
             copasi_temp = os.path.join(self.root, os.path.split(self.copasi_file)[1][:-4] + '_1.cps')
         self.save(copasi_file)
         cmd = '{} "{}"'.format(COPASIUI, copasi_file)
-        print('cmd', cmd)
         os.system(cmd)
         if as_temp:
             os.remove(copasi_temp)

@@ -2456,6 +2456,8 @@ class ParameterEstimation(_Task):
                 'max_active': 3,
                 'prefix': None,
                 'context': 's',
+                'pl_upper_bound': 1000,
+                'pl_lower_bound': 1000,
             }
 
     @staticmethod
@@ -4587,30 +4589,63 @@ class ParameterEstimation(_Task):
                 dct[model_name][i] = model.Model(new_cps)
         return dct
 
-    def _setup1scan(self, q, model, report):
+    def _setup1scan(self, q, mod, report):
         """Setup a single scan.
 
         Args:
           q: queue from multiprocessing
-          model: pycotools3.model.Model
+          mod: pycotools3.model.Model
           report: str.
 
         Returns:
             None
 
         """
-        start = time.time()
-        models = q.put(Scan(model,
-                            scan_type='repeat',
-                            number_of_steps=self.config.settings.pe_number,
-                            subtask='parameter_estimation',
-                            report_type='multi_parameter_estimation',
-                            report_name=report,
-                            run=False,
-                            append=False,
-                            confirm_overwrite=False,
-                            output_in_subtask=False,
-                            save=True))
+        if self.config.settings.context == 'pl':
+            scan_variable = os.path.split(mod.copasi_file)[1][:-4]
+            ##todo implement ability to modify boundaries
+            ## scan_obj = [i for i in self.get_model_objects_from_strings() if i.name == scan_variable]
+            scan_obj = mod.get_model_object(scan_variable)
+            if isinstance(scan_obj, model.Metabolite):
+                if self.config.settings.quantity_type == 'concentration':
+                    scan_obj_init_value = scan_obj.concentration
+                else:
+                    scan_obj_init_value = scan_obj.particle_numbers
+            elif isinstance(scan_obj, model.GlobalQuantity):
+                scan_obj_init_value = scan_obj.initial_value
+            elif isinstance(scan_obj, model.Compartment):
+                scan_obj_init_value = scan_obj.initial_value
+            elif isinstance(scan_obj, model.LocalParameter):
+                scan_obj_init_value = scan_obj.value
+            q.put(Scan(
+                mod,
+                scan_type='scan',
+                minimum=float(scan_obj_init_value)/float(self.config.settings.pl_lower_bound),
+                maximum=float(scan_obj_init_value)*float(self.config.settings.pl_upper_bound),
+                variable=scan_variable,
+                subtask='parameter_estimation',
+                report_type='multi_parameter_estimation',
+                report_name=report,
+                run=False,
+                append=False,
+                confirm_overwrite=False,
+                output_in_subtask=False,
+                save=True,
+                log10=True)
+            )
+        else:
+            q.put(Scan(mod,
+                       scan_type='repeat',
+                       number_of_steps=self.config.settings.pe_number,
+                       subtask='parameter_estimation',
+                       report_type='multi_parameter_estimation',
+                       report_name=report,
+                       run=False,
+                       append=False,
+                       confirm_overwrite=False,
+                       output_in_subtask=False,
+                       save=True)
+                  )
 
     def _setup_scan(self, models):
         """Set up `copy_number` repeat items with `pe_number`
@@ -4680,7 +4715,6 @@ class ParameterEstimation(_Task):
         copied_models = self._copy_model()
         ##configure scan task
         copied_models = self._setup_scan(copied_models)
-        # print(copied_models['model1'][0].open())
 
         return copied_models
 
@@ -4797,7 +4831,6 @@ class ParameterEstimation(_Task):
             return self
 
         def __exit__(self, exc_type, exc_value, exc_traceback):
-            self.set('context', self.context)
 
             if exc_type:
                 LOG.critical(f'exc_type: {exc_type}')
@@ -4902,6 +4935,7 @@ class ParameterEstimation(_Task):
 
             config.settings['problem'] = 'ProfileLikelihoods'
             config.settings['randomize_start_values'] = False
+            config.settings['context'] = self.context
 
             if not os.path.isdir(config.settings['problem']):
                 os.makedirs(config.settings['problem'])
@@ -4946,8 +4980,6 @@ class ParameterEstimation(_Task):
             )
 
             return new_config
-
-
 
         def _add_models(self, models: (str, list)):
             """

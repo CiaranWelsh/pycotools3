@@ -294,6 +294,15 @@ class ModelComponentAttributeTests(_test_base._BaseTest):
                                             concentration=55)
         self.assertEqual(str(metab.particle_numbers), str(3.3121774713500003e+22))
 
+    def test_get_model_object(self):
+        """
+
+        :return:
+        """
+        var = 'A2B'
+        model_obj = self.model.get_model_object(var)
+        self.assertIsInstance(model_obj, pycotools3.model.GlobalQuantity)
+
 
 class SetTests(_test_base._BaseTest):
     """
