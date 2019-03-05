@@ -4258,18 +4258,12 @@ class ParameterEstimation(_Task):
                         ## iterate over list. Raise ValueError is can't find experiment name
                         ## otherwise add the corresponding experiment key to the affected _experiments attr dict
                         for affected_experiment in item['affected_experiments']:  ## iterate over the list
-                            ## When we explicitely tell pycotools not to configure a experiment for a model
-                            ## we also need to tell the affected experiment section of the mapping that
-                            ## it is not needed.
-
-                            # print('aff_e', item_name, affected_experiment, item['affected_experiments'])
-                            # print('aff models', affected_experiment, item.affected_models)
-                            print('affected exp', affected_experiment, 'aff models', item.affected_models)
-                            if affected_experiment not in item.affected_models:
+                            ## ensures that the parameter being configured `item_name`
+                            ## has only experiments under its affected experiments attribute
+                            ## that are actually in the model.
+                            if affected_experiment not in self.config.models_affected_experiments[model_name]:
+                                print(f'ignoring {item_name} as {affected_experiment} not in {self.config.models_affected_experiments[model_name]}')
                                 continue
-
-                            ## if affected experiment list corresponds to 'all' (compare lists)
-                            ## then continue
 
                             if affected_experiment in self._get_validation_keys()[model_name]:
                                 raise ValueError('"{}" has been given as a validation experiment and therefore '
@@ -4311,15 +4305,16 @@ class ParameterEstimation(_Task):
                         item['affected_validation_experiments'] = [item['affected_validation_experiments']]
 
                     ignore_affected_validation_experiments = False
-                    if sorted(item['affected_experiments']) == sorted(self.config.experiment_names):
+                    if sorted(item['affected_validation_experiments']) == sorted(self.config.validation_names):
                         ignore_affected_validation_experiments = True
 
                     if not ignore_affected_validation_experiments:
                         for affected_validation_experiment in item[
                             'affected_validation_experiments']:  ## iterate over the list
 
-                            ##
-                            if affected_validation_experiment not in item.affected_models:
+                            ## Analogous to affected_experiments above
+                            if affected_validation_experiment not in self.config.models_affected_validation_experiments[model_name]:
+                                print(f'ignoring {item_name} as {affected_experiment} not in {self.config.models_affected_experiments[model_name]}')
                                 continue
 
                             if affected_validation_experiment in self._get_experiment_keys()[model_name]:

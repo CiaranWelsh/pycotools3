@@ -242,7 +242,6 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
         self.assertEqual(self.config.settings.validation_weight, self.PE.config.settings.validation_weight)
 
     def test_validation_mapppings1(self):
-        # self.PE.config
         self.assertEqual(self.PE.config.datasets.validations.report3.mappings.C.object_type, 'Metabolite')
 
     def test_mappings1(self):
@@ -538,9 +537,6 @@ class ExperimentMapperTests(_test_base._BaseTest):
             if 'ADeg_k1' == i:
                 bool = True
         self.assertFalse(bool)
-
-    def test(self):
-        self.PE._map_experiments()
 
     def test_correct_number_of_experiments(self):
         """
@@ -844,7 +840,6 @@ class ExperimentMapperTests(_test_base._BaseTest):
 
         query = '//*[@name="FitItem"]'
         count = 0
-        self.PE.models.model1.model.open()
         for i in self.PE.models.model1.model.xml.xpath(query):
             if i.attrib['name'] == 'FitItem':
                 count += 1
@@ -1056,8 +1051,6 @@ class ParameterEstimationTests(_test_base._BaseTest):
         self.assertEqual(3, len(experiment_keys))
 
     def test_number_of_affected_experiments_is_correct(self):
-        # self.PE.write_config_file()
-
         count = 0
         for i in self.PE.models.model1.model.xml.findall('.//*[@name="Affected Experiments"]'):
             # print(i, i.attrib)
@@ -1065,25 +1058,19 @@ class ParameterEstimationTests(_test_base._BaseTest):
                 print(j, j.attrib)
                 count += 1
 
-        # self.PE.models.model1.model.open()
-
         ## only 1 of 3 experiment datasets has affected_experiments
-        # self.assertEqual(26, count)
+        self.assertEqual(2, count)
 
     def test_number_of_affected_validation_experiments_is_correct(self):
-        # self.PE.write_config_file()
-
         count = 0
         for i in self.PE.models.model1.model.xml.findall('.//*[@name="Affected Cross Validation Experiments"]'):
             for j in i:
                 count += 1
 
         ## only 1 of 3 experiment datasets has affected_experiments
-        self.assertEqual(17, count)
+        self.assertEqual(1, count)
 
     def test_affected_experiments_for_global_quantity_A2B(self):
-        ## line 2994
-        ##4215 is the problem for this test
         experiment_keys = []
         for i in self.PE.models.model1.model.xml.findall('.//*[@name="ObjectCN"]'):
             if i.attrib['value'] == 'CN=Root,Model=TestModel1,Vector=Values[A2B],Reference=InitialValue':
@@ -1092,12 +1079,23 @@ class ParameterEstimationTests(_test_base._BaseTest):
                         for k in j:
                             experiment_keys.append(k.attrib['value'])
 
-        self.assertListEqual(sorted(['Experiment_report1', 'Experiment_report4', 'Experiment_report5']),
-                             sorted(experiment_keys))
+        self.assertListEqual([], experiment_keys)
+
+    def test_affected_experiments_for_initial_value_A(self):
+        ## line 2994
+        ##4215 is the problem for this test
+        ## and 4268
+        experiment_keys = []
+        for i in self.PE.models.model1.model.xml.findall('.//*[@name="ObjectCN"]'):
+            if i.attrib['value'] == 'CN=Root,Model=TestModel1,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=InitialConcentration':
+                for j in i.getparent():
+                    if j.attrib['name'] == 'Affected Experiments':
+                        for k in j:
+                            experiment_keys.append(k.attrib['value'])
+
+        self.assertListEqual(['Experiment_report1', 'Experiment_report4'], experiment_keys)
 
     def test_affected_validation_experiments_for_global_quantity_A2B(self):
-        # self.PE.write_config_file()
-
         count = 0
         valiadtion_keys = []
         for i in self.PE.models.model1.model.xml.findall('.//*[@name="ObjectCN"]'):
@@ -1107,8 +1105,18 @@ class ParameterEstimationTests(_test_base._BaseTest):
                         for k in j:
                             valiadtion_keys.append(k.attrib['value'])
 
-        self.assertListEqual(sorted(['Experiment_report2', 'Experiment_report3']),
-                             sorted(valiadtion_keys))
+        self.assertListEqual([], valiadtion_keys)
+
+    def test_affected_validation_experiments_for_ic_B(self):
+        valiadtion_keys = []
+        for i in self.PE.models.model1.model.xml.findall('.//*[@name="ObjectCN"]'):
+            if i.attrib['value'] == 'CN=Root,Model=TestModel1,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=InitialConcentration':
+                for j in i.getparent():
+                    if j.attrib['name'] == 'Affected Cross Validation Experiments':
+                        for k in j:
+                            valiadtion_keys.append(k.attrib['value'])
+
+        self.assertListEqual(['Experiment_report2'], valiadtion_keys)
 
     def test_insert_fit_items(self):
         '''
