@@ -2808,6 +2808,11 @@ class ParameterEstimation(_Task):
                 if self.datasets.experiments[experiment_name].affected_models == 'all':
                     self.datasets.experiments[experiment_name].affected_models = list(self.models.keys())[0] if len(
                         self.models.keys()) == 1 else list(self.models.keys())
+
+                if isinstance(self.datasets.experiments[experiment_name]['affected_models'], str):
+                    self.datasets.experiments[experiment_name]['affected_models'] = [
+                        self.datasets.experiments[experiment_name]['affected_models']]
+
                 if self.datasets.experiments[experiment_name].mappings == {}:
                     self.datasets.experiments[experiment_name].mappings = Munch.fromDict(self.defaults._mappings(
                         self.datasets.experiments[experiment_name].filename,
@@ -2941,6 +2946,7 @@ class ParameterEstimation(_Task):
                             if i not in item:
                                 item[i] = self.defaults.fit_items[i]
 
+                    # print(item['affected_experiments'])
                     if item['affected_experiments'] == 'all':
                         if isinstance(self.experiment_names, str):
                             item['affected_experiments'] = [self.experiment_names]
@@ -2995,6 +3001,12 @@ class ParameterEstimation(_Task):
                         item['affected_experiments'] = [self.experiment_names]
                     else:
                         item['affected_experiments'] = self.experiment_names
+
+                if isinstance(item['affected_experiments'], str):
+                    item['affected_experiments'] = [item['affected_experiments']]
+
+                # for affected_experiment in item['affected_experiments']:
+                #     print(affected_experiment)
 
                 if item['affected_validation_experiments'] == 'all':
                     if isinstance(self.validation_names, str):
@@ -3126,6 +3138,40 @@ class ParameterEstimation(_Task):
                 validation_names.append(i)
 
             return validation_names
+
+        @property
+        def models_affected_experiments(self):
+            """
+            Get which experiment datasets affect which models
+
+            Returns:
+                dict. Keys are model names, value are list of affected models
+            """
+            dct = {}
+            for model_name in self.models:
+                dct[model_name] = []
+                for experiment_name in self.experiments:
+                    if model_name in self.experiments[experiment_name].affected_models:
+                        dct[model_name].append(experiment_name)
+
+            return dct
+
+        @property
+        def models_affected_validation_experiments(self):
+            """
+            Get which experiment datasets affect which models
+
+            Returns:
+                dict. Keys are model names, value are list of affected models
+            """
+            dct = {}
+            for model_name in self.models:
+                dct[model_name] = []
+                for experiment_name in self.validations:
+                    if model_name in self.validations[experiment_name].affected_models:
+                        dct[model_name].append(experiment_name)
+
+            return dct
 
         @property
         def model_objects(self):
@@ -3662,7 +3708,9 @@ class ParameterEstimation(_Task):
                 if not isinstance(experiment.affected_models, list):
                     experiment.affected_models = [experiment.affected_models]
                 ## This implements the affected_models aspect of configuration for experiments
+
                 if model_name not in experiment.affected_models:
+                    print(f'{model_name} is not in {experiment.affected_models}. skipping.')
                     continue
                 ## also need to remove from affected_models attrib
                 ##todo if all remove affected experiments
@@ -4118,6 +4166,8 @@ class ParameterEstimation(_Task):
                 item = items[item_name]
                 if not isinstance(item.affected_models, list):
                     item.affected_models = [item.affected_models]
+
+
                 if model_name not in item.affected_models:
                     continue
                 ## figure out what type of variable item is and assign to component
@@ -4197,33 +4247,49 @@ class ParameterEstimation(_Task):
                     if isinstance(item['affected_experiments'], str):
                         item['affected_experiments'] = [item['affected_experiments']]
 
-                    ## iterate over list. Raise ValueError is can't find experiment name
-                    ## otherwise add the corresponding experiment key to the affected _experiments attr dict
-                    for affected_experiment in item['affected_experiments']:  ## iterate over the list
-                        ## When we explicitely tell pycotools not to configure a experiment for a model
-                        ## we also need to tell the affected experiment section of the mapping that
-                        ## it is not needed.
-                        if affected_experiment not in item.affected_models:
-                            continue
-                        if affected_experiment in self._get_validation_keys()[model_name]:
-                            raise ValueError('"{}" has been given as a validation experiment and therefore '
-                                             'I cannot add this experiment to the list of _experiments that '
-                                             'affect the {} parameter'.format(
-                                affected_experiment, component.name
-                            ))
+                    ## when the list of affected experiments equals the set of experiment names
+                    ## provided by the user we can just skip as the default behaviour is
+                    ## for all experiments to affect a parameter when this field is empty
+                    ignore_affected_experiments = False
+                    if sorted(item['affected_experiments']) == sorted(self.config.experiment_names):
+                        ignore_affected_experiments = True
 
-                        if affected_experiment not in self._get_experiment_keys()[model_name]:
-                            raise ValueError('"{}" (type({}))is not one of your _experiments. These are '
-                                             'your valid experimments: "{}"'.format(
-                                affected_experiment, type(affected_experiment),
-                                self._get_experiment_keys()[model_name].keys()
-                            ))
+                    if not ignore_affected_experiments:
+                        ## iterate over list. Raise ValueError is can't find experiment name
+                        ## otherwise add the corresponding experiment key to the affected _experiments attr dict
+                        for affected_experiment in item['affected_experiments']:  ## iterate over the list
+                            ## When we explicitely tell pycotools not to configure a experiment for a model
+                            ## we also need to tell the affected experiment section of the mapping that
+                            ## it is not needed.
 
-                        affected_experiments_attr[affected_experiment] = {}
-                        affected_experiments_attr[affected_experiment]['name'] = 'Experiment Key'
-                        affected_experiments_attr[affected_experiment]['type'] = 'key'
-                        affected_experiments_attr[affected_experiment]['value'] = \
-                            self._get_experiment_keys()[model_name][affected_experiment]
+                            # print('aff_e', item_name, affected_experiment, item['affected_experiments'])
+                            # print('aff models', affected_experiment, item.affected_models)
+                            print('affected exp', affected_experiment, 'aff models', item.affected_models)
+                            if affected_experiment not in item.affected_models:
+                                continue
+
+                            ## if affected experiment list corresponds to 'all' (compare lists)
+                            ## then continue
+
+                            if affected_experiment in self._get_validation_keys()[model_name]:
+                                raise ValueError('"{}" has been given as a validation experiment and therefore '
+                                                 'I cannot add this experiment to the list of _experiments that '
+                                                 'affect the {} parameter'.format(
+                                    affected_experiment, component.name
+                                ))
+
+                            if affected_experiment not in self._get_experiment_keys()[model_name]:
+                                raise ValueError('"{}" (type({}))is not one of your _experiments. These are '
+                                                 'your valid experimments: "{}"'.format(
+                                    affected_experiment, type(affected_experiment),
+                                    self._get_experiment_keys()[model_name].keys()
+                                ))
+
+                            affected_experiments_attr[affected_experiment] = {}
+                            affected_experiments_attr[affected_experiment]['name'] = 'Experiment Key'
+                            affected_experiments_attr[affected_experiment]['type'] = 'key'
+                            affected_experiments_attr[affected_experiment]['value'] = \
+                                self._get_experiment_keys()[model_name][affected_experiment]
 
                 ## add affected _experiments to element
                 affected_experiments_element = etree.SubElement(fit_item_element, 'ParameterGroup',
@@ -4244,32 +4310,36 @@ class ParameterEstimation(_Task):
                     if isinstance(item['affected_validation_experiments'], str):
                         item['affected_validation_experiments'] = [item['affected_validation_experiments']]
 
-                    ## iterate over list. Raise ValueError is can't find experiment name
-                    ## otherwise add the corresponding experiment key to the affected _experiments attr dict
-                    for affected_validation_experiment in item[
-                        'affected_validation_experiments']:  ## iterate over the list
+                    ignore_affected_validation_experiments = False
+                    if sorted(item['affected_experiments']) == sorted(self.config.experiment_names):
+                        ignore_affected_validation_experiments = True
 
-                        if affected_validation_experiment not in item.affected_models:
-                            continue
+                    if not ignore_affected_validation_experiments:
+                        for affected_validation_experiment in item[
+                            'affected_validation_experiments']:  ## iterate over the list
 
-                        if affected_validation_experiment in self._get_experiment_keys()[model_name]:
-                            raise ValueError('"{}" has been given as an experiment and therefore '
-                                             'I cannot add this experiment to the list of validation _experiments that '
-                                             'affect the {} parameter'.format(
-                                affected_validation_experiment, component.name
-                            ))
+                            ##
+                            if affected_validation_experiment not in item.affected_models:
+                                continue
 
-                        if affected_validation_experiment not in self._get_validation_keys()[model_name]:
-                            raise ValueError('"{}" is not one of your _experiments. These are '
-                                             'your valid experimments: "{}"'.format(
-                                affected_validation_experiment, self._get_validation_keys()[model_name].keys()
-                            ))
+                            if affected_validation_experiment in self._get_experiment_keys()[model_name]:
+                                raise ValueError('"{}" has been given as an experiment and therefore '
+                                                 'I cannot add this experiment to the list of validation _experiments that '
+                                                 'affect the {} parameter'.format(
+                                    affected_validation_experiment, component.name
+                                ))
 
-                        affected_validation_experiments_attr[affected_validation_experiment] = {}
-                        affected_validation_experiments_attr[affected_validation_experiment]['name'] = 'Experiment Key'
-                        affected_validation_experiments_attr[affected_validation_experiment]['type'] = 'key'
-                        affected_validation_experiments_attr[affected_validation_experiment]['value'] = \
-                            self._get_validation_keys()[model_name][affected_validation_experiment]
+                            if affected_validation_experiment not in self._get_validation_keys()[model_name]:
+                                raise ValueError('"{}" is not one of your _experiments. These are '
+                                                 'your valid experimments: "{}"'.format(
+                                    affected_validation_experiment, self._get_validation_keys()[model_name].keys()
+                                ))
+
+                            affected_validation_experiments_attr[affected_validation_experiment] = {}
+                            affected_validation_experiments_attr[affected_validation_experiment]['name'] = 'Experiment Key'
+                            affected_validation_experiments_attr[affected_validation_experiment]['type'] = 'key'
+                            affected_validation_experiments_attr[affected_validation_experiment]['value'] = \
+                                self._get_validation_keys()[model_name][affected_validation_experiment]
 
                 affected_cross_validation_experiments = {'name': 'Affected Cross Validation Experiments'}
 

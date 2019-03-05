@@ -527,9 +527,8 @@ class Parse(object):
                           tasks.ParameterEstimation,
                           str,
                           Parse,
-                          tasks.ProfileLikelihood,
                           pandas.DataFrame,
-                          tasks.ChaserParameterEstimations]
+                          ]
 
         if type(self.cls_instance) not in accepted_types:
             raise errors.InputError('{} not in {}'.format(
@@ -543,22 +542,6 @@ class Parse(object):
                 raise errors.InputError(
                     'plotting functions are only available for scans (not repeat or random distributions)'
                 )
-
-        if isinstance(self.cls_instance, tasks.ProfileLikelihood):
-            if self.cls_instance.index == 'current_parameters':
-                if self.rss_value is None:
-                    raise errors.InputError('When parsing from the ProfileLikelihood class and the '
-                                            'profile likelihood was set to "current parameters" '
-                                            'you must manually specify an argument to the "rss_value" keyword '
-                                            'argument. This is because it is not inferable from the model without'
-                                            ' being first written to file.')
-
-                # if self.num_data_points is None:
-                #     raise errors.InputError(
-                #         'When parsing from the ProfileLikelihood class and you used the "currrent_parameter" '
-                #         'setting, it is necessary to specify the number of data points in the "num_data_points" '
-                #         'argument because it cannot be inferred automatically.'
-                #     )
 
         self.data = self.parse()
 
