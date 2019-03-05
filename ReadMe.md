@@ -13,7 +13,7 @@ Pycotools3 is a set of tools for interacting with [COPASI simulation software](h
 Since publication, the pycotools project has moved to this pycotools3 repository, which is maintained separetly from pycotools. The main differences are that pycotools3 works on Python 3 and the interface for configuring parameter estimations and profile likelihoods has been improved. Please refer to the **[pycotools3 documentation](http://pycotools3.readthedocs.io/en/latest/)** for more detail.
 
 ### Support 
-I monitor stackoverflow questions for `pycotools` tags so you can ask a question there. Additionally, you may contact me on ciaran.welsh@newcastle.ac.uk. 
+I monitor stackoverflow questions for `pycotools` tags so you can ask a question there. Additionally, you may contact me on ciaran.welsh@newcastle.ac.uk or post an issue with any bugs you may find.
 
 Contributions, ideas, suggestions, feature requests or anything generally geared towards improving the package are welcome. 
 
