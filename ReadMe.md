@@ -8,7 +8,7 @@
 
 # Pycotools3
 
-Pycotools3 is a set of tools for interacting with [COPASI simulation software](http://copasi.org/) from Python 3. The old repository supports Python 2 only and can be found [here](https://github.com/CiaranWelsh/pycotools) with documentation [here](). This is also the version that is described in detail in the the [bioinformatics publication](https://academic.oup.com/bioinformatics/advance-article/doi/10.1093/bioinformatics/bty409/5001390). 
+Pycotools3 is a set of tools for interacting with [COPASI simulation software](http://copasi.org/) from Python 3. The old repository supports Python 2 only and can be found [here](https://github.com/CiaranWelsh/pycotools). This is also the version that is described in detail in the the [bioinformatics publication](https://academic.oup.com/bioinformatics/advance-article/doi/10.1093/bioinformatics/bty409/5001390). 
 
 Since publication, the pycotools project has moved to this pycotools3 repository, which is maintained separetly from pycotools. The main differences are that pycotools3 works on Python 3 and the interface for configuring parameter estimations and profile likelihoods has been improved. Please refer to the **[pycotools3 documentation](http://pycotools3.readthedocs.io/en/latest/)** for more detail.
 
