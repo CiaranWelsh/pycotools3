@@ -1435,32 +1435,6 @@ class BuildWithAntimony(unittest.TestCase):
 
 
 
-# class FitItemOrderWithConstraingsTests(unittest.TestCase):
-#
-#     def setUp(self):
-#         self.antimony_str = 'S1 -> S2; k1*S1; k1 = 0.1; S1 = 10'
-#         self.cps = os.path.join(os.path.dirname(__file__), 'antimony_model.cps')
-#         if os.path.isfile(self.cps):
-#             os.remove(self.cps)
-#
-#         with pycotools3.model.BuildAntimony(self.cps) as loader:
-#             mod = loader.load(
-#                 'S1 -> S2; k1*S1; k1 = 0.1; S1 = 10'
-#             )
-#
-#         ## simulate some data
-#         pycotools3.tasks.TimeCourse(mod, end=100, intervals=100, step_size=1)
-#
-#
-#
-#     def tearDown(self):
-#         if os.path.isfile(self.cps):
-#             os.remove(self.cps)
-#
-#     def test(self):
-#         pass
-
-
 if __name__ == '__main__':
     # pass
     unittest.main()

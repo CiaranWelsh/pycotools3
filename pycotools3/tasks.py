@@ -752,7 +752,8 @@ class Reports(_Task):
     controlled by the report_type key word. The following are valid types of
     report:
     
-    .. _report_kwargs:
+    .. report_kwargs_:
+
     
     ===========================     ==============================================
     Report Types                    Description
@@ -798,11 +799,13 @@ class Reports(_Task):
 
     def __init__(self, model, **kwargs):
         """
+        A class for configuring reports
+        Args:
+            model(:py:class:`model.Model`):
+                Model to add report configuration to
 
-        :param model:
-            :py:class:`model.Model`.
-
-        :param kwargs: see :ref:`report_kwargs`
+            **kwargs:
+                Arguments for report
         """
         # super(Reports, self).__init__(model, **kwargs)
         self.model = self.read_model(model)
@@ -810,6 +813,7 @@ class Reports(_Task):
         self.default_properties = {'metabolites': self.model.metabolites,
                                    'global_quantities': self.model.global_quantities,
                                    'local_parameters': self.model.local_parameters,
+                                   'compartments': self.model.compartments,
                                    'quantity_type': 'concentration',
                                    'report_name': None,
                                    'append': False,
@@ -1268,9 +1272,7 @@ class TimeCourse(_Task):
     of copasi's solvers are supported and available via the `method` kwarg.
 
     .. _timecourse_kwargs:
-    
-    TimeCourse Kwargs
-    -----------------
+
     
     ===========================     ==============================================
     TimeCourse Kwargs               Description
@@ -1301,7 +1303,7 @@ class TimeCourse(_Task):
     run                             Default: True
     correct_headers                 Default: True
     save                            Default: False
-    <report_kwargs>                 Arguments for :ref:`report_kwargs` are also
+    <report_kwargs>                 Arguments for :ref:` report_kwargs <report_kwargs>` are also
                                     accepted here
     ===========================     ==============================================
 
@@ -1856,11 +1858,11 @@ class Scan(_Task):
     
     .. _scan_kwargs:
     
-    Scan Kwargs
-    ===========
+    Scan kwargs
+    -----------
     
     ===========================     ==============================================
-    Scan Kwargs               Description
+    Scan Kwargs                     Description
     ===========================     ==============================================
     update_model                    Default: False
     subtask                         Default: parameter_estimation
@@ -2467,8 +2469,6 @@ class ParameterEstimation(_Task):
 
         Stores all the settings needed for configuration of a parameter estimation
         using COPASI.
-
-        .. _ParameterEstimation.Config::
 
         Examples:
             >>> ## create a model
@@ -4175,6 +4175,7 @@ class ParameterEstimation(_Task):
                 ## while we are distinguishing between component type we retrieve its
                 ## model value so if the user specifies that the start value should be the
                 ## model value, we can use the model_value that is collected here
+
                 if item_name in mod.get_variable_names('m'):
                     component = [i for i in mod.metabolites if i.name == item_name][0]
                     item_type = 'metabolite'
@@ -4190,7 +4191,7 @@ class ParameterEstimation(_Task):
                 elif item_name in mod.get_variable_names('l'):
                     component = [i for i in mod.local_parameters if i.global_name == item_name][0]
                     item_type = 'local_parameter'
-                    model_value = mod.get(item_type, item_name, by='name').value
+                    model_value = mod.get(item_type, item_name, by='global_name').value
 
                 elif item_name in mod.get_variable_names('g'):
                     component = [i for i in mod.global_quantities if i.name == item_name][0]
@@ -4387,7 +4388,7 @@ class ParameterEstimation(_Task):
                     subA4 = {'type': 'cn',
                              'name': 'ObjectCN',
                              'value': '{},{}'.format(mod.reference,
-                                                     component.initial_volume_reference)}
+                                                     component.initial_volume_reference())}
 
                 else:
                     raise errors.InputError('{} is not a valid parameter for estimation'.format(list(item)))
@@ -4824,7 +4825,7 @@ class ParameterEstimation(_Task):
 
     class Context:
         """
-        High level interface to create a :py:class:`ParameterEstimation.Config` object.
+        A high level interface to create a :py:class:`ParameterEstimation.Config` object.
 
         Enables the construction of a :py:class:`ParameterEstimation.Config` object
         assuming one of several common patterns of usage.
@@ -4847,6 +4848,25 @@ class ParameterEstimation(_Task):
                     config = context.get_config()
 
                 pe = ParameterEstimation(config)
+
+            Or for profile likelihoods on the first model `mod1`
+
+            .. code-block python
+
+               with ParameterEstimation.Context(
+                   mod, experiment_filename,
+                   context='pl', parameters='gm'
+               ) as context:
+                   context.set('method', 'hooke_jeeves')
+                   context.set('pl_lower_bound', 1000)
+                   context.set('pl_upper_bound', 1000)
+                   context.set('number_of_steps', 25)
+                   context.set('run_mode', True)
+                   config = context.get_config()
+
+                pe = ParameterEstimation(config)
+
+
         """
 
         acceptable_context_args = {
@@ -4882,12 +4902,6 @@ class ParameterEstimation(_Task):
             self.validation_experiments = validation_experiments
             self.settings = settings
 
-            if self.parameters not in self.acceptable_parameters_args:
-                raise errors.InputError(
-                    f'"{self.parameters}" is an invalid argument. Please '
-                    f'choose from the following \n'
-                    f'{Munch.fromDict(self.acceptable_parameters_args).toJSON()}'
-                )
 
             self.defaults = ParameterEstimation._Defaults()
 

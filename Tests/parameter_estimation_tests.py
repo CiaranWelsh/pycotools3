@@ -833,11 +833,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
                 count += 1
         self.assertEqual(3, count)
 
-    def test_remove_fit_item(self):
-        self.PE
-
     def test_correct_number_of_fit_items(self):
-
         query = '//*[@name="FitItem"]'
         count = 0
         for i in self.PE.models.model1.model.xml.xpath(query):
@@ -1587,22 +1583,24 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
         self.assertEqual(expected_report_name, actual)
 
     def test_that_it_works(self):
+        ##compartments not being added to report?
         with ParameterEstimation.Context(
                 self.model.copasi_file,
                 [self.TC1.report_name, self.TC2.report_name,
                  self.report3, self.report4],
-                context='s', parameters='a') as context:
+                context='s', parameters='glm') as context:
             context.set('method', 'genetic_algorithm_sr')
             context.set('number_of_generations', 25)
             context.set('population_size', 14)
+            context.set('randomize_start_values', True)
             context.set('copy_number', 3)
             context.set('run_mode', True)
             config = context.get_config()
 
         pe = ParameterEstimation(config)
-
-        # data = pycotools3.viz.Parse(pe)
-        # print(data)
+        pe.config.models.test_model.model.open()
+        data = pycotools3.viz.Parse(pe)
+        self.assertEqual(3, data['test_model'].shape[0])
 
 
 
@@ -2139,8 +2137,55 @@ class ParameterEstimationTestsMoreThanOneModel(unittest.TestCase):
         [self.assertTrue('[k2]' not in i) for i in fit_items]
 
 
+class TestModelBuildWithOOInterface(unittest.TestCase):
+    def setUp(self):
+        ## Choose a working directory for model
+        working_directory = os.path.abspath('')
+        copasi_file = os.path.join(working_directory, 'MichaelisMenten.cps')
 
-##todo use mocking for running tests.
+        if os.path.isfile(copasi_file):
+            os.remove(copasi_file)
+
+        kf = 0.01
+        kb = 0.1
+        kcat = 0.05
+        with pycotools3.model.Build(copasi_file) as m:
+            m.name = 'Michaelis-Menten'
+            m.add('compartment', name='Cell')
+
+            m.add('metabolite', name='P', concentration=0)
+            m.add('metabolite', name='S', concentration=30)
+            m.add('metabolite', name='E', concentration=10)
+            m.add('metabolite', name='ES', concentration=0)
+
+            m.add('reaction', name='S bind E', expression='S + E -> ES', rate_law='kf*S*E',
+                  parameter_values={'kf': kf})
+
+            m.add('reaction', name='S unbind E', expression='ES -> S + E', rate_law='kb*ES',
+                  parameter_values={'kb': kb})
+
+            m.add('reaction', name='ES produce P', expression='ES -> P + E', rate_law='kcat*ES',
+                  parameter_values={'kcat': kcat})
+
+        self.mm = pycotools3.model.Model(copasi_file)
+        self.fname = os.path.join(working_directory, 'data.txt')
+        self.mm.simulate(0, 10, 11, report_name=self.fname)
+
+    def test(self):
+        with ParameterEstimation.Context(
+                self.mm.copasi_file, self.fname,
+                context='s', parameters='l') as context:
+            context.randomize_start_values = True
+            context.lower_bound = 0.01
+            context.upper_bound = 100
+            context.run_mode = True
+            config = context.get_config()
+        PE = ParameterEstimation(config)
+        self.assertIsInstance(PE, ParameterEstimation)
+
+
+
+    ##todo use mocking for running tests.
 
 
 if __name__ == '__main__':

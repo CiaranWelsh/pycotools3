@@ -14,12 +14,6 @@ pycotools3.tasks.ParameterEstimation.Context
    .. autosummary::
    
       ~Context.__init__
-      ~Context.add_experiments
-      ~Context.add_models
-      ~Context.add_setting
-      ~Context.add_settings
-      ~Context.add_validation_experiments
-      ~Context.add_working_directory
       ~Context.get_config
       ~Context.set
    
