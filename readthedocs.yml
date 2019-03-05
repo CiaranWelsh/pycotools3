@@ -1,7 +1,14 @@
+version: 2
+
 build:
     image: 
+        - latest
         - master
         - develop
 
 python:
     version: 3.6
+    install:
+    - method: pip
+    
+    
