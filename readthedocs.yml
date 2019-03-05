@@ -1,7 +1,9 @@
+version: 2
+
 build:
-    image: 
-        - master
-        - develop
+    image: latest
 
 python:
     version: 3.6
+    
+    
