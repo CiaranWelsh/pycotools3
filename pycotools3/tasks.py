@@ -2974,7 +2974,6 @@ class ParameterEstimation(_Task):
             ## remove fit items if prefix condition is not satisified
             for fit_item in self.items.fit_items:
                 item = self.items.fit_items.get(fit_item)
-
                 self.defaults.fit_items['upper_bound'] = self.settings.upper_bound
                 self.defaults.fit_items['lower_bound'] = self.settings.lower_bound
 
