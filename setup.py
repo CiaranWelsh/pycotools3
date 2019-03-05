@@ -41,8 +41,8 @@ global __version__
 ## master: 2.0.1
 # version
 MAJOR = 2
-MINOR = 0
-MICRO = 5
+MINOR = 1
+MICRO = 1
 
 __version__ = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
