@@ -1600,7 +1600,7 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
         pe = ParameterEstimation(config)
         pe.config.models.test_model.model.open()
         data = pycotools3.viz.Parse(pe)
-        self.assertEqual(3, data['test_model'])
+        self.assertEqual(3, data['test_model'].shape[0])
 
 
 
@@ -2183,19 +2183,6 @@ class TestModelBuildWithOOInterface(unittest.TestCase):
         PE = ParameterEstimation(config)
         self.assertIsInstance(PE, ParameterEstimation)
 
-    def test_insert_locals(self):
-        with ParameterEstimation.Context(
-                self.mm.copasi_file, self.fname,
-                context='s', parameters='l') as context:
-            context.randomize_start_values = True
-            context.lower_bound = 0.01
-            context.upper_bound = 100
-            context.run_mode = True
-            config = context.get_config()
-        PE = ParameterEstimation(config)
-        ##index=0 for best parameter set (i.e. lowest RSS)
-        model.InsertParameters(
-            self.mm, parameter_path=PE.results_directory, index=0, inplace=True)
 
 
     ##todo use mocking for running tests.
