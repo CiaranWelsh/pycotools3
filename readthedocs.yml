@@ -3,8 +3,7 @@ version: 2
 build:
     image: 
         - latest
-        - master
-        - develop
+        - stable
 
 python:
     version: 3.6
