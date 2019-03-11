@@ -58,4 +58,6 @@ docs/build/*
 *.ipynb_checkpoints
 *.log
 docs/source/Tutorials/*.ipynb_checkpoints
+build
+
 
