@@ -1598,7 +1598,6 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
             config = context.get_config()
 
         pe = ParameterEstimation(config)
-        pe.config.models.test_model.model.open()
         data = pycotools3.viz.Parse(pe)
         self.assertEqual(3, data['test_model'].shape[0])
 
