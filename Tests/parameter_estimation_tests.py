@@ -242,7 +242,6 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
         self.assertEqual(self.config.settings.validation_weight, self.PE.config.settings.validation_weight)
 
     def test_validation_mapppings1(self):
-        self.PE.config.models.model1.model.open()
         self.assertEqual(self.PE.config.datasets.validations.report3.mappings.C.object_type, 'Metabolite')
 
     def test_mappings1(self):
