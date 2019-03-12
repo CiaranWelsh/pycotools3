@@ -2257,25 +2257,25 @@ class CrossValidationContextTests(_test_base._BaseTest):
         data = pycotools3.viz.Parse(pe).concat()
         self.assertLess(data.loc['3_0', 0]['RSS'], data.loc['3_1', 0]['RSS'])
 
-    def test_depth_is_2(self):
-        with pycotools3.tasks.ParameterEstimation.Context(
-            self.model, self.experiments, context='cv', parameters='gm'
-        ) as context:
-            context.set('randomize_start_values', True)
-            context.set('method', 'genetic_algorithm')
-            context.set('population_size', 20)
-            context.set('number_of_generations', 50)
-            context.set('swarm_size', 100)
-            context.set('iteration_limit', 2000)
-            context.set('copy_number', 3)
-            context.set('validation_threshold', 500)
-            context.set('cross_validation_depth', 2)
-            context.set('run_mode', True)
-            context.set('lower_bound', 1e-3)
-            context.set('upper_bound', 1e2)
-            config = context.get_config()
-
-        pe = ParameterEstimation(config)
+    # def test_depth_is_2(self):
+    #     with pycotools3.tasks.ParameterEstimation.Context(
+    #         self.model, self.experiments, context='cv', parameters='gm'
+    #     ) as context:
+    #         context.set('randomize_start_values', True)
+    #         context.set('method', 'genetic_algorithm')
+    #         context.set('population_size', 20)
+    #         context.set('number_of_generations', 50)
+    #         context.set('swarm_size', 100)
+    #         context.set('iteration_limit', 2000)
+    #         context.set('copy_number', 3)
+    #         context.set('validation_threshold', 500)
+    #         context.set('cross_validation_depth', 1)
+    #         context.set('run_mode', True)
+    #         context.set('lower_bound', 1e-3)
+    #         context.set('upper_bound', 1e2)
+    #         config = context.get_config()
+    #
+    #     pe = ParameterEstimation(config)
         # data = pycotools3.viz.Parse(pe).concat()
         # print(data)
         # self.assertLess(data.loc['3_0', 0]['RSS'], data.loc['3_1', 0]['RSS'])

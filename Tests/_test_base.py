@@ -76,8 +76,8 @@ class _BaseTest(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        tear_down = False
-        delete_dirs = False
+        tear_down = True
+        delete_dirs = True
 
         if tear_down:
             dire = os.path.dirname(__file__)
