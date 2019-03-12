@@ -287,6 +287,12 @@ class BuildAntimony(object):
         ## place for saving any exceptions that occur
         self.E = None
 
+        LOG.warning(
+            'The BuildAntimony context manager is deprecated '
+            'and will be removed in future versions. Please use'
+            ' model.loada instead.'
+        )
+
     def __enter__(self):
         return self
 
@@ -341,6 +347,50 @@ class BuildAntimony(object):
 
         ## return the model so that we can change its name on exit
         return self.mod
+
+
+def loada(antimony_str, copasi_file):
+    """
+    Build a copasi/pycotools model from antimony string.
+
+    Analogous to the tellurium.loada function. This function
+    creates a COPASI model and parses it into Pycotools from
+    and antimony string using CopasiSE and tellurium.loada
+
+    Args:
+        antimony_str (str): A valid antimony string encoding a model
+        copasi_file (str): path to copasi file
+
+    Returns:
+        A :py:class:`model.Model` object
+    """
+    ## wrap conversion function in try block
+    ## so we can store the exception
+    ## for raising in the __exit__ function
+    ## Otherwise the error gets suppressed.
+    sbml_file = os.path.splitext(copasi_file)[0] + '.sbml'
+    sbml_str = te.antimonyToSBML(antimony_str)
+
+    ## save sbml
+    with open(sbml_file, 'w') as f:
+        f.write(sbml_str)
+
+    ## ensure sbml exists. This code should never be invoked
+    if not os.path.isfile(sbml_file):
+        raise errors.FileDoesNotExistError('Sbml file does not exist')
+
+    ## Perform conversion wtih CopasiSE
+    cmd = f"{COPASISE} -i {sbml_file}"
+    os.system(cmd)
+
+    ## copy from temporary copasiSE output name to user specified name
+    copasiSE_output_file = copasi_file[:-4] + '.sbml.cps'
+
+    copy(copasiSE_output_file, copasi_file)
+    os.remove(copasiSE_output_file)
+
+    ## create a pycotools3 model from the resulting copasi_file
+    return Model(copasi_file)
 
 
 class ImportSBML(object):
@@ -448,6 +498,7 @@ class Model(_base._Base):
     =======================     =======================
 
     """
+
     def __init__(self, copasi_file, quantity_type='concentration',
                  new=False, **kwargs):
         """
@@ -2679,8 +2730,6 @@ class InsertParameters(object):
         return self.model
 
 
-
-
 @mixin(ReadModelMixin)
 @mixin(ComparisonMethodsMixin)
 class Compartment(object):
@@ -4868,7 +4917,6 @@ class ParameterSet(object):
 
         print((etree.tostring(parameter_set, pretty_print=True)))
 
-
 #
 #
 
@@ -4880,5 +4928,3 @@ class ParameterSet(object):
 
 ## implement means ofadding initial expresion
 ## to each ompontnt
-
-

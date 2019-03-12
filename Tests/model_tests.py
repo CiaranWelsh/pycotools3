@@ -1431,7 +1431,10 @@ class BuildWithAntimony(unittest.TestCase):
                 'S1 -> S2; k1*S1; k1 = 0.1; S1 = 10'
             )
         self.assertTrue(type(mod), pycotools3.model.Model)
-        # print pycotools3.viz.PlotTimeCourse(tasks.timecourse(end=100, intervals=100, step_size=1), savefig=True)
+
+    def test_loada(self):
+        mod = pycotools3.model.loada(self.antimony_str, self.cps)
+        self.assertTrue(type(mod), pycotools3.model.Model)
 
 
 

@@ -242,6 +242,7 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
         self.assertEqual(self.config.settings.validation_weight, self.PE.config.settings.validation_weight)
 
     def test_validation_mapppings1(self):
+        self.PE.config.models.model1.model.open()
         self.assertEqual(self.PE.config.datasets.validations.report3.mappings.C.object_type, 'Metabolite')
 
     def test_mappings1(self):
@@ -1083,7 +1084,8 @@ class ParameterEstimationTests(_test_base._BaseTest):
         ## and 4268
         experiment_keys = []
         for i in self.PE.models.model1.model.xml.findall('.//*[@name="ObjectCN"]'):
-            if i.attrib['value'] == 'CN=Root,Model=TestModel1,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=InitialConcentration':
+            if i.attrib[
+                'value'] == 'CN=Root,Model=TestModel1,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=InitialConcentration':
                 for j in i.getparent():
                     if j.attrib['name'] == 'Affected Experiments':
                         for k in j:
@@ -1106,7 +1108,8 @@ class ParameterEstimationTests(_test_base._BaseTest):
     def test_affected_validation_experiments_for_ic_B(self):
         valiadtion_keys = []
         for i in self.PE.models.model1.model.xml.findall('.//*[@name="ObjectCN"]'):
-            if i.attrib['value'] == 'CN=Root,Model=TestModel1,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=InitialConcentration':
+            if i.attrib[
+                'value'] == 'CN=Root,Model=TestModel1,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=InitialConcentration':
                 for j in i.getparent():
                     if j.attrib['name'] == 'Affected Cross Validation Experiments':
                         for k in j:
@@ -1287,6 +1290,7 @@ class ParameterEstimationTests(_test_base._BaseTest):
                 if j.attrib['name'] == 'StartValue':
                     actual.append(j.attrib['value'])
         self.assertListEqual(expected, actual)
+
 
 class ParameterEstimationContextTests(_test_base._BaseTest):
     def setUp(self):
@@ -1600,7 +1604,6 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
         pe = ParameterEstimation(config)
         data = pycotools3.viz.Parse(pe)
         self.assertEqual(3, data['test_model'].shape[0])
-
 
 
 class ParameterEstimationTestsWithDifferentModel(unittest.TestCase):
@@ -1955,6 +1958,7 @@ class UseConfigMoreThanOnceTest(_test_base._BaseTest):
         actual = data['test_model'].shape[0]
         self.assertEqual(expected, actual)
 
+
 class TestThatRemoveExperimentsWorksCorrectly(_test_base._BaseTest):
     def setUp(self):
         super(TestThatRemoveExperimentsWorksCorrectly, self).setUp()
@@ -1970,7 +1974,7 @@ class TestThatRemoveExperimentsWorksCorrectly(_test_base._BaseTest):
             ),
             datasets=dict(
                 experiments=dict(
-                    data=dict( ## Note that the name of this dataset is different to timecourse.txt
+                    data=dict(  ## Note that the name of this dataset is different to timecourse.txt
                         filename=self.fname,
                     ),
                 )
@@ -2066,8 +2070,8 @@ class ParameterEstimationTestsMoreThanOneModel(unittest.TestCase):
         self.mod2.simulate(0, 9, 1, report_name=self.fname2)
 
         with ParameterEstimation.Context(
-            [self.mod1, self.mod2], [self.fname1, self.fname2],
-            context='s', parameters='g'
+                [self.mod1, self.mod2], [self.fname1, self.fname2],
+                context='s', parameters='g'
         ) as context:
             self.config = context.get_config()
 
@@ -2182,9 +2186,99 @@ class TestModelBuildWithOOInterface(unittest.TestCase):
         PE = ParameterEstimation(config)
         self.assertIsInstance(PE, ParameterEstimation)
 
-
-
     ##todo use mocking for running tests.
+
+
+class CrossValidationContextTests(_test_base._BaseTest):
+    def setUp(self):
+        super(CrossValidationContextTests, self).setUp()
+
+
+        self.ant = self.ant.replace('ADeg: A => ; nuc*ADeg_k1*A;', '')
+        self.ant = self.ant.replace('ADeg_k1 = 0.1;', '')
+        self.model = pycotools3.model.loada(self.ant, copasi_file=self.copasi_file)
+
+        self.tc_fname1 = os.path.join(os.path.dirname(__file__), 'timecourse1.txt')
+        self.tc_fname2 = os.path.join(os.path.dirname(__file__), 'timecourse2.txt')
+        self.ss_fname1 = os.path.join(os.path.dirname(__file__), 'steady_state1.txt')
+        self.ss_fname2 = os.path.join(os.path.dirname(__file__), 'steady_state2.txt')
+
+        self.model.simulate(0, 5, 0.1, report_name=self.tc_fname1)
+        self.model.simulate(0, 10, 0.5, report_name=self.tc_fname2)
+        dct1 = {
+            'A': 0.07,
+            'B': 0.06,
+            'C': 2.8
+        }
+        dct2 = {
+            'A': 846,
+            'B': 697,
+            'C': 739
+        }
+        self.ss1 = pandas.DataFrame(dct1, index=[0])
+        self.ss1.to_csv(self.ss_fname1, sep='\t', index=False)
+        self.ss2 = pandas.DataFrame(dct2, index=[0])
+        self.ss2.to_csv(self.ss_fname2, sep='\t', index=False)
+        self.experiments = [self.tc_fname1, self.tc_fname2,
+                            self.ss_fname1, self.ss_fname2]
+
+        self.expected_experiments = {
+            '4_0': ('timecourse1', 'timecourse2', 'steady_state1', 'steady_state2'),
+            '3_0': ('timecourse1', 'timecourse2', 'steady_state1'),
+            '3_1': ('timecourse1', 'timecourse2', 'steady_state2'),
+            '3_2': ('timecourse1', 'steady_state1', 'steady_state2'),
+            '3_3': ('timecourse2', 'steady_state1', 'steady_state2')}
+        self.expected_validations = {
+            '4_0': [],
+            '3_0': ['steady_state2'],
+            '3_1': ['steady_state1'],
+            '3_2': ['timecourse2'],
+            '3_3': ['timecourse1']}
+
+    def test_simple(self):
+        with pycotools3.tasks.ParameterEstimation.Context(
+            self.model, self.experiments, context='cv', parameters='gm'
+        ) as context:
+            context.set('randomize_start_values', True)
+            context.set('method', 'genetic_algorithm')
+            context.set('population_size', 20)
+            context.set('number_of_generations', 50)
+            context.set('swarm_size', 100)
+            context.set('iteration_limit', 2000)
+            context.set('copy_number', 3)
+            context.set('validation_threshold', 500)
+            context.set('cross_validation_depth', 1)
+            context.set('run_mode', True)
+            context.set('lower_bound', 1e-3)
+            context.set('upper_bound', 1e2)
+            config = context.get_config()
+
+        pe = ParameterEstimation(config)
+        data = pycotools3.viz.Parse(pe).concat()
+        self.assertLess(data.loc['3_0', 0]['RSS'], data.loc['3_1', 0]['RSS'])
+
+    def test_depth_is_2(self):
+        with pycotools3.tasks.ParameterEstimation.Context(
+            self.model, self.experiments, context='cv', parameters='gm'
+        ) as context:
+            context.set('randomize_start_values', True)
+            context.set('method', 'genetic_algorithm')
+            context.set('population_size', 20)
+            context.set('number_of_generations', 50)
+            context.set('swarm_size', 100)
+            context.set('iteration_limit', 2000)
+            context.set('copy_number', 3)
+            context.set('validation_threshold', 500)
+            context.set('cross_validation_depth', 2)
+            context.set('run_mode', True)
+            context.set('lower_bound', 1e-3)
+            context.set('upper_bound', 1e2)
+            config = context.get_config()
+
+        pe = ParameterEstimation(config)
+        # data = pycotools3.viz.Parse(pe).concat()
+        # print(data)
+        # self.assertLess(data.loc['3_0', 0]['RSS'], data.loc['3_1', 0]['RSS'])
 
 
 if __name__ == '__main__':

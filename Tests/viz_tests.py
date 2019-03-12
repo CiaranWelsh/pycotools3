@@ -23,7 +23,6 @@ Module that tests the operations of the _Base base test
 
 """
 import pandas
-import pycotools3
 from pycotools3 import model, tasks, viz
 from Tests import _test_base
 import unittest
@@ -40,7 +39,7 @@ class ParseDataTests(_test_base._BaseTest):
         fname = os.path.join(os.path.dirname(__file__), 'report1.txt')
         data = self.model.simulate(0, 50, 1, report_name=fname)
 
-        with pycotools3.tasks.ParameterEstimation.Context(
+        with tasks.ParameterEstimation.Context(
                 self.model, fname, context='s', parameters='g',
         ) as context:
             context.set('method', 'genetic_algorithm')
@@ -54,7 +53,7 @@ class ParseDataTests(_test_base._BaseTest):
             context.set('run_mode', True)
             config = context.get_config()
 
-        self.pe = pycotools3.tasks.ParameterEstimation(config)
+        self.pe = tasks.ParameterEstimation(config)
 
     def test_parse_parameter_estimation_data(self):
         """
@@ -67,14 +66,123 @@ class ParseDataTests(_test_base._BaseTest):
         self.assertListEqual(expected, actual)
 
 
+class ParseTestsMoreThanOneModel(unittest.TestCase):
+    def setUp(self):
+        ant1 = """
+
+        model first()
+            compartment Cell = 1;
+
+            R1: A => B ; Cell * k1 * A;
+            R2: B => C ; Cell * k2 * B;
+            R3: C => A ; Cell * k3 * C;
+
+            k1 = 0.1;
+            k2 = 0.1;
+            k3 = 0.1;
+
+            A = 100;
+            B = 0;
+            C = 0;
+        end
+        """
+
+        ant2 = """
+
+        model second()
+            compartment Cell = 1;
+
+            R1: A => B ; Cell * k1 * A;
+            R2: B => C ; Cell * k2 * B;
+            R3: B => A ; Cell * k3 * B;
+
+            k1 = 0.1;
+            k2 = 0.1;
+            k3 = 0.1;
+
+            A = 100;
+            B = 0;
+            C = 0;
+        end
+        """
+        self.fname1 = os.path.join(os.path.dirname(__file__), 'first.cps')
+        self.fname2 = os.path.join(os.path.dirname(__file__), 'second.cps')
+
+        with model.BuildAntimony(self.fname1) as loader:
+            self.mod1 = loader.load(ant1)
+
+        with model.BuildAntimony(self.fname2) as loader:
+            self.mod2 = loader.load(ant2)
+
+        self.fname1 = os.path.join(os.path.dirname(__file__), 'dataset1.txt')
+        self.fname2 = os.path.join(os.path.dirname(__file__), 'dataset2.txt')
+
+        self.mod1.simulate(0, 9, 1, report_name=self.fname1)
+        self.mod2.simulate(0, 9, 1, report_name=self.fname2)
+
+        with tasks.ParameterEstimation.Context(
+                [self.mod1, self.mod2], [self.fname1, self.fname2],
+                context='s', parameters='g'
+        ) as context:
+            self.config = context.get_config()
+
+        config_dct = dict(
+            models=dict(
+                first=dict(
+                    copasi_file=self.mod1.copasi_file,
+                ),
+                second=dict(
+                    copasi_file=self.mod2.copasi_file
+                )
+            ),
+            datasets=dict(
+                experiments=dict(
+                    first_exp=dict(
+                        filename=self.fname1
+                    ),
+                    second_exp=dict(
+                        filename=self.fname2
+                    )
+                )
+            ),
+            items=dict(
+                fit_items='g'
+            ),
+            settings=dict(
+                working_directory=os.path.dirname(__file__),
+                run_mode=True,
+                method='genetic_algorithm',
+                population_size=5,
+                number_of_generations=25
+            )
+        )
+        self.config = tasks.ParameterEstimation.Config(**config_dct)
+        self.pe = tasks.ParameterEstimation(self.config)
+
+    def test_multiple_models(self):
+        """
+        I had a bug that made all models have the same
+        parameter estimation data. This is the test I used
+        to fix the bug
+        Returns:
+
+        """
+        data = viz.Parse(self.pe)
+        self.assertNotEqual(
+            float(data['first']['k1']),
+            float(data['second']['k1']),
+        )
+
+
+
 class TruncateDataTests(_test_base._BaseTest):
     def setUp(self):
         super(TruncateDataTests, self).setUp()
 
         fname = os.path.join(os.path.dirname(__file__), 'report1.txt')
-        data = self.model.simulate(0, 50, 1, report_name=fname)
+        self.model.simulate(0, 50, 1, report_name=fname)
 
-        with pycotools3.tasks.ParameterEstimation.Context(
+        with tasks.ParameterEstimation.Context(
                 self.model, fname, context='s', parameters='g',
         ) as context:
             context.set('method', 'genetic_algorithm')
@@ -85,7 +193,7 @@ class TruncateDataTests(_test_base._BaseTest):
             context.set('run_mode', True)
             config = context.get_config()
 
-        self.pe = pycotools3.tasks.ParameterEstimation(config)
+        self.pe = tasks.ParameterEstimation(config)
         self.data = viz.Parse(self.pe).data
 
     def test_below_theta_truncate_mode_using_percentile(self):
@@ -138,7 +246,7 @@ class BoxPlotTests(_test_base._BaseTest):
         fname = os.path.join(os.path.dirname(__file__), 'report1.txt')
         data = self.model.simulate(0, 50, 1, report_name=fname)
 
-        with pycotools3.tasks.ParameterEstimation.Context(
+        with tasks.ParameterEstimation.Context(
                 self.model, fname, context='s', parameters='g',
         ) as context:
             context.set('method', 'genetic_algorithm')
@@ -149,14 +257,14 @@ class BoxPlotTests(_test_base._BaseTest):
             context.set('run_mode', True)
             config = context.get_config()
 
-        self.pe = pycotools3.tasks.ParameterEstimation(config)
+        self.pe = tasks.ParameterEstimation(config)
 
     def test_boxplot_is_saved(self):
         """
 
         :return:
         """
-        b = pycotools3.viz.Boxplots(self.pe, savefig=True, num_per_plot=2)
+        b = viz.Boxplots(self.pe, savefig=True, num_per_plot=2)
         self.assertEqual(len(glob.glob(b.results_directory['test_model'] + '/*')), 3)
 
 
@@ -167,7 +275,7 @@ class BoxPlotTests(_test_base._BaseTest):
 #         fname = os.path.join(os.path.dirname(__file__), 'report1.txt')
 #         data = self.model.simulate(0, 50, 1, report_name=fname)
 #
-#         with pycotools3.tasks.ParameterEstimation.Context(
+#         with tasks.ParameterEstimation.Context(
 #                 self.model, fname, context='s', parameters='g',
 #         ) as context:
 #             context.set('method', 'genetic_algorithm')
@@ -181,14 +289,14 @@ class BoxPlotTests(_test_base._BaseTest):
 #             context.set('run_mode', True)
 #             config = context.get_config()
 #
-#         self.pe = pycotools3.tasks.ParameterEstimation(config)
+#         self.pe = tasks.ParameterEstimation(config)
 #
 #     def test_create_directory(self):
 #         """
 #
 #         :return:
 #         """
-#         pl = pycotools3.viz.PlotParameterEstimation(self.pe, savefig=False)
+#         pl = viz.PlotParameterEstimation(self.pe, savefig=False)
 #
 #         dire = pl.create_directories()
 #         for i in dire:
@@ -199,7 +307,7 @@ class BoxPlotTests(_test_base._BaseTest):
 #
 #         :return:
 #         """
-#         pl = pycotools3.viz.PlotParameterEstimation(self.pe, savefig=False)
+#         pl = viz.PlotParameterEstimation(self.pe, savefig=False)
 #         model = pl.update_parameters()
 #         lo = '(ADeg).k1'
 #         met = 'A'
@@ -213,7 +321,7 @@ class BoxPlotTests(_test_base._BaseTest):
 #         test plots are being generated in correct place
 #         :return:
 #         """
-#         pl = pycotools3.viz.PlotParameterEstimation(self.pe,
+#         pl = viz.PlotParameterEstimation(self.pe,
 #                                                     savefig=True,
 #                                                     show=False)
 #         pl.plot()
@@ -225,7 +333,7 @@ class BoxPlotTests(_test_base._BaseTest):
 #         test y argument works
 #         :return:
 #         """
-#         pl = pycotools3.viz.PlotParameterEstimation(self.pe,
+#         pl = viz.PlotParameterEstimation(self.pe,
 #                                                     savefig=True,
 #                                                     show=False,
 #                                                     y=['A', 'B'])
@@ -238,18 +346,18 @@ class BoxPlotTests(_test_base._BaseTest):
 #
 #     def setUp(self):
 #         super(PlotTimeCourseTests, self).setUp()
-#         self.model = pycotools3.model.Model(self.copasi_file)
+#         self.model = model.Model(self.copasi_file)
 #         self.original_parameters = self.model.parameters
 #
-#         self.TC1 = pycotools3.tasks.TimeCourse(self.model, end=10, step_size=0.1,
+#         self.TC1 = tasks.TimeCourse(self.model, end=10, step_size=0.1,
 #                                                intervals=50, report_name='report1.txt')
 #
 #     def test_plot_tc(self):
-#         T = pycotools3.viz.PlotTimeCourse(self.TC1, savefig=True)
+#         T = viz.PlotTimeCourse(self.TC1, savefig=True)
 #         self.assertEqual(len(glob.glob(T.results_directory + '/*')), 7)
 #
 #     def test_plot_tc(self):
-#         T = pycotools3.viz.PlotTimeCourse(self.TC1, savefig=True, y=['A', 'B'], x='A', show=False)
+#         T = viz.PlotTimeCourse(self.TC1, savefig=True, y=['A', 'B'], x='A', show=False)
 #         self.assertEqual(len(glob.glob(T.results_directory + '/*')), 2)
 #
 #
@@ -257,20 +365,20 @@ class BoxPlotTests(_test_base._BaseTest):
 #
 #     def setUp(self):
 #         super(EnsembleTimeCourseTests, self).setUp()
-#         self.model = pycotools3.model.Model(self.copasi_file)
+#         self.model = model.Model(self.copasi_file)
 #         self.original_parameters = self.model.parameters
 #
 #
 # class PlotPLTests(_test_base._BaseTest):
 #     def setUp(self):
 #         super(PlotPLTests, self).setUp()
-#         self.model = pycotools3.model.Model(self.copasi_file)
+#         self.model = model.Model(self.copasi_file)
 #
 #         ## simulate time course
-#         tc = pycotools3.tasks.TimeCourse(self.model, end=1000, intervals=1000, step_size=1)
+#         tc = tasks.TimeCourse(self.model, end=1000, intervals=1000, step_size=1)
 #
 #         ## format time course for parameter estimation
-#         pycotools3.misc.format_timecourse_data(tc.report_name)
+#         misc.format_timecourse_data(tc.report_name)
 #
 #         ## get the paramete pickle filename
 #         pe_data_file = os.path.join(self.model.root, 'test_profile_likleihood.pickle')
@@ -278,7 +386,7 @@ class BoxPlotTests(_test_base._BaseTest):
 #         ##try and get data from parameter pickle.
 #         ## if you can get the df, if not simulate the data
 #         try:
-#             PE = pycotools3.tasks.MultiParameterEstimation(
+#             PE = tasks.MultiParameterEstimation(
 #                 self.model, tc.report_name, metabolites=[],
 #                 lower_bound=0.1, upper_bound=100, method='genetic_algorithm',
 #                 copy_number=1, pe_number=10, number_of_generations=1,
@@ -288,7 +396,7 @@ class BoxPlotTests(_test_base._BaseTest):
 #             PE._setup()
 #             df = pandas.read_pickle(pe_data_file)
 #         except IOError:
-#             PE = pycotools3.tasks.MultiParameterEstimation(
+#             PE = tasks.MultiParameterEstimation(
 #                 self.model, tc.report_name, metabolites=[],
 #                 lower_bound=0.1, upper_bound=100, method='genetic_algorithm',
 #                 copy_number=5, pe_number=10, number_of_generations=1,
@@ -298,7 +406,7 @@ class BoxPlotTests(_test_base._BaseTest):
 #             PE._setup()
 #             PE.run()
 #             time.sleep(10)
-#             p = pycotools3.viz.Parse(PE)
+#             p = viz.Parse(PE)
 #
 #             ##write pickle
 #             p.data.to_pickle(pe_data_file)
@@ -307,33 +415,33 @@ class BoxPlotTests(_test_base._BaseTest):
 #         ## try read the profile likelihood data
 #         ## if fail with input error, simulate profile likelihood data
 #         try:
-#             self.PL = pycotools3.tasks.ProfileLikelihood(
+#             self.PL = tasks.ProfileLikelihood(
 #                 self.model, df=df, index=[0, 1],
 #                 lower_bound_multiplier=1001,
 #                 log10=True, run=False, tolerance=1e-1,
 #                 iteration_limit=1
 #             )
-#             p = pycotools3.viz.Parse(self.PL)
+#             p = viz.Parse(self.PL)
 #
-#         except pycotools3.errors.InputError:
-#             self.PL = pycotools3.tasks.ProfileLikelihood(
+#         except errors.InputError:
+#             self.PL = tasks.ProfileLikelihood(
 #                 self.model, df=df, index=[0, 1],
 #                 lower_bound_multiplier=1001,
 #                 log10=True, run='multiprocess', tolerance=1e-1,
 #                 iteration_limit=1, intervals=4,
 #             )
 #             time.sleep(100)
-#             p = pycotools3.viz.Parse(self.PL)
+#             p = viz.Parse(self.PL)
 #
 #     def test_parse(self):
-#         p = pycotools3.viz.Parse(self.PL)
+#         p = viz.Parse(self.PL)
 #         self.assertTrue(isinstance(p.data, pandas.core.frame.DataFrame))
 #
 #     def test_parse_pl_log_linear(self):
-#         p = pycotools3.viz.Parse(self.PL)
+#         p = viz.Parse(self.PL)
 #         linear_scale_value = p.data.loc['B2C']['RSS'].iloc[0]
 #         log_scale = numpy.log10(linear_scale_value)
-#         p2 = pycotools3.viz.Parse(self.PL, log10=True)
+#         p2 = viz.Parse(self.PL, log10=True)
 #
 #         self.assertEqual(log_scale, p2.data.loc['B2C']['RSS'].iloc[0])
 #

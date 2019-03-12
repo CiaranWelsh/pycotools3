@@ -51,6 +51,7 @@ from .mixin import mixin
 from functools import reduce
 import yaml, json
 import sys
+import itertools
 
 COPASISE, COPASIUI = load_copasi()
 
@@ -2460,6 +2461,7 @@ class ParameterEstimation(_Task):
                 'context': 's',
                 'pl_upper_bound': 1000,
                 'pl_lower_bound': 1000,
+                'cross_validation_depth': 1
             }
 
     @staticmethod
@@ -2946,7 +2948,6 @@ class ParameterEstimation(_Task):
                             if i not in item:
                                 item[i] = self.defaults.fit_items[i]
 
-                    # print(item['affected_experiments'])
                     if item['affected_experiments'] == 'all':
                         if isinstance(self.experiment_names, str):
                             item['affected_experiments'] = [self.experiment_names]
@@ -3005,9 +3006,6 @@ class ParameterEstimation(_Task):
                 if isinstance(item['affected_experiments'], str):
                     item['affected_experiments'] = [item['affected_experiments']]
 
-                # for affected_experiment in item['affected_experiments']:
-                #     print(affected_experiment)
-
                 if item['affected_validation_experiments'] == 'all':
                     if isinstance(self.validation_names, str):
                         item['affected_validation_experiments'] = [self.validation_names]
@@ -3040,6 +3038,8 @@ class ParameterEstimation(_Task):
 
             """
             if 'constraint_items' in self.items:
+                if self.items.constraint_items == {}:
+                    item = {}
 
                 for constraint_item in self.items.constraint_items:
                     item = self.items.constraint_items.get(constraint_item)
@@ -3068,6 +3068,8 @@ class ParameterEstimation(_Task):
                         item.affected_models = list(self.models.keys())
 
                 self.items.constraint_items[constraint_item] = Munch.fromDict(item)
+            # else:
+            #     self.items['constraint_items'] = {}
 
         @property
         def experiments(self):
@@ -3170,7 +3172,6 @@ class ParameterEstimation(_Task):
                 for experiment_name in self.validations:
                     if model_name in self.validations[experiment_name].affected_models:
                         dct[model_name].append(experiment_name)
-
             return dct
 
         @property
@@ -3213,7 +3214,6 @@ class ParameterEstimation(_Task):
             """
             return self.items.constraint_items
 
-
     def __init__(self, config):
         """
         Configure a the parameter estimation task in copasi
@@ -3237,6 +3237,7 @@ class ParameterEstimation(_Task):
         """
         self.config = config
         self.do_checks()
+
         self.model_copies = self._setup()
 
         if self.config.settings.run_mode is not False:
@@ -3663,6 +3664,169 @@ class ParameterEstimation(_Task):
 
         return parent
 
+    def _map1experiment(self, model_name, mod, experiment_names, experiments,
+                        keys_function, validation, query, weight_method_lookup_dct
+                        ):
+        for experiment_name in experiment_names:
+            ## if experiment_name exists, remove and reconfigure
+            experiment = experiments[experiment_name]
+            if not isinstance(experiment.affected_models, list):
+                experiment.affected_models = [experiment.affected_models]
+
+            ## This implements the affected_models aspect of configuration for experiments
+            if model_name not in experiment.affected_models:
+                message = f'Trying to map experiment "{experiment_name}" (validation={validation}) ' \
+                    f'to model "{model_name}" but it is not in ' \
+                    f'model "{model_name}" but it is not in  ' \
+                    f'the affected models list for this model: ' \
+                    f'"{experiment.affected_models}". This configuration has been skipped.'
+                ## in cross validation we expect to see some of these
+                ## these messages whereas with other types of analysis
+                ## they probably mean something ominus.
+                if self.config.settings.context == 'cv':
+                    LOG.debug(message)
+                else:
+                    LOG.warning(message)
+                continue
+            ## also need to remove from affected_models attrib
+            ##todo if all remove affected experiments
+
+            data = pandas.read_csv(
+                experiment.filename,
+                sep=experiment.separator
+            )
+            experiment_type = 'steadystate'
+
+            if 'time' in [i.lower() for i in data.columns]:
+                experiment_type = 'timecourse'
+
+            experiment_type = str(1) if experiment_type == 'timecourse' else str(0)
+
+            num_rows = str(data.shape[0])
+            num_columns = str(data.shape[1])
+
+            experiment_file = {'type': 'file',
+                               'name': 'File Name',
+                               'value': experiment.filename}
+            key = {'type': 'key',
+                   'name': 'Key',
+                   'value': keys_function()[model_name][experiment_name]
+                   }
+
+            # necessary XML attributes
+            experiment_group = etree.Element('ParameterGroup',
+                                             attrib={
+                                                 'name': experiment_name
+                                             })
+
+            row_orientation = {'type': 'bool',
+                               'name': 'Data is Row Oriented',
+                               'value': True}
+
+            experiment_type_dct = {'type': 'unsignedInteger',
+                                   'name': 'Experiment Type',
+                                   'value': experiment_type}
+
+            first_row = {'type': 'unsignedInteger',
+                         'name': 'First Row',
+                         'value': str(1)}
+
+            last_row = {'type': 'unsignedInteger',
+                        'name': 'Last Row',
+                        'value': str(int(num_rows) + 1)}  # add 1 to account for 0 indexed python
+
+            normalize_weights_per_experiment = {'type': 'bool',
+                                                'name': 'Normalize Weights per Experiment',
+                                                'value': experiment.normalize_weights_per_experiment}
+
+            number_of_columns = {'type': 'unsignedInteger',
+                                 'name': 'Number of Columns',
+                                 'value': num_columns}
+
+            object_map = {'name': 'Object Map'}
+
+            row_containing_names = {'type': 'unsignedInteger',
+                                    'name': 'Row containing Names',
+                                    'value': str(1)}
+
+            separator = {'type': 'string',
+                         'name': 'Separator',
+                         'value': experiment.separator}
+
+            weight_method = {'type': 'unsignedInteger',
+                             'name': 'Weight Method',
+                             'value': weight_method_lookup_dct[
+                                 self.config.settings.weight_method
+                             ]}
+
+            for i in [
+                key,
+                experiment_file,
+                row_orientation,
+                first_row,
+                last_row,
+                experiment_type_dct,
+                normalize_weights_per_experiment,
+                separator,
+                weight_method,
+                row_containing_names,
+                number_of_columns,
+            ]:
+                for j, k in i.items():
+                    if isinstance(k, bool):
+                        i[j] = str(int(k))
+                    elif isinstance(k, int):
+                        i[j] = str(k)
+                etree.SubElement(experiment_group, 'Parameter', attrib=i)
+            map = etree.SubElement(experiment_group, 'ParameterGroup', attrib=object_map)
+
+            data_column_number = 0
+            for data_name in experiment.mappings:
+
+                map_group = etree.SubElement(map, 'ParameterGroup', attrib={'name': str(data_column_number)})
+                data_column_number += 1
+
+                if experiment.mappings[data_name].model_object.lower() == 'time':
+                    self._assign_role(map_group, experiment.mappings[data_name].role)
+
+                elif experiment.mappings[data_name].object_type == 'Metabolite':
+                    metab = [i for i in mod.metabolites if
+                             i.name == experiment.mappings[data_name].model_object or i.name == experiment.mappings[
+                                                                                                    data_name].model_object[
+                                                                                                :-6]]
+                    assert len(metab) == 1
+                    self._create_metabolite_reference(
+                        mod,
+                        map_group,
+                        metab[0],
+                        experiment.mappings[data_name].role
+                    )
+                    self._assign_role(map_group, experiment.mappings[data_name].role)
+
+                elif experiment.mappings[data_name].object_type == 'GlobalQuantity':
+                    glo = [i for i in mod.global_quantities if
+                           i.name == experiment.mappings[data_name].model_object or i.name == experiment.mappings[
+                                                                                                  data_name].model_object[
+                                                                                              :-6]]
+                    assert len(metab) == 1
+                    self._create_global_quantity_reference(
+                        mod,
+                        map_group,
+                        glo[0],
+                        experiment.mappings[data_name].role
+                    )
+
+                    self._assign_role(map_group, experiment.mappings[data_name].role)
+
+                for j in mod.xml.xpath(query):
+                    j.insert(0, experiment_group)
+                    if validation:
+                        for k in list(j):
+                            if k.attrib['name'] == 'Weight':
+                                k.attrib['value'] = str(self.config.settings.validation_weight)
+                            if k.attrib['name'] == 'Threshold':
+                                k.attrib['value'] = str(self.config.settings.validation_threshold)
+
     def _map_experiments(self, validation=False):
         """Adds experiment sets to the parameter estimation task
         exp_file is an experiment filename with exactly matching headers (independent variablies need '_indep' appended to the end)
@@ -3686,13 +3850,13 @@ class ParameterEstimation(_Task):
         weight_method_lookup_dct = dict(list(zip(weight_method_string, weight_method_numbers)))
 
         for model_name in self.models:
-
             mod = self.models[model_name].model
 
             if validation:
                 query = '//*[@name="Validation Set"]'
                 experiment_names = self.config.validation_names
                 experiments = self.config.datasets.validations
+
                 keys_function = self._get_validation_keys
                 # self._remove_all_validation_experiments()
             else:
@@ -3702,155 +3866,14 @@ class ParameterEstimation(_Task):
                 keys_function = self._get_experiment_keys
                 # self._remove_all_experiments()
 
-            for experiment_name in experiment_names:
-                ## if experiment_name exists, remove and reconfigure
-                experiment = experiments[experiment_name]
-                if not isinstance(experiment.affected_models, list):
-                    experiment.affected_models = [experiment.affected_models]
-                ## This implements the affected_models aspect of configuration for experiments
-
-                if model_name not in experiment.affected_models:
-                    print(f'{model_name} is not in {experiment.affected_models}. skipping.')
-                    continue
-                ## also need to remove from affected_models attrib
-                ##todo if all remove affected experiments
-
-                data = pandas.read_csv(
-                    experiment.filename,
-                    sep=experiment.separator
-                )
-                experiment_type = 'steadystate'
-
-                if 'time' in [i.lower() for i in data.columns]:
-                    experiment_type = 'timecourse'
-
-                experiment_type = str(1) if experiment_type == 'timecourse' else str(0)
-
-                num_rows = str(data.shape[0])
-                num_columns = str(data.shape[1])
-
-                experiment_file = {'type': 'file',
-                                   'name': 'File Name',
-                                   'value': experiment.filename}
-                key = {'type': 'key',
-                       'name': 'Key',
-                       'value': keys_function()[model_name][experiment_name]
-                       }
-
-                # necessary XML attributes
-                experiment_group = etree.Element('ParameterGroup',
-                                                 attrib={
-                                                     'name': experiment_name
-                                                 })
-
-                row_orientation = {'type': 'bool',
-                                   'name': 'Data is Row Oriented',
-                                   'value': True}
-
-                experiment_type_dct = {'type': 'unsignedInteger',
-                                       'name': 'Experiment Type',
-                                       'value': experiment_type}
-
-                first_row = {'type': 'unsignedInteger',
-                             'name': 'First Row',
-                             'value': str(1)}
-
-                last_row = {'type': 'unsignedInteger',
-                            'name': 'Last Row',
-                            'value': str(int(num_rows) + 1)}  # add 1 to account for 0 indexed python
-
-                normalize_weights_per_experiment = {'type': 'bool',
-                                                    'name': 'Normalize Weights per Experiment',
-                                                    'value': experiment.normalize_weights_per_experiment}
-
-                number_of_columns = {'type': 'unsignedInteger',
-                                     'name': 'Number of Columns',
-                                     'value': num_columns}
-
-                object_map = {'name': 'Object Map'}
-
-                row_containing_names = {'type': 'unsignedInteger',
-                                        'name': 'Row containing Names',
-                                        'value': str(1)}
-
-                separator = {'type': 'string',
-                             'name': 'Separator',
-                             'value': experiment.separator}
-
-                weight_method = {'type': 'unsignedInteger',
-                                 'name': 'Weight Method',
-                                 'value': weight_method_lookup_dct[
-                                     self.config.settings.weight_method
-                                 ]}
-
-                for i in [
-                    key,
-                    experiment_file,
-                    row_orientation,
-                    first_row,
-                    last_row,
-                    experiment_type_dct,
-                    normalize_weights_per_experiment,
-                    separator,
-                    weight_method,
-                    row_containing_names,
-                    number_of_columns,
-                ]:
-                    for j, k in i.items():
-                        if isinstance(k, bool):
-                            i[j] = str(int(k))
-                        elif isinstance(k, int):
-                            i[j] = str(k)
-                    etree.SubElement(experiment_group, 'Parameter', attrib=i)
-                map = etree.SubElement(experiment_group, 'ParameterGroup', attrib=object_map)
-
-                data_column_number = 0
-                for data_name in experiment.mappings:
-
-                    map_group = etree.SubElement(map, 'ParameterGroup', attrib={'name': str(data_column_number)})
-                    data_column_number += 1
-
-                    if experiment.mappings[data_name].model_object.lower() == 'time':
-                        self._assign_role(map_group, experiment.mappings[data_name].role)
-
-                    elif experiment.mappings[data_name].object_type == 'Metabolite':
-                        metab = [i for i in mod.metabolites if
-                                 i.name == experiment.mappings[data_name].model_object or i.name == experiment.mappings[
-                                                                                                        data_name].model_object[
-                                                                                                    :-6]]
-                        assert len(metab) == 1
-                        self._create_metabolite_reference(
-                            mod,
-                            map_group,
-                            metab[0],
-                            experiment.mappings[data_name].role
-                        )
-                        self._assign_role(map_group, experiment.mappings[data_name].role)
-
-                    elif experiment.mappings[data_name].object_type == 'GlobalQuantity':
-                        glo = [i for i in mod.global_quantities if
-                               i.name == experiment.mappings[data_name].model_object or i.name == experiment.mappings[
-                                                                                                      data_name].model_object[
-                                                                                                  :-6]]
-                        assert len(metab) == 1
-                        self._create_global_quantity_reference(
-                            mod,
-                            map_group,
-                            glo[0],
-                            experiment.mappings[data_name].role
-                        )
-
-                        self._assign_role(map_group, experiment.mappings[data_name].role)
-
-                    for j in mod.xml.xpath(query):
-                        j.insert(0, experiment_group)
-                        if validation:
-                            for k in list(j):
-                                if k.attrib['name'] == 'Weight':
-                                    k.attrib['value'] = str(self.config.settings.validation_weight)
-                                if k.attrib['name'] == 'Threshold':
-                                    k.attrib['value'] = str(self.config.settings.validation_threshold)
-
+            ## I have had to put the inner loop in a separate method because
+            ## in python it is impossible to 'continue' an inner loop and
+            ## not also skip the outer loop
+            ## (see https://stackoverflow.com/questions/1859072/python-continuing-to-next-iteration-in-outer-loop/1859099)
+            self._map1experiment(
+                model_name, mod, experiment_names, experiments,
+                keys_function, validation, query, weight_method_lookup_dct
+            )
         return self.models
 
     def _remove_all_experiments(self):
@@ -4167,9 +4190,12 @@ class ParameterEstimation(_Task):
                 if not isinstance(item.affected_models, list):
                     item.affected_models = [item.affected_models]
 
-
                 if model_name not in item.affected_models:
+                    LOG.warning(f'model "{model_name}" is not in the affected models list '
+                                f'({item.affected_models}) for item "{item_name}"'
+                                f' and is therefore being skipped')
                     continue
+
                 ## figure out what type of variable item is and assign to component
                 item_type = None
                 ## while we are distinguishing between component type we retrieve its
@@ -4263,7 +4289,10 @@ class ParameterEstimation(_Task):
                             ## has only experiments under its affected experiments attribute
                             ## that are actually in the model.
                             if affected_experiment not in self.config.models_affected_experiments[model_name]:
-                                print(f'ignoring {item_name} as {affected_experiment} not in {self.config.models_affected_experiments[model_name]}')
+                                LOG.warning(
+                                    f'ignoring {item_name} as {affected_experiment} not in '
+                                    f'{self.config.models_affected_experiments[model_name]}'
+                                )
                                 continue
 
                             if affected_experiment in self._get_validation_keys()[model_name]:
@@ -4314,8 +4343,10 @@ class ParameterEstimation(_Task):
                             'affected_validation_experiments']:  ## iterate over the list
 
                             ## Analogous to affected_experiments above
-                            if affected_validation_experiment not in self.config.models_affected_validation_experiments[model_name]:
-                                print(f'ignoring {item_name} as {affected_experiment} not in {self.config.models_affected_experiments[model_name]}')
+                            if affected_validation_experiment not in self.config.models_affected_validation_experiments[
+                                model_name]:
+                                LOG.warning(f'ignoring {item_name} as {affected_experiment} not in '
+                                      f'{self.config.models_affected_experiments[model_name]}')
                                 continue
 
                             if affected_validation_experiment in self._get_experiment_keys()[model_name]:
@@ -4332,7 +4363,8 @@ class ParameterEstimation(_Task):
                                 ))
 
                             affected_validation_experiments_attr[affected_validation_experiment] = {}
-                            affected_validation_experiments_attr[affected_validation_experiment]['name'] = 'Experiment Key'
+                            affected_validation_experiments_attr[affected_validation_experiment][
+                                'name'] = 'Experiment Key'
                             affected_validation_experiments_attr[affected_validation_experiment]['type'] = 'key'
                             affected_validation_experiments_attr[affected_validation_experiment]['value'] = \
                                 self._get_validation_keys()[model_name][affected_validation_experiment]
@@ -4410,6 +4442,7 @@ class ParameterEstimation(_Task):
                     item_list = problem[3]
                     assert list(item_list.attrib.values())[0] == 'OptimizationItemList'
                 item_list.append(fit_item_element)
+
         return self.models
 
     def _set_method(self):
@@ -4685,8 +4718,8 @@ class ParameterEstimation(_Task):
             q.put(Scan(
                 mod,
                 scan_type='scan',
-                minimum=float(scan_obj_init_value)/float(self.config.settings.pl_lower_bound),
-                maximum=float(scan_obj_init_value)*float(self.config.settings.pl_upper_bound),
+                minimum=float(scan_obj_init_value) / float(self.config.settings.pl_lower_bound),
+                maximum=float(scan_obj_init_value) * float(self.config.settings.pl_upper_bound),
                 variable=scan_variable,
                 subtask='parameter_estimation',
                 report_type='multi_parameter_estimation',
@@ -4765,8 +4798,8 @@ class ParameterEstimation(_Task):
         self._remove_all_experiments()
         self._remove_all_validation_experiments()
 
-        self._map_experiments(validation=False)
         self._map_experiments(validation=True)
+        self._map_experiments(validation=False)
 
         ## get rid of existing parameter estimation definition
         self._remove_all_fit_items()
@@ -4885,7 +4918,7 @@ class ParameterEstimation(_Task):
             'gc': 'global_quantities_and_initial_concentrations',
             'lc': 'local_parameters_and_initial_concentrations',
             '_': 'prefixed_with_underscore'
-        ##todo implement a means of including a list of parameters as sings to this class
+            ##todo implement a means of including a list of parameters as sings to this class
         }
 
         experiment_filetypes = ['.txt', '.csv']
@@ -4901,7 +4934,6 @@ class ParameterEstimation(_Task):
             self.filename = filename
             self.validation_experiments = validation_experiments
             self.settings = settings
-
 
             self.defaults = ParameterEstimation._Defaults()
 
@@ -4957,6 +4989,8 @@ class ParameterEstimation(_Task):
                 return self.get_config_simple()
             elif self.context == 'pl':
                 return self.get_config_pl()
+            elif self.context == 'cv':
+                return self.get_config_cv()
             else:
                 raise ValueError
 
@@ -5032,11 +5066,11 @@ class ParameterEstimation(_Task):
             ##change the models which appear in the config
             new_models_attr = {}
             for p in files:
+                mod = model.Model(files[p])
                 new_models_attr[p] = dict(
                     copasi_file=files[p],
-                    model=model.Model(files[p])
+                    model=mod
                 )
-            # config.models = new_models_attr
 
             ## now modify affected models attribute
             for fit_item in config.items.fit_items:
@@ -5057,6 +5091,121 @@ class ParameterEstimation(_Task):
                 settings=config.settings
             )
 
+            return new_config
+
+        def get_config_cv(self):
+            """
+            configure for cross validation
+            Returns:
+
+            """
+            ## change the results_directory settings
+            config = self.get_config_simple()
+            if len(config.models) != 1:
+                NotImplementedError(
+                    'Currently pycotools3 only supports the configuration of cross validation parameter estimations'
+                    ' for a single model at a time'
+                )
+
+            config.settings['problem'] = 'CrossValidation'
+            config.settings['context'] = self.context
+
+            if not os.path.isdir(config.settings['problem']):
+                os.makedirs(config.settings['problem'])
+
+            config.datasets.validations = deepcopy(config.datasets.experiments)
+
+            experiments = list(config.experiments.keys())
+
+            if config.settings.cross_validation_depth > len(experiments):
+                raise errors.InputError(
+                    f'Number of experiments cannot '
+                    f'exceed that of the '
+                    f'cross_validation_depth setting '
+                    f'({config.settings.cross_validation_depth} > {len(self.experiments)}'
+                )
+
+            ## work out how many models we need
+            ## and create the correct combinations
+            experiments_combs = {}
+            validation_combs = {}
+            count = 0
+            for current_depth in range(config.settings.cross_validation_depth + 1):
+                num_exp = len(experiments) - current_depth
+                e = list(itertools.combinations(self.experiments, num_exp))
+                count += len(list(e))
+                for experiment_set in range(len(e)):
+                    experiments_combs[f'{num_exp}_{experiment_set}'] = e[experiment_set]
+                    validation_combs[f'{num_exp}_{experiment_set}'] = list(set(experiments).difference(set(e[experiment_set])))
+
+            LOG.info(f'Configuring cross validation. {count} models needed')
+
+            model_keys = list(self.models.keys())
+            copasi_file = config.models[model_keys[0]].model.copasi_file
+            model_dct = {}
+            ## copy model
+            for exp_id in experiments_combs:
+                for exp_name in experiments_combs[exp_id]:
+                    fname = os.path.join(config.settings.problem,
+                                         f'{os.path.splitext(copasi_file)[0]}'
+                                         f'{exp_id}.cps')
+                    shutil.copy(copasi_file, fname)
+                    model_dct[exp_id] = os.path.abspath(fname)
+
+            new_models_attr = {}
+            for i in model_dct:
+                mod = model.Model(model_dct[i])
+                new_models_attr[i] = dict(
+                    copasi_file=model_dct[i],
+                    model=mod
+                )
+
+
+            ## prepare affected models dct
+            new_aff_models_exp = {}
+            for exp in experiments:
+                new_aff_models_exp[exp] = []
+                for model_name in experiments_combs:
+                    if exp in experiments_combs[model_name]:
+                        new_aff_models_exp[exp] += [model_name]
+
+            new_aff_models_val = {}
+            for val in experiments:
+                new_aff_models_val[val] = []
+                for model_name in validation_combs:
+                    if val in validation_combs[model_name]:
+                        new_aff_models_val[val] += [model_name]
+
+
+            datasets = deepcopy(config.datasets)
+            for exp in experiments:
+                datasets.experiments[exp].affected_models = new_aff_models_exp[exp]
+
+            for exp in experiments:
+                datasets.validations[exp].affected_models = new_aff_models_val[exp]
+
+
+            datasets = dict(
+                experiments=datasets.experiments,
+                validations=datasets.validations
+            )
+
+            fit_items = deepcopy(config.items.fit_items)
+
+            for fit_item in fit_items:
+                fit_items[fit_item].affected_models = 'all'
+
+            items = dict(
+                fit_items=fit_items,
+                # constraint_items=config.items.constraint_items
+            )
+
+            new_config = ParameterEstimation.Config(
+                models=new_models_attr,
+                datasets=datasets,
+                items=items,
+                settings=config.settings
+            )
             return new_config
 
         def _add_models(self, models: (str, list)):
@@ -5198,7 +5347,7 @@ class ParameterEstimation(_Task):
             if not isinstance(settings, dict):
                 raise TypeError(f'add_settings expects a dict as argument. Got "{type(settings)}"')
             self.settings.update(settings)
-            
+
 
 @mixin(model.GetModelComponentFromStringMixin)
 @mixin(model.ReadModelMixin)
@@ -5735,6 +5884,8 @@ class GlobalSensitivities(Sensitivities):
     """Sensitivity around parameter estimates"""
     pass
 
+
+##todo implements the steady state task
 
 if __name__ == '__main__':
     pass

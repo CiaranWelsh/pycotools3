@@ -560,6 +560,12 @@ class Parse(object):
     def __delitem__(self, key):
         return self.data.__delitem__(key)
 
+    def __iter__(self):
+        return self.data.__iter__()
+
+    def __next__(self):
+        return self.data.__next__()
+
     def parse(self):
         """determine class type of self.cls_instance
         and call the appropirate method for
@@ -676,7 +682,7 @@ class Parse(object):
             return data
 
     @staticmethod
-    def from_multi_parameter_estimation(cls_instance, folder=None):
+    def from_multi_parameter_estimation(cls_instance):
         """Results come without headers - parse the results
         give them the proper headers then overwrite the file again
 
@@ -687,23 +693,19 @@ class Parse(object):
         Returns:
 
         """
-        dct = {}
-        for model_name in cls_instance.models:
-            mod = cls_instance.models[model_name].model
-            ##set default
-            if folder == None:
-                folder = cls_instance.results_directory[model_name]
+
+        def read1(folder):
             tmp_dct = {}
-            for report_name in glob.glob(folder + r'/*.txt'):
+            for report_name in folder:
                 report_name = os.path.abspath(report_name)
-                if os.path.isfile(report_name) != True:
+                if not os.path.isfile(report_name):
                     raise errors.FileDoesNotExistError('"{}" does not exist'.format(report_name))
 
                 try:
                     data = pandas.read_csv(report_name,
                                            sep='\t', header=None, skiprows=[0])
                 except:
-                    LOG.warning('No Columns to parse from file. {} is empty. Skipping this file'.format(
+                    LOG.warning('No Columns to parse from file. "{}" is empty. Skipping this file'.format(
                         report_name))
                     continue
                 try:
@@ -726,7 +728,6 @@ class Parse(object):
                     if mod.fit_item_order == []:
                         raise errors.SomethingWentHorriblyWrongError('Parameter Estimation task is empty')
 
-                    print('names', names, len(names), '\n', data, data.shape)
                     if len(names) != data.shape[1]:
                         raise errors.SomethingWentHorriblyWrongError(
                             'length of parameter estimation data does not equal number of parameters estimated')
@@ -736,6 +737,19 @@ class Parse(object):
                     data.columns = names
                     data.to_csv(report_name, sep='\t', index=False)
                     tmp_dct[report_name] = data
+            return tmp_dct
+
+        dct = {}
+        for model_name in cls_instance.models:
+            mod = cls_instance.models[model_name].model
+            ##set default
+            folder = cls_instance.results_directory[model_name]
+
+            ## I need to split this function into two because
+            ## of the nested for loop and skipping files if they are
+            ## empty using continue. (i.e. continue will continue over both loops, not one
+            tmp_dct = read1(glob.glob(folder + r'/*.txt'))
+
             df = pandas.concat(tmp_dct, sort=True)
             columns = df.columns
             ## reindex, drop and sort by RSS
@@ -1166,6 +1180,9 @@ class Parse(object):
         results, fit_item_order = get_results()
 
         return parse_data(results, fit_item_order)
+
+    def concat(self):
+        return pandas.concat(self.data)
 
 
 class PlotTimeCourse(_Viz):
