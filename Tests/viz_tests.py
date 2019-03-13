@@ -174,7 +174,6 @@ class ParseTestsMoreThanOneModel(unittest.TestCase):
         )
 
 
-
 class TruncateDataTests(_test_base._BaseTest):
     def setUp(self):
         super(TruncateDataTests, self).setUp()
