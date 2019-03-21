@@ -20,7 +20,7 @@ Contributions, ideas, suggestions, feature requests or anything generally geared
 ## Citations
 - Welsh CM, Fullard N, Proctor CJ, Martinez-Guimera A, Isfort RJ, Bascom CC, Tasseff R, Przyborski SA, Shanley DP. PyCoTools: a Python toolbox for COPASI. Bioinformatics. 2018 May 22;34(21):3702-10.
 
-Since this package relies heavily on COPASI and tellurium please alse cite 
+Since this package relies heavily on COPASI and tellurium please also cite 
 
 - Hoops, S., Sahle, S., Gauges, R., Lee, C., Pahle, J., Simus, N., Singhal, M., Xu, L., Mendes, P. and Kummer, U., 2006. COPASI—a complex pathway simulator. Bioinformatics, 22(24), pp.3067-3074.
 
