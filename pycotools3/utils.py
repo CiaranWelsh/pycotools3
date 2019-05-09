@@ -96,6 +96,7 @@ def load_copasi():
     return COPASISE, COPASIUI
 
 
+
 class ParameterEstimationConfiguration:
     """ """
 
