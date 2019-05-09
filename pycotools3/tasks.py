@@ -53,7 +53,7 @@ import yaml, json
 import sys
 import itertools
 
-COPASISE, COPASIUI = load_copasi()
+# COPASISE, COPASIUI = load_copasi()
 
 LOG = logging.getLogger(__name__)
 
@@ -532,7 +532,7 @@ class Run(_Task):
                 raise errors.FileDoesNotExistError('{} is not a file'.format(self.copasi_file))
             p = subprocess.Popen(
                 [
-                    f'{COPASISE}', self.model.copasi_file
+                    f'CopasiSE', self.model.copasi_file
                 ], shell=True
             )
             return p.pid
@@ -559,7 +559,7 @@ class Run(_Task):
         Returns:
 
         """
-        p = subprocess.Popen(f'{COPASISE} "{self.model.copasi_file}"', stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+        p = subprocess.Popen(f'CopasiSE "{self.model.copasi_file}"', stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE, shell=True)
         output, err = p.communicate()
         d = {}
@@ -586,7 +586,7 @@ class Run(_Task):
 
         """
         ##TODO find better solution for running copasi files on linux
-        os.system(f'{COPASISE} {self.model.copasi_file}')
+        os.system(f'CopasiSE {self.model.copasi_file}')
 
     def submit_copasi_job_SGE(self):
         """Submit copasi file as job to SGE based job scheduler.

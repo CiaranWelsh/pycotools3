@@ -52,7 +52,7 @@ from functools import reduce
 
 import sys
 
-COPASISE, COPASIUI = load_copasi()
+# COPASISE, COPASIUI = load_copasi()
 
 LOG = logging.getLogger(__name__)
 
@@ -336,7 +336,7 @@ class BuildAntimony(object):
             raise errors.FileDoesNotExistError('Sbml file does not exist')
 
         ## Perform conversion wtih CopasiSE
-        os.system(f"{COPASISE} -i {self.sbml_file}")
+        os.system(f"CopasiSE -i {self.sbml_file}")
 
         ## copy from temporary copasiSE output name to user specified name
         copy(self.copasiSE_output_file, self.copasi_file)
@@ -380,7 +380,7 @@ def loada(antimony_str, copasi_file):
         raise errors.FileDoesNotExistError('Sbml file does not exist')
 
     ## Perform conversion wtih CopasiSE
-    cmd = f"{COPASISE} -i {sbml_file}"
+    cmd = f"CopasiSE -i {sbml_file}"
     os.system(cmd)
 
     ## copy from temporary copasiSE output name to user specified name
@@ -437,7 +437,7 @@ class ImportSBML(object):
         Returns:
 
         """
-        check_call([f'{COPASISE}', '-i', self.sbml_file])
+        check_call([f'CopasiSE', '-i', self.sbml_file])
         temp_copasi_file = self.sbml_file + '.cps'
         if not os.path.isfile(temp_copasi_file):
             raise errors.FileDoesNotExistError('SBML file has not been translated. '
@@ -2071,7 +2071,7 @@ class Model(_base._Base):
         if as_temp:
             copasi_temp = os.path.join(self.root, os.path.split(self.copasi_file)[1][:-4] + '_1.cps')
         self.save(copasi_file)
-        cmd = '{} "{}"'.format(COPASIUI, copasi_file)
+        cmd = 'CopasiUI "{}"'.format(copasi_file)
         os.system(cmd)
         if as_temp:
             os.remove(copasi_temp)
@@ -2412,7 +2412,7 @@ class Model(_base._Base):
         if sbml_file is None:
             sbml_file = os.path.join(self.root, self.copasi_file[:-4] + '.sbml')
 
-        os.system(f'{COPASISE} {self.copasi_file} -e {sbml_file}')
+        os.system(f'CopasiSE {self.copasi_file} -e {sbml_file}')
         return sbml_file
 
     def to_antimony(self):
