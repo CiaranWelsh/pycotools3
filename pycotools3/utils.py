@@ -60,40 +60,43 @@ def format_timecourse_data(report_name):
 
 
 
-def load_copasi():
-    """ """
-    COPASI_DIR = os.path.join(os.path.dirname(__file__), 'COPASI')
-    assert os.path.isdir(COPASI_DIR)
+# def load_copasi():
+#     """ """
+#     COPASI_DIR = os.path.join(os.path.dirname(__file__), 'COPASI')
+#     assert os.path.isdir(COPASI_DIR)
+#
+#     if sys.platform == 'linux':
+#         LINUX_DIR = os.path.join(COPASI_DIR, 'linux')
+#
+#         if not os.path.isdir(LINUX_DIR):
+#             raise ValueError(f"{LINUX_DIR} is not a directory")
+#
+#         BIN_DIR = os.path.join(LINUX_DIR, 'bin')
+#         if not os.path.isdir(BIN_DIR):
+#             raise ValueError(f"{BIN_DIR} is not a directory")
+#
+#         COPASISE = os.path.join(BIN_DIR, 'CopasiSE')
+#
+#         if not os.path.isfile(COPASISE):
+#             raise ValueError(f"{COPASISE} is not a file")
+#
+#         COPASIUI = os.path.join(BIN_DIR, 'CopasiUI')
+#
+#         if not os.path.isfile(COPASIUI):
+#             raise ValueError(f"{COPASIUI} is not a file")
+#
+#     elif sys.platform == 'win32':
+#         COPASI_DIR = os.path.join(COPASI_DIR, 'windows')
+#         COPASISE = os.path.join(COPASI_DIR, 'CopasiSE.exe')
+#         COPASIUI = os.path.join(COPASI_DIR, 'CopasiUI.exe')
+#
+#     elif sys.platform == 'os2':
+#         COPASI_DIR = os.path.join(COPASI_DIR, 'mac')
+#
+#     return COPASISE, COPASIUI
+#
+#
 
-    if sys.platform == 'linux':
-        LINUX_DIR = os.path.join(COPASI_DIR, 'linux')
-
-        if not os.path.isdir(LINUX_DIR):
-            raise ValueError(f"{LINUX_DIR} is not a directory")
-
-        BIN_DIR = os.path.join(LINUX_DIR, 'bin')
-        if not os.path.isdir(BIN_DIR):
-            raise ValueError(f"{BIN_DIR} is not a directory")
-
-        COPASISE = os.path.join(BIN_DIR, 'CopasiSE')
-
-        if not os.path.isfile(COPASISE):
-            raise ValueError(f"{COPASISE} is not a file")
-
-        COPASIUI = os.path.join(BIN_DIR, 'CopasiUI')
-
-        if not os.path.isfile(COPASIUI):
-            raise ValueError(f"{COPASIUI} is not a file")
-
-    elif sys.platform == 'win32':
-        COPASI_DIR = os.path.join(COPASI_DIR, 'windows')
-        COPASISE = os.path.join(COPASI_DIR, 'CopasiSE.exe')
-        COPASIUI = os.path.join(COPASI_DIR, 'CopasiUI.exe')
-
-    elif sys.platform == 'os2':
-        COPASI_DIR = os.path.join(COPASI_DIR, 'mac')
-
-    return COPASISE, COPASIUI
 
 
 class ParameterEstimationConfiguration:

@@ -39,7 +39,6 @@ import logging
 import os
 import subprocess
 import re
-from .utils import load_copasi
 from multiprocessing import Process, cpu_count
 import glob
 import seaborn as sns
@@ -51,9 +50,7 @@ from functools import reduce
 import yaml, json
 import sys
 import itertools
-from .lhs import lhs
 
-COPASISE, COPASIUI = load_copasi()
 
 LOG = logging.getLogger(__name__)
 
@@ -378,21 +375,21 @@ class Run(_Task):
     must be set to point towards the location of
     your CopasiSE executable. This is usually
     done automatically.
-    
+
     .. highlight::
-    
+
         ## First get a model object
-    
+
     To run a time_course task
-    
+
     To run the parameter estimation task:
-    
+
     To run the parameter estimation task with :py:mod:`multiprocessing`
-    
+
     To run the scan task but have python write a .sh script for submission to sun grid engine:
-    
+
     Properties
-    
+
     ==========          ===================
     Property            Description
     ==========          ===================
@@ -401,7 +398,7 @@ class Run(_Task):
     sge_job_filename    Optional name of sh file
                         generated for running sge
     ==========          ===================
-    
+
     =============
     task options
     =============
@@ -419,7 +416,7 @@ class Run(_Task):
     cross_section
     linear_noise_approximation
     =============
-    
+
     ==============          ==============
     Modes                   Description
     =============           ==============
@@ -436,13 +433,13 @@ class Run(_Task):
 
     >>> model_path = r'/full/path/to/model.cps'
         >>> model = model.Model(model_path)
-    
+
         >>> Run(model, task='time_course', mode=True)
-    
+
         >>> Run(model, task='parameter_estimation', mode=True)
-    
+
         >>> Run(model, task='parameter_estimation', mode='multiprocess')
-    
+
         >>> Run(model, task='scan', mode='sge')
     """
 
@@ -523,7 +520,7 @@ class Run(_Task):
             """
 
             Args:
-              x: 
+              x:
 
             Returns:
 
@@ -532,7 +529,7 @@ class Run(_Task):
                 raise errors.FileDoesNotExistError('{} is not a file'.format(self.copasi_file))
             p = subprocess.Popen(
                 [
-                    f'{COPASISE}', self.model.copasi_file
+                    f'CopasiSE', self.model.copasi_file
                 ], shell=True
             )
             return p.pid
@@ -559,7 +556,7 @@ class Run(_Task):
         Returns:
 
         """
-        p = subprocess.Popen(f'{COPASISE} "{self.model.copasi_file}"', stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+        p = subprocess.Popen(f'CopasiSE "{self.model.copasi_file}"', stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE, shell=True)
         output, err = p.communicate()
         d = {}
@@ -586,7 +583,7 @@ class Run(_Task):
 
         """
         ##TODO find better solution for running copasi files on linux
-        os.system(f'{COPASISE} {self.model.copasi_file}')
+        os.system(f'CopasiSE {self.model.copasi_file}')
 
     def submit_copasi_job_SGE(self):
         """Submit copasi file as job to SGE based job scheduler.
@@ -4862,120 +4859,6 @@ class ParameterEstimation(_Task):
 
         else:
             raise ValueError('"{}" is not a valid argument'.format(self.config.settings.run_mode))
-
-    def run_from_parameters(self, models, parameters):
-        for model_name in models:
-            model_copies = models[model_name]
-            if not isinstance(parameters, dict):
-                raise TypeError(
-                    f'"parameters" argument should be a dictionary '
-                    f'with model names as keys and pandas DataFrames '
-                    f'as values. The DataFrames should have parameter '
-                    f'names along the columns and parameter sets '
-                    f'down the rows. Got "{type(parameters)}" instead. '
-                )
-            for i in parameters:
-                if i not in models:
-                    raise errors.InputError(
-                        f'parameter set with model name "{i}" is not in the outer '
-                        f'level of the models dict ("{models.keys()}". '
-                    )
-                for j in parameters[i]:
-                    if j not in model_copies.keys():
-                        raise errors.InputError(
-                            f'parameter set with model name "{i}" and inner model '
-                            f'name "{j}" is not present in your estimation problem. '
-                            f'These are available {model_copies.keys()}'
-                        )
-
-                for j in parameters[i]:
-                    if not isinstance(parameters[i][j], pandas.DataFrame):
-                        TypeError(f'got "{type(parameters[i][j])}" '
-                                  f'but was expecting a pandas.DataFrame '
-                                  )
-
-            if self.config.settings.run_mode not in [True, False]:
-                raise NotImplementedError(
-                    'Using lhs with run_mode != True is not yet implemented'
-                )
-
-            for model_num in model_copies:
-                for parameter_set_i in range(parameters[model_name][model_num].shape[0]):
-                    p_set = parameters[model_name][model_num].iloc[parameter_set_i].to_dict()
-                    models[model_name][model_num].insert_parameters(
-                        parameter_dict=p_set,
-                        inplace=True
-                    )
-                    r = Run(model=models[model_name][model_num],
-                            task='parameter_estimation',
-                            mode=self.config.settings.run_mode)
-
-    def _run1_from_parameters(self, mod, parameters, q):
-        assert isinstance(mod, model.Model)
-        assert isinstance(parameters, pandas.DataFrame)
-        # print('report naem', report_name)
-
-        for parameter_set_i in range(parameters.shape[0]):
-
-            print('running_parameter set i', parameter_set_i)
-            p_set = parameters.iloc[parameter_set_i].to_dict()
-            mod.insert_parameters(parameter_dict=p_set, inplace=True)
-
-            s = Scan(
-                mod, scan_type='repeat', report_name=report_name,
-                number_of_steps=1, subtask='parameter_estimation',
-                report_type='multi_parameter_estimation'
-            )
-            mod = s.model
-            Run(model=mod, task='scan', mode=True)
-            # q.put(Run(model=mod, task='scan', mode=self.config.settings.run_mode))
-
-
-    def lhs_run(self, models):
-        dct = {}
-        param_names = models[list(models.keys())[0]][0].estimated_parameters()
-
-        for model_name in models:
-            n = len(self.config.items.fit_items)
-
-            iterations = 10
-            pe_number = iterations // self.config.settings.copy_number
-            remainder = iterations % self.config.settings.copy_number
-
-            starting_parameters = lhs(
-                n, 10,
-                lower_bound=self.config.settings['lower_bound'],
-                upper_bound=self.config.settings['upper_bound']
-            )
-            dct[model_name] = {}
-            start_idx = 0
-            for model_num in models[model_name]:
-                end_idx = start_idx + pe_number
-                if model_num < remainder:
-                    end_idx = self.config.settings.copy_number * model_num + pe_number + 1
-                df = pandas.DataFrame(starting_parameters[start_idx: end_idx, ])
-                df.columns = param_names
-                dct[model_name][model_num] = df
-                start_idx = end_idx
-            starting_parameters = dct
-
-        number_of_cpu = cpu_count()
-        q = queue.Queue(maxsize=number_of_cpu)
-
-
-            for model_num in models[model_name]:
-                # fname = os.path.join(os.path.split(report_name)[0], f'{model_num}.txt')
-                print('model_name:', model_name, 'model_num:', model_num)
-                params_df = starting_parameters[model_name][model_num]
-                mod = models[model_name][model_num]
-                self._run1_from_parameters(mod, params_df, q)
-                # t = threading.Thread(
-                #     target=self._run1_from_parameters, args=(mod, params_df, q)
-                # )
-                # t.daemon = True
-                # t.start()
-                # time.sleep(0.1)
-                # print(q.get())
 
 
     class Context:
