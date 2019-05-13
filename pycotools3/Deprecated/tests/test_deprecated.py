@@ -3,7 +3,9 @@ import warnings
 
 import pytest
 
-import deprecated.classic
+import site
+site.addsitedir('..')
+import classic
 
 
 class MyDeprecationWarning(DeprecationWarning):

@@ -8,7 +8,7 @@ import warnings
 
 import pytest
 
-import deprecated.sphinx
+import sphinx
 
 
 @pytest.fixture(scope="module",

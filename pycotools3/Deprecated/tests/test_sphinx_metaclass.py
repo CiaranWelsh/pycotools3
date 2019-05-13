@@ -1,7 +1,7 @@
 # coding: utf-8
 import warnings
 
-import deprecated.sphinx
+import sphinx
 
 
 def with_metaclass(meta, *bases):

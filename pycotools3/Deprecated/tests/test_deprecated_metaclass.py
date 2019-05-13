@@ -1,7 +1,8 @@
 # coding: utf-8
 import warnings
-
-import deprecated.classic
+import site
+site.addsitedir('..')
+import classic
 
 
 def with_metaclass(meta, *bases):

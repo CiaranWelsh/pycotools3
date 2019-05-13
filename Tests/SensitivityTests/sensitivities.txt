@@ -1,2 +1,0 @@
-single_object	0
-(R3).k	0

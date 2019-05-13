@@ -8,7 +8,7 @@ import warnings
 
 import pytest
 
-import deprecated.sphinx
+import sphinx
 
 
 def test_class_deprecation_using_a_simple_decorator():

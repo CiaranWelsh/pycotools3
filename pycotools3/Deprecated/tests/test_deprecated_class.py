@@ -4,8 +4,9 @@ from __future__ import print_function
 import inspect
 import io
 import warnings
-
-import deprecated.classic
+import site
+site.addsitedir('..')
+import classic
 
 
 def test_simple_class_deprecation():
