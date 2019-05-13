@@ -110,39 +110,23 @@ ranks                   `list` of integers
 
 ##TODO Fix plot_kwargs
 ##TODO fix parameter estimation ensembles
-import contextlib
-import string
 import pandas
 # from pandas.parser import CParserError
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_pdf import PdfPages
 import scipy
 import os
-import matplotlib
-import itertools
-from . import tasks, errors, misc, model
+from . import tasks, errors, utils, model
 import seaborn
 import logging
-from subprocess import check_call, Popen
 import glob
 import re
 import numpy
-from .mixin import Mixin, mixin
-from textwrap import wrap
-from sklearn.decomposition import PCA
-from sklearn import linear_model
-from sklearn import model_selection
-from . import _base
 from .cached_property import cached_property
-import matplotlib.patches as mpatches
-from multiprocessing import Process, Queue
 from math import exp as exponential_function
 import math
-from scipy.interpolate import interp1d
 from scipy.stats.mstats import pearsonr
 from cycler import cycler
 from collections import OrderedDict
-from itertools import combinations, combinations_with_replacement, permutations
 
 LOG = logging.getLogger(__name__)
 
@@ -1848,7 +1832,7 @@ class PlotTimeCourseEnsemble(_Viz):
             if self.savefig:
                 self.results_directory = self.create_directory()
                 fname = os.path.join(self.results_directory, '{}.{}'.format(
-                    misc.RemoveNonAscii(parameter).filter, self.ext))
+                    utils.RemoveNonAscii(parameter).filter, self.ext))
                 plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
             if self.show:
                 plt.show()
@@ -2741,7 +2725,7 @@ class Boxplots(_Viz, PlotKwargs):
 #             if self.savefig:
 #                 self.create_directory(self.results_directory)
 #                 fname = os.path.join(self.results_directory,
-#                                      misc.RemoveNonAscii(parameter).filter + '.{}'.format(self.ext))
+#                                      utils.RemoveNonAscii(parameter).filter + '.{}'.format(self.ext))
 #                 plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
 #                 LOG.info('plot save to "{}"'.format(fname))
 #
@@ -3825,7 +3809,7 @@ class Boxplots(_Viz, PlotKwargs):
 #                         d = os.path.join(self.results_directory, str(i))
 #                         d = os.path.join(d, x)
 #                         self.create_directory(d)
-#                         fname = os.path.join(d, misc.RemoveNonAscii(y).filter + '.{}'.format(self.ext))
+#                         fname = os.path.join(d, utils.RemoveNonAscii(y).filter + '.{}'.format(self.ext))
 #
 #                         plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
 #                         LOG.info('saved to --> {}'.format(fname))
@@ -3933,7 +3917,7 @@ class Boxplots(_Viz, PlotKwargs):
 #                         d = os.path.join(self.results_directory, str(i))
 #                         d = os.path.join(d, x)
 #                         self.create_directory(d)
-#                         fname = os.path.join(d, misc.RemoveNonAscii(y).filter + '.{}'.format(self.ext))
+#                         fname = os.path.join(d, utils.RemoveNonAscii(y).filter + '.{}'.format(self.ext))
 #
 #                         plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
 #                         LOG.info('saved to --> {}'.format(fname))
@@ -4021,7 +4005,7 @@ class Boxplots(_Viz, PlotKwargs):
 #                         d = os.path.join(self.results_directory, str(i))
 #                         d = os.path.join(d, x)
 #                         self.create_directory(d)
-#                         fname = os.path.join(d, misc.RemoveNonAscii(y).filter + '.{}'.format(self.ext))
+#                         fname = os.path.join(d, utils.RemoveNonAscii(y).filter + '.{}'.format(self.ext))
 #
 #                         plt.savefig(fname, dpi=self.dpi, bbox_inches='tight')
 #                         LOG.info('saved to --> {}'.format(fname))

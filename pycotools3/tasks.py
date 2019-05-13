@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+"""""
  This file is part of pycotools3.
 
  pycotools3 is free software: you can redistribute it and/or modify
@@ -20,10 +20,9 @@
  $Date: 12-09-2016
  Time:  13:33
 
-'''
+"""
 from . import viz
 from . import errors
-from . import misc
 from . import model
 from .munch import Munch
 from . import munch
@@ -40,7 +39,6 @@ import logging
 import os
 import subprocess
 import re
-from .utils import load_copasi
 from multiprocessing import Process, cpu_count
 import glob
 import seaborn as sns
@@ -52,8 +50,6 @@ from functools import reduce
 import yaml, json
 import sys
 import itertools
-
-# COPASISE, COPASIUI = load_copasi()
 
 LOG = logging.getLogger(__name__)
 
@@ -378,21 +374,21 @@ class Run(_Task):
     must be set to point towards the location of
     your CopasiSE executable. This is usually
     done automatically.
-    
+
     .. highlight::
-    
+
         ## First get a model object
-    
+
     To run a time_course task
-    
+
     To run the parameter estimation task:
-    
+
     To run the parameter estimation task with :py:mod:`multiprocessing`
-    
+
     To run the scan task but have python write a .sh script for submission to sun grid engine:
-    
+
     Properties
-    
+
     ==========          ===================
     Property            Description
     ==========          ===================
@@ -401,7 +397,7 @@ class Run(_Task):
     sge_job_filename    Optional name of sh file
                         generated for running sge
     ==========          ===================
-    
+
     =============
     task options
     =============
@@ -419,7 +415,7 @@ class Run(_Task):
     cross_section
     linear_noise_approximation
     =============
-    
+
     ==============          ==============
     Modes                   Description
     =============           ==============
@@ -436,13 +432,13 @@ class Run(_Task):
 
     >>> model_path = r'/full/path/to/model.cps'
         >>> model = model.Model(model_path)
-    
+
         >>> Run(model, task='time_course', mode=True)
-    
+
         >>> Run(model, task='parameter_estimation', mode=True)
-    
+
         >>> Run(model, task='parameter_estimation', mode='multiprocess')
-    
+
         >>> Run(model, task='scan', mode='sge')
     """
 
@@ -513,7 +509,7 @@ class Run(_Task):
             raise errors.InputError('{} not in {}'.format(self.mode, modes))
 
     def __str__(self):
-        return 'Run({})'.format(self.to_string())
+        return f'Run({self.model}, {self.kwargs})'
 
     def multi_run(self):
         """ """
@@ -523,7 +519,7 @@ class Run(_Task):
             """
 
             Args:
-              x: 
+              x:
 
             Returns:
 
@@ -2461,7 +2457,8 @@ class ParameterEstimation(_Task):
                 'context': 's',
                 'pl_upper_bound': 1000,
                 'pl_lower_bound': 1000,
-                'cross_validation_depth': 1
+                'cross_validation_depth': 1,
+                'starting_parameter_sets': None,
             }
 
     @staticmethod
@@ -4346,7 +4343,7 @@ class ParameterEstimation(_Task):
                             if affected_validation_experiment not in self.config.models_affected_validation_experiments[
                                 model_name]:
                                 LOG.warning(f'ignoring {item_name} as {affected_experiment} not in '
-                                      f'{self.config.models_affected_experiments[model_name]}')
+                                            f'{self.config.models_affected_experiments[model_name]}')
                                 continue
 
                             if affected_validation_experiment in self._get_experiment_keys()[model_name]:
@@ -4701,8 +4698,6 @@ class ParameterEstimation(_Task):
         """
         if self.config.settings.context == 'pl':
             scan_variable = os.path.split(mod.copasi_file)[1][:-4]
-            ##todo implement ability to modify boundaries
-            ## scan_obj = [i for i in self.get_model_objects_from_strings() if i.name == scan_variable]
             scan_obj = mod.get_model_object(scan_variable)
             if isinstance(scan_obj, model.Metabolite):
                 if self.config.settings.quantity_type == 'concentration':
@@ -4760,11 +4755,11 @@ class ParameterEstimation(_Task):
 
         """
         res = {}
+        number_of_cpu = cpu_count()
+        q = queue.Queue(maxsize=number_of_cpu)
         for model_name in models:
             res[model_name] = {}
             # for model_i in self.models[model_name]:
-            number_of_cpu = cpu_count()
-            q = queue.Queue(maxsize=number_of_cpu)
             report_files = self._enumerate_output()[model_name]
             for copy_number, mod in list(models[model_name].items()):
                 t = threading.Thread(target=self._setup1scan,
@@ -4837,24 +4832,33 @@ class ParameterEstimation(_Task):
                 self.config.settings.run_mode = 'parallel'
 
         if self.config.settings.run_mode == 'parallel':
-            for model_name in models:
-                RunParallel(
-                    list(models[model_name].values()),
-                    mode=self.config.settings.run_mode,
-                    max_active=self.config.settings.max_active,
-                    task='scan')
+            if self.config.settings.context != 'lhs':
+                for model_name in models:
+                    RunParallel(
+                        list(models[model_name].values()),
+                        mode=self.config.settings.run_mode,
+                        max_active=self.config.settings.max_active,
+                        task='scan')
+            else:
+                raise NotImplementedError('Parallel implelentation of lhs is not yet implemented. Use run_mode=True')
 
         elif self.config.settings.run_mode is True:
-            for model_name in models:
-                for copy_number, mod in list(models[model_name].items()):
-                    LOG.info(f'running model {model_name}: {copy_number}')
-                    Run(mod, mode=self.config.settings.run_mode, task='scan')
+            if self.config.settings.context != 'lhs':
+                for model_name in models:
+                    for copy_number, mod in list(models[model_name].items()):
+                        LOG.info(f'running model {model_name}: {copy_number}')
+                        Run(mod, mode=self.config.settings.run_mode, task='scan')
+            else:
+                print('lhs running')
+                self.lhs_run(models)
+
 
         elif not self.config.settings.run_mode:
             pass
 
         else:
             raise ValueError('"{}" is not a valid argument'.format(self.config.settings.run_mode))
+
 
     class Context:
         """
@@ -4941,7 +4945,6 @@ class ParameterEstimation(_Task):
             return self
 
         def __exit__(self, exc_type, exc_value, exc_traceback):
-
             if exc_type:
                 LOG.critical(f'exc_type: {exc_type}')
                 LOG.critical(f'exc_value: {exc_value}')
@@ -4963,7 +4966,7 @@ class ParameterEstimation(_Task):
                 None
 
             """
-
+            print(parameter, value)
             if parameter in self.defaults.settings:
                 self.defaults.settings[parameter] = value
 
@@ -4984,6 +4987,22 @@ class ParameterEstimation(_Task):
                     f'"{parameter}" is not a valid argument'
                 )
 
+        def setd(self, dct):
+            """
+            Set the value of multiple settings using a dict[setting] = value.
+
+            Iterates over :py:meth:`ParameterEstimation.Context.set` with key value
+            pairs
+
+            Args:
+                dct (dict): a settings dict where keys are settings and values are setting values
+
+            Returns:
+                None
+            """
+            for k, v in dct.items():
+                self.set(k, v)
+
         def get_config(self):
             if self.context == 's':
                 return self.get_config_simple()
@@ -4991,8 +5010,12 @@ class ParameterEstimation(_Task):
                 return self.get_config_pl()
             elif self.context == 'cv':
                 return self.get_config_cv()
+            elif self.context == 'lhs':
+                return self.get_config_lhs()
             else:
-                raise ValueError
+                raise ValueError(
+                    f'"{self.context}" is not a valid context'
+                )
 
         def get_config_simple(self):
             ## update the config
@@ -5136,7 +5159,8 @@ class ParameterEstimation(_Task):
                 count += len(list(e))
                 for experiment_set in range(len(e)):
                     experiments_combs[f'{num_exp}_{experiment_set}'] = e[experiment_set]
-                    validation_combs[f'{num_exp}_{experiment_set}'] = list(set(experiments).difference(set(e[experiment_set])))
+                    validation_combs[f'{num_exp}_{experiment_set}'] = list(
+                        set(experiments).difference(set(e[experiment_set])))
 
             LOG.info(f'Configuring cross validation. {count} models needed')
 
@@ -5160,7 +5184,6 @@ class ParameterEstimation(_Task):
                     model=mod
                 )
 
-
             ## prepare affected models dct
             new_aff_models_exp = {}
             for exp in experiments:
@@ -5176,14 +5199,12 @@ class ParameterEstimation(_Task):
                     if val in validation_combs[model_name]:
                         new_aff_models_val[val] += [model_name]
 
-
             datasets = deepcopy(config.datasets)
             for exp in experiments:
                 datasets.experiments[exp].affected_models = new_aff_models_exp[exp]
 
             for exp in experiments:
                 datasets.validations[exp].affected_models = new_aff_models_val[exp]
-
 
             datasets = dict(
                 experiments=datasets.experiments,
@@ -5207,6 +5228,12 @@ class ParameterEstimation(_Task):
                 settings=config.settings
             )
             return new_config
+
+        def get_config_lhs(self):
+            config = self.get_config_simple()
+            config.settings.randomize_start_value = False
+            config.settings.context = self.context
+            return config
 
         def _add_models(self, models: (str, list)):
             """

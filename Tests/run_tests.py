@@ -38,7 +38,7 @@ class RunTests(_test_base._BaseTest):
         Turn off all tasks. Then turn on time course.
         :return:
         """
-        R=pycotools3.tasks.Run(self.model, task='time_course')
+        R = pycotools3.tasks.Run(self.model, task='time_course')
         ## configure time course but set run to False
         TC = pycotools3.tasks.TimeCourse(self.model, end=1000, intervals=1000,
                                          step_size=1, run=False)
@@ -67,7 +67,7 @@ class RunTests(_test_base._BaseTest):
         Turn off all tasks. Then turn on time course.
         :return:
         """
-        R=pycotools3.tasks.Run(self.model, task='time_course')
+        R = pycotools3.tasks.Run(self.model, task='time_course')
         ## configure time course but set run to False
         TC = pycotools3.tasks.TimeCourse(self.model, end=1000, intervals=1000,
                                          step_size=1, run=False)
@@ -86,8 +86,6 @@ class RunTests(_test_base._BaseTest):
         """
         R = pycotools3.tasks.Run(self.model, task='parameter_estimation')
 
-
-
     def test_sheduled_parameter_estimation(self):
         """
         Test that the executable box is checked
@@ -100,7 +98,6 @@ class RunTests(_test_base._BaseTest):
         for i in new_xml.find('{http://www.copasi.org/static/schema}ListOfTasks'):
             if i.attrib['name'] == 'Parameter Estimation':
                 self.assertTrue(i.attrib['scheduled'] == 'true')
-
 
     def test_sheduled_scan(self):
         """
@@ -120,58 +117,5 @@ class RunTests(_test_base._BaseTest):
 
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     unittest.main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
