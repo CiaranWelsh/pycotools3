@@ -1445,6 +1445,31 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
         expected = [',', ',', ',', ',']
         self.assertListEqual(expected, actual)
 
+    def test_context_setd(self):
+        settings_dct = {
+            'method': 'genetic_algorithm_sr',
+            'number_of_generations': 25,
+            'population_size': 14,
+            'prefix': 'B',
+            'separator': ',',
+        }
+        with ParameterEstimation.Context(
+                self.model.copasi_file,
+                [self.TC1.report_name, self.TC2.report_name,
+                 self.report3, self.report4],
+                context='s', parameters='a') as context:
+            context.setd(settings_dct)
+            config = context.get_config()
+        pe = ParameterEstimation(config)
+
+        query = '//*[@name="Separator"]'
+        actual = []
+        for i in pe.config.models.test_model.model.xml.xpath(query):
+            actual.append(i.attrib['value'])
+
+        expected = [',', ',', ',', ',']
+        self.assertListEqual(expected, actual)
+
     def test_context_mappings_after_use_of_set(self):
         fname = os.path.join(os.path.dirname(__file__), 'timeseries.txt')
         data = self.model.simulate(0, 10, 11)
@@ -2192,7 +2217,6 @@ class CrossValidationContextTests(_test_base._BaseTest):
     def setUp(self):
         super(CrossValidationContextTests, self).setUp()
 
-
         self.ant = self.ant.replace('ADeg: A => ; nuc*ADeg_k1*A;', '')
         self.ant = self.ant.replace('ADeg_k1 = 0.1;', '')
         self.model = pycotools3.model.loada(self.ant, copasi_file=self.copasi_file)
@@ -2236,7 +2260,7 @@ class CrossValidationContextTests(_test_base._BaseTest):
 
     def test_simple(self):
         with pycotools3.tasks.ParameterEstimation.Context(
-            self.model, self.experiments, context='cv', parameters='gm'
+                self.model, self.experiments, context='cv', parameters='gm'
         ) as context:
             context.set('randomize_start_values', True)
             context.set('method', 'genetic_algorithm')
@@ -2256,29 +2280,131 @@ class CrossValidationContextTests(_test_base._BaseTest):
         data = pycotools3.viz.Parse(pe).concat()
         self.assertLess(data.loc['3_0', 0]['RSS'], data.loc['3_1', 0]['RSS'])
 
-    # def test_depth_is_2(self):
-    #     with pycotools3.tasks.ParameterEstimation.Context(
-    #         self.model, self.experiments, context='cv', parameters='gm'
-    #     ) as context:
-    #         context.set('randomize_start_values', True)
-    #         context.set('method', 'genetic_algorithm')
-    #         context.set('population_size', 20)
-    #         context.set('number_of_generations', 50)
-    #         context.set('swarm_size', 100)
-    #         context.set('iteration_limit', 2000)
-    #         context.set('copy_number', 3)
-    #         context.set('validation_threshold', 500)
-    #         context.set('cross_validation_depth', 1)
-    #         context.set('run_mode', True)
-    #         context.set('lower_bound', 1e-3)
-    #         context.set('upper_bound', 1e2)
-    #         config = context.get_config()
-    #
-    #     pe = ParameterEstimation(config)
-        # data = pycotools3.viz.Parse(pe).concat()
-        # print(data)
-        # self.assertLess(data.loc['3_0', 0]['RSS'], data.loc['3_1', 0]['RSS'])
+
+class RunFromParameterSetTests(_test_base._BaseTest):
+    def setUp(self):
+        super(RunFromParameterSetTests, self).setUp()
+        self.ant = self.ant.replace('ADeg: A => ; nuc*ADeg_k1*A;', '')
+        self.ant = self.ant.replace('ADeg_k1 = 0.1;', '')
+
+        self.model = pycotools3.model.loada(self.ant, copasi_file=self.copasi_file)
+
+        self.tc_fname1 = os.path.join(os.path.dirname(__file__), 'timecourse1.txt')
+        self.tc_fname2 = os.path.join(os.path.dirname(__file__), 'timecourse2.txt')
+        self.ss_fname1 = os.path.join(os.path.dirname(__file__), 'steady_state1.txt')
+
+        self.model.simulate(0, 5, 0.1, report_name=self.tc_fname1)
+        self.model.simulate(0, 10, 0.5, report_name=self.tc_fname2)
+        dct1 = {
+            'A': 0.07,
+            'B': 0.06,
+            'C': 2.8
+        }
+        self.ss1 = pandas.DataFrame(dct1, index=[0])
+        self.ss1.to_csv(self.ss_fname1, sep='\t', index=False)
+        self.experiments = [self.tc_fname1, self.tc_fname2,
+                            self.ss_fname1]
+
+    def test(self):
+        starting_parameter_sets = {
+            'test_model': {
+                0: pandas.DataFrame({
+                    'B2C_0_k2': 25,
+                    'A': 19
+                }, index=[0]),
+                1: pandas.DataFrame({
+                    'C2A_k1': 26,
+                    'A': 14
+                }, index=[0])
+            }
+        }
+
+        with ParameterEstimation.Context(
+                self.model.copasi_file, self.experiments, context='s', parameters='gm') as context:
+            context.setd({
+                'method': 'hooke_jeeves',
+                'copy_number': 2,
+                'run_mode': True,
+                'starting_parameter_sets': starting_parameter_sets
+
+            })
+            config = context.get_config()
+
+        pe = ParameterEstimation(config)
+
+
+class LHSMultistartTests(_test_base._BaseTest):
+    def setUp(self):
+        super(LHSMultistartTests, self).setUp()
+        self.ant = self.ant.replace('ADeg: A => ; nuc*ADeg_k1*A;', '')
+        self.ant = self.ant.replace('ADeg_k1 = 0.1;', '')
+
+        self.model = pycotools3.model.loada(self.ant, copasi_file=self.copasi_file)
+
+        self.tc_fname1 = os.path.join(os.path.dirname(__file__), 'timecourse1.txt')
+        self.tc_fname2 = os.path.join(os.path.dirname(__file__), 'timecourse2.txt')
+        self.ss_fname1 = os.path.join(os.path.dirname(__file__), 'steady_state1.txt')
+
+        self.model.simulate(0, 5, 0.1, report_name=self.tc_fname1)
+        self.model.simulate(0, 10, 0.5, report_name=self.tc_fname2)
+        dct1 = {
+            'A': 0.07,
+            'B': 0.06,
+            'C': 2.8
+        }
+        self.ss1 = pandas.DataFrame(dct1, index=[0])
+        self.ss1.to_csv(self.ss_fname1, sep='\t', index=False)
+        self.experiments = [self.tc_fname1, self.tc_fname2,
+                            self.ss_fname1]
+
+    def test(self):
+        """
+        Lower and upper boundaries must be the same for all parameters
+        being estimated.
+
+        We do not necessarily need to restrict the method.
+
+        We need pe_number to be 1, since we need to insert the parameters before every
+        parameter estimation.
+
+        We must set randomize start values to false
+
+        If we set run mode to True, we could just use one model
+
+        Could split the problem into copy number frames. Then do these back to back
+        Should use pe number and copy number arguments like in other areas of package
+
+        Start values must be set to model values and randomize start values must be off
+
+        Returns:
+
+        """
+        starting_parameter_sets = {
+            'test_model': {
+                0: pandas.DataFrame({
+                    'B2C_0_k2': 25,
+                    'A': 19
+                }, index=[0]),
+                1: pandas.DataFrame({
+                    'C2A_k1': 26,
+                    'A': 14
+                }, index=[0])
+            }
+        }
+        with ParameterEstimation.Context(
+                self.model.copasi_file, self.experiments, context='lhs', parameters='gm'
+        ) as context:
+            context.setd({
+                'method': 'genetic_algorithm',
+                'run_mode': True,
+                'copy_number': 3,
+            })
+            config = context.get_config()
+
+        pe = ParameterEstimation(config)
+        # pe.lhs_run(pe.model_copies)
 
 
 if __name__ == '__main__':
     unittest.main()
+

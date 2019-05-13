@@ -277,26 +277,3 @@ def _pdist(x):
     return np.array(d)
 
 
-if __name__ == '__main__':
-    import numpy
-    import pandas
-
-    n = 10
-    s = lhs(2, n)
-    # r = numpy.random.uniform(0, 1, 2*n).reshape(n, 2)
-    df = pandas.DataFrame(s)
-    # df2 = pandas.DataFrame(r)
-    boundaries = {
-        0: [1e-3, 1e+3],
-        1: [1e-3, 1e+3]
-    }
-    ## need to convert such that 0 is 1e-3 and 1 is 1e+3
-    print(df)
-    #
-    # import matplotlib.pyplot as plt
-    # import seaborn
-    #
-    # plt.figure()
-    # seaborn.scatterplot(0, 1, data=df, label='lhs')
-    # seaborn.scatterplot(0, 1, data=df2, label='random')
-    # plt.show()

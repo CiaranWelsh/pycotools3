@@ -153,7 +153,8 @@ class ParseTestsMoreThanOneModel(unittest.TestCase):
                 run_mode=True,
                 method='genetic_algorithm',
                 population_size=5,
-                number_of_generations=25
+                number_of_generations=25,
+
             )
         )
         self.config = tasks.ParameterEstimation.Config(**config_dct)

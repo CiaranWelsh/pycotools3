@@ -877,6 +877,9 @@ class Model(_base._Base):
                         lst.append(match2)
         return lst
 
+    def estimated_parameters(self):
+        return self.fit_item_order
+
     def add_state(self, state, value):
         """Append state on to end of state template.
         Used within add_metabolite and add_global_quantity. Shouldn't
@@ -2467,7 +2470,7 @@ class Model(_base._Base):
 
         return df[variables]
 
-    def scan(self, **kwargs):
+    def scan(self, inplace=False, **kwargs):
         """
         Perform a parameter scan on model
 
@@ -2480,9 +2483,12 @@ class Model(_base._Base):
         Returns:
 
         """
-        return tasks.Scan(**kwargs)
+        s = tasks.Scan(self, **kwargs)
+        if inplace:
+            self = s.model
+        return s.model
 
-    def sensitivities(self, **kwargs):
+    def sensitivities(self, inplace=False, **kwargs):
         """
         Perform a sensitivity analysis on model
 
@@ -2495,7 +2501,10 @@ class Model(_base._Base):
         Returns:
 
         """
-        return tasks.Sensitivities(**kwargs)
+        s = tasks.Sensitivities(self, **kwargs)
+        if inplace:
+            self = s.model
+        return s.model
 
 
 @mixin(ReadModelMixin)

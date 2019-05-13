@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+"""""
  This file is part of pycotools3.
 
  pycotools3 is free software: you can redistribute it and/or modify
@@ -20,10 +20,9 @@
  $Date: 12-09-2016
  Time:  13:33
 
-'''
+"""
 from . import viz
 from . import errors
-from . import misc
 from . import model
 from .munch import Munch
 from . import munch
@@ -52,6 +51,7 @@ from functools import reduce
 import yaml, json
 import sys
 import itertools
+from .lhs import lhs
 
 COPASISE, COPASIUI = load_copasi()
 
@@ -513,7 +513,7 @@ class Run(_Task):
             raise errors.InputError('{} not in {}'.format(self.mode, modes))
 
     def __str__(self):
-        return 'Run({})'.format(self.to_string())
+        return f'Run({self.model}, {self.kwargs})'
 
     def multi_run(self):
         """ """
@@ -2461,7 +2461,8 @@ class ParameterEstimation(_Task):
                 'context': 's',
                 'pl_upper_bound': 1000,
                 'pl_lower_bound': 1000,
-                'cross_validation_depth': 1
+                'cross_validation_depth': 1,
+                'starting_parameter_sets': None,
             }
 
     @staticmethod
@@ -4346,7 +4347,7 @@ class ParameterEstimation(_Task):
                             if affected_validation_experiment not in self.config.models_affected_validation_experiments[
                                 model_name]:
                                 LOG.warning(f'ignoring {item_name} as {affected_experiment} not in '
-                                      f'{self.config.models_affected_experiments[model_name]}')
+                                            f'{self.config.models_affected_experiments[model_name]}')
                                 continue
 
                             if affected_validation_experiment in self._get_experiment_keys()[model_name]:
@@ -4701,8 +4702,6 @@ class ParameterEstimation(_Task):
         """
         if self.config.settings.context == 'pl':
             scan_variable = os.path.split(mod.copasi_file)[1][:-4]
-            ##todo implement ability to modify boundaries
-            ## scan_obj = [i for i in self.get_model_objects_from_strings() if i.name == scan_variable]
             scan_obj = mod.get_model_object(scan_variable)
             if isinstance(scan_obj, model.Metabolite):
                 if self.config.settings.quantity_type == 'concentration':
@@ -4760,11 +4759,11 @@ class ParameterEstimation(_Task):
 
         """
         res = {}
+        number_of_cpu = cpu_count()
+        q = queue.Queue(maxsize=number_of_cpu)
         for model_name in models:
             res[model_name] = {}
             # for model_i in self.models[model_name]:
-            number_of_cpu = cpu_count()
-            q = queue.Queue(maxsize=number_of_cpu)
             report_files = self._enumerate_output()[model_name]
             for copy_number, mod in list(models[model_name].items()):
                 t = threading.Thread(target=self._setup1scan,
@@ -4837,24 +4836,147 @@ class ParameterEstimation(_Task):
                 self.config.settings.run_mode = 'parallel'
 
         if self.config.settings.run_mode == 'parallel':
-            for model_name in models:
-                RunParallel(
-                    list(models[model_name].values()),
-                    mode=self.config.settings.run_mode,
-                    max_active=self.config.settings.max_active,
-                    task='scan')
+            if self.config.settings.context != 'lhs':
+                for model_name in models:
+                    RunParallel(
+                        list(models[model_name].values()),
+                        mode=self.config.settings.run_mode,
+                        max_active=self.config.settings.max_active,
+                        task='scan')
+            else:
+                raise NotImplementedError('Parallel implelentation of lhs is not yet implemented. Use run_mode=True')
 
         elif self.config.settings.run_mode is True:
-            for model_name in models:
-                for copy_number, mod in list(models[model_name].items()):
-                    LOG.info(f'running model {model_name}: {copy_number}')
-                    Run(mod, mode=self.config.settings.run_mode, task='scan')
+            if self.config.settings.context != 'lhs':
+                for model_name in models:
+                    for copy_number, mod in list(models[model_name].items()):
+                        LOG.info(f'running model {model_name}: {copy_number}')
+                        Run(mod, mode=self.config.settings.run_mode, task='scan')
+            else:
+                print('lhs running')
+                self.lhs_run(models)
+
 
         elif not self.config.settings.run_mode:
             pass
 
         else:
             raise ValueError('"{}" is not a valid argument'.format(self.config.settings.run_mode))
+
+    def run_from_parameters(self, models, parameters):
+        for model_name in models:
+            model_copies = models[model_name]
+            if not isinstance(parameters, dict):
+                raise TypeError(
+                    f'"parameters" argument should be a dictionary '
+                    f'with model names as keys and pandas DataFrames '
+                    f'as values. The DataFrames should have parameter '
+                    f'names along the columns and parameter sets '
+                    f'down the rows. Got "{type(parameters)}" instead. '
+                )
+            for i in parameters:
+                if i not in models:
+                    raise errors.InputError(
+                        f'parameter set with model name "{i}" is not in the outer '
+                        f'level of the models dict ("{models.keys()}". '
+                    )
+                for j in parameters[i]:
+                    if j not in model_copies.keys():
+                        raise errors.InputError(
+                            f'parameter set with model name "{i}" and inner model '
+                            f'name "{j}" is not present in your estimation problem. '
+                            f'These are available {model_copies.keys()}'
+                        )
+
+                for j in parameters[i]:
+                    if not isinstance(parameters[i][j], pandas.DataFrame):
+                        TypeError(f'got "{type(parameters[i][j])}" '
+                                  f'but was expecting a pandas.DataFrame '
+                                  )
+
+            if self.config.settings.run_mode not in [True, False]:
+                raise NotImplementedError(
+                    'Using lhs with run_mode != True is not yet implemented'
+                )
+
+            for model_num in model_copies:
+                for parameter_set_i in range(parameters[model_name][model_num].shape[0]):
+                    p_set = parameters[model_name][model_num].iloc[parameter_set_i].to_dict()
+                    models[model_name][model_num].insert_parameters(
+                        parameter_dict=p_set,
+                        inplace=True
+                    )
+                    r = Run(model=models[model_name][model_num],
+                            task='parameter_estimation',
+                            mode=self.config.settings.run_mode)
+
+    def _run1_from_parameters(self, mod, parameters, q):
+        assert isinstance(mod, model.Model)
+        assert isinstance(parameters, pandas.DataFrame)
+        # print('report naem', report_name)
+
+        for parameter_set_i in range(parameters.shape[0]):
+
+            print('running_parameter set i', parameter_set_i)
+            p_set = parameters.iloc[parameter_set_i].to_dict()
+            mod.insert_parameters(parameter_dict=p_set, inplace=True)
+
+            s = Scan(
+                mod, scan_type='repeat', report_name=report_name,
+                number_of_steps=1, subtask='parameter_estimation',
+                report_type='multi_parameter_estimation'
+            )
+            mod = s.model
+            Run(model=mod, task='scan', mode=True)
+            # q.put(Run(model=mod, task='scan', mode=self.config.settings.run_mode))
+
+
+    def lhs_run(self, models):
+        dct = {}
+        param_names = models[list(models.keys())[0]][0].estimated_parameters()
+
+        for model_name in models:
+            n = len(self.config.items.fit_items)
+
+            iterations = 10
+            pe_number = iterations // self.config.settings.copy_number
+            remainder = iterations % self.config.settings.copy_number
+
+            starting_parameters = lhs(
+                n, 10,
+                lower_bound=self.config.settings['lower_bound'],
+                upper_bound=self.config.settings['upper_bound']
+            )
+            dct[model_name] = {}
+            start_idx = 0
+            for model_num in models[model_name]:
+                end_idx = start_idx + pe_number
+                if model_num < remainder:
+                    end_idx = self.config.settings.copy_number * model_num + pe_number + 1
+                df = pandas.DataFrame(starting_parameters[start_idx: end_idx, ])
+                df.columns = param_names
+                dct[model_name][model_num] = df
+                start_idx = end_idx
+            starting_parameters = dct
+
+        number_of_cpu = cpu_count()
+        q = queue.Queue(maxsize=number_of_cpu)
+
+
+            for model_num in models[model_name]:
+                # fname = os.path.join(os.path.split(report_name)[0], f'{model_num}.txt')
+                print('model_name:', model_name, 'model_num:', model_num)
+                params_df = starting_parameters[model_name][model_num]
+                mod = models[model_name][model_num]
+                self._run1_from_parameters(mod, params_df, q)
+                # t = threading.Thread(
+                #     target=self._run1_from_parameters, args=(mod, params_df, q)
+                # )
+                # t.daemon = True
+                # t.start()
+                # time.sleep(0.1)
+                # print(q.get())
+
 
     class Context:
         """
@@ -4941,7 +5063,6 @@ class ParameterEstimation(_Task):
             return self
 
         def __exit__(self, exc_type, exc_value, exc_traceback):
-
             if exc_type:
                 LOG.critical(f'exc_type: {exc_type}')
                 LOG.critical(f'exc_value: {exc_value}')
@@ -4963,7 +5084,7 @@ class ParameterEstimation(_Task):
                 None
 
             """
-
+            print(parameter, value)
             if parameter in self.defaults.settings:
                 self.defaults.settings[parameter] = value
 
@@ -4984,6 +5105,22 @@ class ParameterEstimation(_Task):
                     f'"{parameter}" is not a valid argument'
                 )
 
+        def setd(self, dct):
+            """
+            Set the value of multiple settings using a dict[setting] = value.
+
+            Iterates over :py:meth:`ParameterEstimation.Context.set` with key value
+            pairs
+
+            Args:
+                dct (dict): a settings dict where keys are settings and values are setting values
+
+            Returns:
+                None
+            """
+            for k, v in dct.items():
+                self.set(k, v)
+
         def get_config(self):
             if self.context == 's':
                 return self.get_config_simple()
@@ -4991,8 +5128,12 @@ class ParameterEstimation(_Task):
                 return self.get_config_pl()
             elif self.context == 'cv':
                 return self.get_config_cv()
+            elif self.context == 'lhs':
+                return self.get_config_lhs()
             else:
-                raise ValueError
+                raise ValueError(
+                    f'"{self.context}" is not a valid context'
+                )
 
         def get_config_simple(self):
             ## update the config
@@ -5136,7 +5277,8 @@ class ParameterEstimation(_Task):
                 count += len(list(e))
                 for experiment_set in range(len(e)):
                     experiments_combs[f'{num_exp}_{experiment_set}'] = e[experiment_set]
-                    validation_combs[f'{num_exp}_{experiment_set}'] = list(set(experiments).difference(set(e[experiment_set])))
+                    validation_combs[f'{num_exp}_{experiment_set}'] = list(
+                        set(experiments).difference(set(e[experiment_set])))
 
             LOG.info(f'Configuring cross validation. {count} models needed')
 
@@ -5160,7 +5302,6 @@ class ParameterEstimation(_Task):
                     model=mod
                 )
 
-
             ## prepare affected models dct
             new_aff_models_exp = {}
             for exp in experiments:
@@ -5176,14 +5317,12 @@ class ParameterEstimation(_Task):
                     if val in validation_combs[model_name]:
                         new_aff_models_val[val] += [model_name]
 
-
             datasets = deepcopy(config.datasets)
             for exp in experiments:
                 datasets.experiments[exp].affected_models = new_aff_models_exp[exp]
 
             for exp in experiments:
                 datasets.validations[exp].affected_models = new_aff_models_val[exp]
-
 
             datasets = dict(
                 experiments=datasets.experiments,
@@ -5207,6 +5346,12 @@ class ParameterEstimation(_Task):
                 settings=config.settings
             )
             return new_config
+
+        def get_config_lhs(self):
+            config = self.get_config_simple()
+            config.settings.randomize_start_value = False
+            config.settings.context = self.context
+            return config
 
         def _add_models(self, models: (str, list)):
             """

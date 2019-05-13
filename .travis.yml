@@ -1,6 +1,10 @@
 language: python
 python:
   - "3.6"
+before_install:
+  - wget https://github.com/copasi/COPASI/releases/download/Build-207/COPASI-4.25.207-Linux-64bit.tar.gz -O /tmp/copasi.tar.gz
+  - tar -xzvf /tmp/copasi.tar.gz
+  - export PATH=$PATH:$PWD/COPASI-4.25.207-Linux-64bit/bin/
 install:
   - pip install -r requirements.txt
   - pip install .

@@ -64,7 +64,7 @@ class LHSTests(unittest.TestCase):
                 if j < 0.01 or j > 100:
                     actual = False
         self.assertTrue(actual)
-        
+
     def test_correlate_boundary_between_0_and_1(self):
         s = lhs(2, 10, 'c')
         actual = True
