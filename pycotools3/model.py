@@ -2499,7 +2499,7 @@ class Model(_base._Base):
         Returns:
 
         """
-        s = tasks.Sensitivities(self, **kwargs)
+        s = tasks.Sensitivitiess(self, **kwargs)
         if inplace:
             self = s.model
         return s.model
