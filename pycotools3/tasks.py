@@ -53,8 +53,6 @@ import yaml, json
 import sys
 import itertools
 
-# COPASISE, COPASIUI = load_copasi()
-
 LOG = logging.getLogger(__name__)
 
 sns.set_context(context='poster',
