@@ -54,7 +54,8 @@ setup(
     author='Ciaran Welsh',
     requires=['lxml', 'argparse', 'pandas', 'numpy', 'scipy',
               'matplotlib', 'scipy', 'seaborn', 'sklearn',
-              'retrying', 'psutil', 'tellurium', 'pyyaml', 'json'
+              'retrying', 'psutil', 'tellurium', 'pyyaml', 'json',
+              'deprecated'
               ],
     author_email='ciaran.welsh@newcastle.ac.uk',
     url='https://github.com/CiaranWelsh/pycotools3',
@@ -65,7 +66,7 @@ setup(
     license='GPL4',
     install_requires=['pandas', 'numpy', 'scipy', 'matplotlib',
                       'lxml', 'seaborn', 'sklearn', 'psutil',
-                      'tellurium', 'pyyaml', 'munch'],
+                      'tellurium', 'pyyaml', 'munch', 'deprecated'],
 
     long_description='A python package for enhancing mathematical'
                      ' modelling using COPASI and Python 3',

@@ -93,3 +93,7 @@ LOG.setLevel(logging.WARNING)
 
 ## define the list of modules imported with the "from pycotools3 import *" statement
 __all__ = ['tasks', 'model', 'viz', 'utils']
+
+
+import matplotlib
+matplotlib.use('Qt5Agg')

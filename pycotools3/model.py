@@ -37,7 +37,7 @@ from . import misc
 # import errors, misc, viz
 from . import _base
 from . import tasks
-from .utils import load_copasi, format_timecourse_data
+from .utils import format_timecourse_data
 
 import pandas
 import re
@@ -51,8 +51,6 @@ from shutil import copy
 from functools import reduce
 
 import sys
-
-# COPASISE, COPASIUI = load_copasi()
 
 LOG = logging.getLogger(__name__)
 
@@ -876,6 +874,9 @@ class Model(_base._Base):
                         match2 = re.findall('Metabolites\[(.*)\]', j.attrib['value'])[0]
                         lst.append(match2)
         return lst
+
+    def estimated_parameters(self):
+        return self.fit_item_order
 
     def add_state(self, state, value):
         """Append state on to end of state template.
@@ -2467,7 +2468,7 @@ class Model(_base._Base):
 
         return df[variables]
 
-    def scan(self, **kwargs):
+    def scan(self, inplace=False, **kwargs):
         """
         Perform a parameter scan on model
 
@@ -2480,9 +2481,12 @@ class Model(_base._Base):
         Returns:
 
         """
-        return tasks.Scan(**kwargs)
+        s = tasks.Scan(self, **kwargs)
+        if inplace:
+            self = s.model
+        return s.model
 
-    def sensitivities(self, **kwargs):
+    def sensitivities(self, inplace=False, **kwargs):
         """
         Perform a sensitivity analysis on model
 
@@ -2495,7 +2499,10 @@ class Model(_base._Base):
         Returns:
 
         """
-        return tasks.Sensitivities(**kwargs)
+        s = tasks.Sensitivities(self, **kwargs)
+        if inplace:
+            self = s.model
+        return s.model
 
 
 @mixin(ReadModelMixin)

@@ -1,10 +1,10 @@
 Cross validation
 ================
-Validation experiments are not used in model calibration but the objective function is evaluated on validation experiments to see if the model can predict data it has not already seen. This can then be used as stopping criteria for the algorithm as we give a threshold for the closeness of the validation fits to simulations. Once reached the algorithm can stop. This idea is common practice in machine learning circles and is used to prevent overfitting.
+Validation experiments are not used in model calibration. Instead the objective function is evaluated on validation data to see if the model can predict data it has not already seen. This can then be used as stopping criteria for the algorithm as we give a threshold for the closeness of the validation fits to simulations. This idea is common practice in machine learning and is used to prevent overfitting.
 
-Cross validation is a new feature of pycotools3 but has been supported by COPASI for some years. The idea is to rotate which experiments are validated until you have data the desired combinations of dataset.
+Cross validation is a new feature of pycotools3 but has been supported by COPASI for some years. The idea is to rotate calibration and validation datasets until you have tried all the combinations.
 
-For instance, here we create a model, simulate 3 datasets and make one up (`ss2`).
+Cross validation can help identify datasets which do and don't fit well together. Here we create a model, simulate 3 datasets, make a data set up and use cross validation to infer the dataset that is made up.
 
 .. code-block:: python
 
@@ -80,13 +80,16 @@ Configuring a cross validation experiment is similar to running parameter estima
     pe = ParameterEstimation(config)
     data = pycotools3.viz.Parse(pe).concat()
 
+	
+
+
 .. note::
 
    The `cross_validation_depth` argument specifies far to go combinatorially. For instance, when `cross_validation_depth=2` and there are 4 datasets, all combinations of 2 datasets for experiments and 2 for validation will be applied.
 
 .. warning::
 
-   While validation experiments are correctly configured with pycotools, there seems to be some instability in the current release of Copasi regarging multiple experiments in the `validation datasets` feature. The validation experiments seem to work well when only one validation experiment is specified, but can crash when more than one is gives.
+   While validation experiments are correctly configured with pycotools, there seems to be some instability in the current release of Copasi regarging multiple experiments in the `validation datasets` feature. Validation experiments work well when only one validation experiment is specified, but can crash when more than one is given.
 
 .. note::
 
