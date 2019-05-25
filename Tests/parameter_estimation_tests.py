@@ -39,12 +39,8 @@ import time
 from io import StringIO
 
 
-## todo test model_value for start values are being resolved (there not)
-## todo: go through other classes that depend on parameter estiomation and ensure a context manager works for them
 ## todo make sure viz works with new parameter estimation
 ## todo modify other class arguments if necessary to be like the parameter estimation class
-## todo documentation needs to be better
-## todo examples, tutorials, html etc.
 ## todo clean up repository of old and unused code, objects files etc
 ## todo remove Models folder
 class DotDictTests(unittest.TestCase):
@@ -253,12 +249,6 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
                 mappings.B.model_object, 'B')
 
     def test_fit_items_A_lower_bound(self):
-        ## now I've broken the use of lower and upper bounds in
-        ## individual fit items
-        ## line 2965 commented out. This is where I set default boundaries
-        ## instead the boundary assignment should occur in the config class
-        ## instead of assigning boundaries again, set the defaults prior to
-        ## qhen needed
         expected = 15
         actual = self.PE.config.items.fit_items.A.lower_bound
         self.assertEqual(expected, actual)
@@ -2192,7 +2182,6 @@ class CrossValidationContextTests(_test_base._BaseTest):
     def setUp(self):
         super(CrossValidationContextTests, self).setUp()
 
-
         self.ant = self.ant.replace('ADeg: A => ; nuc*ADeg_k1*A;', '')
         self.ant = self.ant.replace('ADeg_k1 = 0.1;', '')
         self.model = pycotools3.model.loada(self.ant, copasi_file=self.copasi_file)
@@ -2236,7 +2225,7 @@ class CrossValidationContextTests(_test_base._BaseTest):
 
     def test_simple(self):
         with pycotools3.tasks.ParameterEstimation.Context(
-            self.model, self.experiments, context='cv', parameters='gm'
+                self.model, self.experiments, context='cv', parameters='gm'
         ) as context:
             context.set('randomize_start_values', True)
             context.set('method', 'genetic_algorithm')
@@ -2256,28 +2245,68 @@ class CrossValidationContextTests(_test_base._BaseTest):
         data = pycotools3.viz.Parse(pe).concat()
         self.assertLess(data.loc['3_0', 0]['RSS'], data.loc['3_1', 0]['RSS'])
 
-    # def test_depth_is_2(self):
-    #     with pycotools3.tasks.ParameterEstimation.Context(
-    #         self.model, self.experiments, context='cv', parameters='gm'
-    #     ) as context:
-    #         context.set('randomize_start_values', True)
-    #         context.set('method', 'genetic_algorithm')
-    #         context.set('population_size', 20)
-    #         context.set('number_of_generations', 50)
-    #         context.set('swarm_size', 100)
-    #         context.set('iteration_limit', 2000)
-    #         context.set('copy_number', 3)
-    #         context.set('validation_threshold', 500)
-    #         context.set('cross_validation_depth', 1)
-    #         context.set('run_mode', True)
-    #         context.set('lower_bound', 1e-3)
-    #         context.set('upper_bound', 1e2)
-    #         config = context.get_config()
-    #
-    #     pe = ParameterEstimation(config)
-        # data = pycotools3.viz.Parse(pe).concat()
-        # print(data)
-        # self.assertLess(data.loc['3_0', 0]['RSS'], data.loc['3_1', 0]['RSS'])
+
+class ParameterEstimationTestsWithDifferentTypesOfDataSet(unittest.TestCase):
+    """
+    Sometimes we want to show copasi data files that have individual repeats
+    rather than the average. These repeats are separated by a blank
+    line. Test that ParameterEstimation is flexible enough to
+    support both.
+    """
+
+    def setUp(self):
+        ant1 = """
+
+        model first()
+            compartment Cell = 1;
+
+            R1: A => B ; Cell * k1 * A;
+            R2: B => C ; Cell * k2 * B;
+            R3: C => A ; Cell * k3 * C;
+
+            k1 = 0.1;
+            k2 = 0.1;
+            k3 = 0.1;
+
+            A = 100;
+            B = 0;
+            C = 0;
+        end
+        """
+
+        self.data1 = "A,B,C\n5,10,15\n\n\n"""
+
+        self.data2 = "A,B,C\n5,10,15\n\n4,11,14\n\n6,9,16"
+
+        fname1 = os.path.join(os.path.dirname(__file__), 'first.cps')
+
+        with pycotools3.model.BuildAntimony(fname1) as loader:
+            self.mod1 = loader.load(ant1)
+
+        self.fname1 = os.path.join(os.path.dirname(__file__), 'dataset1.txt')
+        self.fname2 = os.path.join(os.path.dirname(__file__), 'dataset2.txt')
+
+        with open(self.fname1, 'w') as f:
+            f.write(self.data1)
+        with open(self.fname2, 'w') as f:
+            f.write(self.data2)
+
+        with ParameterEstimation.Context(
+                self.mod1, [self.fname1, self.fname2],
+                context='s', parameters='g') as context:
+            context.set('separator', ',')
+            self.config = context.get_config()
+
+        self.pe = ParameterEstimation(self.config)
+
+    def tearDown(self):
+        os.remove(self.fname1)
+        os.remove(self.fname2)
+
+    def test(self):
+        mod = self.pe.config.models['first'].model
+        mod.open()
+
 
 
 if __name__ == '__main__':

@@ -3661,9 +3661,41 @@ class ParameterEstimation(_Task):
 
         return parent
 
+    def _read_data(self, experiment):
+        """
+        Reads data into pandas dataframe. This function is only for the situation
+        where a datafile contains a single experiment. See :py:meth:`_read_data_multiple_experiments`
+        for function that supports multiple experiments per file.
+        Args:
+            experiment:
+
+        Returns:
+
+        """
+        data = pandas.read_csv(
+            experiment.filename,
+            sep=experiment.separator
+        )
+        return data
+
+    def _read_data_multiple_experiments(self, experiment):
+        with open(experiment.filename, 'r') as f:
+            data = f.read()
+
+        headers = data.split('\n')[0]
+        data = data.split('\n')[1:]
+        data = [i for i in data if i != '']
+        data = [headers+'\n'+i for i in data]
+        return [pandas.read_csv(StringIO(i)) for i in data]
+
+
+
     def _map1experiment(self, model_name, mod, experiment_names, experiments,
-                        keys_function, validation, query, weight_method_lookup_dct
-                        ):
+                        keys_function, validation, query, weight_method_lookup_dct):
+
+        #todo consider making this function recursive for situation when multiple experiments
+        # are in one data file
+
         for experiment_name in experiment_names:
             ## if experiment_name exists, remove and reconfigure
             experiment = experiments[experiment_name]
@@ -3685,144 +3717,153 @@ class ParameterEstimation(_Task):
                 else:
                     LOG.warning(message)
                 continue
-            ## also need to remove from affected_models attrib
-            ##todo if all remove affected experiments
 
-            data = pandas.read_csv(
-                experiment.filename,
-                sep=experiment.separator
-            )
-            experiment_type = 'steadystate'
+            # detect whether multiple experiments are in one data file
+            multiple_experiments = False
+            with open(experiment.filename) as f:
+                data_str = f.read()
+                match = re.findall('\n\n\w', data_str)
+                if match != []:
+                    multiple_experiments = True
 
-            if 'time' in [i.lower() for i in data.columns]:
-                experiment_type = 'timecourse'
+            if not multiple_experiments:
+                data = [self._read_data(experiment)]
+            else:
+                data = self._read_data_multiple_experiments(experiment)
 
-            experiment_type = str(1) if experiment_type == 'timecourse' else str(0)
+            for i, sub_experiment in enumerate(data):
+                print(experiment.filename)
+                experiment_type = 'steadystate'
 
-            num_rows = str(data.shape[0])
-            num_columns = str(data.shape[1])
+                if 'time' in [i.lower() for i in sub_experiment.columns]:
+                    experiment_type = 'timecourse'
 
-            experiment_file = {'type': 'file',
-                               'name': 'File Name',
-                               'value': experiment.filename}
-            key = {'type': 'key',
-                   'name': 'Key',
-                   'value': keys_function()[model_name][experiment_name]
-                   }
+                experiment_type = str(1) if experiment_type == 'timecourse' else str(0)
 
-            # necessary XML attributes
-            experiment_group = etree.Element('ParameterGroup',
-                                             attrib={
-                                                 'name': experiment_name
-                                             })
+                num_rows = str(sub_experiment.shape[0])
+                num_columns = str(sub_experiment.shape[1])
 
-            row_orientation = {'type': 'bool',
-                               'name': 'Data is Row Oriented',
-                               'value': True}
+                experiment_file = {'type': 'file',
+                                   'name': 'File Name',
+                                   'value': experiment.filename}
+                key = {'type': 'key',
+                       'name': 'Key',
+                       'value': keys_function()[model_name][experiment_name]
+                       }
 
-            experiment_type_dct = {'type': 'unsignedInteger',
-                                   'name': 'Experiment Type',
-                                   'value': experiment_type}
+                # necessary XML attributes
+                experiment_group = etree.Element('ParameterGroup',
+                                                 attrib={
+                                                     'name': experiment_name
+                                                 })
 
-            first_row = {'type': 'unsignedInteger',
-                         'name': 'First Row',
-                         'value': str(1)}
+                row_orientation = {'type': 'bool',
+                                   'name': 'Data is Row Oriented',
+                                   'value': True}
 
-            last_row = {'type': 'unsignedInteger',
-                        'name': 'Last Row',
-                        'value': str(int(num_rows) + 1)}  # add 1 to account for 0 indexed python
+                experiment_type_dct = {'type': 'unsignedInteger',
+                                       'name': 'Experiment Type',
+                                       'value': experiment_type}
 
-            normalize_weights_per_experiment = {'type': 'bool',
-                                                'name': 'Normalize Weights per Experiment',
-                                                'value': experiment.normalize_weights_per_experiment}
+                first_row = {'type': 'unsignedInteger',
+                             'name': 'First Row',
+                             'value': str(1)}
 
-            number_of_columns = {'type': 'unsignedInteger',
-                                 'name': 'Number of Columns',
-                                 'value': num_columns}
+                last_row = {'type': 'unsignedInteger',
+                            'name': 'Last Row',
+                            'value': str(int(num_rows) + 1)}  # add 1 to account for 0 indexed python
 
-            object_map = {'name': 'Object Map'}
+                normalize_weights_per_experiment = {'type': 'bool',
+                                                    'name': 'Normalize Weights per Experiment',
+                                                    'value': experiment.normalize_weights_per_experiment}
 
-            row_containing_names = {'type': 'unsignedInteger',
-                                    'name': 'Row containing Names',
-                                    'value': str(1)}
+                number_of_columns = {'type': 'unsignedInteger',
+                                     'name': 'Number of Columns',
+                                     'value': num_columns}
 
-            separator = {'type': 'string',
-                         'name': 'Separator',
-                         'value': experiment.separator}
+                object_map = {'name': 'Object Map'}
 
-            weight_method = {'type': 'unsignedInteger',
-                             'name': 'Weight Method',
-                             'value': weight_method_lookup_dct[
-                                 self.config.settings.weight_method
-                             ]}
+                row_containing_names = {'type': 'unsignedInteger',
+                                        'name': 'Row containing Names',
+                                        'value': str(1)}
 
-            for i in [
-                key,
-                experiment_file,
-                row_orientation,
-                first_row,
-                last_row,
-                experiment_type_dct,
-                normalize_weights_per_experiment,
-                separator,
-                weight_method,
-                row_containing_names,
-                number_of_columns,
-            ]:
-                for j, k in i.items():
-                    if isinstance(k, bool):
-                        i[j] = str(int(k))
-                    elif isinstance(k, int):
-                        i[j] = str(k)
-                etree.SubElement(experiment_group, 'Parameter', attrib=i)
-            map = etree.SubElement(experiment_group, 'ParameterGroup', attrib=object_map)
+                separator = {'type': 'string',
+                             'name': 'Separator',
+                             'value': experiment.separator}
 
-            data_column_number = 0
-            for data_name in experiment.mappings:
+                weight_method = {'type': 'unsignedInteger',
+                                 'name': 'Weight Method',
+                                 'value': weight_method_lookup_dct[
+                                     self.config.settings.weight_method
+                                 ]}
 
-                map_group = etree.SubElement(map, 'ParameterGroup', attrib={'name': str(data_column_number)})
-                data_column_number += 1
+                for i in [
+                    key,
+                    experiment_file,
+                    row_orientation,
+                    first_row,
+                    last_row,
+                    experiment_type_dct,
+                    normalize_weights_per_experiment,
+                    separator,
+                    weight_method,
+                    row_containing_names,
+                    number_of_columns,
+                ]:
+                    for j, k in i.items():
+                        if isinstance(k, bool):
+                            i[j] = str(int(k))
+                        elif isinstance(k, int):
+                            i[j] = str(k)
+                    etree.SubElement(experiment_group, 'Parameter', attrib=i)
+                map = etree.SubElement(experiment_group, 'ParameterGroup', attrib=object_map)
 
-                if experiment.mappings[data_name].model_object.lower() == 'time':
-                    self._assign_role(map_group, experiment.mappings[data_name].role)
+                data_column_number = 0
+                for data_name in experiment.mappings:
 
-                elif experiment.mappings[data_name].object_type == 'Metabolite':
-                    metab = [i for i in mod.metabolites if
-                             i.name == experiment.mappings[data_name].model_object or i.name == experiment.mappings[
-                                                                                                    data_name].model_object[
-                                                                                                :-6]]
-                    assert len(metab) == 1
-                    self._create_metabolite_reference(
-                        mod,
-                        map_group,
-                        metab[0],
-                        experiment.mappings[data_name].role
-                    )
-                    self._assign_role(map_group, experiment.mappings[data_name].role)
+                    map_group = etree.SubElement(map, 'ParameterGroup', attrib={'name': str(data_column_number)})
+                    data_column_number += 1
 
-                elif experiment.mappings[data_name].object_type == 'GlobalQuantity':
-                    glo = [i for i in mod.global_quantities if
-                           i.name == experiment.mappings[data_name].model_object or i.name == experiment.mappings[
-                                                                                                  data_name].model_object[
-                                                                                              :-6]]
-                    assert len(metab) == 1
-                    self._create_global_quantity_reference(
-                        mod,
-                        map_group,
-                        glo[0],
-                        experiment.mappings[data_name].role
-                    )
+                    if experiment.mappings[data_name].model_object.lower() == 'time':
+                        self._assign_role(map_group, experiment.mappings[data_name].role)
 
-                    self._assign_role(map_group, experiment.mappings[data_name].role)
+                    elif experiment.mappings[data_name].object_type == 'Metabolite':
+                        metab = [i for i in mod.metabolites if
+                                 i.name == experiment.mappings[data_name].model_object or i.name == experiment.mappings[
+                                                                                                        data_name].model_object[
+                                                                                                    :-6]]
+                        assert len(metab) == 1
+                        self._create_metabolite_reference(
+                            mod,
+                            map_group,
+                            metab[0],
+                            experiment.mappings[data_name].role
+                        )
+                        self._assign_role(map_group, experiment.mappings[data_name].role)
 
-                for j in mod.xml.xpath(query):
-                    j.insert(0, experiment_group)
-                    if validation:
-                        for k in list(j):
-                            if k.attrib['name'] == 'Weight':
-                                k.attrib['value'] = str(self.config.settings.validation_weight)
-                            if k.attrib['name'] == 'Threshold':
-                                k.attrib['value'] = str(self.config.settings.validation_threshold)
+                    elif experiment.mappings[data_name].object_type == 'GlobalQuantity':
+                        glo = [i for i in mod.global_quantities if
+                               i.name == experiment.mappings[data_name].model_object or i.name == experiment.mappings[
+                                                                                                      data_name].model_object[
+                                                                                                  :-6]]
+                        assert len(metab) == 1
+                        self._create_global_quantity_reference(
+                            mod,
+                            map_group,
+                            glo[0],
+                            experiment.mappings[data_name].role
+                        )
+
+                        self._assign_role(map_group, experiment.mappings[data_name].role)
+
+                    for j in mod.xml.xpath(query):
+                        j.insert(0, experiment_group)
+                        if validation:
+                            for k in list(j):
+                                if k.attrib['name'] == 'Weight':
+                                    k.attrib['value'] = str(self.config.settings.validation_weight)
+                                if k.attrib['name'] == 'Threshold':
+                                    k.attrib['value'] = str(self.config.settings.validation_threshold)
 
     def _map_experiments(self, validation=False):
         """Adds experiment sets to the parameter estimation task
@@ -4131,11 +4172,9 @@ class ParameterEstimation(_Task):
         dct = OrderedDict()
 
         for model_name in self.models:
-            # model_name = self.models[model_name].model
             dct[model_name] = OrderedDict()
 
             for experiment_name in self.config.experiment_names:
-                # experiment = self.config.datasets.experiments[experiment_name]
                 key = "Experiment_{}".format(experiment_name)
                 dct[model_name][experiment_name] = key
         return dct

@@ -26,7 +26,7 @@ Module that tests the operations of the _Base base test
 import os, glob
 # import site
 # site.addsitedir(os.path.dirname(os.path.dirname(__file__)))
-from . import _test_base
+import _test_base
 import pycotools3
 
 import pandas
