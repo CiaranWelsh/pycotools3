@@ -3690,7 +3690,7 @@ class ParameterEstimation(_Task):
         data = data.split('\n\n')
         data = [i for i in data if i != '']
         data = [headers+'\n'+i for i in data]
-        data = [pandas.read_csv(StringIO(i)) for i in data]
+        data = [pandas.read_csv(StringIO(i), sep=experiment.separator) for i in data]
 
         # and figure out what the line numbers are
         line_numbers = []
@@ -3698,7 +3698,6 @@ class ParameterEstimation(_Task):
             if i == 0:
                 start = 1
                 end = df.shape[0]
-                # print('start end', start, end)
                 line_numbers.append((start, end))
             else:
                 start = end + 2
@@ -3758,7 +3757,6 @@ class ParameterEstimation(_Task):
 
             for i, sub_experiment in enumerate(data):
                 experiment_type = 'steadystate'
-
                 if 'time' in [i.lower() for i in sub_experiment.columns]:
                     experiment_type = 'timecourse'
 
@@ -5026,7 +5024,6 @@ class ParameterEstimation(_Task):
                 None
 
             """
-            print(parameter, value)
             if parameter in self.defaults.settings:
                 self.defaults.settings[parameter] = value
 
