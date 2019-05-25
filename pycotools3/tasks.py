@@ -1824,7 +1824,7 @@ class TimeCourse(_Task):
                 if 'append' and 'target' in list(j.attrib.keys()):
                     present = True
                     j.attrib.update(arg_dct)
-            if present == False:
+            if not present:
                 report = etree.Element('Report', attrib=arg_dct)
                 i.insert(0, report)
         return self.model
@@ -3682,28 +3682,33 @@ class ParameterEstimation(_Task):
         return data, [[i+1 for i in line_numbers]]
 
     def _read_data_multiple_experiments(self, experiment):
-        all_line_numbers = []
         with open(experiment.filename, 'r') as f:
             data = f.read()
 
         # get the data as dataframes
         headers = data.split('\n')[0]
-        data = data.split('\n')[1:]
+        data = data.split('\n\n')
         data = [i for i in data if i != '']
         data = [headers+'\n'+i for i in data]
-        data =  [pandas.read_csv(StringIO(i)) for i in data]
+        data = [pandas.read_csv(StringIO(i)) for i in data]
 
         # and figure out what the line numbers are
         line_numbers = []
         for i, df in enumerate(data):
             if i == 0:
                 start = 1
-                end = df.shape[0] + 1
+                end = df.shape[0]
+                # print('start end', start, end)
                 line_numbers.append((start, end))
             else:
                 start = end + 2
                 end = start + df.shape[0] - 1
                 line_numbers.append((start, end))
+
+        if len(line_numbers) != len(data):
+            raise ValueError('Huston, we have a problem')
+
+        print(line_numbers)
 
         return data, line_numbers
 

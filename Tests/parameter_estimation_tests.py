@@ -2246,7 +2246,7 @@ class CrossValidationContextTests(_test_base._BaseTest):
         self.assertLess(data.loc['3_0', 0]['RSS'], data.loc['3_1', 0]['RSS'])
 
 
-class ParameterEstimationTestsWithDifferentTypesOfDataSet(unittest.TestCase):
+class ParameterEstimationTestsWithDifferentTypesOfDataSet(_test_base._BaseTest):
     """
     Sometimes we want to show copasi data files that have individual repeats
     rather than the average. These repeats are separated by a blank
@@ -2278,6 +2278,19 @@ class ParameterEstimationTestsWithDifferentTypesOfDataSet(unittest.TestCase):
 
         self.data2 = "A,B,C\n5,10,15\n\n4,11,14\n\n6,9,16"
 
+        self.data3 = "Time,A,B,C\n" \
+                     "0,5,10,15\n" \
+                     "1,6,11,16\n" \
+                     "2,7,12,17\n" \
+                     "\n" \
+                     "0,8,12,16\n" \
+                     "1,9,12,17\n" \
+                     "2,10,13,18\n" \
+                     "\n" \
+                     "0,5,10,15\n" \
+                     "1,6,11,16\n" \
+                     "2,7,12,17\n"
+
         fname1 = os.path.join(os.path.dirname(__file__), 'first.cps')
 
         with pycotools3.model.BuildAntimony(fname1) as loader:
@@ -2285,23 +2298,27 @@ class ParameterEstimationTestsWithDifferentTypesOfDataSet(unittest.TestCase):
 
         self.fname1 = os.path.join(os.path.dirname(__file__), 'dataset1.txt')
         self.fname2 = os.path.join(os.path.dirname(__file__), 'dataset2.txt')
+        self.fname3 = os.path.join(os.path.dirname(__file__), 'dataset3.txt')
 
         with open(self.fname1, 'w') as f:
             f.write(self.data1)
         with open(self.fname2, 'w') as f:
             f.write(self.data2)
+        with open(self.fname3, 'w') as f:
+            f.write(self.data3)
 
         with ParameterEstimation.Context(
-                self.mod1, [self.fname1, self.fname2],
+                self.mod1, [self.fname1, self.fname2, self.fname3],
                 context='s', parameters='g') as context:
             context.set('separator', ',')
             self.config = context.get_config()
 
         self.pe = ParameterEstimation(self.config)
 
-    def tearDown(self):
-        os.remove(self.fname1)
-        os.remove(self.fname2)
+    # def tearDown(self):
+    #     os.remove(self.fname1)
+    #     os.remove(self.fname2)
+    #     os.remove(self.fname3)
 
     def test_line_numbers_accurate_in_multi_experiment_file(self):
         actual_end = None
@@ -2315,7 +2332,24 @@ class ParameterEstimationTestsWithDifferentTypesOfDataSet(unittest.TestCase):
                     actual_end = int(j.attrib['value'])
         expected_start = 4
         expected_end = 4
+        # ans = [(1, 2), (4, 4), (6, 6)]
         self.assertEqual((expected_start, expected_end), (actual_start, actual_end))
+
+
+    def test_file_data_file3(self):
+        expected = (10, 12)
+
+        actual_start = None
+        actual_end = None
+
+        mod = self.pe.config.models['first'].model
+        for i in mod.xml.xpath("//*[@name='dataset3_2']"):
+            for j in list(i):
+                if j.attrib['name'] == 'First Row':
+                    actual_start = int(j.attrib['value'])
+                elif j.attrib['name'] == 'Last Row':
+                    actual_end = int(j.attrib['value'])
+        self.assertEqual(expected, (actual_start, actual_end))
 
 
 
