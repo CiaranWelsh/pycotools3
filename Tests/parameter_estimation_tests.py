@@ -2303,9 +2303,20 @@ class ParameterEstimationTestsWithDifferentTypesOfDataSet(unittest.TestCase):
         os.remove(self.fname1)
         os.remove(self.fname2)
 
-    def test(self):
+    def test_line_numbers_accurate_in_multi_experiment_file(self):
+        actual_end = None
+        actual_start = None
         mod = self.pe.config.models['first'].model
-        mod.open()
+        for i in mod.xml.xpath("//*[@name='dataset2_1']"):
+            for j in list(i):
+                if j.attrib['name'] == 'First Row':
+                    actual_start = int(j.attrib['value'])
+                elif j.attrib['name'] == 'Last Row':
+                    actual_end = int(j.attrib['value'])
+        expected_start = 4
+        expected_end = 4
+        self.assertEqual((expected_start, expected_end), (actual_start, actual_end))
+
 
 
 

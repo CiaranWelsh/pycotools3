@@ -3676,17 +3676,36 @@ class ParameterEstimation(_Task):
             experiment.filename,
             sep=experiment.separator
         )
-        return data
+        line_numbers = data.shape
+
+        # return line numbers as nested list to make consistent with _read_data_multiple_experiments
+        return data, [[i+1 for i in line_numbers]]
 
     def _read_data_multiple_experiments(self, experiment):
+        all_line_numbers = []
         with open(experiment.filename, 'r') as f:
             data = f.read()
 
+        # get the data as dataframes
         headers = data.split('\n')[0]
         data = data.split('\n')[1:]
         data = [i for i in data if i != '']
         data = [headers+'\n'+i for i in data]
-        return [pandas.read_csv(StringIO(i)) for i in data]
+        data =  [pandas.read_csv(StringIO(i)) for i in data]
+
+        # and figure out what the line numbers are
+        line_numbers = []
+        for i, df in enumerate(data):
+            if i == 0:
+                start = 1
+                end = df.shape[0] + 1
+                line_numbers.append((start, end))
+            else:
+                start = end + 2
+                end = start + df.shape[0] - 1
+                line_numbers.append((start, end))
+
+        return data, line_numbers
 
 
 
@@ -3726,13 +3745,14 @@ class ParameterEstimation(_Task):
                 if match != []:
                     multiple_experiments = True
 
+            # read data differently depending on whether there are multiple experiments per file
             if not multiple_experiments:
-                data = [self._read_data(experiment)]
+                data, line_numbers = self._read_data(experiment)
+                data = [data]
             else:
-                data = self._read_data_multiple_experiments(experiment)
+                data, line_numbers = self._read_data_multiple_experiments(experiment)
 
             for i, sub_experiment in enumerate(data):
-                print(experiment.filename)
                 experiment_type = 'steadystate'
 
                 if 'time' in [i.lower() for i in sub_experiment.columns]:
@@ -3748,13 +3768,13 @@ class ParameterEstimation(_Task):
                                    'value': experiment.filename}
                 key = {'type': 'key',
                        'name': 'Key',
-                       'value': keys_function()[model_name][experiment_name]
+                       'value': keys_function()[model_name][experiment_name] + '_' + str(i)
                        }
 
                 # necessary XML attributes
                 experiment_group = etree.Element('ParameterGroup',
                                                  attrib={
-                                                     'name': experiment_name
+                                                     'name': experiment_name + '_' + str(i)
                                                  })
 
                 row_orientation = {'type': 'bool',
@@ -3767,11 +3787,11 @@ class ParameterEstimation(_Task):
 
                 first_row = {'type': 'unsignedInteger',
                              'name': 'First Row',
-                             'value': str(1)}
+                             'value': str(line_numbers[i][0])}
 
                 last_row = {'type': 'unsignedInteger',
                             'name': 'Last Row',
-                            'value': str(int(num_rows) + 1)}  # add 1 to account for 0 indexed python
+                            'value': str(line_numbers[i][1])}  # add 1 to account for 0 indexed python
 
                 normalize_weights_per_experiment = {'type': 'bool',
                                                     'name': 'Normalize Weights per Experiment',
@@ -4145,8 +4165,8 @@ class ParameterEstimation(_Task):
                                 pattern = 'Metabolites\[(.*)\],Reference=(.*)'
                                 match2_copasiML = re.findall(pattern, j.attrib['value'])
                                 if match2_copasiML != []:
-                                    if match2_copasiML[0][1] == 'InitialConcentration' or match2_copasiML[0][
-                                        1] == 'InitialParticleNumber':
+                                    if match2_copasiML[0][1] == 'InitialConcentration' \
+                                            or match2_copasiML[0][1] == 'InitialParticleNumber':
                                         match2_item = re.findall(pattern, item['value'])
                                         if match2_item != []:
                                             if match2_item == match2_copasiML:
