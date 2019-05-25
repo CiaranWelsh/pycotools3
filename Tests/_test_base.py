@@ -107,7 +107,8 @@ class _BaseTest(unittest.TestCase):
                 '*.json',
                 '*.yaml',
                 '*.yml',
-                '*.yaml'
+                '*.yaml',
+                '*.sbml',
             ]
             for i in file_types_to_remove:
                 for j in glob.glob(os.path.join(dire, i)):

@@ -3708,7 +3708,6 @@ class ParameterEstimation(_Task):
         if len(line_numbers) != len(data):
             raise ValueError('Huston, we have a problem')
 
-        print(line_numbers)
 
         return data, line_numbers
 
@@ -3833,8 +3832,7 @@ class ParameterEstimation(_Task):
                     separator,
                     weight_method,
                     row_containing_names,
-                    number_of_columns,
-                ]:
+                    number_of_columns]:
                     for j, k in i.items():
                         if isinstance(k, bool):
                             i[j] = str(int(k))
@@ -3854,10 +3852,9 @@ class ParameterEstimation(_Task):
 
                     elif experiment.mappings[data_name].object_type == 'Metabolite':
                         metab = [i for i in mod.metabolites if
-                                 i.name == experiment.mappings[data_name].model_object or i.name == experiment.mappings[
-                                                                                                        data_name].model_object[
-                                                                                                    :-6]]
-                        assert len(metab) == 1
+                                 i.name == experiment.mappings[data_name].model_object \
+                                 or i.name == experiment.mappings[data_name].model_object.replace('_indep', '')]
+                        assert len(metab) == 1, f"len(metab) should equal 1 but instead equals {len(metab)}"
                         self._create_metabolite_reference(
                             mod,
                             map_group,
@@ -3868,9 +3865,8 @@ class ParameterEstimation(_Task):
 
                     elif experiment.mappings[data_name].object_type == 'GlobalQuantity':
                         glo = [i for i in mod.global_quantities if
-                               i.name == experiment.mappings[data_name].model_object or i.name == experiment.mappings[
-                                                                                                      data_name].model_object[
-                                                                                                  :-6]]
+                               i.name == experiment.mappings[data_name].model_object \
+                               or i.name == experiment.mappings[data_name].model_object.replace('_indep', '')]
                         assert len(metab) == 1
                         self._create_global_quantity_reference(
                             mod,

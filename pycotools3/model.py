@@ -4790,37 +4790,6 @@ class ParameterSet(object):
         """:return:"""
         if self.key is None:
             pass
-            # self.key = KeyFactory(self.model, type='parameter_set').generate()
-
-    # def read_parameter_set_from_xml(self):
-    #     """
-    #     :return: the parameter set defined as self.key (defaults to ModelParameterSet1)
-    #     """
-    #     # print self.model.xml
-    #     for i in self.model.xml.iter():
-    #         if i.tag == '{http://www.copasi.org/static/schema}ListOfModelParameterSets':
-    #             for j in i:
-    #                 if j.attrib['key'] == self.key:
-    #                     for k in j:
-    #                         if k.attrib['cn'] == 'String=Initial Time':
-    #                             for l in k:
-    #                                 self.initial_time = l.attrib['value']
-    #
-    #                         elif k.attrib['cn'] == 'String=Initial Compartment Sizes':
-    #                             for l in k:
-    #                                 compartment_references = [m for m in self.model.compartments if "{},{}".format(
-    #                                     self.model.reference, m.reference == l.attrib['cn'])]
-    #                                 self.compartments.append(compartments)
-    #
-    #                         elif k.attrib['cn'] == 'String=Initial Species Values':
-    #
-    #
-    #                         elif k.attrib['cn'] == 'String=Initial Global Quantities':
-    #                             pass
-    #
-    #
-    #                         elif k.attrib['cn'] == 'String=Kinetic Parameters':
-    #                             pass
 
     def to_xml(self):
         """ """
@@ -4924,14 +4893,4 @@ class ParameterSet(object):
 
         print((etree.tostring(parameter_set, pretty_print=True)))
 
-#
-#
 
-
-##TODO reactions, metabs, globs and comp
-## all need additional reference without the reference part.
-##either string manit or write a new function to produce
-##in each class
-
-## implement means ofadding initial expresion
-## to each ompontnt
