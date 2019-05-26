@@ -3676,10 +3676,8 @@ class ParameterEstimation(_Task):
             experiment.filename,
             sep=experiment.separator
         )
-        line_numbers = data.shape
-
         # return line numbers as nested list to make consistent with _read_data_multiple_experiments
-        return data, [[i+1 for i in line_numbers]]
+        return data, [[1, data.shape[0] + 1]]
 
     def _read_data_multiple_experiments(self, experiment):
         with open(experiment.filename, 'r') as f:
@@ -3689,7 +3687,7 @@ class ParameterEstimation(_Task):
         headers = data.split('\n')[0]
         data = data.split('\n\n')
         data = [i for i in data if i != '']
-        data = [headers+'\n'+i for i in data]
+        data = [headers + '\n' + i for i in data]
         data = [pandas.read_csv(StringIO(i), sep=experiment.separator) for i in data]
 
         # and figure out what the line numbers are
@@ -3707,15 +3705,12 @@ class ParameterEstimation(_Task):
         if len(line_numbers) != len(data):
             raise ValueError('Huston, we have a problem')
 
-
         return data, line_numbers
-
-
 
     def _map1experiment(self, model_name, mod, experiment_names, experiments,
                         keys_function, validation, query, weight_method_lookup_dct):
 
-        #todo consider making this function recursive for situation when multiple experiments
+        # todo consider making this function recursive for situation when multiple experiments
         # are in one data file
 
         for experiment_name in experiment_names:
@@ -3901,7 +3896,7 @@ class ParameterEstimation(_Task):
 
         """
         ## build a reference dct for weight method numbers
-        weight_method_string = ['mean_squared', 'stardard_deviation', 'value_scaling',
+        weight_method_string = ['mean_squared', 'standard_deviation', 'value_scaling',
                                 'mean']
         weight_method_numbers = [str(i) for i in [1, 2, 3, 4]]
         weight_method_lookup_dct = dict(list(zip(weight_method_string, weight_method_numbers)))
@@ -4301,20 +4296,6 @@ class ParameterEstimation(_Task):
                 # initialize new element
                 fit_item_element = etree.Element('ParameterGroup', attrib={'name': 'FitItem'})
 
-                '''
-                We have a problem here in that when we ignore an experiment for a model 
-                via the affected models arg, we also need to remove that experiment 
-                from any fit items which may depend on it. 
-                
-                solutions
-                ----------
-                1. If affected experiments is 'all' change it so that the Affected Experiments element 
-                   is blank, as it is when copasi configures the parameter estimation. 
-                2. Modify the below section of code such that if an experiment doesn't exist for a 
-                   model, we remove it from the affected experiments section. 
-                3. Remove experiment from experiment_keys
-                
-                '''
                 affected_experiments = {'name': 'Affected Experiments'}
                 ## read affected _experiments from config file.yaml
                 affected_experiments_attr = OrderedDict()
@@ -4917,6 +4898,20 @@ class ParameterEstimation(_Task):
         else:
             raise ValueError('"{}" is not a valid argument'.format(self.config.settings.run_mode))
 
+    def duplicate_for_every_experiment(self, model, fit_items, lower_bounds, start_values, upper_bounds):
+        """
+        Replicate Copasi's duplicate for every experiment button.
+
+        Args:
+            model:
+            fit_items:
+            lower_bounds:
+            start_values:
+            upper_bounds:
+
+        Returns:
+
+        """
 
     class Context:
         """

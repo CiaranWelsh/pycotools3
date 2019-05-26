@@ -2353,6 +2353,83 @@ class ParameterEstimationTestsWithDifferentTypesOfDataSet(_test_base._BaseTest):
 
 
 
+class DuplicateForEachExperimentTests(_test_base._BaseTest):
+    """
+    Sometimes we want to show copasi data files that have individual repeats
+    rather than the average. These repeats are separated by a blank
+    line. Test that ParameterEstimation is flexible enough to
+    support both.
+    """
+
+    def setUp(self):
+        ant1 = """
+
+        model first()
+            compartment Cell = 1;
+
+            R1: A => B ; Cell * k1 * A;
+            R2: B => C ; Cell * k2 * B;
+            R3: C => A ; Cell * k3 * C;
+
+            k1 = 0.1;
+            k2 = 0.1;
+            k3 = 0.1;
+
+            A = 100;
+            B = 0;
+            C = 0;
+        end
+        """
+
+        self.data1 = "A,B,C\n5,10,15\n\n\n"""
+
+        self.data2 = "A,B,C\n5,10,15\n\n4,11,14\n\n6,9,16"
+
+        self.data3 = "Time,A,B,C\n" \
+                     "0,5,10,15\n" \
+                     "1,6,11,16\n" \
+                     "2,7,12,17\n" \
+                     "\n" \
+                     "0,8,12,16\n" \
+                     "1,9,12,17\n" \
+                     "2,10,13,18\n" \
+                     "\n" \
+                     "0,5,10,15\n" \
+                     "1,6,11,16\n" \
+                     "2,7,12,17\n"
+
+        fname1 = os.path.join(os.path.dirname(__file__), 'first.cps')
+
+        with pycotools3.model.BuildAntimony(fname1) as loader:
+            self.mod1 = loader.load(ant1)
+
+        self.fname1 = os.path.join(os.path.dirname(__file__), 'dataset1.txt')
+        self.fname2 = os.path.join(os.path.dirname(__file__), 'dataset2.txt')
+        self.fname3 = os.path.join(os.path.dirname(__file__), 'dataset3.txt')
+
+        with open(self.fname1, 'w') as f:
+            f.write(self.data1)
+        with open(self.fname2, 'w') as f:
+            f.write(self.data2)
+        with open(self.fname3, 'w') as f:
+            f.write(self.data3)
+
+        with ParameterEstimation.Context(
+                self.mod1, [self.fname1, self.fname2, self.fname3],
+                context='s', parameters='g') as context:
+            context.set('separator', ',')
+            self.config = context.get_config()
+
+        self.pe = ParameterEstimation(self.config)
+
+
+    def test(self):
+        self.pe.duplicate_for_every_experiment(
+            self.pe.models['first'].model,
+            'A',
+        )
+
+
 
 if __name__ == '__main__':
     unittest.main()
