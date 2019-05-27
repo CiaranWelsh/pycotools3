@@ -986,6 +986,7 @@ class ParameterEstimationTests(_test_base._BaseTest):
 
     def test_global_quantities(self):
         glo = ['A2B', 'ADeg_k1', 'B2C', 'B2C_0_k2', 'C2A_k1', 'ThisIsAssignment']
+        self.PE.models['model1'].model.open()
         self.assertListEqual(sorted(glo), sorted(self.PE.global_quantities))
 
     def test_local_parameter(self):
@@ -1322,6 +1323,7 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
             context.set('number_of_generations', 25)
             context.set('population_size', 10)
             config = context.get_config()
+
         self.assertTrue(isinstance(config, ParameterEstimation.Config))
 
     def test_create_config_file(self):
@@ -2423,12 +2425,12 @@ class DuplicateForEachExperimentTests(_test_base._BaseTest):
         self.pe = ParameterEstimation(self.config)
 
 
-    def test(self):
-        self.pe.duplicate_for_every_experiment(
-            self.pe.models['first'].model,
-            'A',
-        )
-
+    # def test(self):
+    #     self.pe.duplicate_for_every_experiment(
+    #         self.pe.models['first'].model,
+    #         'A',
+    #     )
+#
 
 
 if __name__ == '__main__':

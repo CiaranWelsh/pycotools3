@@ -2356,6 +2356,7 @@ class ParameterEstimation(_Task):
                 if i.lower() == 'time':
                     roles[i] = 'time'
                 elif i[:-6] == '_indep':
+                    print('im an independent')
                     roles[i] = 'independent'
                 else:
                     roles[i] = 'dependent'
@@ -3603,7 +3604,7 @@ class ParameterEstimation(_Task):
 
         elif role == 'dependent':
             cn = '{},{}'.format(mod.reference,
-                                global_quantity.initial_reference)
+                                global_quantity.transient_reference)
         else:
             raise ValueError
 
@@ -3846,7 +3847,7 @@ class ParameterEstimation(_Task):
                     elif experiment.mappings[data_name].object_type == 'Metabolite':
                         metab = [i for i in mod.metabolites if
                                  i.name == experiment.mappings[data_name].model_object \
-                                 or i.name == experiment.mappings[data_name].model_object.replace('_indep', '')]
+                                 or re.findall(i.name + '_indep', experiment.mappings[data_name].model_object) != []]
                         assert len(metab) == 1, f"len(metab) should equal 1 but instead equals {len(metab)}"
                         self._create_metabolite_reference(
                             mod,
@@ -3859,8 +3860,8 @@ class ParameterEstimation(_Task):
                     elif experiment.mappings[data_name].object_type == 'GlobalQuantity':
                         glo = [i for i in mod.global_quantities if
                                i.name == experiment.mappings[data_name].model_object \
-                               or i.name == experiment.mappings[data_name].model_object.replace('_indep', '')]
-                        assert len(metab) == 1
+                               or re.findall(i.name+'_indep', experiment.mappings[data_name].model_object) != []]
+                        assert len(glo) == 1
                         self._create_global_quantity_reference(
                             mod,
                             map_group,
