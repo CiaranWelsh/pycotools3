@@ -548,7 +548,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
         for i in mod.xml.xpath(query):
             for j in i:
                 count += 1
-        self.assertEqual(count, 3)
+        self.assertEqual(count, 5)
 
     def test_correct_number_of_validation_experiments(self):
         """
@@ -561,7 +561,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
         query = '//*[@name="Validation Set"]'
         for i in mod.xml.xpath(query):
             for j in i:
-                if j.attrib['name'] == 'report3_0':
+                if j.attrib['name'] == 'report3':
                     count += 1
 
         self.assertEqual(count, 1)
@@ -620,12 +620,11 @@ class ExperimentMapperTests(_test_base._BaseTest):
     def experiment_checker_function(self, expected_value, attribute):
 
         mod = self.PE.config.models.model1.model
-        mod.open()
         ans = None
         query = '//*[@name="Experiment Set"]'
         for i in mod.xml.xpath(query):
             for j in i:
-                if j.attrib['name'] == 'report1_0':
+                if j.attrib['name'] == 'report1':
                     for k in j:
                         if k.attrib['name'] == attribute:
                             ans = k.attrib['value']
@@ -658,7 +657,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
         First row of experiment_0==1
         :return:
         """
-        self.experiment_checker_function('10', 'Number of Columns')
+        self.experiment_checker_function('4', 'Number of Columns')
 
     def test_experiment_correct_reference1(self):
         """
@@ -672,7 +671,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
         query = '//*[@name="Experiment Set"]'
         for i in mod.xml.xpath(query):
             for j in i:
-                if j.attrib['name'] == 'report2_0':
+                if j.attrib['name'] == 'report2':
                     for k in j:
                         if k.attrib['name'] == 'Object Map':
                             for l in k:
@@ -694,7 +693,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
         query = '//*[@name="Experiment Set"]'
         for i in mod.xml.xpath(query):
             for j in i:
-                if j.attrib['name'] == 'report1_0':
+                if j.attrib['name'] == 'report1':
                     for k in j:
                         if k.attrib['name'] == 'Object Map':
                             for l in k:
@@ -717,7 +716,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
         query = '//*[@name="Validation Set"]'
         for i in mod.xml.xpath(query):
             for j in i:
-                if j.attrib['name'] == 'report3_0':
+                if j.attrib['name'] == 'report3':
                     for k in j:
                         if k.attrib['name'] == 'Object Map':
                             for l in k:
@@ -739,7 +738,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
         query = '//*[@name="Experiment Set"]'
         for i in mod.xml.xpath(query):
             for j in i:
-                if j.attrib['name'] == 'ss_0':
+                if j.attrib['name'] == 'ss':
                     for k in j:
                         if k.attrib['name'] == 'Experiment Type':
                             ## code for steady state is '0'
@@ -758,7 +757,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
         query = '//*[@name="Experiment Set"]'
         for i in mod.xml.xpath(query):
             for j in i:
-                if j.attrib['name'] == 'report1_0':
+                if j.attrib['name'] == 'report1':
                     for k in j:
                         if k.attrib['name'] == 'Experiment Type':
                             ## code for steady state is '0'
@@ -780,7 +779,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
                 for k in j:
                     if k.attrib['name'] == 'Object Map':
                         count += 1
-        self.assertEqual(3, count)
+        self.assertEqual(5, count)
 
     def test_experiment_correct_number_of_validation_obj_maps(self):
         """
@@ -815,7 +814,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
         for i in mod.xml.xpath(query):
             for j in i:
                 count += 1
-        self.assertEqual(3, count)
+        self.assertEqual(5, count)
 
     def test_fit_items_property(self):
         lst = ['A', 'B', 'C', 'A2B', 'B2C', 'B2C_0_k2', 'C2A_k1', 'ADeg_k1']
@@ -829,7 +828,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
         for i in mod.xml.xpath(query):
             for j in i:
                 count += 1
-        self.assertEqual(3, count)
+        self.assertEqual(5, count)
 
     def test_correct_number_of_fit_items(self):
         query = '//*[@name="FitItem"]'
@@ -854,7 +853,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
 
     def test_independent_variables_get_mapped(self):
         mod = self.PE.models['model1'].model
-        query = '//*[@name="ss_0"]'
+        query = '//*[@name="ss"]'
         actual = None
         expected = r'CN=Root,Model=TestModel1,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=InitialConcentration'
         for i in mod.xml.xpath(query):
@@ -888,27 +887,6 @@ class ExperimentMapperTests(_test_base._BaseTest):
                     actual = 'Experiment_report1'
         self.assertEqual(expected, actual)
 
-    def test_affected_experiments_key2(self):
-        """
-        Since changing the configuration to support experimental data files containing more than
-        one experiment there has been a bug in the mapping of initial concentation of A. After digging,
-        it turns out that the initial concentration of A makes use of the affected experiments feature which
-        is causing the bug because of inconsisent experiment keys.
-        Returns:
-
-        """
-        #  Could not find experiment for fit item 'CN=Root,Model=TestModel1,Vector=Compartments[nuc],
-        #  Vector=Metabolites[A],Reference=InitialConcentration'.
-        mod = self.PE.models['model1'].model
-        # mod.open()
-        # query = '//*[@name="Affected Experiments"]'
-        # actual = None
-        # expected = 'Experiment_report1'
-        # for i in mod.xml.xpath(query):
-        #     for j in i:
-        #         if j.attrib['value'] == 'Experiment_report1':
-        #             actual = 'Experiment_report1'
-        # self.assertEqual(expected, actual)
 
 
 class ParameterEstimationTests(_test_base._BaseTest):

@@ -2296,7 +2296,7 @@ class _ParameterEstimationBase(_Task):
         """
         data = pandas.read_csv(fname, sep)
         # return line numbers as nested list to make consistent with _read_data_multiple_experiments
-        return data, [[1, data.shape[0] + 1]]
+        return data, [1, data.shape[0] + 1]
 
     @staticmethod
     def _read_data_multiple_experiments(fname, sep):
@@ -2311,12 +2311,12 @@ class _ParameterEstimationBase(_Task):
         data = [headers + '\n' + i for i in data]
         data = [pandas.read_csv(StringIO(i), sep=sep) for i in data]
 
-        # and figure out what the line numbers are
+        # figure out what the line numbers are
         line_numbers = []
         for i, df in enumerate(data):
             if i == 0:
                 start = 1
-                end = df.shape[0]
+                end = df.shape[0]+1
                 line_numbers.append((start, end))
             else:
                 start = end + 2
@@ -2847,7 +2847,6 @@ class ParameterEstimation(_ParameterEstimationBase):
             Returns:
                 None, the method operates on class attributes inplace
             """
-            print(self.datasets.experiments)
             for experiment_name in self.experiment_names:
                 # determine whether the experiment_name has been appended with a number for multi experiments per file (i.e. exp1_0)
                 match = re.findall('(.*)_\d+$', experiment_name)
@@ -3212,7 +3211,6 @@ class ParameterEstimation(_ParameterEstimationBase):
                     experiment_names += [experiment_name+'_'+str(j) for j in range(num_experiments)]
                 else:
                     experiment_names.append(experiment_name)
-
             return experiment_names
 
         @property
@@ -3795,160 +3793,165 @@ class ParameterEstimation(_ParameterEstimationBase):
                 match = re.findall('\n\n\w', data_str)
                 if match != []:
                     multiple_experiments = True
-
             # read data differently depending on whether there are multiple experiments per file
             if not multiple_experiments:
                 data, line_numbers = self._read_data(experiment.filename, experiment.separator)
-                data = [data]
+                data = data
             else:
                 data, line_numbers = self._read_data_multiple_experiments(experiment.filename, experiment.separator)
+                # need to index the data here to match the current experiment key
+                idx = re.findall('.*_(\d+)?', experiment_name)
+                if idx == []:
+                    raise ValueError
+                idx = int(idx[0])
+                data = data[idx]
+                line_numbers = line_numbers[idx]
 
-            for i, sub_experiment in enumerate(data):
-                print('\ndata is', sub_experiment, '\n')
-                experiment_type = 'steadystate'
-                if 'time' in [i.lower() for i in sub_experiment.columns]:
-                    experiment_type = 'timecourse'
+            # This for loop is now superflous but not doing any harm. Left for now
+            # for i, experiment in enumerate(data):
+            experiment_type = 'steadystate'
 
-                experiment_type = str(1) if experiment_type == 'timecourse' else str(0)
+            if 'time' in [i.lower() for i in data.columns]:
+                experiment_type = 'timecourse'
 
-                num_rows = str(sub_experiment.shape[0])
-                num_columns = str(sub_experiment.shape[1])
+            experiment_type = str(1) if experiment_type == 'timecourse' else str(0)
 
-                experiment_file = {'type': 'file',
-                                   'name': 'File Name',
-                                   'value': experiment.filename}
-                print('keys fuinction', keys_function()[model_name])
-                key_value = keys_function()[model_name][experiment_name]
-                print('kv', key_value)
-                key = {'type': 'key',
-                       'name': 'Key',
-                       'value': key_value#+ '_' + str(i) if multiple_experiments else key_value
-                       }
+            num_rows = str(data.shape[0])
+            num_columns = str(data.shape[1])
 
-                # necessary XML attributes
-                experiment_group = etree.Element('ParameterGroup',
-                                                 attrib={
-                                                     'name': experiment_name #+ '_' + str(i) if multiple_experiments else experiment_name
-                                                 })
+            experiment_file = {'type': 'file',
+                               'name': 'File Name',
+                               'value': experiment.filename}
+            key_value = keys_function()[model_name][experiment_name]
+            key = {'type': 'key',
+                   'name': 'Key',
+                   'value': key_value
+                   }
 
-                row_orientation = {'type': 'bool',
-                                   'name': 'Data is Row Oriented',
-                                   'value': True}
+            # necessary XML attributes
+            experiment_group = etree.Element('ParameterGroup',
+                                             attrib={
+                                                 'name': experiment_name
+                                             })
 
-                experiment_type_dct = {'type': 'unsignedInteger',
-                                       'name': 'Experiment Type',
-                                       'value': experiment_type}
+            row_orientation = {'type': 'bool',
+                               'name': 'Data is Row Oriented',
+                               'value': True}
 
-                first_row = {'type': 'unsignedInteger',
-                             'name': 'First Row',
-                             'value': str(line_numbers[i][0])}
+            experiment_type_dct = {'type': 'unsignedInteger',
+                                   'name': 'Experiment Type',
+                                   'value': experiment_type}
 
-                last_row = {'type': 'unsignedInteger',
-                            'name': 'Last Row',
-                            'value': str(line_numbers[i][1])}  # add 1 to account for 0 indexed python
+            first_row = {'type': 'unsignedInteger',
+                         'name': 'First Row',
+                         'value': str(line_numbers[0])}
 
-                normalize_weights_per_experiment = {'type': 'bool',
-                                                    'name': 'Normalize Weights per Experiment',
-                                                    'value': experiment.normalize_weights_per_experiment}
+            last_row = {'type': 'unsignedInteger',
+                        'name': 'Last Row',
+                        'value': str(line_numbers[1])}  # add 1 to account for 0 indexed python
 
-                number_of_columns = {'type': 'unsignedInteger',
-                                     'name': 'Number of Columns',
-                                     'value': num_columns}
+            normalize_weights_per_experiment = {'type': 'bool',
+                                                'name': 'Normalize Weights per Experiment',
+                                                'value': experiment.normalize_weights_per_experiment}
 
-                object_map = {'name': 'Object Map'}
+            number_of_columns = {'type': 'unsignedInteger',
+                                 'name': 'Number of Columns',
+                                 'value': num_columns}
 
-                row_containing_names = {'type': 'unsignedInteger',
-                                        'name': 'Row containing Names',
-                                        'value': str(1)}
+            object_map = {'name': 'Object Map'}
 
-                separator = {'type': 'string',
-                             'name': 'Separator',
-                             'value': experiment.separator}
+            row_containing_names = {'type': 'unsignedInteger',
+                                    'name': 'Row containing Names',
+                                    'value': str(1)}
 
-                weight_method = {'type': 'unsignedInteger',
-                                 'name': 'Weight Method',
-                                 'value': weight_method_lookup_dct[
-                                     self.config.settings.weight_method
-                                 ]}
+            separator = {'type': 'string',
+                         'name': 'Separator',
+                         'value': experiment.separator}
 
-                for i in [
-                    key,
-                    experiment_file,
-                    row_orientation,
-                    first_row,
-                    last_row,
-                    experiment_type_dct,
-                    normalize_weights_per_experiment,
-                    separator,
-                    weight_method,
-                    row_containing_names,
-                    number_of_columns]:
-                    for j, k in i.items():
-                        if isinstance(k, bool):
-                            i[j] = str(int(k))
-                        elif isinstance(k, int):
-                            i[j] = str(k)
-                    etree.SubElement(experiment_group, 'Parameter', attrib=i)
-                map = etree.SubElement(experiment_group, 'ParameterGroup', attrib=object_map)
+            weight_method = {'type': 'unsignedInteger',
+                             'name': 'Weight Method',
+                             'value': weight_method_lookup_dct[
+                                 self.config.settings.weight_method
+                             ]}
 
-                data_column_number = 0
-                for data_name in experiment.mappings:
+            for i in [
+                key,
+                experiment_file,
+                row_orientation,
+                first_row,
+                last_row,
+                experiment_type_dct,
+                normalize_weights_per_experiment,
+                separator,
+                weight_method,
+                row_containing_names,
+                number_of_columns]:
+                for j, k in i.items():
+                    if isinstance(k, bool):
+                        i[j] = str(int(k))
+                    elif isinstance(k, int):
+                        i[j] = str(k)
+                etree.SubElement(experiment_group, 'Parameter', attrib=i)
+            map = etree.SubElement(experiment_group, 'ParameterGroup', attrib=object_map)
 
-                    map_group = etree.SubElement(map, 'ParameterGroup', attrib={'name': str(data_column_number)})
-                    data_column_number += 1
+            data_column_number = 0
+            for data_name in experiment.mappings:
 
-                    if experiment.mappings[data_name].model_object.lower() == 'time':
-                        self._assign_role(map_group, experiment.mappings[data_name].role)
+                map_group = etree.SubElement(map, 'ParameterGroup', attrib={'name': str(data_column_number)})
+                data_column_number += 1
 
-                    elif experiment.mappings[data_name].object_type == 'Metabolite':
-                        metab = [i for i in mod.metabolites if
-                                 i.name == experiment.mappings[data_name].model_object \
-                                 or re.findall(i.name + '_indep', experiment.mappings[data_name].model_object) != [] ]
-                        assert len(metab) == 1, f"len(metab) should equal 1 but instead equals {len(metab)}"
-                        indep = [i for i in mod.metabolites if \
-                                 re.findall(i.name + '_indep', experiment.mappings[data_name].model_object) != [] ]
-                        if indep != []:
-                            experiment.mappings[data_name].role = 'independent'
+                if experiment.mappings[data_name].model_object.lower() == 'time':
+                    self._assign_role(map_group, experiment.mappings[data_name].role)
 
-                        # modifies map_group inplace
-                        self._create_metabolite_reference(
-                            mod,
-                            map_group,
-                            metab[0],
-                            experiment.mappings[data_name].role
-                        )
-                        self._assign_role(map_group, experiment.mappings[data_name].role)
+                elif experiment.mappings[data_name].object_type == 'Metabolite':
+                    metab = [i for i in mod.metabolites if
+                             i.name == experiment.mappings[data_name].model_object \
+                             or re.findall(i.name + '_indep', experiment.mappings[data_name].model_object) != [] ]
+                    assert len(metab) == 1, f"len(metab) should equal 1 but instead equals {len(metab)}"
+                    indep = [i for i in mod.metabolites if \
+                             re.findall(i.name + '_indep', experiment.mappings[data_name].model_object) != [] ]
+                    if indep != []:
+                        experiment.mappings[data_name].role = 'independent'
 
-                    elif experiment.mappings[data_name].object_type == 'GlobalQuantity':
-                        glo = [i for i in mod.global_quantities if
-                               i.name == experiment.mappings[data_name].model_object \
-                               or re.findall(i.name + '_indep', experiment.mappings[data_name].model_object) != [] ]
-                        assert len(glo) == 1
+                    # modifies map_group inplace
+                    self._create_metabolite_reference(
+                        mod,
+                        map_group,
+                        metab[0],
+                        experiment.mappings[data_name].role
+                    )
+                    self._assign_role(map_group, experiment.mappings[data_name].role)
 
-                        indep = [i for i in mod.global_quantities if \
-                                 re.findall(i.name + '_indep', experiment.mappings[data_name].model_object) != [] ]
+                elif experiment.mappings[data_name].object_type == 'GlobalQuantity':
+                    glo = [i for i in mod.global_quantities if
+                           i.name == experiment.mappings[data_name].model_object \
+                           or re.findall(i.name + '_indep', experiment.mappings[data_name].model_object) != [] ]
+                    assert len(glo) == 1
 
-                        if indep != []:
-                            experiment.mappings[data_name].role = 'independent'
+                    indep = [i for i in mod.global_quantities if \
+                             re.findall(i.name + '_indep', experiment.mappings[data_name].model_object) != [] ]
+
+                    if indep != []:
+                        experiment.mappings[data_name].role = 'independent'
 
 
-                        self._create_global_quantity_reference(
-                            mod,
-                            map_group,
-                            glo[0],
-                            experiment.mappings[data_name].role
-                        )
+                    self._create_global_quantity_reference(
+                        mod,
+                        map_group,
+                        glo[0],
+                        experiment.mappings[data_name].role
+                    )
 
-                        self._assign_role(map_group, experiment.mappings[data_name].role)
+                    self._assign_role(map_group, experiment.mappings[data_name].role)
 
-                    for j in mod.xml.xpath(query):
-                        j.insert(0, experiment_group)
-                        if validation:
-                            for k in list(j):
-                                if k.attrib['name'] == 'Weight':
-                                    k.attrib['value'] = str(self.config.settings.validation_weight)
-                                if k.attrib['name'] == 'Threshold':
-                                    k.attrib['value'] = str(self.config.settings.validation_threshold)
+                for j in mod.xml.xpath(query):
+                    j.insert(0, experiment_group)
+                    if validation:
+                        for k in list(j):
+                            if k.attrib['name'] == 'Weight':
+                                k.attrib['value'] = str(self.config.settings.validation_weight)
+                            if k.attrib['name'] == 'Threshold':
+                                k.attrib['value'] = str(self.config.settings.validation_threshold)
 
     def _map_experiments(self, validation=False):
         """Adds experiment sets to the parameter estimation task
@@ -4975,7 +4978,6 @@ class ParameterEstimation(_ParameterEstimationBase):
                         LOG.info(f'running model {model_name}: {copy_number}')
                         Run(mod, mode=self.config.settings.run_mode, task='scan')
             else:
-                print('lhs running')
                 self.lhs_run(models)
 
 
